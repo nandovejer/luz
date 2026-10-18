@@ -9,6 +9,13 @@
  *   shows up in dev too. Anything else falls through to Vite.
  * - transformIndexHtml (pre): wraps each page in its layout and expands the
  *   partials (also in the landing, which shares the header).
+ * - The docs in another language (apps/docs/i18n/<code>/, docs-i18n.js): every
+ *   page of the site has a document at /<code>/docs/…, a virtual file
+ *   (apps/docs/_virtual/<code>/<path>.html, which never exists on disk) whose
+ *   source is the translation, or the English page where there is none. It is
+ *   rendered from the language's view of the site (localize()). Each language
+ *   also has its search index and its index.md files. Editing a translation or
+ *   a catalog reloads the browser.
  * - The landing is one template rendered once per language of
  *   apps/landing/i18n/locales.json: "/" from apps/landing/index.html, and
  *   "/es/", "/ar/"… from virtual files (apps/landing/<code>/index.html,
@@ -21,7 +28,8 @@
  *   Pages ("/<repo>/"), because it is served at any URL.
  * - The search index (@luz-ds/site search, format version 1) is
  *   generated from the same scan as the A–Z page: served at
- *   /docs/search-index.json in dev, written there by the build.
+ *   /docs/search-index.json in dev, written there by the build (and, one per
+ *   language, at /<code>/docs/search-index.json).
  * - index.md (ai.js): every page as Markdown, next to its index.html, from
  *   the text of llms-full.txt; the rail's "Copy page as Markdown" links to it.
  *   Written by the build, served as text/markdown in dev.
@@ -59,12 +67,17 @@ import {
   rootOf,
   scanSite,
   SHARED_PARTIALS_DIR,
+  searchIndexRouteOf,
 } from "./site.js";
+import { localize } from "./docs-i18n.js";
 import { PACKAGES } from "../luz-packages.js";
 import { AI_ROUTES, exampleAssets, exampleDocuments, manifestAssets, renderLlmsFull, renderLlmsTxt, renderPageMarkdown } from "./ai.js";
 import { SITE_URL } from "./i18n.js";
 
 const LANDING = { route: "/", file: "apps/landing/index.html" };
+
+/** Where the virtual pages of the docs languages are (never on disk): apps/docs/_virtual/<code>/<path>.html. */
+const VIRTUAL_DOCS = "apps/docs/_virtual";
 
 /** The Content-Type of what examples/ and manifests/ serve, by extension. */
 const CONTENT_TYPES = {
@@ -116,7 +129,11 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
 
   const i18nAbs = resolve(repoRoot, I18N_DIR);
   const sharedAbs = resolve(repoRoot, SHARED_PARTIALS_DIR);
+  const docsI18nAbs = resolve(docsDir, "i18n");
+  const pagesAbs = resolve(docsDir, "pages");
   const scan = () => (site ??= scanSite(docsDir, repoRoot));
+  /** The pages build writes absolute URLs (canonical, hreflang, Markdown links) under the site URL; dev writes root-absolute ones. */
+  const urlOptions = () => ({ siteUrl: relativeUrls ? siteUrl : "" });
 
   /**
    * The landing in each language: "/" is the template itself; any other
@@ -129,28 +146,93 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       return { route, file, kind: "landing", locale, virtual: file !== LANDING.file };
     });
 
+  /**
+   * The pages of each docs language (/es/docs/…): one virtual document per
+   * page, with the translation's source where there is one and the English
+   * page's where there is not (`fallback`). `locale` is the language of
+   * site.docsI18n.
+   */
+  const docsDocuments = () =>
+    (scan().docsI18n?.languages ?? []).flatMap((language) =>
+      localize(scan(), language).pages.map((page) => ({
+        route: page.route,
+        file: `${VIRTUAL_DOCS}/${language.code}/${relative(pagesAbs, page.english.abs).split(sep).join("/")}`,
+        kind: "docs-i18n",
+        locale: language,
+        fallback: page.fallback,
+        virtual: true,
+      })),
+    );
+
+  /**
+   * The Markdown of each page, by its route (`/docs/a/index.md`, and in a
+   * language `/es/docs/a/index.md`): the text, made when it is asked for. A
+   * page of a language is converted from its view: the translation's text, or
+   * the English text where it is not translated (RL-19).
+   */
+  const markdownTable = (current) => {
+    const options = urlOptions();
+    const files = new Map(current.pages.map((page) => [`${page.route}${MARKDOWN_FILE}`, () => renderPageMarkdown(current, page, options)]));
+    for (const language of current.docsI18n?.languages ?? []) {
+      const view = localize(current, language);
+      for (const page of view.pages) files.set(`${page.route}${MARKDOWN_FILE}`, () => renderPageMarkdown(view, page, options));
+    }
+    return files;
+  };
+
+  /** What is derived from one scan, made once per scan: the documents, their lookups and the routes a link may point at. */
+  let derived = null;
+  const known = () => {
+    const current = scan();
+    if (derived?.site === current) return derived;
+    const list = [
+      ...landings(),
+      ...current.pages.map((p) => ({ route: p.route, file: p.file, kind: "page" })),
+      ...(current.notFound ? [{ route: NOT_FOUND_ROUTE, file: current.notFound.file, kind: "page" }] : []),
+      ...docsDocuments(),
+    ];
+    const markdown = markdownTable(current);
+    derived = {
+      site: current,
+      documents: list,
+      byFile: new Map(list.map((d) => [d.file, d])),
+      virtual: new Map(list.filter((d) => d.virtual).map((d) => [resolve(repoRoot, d.file), d])),
+      markdown,
+      // The routes a link may point at: the documents and their Markdown, made relative in the pages build
+      routes: new Set([...list.map((d) => d.route), ...markdown.keys()]),
+    };
+    return derived;
+  };
+
   /** Every HTML document of the site: route, source file (repo-relative), kind. */
-  const documents = () => [
-    ...landings(),
-    ...scan().pages.map((p) => ({ route: p.route, file: p.file, kind: "page" })),
-    ...(scan().notFound ? [{ route: NOT_FOUND_ROUTE, file: scan().notFound.file, kind: "page" }] : []),
-  ];
-  /** The virtual landing whose absolute path is `id`, if any. */
-  const virtualOf = (id) => landings().find((d) => d.virtual && resolve(repoRoot, d.file) === id);
+  const documents = () => known().documents;
+  /** The virtual document (a landing, or a page of a docs language) whose absolute path is `id`, if any. */
+  const virtualOf = (id) => known().virtual.get(id);
   /** The template, read inside apps/landing (SEC-PLG-1/2). */
   const landingSource = () => readInside(landingAbs, [dirname(landingAbs)]);
+  /** The source of a virtual document: the landing's template, or the file of the page a docs language shows (its translation, else the English page). */
+  const virtualSource = (doc) => {
+    if (doc.kind === "landing") return landingSource();
+    const language = scan().docsI18n?.byCode.get(doc.locale.code);
+    const page = language && localize(scan(), language).byRoute.get(doc.route);
+    if (!page) throw new Error(`${doc.file}: ${doc.route} is not a page of the docs in ${doc.locale.code}`);
+    return readInside(page.abs, [docsDir]);
+  };
   /** {{root}} of a document in the pages build: relative to its depth; the site's path on the 404. */
   const rootFor = (route) => (route === NOT_FOUND_ROUTE ? pagesBase : rootOf(route));
-  /** The Markdown of each page, by its route (`/docs/a/index.md`): the text, made when it is asked for. */
-  const markdownFiles = () => {
-    const options = { siteUrl: relativeUrls ? siteUrl : "" };
-    return new Map(scan().pages.map((page) => [`${page.route}${MARKDOWN_FILE}`, () => renderPageMarkdown(scan(), page, options)]));
-  };
-  // The routes a link may point at: the documents and their Markdown, made relative in the pages build
-  const routes = () => new Set([...documents().map((d) => d.route), ...markdownFiles().keys()]);
+  const markdownFiles = () => known().markdown;
+  const routes = () => known().routes;
 
-  /** The search index, as the bytes that are published. */
-  const searchIndex = () => JSON.stringify(buildSearchIndex(scan()));
+  /** The search indexes by route, as the bytes that are published: English at /docs/, then one per docs language. */
+  const searchIndexes = () => {
+    const current = scan();
+    const files = new Map([[SEARCH_INDEX_ROUTE, () => JSON.stringify(buildSearchIndex(current))]]);
+    for (const language of current.docsI18n?.languages ?? []) {
+      const view = localize(current, language);
+      files.set(searchIndexRouteOf(view), () => JSON.stringify(buildSearchIndex(view)));
+    }
+    return files;
+  };
 
   /** The AI files by route: the text, and the links absolute only in the pages build. */
   const aiFiles = () => {
@@ -185,6 +267,9 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
   const check = () =>
     buildSite(scan(), {
       extra: landingDocuments(scan(), LANDING.file, landingSource()),
+      // Every page of every docs language: a broken link or fragment in any language fails the build
+      languages: true,
+      ...urlOptions(),
     }).problems;
 
   return {
@@ -205,7 +290,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
                 // path (apps/docs/pages/…); make them relative to its route
                 renderBuiltUrl(filename, { hostId, hostType }) {
                   if (hostType !== "html") return undefined;
-                  const doc = documents().find((d) => d.file === hostId);
+                  const doc = known().byFile.get(hostId);
                   return doc ? rootFor(doc.route) + filename : undefined;
                 },
               },
@@ -219,8 +304,9 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       logger = config.logger;
     },
 
-    // The landing of another language: an entry of the build with no file of
-    // its own; its source is the template
+    // The landing of another language and the pages of a docs language: entries
+    // of the build with no file of their own; their source is the template, the
+    // translation or the English page
     resolveId(id) {
       return virtualOf(id) ? id : undefined;
     },
@@ -228,8 +314,10 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
     load(id) {
       const doc = virtualOf(id);
       if (!doc) return undefined;
-      if (existsSync(id)) throw new Error(`${doc.file}: the landing of /${doc.locale.code}/ is generated; remove this file`);
-      return landingSource();
+      if (existsSync(id)) {
+        throw new Error(`${doc.file}: ${doc.kind === "landing" ? `the landing of /${doc.locale.code}/` : doc.route} is generated; remove this file`);
+      }
+      return virtualSource(doc);
     },
 
     buildStart() {
@@ -257,7 +345,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       warn();
       // A page added or removed changes the route table (handleHotUpdate only sees edits)
       const changed = (file) => {
-        if (file.startsWith(join(docsDir, "pages") + sep)) {
+        if (file.startsWith(pagesAbs + sep) || file.startsWith(docsI18nAbs + sep)) {
           site = null;
           warn();
           server.ws.send({ type: "full-reload" });
@@ -282,8 +370,9 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
           logger.error(`[luz-docs-site] ${error.message}`);
           return next();
         }
-        // The search index: generated, never a file (SEC-PLG-6)
-        if (path === SEARCH_INDEX_ROUTE) {
+        // The search index of each language: generated, never a file (SEC-PLG-6)
+        const searchIndex = path.endsWith("/search-index.json") ? searchIndexes().get(path) : undefined;
+        if (searchIndex) {
           try {
             const body = searchIndex();
             res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -331,11 +420,12 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
           return next();
         }
         const file = map.get(path);
-        // Another language of the landing: rendered from the template, as Vite would a file
-        const virtual = file && landings().find((d) => d.virtual && `/${d.file}` === file);
+        // Another language of the landing, or a page of a docs language: rendered from its source, as Vite would a file
+        const source = file && known().byFile.get(file.slice(1));
+        const virtual = source?.virtual ? source : undefined;
         if (virtual) {
           Promise.resolve()
-            .then(() => server.transformIndexHtml(file, landingSource(), req.originalUrl))
+            .then(() => server.transformIndexHtml(file, virtualSource(virtual), req.originalUrl))
             .then((html) => {
               res.setHeader("Content-Type", "text/html; charset=utf-8");
               res.end(html);
@@ -368,7 +458,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
         file === landingAbs ||
         file.startsWith(sharedAbs + sep) ||
         file.startsWith(i18nAbs + sep) ||
-        (rel !== null && (rel === "site.json" || /^(_layouts|_partials|pages)\//.test(rel)));
+        (rel !== null && (rel === "site.json" || /^(_layouts|_partials|pages|i18n)\//.test(rel)));
       if (!generated) return undefined;
       // A page's front matter can change every page (later: the sidebar)
       site = null;
@@ -381,10 +471,17 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       order: "pre",
       handler(html, ctx) {
         const file = toRepo(ctx.filename);
-        const doc = documents().find((d) => d.file === file);
+        const doc = known().byFile.get(file);
         if (!doc) return html;
         let out = html;
-        if (doc.kind === "page") {
+        if (doc.kind === "docs-i18n") {
+          // The page of a language: its view of the site renders it (the translation or the English page, in the language's chrome)
+          const language = scan().docsI18n?.byCode.get(doc.locale.code);
+          const view = language && localize(scan(), language);
+          const page = view?.byRoute.get(doc.route);
+          if (!page) throw new Error(`${doc.file}: ${doc.route} is not a page of the docs in ${doc.locale.code}`);
+          out = renderPage(page, view, { root: relativeUrls ? rootFor(doc.route) : "/", dev: command !== "build", ...urlOptions() });
+        } else if (doc.kind === "page") {
           // Render the source Vite read; the scan gives the route and the site
           let scanned = scan().byFile.get(resolve(repoRoot, file));
           if (!scanned) {
@@ -392,7 +489,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
             scanned = scan().byFile.get(resolve(repoRoot, file));
           }
           const page = { ...scanned, ...parseFrontMatter(html, file, scan().areas) };
-          out = renderPage(page, scan(), { root: relativeUrls ? rootFor(doc.route) : "/", dev: command !== "build" });
+          out = renderPage(page, scan(), { root: relativeUrls ? rootFor(doc.route) : "/", dev: command !== "build", ...urlOptions() });
         } else if (doc.kind === "landing") {
           // Errors and line numbers point at the template, for every language
           out = renderDocument(html, LANDING.file, doc.route, scan(), { locale: doc.locale, siteUrl: relativeUrls ? siteUrl : "" });
@@ -410,7 +507,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
 
     generateBundle() {
       // Unhashed, next to the pages: every page points at it from its depth
-      this.emitFile({ type: "asset", fileName: SEARCH_INDEX_ROUTE.slice(1), source: searchIndex() });
+      for (const [route, render] of searchIndexes()) this.emitFile({ type: "asset", fileName: route.slice(1), source: render() });
       // The files for an AI agent, at the root of the site (discovery is by link, not by convention)
       for (const [route, render] of aiFiles()) this.emitFile({ type: "asset", fileName: route.slice(1), source: render() });
       // Every page as Markdown, next to its index.html
