@@ -316,27 +316,6 @@ home-light[data-sky="night"] .home-light__day input::-moz-range-thumb {
   box-shadow: inset 4px -2px 0 0 var(--_paper);
 }
 
-/* Pause motion: a quiet text button, filled while pressed, as the looks are */
-home-light .home-light__still {
-  min-block-size: 2.75rem;
-  padding-inline: var(--luz-space-sm);
-  border: 0;
-  border-radius: var(--luz-radius-sm);
-  background: none;
-  color: var(--_muted);
-  font: inherit;
-  cursor: pointer;
-}
-
-home-light .home-light__still:hover,
-home-light .home-light__still[aria-pressed="true"] {
-  color: var(--_ink);
-}
-
-home-light .home-light__still[aria-pressed="true"] {
-  background: var(--luz-surface-pressed);
-}
-
 home-light .home-light__sr {
   position: absolute;
   inline-size: 1px;
@@ -519,18 +498,13 @@ home-globe .home-globe__here {
 
 /* ==========================================================================
    Reduced motion: a still frame. The globe asks for no animation frame (no
-   spin); here the bar stops. Pause motion ([still], WCAG 2.2.2) asks for
-   the same frame: the same rules, under home-light[still]
+   spin); here the bar stops
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   home-light .home-light__bar:not([hidden]) {
     animation: none;
   }
-}
-
-home-light[still] .home-light__bar:not([hidden]) {
-  animation: none;
 }
 
 /* Forced colours: the drawing in the system's text colour */
@@ -557,10 +531,5 @@ home-light[still] .home-light__bar:not([hidden]) {
 
   home-light .home-light__day input::-moz-range-track {
     background: CanvasText;
-  }
-
-  /* The pressed fill is forced away: a border in Highlight marks Pause motion */
-  home-light .home-light__still[aria-pressed="true"] {
-    border: 2px solid Highlight;
   }
 }

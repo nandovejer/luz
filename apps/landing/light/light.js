@@ -2,15 +2,12 @@
  * <home-light>: the light of the visitor's sky on the home page. It draws the
  * sun and the moon where the visitor is, from the time zone of the browser's
  * clock (Intl, never the network or GPS), over a globe (<home-globe>,
- * globe.js). A line under the globe opens a bar to scrub the day and to
- * pause the motion.
+ * globe.js). A line under the globe opens a bar to scrub the day. Only the
+ * system's prefers-reduced-motion stops the motion (RL-8); the element has no
+ * control to pause it and stores nothing.
  *
- *   <home-light remember bleed favicon></home-light>
+ *   <home-light bleed favicon></home-light>
  *
- * remember  keep Pause motion ([still]) in localStorage["luz-home-light"]
- * still     the motion is paused (WCAG 2.2.2): the globe asks for no frame
- *           and light.css stops its animations, as under reduced motion;
- *           the bar's Pause motion button (aria-pressed) toggles it
  * bleed     the visual runs to the edges of the page's frame (light.css)
  * favicon   the tab's icon follows the sky (a data: URL of an SVG)
  *
@@ -27,7 +24,6 @@
  * The rules are apps/landing/light/light.css.
  */
 
-const KEY = "luz-home-light";
 const DEG = Math.PI / 180;
 // A place for each common time zone, latitude and longitude; another zone gets its offset's meridian at 30°
 const PLACES = {
@@ -137,10 +133,6 @@ const mode = () => {
 let uid = 0;
 
 class LuzLight extends HTMLElement {
-  static get observedAttributes() {
-    return ["still"];
-  }
-
   constructor() {
     super();
     this._sim = 0; // the offset of the simulated instant, in ms; 0 is now
@@ -174,13 +166,6 @@ class LuzLight extends HTMLElement {
     clearTimeout(this._favTimer);
   }
 
-  attributeChangedCallback(name, old, value) {
-    if (!this._stage) return;
-    // [still]: the button follows, and _tick() hands the globe its sun again, so it stops or moves
-    this._pause.setAttribute("aria-pressed", String(value !== null));
-    this._tick();
-  }
-
   /** A text of the page: data-luz-label-light-<key> here or on an ancestor. */
   _text(key) {
     const name = `data-luz-label-light-${key}`;
@@ -202,7 +187,6 @@ class LuzLight extends HTMLElement {
 
   _build() {
     this._tz = zone();
-    this._remember = this.hasAttribute("remember");
     this._place = placeFor(this._tz, Date.now());
     const { lat, lon } = this._place, la = lat * DEG, lo = lon * DEG;
     this._placeVec = [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)];
@@ -227,13 +211,7 @@ class LuzLight extends HTMLElement {
     this._scrub = h("input", { type: "range", id: `${id}-scrub`, min: 0, max: 1439, step: 1, value: 720 });
     this._scrub.addEventListener("input", () => this._preview(this._scrub.value / 60));
     day.append(this._scrub);
-    // Pause motion (WCAG 2.2.2): [still] is reduced motion for the globe and light.css
-    this._pause = h("button", { type: "button", class: "home-light__still", "aria-pressed": "false" }, this._text("pause"));
-    this._pause.addEventListener("click", () => {
-      this.toggleAttribute("still");
-      this._save();
-    });
-    bar.append(day, this._pause);
+    bar.append(day);
     this._line = h("button", { type: "button", class: "home-light__line", "aria-expanded": "false", "aria-controls": bar.id });
     // The phrase alone; the light and the hour are in the bar
     this._q = h("span", { class: "home-light__q" });
@@ -249,14 +227,6 @@ class LuzLight extends HTMLElement {
       if (!this._favicon) document.head.append((this._favicon = h("link", { rel: "icon", type: "image/svg+xml" })));
     }
 
-    // Remembered: "still"; [still] goes on before the globe is loaded
-    if (this._remember) {
-      try {
-        if (localStorage.getItem(KEY) === "still") this.setAttribute("still", "");
-      } catch {
-        // Storage refused (a sandboxed frame): nothing remembered
-      }
-    }
     // The globe: its own file, loaded once
     import("./globe.js").then(() => {
       const { lat, lon } = this._place;
@@ -266,17 +236,6 @@ class LuzLight extends HTMLElement {
       this._stage.append(globe);
       this._tick();
     });
-  }
-
-  /** With remember, keep [still]. */
-  _save() {
-    if (!this._remember) return;
-    try {
-      if (this.hasAttribute("still")) localStorage.setItem(KEY, "still");
-      else localStorage.removeItem(KEY);
-    } catch {
-      // Not remembered: the same page
-    }
   }
 
   /** Scrub to an hour (0 to 24), or back to now (null), and ask <luz-mode> to follow. */

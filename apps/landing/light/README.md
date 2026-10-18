@@ -18,15 +18,13 @@ Each module guards `customElements.get()`, writes no HTML from a string (nodes, 
 ## The element
 
 ```html
-<home-light looks="globe city map" look="random" remember bleed favicon></home-light>
+<home-light looks="globe city map" look="random" bleed favicon></home-light>
 ```
 
 | Attribute | What it does |
 | --- | --- |
 | `looks` | The visuals offered, any of `globe`, `city`, `map` (`none`: no visual). |
-| `look` | The first look, or `random`. `?look=` in the URL wins, then the visitor's last click (with `remember`), then this. |
-| `remember` | Keep the look the visitor clicks, and Pause motion, in `localStorage["luz-home-light"]`. |
-| `still` | The motion is paused: the visuals ask for no animation frame and `light.css` stops its animations, as under `prefers-reduced-motion: reduce`. The bar's Pause motion button (`aria-pressed`) toggles it. |
+| `look` | The first look, or `random`. `?look=` in the URL wins, then this. |
 | `bleed` | The visual runs to the edges of the page's frame (`light.css`). |
 | `favicon` | The tab's icon follows the sky (a `data:` URL of an SVG). |
 
@@ -41,7 +39,7 @@ On `<html>` it writes custom properties only: `--sun-alt`, `--sun-az` (degrees),
 - The land: each country is a faint grey, one of five tones, no two neighbours alike; the borders between them are fine lines, barely there, each with a knob (one for every ~14° of its length); the coast is a fine dotted line. The lines are drawn in relief, a line of light towards the sun and a line of shade away from it.
 - The line under the visual is a button that opens the bar: it shows the phrase, the light and the hour (on a pill of the page's paper, so it keeps its contrast over the drawing) and a mark that turns with `aria-expanded`. The bar follows it in the DOM, so Tab goes from the line into the bar; the CSS draws it above. The slider's `aria-valuetext` is the light and the hour, joined by `light.sep`; its `<output>` is `aria-live="off"`. The globe is an image (`role="img"`), not a control: a pointer may drag it, and it is not in the tab order.
 - Without JavaScript the element is empty and `light.css` gives it its height, so the page does not move when the script arrives.
-- Under `prefers-reduced-motion: reduce`, and while the bar's Pause motion button is pressed (`[still]`, WCAG 2.2.2), nothing asks for an animation frame: the globe does not spin and a throw does not keep turning it. Pressing it again starts it. With `remember`, `localStorage["luz-home-light"]` holds `still` while it is pressed (and nothing else), read back before the globe loads.
+- Under `prefers-reduced-motion: reduce` nothing asks for an animation frame: the globe does not spin and a throw does not keep turning it. Nothing else stops the motion: the bar has no pause control, so WCAG 2.2.2 is a known issue of the accessibility statement. The element stores nothing.
 
 ## Why it weighs what it weighs
 
