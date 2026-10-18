@@ -553,7 +553,9 @@ describe("the LUZ docs site", () => {
       const area = site.areas.find((a) => a.id === page?.meta.area);
       expect(current, route).toEqual(area ? [route] : []);
       const parents = links.filter((a) => a.attrs.get("aria-current") === "true").map((a) => a.attrs.get("href"));
-      expect(parents, route).toEqual(area && route !== `/docs/${area.slug}/` ? [`/docs/${area.slug}/`] : []);
+      // An area nested in another (site.json "parent") marks both: the parent's link, then its own (the sub-area link)
+      const outer = area?.parent ? [`/docs/${site.areas.find((a) => a.id === area.parent).slug}/`] : [];
+      expect(parents, route).toEqual(area ? [...outer, ...(route !== `/docs/${area.slug}/` ? [`/docs/${area.slug}/`] : [])] : []);
       expect(links.filter((a) => (a.attrs.get("class") ?? "").includes("is-active")), route).toEqual([]);
       // Flat: not only the current area's pages, every page of every area
       const hrefs = links.map((a) => a.attrs.get("href"));
@@ -759,8 +761,10 @@ describe("the LUZ docs site", () => {
     const expected = site.pages.filter((p) => p.meta.area !== "hub" && p.meta.nav !== "false");
     expect([...order].sort()).toEqual(expected.map((p) => p.route).sort());
     expect(new Set(order).size).toBe(order.length);
-    // The six area indexes, in site.json order, each before its own pages
-    const indexes = site.areas.map((a) => `/docs/${a.slug}/`);
+    // The area indexes, in sidebar order (site.json order, a nested area right after its parent's own pages), each before its own pages
+    const sidebarAreas = site.areas.filter((a) => !a.parent).flatMap((a) => [a, ...site.areas.filter((c) => c.parent === a.id)]);
+    expect(sidebarAreas).toHaveLength(site.areas.length);
+    const indexes = sidebarAreas.map((a) => `/docs/${a.slug}/`);
     expect(order.filter((r) => indexes.includes(r))).toEqual(indexes);
     for (const route of order) {
       const area = site.areas.find((a) => a.id === site.byRoute.get(route).meta.area);
@@ -849,13 +853,14 @@ describe("the LUZ docs site", () => {
         expect(link[2], `${route}: ${kind} has an aria-label`).toBe(false);
       }
     }
-    // Get started → Tokens → HTML elements → Components → Site → Accessibility
+    // Get started → Tokens → Components → Site → … → Documentation → HTML elements (nested in Documentation) → Accessibility
     expect(endOf(rendered.get("/docs/tokens/")).prev?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/tokens/")).next?.[0]).toBe("/docs/tokens/color/");
     expect(endOf(rendered.get("/docs/get-started/classless/")).next?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/get-started/how-luz-is-built/")).next?.[0]).toBe("/docs/tokens/");
-    expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/tokens\//);
-    expect(endOf(rendered.get("/docs/components/")).prev?.[0]).toMatch(/^\/docs\/html\//);
+    expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/documentation\//);
+    expect(endOf(rendered.get("/docs/components/")).prev?.[0]).toMatch(/^\/docs\/tokens\//);
+    expect(endOf(rendered.get("/docs/accessibility/")).prev?.[0]).toMatch(/^\/docs\/html\//);
     expect(endOf(rendered.get("/docs/site/")).prev?.[0]).toMatch(/^\/docs\/components\//);
   });
 
