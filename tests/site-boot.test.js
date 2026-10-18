@@ -34,7 +34,7 @@ const kebab = (name) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
 let script;
 /** Run boot.js once and return what it wrote on <html> and what it asked of the browser. */
-function run({ stored, hour = 14, minute = 0, contrastMore = false, schemeDark = false, storage = "works" } = {}) {
+function run({ stored, pinned, hour = 14, minute = 0, contrastMore = false, schemeDark = false, storage = "works" } = {}) {
   exists();
   script ??= new vm.Script(read(BOOT), { filename: BOOT });
   const attrs = new Map();
@@ -68,7 +68,7 @@ function run({ stored, hour = 14, minute = 0, contrastMore = false, schemeDark =
     },
   };
   if (storage === "works") {
-    const value = (k) => (k === "luz-theme" && stored !== undefined ? stored : null);
+    const value = (k) => (k === "luz-theme" && stored !== undefined ? stored : k === "luz-light" && pinned !== undefined ? pinned : null);
     const methods = {
       getItem: (k) => (reads.push(k), value(k)),
       setItem: (k) => void writes.push(k),
@@ -135,11 +135,15 @@ describe("a stored choice wins, with its light pinned", () => {
     expect(run({ stored: "dark", hour: 10, schemeDark: false })).toMatchObject({ theme: "dark", light: "night" });
   });
 
-  it("reads core's key and nothing else, and writes nothing", () => {
+  it("reads core's key and the globe's hour, nothing else, and writes nothing", () => {
     const { reads, writes } = run({ stored: "dark" });
     expect(reads.length).toBeGreaterThan(0);
-    expect([...new Set(reads)]).toEqual(["luz-theme"]);
+    expect([...new Set(reads)].every((k) => ["luz-theme", "luz-light"].includes(k))).toBe(true);
     expect(writes).toEqual([]);
+  });
+
+  it("a chosen mode wins over an hour the globe pinned (the site never keeps both, but the mode is the footer's)", () => {
+    expect(run({ stored: "dark", pinned: "570", hour: 14 })).toMatchObject({ theme: "dark", light: "night" });
   });
 });
 
@@ -155,6 +159,27 @@ describe("a stored value that is not a mode is not a choice", () => {
 
   it("the old key is not read: a value under luz-site-mode changes nothing", () => {
     expect(run({ hour: 9 }).reads).not.toContain("luz-site-mode");
+  });
+});
+
+describe("an hour pinned by the globe's bar (luz-light, minutes of the day) is the light of that hour", () => {
+  it.each([
+    ["1170", "sunset", "light"],
+    ["570", "morning", "light"],
+    ["360", "dawn", "dark"],
+    ["1290", "dusk", "dark"],
+    ["0", "night", "dark"],
+    ["1439", "night", "dark"],
+  ])("%s is %s, %s, whatever the clock says", (pinned, light, theme) => {
+    for (const hour of [3, 9, 14, 21]) expect(run({ pinned, hour }), `pinned ${pinned} at ${hour}h`).toMatchObject({ theme, light });
+  });
+
+  it("prefers-contrast: more is still the high contrast mode, with the pinned light", () => {
+    expect(run({ pinned: "1170", hour: 9, contrastMore: true })).toMatchObject({ theme: "high-contrast", light: "sunset" });
+  });
+
+  it.each(["", "abc", "-1", "1440", "12.5", "1170px", " 1170"])("%j is not an hour: the clock decides", (pinned) => {
+    expect(run({ pinned, hour: 9 })).toMatchObject({ theme: "light", light: "morning" });
   });
 });
 

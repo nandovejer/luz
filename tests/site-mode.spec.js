@@ -597,6 +597,53 @@ test.describe('<luz-mode>', () => {
       expect(await state(page)).toMatchObject({ theme: null, light: null });
     });
 
+    test('pin(hour) keeps the light of that hour in auto: stored under luz-light (minutes) with `remember`, the chosen mode removed, and after a reload too', async ({ page }) => {
+      await open(page, 'by=clock&remember', { time: at('09:30'), stored: 'dark' });
+      expect(await state(page)).toMatchObject({ theme: 'dark', mode: 'dark' });
+      expect(await page.evaluate(() => /** @type {any} */ (document.getElementById('mode')).pin(19.5))).toBe(true);
+      expect(await state(page)).toEqual({ theme: 'light', light: 'sunset', mode: 'auto', checked: 'auto' });
+      expect(await stored(page), 'the chosen mode is gone').toBeNull();
+      expect(await page.evaluate(() => localStorage.getItem('luz-light'))).toBe('1170');
+      expect(await page.evaluate(() => /** @type {any} */ (document.getElementById('mode')).pinned)).toBe(19.5);
+      expect((await events(page)).at(-1)).toMatchObject({ mode: 'auto', light: 'sunset', simulated: false, pinned: 19.5 });
+      // It holds while the minutes pass, and a preview returns to it, not to now
+      await page.clock.runFor(60_000 * 5);
+      expect(await state(page)).toMatchObject({ light: 'sunset' });
+      await preview(page, 'night');
+      expect(await state(page)).toMatchObject({ theme: 'dark', light: 'night' });
+      await preview(page, null);
+      expect(await state(page)).toMatchObject({ theme: 'light', light: 'sunset' });
+      await page.reload();
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      await expect.poll(() => state(page)).toEqual({ theme: 'light', light: 'sunset', mode: 'auto', checked: 'auto' });
+    });
+
+    test('choosing a mode removes the pinned hour, and pin(null) goes back to the clock', async ({ page }) => {
+      await open(page, 'by=clock&remember', { time: at('09:30') });
+      await page.evaluate(() => /** @type {any} */ (document.getElementById('mode')).pin('dusk'));
+      expect(await state(page)).toMatchObject({ theme: 'dark', light: 'dusk', mode: 'auto' });
+      await choose(page, 'Light');
+      expect(await state(page)).toEqual({ theme: 'light', light: 'afternoon', mode: 'light', checked: 'light' });
+      expect(await page.evaluate(() => localStorage.getItem('luz-light'))).toBeNull();
+      expect(await page.evaluate(() => /** @type {any} */ (document.getElementById('mode')).pinned)).toBeNull();
+      await page.evaluate(() => /** @type {any} */ (document.getElementById('mode')).pin(3));
+      expect(await state(page)).toMatchObject({ theme: 'dark', light: 'night', mode: 'auto' });
+      expect(await stored(page)).toBeNull();
+      await page.evaluate(() => /** @type {any} */ (document.getElementById('mode')).pin(null));
+      expect(await state(page)).toMatchObject({ theme: 'light', light: 'morning', mode: 'auto' });
+      expect(await page.evaluate(() => localStorage.getItem('luz-light'))).toBeNull();
+    });
+
+    test('without `remember` pin() stores nothing; with the system, or a bad hour, it does nothing and returns false', async ({ page }) => {
+      await open(page, 'by=clock', { time: at('09:30') });
+      expect(await page.evaluate(() => /** @type {any} */ (document.getElementById('mode')).pin(21.25))).toBe(true);
+      expect(await state(page)).toMatchObject({ light: 'dusk' });
+      expect(await page.evaluate(() => Object.keys(localStorage))).toEqual([]);
+      for (const bad of [-1, 25, 'noon', NaN]) expect(await page.evaluate((v) => /** @type {any} */ (document.getElementById('mode')).pin(v), bad), `pin(${bad})`).toBe(false);
+      await open(page, '', { time: at('09:30') });
+      expect(await page.evaluate(() => /** @type {any} */ (document.getElementById('mode')).pin(12))).toBe(false);
+    });
+
     test('with the system, preview() does nothing and returns false', async ({ page }) => {
       await open(page, '');
       expect(await preview(page, 'night')).toBe(false);
