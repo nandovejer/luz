@@ -426,12 +426,15 @@ describe("SECURITY.md, the CSP", () => {
 /* ---- the A-Z page ----------------------------------------------------------- */
 
 describe("the A-Z pages stay under the page ceiling", () => {
-  it.each(["/docs/a-z/", "/docs/a-z/m-z/"])("%s renders, with relative links as the Pages build writes it, in less than the 'docs page HTML' ceiling of budgets.json (less a margin for the asset tags Vite adds)", (route) => {
+  // The site is built once for both routes: the build renders every page in every language, so it is slow.
+  let built;
+  const buildOnce = () => (built ??= buildSite(scanSite(`${root}apps/docs`, root)));
+  // The timeout is long on purpose: the first test to run pays for the whole build, and a loaded machine makes it slower.
+  it.each(["/docs/a-z/", "/docs/a-z/m-z/"])("%s renders, with relative links as the Pages build writes it, in less than the 'docs page HTML' ceiling of budgets.json (less a margin for the asset tags Vite adds)", { timeout: 60_000 }, (route) => {
     const { budgets } = JSON.parse(read("budgets.json"));
     const row = budgets.find((b) => b.glob === "docs/**/*.html");
     expect(row, "the docs page HTML row of budgets.json").toBeTruthy();
-    const site = scanSite(`${root}apps/docs`, root);
-    const { rendered } = buildSite(site);
+    const { rendered } = buildOnce();
     expect(rendered.has(route), `${route} is rendered`).toBe(true);
     const html = relativizeLinks(rendered.get(route), route, new Set(rendered.keys()));
     // The built file is a little larger than the generator's: Vite writes the script and link tags (96 bytes in 2026-10)

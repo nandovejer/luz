@@ -569,7 +569,8 @@ describe("the LUZ docs site", () => {
     for (const { name } of elements) expect(az, name).toContain(`#el-${name}"`);
   });
 
-  it("reaches every component in two links from any page, in every language, without opening anything (ia.md §14)", () => {
+  // The timeout is long on purpose: buildSite({ languages: true }) renders every page in every language (about 350 pages), 4 to 5 s alone and more under load.
+  it("reaches every component in two links from any page, in every language, without opening anything (ia.md §14)", { timeout: 60_000 }, () => {
     // Links shown at every width: the content of main (the header's site
     // links are in the closed drawer on a phone, "On this page" is closed).
     // A page in a language (/es/, /es/docs/…) must reach the component's page
