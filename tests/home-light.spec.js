@@ -679,14 +679,26 @@ test.describe('review fixes', () => {
   /* -- 6. The line shows the phrase only: no light's name, no hour (the owner's cut, 2026-10-17) -- */
 
   for (const [route, lang] of ROUTES) {
-    test(`${route}: the line's visible text is the phrase, with no light's name and no hour (${lang})`, async ({ page }) => {
+    test(`${route}: the line's visible text is one of the nine facts, with no light's name and no hour (${lang})`, async ({ page }) => {
       const cat = catalog(lang);
+      const facts = Array.from({ length: 9 }, (_, i) => cat[`light.fact.${i + 1}`]);
       const phases = ['dawn', 'morning', 'afternoon', 'sunset', 'dusk', 'night'].map((phase) => cat[`light.${phase}`]);
       await open(page, route, { time: '14:00' });
       const shown = await visibleText(line(page));
-      expect(shown).toContain(cat['light.say.globe']);
-      expect(phases.filter((name) => shown.includes(name)), 'no light name on the line').toEqual([]);
-      expect(shown, 'no hour on the line').not.toMatch(/[0-9\u0660-\u0669]{1,2}\D[0-9\u0660-\u0669]{2}/);
+      const fact = facts.find((f) => shown.includes(f));
+      expect(fact, 'one of the facts of the page\'s language').toBeDefined();
+      const rest = shown.replace(fact ?? '', '');
+      expect(phases.filter((name) => rest.includes(name)), 'no light name on the line').toEqual([]);
+      expect(rest, 'no hour on the line').not.toMatch(/[0-9\u0660-\u0669]{1,2}\D[0-9\u0660-\u0669]{2}/);
+    });
+
+    test(`${route}: each load picks one of the nine facts at random, in ${lang}: the first, the last and one between`, async ({ page }) => {
+      const cat = catalog(lang);
+      for (const [random, n] of [[0, 1], [0.5, 5], [0.999, 9]]) {
+        await page.addInitScript((r) => { Math.random = () => r; }, random);
+        await open(page, route, { time: '14:00' });
+        expect(await visibleText(line(page)), `Math.random() = ${random}`).toContain(cat[`light.fact.${n}`]);
+      }
     });
   }
 

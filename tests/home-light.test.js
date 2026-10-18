@@ -505,9 +505,19 @@ describe("the strings of <home-light> in the catalogs of the home", () => {
     expect(html).not.toContain("light.pause");
   });
 
-  it.each([["en", en], ["es", es], ["ar", ar]])("%s.json keeps light.say.globe and light.alt.globe", (code, catalogOf) => {
-    expect(typeof catalogOf["light.say.globe"], `${code}.json light.say.globe`).toBe("string");
+  it.each([["en", en], ["es", es], ["ar", ar]])("%s.json has the nine facts about the speed of light as light.fact.1 to light.fact.9, the owner's text, and no fixed phrase", (code, catalogOf) => {
+    const facts = JSON.parse(read("tests/fixtures/light-facts.json"))[code];
+    expect(facts).toHaveLength(9);
+    facts.forEach((fact, i) => expect(catalogOf[`light.fact.${i + 1}`], `${code}.json light.fact.${i + 1}`).toBe(fact));
+    expect(Object.keys(catalogOf).filter((k) => k.startsWith("light.fact."))).toHaveLength(9);
+    expect(Object.keys(catalogOf)).not.toContain("light.say.globe");
     expect(typeof catalogOf["light.alt.globe"], `${code}.json light.alt.globe`).toBe("string");
+  });
+
+  it("the page hands the script the nine facts as data-luz-label-light-fact-1 to -9, and no fixed phrase", () => {
+    const body = html.match(/<body[^>]*>/)[0];
+    for (let i = 1; i <= 9; i++) expect(body).toContain(`data-luz-label-light-fact-${i}="{{t:light.fact.${i}}}"`);
+    expect(body).not.toContain("light-say-globe");
   });
 
   it("the English name of the globe no longer says dots: the globe is a puzzle of countries", () => {
