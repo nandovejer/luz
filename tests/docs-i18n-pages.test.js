@@ -298,13 +298,18 @@ describe("parity: a translation keeps the structure, the code and the figures of
       ["changes a <var>", () => swap("<var>n</var>", "<var>k</var>")],
       ["unwraps a <code>", () => swap("<code>--luz-text</code>", "--luz-text")],
     ],
+    // The figures rule (decisions, "Clarifications after the first real Spanish translations"): every figure of
+    // the English page must be in the translation, in any order, extras allowed, separators equivalent. The old
+    // cases "writes a decimal comma", "swaps two numbers" and "adds a number" encoded the earlier "ordered and
+    // exact" rule: they moved to FIGURES_ALLOWED below, where they must now pass.
     figure: [
-      ["writes a decimal comma", () => swap("4.5:1", "4,5:1")],
       ["changes a size", () => swap("16 px", "18 px")],
       ["spells a number out", () => swap("hay 3 pasos", "hay tres pasos")],
-      ["adds a number", () => swap("hay 3 pasos", "hay 3 pasos (2 opcionales)")],
-      ["swaps two numbers", () => swap("es 16 px; hay 3 pasos", "es 3 px; hay 16 pasos")],
+      ["drops a figure and writes nothing in its place", () => swap("; hay 3 pasos", "")],
       ["changes a number in a table", () => swap("7.2:1", "7.3:1")],
+      ["changes the first part of a ratio", () => swap("4.5:1", "4.6:1")],
+      ["changes the second part of a ratio", () => swap("4.5:1", "4.5:2")],
+      ["glues the digits of a decimal", () => swap("4.5:1", "45:1")],
     ],
     marker: [
       ["drops the generated marker", () => swap("<!-- luz:generated -->", "")],
@@ -331,6 +336,126 @@ describe("parity: a translation keeps the structure, the code and the figures of
       }
     });
   }
+
+  /* ---- The figures rule: every figure of the English page, in any order, with extras and equivalent separators ---- */
+
+  /** The problems of a translation whose only difference is the text of one paragraph. */
+  const figures = (englishText, translatedText) => parityProblems({ file: "apps/docs/pages/x.html", body: `<p>${englishText}</p>`, bodyLine: 1 }, { file: `${ES_PAGES}/x.html`, body: `<p>${translatedText}</p>`, bodyLine: 1 });
+
+  describe("the figures rule", () => {
+    /** [what, English text, translated text]: a translation that must pass. */
+    const FIGURES_ALLOWED = [
+      ["a decimal comma for a decimal point", "The ratio is 4.5:1.", "La proporción es 4,5:1."],
+      ["a decimal comma in a plain decimal", "A scale of 1.25.", "Una escala de 1,25."],
+      ["a thousands dot for a thousands comma", "Up to 1,000 items.", "Hasta 1.000 elementos."],
+      ["a space as the thousands separator", "Up to 1,000,000 items.", "Hasta 1 000 000 elementos."],
+      ["a no-break space (U+00A0) as the thousands separator", "Up to 1,000,000 items.", "Hasta 1\u00a0000\u00a0000 elementos."],
+      ["a narrow no-break space (U+202F) as the thousands separator", "Up to 1,000,000 items.", "Hasta 1\u202f000\u202f000 elementos."],
+      ["the same thousands comma", "Up to 1,000 items.", "Hasta 1,000 elementos."],
+      ["the figures in another order (the old case \"swaps two numbers\")", "Use 16 px and 3 steps.", "Usa 3 pasos y 16 px."],
+      ["a reordered sentence", "The WCAG 2.2 criterion 2.4.11 asks for it.", "El criterio 2.4.11 de WCAG 2.2 lo pide."],
+      ["extra digits where English wrote words", "Four to ten items.", "De 4 a 10 elementos."],
+      ["an extra number (the old case \"adds a number\")", "There are 3 steps.", "Hay 3 pasos (2 opcionales)."],
+      ["Arabic-Indic digits with the Arabic decimal and thousands separators", "A ratio of 4.5:1 and 1,000 items.", "نسبة ٤٫٥:١ و ١٬٠٠٠ عنصر."],
+    ];
+    for (const [what, englishText, translatedText] of FIGURES_ALLOWED) {
+      it(`accepts ${what}`, async () => {
+        await ready();
+        expect(figures(englishText, translatedText)).toEqual([]);
+      });
+    }
+
+    /** [what, English text, translated text]: a figure dropped or changed, which must still be said. */
+    const FIGURES_REFUSED = [
+      ["a dropped figure", "The ratio is 4.5:1 and the size 16 px.", "La proporción es 4,5:1 y el tamaño."],
+      ["a changed ratio", "The ratio is 4.5:1.", "La proporción es 4.6:1."],
+      ["a changed second part of a ratio", "The ratio is 4.5:1.", "La proporción es 4.5:2."],
+      ["a changed thousands figure", "Up to 1,000 items.", "Hasta 1.500 elementos."],
+      ["a decimal that lost its separator", "The ratio is 4.5:1.", "La proporción es 45:1."],
+      ["a criterion that lost a level", "The criterion 2.4.11 asks for it.", "El criterio 2.4 lo pide."],
+      ["a figure written as words with no digits kept", "Use 3 steps.", "Usa tres pasos."],
+    ];
+    for (const [what, englishText, translatedText] of FIGURES_REFUSED) {
+      it(`says so for ${what}`, async () => {
+        await ready();
+        const problems = figures(englishText, translatedText);
+        expect(problems.filter((p) => p.includes("figure")), JSON.stringify(problems)).not.toEqual([]);
+        for (const problem of problems) expect(problem).toMatch(/^apps\/docs\/i18n\/es\/pages\/x\.html:\d+: /);
+      });
+    }
+
+    it("does not count a number inside <code> as a figure: it is compared byte for byte by the code rule", async () => {
+      await ready();
+      const english = { file: "apps/docs/pages/x.html", body: "<p>Use <code>--luz-space-4</code> for the gap.</p>", bodyLine: 1 };
+      const same = { file: `${ES_PAGES}/x.html`, body: "<p>Usa <code>--luz-space-4</code> para el hueco.</p>", bodyLine: 1 };
+      expect(parityProblems(english, same)).toEqual([]);
+      // A changed digit inside the code is a code problem, not a figure one
+      const changed = parityProblems(english, { ...same, body: "<p>Usa <code>--luz-space-5</code> para el hueco.</p>" });
+      expect(changed.some((p) => p.includes("code"))).toBe(true);
+      expect(changed.filter((p) => p.includes("figure"))).toEqual([]);
+    });
+
+    it("does not take a figure written inside <code> for the figure of the English text", async () => {
+      await ready();
+      const problems = figures("The ratio is 4.5:1.", "La proporción es <code>4.5:1</code>.");
+      expect(problems.filter((p) => p.includes("figure")), JSON.stringify(problems)).not.toEqual([]);
+    });
+  });
+
+  /* ---- Attributes a translator may rewrite: compared by presence only ---- */
+
+  describe("attributes compared by presence only", () => {
+    const TRANSLATABLE = ["data-error", "data-file", "data-pass", "data-fail", "data-item", "data-set", "data-unreadable", "data-warning", "data-ignored"];
+    /** The problems when the translation changes the value of `name` on an element. */
+    const attribute = (name, englishValue, translatedValue, { drop = false, tag = "div", extra = "" } = {}) =>
+      parityProblems(
+        { file: "apps/docs/pages/x.html", body: `<${tag} ${name}="${englishValue}"${extra}>Text</${tag}>`, bodyLine: 1 },
+        { file: `${ES_PAGES}/x.html`, body: `<${tag}${drop ? "" : ` ${name}="${translatedValue}"`}${extra}>Texto</${tag}>`, bodyLine: 1 },
+      );
+
+    for (const name of TRANSLATABLE) {
+      it(`lets a translation say ${name} in its own words`, async () => {
+        await ready();
+        expect(attribute(name, "No colour found", "No se encontró el color")).toEqual([]);
+      });
+      it(`still wants ${name} to be there when the English element has it`, async () => {
+        await ready();
+        const problems = attribute(name, "No colour found", "", { drop: true });
+        expect(problems.some((p) => p.includes("skeleton")), JSON.stringify(problems)).toBe(true);
+      });
+    }
+
+    it("says so when a translation adds a translatable attribute the English element does not have", async () => {
+      await ready();
+      const problems = parityProblems({ file: "apps/docs/pages/x.html", body: "<div>Text</div>", bodyLine: 1 }, { file: `${ES_PAGES}/x.html`, body: '<div data-error="Algo">Texto</div>', bodyLine: 1 });
+      expect(problems.some((p) => p.includes("skeleton")), JSON.stringify(problems)).toBe(true);
+    });
+
+    for (const [name, englishValue, translatedValue] of [
+      ["data-contrast-result", "a", "b"],
+      ["data-items", "3", "4"],
+      ["data-errors", "No colour found", "No se encontró el color"],
+      ["data-file-name", "button.css", "boton.css"],
+      ["data-state", "open", "abierto"],
+      ["id", "one", "uno"],
+      ["class", "luz-btn", "luz-boton"],
+    ]) {
+      it(`still says so when a translation changes ${name}`, async () => {
+        await ready();
+        const problems = attribute(name, englishValue, translatedValue);
+        expect(problems.some((p) => p.includes("skeleton")), JSON.stringify(problems)).toBe(true);
+      });
+    }
+
+    it("still says so when a translation changes an href", async () => {
+      await ready();
+      const problems = parityProblems(
+        { file: "apps/docs/pages/x.html", body: '<p><a href="/docs/get-started/">Start</a></p>', bodyLine: 1 },
+        { file: `${ES_PAGES}/x.html`, body: '<p><a href="/docs/get-started/install/">Empieza</a></p>', bodyLine: 1 },
+      );
+      expect(problems.some((p) => p.includes("link"))).toBe(true);
+    });
+  });
 
   it("passes every translation of the fixture site, and finds a real drift in one that was edited", async () => {
     await ready();

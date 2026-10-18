@@ -10,7 +10,11 @@
  *     wording of the Spanish list ("Leer más"), neither of which the English check sees;
  *   - Arabic: no letter case, so a heading is not checked for it (a Latin heading "Quick Start Guide" is not a
  *     Title Case problem in an Arabic page), and the Arabic list of vague wording applies ("هنا");
- *   - an element with its own `lang` (a `lang="en"` island in a translated page) is still read in its own language.
+ *   - an element with its own `lang` (a `lang="en"` island in a translated page) is still read in its own language;
+ *   - the content of a demo or an example of a TRANSLATION (`[data-docs-specimen]`, `.docs-dodont__stage`, in the real pages
+ *     `.luz-docs-dodont__stage`, `.docs-snippet`, `.elements-stage`) is not prose: a card title "Carlos Díaz" in a demo is
+ *     a person's name, not a Title Case heading, and a demo's "Leer más" is a sample, not the page's own link text
+ *     (decisions, "Clarifications after the first real Spanish translations"). English pages are read as before.
  *
  * The script reads everything relative to its own location and has no API, so it runs in a copy of the
  * files it reads (tests/helpers/docs-i18n-size-fixture.js), with the translation files written in it.
@@ -94,6 +98,74 @@ describe("check:strings reads the translations of the docs in their language", (
     try {
       const result = repo.run("check-strings.js");
       expect(result.lines.some((line) => line.includes("apps/docs/pages/index.html") && /Title Case/.test(line) && line.includes("Index Useful Quick")), result.output).toBe(true);
+    } finally {
+      repo.write("apps/docs/pages/index.html", english);
+    }
+  });
+});
+
+/* ---- The demos of a translation are not prose ------------------------------------------------ */
+
+/** The containers of a demo or an example, as the markup that opens each. */
+const DEMOS = {
+  "a specimen": '<div class="docs-example" data-docs-specimen>',
+  "a do and don't stage": '<div class="docs-dodont__stage" inert aria-hidden="true">',
+  "a do and don't stage of the docs package": '<div class="luz-docs-dodont__stage" inert aria-hidden="true">',
+  "a snippet": '<div class="docs-snippet">',
+  "an elements stage": '<div class="elements-stage">',
+};
+const titleCaseIn = (result, code) => about(result, code).filter((line) => /Title Case/.test(line));
+const vagueIn = (result, code) => about(result, code).filter((line) => /vague/.test(line));
+
+describe("check:strings does not read the demos of a translation as prose", () => {
+  for (const [what, open] of Object.entries(DEMOS)) {
+    it(`es: a card title "Carlos Díaz" inside ${what} is not a Title Case problem`, () => {
+      const result = runWith("es", `${open}<h3 class="luz-card__title">Carlos Díaz</h3></div>`);
+      expect(titleCaseIn(result, "es"), result.output).toEqual([]);
+      expect(about(result, "es"), result.output).toEqual([]);
+    });
+  }
+
+  it("es: a heading nested deeper inside a demo is not read either", () => {
+    const result = runWith("es", '<div class="docs-example" data-docs-specimen><div class="luz-card"><div><h3>Carlos Díaz</h3></div></div></div>');
+    expect(titleCaseIn(result, "es"), result.output).toEqual([]);
+  });
+
+  it("es: the same text as a heading OUTSIDE a demo is still a Title Case problem, in Spanish", () => {
+    const result = runWith("es", '<h2 id="a">Carlos Díaz</h2>');
+    expect(titleCaseIn(result, "es").some((line) => line.includes("Carlos Díaz")), result.output).toBe(true);
+    expect(result.status, result.output).toBe(1);
+  });
+
+  it("es: the demo ends where its container ends: a Title Case heading right after it is reported, the one inside is not", () => {
+    const result = runWith("es", '<div class="docs-example" data-docs-specimen><h3>Carlos Díaz</h3></div><h2 id="a">Índice Útil Rápido</h2>');
+    const lines = titleCaseIn(result, "es");
+    expect(lines.some((line) => line.includes("Índice Útil Rápido")), result.output).toBe(true);
+    expect(lines.some((line) => line.includes("Carlos Díaz")), result.output).toBe(false);
+  });
+
+  it("es: the vague wording of a sample link inside a demo (\"Leer más\") is not reported, and is outside it", () => {
+    const inside = runWith("es", '<div class="docs-example" data-docs-specimen><a href="#">Leer más</a><button type="button" aria-label="Aquí">Aceptar</button></div>');
+    expect(vagueIn(inside, "es"), inside.output).toEqual([]);
+    const outside = runWith("es", '<a href="/docs/get-started/">Leer más</a>');
+    expect(vagueIn(outside, "es").some((line) => line.includes("Leer más")), outside.output).toBe(true);
+  });
+
+  it("ar: the vague wording of a sample link inside a demo is not reported, and is outside it", () => {
+    const inside = runWith("ar", '<div class="docs-example" data-docs-specimen><a href="#">هنا</a></div>');
+    expect(vagueIn(inside, "ar"), inside.output).toEqual([]);
+    const outside = runWith("ar", '<a href="/docs/get-started/">هنا</a>');
+    expect(vagueIn(outside, "ar").some((line) => line.includes("هنا")), outside.output).toBe(true);
+  });
+
+  it("an English page stays as it was: a Title Case heading and a vague link inside a demo are still reported", () => {
+    const english = repo.read("apps/docs/pages/index.html");
+    repo.write("apps/docs/pages/index.html", `${english}\n<div class="docs-example" data-docs-specimen><h3 id="zz-demo-title">Index Useful Quick</h3><a href="/docs/">Read more</a></div>\n`);
+    try {
+      const result = repo.run("check-strings.js");
+      const lines = result.lines.filter((line) => line.includes("apps/docs/pages/index.html"));
+      expect(lines.some((line) => /Title Case/.test(line) && line.includes("Index Useful Quick")), result.output).toBe(true);
+      expect(lines.some((line) => /vague/.test(line) && line.includes("Read more")), result.output).toBe(true);
     } finally {
       repo.write("apps/docs/pages/index.html", english);
     }
