@@ -83,17 +83,6 @@
 }
 
 /* --------------------------------------------------------------------------
-   1. Hero: the line under the lead
-   -------------------------------------------------------------------------- */
-
-.landing-built {
-  margin-block-end: var(--luz-space-lg);
-  font-family: var(--luz-font-sans);
-  font-size: var(--luz-text-sm);
-  color: var(--luz-text-secondary);
-}
-
-/* --------------------------------------------------------------------------
    Stars: at dawn, dusk and night (the dark lights) faint stars sit at the top
    of the page, behind its content, fading downwards. Two layers of fixed
    dots (radial gradients in the text colour, no script, no image) that
