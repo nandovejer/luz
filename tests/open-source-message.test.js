@@ -7,12 +7,9 @@
  *     "Human-first, AI-ready"
  *     "Every change starts with a failing test"
  *
- *   Home page    apps/landing/i18n/{en,es,ar}.json carry, beside each other, the keys
- *                  built.title  = the first statement      (en)
- *                  built.line   = the second statement     (en)
- *                the same keys in es and ar, translated (es differs from en; ar has no
- *                Latin letter in them); apps/landing/index.html writes them as
- *                {{t:built.title}} and {{t:built.line}} (the build fails on an unused key)
+ *   Home page    apps/landing/i18n/{en,es,ar}.json carry the statement in `hero.lead` (trusted
+ *                HTML: "We love TDD" is a link to the docs section), translated in es and ar;
+ *                apps/landing/index.html writes it as {{html:hero.lead}}; the old built.* keys are gone
  *   README.md, PRINCIPLES.md   both statements before the first `## ` heading
  *   Page         apps/docs/pages/get-started/how-luz-is-built.html: front matter
  *                title "How LUZ is built", area get-started, order 12 (after Classless),
@@ -46,34 +43,43 @@ const LINE = "Every change starts with a failing test";
 
 describe("the home page says it in three languages", () => {
   const catalog = (code) => JSON.parse(read(`apps/landing/i18n/${code}.json`));
+  const LINK = '<a href="/docs/get-started/how-luz-is-built/#tests-first">';
+  const textOfHtml = (html) => html.replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 
-  it("English has the two statements, word for word", () => {
-    // The owner replaced the home's hero line by "We love TDD: every change starts with a failing test."
-    // (title, separator and line are three keys); README.md and PRINCIPLES.md keep STATEMENT and LINE.
-    expect(catalog("en")["built.title"]).toBe("We love TDD");
-    expect(catalog("en")["built.sep"]).toBe(": ");
-    expect(catalog("en")["built.line"]).toBe("every change starts with a failing test.");
+  it("English says it in the lead, in one sentence with the link", () => {
+    // The owner (2026-10-18) put the lead and the TDD statement in one paragraph; README.md and
+    // PRINCIPLES.md keep STATEMENT and LINE.
+    const lead = catalog("en")["hero.lead"];
+    expect(lead).toContain("Every component works before JavaScript loads &amp; ");
+    expect(lead).toContain(`${LINK}We love TDD</a>, every change starts with a failing test.`);
+    expect(textOfHtml(lead)).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads & We love TDD, every change starts with a failing test.");
   });
 
-  it.each(["es", "ar"])("%s has the same keys, translated", (code) => {
+  it.each(["es", "ar"])("%s has the lead with the same link, translated", (code) => {
     const en = catalog("en");
-    const c = catalog(code);
-    for (const key of ["built.title", "built.line"]) {
-      expect(typeof c[key], `${code} ${key}`).toBe("string");
-      expect(c[key].trim().length, `${code} ${key}`).toBeGreaterThan(0);
-      expect(c[key], `${code} ${key} is not the English text`).not.toBe(en[key]);
+    const lead = catalog(code)["hero.lead"];
+    expect(lead, `${code} hero.lead`).toContain(LINK);
+    expect(lead, `${code} hero.lead is not the English text`).not.toBe(en["hero.lead"]);
+    // The link's text is the statement itself, translated
+    const linkText = lead.slice(lead.indexOf(LINK) + LINK.length, lead.indexOf("</a>", lead.indexOf(LINK)));
+    expect(linkText.trim().length, `${code} link text`).toBeGreaterThan(0);
+    expect(linkText, `${code} link text is not the English text`).not.toBe("We love TDD");
+  });
+
+  it("Arabic has no English in the link", () => {
+    const lead = catalog("ar")["hero.lead"];
+    const start = lead.indexOf(LINK) + LINK.length;
+    expect(lead.slice(start, lead.indexOf("</a>", start))).not.toMatch(/[A-Za-z]/);
+  });
+
+  it("the three built.* keys are gone from every catalog, and the template has no line of its own", () => {
+    for (const code of ["en", "es", "ar"]) {
+      expect(Object.keys(catalog(code)).filter((k) => k.startsWith("built.")), code).toEqual([]);
     }
-  });
-
-  it("Arabic has no English in them", () => {
-    const ar = catalog("ar");
-    for (const key of ["built.title", "built.line"]) expect(ar[key], key).not.toMatch(/[A-Za-z]/);
-  });
-
-  it("the template writes both keys, so the build's unused-key check passes", () => {
     const html = read("apps/landing/index.html");
-    expect(html).toContain("{{t:built.title}}");
-    expect(html).toContain("{{t:built.line}}");
+    expect(html).not.toContain("built.title");
+    expect(html).not.toContain("landing-built");
+    expect(html).toContain("{{html:hero.lead}}");
   });
 });
 

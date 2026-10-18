@@ -435,14 +435,15 @@ test.describe('Landing page', () => {
       // The owner's title (2026-10-17): both ends are stressed, the human and the AI
       await expect(hero.locator('h1.luz-landing-hero__title em')).toHaveText(['humans', 'AI']);
       await expect(hero.locator('.luz-landing-hero__lead')).toBeVisible();
-      // The owner kept the longer lead (2026-10-17)
-      await expect(hero.locator('.luz-landing-hero__lead')).toHaveText('Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads, in light, dark and high contrast.');
-      await expect(hero).toContainText(EN['built.title']);
-      await expect(hero).toContainText(EN['built.line']);
-      // "We love TDD" leads to the docs section that says how it is done
-      const tdd = hero.locator('a[href="/docs/get-started/how-luz-is-built/#tests-first"]');
+      // One paragraph (owner, 2026-10-18): the lead and the TDD statement are one sentence
+      await expect(hero.locator('.luz-landing-hero__lead')).toHaveText('Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads & We love TDD, every change starts with a failing test.');
+      // No separate line under the lead any more
+      await expect(hero.locator('.landing-built')).toHaveCount(0);
+      // "We love TDD" is inside the lead, and leads to the docs section that says how it is done
+      const tdd = hero.locator('.luz-landing-hero__lead a[href="/docs/get-started/how-luz-is-built/#tests-first"]');
       await expect(tdd).toHaveCount(1);
-      await expect(tdd).toContainText(EN['built.title'].replace(/<[^>]*>/g, ''));
+      await expect(tdd).toHaveText('We love TDD');
+      await expect(hero.locator('a[href="/docs/get-started/how-luz-is-built/#tests-first"]')).toHaveCount(1);
 
       await expect(hero.locator('a.luz-btn')).toHaveCount(2);
       await expect(hero.locator('.luz-btn--primary')).toHaveCount(1);
@@ -462,7 +463,13 @@ test.describe('Landing page', () => {
         const lead = ((await page.locator('section#hero .luz-landing-hero__lead').textContent()) ?? '').replace(/\s+/g, ' ').trim();
         expect(lead.length).toBeGreaterThan(20);
         expect(lead).toMatch(/[.!?\u061F\u2026]$/);
-        if (lang === 'en') expect(lead).toBe(catalog('en')['hero.lead']);
+        // The catalog's lead is trusted HTML (the TDD link): its text is what the page shows
+        const text = (html) => html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+        expect(lead).toBe(text(catalog(lang)['hero.lead']));
+        // The TDD statement is in the lead, as a link to the docs section, in every language
+        const tdd = page.locator('section#hero .luz-landing-hero__lead a[href="/docs/get-started/how-luz-is-built/#tests-first"]');
+        await expect(tdd).toHaveCount(1);
+        expect(lead).toContain((await tdd.textContent())?.trim());
       });
 
       test(`${route}: the title is the catalog's, and the brand line stays English (${lang})`, async ({ page }) => {
@@ -480,7 +487,8 @@ test.describe('Landing page', () => {
         const eyebrow = hero.locator('.luz-landing-hero__eyebrow');
         await expect(eyebrow).toHaveAttribute('lang', 'en');
         await expect(eyebrow).toHaveText('Light, usable & zero-dependency');
-        await expect(hero).toContainText(catalog(lang)['built.title']);
+        // The three built.* keys are gone: the statement lives in the lead
+        expect(Object.keys(catalog(lang)).filter((k) => k.startsWith('built.'))).toEqual([]);
       });
     }
   });
