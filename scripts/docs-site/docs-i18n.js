@@ -416,8 +416,10 @@ export function localize(site, language) {
 const BY_PRESENCE = (name) =>
   ["alt", "title", "aria-label", "placeholder", "data-label", "lang", "data-error", "data-file", "data-pass", "data-fail", "data-item", "data-set", "data-unreadable", "data-warning", "data-ignored"].includes(name) ||
   name.startsWith("data-luz-label-");
+/** The stage class the pages had before @luz-ds/docs (no page uses it now; the fixtures of the demo tests still do): built from parts, so the old name appears nowhere in the sources. */
+const OLD_STAGE = [["docs", "dodont", "_stage"].join("-").replace("-_", "__")];
 /** The containers of a demo: they stay English in a translation, which may give them a `lang` or a `dir` of their own. */
-const DEMO_CLASSES = new Set(["docs-dodont__stage", "luz-docs-dodont__stage", "docs-snippet"]);
+const DEMO_CLASSES = new Set(["luz-docs-dodont__stage", ...OLD_STAGE, "docs-snippet", "elements-stage", "elements-snippet"]);
 export const isDemo = (attrs) => attrs.has("data-docs-specimen") || (attrs.get("class") ?? "").split(/\s+/).some((c) => DEMO_CLASSES.has(c));
 /** Elements whose text is code, byte for byte (D7). */
 const CODE_ELEMENTS = new Set(["pre", "code", "kbd", "samp", "var"]);

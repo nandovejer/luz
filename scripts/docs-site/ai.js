@@ -881,12 +881,12 @@ export function aiArtifacts(site, { siteUrl = "" } = {}) {
 const MARKER = /^([ \t]*)<!-- luz:ai ([a-z]+) -->[ \t]*$/gm;
 
 /** A scrollable, labelled luz-table: `columns` are the headers, `rows` arrays of cell HTML. */
-function tableOf(label, columns, rows, lang = "") {
+function tableOf(label, columns, rows, lang = "", regionLabel = label) {
   const head = columns.map((c) => `<th scope="col">${c}</th>`).join("");
   const body = rows.map((cells) => `<tr>${cells.map((cell, i) => `<td data-label="${columns[i]}"><div>${cell}</div></td>`).join("")}</tr>`);
   return [
-    `<div class="luz-table-wrap"${lang} role="region" aria-label="${escAttr(label)}" tabindex="0">`,
-    '  <table class="luz-table">',
+    `<div class="luz-table-wrap" role="region" aria-label="${escAttr(regionLabel)}" tabindex="0">`,
+    `  <table class="luz-table"${lang}>`,
     `    <caption>${escText(label)}</caption>`,
     `    <thead><tr>${head}</tr></thead>`,
     "    <tbody>",
@@ -910,17 +910,20 @@ const generated = {
   },
   rules(site) {
     // The rules are what the CLI prints, in English (D18): in a language the tables say so (lang="en"), their words the English ones
+    // The region is named in the page's language, the table inside it is the English island
     const t = tOf(site.base ?? site);
-    const lang = site.locale ? ' lang="en"' : "";
+    const say = tOf(site);
+    const lang = site.locale ? (site.locale.dir === "rtl" ? ' lang="en" dir="ltr"' : ' lang="en"') : "";
     const rows = ruleRows();
-    const table = (label, severity) =>
+    const table = (label, severity, key) =>
       tableOf(
         label,
         [t("ai.col-rule"), t("ai.col-finds"), t("ai.col-severity")],
         rows.filter((r) => r.severity === severity).map((r) => [`<code>${r.id}</code>`, escText(r.finds), severity]),
         lang,
+        say(key),
       );
-    return [table(t("ai.rules-block"), "block"), table(t("ai.rules-warn"), "warn")].join("\n");
+    return [table(t("ai.rules-block"), "block", "ai.rules-block"), table(t("ai.rules-warn"), "warn", "ai.rules-warn")].join("\n");
   },
 };
 
