@@ -14,8 +14,10 @@
  *    over dark too), never in light and never in high contrast; not under forced
  *    colours.
  *  - Decorative: no text, not in the accessibility tree, `pointer-events: none`.
- *  - Static: nothing animates it for more than 5 s (WCAG 2.2.2: the docs have no
- *    pause control).
+ *  - Nothing moves on a clock: no time-based animation lasts more than 5 s (WCAG
+ *    2.2.2: the docs have no pause control). The one motion it has is the reader's
+ *    own: the stars drift sideways, slowly, as the page scrolls (a scroll-driven
+ *    animation, CSS only, as the home's stars drift), never under reduced motion.
  *  - No layout change, no sideways scroll at 320 px, axe passes in dark.
  *
  * The band has no agreed class name, so `findBand` looks for what the decision
@@ -27,7 +29,7 @@
  * It needs JavaScript only for what the site does before it (boot.js sets
  * data-theme), so it runs in `chromium`.
  */
-/* global atob, Blob, createImageBitmap, innerHeight, OffscreenCanvas, scrollX, scrollY -- these run in the page, inside page.evaluate() */
+/* global atob, Blob, createImageBitmap, innerHeight, OffscreenCanvas, scrollX, scrollY, ScrollTimeline -- these run in the page, inside page.evaluate() */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
@@ -197,7 +199,7 @@ for (const route of ROUTES) {
       expect(withBand, 'the accessibility tree is the same with and without the band').toBe(without);
     });
 
-    test('the band is static: nothing animates it, or every animation ends within 5 s', async ({ page }) => {
+    test('nothing moves the band on a clock: any animation that is not driven by the scroll ends within 5 s', async ({ page }) => {
       await open(page, route, 'dark');
       const band = await expectBand(page, route);
       const animations = await page.evaluate((pseudo) => {
@@ -205,6 +207,8 @@ for (const route of ROUTES) {
         return document
           .getAnimations()
           .filter((a) => {
+            // the reader's scroll drives it, not a clock: it has no end of its own to be within 5 s
+            if (typeof ScrollTimeline !== 'undefined' && a.timeline instanceof ScrollTimeline) return false;
             const e = /** @type {KeyframeEffect} */ (a.effect);
             const target = e?.target;
             if (!target || !host) return false;
@@ -354,6 +358,128 @@ for (const route of ROUTES) {
     });
   });
 }
+
+/** The horizontal and vertical offsets (px) of every background layer of the band, at the current scroll. */
+async function offsets(page, band) {
+  return page.evaluate((pseudo) => {
+    const host = document.querySelector('[data-test-band]');
+    const s = getComputedStyle(/** @type {Element} */ (host), pseudo);
+    const list = (v) => v.split(',').map((x) => parseFloat(x));
+    return { x: list(s.backgroundPositionX), y: list(s.backgroundPositionY) };
+  }, band.pseudo);
+}
+
+/** Scroll to y, and wait for the frames that paint it. */
+async function scrollToY(page, y) {
+  await page.evaluate((top) => window.scrollTo(0, top), y);
+  await nextFrames(page);
+}
+
+/** The most the page can scroll, in px. */
+function scrollRange(page) {
+  return page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+}
+
+test.describe('the stars drift with the scroll, quietly (dark, motion allowed)', () => {
+  const ROUTE = '/docs/components/button/';
+
+  test('scrolling moves the stars of the top strip sideways; the few in the middle of the row stay where they are', async ({ page }) => {
+    await open(page, ROUTE, 'dark');
+    const band = await expectBand(page, ROUTE);
+    const top = await offsets(page, band);
+    const range = await scrollRange(page);
+    expect(range, 'the page scrolls enough to see the drift').toBeGreaterThan(1500);
+    await scrollToY(page, range);
+    const bottom = await offsets(page, band);
+    expect(bottom.x.length).toBe(top.x.length);
+    const moved = top.x.map((x, i) => Math.abs(bottom.x[i] - x));
+    // the layers that repeat across the row (the first eight): each one drifts, at its own pace
+    expect(moved.slice(0, 8).every((d) => d >= 20), `every repeating layer moves by the end of the page: ${moved.slice(0, 8).map((d) => d.toFixed(0))}`).toBe(true);
+    expect(new Set(moved.slice(0, 8).map((d) => d.toFixed(0))).size, 'the layers do not all move together: the far ones are slower').toBeGreaterThan(2);
+    // the ones in the empty middle of the row do not leave it
+    expect(moved.slice(8).every((d) => d < 0.5), `the stars in the middle of the row stay: ${moved.slice(8)}`).toBe(true);
+  });
+
+  test('they move sideways only: the strip of the top, above the text, is where they stay', async ({ page }) => {
+    await open(page, ROUTE, 'dark');
+    const band = await expectBand(page, ROUTE);
+    const top = await offsets(page, band);
+    await scrollToY(page, await scrollRange(page));
+    const bottom = await offsets(page, band);
+    expect(bottom.y, 'no layer moves up or down, so no star ever sits under a line of text').toEqual(top.y);
+  });
+
+  test('it is slow: a thousand pixels of scroll move the fastest layer by less than a tenth of that, and no layer more than 300 px in the whole page', async ({ page }) => {
+    await open(page, ROUTE, 'dark');
+    const band = await expectBand(page, ROUTE);
+    const top = await offsets(page, band);
+    await scrollToY(page, 1000);
+    const thousand = await offsets(page, band);
+    const per1000 = Math.max(...top.x.map((x, i) => Math.abs(thousand.x[i] - x)));
+    expect(per1000, `the fastest layer after 1000 px of scroll (${per1000.toFixed(1)} px)`).toBeLessThanOrEqual(100);
+    await scrollToY(page, await scrollRange(page));
+    const bottom = await offsets(page, band);
+    const whole = Math.max(...top.x.map((x, i) => Math.abs(bottom.x[i] - x)));
+    expect(whole, `the fastest layer over the whole page (${whole.toFixed(0)} px)`).toBeLessThanOrEqual(300);
+  });
+
+  test('the reader moves them, nothing else does: standing still, the band is the same picture 2 s later', async ({ page }) => {
+    await open(page, ROUTE, 'dark');
+    const band = await expectBand(page, ROUTE);
+    await scrollToY(page, 800);
+    const clip = { x: 0, y: 0, width: 1280, height: Math.ceil(band.box.height) };
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await nextFrames(page);
+    const a = await page.screenshot({ clip });
+    await page.waitForTimeout(2000);
+    const b = await page.screenshot({ clip });
+    expect(a.equals(b), 'two screenshots of the band, 2 s apart with no scroll, are identical').toBe(true);
+  });
+
+  test('the drift is driven by the scroll, never by a clock: every animation on the band has a scroll timeline', async ({ page }) => {
+    await open(page, ROUTE, 'dark');
+    const band = await expectBand(page, ROUTE);
+    const info = await page.evaluate((pseudo) => {
+      const host = document.querySelector('[data-test-band]');
+      const list = document.getAnimations().filter((a) => {
+        const e = /** @type {KeyframeEffect} */ (a.effect);
+        return e?.target === host && e.pseudoElement === pseudo;
+      });
+      return list.map((a) => ({ scroll: typeof ScrollTimeline !== 'undefined' && a.timeline instanceof ScrollTimeline }));
+    }, band.pseudo);
+    expect(info.length, 'the band is animated by the scroll').toBeGreaterThan(0);
+    expect(info.every((a) => a.scroll), 'no animation of the band is on a clock').toBe(true);
+  });
+
+  test('reduced motion: the stars stay still, and nothing animates them', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, ROUTE, 'dark');
+    const band = await expectBand(page, ROUTE);
+    const top = await offsets(page, band);
+    await scrollToY(page, await scrollRange(page));
+    const bottom = await offsets(page, band);
+    expect(bottom.x, 'the offsets do not change with the scroll').toEqual(top.x);
+    const running = await page.evaluate((pseudo) => {
+      const host = document.querySelector('[data-test-band]');
+      return document.getAnimations().filter((a) => {
+        const e = /** @type {KeyframeEffect} */ (a.effect);
+        return e?.target === host && e.pseudoElement === pseudo;
+      }).length;
+    }, band.pseudo);
+    expect(running, 'no animation on the band').toBe(0);
+  });
+
+  test('the layout does not move with the drift: the header is the same height and the page the same size at the end of the page', async ({ page }) => {
+    await open(page, ROUTE, 'dark');
+    await expectBand(page, ROUTE);
+    const read = () => page.evaluate(() => ({ header: document.querySelector('#site-header')?.getBoundingClientRect().height, scrollW: document.documentElement.scrollWidth, clientW: document.documentElement.clientWidth }));
+    const before = await read();
+    await scrollToY(page, await scrollRange(page));
+    const after = await read();
+    expect(after.header).toBe(before.header);
+    expect(after.scrollW, 'no sideways scroll comes from the drifting layers').toBeLessThanOrEqual(after.clientW);
+  });
+});
 
 test.describe('where the stars are not', () => {
   test('light: no band, and the same page in dark has it', async ({ page }) => {
