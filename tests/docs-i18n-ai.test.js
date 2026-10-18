@@ -13,9 +13,11 @@
  * The files are the ones the Vite plugin emits (generateBundle), from a throwaway copy of the real docs with a
  * Spanish and an Arabic tree (tests/helpers/docs-i18n-size-fixture.js): the real pages untranslated, so each is
  * the English page in that language's chrome, plus ONE probe page that exists only in the copy and is
- * translated in both. A translation the real site has is kept, so the test follows the real site as it grows.
+ * translated in both. The translations the real site has are removed from the copy (`untranslate`), so the
+ * fallback cases do not depend on how much of the real site is translated.
  * The dev server answers the same two kinds of file.
  */
+import { rmSync } from "node:fs";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { renderPageMarkdown } from "../scripts/docs-site/ai.js";
@@ -44,10 +46,24 @@ function bundleOf(copy) {
   return files;
 }
 
+/** Remove the translated pages the real site has from the copy, keeping the probe's: every real page is then the English one. */
+function untranslate(docsDir) {
+  for (const code of LANGUAGES) {
+    for (const route of translatedRoutes(docsDir, code)) {
+      if (route === PROBE.route) continue;
+      const parts = route.slice("/docs/".length).split("/").filter(Boolean);
+      const base = join(docsDir, "i18n", code, "pages", ...parts);
+      rmSync(`${base}.html`, { force: true });
+      rmSync(join(base, "index.html"), { force: true });
+    }
+  }
+}
+
 beforeAll(() => {
   // The same docs, without a language besides English, and with Spanish and Arabic
   without = makeSite({ languages: [], probe: true });
   withFeature = makeSite({ languages: LANGUAGES, probe: true });
+  untranslate(withFeature.docsDir);
   try {
     baseline = bundleOf(without);
     bundle = bundleOf(withFeature);

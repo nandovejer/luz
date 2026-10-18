@@ -85,6 +85,8 @@ test.describe('the nested submenu on a wide screen', () => {
     });
 
     test(`${where}: Tab walks the pages of Documentation, then HTML elements, then its pages, then Accessibility`, async ({ page }) => {
+      // At 1024 px, below the three-column layout: from 80rem "On this page" is a column on the right, before main in the markup, by design
+      await page.setViewportSize({ width: 1024, height: 800 });
       await page.goto(`${prefix}${FORMS}`);
       const nav = page.locator('nav.luz-docs-nav');
       await nav.locator(`a[href="${prefix}${ownDocumentation.at(-1)}"]`).focus();

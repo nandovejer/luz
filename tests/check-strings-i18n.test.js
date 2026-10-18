@@ -11,8 +11,7 @@
  *   - Arabic: no letter case, so a heading is not checked for it (a Latin heading "Quick Start Guide" is not a
  *     Title Case problem in an Arabic page), and the Arabic list of vague wording applies ("هنا");
  *   - an element with its own `lang` (a `lang="en"` island in a translated page) is still read in its own language;
- *   - the content of a demo or an example of a TRANSLATION (`[data-docs-specimen]`, `.docs-dodont__stage`, in the real pages
- *     `.luz-docs-dodont__stage`, `.docs-snippet`, `.elements-stage`) is not prose: a card title "Carlos Díaz" in a demo is
+ *   - the content of a demo or an example of a TRANSLATION (`[data-docs-specimen]`, `.luz-docs-dodont__stage`, `.docs-snippet`, `.elements-stage`) is not prose: a card title "Carlos Díaz" in a demo is
  *     a person's name, not a Title Case heading, and a demo's "Leer más" is a sample, not the page's own link text
  *     (decisions, "Clarifications after the first real Spanish translations"). English pages are read as before.
  *
@@ -109,8 +108,7 @@ describe("check:strings reads the translations of the docs in their language", (
 /** The containers of a demo or an example, as the markup that opens each. */
 const DEMOS = {
   "a specimen": '<div class="docs-example" data-docs-specimen>',
-  "a do and don't stage": '<div class="docs-dodont__stage" inert aria-hidden="true">',
-  "a do and don't stage of the docs package": '<div class="luz-docs-dodont__stage" inert aria-hidden="true">',
+  "a do and don't stage": '<div class="luz-docs-dodont__stage" inert aria-hidden="true">',
   "a snippet": '<div class="docs-snippet">',
   "an elements stage": '<div class="elements-stage">',
 };
