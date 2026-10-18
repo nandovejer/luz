@@ -168,7 +168,7 @@ test.describe('Documentation site', () => {
       await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveText('Docs');
       // Exactly one radio group drives the tokens on this page
       await expect(page.locator('fieldset:has(input[name="luz-theme"])')).toHaveCount(1);
-      await expect(page.locator('input[name="luz-theme"]')).toHaveCount(4);
+      await expect(page.locator('input[name="luz-theme"]')).toHaveCount(3);
       await expect(page.locator('#page-nav fieldset')).toHaveCount(0);
     });
 
@@ -178,7 +178,7 @@ test.describe('Documentation site', () => {
       await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveCount(0);
     });
 
-    test('the cycle button in the footer steps through the modes and Auto, under core\'s key', async ({ page }) => {
+    test('the cycle button in the footer steps through the three modes, under core\'s key', async ({ page }) => {
       await seedMode(page, 'light');
       await open(page);
       expect(await theme(page)).toBe('light');
@@ -190,12 +190,9 @@ test.describe('Documentation site', () => {
         expect(await theme(page)).toBe(mode);
         await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue(mode);
       }
-      // Auto is the absence of the choice: the key is removed and the clock decides
+      // No Auto in the footer (2026-10-18): after High contrast comes Light again
       await button.click();
-      await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue('auto');
-      await expect(button).toHaveAccessibleName('Change color mode. Current: Auto');
-      expect(await page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBeNull();
-      await button.click();
+      expect(await theme(page)).toBe('light');
       await button.click();
       expect(await page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBe('dark');
       // The site has no key of its own

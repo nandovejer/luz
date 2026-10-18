@@ -654,13 +654,13 @@ test.describe('<luz-mode>', () => {
   /* ---- The event -------------------------------------------------------- */
 
   test.describe('luz-mode:change', () => {
-    test('fires once after the upgrade, bubbling, with { mode, theme, light, remembered, simulated }', async ({ page }) => {
+    test('fires once after the upgrade, bubbling, with { mode, theme, light, remembered, simulated, pinned }', async ({ page }) => {
       await open(page, '', { scheme: 'dark' });
       await page.waitForTimeout(200);
       const all = await events(page);
       expect(all).toHaveLength(1);
-      expect(Object.keys(all[0]).sort()).toEqual(['light', 'mode', 'remembered', 'simulated', 'theme']);
-      expect(all[0]).toEqual({ mode: 'auto', theme: 'dark', light: null, remembered: false, simulated: false });
+      expect(Object.keys(all[0]).sort()).toEqual(['light', 'mode', 'pinned', 'remembered', 'simulated', 'theme']);
+      expect(all[0]).toEqual({ mode: 'auto', theme: 'dark', light: null, remembered: false, simulated: false, pinned: null });
     });
 
     test('fires on every change: a choice, the system and a preview', async ({ page }) => {
@@ -676,23 +676,23 @@ test.describe('<luz-mode>', () => {
       };
       expect((await events(page))).toHaveLength(1);
       expect((await events(page)).at(-1)).toMatchObject({ mode: 'auto', theme: 'light', light: 'morning', simulated: false });
-      expect(await step(() => choose(page, 'Dark'), 2)).toEqual({ mode: 'dark', theme: 'dark', light: 'night', remembered: true, simulated: false });
+      expect(await step(() => choose(page, 'Dark'), 2)).toEqual({ mode: 'dark', theme: 'dark', light: 'night', remembered: true, simulated: false, pinned: null });
       // Auto stores nothing, even with `remember`
-      expect(await step(() => choose(page, 'Auto'), 3)).toEqual({ mode: 'auto', theme: 'light', light: 'morning', remembered: false, simulated: false });
-      expect(await step(() => preview(page, 'dusk'), 4)).toEqual({ mode: 'auto', theme: 'dark', light: 'dusk', remembered: false, simulated: true });
-      expect(await step(() => preview(page, null), 5)).toEqual({ mode: 'auto', theme: 'light', light: 'morning', remembered: false, simulated: false });
-      expect(await step(() => page.evaluate(() => { /** @type {any} */ (document.getElementById('mode')).mode = 'light'; }), 6)).toEqual({ mode: 'light', theme: 'light', light: 'afternoon', remembered: true, simulated: false });
+      expect(await step(() => choose(page, 'Auto'), 3)).toEqual({ mode: 'auto', theme: 'light', light: 'morning', remembered: false, simulated: false, pinned: null });
+      expect(await step(() => preview(page, 'dusk'), 4)).toEqual({ mode: 'auto', theme: 'dark', light: 'dusk', remembered: false, simulated: true, pinned: null });
+      expect(await step(() => preview(page, null), 5)).toEqual({ mode: 'auto', theme: 'light', light: 'morning', remembered: false, simulated: false, pinned: null });
+      expect(await step(() => page.evaluate(() => { /** @type {any} */ (document.getElementById('mode')).mode = 'light'; }), 6)).toEqual({ mode: 'light', theme: 'light', light: 'afternoon', remembered: true, simulated: false, pinned: null });
     });
 
     test('without `remember` a choice says remembered: false', async ({ page }) => {
       await open(page, '');
       await choose(page, 'High contrast');
-      expect((await events(page)).at(-1)).toEqual({ mode: 'high-contrast', theme: 'high-contrast', light: null, remembered: false, simulated: false });
+      expect((await events(page)).at(-1)).toEqual({ mode: 'high-contrast', theme: 'high-contrast', light: null, remembered: false, simulated: false, pinned: null });
     });
 
     test('`remembered` is true only while a fixed mode is stored: with `remember` and a stored mode on load', async ({ page }) => {
       await open(page, 'remember', { stored: 'dark' });
-      expect((await events(page)).at(0)).toEqual({ mode: 'dark', theme: 'dark', light: null, remembered: true, simulated: false });
+      expect((await events(page)).at(0)).toEqual({ mode: 'dark', theme: 'dark', light: null, remembered: true, simulated: false, pinned: null });
     });
 
     test('`remembered` is false in auto with `remember` and nothing stored, and a choice then a return to auto turns it true then false', async ({ page }) => {
@@ -708,7 +708,7 @@ test.describe('<luz-mode>', () => {
 
     test('`remembered` is false without `remember`, even when a mode is stored under the key', async ({ page }) => {
       await open(page, '', { stored: 'dark' });
-      expect((await events(page)).at(0)).toEqual({ mode: 'auto', theme: 'light', light: null, remembered: false, simulated: false });
+      expect((await events(page)).at(0)).toEqual({ mode: 'auto', theme: 'light', light: null, remembered: false, simulated: false, pinned: null });
     });
 
     test('fires when the system changes while in auto', async ({ page }) => {

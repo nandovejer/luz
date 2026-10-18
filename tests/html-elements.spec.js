@@ -232,13 +232,13 @@ test.describe('HTML elements reference, in the documentation', () => {
     await seedMode(page, 'light');
     await open(page, CATEGORY_PAGES[0]);
     await expect(page.locator(`.docs-nav a[href="${OVERVIEW}"]`)).toHaveCount(1);
-    // The footer's cycle button: light, then dark and high contrast; the next step is Auto
+    // The footer's cycle button: light, then dark and high contrast; the next step is Light again (no Auto)
     for (const mode of ['dark', 'high-contrast']) {
       await page.click('footer .luz-mode-cycle');
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
     }
     await page.click('footer .luz-mode-cycle');
-    await expect(page.locator('footer input[name="luz-theme"]:checked')).toHaveValue('auto');
+    await expect(page.locator('footer input[name="luz-theme"]:checked')).toHaveValue('light');
   });
 
   test('the demos that need a script are wired', async ({ page }) => {
