@@ -86,8 +86,10 @@ The phases of the day, by the visitor's clock. Night runs through midnight.
 
 - `el.mode`: The choice: `auto`, `light`, `dark` or `high-contrast`. Setting it chooses the radio
 - `el.light`: The phase of the day now, or `null` unless `by="clock"`
-- `preview(x)`: Shows another time of day: `x` is a phase name or an hour from 0 to 24. With Auto, `data-theme` follows it; with a mode chosen, only the light does. `preview(null)` goes back. Unless `by="clock"` it returns `false`
-- `luz-mode:change`: Bubbles from the element at every change. Its `detail`: `mode` (the choice), `theme` (the `data-theme` applied), `light` (the phase, or `null`), `remembered` (`true` only with `remember` and a mode stored now) and `simulated` (`true` while a preview is active)
+- `preview(x)`: Shows another time of day: `x` is a phase name or an hour from 0 to 24. With Auto, `data-theme` follows it; with a mode chosen, only the light does. `preview(null)` goes back, to the pinned hour if there is one. Unless `by="clock"` it returns `false`
+- `pin(x)`: Keeps another time of day for good: Auto, at `x` (a phase name or an hour from 0 to 24) instead of now. With `remember` it is stored under `luz-light`, in minutes of the day, and the stored mode is removed; choosing a mode, or `pin(null)`, unpins. Unless `by="clock"` it returns `false`
+- `el.pinned`: The pinned hour, or `null`
+- `luz-mode:change`: Bubbles from the element at every change. Its `detail`: `mode` (the choice), `theme` (the `data-theme` applied), `light` (the phase, or `null`), `remembered` (`true` only with `remember` and a mode stored now) `simulated` (`true` while a preview is active) and `pinned` (the pinned hour, or `null`)
 
 #### Two lights in one mode
 

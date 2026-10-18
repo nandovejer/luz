@@ -141,7 +141,7 @@ test.describe('with no choice, the light follows the clock', () => {
         await watch(page);
         await page.goto(path);
         await modulesRan(page);
-        await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue('auto');
+        await expect(page.locator('input[name="luz-theme"]:checked'), 'no mode chosen: no radio checked').toHaveCount(0);
         expect(await state(page)).toEqual({ theme: mode, light });
         // Core's theme module and <luz-mode> both run: neither writes the other mode, not even to correct it in a later task
         expect(only(await took(page, 'data-theme'))).toEqual([mode]);
@@ -180,7 +180,7 @@ test.describe('with no choice, the light follows the clock', () => {
       // Every value the attributes took: boot's, then <luz-mode>'s, the same
       expect(only(await took(page, 'data-theme'))).toEqual(['high-contrast']);
       expect(only(await took(page, 'data-light'))).toEqual(['morning']);
-      await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue('auto');
+      await expect(page.locator('input[name="luz-theme"]:checked'), 'no mode chosen: no radio checked').toHaveCount(0);
     });
   }
 
@@ -210,7 +210,7 @@ test.describe('with no choice, core\'s own theme handling runs under every syste
       await page.evaluate(() => /** @type {any} */ (window).__scheme);
       expect(await state(page)).toEqual({ theme: 'light', light: 'afternoon' });
       expect(only(await took(page, 'data-theme'))).toEqual(['light']);
-      await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue('auto');
+      await expect(page.locator('input[name="luz-theme"]:checked'), 'no mode chosen: no radio checked').toHaveCount(0);
     });
 
     test(`${path}: a light system at 21:00, modules loaded: dark, dusk, and a change of the system does not move it`, async ({ page }) => {

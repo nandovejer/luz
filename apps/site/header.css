@@ -290,6 +290,13 @@
   block-size: var(--luz-control-lg);
 }
 
+/* No Auto radio: while the light follows the hour (the clock's, or the one
+   the home's globe pinned) no radio is checked, and the button shows the
+   Auto icon */
+.site-modes:not(:has(input:checked)) > .luz-mode-cycle > [data-mode-icon="auto"] {
+  display: block;
+}
+
 /* Small screens: the version tag goes (it is also in the install
    snippets), the name stays beside the mark, and the row keeps room for
    Components */

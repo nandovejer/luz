@@ -175,7 +175,7 @@
               "type": {
                 "text": "boolean"
               },
-              "description": "Store the chosen mode under core's luz-theme key; Auto removes it. Without it nothing is stored."
+              "description": "Store the chosen mode under core's luz-theme key, and a pinned hour under luz-light; Auto removes them. Without it nothing is stored."
             },
             {
               "name": "by",
@@ -205,7 +205,7 @@
               "type": {
                 "text": "CustomEvent"
               },
-              "description": "Bubbles from the element after the upgrade and on every change, with detail { mode, theme, light, remembered, simulated }."
+              "description": "Bubbles from the element after the upgrade and on every change, with detail { mode, theme, light, remembered, simulated, pinned }."
             }
           ],
           "demos": [

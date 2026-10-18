@@ -43,7 +43,6 @@ const text = (lang, english) => {
   if (!key) throw new Error(`no key of en.json has the value "${english}"`);
   return catalog(lang)[key];
 };
-const PHRASE = 'A design system is a world with its own laws of light.';
 const ROUTES = [
   ['/', 'en'],
   ['/es/', 'es'],
@@ -208,7 +207,7 @@ test.describe('with JavaScript', () => {
 
   /* -- The slider and Live call <luz-mode>.preview() --------------------- */
 
-  test('in Auto the slider scrubs the page: data-light and data-theme follow the hour, and Live returns', async ({ page }) => {
+  test('in Auto the slider scrubs the page: data-light and data-theme follow the hour, and closing the bar keeps the hour it was let go at', async ({ page }) => {
     await open(page, '/', { time: '14:00' });
     await expect.poll(async () => (await html(page)).light).toBe('afternoon');
     expect((await html(page)).theme).toBe('light');
@@ -230,15 +229,14 @@ test.describe('with JavaScript', () => {
     expect(hours.every((h) => typeof h === 'number' && h >= 0 && h <= 24)).toBe(true);
     expect(Math.abs(hours.at(-1) - 9.5)).toBeLessThan(0.02);
 
-    // No Back to now button any more: closing the bar brings the light back to now
+    // No Back to now button: letting the slider go pinned its hour (2026-10-18), and closing the bar keeps it
     await expect(page.locator('home-light .home-light__live')).toHaveCount(0);
     await page.keyboard.press('Escape');
-    await expect.poll(async () => (await html(page)).light).toBe('afternoon');
-    expect((await html(page)).theme).toBe('light');
-    expect((await previews(page)).at(-1)).toBeNull();
+    await page.waitForTimeout(300);
+    expect(await html(page)).toMatchObject({ light: 'morning', theme: 'light' });
   });
 
-  test('with a fixed mode the theme stays and data-light follows the hour; Live gives the mode\'s own light back', async ({ page }) => {
+  test('after a mode chosen in the footer, moving the slider gives the hour back the lead: its light and its mode (the last touched wins)', async ({ page }) => {
     await open(page, '/', { time: '14:00' });
     await chooseMode(page, 'dark');
     await expect.poll(async () => (await html(page)).theme).toBe('dark');
@@ -246,14 +244,14 @@ test.describe('with JavaScript', () => {
 
     await scrub(page, '09:30');
     await expect.poll(async () => (await html(page)).light).toBe('morning');
-    expect((await html(page)).theme, 'the chosen mode stays').toBe('dark');
+    expect((await html(page)).theme, 'the hour leads again').toBe('light');
     await scrub(page, '19:00');
     await expect.poll(async () => (await html(page)).light).toBe('sunset');
-    expect((await html(page)).theme).toBe('dark');
+    expect((await html(page)).theme).toBe('light');
 
     await page.keyboard.press('Escape');
-    await expect.poll(async () => (await html(page)).light).toBe('night');
-    expect((await html(page)).theme).toBe('dark');
+    await page.waitForTimeout(300);
+    expect(await html(page)).toMatchObject({ light: 'sunset', theme: 'light' });
   });
 
   test('the slider is a keyboard control named from the catalog, and its value text says the hour', async ({ page }) => {
@@ -445,20 +443,15 @@ test.describe('with JavaScript', () => {
 
   for (const [route, lang] of ROUTES) {
     test(`${route}: the phrase under the visual and the names in the bar are the catalog's (${lang})`, async ({ page }) => {
+      await page.addInitScript(() => { Math.random = () => 0; });
       await open(page, route);
-      await expect(page.locator('home-light .home-light__q')).toHaveText(text(lang, PHRASE));
+      await expect(page.locator('home-light .home-light__q')).toHaveText(catalog(lang)['light.fact.1']);
       await openBar(page);
       await scrub(page, '10:00');
       await expect(page.getByRole('slider', { name: text(lang, 'Scrub the day') })).toHaveCount(1);
       await expect(page.locator('home-light .home-light__line')).toHaveAccessibleName(new RegExp(text(lang, 'Show the light bar').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     });
   }
-
-  test('the English phrase is what the catalog says (D11), and the other languages differ', async () => {
-    expect(text('en', PHRASE)).toBe(PHRASE);
-    expect(text('es', PHRASE)).not.toBe(PHRASE);
-    expect(text('ar', PHRASE)).not.toBe(PHRASE);
-  });
 
   /* -- The favicon ------------------------------------------------------------ */
 
@@ -623,15 +616,15 @@ test.describe('review fixes', () => {
     });
   }
 
-  /* -- 3. The bar shows no hour, and nothing is a live region ------------------- */
+  /* -- 3. No <output>; the one live region is the passing "Saved" notice ------------ */
 
-  test('the bar shows no hour (no <output>), and nothing in the light is a status or a polite live region', async ({ page }) => {
+  test('the bar has no <output>, and its one live region is the Saved notice, a status', async ({ page }) => {
     await open(page, '/', { time: '14:00' });
     await openBar(page);
     await expect(output(page)).toHaveCount(0);
     await slider(page).fill('600');
-    expect(await visibleText(page.locator('home-light .home-light__bar')), 'no hour in the bar').not.toMatch(/[0-9\u0660-\u0669]{1,2}\D[0-9\u0660-\u0669]{2}/);
-    expect(await page.locator('home-light').evaluate((el) => el.querySelectorAll('[role="status"], [role="alert"], [role="log"], [aria-live]:not([aria-live="off"])').length)).toBe(0);
+    const live = await page.locator('home-light').evaluate((el) => [...el.querySelectorAll('[role="status"], [role="alert"], [role="log"], [aria-live]:not([aria-live="off"])')].map((n) => `${n.getAttribute('role')} ${n.className}`));
+    expect(live).toEqual(['status home-light__saved']);
   });
 
   /* -- 4. Forced colours ------------------------------------------------------- */
@@ -680,14 +673,26 @@ test.describe('review fixes', () => {
   /* -- 6. The line shows the phrase only: no light's name, no hour (the owner's cut, 2026-10-17) -- */
 
   for (const [route, lang] of ROUTES) {
-    test(`${route}: the line's visible text is the phrase, with no light's name and no hour (${lang})`, async ({ page }) => {
+    test(`${route}: the line's visible text is one of the nine facts, with no light's name and no hour (${lang})`, async ({ page }) => {
       const cat = catalog(lang);
+      const facts = Array.from({ length: 9 }, (_, i) => cat[`light.fact.${i + 1}`]);
       const phases = ['dawn', 'morning', 'afternoon', 'sunset', 'dusk', 'night'].map((phase) => cat[`light.${phase}`]);
       await open(page, route, { time: '14:00' });
       const shown = await visibleText(line(page));
-      expect(shown).toContain(cat['light.say.globe']);
-      expect(phases.filter((name) => shown.includes(name)), 'no light name on the line').toEqual([]);
-      expect(shown, 'no hour on the line').not.toMatch(/[0-9\u0660-\u0669]{1,2}\D[0-9\u0660-\u0669]{2}/);
+      const fact = facts.find((f) => shown.includes(f));
+      expect(fact, 'one of the facts of the page\'s language').toBeDefined();
+      const rest = shown.replace(fact ?? '', '');
+      expect(phases.filter((name) => rest.includes(name)), 'no light name on the line').toEqual([]);
+      expect(rest, 'no hour on the line').not.toMatch(/[0-9\u0660-\u0669]{1,2}\D[0-9\u0660-\u0669]{2}/);
+    });
+
+    test(`${route}: each load picks one of the nine facts at random, in ${lang}: the first, the last and one between`, async ({ page }) => {
+      const cat = catalog(lang);
+      for (const [random, n] of [[0, 1], [0.5, 5], [0.999, 9]]) {
+        await page.addInitScript((r) => { Math.random = () => r; }, random);
+        await open(page, route, { time: '14:00' });
+        expect(await visibleText(line(page)), `Math.random() = ${random}`).toContain(cat[`light.fact.${n}`]);
+      }
     });
   }
 
@@ -755,9 +760,9 @@ test.describe('review fixes', () => {
     expect(Math.abs(d - 10), `the line's bottom is ${d}px below the light's`).toBeLessThanOrEqual(1);
   });
 
-  /* -- 7. No Back to now: closing the bar brings the light back to now ------------ */
+  /* -- 7. No Back to now: closing the bar keeps the hour the slider was let go at (2026-10-18) -- */
 
-  test('the bar has no Back to now button, and clicking the line to close it brings the light back to now', async ({ page }) => {
+  test('the bar has no Back to now button, and clicking the line to close it keeps the hour the slider pinned', async ({ page }) => {
     await open(page, '/', { time: '14:00' });
     await openBar(page);
     await expect(page.locator('home-light .home-light__live')).toHaveCount(0);
@@ -765,7 +770,8 @@ test.describe('review fixes', () => {
     await expect.poll(async () => (await html(page)).light).toBe('night');
     await line(page).click();
     await expect(line(page)).toHaveAttribute('aria-expanded', 'false');
-    await expect.poll(async () => (await html(page)).light).toBe('afternoon');
+    await page.waitForTimeout(300);
+    expect((await html(page)).light).toBe('night');
   });
 
   /* -- 7b. The line spans the whole width, on the bar's frosted glass ------------- */

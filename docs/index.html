@@ -16,11 +16,11 @@
   <link rel="apple-touch-icon" href="./assets/apple-touch-icon-QPTLZskv.png">
   <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
   <script src="./boot.js" ></script>
-  <script type="module" crossorigin src="./assets/header-CDFpI0K3.js"></script>
-  <script type="module" crossorigin src="./assets/landing-C-PK8-YK.js"></script>
+  <script type="module" crossorigin src="./assets/header-kNH6J-Nb.js"></script>
+  <script type="module" crossorigin src="./assets/landing-B0ZzHqx9.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/header-enjYdf1s.css">
-  <link rel="stylesheet" crossorigin href="./assets/landing-BZjenTCs.css">
-  <link rel="stylesheet" crossorigin href="./assets/header-Co4mHu8T.css">
+  <link rel="stylesheet" crossorigin href="./assets/landing-Bn4ClDNb.css">
+  <link rel="stylesheet" crossorigin href="./assets/header-Eb13_Q64.css">
 </head>
 <!-- The strings core's scripts write (the color mode button, the copy
      buttons), in the page's language: authored labels win over core's
@@ -34,10 +34,18 @@
       data-luz-label-copied-status="Copied to clipboard"
       data-luz-label-copy-failed="Copy failed. Select the text and copy it manually."
       data-luz-label-light-open="Show the light bar"
-      data-luz-label-light-say-globe="A design system is a world with its own laws of light."
+      data-luz-label-light-fact-1="Light takes only 1.3 seconds to travel from the Moon to Earth."
+      data-luz-label-light-fact-2="Sunlight takes about 8 minutes and 20 seconds to reach us; if the Sun went out, it would take us that long to notice."
+      data-luz-label-light-fact-3="In just one second, a beam of light could travel around the Earth 7.5 times along the equator."
+      data-luz-label-light-fact-4="A ‘light-year’ does not measure time, but the distance light travels in one year, which equals nearly 9.5 trillion kilometers."
+      data-luz-label-light-fact-5="Due to the time light takes to travel, when you look at the stars at night you are seeing them as they were tens, hundreds, or thousands of years ago."
+      data-luz-label-light-fact-6="According to current physics, the speed of light in a vacuum is the cosmic speed limit; nothing with mass can travel faster than it."
+      data-luz-label-light-fact-7="Light slows down to about 225,000 km/s when traveling through water due to the density of the medium."
+      data-luz-label-light-fact-8="In a laboratory, scientists managed to slow light down to just 61 kilometers per hour by passing it through extremely cold sodium."
+      data-luz-label-light-fact-9="A light (or radio) signal takes between 3 and 22 minutes to reach Mars, depending on how aligned the planets are."
       data-luz-label-light-globe-alt="A globe lit by the sun as it is now, its land a puzzle with one faint grey piece for each country: the day side faces the light, the night side fades."
       data-luz-label-light-scrub="Scrub the day"
-      data-luz-label-light-pause="Pause motion"
+      data-luz-label-light-saved="Saved mode"
       data-luz-label-light-sep=", "
       data-luz-label-light-dawn="Dawn"
       data-luz-label-light-morning="Morning light"
@@ -162,8 +170,7 @@
       <div class="luz-landing-hero__copy">
         <p class="luz-landing-hero__eyebrow" lang="en">Light, usable &amp; zero-dependency</p>
         <h1 class="luz-landing-hero__title" id="hero-title">LUZ, design system for <em>humans</em>, ready for <em>AI</em>.</h1>
-        <p class="luz-landing-hero__lead">Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads, in light, dark and high contrast.</p>
-        <p class="landing-built"><a href="./docs/get-started/how-luz-is-built/#tests-first">We love TDD</a>: every change starts with a failing test.</p>
+        <p class="luz-landing-hero__lead">Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads &amp; <a href="./docs/get-started/how-luz-is-built/#tests-first">We love TDD</a>, every change starts with a failing test.</p>
         <div class="o-actions">
           <a class="luz-btn luz-btn--primary luz-btn--lg" href="./docs/">Read the docs</a>
           <a class="luz-btn luz-btn--outline luz-btn--lg" href="https://github.com/nandovejer/luz">View on GitHub</a>
@@ -178,7 +185,7 @@
          the room is for; once <home-light> is defined the sentence goes -->
     <section class="luz-landing-hero__media luz-landing-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
       <h2 class="u-sr-only" id="light-title">The light where you are</h2>
-      <home-light remember bleed favicon></home-light>
+      <home-light bleed favicon></home-light>
       <p class="landing-light__nojs">With JavaScript on, the light of your hour is drawn here.</p>
     </section>
 
@@ -559,9 +566,8 @@ import &quot;@luz-ds/core&quot;;</code></pre>
       <luz-mode class="site-modes" remember by="clock">
         <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
           <legend class="luz-mode-switcher__label">Color mode</legend>
-          <button class="luz-mode-cycle" type="button" aria-label="Change color mode"></button>
+          <button class="luz-mode-cycle" type="button" aria-label="Change color mode"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
           <span class="luz-mode-cycle__status" role="status"></span>
-          <label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="auto" checked><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Auto</label>
           <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Light</label>
           <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Dark</label>
           <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>

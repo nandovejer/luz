@@ -150,21 +150,21 @@ test('docs: the home shows the A–Z link in place of the big search button', as
   await expect(page.getByRole('main').getByRole('button', { name: /^Search docs/ })).toBeHidden();
 });
 
-test('docs: the color mode switcher is four radios, Auto first and checked, that set the mode', async ({ page }) => {
+test('docs: the color mode switcher is three radios, none checked, that set the mode', async ({ page }) => {
   await page.goto('/docs/');
   const switcher = page.locator('footer luz-mode .luz-mode-switcher--cycle');
-  await expect(switcher.locator('.luz-mode-btn')).toHaveCount(4);
-  await expect(switcher.locator('input[name="luz-theme"]')).toHaveCount(4);
-  expect(await switcher.locator('input[name="luz-theme"]').evaluateAll((all) => all.map((r) => r.value))).toEqual(['auto', 'light', 'dark', 'high-contrast']);
-  await expect(switcher.locator('input[value="auto"]')).toBeChecked();
+  await expect(switcher.locator('.luz-mode-btn')).toHaveCount(3);
+  await expect(switcher.locator('input[name="luz-theme"]')).toHaveCount(3);
+  expect(await switcher.locator('input[name="luz-theme"]').evaluateAll((all) => all.map((r) => r.value))).toEqual(['light', 'dark', 'high-contrast']);
+  await expect(switcher.locator('input:checked')).toHaveCount(0);
   for (const label of await switcher.locator('.luz-mode-btn').all()) await expect(label).toBeVisible();
   await expect(page.locator('.luz-mode-cycle')).toBeHidden();
   const background = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  // Auto is Vejer light without JavaScript: the clock and the system are followed only by the script
+  // No choice is Vejer light without JavaScript: the clock is followed only by the script
   const light = await background();
   await switcher.locator('.luz-mode-btn:has(input[value="dark"])').click();
   await expect.poll(background).not.toBe(light);
-  await switcher.locator('.luz-mode-btn:has(input[value="auto"])').click();
+  await switcher.locator('.luz-mode-btn:has(input[value="light"])').click();
   await expect.poll(background).toBe(light);
 });
 
@@ -348,7 +348,7 @@ for (const home of ['/', '/es/', '/ar/']) {
     const footer = page.locator('footer.luz-landing-footer');
     await expect(footer.locator('.luz-landing-footer__col')).toHaveCount(3);
     await expect(footer.locator('.luz-landing-footer__col').nth(2).locator('a')).toHaveCount(3);
-    await expect(footer.locator('luz-mode input[name="luz-theme"]')).toHaveCount(4);
+    await expect(footer.locator('luz-mode input[name="luz-theme"]')).toHaveCount(3);
     expect((await footer.locator('p').allInnerTexts()).join(' ').length).toBeGreaterThan(40);
   });
 }

@@ -151,9 +151,9 @@ home-light .home-light__line {
   inline-size: 100%;
   padding: var(--luz-space-lg) var(--luz-space-md);
   border: 0;
-  background: color-mix(in oklab, var(--_paper) 82%, transparent);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
-  backdrop-filter: blur(18px) saturate(1.2);
+  background: color-mix(in oklab, var(--_paper) 55%, transparent);
+  -webkit-backdrop-filter: blur(6px) saturate(1.2);
+  backdrop-filter: blur(6px) saturate(1.2);
   /* No hard edge: the glass fades out above and below the phrase */
   mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
   color: var(--_muted);
@@ -203,19 +203,56 @@ home-light .home-light__bar {
   inset-block-end: calc(100% + var(--luz-space-xs));
   z-index: 2;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--luz-space-xs) var(--luz-space-md);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--luz-space-2xs);
   max-width: 48rem;
   margin-inline: auto;
   padding: var(--luz-space-sm) var(--luz-space-md);
   border: 1px solid var(--luz-divider);
   border-radius: var(--luz-radius-md);
-  background: color-mix(in oklab, var(--_paper) 82%, transparent);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
-  backdrop-filter: blur(18px) saturate(1.2);
+  background: color-mix(in oklab, var(--_paper) 55%, transparent);
+  -webkit-backdrop-filter: blur(6px) saturate(1.2);
+  backdrop-filter: blur(6px) saturate(1.2);
   color: var(--_ink);
   font: 400 var(--luz-text-sm) / 1.4 var(--luz-font-sans);
+  text-align: center;
+}
+
+/* The bar, top to bottom: a passing "Saved" notice, the hour in large type,
+   the place and the light, then the slider */
+home-light .home-light__bar > p {
+  margin: 0;
+}
+
+/* Its line is kept while it is empty, so the hour does not jump */
+home-light .home-light__saved {
+  min-block-size: 1lh;
+  color: var(--luz-color-success);
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--luz-duration-slow) var(--_ease),
+    visibility var(--luz-duration-slow);
+}
+
+home-light .home-light__saved[data-on] {
+  visibility: visible;
+  opacity: 1;
+}
+
+home-light .home-light__check {
+  margin-inline-start: 0.3em;
+}
+
+home-light .home-light__time {
+  font: 700 var(--luz-text-4xl) / 1.1 var(--luz-font-sans);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+home-light .home-light__where {
+  font-size: var(--luz-text-base);
 }
 
 home-light .home-light__bar[hidden] {
@@ -240,7 +277,7 @@ home-light :is(button, input):focus-visible {
 
 home-light .home-light__day {
   display: flex;
-  flex: 1 1 16rem;
+  flex: 0 0 auto;
   align-items: center;
   gap: var(--luz-space-sm);
 }
@@ -325,18 +362,11 @@ home-light .home-light__sr {
   white-space: nowrap;
 }
 
-/* A narrow screen: the bar in two rows, the looks above the slider */
+/* A narrow screen: the bar closer to the edges */
 @media (max-width: 640px) {
   home-light .home-light__bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--luz-space-2xs);
     inset-inline: var(--luz-space-xs);
     padding: var(--luz-space-xs) var(--luz-space-sm);
-  }
-
-  home-light .home-light__day {
-    flex: 0 0 auto;
   }
 }
 

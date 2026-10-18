@@ -116,7 +116,7 @@ test.describe('Landing page', () => {
       expect(requests.filter((url) => /\/luz(\.min)?\.js/.test(url))).toEqual([]);
     });
 
-    test('the footer switcher is a radio group that becomes one cycle button, with Auto', async ({ page }) => {
+    test('the footer switcher is a radio group that becomes one cycle button: Light, Dark and High contrast, no Auto', async ({ page }) => {
       await seedMode(page, 'light');
       await open(page);
 
@@ -124,7 +124,7 @@ test.describe('Landing page', () => {
       const switcher = page.locator('footer fieldset.luz-mode-switcher--cycle');
       await expect(switcher).toHaveCount(1);
       await expect(switcher.locator('legend')).toHaveText('Color mode');
-      await expect(switcher.locator('input[type="radio"][name="luz-theme"]')).toHaveCount(4);
+      await expect(switcher.locator('input[type="radio"][name="luz-theme"]')).toHaveCount(3);
       expect(await theme(page)).toBe('light');
 
       const button = switcher.locator('button.luz-mode-cycle');
@@ -132,10 +132,10 @@ test.describe('Landing page', () => {
       await expect(button).toHaveAccessibleName('Change color mode. Current: Light');
       await expect(switcher.locator('.luz-mode-btn').first()).toBeHidden();
 
-      // Light, then Dark, High contrast, Auto (the clock decides) and Light again
-      for (const [mode, label] of [['dark', 'Dark'], ['high-contrast', 'High contrast'], ['auto', 'Auto'], ['light', 'Light']]) {
+      // Light, then Dark, High contrast and Light again: the hour leads only from the globe's bar (2026-10-18)
+      for (const [mode, label] of [['dark', 'Dark'], ['high-contrast', 'High contrast'], ['light', 'Light']]) {
         await button.click();
-        if (mode !== 'auto') expect(await theme(page)).toBe(mode);
+        expect(await theme(page)).toBe(mode);
         expect(await page.evaluate(() => document.documentElement.dataset.mode)).toBeUndefined();
         await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue(mode);
         await expect(button).toHaveAccessibleName(`Change color mode. Current: ${label}`);
@@ -318,21 +318,18 @@ test.describe('Landing page', () => {
       }
     });
 
-    test('footer: the cycle button ships with no icons of its own and shows a copy of the icon of the checked label', async ({ page }) => {
-      await seedMode(page, 'light');
+    test('footer: the cycle button ships an icon per state and shows one: the checked mode\'s, or Auto\'s while no radio is checked', async ({ page }) => {
       await open(page);
       const button = page.locator('footer .luz-mode-cycle');
-      await expect(button.locator('[data-mode-icon]')).toHaveCount(0);
-      for (const mode of ['light', 'dark', 'high-contrast', 'auto']) {
-        await expect(page.locator(`footer input[value="${mode}"]`)).toBeChecked();
-        await expect(button.locator('.luz-mode-btn__icon')).toHaveCount(1);
-        await expect(button.locator('.luz-mode-btn__icon')).toBeVisible();
-        const copy = await page.evaluate(() => {
-          const icon = document.querySelector('footer input:checked').closest('label').querySelector('.luz-mode-btn__icon');
-          return icon.outerHTML === document.querySelector('footer .luz-mode-cycle .luz-mode-btn__icon').outerHTML;
-        });
-        expect(copy, mode).toBe(true);
+      await expect(button.locator('[data-mode-icon]')).toHaveCount(4);
+      const shown = () => button.locator('[data-mode-icon]').evaluateAll((icons) => icons.filter((i) => getComputedStyle(i).display !== 'none').map((i) => i.getAttribute('data-mode-icon')));
+      // A first visit: the hour leads, no radio is checked
+      await expect(page.locator('footer input[name="luz-theme"]:checked')).toHaveCount(0);
+      await expect.poll(shown).toEqual(['auto']);
+      for (const mode of ['light', 'dark', 'high-contrast']) {
         await button.click();
+        await expect(page.locator(`footer input[value="${mode}"]`)).toBeChecked();
+        await expect.poll(shown).toEqual([mode]);
       }
     });
 
@@ -1246,14 +1243,14 @@ test.describe('Landing page', () => {
       });
     }
 
-    test('the colour mode switcher is the <luz-mode remember by="clock"> of the footer, with its four radios', async ({ page }) => {
+    test('the colour mode switcher is the <luz-mode remember by="clock"> of the footer, with its three radios', async ({ page }) => {
       await open(page);
 
       const mode = footer(page).locator('luz-mode');
       await expect(mode).toHaveCount(1);
       await expect(mode).toHaveAttribute('remember', '');
       await expect(mode).toHaveAttribute('by', 'clock');
-      expect(await mode.locator('input[name="luz-theme"]').evaluateAll((all) => all.map((r) => r.value))).toEqual(['auto', 'light', 'dark', 'high-contrast']);
+      expect(await mode.locator('input[name="luz-theme"]').evaluateAll((all) => all.map((r) => r.value))).toEqual(['light', 'dark', 'high-contrast']);
     });
 
     for (const width of [320, 1280]) {
@@ -1391,7 +1388,7 @@ test.describe('Landing page', () => {
       });
     }
 
-    test('the color mode switcher is four radios (Auto, Light, Dark, High contrast): targets of 24px or more at 360px', async ({ page }) => {
+    test('the color mode switcher is three radios (Light, Dark, High contrast): targets of 24px or more at 360px', async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 800 });
       await page.goto('/');
 
@@ -1399,7 +1396,7 @@ test.describe('Landing page', () => {
       const boxes = await page
         .locator('footer .luz-mode-btn')
         .evaluateAll((labels) => labels.map((el) => el.getBoundingClientRect()));
-      expect(boxes).toHaveLength(4);
+      expect(boxes).toHaveLength(3);
       for (const box of boxes) {
         expect(box.width).toBeGreaterThanOrEqual(24);
         expect(box.height).toBeGreaterThanOrEqual(24);

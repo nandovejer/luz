@@ -2,7 +2,11 @@
  * <home-light>: the light of the visitor's sky on the home page. It draws the
  * sun and the moon where the visitor is, from the time zone of the browser's
  * clock (Intl, never the network or GPS), over a globe (<home-globe>,
- * globe.js). A line under the globe opens a bar to scrub the day. Only the
+ * globe.js). A line under the globe opens a bar: the hour in large type,
+ * the place and the light under it, and a slider to scrub the day. Letting
+ * the slider go pins its hour (<luz-mode>.pin()): the page keeps that light,
+ * on a reload too, until the footer's Light, Dark or High contrast is
+ * chosen; a short "Saved" notice says so. Only the
  * system's prefers-reduced-motion stops the motion (RL-8); the element has no
  * control to pause it and stores nothing.
  *
@@ -140,10 +144,13 @@ class LuzLight extends HTMLElement {
 
   connectedCallback() {
     if (!this._stage) this._build();
+    // <luz-mode> may have upgraded first: its pinned hour, if any
+    this._at(mode()?.pinned ?? null);
     this._tick();
     this._abort = new window.AbortController();
     const signal = this._abort.signal;
-    document.addEventListener("luz-mode:change", () => this._tick(), { signal });
+    // The page's hour: the pinned one, or now once a mode is chosen in the footer (a preview is the slider's own)
+    document.addEventListener("luz-mode:change", (e) => (e.detail?.simulated ? this._tick() : this._hold(e.detail?.pinned ?? null)), { signal });
     document.addEventListener("pointerdown", (e) => this._bar && !this._bar.contains(e.target) && !this._line.contains(e.target) && this.close(), { signal });
     document.addEventListener(
       "keydown",
@@ -164,6 +171,7 @@ class LuzLight extends HTMLElement {
     this._abort.abort();
     clearTimeout(this._timer);
     clearTimeout(this._favTimer);
+    clearTimeout(this._savedTimer);
   }
 
   /** A text of the page: data-luz-label-light-<key> here or on an ancestor. */
@@ -177,16 +185,19 @@ class LuzLight extends HTMLElement {
     this._line.setAttribute("aria-expanded", "true");
   }
 
-  /** Close the bar; a scrubbed hour goes with it: the light is the clock's again. */
+  /** Close the bar; a pinned hour stays. */
   close() {
     if (this._bar.hidden) return;
     this._bar.hidden = true;
     this._line.setAttribute("aria-expanded", "false");
-    if (this._sim) this._preview(null);
   }
 
   _build() {
     this._tz = zone();
+    // The line's phrase: one of the page's facts about the speed of light (fact-1, fact-2…), at random on each load
+    let facts = 0;
+    while (this._text(`fact-${facts + 1}`)) facts++;
+    this._fact = 1 + Math.floor(Math.random() * facts);
     this._place = placeFor(this._tz, Date.now());
     const { lat, lon } = this._place, la = lat * DEG, lo = lon * DEG;
     this._placeVec = [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)];
@@ -210,8 +221,14 @@ class LuzLight extends HTMLElement {
     // aria-valuetext carries the light and the hour, which the bar does not show
     this._scrub = h("input", { type: "range", id: `${id}-scrub`, min: 0, max: 1439, step: 1, value: 720 });
     this._scrub.addEventListener("input", () => this._preview(this._scrub.value / 60));
+    // Let go: the hour is the page's until the footer's mode is chosen
+    this._scrub.addEventListener("change", () => this._pin(this._scrub.value / 60));
     day.append(this._scrub);
-    bar.append(day);
+    // A notice, not a state: written when the hour is saved, gone after a moment
+    this._saved = h("p", { class: "home-light__saved", role: "status" });
+    this._time = h("p", { class: "home-light__time" });
+    this._where = h("p", { class: "home-light__where" });
+    bar.append(this._saved, this._time, this._where, day);
     this._line = h("button", { type: "button", class: "home-light__line", "aria-expanded": "false", "aria-controls": bar.id });
     // The phrase alone; the light and the hour are in the bar
     this._q = h("span", { class: "home-light__q" });
@@ -240,14 +257,37 @@ class LuzLight extends HTMLElement {
 
   /** Scrub to an hour (0 to 24), or back to now (null), and ask <luz-mode> to follow. */
   _preview(hour) {
+    this._at(hour);
+    mode()?.preview(hour);
+    this._tick();
+  }
+
+  /** Pin the scrubbed hour with <luz-mode>, and say so for a moment. */
+  _pin(hour) {
+    const el = mode();
+    if (!el?.pin?.(hour)) return;
+    this._saved.replaceChildren(this._text("saved"), h("span", { class: "home-light__check", "aria-hidden": "true" }, "\u2713"));
+    this._saved.dataset.on = "";
+    clearTimeout(this._savedTimer);
+    this._savedTimer = setTimeout(() => {
+      delete this._saved.dataset.on;
+      this._saved.replaceChildren();
+    }, 2500);
+  }
+
+  /** The hour the page holds, from <luz-mode>: a pinned one, or now (null). */
+  _hold(hour) {
+    this._at(hour);
+    this._tick();
+  }
+
+  _at(hour) {
     if (hour === null) this._sim = 0;
     else {
       const p = partsIn(this._tz, Date.now());
       this._sim = (hour - (p.hour + p.minute / 60 + p.second / 3600)) * 36e5;
     }
     this._line.dataset.preview = String(hour !== null);
-    mode()?.preview(hour);
-    this._tick();
   }
 
   _setSunX(x) {
@@ -276,7 +316,7 @@ class LuzLight extends HTMLElement {
     const light = root.getAttribute("data-light");
     const time = this._clock.format(new Date(t));
     this._scrub.value = p.hour * 60 + p.minute;
-    const say = this._text("say-globe");
+    const say = this._text(`fact-${this._fact}`);
     // A chosen mode pins a light that is not the hour's: the hour alone
     const phase = light && (mode()?.mode ?? "auto") === "auto" ? this._text(light) : "";
     const sep = this._text("sep") || ", ";
@@ -285,6 +325,10 @@ class LuzLight extends HTMLElement {
 
     this._say.textContent = `. ${this._text("open")}`;
     this._scrub.setAttribute("aria-valuetext", (phase && phase + sep) + time);
+    // Above the slider: its hour, then the place (the city of the time zone) and the light
+    this._time.textContent = time;
+    const city = this._tz.includes("/") && !this._tz.startsWith("Etc/") ? this._tz.split("/").pop().replace(/_/g, " ") : "";
+    this._where.textContent = [city, phase].filter(Boolean).join(" \u00b7 ");
 
     const { alt, az, vec } = this._sun(t);
     // The slider's thumb: a sun while the sun is up at the scrubbed hour, a moon after (light.css)

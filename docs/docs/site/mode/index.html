@@ -11,12 +11,12 @@
   <link rel="apple-touch-icon" href="../../../assets/apple-touch-icon-QPTLZskv.png">
   <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
   <script src="../../../boot.js" ></script>
-  <script type="module" crossorigin src="../../../assets/header-CDFpI0K3.js"></script>
-  <script type="module" crossorigin src="../../../assets/reference-Cw3lj9ZT.js"></script>
+  <script type="module" crossorigin src="../../../assets/header-kNH6J-Nb.js"></script>
+  <script type="module" crossorigin src="../../../assets/reference-CBX00f0o.js"></script>
   <link rel="stylesheet" crossorigin href="../../../assets/header-enjYdf1s.css">
   <link rel="stylesheet" crossorigin href="../../../assets/reference-CFwLTcYL.css">
-  <link rel="stylesheet" crossorigin href="../../../assets/header-Co4mHu8T.css">
-  <link rel="stylesheet" crossorigin href="../../../assets/reference-BjX1gfAT.css">
+  <link rel="stylesheet" crossorigin href="../../../assets/header-Eb13_Q64.css">
+  <link rel="stylesheet" crossorigin href="../../../assets/reference-BqXuJoZA.css">
 </head>
 <body class="o-shell luz-docs-shell docs-page">
   <a class="luz-skip-link" href="#main-content">Skip to main content</a>
@@ -409,8 +409,10 @@
                 <tbody>
                   <tr><td data-label="Name"><div><code>el.mode</code></div></td><td data-label="What it does"><div>The choice: <code>auto</code>, <code>light</code>, <code>dark</code> or <code class="docs-name"><span>high-contrast</span></code>. Setting it chooses the radio</div></td></tr>
                   <tr><td data-label="Name"><div><code>el.light</code></div></td><td data-label="What it does"><div>The phase of the day now, or <code>null</code> unless <code>by="clock"</code></div></td></tr>
-                  <tr><td data-label="Name"><div><code>preview(x)</code></div></td><td data-label="What it does"><div>Shows another time of day: <code>x</code> is a phase name or an hour from 0 to 24. With Auto, <code class="docs-name"><span>data-theme</span></code> follows it; with a mode chosen, only the light does. <code>preview(null)</code> goes back. Unless <code>by="clock"</code> it returns <code>false</code></div></td></tr>
-                  <tr><td data-label="Name"><div><code>luz-mode:change</code></div></td><td data-label="What it does"><div>Bubbles from the element at every change. Its <code>detail</code>: <code>mode</code> (the choice), <code>theme</code> (the <code class="docs-name"><span>data-theme</span></code> applied), <code>light</code> (the phase, or <code>null</code>), <code>remembered</code> (<code>true</code> only with <code>remember</code> and a mode stored now) and <code>simulated</code> (<code>true</code> while a preview is active)</div></td></tr>
+                  <tr><td data-label="Name"><div><code>preview(x)</code></div></td><td data-label="What it does"><div>Shows another time of day: <code>x</code> is a phase name or an hour from 0 to 24. With Auto, <code class="docs-name"><span>data-theme</span></code> follows it; with a mode chosen, only the light does. <code>preview(null)</code> goes back, to the pinned hour if there is one. Unless <code>by="clock"</code> it returns <code>false</code></div></td></tr>
+                  <tr><td data-label="Name"><div><code>pin(x)</code></div></td><td data-label="What it does"><div>Keeps another time of day for good: Auto, at <code>x</code> (a phase name or an hour from 0 to 24) instead of now. With <code>remember</code> it is stored under <code class="docs-name"><span>luz-light</span></code>, in minutes of the day, and the stored mode is removed; choosing a mode, or <code>pin(null)</code>, unpins. Unless <code>by="clock"</code> it returns <code>false</code></div></td></tr>
+                  <tr><td data-label="Name"><div><code>el.pinned</code></div></td><td data-label="What it does"><div>The pinned hour, or <code>null</code></div></td></tr>
+                  <tr><td data-label="Name"><div><code>luz-mode:change</code></div></td><td data-label="What it does"><div>Bubbles from the element at every change. Its <code>detail</code>: <code>mode</code> (the choice), <code>theme</code> (the <code class="docs-name"><span>data-theme</span></code> applied), <code>light</code> (the phase, or <code>null</code>), <code>remembered</code> (<code>true</code> only with <code>remember</code> and a mode stored now) <code>simulated</code> (<code>true</code> while a preview is active) and <code>pinned</code> (the pinned hour, or <code>null</code>)</div></td></tr>
                 </tbody>
               </table>
             </div>
@@ -518,7 +520,7 @@
       <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../docs/site/lang-switch/"><span class="luz-docs-pager__label">Next</span> <span class="luz-docs-pager__title">Language switch</span></a></li>
     </ul>
   </nav>
-  <p class="luz-docs-page-foot">Last updated <time datetime="2026-10-17">17 October 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/pages/site/mode.html">Edit this page</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Auto%20color%20mode">Report a problem</a></p>
+  <p class="luz-docs-page-foot">Last updated <time datetime="2026-10-18">18 October 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/pages/site/mode.html">Edit this page</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Auto%20color%20mode">Report a problem</a></p>
   </main>
 
   <footer class="docs-footer luz-landing-footer" id="site-footer">
@@ -534,9 +536,8 @@
       <luz-mode class="site-modes" remember by="clock">
         <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
           <legend class="luz-mode-switcher__label">Color mode</legend>
-          <button class="luz-mode-cycle" type="button" aria-label="Change color mode"></button>
+          <button class="luz-mode-cycle" type="button" aria-label="Change color mode"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
           <span class="luz-mode-cycle__status" role="status"></span>
-          <label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="auto" checked><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Auto</label>
           <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Light</label>
           <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Dark</label>
           <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>

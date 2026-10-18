@@ -22,31 +22,24 @@ const catalog = (code) => JSON.parse(read(`apps/landing/i18n/${code}.json`));
 /** The label of the radio with value="auto" in a footer. */
 const autoLabel = (html) => html.match(/<label\b[^>]*>(?:(?!<\/label>)[\s\S])*?\bvalue="auto"[\s\S]*?<\/label>/)?.[0] ?? "";
 
-describe("the Auto label of the home page comes from the catalog", () => {
-  const label = autoLabel(read("apps/landing/index.html"));
-  const key = label.match(/\{\{t:([\w.-]+)\}\}/)?.[1];
+describe("the footer has no Auto (2026-10-18): the light follows the hour, or the hour the home's globe pinned, until a mode is chosen", () => {
+  const radios = (html) => [...html.matchAll(/<input\b[^>]*type="radio"[^>]*name="luz-theme"[^>]*>/g)].map((m) => m[0]);
+  for (const file of ["apps/landing/index.html", "apps/site/_partials/footer.html"]) {
+    it(`${file}: Light, Dark and High contrast, none checked in the markup`, () => {
+      const all = radios(read(file));
+      expect(all.map((r) => r.match(/value="([^"]+)"/)?.[1])).toEqual(["light", "dark", "high-contrast"]);
+      expect(all.filter((r) => /\schecked\b/.test(r))).toEqual([]);
+      expect(autoLabel(read(file)), "no label for an auto radio").toBe("");
+    });
 
-  it("is the first radio of the footer, and its text is a {{t:…}} key, not typed English", () => {
-    expect(label, "a label with the radio value=auto").not.toBe("");
-    expect(key, "a {{t:key}} in the Auto label").toBeTruthy();
-    const html = read("apps/landing/index.html");
-    const radios = [...html.matchAll(/<input\b[^>]*type="radio"[^>]*name="luz-theme"[^>]*>/g)].map((m) => m[0].match(/value="([^"]+)"/)?.[1]);
-    expect(radios[0]).toBe("auto");
-    expect(label.replace(/<svg[\s\S]*?<\/svg>/g, "").replace(/<[^>]+>/g, "").trim()).toBe(`{{t:${key}}}`);
-  });
+    it(`${file}: the cycle button carries an icon per state, Auto's for no radio checked`, () => {
+      const button = read(file).match(/<button class="luz-mode-cycle"[\s\S]*?<\/button>/)?.[0] ?? "";
+      expect([...button.matchAll(/data-mode-icon="([^"]+)"/g)].map((m) => m[1])).toEqual(["auto", "light", "dark", "high-contrast"]);
+    });
+  }
 
-  it("is a key of the three catalogs, English says Auto and Arabic says it in Arabic", () => {
-    expect(key).toBeTruthy();
-    for (const code of ["en", "es", "ar"]) expect(catalog(code)[key], `${code} has ${key}`).toEqual(expect.any(String));
-    expect(catalog("en")[key]).toBe("Auto");
-    expect(catalog("es")[key].trim().length).toBeGreaterThan(0);
-    expect(catalog("ar")[key]).toMatch(/[؀-ۿ]/);
-    expect(catalog("ar")[key]).not.toBe("Auto");
-  });
-
-  it("the shared footer of the docs writes it in English, first of the four radios", () => {
-    const footer = read("apps/site/_partials/footer.html");
-    expect(autoLabel(footer).replace(/<svg[\s\S]*?<\/svg>/g, "").replace(/<[^>]+>/g, "").trim()).toBe("Auto");
+  it("no catalog keeps footer.auto", () => {
+    for (const code of ["en", "es", "ar"]) expect(Object.keys(catalog(code))).not.toContain("footer.auto");
   });
 });
 
