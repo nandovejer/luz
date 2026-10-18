@@ -11,7 +11,9 @@
  *   1. a stored choice under core's key (light, dark or high-contrast) is
  *      that mode, its light pinned: light is the afternoon, dark and high
  *      contrast the night;
- *   2. else the light is the phase of the local hour (the boundaries of
+ *   2. else the light is the phase of the hour the globe's bar pinned
+ *      (<luz-mode>.pin(), stored under "luz-light" in minutes of the day),
+ *      or of the local hour (the boundaries of
  *      phaseOf in packages/site/src/mode.js). With prefers-contrast: more
  *      the mode is high contrast, with that light, as <luz-mode by="clock">
  *      writes it after it upgrades (theme-light.css never overrides high
@@ -27,15 +29,17 @@
 (() => {
   const html = document.documentElement;
   let mode = null;
+  let pinned = null;
   try {
     mode = localStorage.getItem("luz-theme");
+    pinned = localStorage.getItem("luz-light");
   } catch (_) {}
   let light;
   if (mode === "light") light = "afternoon";
   else if (mode === "dark" || mode === "high-contrast") light = "night";
   else {
     const now = new Date();
-    const hour = now.getHours() + now.getMinutes() / 60;
+    const hour = /^\d{1,4}$/.test(pinned || "") && +pinned < 1440 ? pinned / 60 : now.getHours() + now.getMinutes() / 60;
     light = hour < 5 ? "night" : hour < 7.5 ? "dawn" : hour < 12 ? "morning" : hour < 17.5 ? "afternoon" : hour < 20.5 ? "sunset" : hour < 22.5 ? "dusk" : "night";
     if (window.matchMedia && window.matchMedia("(prefers-contrast: more)").matches) mode = "high-contrast";
     else mode = light === "dawn" || light === "dusk" || light === "night" ? "dark" : "light";
