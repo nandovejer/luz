@@ -569,20 +569,37 @@ describe("the LUZ docs site", () => {
     for (const { name } of elements) expect(az, name).toContain(`#el-${name}"`);
   });
 
-  it("reaches every component in two links from any page, without opening anything (ia.md §14)", () => {
+  it("reaches every component in two links from any page, in every language, without opening anything (ia.md §14)", () => {
     // Links shown at every width: the content of main (the header's site
     // links are in the closed drawer on a phone, "On this page" is closed).
+    // A page in a language (/es/, /es/docs/…) must reach the component's page
+    // in that language (/es/docs/components/…): the English one is not its target.
     const components = site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers");
     expect(components).toHaveLength(32);
+    const withLanguages = buildSite(site, { extra: landing, languages: true, unchecked: homes });
+    const codes = homes.filter((h) => h !== "/").map((h) => h.replaceAll("/", ""));
+    expect(codes.length).toBeGreaterThan(0);
+    const prefixOf = (route) => codes.map((code) => `/${code}`).find((prefix) => route === `${prefix}/` || route.startsWith(`${prefix}/`)) ?? "";
     const visible = (html) => {
       const main = html.match(/<main[\s\S]*?<\/main>/)[0].replace(/<nav class="luz-docs-rail__onpage"[\s\S]*?<\/nav>/, "");
-      return new Set([...[...main.matchAll(/href="(\/docs\/[^"#]*)/g)].map((m) => m[1])]);
+      return new Set([...main.matchAll(/href="((?:\/[a-z]{2,3})?\/docs\/[^"#]*)/g)].map((m) => m[1]));
     };
-    const links = new Map([...rendered].map(([route, html]) => [route, visible(html)]));
-    for (const [route] of rendered) {
+    const starts = [...withLanguages.rendered].filter(([route]) => route !== "/404.html");
+    // Every language is a start page, its home and its docs pages
+    for (const code of codes) {
+      expect(starts.some(([route]) => route === `/${code}/`), `${code} home`).toBe(true);
+      expect(starts.some(([route]) => route.startsWith(`/${code}/docs/`)), `${code} docs pages`).toBe(true);
+    }
+    const links = new Map(starts.map(([route, html]) => [route, visible(html)]));
+    for (const [route] of starts) {
+      const prefix = prefixOf(route);
       const one = links.get(route);
       const two = new Set([...one, ...[...one].flatMap((r) => [...(links.get(r) ?? [])])]);
-      for (const c of components) expect(two.has(c.route), `${route} → ${c.route}`).toBe(true);
+      for (const c of components) {
+        const target = prefix + c.route;
+        expect(links.has(target), `${target} is a page`).toBe(true);
+        expect(two.has(target), `${route} → ${target}`).toBe(true);
+      }
     }
   });
 
