@@ -1775,9 +1775,13 @@ h2.docs-demo__title {
    Stars in the dark
    The night of the home page's city, quiet: a band of small points across
    the site header when the colour mode is dark (dawn and dusk too), never in
-   light or high contrast, and not under forced colours. Decorative and
-   still: no text, no pointer, nothing moves (the docs have no pause
-   control, WCAG 2.2.2).
+   light or high contrast, and not under forced colours. Decorative: no text,
+   no pointer. Nothing moves on a clock (the docs have no pause control,
+   WCAG 2.2.2); the only motion is the reader's own: as the page scrolls the
+   stars of the top strip drift sideways, slowly, each layer at its own pace
+   (the small, faint ones slower), as the home's stars drift with the scroll.
+   A scroll-driven animation, CSS only, where the browser has scroll
+   timelines; still under reduced motion.
    The header is opaque and sticky, a stacking context of its own: the band
    is its ::before at z-index -1, so it paints over the header's background
    and under its links, and travels with it.
@@ -1823,6 +1827,43 @@ h2.docs-demo__title {
   background-repeat:
     repeat-x, repeat-x, repeat-x, repeat-x, repeat-x, repeat-x, repeat-x, repeat-x,
     no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  /* The drift, sideways only (the strip is above the text: a star never leaves it).
+     The eight layers that repeat across the row each take a share of it, the
+     brighter ones more; the six in the middle of the row stay put. */
+  background-position:
+    calc(var(--docs-star-drift) * 1) 0, calc(var(--docs-star-drift) * 0.8) 0,
+    calc(var(--docs-star-drift) * 0.6) 0, calc(var(--docs-star-drift) * 0.45) 0,
+    calc(var(--docs-star-drift) * 0.55) 0, calc(var(--docs-star-drift) * 0.35) 0,
+    calc(var(--docs-star-drift) * 0.25) 0, calc(var(--docs-star-drift) * 0.3) 0,
+    0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+/* A length the browser can animate */
+@property --docs-star-drift {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* Over the whole scroll of the page the fastest layer moves by a few rem:
+   a thousand pixels of scroll move it by well under a tenth of that */
+@keyframes docs-stars-drift {
+  to {
+    --docs-star-drift: calc(var(--luz-space-3xl) * -3);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  :root[data-theme="dark"] .site-header::before {
+    animation: docs-stars-drift linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="dark"] .site-header::before {
+    animation: none;
+  }
 }
 
 @media (forced-colors: active) {
