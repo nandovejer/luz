@@ -12,6 +12,7 @@
   "light.say.globe": "Un sistema de diseño es un mundo con sus propias leyes de la luz.",
   "light.alt.globe": "Un globo iluminado por el sol tal como está ahora, con la tierra hecha un puzle de una pieza gris tenue por país: el lado de día mira a la luz y el de noche se apaga.",
   "light.scrub": "Recorrer el día",
+  "light.saved": "Modo guardado",
   "light.live": "Volver a ahora",
   "light.sep": ", ",
   "light.dawn": "Amanecer",
@@ -171,7 +172,6 @@
   "footer.privacy": "La luz se calcula con tu reloj, nunca con tu ubicación. Tu elección se queda en este navegador.",
   "footer.mode": "Modo de color",
   "footer.mode-change": "Cambiar el modo de color",
-  "footer.auto": "Auto",
   "footer.light": "Claro",
   "footer.dark": "Oscuro",
   "footer.contrast": "Alto contraste"

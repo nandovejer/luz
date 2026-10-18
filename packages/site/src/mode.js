@@ -36,20 +36,28 @@
  * Core's cycle button, when luz.js is on the page, steps through the four
  * radios with no code here.
  *
+ * Auto may have no radio: then, in auto, no radio is checked.
+ *
  * API: `mode` ("auto" | "light" | "dark" | "high-contrast"), `light` (the
  * phase, or null without the clock), `preview(phase | hour 0-24 | null)`
  * (with the clock only: the light, and in auto the mode, follow that hour;
- * null returns to now; false when it does nothing).
+ * null returns to the pinned hour, or to now; false when it does nothing),
+ * `pin(phase | hour 0-24 | null)` (with the clock only: auto, at that hour
+ * for good instead of now; with `remember` stored under "luz-light" in
+ * minutes of the day, and the chosen mode removed; choosing a mode, or
+ * pin(null), unpins) and `pinned` (that hour, or null).
  *
  * @element luz-mode - Core's color mode radios with an Auto state that follows the system or the clock of the day; it stores the choice on request.
- * @attr {boolean} remember - Store the chosen mode under core's luz-theme key; Auto removes it. Without it nothing is stored.
+ * @attr {boolean} remember - Store the chosen mode under core's luz-theme key, and a pinned hour under luz-light; Auto removes them. Without it nothing is stored.
  * @attr {"clock"} by - What Auto follows: the local hour, which also writes the light attribute; without it (or by="system") the system's preferences.
  * @attr {string} for - The id of the element that gets data-theme and the light attribute; the default is <html>.
  * @attr {string} light-attr - The name of the attribute for the phase of the day, a data-* name; the default is data-light.
- * @fires luz-mode:change {CustomEvent} - Bubbles from the element after the upgrade and on every change, with detail { mode, theme, light, remembered, simulated }.
+ * @fires luz-mode:change {CustomEvent} - Bubbles from the element after the upgrade and on every change, with detail { mode, theme, light, remembered, simulated, pinned }.
  */
 
 const KEY = "luz-theme";
+// The hour pin() keeps, in minutes of the day (apps/site/boot.js reads it too)
+const PIN = "luz-light";
 const MODES = ["light", "dark", "high-contrast"];
 const CHOICES = ["auto", ...MODES];
 const DARK = ["dawn", "dusk", "night"];
@@ -69,12 +77,12 @@ export function phaseOf(hour) {
   return hour < 5 ? "night" : hour < 7.5 ? "dawn" : hour < 12 ? "morning" : hour < 17.5 ? "afternoon" : hour < 20.5 ? "sunset" : hour < 22.5 ? "dusk" : "night";
 }
 
-/** Storage that may throw (sandboxed iframes): no argument reads, null removes, a string stores. */
-function store(value) {
+/** Storage that may throw (sandboxed iframes): no value reads, null removes, a string stores. */
+function store(value, key = KEY) {
   try {
-    if (value === undefined) return localStorage.getItem(KEY);
-    if (value) localStorage.setItem(KEY, value);
-    else localStorage.removeItem(KEY);
+    if (value === undefined) return localStorage.getItem(key);
+    if (value) localStorage.setItem(key, value);
+    else localStorage.removeItem(key);
   } catch {
     // No persistence, the same page
   }
@@ -88,19 +96,29 @@ function store(value) {
  */
 function sync(el) {
   for (const r of el.querySelectorAll("input[type=radio]")) {
-    if (r.value === el.c && !r.checked) {
-      el.q = true;
-      r.click();
-      el.q = false;
-    }
+    if (r.value === el.c) {
+      if (!r.checked) {
+        el.q = true;
+        r.click();
+        el.q = false;
+      }
+    } else if (el.c === "auto") r.checked = false; // Auto may have no radio: then none is checked
   }
 }
 
+/** An hour 0 to 24 from a phase's name or a number; undefined when it is neither. */
+const hourOf = (x) => {
+  const hour = HOURS[x] ?? x;
+  return typeof hour === "number" && hour >= 0 && hour <= 24 ? hour : undefined;
+};
+
 function choose(el, v, fromRadio) {
   el.c = v;
+  el.n = null;
   if (!fromRadio) sync(el);
   // After the radio's change event: core may have written the key
   store(el.r && v !== "auto" ? v : null);
+  store(null, PIN);
   render(el);
 }
 
@@ -109,16 +127,18 @@ function tick(el) {
   const d = new Date();
   el.i = setTimeout(() => {
     // Only Auto follows the clock, and only when the phase changes: a chosen mode's light is pinned, and a data-theme set by hand stays for the rest of its phase
-    if (el.c === "auto" && el.p === null && now() !== el.h) render(el);
+    if (el.c === "auto" && el.p === null && el.n === null && now() !== el.h) render(el);
     tick(el);
   }, 6e4 - d.getSeconds() * 1e3 - d.getMilliseconds());
 }
 
 function render(el) {
   const { t, c, k, p, m } = el;
-  const phase = p === null ? (el.h = now()) : phaseOf(p);
-  const current = t.getAttribute(THEME);
   const auto = c === "auto";
+  // A preview, else in auto the pinned hour, else now
+  const hour = p ?? (auto ? el.n : null);
+  const phase = hour === null ? (el.h = now()) : phaseOf(hour);
+  const current = t.getAttribute(THEME);
   let theme = auto ? (m[0].matches ? "high-contrast" : (k ? DARK.includes(phase) : m[1].matches) ? "dark" : "light") : c;
   let light = k ? (p !== null || auto ? phase : c === "light" ? "afternoon" : "night") : null;
   if (auto && !MODES.includes(current) && (document.documentElement.getAttribute(THEMES) || "").split(/\s+/).includes(current)) {
@@ -131,7 +151,7 @@ function render(el) {
     if (light && t.getAttribute(el.a) !== light) t.setAttribute(el.a, light);
   }
   el.l = light;
-  const detail = { mode: c, theme, light, remembered: el.r && !auto && store() === c, simulated: p !== null };
+  const detail = { mode: c, theme, light, remembered: el.r && !auto && store() === c, simulated: p !== null, pinned: el.n };
   const key = JSON.stringify(detail);
   if (key !== el.e) {
     el.e = key;
@@ -151,6 +171,9 @@ if (typeof customElements !== "undefined" && !customElements.get("luz-mode")) {
         this.r = this.hasAttribute("remember");
         const saved = this.r && store();
         this.c = MODES.includes(saved) ? saved : "auto";
+        // A pinned hour, only in auto: whole minutes of the day
+        const minutes = this.r && this.k && this.c === "auto" && store(undefined, PIN);
+        this.n = /^\d+$/.test(minutes) && minutes < 1440 ? minutes / 60 : null;
         this.p = null;
         this.e = "";
         this.x = new window.AbortController();
@@ -191,9 +214,26 @@ if (typeof customElements !== "undefined" && !customElements.get("luz-mode")) {
       }
 
       preview(x) {
-        const hour = x === null || x === undefined ? null : (HOURS[x] ?? x);
-        if (!this.k || (hour !== null && !(typeof hour === "number" && hour >= 0 && hour <= 24))) return false;
+        const hour = x === null || x === undefined ? null : hourOf(x);
+        if (!this.k || hour === undefined) return false;
         this.p = hour;
+        render(this);
+        return true;
+      }
+
+      get pinned() {
+        return this.n;
+      }
+
+      pin(x) {
+        const hour = x === null || x === undefined ? null : hourOf(x);
+        if (!this.k || hour === undefined) return false;
+        this.c = "auto";
+        this.n = hour;
+        this.p = null;
+        sync(this);
+        store(null);
+        if (this.r) store(hour === null ? null : "" + Math.min(1439, (hour * 60) | 0), PIN);
         render(this);
         return true;
       }

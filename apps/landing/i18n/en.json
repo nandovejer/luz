@@ -14,6 +14,7 @@
   "light.say.globe": "A design system is a world with its own laws of light.",
   "light.alt.globe": "A globe lit by the sun as it is now, its land a puzzle with one faint grey piece for each country: the day side faces the light, the night side fades.",
   "light.scrub": "Scrub the day",
+  "light.saved": "Saved mode",
   "light.live": "Back to now",
   "light.sep": ", ",
   "light.dawn": "Dawn",
@@ -186,7 +187,6 @@
   "footer.privacy": "The light is computed from your clock, never from your location. Your choice stays in this browser.",
   "footer.mode": "Color mode",
   "footer.mode-change": "Change color mode",
-  "footer.auto": "Auto",
   "footer.light": "Light",
   "footer.dark": "Dark",
   "footer.contrast": "High contrast"
