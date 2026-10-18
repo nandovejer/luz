@@ -232,6 +232,9 @@ export function renderAlternates(i18n, current = i18n.default, siteUrl = "") {
 const GLOBE =
   '<svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg>';
 
+/** ` dir="ltr"` on the name of a left-to-right language among the links of a right-to-left page: its letters keep their order. */
+const isolate = (current, l) => (current.dir === "rtl" && l.dir === "ltr" ? ' dir="ltr"' : "");
+
 /**
  * The language switch of @luz-ds/site for the page in `current`
  * (<luz-lang-switch>, a CSS-only tag: no script defines it): a
@@ -247,7 +250,7 @@ export function renderSwitcher(i18n, current, label, { locales = i18n.locales, h
   const items = locales.map((l) => {
     const mark = l.code === current.code ? ' aria-current="page"' : "";
     const hreflang = hreflangOf(l);
-    return `      <li><a class="luz-lang-switch__link" href="${esc(hrefOf(l))}"${hreflang ? ` hreflang="${esc(hreflang)}"` : ""} lang="${esc(l.code)}"${mark}>${esc(l.name)}</a></li>`;
+    return `      <li><a class="luz-lang-switch__link" href="${esc(hrefOf(l))}"${hreflang ? ` hreflang="${esc(hreflang)}"` : ""} lang="${esc(l.code)}"${isolate(current, l)}${mark}>${esc(l.name)}</a></li>`;
   });
   return [
     "<luz-lang-switch>",
@@ -271,7 +274,7 @@ export function renderLangLinks(i18n, current, { locales = i18n.locales, hrefOf 
   const items = locales.map((l) => {
     const mark = l.code === current.code ? ' aria-current="page"' : "";
     const hreflang = hreflangOf(l);
-    return `  <li><a href="${esc(hrefOf(l))}"${hreflang ? ` hreflang="${esc(hreflang)}"` : ""} lang="${esc(l.code)}"${mark}>${esc(l.name)}</a></li>`;
+    return `  <li><a href="${esc(hrefOf(l))}"${hreflang ? ` hreflang="${esc(hreflang)}"` : ""} lang="${esc(l.code)}"${isolate(current, l)}${mark}>${esc(l.name)}</a></li>`;
   });
   return ["<ul>", ...items, "</ul>"].join("\n");
 }

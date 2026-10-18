@@ -20,13 +20,14 @@ import { initTabs } from "/packages/core/dist/tabs.js";
 import { initModals } from "/packages/core/dist/modal.js";
 import { initPlayers } from "/packages/core/dist/player.js";
 import { initSidebar } from "/packages/core/dist/sidebar.js";
+import { initThemeCycle } from "/packages/core/dist/theme.js";
 // Defines <luz-search> at once, not on idle as site.js would: the header's
 // search button is on every page, and wires itself when it connects
 import "/packages/site/dist/search.js";
 // Defines <luz-consent>, for the live example of the Cookie consent page
 // (its answer is stored under its own key, luz-consent-demo)
 import "/packages/site/dist/consent.js";
-import { initSiteHeader } from "/apps/site/header.js";
+import { initSiteChrome } from "/apps/site/header.js";
 import { initDocsView } from "./view.js";
 
 /* ---- Small enhancements ----------------------------------------------- */
@@ -465,8 +466,11 @@ function initSlotDemo() {
 
 /* ---- Boot -------------------------------------------------------------- */
 
-// Color mode, menu drawer and header height (shared with the home page)
-initSiteHeader();
+// Menu drawer and header height (shared with the home page), and the
+// colour-mode button: wired now, named once core's strings for the page's
+// language are registered (the markup names it in that language meanwhile)
+initSiteChrome();
+initThemeCycle(document, true);
 // The specimens stay in Vejer whatever the light; the canvas demo paints with
 // the token values, so it repaints per mode and light
 initSpecimenTheme();
@@ -479,6 +483,7 @@ initAssets();
 // The copy buttons and the code blocks write strings (their names, "Copied"):
 // they wait for the language of the page to be loaded; the rest does not
 loadStrings().then(() => {
+  initThemeCycle();
   initCopy();
   // highlightBlock() only: initHighlight() also injects a copy button into each
   // block, and core ships no position for it.

@@ -93,6 +93,8 @@ const PLACEHOLDERS = new Set([
   // The page's language (i18n.js): its code and direction, its home page, the
   // <link rel="alternate"> of every language, the language switcher
   "lang", "dir", "home", "alternates", "langswitch", "langlinks",
+  // ` dir="ltr"` in a right-to-left page, "" otherwise: for the English lists a partial writes
+  "endir",
   // A docs page in a language: the notice before its content (a translation not
   // reviewed yet, or none) and the attributes of the content (lang="en" on a page in English)
   "notice", "contentattrs",
@@ -100,7 +102,7 @@ const PLACEHOLDERS = new Set([
   "version",
 ]);
 /** Values inserted as HTML, not escaped. Only the generator produces them. */
-const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "notice", "contentattrs"]);
+const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "endir", "notice", "contentattrs"]);
 
 /** Where the home page's languages live, from the repository root. */
 export const I18N_DIR = "apps/landing/i18n";
@@ -158,8 +160,10 @@ const docsRootOf = (site) => site.docsRoute ?? DOCS_ROUTE;
 const baseOf = (site) => site.base ?? site;
 /** The English page a view's page is made from, or the page itself. */
 const englishOf = (page) => page.english ?? page;
-/** ` lang="en"` on what a page that is not translated shows of its own: its title, its lead, its entries in a list. */
-const enAttr = (page) => (page?.fallback ? ' lang="en"' : "");
+/** ` lang="en"`, and ` dir="ltr"` in a right-to-left language: an island of English in the chrome of a page in another language. */
+const enLang = (site) => (site.locale?.dir === "rtl" ? ' lang="en" dir="ltr"' : ' lang="en"');
+/** `enLang()` on what a page that is not translated shows of its own: its title, its lead, its entries in a list. */
+const enAttr = (site, page) => (page?.fallback ? enLang(site) : "");
 /** The language of a view as attributes, on what the chrome says inside the English content of a page that is not translated yet. */
 const ownAttrs = (site, page) => (page?.fallback ? ` lang="${site.locale.code}" dir="${site.locale.dir}"` : "");
 /** A route of the English site in the docs of `site`. */
@@ -537,7 +541,7 @@ export function renderNav(site, page) {
   const root = docsRootOf(site);
   // In a language the title of a page that is not translated is English: one lang="en" on a list of such pages, else on each link
   const item = (p, listIsEnglish) =>
-    `<li>${link(p.route, p.meta.title, ` class="luz-sidebar__link"${p.fallback && !listIsEnglish ? ' lang="en"' : ""}${p.route === page.route ? ' aria-current="page"' : ""}`)}</li>`;
+    `<li>${link(p.route, p.meta.title, ` class="luz-sidebar__link"${p.fallback && !listIsEnglish ? enLang(site) : ""}${p.route === page.route ? ' aria-current="page"' : ""}`)}</li>`;
   const items = site.areas.map((area) => {
     const route = areaRoute(area, root);
     const here = current?.id === area.id;
@@ -552,13 +556,13 @@ export function renderNav(site, page) {
       const groupEnglish = pages.every((p) => p.fallback);
       return [
         `<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-${group.id}">${escapeHtml(group.label)}</span>`,
-        `<ul class="docs-nav__pages"${groupEnglish ? ' lang="en"' : ""} aria-labelledby="nav-${group.id}">`,
+        `<ul class="docs-nav__pages"${groupEnglish ? enLang(site) : ""} aria-labelledby="nav-${group.id}">`,
         ...pages.map((p) => item(p, groupEnglish)),
         "</ul></li>",
       ];
     });
     if (!children.length) return `<li>${head}</li>`;
-    return [`<li>${head}`, `<ul class="docs-nav__pages"${allEnglish ? ' lang="en"' : ""}>`, ...children, "</ul></li>"].join("\n");
+    return [`<li>${head}`, `<ul class="docs-nav__pages"${allEnglish ? enLang(site) : ""}>`, ...children, "</ul></li>"].join("\n");
   });
   return `    <ul class="docs-nav">\n${items.join("\n")}\n    </ul>`;
 }
@@ -578,7 +582,7 @@ export function renderBreadcrumb(site, page) {
   if (area && page.route !== areaRoute(area, root) && indexOf(site, area)) {
     trail.push(link(areaRoute(area, root), area.label, ' class="luz-breadcrumb__item"'));
   }
-  trail.push(`<span class="luz-breadcrumb__item"${enAttr(page)} aria-current="page">${escapeHtml(page.meta.title)}</span>`);
+  trail.push(`<span class="luz-breadcrumb__item"${enAttr(site, page)} aria-current="page">${escapeHtml(page.meta.title)}</span>`);
   const items = trail.map((item) => `        <li>${item}</li>`).join("\n");
   return `    <nav class="docs-breadcrumb" aria-label="${say(t, "chrome.crumb")}">\n      <ol class="luz-breadcrumb">\n${items}\n      </ol>\n    </nav>`;
 }
@@ -647,8 +651,8 @@ function chipsOf(site, page) {
  */
 export function renderPageHead(site, page) {
   const t = tOf(site);
-  const h1 = `    <h1 class="docs-title"${enAttr(page)}>${escapeHtml(page.meta.title)}</h1>`;
-  const lead = page.meta.lead === "true" ? [`    <p class="luz-docs-page-head__lead"${enAttr(page)}>${escapeHtml(page.meta.description)}</p>`] : [];
+  const h1 = `    <h1 class="docs-title"${enAttr(site, page)}>${escapeHtml(page.meta.title)}</h1>`;
+  const lead = page.meta.lead === "true" ? [`    <p class="luz-docs-page-head__lead"${enAttr(site, page)}>${escapeHtml(page.meta.description)}</p>`] : [];
   if (page.route === NOT_FOUND_ROUTE) {
     return `  <div class="luz-docs-page-head">\n${h1}${page.meta.lead === "true" ? `\n    <p class="docs-lead">${escapeHtml(page.meta.description)}</p>` : ""}\n  </div>`;
   }
@@ -680,7 +684,7 @@ export function renderPageHead(site, page) {
  * 80rem (the rail is above the content there) and, from 80rem, marks the
  * section in view (core's initSidebar).
  */
-export function renderToc(page, html, t = englishT()) {
+export function renderToc(page, html, t = englishT(), site = {}) {
   if (page.meta.toc === "false") return "";
   const levels = page.meta.toc === "h2,h3" ? [2, 3] : [2];
   const headings = readHtml(html, page.file).headings.filter((h) => levels.includes(h.level) && !h.specimen);
@@ -700,7 +704,7 @@ export function renderToc(page, html, t = englishT()) {
     if (next?.level !== 3) lines.push("          </ul>\n        </li>");
   });
   // The headings are the content's: English on a page that is not translated yet
-  return `  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">\n    <details class="luz-docs-rail__fold" open>\n      <summary class="luz-docs-rail__title" id="docs-rail-title">${say(t, "rail.on-page")}</summary>\n      <ul class="luz-docs-rail__list"${enAttr(page)}>\n${lines.join("\n")}\n      </ul>\n    </details>\n  </nav>`;
+  return `  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">\n    <details class="luz-docs-rail__fold" open>\n      <summary class="luz-docs-rail__title" id="docs-rail-title">${say(t, "rail.on-page")}</summary>\n      <ul class="luz-docs-rail__list"${enAttr(site, page)}>\n${lines.join("\n")}\n      </ul>\n    </details>\n  </nav>`;
 }
 
 /**
@@ -719,7 +723,7 @@ export function renderEndNav(site, page) {
   if (!around && !essentials.length) return "";
   const lines = ['  <nav class="docs-end" aria-labelledby="docs-end-title">', `    <h2 class="docs-end__title" id="docs-end-title">${say(t, "end.title")}</h2>`];
   if (essentials.length) {
-    lines.push('    <ul class="docs-end__links">', ...essentials.map((e) => `      <li>${link(e.route, e.label, e.english ? ' lang="en"' : "")}</li>`), "    </ul>");
+    lines.push('    <ul class="docs-end__links">', ...essentials.map((e) => `      <li>${link(e.route, e.label, e.english ? enLang(site) : "")}</li>`), "    </ul>");
   }
   const pager = [];
   for (const [key, label, rel] of [["prev", say(t, "end.prev"), "prev"], ["next", say(t, "end.next"), "next"]]) {
@@ -728,7 +732,7 @@ export function renderEndNav(site, page) {
     pager.push(
       `      <li class="luz-docs-pager__${key}"><a class="luz-docs-pager__link" rel="${rel}" href="${escapeHtml(target.route)}">` +
         `<span class="luz-docs-pager__label">${label}</span> ` +
-        `<span class="luz-docs-pager__title"${enAttr(target)}>${escapeHtml(target.meta.title)}</span></a></li>`,
+        `<span class="luz-docs-pager__title"${enAttr(site, target)}>${escapeHtml(target.meta.title)}</span></a></li>`,
     );
   }
   if (pager.length) lines.push('    <ul class="luz-docs-pager">', ...pager, "    </ul>");
@@ -833,8 +837,8 @@ export function renderGallery(site, page) {
     .sort(byOrder);
   const groups = [...(area.groups ?? []), { id: "", label: "" }];
   const card = (p) =>
-    `      <li class="luz-card docs-card"${enAttr(p)}>\n        <h3 class="luz-card__title docs-card__title">${link(p.route, p.meta.title)}</h3>\n        <p class="luz-card__body docs-card__desc">${escapeHtml(p.meta.description)}</p>\n      </li>`;
-  const row = (p) => `      <li${enAttr(p)}>${link(p.route, p.meta.title)} <span class="docs-gallery__desc">${escapeHtml(p.meta.description)}</span></li>`;
+    `      <li class="luz-card docs-card"${enAttr(site, p)}>\n        <h3 class="luz-card__title docs-card__title">${link(p.route, p.meta.title)}</h3>\n        <p class="luz-card__body docs-card__desc">${escapeHtml(p.meta.description)}</p>\n      </li>`;
+  const row = (p) => `      <li${enAttr(site, p)}>${link(p.route, p.meta.title)} <span class="docs-gallery__desc">${escapeHtml(p.meta.description)}</span></li>`;
   return groups
     .map((group) => {
       const members = pages.filter((p) => p.meta.group === group.id);
@@ -1077,7 +1081,7 @@ export function renderAZ(site, page) {
   // The index is the English one in every language (its names, kinds and letters are English): in a language it keeps
   // the language's chrome around it and says lang="en" on its lists; its links go to the pages of that language
   const base = baseOf(site);
-  const inEnglish = site.locale ? ' lang="en"' : "";
+  const inEnglish = site.locale ? enLang(site) : "";
   const toLocal = (route) => localRouteOf(site, route);
   const groups = new Map();
   for (const entry of indexEntries(base)) {
@@ -1372,7 +1376,7 @@ function renderPageIn(page, site, options) {
   // A translated page keeps its demos in English: each says so, and an RTL page keeps them left to right
   const content = site.locale && !page.fallback ? markDemos(unmarked, page.file, site.locale.dir) : unmarked;
   const generated = marked ? "" : block;
-  const toc = renderToc(page, `${content}\n${generated}`, t);
+  const toc = renderToc(page, `${content}\n${generated}`, t, site);
   const layout = reader.layout(page.meta.layout);
   const notFound = page.route === NOT_FOUND_ROUTE;
   const out = expand(layout.text, {
@@ -1414,7 +1418,6 @@ function renderNotice(site, page) {
   const t = tOf(site);
   t.mark("notice.");
   const canonical = englishOf(page).route;
-  const title = page.fallback ? t("notice.title-untranslated") : t("notice.title-pending");
   const text = page.fallback
     ? [t("notice.untranslated")]
     : [t("notice.pending"), ...(canonical === `${DOCS_ROUTE}accessibility/` ? [t("notice.pending-statement")] : [])];
@@ -1422,7 +1425,6 @@ function renderNotice(site, page) {
     '<div class="luz-alert luz-alert--info docs-notice">',
     '    <div class="luz-alert__icon" aria-hidden="true">\u2139</div>',
     "    <div>",
-    `      <div class="luz-alert__title">${escapeHtml(title)}</div>`,
     `      <div class="luz-alert__body">${escapeHtml(text.join(" "))} <a href="${escapeHtml(canonical)}" hreflang="en">${say(t, "notice.english")}</a></div>`,
     "    </div>",
     "  </div>",
@@ -1443,6 +1445,8 @@ function languageValues(site, locale, { home = false, siteUrl = "", page = null 
   const values = {
     lang: locale?.code ?? "en",
     dir: locale?.dir ?? "ltr",
+    // On a docs page only: the home page's catalogs and tests pin the lists of its dialog as they are
+    endir: page && locale?.dir === "rtl" ? ' dir="ltr"' : "",
     home: locale?.route ?? "/",
     alternates: translated ? renderAlternates(i18n, locale, siteUrl) : "",
     langswitch: translated ? renderSwitcher(i18n, locale, lookup(locale, "lang.label", `${I18N_DIR}/${locale.code}.json`, null)) : "",
