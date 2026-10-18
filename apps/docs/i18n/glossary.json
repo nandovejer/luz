@@ -1040,6 +1040,74 @@
         "ar": []
       },
       "note": "proposed; the button is an imperative in Arabic"
+    },
+    {
+      "en": "code snippet",
+      "es": "fragmento de código",
+      "ar": "مقتطف",
+      "forms": {
+        "es": [
+          "fragmento de código",
+          "fragmentos de código"
+        ],
+        "ar": [
+          "مقتطف",
+          "مقتطفات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed: a piece of code to copy. In Spanish «fragmento» alone is not used for a lazy chunk (see «lazy chunk»)"
+    },
+    {
+      "en": "lazy chunk",
+      "es": "carga bajo demanda",
+      "ar": "جزء يُحمَّل عند الحاجة",
+      "forms": {
+        "es": [
+          "carga bajo demanda",
+          "archivo que se carga bajo demanda",
+          "archivos que se cargan bajo demanda"
+        ],
+        "ar": [
+          "جزء يُحمَّل عند الحاجة",
+          "أجزاء تُحمَّل عند الحاجة"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "fragmento diferido"
+        ],
+        "ar": []
+      },
+      "note": "proposed: a file the page loads only when it needs it. Say «archivo» for the file itself; «fragmento» is reserved for a code snippet"
+    },
+    {
+      "en": "component (Arabic spelling)",
+      "es": "componente",
+      "ar": "مكون",
+      "forms": {
+        "es": [
+          "componente",
+          "componentes"
+        ],
+        "ar": [
+          "مكون",
+          "مكونات",
+          "المكونات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": [
+          "مكوّن",
+          "مكوّنات",
+          "المكوّنات"
+        ]
+      },
+      "note": "proposed: in the Arabic docs chrome «component» is written WITHOUT the shadda («مكون», «المكونات»), in navigation labels and everywhere in the catalog. Keep «حزمة» for the area labels (packages) and «نمط» for pattern pages"
     }
   ]
 }
