@@ -480,7 +480,8 @@ test.describe('Landing page', () => {
         const title = (await hero.locator('h1').textContent())?.trim() ?? '';
         expect(title.length).toBeGreaterThan(5);
         if (lang !== 'en') expect(title).not.toBe('LUZ, design system for humans, ready for AI.');
-        if (lang === 'es') expect(title).toBe('Luz, sistema de diseño para el humano, listo para la IA');
+        // The brand is written in capitals in the title, always (owner, 2026-10-18)
+        if (lang === 'es') expect(title).toBe('LUZ, sistema de diseño para el humano, listo para la IA');
         // Every language stresses the human and the AI
         await expect(hero.locator('h1 em')).toHaveCount(2);
         if (lang === 'es') await expect(hero.locator('h1 em')).toHaveText(['humano', 'IA']);
