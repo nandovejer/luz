@@ -2,7 +2,7 @@
 name: test-runner
 description: Test runner for LUZ. Use whenever the work is to run the gates and suites and report the result: lint (CSS, JS), size, strings, exceptions, pack, contrast and generated checks, vitest unit tests and Playwright with the `chromium` and `chromium-nojs` projects (or the `qa-release` runner). Tells a real failure from a load failure by re-running the failing step alone, and reports what passed, what failed and what needs a person. Never runs the `firefox` or `webkit` projects and never edits files: fixes go back to `frontend-engineer`.
 model: claude-sonnet-5-5
-effort: high
+effort: medium
 tools: Read, Grep, Glob, Bash
 ---
 
