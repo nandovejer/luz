@@ -163,8 +163,9 @@ describe("front matter", () => {
     expect(() => parseFrontMatter(PAGE("A", "", "layout: ../evil\n"), "x.html")).toThrow(/layout/);
   });
 
-  it("allows generate: gallery, a-z, snippets and ai, and nothing else", () => {
-    for (const value of ["gallery", "a-z", "snippets", "ai"]) {
+  // "notfound" is the 404: the generator writes, at <!-- luz:generated -->, one block per other docs language
+  it("allows generate: gallery, a-z, snippets, ai and notfound, and nothing else", () => {
+    for (const value of ["gallery", "a-z", "snippets", "ai", "notfound"]) {
       expect(parseFrontMatter(PAGE("A", "", `generate: ${value}\n`), "x.html", areas).meta.generate, value).toBe(value);
     }
     expect(() => parseFrontMatter(PAGE("A", "", "generate: tokens\n"), "x.html", areas)).toThrow(/generate/);
@@ -482,23 +483,49 @@ describe("the LUZ docs site", () => {
     expect([...rendered.keys()].sort()).toEqual([...homes, "/404.html", ...site.pages.map((p) => p.route)].sort());
   });
 
-  it("renders one header for every page from the shared partial, with the current links marked", () => {
+  // Decision D1: a language has docs when apps/docs/i18n/<code>/ exists. The delivery is Spanish and Arabic.
+  const docsLanguages = () => {
+    const folder = join(repo, "apps/docs/i18n");
+    return existsSync(folder) ? readdirSync(folder, { withFileTypes: true }).filter((e) => e.isDirectory() && e.name !== "en").map((e) => e.name).sort() : [];
+  };
+
+  it("has docs in Spanish and Arabic: a folder apps/docs/i18n/<code>/ for each (D1)", () => {
+    expect(docsLanguages()).toEqual(["ar", "es"]);
+  });
+
+  it("renders one header for every page from the shared partial, with the current links marked, and the language switcher on the docs pages", () => {
     const header = (html) => html.match(/<header class="site-header"[\s\S]*?<\/header>/)[0];
-    // The English docs header: the home page adds its language switcher, in its language
+    // The docs header and the home's differ in the switcher alone: the home's is in its language, the docs' lists the same page in each language
     const flat = (html) =>
       html
         .replace(/ aria-current="(page|true)"/g, "")
         .replace(/<luz-lang-switch>[\s\S]*?<\/luz-lang-switch>/, "")
         .replace(/\s+/g, " ");
+    const switcherOf = (html) => header(html).match(/<luz-lang-switch>[\s\S]*?<\/luz-lang-switch>/)?.[0] ?? "";
     const docsHeader = flat(header(rendered.get("/docs/")));
     for (const [route, html] of rendered) {
       const own = header(html);
       if (route === "/" || !homes.includes(route)) expect(flat(own), route).toBe(docsHeader);
-      expect(own.includes("<luz-lang-switch>"), route).toBe(homes.includes(route));
+      // A docs page has the switcher (the not-found page, which is no page in any language, does not: its text names the languages)
+      const hasSwitcher = route !== "/404.html";
+      expect(own.includes("<luz-lang-switch>"), route).toBe(hasSwitcher);
       // The site links (Home and Docs; the brand is not a navigation item) and the switcher's current language
       const marked = [...own.matchAll(/<a[^>]* href="([^"]*)"[^>]* aria-current="(page|true)">/g)].map(([, href, value]) => [href, value]);
       const expected = [...currentOf(route, homes)].filter(([href]) => href === "/docs/" || homes.includes(href));
-      expect(marked, route).toEqual(homes.includes(route) ? [...expected, [route, "page"]] : expected);
+      // The switcher marks the language the page is in: the home in its own, a docs page the English route of the page
+      expect(marked, route).toEqual(hasSwitcher ? [...expected, [route, "page"]] : expected);
+      if (hasSwitcher && !homes.includes(route)) {
+        // One link per language of the docs, the English page marked, the others not
+        const links = [...switcherOf(html).matchAll(/<a\b([^>]*)>/g)].map(([, attrs]) => ({
+          href: /\shref="([^"]*)"/.exec(attrs)?.[1],
+          lang: /\slang="([^"]*)"/.exec(attrs)?.[1],
+          current: /\saria-current="([^"]*)"/.exec(attrs)?.[1] ?? null,
+        }));
+        const inRegistryOrder = site.i18n.locales.map((l) => l.code).filter((code) => code === "en" || docsLanguages().includes(code));
+        expect(links.map((l) => l.lang), `${route}: languages in the switcher, in the order of the registry`).toEqual(inRegistryOrder);
+        expect(links.find((l) => l.lang === "en"), route).toMatchObject({ href: route, current: "page" });
+        expect(links.filter((l) => l.current), `${route}: only the page in English is marked`).toHaveLength(1);
+      }
     }
   });
 

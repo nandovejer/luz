@@ -5,7 +5,7 @@
  * language switcher and the <link rel="alternate"> generated from the
  * registry, and the real catalogs of apps/landing/i18n.
  */
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -14,6 +14,7 @@ import { markDocsLinks, renderAlternates, renderSwitcher } from "../scripts/docs
 import { docsSite } from "../scripts/docs-site/plugin.js";
 import { PAGES_BASE, SITE_URL } from "../vite.config.js";
 import { buildSite, currentOf, landingDocuments, relativizeLinks, renderDocument, scanSite } from "../scripts/docs-site/site.js";
+import { addDocsLanguage } from "./helpers/docs-i18n-size-fixture.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -226,6 +227,50 @@ describe("languages of the home page: generated markup", () => {
     expect(markDocsLinks('<a href="/docs/" hreflang="fr">x</a>', "/docs/", "en")).toBe('<a href="/docs/" hreflang="fr">x</a>');
   });
 
+  // Decision D1: a language has docs when apps/docs/i18n/<code>/ exists. Then its home links to /<code>/docs/,
+  // the docs in its language, and says nothing about English (a link to the English docs says hreflang="en")
+  describe("once a language has docs", () => {
+    const docsOf = (codes, options) => {
+      const repoRoot = fixture(options);
+      for (const code of codes) addDocsLanguage(join(repoRoot, "apps/docs"), code);
+      const withDocs = scan(repoRoot);
+      const render = (route, code) => renderDocument(options?.landing ?? LANDING, "apps/landing/index.html", route, withDocs, { locale: withDocs.i18n.byCode.get(code) });
+      return { render };
+    };
+
+    it("rewrites the links to /docs/ to /es/docs/, without hreflang, and keeps hreflang=\"en\" on the language that has none", () => {
+      const { render } = docsOf(["es"]);
+      const es = render("/es/", "es");
+      expect(es, "links of the Spanish home").toContain('<a href="/es/docs/">Docs</a>');
+      expect(es, "no link left to the English docs").not.toMatch(/href="\/docs\//);
+      expect(es).not.toContain('hreflang="en"');
+      // Arabic has no docs folder in this copy: its links are the English ones, said so
+      const ar = render("/ar/", "ar");
+      expect(ar).toContain('<a href="/docs/" hreflang="en">Docs</a>');
+      expect(ar).not.toContain("/ar/docs/");
+      // English is the default: its links are what they were
+      expect(render("/", "en")).toContain('<a href="/docs/">Docs</a>');
+    });
+
+    it("does it for each language that has docs, and for a link a catalog string carries", () => {
+      const lead = 'Ve a <a href="/docs/">la guía</a> con <span data-count="n">3</span> <strong>pasos</strong>.';
+      const { render } = docsOf(["es", "ar"], { catalogs: { ...CATALOGS, es: { ...CATALOGS.es, "hero.lead": lead } } });
+      expect(render("/es/", "es")).toContain('<p>Ve a <a href="/es/docs/">la guía</a> con <span data-count="n">3</span> <strong>pasos</strong>.</p>');
+      const ar = render("/ar/", "ar");
+      expect(ar).toContain('<a href="/ar/docs/">Docs</a>');
+      expect(ar).not.toMatch(/href="\/docs\//);
+    });
+
+    it("leaves alone a link outside /docs/: a path that only starts with the same letters, and another site's /docs/", () => {
+      const landing = LANDING.replace("</main>", '  <a href="/docsx/">Other</a><a href="https://example.org/docs/">Out</a>\n  </main>');
+      const { render } = docsOf(["es"], { landing });
+      const es = render("/es/", "es");
+      expect(es, "the docs link of the same page is rewritten").toContain('<a href="/es/docs/">Docs</a>');
+      expect(es).toContain('<a href="/docsx/">Other</a>');
+      expect(es).toContain('<a href="https://example.org/docs/">Out</a>');
+    });
+  });
+
   it("makes the languages' links relative in the pages build", () => {
     const routes = new Set(["/", "/es/", "/ar/", "/docs/"]);
     expect(relativizeLinks('<link rel="alternate" hreflang="en" href="/"><a href="/ar/">x</a><a href="/docs/">d</a>', "/es/", routes)).toBe(
@@ -278,12 +323,21 @@ describe("the LUZ home page in every language", () => {
     }
   });
 
-  it("marks every link to the English documentation with hreflang on /es/ and /ar/", () => {
+  it("marks every link to the English documentation with hreflang on /es/ and /ar/, and sends the language that has docs to its own", () => {
     for (const doc of docs.filter((d) => d.route !== "/")) {
       const html = render(doc);
-      const docsLinks = [...html.matchAll(/<a\b[^>]*href="\/docs\/[^"]*"[^>]*>/g)].map((m) => m[0]);
-      expect(docsLinks.length, doc.route).toBeGreaterThan(20);
-      for (const a of docsLinks) expect(a, doc.route).toContain('hreflang="en"');
+      const { code } = doc.locale;
+      // Decision D1: a language has docs when apps/docs/i18n/<code>/ exists
+      const hasDocs = existsSync(join(repo, "apps/docs/i18n", code));
+      const prefix = hasDocs ? `/${code}/docs/` : "/docs/";
+      const docsLinks = [...html.matchAll(new RegExp(`<a\\b[^>]*href="${prefix}[^"]*"[^>]*>`, "g"))].map((m) => m[0]);
+      expect(docsLinks.length, `${doc.route}: links to ${prefix}`).toBeGreaterThan(20);
+      for (const a of docsLinks) {
+        if (hasDocs) expect(a, doc.route).not.toContain('hreflang="en"');
+        else expect(a, doc.route).toContain('hreflang="en"');
+      }
+      // ... and none left to the other docs
+      if (hasDocs) expect(html.match(/<a\b[^>]*href="\/docs\/[^"]*"[^>]*>/g) ?? [], `${doc.route}: links to the English docs`).toEqual([]);
     }
   });
 });
