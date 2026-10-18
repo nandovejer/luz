@@ -371,8 +371,10 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
     expect(rendered.get("/ar/")).not.toContain("Your choice stays in this browser.");
   });
 
-  it("the hero's lead is the longer one the owner kept, in every language", () => {
-    expect(catalogs.en["hero.lead"]).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads, in light, dark and high contrast.");
+  it("the hero's lead is the longer one the owner kept, with the TDD statement in it, in every language", () => {
+    // The owner (2026-10-18): the lead and "We love TDD, every change starts with a failing test" are one sentence;
+    // "We love TDD" is a link to the docs section that says how it is done.
+    expect(catalogs.en["hero.lead"]).toBe('Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads &amp; <a href="/docs/get-started/how-luz-is-built/#tests-first">We love TDD</a>, every change starts with a failing test.');
     for (const code of ["en", "es", "ar"]) expect(catalogs[code]["hero.lead"].replace(/<[^>]*>/g, "").length, code).toBeGreaterThan(120);
   });
 
