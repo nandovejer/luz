@@ -194,6 +194,10 @@ class LuzLight extends HTMLElement {
 
   _build() {
     this._tz = zone();
+    // The line's phrase: one of the page's facts about the speed of light (fact-1, fact-2…), at random on each load
+    let facts = 0;
+    while (this._text(`fact-${facts + 1}`)) facts++;
+    this._fact = 1 + Math.floor(Math.random() * facts);
     this._place = placeFor(this._tz, Date.now());
     const { lat, lon } = this._place, la = lat * DEG, lo = lon * DEG;
     this._placeVec = [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)];
@@ -312,7 +316,7 @@ class LuzLight extends HTMLElement {
     const light = root.getAttribute("data-light");
     const time = this._clock.format(new Date(t));
     this._scrub.value = p.hour * 60 + p.minute;
-    const say = this._text("say-globe");
+    const say = this._text(`fact-${this._fact}`);
     // A chosen mode pins a light that is not the hour's: the hour alone
     const phase = light && (mode()?.mode ?? "auto") === "auto" ? this._text(light) : "";
     const sep = this._text("sep") || ", ";
