@@ -1,0 +1,112 @@
+<!-- luz:page
+title: Capas de cascada
+description: Cómo se integra LUZ en tu cascada: una capa llamada luz, el orden que debes declarar y cómo sobrescribir sus estilos sin !important.
+source: b31fd25b86c1
+reviewed: false
+-->
+    <section class="docs-block" id="order" aria-labelledby="order-title">
+      <h2 class="docs-chapter__title" id="order-title">Declara primero el orden</h2>
+      <p class="docs-lead">Todo el CSS de LUZ está dentro de una capa de cascada, <code>luz</code>. Colócala entre tu restablecimiento y tus propios estilos, y declara ese orden antes de cargar ninguna hoja de estilos.</p>
+      <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Layer order"><code>@layer reset, luz, app;</code></pre>
+      <ul>
+        <li>El orden de las capas depende de la primera aparición de sus nombres. Una declaración como esta, antes que todo lo demás, lo fija.</li>
+        <li>En HTML, ponla en un <code>&lt;style&gt;</code> antes de los elementos <code>&lt;link&gt;</code>. En una hoja de estilos, ponla en la primera línea, antes de cualquier <code>@import</code> de LUZ.</li>
+        <li>Una capa posterior prevalece sobre una anterior. Así que <code>app</code> prevalece sobre <code>luz</code>, y <code>luz</code> sobre <code>reset</code>.</li>
+        <li>No tienes que usar estos nombres. Usa las capas que quieras: <code>luz</code> es el único nombre que añade LUZ.</li>
+      </ul>
+      <p>Las capas y los nombres con punto, como <code>luz.components</code>, funcionan en todos los navegadores actuales y están disponibles desde marzo de 2022 (<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@layer">MDN</a>).</p>
+    </section>
+
+    <section class="docs-block" id="inside" aria-labelledby="inside-title">
+      <h2 class="docs-chapter__title" id="inside-title">Qué contiene luz</h2>
+      <p>Core y los demás paquetes ponen sus reglas en capas propias dentro de <code>luz</code>. Se muestran aquí de la primera a la última: una capa más abajo en la tabla prevalece sobre las de arriba.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Las capas dentro de luz" tabindex="0">
+        <table class="luz-table">
+          <thead>
+            <tr><th scope="col">Capa</th><th scope="col">Paquete</th><th scope="col">Qué contiene</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Capa"><div><code>luz.tokens</code></div></td><td data-label="Paquete"><div>tokens</div></td><td data-label="Qué contiene"><div>Las propiedades personalizadas <code>--luz-*</code></div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.themes</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Tus propios aspectos (solo propiedades personalizadas; <a href="/docs/tokens/themes/">crea uno</a>). LUZ no incluye ninguno: su aspecto predeterminado está en <code>luz.tokens</code></div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.settings</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Ajustes de movimiento, z-index y puntos de ruptura</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.generic</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>El restablecimiento</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.elements</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Elementos HTML sin clases, con especificidad 0</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.objects</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Objetos de maquetación: <code>.o-*</code></div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.components</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Los componentes: <code>.luz-*</code></div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.utilities</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Ayudas de una sola función: <code>.u-*</code>. Prevalecen sobre los componentes por orden, no mediante <code>!important</code></div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.site</code></div></td><td data-label="Paquete"><div>site</div></td><td data-label="Qué contiene"><div>Los cinco componentes de site: <code>&lt;luz-search&gt;</code>, <code>&lt;luz-consent&gt;</code>, <code>&lt;luz-lang-switch&gt;</code>, <code>&lt;luz-submenu&gt;</code>, <code>&lt;luz-banner&gt;</code> y sus clases <code>.luz-&lt;tag&gt;__*</code></div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.landing</code></div></td><td data-label="Paquete"><div>landing</div></td><td data-label="Qué contiene"><div>Los patrones de una landing page: <code>.luz-landing-*</code>. Va después de site para que pueda ampliarlo</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.cms</code></div></td><td data-label="Paquete"><div>cms</div></td><td data-label="Qué contiene"><div>Los patrones de un blog, un periódico o cualquier CMS: <code>.luz-cms-*</code>. Va después de site; landing y cms no comparten clases, así que su orden no cambia nada</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.app</code></div></td><td data-label="Paquete"><div>app</div></td><td data-label="Qué contiene"><div>La cabecera y el panel de una aplicación web: <code>.luz-app-*</code>. Va después de cms; landing, cms y app no comparten clases, así que su orden no cambia nada</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.docs</code></div></td><td data-label="Paquete"><div>docs</div></td><td data-label="Qué contiene"><div>Las partes de una página de documentación: <code>.luz-docs-*</code>. Va después de app; no comparte clases con otros paquetes, así que su posición no mueve ninguna otra capa</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.print</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Lo que cambia en papel, dentro de <code>@media print</code>: <a href="/docs/get-started/print/">Estilos de impresión</a>. Va al final para prevalecer sobre los estilos de pantalla de todos los paquetes</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Cada archivo que publica LUZ repite primero el orden de esta lista, así que es el mismo sea cual sea el archivo que cargue primero la página. Estos nombres son públicos: cambiar uno es un cambio incompatible.</p>
+    </section>
+
+    <section class="docs-block" id="unlayered" aria-labelledby="unlayered-title">
+      <h2 class="docs-chapter__title" id="unlayered-title">El CSS sin capa prevalece</h2>
+      <p>Los estilos que no están en ninguna capa prevalecen sobre todas las capas, sea cual sea el orden en el código fuente. Así que una regla normal tuya prevalece sobre <code>luz</code> y también sobre tu propia capa <code>app</code>.</p>
+      <ul>
+        <li>Si tu CSS no usa capas, nada cambia: ya prevalece sobre LUZ sin necesidad de <code>!important</code>.</li>
+        <li>Si usas capas, mantén tus reglas dentro de una: una regla sin capa que olvides incluir sobrescribirá tus propias capas.</li>
+        <li>El orden de capas no ayuda con las reglas que están fuera de ellas. Pon la sobrescritura en <code>app</code> o sin capa, y ten claro cuál has elegido.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="override" aria-labelledby="override-title">
+      <h2 class="docs-chapter__title" id="override-title">Sobrescribir LUZ</h2>
+      <p>Tres formas de sobrescribir estilos, empezando por la más sencilla. Todas prevalecen sobre LUZ porque <code>app</code> va después de <code>luz</code>.</p>
+      <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Overriding LUZ from your own layer"><code>@layer reset, luz, app;
+
+@layer app {
+  /* A token: every component that reads it follows */
+  :root {
+    --luz-brand-fill: #0b5a8c;
+  }
+
+  /* A component: your rule, in your layer */
+  .luz-btn {
+    min-height: 3rem;
+  }
+
+  /* A site component */
+  luz-banner {
+    font-size: 1rem;
+  }
+}</code></pre>
+      <ul>
+        <li><strong>Prioriza los tokens.</strong> Un token modifica todos los componentes que lo usan, en el modo en el que se define. Comprueba los colores que establezcas con <a href="/docs/tokens/contrast/">la comprobación de contraste</a>.</li>
+        <li><strong>No necesitas <code>!important</code> ni selectores más largos</strong>: el orden de las capas prevalece primero, y la especificidad solo cuenta dentro de una misma capa.</li>
+        <li>Mantén las sobrescrituras de color en el modo correcto: <code>:root</code> en <code>app</code> también prevalece sobre el modo oscuro de LUZ. Define el token para cada modo, por ejemplo en <code>[data-theme="dark"]</code>.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="why" aria-labelledby="why-title">
+      <h2 class="docs-chapter__title" id="why-title">Por qué hay una sola capa contenedora</h2>
+      <p>Antes, las capas de LUZ eran seis nombres de nivel superior: <code>settings</code>, <code>generic</code>, <code>elements</code>, <code>objects</code>, <code>components</code> y <code>utilities</code>. Son breves y comunes, y otras herramientas usan algunos de esos nombres.</p>
+      <p>Una página que cargaba una de ellas junto con LUZ mezclaba sus capas <code>components</code> o <code>utilities</code> con las de LUZ, y el orden entre ellas dependía del azar.</p>
+      <ul>
+        <li>Dentro de <code>luz</code>, los nombres de capa de LUZ nunca coinciden con los tuyos.</li>
+        <li>Un solo nombre ordena todo LUZ: colocas <code>luz</code> una vez y no tienes que saber qué contiene.</li>
+        <li>Funciona con un <code>&lt;link&gt;</code> o desde una CDN, donde no se puede añadir una capa desde fuera.</li>
+      </ul>
+      <p>Aun así, puedes poner una capa tuya entre dos capas de LUZ si las nombras en la primera declaración: <code>@layer luz.components, mine, luz.utilities;</code>.</p>
+    </section>
+
+    <section class="docs-block" id="import" aria-labelledby="import-title">
+      <h2 class="docs-chapter__title" id="import-title">Cargar con @import</h2>
+      <p>Con un empaquetador que resuelva nombres de paquetes, o con rutas a los archivos, cárgalos tal cual. No añadas <code>layer(luz)</code> al import: los archivos ya declaran sus capas dentro de <code>luz</code> y envolverlos anidaría los nombres como <code>luz.luz.components</code>.</p>
+      <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Importing LUZ"><code>@layer reset, luz, app;
+
+@import url("@luz-ds/tokens/css");
+@import url("@luz-ds/core/css");
+@import url("@luz-ds/site/css");
+@import url("@luz-ds/landing/css"); /* only for a landing page */
+@import url("@luz-ds/cms/css");     /* only for a blog or a newspaper */
+@import url("@luz-ds/app/css");     /* only for a web application */
+@import url("@luz-ds/docs/css");    /* only for a documentation site */</code></pre>
+      <p>Tu hoja de estilos importa un archivo después de la declaración, así que el orden queda fijado antes de que se cargue LUZ.</p>
+    </section>

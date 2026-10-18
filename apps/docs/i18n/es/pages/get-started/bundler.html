@@ -1,0 +1,248 @@
+<!-- luz:page
+title: Con un empaquetador o framework
+description: Importa el CSS y el script de LUZ en Astro o en cualquier herramienta que resuelva nombres de paquetes, y conserva el orden de las capas y las fuentes.
+keywords: vite, astro, empaquetador, framework, import
+source: dffff15fb784
+reviewed: false
+-->
+    <section class="docs-block" aria-labelledby="imports">
+      <h2 class="docs-chapter__title" id="imports">Los imports</h2>
+      <p class="docs-lead">Importa el CSS de cada paquete que uses, primero tokens, y el script si quieres añadir comportamiento. Un empaquetador resuelve estos nombres desde <code>node_modules</code>; un <code>&lt;link&gt;</code> en HTML no puede hacerlo.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">JS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-imports" aria-label="Copy the imports">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="The imports"><code id="code-imports">import "@luz-ds/tokens/css";
+import "@luz-ds/core/css";
+import "@luz-ds/core";
+
+// Only if the page uses a site element: search, consent, language switch
+import "@luz-ds/site/css";
+import "@luz-ds/site";
+
+// Only for one kind of site: landing, cms or app
+import "@luz-ds/landing/css";</code></pre>
+      </div>
+      <ul>
+        <li>Primero van los tokens: todos los demás paquetes los necesitan.</li>
+        <li><code>import "@luz-ds/core"</code> es el script. Es opcional: todas las páginas de LUZ funcionan sin él.</li>
+        <li>Para cargar menos CSS, importa <code>@luz-ds/core/base.css</code> y después un archivo por componente, por ejemplo <code>@luz-ds/core/components/button.css</code>.</li>
+        <li>Para cargar un módulo de script, impórtalo por su nombre y llama a su función: consulta <a href="/docs/get-started/javascript/">Módulos de JavaScript</a>.</li>
+      </ul>
+      <p>Para ver las líneas adecuadas a lo que estás creando, con las etiquetas CDN y sus hashes de integridad, <a href="/docs/get-started/snippet/">elige tu fragmento</a>.</p>
+      <p>Cada nombre anterior es una entrada del mapa <code>exports</code> de su paquete. Esta tabla los enumera todos.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Exportaciones de cada paquete" tabindex="0">
+        <table class="luz-table">
+          <caption>Exportaciones de cada paquete</caption>
+          <thead>
+            <tr><th scope="col">Paquete</th><th scope="col">Exportación</th><th scope="col">Qué es</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>.</code></div></td><td data-label="Qué es"><div><code>luz-tokens.css</code>, el mismo archivo que <code>./css</code>, para herramientas que buscan la hoja de estilos principal de un paquete</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>luz-tokens.css</code>: todos los tokens, con las reglas <code>@font-face</code> de ET Book</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>luz-tokens.min.css</code>: lo mismo, minimizado</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./tokens.css</code></div></td><td data-label="Qué es"><div><code>tokens.css</code>: todos los tokens, sin <code>@font-face</code>. Para cuando aportas tu propia fuente</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./fonts.css</code></div></td><td data-label="Qué es"><div>Solo las reglas <code>@font-face</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./tokens.json</code></div></td><td data-label="Qué es"><div>Los tokens en formato JSON, para herramientas</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./dtcg</code></div></td><td data-label="Qué es"><div>Los tokens en formato W3C Design Tokens, para Figma y otras herramientas de diseño</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./dtcg/resolver</code></div></td><td data-label="Qué es"><div>Un documento resolver para los mismos tokens, con sus tres modos de color</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./fonts/*</code></div></td><td data-label="Qué es"><div>Los archivos de fuente ET Book a los que apuntan las hojas de estilos</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>.</code></div></td><td data-label="Qué es"><div><code>luz.js</code>: el script que inicia todos los comportamientos de la página. Impórtalo en el navegador</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>luz.css</code>: el restablecimiento, los elementos sin clases, los objetos de maquetación, los componentes y las utilidades</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>luz.min.css</code>: lo mismo, minimizado</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./base.css</code></div></td><td data-label="Qué es"><div>Los ajustes, el restablecimiento y los elementos sin clases, para cargar los componentes uno a uno</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./print.css</code></div></td><td data-label="Qué es"><div>Solo los estilos de impresión. <code>luz.css</code> ya los incluye</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./classless.css</code></div></td><td data-label="Qué es"><div>Estilos para marcado al que no puedes añadir clases, dentro de <code>data-luz-classless</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por componente, como <code>@luz-ds/core/components/button.css</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./themes/*</code></div></td><td data-label="Qué es"><div>La plantilla para crear tu propio aspecto, <code>themes/_template.css</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./theme</code></div></td><td data-label="Qué es"><div>Modo de color: <code>initThemeSystem</code>, <code>applyTheme</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./sidebar</code></div></td><td data-label="Qué es"><div>Seguimiento del desplazamiento y cajón: <code>initSidebar</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./clipboard</code></div></td><td data-label="Qué es"><div>Botones de copia: <code>initCopyButtons</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./modal</code></div></td><td data-label="Qué es"><div>Alternativa para <code>command</code> y <code>commandfor</code> en un diálogo: <code>initModals</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./highlight</code></div></td><td data-label="Qué es"><div>Resaltado de código: <code>initHighlight</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./player</code></div></td><td data-label="Qué es"><div>Reproductores de audio y vídeo: <code>initPlayers</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./tabs</code></div></td><td data-label="Qué es"><div>Pestañas: <code>initTabs</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./midi</code></div></td><td data-label="Qué es"><div>El reproductor MIDI: <code>MidiPlayer</code>, cargado cuando hace falta</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./table-sort</code></div></td><td data-label="Qué es"><div>Tablas ordenables: <code>initTableSort</code>, cargadas cuando hacen falta</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./timeline</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-timeline&gt;</code>, cargado cuando hace falta</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./utils</code></div></td><td data-label="Qué es"><div>Funciones auxiliares, como <code>formatTime</code> y <code>enableJs</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./i18n</code></div></td><td data-label="Qué es"><div>Los textos de los scripts: <code>t</code>, <code>registerLocale</code>, <code>loadLocales</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./i18n/*</code></div></td><td data-label="Qué es"><div>Los textos de uno de los idiomas que incluye LUZ, por ejemplo <code>@luz-ds/core/i18n/es</code>: su exportación predeterminada es un objeto de textos que se carga cuando hace falta</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./custom-elements.json</code></div></td><td data-label="Qué es"><div>Todos los elementos personalizados que define o estiliza el paquete, con sus atributos y eventos, en formato Custom Elements Manifest para editores y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>.</code></div></td><td data-label="Qué es"><div><code>site.js</code>: carga el script de cada elemento del sitio que haya en la página</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./search</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-search&gt;</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./consent</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-consent&gt;</code> y <code>getConsent</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./mode</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-mode&gt;</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>site.css</code>: los estilos de los elementos del sitio</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>site.min.css</code>: lo mismo, minimizado</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./print.css</code></div></td><td data-label="Qué es"><div>Solo las reglas de impresión de los elementos del sitio</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento del sitio: banner, consentimiento, selector de idioma, modo, búsqueda y submenú</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./custom-elements.json</code></div></td><td data-label="Qué es"><div>Todos los elementos personalizados que define o estiliza el paquete, con sus atributos y eventos, en formato Custom Elements Manifest para editores y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>landing.css</code>: los elementos de una landing page</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>landing.min.css</code>: lo mismo, minimizado</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/cms</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>cms.css</code>: los elementos de un blog o CMS</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/cms</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>cms.min.css</code>: lo mismo, minimizado</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/cms</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/cms</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/app</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>app.css</code>: los elementos de una aplicación web</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/app</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>app.min.css</code>: lo mismo, minimizado</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/app</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/app</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/docs</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>docs.css</code>: los elementos de una página de documentación</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/docs</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>docs.min.css</code>: lo mismo, minimizado</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/docs</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/docs</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="docs-block" aria-labelledby="order">
+      <h2 class="docs-chapter__title" id="order">El orden de las capas se conserva al empaquetar</h2>
+      <p>Todos los archivos CSS que publica LUZ empiezan con la misma declaración <code>@layer</code>, que define el orden de todas sus capas. Así, el orden se mantiene aunque tu herramienta divida, reordene o una los archivos: el primer archivo que se carga lo establece.</p>
+      <p>En la compilación de Astro que aparece a continuación, las capas quedaron en el orden declarado, primero <code>luz.tokens</code> y al final <code>luz.print</code>; una regla del consumidor sin capa quedó la última.</p>
+      <p>Tu CSS que esté fuera de cualquier capa prevalece sobre todas las capas de LUZ, esté donde esté, sin necesidad de <code>!important</code>. <a href="/docs/get-started/layers/">Capas de cascada</a> contiene la lista completa y explica cómo sobrescribir una.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="astro">
+      <h2 class="docs-chapter__title" id="astro">Astro, paso a paso</h2>
+      <p class="docs-lead">Un proyecto nuevo de Astro con los tokens y core de LUZ, una plantilla que los carga y CSS propio que se aplica al final.</p>
+      <p><strong>Creado con Astro 7.3 el 2026-10-15.</strong> LUZ está en beta y Astro cambia entre versiones, así que esta página tiene fecha: si algún paso falla con una versión más reciente de Astro, consulta primero sus notas de esa versión.</p>
+      <p>Para la compilación se usaron paquetes creados desde el repositorio de LUZ en la versión 0.0.0, instalados con <code>npm install --legacy-peer-deps</code>, porque los rangos de dependencias peer <code>^0.1.0</code> no se resuelven hasta que se publique la versión 0.1.0. Después, el comando siguiente no necesita ninguna opción.</p>
+      <h3 class="docs-subhead" id="astro-project">El proyecto</h3>
+      <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="The files of the project"><code>my-site/
+├─ package.json
+├─ astro.config.mjs            (empty config: defineConfig({}))
+└─ src/
+   ├─ layouts/Base.astro       the two CSS imports, the script
+   ├─ styles/site.css          your own CSS, last, outside any layer
+   └─ pages/index.astro</code></pre>
+      <p><code>astro.config.mjs</code> se deja tal y como lo crea Astro. LUZ no necesita ninguna configuración en él.</p>
+      <h3 class="docs-subhead" id="astro-commands">Los comandos</h3>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Shell</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-astro-commands" aria-label="Copy the Astro commands">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The commands"><code id="code-astro-commands">npm create astro@latest my-site
+cd my-site
+npm install @luz-ds/tokens @luz-ds/core
+npm run dev</code></pre>
+      </div>
+      <h3 class="docs-subhead" id="astro-layout">La plantilla</h3>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Astro</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-astro-layout" aria-label="Copy the layout">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="src/layouts/Base.astro"><code id="code-astro-layout">---
+// src/layouts/Base.astro
+import "@luz-ds/tokens/css";
+import "@luz-ds/core/css";
+import "../styles/site.css";
+---
+&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+    &lt;title&gt;My site&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;slot /&gt;
+    &lt;script&gt;
+      import "@luz-ds/core";
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+      <h3 class="docs-subhead" id="astro-css">Tu CSS y la página</h3>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">CSS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-astro-css" aria-label="Copy your CSS">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="src/styles/site.css"><code id="code-astro-css">/* src/styles/site.css */
+:root { --luz-type-base: 1.125rem; }</code></pre>
+      </div>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Astro</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-astro-page" aria-label="Copy the page">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="src/pages/index.astro"><code id="code-astro-page">---
+// src/pages/index.astro
+import Base from "../layouts/Base.astro";
+---
+&lt;Base&gt;
+  &lt;main class="o-container"&gt;
+    &lt;h1&gt;My site&lt;/h1&gt;
+    &lt;button class="luz-btn luz-btn--primary" type="button"&gt;Save changes&lt;/button&gt;
+  &lt;/main&gt;
+&lt;/Base&gt;</code></pre>
+      </div>
+      <p>La regla de <code>site.css</code> establece el control tipográfico en 1.125rem y prevalece sobre el valor predeterminado de LUZ, sin capa y sin <code>!important</code>. <a href="/docs/get-started/make-it-yours/">Hazlo tuyo</a> explica los demás controles.</p>
+      <h3 class="docs-subhead" id="astro-seen">Qué mostró la compilación</h3>
+      <ul>
+        <li><code>astro build</code> y <code>astro dev</code> funcionaron con los dos imports CSS en el encabezado de una plantilla y sin configuración en <code>astro.config.mjs</code>.</li>
+        <li>Astro agrupó <code>&lt;script&gt;</code> con <code>import "@luz-ds/core"</code> en un único archivo de módulo y separó los fragmentos de carga diferida.</li>
+        <li>Las fuentes se generaron como archivos con hash, y las capas y tu propia regla quedaron en el orden descrito arriba.</li>
+      </ul>
+      <p>Se examinó el resultado de la compilación, pero no se abrió la página generada en un navegador. No se probó Astro con un enrutador de transiciones de vista (<code>&lt;ClientRouter /&gt;</code>) ni Windows.</p>
+      <p>Los imports de <code>landing</code>, <code>cms</code> y <code>app</code> tienen la misma estructura que los anteriores, pero no se compilaron.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="others">
+      <h2 class="docs-chapter__title" id="others">Vite, Next, Nuxt y SvelteKit</h2>
+      <p>Para esta página solo se compiló Astro; Vite por sí solo, Next, Nuxt y SvelteKit no se compilaron ni probaron. Los imports son los mismos y van en la plantilla raíz o en el archivo de entrada de la aplicación.</p>
+      <p>La documentación de cada herramienta indica dónde colocar el CSS de un paquete:</p>
+      <ul>
+        <li><a href="https://vite.dev/guide/">Documentación de Vite</a></li>
+        <li><a href="https://nextjs.org/docs">Documentación de Next.js</a></li>
+        <li><a href="https://nuxt.com/docs">Documentación de Nuxt</a></li>
+        <li><a href="https://svelte.dev/docs/kit">Documentación de SvelteKit</a></li>
+      </ul>
+      <p>Hay algo que todas comparten. Un módulo de LUZ no produce efectos secundarios al importarlo hasta que llamas a su función <code>init</code>, y <code>luz.js</code> y <code>site.js</code> comprueban primero que exista <code>document</code>.</p>
+      <p>Por eso, los frameworks que renderizan en el servidor pueden importarlos. En Node sin <code>document</code> se importaron diez módulos de core y site sin errores.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="fonts">
+      <h2 class="docs-chapter__title" id="fonts">Fuentes y recursos</h2>
+      <p><code>@luz-ds/tokens/css</code> es <code>luz-tokens.css</code>, y sus reglas <code>@font-face</code> apuntan a los archivos de ET Book con <code>url()</code>. El empaquetador resuelve esas rutas: Astro generó los archivos como recursos <code>woff2</code> con hash.</p>
+      <p>Para no usar ET Book, importa <code>@luz-ds/tokens/tokens.css</code>. Incluye los mismos tokens y no tiene reglas <code>@font-face</code>, así que no se descarga ninguna fuente.</p>
+      <p>Después, define <code>--luz-font-body</code> con la fuente que uses: <a href="/docs/get-started/make-it-yours/">Hazlo tuyo</a> explica cómo.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="cdn">
+      <h2 class="docs-chapter__title" id="cdn">Una CDN en un framework</h2>
+      <p>Puedes cargar LUZ desde una CDN en la plantilla de un framework en lugar de importarlo. En una plantilla de Astro, el <code>&lt;link rel="stylesheet"&gt;</code> en <code>&lt;head&gt;</code> y el <code>&lt;script type="module" src="https://…"&gt;</code>, cada uno con <code>integrity</code> y <code>crossorigin</code>, se quedan tal cual.</p>
+      <p>Lo mismo ocurre con un script con <code>is:inline</code>. Astro solo procesa un <code>&lt;script&gt;</code> que no tenga ningún atributo aparte de <code>src</code>.</p>
+      <p>Usa la CDN o los imports, pero no ambos: LUZ se cargaría dos veces. <a href="/docs/get-started/snippet/">Elige tu fragmento</a> incluye las etiquetas y sus hashes.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="problems">
+      <h2 class="docs-chapter__title" id="problems">Si algo no funciona</h2>
+      <ul>
+        <li><strong>Un aviso sobre una dependencia peer.</strong> <code>@luz-ds/core</code> requiere <code>@luz-ds/tokens</code> en la versión <code>^0.1.0</code>. Instala ambos en la misma versión: <code>npm install @luz-ds/tokens @luz-ds/core</code>.</li>
+        <li><strong>La herramienta no puede resolver <code>@luz-ds/core/css</code>.</strong> La exportación es <code>./css</code>, sin extensión de archivo. Si la herramienta indica que un import no se puede resolver, añade el paquete a <code>vite.ssr.noExternal</code>, como se explica en la <a href="https://docs.astro.build/en/guides/styling/">guía de estilos de Astro</a>.</li>
+        <li><strong>Los estilos aparecen en el orden equivocado.</strong> Dos copias de LUZ en la página, por ejemplo una de una CDN y otra del empaquetador, ponen sus reglas en las mismas capas: cárgalo una sola vez. Un <code>@import</code> con <code>layer(luz)</code> anida los nombres como <code>luz.luz.components</code>: quita <code>layer()</code>. <a href="/docs/get-started/layers/">Capas de cascada</a> explica el orden.</li>
+      </ul>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">JS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-astro-noexternal" aria-label="Copy the Astro setting">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="astro.config.mjs with the package left to the bundler"><code id="code-astro-noexternal">// astro.config.mjs
+import { defineConfig } from "astro/config";
+
+export default defineConfig({
+  vite: { ssr: { noExternal: ["@luz-ds/tokens", "@luz-ds/core"] } },
+});</code></pre>
+      </div>
+    </section>

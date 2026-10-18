@@ -1,0 +1,184 @@
+<!-- luz:page
+title: Diálogo modal
+description: Pide tomar una decisión antes de continuar, mediante un elemento dialog nativo.
+keywords: diálogo, ventana emergente
+source: eb5129143b95
+reviewed: false
+-->
+    <div class="docs-component" id="c-modal">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un botón que abre un diálogo para preguntar si se debe eliminar un borrador.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-row">
+              <button class="luz-btn luz-btn--danger" type="button" commandfor="docs-modal" command="show-modal">Delete draft</button>
+            </div>
+            <dialog class="luz-modal" id="docs-modal" aria-labelledby="docs-modal-title">
+              <div class="luz-modal__header">
+                <button class="luz-modal__close" commandfor="docs-modal" command="close" aria-label="Close dialog" type="button">×</button>
+                <h2 class="luz-modal__title" id="docs-modal-title">Delete this draft?</h2>
+              </div>
+              <div class="luz-modal__body">
+                <p>You cannot undo this. The draft and its comments are deleted.</p>
+              </div>
+              <div class="luz-modal__footer">
+                <button class="luz-btn luz-btn--ghost" commandfor="docs-modal" command="close" type="button">Cancel</button>
+                <button class="luz-btn luz-btn--danger" commandfor="docs-modal" command="close" type="button">Delete draft</button>
+              </div>
+            </dialog>
+          </div>
+
+          <p class="docs-demo__note">A native <code class="luz-code-inline">&lt;dialog&gt;</code>.</p>
+          <p class="docs-demo__note">Escape closes it and focus goes back to the button that opened it. Nothing is deleted here.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Algunos navegadores compatibles aún no admiten los atributos <code>command</code> y <code>commandfor</code>. En esos navegadores, si JavaScript está desactivado, el botón de apertura no hace nada.</p>
+          <p>Ofrece a quien lee otra forma de realizar la misma acción.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del diálogo modal">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-modal" aria-label="Copy the modal markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Modal markup"><code id="code-modal">&lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot; commandfor=&quot;rename&quot; command=&quot;show-modal&quot;&gt;Rename project&lt;/button&gt;
+
+&lt;dialog class=&quot;luz-modal&quot; id=&quot;rename&quot; aria-labelledby=&quot;rename-title&quot;&gt;
+  &lt;div class=&quot;luz-modal__header&quot;&gt;
+    &lt;button class=&quot;luz-modal__close&quot; type=&quot;button&quot; commandfor=&quot;rename&quot; command=&quot;close&quot; aria-label=&quot;Close dialog&quot;&gt;×&lt;/button&gt;
+    &lt;h2 class=&quot;luz-modal__title&quot; id=&quot;rename-title&quot;&gt;Rename project&lt;/h2&gt;
+  &lt;/div&gt;
+  &lt;form method=&quot;dialog&quot;&gt;
+    &lt;div class=&quot;luz-modal__body&quot;&gt;
+      &lt;div class=&quot;luz-field&quot;&gt;
+        &lt;label class=&quot;luz-field__label&quot; for=&quot;rename-name&quot;&gt;New name&lt;/label&gt;
+        &lt;input class=&quot;luz-input&quot; id=&quot;rename-name&quot; type=&quot;text&quot; autofocus&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;luz-modal__footer&quot;&gt;
+      &lt;button class=&quot;luz-btn luz-btn--ghost&quot; type=&quot;button&quot; commandfor=&quot;rename&quot; command=&quot;close&quot;&gt;Cancel&lt;/button&gt;
+      &lt;button class=&quot;luz-btn luz-btn--primary&quot; value=&quot;rename&quot;&gt;Rename project&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-modal-js" aria-label="Copy the fallback script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Fallback script code"><code id="code-modal-js">import { initModals } from &quot;@luz-ds/core/modal&quot;;
+initModals();</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Un tamaño y ningún modificador: hasta 600 px de ancho y el 90 % de la altura de la ventana gráfica, con desplazamiento interno si el contenido es más largo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Elementos del diálogo modal" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-modal</code></div></td><td data-label="Qué hace"><div>La superficie del diálogo, con un fondo atenuado y ligeramente difuminado</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-modal__header</code>, <code>__title</code></div></td><td data-label="Qué hace"><div>La fila del título, con una línea debajo</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-modal__close</code></div></td><td data-label="Qué hace"><div>El botón ×, al final de la fila del título, de al menos 28 px</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-modal__body</code></div></td><td data-label="Qué hace"><div>El contenido</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-modal__footer</code></div></td><td data-label="Qué hace"><div>Los botones, al final de la fila, con una línea por encima</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>command="show-modal"</code>, <code>command="close"</code></div></td><td data-label="Qué hace"><div>Abre y cierra el diálogo indicado en <code>commandfor</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un elemento nativo <code>&lt;dialog&gt;</code> con estilos de <code>components/modal.css</code>, que se abre como diálogo modal.</p>
+            <ul>
+              <li>El navegador se encarga de lo difícil: la página del fondo queda inerte, el foco permanece dentro, Escape lo cierra y el foco vuelve al botón que lo abrió.</li>
+              <li>Los botones lo abren y lo cierran con <code>command</code> y <code>commandfor</code>, sin scripts.</li>
+              <li><code>initModals()</code> de <code>modal.js</code> gestiona los mismos dos comandos en los navegadores que aún no los admiten, y no hace nada en los demás. <code>luz.js</code> lo ejecuta.</li>
+              <li>Al enviar un <code>&lt;form method="dialog"&gt;</code> que esté dentro, el diálogo se cierra y su <code>returnValue</code> toma el valor del botón pulsado.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Todo funciona en los navegadores que admiten <code>command</code>. En los demás, el botón de apertura no hace nada: consulta «Problemas conocidos».</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Tab y Mayús+Tab permiten moverse solo dentro del diálogo; Escape lo cierra.</p>
+            <ul>
+              <li>Al abrirlo, el foco pasa al primer elemento que lo admite o al que tenga <code>autofocus</code>.</li>
+              <li>Asigna un nombre al diálogo con <code>aria-labelledby</code>, que apunte a su título.</li>
+              <li>El botón × necesita <code>aria-label="Close dialog"</code>: su texto es un símbolo.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un diálogo modal para pedir una decisión o una breve respuesta que deba resolverse antes de continuar.</p>
+            <ul>
+              <li>Para confirmar una acción que no se puede deshacer.</li>
+              <li>Para pedir uno o dos datos, como un nombre nuevo.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un diálogo modal para algo que se pueda ignorar o retomar más tarde.</p>
+            <ul>
+              <li>Para información sobre la página, usa una <a href="/docs/components/alert/">alerta</a>.</li>
+              <li>Para una confirmación que no requiere respuesta, usa un <a href="/docs/components/toast/">aviso emergente</a>.</li>
+              <li>Para un formulario largo, usa una página propia.</li>
+              <li>No abras nunca un diálogo modal al cargar la página.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Formula la pregunta en el título y repite la acción en el botón principal.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-modal docs-stage__modal"><div class="luz-modal__header"><p class="luz-modal__title">Delete this draft?</p></div><div class="luz-modal__body"><p>You cannot undo this.</p></div><div class="luz-modal__footer"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Cancel</button><button class="luz-btn luz-btn--danger luz-btn--sm" type="button">Delete draft</button></div></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Pongas «¿Estás seguro?» con «Cancelar» y «Continuar»: quien lee tendría que leer el cuerpo para saber qué hace «Continuar».</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-modal docs-stage__modal"><div class="luz-modal__header"><p class="luz-modal__title">Are you sure?</p></div><div class="luz-modal__body"><p>You cannot undo this.</p></div><div class="luz-modal__footer"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Cancel</button><button class="luz-btn luz-btn--danger luz-btn--sm" type="button">Continue</button></div></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>El título formula la pregunta o nombra la tarea: «¿Eliminar este borrador?».</p>
+            <ul>
+              <li>El cuerpo explica lo que ocurrirá en una o dos frases.</li>
+              <li>El botón principal repite la acción: «Eliminar borrador». El otro dice «Cancelar».</li>
+              <li>Nunca uses «Aceptar», «Sí» ni «Confirmar».</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto aparece sobre la superficie del diálogo, por encima de una capa oscura que atenúa la página.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del diálogo modal en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Título y cuerpo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Botón de cierre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> al abrirse, pasa al diálogo y, al cerrarse, vuelve al botón que lo abrió. El botón de cierre tiene un contorno <code>--luz-focus-ring</code> de 2 px, a 2 px de distancia.</li>
+              <li><strong>Bordes:</strong> el diálogo tiene un borde y una sombra, así que también queda separado de la página con colores forzados.</li>
+              <li><strong>Área interactiva:</strong> el botón de cierre mide al menos 28 px cuadrados.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 15 tokens que lee <code>components/modal.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-lg</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-lg</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

@@ -1,0 +1,232 @@
+<!-- luz:page
+title: Cabecera
+description: Abre cada página de un blog o periódico con el nombre de la publicación, sus secciones y una búsqueda: una fila fija arriba o una cabecera de tres filas.
+keywords: barra superior, cabecera, periódico, cabecera de blog
+source: c4e44a4b733a
+reviewed: false
+-->
+    <div class="docs-component" id="p-cms-header">
+          <h2 id="example">Ejemplo</h2>
+          <p>La cabecera de un periódico, tanto como barra de blog como en formato de cabecera destacada.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <header class="luz-cms-header">
+              <div class="o-container o-container--inline o-row">
+                <button class="luz-nav-toggle" type="button" popovertarget="demo-cms-nav" aria-label="Sections of the example blog">
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
+                </button>
+                <a class="luz-cms-header__brand" href="#p-cms-header">The Vejer Review</a>
+                <nav class="luz-navbar" id="demo-cms-nav" aria-label="Example blog" popover>
+                  <ul class="luz-navbar__list">
+                    <li><a class="luz-navbar__link" href="#p-cms-header" aria-current="true">News</a></li>
+                    <li><a class="luz-navbar__link" href="#p-cms-header">Culture</a></li>
+                    <li><a class="luz-navbar__link" href="#p-cms-header">Opinion</a></li>
+                  </ul>
+                </nav>
+                <div class="o-row luz-cms-header__actions">
+                  <a class="luz-btn luz-btn--ghost" href="#p-cms-header">Subscribe</a>
+                </div>
+              </div>
+            </header>
+          </div>
+          <div class="docs-demo__stage">
+            <header class="luz-cms-header luz-cms-header--masthead">
+              <div class="o-container o-container--inline o-stack">
+                <div class="o-row luz-cms-header__top">
+                  <p class="luz-cms-header__date"><time datetime="2026-10-14">Wednesday, 14 October 2026</time></p>
+                  <div class="o-row luz-cms-header__actions">
+                    <a class="luz-btn luz-btn--ghost" href="#p-cms-header">Subscribe</a>
+                  </div>
+                </div>
+                <a class="luz-cms-header__brand" href="#p-cms-header">The Vejer Review</a>
+                <div class="o-row luz-cms-header__sections">
+                  <button class="luz-nav-toggle" type="button" popovertarget="demo-cms-masthead-nav" aria-label="Sections of the example newspaper">
+                    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
+                  </button>
+                  <nav class="luz-navbar" id="demo-cms-masthead-nav" aria-label="Example newspaper" popover>
+                    <ul class="luz-navbar__list">
+                      <li><a class="luz-navbar__link" href="#p-cms-header" aria-current="page">News</a></li>
+                      <li><a class="luz-navbar__link" href="#p-cms-header">Culture</a></li>
+                      <li><a class="luz-navbar__link" href="#p-cms-header">Opinion</a></li>
+                      <li><a class="luz-navbar__link" href="#p-cms-header">Sport</a></li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </header>
+          </div>
+          <p class="docs-demo__note">The blog bar, then the masthead. At 768 px of window width and below the sections collapse into a menu, core's <a href="/docs/components/navbar/">navbar</a>.</p>
+          <p class="docs-demo__note">The examples are not sticky: in a page, <code class="luz-code-inline">.o-sticky</code> keeps the blog bar at the top; the masthead never sticks.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Los problemas propios de la cabecera son los de los componentes de core que la forman y otro específico de la cabecera destacada.</p>
+          <ul>
+            <li><strong>El menú de la cabecera destacada sin posicionamiento de anclas.</strong> En los navegadores sin posicionamiento de anclas CSS, el menú de secciones se abre cerca de la parte superior de la ventana y, mientras está abierto, cubre el nombre de la publicación y el botón de menú. Pulsa Escape o haz clic fuera del menú para cerrarlo y volver a la página.</li>
+            <li><strong>El panel del menú.</strong> Si sigues pulsando Tab después del último enlace del menú abierto, el foco avanza por la página y el menú permanece abierto encima; Escape lo cierra. Consulta los <a href="/docs/components/navbar/#known-issues">problemas conocidos de la barra de navegación</a>.</li>
+            <li><strong>Barra fija y texto ampliado.</strong> El relleno de desplazamiento de <code>.o-sticky</code> es un mínimo: con el texto al 300 % y la barra en varias filas, Safari puede dejar debajo de ella un campo al que se llega con Tab. Asigna a <code>scroll-padding-block-start</code> en <code>html</code> la altura real de la cabecera o prescinde de <code>.o-sticky</code>.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>La barra de blog, con la búsqueda y el selector de idioma de site en sus acciones:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-cms-header" aria-label="Copy the blog bar markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Blog bar markup"><code id="code-cms-header">&lt;header class=&quot;luz-cms-header o-sticky&quot;&gt;
+  &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
+    &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;cms-nav&quot; aria-label=&quot;Sections&quot;&gt;
+      &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z&quot;/&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;a class=&quot;luz-cms-header__brand&quot; href=&quot;/&quot;&gt;The Vejer Review&lt;/a&gt;
+    &lt;nav class=&quot;luz-navbar&quot; id=&quot;cms-nav&quot; aria-label=&quot;Sections&quot; popover&gt;
+      &lt;ul class=&quot;luz-navbar__list&quot;&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/news/&quot; aria-current=&quot;true&quot;&gt;News&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/culture/&quot;&gt;Culture&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/opinion/&quot;&gt;Opinion&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+    &lt;div class=&quot;o-row luz-cms-header__actions&quot;&gt;
+      &lt;luz-search&gt;…&lt;/luz-search&gt;
+      &lt;luz-lang-switch&gt;…&lt;/luz-lang-switch&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+            </div>
+            <p>La cabecera destacada:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-cms-masthead" aria-label="Copy the masthead markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Masthead markup"><code id="code-cms-masthead">&lt;header class=&quot;luz-cms-header luz-cms-header--masthead&quot;&gt;
+  &lt;div class=&quot;o-container o-container--inline o-stack&quot;&gt;
+    &lt;div class=&quot;o-row luz-cms-header__top&quot;&gt;
+      &lt;p class=&quot;luz-cms-header__date&quot;&gt;&lt;time datetime=&quot;2026-10-14&quot;&gt;Wednesday, 14 October 2026&lt;/time&gt;&lt;/p&gt;
+      &lt;div class=&quot;o-row luz-cms-header__actions&quot;&gt;
+        &lt;luz-search&gt;…&lt;/luz-search&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;a class=&quot;luz-cms-header__brand&quot; href=&quot;/&quot;&gt;The Vejer Review&lt;/a&gt;
+    &lt;div class=&quot;o-row luz-cms-header__sections&quot;&gt;
+      &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;cms-nav&quot; aria-label=&quot;Sections&quot;&gt;…&lt;/button&gt;
+      &lt;nav class=&quot;luz-navbar&quot; id=&quot;cms-nav&quot; aria-label=&quot;Sections&quot; popover&gt;…&lt;/nav&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Un modificador. La cabecera es una clase de cms aplicada a un <code>&lt;header&gt;</code> nativo, maquetada con los objetos de core en el marcado.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases de la cabecera" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-header</code></div></td><td data-label="Efecto"><div>En <code>&lt;header&gt;</code>: la barra de blog. La superficie de la página, una línea debajo, los espacios de la fila y el ancla bajo la que se abren sus paneles</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-header--masthead</code></div></td><td data-label="Efecto"><div>La cabecera destacada del periódico: tres filas en un <code>.o-stack</code>, 16 px de espacio arriba y abajo, no fija</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-header__brand</code></div></td><td data-label="Efecto"><div>El nombre de la publicación enlaza a la página de inicio, con la tipografía de encabezado en seminegrita y subrayado solo al pasar el puntero. En la barra ocupa el espacio libre de la fila; en la cabecera destacada es grande y centrado. El logotipo <code>&lt;img&gt;</code> mide 44 px de alto en la barra y 88 px en la cabecera destacada</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-header__actions</code></div></td><td data-label="Efecto"><div>En un <code>.o-row</code>: la <a href="/docs/site/search/">búsqueda</a> de site y después su <a href="/docs/site/lang-switch/">selector de idioma</a></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-header__top</code></div></td><td data-label="Efecto"><div>Solo en la cabecera destacada, en un <code>.o-row</code>: la fecha al principio y las acciones al final, en una sola fila</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-header__date</code></div></td><td data-label="Efecto"><div>Solo en la cabecera destacada: la fecha de hoy en un <code>&lt;time datetime&gt;</code>, pequeña y secundaria; salta de línea para dejar sitio a las acciones</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-header__sections</code></div></td><td data-label="Efecto"><div>Solo en la cabecera destacada, en un <code>.o-row</code>: el botón de menú y la barra de navegación entre dos líneas, centrados a partir de 769 px; el panel se abre debajo de esta fila</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.o-sticky</code> (core)</div></td><td data-label="Efecto"><div>Mantiene la barra de blog arriba mientras se desplaza la página, en ventanas de al menos 30 rem de alto; consulta <a href="/docs/components/layout/#objects-page">la página y sus barras</a>. Nunca se usa en la cabecera destacada</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.o-container.o-container--inline</code> (core)</div></td><td data-label="Efecto"><div>El ancho y los márgenes internos de la página, para que la cabecera empiece donde empieza el contenido</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (core)</div></td><td data-label="Efecto"><div>El botón de menú y las secciones: consulta la <a href="/docs/components/navbar/">barra de navegación</a></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>@luz-ds/cms</code> aplicado a los objetos y la barra de navegación de core. Sin JavaScript; <code>@luz-ds/site</code> es opcional.</p>
+            <ul>
+              <li>cms solo aporta la apariencia: la superficie de la página, la línea inferior, la marca y los espacios de la fila (8 px entre filas, 16 px entre elementos y 24 px a partir de 769 px). Core se ocupa del resto: <code>.o-sticky</code> aporta la fijación y el relleno de desplazamiento, <code>.o-container--inline</code> los márgenes internos, <code>.o-row</code> y <code>.o-stack</code> las filas, y la barra de navegación los enlaces y su panel.</li>
+              <li>Una barra de una fila tiene la altura <code>--luz-bar-h</code> de core: controles de 44 px, 4 px arriba y abajo y una línea de 1 px. A 768 px o menos, la marca ocupa el espacio entre el botón de menú y las acciones, y salta de línea ahí para mantener los controles en una sola fila; al ampliar el texto, la fila se parte y la barra crece.</li>
+              <li>La cabecera destacada no es fija: tres filas pegadas arriba ocuparían un tercio de la pantalla del móvil. La marca mide 49 px a partir de 1024 px, 39 px por debajo y 31 px a 640 px o menos (<code>--luz-text-4xl</code>, <code>-3xl</code> y <code>-2xl</code>, los tamaños del hero de landing).</li>
+              <li>La barra, y la fila de secciones de la cabecera destacada, se identifican como el ancla <code>--luz-bar</code>, dentro de su propio ámbito. En los navegadores compatibles con el posicionamiento de anclas CSS, el panel de navegación se abre debajo. En los demás, se abre a <code>--luz-bar-h</code> desde la parte superior de la ventana (consulta Problemas conocidos).</li>
+              <li>Con <code>@luz-ds/site</code>, la lista de <code>&lt;luz-lang-switch&gt;</code> se abre debajo de la barra. Sin él, no cambia nada: las reglas que amplían los elementos de site no coinciden con ninguno.</li>
+              <li>El <a href="/docs/cms/toc/">índice</a> de un artículo se queda fijo debajo de una barra con <code>.o-sticky</code>.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el menú es una ventana emergente que abre <code>popovertarget</code> del botón, sin scripts; los enlaces son enlaces normales y la búsqueda de site muestra un enlace al índice alfabético.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Orden:</strong> el del código fuente. En la barra: botón de menú, marca, secciones y acciones. En la cabecera destacada: acciones de la fila superior, marca, botón de menú y secciones.</li>
+              <li><strong>Teclas:</strong> Enter o Espacio en el botón de menú abre y cierra el panel; Escape lo cierra y devuelve el foco al botón. El panel no es modal: al pulsar Tab después del último enlace se continúa por la página.</li>
+              <li><strong>Nombres:</strong> tanto <code>&lt;nav&gt;</code> como el botón de menú se llaman «Secciones»; el navegador expone el estado expandido del botón. La sección del artículo lleva <code>aria-current="true"</code> y el índice de la propia sección, <code>aria-current="page"</code>; ambos aparecen subrayados.</li>
+              <li><strong>Marca:</strong> un enlace, nunca un encabezado: el título del artículo es el único <code>h1</code> de la página. El logotipo es un <code>&lt;img&gt;</code> cuyo <code>alt</code> contiene el nombre de la publicación, sin texto al lado.</li>
+              <li><strong>Puntos de referencia:</strong> un <code>&lt;header&gt;</code> que es hijo directo de <code>&lt;body&gt;</code> es el banner. Pon antes el <a href="/docs/components/skip-link/">enlace para saltar al contenido</a>.</li>
+            </ul>
+            <p class="docs-view__xref">La pestaña Diseño contiene <a href="#contrast">el contraste y el foco</a>.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa la cabecera al principio de cada página de un blog o periódico: quien llega a un artículo desde una búsqueda identifica la publicación y puede acceder a sus secciones y al buscador.</p>
+            <ul>
+              <li>La barra de blog para la mayoría de sitios: una fila que permanece arriba mientras se lee.</li>
+              <li>La cabecera destacada para la portada y las secciones de un periódico, donde el nombre y la fecha marcan el tono.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No la uses en una página de aterrizaje ni en una app: sus paquetes tienen cabeceras propias.</p>
+            <ul>
+              <li>Una cabecera por página, nunca dentro de un componente o artículo: es el banner de la página.</li>
+              <li>No fijes la cabecera destacada ni pongas la fecha en la barra: en una sola fila competiría con el nombre.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> El nombre de la publicación como texto y unas pocas secciones con los nombres que conoce quien lee.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <header class="luz-cms-header"><div class="o-container o-container--inline o-row"><a class="luz-cms-header__brand" href="#">The Vejer Review</a><nav class="luz-navbar" aria-label="Sections"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#" aria-current="true">News</a></li><li><a class="luz-navbar__link" href="#">Culture</a></li><li><a class="luz-navbar__link" href="#">Opinion</a></li></ul></nav></div></header>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Recortar el nombre con puntos suspensivos o poner cada etiqueta del sitio como sección: quien lee no sabrá dónde está.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <header class="luz-cms-header"><div class="o-container o-container--inline o-row"><a class="luz-cms-header__brand" href="#">The Vejer Re…</a><nav class="luz-navbar" aria-label="Sections"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#">News</a></li><li><a class="luz-navbar__link" href="#">Local</a></li><li><a class="luz-navbar__link" href="#">Tides</a></li><li><a class="luz-navbar__link" href="#">Beaches</a></li><li><a class="luz-navbar__link" href="#">Food</a></li><li><a class="luz-navbar__link" href="#">Wine</a></li><li><a class="luz-navbar__link" href="#">Misc</a></li><li><a class="luz-navbar__link" href="#">Weather</a></li></ul></nav></div></header>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>La marca es el nombre de la publicación; las secciones usan los nombres que quienes leen dan a sus apartados.</p>
+            <ul>
+              <li>Marca: el nombre completo, tal como aparece en la publicación. Se parte en varias líneas si el ancho es reducido; nunca lo acortes con puntos suspensivos.</li>
+              <li>Secciones: entre cuatro y siete, de una o dos palabras cada una, con los mismos nombres que los títulos de sus páginas de índice.</li>
+              <li>Fecha (cabecera destacada): escrita con palabras en el idioma de la página, «miércoles, 14 de octubre de 2026», con el mismo día en <code>datetime</code>.</li>
+              <li>Botón de menú: «Secciones», traducido como el resto de la página.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto se muestra sobre la superficie de la página, tanto en la fila como en el panel abierto. La capa oscura empieza debajo de la barra, así que esta nunca queda atenuada.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la cabecera en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Marca y sección actual</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Secciones y fecha</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido corresponde a WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> cada enlace y botón de la cabecera conserva el anillo de core, de 2 px y color <code>--luz-focus-ring</code>. La sección actual también está subrayada, así que la indicación no depende solo del color.</li>
+              <li><strong>Bordes:</strong> la línea bajo la barra y las dos líneas de la fila de secciones de la cabecera destacada (<code>--luz-divider</code>) son decorativas y no tienen un mínimo; se conservan con colores forzados.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 18 tokens que usan las reglas de <code>.luz-cms-header</code> de <code>components/header.css</code> de cms, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-sans</code>, <code>--luz-text-2xl</code>, <code>--luz-text-3xl</code>, <code>--luz-text-4xl</code>, <code>--luz-text-lg</code>, <code>--luz-text-sm</code>, <code>--luz-text-xl</code></dd></div>
+              <div><dt><a href="/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-bar-h</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">La pestaña Código contiene <a href="#keyboard">el teclado y ARIA</a>.</p>
+          </div>
+    </div>

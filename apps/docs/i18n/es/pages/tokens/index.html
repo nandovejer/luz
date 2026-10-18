@@ -1,0 +1,48 @@
+<!-- luz:page
+title: Tokens
+description: Propiedades personalizadas de CSS para todos los valores de color, espacio, tamaño y tipografía. Usa los semánticos: cambian según el modo de color.
+source: e50a9123942f
+reviewed: false
+-->
+    <p class="docs-lead">Propiedades personalizadas de CSS para todos los valores de color, espacio, tamaño y tipografía. Usa los semánticos: cambian según el modo de color.</p>
+
+    <div class="docs-prose">
+            <h2 id="layer-model" class="docs-prose__title">Dos capas</h2>
+            <ul>
+              <li><strong>Los primitivos</strong> contienen valores sin procesar: <code class="luz-code-inline">--luz-blue-60</code>, <code class="luz-code-inline">--luz-space-md</code>. Son iguales en todos los modos.</li>
+              <li><strong>Los tokens semánticos</strong> asignan una función a un color: <code class="luz-code-inline">--luz-text-primary</code>, <code class="luz-code-inline">--luz-surface-page</code>. En cada modo apuntan a distintos primitivos.</li>
+              <li>Las escalas de espacio, tamaño, radio, sombra y tipografía son primitivos que los componentes usan directamente: no cambian según el modo.</li>
+            </ul>
+            <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Where the tokens come from"><code>packages/tokens/tokens.json        the source of the primitives
+packages/tokens/src/semantic.css   the semantic colours, per mode
+dist/luz-tokens.css                both layers, and the ET Book font
+dist/tokens.css                    both layers, no font</code></pre>
+          </div>
+
+    <div class="docs-prose">
+            <h2 id="component-token-rule" class="docs-prose__title">Usa colores semánticos, nunca primitivos</h2>
+            <p>Un componente que usa un color primitivo se ve bien en un modo y mal en los demás.</p>
+            <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Semantic and primitive colour tokens"><code>/* Do: semantic tokens follow the mode */
+.panel {
+  color: var(--luz-text-primary);
+  background: var(--luz-surface);
+  border: 1px solid var(--luz-divider);
+  padding: var(--luz-space-md);
+}
+
+/* Don't: a primitive colour stays the same in dark mode */
+.panel {
+  color: var(--luz-gray-100);
+  background: var(--luz-blue-10);
+}</code></pre>
+          </div>
+
+    <div class="docs-prose" id="tokens-fills">
+            <h2 id="solid-fills" class="docs-prose__title">Texto sobre un relleno sólido</h2>
+            <p>Con <code class="luz-code-inline">--luz-text-on-fill</code>, usa un token de relleno, no el color de marca ni el de estado.</p>
+            <ul>
+              <li>Los rellenos: <code class="luz-code-inline">--luz-brand-fill</code>, <code class="luz-code-inline">--luz-brand-fill-hover</code>, <code class="luz-code-inline">--luz-brand-fill-active</code> y <code class="luz-code-inline">--luz-color-danger-fill</code>.</li>
+              <li>En los modos claro y de alto contraste, equivalen a los colores de marca y de peligro. En el modo oscuro son un nivel más oscuros: el color oscuro de marca es lo bastante claro para leerse como texto, y el texto blanco sobre él no alcanza 4,5:1.</li>
+            </ul>
+          </div>
+

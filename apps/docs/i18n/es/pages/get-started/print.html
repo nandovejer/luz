@@ -1,0 +1,64 @@
+<!-- luz:page
+title: Estilos de impresión
+description: Qué cambia LUZ al imprimir y cómo conservarlo o modificarlo, con una sola capa y sin archivos adicionales si cargas luz.css.
+source: a23455194f31
+reviewed: false
+-->
+    <section class="docs-block" id="what" aria-labelledby="what-title">
+      <h2 class="docs-chapter__title" id="what-title">Qué cambia al imprimir</h2>
+      <p class="docs-lead">Una página impresa con LUZ tiene texto negro sobre fondo blanco, sin las partes que solo funcionan en pantalla. Es un bloque CSS en su propia capa, <code>luz.print</code>, que se carga con <code>luz.css</code>.</p>
+      <ul>
+        <li><strong>Colores.</strong> Las superficies son blancas y el texto negro, sea cual sea el modo de color de la página. Los tokens vuelven a definirse para impresión y todos los componentes se adaptan, sin reglas propias. Los colores de estado y del código pasan a ser negros: cada uno tiene además un icono, un título o un grosor que lo distingue.</li>
+        <li><strong>Ocultos.</strong> La navegación (<code>nav</code>), la barra lateral, la fila de pestañas, los botones de copia, el selector del modo de color, el reproductor, los avisos emergentes y los tooltips. Site también oculta el enlace para saltar al contenido y la búsqueda.</li>
+        <li><strong>Enlaces.</strong> La dirección de un enlace externo se imprime entre corchetes después del texto. No ocurre así con un enlace que parece un botón.</li>
+        <li><strong>Saltos.</strong> No hay saltos de página dentro de una figura, un bloque de código, una tabla, una fila de tabla, una cita, una imagen, una tarjeta o una alerta. Los encabezados permanecen junto al texto que viene después.</li>
+        <li><strong>Tablas.</strong> La fila de encabezado se repite en cada página de una tabla que ocupa varias páginas. Una tabla ancha no queda recortada.</li>
+        <li><strong>Código.</strong> Las líneas largas se parten porque el papel no permite desplazarse.</li>
+        <li><strong>Pestañas.</strong> Se imprimen todos los paneles, uno tras otro, no solo el que está abierto.</li>
+        <li><strong>Movimiento.</strong> Sin transiciones, animaciones ni sombras.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="load" aria-labelledby="load-title">
+      <h2 class="docs-chapter__title" id="load-title">Cómo cargarlo</h2>
+      <ul>
+        <li><code>luz.css</code> ya lo incluye. No tienes que añadir ni quitar nada: el bloque está dentro del archivo.</li>
+        <li>Si cargas <code>base.css</code> y cada componente por separado, no se incluyen los estilos de impresión. Añade <code>@luz-ds/core/print.css</code> (<code>dist/print.css</code>) si los quieres. Declara el orden de capas, como hacen todos los archivos.</li>
+        <li>Las páginas de Site también incluyen sus propias reglas de impresión, en <code>luz.site</code>.</li>
+        <li>En pantalla no cambia nada: todo el bloque está dentro de <code>@media print</code>.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="change" aria-labelledby="change-title">
+      <h2 class="docs-chapter__title" id="change-title">Conservar o cambiar algo</h2>
+      <p>Tu CSS prevalece sobre <code>luz.print</code>, igual que sobre el resto de LUZ: una regla en tu capa <code>app</code> o sin capa. Ponla dentro de <code>@media print</code>.</p>
+      <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Changing the print styles"><code>@layer reset, luz, app;
+
+@layer app {
+  @media print {
+    /* Print the breadcrumb of this site */
+    .site-breadcrumb {
+      display: block;
+    }
+
+    /* Keep the page margins your own */
+    @page {
+      margin: 2cm;
+    }
+  }
+}</code></pre>
+      <ul>
+        <li>LUZ no define el margen <code>@page</code> ni el tamaño del papel: eso lo decides tú.</li>
+        <li>Con <code>luz.css</code> no hay ningún interruptor para desactivarlos: deshaz las reglas que no quieras en tu propia capa, como se indica arriba. Para no usar ninguna, carga <code>base.css</code> y los componentes por separado, y no cargues <code>print.css</code>.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="limits" aria-labelledby="limits-title">
+      <h2 class="docs-chapter__title" id="limits-title">Qué no se ha comprobado</h2>
+      <ul>
+        <li><strong>Simulado, no impreso.</strong> La prueba muestra una página de documentación con el medio de impresión y lee los estilos en Chromium, Firefox y WebKit. Nadie ha revisado una hoja impresa ni un PDF generado por un navegador.</li>
+        <li><strong>La dirección de un enlace se dibuja con CSS.</strong> Aparece en papel y en el texto de un PDF, pero no en la página, así que un lector de pantalla no la lee.</li>
+        <li><strong>Fondos.</strong> Los navegadores omiten los colores e imágenes de fondo al imprimir, salvo que quien lee active «gráficos de fondo». LUZ usa texto, bordes y grosor, no fondos rellenos, para distinguir los elementos.</li>
+        <li><strong>Tablas largas y saltos.</strong> Una tabla más alta que la página se parte de todos modos: el navegador ignora «no separar» si no puede mantenerla entera. Safari no respeta <code>break-after: avoid</code>, así que un encabezado puede quedar solo al pie de página.</li>
+      </ul>
+    </section>

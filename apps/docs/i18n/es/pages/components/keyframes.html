@@ -1,0 +1,54 @@
+<!-- luz:page
+title: Fotogramas clave
+description: Cinco animaciones compartidas para tus propios componentes, que se detienen cuando se solicita movimiento reducido
+source: ea5ca02e3fbe
+reviewed: false
+-->
+    <div class="docs-block" id="c-animations">
+          <div class="docs-demo__stage docs-anim">
+            <label class="luz-toggle">
+              <input class="luz-toggle__input" type="checkbox" role="switch">
+              <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
+              <span class="luz-toggle__label">Reproducir animaciones</span>
+            </label>
+            <p class="docs-motion__reduced docs-demo__note">El movimiento reducido está activado, por lo que las animaciones no se ejecutan.</p>
+            <ul class="o-grid docs-cols-4 docs-anim__tiles">
+              <li class="docs-anim__tile"><span class="docs-anim__stage" aria-hidden="true"><span class="docs-anim__spin"></span></span><code>luz-spin</code></li>
+              <li class="docs-anim__tile"><span class="docs-anim__stage" aria-hidden="true"><span class="docs-anim__shimmer"></span></span><code>luz-shimmer</code></li>
+              <li class="docs-anim__tile"><span class="docs-anim__stage" aria-hidden="true"><span class="docs-anim__pulse"></span></span><code>luz-pulse</code></li>
+              <li class="docs-anim__tile"><span class="docs-anim__stage" aria-hidden="true"><span class="docs-anim__slide">Aa</span></span><code>luz-slide-up</code></li>
+            </ul>
+          </div>
+          <p class="docs-demo__note">Un quinto fotograma clave, <code class="luz-code-inline">luz-fade-in</code>, abre el diálogo modal.</p>
+          <h2 id="keyframes-use">Usar un fotograma clave</h2>
+          <p>Asigna un nombre al fotograma clave en tu propia <code>animation</code> y toma su duración de un <a href="/docs/tokens/motion/">token de movimiento</a>.</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">CSS</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-keyframes" aria-label="Copy the panel that slides in code">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Panel that slides in code"><code id="code-keyframes">.panel[open] {
+  animation: luz-slide-up var(--luz-duration-base) var(--luz-easing-enter);
+}</code></pre>
+          </div>
+          <ul>
+            <li>Con el movimiento reducido, todos los tokens <code>--luz-duration-*</code> valen <code>0s</code>, por lo que la animación no se ejecuta y el elemento aparece en su estado final.</li>
+            <li>Una duración escrita directamente ignora el movimiento reducido: no la escribas nunca.</li>
+            <li>No repitas una animación indefinidamente: detenla cuando termine la tarea.</li>
+          </ul>
+          <div class="luz-table-wrap" role="region" aria-label="Fotogramas clave" tabindex="0">
+            <table class="luz-table">
+              <thead>
+                <tr><th scope="col">Fotograma clave</th><th scope="col">Qué hace</th></tr>
+              </thead>
+              <tbody>
+                <tr><td data-label="Fotograma clave"><div><code>luz-spin</code></div></td><td data-label="Qué hace"><div>Un giro completo, para un indicador de carga</div></td></tr>
+                <tr><td data-label="Fotograma clave"><div><code>luz-shimmer</code></div></td><td data-label="Qué hace"><div>Desplaza un degradado de fondo, para un marcador de carga</div></td></tr>
+                <tr><td data-label="Fotograma clave"><div><code>luz-pulse</code></div></td><td data-label="Qué hace"><div>Crece y se desvanece, y luego vuelve a aparecer, para llamar la atención una vez</div></td></tr>
+                <tr><td data-label="Fotograma clave"><div><code>luz-slide-up</code></div></td><td data-label="Qué hace"><div>Aparece gradualmente mientras sube 8 px, para algo que entra en escena</div></td></tr>
+                <tr><td data-label="Fotograma clave"><div><code>luz-fade-in</code></div></td><td data-label="Qué hace"><div>Aparece gradualmente; se usa en el diálogo modal y su fondo.</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        
+    </div>

@@ -1,0 +1,88 @@
+<!-- luz:page
+title: Módulos de JavaScript
+description: Qué añade cada script opcional, cómo cargar solo el que necesitas y qué hace la página sin ellos.
+source: ba653cc9d45e
+reviewed: false
+-->
+    <div class="docs-block" id="c-js">
+          <p>Todas las páginas de LUZ funcionan sin JavaScript. Los scripts añaden comportamiento: copiar, resaltar, un botón que alterna el modo de color, seguimiento del desplazamiento, reproductores, pestañas, ordenación de tablas y una línea de tiempo.</p>
+          <h2 id="js-load">Cargarlo todo o un módulo</h2>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-js-all" aria-label="Copy the all modules markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="All modules markup"><code id="code-js-all">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+          </div>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">JS</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-js-one" aria-label="Copy the one module code">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="One module code"><code id="code-js-one">import { initTabs } from &quot;@luz-ds/core/tabs&quot;;
+initTabs();</code></pre>
+          </div>
+          <ul>
+            <li><code>luz.js</code> inicia todos los módulos al cargar la página.</li>
+            <li>Importar un solo módulo no hace nada hasta que llamas a su función <code>init</code>.</li>
+            <li><code>midi.js</code>, <code>table-sort.js</code> y <code>timeline.js</code> son fragmentos independientes: <code>luz.js</code> carga cada uno cuando hace falta y solo en las páginas que lo necesitan.</li>
+            <li>La búsqueda del sitio está en <code>@luz-ds/site</code>: consulta <a href="/docs/site/search/">Búsqueda</a>. El aviso de cookies también está ahí, en un módulo propio que <code>site.js</code> no incluye: consulta <a href="/docs/site/consent/">Consentimiento de cookies</a>. El modo de color automático es un tercer módulo del mismo tipo, <code>mode.js</code>, que <code>site.js</code> carga solo en páginas con <code>&lt;luz-mode&gt;</code>: consulta <a href="/docs/site/mode/">Modo de color automático</a>.</li>
+          </ul>
+          <h2 id="js-modules">Los módulos</h2>
+          <details class="docs-fold" open data-fold-narrow>
+            <summary>Los <span data-count="modules">13</span> módulos de JavaScript</summary>
+            <div class="docs-demo__stage">
+            <div class="luz-table-wrap" role="region" aria-label="Módulos de JavaScript" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Módulo</th><th scope="col">Qué hace</th><th scope="col">Exportaciones principales</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Módulo"><div><code>luz.js</code></div></td><td data-label="Qué hace"><div>Punto de entrada: vuelve a exportar todos los módulos y los inicia al cargar la página</div></td><td data-label="Exportaciones principales"><div>Todo lo que aparece a continuación</div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>theme.js</code></div></td><td data-label="Qué hace"><div>Cambio del modo de color</div></td><td data-label="Exportaciones principales"><div><code>applyTheme</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>sidebar.js</code></div></td><td data-label="Qué hace"><div>Enlace activo al desplazarse (los enlaces de <code>.luz-sidebar__link</code> y los enlaces de la página dentro de un elemento con <code>data-luz-spy</code>) y cierre del cajón emergente al seguir un enlace</div></td><td data-label="Exportaciones principales"><div><code>initSidebar</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>clipboard.js</code></div></td><td data-label="Qué hace"><div>Copiar con respuesta visual</div></td><td data-label="Exportaciones principales"><div><code>copyToClipboard</code>, <code>initCopyButtons</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>modal.js</code></div></td><td data-label="Qué hace"><div>Alternativa para los atributos <code>command</code> y <code>commandfor</code> en navegadores que no los admiten</div></td><td data-label="Exportaciones principales"><div><code>initModals</code>, <code>supportsCommands</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>highlight.js</code></div></td><td data-label="Qué hace"><div>Resaltado de sintaxis sin dependencias para bloques de código</div></td><td data-label="Exportaciones principales"><div><code>highlightBlock</code>, <code>initHighlight</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>player.js</code></div></td><td data-label="Qué hace"><div>Reproductores de vídeo, audio y MIDI con una interfaz común</div></td><td data-label="Exportaciones principales"><div><code>mountPlayer</code>, <code>mountMidiPlayer</code>, <code>initPlayers</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>tabs.js</code></div></td><td data-label="Qué hace"><div>Activación de pestañas y compatibilidad con el teclado</div></td><td data-label="Exportaciones principales"><div><code>activateTab</code>, <code>initTabs</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>i18n.js</code></div></td><td data-label="Qué hace"><div>Textos que escriben los scripts en el idioma del <code>lang</code> más cercano: inglés en el punto de entrada y los demás idiomas se cargan cuando los usa una página</div></td><td data-label="Exportaciones principales"><div><code>t</code>, <code>getLang</code>, <code>registerLocale</code>, <code>loadLocales</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>utils.js</code></div></td><td data-label="Qué hace"><div>Funciones auxiliares</div></td><td data-label="Exportaciones principales"><div><code>formatTime</code>, <code>escapeHtml</code>, <code>calculateProgress</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>table-sort.js</code></div></td><td data-label="Qué hace"><div>Ordena una tabla en el navegador: un encabezado marcado con <code>data-luz-sort</code> se convierte en botón. Se carga cuando hace falta, solo en páginas que tienen uno</div></td><td data-label="Exportaciones principales"><div><code>initTableSort(root, t)</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>timeline.js</code></div></td><td data-label="Qué hace"><div>Define <code>&lt;luz-timeline&gt;</code>: una línea de tiempo con fechas, Anterior y Siguiente, reproducción automática opcional con un botón Pausar y disposición vertical. Se carga cuando hace falta, solo en páginas que la tienen</div></td><td data-label="Exportaciones principales"><div>Importarlo define el elemento; <code>initTimeline(root, translate)</code> le pasa otra función <code>t</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>midi.js</code></div></td><td data-label="Qué hace"><div>Analizador MIDI y programador de Web Audio, cargado cuando hace falta</div></td><td data-label="Exportaciones principales"><div><code>MidiPlayer</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </details>
+          <h3 id="js-languages">Idiomas y textos que escriben los scripts</h3>
+          <p>El inglés está en el punto de entrada. Cada uno de los demás idiomas que incluye LUZ es un archivo pequeño, que se carga al inicio en páginas cuyo <code>&lt;html lang&gt;</code> o cuyo <code>lang</code> fuera de un enlace o una opción lo indica; las páginas en inglés no hacen ninguna solicitud.</p>
+          <p>Con los módulos individuales, llama tú a <code>loadLocales()</code> y usa <code>await loadLocales()</code> antes de <code>initHighlight()</code>, <code>initPlayers()</code> e <code>initThemeCycle()</code>. Si no se puede cargar un archivo, se muestra un único aviso en la consola y se usa el inglés.</p>
+          <p>Para un idioma que LUZ no incluya, establece una vez <code>data-luz-label-*</code> en <code>&lt;html&gt;</code> o <code>&lt;body&gt;</code>, o llama a <code>registerLocale()</code> antes de iniciar los scripts.</p>
+          <p>Para comprobar el archivo, añade un mapa de importación con una sección <code>integrity</code> antes del primer script de módulo, solo en las páginas de ese idioma. Un enlace <code>modulepreload</code> con <code>integrity</code> no es una protección en Safari ni Firefox: úsalo como mejora del rendimiento.</p>
+          <p>Añadir un idioma a LUZ requiere un pull request: el archivo JSON <code>packages/core/src/i18n/&lt;code&gt;.json</code>, una línea en el mapa <code>files</code> de <code>i18n.js</code> y una fila de presupuesto. Los pasos están en AGENTS.md.</p>
+          <h2 id="js-without">Sin JavaScript</h2>
+          <p>A qué recurre cada comportamiento cuando el script no se ejecuta:</p>
+          <div class="luz-table-wrap" role="region" aria-label="Comportamiento sin JavaScript" tabindex="0">
+            <table class="luz-table">
+              <thead>
+                <tr><th scope="col">Componente</th><th scope="col">Sin JavaScript</th></tr>
+              </thead>
+              <tbody>
+                <tr><td data-label="Componente"><div><a href="/docs/components/tabs/">Pestañas</a></div></td><td data-label="Sin JavaScript"><div>Enlaces y todos los paneles apilados</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/mode-switcher/">Selector del modo de color</a></div></td><td data-label="Sin JavaScript"><div>Tres botones de opción que siguen cambiando el modo; no se recuerda la elección</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/site/mode/">Modo de color automático</a></div></td><td data-label="Sin JavaScript"><div>Los cuatro botones de opción siguen cambiando el modo; Automático equivale a claro, y no se sigue ni el sistema ni el reloj</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/copy-button/">Botón de copia</a></div></td><td data-label="Sin JavaScript"><div>Oculto; el texto sigue pudiéndose seleccionar</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/player/">Reproductor</a></div></td><td data-label="Sin JavaScript"><div>Los controles propios del navegador para archivos multimedia; MIDI muestra su texto alternativo</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/modal/">Diálogo modal</a></div></td><td data-label="Sin JavaScript"><div>Se abre donde el navegador admite <code>command</code>; en los demás casos, el botón de apertura no hace nada</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/code/">Código</a></div></td><td data-label="Sin JavaScript"><div>Texto sin formato ni colores</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/table/">Tabla</a></div></td><td data-label="Sin JavaScript"><div>Un encabezado con enlace se ordena en el servidor; un encabezado simple no se puede ordenar. Nunca se ocultan filas</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/timeline/">Línea de tiempo</a></div></td><td data-label="Sin JavaScript"><div>Una lista ordenada con una línea y un punto por elemento; todos los elementos son visibles</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/sidebar/">Barra lateral</a></div></td><td data-label="Sin JavaScript"><div>Funciona, incluido el cajón; el enlace actual no sigue el desplazamiento</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/cms/toc/">Índice</a> y otras listas <code>data-luz-spy</code></div></td><td data-label="Sin JavaScript"><div>Enlaces a las secciones; no se marca cuál está a la vista</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        
+    </div>

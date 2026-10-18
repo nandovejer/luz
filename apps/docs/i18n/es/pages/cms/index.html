@@ -1,0 +1,34 @@
+<!-- luz:page
+title: CMS
+description: La estructura de páginas de un blog, un periódico o cualquier sitio de artículos, desde la cabecera hasta el listado de publicaciones; y cómo saber si lo necesitas.
+source: 7736455733ad
+reviewed: false
+-->
+    <p class="docs-lead">La estructura de páginas de un blog, un periódico o cualquier sitio de artículos, desde la cabecera hasta el listado de publicaciones; y cómo saber si lo necesitas.</p>
+    <p>Un sitio de artículos publica muchas páginas con la misma estructura: una historia con cabecera, texto y autor, y listados que llevan hasta ellas. Este paquete contiene la estructura de página de ese tipo de sitio: la cabecera (una barra o una mancheta), la cabecera de página, la cabecera del artículo con su índice y el pie.</p>
+    <p>La maquetación que necesita cada página (la página, la barra fija y la navbar) es de core; las piezas que actúan en todo el sitio (búsqueda, idioma y consentimiento de cookies) están en <a href="/docs/site/">Site</a>.</p>
+    <ul>
+      <li>Funciona con cualquier CMS y cualquier stack. Puedes poner las clases en cualquier elemento, así que una plantilla de WordPress, Drupal, Ghost, Hugo o tu propio código puede incluirlas.</li>
+      <li>Todas las clases empiezan por <code class="luz-code-inline">.luz-cms-</code>, usan solo tokens semánticos y están en la capa de cascada <code class="luz-code-inline">luz.cms</code>, después de la de site. Cada patrón es una clase sobre un elemento nativo, maquetado en el HTML con los objetos de core.</li>
+      <li>No tiene script. Carga <code class="luz-code-inline">cms.css</code> después del CSS de tokens y core (y de site, si lo usas): <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> incluye el comando y las etiquetas CDN. Con el script de core, el índice marca la sección visible.</li>
+      <li>Tiene su propia versión, 0.x mientras sigue creciendo, y necesita la versión <code>^0.1.0</code> de tokens y core, declarados como dependencias peer. Site es una dependencia peer opcional: sin él, los patrones se muestran igual y las reglas que refinan sus elementos no afectan a nada.</li>
+      <li>La tarjeta de publicación, el listado, las publicaciones relacionadas y la ficha del autor no necesitan su propio CSS: se componen con la tarjeta, el avatar y la paginación de core en <a href="/docs/cms/templates/">plantillas de CMS</a>.</li>
+    </ul>
+
+    <div class="docs-decision-grid">
+        <div class="docs-decision-card">
+          <h2 id="use-cms-when" class="docs-decision-card__title">Usa cms cuando</h2>
+          <ul>
+            <li>Publicas artículos, entradas o historias, cada una con título, autor y fecha.</li>
+            <li>Tus artículos son lo bastante largos como para necesitar un índice junto al texto.</li>
+            <li>Quieres una cabecera que dé nombre a la publicación y a sus secciones, como una barra o una mancheta de periódico.</li>
+          </ul>
+        </div>
+        <div class="docs-decision-card">
+          <h2 id="use-another-kind-when" class="docs-decision-card__title">Usa otro paquete cuando</h2>
+          <ul>
+            <li>Tu sitio es una landing page: <a href="/docs/landing/">Landing</a> tiene su cabecera, hero y pie.</li>
+            <li>Tus páginas son documentación o una aplicación, sin autor ni fecha: la <a href="/docs/components/layout/">maquetación</a> y la <a href="/docs/components/navbar/">navbar</a> de core son un buen punto de partida.</li>
+          </ul>
+        </div>
+      </div>

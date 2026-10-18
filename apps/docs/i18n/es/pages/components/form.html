@@ -1,0 +1,352 @@
+<!-- luz:page
+title: Campos de formulario
+description: Recoge datos con campos, opciones y selectores nativos, cada uno con una etiqueta visible, una indicación y un error.
+keywords: input, textarea, casilla
+source: 4f91f3acd78f
+reviewed: false
+-->
+    <div class="docs-component" id="c-form">
+          <h2 id="example">Ejemplo</h2>
+          <p>Campos para un proyecto: campos de texto, un select, casillas y botones de opción, con una indicación, un error y los estados desactivado y de solo lectura.</p>
+          <div class="docs-example" data-docs-specimen>
+          <fieldset class="docs-width" hidden>
+            <legend>Ancho</legend>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="phone"> Móvil</label>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="tablet"> Tableta</label>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="full" checked> Completo</label>
+          </fieldset>
+          <div class="luz-docs-example__frame">
+          <div class="docs-demo__stage">
+            <div class="o-grid docs-cols-3">
+              <div>
+                <h3 class="docs-subhead">Text</h3>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-name">Project name</label>
+                  <input class="luz-input" id="f-name" type="text" placeholder="My project" aria-describedby="f-name-help">
+                  <div class="luz-field__helper" id="f-name-help">Shown on the dashboard.</div>
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label luz-field__label--required" for="f-email">Email</label>
+                  <input class="luz-input" id="f-email" type="email" placeholder="jane@example.com" required autocomplete="off">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-slug">Slug</label>
+                  <input class="luz-input luz-input--error" id="f-slug" type="text" value="my project" aria-invalid="true" aria-describedby="f-slug-error">
+                  <div class="luz-field__error" id="f-slug-error"><span class="u-sr-only">Error: </span>Use letters, numbers and dashes only.</div>
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-disabled">Disabled</label>
+                  <input class="luz-input" id="f-disabled" type="text" value="Not editable" disabled>
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-readonly">Read-only</label>
+                  <input class="luz-input" id="f-readonly" type="text" value="luz-7f3a" readonly>
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-notes">Notes</label>
+                  <textarea class="luz-input luz-input--textarea" id="f-notes" rows="3" placeholder="Anything else?"></textarea>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="docs-subhead">Choice</h3>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-role">Role</label>
+                  <select class="luz-select" id="f-role">
+                    <option value="">Select a role</option>
+                    <option value="dev">Developer</option>
+                    <option value="design">Designer</option>
+                    <option value="pm">Product manager</option>
+                  </select>
+                </div>
+                <div class="luz-field">
+                  <div class="luz-field__label" id="f-notify-label">Notifications</div>
+                  <div class="luz-check-group" role="group" aria-labelledby="f-notify-label">
+                    <div class="luz-check-item"><input type="checkbox" id="f-check-1" checked><label for="f-check-1">Email</label></div>
+                    <div class="luz-check-item"><input type="checkbox" id="f-check-2"><label for="f-check-2">Push</label></div>
+                    <div class="luz-check-item"><input type="checkbox" id="f-check-3" disabled><label for="f-check-3">SMS (disabled)</label></div>
+                  </div>
+                </div>
+                <div class="luz-field">
+                  <fieldset class="luz-fieldset">
+                    <legend>Plan</legend>
+                    <div class="luz-check-group">
+                      <div class="luz-check-item"><input type="radio" name="f-plan" id="f-radio-1" checked><label for="f-radio-1">Free</label></div>
+                      <div class="luz-check-item"><input type="radio" name="f-plan" id="f-radio-2"><label for="f-radio-2">Team</label></div>
+                      <div class="luz-check-item"><input type="radio" name="f-plan" id="f-radio-3"><label for="f-radio-3">Enterprise</label></div>
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="o-stack">
+                  <label class="luz-toggle">
+                    <input class="luz-toggle__input" type="checkbox" role="switch" checked>
+                    <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
+                    <span class="luz-toggle__label">Public profile</span>
+                  </label>
+                  <label class="luz-toggle">
+                    <input class="luz-toggle__input" type="checkbox" role="switch">
+                    <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
+                    <span class="luz-toggle__label">Weekly digest</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="docs-subhead">Pickers and values</h3>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-date">Date</label>
+                  <input class="luz-input" id="f-date" type="date">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-time">Time</label>
+                  <input class="luz-input" id="f-time" type="time">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-color">Color</label>
+                  <input class="luz-input" id="f-color" type="color" value="#0066cf">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-file">File</label>
+                  <input class="luz-input" id="f-file" type="file">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-range">Volume <output class="luz-output" id="f-range-out" for="f-range">50</output></label>
+                  <input class="luz-input" id="f-range" type="range" min="0" max="100" value="50" data-output="f-range-out">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-meter">Storage used, 6 of 10 GB</label>
+                  <meter class="luz-meter" id="f-meter" min="0" max="10" value="6">6 of 10 GB</meter>
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-list">Browser</label>
+                  <input class="luz-input" id="f-list" list="f-browsers" placeholder="Start typing">
+                  <datalist id="f-browsers">
+                    <option value="Chrome"></option>
+                    <option value="Edge"></option>
+                    <option value="Firefox"></option>
+                    <option value="Safari"></option>
+                  </datalist>
+                </div>
+              </div>
+            </div>
+
+            <details>
+              <summary>More input types (8)</summary>
+              <div class="o-grid docs-cols-4">
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-number">number</label>
+                  <input class="luz-input" id="f-number" type="number" value="3" min="0" max="10">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-password">password</label>
+                  <input class="luz-input" id="f-password" type="password" value="secret" autocomplete="off">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-tel">tel</label>
+                  <input class="luz-input" id="f-tel" type="tel" placeholder="+34 600 000 000" autocomplete="off">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-url">url</label>
+                  <input class="luz-input" id="f-url" type="url" placeholder="https://example.com" autocomplete="off">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-search">search</label>
+                  <input class="luz-input" id="f-search" type="search" placeholder="Search">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-datetime">datetime-local</label>
+                  <input class="luz-input" id="f-datetime" type="datetime-local">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-month">month</label>
+                  <input class="luz-input" id="f-month" type="month" placeholder="YYYY-MM">
+                </div>
+                <div class="luz-field">
+                  <label class="luz-field__label" for="f-week">week</label>
+                  <input class="luz-input" id="f-week" type="week" placeholder="YYYY-Www">
+                </div>
+              </div>
+            </details>
+          </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Ninguno conocido.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de campos de formulario">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-field" aria-label="Copy the text field with a hint markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Text field with a hint markup"><code id="code-field">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;project-name&quot;&gt;Project name&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;project-name&quot; type=&quot;text&quot; aria-describedby=&quot;project-name-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;project-name-hint&quot;&gt;Shown on the dashboard.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-field-error" aria-label="Copy the field with an error markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Field with an error markup"><code id="code-field-error">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;slug&quot;&gt;Slug&lt;/label&gt;
+  &lt;input class=&quot;luz-input luz-input--error&quot; id=&quot;slug&quot; type=&quot;text&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;slug-error&quot;&gt;
+  &lt;div class=&quot;luz-field__error&quot; id=&quot;slug-error&quot;&gt;&lt;span class=&quot;u-sr-only&quot;&gt;Error: &lt;/span&gt;Use letters, numbers and dashes only.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-radios" aria-label="Copy the radio group markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Radio group markup"><code id="code-radios">&lt;fieldset class=&quot;luz-fieldset&quot;&gt;
+  &lt;legend&gt;Plan&lt;/legend&gt;
+  &lt;div class=&quot;luz-check-group&quot;&gt;
+    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; id=&quot;plan-free&quot; checked&gt;&lt;label for=&quot;plan-free&quot;&gt;Free&lt;/label&gt;&lt;/div&gt;
+    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; id=&quot;plan-team&quot;&gt;&lt;label for=&quot;plan-team&quot;&gt;Team&lt;/label&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-switch" aria-label="Copy the switch markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Switch markup"><code id="code-switch">&lt;label class=&quot;luz-toggle&quot;&gt;
+  &lt;input class=&quot;luz-toggle__input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot;&gt;
+  &lt;span class=&quot;luz-toggle__track&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;luz-toggle__thumb&quot;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;luz-toggle__label&quot;&gt;Weekly digest&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Cada control es un elemento nativo con una clase de LUZ. El estado se define con atributos nativos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases y estados de formulario" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-field</code></div></td><td data-label="Efecto"><div>Agrupa una etiqueta, su control, su indicación y su error</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-field__label</code></div></td><td data-label="Efecto"><div>La etiqueta visible</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-field__label--required</code></div></td><td data-label="Efecto"><div>Añade « *» en rojo después de la etiqueta</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-field__helper</code></div></td><td data-label="Efecto"><div>Una indicación debajo del control</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-field__error</code></div></td><td data-label="Efecto"><div>Un error debajo del control, en el color de peligro</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-input</code></div></td><td data-label="Efecto"><div>Campos de texto, correo electrónico, número, fecha, hora, color, archivo y rango, y <code>&lt;textarea&gt;</code>; 44 px de alto</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-input--error</code></div></td><td data-label="Efecto"><div>Un subrayado de 2 px en color de peligro; combínalo con <code>aria-invalid="true"</code></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-input--textarea</code></div></td><td data-label="Efecto"><div>Altura automática, de al menos 80 px y redimensionable en vertical</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-select</code></div></td><td data-label="Efecto"><div>Un <code>&lt;select&gt;</code>, documentado en su propia página: <a href="/docs/components/select/">Select</a></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-check-group</code>, <code>.luz-check-item</code></div></td><td data-label="Efecto"><div>Una lista de casillas o botones de opción, cada uno con su etiqueta</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-fieldset</code></div></td><td data-label="Efecto"><div>Un grupo con borde y un <code>&lt;legend&gt;</code> en mayúsculas</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-toggle</code></div></td><td data-label="Efecto"><div>Un interruptor: una casilla con <code>role="switch"</code>, representada por una pista y un control deslizante</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-meter</code></div></td><td data-label="Efecto"><div>Una barra <code>&lt;meter&gt;</code> del color de marca en todos los estados: consulta <a href="/docs/components/meter/">Meter</a></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-output</code></div></td><td data-label="Efecto"><div>Un valor calculado</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>disabled</code>, <code>readonly</code></div></td><td data-label="Efecto"><div>Atenuado; el estado de solo lectura también tiene un subrayado discontinuo</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Controles de formulario nativos, con estilos de <code>components/form.css</code>. No necesitan JavaScript: el navegador gestiona el estado, el teclado, la validación y el envío.</p>
+            <ul>
+              <li>Cada control obtiene su nombre de <code>&lt;label&gt;</code>; la indicación y el error se asocian mediante <code>aria-describedby</code>.</li>
+              <li>LUZ no marca los campos no válidos por ti: cuando falle la validación, añade <code>.luz-input--error</code>, <code>aria-invalid="true"</code> y el texto del error.</li>
+              <li>El texto de los campos es de 16 px con pantallas de 768 px o menos y en pantallas táctiles para que iOS Safari no amplíe la página.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Todos los controles, incluido el interruptor, funcionan y se envían con su formulario. Solo faltan las funciones que añaden tus propios scripts, como la validación en vivo o mostrar un valor en un elemento <code>&lt;output&gt;</code>.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Se aplican las teclas nativas. Tab permite pasar de un control a otro.</p>
+            <ul>
+              <li>Espacio marca una casilla o activa un interruptor.</li>
+              <li>Las teclas de flecha permiten elegir una opción del grupo o mover un control deslizante.</li>
+              <li>Agrupa los controles relacionados en un <code>&lt;fieldset&gt;</code> con un <code>&lt;legend&gt;</code> o en un elemento con <code>role="group"</code> identificado mediante <code>aria-labelledby</code>.</li>
+              <li>Escribe «Error: » antes del texto del error; si quieres, ocúltalo visualmente con <code>.u-sr-only</code>.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa estos campos para recoger datos y elige el control nativo que corresponda.</p>
+            <ul>
+              <li>Texto, correo electrónico, número, fecha y hora: usa un input con el <code>type</code> correspondiente.</li>
+              <li>Para elegir una opción entre pocas (seis o menos), usa botones de opción. Para elegir entre muchas, usa un <a href="/docs/components/select/">select</a>.</li>
+              <li>Para elegir varias opciones, usa casillas. Para un ajuste que se aplica al instante, usa un interruptor.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No recrees un control nativo con elementos <code>&lt;div&gt;</code>.</p>
+            <ul>
+              <li>No uses un placeholder como etiqueta: desaparece cuando el lector escribe.</li>
+              <li>No uses un interruptor en un formulario que se envía con un botón: usa una casilla.</li>
+              <li>Para mostrar el avance de una tarea, usa <a href="/docs/components/progress/">progress</a>, no <a href="/docs/components/meter/">meter</a>.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa una casilla en un formulario que se envía con un botón: nada cambia hasta pulsar «Guardar preferencias».</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-check-item"><input type="checkbox" id="dd-form-do" checked><label for="dd-form-do">Email me about new releases</label></div>
+                  <div class="o-row"><button class="luz-btn luz-btn--primary luz-btn--sm" type="button">Save preferences</button></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No uses un interruptor en ese formulario: promete un cambio inmediato y el lector no sabrá que aún tiene que pulsar el botón.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <label class="luz-toggle"><input class="luz-toggle__input" type="checkbox" role="switch" checked><span class="luz-toggle__track"><span class="luz-toggle__thumb"></span></span><span class="luz-toggle__label">Email me about new releases</span></label>
+                  <div class="o-row"><button class="luz-btn luz-btn--primary luz-btn--sm" type="button">Save preferences</button></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Todos los controles tienen una etiqueta visible que indica qué se debe introducir.</p>
+            <ul>
+              <li>Las etiquetas son sustantivos breves, con mayúscula inicial: «Nombre del proyecto».</li>
+              <li>Una indicación debajo del control explica el formato o el motivo de la pregunta.</li>
+              <li>Un error explica qué está mal y cómo corregirlo: «Usa solo letras, números y guiones».</li>
+              <li>Si marcas los campos obligatorios con «*», explica una sola vez, encima del formulario, qué significa.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Las etiquetas y las indicaciones usan texto secundario en la página; lo que escribe el lector usa texto principal en el campo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de los campos del formulario en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Etiqueta e indicación</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto introducido</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Placeholder</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-muted</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>5.2:1</div></td><td data-label="Alto contraste"><div>9.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Mensaje de error</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>11.7:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde inferior del campo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-input-border</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>3.9:1</div></td><td data-label="Oscuro"><div>3.9:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de la casilla y del botón de opción</div></td><td data-label="Color sobre el fondo"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4.3:1</div></td><td data-label="Oscuro"><div>3.6:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Casilla marcada e interruptor activado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>3.5:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Pista del interruptor desactivado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4.3:1</div></td><td data-label="Oscuro"><div>3.6:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Control deslizante del interruptor activado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> un contorno de 2 px <code>--luz-focus-ring</code>, situado a 2 px del campo; el borde inferior del campo de texto también adopta el color del anillo y un grosor de 2 px. Las casillas, los botones de opción y la pista del interruptor reciben el mismo contorno.</li>
+              <li><strong>No depende solo del color:</strong> un campo no válido tiene un borde inferior de 2 px y un mensaje de error; uno de solo lectura tiene un borde inferior discontinuo; el control deslizante del interruptor se mueve.</li>
+              <li><strong>Objetivo táctil:</strong> los campos de texto tienen 44 px de alto.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 31 tokens que lee <code>components/form.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-muted"><code>--luz-text-muted</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-control</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

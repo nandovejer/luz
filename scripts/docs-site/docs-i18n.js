@@ -413,12 +413,32 @@ export function localize(site, language) {
 /* ---- Parity ------------------------------------------------------------------------------------ */
 
 /** Attributes whose text a translator changes: compared by presence only. */
-const BY_PRESENCE = (name) => ["alt", "title", "aria-label", "placeholder", "data-label", "lang"].includes(name) || name.startsWith("data-luz-label-");
+const BY_PRESENCE = (name) =>
+  ["alt", "title", "aria-label", "placeholder", "data-label", "lang", "data-error", "data-file", "data-pass", "data-fail", "data-item", "data-set", "data-unreadable", "data-warning", "data-ignored"].includes(name) ||
+  name.startsWith("data-luz-label-");
+/** The containers of a demo: they stay English in a translation, which may give them a `lang` or a `dir` of their own. */
+const DEMO_CLASSES = new Set(["docs-dodont__stage", "luz-docs-dodont__stage", "docs-snippet"]);
+export const isDemo = (attrs) => attrs.has("data-docs-specimen") || (attrs.get("class") ?? "").split(/\s+/).some((c) => DEMO_CLASSES.has(c));
 /** Elements whose text is code, byte for byte (D7). */
 const CODE_ELEMENTS = new Set(["pre", "code", "kbd", "samp", "var"]);
 const MARKER = /<!--\s*luz:[^]*?-->|\{\{[^{}]*\}\}/g;
 const ARABIC_DIGITS = { "٠": "0", "١": "1", "٢": "2", "٣": "3", "٤": "4", "٥": "5", "٦": "6", "٧": "7", "٨": "8", "٩": "9", "۰": "0", "۱": "1", "۲": "2", "۳": "3", "۴": "4", "۵": "5", "۶": "6", "۷": "7", "۸": "8", "۹": "9", "٫": ".", "٬": "," };
 const FIGURE = /\d[\d.,]*(?::\d+)?/g;
+/** 1 000 000 (a space, U+00A0 or U+202F between groups of three) is 1,000,000. */
+const GROUPED = /(?<![\d.,])\d{1,3}(?:[ \u00a0\u202f]\d{3})+(?!\d)/g;
+
+/**
+ * One form for a figure whatever the language writes it in: a comma followed by
+ * anything but three digits is a decimal point (4,5 is 4.5), and a dot between
+ * groups of three digits is a thousands comma (1.000 is 1,000). 45:1 and 4.5:1
+ * stay apart, and so does every level of 2.4.11.
+ */
+function normalFigure(sign) {
+  const [number, ratio] = sign.split(":");
+  let n = number.replace(/,(\d+)/g, (m, digits) => (digits.length === 3 ? m : `.${digits}`));
+  if (/^\d{1,3}(\.\d{3})+$/.test(n)) n = n.replace(/\./g, ",");
+  return ratio === undefined ? n : `${n}:${ratio}`;
+}
 
 /** What parity compares in a body, with where each thing is (line of the body, 1-based). */
 function factsOf(body, file) {
@@ -435,17 +455,20 @@ function factsOf(body, file) {
   const text = (to) => {
     if (inCode || hidden) return;
     const raw = body.slice(last, to).replace(/<!--[^]*?-->/g, "");
-    const normal = decodeEntities(raw).replace(/[٠-٩۰-۹٫٬]/g, (c) => ARABIC_DIGITS[c]);
+    const normal = decodeEntities(raw)
+      .replace(/[٠-٩۰-۹٫٬]/g, (c) => ARABIC_DIGITS[c])
+      .replace(GROUPED, (group) => group.replace(/[ \u00a0\u202f]/g, ","));
     for (const m of normal.matchAll(FIGURE)) {
-      figures.push({ sign: m[0].replace(/[.,]+$/, ""), line: lineOf(last) });
+      figures.push({ sign: normalFigure(m[0].replace(/[.,]+$/, "")), line: lineOf(last) });
     }
   };
   for (const tag of tags(body, file)) {
     text(tag.index);
     last = tag.end;
     if (tag.type === "start") {
+      const demo = isDemo(tag.attrs);
       const attrs = [...tag.attrs]
-        .filter(([name]) => name !== "href")
+        .filter(([name]) => name !== "href" && !(demo && (name === "lang" || name === "dir")))
         .map(([name, value]) => (BY_PRESENCE(name) ? name : `${name}=${value}`))
         .sort();
       skeleton.push({ sign: `<${tag.name}${attrs.length ? ` ${attrs.join(" ")}` : ""}>`, line: tag.line });
@@ -512,7 +535,12 @@ export function parityProblems(english, translation) {
   compare("heading", en.headings, tr.headings, "heading");
   compare("link", en.links, tr.links, "link");
   compare("code", en.code, tr.code, "code text");
-  compare("figure", en.figures, tr.figures, "number");
+  const present = new Set(tr.figures.map((f) => f.sign));
+  for (const figure of en.figures) {
+    if (present.has(figure.sign)) continue;
+    present.add(figure.sign);
+    problems.push(`${at(tr.figures.at(-1)?.line ?? 1)}: figure: the English page has the number ${show(figure.sign)}, the translation does not (line ${figure.line} of the English body)`);
+  }
   compare("marker", en.markers, tr.markers, "marker");
   return problems;
 }

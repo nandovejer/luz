@@ -1,0 +1,135 @@
+<!-- luz:page
+title: Figura
+description: Muestra una imagen, un gráfico o un diagrama con un pie que indica qué representa.
+source: 12e61fcfb4d5
+reviewed: false
+-->
+    <div class="docs-component" id="c-figure">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un gráfico de barras con un pie que explica qué muestra.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-figure u-mb-0">
+              <div class="luz-figure__media">
+                <svg viewBox="0 0 320 96" role="img" aria-label="Bar chart with six rising bars" fill="currentColor">
+                  <rect x="8" y="64" width="40" height="32"/>
+                  <rect x="60" y="52" width="40" height="44"/>
+                  <rect x="112" y="40" width="40" height="56"/>
+                  <rect x="164" y="30" width="40" height="66"/>
+                  <rect x="216" y="16" width="40" height="80"/>
+                  <rect x="268" y="4" width="40" height="92"/>
+                </svg>
+              </div>
+              <figcaption class="luz-figure__caption">Requests per day, last six days.</figcaption>
+            </figure>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Ninguno conocido.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de figura">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-figure" aria-label="Copy the figure markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Figure markup"><code id="code-figure">&lt;figure class=&quot;luz-figure&quot;&gt;
+  &lt;div class=&quot;luz-figure__media&quot;&gt;
+    &lt;img src=&quot;requests.png&quot; width=&quot;640&quot; height=&quot;192&quot; alt=&quot;Bar chart: requests rise every day, from 1,200 on Monday to 3,400 on Saturday.&quot;&gt;
+  &lt;/div&gt;
+  &lt;figcaption class=&quot;luz-figure__caption&quot;&gt;Requests per day, last six days.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Partes de la figura" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-figure</code></div></td><td data-label="Qué hace"><div>Una superficie con relleno, borde inicial del color de marca y esquinas redondeadas</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-figure__media</code></div></td><td data-label="Qué hace"><div>Redondea y recorta la imagen, el gráfico o el código que contiene</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-figure__caption</code></div></td><td data-label="Qué hace"><div>Más pequeño, en cursiva y con el color de texto secundario</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Elementos nativos <code>&lt;figure&gt;</code> y <code>&lt;figcaption&gt;</code>, con estilos de <code>components/figure.css</code>. No necesitan JavaScript.</p>
+            <ul>
+              <li>El pie identifica la figura para la tecnología de asistencia.</li>
+              <li>Un <code>&lt;figure&gt;</code> sin clases también recibe un estilo básico de los elementos base.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: una figura usa HTML y CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Una figura no es interactiva ni recibe el foco.</p>
+            <ul>
+              <li>El contenido multimedia necesita su propia alternativa textual: <code>alt</code> en un <code>&lt;img&gt;</code>, o <code>role="img"</code> y <code>aria-label</code> en un <code>&lt;svg&gt;</code> en línea.</li>
+              <li>Un gráfico también necesita que sus datos aparezcan como texto: en el texto alt, en el pie o en una <a href="/docs/components/table/">tabla</a> junto al gráfico.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una figura para un gráfico, una imagen, un diagrama o un fragmento de código al que haga referencia el texto y que necesite un pie.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses una figura con fines decorativos.</p>
+            <ul>
+              <li>Una imagen decorativa lleva <code>alt=""</code> y no necesita una figura.</li>
+              <li>Para mostrar una imagen en un cuadro con forma fija, usa el <a href="/docs/components/image/">marco de imagen</a>.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Escribe un pie que explique qué muestra la figura y de qué periodo.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <figure class="luz-figure u-mb-0"><div class="luz-figure__media"><svg viewBox="0 0 320 64" fill="currentColor"><rect x="8" y="40" width="40" height="24"/><rect x="60" y="32" width="40" height="32"/><rect x="112" y="24" width="40" height="40"/><rect x="164" y="16" width="40" height="48"/><rect x="216" y="8" width="40" height="56"/><rect x="268" y="2" width="40" height="62"/></svg></div><figcaption class="luz-figure__caption">Requests per day, last six days.</figcaption></figure>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No uses «Figura 1» como pie: el lector conoce el número, pero no qué muestra el gráfico.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <figure class="luz-figure u-mb-0"><div class="luz-figure__media"><svg viewBox="0 0 320 64" fill="currentColor"><rect x="8" y="40" width="40" height="24"/><rect x="60" y="32" width="40" height="32"/><rect x="112" y="24" width="40" height="40"/><rect x="164" y="16" width="40" height="48"/><rect x="216" y="8" width="40" height="56"/><rect x="268" y="2" width="40" height="62"/></svg></div><figcaption class="luz-figure__caption">Figure 1</figcaption></figure>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>El pie indica qué muestra la figura y de qué periodo o ámbito.</p>
+            <ul>
+              <li>El texto alt describe lo que vería el lector: la tendencia, no «gráfico».</li>
+              <li>No repitas el pie en el texto alt.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El pie usa texto secundario sobre la superficie de la figura.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la figura en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Pie</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> la figura no lo recibe.</li>
+              <li><strong>Gráficos:</strong> tú eliges los colores del contenido multimedia; procura que las partes del gráfico que transmiten significado tengan una relación de 3:1 con el fondo (WCAG 1.4.11). El borde inicial de marca es decorativo.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 7 tokens que lee <code>components/figure.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

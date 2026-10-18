@@ -1,0 +1,140 @@
+<!-- luz:page
+title: Botón para copiar
+description: Copia un comando o un valor en el portapapeles e indica que lo ha hecho.
+source: 732d28d45f04
+reviewed: false
+-->
+    <div class="docs-component" id="c-copy">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un valor con un botón para copiarlo en el portapapeles.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-row">
+              <code class="luz-code-inline">var(--luz-brand-primary)</code>
+              <button class="luz-copy-btn" type="button" data-copy="var(--luz-brand-primary)" aria-label="Copy the brand token reference">Copy</button>
+            </div>
+          </div>
+
+          <p class="docs-demo__note">The button copies the text of its <code class="luz-code-inline">data-copy</code> attribute.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La API del portapapeles necesita un contexto seguro (https o localhost durante el desarrollo). En otros contextos, la copia falla.</p>
+          <p>El fallo solo se anuncia a los lectores de pantalla: el botón no muestra ningún mensaje, así que quienes pueden verlo no perciben que haya pasado nada. Aun así, el texto se puede seleccionar y copiar a mano.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de botón para copiar">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-copy" aria-label="Copy the copy button markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Copy button markup"><code id="code-copy">&lt;code class=&quot;luz-code-inline&quot;&gt;npm install @luz-ds/core&lt;/code&gt;
+&lt;button class=&quot;luz-copy-btn&quot; type=&quot;button&quot; data-copy=&quot;npm install @luz-ds/core&quot; aria-label=&quot;Copy the install command&quot;&gt;Copy&lt;/button&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-copy-js" aria-label="Copy the copy script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Copy script code"><code id="code-copy-js">import { initCopyButtons } from &quot;@luz-ds/core/clipboard&quot;;
+initCopyButtons();</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Una clase y un atributo. El aspecto no cambia.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones del botón para copiar" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-copy-btn</code></div></td><td data-label="Efecto"><div>Botón mono pequeño, de 24 px de alto; oculto hasta que se ejecuta el script</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-copy</code></div></td><td data-label="Efecto"><div>El texto exacto que se debe copiar</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.is-copied</code></div></td><td data-label="Efecto"><div>El script lo establece durante aproximadamente un segundo tras copiar: color de éxito y etiqueta «Copiado»</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un <code>&lt;button&gt;</code> nativo, al que da estilo <code>components/copy-btn.css</code> y que controla <code>clipboard.js</code>.</p>
+            <ul>
+              <li><code>initCopyButtons()</code> escucha los clics en cualquier <code>.luz-copy-btn</code> y copia su <code>data-copy</code>. <code>luz.js</code> lo ejecuta.</li>
+              <li>Durante aproximadamente un segundo, la etiqueta muestra «Copiado» y luego vuelve a su estado anterior.</li>
+              <li>Una región dinámica cortés anuncia «Copiado en el portapapeles» o que la copia ha fallado. Los textos proceden de <code>i18n.js</code> y están en el idioma de la página.</li>
+              <li><code>copyToClipboard(text, el)</code> hace lo mismo con tus propios controles.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>El botón está oculto porque no haría nada. El texto que copia permanece en la página para que el lector lo seleccione y lo copie.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Con Tab se llega al botón; Enter o Espacio copia el texto. El foco permanece en el botón.</p>
+            <ul>
+              <li>La etiqueta visible es «Copiar»; el <code>aria-label</code> empieza con esas palabras e indica qué se copia: «Copiar el comando de instalación».</li>
+              <li>El resultado se anuncia en una región dinámica cortés que comparten todos los botones para copiar.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un botón para copiar una cadena breve que el lector vaya a pegar en otro sitio: un comando, el nombre de un token o una clave.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un botón para copiar si es igual de fácil seleccionar el texto ni como única forma de obtener el contenido.</p>
+            <ul>
+              <li>Para textos largos, usa un <a href="/docs/components/code/">bloque de código</a> que el lector pueda seleccionar.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Ponlo junto al texto que copia, que el lector también puede seleccionar a mano.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><code class="luz-code-inline">var(--luz-brand-primary)</code><button class="luz-copy-btn" type="button">Copy</button></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No pongas un botón para copiar texto que el lector tenga que cambiar primero: pegará «&lt;tu-token&gt;» y el comando fallará.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><code class="luz-code-inline">npm config set _authToken &lt;your-token&gt;</code><button class="luz-copy-btn" type="button">Copy</button></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Mantén la etiqueta visible «Copiar» e indica qué copia en el nombre accesible.</p>
+            <ul>
+              <li>Empieza el nombre accesible con la palabra visible: «Copiar el comando de instalación».</li>
+              <li>Copia exactamente lo que se muestra, sin el símbolo del prompt ni espacios adicionales.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>La etiqueta usa texto secundario en la página; después de copiar, cambia al color de éxito.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del botón para copiar en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Etiqueta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-brand-subtle</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>14.3:1</div></td><td data-label="Oscuro"><div>12.7:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta tras copiar</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-success</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>12.5:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> un contorno de 2 px <code>--luz-focus-ring</code>, situado a 2 px del botón.</li>
+              <li><strong>No depende solo del color:</strong> después de copiar, la etiqueta muestra «Copiado» y una región dinámica lo anuncia; el verde es solo un complemento.</li>
+              <li><strong>Objetivo táctil:</strong> al menos 24 px de alto.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 13 tokens que lee <code>components/copy-btn.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a>, <a href="/docs/tokens/color/#luz-color-success"><code>--luz-color-success</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

@@ -17,10 +17,10 @@ Copy these as they are:
 - Everything in code: the text inside every `<pre>` and every `<code>` (and `<kbd>`, `<samp>`, `<var>`) is the English text, byte for byte. A test fails the commit if it differs. This includes class names (`.luz-btn`), tokens (`--luz-space-md`), properties, attributes, elements, file names, commands and URLs.
 - The ids of the standards: WCAG criteria, EN 301 549, ARIA roles and attributes.
 - The names of keys printed on a key (Tab, Enter, Esc, Shift, Ctrl). Space is translated (`Espacio`, `مفتاح المسافة`).
-- Numbers, ratios and versions. The figures of a page must be the same list as in English; a test compares them.
+- Numbers, ratios and versions. Every figure of the English page must appear in the translation, in any order and with the separators of your language (`4,5:1` is `4.5:1`, `1.000` and `1 000` are `1,000`); extras are allowed, and a dropped or changed figure fails the test.
 - The `id` of a heading and the `href` of a link. Translate the text of a link, never its target. Write internal links as `/docs/…`: the build turns them into the links of the language.
 
-Text inside a demo (`data-docs-specimen`) is translated. A code comment inside a code sample stays English.
+Demos stay English in a translation: the live markup of `[data-docs-specimen]`, the Do and don't stages and the snippets is copied as it is, and the generator marks each of those containers `lang="en"` (and `dir="ltr"` in a right-to-left page); give a container a `lang` of its own to keep it. `pnpm check:strings` does not read the strings inside demos. A code comment inside a code sample stays English.
 
 ## Register
 

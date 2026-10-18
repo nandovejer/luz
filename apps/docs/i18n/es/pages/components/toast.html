@@ -1,0 +1,146 @@
+<!-- luz:page
+title: Aviso emergente
+description: Confirma un resultado pequeño, como «Borrador guardado», sin interrumpir la lectura.
+keywords: aviso emergente, notificación
+source: c80fde930189
+reviewed: false
+-->
+    <div class="docs-component" id="c-toast">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un aviso emergente que confirma una exportación, mostrado como ejemplo estático.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-toast" role="status">
+              <div class="luz-toast__content">
+                <div class="luz-toast__kind">Success</div>
+                <div class="luz-toast__msg">File exported.</div>
+              </div>
+              <button class="luz-toast__close" type="button" aria-label="Dismiss notification">×</button>
+            </div>
+          </div>
+
+          <p class="docs-demo__note">A static specimen: LUZ draws the toast, and you place it, show it and hide it.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>LUZ solo proporciona el aspecto visual. Tú debes crear la región dinámica, la ubicación, el tiempo que se muestra y el comportamiento del botón de cierre, además de garantizar su accesibilidad.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación sobre avisos emergentes">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Mantén una región dinámica vacía en la página e introduce en ella el aviso cuando se produzca el resultado.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-toast" aria-label="Copy the toast in its live region markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Toast in its live region markup"><code id="code-toast">&lt;div role=&quot;status&quot;&gt;
+  &lt;div class=&quot;luz-toast&quot;&gt;
+    &lt;div class=&quot;luz-toast__content&quot;&gt;
+      &lt;div class=&quot;luz-toast__kind&quot;&gt;Saved&lt;/div&gt;
+      &lt;div class=&quot;luz-toast__msg&quot;&gt;Draft saved.&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button class=&quot;luz-toast__close&quot; type=&quot;button&quot; aria-label=&quot;Dismiss notification&quot;&gt;×&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Partes del aviso emergente" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-toast</code></div></td><td data-label="Qué hace"><div>Una caja elevada sobre la superficie intensa, de hasta 320 px de ancho y nunca más ancha que su contenedor</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-toast__kind</code></div></td><td data-label="Qué hace"><div>Una etiqueta pequeña en fuente mono encima del mensaje</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-toast__msg</code></div></td><td data-label="Qué hace"><div>El mensaje</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-toast__close</code></div></td><td data-label="Qué hace"><div>El botón ×, de al menos 28 px</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un bloque con estilo de <code>components/toast.css</code>. LUZ no incluye ningún script para avisos emergentes.</p>
+            <ul>
+              <li>Colócalo con tu propio CSS, por ejemplo, fijado en la parte inferior de la pantalla, por encima de la página con <code>--luz-z-toast</code>.</li>
+              <li>Si se oculta automáticamente, déjalo en pantalla al menos 5 segundos y mantenlo mientras tenga el foco o el puntero esté encima.</li>
+              <li>Tu script debe eliminar el aviso al pulsar el botón de cierre.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Un aviso emergente solo aparece como respuesta a algo que ha hecho tu script, así que no existe sin JavaScript. Muestra el mismo resultado en la página, por ejemplo, en una <a href="/docs/components/alert/">alerta</a> después de enviar un formulario.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Mostrar un aviso emergente no desplaza el foco.</p>
+            <ul>
+              <li>Insértalo en una región dinámica educada (<code>role="status"</code>) que ya esté en la página, para que lo anuncien los lectores de pantalla.</li>
+              <li>Se puede llegar al botón de cierre con Tab y su nombre es «Descartar notificación».</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un aviso emergente para confirmar un resultado pequeño que no requiera respuesta: «Borrador guardado», «Enlace copiado».</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un aviso emergente para nada que la persona deba atender o no deba perderse: desaparece.</p>
+            <ul>
+              <li>Para un error, usa una <a href="/docs/components/alert/">alerta</a> junto a lo que ha fallado.</li>
+              <li>Para tomar una decisión, usa un <a href="/docs/components/modal/">diálogo modal</a>.</li>
+              <li>No incluyas enlaces ni botones, salvo el botón de cierre.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Una confirmación breve que la persona puede perderse sin consecuencias: «Archivo exportado».</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-toast"><div class="luz-toast__content"><div class="luz-toast__kind">Success</div><div class="luz-toast__msg">File exported.</div></div><button class="luz-toast__close" type="button">×</button></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Un pago fallido en un aviso emergente: desaparece antes de que la persona pueda actuar. Usa una alerta junto a lo que ha fallado.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-toast"><div class="luz-toast__content"><div class="luz-toast__kind">Error</div><div class="luz-toast__msg">Payment failed. Update your card.</div></div><button class="luz-toast__close" type="button">×</button></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Una frase breve en pasado: «Archivo exportado».</p>
+            <ul>
+              <li>La etiqueta del tipo es una palabra: «Guardado», «Correcto».</li>
+              <li>No repitas lo que ya muestra la página.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El aviso emergente usa la superficie intensa y el texto principal, así que destaca de la página en todos los modos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del aviso emergente en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Necesita</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Etiqueta del tipo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>5.4:1</div></td><td data-label="Alto contraste"><div>16.5:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Mensaje</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>13.5:1</div></td><td data-label="Oscuro"><div>10.9:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Botón de cierre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>5.4:1</div></td><td data-label="Alto contraste"><div>16.5:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>4.8:1</div></td><td data-label="Oscuro"><div>5.6:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. «Necesita» indica el mínimo AA de WCAG 2.2: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el aviso no recibe el foco al aparecer. El botón de cierre tiene un contorno de <code>--luz-focus-ring</code> de 2 px, a 2 px por fuera.</li>
+              <li><strong>No solo el color:</strong> el tipo se indica con una palabra («Correcto»), no con un color.</li>
+              <li><strong>Área interactiva:</strong> el botón de cierre mide al menos 28 px cuadrados.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 18 tokens que lee <code>components/toast.css</code>, por familia. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-lg</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

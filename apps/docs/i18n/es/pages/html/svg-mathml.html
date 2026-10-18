@@ -1,0 +1,73 @@
+<!-- luz:page
+title: SVG y MathML
+description: Dibuja gráficos y escribe fórmulas matemáticas dentro de HTML. Ambos forman parte de la página y usan los mismos tokens.
+source: 595556d6c8f8
+reviewed: false
+-->
+    <div class="docs-block elements-section" id="cat-svg-mathml" data-category="svg-mathml">
+        <p class="elements-section__lead">Dibuja gráficos y escribe fórmulas matemáticas dentro de HTML. Ambos forman parte de la página y usan los mismos tokens.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-math" data-element="math" aria-labelledby="el-math-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-math-title"><code>&lt;math&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/math">MDN<span class="u-sr-only"> referencia del elemento math</span></a>
+          </div>
+          <p class="elements-card__desc">Una fórmula escrita en MathML. Sigue siendo texto real: se puede seleccionar, ampliar y leer con lectores de pantalla.</p>
+          <div class="elements-stage">
+            <math display="block">
+              <mrow>
+                <mi>x</mi><mo>=</mo>
+                <mfrac>
+                  <mrow><mo>−</mo><mi>b</mi><mo>±</mo><msqrt><mrow><msup><mi>b</mi><mn>2</mn></msup><mo>−</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow></msqrt></mrow>
+                  <mrow><mn>2</mn><mi>a</mi></mrow>
+                </mfrac>
+              </mrow>
+            </math>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-math" aria-label="Copy the math markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="math markup"><code id="code-math">&lt;math display=&quot;block&quot;&gt;
+  &lt;mrow&gt;
+    &lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;
+    &lt;mfrac&gt;
+      &lt;mrow&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mo&gt;±&lt;/mo&gt;&lt;msqrt&gt;&lt;mrow&gt;&lt;msup&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;/mrow&gt;&lt;/msqrt&gt;&lt;/mrow&gt;
+      &lt;mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;/mrow&gt;
+    &lt;/mfrac&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador. El navegador lo distribuye; LUZ no añade nada.</p>
+        </article>
+
+        <article class="elements-card" id="el-svg" data-element="svg" aria-labelledby="el-svg-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-svg-title"><code>&lt;svg&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/svg">MDN<span class="u-sr-only"> referencia del elemento svg</span></a>
+          </div>
+          <p class="elements-card__desc">Una imagen vectorial escrita en la página. Puede usar los colores y tokens de la página y se mantiene nítida a cualquier tamaño.</p>
+          <div class="elements-stage">
+            <svg viewBox="0 0 240 120" width="240" height="120" role="img" aria-labelledby="d-svg-title" style="color: var(--luz-brand-primary)">
+              <title id="d-svg-title">A square and a circle</title>
+              <rect x="20" y="20" width="80" height="80" fill="currentColor"/>
+              <circle cx="170" cy="60" r="40" fill="none" stroke="currentColor" stroke-width="6"/>
+            </svg>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-svg" aria-label="Copy the svg markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="svg markup"><code id="code-svg">&lt;svg viewBox=&quot;0 0 240 120&quot; width=&quot;240&quot; height=&quot;120&quot; role=&quot;img&quot; aria-labelledby=&quot;d-svg-title&quot; style=&quot;color: var(--luz-brand-primary)&quot;&gt;
+  &lt;title id=&quot;d-svg-title&quot;&gt;A square and a circle&lt;/title&gt;
+  &lt;rect x=&quot;20&quot; y=&quot;20&quot; width=&quot;80&quot; height=&quot;80&quot; fill=&quot;currentColor&quot;/&gt;
+  &lt;circle cx=&quot;170&quot; cy=&quot;60&quot; r=&quot;40&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;6&quot;/&gt;
+&lt;/svg&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/media.css</code>, sin clase. LUZ solo limita el ancho. Los iconos mantienen el tamaño que les dan sus propias clases o atributos.</p>
+        </article>
+        </div>
+      
+    </div>

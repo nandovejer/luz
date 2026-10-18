@@ -1,0 +1,25 @@
+<!-- luz:page
+title: Sombras
+description: La escala de elevación: cuánto parece flotar una superficie sobre la página.
+source: 0110f5b2d517
+reviewed: false
+-->
+    <div class="docs-block" id="t-shadow">
+          <p>Cuanto más elevada está la superficie, mayor es la sombra. No uses nunca una sombra como único borde de una superficie: combínala con un borde, porque las sombras desaparecen con los colores forzados. </p>
+          <p>Los valores de abajo corresponden al modo claro. En el modo oscuro, las sombras pequeña, mediana y grande se vuelven más intensas, con negro al 40, 50 y 60 por ciento, porque una sombra pálida no se aprecia sobre una superficie oscura. En alto contraste se sustituyen por contornos: la sombra pequeña desaparece, la mediana es una línea negra de 1px y la grande, una línea negra de 2px, porque ahí el desenfoque es invisible. <code class="luz-code-inline">--luz-shadow-icon</code> se define una sola vez, así que todos los modos usan el mismo valor.</p>
+          <ul>
+            <li><code class="luz-code-inline">--luz-shadow-sm</code>: una tarjeta bajo el puntero.</li>
+            <li><code class="luz-code-inline">--luz-shadow-md</code>: tooltips y avisos emergentes.</li>
+            <li><code class="luz-code-inline">--luz-shadow-lg</code>: diálogos y el panel lateral.</li>
+            <li><code class="luz-code-inline">--luz-shadow-icon</code>: un icono sobre una imagen, como el botón de reproducción de un vídeo.</li>
+          </ul>
+          <div class="docs-demo__stage">
+            <div class="o-grid docs-shadows">
+              <div class="docs-box docs-box--shadow" style="--v: var(--luz-shadow-sm)"><code>--luz-shadow-sm</code><br>0 1px 2px rgba(35,28,22,.08), 0 0 1px rgba(35,28,22,.1)</div>
+              <div class="docs-box docs-box--shadow" style="--v: var(--luz-shadow-md)"><code>--luz-shadow-md</code><br>0 4px 10px rgba(35,28,22,.1), 0 2px 4px rgba(35,28,22,.06)</div>
+              <div class="docs-box docs-box--shadow" style="--v: var(--luz-shadow-lg)"><code>--luz-shadow-lg</code><br>0 14px 28px rgba(35,28,22,.14), 0 6px 12px rgba(35,28,22,.08)</div>
+              <div class="docs-box docs-box--shadow" style="--v: var(--luz-shadow-icon)"><code>--luz-shadow-icon</code><br>0 2px 8px rgba(0,0,0,.5)</div>
+            </div>
+          </div>
+        
+    </div>

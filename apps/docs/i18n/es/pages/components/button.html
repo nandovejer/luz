@@ -1,0 +1,222 @@
+<!-- luz:page
+title: Botón
+description: Inicia una acción en la página actual, como guardar, enviar o abrir un diálogo.
+source: bbb34ae18fd6
+reviewed: false
+-->
+    <div class="docs-component" id="c-button">
+          <h2 id="example">Ejemplo</h2>
+          <p>Las cinco variantes, los tres tamaños, un botón desactivado y un enlace con aspecto de botón.</p>
+          <div class="docs-example" data-docs-specimen>
+          <fieldset class="docs-width" hidden>
+            <legend>Ancho</legend>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="phone"> Móvil</label>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="tablet"> Tableta</label>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="full" checked> Completo</label>
+          </fieldset>
+          <div class="luz-docs-example__frame">
+          <div class="docs-demo__stage">
+            <div class="o-row">
+              <button class="luz-btn luz-btn--primary" type="button">Primary</button>
+              <button class="luz-btn luz-btn--secondary" type="button">Secondary</button>
+              <button class="luz-btn luz-btn--outline" type="button">Outline</button>
+              <button class="luz-btn luz-btn--ghost" type="button">Ghost</button>
+              <button class="luz-btn luz-btn--danger" type="button">Danger</button>
+            </div>
+            <div class="o-row">
+              <button class="luz-btn luz-btn--primary luz-btn--sm" type="button">Small</button>
+              <button class="luz-btn luz-btn--primary" type="button">Default</button>
+              <button class="luz-btn luz-btn--primary luz-btn--lg" type="button">Large</button>
+            </div>
+            <div class="o-row">
+              <button class="luz-btn luz-btn--primary" type="button" disabled>Disabled</button>
+              <a class="luz-btn luz-btn--outline" href="#c-button">Link as button</a>
+            </div>
+            <div class="docs-narrow-frame">
+              <button class="luz-btn luz-btn--primary luz-btn--block" type="button">Add to cart</button>
+            </div>
+          </div>
+          </div>
+          </div>
+          <form class="docs-try" hidden>
+            <p class="docs-try__lead">Pruébalo: elige una variante, un tamaño y el ancho; después, copia el marcado.</p>
+            <div class="docs-try__controls">
+              <fieldset class="docs-try__group">
+                <legend>Variante</legend>
+                <label class="luz-check-item"><input type="radio" name="variant" value="primary" checked> Principal</label>
+                <label class="luz-check-item"><input type="radio" name="variant" value="secondary"> Secundario</label>
+                <label class="luz-check-item"><input type="radio" name="variant" value="outline"> Contorno</label>
+                <label class="luz-check-item"><input type="radio" name="variant" value="ghost"> Fantasma</label>
+                <label class="luz-check-item"><input type="radio" name="variant" value="danger"> Peligro</label>
+              </fieldset>
+              <fieldset class="docs-try__group">
+                <legend>Tamaño</legend>
+                <label class="luz-check-item"><input type="radio" name="size" value="sm"> Pequeño</label>
+                <label class="luz-check-item"><input type="radio" name="size" value="default" checked> Predeterminado</label>
+                <label class="luz-check-item"><input type="radio" name="size" value="lg"> Grande</label>
+              </fieldset>
+              <fieldset class="docs-try__group">
+                <legend>Ancho completo</legend>
+                <label class="luz-check-item"><input type="checkbox" name="block" value="block"> Ocupar todo el ancho del contenedor</label>
+              </fieldset>
+            </div>
+            <div class="docs-try__preview" data-docs-specimen><button class="luz-btn luz-btn--primary" type="button">Save changes</button></div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-button-try" aria-label="Copy the markup of the button you made">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Markup of the button you made"><code id="code-button-try">&lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot;&gt;Save changes&lt;/button&gt;</code></pre>
+            </div>
+          </form>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Ninguno conocido.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de botón">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-button" aria-label="Copy the primary button markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Primary button markup"><code id="code-button">&lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot;&gt;Save changes&lt;/button&gt;</code></pre>
+            </div>
+            <p>Un enlace a otra página con aspecto de botón:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-button-link" aria-label="Copy the link styled as a button markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Link styled as a button markup"><code id="code-button-link">&lt;a class=&quot;luz-btn luz-btn--outline&quot; href=&quot;/pricing/&quot;&gt;See the plans&lt;/a&gt;</code></pre>
+            </div>
+            <p>Todo el ancho de un contenedor estrecho, como una tarjeta o un formulario en un móvil:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-button-block" aria-label="Copy the full-width button markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Full-width button markup"><code id="code-button-block">&lt;form action=&quot;/cart/add&quot; method=&quot;post&quot;&gt;
+  &lt;button class=&quot;luz-btn luz-btn--primary luz-btn--block&quot; type=&quot;submit&quot;&gt;Add to cart&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Combina <code>.luz-btn</code> con una variante y, si hace falta, un tamaño y el ancho completo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Variantes y tamaños de botón" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-btn--primary</code></div></td><td data-label="Efecto"><div>Relleno de marca: la acción principal de la vista</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-btn--secondary</code></div></td><td data-label="Efecto"><div>Superficie neutra intensa: una acción secundaria</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-btn--outline</code></div></td><td data-label="Efecto"><div>Texto y borde de marca, sin relleno</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-btn--ghost</code></div></td><td data-label="Efecto"><div>Solo texto de marca: una acción de baja prioridad</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-btn--danger</code></div></td><td data-label="Efecto"><div>Relleno de peligro: una acción que elimina o no se puede deshacer</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-btn--sm</code></div></td><td data-label="Efecto"><div>36 px de alto, texto pequeño</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-btn--lg</code></div></td><td data-label="Efecto"><div>56 px de alto, texto base</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-btn--block</code></div></td><td data-label="Efecto"><div>Ocupa el ancho del contenedor y permite que la etiqueta ocupe varias líneas: para tarjetas, formularios o cajones, no para columnas anchas</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>disabled</code></div></td><td data-label="Efecto"><div>Texto atenuado, borde discontinuo y sin eventos de puntero</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>La altura predeterminada es 44 px. Un <code>&lt;svg&gt;</code> dentro del botón se muestra a 16 × 16 px, antes o después de la etiqueta.</p>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un <code>&lt;button&gt;</code> (o <code>&lt;a&gt;</code>) nativo con clases de <code>components/button.css</code>. No necesita JavaScript.</p>
+            <ul>
+              <li>Define <code>type="button"</code> salvo que el botón envíe un formulario; el tipo predeterminado es <code>submit</code>.</li>
+              <li>La altura es mínima: la etiqueta puede crecer junto con el tamaño de fuente del lector.</li>
+              <li><code>.luz-btn--block</code> establece <code>inline-size: 100%</code>. Úsalo cuando el botón sea el único elemento de su fila: en una fila flex ocuparía todo el espacio. Su etiqueta ocupa varias líneas y las palabras que no caben se dividen para que nada sobresalga con 320 px de ancho o texto al 200 %.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Un botón funciona como cualquier botón nativo: envía el formulario o no hace nada. Tu script define qué ocurre al hacer clic.</p>
+            <p>En esta página, las opciones Pruébalo y Ancho del ejemplo necesitan JavaScript: sin él no se muestran, pero sí aparecen los ejemplos y su marcado.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Con Tab se llega al botón; Enter o Espacio lo activa. Un enlace con aspecto de botón solo responde a Enter, como cualquier enlace.</p>
+            <ul>
+              <li>No hace falta ARIA: la etiqueta visible es el nombre.</li>
+              <li>Un botón que solo tiene un icono necesita un nombre: <code>aria-label="Close"</code>; el icono debe llevar <code>aria-hidden="true"</code>.</li>
+              <li>Tab omite los botones desactivados y es posible que los lectores de pantalla no los encuentren: es preferible usar un botón activo que explique qué falta.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un botón para iniciar una acción en la página actual: guardar, enviar, eliminar o abrir un diálogo.</p>
+            <ul>
+              <li>Un botón principal por vista, para la acción que realiza la mayoría.</li>
+              <li>Usa botones secundarios, de contorno o fantasma para las demás acciones.</li>
+              <li>Usa el ancho completo (<code>.luz-btn--block</code>) cuando la acción sea lo único que hay en un contenedor estrecho: una tarjeta, un cajón o el botón para enviar un formulario en un móvil.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un botón para ir a otra página: usa un enlace, con aspecto de botón solo si es la llamada principal a la acción.</p>
+            <ul>
+              <li>Para mostrar varias acciones relacionadas en una fila, usa un <a href="/docs/components/layout/#objects-actions">grupo de acciones</a>.</li>
+              <li>No desactives un botón para ocultar una acción que el lector aún no puede realizar: explica el motivo.</li>
+              <li>No extiendas un botón por una columna ancha: una barra de 1.000 px no es un botón. Dos acciones en paralelo son dos botones con su propio ancho.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa un botón principal para la acción que realiza la mayoría; los demás deben destacar menos.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><button class="luz-btn luz-btn--primary" type="button">Save changes</button><button class="luz-btn luz-btn--ghost" type="button">Cancel</button></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No uses dos botones principales: ninguno parece el siguiente paso y el lector tiene que pararse a compararlos.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><button class="luz-btn luz-btn--primary" type="button">Save changes</button><button class="luz-btn luz-btn--primary" type="button">Publish</button></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Empieza con un verbo e indica el resultado: «Guardar cambios», «Eliminar borrador».</p>
+            <ul>
+              <li>No uses «Vale», «Enviar» ni «Haz clic aquí».</li>
+              <li>Mayúscula inicial, dos o tres palabras y sin punto final.</li>
+              <li>Usa las mismas palabras para la misma acción en todas partes.</li>
+              <li>Un botón de ancho completo invita a usar etiquetas largas: limítala a unos 24 caracteres o permite que ocupe varias líneas.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Los botones con relleno usan texto blanco; los de contorno y fantasma usan texto de marca sobre la página.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del botón en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Etiqueta principal</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta principal al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill-hover</code></div></td><td data-label="Claro"><div>8.2:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>17.9:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta secundaria</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>13.5:1</div></td><td data-label="Oscuro"><div>10.9:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta secundaria al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-outline</code></div></td><td data-label="Claro"><div>4.6:1</div></td><td data-label="Oscuro"><div>4.8:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta del botón de contorno y fantasma</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta del botón de contorno y fantasma al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-brand-subtle</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>6.5:1</div></td><td data-label="Alto contraste"><div>13.6:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta de peligro</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-color-danger-fill</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>6.0:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta y borde desactivados</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-disabled</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3.5:1</div></td><td data-label="Oscuro"><div>4.2:1</div></td><td data-label="Alto contraste"><div>5.3:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos. El texto desactivado no tiene un mínimo WCAG; LUZ exige 3:1.</p>
+            <ul>
+              <li><strong>Foco:</strong> todas las variantes tienen un contorno de 2 px <code>--luz-focus-ring</code>, situado a 2 px del botón.</li>
+              <li><strong>No depende solo del color:</strong> un botón desactivado tiene un borde discontinuo; en la variante de contorno, el borde y el texto usan el color de marca.</li>
+              <li><strong>Objetivo táctil:</strong> 44 px de alto de forma predeterminada y 36 px para <code>.luz-btn--sm</code>, con o sin ancho completo. Usa el tamaño predeterminado cuando se vaya a pulsar con el pulgar (44 px es el objetivo mejorado de WCAG 2.5.5, nivel AAA).</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 26 tokens que lee <code>components/button.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-fill-active"><code>--luz-brand-fill-active</code></a>, <a href="/docs/tokens/color/#luz-brand-fill-hover"><code>--luz-brand-fill-hover</code></a>, <a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a>, <a href="/docs/tokens/color/#luz-color-danger-fill"><code>--luz-color-danger-fill</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-control-xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-base</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

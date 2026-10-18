@@ -1,0 +1,489 @@
+<!-- luz:page
+title: Bloques de texto
+description: Contienen el texto de lectura de una página: párrafos, listas, citas y texto preformateado.
+source: 01d9b78ff8c7
+reviewed: false
+-->
+    <div class="docs-block elements-section" id="cat-text" data-category="text">
+        <p class="elements-section__lead">Contienen el texto de lectura de una página: párrafos, listas, citas y texto preformateado.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-blockquote" data-element="blockquote" aria-labelledby="el-blockquote-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-blockquote-title"><code>&lt;blockquote&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/blockquote">MDN<span class="u-sr-only"> referencia del elemento blockquote</span></a>
+          </div>
+          <p class="elements-card__desc">Una cita extensa, separada en su propio bloque. Pon la URL de la fuente en el atributo cite e indica quién lo dijo fuera de la cita, por ejemplo, en un figcaption.</p>
+          <div class="elements-stage">
+            <blockquote>
+              <p>The best interface is the one the browser already ships.</p>
+            </blockquote>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-blockquote" aria-label="Copy the blockquote markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="blockquote markup"><code id="code-blockquote">&lt;blockquote&gt;
+  &lt;p&gt;The best interface is the one the browser already ships.&lt;/p&gt;
+&lt;/blockquote&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-dd" data-element="dd" aria-labelledby="el-dd-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-dd-title"><code>&lt;dd&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dd">MDN<span class="u-sr-only"> referencia del elemento dd</span></a>
+          </div>
+          <p class="elements-card__desc">El valor o la explicación que sigue a dt en una lista de descripciones. Un término puede tener varios.</p>
+          <div class="elements-stage">
+            <dl>
+              <dt>Token</dt>
+              <dd>A named design decision, stored as a variable.</dd>
+            </dl>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dd" aria-label="Copy the dd markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="dd markup"><code id="code-dd">&lt;dl&gt;
+  &lt;dt&gt;Token&lt;/dt&gt;
+  &lt;dd&gt;A named design decision, stored as a variable.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-div" data-element="div" aria-labelledby="el-div-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-div-title"><code>&lt;div&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/div">MDN<span class="u-sr-only"> referencia del elemento div</span></a>
+          </div>
+          <p class="elements-card__desc">Una caja sencilla sin significado propio. Úsala solo si no encaja ningún otro elemento y asígnale una clase que explique su propósito.</p>
+          <div class="elements-stage">
+            <div class="o-stack">
+              <div>First block</div>
+              <div>Second block</div>
+            </div>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-div" aria-label="Copy the div markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="div markup"><code id="code-div">&lt;div class=&quot;o-stack&quot;&gt;
+  &lt;div&gt;First block&lt;/div&gt;
+  &lt;div&gt;Second block&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador. LUZ no añade estilos. El objeto de maquetación o-stack separa sus elementos hijos.</p>
+        </article>
+
+        <article class="elements-card" id="el-dl" data-element="dl" aria-labelledby="el-dl-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-dl-title"><code>&lt;dl&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dl">MDN<span class="u-sr-only"> referencia del elemento dl</span></a>
+          </div>
+          <p class="elements-card__desc">Una lista de nombres asociados a valores: un glosario, las especificaciones de un producto o los datos de un archivo. Cada dt nombra algo y el dd siguiente lo explica.</p>
+          <div class="elements-stage">
+            <dl>
+              <dt>Tokens</dt>
+              <dd>Layer 1, standalone.</dd>
+              <dt>Core</dt>
+              <dd>Layer 2, requires tokens.</dd>
+            </dl>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dl" aria-label="Copy the dl markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="dl markup"><code id="code-dl">&lt;dl&gt;
+  &lt;dt&gt;Tokens&lt;/dt&gt;
+  &lt;dd&gt;Layer 1, standalone.&lt;/dd&gt;
+  &lt;dt&gt;Core&lt;/dt&gt;
+  &lt;dd&gt;Layer 2, requires tokens.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-dt" data-element="dt" aria-labelledby="el-dt-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-dt-title"><code>&lt;dt&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dt">MDN<span class="u-sr-only"> referencia del elemento dt</span></a>
+          </div>
+          <p class="elements-card__desc">La parte del nombre de un par nombre-valor en una lista de descripciones, como una palabra de un glosario. LUZ la muestra con un peso mayor.</p>
+          <div class="elements-stage">
+            <dl>
+              <dt>Site</dt>
+              <dd>Layer 3, site patterns.</dd>
+            </dl>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dt" aria-label="Copy the dt markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="dt markup"><code id="code-dt">&lt;dl&gt;
+  &lt;dt&gt;Site&lt;/dt&gt;
+  &lt;dd&gt;Layer 3, site patterns.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-figcaption" data-element="figcaption" aria-labelledby="el-figcaption-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-figcaption-title"><code>&lt;figcaption&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figcaption">MDN<span class="u-sr-only"> referencia del elemento figcaption</span></a>
+          </div>
+          <p class="elements-card__desc">El pie de una figura. Colócalo como primer o último elemento hijo de figure.</p>
+          <div class="elements-stage">
+            <figure>
+              <img src="/apps/docs/assets/shapes.svg" alt="A blue square and a grey circle" width="240" height="120">
+              <figcaption>Two shapes, drawn in SVG.</figcaption>
+            </figure>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-figcaption" aria-label="Copy the figcaption markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="figcaption markup"><code id="code-figcaption">&lt;figure&gt;
+  &lt;img src=&quot;shapes.svg&quot; alt=&quot;A blue square and a grey circle&quot; width=&quot;240&quot; height=&quot;120&quot;&gt;
+  &lt;figcaption&gt;Two shapes, drawn in SVG.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-figure" data-element="figure" aria-labelledby="el-figure-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-figure-title"><code>&lt;figure&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figure">MDN<span class="u-sr-only"> referencia del elemento figure</span></a>
+          </div>
+          <p class="elements-card__desc">Envuelve una imagen, un diagrama, un bloque de código o una cita a la que hace referencia el texto, con un pie opcional. Se podría mover a otro lugar de la página sin romper el texto.</p>
+          <div class="elements-stage">
+            <figure>
+              <img src="/apps/docs/assets/shapes.svg" alt="A blue square and a grey circle" width="240" height="120">
+              <figcaption>Two shapes, drawn in SVG.</figcaption>
+            </figure>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-figure" aria-label="Copy the figure markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="figure markup"><code id="code-figure">&lt;figure&gt;
+  &lt;img src=&quot;shapes.svg&quot; alt=&quot;A blue square and a grey circle&quot; width=&quot;240&quot; height=&quot;120&quot;&gt;
+  &lt;figcaption&gt;Two shapes, drawn in SVG.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase. LUZ convierte una figure sin clase en una superficie con relleno. El componente .luz-figure añade más estilos.</p>
+        </article>
+
+        <article class="elements-card" id="el-hr" data-element="hr" aria-labelledby="el-hr-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-hr-title"><code>&lt;hr&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/hr">MDN<span class="u-sr-only"> referencia del elemento hr</span></a>
+          </div>
+          <p class="elements-card__desc">Marca un cambio de tema o de escena entre párrafos. Úsala con ese significado, no como línea decorativa: para una línea sencilla, usa un borde.</p>
+          <div class="elements-stage">
+            <p>Above the break.</p>
+            <hr>
+            <p>Below the break.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-hr" aria-label="Copy the hr markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="hr markup"><code id="code-hr">&lt;p&gt;Above the break.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Below the break.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-li" data-element="li" aria-labelledby="el-li-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-li-title"><code>&lt;li&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/li">MDN<span class="u-sr-only"> referencia del elemento li</span></a>
+          </div>
+          <p class="elements-card__desc">Un elemento de una lista. Su padre es ol, ul o menu.</p>
+          <div class="elements-stage">
+            <ul>
+              <li>Tokens</li>
+              <li>Core</li>
+              <li>Site</li>
+            </ul>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-li" aria-label="Copy the li markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="li markup"><code id="code-li">&lt;ul&gt;
+  &lt;li&gt;Tokens&lt;/li&gt;
+  &lt;li&gt;Core&lt;/li&gt;
+  &lt;li&gt;Site&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+
+        <article class="elements-card" id="el-menu" data-element="menu" aria-labelledby="el-menu-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-menu-title"><code>&lt;menu&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/menu">MDN<span class="u-sr-only"> referencia del elemento menu</span></a>
+          </div>
+          <p class="elements-card__desc">Una lista de acciones que se pueden realizar, como los botones de una barra de herramientas. Los navegadores la tratan como ul; LUZ la distribuye en una fila.</p>
+          <div class="elements-stage">
+            <menu>
+              <li><button class="luz-btn luz-btn--outline luz-btn--sm" type="button">Cut</button></li>
+              <li><button class="luz-btn luz-btn--outline luz-btn--sm" type="button">Copy</button></li>
+              <li><button class="luz-btn luz-btn--outline luz-btn--sm" type="button">Paste</button></li>
+            </menu>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-menu" aria-label="Copy the menu markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="menu markup"><code id="code-menu">&lt;menu&gt;
+  &lt;li&gt;&lt;button class=&quot;luz-btn luz-btn--outline luz-btn--sm&quot; type=&quot;button&quot;&gt;Cut&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button class=&quot;luz-btn luz-btn--outline luz-btn--sm&quot; type=&quot;button&quot;&gt;Copy&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button class=&quot;luz-btn luz-btn--outline luz-btn--sm&quot; type=&quot;button&quot;&gt;Paste&lt;/button&gt;&lt;/li&gt;
+&lt;/menu&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-ol" data-element="ol" aria-labelledby="el-ol-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-ol-title"><code>&lt;ol&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol">MDN<span class="u-sr-only"> referencia del elemento ol</span></a>
+          </div>
+          <p class="elements-card__desc">Una lista cuyo orden importa, como una serie de pasos o una clasificación. Una lista sin clase recupera los marcadores dentro de su caja.</p>
+          <div class="elements-stage">
+            <ol>
+              <li>Install the tokens.</li>
+              <li>Add the core.</li>
+              <li>Add the site package.</li>
+            </ol>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-ol" aria-label="Copy the ol markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="ol markup"><code id="code-ol">&lt;ol&gt;
+  &lt;li&gt;Install the tokens.&lt;/li&gt;
+  &lt;li&gt;Add the core.&lt;/li&gt;
+  &lt;li&gt;Add the site package.&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-p" data-element="p" aria-labelledby="el-p-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-p-title"><code>&lt;p&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/p">MDN<span class="u-sr-only"> referencia del elemento p</span></a>
+          </div>
+          <p class="elements-card__desc">Un párrafo de texto. LUZ pide al navegador que evite dejar una sola palabra aislada en la última línea.</p>
+          <div class="elements-stage">
+            <p>LUZ is a vanilla design system: tokens, components and app patterns in plain CSS and ES modules, with no framework and no build step.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-p" aria-label="Copy the p markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="p markup"><code id="code-p">&lt;p&gt;LUZ is a vanilla design system: tokens, components and app patterns in plain CSS and ES modules, with no framework and no build step.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-pre" data-element="pre" aria-labelledby="el-pre-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-pre-title"><code>&lt;pre&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/pre">MDN<span class="u-sr-only"> referencia del elemento pre</span></a>
+          </div>
+          <p class="elements-card__desc">Texto que se muestra exactamente como se ha escrito, con todos los espacios y saltos de línea, en una fuente de ancho fijo. Para el código, añade la clase .luz-code-block y un elemento code.</p>
+          <div class="elements-stage">
+            <pre>$ pnpm add @luz-ds/tokens
+            $ pnpm add @luz-ds/core</pre>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-pre" aria-label="Copy the pre markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="pre markup"><code id="code-pre">&lt;pre&gt;$ pnpm add @luz-ds/tokens
+$ pnpm add @luz-ds/core&lt;/pre&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-ul" data-element="ul" aria-labelledby="el-ul-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-ul-title"><code>&lt;ul&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ul">MDN<span class="u-sr-only"> referencia del elemento ul</span></a>
+          </div>
+          <p class="elements-card__desc">Una lista cuyo orden no importa, como una lista de características o ingredientes. Una lista sin clase recupera los marcadores dentro de su caja.</p>
+          <div class="elements-stage">
+            <ul>
+              <li>Tokens</li>
+              <li>Core</li>
+              <li>Site</li>
+            </ul>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-ul" aria-label="Copy the ul markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="ul markup"><code id="code-ul">&lt;ul&gt;
+  &lt;li&gt;Tokens&lt;/li&gt;
+  &lt;li&gt;Core&lt;/li&gt;
+  &lt;li&gt;Site&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+        </div>
+      
+    </div>
+
+    <div class="docs-block elements-section" id="dl-patterns">
+        <h2 class="docs-subhead" id="dl-patterns-title">Patrones de listas de descripciones</h2>
+        <p class="elements-section__lead">Tres formas de usar <code>&lt;dl&gt;</code> con los estilos anteriores. Puedes agrupar cada <code>&lt;dt&gt;</code> con su <code>&lt;dd&gt;</code> en un <code>&lt;div&gt;</code>: es HTML válido y LUZ mantiene el mismo espacio entre grupos.</p>
+        <div class="elements-grid">
+        <section class="elements-card" id="dl-metadata" aria-labelledby="dl-metadata-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="dl-metadata-title">Metadatos</h2>
+          </div>
+          <p class="elements-card__desc">Datos sobre algo, como un archivo o un pedido. Cada par tiene un nombre y un valor, y va en su propio div para que un script o una regla de estilo pueda seleccionarlo.</p>
+          <div class="elements-stage">
+            <dl>
+              <div>
+                <dt>File</dt>
+                <dd>annual-report.pdf</dd>
+              </div>
+              <div>
+                <dt>Size</dt>
+                <dd>2.4 MB</dd>
+              </div>
+              <div>
+                <dt>Last changed</dt>
+                <dd><time datetime="2026-10-09">9 October 2026</time></dd>
+              </div>
+            </dl>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dl-metadata" aria-label="Copy the metadata markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="metadata markup"><code id="code-dl-metadata">&lt;dl&gt;
+  &lt;div&gt;
+    &lt;dt&gt;File&lt;/dt&gt;
+    &lt;dd&gt;annual-report.pdf&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Size&lt;/dt&gt;
+    &lt;dd&gt;2.4 MB&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Last changed&lt;/dt&gt;
+    &lt;dd&gt;&lt;time datetime=&quot;2026-10-09&quot;&gt;9 October 2026&lt;/time&gt;&lt;/dd&gt;
+  &lt;/div&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Usa <code>&lt;time&gt;</code> con <code>datetime</code> para las fechas. Los nombres son sustantivos breves y los valores, texto sin formato.</p>
+        </section>
+        <section class="elements-card" id="dl-keyvalue" aria-labelledby="dl-keyvalue-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="dl-keyvalue-title">Pares de nombre y valor</h2>
+          </div>
+          <p class="elements-card__desc">Un resumen de ajustes o detalles. Un nombre puede tener varios valores: repite dd, uno por cada valor.</p>
+          <div class="elements-stage">
+            <dl>
+              <div>
+                <dt>Plan</dt>
+                <dd>Team</dd>
+              </div>
+              <div>
+                <dt>Members</dt>
+                <dd>Ana Ruiz</dd>
+                <dd>Luis Pérez</dd>
+              </div>
+              <div>
+                <dt>Billing email</dt>
+                <dd><a href="mailto:billing@example.com">billing@example.com</a></dd>
+              </div>
+            </dl>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dl-keyvalue" aria-label="Copy the key and value markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="key and value markup"><code id="code-dl-keyvalue">&lt;dl&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Plan&lt;/dt&gt;
+    &lt;dd&gt;Team&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Members&lt;/dt&gt;
+    &lt;dd&gt;Ana Ruiz&lt;/dd&gt;
+    &lt;dd&gt;Luis Pérez&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Billing email&lt;/dt&gt;
+    &lt;dd&gt;&lt;a href=&quot;mailto:billing@example.com&quot;&gt;billing@example.com&lt;/a&gt;&lt;/dd&gt;
+  &lt;/div&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Si un nombre tiene varios valores, todos forman un mismo grupo: el lector de pantalla anuncia cada valor por turno.</p>
+        </section>
+        <section class="elements-card" id="dl-glossary" aria-labelledby="dl-glossary-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="dl-glossary-title">Glosario</h2>
+          </div>
+          <p class="elements-card__desc">Términos y sus significados. Cada término es un dt con un dfn dentro y tiene un id para que otras páginas puedan enlazar a su entrada.</p>
+          <div class="elements-stage">
+            <dl>
+              <dt id="term-token"><dfn>Design token</dfn></dt>
+              <dd>A named value, such as a color or a space, that components read.</dd>
+              <dt id="term-mode"><dfn>Color mode</dfn></dt>
+              <dd>One set of color values for the whole page.</dd>
+              <dd>Light, dark and high contrast are the three LUZ ships.</dd>
+            </dl>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dl-glossary" aria-label="Copy the glossary markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="glossary markup"><code id="code-dl-glossary">&lt;dl&gt;
+  &lt;dt id=&quot;term-token&quot;&gt;&lt;dfn&gt;Design token&lt;/dfn&gt;&lt;/dt&gt;
+  &lt;dd&gt;A named value, such as a color or a space, that components read.&lt;/dd&gt;
+  &lt;dt id=&quot;term-mode&quot;&gt;&lt;dfn&gt;Color mode&lt;/dfn&gt;&lt;/dt&gt;
+  &lt;dd&gt;One set of color values for the whole page.&lt;/dd&gt;
+  &lt;dd&gt;Light, dark and high contrast are the three LUZ ships.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Enlaza a un término con <code>#term-token</code>. Un término puede tener más de un significado: repite dd.</p>
+        </section>
+        </div>
+        <h3 id="dl-notes" class="docs-subhead">Antes de usarlo</h3>
+        <ul>
+          <li>Mantén el valor predeterminado de <code>display</code> de <code>&lt;dl&gt;</code> y sus grupos. Definir <code>flex</code> o <code>grid</code> en elementos de lista ha hecho que algunas combinaciones de navegador y lector de pantalla pierdan la semántica de lista; consulta <a href="https://adrianroselli.com/2020/03/csun-2020-css-display-properties-versus-html-semantics.html">Propiedades display de CSS frente a la semántica de HTML</a>. Distribuye los pares en un contenedor que controles y prueba el resultado.</li>
+          <li>HTML solo permite un <code>&lt;div&gt;</code> dentro de <code>&lt;dl&gt;</code> cuando envuelve un nombre y sus valores. Una fuente que probó un div como contenedor simple detectó problemas con lectores de pantalla en algunos navegadores (<a href="https://s.codepen.io/stevef/debug/GxwaoP">Uso de div en dl</a>; no ofrece resultados). LUZ no ha probado el marcado agrupado con NVDA, JAWS, VoiceOver, TalkBack ni Orca.</li>
+          <li>Para una tabla con muchos valores por fila, usa una <a href="/docs/components/table/">tabla</a>, no una lista de descripciones.</li>
+        </ul>
+    </div>

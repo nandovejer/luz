@@ -53,6 +53,39 @@ function visibleHtml(html) {
     .replace(/<(pre|code|script|style|svg|template)\b[\s\S]*?<\/\1>/gi, blank);
 }
 
+// The containers of a demo or an example: in a translation they are live markup left as written, not prose
+const DEMO_CLASS = /(^|\s)(docs-dodont__stage|luz-docs-dodont__stage|docs-snippet|elements-stage)(\s|$)/;
+const VOID_TAG = /^(area|base|br|col|embed|hr|img|input|link|meta|source|track|wbr)$/;
+
+/** `html` with the inside of each demo container blanked, to its closing tag. A source that does not tokenize is left as it is. */
+function withoutDemos(html) {
+  const spans = [];
+  const open = [];
+  try {
+    for (const tag of tags(html)) {
+      if (tag.type === "start") {
+        if (tag.selfClosing || VOID_TAG.test(tag.name)) continue;
+        const demo = tag.attrs.has("data-docs-specimen") || DEMO_CLASS.test(tag.attrs.get("class") ?? "");
+        open.push({ name: tag.name, from: demo && !open.some((o) => o.demo) ? tag.index : -1, demo });
+      } else {
+        const i = open.findLastIndex((o) => o.name === tag.name);
+        if (i === -1) continue;
+        if (open[i].from !== -1) spans.push([open[i].from, tag.end]);
+        open.length = i;
+      }
+    }
+  } catch {
+    return html;
+  }
+  let out = "";
+  let at = 0;
+  for (const [from, to] of spans) {
+    out += html.slice(at, from) + blank(html.slice(from, to));
+    at = to;
+  }
+  return out + html.slice(at);
+}
+
 function textOf(fragment) {
   return fragment.replace(/<[^>]+>/g, "").replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").trim();
 }
@@ -96,8 +129,8 @@ function languages(html, fallback) {
 const problems = [];
 
 /** Check one HTML document or fragment; `name` says where, `fallback` is its language. */
-function check(name, source, fallback) {
-  const html = visibleHtml(source);
+function check(name, source, fallback, { demos = true } = {}) {
+  const html = demos ? visibleHtml(source) : withoutDemos(visibleHtml(source));
   const lang = languages(html, fallback);
   const langOf = (index) => lang.get(index) ?? fallback;
   const lines = html.split("\n");
@@ -134,7 +167,8 @@ function check(name, source, fallback) {
 const TRANSLATION = /^apps\/docs\/i18n\/([a-z]{2,3})\//;
 for (const file of htmlFiles(appsDir)) {
   const name = relative(root, file).split(sep).join("/");
-  check(name, readFileSync(file, "utf-8"), TRANSLATION.exec(name)?.[1] ?? "en");
+  const translation = TRANSLATION.exec(name)?.[1];
+  check(name, readFileSync(file, "utf-8"), translation ?? "en", { demos: !translation });
 }
 
 // The home page, as rendered in each language

@@ -1,0 +1,156 @@
+<!-- luz:page
+title: Paginación
+description: Enlaza a las páginas de una lista que se extiende a lo largo de varias páginas y marca la página actual.
+source: ec0cba80a494
+reviewed: false
+-->
+    <div class="docs-component" id="c-pagination">
+          <h2 id="example">Ejemplo</h2>
+          <p>Los enlaces de una lista de 40 páginas, con la actual marcada.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <nav aria-label="Example pagination">
+              <ul class="luz-pagination">
+                <li><a class="luz-pagination__link" href="#example" rel="prev">Previous</a></li>
+                <li><a class="luz-pagination__link" href="#example" aria-label="Page 1">1</a></li>
+                <li class="luz-pagination__gap" aria-hidden="true">…</li>
+                <li><a class="luz-pagination__link" href="#example" aria-label="Page 7">7</a></li>
+                <li><a class="luz-pagination__link" href="#example" aria-label="Page 8" aria-current="page">8</a></li>
+                <li><a class="luz-pagination__link" href="#example" aria-label="Page 9">9</a></li>
+                <li class="luz-pagination__gap" aria-hidden="true">…</li>
+                <li><a class="luz-pagination__link" href="#example" aria-label="Page 40">40</a></li>
+                <li><a class="luz-pagination__link" href="#example" rel="next">Next</a></li>
+              </ul>
+            </nav>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la paginación">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-pagination" aria-label="Copy the pagination markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Pagination markup"><code id="code-pagination">&lt;nav aria-label=&quot;Pagination&quot;&gt;
+  &lt;ul class=&quot;luz-pagination&quot;&gt;
+    &lt;li&gt;&lt;a class=&quot;luz-pagination__link&quot; href=&quot;/blog/?page=1&quot; rel=&quot;prev&quot;&gt;Previous&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class=&quot;luz-pagination__link&quot; href=&quot;/blog/?page=1&quot; aria-label=&quot;Page 1&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class=&quot;luz-pagination__link&quot; href=&quot;/blog/?page=2&quot; aria-label=&quot;Page 2&quot; aria-current=&quot;page&quot;&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class=&quot;luz-pagination__link&quot; href=&quot;/blog/?page=3&quot; aria-label=&quot;Page 3&quot;&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class=&quot;luz-pagination__link&quot; href=&quot;/blog/?page=3&quot; rel=&quot;next&quot;&gt;Next&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores. En pantallas estrechas, la lista ocupa más líneas.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Elementos de la paginación" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-pagination</code></div></td><td data-label="Qué hace"><div>La lista: una fila de elementos que salta de línea en pantallas estrechas</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-pagination__link</code></div></td><td data-label="Qué hace"><div>Una página, Anterior o Siguiente: un área interactiva de al menos 44 px</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>aria-current="page"</code></div></td><td data-label="Qué hace"><div>Marca la página actual con un relleno sólido y un peso de fuente mayor</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>aria-disabled="true"</code></div></td><td data-label="Qué hace"><div>Anterior o Siguiente en los extremos, como <code>&lt;span&gt;</code> y no como enlace: color de texto desactivado</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-pagination__gap</code></div></td><td data-label="Qué hace"><div>La «…» de una lista larga: una marca oculta a los lectores de pantalla</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un punto de referencia <code>&lt;nav&gt;</code> alrededor de una lista de enlaces, con estilos de <code>components/pagination.css</code>. Cada página tiene una dirección propia, así que el servidor la genera y funcionan el botón Atrás, los marcadores y los motores de búsqueda.</p>
+            <p>Sin JavaScript.</p>
+            <ul>
+              <li>Los números son enlaces, no botones: al seguir uno, se carga otra página.</li>
+              <li><code>rel="prev"</code> y <code>rel="next"</code> indican qué enlaces llevan a las páginas anterior y siguiente.</li>
+              <li>La página actual es un enlace con <code>aria-current="page"</code>, así que se sigue anunciando como enlace y conserva su posición en el orden.</li>
+              <li>En la primera o la última página, Anterior o Siguiente es un <code>&lt;span&gt;</code> con <code>aria-disabled="true"</code>: solo texto, sin parada de foco.</li>
+              <li>Conserva el <code>&lt;nav&gt;</code>. Algunos navegadores eliminan la semántica de lista de un <code>&lt;ul&gt;</code> sin viñetas, y el punto de referencia hace que siga anunciándose como lista; si no hay <code>&lt;nav&gt;</code>, añade <code>role="list"</code> al <code>&lt;ul&gt;</code>.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: es una lista de enlaces con CSS. Sin CSS, se lee como una lista de enlaces.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Pulsa Tab para llegar a cada enlace en orden y Enter para abrirlo.</p>
+            <ul>
+              <li>Asigna al elemento <code>&lt;nav&gt;</code> el nombre «Paginación» con <code>aria-label</code>, para distinguirlo de la navegación principal.</li>
+              <li>Asigna a un número el nombre «Página 3» con <code>aria-label</code>. El número visible sigue formando parte del nombre. <code>aria-current="page"</code> indica al lector de pantalla cuál es la página actual, así que no hace falta incluirlo en el nombre.</li>
+              <li>Marca el espacio con <code>aria-hidden="true"</code>: el lector de pantalla oye las páginas, no los puntos.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa la paginación cuando una lista sea demasiado larga para una sola página y se pueda acceder a cada página con su propia dirección: resultados de búsqueda, archivo de un blog o tabla de registros.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses la paginación para una lista corta ni para los pasos de una tarea.</p>
+            <ul>
+              <li>Para las páginas superiores a la actual, usa <a href="/docs/components/breadcrumb/">migas de pan</a>.</li>
+              <li>Para las secciones de una página, usa <a href="/docs/components/tabs/">pestañas</a>.</li>
+              <li>Si tienes un flujo que se carga al desplazarse, ofrece también un enlace a la página siguiente: es la única versión a la que pueden llegar quienes usan teclado o lector de pantalla.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Muestra la primera y la última página, la actual y las contiguas, con un espacio entre ellas.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ul class="luz-pagination"><li><span class="luz-pagination__link">1</span></li><li class="luz-pagination__gap">…</li><li><span class="luz-pagination__link">7</span></li><li><span class="luz-pagination__link" aria-current="page">8</span></li><li><span class="luz-pagination__link">9</span></li><li class="luz-pagination__gap">…</li><li><span class="luz-pagination__link">40</span></li></ul>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Imprimas todos los números de una lista larga: desborda el ancho y obliga a contar.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ul class="luz-pagination"><li><span class="luz-pagination__link">1</span></li><li><span class="luz-pagination__link">2</span></li><li><span class="luz-pagination__link">3</span></li><li><span class="luz-pagination__link">4</span></li><li><span class="luz-pagination__link">5</span></li><li><span class="luz-pagination__link">6</span></li><li><span class="luz-pagination__link">7</span></li><li><span class="luz-pagination__link">8</span></li><li><span class="luz-pagination__link">9</span></li><li><span class="luz-pagination__link">10</span></li></ul>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Usa la palabra que diría quien lee.</p>
+            <ul>
+              <li>«Anterior» y «Siguiente», no solo flechas ni «Atrás».</li>
+              <li>Escribe los números de página con cifras; para tecnologías de asistencia, asígnales el nombre «Página 3».</li>
+              <li>Indica el número total de páginas cerca de la lista («Página 8 de 40») cuando sea importante.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Las páginas usan el color de texto secundario; la página actual aparece en blanco sobre un relleno sólido del color de marca.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la paginación en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Página actual</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Relleno de la página actual</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>3.5:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anterior o Siguiente en el extremo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-disabled</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3.5:1</div></td><td data-label="Oscuro"><div>4.2:1</div></td><td data-label="Alto contraste"><div>5.3:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Espacio</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-muted</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4.9:1</div></td><td data-label="Oscuro"><div>5.6:1</div></td><td data-label="Alto contraste"><div>9.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes, los iconos y el estado desactivado.</p>
+            <ul>
+              <li><strong>Foco:</strong> cada enlace tiene el anillo compartido: un contorno de 2 px <code>--luz-focus-ring</code>, a 2 px del elemento.</li>
+              <li><strong>No solo color:</strong> la página actual tiene un relleno sólido, un peso mayor (600) y <code>aria-current</code>.</li>
+              <li><strong>Colores forzados:</strong> la página actual usa los colores de selección del sistema (<code>Highlight</code> y <code>HighlightText</code>) y un anillo de foco en <code>CanvasText</code>; los extremos que no son enlaces usan <code>GrayText</code>.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 15 tokens que lee <code>components/pagination.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-pressed"><code>--luz-surface-pressed</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-muted"><code>--luz-text-muted</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

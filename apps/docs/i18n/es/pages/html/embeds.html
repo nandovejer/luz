@@ -1,0 +1,123 @@
+<!-- luz:page
+title: Marcos e inserciones
+description: Muestra contenido de otros lugares: otra página en un marco, un archivo en un visor o una imagen que cambia con la pantalla.
+source: 17373c16d316
+reviewed: false
+-->
+    <div class="docs-block elements-section" id="cat-embedded" data-category="embedded">
+        <p class="elements-section__lead">Muestra contenido de otros lugares: otra página en un marco, un archivo en un visor o una imagen que cambia con la pantalla.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-embed" data-element="embed" aria-labelledby="el-embed-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-embed-title"><code>&lt;embed&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/embed">MDN<span class="u-sr-only"> referencia del elemento embed</span></a>
+          </div>
+          <p class="elements-card__desc">Muestra un archivo externo, como un PDF, con el visor que tenga el navegador. No ofrece contenido alternativo, así que ponle un título.</p>
+          <div class="elements-stage">
+            <embed type="image/svg+xml" data-asset="shapes" width="240" height="120" title="A blue square and a grey circle">
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-embed" aria-label="Copy the embed markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="embed markup"><code id="code-embed">&lt;embed src=&quot;shapes.svg&quot; type=&quot;image/svg+xml&quot; width=&quot;240&quot; height=&quot;120&quot; title=&quot;A blue square and a grey circle&quot;&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/media.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-iframe" data-element="iframe" aria-labelledby="el-iframe-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-iframe-title"><code>&lt;iframe&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe">MDN<span class="u-sr-only"> referencia del elemento iframe</span></a>
+          </div>
+          <p class="elements-card__desc">Muestra otra página web dentro de esta, aquí una pequeña escrita en el propio documento mediante <code>srcdoc</code>. Ponle siempre un título y carga el contenido de forma diferida si queda por debajo del pliegue.</p>
+          <div class="elements-stage">
+            <iframe srcdoc="&lt;p style=&quot;font: 1rem system-ui; margin: 1rem&quot;&gt;A separate document, embedded in this page.&lt;/p&gt;" title="An embedded example document" loading="lazy" width="320" height="120"></iframe>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-iframe" aria-label="Copy the iframe markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="iframe markup"><code id="code-iframe">&lt;iframe srcdoc=&quot;&amp;lt;p&amp;gt;A separate document, embedded in this page.&amp;lt;/p&amp;gt;&quot;
+  title=&quot;An embedded example document&quot; loading=&quot;lazy&quot; width=&quot;320&quot; height=&quot;120&quot;&gt;&lt;/iframe&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/media.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-object" data-element="object" aria-labelledby="el-object-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-object-title"><code>&lt;object&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/object">MDN<span class="u-sr-only"> referencia del elemento object</span></a>
+          </div>
+          <p class="elements-card__desc">Muestra un archivo externo, como un PDF o una imagen, y admite contenido alternativo en su interior para cuando no se pueda cargar el archivo.</p>
+          <div class="elements-stage">
+            <object type="image/svg+xml" data-asset="shapes" width="240" height="120" aria-label="A blue square and a grey circle">
+              A blue square and a grey circle
+            </object>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-object" aria-label="Copy the object markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="object markup"><code id="code-object">&lt;object data=&quot;shapes.svg&quot; type=&quot;image/svg+xml&quot; width=&quot;240&quot; height=&quot;120&quot; aria-label=&quot;A blue square and a grey circle&quot;&gt;
+  A blue square and a grey circle
+&lt;/object&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/media.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-picture" data-element="picture" aria-labelledby="el-picture-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-picture-title"><code>&lt;picture&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/picture">MDN<span class="u-sr-only"> referencia del elemento picture</span></a>
+          </div>
+          <p class="elements-card__desc">Ofrece al navegador varias versiones de una imagen para que elija la más adecuada según el ancho, el formato del archivo o la densidad de píxeles. Debe contener un elemento img.</p>
+          <div class="elements-stage">
+            <picture>
+              <source media="(max-width: 30rem)" srcset="/apps/docs/assets/shapes-compact.svg">
+              <img src="/apps/docs/assets/shapes.svg" alt="A blue square and a grey circle" width="240" height="120">
+            </picture>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-picture" aria-label="Copy the picture markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="picture markup"><code id="code-picture">&lt;picture&gt;
+  &lt;source media=&quot;(max-width: 30rem)&quot; srcset=&quot;shapes-compact.svg&quot;&gt;
+  &lt;img src=&quot;shapes.svg&quot; alt=&quot;A blue square and a grey circle&quot; width=&quot;240&quot; height=&quot;120&quot;&gt;
+&lt;/picture&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/media.css</code>, sin clase. Reduce la ventana por debajo de 30rem y picture cambia a la imagen compacta.</p>
+        </article>
+
+        <article class="elements-card" id="el-source" data-element="source" aria-labelledby="el-source-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-source-title"><code>&lt;source&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/source">MDN<span class="u-sr-only"> referencia del elemento source</span></a>
+          </div>
+          <p class="elements-card__desc">Una opción de archivo dentro de picture, audio o video. El navegador usa la primera que puede reproducir.</p>
+          <div class="elements-stage">
+            <picture>
+              <source srcset="/apps/docs/assets/shapes.svg" type="image/svg+xml">
+              <img src="/apps/docs/assets/shapes.svg" alt="A blue square and a grey circle" width="240" height="120">
+            </picture>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-source" aria-label="Copy the source markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="source markup"><code id="code-source">&lt;picture&gt;
+  &lt;source srcset=&quot;shapes.svg&quot; type=&quot;image/svg+xml&quot;&gt;
+  &lt;img src=&quot;shapes.svg&quot; alt=&quot;A blue square and a grey circle&quot; width=&quot;240&quot; height=&quot;120&quot;&gt;
+&lt;/picture&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+        </div>
+      
+    </div>

@@ -1,0 +1,268 @@
+<!-- luz:page
+title: Reproductor multimedia
+description: Reproduce un vídeo, un sonido o un archivo MIDI en la página, con los mismos controles para los tres.
+source: c4c244e90704
+reviewed: false
+-->
+    <div class="docs-component" id="c-player">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un vídeo y un archivo de audio con los mismos controles.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage o-grid docs-cols-2">
+            <div class="docs-demo__stage">
+            <!-- Public domain: NASA, "Earth Views from the ISS - No Music", NASA ID NHQ_2020_1221_Earth Views, 15 s from 6:35, no audio -->
+            <div class="luz-player" data-type="video" role="group" aria-label="Earth from the space station">
+              <div class="luz-player-media-wrap is-paused">
+                <video class="luz-player-video" preload="metadata" controls playsinline aria-label="The curved edge of the Earth seen from the International Space Station: brown land under thin cloud, below black space. No sound.">
+                  <source src="/apps/docs/assets/nasa-earth.mp4" type="video/mp4">
+                  <track kind="captions" srclang="en" label="English" data-asset="nasa-captions" default>
+                  <track kind="subtitles" srclang="es" label="Español" data-asset="nasa-captions-es">
+                </video>
+                <div class="luz-player-overlay" aria-hidden="true">
+                  <svg class="luz-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+                </div>
+              </div>
+              <div class="luz-player-controls">
+                <div class="luz-player-progress-row">
+                  <button class="luz-player-btn luz-player-playpause" type="button" aria-label="Play">
+                    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,3 20,12 6,21"/></svg>
+                    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+                  </button>
+                  <input class="luz-player-seekbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Seek Earth video">
+                </div>
+                <div class="luz-player-btns">
+                  <span class="luz-player-time luz-player-current">0:00</span>
+                  <span class="luz-player-spacer"></span>
+                  <span class="luz-player-time luz-player-duration">0:00</span>
+                  <div class="luz-player-vol-wrap">
+                    <button class="luz-player-btn luz-player-mute" type="button" aria-label="Mute">
+                      <svg class="icon-vol-on" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9h4l5-5v16l-5-5H3z"/><path d="M16 8a5 5 0 0 1 0 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                      <svg class="icon-vol-off" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><path d="M3 9h4l5-5v16l-5-5H3z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                    </button>
+                    <input class="luz-player-seekbar luz-player-volbar" type="range" min="0" max="100" step="5" value="100" style="--luz-seek: 100%" aria-label="Earth video volume">
+                  </div>
+                  <select class="luz-input luz-player-tracks" aria-label="Captions"></select>
+                </div>
+              </div>
+            </div>
+            <p class="docs-demo__note">Video, MP4, 15 seconds, with English captions shown by default and Spanish subtitles. It has no sound: both tracks describe the picture.</p>
+            <p class="docs-demo__note">Video: <a href="https://images.nasa.gov/details/NHQ_2020_1221_Earth%20Views">NASA, Earth Views from the ISS</a>, in the public domain.</p>
+            </div>
+
+            <div class="docs-demo__stage">
+              <!-- Public domain: NASA, Apollo 11 launch countdown and lift-off, 16 July 1969, 25 s (nasa.gov/historical-sounds); ID3/XMP metadata stripped -->
+              <div class="luz-player" data-type="audio" role="group" aria-label="Apollo 11 countdown player">
+                <audio class="luz-player-audio" preload="none" controls>
+                  <source src="/apps/docs/assets/nasa-apollo11-countdown.mp3" type="audio/mpeg">
+                </audio>
+                <div class="luz-player-controls luz-player-controls--audio">
+                  <button class="luz-player-btn luz-player-playpause" type="button" aria-label="Play">
+                    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,3 20,12 6,21"/></svg>
+                    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+                  </button>
+                  <div class="luz-player-progress-row luz-player-progress-row--audio">
+                    <span class="luz-player-time luz-player-current">0:00</span>
+                    <input class="luz-player-seekbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Seek audio">
+                    <span class="luz-player-time luz-player-duration">0:00</span>
+                  </div>
+                </div>
+              </div>
+              <p class="docs-demo__note">Audio, MP3, 25 seconds.</p>
+              <p class="docs-demo__note">Nothing is downloaded until you press play. Recording: <a href="https://www.nasa.gov/historical-sounds/">NASA, Apollo 11 launch countdown and lift-off</a>, in the public domain.</p>
+
+              <!-- data-src is set by reference.js (the build does not rewrite data-* URLs) -->
+              <div class="luz-player" data-type="midi" role="group" aria-label="MIDI player">
+                <p class="luz-player-fallback">MIDI playback needs JavaScript.</p>
+                <div class="luz-player-controls luz-player-controls--audio">
+                  <button class="luz-player-btn luz-player-playpause" type="button" aria-label="Play" disabled>
+                    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6,3 20,12 6,21"/></svg>
+                    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+                  </button>
+                  <div class="luz-player-progress-row luz-player-progress-row--audio">
+                    <span class="luz-player-time luz-player-current">0:00</span>
+                    <input class="luz-player-seekbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Seek MIDI">
+                    <span class="luz-player-time luz-player-duration">0:00</span>
+                  </div>
+                  <span class="luz-player-midi-status"></span>
+                </div>
+              </div>
+              <p class="docs-demo__note">MIDI, parsed and played with Web Audio by <code class="luz-code-inline">midi.js</code>, which loads only when a MIDI player is on the page.</p>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Los subtítulos, las transcripciones y la audiodescripción dependen del contenido multimedia que proporciones. Los colores de los subtítulos son una sugerencia: prevalecen los ajustes propios de quien lee, y puede que el navegador los dibuje a su manera, por ejemplo en su propio reproductor a pantalla completa.</p>
+          <p>Un archivo MIDI no tiene reproductor sin JavaScript: ofrece un enlace de descarga en el texto alternativo.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del reproductor">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Un reproductor de audio. El de vídeo añade un <code>.luz-player-media-wrap</code> alrededor de <code>&lt;video&gt;</code>, además de un botón de silencio y un control deslizante de volumen: cópialo del ejemplo anterior.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-player-audio" aria-label="Copy the audio player markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Audio player markup"><code id="code-player-audio">&lt;div class=&quot;luz-player&quot; data-type=&quot;audio&quot; role=&quot;group&quot; aria-label=&quot;Episode 12 player&quot;&gt;
+  &lt;audio class=&quot;luz-player-audio&quot; preload=&quot;none&quot; controls&gt;
+    &lt;source src=&quot;episode-12.mp3&quot; type=&quot;audio/mpeg&quot;&gt;
+  &lt;/audio&gt;
+  &lt;div class=&quot;luz-player-controls luz-player-controls--audio&quot;&gt;
+    &lt;button class=&quot;luz-player-btn luz-player-playpause&quot; type=&quot;button&quot; aria-label=&quot;Play&quot;&gt;
+      &lt;svg class=&quot;icon-play&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot; aria-hidden=&quot;true&quot;&gt;&lt;polygon points=&quot;6,3 20,12 6,21&quot;/&gt;&lt;/svg&gt;
+      &lt;svg class=&quot;icon-pause&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot; aria-hidden=&quot;true&quot; style=&quot;display:none&quot;&gt;&lt;rect x=&quot;5&quot; y=&quot;3&quot; width=&quot;4&quot; height=&quot;18&quot;/&gt;&lt;rect x=&quot;15&quot; y=&quot;3&quot; width=&quot;4&quot; height=&quot;18&quot;/&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;div class=&quot;luz-player-progress-row luz-player-progress-row--audio&quot;&gt;
+      &lt;span class=&quot;luz-player-time luz-player-current&quot;&gt;0:00&lt;/span&gt;
+      &lt;input class=&quot;luz-player-seekbar&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;1000&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Seek audio&quot;&gt;
+      &lt;span class=&quot;luz-player-time luz-player-duration&quot;&gt;0:00&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <p>Subtítulos: un elemento <code>&lt;track&gt;</code> por archivo dentro de <code>&lt;video&gt;</code> y un control en <code>.luz-player-btns</code>. Usa un botón para una pista y un selector para varias; el script rellena el selector.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-player-captions" aria-label="Copy the captions markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Captions markup"><code id="code-player-captions">&lt;video class=&quot;luz-player-video&quot; preload=&quot;metadata&quot; controls playsinline&gt;
+  &lt;source src=&quot;interview.mp4&quot; type=&quot;video/mp4&quot;&gt;
+  &lt;track kind=&quot;captions&quot; srclang=&quot;en&quot; label=&quot;English&quot; src=&quot;interview-en.vtt&quot; default&gt;
+  &lt;track kind=&quot;subtitles&quot; srclang=&quot;es&quot; label=&quot;Español&quot; src=&quot;interview-es.vtt&quot;&gt;
+&lt;/video&gt;
+
+&lt;!-- One track: a button that turns it on and off --&gt;
+&lt;button class=&quot;luz-player-btn luz-player-captions&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Captions&quot;&gt;
+  &lt;svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;rect x=&quot;2&quot; y=&quot;5&quot; width=&quot;20&quot; height=&quot;14&quot; rx=&quot;2&quot;/&gt;&lt;path d=&quot;M6 11h12M6 15h7&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;
+
+&lt;!-- Several tracks: a select, filled by the script --&gt;
+&lt;select class=&quot;luz-input luz-player-tracks&quot; aria-label=&quot;Captions&quot;&gt;&lt;/select&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-player-js" aria-label="Copy the player script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Player script code"><code id="code-player-js">import { initPlayers } from &quot;@luz-ds/core/player&quot;;
+initPlayers();</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones del reproductor" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>data-type="video"</code></div></td><td data-label="Efecto"><div>Un <code>&lt;video class="luz-player-video"&gt;</code>; al pulsar en la imagen, se reproduce o se pausa</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-type="audio"</code></div></td><td data-label="Efecto"><div>Un <code>&lt;audio class="luz-player-audio"&gt;</code> con una fila compacta de controles (<code>.luz-player-controls--audio</code>)</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-type="midi"</code> y <code>data-src</code></div></td><td data-label="Efecto"><div>Un archivo MIDI reproducido con Web Audio mediante <code>midi.js</code>, que solo se carga cuando hace falta</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-player-mute</code>, <code>.luz-player-volbar</code></div></td><td data-label="Efecto"><div>Un botón de silencio y un control deslizante de volumen</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-player-fullscreen</code>, <code>.luz-player-pip</code></div></td><td data-label="Efecto"><div>Botones opcionales de pantalla completa e imagen en imagen para vídeo</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>&lt;track kind="captions"&gt;</code>, <code>kind="subtitles"</code></div></td><td data-label="Efecto"><div>Un archivo WebVTT con <code>srclang</code> y <code>label</code>; <code>default</code> lo muestra desde el principio</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-player-captions</code></div></td><td data-label="Efecto"><div>Un botón para activar y desactivar los subtítulos: usa la pista predeterminada o, si no hay, la primera</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-player-tracks</code></div></td><td data-label="Efecto"><div>Un selector con <code>.luz-input</code> para elegir una pista o ninguna</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-player-fallback</code></div></td><td data-label="Efecto"><div>Texto que solo se muestra cuando el script no se ejecuta</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>El elemento multimedia nativo reproduce el archivo; <code>player.js</code> controla los controles de LUZ, con estilos de <code>components/player.css</code>.</p>
+            <ul>
+              <li><code>initPlayers()</code> monta todos los elementos <code>.luz-player</code> de la página o del elemento que le pases. <code>luz.js</code> lo ejecuta. Si un reproductor ya está montado, lo deja como está, así que se puede volver a ejecutar sin riesgo.</li>
+              <li>Al montarlo, el script quita <code>controls</code> nativo y conecta los controles de LUZ: reproducir y pausar, tiempo, búsqueda y volumen. Se inicializan según el estado del propio contenido: un vídeo <code>muted</code> aparece silenciado y la duración conocida por el navegador se muestra de inmediato.</li>
+              <li>La búsqueda y el volumen usan controles deslizantes nativos <code>&lt;input type="range"&gt;</code>. Cuando se conoce la duración, el de búsqueda tiene un paso por segundo, independientemente del valor de <code>max</code> en el marcado.</li>
+              <li>Los botones de pantalla completa e imagen en imagen se ocultan cuando el navegador no ofrece esas funciones.</li>
+              <li>Los subtítulos son los del navegador: cada elemento <code>&lt;track&gt;</code> es una pista de texto cuyos indicadores dibuja el navegador. Los controles de LUZ solo eligen qué pista se muestra, así que también reflejan las selecciones del menú propio del navegador. <code>::cue</code> muestra texto claro sobre la superficie multimedia. No se guarda ninguna opción. Se oculta cualquier control que no tenga una pista que mostrar.</li>
+              <li><code>mountPlayer(root)</code> y <code>mountMidiPlayer(root)</code> montan un único reproductor.</li>
+              <li>El reproductor es un contenedor de consulta de tamaño: por debajo de 480 px de ancho propio, los controles de audio se apilan y se oculta la barra de volumen, esté donde esté. Si un elemento superior ajusta su tamaño al contenido (un elemento flex en línea o flotante), necesita un ancho propio.</li>
+              <li>En texto de derecha a izquierda, la línea de tiempo sigue la dirección de lectura: la barra de búsqueda empieza a la derecha y se rellena hacia la izquierda, la fila de controles se invierte y las teclas del control deslizante son las del navegador. Los iconos de reproducción, pausa y volumen no se invierten: no apuntan a ninguna parte.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>El audio y el vídeo muestran los controles propios del navegador y los de LUZ permanecen ocultos. Los controles del navegador ofrecen subtítulos; una pista con <code>default</code> se muestra desde el principio.</p>
+            <p>El reproductor MIDI muestra el texto alternativo.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Usa Tab para moverte por los controles; cada uno conserva sus teclas nativas.</p>
+            <ul>
+              <li>Botones: Enter o Espacio. Sus nombres cambian según el estado: «Reproducir» o «Pausar», «Silenciar» o «Activar sonido». El botón de subtítulos conserva el nombre «Subtítulos» e indica si está pulsado (<code>aria-pressed</code>).</li>
+              <li>Selector de pistas: usa las teclas propias del navegador; cada opción aparece en el idioma de su pista.</li>
+              <li>Controles deslizantes: teclas de dirección, Home, End, Page Up y Page Down. Una tecla de dirección mueve el control de búsqueda un segundo y el de volumen un paso (5 % en el ejemplo). El de búsqueda indica el tiempo con texto.</li>
+              <li>Cuando el reproductor tiene el foco, pero no uno de sus controles (por ejemplo, después de pulsar el vídeo): Espacio o K reproduce y pausa, y M silencia. F activa la pantalla completa y C activa o desactiva los subtítulos si el reproductor tiene esos botones. Si mantienes Ctrl, Alt o Cmd, estas teclas no hacen nada.</li>
+              <li>El reproductor tiene <code>role="group"</code> y su nombre procede de <code>aria-label</code>.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un reproductor para reproducir un vídeo, un sonido o un archivo MIDI dentro de la página cuando quien lee lo inicie.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un reproductor para contenido multimedia que se inicia solo o se reproduce en segundo plano.</p>
+            <ul>
+              <li>No actives nunca la reproducción automática.</li>
+              <li>Para una ilustración animada breve y sin sonido, usa una imagen o una <a href="/docs/components/figure/">figura</a>.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Deja que quien lee inicie los controles y asigna un nombre que indique qué se reproduce. Versión abreviada: el marcado completo está en «Copiar el marcado».</figcaption>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Do: player markup"><code>&lt;div class="luz-player" data-type="audio" role="group" aria-label="Episode 12 player"&gt;&#10;  &lt;audio class="luz-player-audio" preload="metadata" controls src="episode-12.mp3"&gt;&lt;/audio&gt;&#10;&lt;/div&gt;</code></pre>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Reproduzcas contenido multimedia automáticamente. El sonido que dura más de 3 segundos debe poder detenerse (WCAG 1.4.2), así que aquí solo se muestra como código.</figcaption>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Don't: player markup"><code>&lt;video autoplay loop src="intro.mp4"&gt;&lt;/video&gt;</code></pre>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Nombra cada reproductor según lo que reproduce: «Reproductor del episodio 12», no «Reproductor de audio».</p>
+            <ul>
+              <li>Añade subtítulos (<code>&lt;track kind="captions"&gt;</code>) y una transcripción a los vídeos con voz. Los subtítulos incluyen los sonidos además de las palabras; los subtítulos traducidos (<code>kind="subtitles"</code>) solo traducen las palabras.</li>
+              <li>Etiqueta cada pista en su propio idioma: «English», «Español».</li>
+              <li>Describe los vídeos sin sonido con <code>aria-label</code> o con texto junto al vídeo.</li>
+              <li>Si el archivo es grande, indica su duración y formato junto al reproductor.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Los controles aparecen sobre la superficie intensa. El control deslizante y la parte reproducida de la barra de búsqueda usan el color de marca; la barra tiene un borde del color del borde del campo, para que se vea toda su longitud.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del reproductor en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Tiempo y estado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>5.4:1</div></td><td data-label="Alto contraste"><div>16.5:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Icono del botón</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>13.5:1</div></td><td data-label="Oscuro"><div>10.9:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Icono del botón al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>6.4:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Botón de subtítulos activado: icono y subrayado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>4.8:1</div></td><td data-label="Oscuro"><div>5.6:1</div></td><td data-label="Alto contraste"><div>12.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Control deslizante de la barra de búsqueda</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>4.8:1</div></td><td data-label="Oscuro"><div>5.6:1</div></td><td data-label="Alto contraste"><div>12.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Parte reproducida frente a la cargada</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-pressed</code></div></td><td data-label="Claro"><div>4.6:1</div></td><td data-label="Oscuro"><div>5.6:1</div></td><td data-label="Alto contraste"><div>12.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Parte reproducida frente a la que aún no se ha cargado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de la barra de búsqueda</div></td><td data-label="Color sobre el fondo"><div><code>--luz-input-border</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>3.2:1</div></td><td data-label="Oscuro"><div>3.0:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto de los subtítulos</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-surface-media</code></div></td><td data-label="Claro"><div>21.0:1</div></td><td data-label="Oscuro"><div>21.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>4.8:1</div></td><td data-label="Oscuro"><div>5.6:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> los botones, los controles deslizantes y el selector de pistas tienen un contorno de 2 px <code>--luz-focus-ring</code>, a 2 px de distancia, como todos los controles de LUZ.</li>
+              <li><strong>No solo color:</strong> los iconos y nombres de reproducir y pausar cambian; el control deslizante indica la posición; cuando se activa el botón de subtítulos, además del color de marca, aparece un subrayado.</li>
+              <li><strong>Selector de pistas:</strong> usa los colores del campo del formulario, de <a href="/docs/components/form/#contrast">Formulario</a>.</li>
+              <li><strong>Área interactiva:</strong> los botones miden 32 px cuadrados.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 25 tokens que lee <code>components/player.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-media"><code>--luz-surface-media</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-surface-pressed"><code>--luz-surface-pressed</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-icon</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

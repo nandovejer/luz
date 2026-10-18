@@ -1,0 +1,193 @@
+<!-- luz:page
+title: Búsqueda
+description: Permite encontrar por su nombre una página, sección o elemento HTML del sitio, mediante un botón de la cabecera.
+source: e639e7b07b38
+reviewed: false
+-->
+    <div class="docs-component" id="p-search">
+          <h2 id="example">Ejemplo</h2>
+          <p>El botón de búsqueda de una cabecera abre el mismo diálogo que aparece en la parte superior de esta página.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <a href="/docs/a-z/" data-luz-search-fallback>A–Z index</a>
+            <button class="luz-search__trigger" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" hidden>
+              <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <span class="luz-search__trigger-label">Search docs…</span>
+              <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+            </button>
+            <p class="docs-demo__note">A second button for the search in this site’s header: it opens the same dialog. Without JavaScript it is a link to the A–Z index.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La búsqueda todavía no se ha probado con un lector de pantalla. Ctrl+K abre esta búsqueda en lugar del cuadro de búsqueda web del navegador; usa la barra de direcciones para buscar en la web.</p>
+          <p>Con <code>site.js</code>, si pulsas Ctrl+K antes de que se haya cargado el script de búsqueda, este se carga y luego abre el diálogo; la espera puede ser algo más larga con una conexión lenta. Con un zoom del 400 %, se desplaza todo el diálogo, así que el campo puede quedar fuera de la vista mientras lees los resultados.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de búsqueda">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>&lt;luz-search&gt;</code> contiene el enlace a tu índice, el botón que lo sustituye y el diálogo. Colócalo donde vaya la búsqueda, normalmente al final de la cabecera: el enlace y el botón comparten el mismo espacio, así que nada se desplaza cuando el botón toma el relevo, y el diálogo cerrado no ocupa espacio.</p>
+            <p>Todos los textos son tuyos: escríbelos en el idioma de la página.</p>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Search markup"><code>&lt;luz-search&gt;
+  &lt;a class=&quot;luz-search__fallback&quot; href=&quot;/a-z/&quot; data-luz-search-fallback&gt;
+    &lt;svg class=&quot;luz-search__trigger-icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+    &lt;span class=&quot;luz-search__fallback-label&quot;&gt;A–Z index&lt;/span&gt;
+  &lt;/a&gt;
+  &lt;button class=&quot;luz-search__trigger luz-search__trigger--compact&quot; type=&quot;button&quot; data-luz-search-open
+          aria-haspopup=&quot;dialog&quot; aria-keyshortcuts=&quot;Control+K Meta+K&quot; hidden&gt;
+    &lt;svg class=&quot;luz-search__trigger-icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+    &lt;span class=&quot;luz-search__trigger-label&quot;&gt;Search docs…&lt;/span&gt;
+    &lt;kbd class=&quot;luz-search__trigger-key&quot; aria-hidden=&quot;true&quot;&gt;Ctrl K&lt;/kbd&gt;
+  &lt;/button&gt;
+  &lt;dialog class=&quot;luz-modal luz-search&quot; aria-labelledby=&quot;search-title&quot;
+          data-luz-search-src=&quot;/search-index.json&quot;
+          data-luz-label-results=&quot;{n} results&quot;
+          data-luz-label-result=&quot;1 result&quot;
+          data-luz-label-capped=&quot;{shown} of {n} results. Type more to narrow.&quot;
+          data-luz-label-none=&quot;No results for “{query}”. Check the spelling or try a shorter word.&quot;
+          data-luz-label-loading=&quot;Loading the search index…&quot;
+          data-luz-label-error=&quot;Search is not available right now.&quot;&gt;
+    &lt;search class=&quot;luz-search__body&quot;&gt;
+      &lt;div class=&quot;luz-search__head&quot;&gt;
+        &lt;h2 class=&quot;luz-search__title&quot; id=&quot;search-title&quot;&gt;&lt;label for=&quot;search-q&quot;&gt;Search the documentation&lt;/label&gt;&lt;/h2&gt;
+        &lt;form method=&quot;dialog&quot;&gt;&lt;button class=&quot;luz-btn luz-btn--ghost luz-search__close&quot; aria-label=&quot;Close search&quot;&gt;
+          &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M6 6l12 12M18 6 6 18&quot;/&gt;&lt;/svg&gt;
+        &lt;/button&gt;&lt;/form&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;luz-search__field&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+        &lt;input class=&quot;luz-input&quot; id=&quot;search-q&quot; type=&quot;text&quot; maxlength=&quot;100&quot; autocomplete=&quot;off&quot;
+               spellcheck=&quot;false&quot; enterkeyhint=&quot;go&quot; autofocus aria-describedby=&quot;search-hint&quot;&gt;
+      &lt;/div&gt;
+      &lt;p class=&quot;luz-field__helper&quot; id=&quot;search-hint&quot;&gt;Results update as you type. Arrow keys move through them.&lt;/p&gt;
+      &lt;p class=&quot;luz-search__status&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+      &lt;div class=&quot;luz-search__results&quot; data-luz-search-results&gt;
+        &lt;div hidden&gt;&lt;h3&gt;Pages&lt;/h3&gt;&lt;ul data-luz-search-list=&quot;pages&quot;&gt;&lt;/ul&gt;&lt;/div&gt;
+        &lt;div hidden&gt;&lt;h3&gt;Sections&lt;/h3&gt;&lt;ul data-luz-search-list=&quot;sections&quot;&gt;&lt;/ul&gt;&lt;/div&gt;
+        &lt;div hidden&gt;&lt;h3&gt;HTML elements&lt;/h3&gt;&lt;ul data-luz-search-list=&quot;elements&quot;&gt;&lt;/ul&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p class=&quot;luz-search__foot&quot;&gt;Can’t find it? &lt;a href=&quot;/a-z/&quot;&gt;Browse the A–Z index&lt;/a&gt;&lt;/p&gt;
+    &lt;/search&gt;
+  &lt;/dialog&gt;
+&lt;/luz-search&gt;
+
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.1.0/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Todas las opciones se indican en el marcado: son clases o atributos.</p>
+            <ul>
+              <li><code>.luz-search__trigger--compact</code>: a 768 px o menos, el activador solo muestra la lupa, en un espacio de 44 por 44 px, igual que el enlace contiguo; sus nombres se mantienen, aunque recortados, no se eliminan. Añade a ambos un <code>&lt;svg class=&quot;luz-search__trigger-icon&quot;&gt;</code>.</li>
+              <li>Se puede usar más de un activador: todos los <code>[data-luz-search-open]</code> de la página abren el diálogo, estén dentro del elemento o no (este sitio tiene uno en la cabecera y otro en la portada de la documentación). Los que estén fuera permanecen ocultos hasta que funcione la búsqueda y no ocupan espacio: colócalos donde su aparición no desplace nada, por ejemplo, al final de una sección.</li>
+              <li>Un elemento con <code>data-luz-search-show=&quot;idle&quot;</code> dentro de <code>[data-luz-search-results]</code> se muestra mientras el campo está vacío, por ejemplo, con una lista breve de páginas populares; uno con <code>data-luz-search-show=&quot;none&quot;</code> se muestra cuando no hay coincidencias.</li>
+              <li>Omite <code>[data-luz-search-list]</code> para no incluir ese grupo.</li>
+              <li>Los textos que escribe el script son los atributos <code>data-luz-label-*</code> del diálogo: <code>results</code>, <code>result</code>, <code>capped</code>, <code>none</code>, <code>loading</code> y <code>error</code>, con <code>{n}</code>, <code>{shown}</code> y <code>{query}</code>. <code>data-luz-label-idle</code> es el texto que muestra el estado mientras el campo está vacío, por ejemplo, «Escribe para buscar en la documentación». Si falta una etiqueta, no se escribe nada.</li>
+            </ul>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Carga <code>site.min.js</code> como módulo. No carga nada en páginas sin <code>&lt;luz-search&gt;</code>.</p>
+            <p>En una página que sí lo tenga, carga el archivo de búsqueda, <code>search.min.js</code>, cuando el lector pasa el puntero por primera vez, mueve el foco al elemento o pulsa <kbd>Ctrl</kbd> + <kbd>K</kbd>, o cuando el navegador está inactivo, lo que ocurra antes. Ese archivo define <code>&lt;luz-search&gt;</code>, un elemento personalizado en el DOM ligero (sin Shadow DOM), y cada instancia de la página se conecta por sí misma.</p>
+            <ul>
+              <li>El botón ocupa el mismo espacio que el enlace, así que nada se desplaza. Si el enlace tiene el foco del teclado o el puntero está pulsado en ese momento, el cambio espera a que el lector salga del enlace, lo siga o suelte el puntero: el foco nunca se mueve.</li>
+              <li>El botón abre el <code>&lt;dialog&gt;</code> nativo con <code>showModal()</code>: el navegador mantiene el foco dentro, lo cierra con Escape y devuelve el foco a su origen.</li>
+              <li>La primera vez que se abre el diálogo, el script lee el índice.</li>
+              <li>Si no se puede cargar <code>search.min.js</code>, la página conserva el comportamiento sin JavaScript: el enlace funciona y el botón permanece oculto.</li>
+              <li>Si un router o framework añade un <code>&lt;luz-search&gt;</code> después de cargar la página, <code>site.min.js</code> no lo detecta: importa <code>@luz-ds/site/search</code> (o <code>search.min.js</code>) a mano y se conectará al elemento cuando este se inserte. Aunque haya dos copias del archivo en una página, el elemento solo se define una vez.</li>
+            </ul>
+            <p>El índice es un archivo JSON de la versión 1. Cada lista contiene <code>[text, url, meta, lang]</code>; <code>meta</code> (que se muestra atenuado después del texto) y <code>lang</code> son opcionales, y las URL son relativas al archivo:</p>
+            <pre class="luz-code-block" data-lang="json" tabindex="0" role="region" aria-label="Search index format"><code>{
+  &quot;version&quot;: 1,
+  &quot;pages&quot;: [[&quot;Button&quot;, &quot;components/button/&quot;, &quot;Components&quot;]],
+  &quot;sections&quot;: [[&quot;When to use&quot;, &quot;components/button/#when&quot;, &quot;Button › Design&quot;]],
+  &quot;elements&quot;: [[&quot;&lt;table&gt; element, Tables&quot;, &quot;html/tables/#el-table&quot;]]
+}</code></pre>
+            <p>Un resultado coincide cuando el texto y los metadatos contienen todas las palabras escritas, sin distinguir mayúsculas, minúsculas ni acentos; los que empiezan por esas palabras aparecen primero. Cada grupo muestra un máximo de 8 resultados y la línea de estado indica cuántos hay.</p>
+            <p>Qué acepta el componente para que un índice generado por un CMS no pueda dañar la página:</p>
+            <ul>
+              <li>El JSON solo puede proceder del mismo origen de la página, por http o https; si hay una redirección, la solicitud falla. Tu Content-Security-Policy necesita <code>connect-src 'self'</code>; para usar un índice de otro sitio, aloja una copia en el tuyo. El navegador lo almacena en caché como cualquier archivo.</li>
+              <li>Los enlaces solo pueden ser URL <code>http:</code> y <code>https:</code>; se omite cualquier otro elemento. El texto se escribe como texto, nunca como HTML.</li>
+              <li>Límites: 1 000 000 de caracteres JSON, 10 000 resultados, 300 caracteres por texto, 8 palabras por búsqueda y 100 caracteres en el campo. Se ignoran los campos desconocidos. Si el índice no es de la versión 1, se muestra el mensaje de error.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>El botón permanece oculto, no recibe el foco ni se lee; en su lugar se muestra el enlace. Crea una página que enumere todas las páginas por nombre, como un índice alfabético. El diálogo nunca se abre.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Todo funciona con el teclado mediante un atajo.</p>
+            <ul>
+              <li><kbd>Ctrl</kbd> + <kbd>K</kbd> o <kbd>⌘</kbd> + <kbd>K</kbd> abre la búsqueda desde cualquier lugar de la página, excepto mientras escribes en un área de texto o una región editable, o mientras haya otro diálogo abierto. Si lo pulsas de nuevo, selecciona el texto del campo. Si lo pulsas antes de que se cargue <code>search.min.js</code>, lo carga y luego abre el diálogo; en una página sin <code>&lt;luz-search&gt;</code>, el navegador conserva el atajo.</li>
+              <li>La flecha abajo pasa del campo al primer resultado; las flechas arriba y abajo recorren los resultados, incluso entre grupos; Inicio y Fin van al primero y al último. La flecha arriba en el primer resultado vuelve al campo.</li>
+              <li>Enter en el campo abre el primer resultado; en un resultado, sigue el enlace. Si escribes mientras tienes un resultado enfocado, vuelves al campo.</li>
+              <li>Escape o el botón de cierre (un icono × llamado <em>Cerrar búsqueda</em> mediante su <code>aria-label</code>) cierra el diálogo, sea cual sea el contenido del campo, y devuelve el foco a su posición anterior. Por eso el campo es <code>type=&quot;text&quot;</code>: en uno <code>type=&quot;search&quot;</code>, Chrome y Safari usan la primera pulsación de Escape para borrar el texto. Si un resultado lleva a la misma página, el diálogo se cierra y el foco pasa al encabezado de esa sección. Si al abrirlo nada tenía el foco (Ctrl+K en una página recién cargada o un clic en un navegador que no enfoca botones), el script lo pasa al botón que abrió el diálogo o al propio botón de búsqueda tras Ctrl+K, para que la siguiente pulsación de Tab continúe desde la cabecera.</li>
+              <li>El encabezado da nombre al diálogo y etiqueta el campo. El recuento se anuncia cuando el lector deja de escribir (<code>role=&quot;status&quot;</code>). Los resultados son enlaces en listas bajo encabezados, no un combobox.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa la búsqueda en sitios con más de unas pocas páginas, donde el lector pueda buscar un componente, un ajuste o el título de un artículo por su nombre.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses la búsqueda en lugar de la navegación: mantén el menú y una página de índice.</p>
+            <ul>
+              <li>La búsqueda requiere escribir y conocer el nombre, que quizá el lector desconozca.</li>
+              <li>Solo encuentra coincidencias en títulos y encabezados: no puede buscar dentro de textos largos ni en varios sitios.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Explica qué se busca con una etiqueta breve que quepa en todos los idiomas.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <span class="luz-search__trigger"><svg class="luz-search__trigger-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="luz-search__trigger-label">Search docs…</span><kbd class="luz-search__trigger-key">Ctrl K</kbd></span>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Dejes solo la lupa en una pantalla ancha: quien la ve tiene que adivinar qué busca y desaparece la pista del atajo. Reserva el botón con solo el icono para pantallas estrechas.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <span class="luz-search__trigger"><svg class="luz-search__trigger-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Todo el texto está en el marcado, así que puedes redactarlo en el idioma de la página.</p>
+            <ul>
+              <li>El activador indica qué se busca: «Buscar en la documentación…». Mantén el texto breve en todos los idiomas («Buscar…») en lugar de recortarlo.</li>
+              <li>Añade la página a los metadatos de los resultados de secciones: «Cuándo usarlo» con «Botón › Diseño», para que cada resultado se entienda por sí mismo y se encuentre por el nombre de la página.</li>
+              <li>Indica qué probar a continuación en la etiqueta <code>none</code>, que la línea de estado anuncia después de la consulta: «Comprueba la ortografía o prueba con una palabra más corta».</li>
+              <li>Haz que el enlace alternativo y la línea debajo de los resultados lleven a la misma página de índice.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto del botón usa el color de texto secundario sobre el color del campo, no el gris de un marcador de posición; los resultados aparecen sobre la superficie del diálogo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la búsqueda en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto del activador</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto del activador, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde del activador</div></td><td data-label="Color sobre el fondo"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3.7:1</div></td><td data-label="Oscuro"><div>4.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título del resultado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título del resultado, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>6.4:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Encabezado del grupo, página del resultado, recuento e indicación</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Página del resultado, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>6.2:1</div></td><td data-label="Alto contraste"><div>18.4:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Lupa del campo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Icono de cierre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Icono de cierre, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el activador tiene un contorno <code>--luz-focus-ring</code> de 2 px, a 2 px de distancia; el resultado enfocado tiene el mismo anillo que cualquier enlace.</li>
+              <li><strong>Bordes:</strong> en colores forzados, el diálogo conserva un borde real y la lupa y el icono de cierre se dibujan con el color de texto del sistema.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 22 tokens que lee <code>components/search.css</code> de site, agrupados por familia. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-lg</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

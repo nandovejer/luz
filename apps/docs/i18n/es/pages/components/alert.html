@@ -1,0 +1,169 @@
+<!-- luz:page
+title: Alerta
+description: Informa al lector sobre la página o una tarea: comunica información, un éxito, un aviso o un error.
+keywords: llamada, cuadro de mensaje
+source: c7ef349fad26
+reviewed: false
+-->
+    <div class="docs-component" id="c-alert">
+          <h2 id="example">Ejemplo</h2>
+          <p>Los cuatro tipos de alerta: información, éxito, aviso y error.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage docs-demo__stage--flush">
+            <div class="luz-alert luz-alert--info">
+              <div class="luz-alert__icon" aria-hidden="true">i</div>
+              <div>
+                <div class="luz-alert__title">Information</div>
+                <div class="luz-alert__body">A new version is available.</div>
+              </div>
+            </div>
+            <div class="luz-alert luz-alert--success">
+              <div class="luz-alert__icon" aria-hidden="true">✓</div>
+              <div>
+                <div class="luz-alert__title">Success</div>
+                <div class="luz-alert__body">Deployment completed.</div>
+              </div>
+            </div>
+            <div class="luz-alert luz-alert--warning">
+              <div class="luz-alert__icon" aria-hidden="true">!</div>
+              <div>
+                <div class="luz-alert__title">Warning</div>
+                <div class="luz-alert__body">Storage is almost full.</div>
+              </div>
+            </div>
+            <div class="luz-alert luz-alert--error">
+              <div class="luz-alert__icon" aria-hidden="true">×</div>
+              <div>
+                <div class="luz-alert__title">Error</div>
+                <div class="luz-alert__body">The build failed.</div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Ninguno conocido.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de alerta">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-alert" aria-label="Copy the warning alert markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Warning alert markup"><code id="code-alert">&lt;div class=&quot;luz-alert luz-alert--warning&quot;&gt;
+  &lt;div class=&quot;luz-alert__icon&quot; aria-hidden=&quot;true&quot;&gt;!&lt;/div&gt;
+  &lt;div&gt;
+    &lt;div class=&quot;luz-alert__title&quot;&gt;Warning&lt;/div&gt;
+    &lt;div class=&quot;luz-alert__body&quot;&gt;Storage is almost full. Delete old builds to free space.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Una clase modificadora define el estado. Indica también el estado en el título: el color es solo una pista adicional.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Variantes de alerta" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Uso</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-alert--info</code></div></td><td data-label="Uso"><div>Información útil</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-alert--success</code></div></td><td data-label="Uso"><div>Una tarea que ha terminado correctamente</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-alert--warning</code></div></td><td data-label="Uso"><div>Algo que puede salir mal pronto</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-alert--error</code></div></td><td data-label="Uso"><div>Algo que ha salido mal y requiere actuar</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un bloque con un icono, un título y un cuerpo, al que da estilo <code>components/alert.css</code>. No necesita JavaScript.</p>
+            <ul>
+              <li>El icono es decorativo (<code>aria-hidden="true"</code>): el título ya indica el estado.</li>
+              <li>El borde inicial y el título usan el color del estado; el cuerpo mantiene el color de texto secundario.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: la alerta es HTML y CSS estáticos.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Una alerta no es interactiva ni recibe el foco.</p>
+            <ul>
+              <li>Una alerta que ya está en la página cuando se carga no necesita role.</li>
+              <li>Una alerta que aparece tras una acción debe anunciarse: insértala en un contenedor que ya esté en la página con <code>role="status"</code>, o con <code>role="alert"</code> si es un error que requiere atención inmediata.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una alerta para comunicar al lector un estado importante de esta página.</p>
+            <ul>
+              <li>Información que necesita antes de actuar: «Este proyecto está archivado».</li>
+              <li>El resultado de una tarea: éxito, aviso o error.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses una alerta para un mensaje que deba detener al lector ni para uno que pueda pasar por alto sin consecuencias.</p>
+            <ul>
+              <li>Para una decisión que el lector debe tomar antes de continuar, usa un <a href="/docs/components/modal/">diálogo modal</a>.</li>
+              <li>Para una confirmación breve que no requiere actuar, usa un <a href="/docs/components/toast/">aviso emergente</a>.</li>
+              <li>Para un error en un campo, ponlo junto al campo (<a href="/docs/components/form/">campos de formulario</a>).</li>
+              <li>Si hay más de dos alertas a la vez, combínalas; de lo contrario, el lector dejará de leerlas.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Explica qué ha pasado y qué hacer a continuación: «Queda poco espacio. Elimina compilaciones antiguas o cambia de plan».</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-alert luz-alert--warning"><div class="luz-alert__icon">!</div><div><div class="luz-alert__title">Storage almost full</div><div class="luz-alert__body">Delete old builds or change your plan.</div></div></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> «Algo ha salido mal» no indica qué ha fallado ni qué puede hacer el lector.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-alert luz-alert--error"><div class="luz-alert__icon">×</div><div><div class="luz-alert__title">Error</div><div class="luz-alert__body">Something went wrong.</div></div></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Explica qué ha pasado y qué hacer a continuación.</p>
+            <ul>
+              <li>El título indica el estado en una o dos palabras: «Aviso», «Error de compilación».</li>
+              <li>El cuerpo consta de una o dos frases breves: «La compilación ha fallado. Comprueba el registro y vuelve a ejecutarla».</li>
+              <li>No dependas solo del color o del icono.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Cada título usa el color de su estado sobre un fondo tintado; el texto del cuerpo es igual en todos los fondos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la alerta en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Título, información</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-info</code> on <code>--luz-color-info-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>9.0:1</div></td><td data-label="Oscuro"><div>9.7:1</div></td><td data-label="Alto contraste"><div>13.6:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título, éxito</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-success</code> on <code>--luz-color-success-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.4:1</div></td><td data-label="Oscuro"><div>10.1:1</div></td><td data-label="Alto contraste"><div>8.9:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título, aviso</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-warning</code> on <code>--luz-color-warning-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.8:1</div></td><td data-label="Oscuro"><div>9.0:1</div></td><td data-label="Alto contraste"><div>8.9:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título, error</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> on <code>--luz-color-danger-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.4:1</div></td><td data-label="Oscuro"><div>10.2:1</div></td><td data-label="Alto contraste"><div>8.9:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cuerpo, información</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-color-info-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.3:1</div></td><td data-label="Oscuro"><div>6.0:1</div></td><td data-label="Alto contraste"><div>18.5:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cuerpo, éxito</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-color-success-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.3:1</div></td><td data-label="Oscuro"><div>6.0:1</div></td><td data-label="Alto contraste"><div>18.6:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cuerpo, aviso</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-color-warning-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.3:1</div></td><td data-label="Oscuro"><div>5.7:1</div></td><td data-label="Alto contraste"><div>18.4:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cuerpo, error</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-color-danger-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>6.5:1</div></td><td data-label="Alto contraste"><div>18.4:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> la alerta no recibe el foco. Los enlaces y botones que contiene conservan su propio anillo de foco.</li>
+              <li><strong>No depende solo del color:</strong> el título indica el estado y el icono tiene una forma propia. El borde inicial es un detalle decorativo.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 18 tokens que lee <code>components/alert.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-color-danger-bg"><code>--luz-color-danger-bg</code></a>, <a href="/docs/tokens/color/#luz-color-info"><code>--luz-color-info</code></a>, <a href="/docs/tokens/color/#luz-color-info-bg"><code>--luz-color-info-bg</code></a>, <a href="/docs/tokens/color/#luz-color-success"><code>--luz-color-success</code></a>, <a href="/docs/tokens/color/#luz-color-success-bg"><code>--luz-color-success-bg</code></a>, <a href="/docs/tokens/color/#luz-color-warning"><code>--luz-color-warning</code></a>, <a href="/docs/tokens/color/#luz-color-warning-accent"><code>--luz-color-warning-accent</code></a>, <a href="/docs/tokens/color/#luz-color-warning-bg"><code>--luz-color-warning-bg</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-base</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

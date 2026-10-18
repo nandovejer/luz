@@ -1,0 +1,201 @@
+<!-- luz:page
+title: Hero
+description: Abre una página de inicio o landing con un título, una frase, las acciones principales y una imagen opcional.
+keywords: jumbotron, pantalla de bienvenida, introducción
+source: 6f2e31229084
+reviewed: false
+-->
+    <div class="docs-component" id="p-landing-hero">
+          <h2 id="example">Ejemplo</h2>
+          <p>El hero de la página de un evento, con su fecha, título, entradilla y dos acciones.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage" id="demo-hero">
+            <section class="luz-landing-hero o-grid o-grid--split" aria-labelledby="demo-hero-title">
+              <div class="luz-landing-hero__copy">
+                <p class="luz-landing-hero__eyebrow">12 and 13 May 2027 · Seville</p>
+                <p class="luz-landing-hero__title" id="demo-hero-title">Acme Summit 2027</p>
+                <p class="luz-landing-hero__lead">Two days of talks and workshops for retail teams.</p>
+                <div class="o-actions">
+                  <a class="luz-btn luz-btn--primary" href="#markup">Register</a>
+                  <a class="luz-btn luz-btn--outline" href="#variants">See the options</a>
+                </div>
+              </div>
+              <div class="luz-landing-hero__media">
+                <div class="luz-image luz-image--4x3"></div>
+              </div>
+            </section>
+          </div>
+          <p class="docs-demo__note">This column is narrower than 51rem, so the picture goes under the text; on a page of full width it sits beside it. The frame is empty, so it shows its flat surface, and the title is a paragraph: this page already has its <code class="luz-code-inline">&lt;h1&gt;</code>.</p>
+          <div class="docs-demo__stage" id="demo-hero-centered">
+            <section class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split" aria-labelledby="demo-hero-centered-title">
+              <div class="luz-landing-hero__copy">
+                <p class="luz-landing-hero__eyebrow">New in version 2</p>
+                <p class="luz-landing-hero__title" id="demo-hero-centered-title">Stock counts that <em>keep up</em> with the shop</p>
+                <p class="luz-landing-hero__lead">Acme Stock updates every shelf as it sells, so you reorder before it runs out.</p>
+                <div class="o-actions">
+                  <a class="luz-btn luz-btn--primary" href="#markup">Start free trial</a>
+                  <a class="luz-btn luz-btn--outline" href="#variants">Book a demo</a>
+                </div>
+              </div>
+            </section>
+          </div>
+          <p class="docs-demo__note">The same hero with <code class="luz-code-inline">luz-landing-hero--centered</code>: one column at any width, the text centred. A picture that bleeds cannot be shown in this column, as it runs to the edges of the window: see <a href="#variants">Variants and options</a>.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del hero">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-hero" aria-label="Copy the hero markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Hero markup"><code id="code-hero">&lt;section class=&quot;luz-landing-hero o-grid o-grid--split&quot; aria-labelledby=&quot;hero-title&quot;&gt;
+  &lt;div class=&quot;luz-landing-hero__copy&quot;&gt;
+    &lt;p class=&quot;luz-landing-hero__eyebrow&quot;&gt;12 and 13 May 2027 · Seville&lt;/p&gt;
+    &lt;h1 class=&quot;luz-landing-hero__title&quot; id=&quot;hero-title&quot;&gt;Acme Summit 2027&lt;/h1&gt;
+    &lt;p class=&quot;luz-landing-hero__lead&quot;&gt;Two days of talks and workshops for retail teams.&lt;/p&gt;
+    &lt;div class=&quot;o-actions&quot;&gt;
+      &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;#register&quot;&gt;Register&lt;/a&gt;
+      &lt;a class=&quot;luz-btn luz-btn--outline&quot; href=&quot;#programme&quot;&gt;See the programme&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-landing-hero__media&quot;&gt;
+    &lt;div class=&quot;luz-image luz-image--4x3&quot;&gt;
+      &lt;img src=&quot;/img/venue-1280.jpg&quot; width=&quot;1280&quot; height=&quot;960&quot; alt=&quot;The main hall, full, before the opening talk&quot; fetchpriority=&quot;high&quot; decoding=&quot;async&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Dos modificadores, <code>--centered</code> y <code>__media--bleed</code>, como en la <a href="/docs/landing/templates/#product-page">plantilla de página de producto</a>. La etiqueta superior, la entradilla y la imagen son opcionales; sin imagen, el texto ocupa todo el ancho.</p>
+            <p>El bloque es una clase de landing sobre la cuadrícula dividida de core.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Partes del hero" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-hero</code></div></td><td data-label="Qué hace"><div>En un <code>&lt;section&gt;</code> con <code>.o-grid.o-grid--split</code> de core: espacio encima, separación entre elementos y columnas de al menos 24 rem (<code>--luz-grid-min</code>); cuando cada una dispone de 24 rem, son dos columnas iguales; si no, una debajo de otra.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-hero--centered</code></div></td><td data-label="Qué hace"><div>Una columna a cualquier ancho: el texto mide como máximo 48 rem, está centrado y también lo están sus acciones; la imagen queda debajo.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-hero__copy</code></div></td><td data-label="Qué hace"><div>El texto y las acciones, primero en el código fuente.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-hero__eyebrow</code></div></td><td data-label="Qué hace"><div>Una línea breve sobre el título, en versalitas pequeñas con tipografía mono; en árabe se usa sans.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-hero__title</code></div></td><td data-label="Qué hace"><div>El título: tipografía de encabezado, tamaño 4xl y líneas equilibradas; 3xl por debajo de 1024 px y 2xl a 640 px o menos.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-hero__lead</code></div></td><td data-label="Qué hace"><div>Una o dos frases de hasta 70 caracteres de ancho, en color de texto secundario; tamaño xl, lg por debajo de 1024 px y base a 640 px o menos.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-hero__media</code></div></td><td data-label="Qué hace"><div>La segunda columna, que contiene el <a href="/docs/components/image/">marco de imagen</a> de core.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-hero__media--bleed</code></div></td><td data-label="Qué hace"><div>En un hero centrado, la imagen va de un extremo al otro de la ventana, más allá de los márgenes interiores de la página, sin desplazamiento lateral. El marco tiene una proporción de 16:9, salvo que indiques otra.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un <code>&lt;section&gt;</code> con el nombre de su título, maquetado con la cuadrícula dividida de core y con estilos de <code>@luz-ds/landing</code>. No usa JavaScript y <code>@luz-ds/site</code> es opcional.</p>
+            <ul>
+              <li>Las columnas son la <a href="/docs/components/layout/#objects-actions">cuadrícula dividida</a> intrínseca de core: dependen del espacio disponible para el hero, no del ancho de la ventana. Un hero tan ancho como la página se divide a partir de unos 900 px de ventana; en una columna estrecha o con texto más grande permanece en una sola columna.</li>
+              <li>El orden es el del código fuente: el texto va primero, a la izquierda en una página de izquierda a derecha y a la derecha en una de derecha a izquierda.</li>
+              <li>Las acciones son el <a href="/docs/components/layout/#objects-actions">grupo de acciones</a> de core, <code>.o-actions</code>: a 640 px o menos, los botones se apilan y ocupan todo el ancho.</li>
+              <li>El desbordamiento mide la ventana sin una unidad de viewport, que cuenta la barra de desplazamiento y mueve la página lateralmente: la raíz de la página se convierte en un contenedor de tamaño (<code>container-type: inline-size</code>). La columna debe centrarse respecto a la ventana, como hace <code>.o-container</code> de core.</li>
+              <li>El <code>em</code> de un título toma el color de <code>--luz-landing-title-accent</code>, que por defecto es el del título.</li>
+              <li>Las clases solo cambian el aspecto. El título debe ser el <code>&lt;h1&gt;</code> de la página.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el hero es HTML y CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>El hero no tiene interacción propia: Tab recorre sus enlaces en el orden del código fuente.</p>
+            <ul>
+              <li><code>aria-labelledby</code> en <code>&lt;section&gt;</code> apunta al título, así que el hero es una región con el nombre de la página.</li>
+              <li>Déjalo al principio de <code>&lt;main&gt;</code> para que el enlace para saltar al contenido llegue justo antes.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un hero al principio de una página de inicio, una landing o una portada para explicar en pocas palabras de qué trata el sitio o el evento y qué hacer primero.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses en una página a la que se llega para leer o completar una tarea: utiliza un <code>&lt;h1&gt;</code> sencillo y una entradilla, que ocupan menos espacio.</p>
+            <ul>
+              <li>Un hero por página y solo al principio.</li>
+              <li>No lo uses para un mensaje en medio de la página: utiliza una <a href="/docs/landing/section/">sección</a> y, si tiene que destacar, una <a href="/docs/components/band/">banda</a> de core.</li>
+            </ul>
+            <h3 id="do-dont">Buenas y malas prácticas</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Una acción principal y otra secundaria con un botón de contorno.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-landing-hero o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Acme Summit 2027</p><p class="luz-landing-hero__lead">Two days of talks for retail teams.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Register</span><span class="luz-btn luz-btn--outline">See the programme</span></div></div></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Pongas tres botones principales: quien lee no sabrá cuál debe elegir primero.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-landing-hero o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Acme Summit 2027</p><p class="luz-landing-hero__lead">Two days of talks for retail teams.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Register</span><span class="luz-btn luz-btn--primary">Programme</span><span class="luz-btn luz-btn--primary">Venue</span></div></div></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Un título que nombre el tema y una entradilla que explique qué aporta a quien lee.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-landing-hero o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Acme Summit 2027</p><p class="luz-landing-hero__lead">Two days of talks and workshops for retail teams.</p></div></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Uses un eslogan como título ni una entradilla que lo repita sin explicar de qué se trata.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-landing-hero o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">The future starts here</p><p class="luz-landing-hero__lead">Be part of the future, starting today.</p></div></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Centra un título breve y una frase, con una o dos acciones.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Stock counts that keep up</p><p class="luz-landing-hero__lead">Reorder before a shelf runs out.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Start free trial</span></div></div></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Centres un párrafo largo: sin un borde inicial común, la vista tiene que volver a buscar cada línea.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Stock counts that keep up</p><p class="luz-landing-hero__lead">Acme Stock reads every sale as it happens, compares it with what is on the shelf and with what the supplier can deliver this week, and then suggests an order for each shop, which you can change before it is sent.</p></div></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Redacción del contenido</h3>
+            <p>El título explica de qué trata el sitio o el evento, en estilo de frase y con menos de diez palabras.</p>
+            <ul>
+              <li>La etiqueta superior es un dato que hace falta conocer enseguida (una fecha y un lugar, el nombre de un producto), no un eslogan. Omítela si no la necesitas.</li>
+              <li>La entradilla tiene una o dos frases breves: explica qué obtiene quien lee.</li>
+              <li>Los botones empiezan con un verbo e indican adónde llevan: «Inscríbete», «Ver el programa».</li>
+              <li>El <code>alt</code> de la imagen indica qué muestra, o queda vacío si es solo decorativa. Es lo primero de la página: no uses <code>loading="lazy"</code>.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El título usa el color de texto principal y la etiqueta superior y la entradilla, el secundario, sobre la página. Los botones son de core.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del hero en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Etiqueta superior</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Entradilla</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo, redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el hero no recibe el foco; sus botones conservan el anillo de foco del <a href="/docs/components/button/">botón</a>.</li>
+              <li><strong>Acento:</strong> el <code>em</code> de un título tiene el color del título, salvo que definas <code>--luz-landing-title-accent</code>. El color es tuyo: comprueba el contraste con la superficie de la página en todos los modos que ofrezcas; el texto necesita 4,5:1.</li>
+              <li>No pongas el texto sobre la imagen: el contraste dependería de ella y no hay ningún token que lo controle.</li>
+            </ul>
+            <h3 id="tokens">Tokens que utiliza</h3>
+            <p>Los 19 tokens que leen, por familia, las reglas de <code>.luz-landing-hero</code> de landing en <code>components/hero.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-3xl</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-2xl</code>, <code>--luz-text-3xl</code>, <code>--luz-text-4xl</code>, <code>--luz-text-base</code>, <code>--luz-text-lg</code>, <code>--luz-text-xl</code>, <code>--luz-text-xs</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

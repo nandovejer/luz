@@ -1,0 +1,122 @@
+<!-- luz:page
+title: Metadatos de página
+description: Informa a navegadores, buscadores y scripts sobre la página. Quien la visita no ve estos elementos, así que las tarjetas muestran solo el marcado.
+source: 4e5788216bfe
+reviewed: false
+-->
+    <div class="docs-block elements-section" id="cat-metadata" data-category="metadata">
+        <p class="elements-section__lead">Informa a navegadores, buscadores y scripts sobre la página. Quien la visita no ve estos elementos, así que las tarjetas muestran solo el marcado.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-base" data-element="base" aria-labelledby="el-base-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-base-title"><code>&lt;base&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/base">MDN<span class="u-sr-only"> referencia del elemento base</span></a>
+          </div>
+          <p class="elements-card__desc">Cambia la base de todas las URL relativas de la página y puede establecer un destino predeterminado para los enlaces. Usa como máximo uno y colócalo antes de cualquier etiqueta que contenga una URL.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-base" aria-label="Copy the base markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="base markup"><code id="code-base">&lt;base href=&quot;https://example.com/app/&quot; target=&quot;_blank&quot;&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador. También reescribe los enlaces solo con fragmento, como href="#top", así que úsalo con cuidado.</p>
+        </article>
+
+        <article class="elements-card" id="el-head" data-element="head" aria-labelledby="el-head-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-head-title"><code>&lt;head&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/head">MDN<span class="u-sr-only"> referencia del elemento head</span></a>
+          </div>
+          <p class="elements-card__desc">La parte de la página que quien la visita nunca ve: el título, el juego de caracteres, las hojas de estilos, los scripts y otros ajustes del navegador.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-head" aria-label="Copy the head markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="head markup"><code id="code-head">&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;My page&lt;/title&gt;
+&lt;/head&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+
+        <article class="elements-card" id="el-link" data-element="link" aria-labelledby="el-link-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-link-title"><code>&lt;link&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/link">MDN<span class="u-sr-only"> referencia del elemento link</span></a>
+          </div>
+          <p class="elements-card__desc">Indica al navegador un archivo que necesita la página, normalmente una hoja de estilos, pero también iconos y recursos precargados. Carga primero tokens, luego core y, por último, site.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-link" aria-label="Copy the link markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="link markup"><code id="code-link">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css&quot;&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+
+        <article class="elements-card" id="el-meta" data-element="meta" aria-labelledby="el-meta-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-meta-title"><code>&lt;meta&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta">MDN<span class="u-sr-only"> referencia del elemento meta</span></a>
+          </div>
+          <p class="elements-card__desc">Ajustes e información para navegadores y buscadores que no tienen una etiqueta propia: juego de caracteres, ventana gráfica, descripción y esquema de color.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-meta" aria-label="Copy the meta markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="meta markup"><code id="code-meta">&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;meta name=&quot;description&quot; content=&quot;A vanilla design system in plain CSS.&quot;&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+
+        <article class="elements-card" id="el-style" data-element="style" aria-labelledby="el-style-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-style-title"><code>&lt;style&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/style">MDN<span class="u-sr-only"> referencia del elemento style</span></a>
+          </div>
+          <p class="elements-card__desc">CSS escrito directamente en la página. Es mejor enlazar una hoja de estilos y reservar esto para unas pocas líneas de CSS crítico o generado.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-style" aria-label="Copy the style markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="style markup"><code id="code-style">&lt;style&gt;
+  .banner { padding: var(--luz-space-md); }
+&lt;/style&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+
+        <article class="elements-card" id="el-title" data-element="title" aria-labelledby="el-title-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-title-title"><code>&lt;title&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/title">MDN<span class="u-sr-only"> referencia del elemento title</span></a>
+          </div>
+          <p class="elements-card__desc">El nombre de la página. Los navegadores lo muestran en la pestaña, los marcadores y los resultados de búsqueda lo usan, y los lectores de pantalla lo anuncian primero.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-title" aria-label="Copy the title markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="title markup"><code id="code-title">&lt;title&gt;HTML elements: LUZ Design System&lt;/title&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+        </div>
+      
+    </div>

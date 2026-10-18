@@ -1,0 +1,146 @@
+<!-- luz:page
+title: Franja
+description: Aplica un tono a un bloque de la página de lado a lado, mientras su contenido conserva el ancho de columna.
+source: 11b721855f41
+reviewed: false
+-->
+    <div class="docs-component" id="c-band">
+          <h2 id="example">Ejemplo</h2>
+          <p>Una franja que indica a los visitantes cuándo termina el plazo de inscripción, con un tono que llega hasta los bordes del marco.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <section class="o-stack luz-band" aria-labelledby="band-demo-title">
+              <h2 id="band-demo-title">Registration closes on 30 April</h2>
+              <p>The hall holds 400 people, and the Two days ticket sold out last year.</p>
+              <div class="o-actions">
+                <a class="luz-btn luz-btn--primary" href="#band-demo-title">Register now</a>
+              </div>
+            </section>
+            <p class="docs-demo__note">The tint runs to the edges of this frame; in a page, to the edges of the window. The content keeps the column.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La franja tiene tres problemas, todos relacionados con la forma en que se dibuja el tono.</p>
+          <ul>
+            <li><strong>Se recorta la información sobre herramientas que sobresale por arriba.</strong> La franja recorta cualquier elemento que sobresalga por arriba o por abajo. Una información sobre herramientas CSS de un control situado al principio de la franja se recorta con texto al 200 % o más. Empieza la franja con un encabezado y no pongas información sobre herramientas en el primer control. Los menús desplegables y otros popovers no se recortan.</li>
+            <li><strong>Botones de contorno y fantasma.</strong> Su color al pasar el puntero es el mismo tono de la franja, así que no se aprecia ningún cambio. La etiqueta y el contorno siguen identificándolos. Usa un botón principal y uno de contorno para ofrecer una alternativa.</li>
+            <li><strong>Colores forzados.</strong> Se elimina el tono, de modo que la franja queda compuesta por el encabezado, el texto y los botones entre dos líneas finas del color de texto del sistema.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de franja">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-band" aria-label="Copy the band markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Band markup"><code id="code-band">&lt;main id=&quot;main-content&quot; class=&quot;o-container o-stack&quot;&gt;
+  &lt;!-- other sections --&gt;
+  &lt;section class=&quot;o-stack luz-band&quot; aria-labelledby=&quot;last-seats-title&quot;&gt;
+    &lt;h2 id=&quot;last-seats-title&quot;&gt;Registration closes on 30 April&lt;/h2&gt;
+    &lt;p&gt;The hall holds 400 people, and the Two days ticket sold out last year.&lt;/p&gt;
+    &lt;div class=&quot;o-actions&quot;&gt;
+      &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;/register/&quot;&gt;Register now&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/main&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay variantes: una clase que puedes aplicar a cualquier bloque. El diseño interior depende de ti: <code>.o-stack</code> distribuye el espacio entre sus elementos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clase de franja" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-band</code></div></td><td data-label="Efecto"><div>El bloque usa el tono <code>--luz-brand-subtle</code> de lado a lado de la página, con 48 px (<code>--luz-space-2xl</code>) por encima y por debajo del contenido. El contenido conserva el ancho de columna de la página</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>@luz-ds/core</code>. No necesita JavaScript.</p>
+            <ul>
+              <li>La franja se mantiene dentro de la columna de la página, por lo que el texto conserva el borde inicial de la columna. El tono se dibuja con un <code>box-shadow</code> que se extiende más allá del bloque y se recorta por arriba y por abajo con <code>clip-path</code>. La sombra no añade ancho desplazable; <code>100vw</code> sí lo haría cuando la página tiene una barra de desplazamiento. En un <code>.o-shell</code>, el tono termina en <code>.o-main</code>.</li>
+              <li>Cualquier bloque puede ser una franja: un <code>&lt;section&gt;</code> con su encabezado o un <code>&lt;div&gt;</code> normal.</li>
+              <li>Colócala en la propia página, dentro de la columna principal. Dentro de una tarjeta o un elemento con fondo propio, el tono se dibuja sobre esa superficie y se sale del elemento si este es más ancho que la ventana.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: la franja está hecha con CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>La franja no es interactiva ni añade ningún role.</p>
+            <ul>
+              <li>Un <code>&lt;section&gt;</code> identificado con <code>aria-labelledby</code> se convierte en un punto de referencia de tipo región; una franja <code>&lt;div&gt;</code> es solo un bloque.</li>
+              <li>El tono no transmite significado ni es lo que agrupa la franja: lo hacen la sección y su encabezado. La agrupación se conserva sin el tono (en colores forzados o al imprimir).</li>
+              <li>Los controles de la franja conservan su propio anillo de foco. Los 48 px de espacio por arriba y por abajo dejan sitio para él con texto al 200 % y a 320 px de ancho.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una franja para una llamada a la acción cerca del final de una página larga o para marcar una pausa en medio de ella.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No pongas una franja en cada sección: si todo destaca, nada destaca.</p>
+            <ul>
+              <li>Como máximo, una franja por cada altura de pantalla; dos seguidas se perciben como un nuevo fondo, no como una llamada a la acción.</li>
+              <li>No uses el tono para comunicar algo (un aviso o un estado): no transmite significado y los colores forzados lo eliminan. Usa una <a href="/docs/components/alert/">alerta</a>.</li>
+              <li>No pongas una franja dentro de una tarjeta, sobre un área <code>--luz-surface</code> ni alrededor de toda la página. En modo oscuro, el botón principal sobre un tono colocado encima de <code>--luz-surface</code> baja a 2,7:1, por debajo del 3:1 que necesita el borde de un control.</li>
+              <li>No pongas un <code>.luz-btn--secondary</code> en la franja: su relleno tiene el mismo color que el tono y parece texto normal.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa una sola franja, con un encabezado que explique por qué actuar ahora y un botón principal.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-stack luz-band"><h2 class="u-mb-0">Registration closes on 30 April</h2><div class="o-actions"><button class="luz-btn luz-btn--primary" type="button">Register now</button></div></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No pongas dos franjas seguidas: la segunda parece un nuevo fondo y ninguna destaca como llamada a la acción.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-band"><h2 class="u-mb-0">Registration closes on 30 April</h2></div>
+                  <div class="luz-band"><h2 class="u-mb-0">Questions?</h2></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>En una franja, el encabezado explica por qué actuar ahora, no cuál es la acción: «El plazo de inscripción termina el 30 de abril», no «Inscríbete».</p>
+            <ul>
+              <li>Añade una frase de apoyo, un botón principal y, si necesitas ofrecer una alternativa, un botón de contorno.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>La franja coloca el contenido sobre <code>--luz-brand-subtle</code>, encima de la página.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la franja en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Encabezado y texto</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-brand-subtle</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>14.3:1</div></td><td data-label="Oscuro"><div>12.7:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto secundario</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-brand-subtle</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>6.3:1</div></td><td data-label="Alto contraste"><div>18.5:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace y etiqueta y borde del botón de contorno</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-brand-subtle</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>6.5:1</div></td><td data-label="Alto contraste"><div>13.6:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Relleno del botón principal</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-fill</code> on <code>--luz-brand-subtle</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>3.0:1</div></td><td data-label="Alto contraste"><div>13.6:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta del botón principal</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-brand-subtle</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>6.5:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco y bordes de controles.</p>
+            <ul>
+              <li><strong>Foco:</strong> la franja no lo recibe; los elementos de su interior conservan su propio anillo <code>--luz-focus-ring</code>, dibujado a 4 px. Los 48 px de relleno de la franja lo mantienen dentro del tono.</li>
+              <li><strong>Combinación con poco contraste:</strong> el relleno del botón principal tiene una relación de 3,0:1 con el tono en modo oscuro. Su etiqueta alcanza 4,9:1 e identifica el control, por lo que este sigue siendo reconocible; coloca la franja en la página, nunca sobre una superficie.</li>
+              <li><strong>Colores forzados:</strong> se elimina el tono y dos líneas de 1 px <code>CanvasText</code> marcan los bordes superior e inferior de la franja.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 2 tokens que lee <code>components/band.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

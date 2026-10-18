@@ -1,0 +1,143 @@
+<!-- luz:page
+title: Plantillas de app
+description: Las partes de una aplicación que no necesitan CSS propio, listas para copiar y adaptar: la página con barra lateral, una app sin barra lateral y un panel de control vacío.
+source: 41bf61a78fb7
+reviewed: false
+-->
+    <div class="docs-block" id="p-app-templates">
+          <p>Cada plantilla es marcado que puedes copiar en tu aplicación, sustituyendo el ejemplo por tu propio texto. Solo usan las clases de core y app (y la búsqueda de site, donde corresponda): lo que necesite CSS propio es un patrón con su página, y <a href="#not-here">la última sección</a> indica qué no ofrece LUZ todavía.</p>
+          <p>El <code>&lt;h1&gt;</code> y la acción principal de la vista van en la primera fila del panel de control, nunca en la barra. La barra contiene los elementos comunes a todas las vistas.</p>
+          <div class="docs-prose">
+            <h2 id="app-page" class="docs-prose__title">Página de app</h2>
+            <p>La página completa de una aplicación: el enlace para saltar al contenido y la <a href="/docs/components/sidebar/">barra lateral</a> de core junto al área principal, que contiene la <a href="/docs/app/header/">cabecera</a> y el <a href="/docs/app/dashboard/">panel de control</a>.</p>
+            <ul>
+              <li><code>.o-shell</code> coloca la barra lateral en una columna y <code>.o-main</code> a su lado. A 768 px o menos, la barra lateral es un panel que abre el botón de menú, sin scripts.</li>
+              <li>El enlace para saltar al contenido va primero y su destino es <code>&lt;main&gt;</code>, para que quien usa el teclado se salte la barra lateral y la barra superior.</li>
+              <li>Omite <code>&lt;luz-search&gt;</code> si no cargas site. Si cargas el script de core, marcará el enlace actual de la barra lateral y cerrará el panel al seguir un enlace.</li>
+            </ul>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-tpl-app-page" aria-label="Copy the app page markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="App page markup"><code id="code-tpl-app-page">&lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to content&lt;/a&gt;
+&lt;div class=&quot;o-shell&quot;&gt;
+  &lt;nav class=&quot;luz-sidebar&quot; id=&quot;app-nav&quot; aria-label=&quot;Main&quot; popover&gt;
+    &lt;a class=&quot;luz-sidebar__brand&quot; href=&quot;/&quot;&gt;&lt;span class=&quot;luz-sidebar__brand-name&quot;&gt;Bodega&lt;/span&gt;&lt;/a&gt;
+    &lt;div class=&quot;luz-sidebar__section&quot;&gt;
+      &lt;a class=&quot;luz-sidebar__link&quot; href=&quot;/&quot; aria-current=&quot;page&quot;&gt;Overview&lt;/a&gt;
+      &lt;a class=&quot;luz-sidebar__link&quot; href=&quot;/reports/&quot;&gt;Reports&lt;/a&gt;
+      &lt;a class=&quot;luz-sidebar__link&quot; href=&quot;/stock/&quot;&gt;Stock&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+  &lt;div class=&quot;o-main&quot;&gt;
+    &lt;header class=&quot;luz-app-header o-sticky&quot;&gt;
+      &lt;div class=&quot;o-row&quot;&gt;
+        &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;app-nav&quot; aria-label=&quot;Menu&quot;&gt;…&lt;/button&gt;
+        &lt;p class=&quot;luz-app-header__product&quot;&gt;Bodega&lt;/p&gt;
+        &lt;div class=&quot;o-row luz-app-header__actions&quot;&gt;
+          &lt;luz-search&gt;…&lt;/luz-search&gt;
+          &lt;div class=&quot;luz-dropdown&quot;&gt;
+            &lt;button class=&quot;luz-btn luz-btn--ghost luz-app-header__account&quot; type=&quot;button&quot; popovertarget=&quot;account-menu&quot;&gt;&lt;span class=&quot;luz-avatar luz-avatar--sm&quot;&gt;AM&lt;/span&gt; &lt;span class=&quot;luz-app-header__account-name&quot;&gt;Ana Martín&lt;/span&gt;&lt;/button&gt;
+            &lt;div class=&quot;luz-dropdown__menu&quot; id=&quot;account-menu&quot; popover&gt;
+              &lt;ul class=&quot;luz-dropdown__list&quot;&gt;
+                &lt;li&gt;&lt;a class=&quot;luz-dropdown__item&quot; href=&quot;/account/&quot;&gt;Account settings&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a class=&quot;luz-dropdown__item&quot; href=&quot;/logout/&quot;&gt;Sign out&lt;/a&gt;&lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/header&gt;
+    &lt;main class=&quot;luz-app-dashboard&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;
+      &lt;div class=&quot;luz-app-dashboard__head&quot;&gt;
+        &lt;h1 class=&quot;luz-app-dashboard__title&quot;&gt;Overview&lt;/h1&gt;
+        &lt;div class=&quot;o-actions&quot;&gt;
+          &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;/reports/new/&quot;&gt;New report&lt;/a&gt;
+          &lt;a class=&quot;luz-btn luz-btn--secondary&quot; href=&quot;/export/&quot;&gt;Export data&lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
+        &lt;li class=&quot;luz-card luz-app-dashboard__panel luz-app-dashboard__panel--wide&quot;&gt;
+          &lt;h2 class=&quot;luz-card__title&quot;&gt;Sales this month&lt;/h2&gt;
+          &lt;p class=&quot;luz-card__body&quot;&gt;The sales of the month so far.&lt;/p&gt;
+          &lt;a href=&quot;/reports/sales/&quot;&gt;Open the sales report&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class=&quot;luz-card luz-app-dashboard__panel&quot;&gt;
+          &lt;h2 class=&quot;luz-card__title&quot;&gt;Stock alerts&lt;/h2&gt;
+          &lt;p class=&quot;luz-card__body&quot;&gt;Three products are below their minimum.&lt;/p&gt;
+          &lt;a href=&quot;/stock/alerts/&quot;&gt;Review stock&lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/main&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+          <div class="docs-prose">
+            <h2 id="no-sidebar" class="docs-prose__title">App sin barra lateral</h2>
+            <p>Una aplicación pequeña con pocas vistas no necesita barra lateral. Usa <code>.o-page</code> de core en lugar de la estructura y su <a href="/docs/components/navbar/">barra de navegación</a> en la barra para los enlaces.</p>
+            <ul>
+              <li>El botón de menú abre la barra de navegación, que agrupa los enlaces en un panel a 768 px o menos; a partir de 769 px no se muestra el botón y los enlaces quedan en la fila.</li>
+              <li>El nombre del producto es el primer enlace de la barra de navegación y lleva a la vista de inicio: <code>.luz-app-header__product</code> se reserva para el panel de la barra lateral y no se usa aquí.</li>
+              <li>El <code>.o-row</code> de la barra contiene, en este orden, el botón de menú, la barra de navegación y las acciones.</li>
+            </ul>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-tpl-no-sidebar" aria-label="Copy the app without a sidebar markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="App without a sidebar markup"><code id="code-tpl-no-sidebar">&lt;body class=&quot;o-page&quot;&gt;
+  &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to content&lt;/a&gt;
+  &lt;header class=&quot;luz-app-header o-sticky&quot;&gt;
+    &lt;div class=&quot;o-row&quot;&gt;
+      &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;app-nav&quot; aria-label=&quot;Menu&quot;&gt;…&lt;/button&gt;
+      &lt;nav class=&quot;luz-navbar&quot; id=&quot;app-nav&quot; aria-label=&quot;Main&quot; popover&gt;
+        &lt;ul class=&quot;luz-navbar__list&quot;&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/&quot; aria-current=&quot;page&quot;&gt;Bodega&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/reports/&quot;&gt;Reports&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+      &lt;div class=&quot;o-row luz-app-header__actions&quot;&gt;…&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+  &lt;main class=&quot;luz-app-dashboard&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;…&lt;/main&gt;
+&lt;/body&gt;</code></pre>
+            </div>
+          </div>
+          <div class="docs-prose">
+            <h2 id="empty-dashboard" class="docs-prose__title">Panel de control vacío</h2>
+            <p>Una vista que aún no contiene nada: un panel ancho con una frase y la acción principal como enlace. La fila del título mantiene su sitio para que la vista no dé un salto cuando aparezca el primer panel.</p>
+            <ul>
+              <li>Explica en una frase qué falta y qué hacer: «Aún no hay informes. Crea el primero».</li>
+              <li>La acción es un enlace al lugar donde se crea el informe. Es la única acción principal de la vista: no la pongas en la fila del título mientras esté en el panel.</li>
+            </ul>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-tpl-empty" aria-label="Copy the empty dashboard markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Empty dashboard markup"><code id="code-tpl-empty">&lt;main class=&quot;luz-app-dashboard&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;
+  &lt;div class=&quot;luz-app-dashboard__head&quot;&gt;
+    &lt;h1 class=&quot;luz-app-dashboard__title&quot;&gt;Reports&lt;/h1&gt;
+  &lt;/div&gt;
+  &lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
+    &lt;li class=&quot;luz-card luz-app-dashboard__panel luz-app-dashboard__panel--wide&quot;&gt;
+      &lt;h2 class=&quot;luz-card__title&quot;&gt;No reports yet&lt;/h2&gt;
+      &lt;p class=&quot;luz-card__body&quot;&gt;Create your first report to see it here.&lt;/p&gt;
+      &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;/reports/new/&quot;&gt;New report&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/main&gt;</code></pre>
+            </div>
+          </div>
+          <div class="docs-prose">
+            <h2 id="not-here" class="docs-prose__title">Qué no incluye</h2>
+            <p>Una aplicación suele necesitar elementos que LUZ todavía no ofrece. Las plantillas anteriores no los simulan.</p>
+            <ul>
+              <li><strong>Una barra de iconos o una barra lateral plegable.</strong> La barra lateral es de core: una columna a partir de 769 px y un panel por debajo.</li>
+              <li><strong>Gráficos, estadísticas y una tabla de datos con filtros.</strong> Un panel puede contener tu propio contenido, una <a href="/docs/components/table/">tabla</a> o una barra de <a href="/docs/components/progress/">progreso</a>.</li>
+              <li><strong>Notificaciones, un selector de espacio de trabajo y migas de pan en la barra.</strong> La barra contiene las herramientas comunes a todas las vistas.</li>
+            </ul>
+          </div>
+    </div>

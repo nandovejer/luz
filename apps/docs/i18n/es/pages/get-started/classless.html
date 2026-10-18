@@ -1,0 +1,105 @@
+<!-- luz:page
+title: Estilos sin clases
+description: El aspecto de un botón, un campo de texto, un selector y una tabla, y el espacio entre párrafos, encabezados y listas, en el elemento sin clases y dentro de un elemento que marques, para el marcado al que no puedes añadir clases.
+keywords: markdown, texto enriquecido
+source: 4ffcf68a5874
+reviewed: false
+-->
+    <section class="docs-block" id="what" aria-labelledby="what-title">
+      <h2 class="docs-chapter__title" id="what-title">Qué es</h2>
+      <p class="docs-lead">Un archivo adicional, <code>classless.css</code>, que da a un <code>button</code>, <code>input</code>, <code>textarea</code>, <code>select</code> y <code>table</code> sin clases el aspecto del componente LUZ y añade espacio entre los bloques de texto largo, dentro de un elemento con <code>data-luz-classless</code>. Está pensado para marcado que no controlas: un archivo Markdown, un CMS o un formulario de una biblioteca.</p>
+      <p>No está en <code>luz.css</code> y no hace nada hasta que lo cargas y marcas una zona. Una página que no lo carga se queda exactamente como estaba.</p>
+    </section>
+
+    <section class="docs-block" id="load" aria-labelledby="load-title">
+      <h2 class="docs-chapter__title" id="load-title">Cómo cargarlo</h2>
+      <p>Desde una CDN, con un <code>&lt;link&gt;</code> para cada archivo, en este orden:</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">HTML</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-classless-cdn" aria-label="Copy the CDN tags">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Loading classless.css from a CDN"><code id="code-classless-cdn">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/classless.min.css"&gt;</code></pre>
+      </div>
+      <p>Con un empaquetador, importa los puntos de entrada CSS de los paquetes. Un <code>href</code> no puede indicar un paquete: estas rutas solo sirven para <code>import</code>.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">JS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-classless-import" aria-label="Copy the imports">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Importing classless.css"><code id="code-classless-import">import "@luz-ds/tokens/css";
+import "@luz-ds/core/css";
+import "@luz-ds/core/classless.css";</code></pre>
+      </div>
+      <p>Después, marca la zona:</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">HTML</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-classless-zone" aria-label="Copy the zone markup">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Marking the zone"><code id="code-classless-zone">&lt;!-- the whole page --&gt;
+&lt;body data-luz-classless&gt;
+
+&lt;!-- or only the rendered content --&gt;
+&lt;article data-luz-classless&gt;…&lt;/article&gt;</code></pre>
+      </div>
+      <ul>
+        <li>Declara el orden de capas, como hacen todos los archivos, y escribe en <code>luz.elements</code>. Una clase <code>.luz-*</code> está en <code>luz.components</code> y prevalece por orden.</li>
+        <li>Pon el atributo en <code>&lt;body&gt;</code> o en un elemento dentro de él. Los elementos que estiliza son sus <em>descendientes</em>.</li>
+        <li>Tamaño: unos 1,7 kB min+gzip, con un presupuesto propio (3 kB).</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="what-changes" aria-labelledby="what-changes-title">
+      <h2 class="docs-chapter__title" id="what-changes-title">En qué se convierte cada elemento</h2>
+      <div class="luz-table-wrap" role="region" aria-label="Elementos con estilos sin clases" tabindex="0">
+        <table class="luz-table">
+          <caption>Elemento sin clases y el componente que reproduce</caption>
+          <thead>
+            <tr><th scope="col">Elemento</th><th scope="col">Se parece a</th><th scope="col">No incluye</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Elemento"><div><code>button</code>, <code>input</code> de tipo <code>button</code> y <code>reset</code></div></td><td data-label="Se parece a"><div><code>.luz-btn .luz-btn--secondary</code></div></td><td data-label="No incluye"><div>Tamaños y otras variantes: añade la clase</div></td></tr>
+            <tr><td data-label="Elemento"><div><code>button type="submit"</code>, <code>input type="submit"</code></div></td><td data-label="Se parece a"><div><code>.luz-btn .luz-btn--primary</code></div></td><td data-label="No incluye"><div>Para el navegador, un botón sin <code>type</code> envía el formulario, pero aquí no: indica <code>type="submit"</code></div></td></tr>
+            <tr><td data-label="Elemento"><div><code>input</code> de tipo text, email, password, search, tel, url, number, date, time, datetime-local, month y week; <code>textarea</code></div></td><td data-label="Se parece a"><div><code>.luz-input</code>, <code>.luz-input--textarea</code></div></td><td data-label="No incluye"><div>La etiqueta, el texto de ayuda y el error de <code>.luz-field</code></div></td></tr>
+            <tr><td data-label="Elemento"><div><code>select</code></div></td><td data-label="Se parece a"><div>El cuadro cerrado de <code>.luz-select</code></div></td><td data-label="No incluye"><div>La lista abierta con estilos, donde el navegador admite <code>appearance: base-select</code>: es decir, <code>.luz-select</code></div></td></tr>
+            <tr><td data-label="Elemento"><div><code>table</code>, con su título, <code>th</code> y <code>td</code></div></td><td data-label="Se parece a"><div><code>.luz-table</code></div></td><td data-label="No incluye"><div>Desplazamiento y apilado: necesitan un contenedor y <code>data-label</code></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>No se les aplica estilo a propósito: los controles <code>checkbox</code>, <code>radio</code>, <code>range</code>, <code>color</code>, <code>file</code> y <code>hidden</code> tienen su propio control nativo, y la <code>table</code> nunca recibe <code>display: block</code> ni una caja de desplazamiento, porque algunos lectores de pantalla perderían su semántica de tabla.</p>
+    </section>
+
+    <section class="docs-block" id="flow" aria-labelledby="flow-title">
+      <h2 class="docs-chapter__title" id="flow-title">Espacio entre bloques</h2>
+      <p>El restablecimiento de LUZ elimina todos los márgenes, así que un artículo Markdown quedaría apelmazado. Dentro de la zona, cada párrafo, lista, cita, figura, bloque preformateado, tabla, regla, <code>details</code>, <code>fieldset</code>, <code>form</code> o dirección empieza un paso (<code>--luz-space-md</code>) por debajo del bloque anterior.</p>
+      <p>Un encabezado empieza más abajo (<code>--luz-space-xl</code>) y el bloque que viene después queda más cerca (<code>--luz-space-sm</code>), así cada encabezado queda unido a lo que presenta.</p>
+      <ul>
+        <li>El primer elemento hijo de su contenedor no tiene margen superior, así que la zona no se separa de su contenedor.</li>
+        <li>No se modifican <code>div</code>, <code>span</code> ni los elementos en línea: su disposición es cosa tuya. Para crear una columna de bloques, usa <a href="/docs/components/layout/"><code>.o-stack</code></a>.</li>
+        <li>Un botón que va después de un campo mantiene el mismo espacio para no tocarlo. Los botones uno al lado del otro permanecen juntos.</li>
+        <li>Es un margen con especificidad cero: prevalece cualquier clase tuya, y un componente LUZ que defina su propio margen lo conserva.</li>
+        <li>Para un artículo, <a href="/docs/components/prose/"><code>.luz-prose</code></a> de core aplica los mismos tres espacios entre los bloques de un contenedor y añade la longitud de línea y la sangría de las listas. Funcionan juntos: pon ambos en el elemento que contiene el texto y el modo sin clases añade el aspecto de sus tablas y controles.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="rules" aria-labelledby="rules-title">
+      <h2 class="docs-chapter__title" id="rules-title">Cómo no interfiere</h2>
+      <ul>
+        <li><strong>Especificidad cero.</strong> Todos los selectores están dentro de <code>:where()</code>, así que prevalece cualquier clase tuya, en cualquier capa.</li>
+        <li><strong>Respeta las clases de LUZ.</strong> Un elemento cuya clase contiene <code>luz-</code> pertenece a su componente: un <code>.luz-copy-btn</code> dentro de la zona conserva su aspecto.</li>
+        <li><strong>Una copia fiel.</strong> Las declaraciones del botón, el campo, el selector y la tabla son las de los componentes. Una prueba compara cada elemento sin clases con su componente, propiedad por propiedad, y falla si algo cambia. El espacio entre bloques no es una copia: ningún componente lo define.</li>
+        <li><strong>Todo lo demás funciona igual:</strong> los tres modos de color, el anillo de foco, el texto de derecha a izquierda y los colores forzados funcionan como en el componente.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="limits" aria-labelledby="limits-title">
+      <h2 class="docs-chapter__title" id="limits-title">Límites</h2>
+      <ul>
+        <li><strong>El modo de color debe estar en otro elemento.</strong> El selector de fecha y el desplegable toman la combinación de colores de un <code>data-theme</code> en un antecesor de la zona, igual que los componentes: pon <code>data-theme</code> en <code>&lt;html&gt;</code>, no en la zona.</li>
+        <li><strong>Comprobado por scripts, no a mano.</strong> La prueba de equivalencia pasa en Chromium, Firefox 155 y WebKit 26.6, en Linux. Safari no admite colores forzados, así que ese caso solo se comprueba en Chromium y Firefox.</li>
+        <li><strong>No es un componente.</strong> No tiene página en la galería de componentes ni estados propios. Si puedes añadir una clase, usa el componente: tiene variantes, tamaños y documentación.</li>
+      </ul>
+    </section>

@@ -43,7 +43,7 @@ import { SITE_KINDS } from "../luz-packages.js";
 import { fillAiMarkers } from "./ai.js";
 import { renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
-import { loadDocsLocales, localizeLinks, localize } from "./docs-i18n.js";
+import { isDemo, loadDocsLocales, localizeLinks, localize } from "./docs-i18n.js";
 import { bundledEnglish, englishT, makeT } from "./strings.js";
 
 /** Where the docs pages are published. */
@@ -1318,6 +1318,25 @@ export function breakClassNames(html) {
 }
 
 /**
+ * The demos of a translated page (`[data-docs-specimen]`, the Do and don't
+ * stages and the snippets) are live LUZ markup the translation leaves in
+ * English: each container gets `lang="en"`, and `dir="ltr"` in a right-to-left
+ * page. A container the translation already gave a `lang` keeps its own, and
+ * gets no `dir`. Everything else is left byte for byte.
+ */
+function markDemos(html, file, dir) {
+  let out = "";
+  let from = 0;
+  for (const tag of tags(html, file)) {
+    if (tag.type !== "start" || !isDemo(tag.attrs) || tag.attrs.has("lang")) continue;
+    const at = tag.index + 1 + (tag.written ?? tag.name).length;
+    out += `${html.slice(from, at)} lang="en"${dir === "rtl" ? ' dir="ltr"' : ""}`;
+    from = at;
+  }
+  return from ? out + html.slice(from) : html;
+}
+
+/**
  * Render a page: its layout, with the partials, the generated blocks and the
  * page fragment. `options.root` is the {{root}} value (relative in the pages
  * build, the site's path on the not-found page).
@@ -1349,7 +1368,9 @@ function renderPageIn(page, site, options) {
   const marked = filled.includes(GENERATED_MARKER);
   // An empty block (the 404 of a site with one language) takes its marker's line with it
   const placed = block ? filled.replace(GENERATED_MARKER, () => block) : filled.replace(/\n?[ \t]*<!-- luz:generated -->/, "");
-  const content = breakClassNames(marked ? placed.replaceAll(GENERATED_MARKER, "") : filled);
+  const unmarked = breakClassNames(marked ? placed.replaceAll(GENERATED_MARKER, "") : filled);
+  // A translated page keeps its demos in English: each says so, and an RTL page keeps them left to right
+  const content = site.locale && !page.fallback ? markDemos(unmarked, page.file, site.locale.dir) : unmarked;
   const generated = marked ? "" : block;
   const toc = renderToc(page, `${content}\n${generated}`, t);
   const layout = reader.layout(page.meta.layout);

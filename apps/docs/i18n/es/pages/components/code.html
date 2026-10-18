@@ -1,0 +1,271 @@
+<!-- luz:page
+title: Código
+description: Muestra código dentro de una frase o en un bloque con colores de sintaxis en todos los modos.
+source: 852f9afc3abc
+reviewed: false
+-->
+    <div class="docs-component" id="c-code">
+          <h2 id="example">Ejemplo</h2>
+          <p>Bloques de código en los tres modos, todos con la misma paleta.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-grid docs-cols-3">
+              <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="CSS example"><code>.panel {
+  padding: var(--luz-space-md);
+  color: var(--luz-text-primary);
+  background: var(--luz-surface);
+}</code></pre>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="HTML example"><code>&lt;button
+  class=&quot;luz-btn luz-btn--primary&quot;
+  type=&quot;button&quot;&gt;
+  Save changes
+&lt;/button&gt;</code></pre>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="JavaScript example"><code>import { MidiPlayer }
+  from &quot;@luz-ds/core/midi&quot;;
+
+const player = await MidiPlayer.load(url);
+player.play();</code></pre>
+            </div>
+            <p>Inline code looks like <code class="luz-code-inline">var(--luz-text-primary)</code> inside a sentence.</p>
+            <h3 class="docs-subhead" id="c-code-syntax">Syntax colours in the three modes</h3>
+            <p>LUZ's own scheme: keywords stay ink and bold, colour goes to what the author wrote (names, properties, values), comments step back in italic. No red, because red means error.</p>
+            <p>Each colour keeps 4.5:1 or more on the block, 7:1 or more in high contrast.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Syntax tokens" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Token</th><th scope="col">Class</th><th scope="col">What it marks</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Token"><div><code>--luz-code-comment</code></div></td><td data-label="Class"><div><code>.tok-comment</code></div></td><td data-label="What it marks"><div>Comments in every language. Muted and italic.</div></td></tr>
+                  <tr><td data-label="Token"><div><code>--luz-code-keyword</code></div></td><td data-label="Class"><div><code>.tok-keyword</code></div></td><td data-label="What it marks"><div>JavaScript and shell keywords, CSS at-rules and <code>!important</code>, the HTML doctype. Ink and bold, no colour.</div></td></tr>
+                  <tr><td data-label="Token"><div><code>--luz-code-name</code></div></td><td data-label="Class"><div><code>.tok-name</code></div></td><td data-label="What it marks"><div>HTML tags, CSS selectors and functions, JavaScript function and class names, shell commands.</div></td></tr>
+                  <tr><td data-label="Token"><div><code>--luz-code-property</code></div></td><td data-label="Class"><div><code>.tok-property</code></div></td><td data-label="What it marks"><div>HTML attributes, CSS properties and custom properties, JSON keys, shell flags and variables.</div></td></tr>
+                  <tr><td data-label="Token"><div><code>--luz-code-string</code></div></td><td data-label="Class"><div><code>.tok-string</code></div></td><td data-label="What it marks"><div>Quoted strings in every language, HTML attribute values.</div></td></tr>
+                  <tr><td data-label="Token"><div><code>--luz-code-literal</code></div></td><td data-label="Class"><div><code>.tok-literal</code></div></td><td data-label="What it marks"><div>Numbers and units, hex colours, <code>true</code>, <code>false</code>, <code>null</code>, HTML entities.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="o-grid docs-scopes">
+              <div class="docs-scope" data-theme="light">
+                <h4 class="docs-subhead">Light</h4>
+                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="CSS in light mode"><code>/* Wide cards */
+@media (min-width: 48rem) {
+  .card::after {
+    content: &quot;new&quot;;
+    inset: 0 auto auto 50%;
+    color: var(--ink, #036);
+  }
+}</code></pre>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="HTML in light mode"><code>&lt;!doctype html&gt;
+&lt;!-- Primary action --&gt;
+&lt;button type=&quot;submit&quot; disabled&gt;
+  Save &amp;amp; close
+&lt;/button&gt;</code></pre>
+                <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="JavaScript in light mode"><code>// Play a track
+const player = await
+  MidiPlayer.load(&quot;a.mid&quot;);
+if (player) player.play(0, true);</code></pre>
+                <pre class="luz-code-block" data-lang="json" tabindex="0" role="region" aria-label="JSON in light mode"><code>{
+  &quot;name&quot;: &quot;@luz-ds/core&quot;,
+  &quot;private&quot;: false,
+  &quot;size&quot;: 7.02
+}</code></pre>
+                <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="Shell in light mode"><code># Build and test
+pnpm core:build
+npx playwright test \
+  --project=chromium $CI</code></pre>
+              </div>
+              <div class="docs-scope" data-theme="dark">
+                <h4 class="docs-subhead">Dark</h4>
+                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="CSS in dark mode"><code>/* Wide cards */
+@media (min-width: 48rem) {
+  .card::after {
+    content: &quot;new&quot;;
+    inset: 0 auto auto 50%;
+    color: var(--ink, #036);
+  }
+}</code></pre>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="HTML in dark mode"><code>&lt;!doctype html&gt;
+&lt;!-- Primary action --&gt;
+&lt;button type=&quot;submit&quot; disabled&gt;
+  Save &amp;amp; close
+&lt;/button&gt;</code></pre>
+                <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="JavaScript in dark mode"><code>// Play a track
+const player = await
+  MidiPlayer.load(&quot;a.mid&quot;);
+if (player) player.play(0, true);</code></pre>
+                <pre class="luz-code-block" data-lang="json" tabindex="0" role="region" aria-label="JSON in dark mode"><code>{
+  &quot;name&quot;: &quot;@luz-ds/core&quot;,
+  &quot;private&quot;: false,
+  &quot;size&quot;: 7.02
+}</code></pre>
+                <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="Shell in dark mode"><code># Build and test
+pnpm core:build
+npx playwright test \
+  --project=chromium $CI</code></pre>
+              </div>
+              <div class="docs-scope" data-theme="high-contrast">
+                <h4 class="docs-subhead">High contrast</h4>
+                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="CSS in high contrast mode"><code>/* Wide cards */
+@media (min-width: 48rem) {
+  .card::after {
+    content: &quot;new&quot;;
+    inset: 0 auto auto 50%;
+    color: var(--ink, #036);
+  }
+}</code></pre>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="HTML in high contrast mode"><code>&lt;!doctype html&gt;
+&lt;!-- Primary action --&gt;
+&lt;button type=&quot;submit&quot; disabled&gt;
+  Save &amp;amp; close
+&lt;/button&gt;</code></pre>
+                <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="JavaScript in high contrast mode"><code>// Play a track
+const player = await
+  MidiPlayer.load(&quot;a.mid&quot;);
+if (player) player.play(0, true);</code></pre>
+                <pre class="luz-code-block" data-lang="json" tabindex="0" role="region" aria-label="JSON in high contrast mode"><code>{
+  &quot;name&quot;: &quot;@luz-ds/core&quot;,
+  &quot;private&quot;: false,
+  &quot;size&quot;: 7.02
+}</code></pre>
+                <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="Shell in high contrast mode"><code># Build and test
+pnpm core:build
+npx playwright test \
+  --project=chromium $CI</code></pre>
+              </div>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>El resaltador usa un conjunto de patrones, no un analizador: las etiquetas JSX, el contenido de los elementos <code>style</code> y <code>script</code> de HTML y los valores de atributos sin comillas se muestran sin formato. Los colores son decorativos: la tecnología de asistencia lee el código de la misma forma.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de código">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-code-block" aria-label="Copy the code block markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Code block markup"><code id="code-code-block">&lt;pre class=&quot;luz-code-block&quot; data-lang=&quot;css&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;Panel styles&quot;&gt;&lt;code&gt;.panel {
+  color: var(--luz-text-primary);
+}&lt;/code&gt;&lt;/pre&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-code-inline" aria-label="Copy the inline code markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Inline code markup"><code id="code-code-inline">&lt;p&gt;Set the colour with &lt;code class=&quot;luz-code-inline&quot;&gt;--luz-text-primary&lt;/code&gt;.&lt;/p&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-code-js" aria-label="Copy the highlighting script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Highlighting script code"><code id="code-code-js">import { initHighlight } from &quot;@luz-ds/core/highlight&quot;;
+initHighlight();</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Dos clases y el idioma en un atributo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones de código" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-code-block</code></div></td><td data-label="Efecto"><div>Un bloque sobre una superficie atenuada, con fuente mono y desplazamiento horizontal si una línea es larga</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-code-inline</code></div></td><td data-label="Efecto"><div>Código dentro de una frase, con el color de código</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-lang</code></div></td><td data-label="Efecto"><div>El idioma: <code>html</code>, <code>css</code>, <code>js</code>, <code>jsx</code>, <code>json</code>, <code>bash</code>, <code>sh</code> o <code>shell</code>. Se muestra como una etiqueta en una línea propia encima del código, en el borde final. Cualquier otro valor se muestra sin resaltarlo</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un <code>&lt;pre&gt;</code> con un <code>&lt;code&gt;</code> dentro, al que da estilo <code>components/code.css</code>. El resaltado es opcional y lo proporciona <code>highlight.js</code>.</p>
+            <ul>
+              <li><code>highlightBlock(pre)</code> colorea un bloque: envuelve el código con seis clases <code>.tok-*</code>, una por cada token <code>--luz-code-*</code>.</li>
+              <li><code>initHighlight()</code> lo hace con cada <code>pre.luz-code-block</code>, añade un <code>aria-label</code> a los bloques que no tengan ninguno («Ejemplo de CSS») y añade un botón para copiar en cada bloque. Core no asigna una posición a ese botón: colócalo con tu propio CSS o llama solo a <code>highlightBlock()</code>. <code>luz.js</code> ejecuta <code>initHighlight()</code>.</li>
+              <li>En colores forzados, todos los colores pasan a ser el color de texto del sistema; las palabras clave en negrita y los comentarios en cursiva se mantienen.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>El bloque es texto normal y legible de un solo color. Solo se pierden los colores.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Un bloque puede ser más ancho que la pantalla, así que debe recibir el foco: con Tab se llega a él y las teclas de flecha permiten desplazarse.</p>
+            <ul>
+              <li>Usa <code>tabindex="0"</code>, <code>role="region"</code> y un <code>aria-label</code> que identifique el código, para que la parada de foco tenga un nombre.</li>
+              <li>El código en línea no necesita nada.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un bloque de código para mostrar código o resultados del terminal que el lector pueda consultar o copiar, y código en línea para nombres dentro de una frase.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un bloque de código para un archivo largo ni para texto que no sea código.</p>
+            <ul>
+              <li>Para enlazar a un archivo completo, enlaza al archivo original.</li>
+              <li>Para indicar una tecla que debe pulsar el lector, usa <code>&lt;kbd&gt;</code>.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Muestra código que funcione al pegarlo: solo el comando.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <pre class="luz-code-block" data-lang="shell"><code>npm install @luz-ds/core</code></pre>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No mezcles el símbolo del prompt y el resultado en el mismo bloque: al pegarlo, fallarán «$» y las líneas de salida.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <pre class="luz-code-block" data-lang="shell"><code>$ npm install @luz-ds/core&#10;added 1 package in 2s</code></pre>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Muestra código que funcione al pegarlo.</p>
+            <ul>
+              <li>Identifica cada bloque en su <code>aria-label</code>: indica qué código contiene, no «Código».</li>
+              <li>Define <code>data-lang</code>; usa <code>text</code> para los resultados que no sean código.</li>
+              <li>Procura que las líneas sean cortas: una línea larga obliga al lector a desplazarse horizontalmente.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El código y los colores de sintaxis aparecen sobre una superficie atenuada. En alto contraste, todos los colores de sintaxis alcanzan 7:1.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del código en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Código</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Comentario</div></td><td data-label="Color sobre el fondo"><div><code>--luz-code-comment</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.0:1</div></td><td data-label="Oscuro"><div>8.5:1</div></td><td data-label="Alto contraste"><div>8.7:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Palabra clave</div></td><td data-label="Color sobre el fondo"><div><code>--luz-code-keyword</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Nombre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-code-name</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>8.8:1</div></td><td data-label="Oscuro"><div>12.0:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Propiedad</div></td><td data-label="Color sobre el fondo"><div><code>--luz-code-property</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>8.1:1</div></td><td data-label="Alto contraste"><div>9.7:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cadena</div></td><td data-label="Color sobre el fondo"><div><code>--luz-code-string</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>4.7:1</div></td><td data-label="Oscuro"><div>9.0:1</div></td><td data-label="Alto contraste"><div>8.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Literal</div></td><td data-label="Color sobre el fondo"><div><code>--luz-code-literal</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>6.7:1</div></td><td data-label="Oscuro"><div>8.4:1</div></td><td data-label="Alto contraste"><div>11.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta del idioma</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>18.4:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Código en línea</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-code</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>8.1:1</div></td><td data-label="Alto contraste"><div>9.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> core no dibuja su propio anillo en un bloque desplazable (<code>tabindex="0"</code>): se muestra el del navegador. Esta documentación añade el anillo de LUZ en <code>reference.css</code>; haz lo mismo si tus bloques se desplazan.</li>
+              <li><strong>No depende solo del color:</strong> las palabras clave están en negrita y los comentarios en cursiva, por lo que la sintaxis sigue siendo legible sin los colores.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 21 tokens que lee <code>components/code.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-code-comment"><code>--luz-code-comment</code></a>, <a href="/docs/tokens/color/#luz-code-keyword"><code>--luz-code-keyword</code></a>, <a href="/docs/tokens/color/#luz-code-literal"><code>--luz-code-literal</code></a>, <a href="/docs/tokens/color/#luz-code-name"><code>--luz-code-name</code></a>, <a href="/docs/tokens/color/#luz-code-property"><code>--luz-code-property</code></a>, <a href="/docs/tokens/color/#luz-code-string"><code>--luz-code-string</code></a>, <a href="/docs/tokens/color/#luz-color-code"><code>--luz-color-code</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

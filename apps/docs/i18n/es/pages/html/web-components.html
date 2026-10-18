@@ -1,0 +1,87 @@
+<!-- luz:page
+title: Web Components
+description: Crea elementos personalizados: una plantilla que se analiza pero no se muestra y un slot que muestra el contenido de la página dentro de un árbol shadow.
+source: 1143733e6897
+reviewed: false
+-->
+    <div class="docs-block elements-section" id="cat-web-components" data-category="web-components">
+        <p class="elements-section__lead">Crea elementos personalizados: una plantilla que se analiza pero no se muestra y un slot que muestra el contenido de la página dentro de un árbol shadow.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-slot" data-element="slot" aria-labelledby="el-slot-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-slot-title"><code>&lt;slot&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/slot">MDN<span class="u-sr-only"> referencia del elemento slot</span></a>
+          </div>
+          <p class="elements-card__desc">Un hueco en el árbol shadow de un componente web que la página rellena con su propio marcado. Un slot con nombre solo recibe los elementos cuyo atributo slot coincide con ese nombre.</p>
+          <div class="elements-stage">
+            <template id="d-slot-template">
+              <style>
+                article { padding: var(--luz-space-sm); border: 1px solid var(--luz-divider); }
+                h4 { margin-bottom: var(--luz-space-2xs); }
+              </style>
+              <article>
+                <h3><slot name="title">Untitled</slot></h3>
+                <slot>No content.</slot>
+              </article>
+            </template>
+
+            <demo-card>
+              <span slot="title">Hello from the light DOM</span>
+              This text fills the default slot.
+            </demo-card>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-slot" aria-label="Copy the slot markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="slot markup"><code id="code-slot">&lt;template id=&quot;d-slot-template&quot;&gt;
+  &lt;style&gt;
+    article { padding: var(--luz-space-sm); border: 1px solid var(--luz-divider); }
+    h4 { margin-bottom: var(--luz-space-2xs); }
+  &lt;/style&gt;
+  &lt;article&gt;
+    &lt;h4&gt;&lt;slot name=&quot;title&quot;&gt;Untitled&lt;/slot&gt;&lt;/h4&gt;
+    &lt;slot&gt;No content.&lt;/slot&gt;
+  &lt;/article&gt;
+&lt;/template&gt;
+
+&lt;demo-card&gt;
+  &lt;span slot=&quot;title&quot;&gt;Hello from the light DOM&lt;/span&gt;
+  This text fills the default slot.
+&lt;/demo-card&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: slot no tiene caja propia y el contenido que recibe conserva sus estilos. El elemento personalizado necesita unas pocas líneas de script. Los tokens de diseño atraviesan el límite del shadow, así que la tarjeta sigue el modo de color.</p>
+        </article>
+
+        <article class="elements-card" id="el-template" data-element="template" aria-labelledby="el-template-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-template-title"><code>&lt;template&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/template">MDN<span class="u-sr-only"> referencia del elemento template</span></a>
+          </div>
+          <p class="elements-card__desc">Marcado que el navegador lee pero no muestra, listo para copiarlo en la página mediante un script.</p>
+          <div class="elements-stage">
+            <template id="d-template">
+              <li>Item <span data-n></span></li>
+            </template>
+
+            <button class="luz-btn luz-btn--outline" type="button" id="d-template-add">Add an item</button>
+            <ul id="d-template-list"></ul>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-template" aria-label="Copy the template markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="template markup"><code id="code-template">&lt;template id=&quot;d-template&quot;&gt;
+  &lt;li&gt;Item &lt;span data-n&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;/template&gt;
+
+&lt;button class=&quot;luz-btn luz-btn--outline&quot; type=&quot;button&quot; id=&quot;d-template-add&quot;&gt;Add an item&lt;/button&gt;
+&lt;ul id=&quot;d-template-list&quot;&gt;&lt;/ul&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: nunca se representa. Las copias que el script inserta en la página adoptan los estilos de esta.</p>
+        </article>
+        </div>
+      
+    </div>

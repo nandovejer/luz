@@ -1,0 +1,198 @@
+<!-- luz:page
+title: Select
+description: Lista desplegable nativa para elegir una opción de una lista larga; el cuadro cerrado está diseñado con tokens.
+source: 1404221c69db
+reviewed: false
+-->
+    <div class="docs-component" id="c-select">
+          <h2 id="example">Ejemplo</h2>
+          <p>Cuatro elementos select: un país, un país de nacimiento con un error, una región y una lista de idiomas.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="s-country">Country</label>
+              <select class="luz-select" id="s-country" name="country">
+                <option value="">Select a country</option>
+                <option value="de">Germany</option>
+                <option value="es">Spain</option>
+                <option value="fr">France</option>
+                <option value="it">Italy</option>
+                <option value="pt">Portugal</option>
+                <option value="se">Sweden</option>
+                <option value="gb">United Kingdom</option>
+              </select>
+              <p class="luz-field__helper" id="s-country-help">Choose where you live.</p>
+            </div>
+            <div class="luz-field">
+              <label class="luz-field__label" for="s-error">Country of birth</label>
+              <select class="luz-select" id="s-error" name="birth" aria-invalid="true" aria-describedby="s-error-text">
+                <option value="" selected>Select a country</option>
+                <option value="es">Spain</option>
+                <option value="fr">France</option>
+              </select>
+              <p class="luz-field__error" id="s-error-text"><span class="u-sr-only">Error: </span>Select a country of birth.</p>
+            </div>
+            <div class="luz-field">
+              <label class="luz-field__label" for="s-disabled">Region</label>
+              <select class="luz-select" id="s-disabled" name="region" disabled>
+                <option>Choose a country first</option>
+              </select>
+            </div>
+            <div class="luz-field">
+              <label class="luz-field__label" for="s-multiple">Languages</label>
+              <select class="luz-select" id="s-multiple" name="languages" multiple size="4">
+                <option value="de">German</option>
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="it">Italian</option>
+              </select>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La lista abierta se ve distinta en cada navegador y sistema. Es lo esperado.</p>
+          <ul>
+            <li>El cuadro cerrado es igual en todas partes. La lista que se abre la dibuja el navegador o el sistema operativo y es la que ya conoce quien la usa.</li>
+            <li>Los navegadores compatibles con <code>appearance: base-select</code> (Chrome y Edge 135 o posterior, Safari 27 o posterior) también muestran la lista con los colores, la forma y el espaciado de LUZ. Firefox muestra su propia lista.</li>
+            <li>En los móviles se abre el selector del sistema, que LUZ no puede diseñar.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de Select">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-select" aria-label="Copy the select markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Select markup"><code id="code-select">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;country&quot;&gt;Country&lt;/label&gt;
+  &lt;select class=&quot;luz-select&quot; id=&quot;country&quot; name=&quot;country&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;Select a country&lt;/option&gt;
+    &lt;option value=&quot;de&quot;&gt;Germany&lt;/option&gt;
+    &lt;option value=&quot;es&quot;&gt;Spain&lt;/option&gt;
+    &lt;option value=&quot;fr&quot;&gt;France&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Una clase en el propio <code>&lt;select&gt;</code>. No hay contenedor ni modificador: el estado depende de los atributos nativos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases y atributos de Select" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-select</code></div></td><td data-label="Qué hace"><div>El cuadro cerrado: 44 px de alto, con borde inferior y una flecha al final de la línea</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>aria-invalid="true"</code></div></td><td data-label="Qué hace"><div>Estado de error: borde más grueso del color de peligro. Acompáñalo del texto de error</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>disabled</code></div></td><td data-label="Qué hace"><div>Texto desactivado y borde discontinuo</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>multiple</code>, <code>size</code></div></td><td data-label="Qué hace"><div>Lista siempre abierta, con borde completo y sin flecha</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>&lt;optgroup label&gt;</code></div></td><td data-label="Qué hace"><div>Conjunto de opciones con etiqueta</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un <code>&lt;select&gt;</code> nativo diseñado por <code>components/select.css</code>, en dos capas. Sin JavaScript.</p>
+            <ul>
+              <li><strong>El cuadro cerrado, en todos los navegadores.</strong> El borde, la altura, la tipografía y los colores proceden de tokens. La flecha está hecha con dos degradados en <code>currentcolor</code>, así que sigue el color del texto, el estado desactivado y los colores forzados. Está al final en línea y, por eso, pasa a la izquierda en textos de derecha a izquierda.</li>
+              <li><strong>La lista abierta, cuando el navegador lo permite.</strong> Dentro de <code>@supports (appearance: base-select)</code> también se diseñan la lista, sus opciones y la marca de verificación. Fuera de esa regla no cambia nada.</li>
+              <li><code>color-scheme</code> sigue el modo de color, así que la lista del sistema se abre en el modo adecuado.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: select es un elemento nativo y LUZ no le añade ningún script.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Se aplican las teclas nativas; cuáles abren la lista varía un poco entre sistemas.</p>
+            <ul>
+              <li>Tab lleva al select. Enter o Espacio abre la lista y Escape la cierra sin hacer cambios.</li>
+              <li>Las flechas arriba y abajo recorren las opciones; al escribir las primeras letras, se salta a la coincidencia.</li>
+              <li>Añade un <code>&lt;label for&gt;</code> visible. No añadas ningún role: el elemento ya tiene semántica propia.</li>
+              <li>Si hay un error, establece <code>aria-invalid="true"</code> y haz que <code>aria-describedby</code> apunte al texto del error.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> se explican en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un select cuando la persona tenga que elegir una opción de una lista larga y ya sepa cuál busca.</p>
+            <ul>
+              <li>Un país, un año o una zona horaria: más de seis opciones y una sola respuesta.</li>
+              <li>Las opciones son breves y se pueden recorrer en orden.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>Un select oculta las opciones hasta que se abre, lo que a algunas personas les resulta difícil. El <a href="https://design-system.service.gov.uk/components/select/">GOV.UK Design System</a> recomienda usarlo como último recurso.</p>
+            <p>La regla de seis es propia de LUZ: esa guía no indica ninguna cifra.</p>
+            <ul>
+              <li>Con seis opciones o menos, usa <a href="/docs/components/form/">botones de opción</a>: todas las opciones quedan a la vista.</li>
+              <li>Para elegir varias opciones, usa <a href="/docs/components/form/">casillas de verificación</a>.</li>
+              <li>Antes de usar una lista larga, haz una pregunta que permita acortarla.</li>
+              <li>No construyas nunca tu propio listbox con elementos <code>&lt;div&gt;</code> ni ocultes el select detrás de una copia.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa un select para una lista larga, con una etiqueta visible que indique qué elegir.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-field">
+                    <div class="luz-field__label">Country</div>
+                    <select class="luz-select"><option>Select a country</option><option>Germany</option><option>Spain</option></select>
+                  </div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No ocultes tres opciones en un select. Los botones de opción las muestran todas a la vez.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-field">
+                    <div class="luz-field__label">Delivery</div>
+                    <select class="luz-select"><option>Standard</option><option>Express</option><option>Collect</option></select>
+                  </div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <ul>
+              <li>La etiqueta indica qué elegir, con un sustantivo: «País», no «Selecciona una opción».</li>
+              <li>La primera opción es una indicación como «Selecciona un país», con valor vacío, para que un campo obligatorio no se dé por respondido de forma predeterminada.</li>
+              <li>Escribe cada opción en estilo oración y ordénalas de una forma previsible, por ejemplo, alfabéticamente.</li>
+              <li>Asigna un texto a cada opción. Puedes acompañarlo de un icono o una muestra de color, pero nunca sustituirlo por ellos.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El cuadro y su lista usan los mismos colores de entrada y superficie que los demás campos del formulario.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de Select en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto y flecha</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto desactivado</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-disabled</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>3.7:1</div></td><td data-label="Oscuro"><div>3.9:1</div></td><td data-label="Alto contraste"><div>5.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde</div></td><td data-label="Color sobre fondo"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3.7:1</div></td><td data-label="Oscuro"><div>4.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de error</div></td><td data-label="Color sobre fondo"><div><code>--luz-color-danger</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>5.5:1</div></td><td data-label="Oscuro"><div>10.8:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto de la lista abierta</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Opción bajo el puntero</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Opción desactivada</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-disabled</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>3.7:1</div></td><td data-label="Oscuro"><div>3.9:1</div></td><td data-label="Alto contraste"><div>5.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario corresponde al nivel AA de WCAG 2.2: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el select tiene el contorno compartido de 2 px <code>--luz-focus-ring</code>, a 2 px del cuadro, y un borde inferior más grueso.</li>
+              <li><strong>No solo el color:</strong> el error tiene un borde más grueso y un texto de error; el select desactivado tiene un borde discontinuo; la opción elegida en la lista abierta aparece en negrita y con una marca de verificación.</li>
+              <li><strong>Colores forzados:</strong> el borde, la flecha y el texto adoptan los colores del sistema para seguir siendo visibles.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 20 tokens que lee <code>components/select.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-control</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> se explican en la pestaña Código.</p>
+          </div>
+    </div>

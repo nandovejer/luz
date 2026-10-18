@@ -1,0 +1,107 @@
+<!-- luz:page
+title: Comprobador de contraste
+description: Comprueba tus propias sobrescrituras de color frente al contraste que promete LUZ, con un comando o en la página, antes de que lleguen a quien la use.
+source: 6b38900a2cdb
+reviewed: false
+-->
+    <div class="docs-block" id="t-contrast">
+      <h2 id="run">Ejecutarlo</h2>
+      <p>LUZ mantiene legibles sus propios colores en los modos claro, oscuro y de alto contraste. En cuanto sobrescribes un token, esa promesa pasa a ser tuya. <code>check-contrast</code> lee las declaraciones <code>--luz-*</code> de tu hoja de estilos, las aplica sobre los tokens de LUZ como haría el navegador y mide las mismas combinaciones que se enumeran en las páginas de componentes. Necesita Node 20 o posterior y nada más. <code>luz-check</code>, el comando de <a href="/docs/get-started/ai/">@luz-ds/check</a>, realiza la misma comprobación en las hojas de estilo que indiques, junto con sus reglas para el HTML y CSS de una página.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Shell</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-contrast-run" aria-label="Copy the command">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="The command"><code id="code-contrast-run">npx @luz-ds/tokens check-contrast my-theme.css</code></pre>
+      </div>
+      <p>Indica los nombres de tus archivos en el orden en que carga la página. Usa <code>--json</code> para obtener un informe legible por máquina y <code>--strict</code> para que también fallen las advertencias.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Output</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-contrast-out" aria-label="Copy the example output">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Example output"><code id="code-contrast-out">✗ light, high-contrast: --luz-text-secondary on surface-page is 2.8:1, needs 4.5:1 (text)
+    --luz-text-secondary: #999 is set in my-theme.css:2
+✗ contrast: 5 pairs fail (9 of 378 measurements) in light, dark, high-contrast</code></pre>
+      </div>
+
+      <h2 id="checks">Qué comprueba</h2>
+      <p>La luminancia relativa de WCAG 2.x y el contraste del nivel AA de WCAG 2.2. No se usa APCA porque no forma parte del estándar.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Mínimos de contraste" tabindex="0">
+        <table class="luz-table">
+          <thead>
+            <tr><th scope="col">Tipo</th><th scope="col">Mínimo</th><th scope="col">Qué protege</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Tipo"><div><code>text</code></div></td><td data-label="Mínimo"><div>4.5:1</div></td><td data-label="Qué protege"><div>Texto y enlaces en todas las superficies en las que aparecen, texto de estado sobre su tinte, texto en un botón relleno y colores de sintaxis en un bloque de código</div></td></tr>
+            <tr><td data-label="Tipo"><div><code>disabled-text</code></div></td><td data-label="Mínimo"><div>3:1</div></td><td data-label="Qué protege"><div>Texto de controles desactivados. Regla de LUZ: sigue siendo legible y el estado se indica también de otra forma que no sea el color</div></td></tr>
+            <tr><td data-label="Tipo"><div><code>ui</code></div></td><td data-label="Mínimo"><div>3:1</div></td><td data-label="Qué protege"><div>El anillo de foco, los bordes de los campos, los contornos y la parte reproducida de una barra de progreso</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Las combinaciones se comprueban en los modos claro, oscuro y de alto contraste, y en cada <code>[data-theme="name"]</code> que defina tu archivo, como <code>name</code> y <code>name/light</code>, <code>name/dark</code> y <code>name/high-contrast</code>. Los colores translúcidos se aplican sobre la superficie que tienen debajo, como en la página. Una <em>advertencia</em> es un objetivo más estricto que WCAG que LUZ se fija, como el relleno de una casilla marcada sobre la página: se muestra, pero no hace fallar la comprobación salvo que pases <code>--strict</code>.</p>
+
+      <h2 id="reads">Qué lee</h2>
+      <ul>
+        <li><strong>Selectores:</strong> <code>:root</code>, <code>html</code>, <code>[data-theme="x"]</code> y <code>[data-mode="y"]</code>, por separado o combinados. Una regla posterior prevalece sobre otra anterior con la misma especificidad, y un selector más específico prevalece sobre uno posterior. Una sobrescritura de <code>:root</code> cargada después de LUZ también llega a los modos oscuro y de alto contraste, salvo que ese modo vuelva a establecer el token: establece cada token por modo.</li>
+        <li><strong>Reglas at:</strong> <code>@media (prefers-color-scheme: dark)</code> y <code>light</code>, además de <code>@layer</code> y <code>@supports</code>, se consideran verdaderas. No se modela el orden de las capas.</li>
+        <li><strong>Valores:</strong> <code>#rgb</code>, <code>#rrggbb</code> con o sin alfa, <code>rgb()</code> y <code>hsl()</code> en cualquiera de sus sintaxis, <code>white</code>, <code>black</code>, <code>transparent</code> y cadenas de <code>var()</code>.</li>
+        <li><strong>Todo lo demás se informa, no se omite:</strong> los selectores de clase, otras consultas de medios o reglas que no se entiendan se enumeran como ignoradas. Un color que no se pueda leer, como <code>color-mix()</code> u <code>oklch()</code>, cuenta como un fallo, porque una combinación que no se ha medido no es una combinación que haya superado la prueba.</li>
+      </ul>
+
+      <h2 id="exit">Códigos de salida</h2>
+      <div class="luz-table-wrap" role="region" aria-label="Códigos de salida" tabindex="0">
+        <table class="luz-table">
+          <thead>
+            <tr><th scope="col">Código</th><th scope="col">Significado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Código"><div><code>0</code></div></td><td data-label="Significado"><div>Todas las combinaciones cumplen su mínimo</div></td></tr>
+            <tr><td data-label="Código"><div><code>1</code></div></td><td data-label="Significado"><div>Una combinación falla o no se ha podido leer el color</div></td></tr>
+            <tr><td data-label="Código"><div><code>2</code></div></td><td data-label="Significado"><div>El comando se ha usado incorrectamente o no se ha podido leer un archivo</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="ci">En tu compilación</h2>
+      <p>El comando hace fallar el paso si hay un error, así que basta con una línea.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">package.json</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-contrast-ci" aria-label="Copy the package.json script">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="json" tabindex="0" role="region" aria-label="A package.json script"><code id="code-contrast-ci">{
+  "scripts": {
+    "check:contrast": "luz-tokens check-contrast src/theme.css"
+  }
+}</code></pre>
+      </div>
+
+      <h2 id="try">Pruébalo en la página</h2>
+      <p>Con JavaScript activado, puedes pegar aquí tus sobrescrituras y ejecutar la misma comprobación. No sale nada de la página. Sin JavaScript, usa el comando anterior: hace lo mismo.</p>
+      <div data-contrast-tool>
+        <div class="luz-field">
+          <label class="luz-field__label" for="contrast-css">Tu CSS</label>
+          <textarea class="luz-input luz-input--textarea" id="contrast-css" rows="7" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" aria-describedby="contrast-css-help">:root {
+  --luz-text-secondary: #999;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --luz-focus-ring: #334;
+  }
+}</textarea>
+          <p class="luz-field__helper" id="contrast-css-help">Pega los tokens <code>--luz-*</code> que sobrescribes.</p>
+        </div>
+        <button class="luz-btn luz-btn--primary" type="button">Comprobar el contraste</button>
+        <div data-contrast-result role="status" aria-live="polite"
+          data-file="tu CSS"
+          data-pass="Las {checked} combinaciones cumplen su mínimo en {modes}."
+          data-fail="{failures} combinaciones fallan o no se han podido medir, de {checked}."
+          data-item="{modes}: {foreground} sobre {background} tiene {ratio}; necesita {minimum}:1."
+          data-set="{token} es {value} (línea {line})."
+          data-unreadable="No se ha medido {foreground} sobre {background}: {reason}"
+          data-warning="Advertencia, {modes}: {foreground} sobre {background} tiene {ratio}. LUZ aspira a {minimum}:1."
+          data-ignored="No se ha leído: {selector} (línea {line})."
+          data-error="No se ha podido leer el CSS:"></div>
+      </div>
+    </div>

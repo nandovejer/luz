@@ -1,0 +1,175 @@
+<!-- luz:page
+title: Índice
+description: Enumera las secciones de un artículo largo, junto al texto cuando hay espacio y encima cuando no lo hay.
+source: f0345377d2c2
+reviewed: false
+-->
+    <div class="docs-component" id="p-toc">
+          <h2 id="example">Ejemplo</h2>
+          <p>El índice de un artículo, junto al texto.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <article class="luz-cms-article" id="toc-demo">
+              <div class="luz-cms-article__layout">
+                <nav class="luz-cms-toc" aria-labelledby="toc-demo-title" data-luz-spy>
+                  <h3 class="luz-cms-toc__title" id="toc-demo-title">Contents</h3>
+                  <ol class="luz-cms-toc__list">
+                    <li><a href="#toc-demo-method">How the readings were taken</a></li>
+                    <li><a href="#toc-demo-level">Four centimetres in ten years</a></li>
+                    <li><a href="#toc-demo-storms">Storms that reach the walls</a></li>
+                    <li><a href="#toc-demo-next">What the council plans next</a></li>
+                  </ol>
+                </nav>
+                <div class="luz-prose">
+                  <p>Since March 2016, a group of volunteers has read the tide gauge in the port at six in the morning and six in the evening, every day of the year.</p>
+                  <h3 id="toc-demo-method">How the readings were taken</h3>
+                  <p>Each reading is the height of the water against the gauge, to the nearest centimetre, with the time, the wind and the state of the sea. Two people read it, and a third checks the sheet the same week.</p>
+                  <h3 id="toc-demo-level">Four centimetres in ten years</h3>
+                  <p>The average height at high tide was 4 cm higher in 2025 than in 2016. That is close to the rise that the national tide gauges record along the whole coast.</p>
+                  <h3 id="toc-demo-storms">Storms that reach the walls</h3>
+                  <p>In the first five winters, waves reached the sea wall of the old town twice. In the last five, they reached it eleven times.</p>
+                  <h3 id="toc-demo-next">What the council plans next</h3>
+                  <p>The council will publish the full records as open data in January and has asked the volunteers to add a third daily reading.</p>
+                </div>
+              </div>
+            </article>
+            <p class="docs-demo__note">Beside the text, at the end, when the article is 46rem wide or more; above it below that. With core's script, the section in view is marked as you scroll.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La marca de la sección visible necesita el script de core; sin él, no se marca ningún enlace. Junto al texto, el índice queda en el extremo en línea, pero aparece primero en el código fuente, así que Tab llega a él antes que al texto.</p>
+          <p>Aún no se ha probado con un lector de pantalla.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del índice">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-toc" aria-label="Copy the table of contents markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Table of contents markup"><code id="code-toc">&lt;article class=&quot;luz-cms-article&quot;&gt;
+  &lt;header class=&quot;luz-cms-article-header&quot;&gt;…&lt;/header&gt;
+  &lt;div class=&quot;luz-cms-article__layout&quot;&gt;
+    &lt;nav class=&quot;luz-cms-toc&quot; aria-labelledby=&quot;toc-title&quot; data-luz-spy&gt;
+      &lt;h2 class=&quot;luz-cms-toc__title&quot; id=&quot;toc-title&quot;&gt;Contents&lt;/h2&gt;
+      &lt;ol class=&quot;luz-cms-toc__list&quot;&gt;
+        &lt;li&gt;&lt;a href=&quot;#method&quot;&gt;How the readings were taken&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#level&quot;&gt;Four centimetres in ten years&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#storms&quot;&gt;Storms that reach the walls&lt;/a&gt;&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/nav&gt;
+    &lt;div class=&quot;luz-prose&quot;&gt;
+      &lt;p&gt;Since March 2016, a group of volunteers has read the tide gauge…&lt;/p&gt;
+      &lt;h2 id=&quot;method&quot;&gt;How the readings were taken&lt;/h2&gt;
+      &lt;p&gt;…&lt;/p&gt;
+      &lt;h2 id=&quot;level&quot;&gt;Four centimetres in ten years&lt;/h2&gt;
+      &lt;p&gt;…&lt;/p&gt;
+      &lt;h2 id=&quot;storms&quot;&gt;Storms that reach the walls&lt;/h2&gt;
+      &lt;p&gt;…&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores. El índice es opcional: si se omite, el texto ocupa la primera columna.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Partes del índice" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o propiedad</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-article</code></div></td><td data-label="Qué hace"><div>El artículo: su ancho determina la maquetación, no el de la ventana (contenedor de tamaño)</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-article__layout</code></div></td><td data-label="Qué hace"><div>El índice y, después, el texto. Cuando el artículo mide al menos 46rem: el texto va en la primera columna y el índice en una columna de 13rem al extremo en línea, con 48 px de separación; por debajo, se usa una columna</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc</code></div></td><td data-label="Qué hace"><div>El <code>&lt;nav&gt;</code>. Junto al texto permanece visible mientras este se desplaza, y una lista más alta que la ventana se desplaza por dentro</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>data-luz-spy</code> en <code>.luz-cms-toc</code></div></td><td data-label="Qué hace"><div>El seguimiento de desplazamiento de core marca el enlace de la sección visible. Opcional</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc__title</code></div></td><td data-label="Qué hace"><div>El encabezado del índice, en sans y seminegrita</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc__list</code></div></td><td data-label="Qué hace"><div>La lista, sin marcadores y con una línea en el inicio en línea; un enlace por línea</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>--luz-cms-toc-top</code></div></td><td data-label="Qué hace"><div>El espacio sobre el índice mientras permanece visible: 24 px, o 24 px por debajo de una barra fija (el <code>.o-sticky</code> de core, una fila de <code>--luz-bar-h</code>, como la <a href="/docs/cms/header/">cabecera</a>). Si la cabecera tiene otra altura, asígnalo a <code>.luz-cms-toc</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Una cuadrícula CSS dentro de un contenedor de tamaño, de <code>@luz-ds/cms</code>. No necesita JavaScript propio.</p>
+            <ul>
+              <li>La maquetación se adapta al espacio del artículo: en una página con barra lateral o con texto más grande, el índice pasa antes encima del texto. Por debajo de 46rem es una lista normal encima del texto y no permanece visible, porque lo taparía.</li>
+              <li>El índice aparece primero en el código fuente, así que se lee primero y Tab llega a él antes en ambas maquetaciones. El texto es un elemento único, segundo hijo de <code>__layout</code>; en un CMS, es el elemento que contiene el artículo.</li>
+              <li>Cada enlace apunta al <code>id</code> del encabezado de una sección. La mayoría de CMS pueden generar esos ids; en WordPress, usa el ancla HTML de cada bloque de encabezado.</li>
+              <li>Con el script de core (<code>luz.js</code> o <code>initSidebar()</code> de <code>@luz-ds/core/sidebar</code>), el enlace de la sección visible recibe <code>aria-current="true"</code>, que dibuja una barra y lo muestra en seminegrita. El script localiza los enlaces mediante el atributo <code>data-luz-spy</code> en <code>&lt;nav&gt;</code>: todos los enlaces internos a secciones de la página.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>El índice es una lista de enlaces a las secciones a las que se desplaza el navegador. El script solo hace falta para marcar la sección visible; sin él, no se marca ningún enlace.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Tab recorre los enlaces en orden; Enter sigue uno. El navegador mueve el foco y se desplaza hasta la sección.</p>
+            <ul>
+              <li>Un <code>&lt;nav&gt;</code> identificado por su encabezado: quienes usan lector de pantalla lo encuentran en la lista de puntos de referencia como «Contenido». Usa <code>&lt;ol&gt;</code>: las secciones tienen un orden.</li>
+              <li><code>aria-current="true"</code> identifica la sección visible; el script lo actualiza. Sin el script, ninguna sección aparece como actual.</li>
+              <li>Debajo de una cabecera fija, el relleno de desplazamiento de <code>.o-sticky</code> de core evita que la cabecera tape el encabezado de la sección al seguir un enlace.</li>
+            </ul>
+            <p class="docs-view__xref">La pestaña Diseño contiene <a href="#contrast">el contraste y el foco</a>.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un índice en un artículo con cuatro o más secciones, que se lea por partes o se consulte varias veces: una guía, un informe o una entrevista larga.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses en una entrada corta: tres párrafos no necesitan un mapa.</p>
+            <ul>
+              <li>No sirve para enlazar a otras páginas: eso es navegación y va en la <a href="/docs/cms/header/">cabecera</a> o en una <a href="/docs/components/sidebar/">barra lateral</a>.</li>
+              <li>Tampoco sirve para los pasos ordenados de una tarea: numéralos en el texto.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa encabezados de sección que expliquen de qué trata cada parte, para que la lista funcione como resumen.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <nav class="luz-cms-toc"><p class="luz-cms-toc__title">Contents</p><ol class="luz-cms-toc__list"><li><a>How the readings were taken</a></li><li><a>Four centimetres in ten years</a></li><li><a>Storms that reach the walls</a></li></ol></nav>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Usa encabezados que podrían aparecer en cualquier artículo: la lista no aporta nada.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <nav class="luz-cms-toc"><p class="luz-cms-toc__title">Contents</p><ol class="luz-cms-toc__list"><li><a>Introduction</a></li><li><a>Background</a></li><li><a>Discussion</a></li></ol></nav>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Cada enlace reproduce exactamente el encabezado de su sección, para que quien lee reconozca adónde lleva.</p>
+            <ul>
+              <li>Incluye solo los <code>&lt;h2&gt;</code> del artículo. Si hay más de unos ocho, quizá convenga dividirlo en dos.</li>
+              <li>Llámalo «Contenido» en el idioma de quien lee («Contenido» en español).</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Los enlaces usan el color de texto secundario de la página; el actual usa el color principal y una barra del color de marca.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del índice en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Título y enlace actual</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Barra del enlace actual</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido corresponde a WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> cada enlace conserva el anillo de core.</li>
+              <li>El enlace actual se indica con la barra y el peso, no solo con el color. Los enlaces no están subrayados: dentro de <code>&lt;nav&gt;</code>, su ubicación ya indica que son enlaces, como en todos los elementos de navegación de LUZ.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 15 tokens que usan las reglas de <code>.luz-cms-article</code> y <code>.luz-cms-toc</code> de <code>components/article.css</code> de cms, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-base</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-bar-h</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">La pestaña Código contiene <a href="#keyboard">el teclado y ARIA</a>.</p>
+          </div>
+    </div>

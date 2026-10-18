@@ -1,0 +1,121 @@
+<!-- luz:page
+title: Tipografía
+description: Las tres pilas de fuentes, la escala tipográfica en rem y el tamaño mínimo que puede usar cada tipo de texto.
+source: 7103afe17f21
+reviewed: false
+-->
+    <div class="docs-block" id="t-type">
+          <div class="docs-demo__stage">
+            <ul class="o-grid docs-cols-3 docs-fonts">
+              <li class="docs-font" style="--v: var(--luz-font-sans)">
+                <code>--luz-font-sans</code>
+                <span class="docs-font__sample">Sans del sistema</span>
+                <span class="docs-font__weights"><span style="font-weight:400">400</span> <span style="font-weight:600">600</span> <span style="font-weight:700">700</span> <span style="font-style:italic">cursiva</span></span>
+              </li>
+              <li class="docs-font" style="--v: var(--luz-font-serif)">
+                <code>--luz-font-serif</code>
+                <span class="docs-font__sample">ET Book</span>
+                <span class="docs-font__weights"><span style="font-weight:400">400</span> <span style="font-weight:600">600</span> <span style="font-weight:700">700</span> <span style="font-style:italic">cursiva</span></span>
+              </li>
+              <li class="docs-font" style="--v: var(--luz-font-mono)">
+                <code>--luz-font-mono</code>
+                <span class="docs-font__sample">Mono del sistema</span>
+                <span class="docs-font__weights"><span style="font-weight:400">400</span> <span style="font-weight:700">700</span> <span style="font-style:italic">cursiva</span></span>
+              </li>
+            </ul>
+            <ul class="docs-scale-list">
+              <li class="docs-scale">
+                <code>--luz-text-xs</code>
+                <span>0.75rem · 12px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-xs)">Ligero, útil y sin dependencias</span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-text-sm</code>
+                <span>0.875rem · 14px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-sm)">Ligero, útil y sin dependencias</span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-text-md</code>
+                <span>0.9375rem · 15px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-md)">Ligero, útil y sin dependencias</span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-text-base</code>
+                <span>1rem · 16px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-base)">Ligero, útil y sin dependencias</span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-text-lg</code>
+                <span>1.25rem · 20px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-lg)">Ligero, útil y sin dependencias</span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-text-xl</code>
+                <span>1.5625rem · 25px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-xl)">Ligero, útil y sin dependencias</span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-text-2xl</code>
+                <span>1.9375rem · 31px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-2xl)">Ligero, útil y sin dependencias</span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-text-3xl</code>
+                <span>2.4375rem · 39px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-3xl)">Ligero, útil y sin dependencias</span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-text-4xl</code>
+                <span>3.0625rem · 49px</span>
+                <span class="docs-scale__type u-truncate" style="--v: var(--luz-text-4xl)">Ligero, útil y sin dependencias</span>
+              </li>
+            </ul>
+          </div>
+          <ul class="docs-scale-list">
+            <li class="docs-scale docs-scale--note"><code class="u-select-all">--luz-type-base</code><span>1rem · 16px</span><span class="docs-scale__note">El tamaño de <code class="luz-code-inline">--luz-text-base</code> y la base a partir de la cual se calculan los demás pasos</span></li>
+            <li class="docs-scale docs-scale--note"><code class="u-select-all">--luz-type-ratio</code><span>1.25</span><span class="docs-scale__note">El multiplicador entre dos pasos por encima de la base y el divisor por debajo</span></li>
+          </ul>
+          <p class="docs-demo__note">Dos parámetros determinan el tamaño de toda la escala. Defínelos en rem en <code class="luz-code-inline">:root</code>, dentro de tu CSS; definirlos en <code class="luz-code-inline">body</code> o en una sección no cambia nada. Los componentes leen los pasos <code class="luz-code-inline">--luz-text-*</code>, nunca los parámetros.</p>
+        
+    </div>
+
+    <div class="docs-block" id="t-roles">
+          <h2 id="font-roles" class="docs-subhead">Funciones de las fuentes</h2>
+          <ul class="docs-scale-list">
+            <li class="docs-scale docs-scale--note"><code class="u-select-all">--luz-font-body</code><span>var(--luz-font-serif)</span><span class="docs-scale__note">Texto corrido: la serif. Los controles, etiquetas, tablas y navegación usan la sans</span></li>
+            <li class="docs-scale docs-scale--note"><code class="u-select-all">--luz-font-heading</code><span>var(--luz-font-serif)</span><span class="docs-scale__note">Familia tipográfica de los encabezados</span></li>
+            <li class="docs-scale docs-scale--note"><code class="u-select-all">--luz-text-body</code><span>calc(var(--luz-text-base) * 1.0625)</span><span class="docs-scale__note">Texto corrido, 17px con los valores predeterminados: un paso por encima de la base porque la altura x de ET Book es pequeña. Sigue el parámetro base</span></li>
+            <li class="docs-scale docs-scale--note"><code class="u-select-all">--luz-text-control</code><span>var(--luz-text-md)</span><span class="docs-scale__note">Texto de campos de formulario; al menos 16px (max(1rem, --luz-text-base)) a 768px o menos y en pantallas táctiles</span></li>
+          </ul>
+          <p class="docs-demo__note">Estos cuatro se incluyen en core, no en tokens.</p>
+    </div>
+
+    <div class="docs-prose" id="tokens-typography">
+            <h2 id="type-scale-and-minimum-sizes" class="docs-prose__title">Escala tipográfica y tamaños mínimos</h2>
+            <p>Todos los tamaños se expresan en <code class="luz-code-inline">rem</code>, así que el texto sigue el tamaño de fuente que se configure en el navegador, no solo el zoom de página (WCAG 1.4.4). La escala es igual para todos los anchos de ventana: ningún punto de ruptura reduce el texto. Por encima de la base de 16px, cada paso es el anterior multiplicado por 1.25 y redondeado a 1/16 rem (un píxel entero con el valor predeterminado); por debajo están los mínimos de legibilidad. La columna Fórmula muestra la cadena tal como la escribe la hoja de estilos; un navegador compatible con <code class="luz-code-inline">round()</code> redondea cada paso a 1/16 rem y obtiene el valor de la columna Valor.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Escala tipográfica" tabindex="0">
+              <table class="luz-table">
+                <caption>Tokens de tamaño de fuente</caption>
+                <thead>
+                  <tr><th scope="col">Token</th><th scope="col">Fórmula</th><th scope="col">Valor</th><th scope="col">Con raíz de 16px</th><th scope="col">Uso</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-xs</code></td><td data-label="Fórmula"><code class="luz-code-inline">max(0.75rem, calc(var(--luz-text-sm) / var(--luz-type-ratio)))</code></td><td data-label="Valor">0.75rem</td><td data-label="Con raíz de 16px">12px</td><td data-label="Uso">Mínimo absoluto. Solo microtexto: insignias, etiquetas, contadores y versiones. Nunca para texto corrido.</td></tr>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-sm</code></td><td data-label="Fórmula"><code class="luz-code-inline">max(0.875rem, calc(var(--luz-text-base) / var(--luz-type-ratio)))</code></td><td data-label="Valor">0.875rem</td><td data-label="Con raíz de 16px">14px</td><td data-label="Uso">Mínimo para texto secundario y de interfaz: ayudas y errores, pies de foto, encabezados de tabla, migas de pan y tooltips.</td></tr>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-md</code></td><td data-label="Fórmula"><code class="luz-code-inline">calc((var(--luz-text-sm) + var(--luz-text-base)) / 2)</code></td><td data-label="Valor">0.9375rem</td><td data-label="Con raíz de 16px">15px</td><td data-label="Uso">Texto predeterminado de la interfaz: botones, etiquetas, celdas de tabla, pestañas y navegación.</td></tr>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-base</code></td><td data-label="Fórmula"><code class="luz-code-inline">var(--luz-type-base)</code></td><td data-label="Valor">1rem</td><td data-label="Con raíz de 16px">16px</td><td data-label="Uso">La base de la escala y el texto de interfaz en un tamaño mayor. Campos de formulario en pantallas táctiles. El texto corrido usa <code class="luz-code-inline">--luz-text-body</code>, un paso por encima.</td></tr>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-lg</code></td><td data-label="Fórmula"><code class="luz-code-inline">calc(var(--luz-text-base) * var(--luz-type-ratio))</code></td><td data-label="Valor">1.25rem</td><td data-label="Con raíz de 16px">20px</td><td data-label="Uso">Párrafos introductorios y títulos de diálogo.</td></tr>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-xl</code></td><td data-label="Fórmula"><code class="luz-code-inline">calc(var(--luz-text-lg) * var(--luz-type-ratio))</code></td><td data-label="Valor">1.5625rem</td><td data-label="Con raíz de 16px">25px</td><td data-label="Uso">Encabezados.</td></tr>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-2xl</code></td><td data-label="Fórmula"><code class="luz-code-inline">calc(var(--luz-text-xl) * var(--luz-type-ratio))</code></td><td data-label="Valor">1.9375rem</td><td data-label="Con raíz de 16px">31px</td><td data-label="Uso">Encabezados.</td></tr>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-3xl</code></td><td data-label="Fórmula"><code class="luz-code-inline">calc(var(--luz-text-2xl) * var(--luz-type-ratio))</code></td><td data-label="Valor">2.4375rem</td><td data-label="Con raíz de 16px">39px</td><td data-label="Uso">Títulos de página.</td></tr>
+                  <tr><td data-label="Token"><code class="luz-code-inline">--luz-text-4xl</code></td><td data-label="Fórmula"><code class="luz-code-inline">calc(var(--luz-text-3xl) * var(--luz-type-ratio))</code></td><td data-label="Valor">3.0625rem</td><td data-label="Con raíz de 16px">49px</td><td data-label="Uso">Texto de exhibición.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li>El <strong>texto del cuerpo</strong> usa <code class="luz-code-inline">--luz-text-body</code> (17px con los valores predeterminados), con una altura de línea de 1.6.</li>
+              <li>El <strong>texto secundario y de interfaz</strong> nunca es inferior a <code class="luz-code-inline">--luz-text-sm</code> (14px).</li>
+              <li><strong>Nada</strong> baja de <code class="luz-code-inline">--luz-text-xs</code> (12px). Los tamaños relativos a su contexto (<code class="luz-code-inline">kbd</code>, <code class="luz-code-inline">time</code>, <code class="luz-code-inline">output</code>, código en línea y pies) se limitan con <code class="luz-code-inline">max()</code> para que no bajen del mínimo dentro de texto pequeño.</li>
+              <li>Los <strong>campos de formulario</strong> usan <code class="luz-code-inline">--luz-text-control</code> (configuración de core): <code class="luz-code-inline">--luz-text-md</code> en ordenadores; <code class="luz-code-inline">max(1rem, var(--luz-text-base))</code> a 768px o menos y en pantallas táctiles, nunca por debajo de 16px, porque iOS Safari amplía la página al enfocar cualquier campo más pequeño.</li>
+            </ul>
+          </div>

@@ -1,0 +1,52 @@
+<!-- luz:page
+title: Raíz del documento
+description: La raíz de la página y el cuerpo que contiene todo lo que ve quien la visita. Se muestra como marcado: LUZ aplica estilos a ambos en su capa de documento.
+source: b753cb8faa77
+reviewed: false
+-->
+    <div class="docs-block elements-section" id="cat-root" data-category="root">
+        <p class="elements-section__lead">La raíz de la página y el cuerpo que contiene todo lo que ve quien la visita. Se muestra como marcado: LUZ aplica estilos a ambos en su capa de documento.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-body" data-element="body" aria-labelledby="el-body-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-body-title"><code>&lt;body&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/body">MDN<span class="u-sr-only"> referencia del elemento body</span></a>
+          </div>
+          <p class="elements-card__desc">Contiene todo lo que se ve en la página. Cada página tiene uno, justo después de head.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-body" aria-label="Copy the body markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="body markup"><code id="code-body">&lt;body class=&quot;o-shell&quot;&gt;
+  &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to main content&lt;/a&gt;
+  &lt;main id=&quot;main-content&quot;&gt;…&lt;/main&gt;
+&lt;/body&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/document.css</code>, sin clase. No afecta a la maquetación hasta que añadas o-shell para distribuir la barra lateral y el contenido principal.</p>
+        </article>
+
+        <article class="elements-card" id="el-html" data-element="html" aria-labelledby="el-html-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-html-title"><code>&lt;html&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/html">MDN<span class="u-sr-only"> referencia del elemento html</span></a>
+          </div>
+          <p class="elements-card__desc">La etiqueta más externa, que envuelve toda la página. Añade <code>lang</code> para que los lectores de pantalla y las herramientas de traducción elijan el idioma correcto, y <code>data-theme</code> para elegir el modo de color de LUZ.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-html" aria-label="Copy the html markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="html markup"><code id="code-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;
+  &lt;head&gt;…&lt;/head&gt;
+  &lt;body&gt;…&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/document.css</code>, sin clase. LUZ lee <code>data-theme</code> en este elemento: claro, oscuro o alto contraste.</p>
+        </article>
+        </div>
+      
+    </div>

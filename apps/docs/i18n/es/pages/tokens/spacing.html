@@ -1,0 +1,91 @@
+<!-- luz:page
+title: Espaciado y tamaños
+description: La escala de espaciado para separaciones y rellenos, y las alturas de botones y campos.
+source: e3b8070e29c2
+reviewed: false
+-->
+    <div class="docs-block" id="t-spacing">
+          <p>Obtén de esta escala todas las separaciones, rellenos y márgenes para que el espaciado sea coherente entre componentes. Usa los pasos pequeños dentro de un componente y los grandes entre secciones.</p>
+          <div class="docs-demo__stage">
+            <ul class="docs-scale-list">
+              <li class="docs-scale">
+                <code>--luz-space-3xs</code>
+                <span>unit × ½ · 2px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-3xs)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-2xs</code>
+                <span>unit × 1 · 4px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-2xs)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-xs</code>
+                <span>unit × 2 · 8px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-xs)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-sm</code>
+                <span>unit × 3 · 12px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-sm)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-md</code>
+                <span>unit × 4 · 16px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-md)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-lg</code>
+                <span>unit × 6 · 24px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-lg)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-xl</code>
+                <span>unit × 8 · 32px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-xl)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-2xl</code>
+                <span>unit × 12 · 48px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-2xl)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-3xl</code>
+                <span>unit × 16 · 64px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-3xl)" aria-hidden="true"></span>
+              </li>
+              <li class="docs-scale">
+                <code>--luz-space-4xl</code>
+                <span>unit × 24 · 96px</span>
+                <span class="docs-scale__bar" style="--v: var(--luz-space-4xl)" aria-hidden="true"></span>
+              </li>
+            </ul>
+          </div>
+          <ul class="docs-scale-list">
+            <li class="docs-scale docs-scale--note"><code class="u-select-all">--luz-space-unit</code><span>0.25rem · 4px</span><span class="docs-scale__note">La cuadrícula de la que son múltiplos todos los pasos; se expresa en rem para que el espaciado siga el tamaño de fuente de quien lee</span></li>
+          </ul>
+          <p class="docs-demo__note">Una línea fina de 2px y, después, la unidad <code class="luz-code-inline">--luz-space-unit</code> (0.25rem, 4px con una raíz de 16px) multiplicada por 1, 2, 3, 4, 6, 8, 12, 16 y 24: cada potencia de dos y el paso intermedio de 1,5×. La unidad se expresa en rem, así que el espaciado sigue, como el texto, el tamaño de fuente que se configura en el navegador. Defínela en <code class="luz-code-inline">:root</code> para cambiar toda la escala; los componentes usan los pasos, nunca la unidad.</p>
+        
+    </div>
+
+    <section class="docs-block" id="t-sizing" aria-labelledby="t-sizing-title">
+          <div class="docs-demo__head">
+            <h2 class="docs-demo__title" id="t-sizing-title">Alturas de los controles</h2>
+            <code class="docs-demo__file">tokens.json → control</code>
+          </div>
+          <div class="docs-demo__stage">
+            <div class="o-stack">
+              <div class="docs-box docs-box--height" style="--v: var(--luz-control-sm)">--luz-control-sm · 28px</div>
+              <div class="docs-box docs-box--height" style="--v: var(--luz-control-md)">--luz-control-md · 36px</div>
+              <div class="docs-box docs-box--height" style="--v: var(--luz-control-lg)">--luz-control-lg · 44px</div>
+              <div class="docs-box docs-box--height" style="--v: var(--luz-control-xl)">--luz-control-xl · 56px</div>
+            </div>
+          </div>
+          <p class="docs-demo__note">44px es el tamaño objetivo de WCAG 2.5.5; los demás pasos distan aproximadamente 1,25× en la cuadrícula de 4px.</p>
+          <ul>
+            <li><code class="luz-code-inline">--luz-control-sm</code>: botones de cierre y otros objetivos pequeños para iconos.</li>
+            <li><code class="luz-code-inline">--luz-control-md</code>: botones pequeños.</li>
+            <li><code class="luz-code-inline">--luz-control-lg</code>: botones y campos; es el valor predeterminado.</li>
+            <li><code class="luz-code-inline">--luz-control-xl</code>: botones grandes.</li>
+          </ul>
+        
+    </section>
