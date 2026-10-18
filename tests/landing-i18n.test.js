@@ -15,6 +15,7 @@ import { docsSite } from "../scripts/docs-site/plugin.js";
 import { PAGES_BASE, SITE_URL } from "../vite.config.js";
 import { buildSite, currentOf, landingDocuments, relativizeLinks, renderDocument, scanSite } from "../scripts/docs-site/site.js";
 import { addDocsLanguage } from "./helpers/docs-i18n-size-fixture.js";
+import { findAll, parse, query } from "./helpers/html-dom.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -230,6 +231,18 @@ describe("languages of the home page: generated markup", () => {
   // Decision D1: a language has docs when apps/docs/i18n/<code>/ exists. Then its home links to /<code>/docs/,
   // the docs in its language, and says nothing about English (a link to the English docs says hreflang="en")
   describe("once a language has docs", () => {
+    /** The links of the page body into the docs (/docs/… or /<code>/docs/…): not the <head>'s alternates, not the language switcher's. */
+    const docsAnchors = (html) => {
+      const tree = parse(html, "home");
+      const body = query(tree, "body");
+      const inSwitcher = (n) => {
+        for (let up = n.parent; up; up = up.parent) if (up.name === "luz-lang-switch") return true;
+        return false;
+      };
+      return findAll(body, (n) => n.name === "a" && n.attrs.has("href") && /^\/(?:[a-z]{2,3}\/)?docs\//.test(n.attrs.get("href")) && !inSwitcher(n));
+    };
+    const hreflangsOf = (html) => docsAnchors(html).map((a) => a.attrs.get("hreflang") ?? null);
+
     const docsOf = (codes, options) => {
       const repoRoot = fixture(options);
       for (const code of codes) addDocsLanguage(join(repoRoot, "apps/docs"), code);
@@ -243,11 +256,14 @@ describe("languages of the home page: generated markup", () => {
       const es = render("/es/", "es");
       expect(es, "links of the Spanish home").toContain('<a href="/es/docs/">Docs</a>');
       expect(es, "no link left to the English docs").not.toMatch(/href="\/docs\//);
-      expect(es).not.toContain('hreflang="en"');
+      expect(docsAnchors(es).length, "docs links of the Spanish home").toBeGreaterThan(0);
+      expect(hreflangsOf(es).filter((h) => h === "en"), "docs links of the Spanish home that say hreflang=en").toEqual([]);
       // Arabic has no docs folder in this copy: its links are the English ones, said so
       const ar = render("/ar/", "ar");
       expect(ar).toContain('<a href="/docs/" hreflang="en">Docs</a>');
       expect(ar).not.toContain("/ar/docs/");
+      expect(docsAnchors(ar).length, "docs links of the Arabic home").toBeGreaterThan(0);
+      expect(hreflangsOf(ar).filter((h) => h !== "en"), "docs links of the Arabic home that lack hreflang=en").toEqual([]);
       // English is the default: its links are what they were
       expect(render("/", "en")).toContain('<a href="/docs/">Docs</a>');
     });

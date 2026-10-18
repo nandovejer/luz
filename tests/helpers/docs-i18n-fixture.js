@@ -425,6 +425,9 @@ export function chromeOf(html) {
   const skip = new Set(["pre", "code", "kbd", "script", "style", "svg"]);
   const voids = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"]);
   const hidden = [];
+  // An element with a lang other than the page's is its own language island (that is what the attribute is for)
+  const primary = (lang) => String(lang).toLowerCase().split("-")[0];
+  const pageLang = primary(/<html\b[^>]*\blang="([^"]*)"/i.exec(html)?.[1] ?? "en");
   let skipping = 0;
   let last = 0;
   const lineOf = (index) => html.slice(0, index).split("\n").length;
@@ -445,7 +448,8 @@ export function chromeOf(html) {
         }
       }
       if (!voids.has(tag.name) && !tag.selfClosing) {
-        const inert = skip.has(tag.name) || tag.attrs.get("lang") === "en";
+        const lang = tag.attrs.get("lang");
+        const inert = skip.has(tag.name) || (Boolean(lang) && primary(lang) !== pageLang);
         hidden.push(inert);
         if (inert) skipping++;
       }

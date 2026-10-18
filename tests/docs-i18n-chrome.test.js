@@ -77,7 +77,8 @@ function englishIn(route, items, patterns) {
   return found;
 }
 
-const BRANDS = /\b(?:LUZ|GitHub|A–Z|MIT|npm|beta)\b/g;
+// A product name, a label that is the same in every language ("beta") and a version number (v0.1.0)
+const BRANDS = /\b(?:LUZ|GitHub|A–Z|MIT|npm|beta)\b|\bv\d+(?:\.\d+)*/g;
 /** Is this text in Arabic, or a symbol, a number or a brand (v0.1.0 beta, GitHub, A–Z)? */
 const isArabicOrNeutral = (text) => /\p{Script=Arabic}/u.test(text) || !/\p{Script=Latin}/u.test(text.replace(BRANDS, ""));
 

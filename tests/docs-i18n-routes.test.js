@@ -14,7 +14,6 @@
 import { afterAll, afterEach, describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { tags } from "../scripts/docs-site/html.js";
 import { buildSite, relativizeLinks, renderPage, routeOfPage, scanSite } from "../scripts/docs-site/site.js";
 import { find, findAll, hasClass, parse, query, queryAll, textOf } from "./helpers/html-dom.js";
 import { PAGES, REPO, TRANSLATED, docsI18nFixture as fixture, docsI18nModule, docsLanguage, messageOf, headLinks, languageOf, titleOf } from "./helpers/docs-i18n-fixture.js";
@@ -105,10 +104,6 @@ describe("the localized site", () => {
   const strings = (code) => docsLanguage(site, code).docsStrings;
   /** What a reader of the language sees as the title of a page in a list: the translation's, else English. */
   const titleIn = (code, route) => (translates(code, route) ? docsLanguage(site, code).pages.get(route).meta.title : site.byRoute.get(route).meta.title);
-  const links = (html) =>
-    [...tags(html.slice(html.indexOf("<body")), "page")]
-      .filter((t) => t.type === "start" && t.name === "a" && t.attrs.has("href"))
-      .map((t) => ({ href: t.attrs.get("href"), hreflang: t.attrs.get("hreflang") ?? null }));
 
   /* ---- Routes ------------------------------------------------------------------------- */
 
@@ -218,18 +213,22 @@ describe("the localized site", () => {
       expect(view.body).toContain('href="#three"');
     });
 
-    it("sends every link of a localized page to the same language, except the links that name another language", async () => {
+    it("sends every link of a localized page to the same language, except the language switcher's and the notice's link to the English page", async () => {
       await ready();
       const problems = [];
       for (const code of CODES) {
         for (const route of routes()) {
           const own = `/${code}/`;
-          for (const { href, hreflang } of links(htmlOf(code, route))) {
+          // The switcher's links are cross-language by nature: they are checked on their own (the switcher tests below)
+          const switcher = new Set(findAll(query(treeOf(code, route), "luz-lang-switch"), (n) => n.name === "a"));
+          const anchors = findAll(treeOf(code, route), (n) => n.name === "a" && n.attrs.has("href") && !switcher.has(n));
+          for (const a of anchors) {
+            const href = a.attrs.get("href");
             if (!href.startsWith("/") || href.startsWith("//")) continue;
             const path = href.split(/[#?]/)[0];
-            if (hreflang) {
-              // The switcher and the notice: a language's version of this same page
-              if (![route, localRoute("es", route), localRoute("ar", route)].includes(path)) problems.push(`${code} ${route}: hreflang link to ${href}`);
+            if (a.attrs.has("hreflang")) {
+              // The notice: the English version of this same page
+              if (a.attrs.get("hreflang") !== "en" || path !== route) problems.push(`${code} ${route}: hreflang link to ${href}`);
               continue;
             }
             if (!path.startsWith(own)) problems.push(`${code} ${route}: ${href} leaves the language`);
