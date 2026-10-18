@@ -1,0 +1,1045 @@
+{
+  "$comment": "The glossary of the docs translators (dev/TRANSLATING.md). Seeded from the home catalogs (the home page catalogs) and core's Spanish (packages/core/src/i18n/es.json): a term marked existing is how the project already writes it. 'forms' are the inflections a translation may use; 'avoid' are words a translation must not use for the term.",
+  "keep": {
+    "literals": [
+      "LUZ",
+      "GitHub",
+      "npm",
+      "pnpm",
+      "CDN",
+      "MIT",
+      "ARIA",
+      "WCAG",
+      "EN 301 549",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "JSON",
+      "Markdown",
+      "MIDI",
+      "Figma",
+      "Core",
+      "Site",
+      "Tab",
+      "Enter",
+      "Escape",
+      "Shift",
+      "Ctrl"
+    ],
+    "patterns": [
+      "@luz-ds/[a-z0-9-]+",
+      "--luz-[a-z0-9-]+",
+      "\\.(?:luz|o|u)-[a-z0-9_-]+",
+      "data-[a-z0-9-]+",
+      "aria-[a-z]+",
+      "<[a-z][a-z0-9-]*>",
+      "[a-z0-9-]+\\.(?:css|js|json|html|md)"
+    ],
+    "note": "Never translated: the brand, the packages, every class, token, attribute, element, file name, command and URL, the ids of WCAG and EN 301 549, the ARIA roles, the names of keys printed on a key (except Space) and everything inside pre and code. A code sample stays English byte for byte."
+  },
+  "terms": [
+    {
+      "en": "design system",
+      "es": "sistema de diseño",
+      "ar": "نظام تصميم",
+      "forms": {
+        "es": [
+          "sistema de diseño"
+        ],
+        "ar": [
+          "نظام تصميم"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "sistema de diseños"
+        ],
+        "ar": []
+      },
+      "note": "existing (home catalogs)"
+    },
+    {
+      "en": "component",
+      "es": "componente",
+      "ar": "مكوّن",
+      "forms": {
+        "es": [
+          "componente",
+          "componentes"
+        ],
+        "ar": [
+          "مكوّن",
+          "مكوّنات",
+          "المكونات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "pattern",
+      "es": "patrón",
+      "ar": "نمط",
+      "forms": {
+        "es": [
+          "patrón",
+          "patrones"
+        ],
+        "ar": [
+          "نمط",
+          "أنماط",
+          "الأنماط"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing: the Patterns heading of the home footer"
+    },
+    {
+      "en": "token",
+      "es": "token",
+      "ar": "رمز التصميم",
+      "forms": {
+        "es": [
+          "token",
+          "tokens"
+        ],
+        "ar": [
+          "رمز التصميم",
+          "رموز التصميم"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "ficha",
+          "fichas",
+          "símbolo"
+        ],
+        "ar": []
+      },
+      "note": "existing. A semantic token is «رمز دلالي»; a primitive is «أساسي»"
+    },
+    {
+      "en": "semantic",
+      "es": "semántico",
+      "ar": "دلالي",
+      "forms": {
+        "es": [
+          "semántico",
+          "semántica",
+          "semánticos"
+        ],
+        "ar": [
+          "دلالي",
+          "دلالية"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "primitive",
+      "es": "primitivo",
+      "ar": "أساسي",
+      "forms": {
+        "es": [
+          "primitivo",
+          "primitiva",
+          "primitivos"
+        ],
+        "ar": [
+          "أساسي",
+          "أساسية"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "cascade layer",
+      "es": "capa de cascada",
+      "ar": "طبقة تتالٍ",
+      "forms": {
+        "es": [
+          "capa de cascada",
+          "capas de cascada",
+          "capa",
+          "capas"
+        ],
+        "ar": [
+          "طبقة تتالٍ",
+          "طبقات التتالي",
+          "طبقة",
+          "طبقات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "color mode",
+      "es": "modo de color",
+      "ar": "وضع الألوان",
+      "forms": {
+        "es": [
+          "modo de color",
+          "modos de color"
+        ],
+        "ar": [
+          "وضع الألوان",
+          "أوضاع الألوان"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "tema de color"
+        ],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "light",
+      "es": "claro",
+      "ar": "فاتح",
+      "forms": {
+        "es": [
+          "claro"
+        ],
+        "ar": [
+          "فاتح"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing: a color mode"
+    },
+    {
+      "en": "dark",
+      "es": "oscuro",
+      "ar": "داكن",
+      "forms": {
+        "es": [
+          "oscuro"
+        ],
+        "ar": [
+          "داكن"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing: a color mode"
+    },
+    {
+      "en": "high contrast",
+      "es": "alto contraste",
+      "ar": "تباين عالٍ",
+      "forms": {
+        "es": [
+          "alto contraste"
+        ],
+        "ar": [
+          "تباين عالٍ"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing: a color mode"
+    },
+    {
+      "en": "contrast",
+      "es": "contraste",
+      "ar": "تباين",
+      "forms": {
+        "es": [
+          "contraste"
+        ],
+        "ar": [
+          "تباين"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "focus",
+      "es": "foco",
+      "ar": "التركيز",
+      "forms": {
+        "es": [
+          "foco"
+        ],
+        "ar": [
+          "التركيز"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "enfoque"
+        ],
+        "ar": []
+      },
+      "note": "existing. Focus ring: «anillo de foco» / «حلقة التركيز»"
+    },
+    {
+      "en": "keyboard",
+      "es": "teclado",
+      "ar": "لوحة المفاتيح",
+      "forms": {
+        "es": [
+          "teclado"
+        ],
+        "ar": [
+          "لوحة المفاتيح"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "screen reader",
+      "es": "lector de pantalla",
+      "ar": "قارئ الشاشة",
+      "forms": {
+        "es": [
+          "lector de pantalla",
+          "lectores de pantalla"
+        ],
+        "ar": [
+          "قارئ الشاشة",
+          "قارئات الشاشة"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed"
+    },
+    {
+      "en": "accessibility",
+      "es": "accesibilidad",
+      "ar": "إمكانية الوصول",
+      "forms": {
+        "es": [
+          "accesibilidad"
+        ],
+        "ar": [
+          "إمكانية الوصول"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "accessibility statement",
+      "es": "declaración de accesibilidad",
+      "ar": "بيان إمكانية الوصول",
+      "forms": {
+        "es": [
+          "declaración de accesibilidad"
+        ],
+        "ar": [
+          "بيان إمكانية الوصول"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing (home footer)"
+    },
+    {
+      "en": "native",
+      "es": "nativo",
+      "ar": "أصلي",
+      "forms": {
+        "es": [
+          "nativo",
+          "nativa",
+          "nativos",
+          "nativas"
+        ],
+        "ar": [
+          "أصلي",
+          "أصلية"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing: a native element is the browser's own"
+    },
+    {
+      "en": "browser",
+      "es": "navegador",
+      "ar": "المتصفح",
+      "forms": {
+        "es": [
+          "navegador",
+          "navegadores"
+        ],
+        "ar": [
+          "المتصفح",
+          "المتصفحات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "without JavaScript",
+      "es": "sin JavaScript",
+      "ar": "دون JavaScript",
+      "forms": {
+        "es": [
+          "sin JavaScript"
+        ],
+        "ar": [
+          "دون JavaScript"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing. JavaScript stays in Latin"
+    },
+    {
+      "en": "build step",
+      "es": "paso de compilación",
+      "ar": "خطوة بناء",
+      "forms": {
+        "es": [
+          "paso de compilación",
+          "sin compilación"
+        ],
+        "ar": [
+          "خطوة بناء",
+          "بلا خطوة بناء"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "dependency",
+      "es": "dependencia",
+      "ar": "اعتمادية",
+      "forms": {
+        "es": [
+          "dependencia",
+          "dependencias"
+        ],
+        "ar": [
+          "اعتمادية",
+          "اعتماديات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "runtime",
+      "es": "tiempo de ejecución",
+      "ar": "وقت التشغيل",
+      "forms": {
+        "es": [
+          "tiempo de ejecución"
+        ],
+        "ar": [
+          "وقت التشغيل"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "framework",
+      "es": "framework",
+      "ar": "إطار عمل",
+      "forms": {
+        "es": [
+          "framework",
+          "frameworks"
+        ],
+        "ar": [
+          "إطار عمل",
+          "أطر العمل"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "stylesheet",
+      "es": "hoja de estilos",
+      "ar": "ورقة أنماط",
+      "forms": {
+        "es": [
+          "hoja de estilos",
+          "hojas de estilos"
+        ],
+        "ar": [
+          "ورقة أنماط",
+          "أوراق الأنماط"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "attribute",
+      "es": "atributo",
+      "ar": "سمة",
+      "forms": {
+        "es": [
+          "atributo",
+          "atributos"
+        ],
+        "ar": [
+          "سمة",
+          "سمات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing. Do not use «سمة» for a theme"
+    },
+    {
+      "en": "theme",
+      "es": "tema",
+      "ar": "المظهر",
+      "forms": {
+        "es": [
+          "tema",
+          "temas"
+        ],
+        "ar": [
+          "المظهر",
+          "المظاهر"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": [
+          "السمة"
+        ]
+      },
+      "note": "proposed. The Arabic «السمة» means an attribute"
+    },
+    {
+      "en": "tag",
+      "es": "etiqueta",
+      "ar": "وسم",
+      "forms": {
+        "es": [
+          "etiqueta",
+          "etiquetas"
+        ],
+        "ar": [
+          "وسم",
+          "وسوم"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing: an HTML tag"
+    },
+    {
+      "en": "link",
+      "es": "enlace",
+      "ar": "رابط",
+      "forms": {
+        "es": [
+          "enlace",
+          "enlaces"
+        ],
+        "ar": [
+          "رابط",
+          "روابط"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "vínculo"
+        ],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "dialog",
+      "es": "diálogo",
+      "ar": "مربع حوار",
+      "forms": {
+        "es": [
+          "diálogo",
+          "diálogos",
+          "diálogo modal"
+        ],
+        "ar": [
+          "مربع حوار",
+          "مربعات الحوار"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "popover",
+      "es": "popover",
+      "ar": "نافذة منبثقة",
+      "forms": {
+        "es": [
+          "popover"
+        ],
+        "ar": [
+          "نافذة منبثقة",
+          "نوافذ منبثقة"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "tabs",
+      "es": "pestañas",
+      "ar": "علامات التبويب",
+      "forms": {
+        "es": [
+          "pestaña",
+          "pestañas"
+        ],
+        "ar": [
+          "علامات التبويب",
+          "علامة تبويب"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "form",
+      "es": "formulario",
+      "ar": "نموذج",
+      "forms": {
+        "es": [
+          "formulario",
+          "formularios"
+        ],
+        "ar": [
+          "نموذج",
+          "النماذج"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "button",
+      "es": "botón",
+      "ar": "زر",
+      "forms": {
+        "es": [
+          "botón",
+          "botones"
+        ],
+        "ar": [
+          "زر",
+          "الأزرار",
+          "أزرار"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "search",
+      "es": "búsqueda",
+      "ar": "البحث",
+      "forms": {
+        "es": [
+          "búsqueda",
+          "buscar"
+        ],
+        "ar": [
+          "البحث",
+          "ابحث"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "documentation",
+      "es": "documentación",
+      "ar": "التوثيق",
+      "forms": {
+        "es": [
+          "documentación"
+        ],
+        "ar": [
+          "التوثيق"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing: the Docs link of the header"
+    },
+    {
+      "en": "get started",
+      "es": "primeros pasos",
+      "ar": "البدء",
+      "forms": {
+        "es": [
+          "primeros pasos"
+        ],
+        "ar": [
+          "البدء"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "snippet",
+      "es": "fragmento",
+      "ar": "مقتطف",
+      "forms": {
+        "es": [
+          "fragmento",
+          "fragmentos"
+        ],
+        "ar": [
+          "مقتطف",
+          "مقتطفات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "copy",
+      "es": "copiar",
+      "ar": "نسخ",
+      "forms": {
+        "es": [
+          "copiar",
+          "copiado"
+        ],
+        "ar": [
+          "نسخ",
+          "تم النسخ"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing. Copied: «copiado» / «تم النسخ»"
+    },
+    {
+      "en": "clipboard",
+      "es": "portapapeles",
+      "ar": "الحافظة",
+      "forms": {
+        "es": [
+          "portapapeles"
+        ],
+        "ar": [
+          "الحافظة"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "beta",
+      "es": "beta",
+      "ar": "تجريبي",
+      "forms": {
+        "es": [
+          "beta"
+        ],
+        "ar": [
+          "تجريبي"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing (home footer)"
+    },
+    {
+      "en": "changelog",
+      "es": "registro de cambios",
+      "ar": "سجل التغييرات",
+      "forms": {
+        "es": [
+          "registro de cambios"
+        ],
+        "ar": [
+          "سجل التغييرات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "on this page",
+      "es": "en esta página",
+      "ar": "في هذه الصفحة",
+      "forms": {
+        "es": [
+          "en esta página"
+        ],
+        "ar": [
+          "في هذه الصفحة"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "existing"
+    },
+    {
+      "en": "known issue",
+      "es": "problema conocido",
+      "ar": "مشكلة معروفة",
+      "forms": {
+        "es": [
+          "problema conocido",
+          "problemas conocidos"
+        ],
+        "ar": [
+          "مشكلة معروفة",
+          "مشكلات معروفة"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "error conocido"
+        ],
+        "ar": []
+      },
+      "note": "proposed"
+    },
+    {
+      "en": "markup",
+      "es": "marcado",
+      "ar": "الترميز",
+      "forms": {
+        "es": [
+          "marcado"
+        ],
+        "ar": [
+          "الترميز"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed: HTML markup"
+    },
+    {
+      "en": "class",
+      "es": "clase",
+      "ar": "فئة",
+      "forms": {
+        "es": [
+          "clase",
+          "clases"
+        ],
+        "ar": [
+          "فئة",
+          "فئات"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed: a CSS class (the name itself stays in code)"
+    },
+    {
+      "en": "example",
+      "es": "ejemplo",
+      "ar": "مثال",
+      "forms": {
+        "es": [
+          "ejemplo",
+          "ejemplos"
+        ],
+        "ar": [
+          "مثال",
+          "أمثلة"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed"
+    },
+    {
+      "en": "breadcrumb",
+      "es": "migas de pan",
+      "ar": "مسار التنقل",
+      "forms": {
+        "es": [
+          "migas de pan"
+        ],
+        "ar": [
+          "مسار التنقل"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed"
+    },
+    {
+      "en": "sidebar",
+      "es": "barra lateral",
+      "ar": "الشريط الجانبي",
+      "forms": {
+        "es": [
+          "barra lateral"
+        ],
+        "ar": [
+          "الشريط الجانبي"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed"
+    },
+    {
+      "en": "last updated",
+      "es": "última actualización",
+      "ar": "آخر تحديث",
+      "forms": {
+        "es": [
+          "última actualización"
+        ],
+        "ar": [
+          "آخر تحديث"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed"
+    },
+    {
+      "en": "report a problem",
+      "es": "informar de un problema",
+      "ar": "أبلغ عن مشكلة",
+      "forms": {
+        "es": [
+          "informar de un problema"
+        ],
+        "ar": [
+          "أبلغ عن مشكلة"
+        ]
+      },
+      "avoid": {
+        "es": [],
+        "ar": []
+      },
+      "note": "proposed; the button is an imperative in Arabic"
+    }
+  ]
+}

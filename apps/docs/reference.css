@@ -140,6 +140,28 @@
   color: var(--luz-text-secondary);
 }
 
+/* Code is English and reads left to right on any page. In a right-to-left
+   page a class name such as .luz-btn--primary or a token such as
+   --luz-space-md would be reordered by the bidi algorithm, and a block of code
+   would be aligned to the right: each is an isolate, laid out as in English
+   (docs-i18n design, section f). */
+.docs-page :is(code, kbd, samp, pre) {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.docs-page pre {
+  text-align: start;
+}
+
+/* The notice under the page head (div.luz-alert.luz-alert--info.docs-notice):
+   "This page is not translated yet", or "This translation is pending review".
+   main already spaces its blocks with a gap, so the alert's own bottom margin
+   would double it */
+.docs-notice {
+  margin-block-end: 0;
+}
+
 /* A long URL or class name in running text wraps instead of widening the page */
 :where(.docs-body) :where(p, li, td) code {
   overflow-wrap: anywhere;

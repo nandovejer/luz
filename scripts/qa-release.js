@@ -42,6 +42,7 @@ const steps = [
   { name: "Lint JS (ESLint: RL-3, HTML sinks)", cmd: [pnpm, "lint:js"] },
   { name: "Size budgets (RL-17)", cmd: [pnpm, "check:size"] },
   { name: "Shipped strings (SR-1)", cmd: [pnpm, "check:strings"] },
+  { name: "Translations of the docs (a stale or orphan page blocks a release)", cmd: [pnpm, "check:i18n", "--strict"] },
   { name: "Exceptions register", cmd: [pnpm, "check:exceptions"] },
   { name: "Licences (RL-1, RL-13: published packages MIT with no dependencies; dev/LICENSES.md)", cmd: [pnpm, "check:license"] },
   { name: "Tarball contents", cmd: [pnpm, "check:pack"] },

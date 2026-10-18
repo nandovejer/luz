@@ -54,6 +54,7 @@ import { SITE_URL } from "../../packages/check/src/messages.js";
 import { ruleRows } from "./ai-rules.js";
 import { readingOrder } from "./site.js";
 import { FILES } from "./snippets.js";
+import { englishT } from "./strings.js";
 
 /** The routes of the AI files at the Pages root. */
 export const AI_ROUTES = { llms: "/llms.txt", llmsFull: "/llms-full.txt", examples: "/examples/", manifests: "/manifests/" };
@@ -581,22 +582,24 @@ const TOKENS_POINTER =
 /** The text of a page's body, by the kind of page. */
 function bodyOf(page, options) {
   const { siteUrl, base } = options;
+  // The special pages are known by their English route, in a language's tree too
+  const canonical = page.canonicalRoute ?? page.route;
   const file = page.file;
   const area = page.meta.area;
   const headings = outline(page.body, page.bodyLine, file);
   const lineOf = (offset) => page.bodyLine + (page.body.slice(0, offset).match(/\n/g) ?? []).length;
 
   if (PACKAGE_OF_AREA[area] && TEMPLATES_ROUTE.test(page.route)) return TEMPLATES_POINTER;
-  if (SUMMARY_POINTERS.has(page.route)) return SUMMARY_POINTERS.get(page.route);
+  if (SUMMARY_POINTERS.has(canonical)) return SUMMARY_POINTERS.get(canonical);
 
-  if (page.route === AI_ROUTE && page.meta.generate === "ai") {
+  if (canonical === AI_ROUTE && page.meta.generate === "ai") {
     const { text } = convert(aiBodyOf(page.body, headings), { file, line: lineOf(0), shift: 1, siteUrl, base });
     return text.startsWith(page.meta.description) ? text.slice(page.meta.description.length).replace(/^\s+/, "") : text;
   }
 
-  if (area === "html" || OUTLINE_POINTERS.has(page.route)) {
+  if (area === "html" || OUTLINE_POINTERS.has(canonical)) {
     const items = headings.filter((h) => h.level === 2 && h.text).map((h) => `- ${/[<>]/.test(h.text) ? codeSpan(h.text) : h.text}`);
-    return [items.join("\n"), OUTLINE_POINTERS.get(page.route)].filter(Boolean).join("\n\n");
+    return [items.join("\n"), OUTLINE_POINTERS.get(canonical)].filter(Boolean).join("\n\n");
   }
 
   if (headings.some((h) => h.id === "markup")) {
@@ -834,18 +837,18 @@ export function exampleDocuments(site, { csp, versions, root = REPO_ROOT }) {
 
 /* ---- aiArtifacts: the table of "What an agent can read" ---------------------- */
 
+/** The catalog key of what each file is (strings.js; the table on the page "Working with AI"). */
 const WHAT = {
-  "llms.txt": "The index of the documentation for an agent: every page with its description, in reading order.",
-  "llms-full.txt": "The same pages as plain text: the markup, the variants, when to use and the keyboard of each one.",
-  example: "The markup of one component or pattern page, styled by LUZ; every page that has a markup section has its own under /examples/.",
-  "classes.json": "Every class, custom property and attribute hook of the package: the names an agent may use.",
-  "custom-elements.json": "The custom elements the package defines or declares, with the attributes each one reads.",
+  "llms.txt": "ai.what-llms",
+  "llms-full.txt": "ai.what-llms-full",
+  example: "ai.what-example",
+  "classes.json": "ai.what-classes",
+  "custom-elements.json": "ai.what-elements",
 };
 
-const MADE_BY = {
-  pages: "scripts/docs-site/ai.js, in the pages build",
-  manifests: "scripts/ai-manifests.js, in the build of each package",
-};
+const MADE_BY = { pages: "ai.made-pages", manifests: "ai.made-manifests" };
+
+const tOf = (site) => site.t ?? englishT();
 
 /**
  * The AI files of the Pages site as table rows, in this order: `llms.txt`,
@@ -855,17 +858,20 @@ const MADE_BY = {
  * without its first slash. Pure: it reads the manifests' routes, not the files.
  */
 export function aiArtifacts(site, { siteUrl = "" } = {}) {
+  const t = tOf(site);
   const rows = [
-    { file: "llms.txt", url: urlOf(AI_ROUTES.llms, siteUrl), what: WHAT["llms.txt"], madeBy: MADE_BY.pages },
-    { file: "llms-full.txt", url: urlOf(AI_ROUTES.llmsFull, siteUrl), what: WHAT["llms-full.txt"], madeBy: MADE_BY.pages },
+    { file: "llms.txt", url: urlOf(AI_ROUTES.llms, siteUrl), what: t(WHAT["llms.txt"]), madeBy: t(MADE_BY.pages) },
+    { file: "llms-full.txt", url: urlOf(AI_ROUTES.llmsFull, siteUrl), what: t(WHAT["llms-full.txt"]), madeBy: t(MADE_BY.pages) },
   ];
-  const sample = site.byRoute.get("/docs/components/button/") ?? site.pages.find(hasMarkup);
+  // The files are the English site's, whatever the language the table is read in
+  const english = site.base ?? site;
+  const sample = english.byRoute.get("/docs/components/button/") ?? english.pages.find(hasMarkup);
   if (sample && hasMarkup(sample)) {
-    rows.push({ file: "examples/<area>/<slug>.html", url: urlOf(exampleRouteOf(sample), siteUrl), what: WHAT.example, madeBy: MADE_BY.pages });
+    rows.push({ file: "examples/<area>/<slug>.html", url: urlOf(exampleRouteOf(sample), siteUrl), what: t(WHAT.example), madeBy: t(MADE_BY.pages) });
   }
   for (const { route } of manifestAssets(site.repoRoot ?? REPO_ROOT)) {
     const [, pkg, name] = /^\/manifests\/([a-z]+)\/([a-z.-]+)$/.exec(route);
-    rows.push({ file: route.slice(1), url: urlOf(route, siteUrl), what: `${WHAT[name]} Package: @luz-ds/${pkg}.`, madeBy: MADE_BY.manifests });
+    rows.push({ file: route.slice(1), url: urlOf(route, siteUrl), what: `${t(WHAT[name])} ${t("ai.package", { package: `@luz-ds/${pkg}` })}`, madeBy: t(MADE_BY.manifests) });
   }
   return rows;
 }
@@ -875,11 +881,11 @@ export function aiArtifacts(site, { siteUrl = "" } = {}) {
 const MARKER = /^([ \t]*)<!-- luz:ai ([a-z]+) -->[ \t]*$/gm;
 
 /** A scrollable, labelled luz-table: `columns` are the headers, `rows` arrays of cell HTML. */
-function tableOf(label, columns, rows) {
+function tableOf(label, columns, rows, lang = "") {
   const head = columns.map((c) => `<th scope="col">${c}</th>`).join("");
   const body = rows.map((cells) => `<tr>${cells.map((cell, i) => `<td data-label="${columns[i]}"><div>${cell}</div></td>`).join("")}</tr>`);
   return [
-    `<div class="luz-table-wrap" role="region" aria-label="${escAttr(label)}" tabindex="0">`,
+    `<div class="luz-table-wrap"${lang} role="region" aria-label="${escAttr(label)}" tabindex="0">`,
     '  <table class="luz-table">',
     `    <caption>${escText(label)}</caption>`,
     `    <thead><tr>${head}</tr></thead>`,
@@ -893,23 +899,28 @@ function tableOf(label, columns, rows) {
 
 const generated = {
   files(site) {
+    const t = tOf(site);
     const rows = aiArtifacts(site, { siteUrl: SITE_URL }).map((r) => [
       `<code>${escText(r.file)}</code>`,
       `<code>${escText(r.url)}</code>`,
       escText(r.what),
       escText(r.madeBy),
     ]);
-    return tableOf("Files an agent can read", ["File", "URL", "What it is", "Made by"], rows);
+    return tableOf(t("ai.files-label"), [t("ai.col-file"), t("ai.col-url"), t("ai.col-what"), t("ai.col-made-by")].map(escText), rows);
   },
-  rules() {
+  rules(site) {
+    // The rules are what the CLI prints, in English (D18): in a language the tables say so (lang="en"), their words the English ones
+    const t = tOf(site.base ?? site);
+    const lang = site.locale ? ' lang="en"' : "";
     const rows = ruleRows();
     const table = (label, severity) =>
       tableOf(
         label,
-        ["Rule", "What it finds", "Severity"],
+        [t("ai.col-rule"), t("ai.col-finds"), t("ai.col-severity")],
         rows.filter((r) => r.severity === severity).map((r) => [`<code>${r.id}</code>`, escText(r.finds), severity]),
+        lang,
       );
-    return [table("Rules that block", "block"), table("Rules that warn", "warn")].join("\n");
+    return [table(t("ai.rules-block"), "block"), table(t("ai.rules-warn"), "warn")].join("\n");
   },
 };
 

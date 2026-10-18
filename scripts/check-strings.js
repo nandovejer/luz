@@ -6,7 +6,8 @@
  *
  * The home page is one template whose text is in a catalog per language
  * (apps/landing/i18n/): it is checked as rendered, once per language, by the
- * same generator as the site (scripts/docs-site). Each check knows the
+ * same generator as the site (scripts/docs-site). A translation of a docs page
+ * (apps/docs/i18n/<code>/pages/) is read in language <code>. Each check knows the
  * language of the text it reads (the element's own lang, else the page's):
  * vague wording has a list per language, and Title Case is checked in
  * English and Spanish only (Arabic has no letter case).
@@ -128,10 +129,12 @@ function check(name, source, fallback) {
   }
 }
 
-// Every source file, in English unless it says otherwise (the docs are English only)
+// Every source file, in English unless it says otherwise: a translation of a docs page, a file under
+// apps/docs/i18n/<code>/, is in language <code> (its own lang attributes still win, as everywhere)
+const TRANSLATION = /^apps\/docs\/i18n\/([a-z]{2,3})\//;
 for (const file of htmlFiles(appsDir)) {
   const name = relative(root, file).split(sep).join("/");
-  check(name, readFileSync(file, "utf-8"), "en");
+  check(name, readFileSync(file, "utf-8"), TRANSLATION.exec(name)?.[1] ?? "en");
 }
 
 // The home page, as rendered in each language

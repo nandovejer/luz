@@ -24,8 +24,11 @@
  * No loops, no conditionals. Anything unknown fails the build.
  *
  * The home page is one template rendered once per language of
- * apps/landing/i18n/locales.json ("/", "/es/", "/ar/"); the documentation
- * is English only and renders the shared partials with the default catalog.
+ * apps/landing/i18n/locales.json ("/", "/es/", "/ar/"). The documentation is
+ * English, and in each language that has a folder apps/docs/i18n/<code>/ (see
+ * docs-i18n.js): the same pages at /<code>/docs/…, translated where there is a
+ * translation and in English, with a notice, where there is not. Every string
+ * the generator writes is a key of apps/docs/i18n/<code>/strings.json (strings.js).
  *
  * Security (.claude/plans/docs-redesign/security.md, SEC-PLG-*): files are
  * read only inside apps/docs/ (and the landing page), after checking the real
@@ -39,7 +42,9 @@ import { HtmlError, readHtml, tags } from "./html.js";
 import { SITE_KINDS } from "../luz-packages.js";
 import { fillAiMarkers } from "./ai.js";
 import { renderSnippets, snippetData } from "./snippets.js";
-import { assertInlineHtml, loadLocales, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderSwitcher, unusedKeys } from "./i18n.js";
+import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
+import { loadDocsLocales, localizeLinks, localize } from "./docs-i18n.js";
+import { bundledEnglish, englishT, makeT } from "./strings.js";
 
 /** Where the docs pages are published. */
 export const DOCS_ROUTE = "/docs/";
@@ -76,8 +81,9 @@ const FRONT_MATTER = {
   module: { default: "" },
   // "false" when the page's content starts with its own lead paragraph
   lead: { default: "true" },
-  // A block the generator writes after the content: "gallery", "a-z" or "snippets"; "ai" writes
-  // its tables where the content has `<!-- luz:ai files -->` and `<!-- luz:ai rules -->`
+  // A block the generator writes after the content: "gallery", "a-z" or "snippets"; "notfound" (the
+  // 404) one block per other docs language; "ai" writes its tables where the content has
+  // `<!-- luz:ai files -->` and `<!-- luz:ai rules -->`
   generate: { default: "" },
 };
 
@@ -87,11 +93,14 @@ const PLACEHOLDERS = new Set([
   // The page's language (i18n.js): its code and direction, its home page, the
   // <link rel="alternate"> of every language, the language switcher
   "lang", "dir", "home", "alternates", "langswitch", "langlinks",
+  // A docs page in a language: the notice before its content (a translation not
+  // reviewed yet, or none) and the attributes of the content (lang="en" on a page in English)
+  "notice", "contentattrs",
   // The version the packages share (packages/core/package.json): the CDN snippets and the footer of the home
   "version",
 ]);
 /** Values inserted as HTML, not escaped. Only the generator produces them. */
-const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks"]);
+const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "notice", "contentattrs"]);
 
 /** Where the home page's languages live, from the repository root. */
 export const I18N_DIR = "apps/landing/i18n";
@@ -120,7 +129,11 @@ const TEMPLATE_HEADINGS = new Set([
 const AREA_OF_PACKAGE = { docs: "documentation" };
 const PACKAGE_AREAS = new Set(["site", ...SITE_KINDS.map((name) => AREA_OF_PACKAGE[name] ?? name)]);
 
-/** What an A–Z entry is, by the area of its page. */
+/**
+ * What an A–Z entry is, by the area of its page: the English index's own words.
+ * A view in a language says them with the catalog's `kind.<area>` (the A–Z
+ * index itself is the English one in every language, D9).
+ */
 const AREA_KIND = {
   "get-started": "Get started",
   components: "Component",
@@ -134,6 +147,25 @@ const AREA_KIND = {
   accessibility: "Accessibility",
   hub: "Documentation",
 };
+
+/* ---- The strings and the routes of a language ----------------------------- */
+
+/** The reader of the strings of a site or of its view in a language. */
+const tOf = (site) => site.t ?? englishT();
+/** Where the docs of the site (or of its view) are: "/docs/", "/es/docs/". */
+const docsRootOf = (site) => site.docsRoute ?? DOCS_ROUTE;
+/** The English site a view is made from, or the site itself. */
+const baseOf = (site) => site.base ?? site;
+/** The English page a view's page is made from, or the page itself. */
+const englishOf = (page) => page.english ?? page;
+/** ` lang="en"` on what a page that is not translated shows of its own: its title, its lead, its entries in a list. */
+const enAttr = (page) => (page?.fallback ? ' lang="en"' : "");
+/** The language of a view as attributes, on what the chrome says inside the English content of a page that is not translated yet. */
+const ownAttrs = (site, page) => (page?.fallback ? ` lang="${site.locale.code}" dir="${site.locale.dir}"` : "");
+/** A route of the English site in the docs of `site`. */
+const localRouteOf = (site, route) => docsRootOf(site) + route.slice(DOCS_ROUTE.length);
+/** The text of `key`, escaped (a placeholder's value is put in as written, then everything is escaped). */
+const say = (t, key, vars) => escapeHtml(t(key, vars));
 
 /* ---- Small pure helpers ------------------------------------------------ */
 
@@ -220,7 +252,7 @@ export function parseFrontMatter(source, file, areas = null) {
     if (!["true", "false"].includes(meta[key])) throw new Error(`${file}: ${key} is "true" or "false"`);
   }
   if (!["h2", "h2,h3", "false"].includes(meta.toc)) throw new Error(`${file}: toc is "h2", "h2,h3" or "false"`);
-  if (!["", "gallery", "a-z", "snippets", "ai"].includes(meta.generate)) throw new Error(`${file}: generate is "gallery", "a-z", "snippets" or "ai"`);
+  if (!["", "gallery", "a-z", "snippets", "ai", "notfound"].includes(meta.generate)) throw new Error(`${file}: generate is "gallery", "a-z", "snippets", "ai" or "notfound"`);
   if (meta.group && !NAME.test(meta.group)) throw new Error(`${file}: group "${meta.group}" is not a valid name`);
   if (areas && meta.area !== HUB_AREA) {
     const area = areas.find((a) => a.id === meta.area);
@@ -337,8 +369,46 @@ export function scanSite(docsDir, repoRoot = resolve(docsDir, "../..")) {
   // The partials shared with the home page: a symlink or a name in both folders fails here
   sharedPartials(docsDir, repoRoot);
 
+  // The docs' own languages (docs-i18n.js): a folder apps/docs/i18n/<code>/ each
+  const docsI18n = loadDocsLocales(docsDir, i18n, { repoRoot, areas, byRoute });
+
   const all = notFound ? [...pages, notFound] : pages;
-  return { docsDir, repoRoot, areas, pages, notFound, byRoute, byFile: new Map(all.map((p) => [p.abs, p])), i18n };
+  const site = { docsDir, repoRoot, areas, pages, notFound, byRoute, byFile: new Map(all.map((p) => [p.abs, p])), i18n, docsI18n, docsRoute: DOCS_ROUTE };
+  // Every string the generator writes goes through `site.t`; the keys read are recorded in `usage.used` while a build runs
+  site.usage = { used: null };
+  site.lang = i18n?.default.code ?? "en";
+  site.t = makeT({
+    strings: docsI18n ? docsI18n.reference.strings : bundledEnglish(),
+    lang: site.lang,
+    usage: site.usage,
+    file: docsI18n ? docsI18n.reference.file : "apps/docs/i18n/en/strings.json",
+  });
+  return site;
+}
+
+/**
+ * The English locale of the docs pages: the home page's default catalog and the
+ * docs' English strings, one object (a key is in one of them, never both).
+ */
+function englishLocale(site) {
+  if (site.englishLocale) return site.englishLocale;
+  const docs = site.docsI18n?.reference;
+  const docsStrings = docs ? docs.strings : bundledEnglish();
+  const home = site.i18n?.default;
+  site.englishLocale = {
+    code: "en",
+    name: "English",
+    dir: "ltr",
+    route: "/",
+    file: docs?.file ?? "apps/docs/i18n/en/strings.json",
+    source: docs?.source ?? "",
+    numbers: () => ({}),
+    ...home,
+    alsoIn: docs?.file ?? "apps/docs/i18n/en/strings.json",
+    docsStrings,
+    strings: { ...home?.strings, ...docsStrings },
+  };
+  return site.englishLocale;
 }
 
 /** The routes of the home page, one per language ("/" alone without a registry). */
@@ -346,19 +416,20 @@ export const homesOf = (site) => site.i18n?.locales.map((l) => l.route) ?? ["/"]
 
 /* ---- The site's structure, from the front matter ------------------------ */
 
-const byOrder = (a, b) => Number(a.meta.order) - Number(b.meta.order) || a.meta.title.localeCompare(b.meta.title, "en");
+// The order is the English one in every language: the title that breaks a tie is the English page's
+const byOrder = (a, b) => Number(a.meta.order) - Number(b.meta.order) || englishOf(a).meta.title.localeCompare(englishOf(b).meta.title, "en");
 
 /** The area of a page, or null for the hub area. */
 export function areaOf(site, page) {
   return site.areas.find((a) => a.id === page.meta.area) ?? null;
 }
 
-/** The route of an area's index page. */
-export const areaRoute = (area) => `${DOCS_ROUTE}${area.slug}/`;
+/** The route of an area's index page (in the docs at `root`: "/docs/", "/es/docs/"). */
+export const areaRoute = (area, root = DOCS_ROUTE) => `${root}${area.slug}/`;
 
 /** The index page of an area, or null while it has none. */
 export function indexOf(site, area) {
-  return site.byRoute.get(areaRoute(area)) ?? null;
+  return site.byRoute.get(areaRoute(area, docsRootOf(site))) ?? null;
 }
 
 /**
@@ -367,7 +438,7 @@ export function indexOf(site, area) {
  * Returns [{ group (null or a site.json group), pages }].
  */
 export function sectionsOf(site, area) {
-  const index = areaRoute(area);
+  const index = areaRoute(area, docsRootOf(site));
   const pages = site.pages
     .filter((p) => p.meta.area === area.id && p.route !== index && p.meta.nav !== "false")
     .sort(byOrder);
@@ -412,21 +483,41 @@ export function essentialsOf(site, page) {
   const skip = new Set([page.route, prev?.route, next?.route]);
   return (area.essentials ?? [])
     .filter((item) => !skip.has(item.href))
-    .map((item) => ({ route: item.href, label: item.label ?? site.byRoute.get(item.href).meta.title }));
+    .map((item) => {
+      const target = site.byRoute.get(item.href);
+      // `english`: the label is English (a fallback page's title, or a label kept as written): it says lang="en"
+      return { route: item.href, label: item.label ?? target.meta.title, english: item.label ? item.english === true : target.fallback === true };
+    });
 }
 
 /** The text of <title>: "<h1> – <Area> – LUZ documentation", shorter on the hub and area indexes. */
 export function docTitleOf(site, page) {
-  if (page.route === DOCS_ROUTE || page.meta.title === SITE_TITLE) return SITE_TITLE;
+  const title = tOf(site)("title.site");
+  const english = englishOf(page);
+  if (english.route === DOCS_ROUTE || english.meta.title === SITE_TITLE) return title;
   const area = areaOf(site, page);
-  if (!area || page.meta.title === area.label) return `${page.meta.title} – ${SITE_TITLE}`;
-  return `${page.meta.title} – ${area.label} – ${SITE_TITLE}`;
+  // An area index is named as its area (compared in English, whatever the language of the title)
+  if (!area || english.meta.title === areaOf(baseOf(site), english).label) return `${page.meta.title} – ${title}`;
+  return `${page.meta.title} – ${area.label} – ${title}`;
 }
 
 /** The headings of a page's own content (cached): readHtml() of its body. */
 function contentOf(page) {
   page.parsed ??= readHtml("\n".repeat(page.bodyLine - 1) + page.body, page.file);
   return page.parsed;
+}
+
+/**
+ * The headings of a page, for the indexes: the structure (ids, levels, whether
+ * a heading is in a demo) is the English page's, the text is the translation's
+ * where the page is translated (their ids are the same: parity checks it).
+ * `english` is the English text.
+ */
+function headingsOf(page) {
+  const english = contentOf(englishOf(page)).headings;
+  if (!page.english || page.fallback) return english;
+  const own = new Map(contentOf(page).headings.filter((h) => h.id).map((h) => [h.id, h.text]));
+  return english.map((h) => ({ ...h, english: h.text, text: own.get(h.id) ?? h.text }));
 }
 
 /* ---- Generated blocks --------------------------------------------------- */
@@ -443,25 +534,31 @@ const link = (href, text, attrs = "") => `<a${attrs} href="${escapeHtml(href)}">
  */
 export function renderNav(site, page) {
   const current = areaOf(site, page);
-  const item = (p) => `<li>${link(p.route, p.meta.title, ` class="luz-sidebar__link"${p.route === page.route ? ' aria-current="page"' : ""}`)}</li>`;
+  const root = docsRootOf(site);
+  // In a language the title of a page that is not translated is English: one lang="en" on a list of such pages, else on each link
+  const item = (p, listIsEnglish) =>
+    `<li>${link(p.route, p.meta.title, ` class="luz-sidebar__link"${p.fallback && !listIsEnglish ? ' lang="en"' : ""}${p.route === page.route ? ' aria-current="page"' : ""}`)}</li>`;
   const items = site.areas.map((area) => {
-    const route = areaRoute(area);
+    const route = areaRoute(area, root);
     const here = current?.id === area.id;
     const mark = !here ? "" : page.route === route ? ' aria-current="page"' : ' aria-current="true"';
     const href = indexOf(site, area) ? route : area.fallback ?? route;
     const head = link(href, area.label, ` class="luz-sidebar__link docs-nav__area"${mark}`);
-    const children = sectionsOf(site, area).flatMap(({ group, pages }) =>
-      group
-        ? [
-            `<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-${group.id}">${escapeHtml(group.label)}</span>`,
-            `<ul class="docs-nav__pages" aria-labelledby="nav-${group.id}">`,
-            ...pages.map(item),
-            "</ul></li>",
-          ]
-        : pages.map(item),
-    );
+    const sections = sectionsOf(site, area);
+    // The area's own list is English as a whole when every page in it is, and it has no group label (said in the language)
+    const allEnglish = sections.length === 1 && !sections[0].group && sections[0].pages.every((p) => p.fallback);
+    const children = sections.flatMap(({ group, pages }) => {
+      if (!group) return pages.map((p) => item(p, allEnglish));
+      const groupEnglish = pages.every((p) => p.fallback);
+      return [
+        `<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-${group.id}">${escapeHtml(group.label)}</span>`,
+        `<ul class="docs-nav__pages"${groupEnglish ? ' lang="en"' : ""} aria-labelledby="nav-${group.id}">`,
+        ...pages.map((p) => item(p, groupEnglish)),
+        "</ul></li>",
+      ];
+    });
     if (!children.length) return `<li>${head}</li>`;
-    return [`<li>${head}`, '<ul class="docs-nav__pages">', ...children, "</ul></li>"].join("\n");
+    return [`<li>${head}`, `<ul class="docs-nav__pages"${allEnglish ? ' lang="en"' : ""}>`, ...children, "</ul></li>"].join("\n");
   });
   return `    <ul class="docs-nav">\n${items.join("\n")}\n    </ul>`;
 }
@@ -472,15 +569,18 @@ export function renderNav(site, page) {
  * hub and the not-found page.
  */
 export function renderBreadcrumb(site, page) {
-  if (page.route === DOCS_ROUTE || page.route === NOT_FOUND_ROUTE) return "";
+  const canonical = englishOf(page).route;
+  if (canonical === DOCS_ROUTE || canonical === NOT_FOUND_ROUTE) return "";
+  const t = tOf(site);
+  const root = docsRootOf(site);
   const area = areaOf(site, page);
-  const trail = [link(DOCS_ROUTE, "Docs", ' class="luz-breadcrumb__item"')];
-  if (area && page.route !== areaRoute(area) && indexOf(site, area)) {
-    trail.push(link(areaRoute(area), area.label, ' class="luz-breadcrumb__item"'));
+  const trail = [link(root, t("chrome.crumb-docs"), ' class="luz-breadcrumb__item"')];
+  if (area && page.route !== areaRoute(area, root) && indexOf(site, area)) {
+    trail.push(link(areaRoute(area, root), area.label, ' class="luz-breadcrumb__item"'));
   }
-  trail.push(`<span class="luz-breadcrumb__item" aria-current="page">${escapeHtml(page.meta.title)}</span>`);
+  trail.push(`<span class="luz-breadcrumb__item"${enAttr(page)} aria-current="page">${escapeHtml(page.meta.title)}</span>`);
   const items = trail.map((item) => `        <li>${item}</li>`).join("\n");
-  return `    <nav class="docs-breadcrumb" aria-label="Breadcrumb">\n      <ol class="luz-breadcrumb">\n${items}\n      </ol>\n    </nav>`;
+  return `    <nav class="docs-breadcrumb" aria-label="${say(t, "chrome.crumb")}">\n      <ol class="luz-breadcrumb">\n${items}\n      </ol>\n    </nav>`;
 }
 
 /** Where the source of the site is: the rail's and the page foot's Edit and Report. */
@@ -524,15 +624,16 @@ const isTested = (site, page) => {
  * spec, and its known issues, linked to the section.
  */
 function chipsOf(site, page) {
+  const t = tOf(site);
   const files = page.meta.files.split(";").map((f) => f.trim()).filter(Boolean);
-  const issues = knownIssuesOf(page.body) ?? 0;
-  const said = issues === 0 ? "No known issues" : issues === 1 ? "1 known issue" : `${issues} known issues`;
+  // The count is the English page's: a translation cannot change what the chip says
+  const issues = knownIssuesOf(englishOf(page).body) ?? 0;
   return [
     ...files.map((f) => `<code class="docs-demo__file">${escapeHtml(f)}</code>`),
-    page.meta.module ? `JS: ${escapeHtml(page.meta.module)}` : "No JavaScript",
-    "Light · Dark · High contrast",
-    ...(isTested(site, page) ? ["Tested"] : []),
-    link("#known-issues", said),
+    page.meta.module ? escapeHtml(t("chip.js", { module: page.meta.module })) : say(t, "chip.nojs"),
+    say(t, "chip.modes"),
+    ...(isTested(site, page) ? [say(t, "chip.tested")] : []),
+    link("#known-issues", t.plural("chip.issues", issues)),
   ];
 }
 
@@ -545,8 +646,9 @@ function chipsOf(site, page) {
  * page keeps its plain head: the h1 and the lead.
  */
 export function renderPageHead(site, page) {
-  const h1 = `    <h1 class="docs-title">${escapeHtml(page.meta.title)}</h1>`;
-  const lead = page.meta.lead === "true" ? [`    <p class="luz-docs-page-head__lead">${escapeHtml(page.meta.description)}</p>`] : [];
+  const t = tOf(site);
+  const h1 = `    <h1 class="docs-title"${enAttr(page)}>${escapeHtml(page.meta.title)}</h1>`;
+  const lead = page.meta.lead === "true" ? [`    <p class="luz-docs-page-head__lead"${enAttr(page)}>${escapeHtml(page.meta.description)}</p>`] : [];
   if (page.route === NOT_FOUND_ROUTE) {
     return `  <div class="luz-docs-page-head">\n${h1}${page.meta.lead === "true" ? `\n    <p class="docs-lead">${escapeHtml(page.meta.description)}</p>` : ""}\n  </div>`;
   }
@@ -554,7 +656,7 @@ export function renderPageHead(site, page) {
   const group = area?.groups?.find((g) => g.id === page.meta.group);
   // An area index names the package the area documents (site.json `package`); its pages name their group
   // (a package name is code, in its own case)
-  const pkg = area && page.route === areaRoute(area) && area.package ? `<code>${escapeHtml(area.package)}</code>` : null;
+  const pkg = area && page.route === areaRoute(area, docsRootOf(site)) && area.package ? `<code>${escapeHtml(area.package)}</code>` : null;
   const second = pkg ?? (group ? escapeHtml(group.label) : null);
   const eyebrow = area ? [`    <p class="luz-docs-page-head__eyebrow">${escapeHtml(area.label)}${second ? ` · ${second}` : ""}</p>`] : [];
   const files = page.meta.files.split(";").map((f) => f.trim()).filter(Boolean);
@@ -562,7 +664,7 @@ export function renderPageHead(site, page) {
   const chips = isViewPage(page)
     ? [`    <ul class="luz-docs-page-head__meta">${chipsOf(site, page).map((c) => `<li>${c}</li>`).join("")}</ul>`]
     : files.length
-      ? [`    <p class="luz-docs-page-head__files">Files: ${files.map((f) => `<code class="docs-demo__file">${escapeHtml(f)}</code>`).join(", ")}</p>`]
+      ? [`    <p class="luz-docs-page-head__files">${say(t, "page.files")} ${files.map((f) => `<code class="docs-demo__file">${escapeHtml(f)}</code>`).join(", ")}</p>`]
       : [];
   const crumb = renderBreadcrumb(site, page);
   return [...(crumb ? [crumb] : []), '  <header class="luz-docs-page-head">', ...eyebrow, h1, ...lead, ...chips, "  </header>"].join("\n");
@@ -578,7 +680,7 @@ export function renderPageHead(site, page) {
  * 80rem (the rail is above the content there) and, from 80rem, marks the
  * section in view (core's initSidebar).
  */
-export function renderToc(page, html) {
+export function renderToc(page, html, t = englishT()) {
   if (page.meta.toc === "false") return "";
   const levels = page.meta.toc === "h2,h3" ? [2, 3] : [2];
   const headings = readHtml(html, page.file).headings.filter((h) => levels.includes(h.level) && !h.specimen);
@@ -597,7 +699,8 @@ export function renderToc(page, html) {
     lines.push(`            <li>${item(h)}</li>`);
     if (next?.level !== 3) lines.push("          </ul>\n        </li>");
   });
-  return `  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">\n    <details class="luz-docs-rail__fold" open>\n      <summary class="luz-docs-rail__title" id="docs-rail-title">On this page</summary>\n      <ul class="luz-docs-rail__list">\n${lines.join("\n")}\n      </ul>\n    </details>\n  </nav>`;
+  // The headings are the content's: English on a page that is not translated yet
+  return `  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">\n    <details class="luz-docs-rail__fold" open>\n      <summary class="luz-docs-rail__title" id="docs-rail-title">${say(t, "rail.on-page")}</summary>\n      <ul class="luz-docs-rail__list"${enAttr(page)}>\n${lines.join("\n")}\n      </ul>\n    </details>\n  </nav>`;
 }
 
 /**
@@ -610,21 +713,22 @@ export function renderToc(page, html) {
  * not-found page.
  */
 export function renderEndNav(site, page) {
+  const t = tOf(site);
   const around = neighboursOf(site, page);
   const essentials = essentialsOf(site, page);
   if (!around && !essentials.length) return "";
-  const lines = ['  <nav class="docs-end" aria-labelledby="docs-end-title">', '    <h2 class="docs-end__title" id="docs-end-title">Keep going</h2>'];
+  const lines = ['  <nav class="docs-end" aria-labelledby="docs-end-title">', `    <h2 class="docs-end__title" id="docs-end-title">${say(t, "end.title")}</h2>`];
   if (essentials.length) {
-    lines.push('    <ul class="docs-end__links">', ...essentials.map((e) => `      <li>${link(e.route, e.label)}</li>`), "    </ul>");
+    lines.push('    <ul class="docs-end__links">', ...essentials.map((e) => `      <li>${link(e.route, e.label, e.english ? ' lang="en"' : "")}</li>`), "    </ul>");
   }
   const pager = [];
-  for (const [key, label, rel] of [["prev", "Previous", "prev"], ["next", "Next", "next"]]) {
+  for (const [key, label, rel] of [["prev", say(t, "end.prev"), "prev"], ["next", say(t, "end.next"), "next"]]) {
     const target = around?.[key];
     if (!target) continue;
     pager.push(
       `      <li class="luz-docs-pager__${key}"><a class="luz-docs-pager__link" rel="${rel}" href="${escapeHtml(target.route)}">` +
         `<span class="luz-docs-pager__label">${label}</span> ` +
-        `<span class="luz-docs-pager__title">${escapeHtml(target.meta.title)}</span></a></li>`,
+        `<span class="luz-docs-pager__title"${enAttr(target)}>${escapeHtml(target.meta.title)}</span></a></li>`,
     );
   }
   if (pager.length) lines.push('    <ul class="luz-docs-pager">', ...pager, "    </ul>");
@@ -647,16 +751,16 @@ const actionsOf = (page) => ({
  * link to the page's index.md, which the docs script copies to the
  * clipboard), Edit this page and Report a problem.
  */
-export function renderRail(page, toc) {
+export function renderRail(page, toc, t = englishT()) {
   const { edit, report } = actionsOf(page);
   return [
-    '  <aside class="luz-docs-rail" aria-label="About this page">',
+    `  <aside class="luz-docs-rail" aria-label="${say(t, "rail.about")}">`,
     '  <div class="luz-docs-rail__inner">',
     ...(toc ? [toc] : []),
     '    <div class="luz-docs-rail__actions">',
-    `      ${link(`${page.route}index.md`, "Copy page as Markdown", " data-docs-copy-page")}`,
-    `      ${link(edit, "Edit this page")}`,
-    `      ${link(report, "Report a problem")}`,
+    `      ${link(`${page.route}index.md`, t("rail.copy"), ` data-docs-copy-page data-docs-copied="${say(t, "rail.copied")}" data-docs-not-copied="${say(t, "rail.not-copied")}"`)}`,
+    `      ${link(edit, t("rail.edit"))}`,
+    `      ${link(report, t("rail.report"))}`,
     "    </div>",
     "  </div>",
     "  </aside>",
@@ -696,14 +800,24 @@ export function lastUpdatedOf(site, page, { dev = false } = {}) {
   return lastCommits.get(page.abs) ?? today();
 }
 
-const DATE_FORMAT = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+const dateFormats = new Map();
+/** The long date of the catalog's `format.date-locale`: "18 October 2026", "18 de octubre de 2026". */
+const dayOf = (iso, locale) => {
+  if (!dateFormats.has(locale)) {
+    const options = { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" };
+    // A catalog whose format.date-locale is no language tag still gets a date, in English
+    dateFormats.set(locale, (() => { try { return new Intl.DateTimeFormat(locale, options); } catch { return new Intl.DateTimeFormat("en-GB", options); } })());
+  }
+  return dateFormats.get(locale).format(new Date(`${iso}T00:00:00Z`));
+};
 
 /** The page foot: "Last updated <time>", then Edit and Report, the rail's links. */
 export function renderPageFoot(site, page, options = {}) {
+  const t = tOf(site);
   const iso = lastUpdatedOf(site, page, options);
   const { edit, report } = actionsOf(page);
-  const day = DATE_FORMAT.format(new Date(`${iso}T00:00:00Z`));
-  return `  <p class="luz-docs-page-foot">Last updated <time datetime="${iso}">${day}</time> · ${link(edit, "Edit this page")} · ${link(report, "Report a problem")}</p>`;
+  const day = dayOf(iso, t("format.date-locale"));
+  return `  <p class="luz-docs-page-foot">${say(t, "page.updated")} <time datetime="${iso}">${day}</time> · ${link(edit, t("rail.edit"))} · ${link(report, t("rail.report"))}</p>`;
 }
 
 /**
@@ -715,12 +829,12 @@ export function renderGallery(site, page) {
   const area = areaOf(site, page);
   if (!area) return "";
   const pages = site.pages
-    .filter((p) => p.meta.area === area.id && p.route !== areaRoute(area) && p.meta.nav !== "false")
+    .filter((p) => p.meta.area === area.id && p.route !== areaRoute(area, docsRootOf(site)) && p.meta.nav !== "false")
     .sort(byOrder);
   const groups = [...(area.groups ?? []), { id: "", label: "" }];
   const card = (p) =>
-    `      <li class="luz-card docs-card">\n        <h3 class="luz-card__title docs-card__title">${link(p.route, p.meta.title)}</h3>\n        <p class="luz-card__body docs-card__desc">${escapeHtml(p.meta.description)}</p>\n      </li>`;
-  const row = (p) => `      <li>${link(p.route, p.meta.title)} <span class="docs-gallery__desc">${escapeHtml(p.meta.description)}</span></li>`;
+    `      <li class="luz-card docs-card"${enAttr(p)}>\n        <h3 class="luz-card__title docs-card__title">${link(p.route, p.meta.title)}</h3>\n        <p class="luz-card__body docs-card__desc">${escapeHtml(p.meta.description)}</p>\n      </li>`;
+  const row = (p) => `      <li${enAttr(p)}>${link(p.route, p.meta.title)} <span class="docs-gallery__desc">${escapeHtml(p.meta.description)}</span></li>`;
   return groups
     .map((group) => {
       const members = pages.filter((p) => p.meta.group === group.id);
@@ -729,7 +843,7 @@ export function renderGallery(site, page) {
         ? `    <ul class="docs-gallery__rows">\n${members.map(row).join("\n")}\n    </ul>`
         : `    <ul class="docs-gallery__cards">\n${members.map(card).join("\n")}\n    </ul>`;
       if (!group.label) return `  <div class="docs-gallery">\n${list}\n  </div>`;
-      return `  <section class="docs-gallery" aria-labelledby="group-${group.id}">\n    <h2 id="group-${group.id}">${escapeHtml(group.label)}</h2>\n${list}\n  </section>`;
+      return `  <section class="docs-gallery" aria-labelledby="group-${group.id}">\n    <h2 id="group-${group.id}"${ownAttrs(site, page)}>${escapeHtml(group.label)}</h2>\n${list}\n  </section>`;
     })
     .filter(Boolean)
     .join("\n");
@@ -753,6 +867,8 @@ const TOKEN_NAME = /^--luz-[a-z0-9]+(?:-[a-z0-9]+)*$/;
  */
 function namesOf(page, byId) {
   const found = new Map();
+  // The names are code, the same in a translation: read from the English page
+  page = englishOf(page);
   for (const code of contentOf(page).codes) {
     const token = TOKEN_NAME.test(code.text);
     if (code.specimen || !(token || CLASS_NAME.test(code.text))) continue;
@@ -798,30 +914,36 @@ function namesOf(page, byId) {
  * page of the tokens area, then the one that names it most.
  */
 export function indexData(site) {
+  const t = tOf(site);
   const data = site.pages
     .filter((page) => page.meta.search !== "false")
     .map((page) => {
       const area = areaOf(site, page);
       // The index of a package's area is the package ("Site", "Landing", "CMS"), not one of its patterns
-      const kind = PACKAGE_AREAS.has(area?.id) && page.route === areaRoute(area) ? area.label : AREA_KIND[page.meta.area] ?? "Page";
+      const kind =
+        PACKAGE_AREAS.has(area?.id) && page.route === areaRoute(area, docsRootOf(site))
+          ? area.label
+          : site.locale
+            ? t(Object.hasOwn(AREA_KIND, page.meta.area) ? `kind.${page.meta.area}` : "kind.page")
+            : AREA_KIND[page.meta.area] ?? "Page";
       // The levels "On this page" lists: on a component page, the h3 of its tabs too
       const sectionLevels = page.meta.toc === "h2,h3" ? [2, 3] : [2];
       const sections = [];
       const elements = [];
       let tab = null;
-      for (const h of contentOf(page).headings) {
+      for (const h of headingsOf(page)) {
         if (h.specimen || !h.id) continue;
         if (h.level === 2) tab = VIEW_HEADINGS.has(h.id) ? h.text : null;
         const element = /^el-(.+)-title$/.exec(h.id);
         if (element && h.level === 2) {
-          elements.push({ text: `${h.text} element`, id: `el-${element[1]}` });
-        } else if (sectionLevels.includes(h.level) && h.text !== page.meta.title) {
-          sections.push({ text: h.text, id: h.id, tab: h.level > 2 ? tab : null, template: TEMPLATE_HEADINGS.has(h.text) });
+          elements.push({ text: t("index.element", { name: h.text }), id: `el-${element[1]}` });
+        } else if (sectionLevels.includes(h.level) && (h.english ?? h.text) !== englishOf(page).meta.title) {
+          sections.push({ text: h.text, id: h.id, tab: h.level > 2 ? tab : null, template: TEMPLATE_HEADINGS.has(h.english ?? h.text) });
         }
       }
       const keywords = page.meta.keywords.split(",").map((k) => k.trim()).filter(Boolean);
       // An area index only introduces: what it names, a page of its area names for real
-      const candidates = area && page.route === areaRoute(area) ? [] : namesOf(page, new Map(sections.map((s) => [s.id, s])));
+      const candidates = area && page.route === areaRoute(area, docsRootOf(site)) ? [] : namesOf(page, new Map(sections.map((s) => [s.id, s])));
       return { page, title: page.meta.title, route: page.route, area: area?.label ?? null, kind, keywords, sections, elements, names: [], candidates };
     });
   // Each name goes to one page. Tokens: a page of the tokens area. Then the page that names most of
@@ -863,12 +985,13 @@ export function indexData(site) {
  * Returns [{ name, href, kind }] sorted by name.
  */
 export function indexEntries(site) {
+  const t = tOf(site);
   const entries = [];
   for (const { title, route, kind, keywords, sections, elements } of indexData(site)) {
     entries.push({ name: title, href: route, kind });
-    for (const k of aliasesOf(title, keywords)) entries.push({ name: k, href: route, kind: `Another name for ${title}` });
-    for (const s of sections) if (!s.template) entries.push({ name: s.text, href: `${route}#${s.id}`, kind: `Section of ${title}` });
-    for (const e of elements) entries.push({ name: e.text, href: `${route}#${e.id}`, kind: `HTML element, ${title}` });
+    for (const k of aliasesOf(title, keywords)) entries.push({ name: k, href: route, kind: t("kind.alias", { title }) });
+    for (const s of sections) if (!s.template) entries.push({ name: s.text, href: `${route}#${s.id}`, kind: t("kind.section", { title }) });
+    for (const e of elements) entries.push({ name: e.text, href: `${route}#${e.id}`, kind: t("kind.element", { title }) });
   }
   const key = (e) => e.name.replace(/^[^\p{L}\p{N}]+/u, "");
   return entries.sort((a, b) => key(a).localeCompare(key(b), "en", { sensitivity: "base" }) || a.href.localeCompare(b.href));
@@ -882,6 +1005,8 @@ const aliasesOf = (title, keywords) => {
 
 /** Where the search index is published, next to the pages it points at. */
 export const SEARCH_INDEX_ROUTE = `${DOCS_ROUTE}search-index.json`;
+/** The search index of a language's docs: /es/docs/search-index.json. */
+export const searchIndexRouteOf = (site) => `${docsRootOf(site)}search-index.json`;
 
 /** Template headings the search leaves out: the page itself, or its tab row. */
 const NOT_SEARCHED = new Set(["example", "code", "design"]);
@@ -902,16 +1027,21 @@ const NOT_SEARCHED = new Set(["example", "code", "design"]);
  * JSON.stringify (SEC-PLG-9).
  */
 export function buildSearchIndex(site) {
-  const url = (route, id = "") => (route.slice(DOCS_ROUTE.length) || "./") + (id && `#${id}`);
+  const root = docsRootOf(site);
+  const url = (route, id = "") => (route.slice(root.length) || "./") + (id && `#${id}`);
+  const lang = site.locale?.code;
   const index = { version: 1, pages: [], sections: [], elements: [] };
-  for (const { title, route, area, keywords, sections, elements, names } of indexData(site)) {
+  for (const { page, title, route, area, keywords, sections, elements, names } of indexData(site)) {
+    // An entry of a translated page says its language (the 4th item of an entry); the others are English, in lists that say so
+    const own = lang && !page.fallback;
+    const entry = (text, href, meta) => (own ? [text, href, meta ?? "", lang] : meta ? [text, href, meta] : [text, href]);
     const meta = [area, aliasesOf(title, keywords).join(", ")].filter(Boolean).join(" · ");
-    index.pages.push(meta ? [title, url(route), meta] : [title, url(route)]);
+    index.pages.push(entry(title, url(route), meta));
     for (const s of sections) {
-      if (!NOT_SEARCHED.has(s.id)) index.sections.push([s.text, url(route, s.id), `${title}${s.tab ? ` › ${s.tab}` : ""}`]);
+      if (!NOT_SEARCHED.has(s.id)) index.sections.push(entry(s.text, url(route, s.id), `${title}${s.tab ? ` › ${s.tab}` : ""}`));
     }
     for (const n of names) index.sections.push([n.text, url(route, n.id ?? ""), `${title}${n.tab ? ` › ${n.tab}` : ""}`]);
-    for (const e of elements) index.elements.push([`${e.text}, ${title}`, url(route, e.id)]);
+    for (const e of elements) index.elements.push(entry(`${e.text}, ${title}`, url(route, e.id)));
   }
   return index;
 }
@@ -942,37 +1072,46 @@ const azIdOf = (letter) => (letter === "#" ? "az-other" : `az-${letter.toLowerCa
  * gallery, then one h2 and one list per letter of this half that has entries.
  */
 export function renderAZ(site, page) {
+  const t = tOf(site);
+  const root = docsRootOf(site);
+  // The index is the English one in every language (its names, kinds and letters are English): in a language it keeps
+  // the language's chrome around it and says lang="en" on its lists; its links go to the pages of that language
+  const base = baseOf(site);
+  const inEnglish = site.locale ? ' lang="en"' : "";
+  const toLocal = (route) => localRouteOf(site, route);
   const groups = new Map();
-  for (const entry of indexEntries(site)) {
+  for (const entry of indexEntries(base)) {
     const letter = azLetterOf(entry.name);
     if (!groups.has(letter)) groups.set(letter, []);
     groups.get(letter).push(entry);
   }
-  const half = AZ_PAGES.find((p) => p.route === page?.route) ?? AZ_PAGES[0];
-  const halves = AZ_PAGES.map((p) => `<li>${link(p.route, p.label, p === half ? ' aria-current="page"' : "")}</li>`).join("");
+  const halfRoutes = AZ_PAGES.map((p) => ({ ...p, route: toLocal(p.route) }));
+  const half = halfRoutes.find((p) => p.route === page?.route) ?? halfRoutes[0];
+  const halves = halfRoutes.map((p) => `<li>${link(p.route, p.label, p === half ? ' aria-current="page"' : "")}</li>`).join("");
   const letters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+  // A letter is a letter of the English alphabet in every language
   const jump = letters
     .map((l) => {
       if (!groups.has(l)) return `<li><span>${l}</span></li>`;
-      const there = AZ_PAGES.find((p) => p.letters.includes(l));
+      const there = halfRoutes.find((p) => p.letters.includes(l));
       return `<li>${link(there === half ? `#${azIdOf(l)}` : `${there.route}#${azIdOf(l)}`, l)}</li>`;
     })
     .join("");
   // The row reaches every section of the page: Other too, when this half has it
-  const other = half.letters.includes("#") && groups.has("#") ? `<li>${link("#az-other", "Other")}</li>` : "";
+  const other = half.letters.includes("#") && groups.has("#") ? `<li${site.locale ? ` lang="${site.locale.code}" dir="${site.locale.dir}"` : ""}>${link("#az-other", t("az.rest"))}</li>` : "";
   const sections = half.letters
     .filter((l) => groups.has(l))
     .map((l) => {
       const id = azIdOf(l);
-      const heading = l === "#" ? "Other" : l;
+      const heading = l === "#" ? say(t, "az.rest") : l;
       const items = groups
         .get(l)
-        .map((e) => `      <li>${link(e.href, e.name)} <span class="docs-az__kind">${escapeHtml(e.kind)}</span></li>`)
+        .map((e) => `      <li>${link(site.locale ? e.href.replace(DOCS_ROUTE, root) : e.href, e.name)} <span class="docs-az__kind">${escapeHtml(e.kind)}</span></li>`)
         .join("\n");
-      return `  <section class="docs-az__letter" aria-labelledby="${id}">\n    <h2 id="${id}">${heading}</h2>\n    <ul class="docs-az__list">\n${items}\n    </ul>\n  </section>`;
+      return `  <section class="docs-az__letter" aria-labelledby="${id}">\n    <h2 id="${id}"${l === "#" ? ownAttrs(site, page) : inEnglish}>${heading}</h2>\n    <ul class="docs-az__list"${inEnglish}>\n${items}\n    </ul>\n  </section>`;
     });
-  const gallery = `  <p>The components are also grouped by what they do in the ${link(`${DOCS_ROUTE}components/`, "components gallery")}.</p>`;
-  return `  <nav class="docs-az__halves" aria-label="Parts of the index">\n    <p>This index has two pages:</p>\n    <ul>${halves}</ul>\n  </nav>\n  <nav class="docs-az__letters" aria-label="Letters">\n    <ul>${jump}${other}</ul>\n  </nav>\n${gallery}\n${sections.join("\n")}`;
+  const gallery = `  <p${ownAttrs(site, page)}>${say(t, "az.gallery", { link: "\u0000" }).replace("\u0000", link(`${root}components/`, t("az.gallery-link")))}</p>`;
+  return `  <nav class="docs-az__halves" aria-label="${say(t, "az.parts")}"${ownAttrs(site, page)}>\n    <p>${say(t, "az.intro")}</p>\n    <ul${inEnglish}>${halves}</ul>\n  </nav>\n  <nav class="docs-az__letters" aria-label="${say(t, "az.letters")}"${ownAttrs(site, page)}>\n    <ul${inEnglish}>${jump}${other}</ul>\n  </nav>\n${gallery}\n${sections.join("\n")}`;
 }
 
 /* ---- Rendering --------------------------------------------------------- */
@@ -980,13 +1119,14 @@ export function renderAZ(site, page) {
 /**
  * Add aria-current to every link inside a <nav> (or a site links list) whose
  * href is a key of `marks` (Map href → "page" | "true"). The brand link,
- * outside the nav, is not a navigation item.
+ * outside the nav, is not a navigation item. A link that names a language
+ * (hreflang: the switcher's, the notice's) is not a link to where you are.
  */
 export function markCurrent(html, marks) {
   if (!marks?.size) return html;
   return html.replace(/<(nav|ul)\b[\s\S]*?<\/\1>/g, (list) =>
     list.replace(/<a\b([^>]*?)\shref="([^"]*)"([^>]*)>/g, (whole, before, value, after) =>
-      marks.has(value) && !/\saria-current=/.test(before + after) ? `<a${before} href="${value}"${after} aria-current="${marks.get(value)}">` : whole,
+      marks.has(value) && !/\saria-current=|\shreflang=/.test(before + after) ? `<a${before} href="${value}"${after} aria-current="${marks.get(value)}">` : whole,
     ),
   );
 }
@@ -1125,10 +1265,33 @@ function renderGenerated(page, site, options) {
     case "a-z":
       return renderAZ(site, page);
     case "snippets":
-      return renderSnippets(snippetData({ root: site.repoRoot, readFile: readFileSync, dev: options.dev === true }));
+      return renderSnippets(snippetData({ root: site.repoRoot, readFile: readFileSync, dev: options.dev === true }), tOf(site));
+    case "notfound":
+      return renderNotFoundLanguages(site);
     default:
       return "";
   }
+}
+
+/**
+ * The block of the not-found page for each other docs language (D15): a
+ * sentence in that language, with its own lang and dir, and a link to the
+ * language's docs. The page is one static file for every address.
+ */
+function renderNotFoundLanguages(site) {
+  const docs = site.docsI18n;
+  if (!docs?.languages.length) return "";
+  site.t.mark("notfound.");
+  return docs.languages
+    .map(
+      (language) =>
+        `    <section class="docs-not-found__lang" lang="${escapeHtml(language.code)}" dir="${escapeHtml(language.dir)}">\n` +
+        `      <p>${escapeHtml(language.docsStrings["notfound.text"])}</p>\n` +
+        `      <p>${link(language.docsRoute, language.docsStrings["notfound.home"], ' class="luz-btn luz-btn--outline"')}</p>\n` +
+        "    </section>",
+    )
+    .join("\n")
+    .replace(/^ {4}/, "");
 }
 
 /** A class name or a selector of one: letters, digits, `-`, `_` and dots (tests/docs-class-name-wrap.spec.js reads the same). */
@@ -1160,10 +1323,23 @@ export function breakClassNames(html) {
  * build, the site's path on the not-found page).
  */
 export function renderPage(page, site, options = {}) {
+  // The catalog keys this render reads are recorded in the caller's Set (buildSite reports the ones no render read)
+  const usage = site.usage;
+  const prior = usage?.used;
+  if (usage && options.used) usage.used = options.used;
+  try {
+    return renderPageIn(page, site, options);
+  } finally {
+    if (usage) usage.used = prior;
+  }
+}
+
+function renderPageIn(page, site, options) {
   const reader = options.reader ?? sourceReader(site);
-  const current = currentOf(page.route);
-  // The documentation is English only: the default catalog, no switcher
-  const locale = site.i18n?.default;
+  const t = tOf(site);
+  // The marks of the links to where you are are the English page's: the partials say /docs/…, the links are put in the language afterwards
+  const current = currentOf(englishOf(page).route);
+  const locale = site.locale ?? englishLocale(site);
   const strings = { locale, used: options.used };
   const expanded = expand(page.body, { file: page.file, firstLine: page.bodyLine, partial: reader.partial, current, placeholders: false, ...strings });
   // "ai" is written inside the content, at its two markers, so it is known to the table of contents
@@ -1171,18 +1347,21 @@ export function renderPage(page, site, options = {}) {
   // `<!-- luz:generated -->` in the content puts the generated block where it stands, once
   const block = renderGenerated(page, site, options);
   const marked = filled.includes(GENERATED_MARKER);
-  const content = breakClassNames(marked ? filled.replace(GENERATED_MARKER, () => block).replaceAll(GENERATED_MARKER, "") : filled);
+  // An empty block (the 404 of a site with one language) takes its marker's line with it
+  const placed = block ? filled.replace(GENERATED_MARKER, () => block) : filled.replace(/\n?[ \t]*<!-- luz:generated -->/, "");
+  const content = breakClassNames(marked ? placed.replaceAll(GENERATED_MARKER, "") : filled);
   const generated = marked ? "" : block;
-  const toc = renderToc(page, `${content}\n${generated}`);
+  const toc = renderToc(page, `${content}\n${generated}`, t);
   const layout = reader.layout(page.meta.layout);
-  return expand(layout.text, {
+  const notFound = page.route === NOT_FOUND_ROUTE;
+  const out = expand(layout.text, {
     file: layout.file,
     partial: reader.partial,
     current,
     placeholders: true,
     ...strings,
     values: {
-      ...languageValues(site, locale),
+      ...languageValues(site, locale, { page, siteUrl: options.siteUrl }),
       title: page.meta.title,
       doctitle: docTitleOf(site, page),
       description: page.meta.description,
@@ -1190,20 +1369,54 @@ export function renderPage(page, site, options = {}) {
       content,
       nav: renderNav(site, page),
       pagehead: renderPageHead(site, page),
-      rail: page.route === NOT_FOUND_ROUTE ? "" : renderRail(page, toc),
+      rail: notFound ? "" : renderRail(page, toc, t),
       endnav: renderEndNav(site, page),
-      pagefoot: page.route === NOT_FOUND_ROUTE ? "" : renderPageFoot(site, page, { dev: options.dev === true }),
+      pagefoot: notFound ? "" : renderPageFoot(site, page, { dev: options.dev === true }),
       generated,
+      notice: notFound ? "" : renderNotice(site, page),
+      contentattrs: page.fallback ? ' lang="en" dir="ltr"' : "",
     },
   });
+  // In a language the links the partials and the layout carry (/docs/, the home) go to that language's pages
+  return site.locale ? localizeLinks(out, site.locale) : out;
+}
+
+/**
+ * What a page in a language says before its content when it is not what the
+ * reader may think: a page that is not translated yet (English), or a
+ * translation no person has reviewed. "" for a reviewed translation. A
+ * non-landmark alert, no role: it is there when the page loads. It links the
+ * English page; on the accessibility statement it adds that English prevails.
+ */
+function renderNotice(site, page) {
+  if (!site.locale || (!page.fallback && page.reviewed)) return "";
+  const t = tOf(site);
+  t.mark("notice.");
+  const canonical = englishOf(page).route;
+  const title = page.fallback ? t("notice.title-untranslated") : t("notice.title-pending");
+  const text = page.fallback
+    ? [t("notice.untranslated")]
+    : [t("notice.pending"), ...(canonical === `${DOCS_ROUTE}accessibility/` ? [t("notice.pending-statement")] : [])];
+  return [
+    '<div class="luz-alert luz-alert--info docs-notice">',
+    '    <div class="luz-alert__icon" aria-hidden="true">\u2139</div>',
+    "    <div>",
+    `      <div class="luz-alert__title">${escapeHtml(title)}</div>`,
+    `      <div class="luz-alert__body">${escapeHtml(text.join(" "))} <a href="${escapeHtml(canonical)}" hreflang="en">${say(t, "notice.english")}</a></div>`,
+    "    </div>",
+    "  </div>",
+    "  ",
+  ].join("\n");
 }
 
 /**
  * The language values of a template: {{lang}}, {{dir}}, {{home}} and, on a
- * home page (`home: true`), {{alternates}} and {{langswitch}}; both are
- * empty on the documentation, which has one language.
+ * home page (`home: true`), {{alternates}}, {{langswitch}} and {{langlinks}}.
+ * On a docs `page` (the not-found page apart) {{alternates}} is its canonical
+ * link and the alternates of the languages that translated it, and
+ * {{langswitch}} the switcher, when the docs have more than one language.
  */
-function languageValues(site, locale, { home = false, siteUrl = "" } = {}) {
+function languageValues(site, locale, { home = false, siteUrl = "", page = null } = {}) {
   const i18n = site.i18n;
   const translated = home && i18n && locale;
   const values = {
@@ -1214,10 +1427,55 @@ function languageValues(site, locale, { home = false, siteUrl = "" } = {}) {
     langswitch: translated ? renderSwitcher(i18n, locale, lookup(locale, "lang.label", `${I18N_DIR}/${locale.code}.json`, null)) : "",
     langlinks: translated ? renderLangLinks(i18n, locale) : "",
   };
+  if (page && page.route !== NOT_FOUND_ROUTE) {
+    values.alternates = renderDocsAlternates(site, page, siteUrl);
+    values.langswitch = renderDocsSwitcher(site, page, locale);
+  }
   // A repository without the packages (a fixture) has no {{version}}: a template that uses it fails
   const version = sharedVersion(site.repoRoot);
   if (version) values.version = version;
   return values;
+}
+
+/**
+ * The <head> links of a docs page: its canonical URL and the languages it is
+ * in. A translation lists the English page, every language that translated
+ * the page and x-default (English); the English page of a translated page lists
+ * the same set, so each member lists every member. A page with no translation
+ * has only its canonical link, and a page that is not translated yet (English
+ * in a language's chrome) points its canonical link at the English page.
+ */
+function renderDocsAlternates(site, page, siteUrl) {
+  const docs = site.docsI18n;
+  const english = englishOf(page).route;
+  if (!docs || page.fallback) return renderPageLinks(english, [], siteUrl);
+  const translators = docs.languages.filter((l) => l.pages.has(english));
+  if (!translators.length) return renderPageLinks(page.route, [], siteUrl);
+  const defaultCode = site.i18n.default.code;
+  const set = site.i18n.locales
+    .filter((l) => l.code === defaultCode || translators.some((x) => x.code === l.code))
+    .map((l) => [l.code, l.code === defaultCode ? english : docs.byCode.get(l.code).docsRoute + english.slice(DOCS_ROUTE.length)]);
+  return renderPageLinks(page.route, [...set, ["x-default", english]], siteUrl);
+}
+
+/**
+ * The language switcher of a docs page: the same page in each language of the
+ * docs (English first, then the languages of the registry that have a folder),
+ * the page's language marked, hreflang only on the pages that are translated
+ * (and on English). "" when the docs have one language.
+ */
+function renderDocsSwitcher(site, page, locale) {
+  const docs = site.docsI18n;
+  if (!docs?.languages.length || !site.i18n) return "";
+  const i18n = site.i18n;
+  const english = englishOf(page).route;
+  const locales = i18n.locales.filter((l) => l === i18n.default || docs.byCode.has(l.code));
+  const label = lookup(locale, "lang.label", `${I18N_DIR}/${locale.code}.json`, site.usage?.used);
+  return renderSwitcher(i18n, locale, label, {
+    locales,
+    hrefOf: (l) => (l === i18n.default ? english : docs.byCode.get(l.code).docsRoute + english.slice(DOCS_ROUTE.length)),
+    hreflangOf: (l) => (l === i18n.default ? l.code : docs.byCode.get(l.code).pages.has(english) ? l.code : null),
+  });
 }
 
 /** The version of packages/core/package.json (tokens, core and site share it), or null. */
@@ -1250,7 +1508,9 @@ export function renderDocument(html, file, route, site, options = {}) {
     used: options.used,
     values: languageValues(site, locale, { home: true, siteUrl: options.siteUrl }),
   });
-  return locale && site.i18n && locale !== site.i18n.default ? markDocsLinks(out, DOCS_ROUTE, site.i18n.default.code) : out;
+  if (!locale || !site.i18n || locale === site.i18n.default) return out;
+  // A language that has docs links to them (apps/docs/i18n/<code>/); one that has not, to the English ones, and says so
+  return site.docsI18n?.byCode.has(locale.code) ? localizeDocsLinks(out, locale.code) : markDocsLinks(out, DOCS_ROUTE, site.i18n.default.code);
 }
 
 /**
@@ -1273,7 +1533,7 @@ export function relativizeLinks(html, route, routes, root = rootOf(route)) {
     .replace(/href="\/([^"#?]*)(#[^"]*)?"/g, (whole, path, hash = "") =>
       routes.has(`/${path}`) ? `href="${root}${path}${hash}"` : whole,
     )
-    .replaceAll(`data-luz-search-src="${SEARCH_INDEX_ROUTE}"`, `data-luz-search-src="${root}${SEARCH_INDEX_ROUTE.slice(1)}"`);
+    .replace(/data-luz-search-src="\/((?:[a-z]{2,3}(?:-[a-z0-9]+)*\/)?docs\/search-index\.json)"/g, (whole, path) => `data-luz-search-src="${root}${path}"`);
 }
 
 /* ---- Checking ---------------------------------------------------------- */
@@ -1331,12 +1591,15 @@ function readSourceHtml(text, file, firstLine = 1) {
  * `extra` are full documents outside apps/docs/pages (the landing, once per
  * language: landingDocuments()): [{ route, file, html, locale? }].
  * `unchecked` are routes known to exist whose ids are not checked.
- * When the landing is rendered in every language, a catalog key that no
- * template used is a problem too.
+ * `languages: true` renders the pages of every docs language too
+ * (/es/docs/…, with the English page where a page is not translated), and
+ * then a key of apps/docs/i18n/en/strings.json that no render used is a
+ * problem. When the landing is rendered in every language, a catalog key that
+ * no template used is a problem too.
  * Returns { rendered: Map route → html, problems: [string] }. Throws on a
  * malformed source and on a missing catalog key (never a warning).
  */
-export function buildSite(site, { extra = [], unchecked = [], root } = {}) {
+export function buildSite(site, { extra = [], unchecked = [], root, languages = false, siteUrl } = {}) {
   const reader = sourceReader(site);
   const used = new Set();
   const sourceLinks = (text, file, firstLine, fragment) => {
@@ -1357,8 +1620,8 @@ export function buildSite(site, { extra = [], unchecked = [], root } = {}) {
 
   const rendered = new Map();
   const docs = [];
-  for (const page of site.notFound ? [...site.pages, site.notFound] : site.pages) {
-    const html = renderPage(page, site, { reader, root, used });
+  const add = (page, view, options = {}) => {
+    const html = renderPage(page, view, { reader, root, used, siteUrl, ...options });
     const layout = reader.layout(page.meta.layout);
     const { ids, links: renderedLinks } = readHtml(html, `${page.file} (rendered as ${page.route})`);
     // Links the generator wrote (sidebar, breadcrumb, end of page, galleries, A–Z)
@@ -1373,6 +1636,13 @@ export function buildSite(site, { extra = [], unchecked = [], root } = {}) {
     for (const l of renderedLinks) if (!sourceHrefs.has(l.href)) links.push({ ...l, file: `${page.file} (generated)`, line: 1 });
     rendered.set(page.route, html);
     docs.push({ route: page.route, ids: new Set(ids.keys()), links });
+  };
+  for (const page of site.notFound ? [...site.pages, site.notFound] : site.pages) add(page, site);
+  const docsI18n = site.docsI18n;
+  const wanted = languages ? docsI18n?.languages ?? [] : [];
+  for (const language of wanted) {
+    const view = localize(site, language);
+    for (const page of view.pages) add(page, view);
   }
   for (const doc of extra) {
     const html = renderDocument(doc.html, doc.file, doc.route, site, { reader, locale: doc.locale, used });
@@ -1385,11 +1655,32 @@ export function buildSite(site, { extra = [], unchecked = [], root } = {}) {
     docs.push({ route: doc.route, ids: new Set(ids.keys()), links });
   }
 
-  const known = new Map([...docs.map((d) => [d.route, d.ids]), ...unchecked.map((route) => [route, null])]);
+  // The home pages (/, /es/, /ar/) are not docs: a link to one is not checked
+  const known = new Map([...docs.map((d) => [d.route, d.ids]), ...[...homesOf(site), ...unchecked].map((route) => [route, null])]);
+  // The pages of the docs languages exist even when this build does not render them (a link to one is not a mistake)
+  if (!languages) {
+    for (const language of docsI18n?.languages ?? []) {
+      for (const page of site.pages) known.set(language.docsRoute + page.route.slice(DOCS_ROUTE.length), null);
+    }
+  }
   const seen = new Set();
   const problems = checkLinks(docs, known).filter((p) => !seen.has(p) && seen.add(p));
   // Every key is used somewhere, once the home page has been rendered in every language
   const everyLanguage = site.i18n && site.i18n.locales.every((l) => extra.some((d) => d.locale === l));
   if (everyLanguage) problems.push(...unusedKeys(site.i18n, used));
+  // ... and the docs' own, once every language has been rendered (with no language, the notices and the rail have no render)
+  if (languages && docsI18n?.languages.length) {
+    // What only some pages need is not "unused" when the site has no such page: the labels of a kind and an
+    // entry, the chips, a files line, the notices, and the strings of a generated page the site does not have
+    const generates = new Set(site.pages.map((p) => p.meta.generate));
+    const conditional = (key) =>
+      ["kind.", "index.", "chip.", "notice.", "page.files", "az.rest"].some((prefix) => key.startsWith(prefix)) ||
+      (key.startsWith("snippets.") && !generates.has("snippets")) ||
+      (key.startsWith("ai.") && !generates.has("ai")) ||
+      (key.startsWith("az.") && !generates.has("a-z")) ||
+      (key.startsWith("notfound.") && !site.notFound);
+    for (const key of Object.keys(docsI18n.reference.strings)) if (conditional(key)) used.add(key);
+    problems.push(...unusedKeys({ default: docsI18n.reference }, used));
+  }
   return { rendered, problems };
 }

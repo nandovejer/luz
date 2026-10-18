@@ -87,6 +87,28 @@ export function lineOfKey(source, key) {
 }
 
 /**
+ * Parse a catalog file and check every key and value: `source` is the text of
+ * `file`. Returns the flat object. Throws "file:line: …" on a key that is not
+ * lowercase words joined by "." or "-" and on a value that is not a non-empty
+ * string. Shared by the home page's catalogs and the docs' (docs-i18n.js).
+ */
+export function checkCatalog(source, file) {
+  let strings;
+  try {
+    strings = JSON.parse(source);
+  } catch (error) {
+    throw new Error(`${file}: ${error.message}`);
+  }
+  if (!strings || typeof strings !== "object" || Array.isArray(strings)) throw new Error(`${file}: a flat object of "key": "text"`);
+  for (const [key, value] of Object.entries(strings)) {
+    const at = `${file}:${lineOfKey(source, key)}`;
+    if (!KEY.test(key)) throw new Error(`${at}: "${key}" is not a valid key (lowercase words joined by "." or "-")`);
+    if (typeof value !== "string" || !value.trim()) throw new Error(`${at}: "${key}" is not a non-empty string`);
+  }
+  return strings;
+}
+
+/**
  * Check the registry and the catalogs. `read(abs)` returns a file's text
  * (readInside in site.js). Returns { dir, locales: [{ code, name, dir,
  * route, file, strings, source }], byCode: Map, default } or null when there
@@ -125,18 +147,7 @@ export function loadLocales(i18nDir, repoRoot, read) {
     const file = rel(catalogAbs);
     if (!existsSync(catalogAbs)) throw new Error(`${file}: missing (the catalog of "${code}" in ${registryFile})`);
     const source = read(catalogAbs);
-    let strings;
-    try {
-      strings = JSON.parse(source);
-    } catch (error) {
-      throw new Error(`${file}: ${error.message}`);
-    }
-    if (!strings || typeof strings !== "object" || Array.isArray(strings)) throw new Error(`${file}: a flat object of "key": "text"`);
-    for (const [key, value] of Object.entries(strings)) {
-      const at = `${file}:${lineOfKey(source, key)}`;
-      if (!KEY.test(key)) throw new Error(`${at}: "${key}" is not a valid key (lowercase words joined by "." or "-")`);
-      if (typeof value !== "string" || !value.trim()) throw new Error(`${at}: "${key}" is not a non-empty string`);
-    }
+    const strings = checkCatalog(source, file);
     const locale = { code, name, dir, route, file, strings, source, numbers };
     locales.push(locale);
     byCode.set(code, locale);
@@ -165,7 +176,7 @@ export function loadLocales(i18nDir, repoRoot, read) {
  */
 export function lookup(locale, key, where, used) {
   if (!KEY.test(key)) throw new Error(`${where}: "${key}" is not a valid catalog key`);
-  if (!Object.hasOwn(locale.strings, key)) throw new Error(`${where}: "${key}" is not in ${locale.file}`);
+  if (!Object.hasOwn(locale.strings, key)) throw new Error(`${where}: "${key}" is not in ${locale.file}${locale.alsoIn ? ` or ${locale.alsoIn}` : ""}`);
   used?.add(key);
   return expandNumbers(locale.strings[key], locale.numbers ?? {}, `${locale.file}:${lineOfKey(locale.source ?? "", key)}`);
 }
@@ -232,10 +243,11 @@ const GLOBE =
  * still contains the visible text (WCAG 2.5.3). Below 360px the name is
  * clipped and the globe shows alone; the name stays in the accessible one.
  */
-export function renderSwitcher(i18n, current, label) {
-  const items = i18n.locales.map((l) => {
+export function renderSwitcher(i18n, current, label, { locales = i18n.locales, hrefOf = (l) => l.route, hreflangOf = (l) => l.code } = {}) {
+  const items = locales.map((l) => {
     const mark = l.code === current.code ? ' aria-current="page"' : "";
-    return `      <li><a class="luz-lang-switch__link" href="${esc(l.route)}" hreflang="${esc(l.code)}" lang="${esc(l.code)}"${mark}>${esc(l.name)}</a></li>`;
+    const hreflang = hreflangOf(l);
+    return `      <li><a class="luz-lang-switch__link" href="${esc(hrefOf(l))}"${hreflang ? ` hreflang="${esc(hreflang)}"` : ""} lang="${esc(l.code)}"${mark}>${esc(l.name)}</a></li>`;
   });
   return [
     "<luz-lang-switch>",
@@ -255,12 +267,27 @@ export function renderSwitcher(i18n, current, label) {
  * ({{langlinks}}): each name in its own language (lang, hreflang), the
  * current one marked aria-current="page". The same links as the switcher.
  */
-export function renderLangLinks(i18n, current) {
-  const items = i18n.locales.map((l) => {
+export function renderLangLinks(i18n, current, { locales = i18n.locales, hrefOf = (l) => l.route, hreflangOf = (l) => l.code } = {}) {
+  const items = locales.map((l) => {
     const mark = l.code === current.code ? ' aria-current="page"' : "";
-    return `  <li><a href="${esc(l.route)}" hreflang="${esc(l.code)}" lang="${esc(l.code)}"${mark}>${esc(l.name)}</a></li>`;
+    const hreflang = hreflangOf(l);
+    return `  <li><a href="${esc(hrefOf(l))}"${hreflang ? ` hreflang="${esc(hreflang)}"` : ""} lang="${esc(l.code)}"${mark}>${esc(l.name)}</a></li>`;
   });
   return ["<ul>", ...items, "</ul>"].join("\n");
+}
+
+/**
+ * The <head> links of a docs page: its canonical URL and, when `alternates`
+ * (a list of [hreflang, route]) has members, a <link rel="alternate"> for each.
+ * Absolute from `siteUrl` in the pages build, root-absolute without it.
+ */
+export function renderPageLinks(canonical, alternates, siteUrl = "") {
+  if (siteUrl && !SITE_URL.test(siteUrl)) throw new Error(`siteUrl must be an https URL ending in "/", got ${siteUrl}`);
+  const url = (route) => esc(siteUrl ? siteUrl + route.slice(1) : route);
+  return [
+    `<link rel="canonical" href="${url(canonical)}">`,
+    ...alternates.map(([hreflang, route]) => `<link rel="alternate" hreflang="${esc(hreflang)}" href="${url(route)}">`),
+  ].join("\n  ");
 }
 
 /**
@@ -271,4 +298,15 @@ export function markDocsLinks(html, docsRoute, lang) {
   return html.replace(/<a\b([^>]*?)\shref="([^"]*)"([^>]*)>/g, (whole, before, href, after) =>
     href.startsWith(docsRoute) && !/\shreflang=/.test(before + after) ? `<a${before} href="${href}" hreflang="${lang}"${after}>` : whole,
   );
+}
+
+/**
+ * The home page of a language that has docs (apps/docs/i18n/<code>/): its
+ * links to /docs/ go to /<code>/docs/, the docs in its language (no
+ * hreflang), and so does the search index of its dialog.
+ */
+export function localizeDocsLinks(html, code) {
+  return html
+    .replace(/<a\b([^>]*?)\shref="\/docs\/([^"]*)"/g, (whole, before, rest) => `<a${before} href="/${code}/docs/${rest}"`)
+    .replaceAll('data-luz-search-src="/docs/search-index.json"', `data-luz-search-src="/${code}/docs/search-index.json"`);
 }
