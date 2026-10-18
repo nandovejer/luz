@@ -53,7 +53,7 @@
   "nav.site": "Site",
   "nav.html": "Elementos HTML",
   "nav.accessibility": "Accesibilidad",
-  "hero.title": "Luz, sistema de diseño para el <em>humano</em>, listo para la <em>IA</em>",
+  "hero.title": "LUZ, sistema de diseño para el <em>humano</em>, listo para la <em>IA</em>",
   "hero.lead": "Tokens, CSS y un poco de JavaScript, sobre lo que el navegador ya hace. Cada componente funciona antes de que cargue JavaScript y <a href=\"/docs/get-started/how-luz-is-built/#tests-first\">nos encanta TDD</a>, cada cambio empieza con una prueba que falla.",
   "hero.docs": "Leer la documentación, en inglés",
   "hero.github": "Ver el código en GitHub",
