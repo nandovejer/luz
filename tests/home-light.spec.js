@@ -43,7 +43,6 @@ const text = (lang, english) => {
   if (!key) throw new Error(`no key of en.json has the value "${english}"`);
   return catalog(lang)[key];
 };
-const PHRASE = 'A design system is a world with its own laws of light.';
 const ROUTES = [
   ['/', 'en'],
   ['/es/', 'es'],
@@ -444,20 +443,15 @@ test.describe('with JavaScript', () => {
 
   for (const [route, lang] of ROUTES) {
     test(`${route}: the phrase under the visual and the names in the bar are the catalog's (${lang})`, async ({ page }) => {
+      await page.addInitScript(() => { Math.random = () => 0; });
       await open(page, route);
-      await expect(page.locator('home-light .home-light__q')).toHaveText(text(lang, PHRASE));
+      await expect(page.locator('home-light .home-light__q')).toHaveText(catalog(lang)['light.fact.1']);
       await openBar(page);
       await scrub(page, '10:00');
       await expect(page.getByRole('slider', { name: text(lang, 'Scrub the day') })).toHaveCount(1);
       await expect(page.locator('home-light .home-light__line')).toHaveAccessibleName(new RegExp(text(lang, 'Show the light bar').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     });
   }
-
-  test('the English phrase is what the catalog says (D11), and the other languages differ', async () => {
-    expect(text('en', PHRASE)).toBe(PHRASE);
-    expect(text('es', PHRASE)).not.toBe(PHRASE);
-    expect(text('ar', PHRASE)).not.toBe(PHRASE);
-  });
 
   /* -- The favicon ------------------------------------------------------------ */
 
