@@ -344,12 +344,12 @@ test.describe('Landing page', () => {
           ),
         );
         const before = (a, b) => a.bottom <= b.top + 1 || (Math.abs(a.top - b.top) < a.height && a.left < b.left);
-        // At 768px and below: menu button, brand, then the search (the site
+        // At 768px and below: brand, the search, then the menu button (the site
         // links are in the drawer). Above: brand, site links, search.
         if (width <= 768) {
-          expect(before(menu, brand)).toBe(true);
-          expect(nav.width).toBe(0);
           expect(before(brand, search)).toBe(true);
+          expect(before(search, menu)).toBe(true);
+          expect(nav.width).toBe(0);
         } else {
           expect(menu.width).toBe(0);
           expect(before(brand, nav)).toBe(true);
@@ -358,7 +358,7 @@ test.describe('Landing page', () => {
       });
     }
 
-    test('the menu drawer lists the sections of this page and of the docs', async ({ page }) => {
+    test('the menu drawer lists the sections of this page, then Documentation and GitHub, then the languages', async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 800 });
       await open(page);
 
@@ -374,7 +374,10 @@ test.describe('Landing page', () => {
         expect(SECTIONS, href).toContain(href.slice(1));
         await expect(page.locator(href), href).toHaveCount(1);
       }
-      await expect(drawer.locator('a[href^="/docs/"]:not([href="/docs/"])')).toHaveCount(6);
+      // No list of the docs' areas any more: Documentation is one link, GitHub the next, the languages last
+      await expect(drawer.locator('a[href^="/docs/"]')).toHaveCount(1);
+      await expect(drawer.locator('a[href="/docs/"]')).toHaveText('Documentation');
+      await expect(drawer.locator('a[hreflang]')).toHaveCount(3);
     });
 
     test('content is centred at 1440px, in the site frame with the header', async ({ page }) => {
@@ -1200,7 +1203,7 @@ test.describe('Landing page', () => {
   test.describe('footer', () => {
     const footer = (page) => page.locator('footer.luz-landing-footer');
 
-    test('a brand, then three columns (Docs, Project, Language) on the landing footer grid', async ({ page }) => {
+    test('a brand, then three columns (Documentation, Project, Language) on the landing footer grid', async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 800 });
       await open(page);
 
@@ -1210,7 +1213,7 @@ test.describe('Landing page', () => {
       await expect(brand).toContainText('LUZ');
       await expect(brand).toContainText(/\d+\.\d+\.\d+/);
       await expect(brand.locator('svg, img').first()).toBeVisible();
-      await expect(footer(page).locator('.luz-landing-footer__col-title')).toHaveText(['Docs', 'Project', 'Language']);
+      await expect(footer(page).locator('.luz-landing-footer__col-title')).toHaveText(['Documentation', 'Project', 'Language']);
       const cols = footer(page).locator('.luz-landing-footer__col');
       await expect(cols).toHaveCount(3);
       // Side by side from 768px: the brand and the three columns in one row
@@ -1254,7 +1257,7 @@ test.describe('Landing page', () => {
     });
 
     for (const width of [320, 1280]) {
-      test(`the switcher's legend, "Color mode", is shown as text at ${width}px`, async ({ page }) => {
+      test(`the switcher's legend, "Color mode", is read by a screen reader and not drawn at ${width}px (the cycle button sits in the window's corner)`, async ({ page }) => {
         await page.setViewportSize({ width, height: 800 });
         await open(page);
 
@@ -1263,17 +1266,12 @@ test.describe('Landing page', () => {
         const seen = await legend.evaluate((el) => {
           const cs = getComputedStyle(el);
           const box = el.getBoundingClientRect();
-          return { shown: el.checkVisibility({ visibilityProperty: true }), width: box.width, height: box.height, left: box.left, right: box.right, clip: cs.clip, clipPath: cs.clipPath, fontSize: parseFloat(cs.fontSize), edge: document.documentElement.clientWidth };
+          return { width: box.width, height: box.height, clip: cs.clip, clipPath: cs.clipPath };
         });
-        expect(seen.shown).toBe(true);
-        // Not the one-pixel, clipped box of a screen-reader-only label
-        expect(seen.width, 'width of the legend').toBeGreaterThanOrEqual(40);
-        expect(seen.height, 'height of the legend').toBeGreaterThanOrEqual(12);
-        expect(seen.clip).toBe('auto');
-        expect(seen.clipPath).toBe('none');
-        expect(seen.fontSize).toBeGreaterThanOrEqual(12);
-        expect(seen.left).toBeGreaterThanOrEqual(-1);
-        expect(seen.right).toBeLessThanOrEqual(seen.edge + 1);
+        // The one-pixel, clipped box of a screen-reader-only label, not a drawn one
+        expect(seen.width, 'width of the legend').toBeLessThanOrEqual(1);
+        expect(seen.height, 'height of the legend').toBeLessThanOrEqual(1);
+        expect(seen.clip !== 'auto' || seen.clipPath !== 'none', 'clipped').toBe(true);
       });
     }
 
@@ -1490,7 +1488,8 @@ test.describe('Landing page', () => {
     test('the beta and version tags are text', async ({ page }) => {
       await open(page);
 
-      await expect(page.locator('.site-header__brand .site-header__tag')).toHaveText(`v${version('core')} beta`);
+      await expect(page.locator('.site-header__version')).toContainText(`v${version('core')} beta`);
+      await expect(page.locator('.site-header .luz-tag')).toHaveCount(0);
     });
 
     test('the page background is one flat color', async ({ page }) => {

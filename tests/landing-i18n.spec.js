@@ -101,9 +101,10 @@ for (const { route, lang, dir, name, label } of LANGUAGES) {
       await expect(links).toHaveText(['English', 'Español', 'العربية']);
       expect(await links.evaluateAll((all) => all.map((a) => [a.lang, a.hreflang]))).toEqual([['en', 'en'], ['es', 'es'], ['ar', 'ar']]);
       await expect(list.locator('[aria-current="page"]')).toHaveText(name);
-      // A second cue besides colour: the current language is underlined (RL-6)
-      const underline = await list.locator('[aria-current="page"]').evaluate((a) => getComputedStyle(a).textDecorationLine);
-      expect(underline).toContain('underline');
+      // A second cue besides colour: a tick (a shape drawn with a border), no underline (RL-6)
+      const current = list.locator('[aria-current="page"]');
+      expect(await current.evaluate((a) => getComputedStyle(a, '::before').borderRightWidth)).toBe('2px');
+      expect(await current.evaluate((a) => getComputedStyle(a).textDecorationLine)).toBe('none');
     });
 
     test('O1: the accessibility tree of the switch is what the classed div gave, closed and open', async ({ page }) => {
@@ -113,12 +114,14 @@ for (const { route, lang, dir, name, label } of LANGUAGES) {
       await expect(switcher(page)).toMatchAriaSnapshot(openTree(route));
     });
 
-    test('Home in the header is this language’s home page, marked current', async ({ page }) => {
+    test('the logo in the header is this language’s home page; the header has no Home link', async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 800 });
       await open(page, route);
-      const current = page.locator('.site-header__nav a[aria-current="page"]');
-      await expect(current).toHaveCount(1);
-      expect(new URL(await current.evaluate((a) => a.href)).pathname).toBe(route);
+      const logo = page.locator('.site-header__brand');
+      await expect(logo).toHaveAccessibleName('LUZ');
+      expect(new URL(await logo.evaluate((a) => a.href)).pathname).toBe(route);
+      await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveCount(0);
+      await expect(page.locator('.site-header__nav a')).toHaveCount(1);
     });
   });
 }
@@ -153,7 +156,14 @@ test.describe('the language switch', () => {
     await switcher(page).evaluate((el) => el.style.setProperty('--luz-lang-switch-top', '123px'));
     await switcher(page).getByRole('button').click();
     const top = await page.locator('#luz-lang-menu').evaluate((el) => el.getBoundingClientRect().top);
-    expect(top).toBe(123);
+    // Where the browser has anchor positioning the list hangs under its button and the property is only the fallback
+    // (tests/site-header.spec.js holds the anchored position); elsewhere it is the list's top
+    if (await page.evaluate(() => window.CSS.supports('position-anchor: --x'))) {
+      const button = await switcher(page).getByRole('button').evaluate((el) => el.getBoundingClientRect().bottom);
+      expect(top).toBeGreaterThan(button);
+    } else {
+      expect(top).toBe(123);
+    }
   });
 
   test('goes to another language by following a link, with or without JavaScript', async ({ page }) => {
@@ -187,6 +197,17 @@ test.describe('the language switch', () => {
       // One row: every control of the header on the same line as the menu button
       const header = page.locator('.site-header');
       expect((await header.boundingBox())?.height).toBeLessThanOrEqual(60);
+      if (width <= 768) {
+        // The switch is not in the row: the languages are a group of the drawer, which fits the window
+        await expect(switcher(page)).toBeHidden();
+        await page.getByRole('button', { name: 'القائمة', exact: true }).click();
+        const links = page.locator('#page-nav .page-nav__langs a');
+        await expect(links).toHaveText(['English', 'Español', 'العربية']);
+        for (const box of await links.evaluateAll((all) => all.map((a) => a.getBoundingClientRect().toJSON()))) {
+          expect(box.left >= 0 && box.right <= width, JSON.stringify(box)).toBe(true);
+        }
+        return;
+      }
       const button = switcher(page).getByRole('button');
       const box = await button.boundingBox();
       expect(box && box.x >= 0 && box.x + box.width <= width).toBe(true);
@@ -203,7 +224,7 @@ test.describe('the language switch', () => {
   }
 
   for (const { route, name, label } of LANGUAGES) {
-    test(`${route} at 320px with 30 % larger text: one header row, the globe alone, the name still the button's`, async ({ page }) => {
+    test(`${route} at 320px with 30 % larger text: one header row, no switch in it, the languages in the drawer`, async ({ page }) => {
       await page.setViewportSize({ width: 320, height: 700 });
       await open(page, route);
       // Set from the test, not a page script: it works in chromium-nojs too
@@ -211,20 +232,20 @@ test.describe('the language switch', () => {
         document.documentElement.style.fontSize = '130%';
       });
       const header = await page.locator('.site-header').boundingBox();
-      expect(header?.height).toBeLessThanOrEqual(60);
+      expect(header?.height).toBeLessThanOrEqual(70);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
-      const button = switcher(page).getByRole('button');
-      await expect(button).toHaveAccessibleName(`${label}: ${name}`);
-      // No visible text: the name is clipped to 1px
-      const shown = await button.locator('.luz-lang-switch__name').evaluate((el) => el.getBoundingClientRect().width);
-      expect(shown).toBeLessThanOrEqual(1);
-      // 43.99999809 in Gecko's layout units is 44 px
-      expect((await button.boundingBox())?.width).toBeGreaterThanOrEqual(43.99);
+      // At 768px and below the switch is not in the row: the languages are a labelled group of the drawer
+      await expect(switcher(page)).toBeHidden();
+      await page.locator('.site-header__menu').click();
+      const group = page.locator('#page-nav .page-nav__langs [role="group"]');
+      await expect(group).toBeVisible();
+      await expect(group).toHaveAccessibleName(label);
+      await expect(group.locator('[aria-current="page"]')).toHaveText(name);
     });
   }
 
-  test('from 360px the button shows the language\'s name', async ({ page }) => {
-    await page.setViewportSize({ width: 360, height: 700 });
+  test('from 769px the button shows the language\'s name', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 700 });
     await open(page, '/es/');
     await expect(switcher(page).locator('.luz-lang-switch__name')).toBeVisible();
     expect(await switcher(page).locator('.luz-lang-switch__name').evaluate((el) => el.getBoundingClientRect().width)).toBeGreaterThan(20);

@@ -495,9 +495,9 @@ describe("the LUZ docs site", () => {
       const own = header(html);
       if (route === "/" || !homes.includes(route)) expect(flat(own), route).toBe(docsHeader);
       expect(own.includes("<luz-lang-switch>"), route).toBe(homes.includes(route));
-      // The site links (Home and Docs; the brand is not a navigation item) and the switcher's current language
+      // The site links (Documentation; there is no Home link, the brand is not a navigation item) and the switcher's current language
       const marked = [...own.matchAll(/<a[^>]* href="([^"]*)"[^>]* aria-current="(page|true)">/g)].map(([, href, value]) => [href, value]);
-      const expected = [...currentOf(route, homes)].filter(([href]) => href === "/docs/" || homes.includes(href));
+      const expected = [...currentOf(route, homes)].filter(([href]) => href === "/docs/");
       expect(marked, route).toEqual(homes.includes(route) ? [...expected, [route, "page"]] : expected);
     }
   });
@@ -942,7 +942,7 @@ describe("the LUZ docs site", () => {
     expect(drawer.attrs.has("popover")).toBe(true);
     expect(query(dom, "button.luz-nav-toggle").attrs.get("popovertarget")).toBe("page-nav");
     const hrefs = findAll(drawer, (n) => n.name === "a").map((a) => a.attrs.get("href"));
-    expect(hrefs).toEqual(["/", "/docs/", "https://github.com/nandovejer/luz"]);
+    expect(hrefs).toEqual(["/docs/", "https://github.com/nandovejer/luz"]);
   });
 
   it("the not-found page has a decorative \"SYSTEM FAILURE\" first in the main, and its one h1 in a visually hidden wrapper", () => {

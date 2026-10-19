@@ -96,7 +96,7 @@ for (const app of ['/', '/docs/', '/docs/components/button/', notFoundRoute]) {
     const banner = page.getByRole('banner');
     const link = banner.getByRole('link', { name: 'A–Z index' });
     await expect(link).toBeVisible();
-    await expect(banner.getByRole('button', { name: /^Search docs/ })).toBeHidden();
+    await expect(banner.getByRole('button', { name: /^Search/ })).toBeHidden();
     await expect(page.getByRole('dialog')).toHaveCount(0);
     const href = await link.evaluate((a) => a.href);
     const response = await page.request.get(href);
@@ -147,7 +147,7 @@ test('docs: the A–Z index, both pages together, links every page', async ({ pa
 test('docs: the home shows the A–Z link in place of the big search button', async ({ page }) => {
   await page.goto('/docs/');
   await expect(page.getByRole('main').getByRole('link', { name: 'Browse the A–Z index' })).toBeVisible();
-  await expect(page.getByRole('main').getByRole('button', { name: /^Search docs/ })).toBeHidden();
+  await expect(page.getByRole('main').getByRole('button', { name: /^Search/ })).toBeHidden();
 });
 
 test('docs: the color mode switcher is three radios, none checked, that set the mode', async ({ page }) => {
@@ -198,13 +198,13 @@ test('docs: the specimens carry no data-theme without JavaScript, and the radios
 
 // The drawer's names on the home page in another language (apps/landing/i18n)
 const DRAWER = {
-  '/es/': { menu: 'Menú', site: 'Sitio', links: ['Inicio', 'Documentación', 'GitHub'] },
-  '/ar/': { menu: 'القائمة', site: 'الموقع', links: ['الرئيسية', 'التوثيق', 'GitHub'] },
+  '/es/': { menu: 'Menú', site: 'Sitio', links: ['Documentación', 'GitHub'] },
+  '/ar/': { menu: 'القائمة', site: 'الموقع', links: ['التوثيق', 'GitHub'] },
 };
 
 for (const app of APPS) {
   test(`${app}: the menu drawer opens and closes without JavaScript`, async ({ page }) => {
-    const names = DRAWER[app] ?? { menu: 'Menu', site: 'Site', links: ['Home', 'Docs', 'GitHub'] };
+    const names = DRAWER[app] ?? { menu: 'Menu', site: 'Site', links: ['Documentation', 'GitHub'] };
     await page.setViewportSize({ width: 360, height: 640 });
     await page.goto(app);
     const toggle = page.getByRole('button', { name: names.menu, exact: true });
@@ -218,9 +218,9 @@ for (const app of APPS) {
     await expect(drawer.getByRole('list', { name: names.site }).getByRole('link')).toHaveText(names.links);
     // With no script to measure it, the header's height is the CSS value:
     // the drawer opens right below the header, never over its button
+    // (polled: the panel slides in from a few pixels above, and ends right below the header)
     const header = await page.locator('.site-header').boundingBox();
-    const nav = await drawer.boundingBox();
-    expect(Math.abs(nav.y - (header.y + header.height))).toBeLessThanOrEqual(1);
+    await expect.poll(async () => Math.abs((await drawer.boundingBox()).y - (header.y + header.height))).toBeLessThanOrEqual(1);
     await page.keyboard.press('Escape');
     await expect(drawer).toBeHidden();
   });

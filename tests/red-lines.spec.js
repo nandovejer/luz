@@ -77,7 +77,7 @@ test.describe('RL-12: searching makes no third-party request', () => {
       await page.waitForLoadState('networkidle');
       // Opened with the button, then with Ctrl+K, with a query each time
       const dialog = page.getByRole('dialog', { name: 'Search the documentation' });
-      await page.getByRole('banner').getByRole('button', { name: /^Search docs/ }).click();
+      await page.getByRole('banner').getByRole('button', { name: 'Search', exact: true }).click();
       await dialog.getByRole('textbox').fill('button');
       await expect(dialog.locator('[data-luz-search-list] a').first()).toBeVisible();
       await page.keyboard.press('Escape');

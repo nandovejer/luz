@@ -164,20 +164,22 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('header and color modes', () => {
-    test('the header has the site links, with Docs current on the hub', async ({ page }) => {
+    test('the header has Documentation and GitHub, with Documentation current on the hub (no Home link: the logo is it)', async ({ page }) => {
       await open(page);
 
-      await expect(page.locator('.site-header__nav a')).toHaveText(['Home', 'Docs', 'GitHub']);
-      await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveText('Docs');
+      await expect(page.locator('.site-header__nav a')).toHaveText(['Documentation']);
+      await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveText('Documentation');
+      await expect(page.locator('#site-header').getByRole('link', { name: 'GitHub' })).toBeVisible();
+      await expect(page.locator('#site-header').getByRole('link', { name: 'Home' })).toHaveCount(0);
       // Exactly one radio group drives the tokens on this page
       await expect(page.locator('fieldset:has(input[name="luz-theme"])')).toHaveCount(1);
       await expect(page.locator('input[name="luz-theme"]')).toHaveCount(3);
       await expect(page.locator('#page-nav fieldset')).toHaveCount(0);
     });
 
-    test('on a component page, Docs is the current section', async ({ page }) => {
+    test('on a component page, Documentation is the current section', async ({ page }) => {
       await gotoId(page, 'c-button');
-      await expect(page.locator('.site-header__nav a[aria-current="true"]')).toHaveText(['Docs']);
+      await expect(page.locator('.site-header__nav a[aria-current="true"]')).toHaveText(['Documentation']);
       await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveCount(0);
     });
 
@@ -1020,32 +1022,32 @@ test.describe('Documentation site', () => {
       await expect(page.locator('.luz-docs-rail')).toHaveCount(0);
     });
 
-    test('keeps the header\'s drawer, with the three site links only', async ({ page }) => {
+    test('keeps the header\'s drawer, with the two site links only', async ({ page }) => {
       await page.goto('/404.html');
       const drawer = page.locator('nav#page-nav.luz-sidebar.page-nav.page-nav--drawer');
       await expect(drawer).toHaveCount(1);
       await expect(drawer).toHaveAttribute('popover', '');
       await expect(page.locator('.luz-nav-toggle[popovertarget="page-nav"]')).toHaveCount(1);
       const hrefs = await drawer.locator('a').evaluateAll((all) => all.map((a) => a.getAttribute('href')));
-      expect(hrefs).toEqual(['/', '/docs/', 'https://github.com/nandovejer/luz']);
+      expect(hrefs).toEqual(['/docs/', 'https://github.com/nandovejer/luz']);
     });
 
-    test('at 390px the menu button opens the drawer and the three site links are reachable', async ({ page }) => {
+    test('at 390px the menu button opens the drawer and the two site links are reachable', async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 800 });
       await page.goto('/404.html');
       const drawer = page.locator('#page-nav');
       await expect(drawer).toBeHidden();
       await page.getByRole('button', { name: 'Menu', exact: true }).click();
       await expect(drawer).toBeVisible();
-      for (const name of ['Home', 'Docs', 'GitHub']) await expect(drawer.getByRole('link', { name })).toBeVisible();
+      for (const name of ['Documentation', 'GitHub']) await expect(drawer.getByRole('link', { name })).toBeVisible();
     });
 
     test('at 1280px the drawer is not displayed and the header row shows the site links', async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 800 });
       await page.goto('/404.html');
       await expect(page.locator('#page-nav')).toBeHidden();
-      const row = page.locator('.site-header__nav');
-      for (const name of ['Home', 'Docs', 'GitHub']) await expect(row.getByRole('link', { name })).toBeVisible();
+      const row = page.locator('#site-header');
+      for (const name of ['Documentation', 'GitHub']) await expect(row.getByRole('link', { name })).toBeVisible();
     });
 
     test('is one centred column: main spans the window, its text is centred, so are the links', async ({ page }) => {
@@ -1442,21 +1444,23 @@ test.describe('Site header and navigation toggle', () => {
     'apps/docs/_layouts/not-found.html': ['header', 'site-links'],
   };
 
-  test('every page has the same header markup: Home, Docs, GitHub and the search', () => {
+  test('every page has the same header markup: Documentation, GitHub and the search (no Home link)', () => {
     // The shared partials are apps/site's (read here, so a missing file fails this test and no other)
     const HEADER = read('apps/site/_partials/header.html');
     const SITE_LINKS = read('apps/site/_partials/site-links.html');
     expect(HEADER).toContain('popovertarget="page-nav"');
     expect(HEADER).not.toContain('aria-current');
     const row = HEADER.match(/<nav class="site-header__nav"[\s\S]*?<\/nav>/)[0];
-    // {{home}}: the home page in the page's language ("/" on the docs, "/es/" on the Spanish home page)
-    expect([...row.matchAll(/href="([^"]+)"/g)].map((m) => m[1])).toEqual(['{{home}}', '/docs/', 'https://github.com/nandovejer/luz']);
+    // The row holds Documentation; GitHub is the control after it, and the logo ({{home}}) is the link to the home page
+    expect([...row.matchAll(/href="([^"]+)"/g)].map((m) => m[1])).toEqual(['/docs/']);
+    expect(HEADER).toContain('href="https://github.com/nandovejer/luz"');
+    expect(HEADER).toMatch(/class="site-header__brand" href="\{\{home\}\}"/);
     expect(HEADER).toContain('data-luz-search-open');
     // The drawer's site links are the header's, in the same order: a labelled
     // list inside the drawer's nav, not a nav in a nav (a11y.md F4)
-    expect(SITE_LINKS).toContain('<ul aria-labelledby="nav-site">');
+    expect(SITE_LINKS).toMatch(/<ul class="page-nav__row" aria-label="\{\{t:site\.label\}\}">/);
     expect(SITE_LINKS).not.toContain('<nav');
-    expect([...SITE_LINKS.matchAll(/href="([^"]+)"/g)].map((m) => m[1])).toEqual(['{{home}}', '/docs/', 'https://github.com/nandovejer/luz']);
+    expect([...SITE_LINKS.matchAll(/href="([^"]+)"/g)].map((m) => m[1])).toEqual(['/docs/', 'https://github.com/nandovejer/luz']);
     for (const [file, partials] of Object.entries(INCLUDERS)) {
       for (const name of partials) expect(read(file), file).toContain(`<!-- luz:include ${name} -->`);
       // tabindex="-1": a scrollable nav is a Tab stop of its own in Firefox
@@ -1483,9 +1487,10 @@ test.describe('Site header and navigation toggle', () => {
   });
 
   const PAGES = [
-    { path: '/', current: 'Home' },
-    { path: '/docs/', current: 'Docs' },
-    { path: routeOf('c-button'), current: 'Docs' },
+    // No Home link in the header: the logo is it, so no control is current on the home page
+    { path: '/', current: null },
+    { path: '/docs/', current: 'Documentation' },
+    { path: routeOf('c-button'), current: 'Documentation' },
   ].filter((p, i, all) => all.findIndex((q) => q.path === p.path) === i);
   const PARTS = ['.site-header', '.site-header__menu', '.site-header__brand', '.site-header__nav'];
   // The site links' x is left out: on the home page the language switcher
@@ -1529,19 +1534,26 @@ test.describe('Site header and navigation toggle', () => {
 
     test(`the current page link is marked by more than color: ${path}`, async ({ page }) => {
       await page.goto(path);
-      const link = page.locator('.site-header__nav a[aria-current]').first();
-      await expect(link).toHaveText(current);
-      expect(await link.evaluate((el) => getComputedStyle(el).textDecorationLine)).toBe('underline');
+      const link = page.locator('.site-header__nav a[aria-current]');
+      if (!current) {
+        await expect(link).toHaveCount(0);
+        return;
+      }
+      await expect(link.first()).toHaveText(current);
+      // A 2px bar at the bottom (a border, so it stays in forced colors), not an underline
+      expect(await link.first().evaluate((el) => getComputedStyle(el).borderBottomWidth)).toBe('2px');
+      expect(await link.first().evaluate((el) => getComputedStyle(el).textDecorationLine)).toBe('none');
     });
 
     for (const [width, order] of [
-      [360, ['.luz-skip-link', '.site-header__menu', '.site-header__brand', '.site-header__search']],
+      [360, ['.luz-skip-link', '.site-header__brand', '.site-header__search', '.site-header__menu']],
       [1440, [
         '.luz-skip-link',
         '.site-header__brand',
+        '.site-header__version',
         '.site-header__nav a >> nth=0',
-        '.site-header__nav a >> nth=1',
-        '.site-header__nav a >> nth=2',
+        '.site-header__github',
+        '.site-header__search',
       ]],
     ]) {
       test(`the focus order follows the header row at ${width}px: ${path}`, async ({ page }) => {
@@ -1554,7 +1566,7 @@ test.describe('Site header and navigation toggle', () => {
       });
     }
 
-    test(`on a phone Home, Docs and GitHub are in the drawer, first; the search stays in the row: ${path}`, async ({ page }) => {
+    test(`on a phone Documentation and GitHub are in the drawer (after the sections on the home page, first on the docs); the search stays in the row: ${path}`, async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 640 });
       await page.goto(path);
       await expect(page.locator('.site-header__nav a:visible')).toHaveCount(0);
@@ -1565,13 +1577,18 @@ test.describe('Site header and navigation toggle', () => {
       await menu.focus();
       await page.keyboard.press('Enter');
       const site = page.getByRole('list', { name: 'Site', exact: true });
-      await expect(site.getByRole('link')).toHaveText(['Home', 'Docs', 'GitHub']);
-      await expect(site.locator('[aria-current]')).toHaveText(current);
-      // first in the drawer: the first Tab from the button lands on Home
-      await page.keyboard.press('Tab');
-      await expect(site.getByRole('link', { name: 'Home' })).toBeFocused();
-      const underline = await site.locator('[aria-current]').evaluate((el) => getComputedStyle(el).textDecorationLine);
-      expect(underline).toBe('underline');
+      await expect(site.getByRole('link')).toHaveText(['Documentation', 'GitHub']);
+      await expect(page.locator('#page-nav').getByRole('link', { name: 'Home' })).toHaveCount(0);
+      if (current) {
+        await expect(site.locator('[aria-current]')).toHaveText(current);
+        // first in the docs drawer: the first Tab from the button lands on Documentation
+        await page.keyboard.press('Tab');
+        await expect(site.getByRole('link', { name: 'Documentation' })).toBeFocused();
+        const underline = await site.locator('[aria-current]').evaluate((el) => getComputedStyle(el).textDecorationLine);
+        expect(underline).toBe('underline');
+      } else {
+        await expect(site.locator('[aria-current]')).toHaveCount(0);
+      }
     });
 
     test(`on a wide screen the site links are in the header row only: ${path}`, async ({ page }) => {

@@ -29,7 +29,7 @@ async function open(page, url = BUTTON) {
 
 /** Open the dialog with the header button and type a query; wait for the count. */
 async function searchFor(page, query) {
-  await page.getByRole('banner').getByRole('button', { name: /^Search docs/ }).click();
+  await page.getByRole('banner').getByRole('button', { name: 'Search', exact: true }).click();
   await expect(field(page)).toBeFocused();
   await field(page).fill(query);
   await expect(status(page)).not.toBeEmpty();
@@ -40,7 +40,7 @@ test.describe('search: opening and closing', () => {
     await open(page);
     const banner = page.getByRole('banner');
     await expect(banner.getByRole('link', { name: 'A–Z index' })).toBeHidden();
-    const button = banner.getByRole('button', { name: /^Search docs/ });
+    const button = banner.getByRole('button', { name: 'Search', exact: true });
     await expect(button).toBeVisible();
     await expect(button).toHaveAttribute('aria-keyshortcuts', 'Control+K Meta+K');
     await button.click();
@@ -49,7 +49,7 @@ test.describe('search: opening and closing', () => {
     await expect(field(page)).toBeFocused();
     // The status region is there, and empty, when it opens (SRCH-24)
     await expect(status(page)).toBeEmpty();
-    await expect(dialog(page).getByRole('heading', { name: 'Popular' })).toBeVisible();
+    await expect(dialog(page).getByRole('heading', { name: 'Popular' })).toHaveCount(0);
   });
 
   test('Ctrl+K and ⌘K open it; a single key never does (SRCH-6, SRCH-8)', async ({ page }) => {
@@ -102,7 +102,7 @@ test.describe('search: opening and closing', () => {
     // The close button closes it too, back to the button that opened it
     await dialog(page).getByRole('button', { name: 'Close search' }).click();
     await expect(dialog(page)).toBeHidden();
-    const button = page.getByRole('banner').getByRole('button', { name: /^Search docs/ });
+    const button = page.getByRole('banner').getByRole('button', { name: 'Search', exact: true });
     await button.click();
     await dialog(page).getByRole('button', { name: 'Close search' }).click();
     await expect(button).toBeFocused();
@@ -185,7 +185,7 @@ test.describe('search: results', () => {
     await open(page);
     await searchFor(page, "zz$&$'$`{n}");
     await expect(status(page)).toHaveText("No results for “zz$&$'$`{n}”. Check the spelling or try a shorter word.");
-    await expect(dialog(page).getByRole('heading', { name: 'Popular' })).toBeHidden();
+    await expect(dialog(page).getByRole('heading', { name: 'Popular' })).toHaveCount(0);
     await expect(dialog(page).getByRole('link', { name: 'Browse the A–Z index' })).toBeVisible();
   });
 
@@ -479,7 +479,7 @@ test.describe('search: rendering', () => {
   test('320 × 256 (400 % zoom): the dialog fits the screen and scrolls, nothing is cut off (SRCH-15)', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 256 });
     await open(page);
-    await page.getByRole('banner').getByRole('button', { name: /^Search docs/ }).click();
+    await page.getByRole('banner').getByRole('button', { name: 'Search', exact: true }).click();
     await field(page).fill('tab');
     const box = await dialog(page).boundingBox();
     expect(box.x).toBeGreaterThanOrEqual(0);
