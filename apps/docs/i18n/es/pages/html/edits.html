@@ -1,0 +1,49 @@
+<!-- luz:page
+title: Cambios controlados
+description: Muestra qué ha cambiado en un texto: qué se ha eliminado y qué se ha añadido.
+source: b7aa10d9d0ed
+reviewed: false
+-->
+    <div class="docs-block elements-section" id="cat-edits" data-category="edits">
+        <p class="elements-section__lead">Muestra qué ha cambiado en un texto: qué se ha eliminado y qué se ha añadido.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-del" data-element="del" aria-labelledby="el-del-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-del-title"><code>&lt;del&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/del">MDN<span class="u-sr-only"> referencia del elemento del</span></a>
+          </div>
+          <p class="elements-card__desc">Texto eliminado en un cambio controlado, como una modificación de las condiciones. Añade datetime y cite si sabes cuándo y por qué. LUZ aplica un tono rojizo al tachado.</p>
+          <div class="elements-stage">
+            <p>Price: <del datetime="2026-10-01">$20</del> <ins datetime="2026-10-06">$15</ins></p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-del" aria-label="Copy the del markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="del markup"><code id="code-del">&lt;p&gt;Price: &lt;del datetime=&quot;2026-10-01&quot;&gt;$20&lt;/del&gt; &lt;ins datetime=&quot;2026-10-06&quot;&gt;$15&lt;/ins&gt;&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/inline.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-ins" data-element="ins" aria-labelledby="el-ins-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-ins-title"><code>&lt;ins&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ins">MDN<span class="u-sr-only"> referencia del elemento ins</span></a>
+          </div>
+          <p class="elements-card__desc">Texto añadido en un cambio controlado; es el elemento complementario de del. LUZ aplica un tono verdoso al subrayado.</p>
+          <div class="elements-stage">
+            <p>Price: <del datetime="2026-10-01">$20</del> <ins datetime="2026-10-06">$15</ins></p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-ins" aria-label="Copy the ins markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="ins markup"><code id="code-ins">&lt;p&gt;Price: &lt;del datetime=&quot;2026-10-01&quot;&gt;$20&lt;/del&gt; &lt;ins datetime=&quot;2026-10-06&quot;&gt;$15&lt;/ins&gt;&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/inline.css</code>, sin clase.</p>
+        </article>
+        </div>
+      
+    </div>

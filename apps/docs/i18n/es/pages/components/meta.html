@@ -1,0 +1,125 @@
+<!-- luz:page
+title: Línea de metadatos
+description: Muestra en una línea algunos datos sobre un elemento, como la fecha, el tiempo de lectura y el autor, separados por puntos.
+source: 40bc5ed000e9
+reviewed: false
+-->
+    <div class="docs-component" id="c-meta">
+          <h2 id="example">Ejemplo</h2>
+          <p>Una línea bajo el título de un artículo con el autor, la fecha y el tiempo de lectura.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <p class="luz-meta"><span>By <a href="#example">Ana Ruiz</a></span> <time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Los lectores de pantalla ocultan los puntos mediante texto alternativo para el contenido generado, compatible con Firefox desde la versión 128 y con Safari desde la 17.4. En navegadores anteriores, el lector de pantalla lee cada punto.</p>
+          <p>Aún no se ha probado con un lector de pantalla.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la línea de metadatos">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-meta" aria-label="Copy the meta line markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meta line markup"><code id="code-meta">&lt;p class=&quot;luz-meta&quot;&gt;
+  &lt;span&gt;By &lt;a href=&quot;/authors/ana-ruiz/&quot;&gt;Ana Ruiz&lt;/a&gt;&lt;/span&gt;
+  &lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt;
+  &lt;span&gt;6 min read&lt;/span&gt;
+&lt;/p&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Elementos de la línea de metadatos" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o elemento</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o elemento"><div><code>.luz-meta</code></div></td><td data-label="Qué hace"><div>La línea: datos en una fila que salta de línea, con tipografía sans y el color de texto secundario</div></td></tr>
+                  <tr><td data-label="Clase o elemento"><div>Cada elemento secundario</div></td><td data-label="Qué hace"><div>Un dato: un elemento <code>&lt;time&gt;</code>, un enlace o un <code>&lt;span&gt;</code> de texto. Antes de cada elemento, salvo el primero, aparece un punto</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Solo CSS, en <code>components/meta.css</code>: una fila flexible que salta de línea y un punto dibujado con <code>::before</code> en cada dato después del primero.</p>
+            <ul>
+              <li>El punto queda en el espacio anterior al dato. La línea recorta los bordes inicial y final, de modo que, si un dato salta al principio de una línea nueva, su punto queda fuera: ninguna línea empieza con un punto.</li>
+              <li>La línea tiene 4 px de relleno en cada extremo, espacio para el anillo de foco de un enlace dentro del recorte y un margen negativo del mismo tamaño, para que sus líneas de texto queden alineadas con el texto anterior.</li>
+              <li>El punto se escribe como <code>content: "·" / ""</code>: un texto alternativo vacío para que los lectores de pantalla no lo lean.</li>
+              <li>No hay ningún elemento posicionado, así que, en una tarjeta cuyo enlace de título cubra toda la tarjeta, esta sigue siendo un único enlace.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: la línea de metadatos está hecha con CSS. Sin CSS, los datos se unen en una sola línea con los espacios del marcado: deja un espacio o un salto de línea entre los elementos.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>La línea no recibe el foco ni añade ningún rol. Pulsa Tab para llegar a los enlaces que contiene, en orden.</p>
+            <ul>
+              <li>El lector de pantalla lee los datos uno tras otro, sin los puntos. Escribe cada dato para que tenga sentido por sí solo: «6 min de lectura», no «6».</li>
+              <li>Asigna a las fechas un elemento <code>&lt;time datetime&gt;</code> para que el software pueda leerlas.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una línea de metadatos para mostrar entre dos y cuatro datos breves sobre una entrada, una historia o un elemento: el autor, la fecha, el tiempo de lectura o la sección.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No la uses para una frase ni para datos que haya que comparar entre varios elementos.</p>
+            <ul>
+              <li>Los datos con etiquetas, como un precio y una talla, van en una lista de descripciones (<code>&lt;dl&gt;</code>) o en una <a href="/docs/components/table/">tabla</a>.</li>
+              <li>Una ruta de páginas es una <a href="/docs/components/breadcrumb/">miga de pan</a>; un conjunto de etiquetas es una fila de <a href="/docs/components/tag/">etiquetas</a>.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Pon cada dato en su propio elemento y deja que CSS añada los puntos.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Escribas los puntos como texto: el lector de pantalla lee cada uno y una línea puede empezar con un punto al saltar de línea.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <p class="luz-meta"><span>12 October 2026 · 6 min read</span></p>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Datos breves, empezando por el más útil: normalmente el autor y después la fecha.</p>
+            <ul>
+              <li>Escribe la fecha con palabras, con el mes desplegado, en el idioma de quien lee.</li>
+              <li>Incluye entre dos y cuatro datos. Si hay más, forma una lista, no una línea.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Los datos y los puntos usan el color de texto secundario; los enlaces de la línea conservan el color de los enlaces.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la línea de metadatos en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Dato y punto</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> un enlace conserva el contorno de 2 px <code>--luz-focus-ring</code> de core, dentro del recorte de la línea.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 5 tokens que lee <code>components/meta.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

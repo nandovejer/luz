@@ -1,0 +1,42 @@
+<!-- luz:page
+title: Clases de utilidad
+description: Clases pequeñas u-* que hacen una sola cosa cada una, para los casos que no cubre un componente.
+source: 94ce5303ced7
+reviewed: false
+-->
+    <div class="docs-block" id="c-utilities">
+          <p>Usa una clase de utilidad para un ajuste puntual. Si añades una y otra vez las mismas clases de utilidad al mismo elemento, necesitas un componente o una clase propios.</p>
+          <ul>
+            <li>Las clases de utilidad prevalecen sobre los componentes: van al final de la cascada.</li>
+            <li><code>.u-sr-only</code> oculta el texto en pantalla, pero no a los lectores de pantalla. <code>.u-hidden</code> lo oculta de ambas formas.</li>
+            <li><code>.u-no-events</code> solo bloquea el puntero: el teclado aún puede llegar al elemento y usarlo. No la uses nunca para desactivar un control.</li>
+          </ul>
+          <details class="docs-fold" open data-fold-narrow>
+            <summary>Todas las <span data-count="utilities">16</span> clases de utilidad</summary>
+            <div class="docs-demo__stage">
+            <div class="luz-table-wrap" role="region" aria-label="Clases de utilidad" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th><th scope="col">Ejemplo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.u-hidden</code></div></td><td data-label="Efecto"><div>Elimina el elemento de la página</div></td><td data-label="Ejemplo"><div><span class="u-hidden">Oculto</span><span class="u-text-muted">(no se muestra nada)</span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-sr-only</code></div></td><td data-label="Efecto"><div>Visible solo para lectores de pantalla</div></td><td data-label="Ejemplo"><div><span class="u-sr-only">Leído por lectores de pantalla</span><span class="u-text-muted">(solo para lectores de pantalla)</span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-text-mono</code></div></td><td data-label="Efecto"><div>Fuente monoespaciada</div></td><td data-label="Ejemplo"><div><span class="u-text-mono">0123 abc</span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-text-primary</code></div></td><td data-label="Efecto"><div>Texto principal</div></td><td data-label="Ejemplo"><div><span class="u-text-primary">Texto principal</span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-text-muted</code></div></td><td data-label="Efecto"><div>Texto secundario</div></td><td data-label="Ejemplo"><div><span class="u-text-muted">Texto atenuado</span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-truncate</code></div></td><td data-label="Efecto"><div>Una línea, con puntos suspensivos si se desborda</div></td><td data-label="Ejemplo"><div><span class="u-truncate docs-util-narrow">Una línea larga que se corta</span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-flex</code></div></td><td data-label="Efecto"><div>Contenedor flex</div></td><td data-label="Ejemplo"><div><span class="u-flex"><span class="docs-box">a</span><span class="docs-box">b</span></span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-flex-center</code></div></td><td data-label="Efecto"><div>Flex, centrado en ambos ejes</div></td><td data-label="Ejemplo"><div><span class="u-flex-center docs-util-frame"><span class="docs-box">a</span></span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-flex-between</code></div></td><td data-label="Efecto"><div>Flex, con los elementos en los extremos</div></td><td data-label="Ejemplo"><div><span class="u-flex-between docs-util-frame"><span class="docs-box">a</span><span class="docs-box">b</span></span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-flex-1</code></div></td><td data-label="Efecto"><div>Ocupa el espacio restante</div></td><td data-label="Ejemplo"><div><span class="u-flex docs-util-frame"><span class="docs-box">a</span><span class="docs-box u-flex-1">flex 1</span></span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-mb-0</code> <code>.u-mb-sm</code> <code>.u-mb-md</code> <code>.u-mb-lg</code></div></td><td data-label="Efecto"><div>Margen inferior: 0, 8px, 16px, 32px</div></td><td data-label="Ejemplo"><div><span class="docs-util-margins"><span class="docs-box u-mb-0">0</span><span class="docs-box u-mb-sm">sm</span><span class="docs-box u-mb-md">md</span><span class="docs-box u-mb-lg">lg</span></span></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-select-all</code></div></td><td data-label="Efecto"><div>Un clic selecciona todo el texto</div></td><td data-label="Ejemplo"><div><code class="u-select-all">click-selects-all</code></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.u-no-events</code></div></td><td data-label="Efecto"><div>Ignora los eventos del puntero</div></td><td data-label="Ejemplo"><div><a class="u-no-events" href="#c-utilities" tabindex="-1" aria-disabled="true">Enlace en el que no puedes hacer clic</a></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </details>
+        
+    </div>

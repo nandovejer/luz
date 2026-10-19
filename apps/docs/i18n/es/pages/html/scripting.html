@@ -1,0 +1,70 @@
+<!-- luz:page
+title: Scripts y canvas
+description: Dibuja con un script, indica qué ocurre si está desactivado y carga el propio script.
+source: 0098cd0616fd
+reviewed: false
+-->
+    <div class="docs-block elements-section" id="cat-scripting" data-category="scripting">
+        <p class="elements-section__lead">Dibuja con un script, indica qué ocurre si está desactivado y carga el propio script.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-canvas" data-element="canvas" aria-labelledby="el-canvas-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-canvas-title"><code>&lt;canvas&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/canvas">MDN<span class="u-sr-only"> referencia del elemento canvas</span></a>
+          </div>
+          <p class="elements-card__desc">Un área de dibujo que pintas con un script, para gráficos o juegos. Los lectores de pantalla no pueden ver el dibujo, así que incluye dentro una alternativa textual.</p>
+          <div class="elements-stage">
+            <canvas id="d-canvas" width="240" height="120" role="img" aria-label="A square and a circle, drawn with the canvas API">
+              A square and a circle.
+            </canvas>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-canvas" aria-label="Copy the canvas markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="canvas markup"><code id="code-canvas">&lt;canvas id=&quot;d-canvas&quot; width=&quot;240&quot; height=&quot;120&quot; role=&quot;img&quot; aria-label=&quot;A square and a circle, drawn with the canvas API&quot;&gt;
+  A square and a circle.
+&lt;/canvas&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/media.css</code>, sin clase. Este ejemplo se dibuja a partir de los valores de los tokens, por lo que sigue el modo de color.</p>
+        </article>
+
+        <article class="elements-card" id="el-noscript" data-element="noscript" aria-labelledby="el-noscript-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-noscript-title"><code>&lt;noscript&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/noscript">MDN<span class="u-sr-only"> referencia del elemento noscript</span></a>
+          </div>
+          <p class="elements-card__desc">Contenido que solo se muestra cuando los scripts están desactivados o no pueden ejecutarse. Esta tarjeta muestra solo el marcado: en esta página nunca se representaría.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-noscript" aria-label="Copy the noscript markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="noscript markup"><code id="code-noscript">&lt;noscript&gt;
+  &lt;p&gt;This page needs JavaScript for the live demos.&lt;/p&gt;
+&lt;/noscript&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: cuando aparece, su contenido adopta los estilos de los elementos que contiene.</p>
+        </article>
+
+        <article class="elements-card" id="el-script" data-element="script" aria-labelledby="el-script-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-script-title"><code>&lt;script&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script">MDN<span class="u-sr-only"> referencia del elemento script</span></a>
+          </div>
+          <p class="elements-card__desc">Ejecuta JavaScript, escrito en línea o cargado desde un archivo. Usa type="module" para los comportamientos de LUZ.</p>
+          <p class="elements-card__style">Solo marcado: este elemento no se representa.</p>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-script" aria-label="Copy the script markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="script markup"><code id="code-script">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+        </div>
+      
+    </div>

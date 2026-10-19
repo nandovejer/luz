@@ -1,0 +1,157 @@
+<!-- luz:page
+title: Acordeón
+description: Muestra y oculta secciones de contenido con los elementos nativos details y summary, de una en una si asignas un nombre al grupo.
+keywords: contraer, desplegar
+source: af8a7e94b80d
+reviewed: false
+-->
+    <div class="docs-component" id="c-accordion">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un grupo de preguntas con sus respuestas: al abrir una, se cierra la que estaba abierta.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-accordion">
+              <details name="acc-demo" open>
+                <summary>What is a design token?</summary>
+                <p>A named value, such as a color or a space, that components read instead of a literal.</p>
+              </details>
+              <details name="acc-demo">
+                <summary>Why only one open at a time?</summary>
+                <p>The same <code>name</code> on each details connects them: opening one closes the other.</p>
+              </details>
+              <details name="acc-demo">
+                <summary>Does it need JavaScript?</summary>
+                <p>No. The browser opens, closes and groups them.</p>
+              </details>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Hay dos cosas que debes saber antes de confiar en un grupo con nombre.</p>
+          <p><strong>Grupo exclusivo.</strong> El atributo <code>name</code> funciona en Chrome y Edge 120, Safari 17.2 y Firefox 130, todos desde septiembre de 2024 o anteriores, por lo que aún no tiene disponibilidad amplia en Baseline. En un navegador más antiguo, cada panel se abre por separado: no se pierde nada.</p>
+          <p><strong>Lectores de pantalla.</strong> LUZ no ha probado cómo anuncian NVDA, JAWS, VoiceOver, TalkBack y Orca un grupo exclusivo, ni ha comprobado datos de compatibilidad. La agrupación de un conjunto exclusivo no se comunica a la tecnología de asistencia: su correspondencia de accesibilidad en HTML sigue siendo una cuestión abierta (consulta la <a href="https://open-ui.org/components/accordion.explainer">explicación de Open UI</a>).</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de acordeón">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-accordion" aria-label="Copy the accordion markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Accordion markup"><code id="code-accordion">&lt;div class=&quot;luz-accordion&quot;&gt;
+  &lt;details name=&quot;faq&quot; open&gt;
+    &lt;summary&gt;What is a design token?&lt;/summary&gt;
+    &lt;p&gt;A named value that components read.&lt;/p&gt;
+  &lt;/details&gt;
+  &lt;details name=&quot;faq&quot;&gt;
+    &lt;summary&gt;Does it need JavaScript?&lt;/summary&gt;
+    &lt;p&gt;No.&lt;/p&gt;
+  &lt;/details&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Un único <code>&lt;details&gt;</code> no necesita clase: la capa de elementos le da estilo. La clase solo sirve para unir varios en una pila.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases y atributos de acordeón" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-accordion</code></div></td><td data-label="Qué hace"><div>Une los elementos <code>&lt;details&gt;</code> que contiene en un solo bloque: un borde entre ellos y esquinas redondeadas solo en el bloque</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>name="…"</code></div></td><td data-label="Qué hace"><div>Agrupa los elementos details con el mismo nombre: solo puede haber uno abierto a la vez. No tienen que estar juntos</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>open</code></div></td><td data-label="Qué hace"><div>Hace que un panel empiece abierto. En un grupo con nombre, solo permanece abierto el primer elemento con <code>open</code> en el código fuente</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Elementos nativos <code>&lt;details&gt;</code> y <code>&lt;summary&gt;</code>, con estilos de <code>elements/interactive.css</code> y sin clases. <code>components/accordion.css</code> solo añade el bloque unido.</p>
+            <p>No necesita JavaScript.</p>
+            <ul>
+              <li>summary es la etiqueta del panel; el resto de details es su contenido.</li>
+              <li>El contenido cerrado no se muestra ni forma parte del orden de lectura hasta que se abre el panel.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el navegador se encarga de abrir, cerrar y agrupar. El acordeón funciona por completo sin scripts.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Con Tab se llega a cada summary en orden. Enter o Espacio lo abre o lo cierra.</p>
+            <p>No hay atajos con las teclas de flecha para moverse entre paneles.</p>
+            <ul>
+              <li>No añadas ningún role: <code>&lt;details&gt;</code> ya tiene su propia semántica y no admite roles ARIA.</li>
+              <li>No pongas enlaces ni botones dentro de summary: ese elemento ya es el control.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un acordeón para agrupar bajo títulos breves contenido que la mayoría de lectores puede omitir.</p>
+            <ul>
+              <li>Preguntas frecuentes y listas de referencia largas.</li>
+              <li>Detalles opcionales bajo una respuesta breve.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No ocultes información que necesitan todos los lectores ni lo uses para desplazarte por el sitio.</p>
+            <ul>
+              <li>Para las secciones principales de un sitio, usa una <a href="/docs/components/sidebar/">barra lateral</a>. Para contenido entre el que se puede alternar, usa <a href="/docs/components/tabs/">pestañas</a>.</li>
+              <li>No pongas un error, un aviso ni un paso obligatorio dentro de un panel cerrado.</li>
+              <li>Si solo hay una o dos respuestas breves, muéstralas como texto normal.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Pon a cada summary un título breve que indique qué responde el panel.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-accordion">
+                    <details><summary>How do I reset my password?</summary><p>Use the link on the sign-in page.</p></details>
+                    <details><summary>Where are my invoices?</summary><p>Under Billing.</p></details>
+                  </div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No uses una frase contextual completa como título: oculta la idea principal y ocupa varias líneas.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-accordion">
+                    <details><summary>In case you have forgotten the password you chose when you signed up, here is what to do</summary><p>Use the link on the sign-in page.</p></details>
+                  </div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <ul>
+              <li>Escribe en summary la pregunta o el tema, con mayúscula inicial y en pocas palabras.</li>
+              <li>Pon primero la respuesta en el panel. Sé breve y enlaza a otra página para ampliar la información.</li>
+              <li>Ordena los paneles según las preguntas de los lectores, empezando por la más frecuente.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto y el indicador usan el color de texto principal sobre la superficie.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del acordeón en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto de summary</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>summary al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> summary tiene el contorno compartido de 2 px <code>--luz-focus-ring</code>, situado a 2 px del borde del cuadro.</li>
+              <li><strong>No depende solo del color:</strong> el indicador gira para distinguir entre abierto y cerrado; no se usan el borde ni el fondo.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 2 tokens que lee <code>components/accordion.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p>El aspecto de un details individual y de su summary, con sus propios tokens, se define en <code>elements/interactive.css</code>.</p>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

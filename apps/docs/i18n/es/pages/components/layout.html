@@ -1,0 +1,202 @@
+<!-- luz:page
+title: Objetos de maquetación
+description: Organiza bloques en una pila, una fila o una cuadrícula; coloca elementos junto a una imagen o agrupa acciones, y estructura la página con su barra fija mediante las clases o-*
+source: 6357c72ac836
+reviewed: false
+-->
+    <div class="docs-block" id="c-objects">
+          <h2 id="objects-examples">Ejemplos</h2>
+          <div class="docs-demo__stage o-grid docs-cols-2">
+            <div class="docs-demo__stage">
+              <code class="docs-demo__file">.o-stack</code>
+              <div class="o-stack">
+                <div class="docs-box">1</div>
+                <div class="docs-box">2</div>
+                <div class="docs-box">3</div>
+              </div>
+            </div>
+            <div class="docs-demo__stage">
+              <code class="docs-demo__file">.o-row</code>
+              <div class="o-row">
+                <div class="docs-box">1</div>
+                <div class="docs-box">2</div>
+                <div class="docs-box">3</div>
+                <div class="docs-box">4</div>
+                <div class="docs-box">5</div>
+              </div>
+            </div>
+            <div class="docs-demo__stage">
+              <code class="docs-demo__file">.o-grid</code>
+              <div class="o-grid docs-cols-4">
+                <div class="docs-box">1</div>
+                <div class="docs-box">2</div>
+                <div class="docs-box">3</div>
+                <div class="docs-box">4</div>
+              </div>
+            </div>
+            <div class="docs-demo__stage">
+              <code class="docs-demo__file">.o-media</code>
+              <div class="o-media">
+                <span class="luz-avatar luz-avatar--md" aria-hidden="true">AB</span>
+                <div class="o-media__body">
+                  <p>Objeto multimedia</p>
+                  <p class="u-text-muted">Un elemento de tamaño fijo junto al contenido, que ocupa el ancho restante.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="docs-demo__note"><code class="luz-code-inline">.o-shell</code>, <code class="luz-code-inline">.o-main</code> y <code class="luz-code-inline">.o-container</code> se aplican a toda la página: <a href="#page-nav">esta página los usa</a>.</p>
+        
+          <h2 id="objects-reference">Elige un objeto</h2>
+          <p>Los objetos solo organizan la maquetación: no aplican color ni tipografía. El espaciado procede de los tokens de espacio.</p>
+          <div class="luz-table-wrap" role="region" aria-label="Objetos de maquetación" tabindex="0">
+            <table class="luz-table">
+              <thead>
+                <tr><th scope="col">Clase</th><th scope="col">Qué hace</th></tr>
+              </thead>
+              <tbody>
+                <tr><td data-label="Clase"><div><code>.o-stack</code></div></td><td data-label="Qué hace"><div>Una columna, con 12 px entre elementos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-row</code></div></td><td data-label="Qué hace"><div>Una fila que salta de línea, con los elementos centrados en vertical y 12 px entre ellos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-grid</code></div></td><td data-label="Qué hace"><div>Una cuadrícula con espacios de 16 px; define las columnas con tu propio <code>grid-template-columns</code> o con uno de los modificadores siguientes</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-grid--auto</code></div></td><td data-label="Qué hace"><div>Tantas columnas iguales como quepan, ninguna más estrecha que <code>--luz-grid-min</code> (16 rem de forma predeterminada): la cuadrícula se redistribuye sola y no necesita puntos de ruptura</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-grid--2</code>, <code>.o-grid--3</code>, <code>.o-grid--4</code></div></td><td data-label="Qué hace"><div>Ese número de columnas iguales por encima de 768 px; una columna a 768 px o menos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-grid--split</code></div></td><td data-label="Qué hace"><div>Dos columnas iguales cuando cada una alcanza <code>--luz-grid-min</code> (16 rem de forma predeterminada), y una por debajo: una sección destacada con su imagen o dos características en paralelo. Con texto más grande, se apilan automáticamente</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-media</code>, <code>.o-media__body</code></div></td><td data-label="Qué hace"><div>Un elemento de tamaño fijo, como un avatar, junto al contenido, que ocupa el ancho restante</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-container</code></div></td><td data-label="Qué hace"><div>El ancho del contenido (<code>--luz-content-max</code>, 1100 px) y el relleno de la página; menos relleno a 640 px o menos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-container--inline</code></div></td><td data-label="Qué hace"><div>Solo el ancho del contenedor y los márgenes laterales, sin relleno arriba ni abajo: la fila de una barra, para que su contenido empiece donde empieza el de la página</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-page</code></div></td><td data-label="Qué hace"><div>Una página sin barra lateral: una columna de al menos la altura de la ventana cuyo <code>&lt;main&gt;</code> crece, de modo que el pie quede al fondo en las páginas cortas. Antes de la cabecera puede haber cualquier número de bandas</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-sticky</code></div></td><td data-label="Qué hace"><div>Una barra que permanece arriba mientras se desplaza la página, en una ventana de al menos 30 rem de alto, con un relleno de desplazamiento que mantiene fuera de ella lo que se alcanza con Tab</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-actions</code></div></td><td data-label="Qué hace"><div>Dos o tres botones o enlaces relacionados en una fila que salta de línea, separados por 8 px; a 640 px o menos, una columna de acciones de ancho completo cuyas etiquetas pueden saltar de línea</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-shell</code></div></td><td data-label="Qué hace"><div>La maquetación de la aplicación: una columna de barra lateral (<code>--luz-sidebar-width</code>) junto al área principal y un pie que ocupa todo el ancho; una sola columna a 768 px o menos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-main</code></div></td><td data-label="Qué hace"><div>El área principal dentro de <code>.o-shell</code></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="objects-page">La página y sus barras</h2>
+          <p>Una página sin barra lateral usa <code>.o-page</code>: primero las bandas que haya (un aviso, la pregunta sobre cookies), y después la cabecera, <code>&lt;main&gt;</code> y el pie. La fila de la cabecera es <code>.o-container.o-container--inline</code>, para que el nombre del sitio empiece donde empieza el contenido, y <code>.o-sticky</code> mantiene la cabecera arriba.</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-page" aria-label="Copy the page markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page markup"><code id="code-objects-page">&lt;body&gt;
+  &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to main content&lt;/a&gt;
+  &lt;div class=&quot;o-page&quot;&gt;
+    &lt;header class=&quot;o-sticky&quot;&gt;
+      &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;…&lt;/div&gt;
+    &lt;/header&gt;
+    &lt;main id=&quot;main-content&quot; class=&quot;o-container o-stack&quot; tabindex=&quot;-1&quot;&gt;…&lt;/main&gt;
+    &lt;footer&gt;
+      &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;…&lt;/div&gt;
+    &lt;/footer&gt;
+  &lt;/div&gt;
+&lt;/body&gt;</code></pre>
+          </div>
+          <ul>
+            <li>Los objetos solo organizan la maquetación: tu CSS o la cabecera de un paquete para un tipo de sitio se encargan de la superficie y el separador de la cabecera.</li>
+            <li><code>--luz-bar-h</code> es la altura de una barra de una fila con controles de 44 px y el tamaño de texto predeterminado: el control, dos rellenos de 4 px y un separador de 1 px. El panel de la <a href="/docs/components/navbar/">barra de navegación</a> se abre a esa altura si no hay nada que lo ancle.</li>
+            <li>Con <code>.o-sticky</code> en la página, el relleno de desplazamiento de <code>&lt;html&gt;</code> es el mayor de <code>--luz-bar-h</code> y 3.5em, más medio control: un campo al que llegas con Tab o el destino del <a href="/docs/components/skip-link/">enlace para saltar</a> se detiene debajo de la barra. Es un mínimo: una barra que ocupa varias filas con el texto ampliado es más alta, y Safari puede dejar un campo parcialmente oculto debajo al ampliar el texto al 300 por ciento.</li>
+            <li>Por debajo de 30 rem de alto de ventana, la barra se desplaza con la página, así que nunca ocupa la mayor parte de una pantalla baja.</li>
+          </ul>
+          <h2 id="objects-actions">Acciones y cuadrícula dividida</h2>
+          <div class="docs-demo__stage o-stack">
+            <div class="o-grid o-grid--split">
+              <div class="docs-box">Copiar</div>
+              <div class="docs-box">Imagen</div>
+            </div>
+            <div class="o-actions">
+              <a class="luz-btn luz-btn--primary" href="#objects-actions">Registrarse ahora</a>
+              <a class="luz-btn luz-btn--outline" href="#objects-actions">Ver el programa</a>
+            </div>
+          </div>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-actions" aria-label="Copy the split grid and actions markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Split grid and actions markup"><code id="code-objects-actions">&lt;section class=&quot;o-grid o-grid--split&quot;&gt;
+  &lt;div class=&quot;o-stack&quot;&gt;
+    &lt;h1&gt;…&lt;/h1&gt;
+    &lt;div class=&quot;o-actions&quot;&gt;
+      &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;/register/&quot;&gt;Register now&lt;/a&gt;
+      &lt;a class=&quot;luz-btn luz-btn--outline&quot; href=&quot;/programme/&quot;&gt;See the programme&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-image&quot;&gt;…&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- two columns only when each gets 24 rem --&gt;
+&lt;section class=&quot;o-grid o-grid--split hero&quot;&gt;…&lt;/section&gt;
+&lt;style&gt;.hero { --luz-grid-min: 24rem; }&lt;/style&gt;</code></pre>
+          </div>
+          <ul>
+            <li>Una acción principal por grupo y, si hay otra opción, una segunda secundaria con contorno. En la columna estrecha, la principal va primero, como en el orden de origen.</li>
+            <li>Un <code>.luz-btn</code> dentro de <code>.o-actions</code> permite que la etiqueta salte de línea en la columna estrecha, para que nunca se salga de la ventana.</li>
+          </ul>
+          <h2 id="objects-grid">La cuadrícula</h2>
+          <p>LUZ no tiene un sistema de 12 columnas: una cuadrícula de contenido consta de unas pocas columnas iguales, que crea <code>.o-grid</code>. Usa <code>.o-grid--auto</code> cuando los elementos deban decidir cuántas caben, como las tarjetas; usa <code>.o-grid--2</code> a <code>--4</code> cuando el número forme parte del diseño.</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-grid" aria-label="Copy the grid markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Grid markup"><code id="code-objects-grid">&lt;!-- as many columns as fit, each at least 16 rem --&gt;
+&lt;div class=&quot;o-grid o-grid--auto&quot;&gt;…cards…&lt;/div&gt;
+
+&lt;!-- at least 12 rem: set the property in your own CSS --&gt;
+&lt;div class=&quot;o-grid o-grid--auto gallery&quot;&gt;…&lt;/div&gt;
+&lt;style&gt;.gallery { --luz-grid-min: 12rem; }&lt;/style&gt;
+
+&lt;!-- three columns above 768 px, one below --&gt;
+&lt;div class=&quot;o-grid o-grid--3&quot;&gt;…&lt;/div&gt;</code></pre>
+          </div>
+          <ul>
+            <li>Los elementos conservan el orden de origen: la cuadrícula no los reordena, así que el orden de lectura y de tabulación coincide con el de la página.</li>
+            <li>Las columnas usan <code>minmax(0, 1fr)</code>, así que una palabra larga o una tabla ancha dentro de un elemento no pueden ensanchar la cuadrícula más que su contenedor.</li>
+            <li>Para una maquetación que dependa del ancho de una tarjeta y no de la ventana, coloca la cuadrícula en un contenedor y ajusta allí el tamaño de los elementos; los objetos no consultan el contenedor.</li>
+          </ul>
+          <h2 id="objects-lists">Listas</h2>
+          <p>Si los elementos forman una lista (entradas, ponentes, etiquetas), aplica <code>.o-grid</code>, <code>.o-stack</code> o <code>.o-row</code> al propio <code>&lt;ul&gt;</code> o <code>&lt;ol&gt;</code>. El objeto elimina las viñetas y la sangría, pero los elementos siguen siendo una lista: el lector de pantalla indica cuántos hay y permite saltarlos.</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-list" aria-label="Copy the list grid markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="List grid markup"><code id="code-objects-list">&lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
+  &lt;li class=&quot;luz-card&quot;&gt;…&lt;/li&gt;
+  &lt;li class=&quot;luz-card&quot;&gt;…&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+          <ul>
+            <li>Safari puede eliminar el rol de lista de una lista sin viñetas que esté fuera de un <code>&lt;nav&gt;</code>. Asigna un encabezado a cada elemento, como en las tarjetas, para que se pueda seguir recorriendo la lista.</li>
+            <li>No necesitas ninguna regla propia. Dentro de <a href="/docs/components/prose/">texto corrido</a>, que devuelve las viñetas a las listas, las listas con un objeto siguen sin tenerlas.</li>
+          </ul>
+          <h2 id="objects-markup">Copiar el marcado</h2>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-media" aria-label="Copy the media object markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Media object markup"><code id="code-objects-media">&lt;div class=&quot;o-media&quot;&gt;
+  &lt;span class=&quot;luz-avatar luz-avatar--md&quot; aria-hidden=&quot;true&quot;&gt;AB&lt;/span&gt;
+  &lt;div class=&quot;o-media__body&quot;&gt;
+    &lt;p&gt;Ana Belén&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-shell" aria-label="Copy the app shell markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="App shell markup"><code id="code-objects-shell">&lt;body class=&quot;o-shell&quot;&gt;
+  &lt;nav class=&quot;luz-sidebar&quot; aria-label=&quot;Main&quot;&gt;…&lt;/nav&gt;
+  &lt;main class=&quot;o-main&quot; id=&quot;main-content&quot;&gt;
+    &lt;div class=&quot;o-container&quot;&gt;…&lt;/div&gt;
+  &lt;/main&gt;
+  &lt;footer&gt;…&lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+          </div>
+          <p>El pie es un <code>&lt;footer&gt;</code> normal, que core coloca de lado a lado en la parte inferior: nada de esto necesita site. Para páginas completas sin barra lateral, usa <a href="#objects-page"><code>.o-page</code></a>.</p>
+          <p><a href="/docs/get-started/structure/#needs">Qué necesita cada paquete</a> enumera todos los elementos.</p>
+    </div>

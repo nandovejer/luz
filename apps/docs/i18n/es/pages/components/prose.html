@@ -1,0 +1,153 @@
+<!-- luz:page
+title: Texto corrido
+description: Establece líneas de unos 70 caracteres y espacio entre bloques de texto largo, sea cual sea el marcado que escriba el editor.
+source: 3ff478cf71ee
+reviewed: false
+-->
+    <div class="docs-component" id="c-prose">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un artículo breve en texto corrido, con dos encabezados, una lista y una cita.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-prose">
+              <p>Since March 2016, a group of volunteers has read the tide gauge in the port at six in the morning and six in the evening. Their sheets are the longest record of the sea in the bay that anyone has kept by hand, and the council will publish them as <a href="/docs/components/table/">a table of open data</a>.</p>
+              <h3>How the readings were taken</h3>
+              <p>Each reading is the height of the water against the gauge, to the nearest centimetre. The sheet calls it <code>level_cm</code>.</p>
+              <ul class="wp-block-list">
+                <li>Two readings a day, every day of the year.</li>
+                <li>41 volunteers over ten years.</li>
+                <li>Fewer than one reading in a hundred left out.</li>
+              </ul>
+              <blockquote><p>We did not set out to measure the climate. We wanted to know when to take the boats out.</p></blockquote>
+              <h3>Four centimetres in ten years</h3>
+              <p>The average height at high tide was 4 cm higher in 2025 than in 2016, close to what the national gauges record along the coast.</p>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Una tabla sin contenedor que sea más ancha que la columna desplaza la página lateralmente en pantallas estrechas. Coloca las tablas anchas en el contenedor de tablas de core, <a href="/docs/components/table/">table</a>, <code>.luz-table-wrap</code>, que permite desplazarse por su interior.</p>
+          <p>Aún no se ha probado con un lector de pantalla.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del texto corrido">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-prose" aria-label="Copy the prose markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Prose markup"><code id="code-prose">&lt;div class=&quot;luz-prose&quot;&gt;
+  &lt;!-- What the editor or the Markdown writes, as it is --&gt;
+  &lt;p&gt;Since March 2016, a group of volunteers has read the tide gauge…&lt;/p&gt;
+  &lt;h2 id=&quot;method&quot;&gt;How the readings were taken&lt;/h2&gt;
+  &lt;p&gt;…&lt;/p&gt;
+  &lt;ul class=&quot;wp-block-list&quot;&gt;
+    &lt;li&gt;…&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;figure&gt;
+    &lt;img src=&quot;gauge.jpg&quot; width=&quot;1200&quot; height=&quot;800&quot; alt=&quot;The tide gauge in the port, a post marked in centimetres&quot;&gt;
+    &lt;figcaption&gt;The gauge at low tide.&lt;/figcaption&gt;
+  &lt;/figure&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones del texto corrido" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o propiedad</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-prose</code></div></td><td data-label="Qué hace"><div>En el elemento que contiene el texto: líneas de unos 70 caracteres, espacio entre bloques, sangría y viñetas para las listas, y el código integrado con aspecto de ficha</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>--luz-prose-measure</code></div></td><td data-label="Qué hace"><div>El ancho máximo de línea, <code>70ch</code> de forma predeterminada. Establécelo en el contenedor entre <code>60ch</code> y <code>80ch</code></div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>data-luz-classless</code> en el mismo elemento</div></td><td data-label="Qué hace"><div>Con el <a href="/docs/get-started/classless/">modo classless</a> cargado, sus tablas, botones y campos adoptan el aspecto de los componentes de core.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Solo CSS, en <code>components/prose.css</code>. Todos los selectores están dentro de <code>:where()</code>, así que prevalece un componente de LUZ dentro del texto o una regla tuya.</p>
+            <ul>
+              <li><strong>Longitud de línea.</strong> Cada bloque del contenedor tiene como máximo la anchura de <code>--luz-prose-measure</code>. Las figuras, tablas, bloques de código, imágenes, vídeos y <code>.luz-table-wrap</code> ocupan todo el ancho del contenedor, pero no lo superan.</li>
+              <li><strong>Espacio entre bloques.</strong> Cada bloque empieza <code>--luz-space-md</code> por debajo del anterior. Los encabezados y las líneas separadoras empiezan más abajo (<code>--luz-space-xl</code>), y el bloque posterior a un encabezado queda más cerca (<code>--luz-space-sm</code>). Se usan márgenes, no una separación: los componentes conservan sus propios márgenes y los dos se combinan.</li>
+              <li><strong>Listas.</strong> Todas las listas recuperan su sangría y sus viñetas, con o sin clase (por ejemplo, la lista <code>ul.wp-block-list</code> de un editor), salvo las que tengan un objeto de maquetación (<code>.o-grid</code>, <code>.o-stack</code>) o una clase de componente de LUZ.</li>
+              <li><strong>Código integrado</strong> tiene el aspecto de <code>.luz-code-inline</code>. Las palabras y direcciones largas saltan de línea en vez de desplazar la página lateralmente.</li>
+              <li><strong>Modo classless</strong> aplica la misma separación de tres pasos entre bloques, así que ambos modos coinciden; el texto corrido está en una capa posterior y prevalece donde se superponen. El texto corrido establece la longitud de línea y las listas; el modo classless, el aspecto de las tablas y los controles.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el texto corrido se crea con CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>El texto corrido no recibe el foco ni añade un rol. Pulsa Tab para llegar a los enlaces y controles que contiene, en el orden de origen.</p>
+            <ul>
+              <li>Un <code>&lt;pre&gt;</code> largo se desplaza lateralmente por su interior. Para recorrerlo con el teclado, asígnale <code>tabindex="0"</code>, <code>role="region"</code> y un nombre, como hace el <a href="/docs/components/code/">bloque de código</a> de core.</li>
+              <li>Los encabezados internos crean el esquema del texto: empieza en el nivel posterior al título de la página y no te saltes ninguno.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa el texto corrido alrededor de texto continuo cuyo marcado no escribes bloque a bloque: el cuerpo de una entrada o de una página de un editor de CMS, Markdown o un artículo de ayuda.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo apliques a toda una página ni a una interfaz: la cabecera, la navegación, los formularios y las tarjetas se organizan por sí solos.</p>
+            <ul>
+              <li>Para una columna de bloques que construyas tú, usa <a href="/docs/components/layout/"><code>.o-stack</code></a>.</li>
+              <li>Para una o dos líneas dentro de un componente, como el texto de una tarjeta, usa las clases del propio componente.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa párrafos breves bajo encabezados que expliquen lo que sigue, para que se pueda encontrar cada sección de un vistazo.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-prose"><p><strong>How the readings were taken</strong></p><p>Two people read the gauge, to the nearest centimetre.</p><p>A third checks the sheet the same week.</p></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Escribas un único párrafo largo sin encabezados: no se puede saber qué contiene sin leerlo entero.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-prose"><p>Two people read the gauge, to the nearest centimetre, and a third checks the sheet the same week, and a reading that two people do not agree on is left out, and the port checks the gauge against a survey mark every spring.</p></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Escribe para quien lee las primeras palabras de cada línea y se salta el resto.</p>
+            <ul>
+              <li>Una idea por párrafo. Expón el punto principal al principio.</li>
+              <li>Usa encabezados ordenados y en mayúscula inicial, que expliquen el tema de cada sección.</li>
+              <li>Usa una lista para tres o más elementos del mismo tipo; para dos, escribe una frase.</li>
+              <li>Usa enlaces que indiquen adónde llevan y pies que expliquen qué muestran las figuras.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto y los enlaces conservan los colores de los elementos de core; el código integrado usa el color de código sobre una superficie apagada.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del texto corrido en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cita</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Código integrado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-code</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>8.1:1</div></td><td data-label="Alto contraste"><div>9.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> los enlaces conservan el contorno de 2 px <code>--luz-focus-ring</code> de core, a 2 px del texto.</li>
+              <li><strong>Enlaces:</strong> están subrayados, así que no se distinguen solo por el color (WCAG 1.4.1).</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 11 tokens que lee <code>components/prose.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-code"><code>--luz-color-code</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

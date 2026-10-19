@@ -1,0 +1,32 @@
+<!-- luz:page
+title: Landing
+description: Lo que una landing page necesita además de core: desde la cabecera y el hero hasta los bloques de una página de evento; y cómo saber si los necesitas.
+source: ec62595c1c81
+reviewed: false
+-->
+    <p class="docs-lead">Lo que una landing page necesita además de core: desde la cabecera y el hero hasta los bloques de una página de evento; y cómo saber si los necesitas.</p>
+    <p>Una landing page presenta un producto o evento en una sola página e invita a quien la visita a actuar. Este paquete contiene los patrones que solo usa este tipo de página.</p>
+    <p>La columna de página, la barra fija, el enlace para saltar y los enlaces de la cabecera son de core; la búsqueda, el banner de cookies y el selector de idioma son de <a href="/docs/site/">Site</a> y opcionales.</p>
+    <ul>
+      <li>Todas las clases empiezan por <code class="luz-code-inline">.luz-landing-</code>, usan solo tokens semánticos y están en la capa de cascada <code class="luz-code-inline">luz.landing</code>, después de la de site.</li>
+      <li>No tiene script. Carga <code class="luz-code-inline">landing.css</code> después del CSS de tokens, core y site: <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> incluye el comando y las etiquetas CDN.</li>
+      <li>Tiene su propia versión, 0.x mientras sigue creciendo, y necesita la versión <code>^0.1.0</code> de tokens, core y site, declarados como dependencias peer.</li>
+      <li>La <a href="/">página de inicio de LUZ</a> está hecha con este paquete.</li>
+    </ul>
+
+    <div class="docs-decision-grid">
+        <div class="docs-decision-card">
+          <h2 id="use-landing-when" class="docs-decision-card__title">Usa landing cuando</h2>
+          <ul>
+            <li>Creas la página de un producto, un servicio o un evento, con características que mostrar unas junto a otras.</li>
+            <li>Quieres bloques que puedas copiar para una página así: hero, programa, ponentes, entradas, llamada a la acción e inscripción.</li>
+          </ul>
+        </div>
+        <div class="docs-decision-card">
+          <h2 id="use-site-alone-when" class="docs-decision-card__title">Usa solo site cuando</h2>
+          <ul>
+            <li>Tus páginas son artículos, documentación o una aplicación: una cabecera, el contenido y un pie.</li>
+            <li>Maquetas tus propios bloques con los objetos de cuadrícula de core.</li>
+          </ul>
+        </div>
+      </div>

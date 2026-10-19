@@ -1,0 +1,42 @@
+<!-- luz:page
+title: Cómo se construye LUZ
+description: Tres compromisos detrás de cada versión: se crea pensando primero en las personas y también para que la entiendan los agentes de IA; cada cambio empieza con una prueba que falla; y nada se ejecuta en tu página si no lo has cargado.
+source: f686ec1940cc
+reviewed: false
+-->
+    <section class="docs-block" id="human-first" aria-labelledby="human-first-title">
+      <h2 class="docs-chapter__title" id="human-first-title">Primero las personas, lista para la IA</h2>
+      <p>LUZ se crea para quien usa la página. Parte del HTML nativo, funciona con teclado y sin JavaScript, y aspira al nivel AA de WCAG 2.2 en tres modos de color.</p>
+      <p>El HTML y CSS sencillos, con una lista cerrada de nombres de clase, también son fáciles de usar correctamente por un agente de IA. El sitio publica la lista de nombres y un comando comprueba lo que ha escrito el agente.</p>
+      <p><a href="/docs/get-started/ai/">Trabajar con IA</a> incluye los archivos y la instrucción.</p>
+    </section>
+
+    <section class="docs-block" id="tests-first" aria-labelledby="tests-first-title">
+      <h2 class="docs-chapter__title" id="tests-first-title">Primero las pruebas</h2>
+      <p>Cada cambio empieza con una prueba que falla. La prueba indica qué debe hacer el cambio y se confirma antes que él. Primero se explora: puedes probar un cambio con libertad y escribes su prueba cuando sabes qué debe hacer, antes del primer commit.</p>
+      <p>El proceso tiene dos pasos:</p>
+      <ol>
+        <li>Crea un commit <code>test:</code>. La prueba debe fallar sin el cambio y por el motivo correcto: porque falta el comportamiento, no por una errata en la prueba.</li>
+        <li>Crea el commit del cambio que hace que la prueba pase. Nadie debilita una prueba para que pase.</li>
+      </ol>
+      <p>Una corrección empieza con la prueba que reproduce el error. La prueba se lee antes que el código.</p>
+      <p>Hay varios tipos de pruebas:</p>
+      <ul>
+        <li><strong>Pruebas unitarias</strong> con Vitest, para la lógica y los valores.</li>
+        <li><strong>Pruebas en navegador</strong> con Playwright en Chromium, una vez con JavaScript y otra sin él. Comprueban el comportamiento, el teclado y el estado de la página cuando el script no se ejecuta.</li>
+        <li><strong>Pruebas de accesibilidad.</strong> axe analiza cada página en los modos claro, oscuro y de alto contraste. Un problema grave o crítico hace fallar la compilación.</li>
+        <li><strong>Pruebas de documentación.</strong> Las relaciones de contraste y las listas de tokens de las páginas de documentación se calculan a partir del CSS y una prueba vuelve a calcularlas para evitar que se desvíen del código.</li>
+        <li><strong>Presupuestos de tamaño.</strong> Si un archivo supera su límite, la comprobación falla; nadie aumenta el límite.</li>
+        <li><strong>Comprobaciones</strong> de los textos publicados, las licencias y el contenido de cada paquete.</li>
+      </ul>
+      <p>Un solo comando, <code>pnpm check:all</code>, las ejecuta todas.</p>
+      <p>Ese comando no incluye Safari ni Firefox. Antes de una versión, unas personas revisan ambos navegadores y las revisiones abiertas son públicas.</p>
+      <p>Las reglas que aplican estas comprobaciones están en <a href="https://github.com/nandovejer/luz/blob/main/PRINCIPLES.md">PRINCIPLES.md</a>, y <a href="https://github.com/nandovejer/luz/blob/main/dev/TESTING.md">TESTING.md</a> explica cómo escribir pruebas.</p>
+    </section>
+
+    <section class="docs-block" id="zero-dependencies" aria-labelledby="zero-dependencies-title">
+      <h2 class="docs-chapter__title" id="zero-dependencies-title">Sin dependencias</h2>
+      <p>Los paquetes no tienen dependencias en tiempo de ejecución. Incluyen CSS sencillo y pequeños módulos ES que no necesitan compilación, y usan los elementos y las API del navegador antes que cualquier script.</p>
+      <p>Los presupuestos de tamaño son una línea roja: una comprobación falla si un archivo supera su límite y nadie lo aumenta para que pase. Todo lo que publica LUZ está bajo la licencia MIT, y solo bajo la licencia MIT.</p>
+      <p><a href="/docs/get-started/">Primeros pasos</a> explica cómo cargarlo.</p>
+    </section>

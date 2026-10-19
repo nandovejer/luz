@@ -299,14 +299,21 @@ test.describe('Arabic typography', () => {
   });
 });
 
-test.describe('links from another language into the English documentation', () => {
-  for (const route of ['/es/', '/ar/']) {
-    test(`${route}: every link to the docs says hreflang="en"; the search results are English`, async ({ page }) => {
+test.describe('links from the home page in another language into the documentation', () => {
+  // The docs are in English and Spanish (Arabic docs are planned): the Spanish home links its own docs, the Arabic home the English ones
+  for (const [route, docs] of [['/es/', '/es/docs/'], ['/ar/', '/docs/']]) {
+    test(`${route}: every link to the docs goes to ${docs}${route === '/ar/' ? ' and says hreflang="en"' : ''}; the search results are English`, async ({ page }) => {
       await open(page, route);
-      const missing = await page.locator('a[href*="docs/"]').evaluateAll((links) =>
-        links.filter((a) => new URL(a.href).pathname.startsWith('/docs/') && a.hreflang !== 'en').map((a) => a.outerHTML.slice(0, 80)),
+      const links = await page.locator('a[href*="docs/"]').evaluateAll((all) =>
+        all.map((a) => ({ path: new URL(a.href).pathname, hreflang: a.hreflang, html: a.outerHTML.slice(0, 80) })),
       );
-      expect(missing).toEqual([]);
+      const intoDocs = links.filter((l) => /^\/(es\/)?docs\//.test(l.path));
+      expect(intoDocs.length, 'a link to the docs').toBeGreaterThan(0);
+      expect(intoDocs.filter((l) => !l.path.startsWith(docs)).map((l) => l.html), `every link goes to ${docs}`).toEqual([]);
+      // A link to a language the docs lack says so; a link to the docs in the page's own language says nothing
+      const english = intoDocs.filter((l) => l.path.startsWith('/docs/'));
+      expect(english.filter((l) => l.hreflang !== 'en').map((l) => l.html)).toEqual([]);
+      expect(intoDocs.filter((l) => l.path.startsWith('/es/docs/') && l.hreflang === 'en').map((l) => l.html)).toEqual([]);
       expect(await page.locator('[data-luz-search-list]').evaluateAll((lists) => lists.map((l) => l.lang))).toEqual(['en', 'en', 'en']);
       // The dialog's own text is in the page's language
       const label = await page.locator('label[for="luz-search-q"]').textContent();

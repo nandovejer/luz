@@ -35,6 +35,9 @@ const links = (node) => findAll(node, (n) => n.name === "a");
 const href = (a) => a.attrs.get("href");
 
 const DOCS_PAGES = ["/docs/", "/docs/components/button/"];
+/** Where the Documentation link of a page goes: Spanish docs from the Spanish home, English docs from the others (Arabic docs are planned; owner, 2026-10-19). */
+const DOCS_OF = { "/": "/docs/", "/es/": "/es/docs/", "/ar/": "/docs/" };
+const docsHref = (route) => DOCS_OF[route] ?? "/docs/";
 const catalog = (code) => JSON.parse(read(`apps/landing/i18n/${code}.json`));
 
 /** The text a sighted reader sees in a node: its text without the visually hidden parts. */
@@ -96,13 +99,13 @@ describe("the header's row", () => {
     for (const route of [...homes, ...DOCS_PAGES]) {
       const header = headerOf(route);
       const at = (node) => node.open.index;
-      const docs = links(header).find((a) => href(a) === "/docs/");
+      const docs = links(header).find((a) => href(a) === docsHref(route));
       const github = links(header).find((a) => href(a) === GITHUB);
       const search = query(header, "luz-search");
       const lang = query(header, "luz-lang-switch");
       const menu = find(header, (n) => n.name === "button" && n.attrs.get("popovertarget") === "page-nav");
       for (const [name, node] of Object.entries({ docs, github, search, menu })) expect(node, `${route}: ${name}`).toBeTruthy();
-      expect(homes.includes(route), `${route}: the language switch is the home page's only`).toBe(!!lang);
+      expect(lang, `${route}: the language switch (the home pages and the docs pages have one, the not-found page none)`).toBeTruthy();
       const order = [docs, github, search, lang, menu].filter(Boolean);
       expect(order.map(at), route).toEqual([...order.map(at)].sort((a, b) => a - b));
     }
@@ -111,7 +114,7 @@ describe("the header's row", () => {
   it("gives Documentation, GitHub and Search an icon and a word", () => {
     for (const route of [...homes, ...DOCS_PAGES]) {
       const header = headerOf(route);
-      const docs = links(header).find((a) => href(a) === "/docs/");
+      const docs = links(header).find((a) => href(a) === docsHref(route));
       const github = links(header).find((a) => href(a) === GITHUB);
       const trigger = find(header, (n) => n.name === "button" && n.attrs.has("data-luz-search-open"));
       for (const [name, node] of Object.entries({ docs, github, trigger })) {
@@ -131,8 +134,10 @@ describe("the header's row", () => {
     };
     for (const [route, words] of Object.entries(expected)) {
       const header = headerOf(route);
-      const docs = links(header).find((a) => href(a) === "/docs/");
+      const docs = links(header).find((a) => href(a) === docsHref(route));
       expect(visibleText(docs), `${route}: the docs link`).toBe(words.docs);
+      // A link into docs the page's language does not have is marked as English
+      if (route === "/ar/") expect(docs.attrs.get("hreflang"), `${route}: the English docs`).toBe("en");
       const label = query(header, "span.luz-search__trigger-label");
       expect(textOf(label), `${route}: the search button`).toBe(words.search);
     }
@@ -188,9 +193,9 @@ describe("the drawer the menu button opens", () => {
       const hrefs = links(drawer).map(href);
       const sections = hrefs.filter((h) => h.startsWith("#"));
       expect(sections.length, `${route}: the sections`).toBeGreaterThan(0);
-      expect(hrefs, route).toEqual([...sections, "/docs/", GITHUB, ...homes]);
-      const docs = links(drawer).find((a) => href(a) === "/docs/");
-      expect(visibleText(docs), route).toBe(visibleText(links(headerOf(route)).find((a) => href(a) === "/docs/")));
+      expect(hrefs, route).toEqual([...sections, docsHref(route), GITHUB, ...homes]);
+      const docs = links(drawer).find((a) => href(a) === docsHref(route));
+      expect(visibleText(docs), route).toBe(visibleText(links(headerOf(route)).find((a) => href(a) === docsHref(route))));
     }
   });
 

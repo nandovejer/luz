@@ -1,0 +1,153 @@
+<!-- luz:page
+title: Imagen
+description: Muestra una imagen en un marco de forma fija, con una superficie lisa mientras se carga o si falta.
+source: 742d15ac938b
+reviewed: false
+-->
+    <div class="docs-component" id="c-image">
+          <h2 id="example">Ejemplo</h2>
+          <p>Una imagen en su marco, después el marco vacío y, por último, las proporciones disponibles.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-grid o-grid--2">
+              <figure>
+                <div class="luz-image">
+                  <picture>
+                    <source type="image/avif" srcset="/apps/docs/assets/desert-640.avif 640w, /apps/docs/assets/desert-1280.avif 1280w" sizes="(min-width: 768px) 50vw, 100vw">
+                    <source type="image/webp" srcset="/apps/docs/assets/desert-640.webp 640w, /apps/docs/assets/desert-1280.webp 1280w" sizes="(min-width: 768px) 50vw, 100vw">
+                    <img src="/apps/docs/assets/desert-1280.jpg" srcset="/apps/docs/assets/desert-640.jpg 640w, /apps/docs/assets/desert-1280.jpg 1280w" sizes="(min-width: 768px) 50vw, 100vw" width="1280" height="720" alt="Out-of-focus sand dunes under a low sun and a blue sky" loading="lazy" decoding="async">
+                  </picture>
+                </div>
+                <figcaption>With an image</figcaption>
+              </figure>
+              <figure>
+                <div class="luz-image"></div>
+                <figcaption>With no image: the flat surface</figcaption>
+              </figure>
+            </div>
+            <p class="docs-demo__note">Ratios: 16:9, <code class="luz-code-inline">--4x3</code>, <code class="luz-code-inline">--3x2</code>, <code class="luz-code-inline">--1x1</code>, <code class="luz-code-inline">--21x9</code>, <code class="luz-code-inline">--9x16</code>.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Si una imagen no se carga, algunos navegadores añaden un icono de imagen rota junto a su texto alternativo. En el modo de colores forzados, la superficie adopta el color de la página y el marco muestra un borde fino.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la imagen">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-image" aria-label="Copy the image frame markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Image frame markup"><code id="code-image">&lt;div class=&quot;luz-image&quot;&gt;
+  &lt;picture&gt;
+    &lt;source type=&quot;image/avif&quot; srcset=&quot;dunes-640.avif 640w, dunes-1280.avif 1280w&quot; sizes=&quot;(min-width: 768px) 50vw, 100vw&quot;&gt;
+    &lt;source type=&quot;image/webp&quot; srcset=&quot;dunes-640.webp 640w, dunes-1280.webp 1280w&quot; sizes=&quot;(min-width: 768px) 50vw, 100vw&quot;&gt;
+    &lt;img src=&quot;dunes-1280.jpg&quot; srcset=&quot;dunes-640.jpg 640w, dunes-1280.jpg 1280w&quot; sizes=&quot;(min-width: 768px) 50vw, 100vw&quot;
+      width=&quot;1280&quot; height=&quot;720&quot; alt=&quot;Sand dunes under a low sun&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot;&gt;
+  &lt;/picture&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Un modificador establece la forma. Si no se usa ninguno, el marco tiene una proporción de 16:9.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Proporciones de imagen" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Proporción</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-image</code></div></td><td data-label="Proporción"><div>16:9</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-image--4x3</code></div></td><td data-label="Proporción"><div>4:3</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-image--3x2</code></div></td><td data-label="Proporción"><div>3:2</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-image--1x1</code></div></td><td data-label="Proporción"><div>Cuadrado</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-image--21x9</code></div></td><td data-label="Proporción"><div>21:9, para banners anchos</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-image--9x16</code></div></td><td data-label="Proporción"><div>9:16, vertical</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un <code>&lt;div&gt;</code> de proporción fija alrededor de un <code>&lt;picture&gt;</code> nativo, con estilos de <code>@luz-ds/core</code>. Sin JavaScript.</p>
+            <ul>
+              <li>La imagen llena el marco y se recorta para ajustarse a él.</li>
+              <li>El marco es una superficie lisa <code>--luz-surface-strong</code>: se muestra sin imagen, mientras se carga o si falla. El texto alternativo de una imagen que no se carga aparece sobre ella, al igual que las imágenes PNG y SVG transparentes.</li>
+              <li>LUZ no incluye ninguna imagen de sustitución: la página no solicita nada que no haya especificado.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el marco y la imagen se crean con HTML y CSS. Sin CSS, la imagen aparece con su tamaño original.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>El marco no tiene ninguna interacción propia.</p>
+            <ul>
+              <li>Los lectores de pantalla anuncian el <code>&lt;img&gt;</code> mediante su texto alternativo; un marco vacío no anuncia nada.</li>
+              <li>No añadas un rol ni un <code>aria-label</code> al marco.</li>
+              <li>Si la imagen es un enlace, su nombre procede del texto alternativo, que debe indicar adónde lleva.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa el marco de imagen para mostrar una imagen en un cuadro de forma fija, como la portada de una tarjeta o la cabecera de un artículo, cuando la imagen pueda faltar.</p>
+            <ul>
+              <li>Contenido de otras personas o de un sistema de gestión de contenidos.</li>
+              <li>Una página creada antes de disponer de las imágenes.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses con imágenes que deban conservar su forma, como gráficos o capturas de pantalla: el marco las recorta.</p>
+            <ul>
+              <li>Para un gráfico o diagrama con un pie, usa una <a href="/docs/components/figure/">figura</a>.</li>
+              <li>Para los iconos y logotipos, usa un <code>&lt;img&gt;</code> o un SVG con su tamaño original.</li>
+              <li>No uses nunca un marco vacío como sustituto de una imagen informativa: si falta, indícalo con texto.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa una imagen real con un texto alternativo que describa lo que muestra.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-image"><img src="/apps/docs/assets/desert-640.jpg" width="640" height="360" alt="Out-of-focus sand dunes under a low sun"></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> No dejes vacío el marco cuando la imagen es el contenido: un plano que nadie puede ver y que no se describe con palabras.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <figure class="u-mb-0"><div class="luz-image"></div><figcaption>Floor plan of the ground floor</figcaption></figure>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Añade a cada imagen real un texto alternativo que describa lo que muestra en una frase sencilla.</p>
+            <ul>
+              <li>Usa <code>alt=""</code> si la imagen es decorativa o el texto que la acompaña ya dice lo mismo.</li>
+              <li>El marco recorta la imagen: aleja de los bordes el texto y los detalles esenciales, y describe lo que sigue visible.</li>
+              <li>Establece <code>width</code> y <code>height</code> con el tamaño original de la imagen para que la página no dé saltos mientras se carga.</li>
+              <li>Añade <code>loading="lazy"</code> solo a las imágenes que quedan más abajo: las que se ven al abrir la página deben cargarse de inmediato.</li>
+              <li>No incluyas texto en las imágenes.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El marco usa la superficie intensa; si una imagen no se carga, su texto alternativo aparece en color de texto principal sobre ella.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la imagen en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto alternativo de una imagen rota</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>13.5:1</div></td><td data-label="Oscuro"><div>10.9:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el marco no lo recibe.</li>
+              <li><strong>Imágenes:</strong> sus colores son propios.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 3 tokens que lee <code>components/image.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

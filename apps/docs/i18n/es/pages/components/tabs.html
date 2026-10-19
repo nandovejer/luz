@@ -1,0 +1,150 @@
+<!-- luz:page
+title: Pestañas
+description: Permite cambiar entre paneles de contenido relacionado en un mismo lugar; sin JavaScript, los paneles se muestran apilados en secciones.
+source: 0cc298c8b5c2
+reviewed: false
+-->
+    <div class="docs-component" id="c-tabs">
+          <h2 id="example">Ejemplo</h2>
+          <p>Tres pestañas, Resumen, Ajustes y Registros, cada una con su panel.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage docs-demo__stage--flush">
+            <nav class="luz-tabs" aria-label="Service details">
+              <a class="luz-tab is-active" id="tab-summary" href="#panel-summary">Summary</a>
+              <a class="luz-tab" id="tab-settings" href="#panel-settings">Settings</a>
+              <a class="luz-tab" id="tab-logs" href="#panel-logs">Logs</a>
+            </nav>
+            <div class="luz-tabpanel" id="panel-summary"><p>Three services are running.</p></div>
+            <div class="luz-tabpanel" id="panel-settings"><p>Deploys run on every push.</p></div>
+            <div class="luz-tabpanel" id="panel-logs"><p>No errors in the last hour.</p></div>
+          </div>
+
+          <p class="docs-demo__note">Focus a tab, then use the arrow keys, Home and End. The Code and Design tabs of this page are the same component.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de pestañas">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-tabs" aria-label="Copy the tabs markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Tabs markup"><code id="code-tabs">&lt;nav class=&quot;luz-tabs&quot; aria-label=&quot;Project&quot;&gt;
+  &lt;a class=&quot;luz-tab&quot; href=&quot;#project-summary&quot;&gt;Summary&lt;/a&gt;
+  &lt;a class=&quot;luz-tab&quot; href=&quot;#project-settings&quot;&gt;Settings&lt;/a&gt;
+&lt;/nav&gt;
+&lt;div class=&quot;luz-tabpanel&quot; id=&quot;project-summary&quot;&gt;…&lt;/div&gt;
+&lt;div class=&quot;luz-tabpanel&quot; id=&quot;project-settings&quot;&gt;…&lt;/div&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-tabs-js" aria-label="Copy the tabs script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Tabs script code"><code id="code-tabs-js">import { initTabs } from &quot;@luz-ds/core/tabs&quot;;
+initTabs();</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Un solo aspecto. La primera pestaña que se abre es la primera que cumpla una de estas condiciones:</p>
+            <div class="luz-table-wrap" role="region" aria-label="Qué pestaña se abre primero" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Orden</th><th scope="col">Pestaña</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Orden"><div>1</div></td><td data-label="Pestaña"><div>La pestaña cuyo panel contiene el elemento indicado en el fragmento de la URL</div></td></tr>
+                  <tr><td data-label="Orden"><div>2</div></td><td data-label="Pestaña"><div>Una pestaña con <code>aria-selected="true"</code> o <code>.is-active</code> en el marcado</div></td></tr>
+                  <tr><td data-label="Orden"><div>3</div></td><td data-label="Pestaña"><div>La primera pestaña</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Fila de enlaces internos a los paneles, con estilos de <code>components/tabs.css</code> y mejorada por <code>tabs.js</code>.</p>
+            <ul>
+              <li><code>initTabs()</code> añade el patrón de pestañas de ARIA: <code>role="tablist"</code>, <code>"tab"</code> y <code>"tabpanel"</code>, <code>aria-selected</code>, <code>aria-controls</code>, <code>aria-labelledby</code> y un <code>tabindex</code> itinerante. Oculta los paneles inactivos. <code>luz.js</code> lo ejecuta.</li>
+              <li>Un enlace a un elemento dentro de un panel oculto abre su pestaña al cargar, al producirse <code>hashchange</code> y al hacer clic.</li>
+              <li>Los paneles inactivos usan <code>hidden="until-found"</code> cuando el navegador lo admite, de modo que la búsqueda en la página puede encontrarlos y abrir su pestaña.</li>
+              <li><code>activateTab(tab)</code> selecciona una pestaña desde tu propio script.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Las pestañas son una fila de enlaces y todos los paneles se muestran apilados en orden. Cada enlace salta a su panel.</p>
+            <p>Asigna un encabezado a cada panel para que la página apilada siga siendo fácil de leer.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Tab entra en la fila de pestañas y lleva a la seleccionada; otra pulsación de Tab sale de la fila hacia el panel.</p>
+            <ul>
+              <li>Las flechas izquierda y derecha (o arriba y abajo) mueven el foco a la pestaña siguiente y la seleccionan; Home y End llevan a la primera y a la última.</li>
+              <li>Espacio o Enter selecciona la pestaña enfocada.</li>
+              <li>En texto de derecha a izquierda, las flechas izquierda y derecha siguen la dirección de lectura.</li>
+              <li>Asigna un nombre a la fila de pestañas con <code>aria-label</code>; lo conserva cuando se convierte en una lista de pestañas.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> se explican en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa pestañas para cambiar entre paneles del mismo nivel que no sea necesario ver a la vez, como el resumen, los ajustes y los registros de un servicio.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses pestañas para cambiar de página ni para ocultar contenido que se necesite ver de una vez.</p>
+            <ul>
+              <li>Para cambiar de página, usa una <a href="/docs/components/sidebar/">barra lateral</a> o enlaces en la cabecera.</li>
+              <li>Para pasos que deban seguirse en orden, usa páginas separadas.</li>
+              <li>Más de cinco o seis pestañas no caben en un móvil: usa secciones con encabezados.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Pon a las pestañas el nombre de sus paneles, con una o dos palabras.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="docs-stage__tabs"><span class="luz-tab is-active">Summary</span><span class="luz-tab">Settings</span><span class="luz-tab">Logs</span></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No conviertas pasos numerados en pestañas: un proceso ordenado debe ir en páginas separadas y nada impide saltarse un paso.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="docs-stage__tabs"><span class="luz-tab is-active">1. Account</span><span class="luz-tab">2. Billing</span><span class="luz-tab">3. Confirm</span></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Pon a cada pestaña el nombre de su panel, con una o dos palabras.</p>
+            <ul>
+              <li>Usa estilo oración y evita los verbos: «Resumen», «Ajustes».</li>
+              <li>Usa el mismo nombre para el encabezado del panel.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Las pestañas usan texto secundario; la actual usa texto de marca y un subrayado de marca.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de pestañas en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Pestaña</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Pestaña al pasar el puntero</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Pestaña actual y su subrayado</div></td><td data-label="Color sobre fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario corresponde al nivel AA de WCAG 2.2: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> contorno de 2 px <code>--luz-focus-ring</code> dibujado dentro de la pestaña, para que la fila desplazable nunca lo recorte.</li>
+              <li><strong>No solo el color:</strong> la pestaña actual tiene un subrayado de 2 px; la línea de la fila bajo las demás usa <code>--luz-divider</code>.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 10 tokens que lee <code>components/tabs.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> se explican en la pestaña Código.</p>
+          </div>
+    </div>

@@ -31,12 +31,21 @@ function publishHeight(header) {
   if (typeof ResizeObserver === "function") new ResizeObserver(publish).observe(header);
 }
 
-/** Wire the header of a page of the site: the cycle button, the drawer and the header's height. */
-export function initSiteHeader() {
-  // One button that steps through the modes; the radios stay underneath
-  initThemeCycle();
+/**
+ * Wire the drawer and the header's height: what the header does besides the
+ * colour-mode button. A page that names that button itself (the docs, which
+ * wait for the strings of the page's language) calls this alone.
+ */
+export function initSiteChrome() {
   const nav = document.getElementById("page-nav");
   if (nav) initSidebar(nav);
   const header = document.querySelector(".site-header");
   if (header) publishHeight(header);
+}
+
+/** Wire the header of a page of the site: the cycle button, the drawer and the header's height. */
+export function initSiteHeader() {
+  // One button that steps through the modes; the radios stay underneath
+  initThemeCycle();
+  initSiteChrome();
 }

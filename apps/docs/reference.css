@@ -140,6 +140,57 @@
   color: var(--luz-text-secondary);
 }
 
+/* Code is English and reads left to right on any page. In a right-to-left
+   page a class name such as .luz-btn--primary or a token such as
+   --luz-space-md would be reordered by the bidi algorithm, and a block of code
+   would be aligned to the right: each is an isolate, laid out as in English
+   (docs-i18n design, section f). */
+.docs-page :is(code, kbd, samp, pre) {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.docs-page pre {
+  text-align: start;
+}
+
+/* English inside an Arabic page keeps the serif of the English docs. Core
+   gives the whole Arabic page the system sans (ET Book has no Arabic
+   letters); an element that says lang="en" takes the serif back, and an
+   Arabic island inside it (the A–Z index, the chrome around a demo) the
+   sans. A heading keeps its own rule, which reads --luz-font-heading. */
+:lang(ar) [lang="en"] {
+  --luz-font-heading: var(--luz-font-serif);
+  --luz-font-body: var(--luz-font-serif);
+}
+
+:lang(ar) [lang="en"]:not(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--luz-font-body);
+}
+
+:lang(en) [lang="ar"] {
+  --luz-font-heading: var(--luz-font-sans);
+  --luz-font-body: var(--luz-font-sans);
+}
+
+:lang(en) [lang="ar"]:not(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--luz-font-body);
+}
+
+/* The notice under the page head (div.luz-alert.luz-alert--info.docs-notice):
+   "This page is not translated yet", or "This translation is pending review".
+   main already spaces its blocks with a gap, so the alert's own bottom margin
+   would double it */
+.docs-notice {
+  margin-block-end: 0;
+}
+
+/* The sentence and its link are running text of the page, not a small note:
+   they take the page's text size, the same as the paragraphs under them */
+.docs-notice .luz-alert__body {
+  font-size: var(--luz-text-body);
+}
+
 /* A long URL or class name in running text wraps instead of widening the page */
 :where(.docs-body) :where(p, li, td) code {
   overflow-wrap: anywhere;
@@ -994,8 +1045,28 @@
   border-inline-start: 3px solid transparent;
 }
 
+/* A long word (a translated label, 400 % text) wraps in the link instead of widening the drawer */
+.docs-nav .luz-sidebar__link {
+  overflow-wrap: anywhere;
+}
+
 .docs-nav__area {
   font-weight: 600;
+}
+
+/* HTML elements, nested in the Documentation section: its link sits at the level of that
+   section's pages and its own pages one step in, by the list's margin (the link keeps
+   the same padding, so the start border that marks the current page lines up) */
+.docs-nav__subarea {
+  font-weight: 600;
+}
+
+.docs-nav__sub > .docs-nav__pages {
+  margin-inline-start: var(--luz-space-sm);
+}
+
+.docs-nav__sub .docs-nav__pages .luz-sidebar__link {
+  padding-inline-start: var(--luz-space-xl);
 }
 
 .docs-nav__pages .luz-sidebar__link {

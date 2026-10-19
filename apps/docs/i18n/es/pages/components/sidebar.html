@@ -1,0 +1,195 @@
+<!-- luz:page
+title: Barra lateral
+description: Contiene la navegación principal de un sitio o una aplicación y se convierte en un panel lateral en pantallas pequeñas.
+keywords: panel lateral, navegación lateral
+source: a1a4aa6190e7
+reviewed: false
+-->
+    <div class="docs-component" id="c-sidebar">
+          <h2 id="example">Ejemplo</h2>
+          <p>Barra lateral con el nombre del producto, una lista de enlaces y el selector del modo de color.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage docs-sidebar-demo">
+            <nav class="luz-sidebar" aria-label="Sidebar specimen">
+              <div class="luz-sidebar__brand">
+                <div class="luz-sidebar__brand-name">
+                  <span class="luz-sidebar__logo" aria-hidden="true"><svg viewBox="8 8 32 32" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M24 8v32a16 16 0 0 1 0-32ZM28 20l6-12 6 12ZM28 24h12v16H28Z"/></svg></span>
+                  LUZ
+                </div>
+                <div class="luz-sidebar__version">v0.1.0</div>
+              </div>
+              <div class="luz-sidebar__section">
+                <div class="luz-sidebar__section-label">System</div>
+                <a class="luz-sidebar__link is-active" href="/docs/tokens/" aria-current="true">Tokens</a>
+                <a class="luz-sidebar__link" href="/docs/components/">Components</a>
+                <a class="luz-sidebar__link" href="/docs/site/">Site</a>
+              </div>
+              <div class="luz-sidebar__footer">
+                <fieldset class="luz-mode-switcher" disabled>
+                  <legend class="luz-mode-switcher__label">Color mode (specimen)</legend>
+                  <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="light" checked>Light</label>
+                  <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="dark">Dark</label>
+                  <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="high-contrast">High contrast</label>
+                </fieldset>
+              </div>
+            </nav>
+            <div class="docs-demo__stage">
+              <div class="o-row">
+                <button class="luz-nav-toggle" type="button" aria-label="Navigation toggle (specimen)" disabled>
+                  <span class="luz-nav-toggle__bar"></span>
+                  <span class="luz-nav-toggle__bar"></span>
+                  <span class="luz-nav-toggle__bar"></span>
+                </button>
+                <code class="docs-demo__file">.luz-nav-toggle</code>
+              </div>
+              <p class="docs-demo__note">On small screens the sidebar becomes a drawer. <a href="#page-nav">This page's navigation uses it live</a>.</p>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>En un navegador sin la API de popover, la navegación no se convierte en un panel lateral: permanece visible sobre el contenido en pantallas pequeñas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la barra lateral">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-sidebar" aria-label="Copy the sidebar with its drawer button markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Sidebar with its drawer button markup"><code id="code-sidebar">&lt;header&gt;
+  &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;site-nav&quot; aria-label=&quot;Menu&quot;&gt;
+    &lt;span class=&quot;luz-nav-toggle__bar&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;luz-nav-toggle__bar&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;luz-nav-toggle__bar&quot;&gt;&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/header&gt;
+
+&lt;nav class=&quot;luz-sidebar&quot; id=&quot;site-nav&quot; popover aria-label=&quot;Main&quot;&gt;
+  &lt;div class=&quot;luz-sidebar__section&quot;&gt;
+    &lt;div class=&quot;luz-sidebar__section-label&quot;&gt;Account&lt;/div&gt;
+    &lt;a class=&quot;luz-sidebar__link is-active&quot; href=&quot;/profile/&quot; aria-current=&quot;page&quot;&gt;Profile&lt;/a&gt;
+    &lt;a class=&quot;luz-sidebar__link&quot; href=&quot;/billing/&quot;&gt;Billing&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-sidebar-js" aria-label="Copy the sidebar script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Sidebar script code"><code id="code-sidebar-js">import { initSidebar } from &quot;@luz-ds/core/sidebar&quot;;
+initSidebar();</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Partes y opciones de la barra lateral" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-sidebar</code></div></td><td data-label="Qué hace"><div>Columna de navegación, con los colores de la barra lateral</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>popover</code> en <code>.luz-sidebar</code></div></td><td data-label="Qué hace"><div>La convierte en un panel lateral con 768 px o menos</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-sidebar__brand</code>, <code>__brand-name</code>, <code>__logo</code>, <code>__version</code></div></td><td data-label="Qué hace"><div>Bloque de marca opcional en la parte superior</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-sidebar__section</code>, <code>__section-label</code></div></td><td data-label="Qué hace"><div>Grupo de enlaces y su etiqueta</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-sidebar__link</code></div></td><td data-label="Qué hace"><div>Enlace</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-luz-spy</code> en cualquier elemento</div></td><td data-label="Qué hace"><div>No forma parte de la barra lateral: el indicador de desplazamiento también marca los enlaces a secciones de la página dentro de ella, como una tabla de contenidos con tu propio diseño</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.is-active</code> en un enlace</div></td><td data-label="Qué hace"><div>Resalta el enlace actual con el grosor y el color; acompáñalo de <code>aria-current="page"</code></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-sidebar__footer</code></div></td><td data-label="Qué hace"><div>Fijado en la parte inferior, por ejemplo, para el <a href="/docs/components/mode-switcher/">selector del modo de color</a></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-nav-toggle</code></div></td><td data-label="Qué hace"><div>Botón de menú, visible con 768 px o menos; colócalo al principio de la fila de cabecera</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-nav-toggle--fixed</code></div></td><td data-label="Qué hace"><div>Fija el botón de menú en la esquina superior inicial, en páginas sin cabecera</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Punto de referencia <code>&lt;nav&gt;</code>, con estilos de <code>components/sidebar.css</code>. En pantallas pequeñas es un panel lateral nativo de tipo popover.</p>
+            <ul>
+              <li>El botón de menú lo abre mediante <code>popovertarget</code>, sin scripts. El navegador se encarga de Escape, de cerrarlo al hacer clic fuera, de la capa superior y del estado expandido.</li>
+              <li><code>initSidebar()</code> de <code>sidebar.js</code> es opcional: marca el enlace de la sección visible en páginas largas (<code>aria-current="true"</code>) y cierra el panel al seguir un enlace. <code>luz.js</code> lo ejecuta.</li>
+              <li>El indicador de desplazamiento localiza los enlaces mediante <code>.luz-sidebar__link</code> y <code>data-luz-spy</code>: en cualquier elemento (como un <code>&lt;nav&gt;</code> de contenidos), sigue todos los enlaces internos que apuntan a una sección de la página (<code>href="#…"</code>). El atributo es el punto de conexión; el diseño de esos enlaces es cosa tuya.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>La barra lateral y el panel funcionan. El enlace actual es el que marcas en el marcado; no sigue el desplazamiento.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Tab recorre los enlaces en orden. En pantallas pequeñas, el botón de menú abre el panel; Escape o un clic fuera lo cierra y el foco vuelve al botón.</p>
+            <ul>
+              <li>Si la página tiene más de un <code>&lt;nav&gt;</code>, asígnale un nombre con <code>aria-label</code>.</li>
+              <li>Marca la página actual con <code>aria-current="page"</code> y <code>.is-active</code>: la clase solo aporta el aspecto visual.</li>
+              <li>El botón de menú conserva el nombre «Menú» tanto si el panel está abierto como cerrado; popover expone el estado.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> se explican en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una barra lateral para la navegación principal de una aplicación o de un sitio de documentación con muchas secciones.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses una barra lateral en un sitio con pocas páginas: la navegación en la cabecera es más sencilla.</p>
+            <ul>
+              <li>Para mostrar la ruta hasta la página actual, usa <a href="/docs/components/breadcrumb/">migas de pan</a>.</li>
+              <li>Para los paneles de una misma página, usa <a href="/docs/components/tabs/">pestañas</a>.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Sustantivos breves, agrupados bajo una etiqueta y en el orden en que se necesitan.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="docs-stage__sidebar"><span class="luz-sidebar__section-label">Account</span><span class="luz-sidebar__link">Profile</span><span class="luz-sidebar__link">Billing</span><span class="luz-sidebar__link">Team</span></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No uses frases ni enlaces genéricos: «Gestiona los datos de facturación» cuesta recorrerlo con la vista y «Otras cosas» no dice nada.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="docs-stage__sidebar"><span class="luz-sidebar__section-label">Menu</span><span class="luz-sidebar__link">Manage your billing details</span><span class="luz-sidebar__link">Profile</span><span class="luz-sidebar__link">Other stuff</span></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Pon a cada enlace el nombre de la página que abre, con una o dos palabras.</p>
+            <ul>
+              <li>Las etiquetas de sección son sustantivos: «Cuenta», «Facturación».</li>
+              <li>Ordena los enlaces según la frecuencia con que se necesitan.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>La barra lateral tiene sus propios tokens: texto claro sobre un panel oscuro en todos los modos y un enlace actual con fondo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la barra lateral en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Enlace</div></td><td data-label="Color sobre fondo"><div><code>--luz-sidebar-text</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Claro"><div>10.9:1</div></td><td data-label="Oscuro"><div>10.0:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace al pasar el puntero</div></td><td data-label="Color sobre fondo"><div><code>--luz-sidebar-text-hover</code> on <code>--luz-sidebar-hover</code></div></td><td data-label="Claro"><div>13.0:1</div></td><td data-label="Oscuro"><div>16.4:1</div></td><td data-label="Alto contraste"><div>17.6:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace actual</div></td><td data-label="Color sobre fondo"><div><code>--luz-sidebar-active-text</code> on <code>--luz-sidebar-active-bg</code></div></td><td data-label="Claro"><div>10.3:1</div></td><td data-label="Oscuro"><div>10.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Fondo del enlace actual</div></td><td data-label="Color sobre fondo"><div><code>--luz-sidebar-active-bg</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Claro"><div>8.9:1</div></td><td data-label="Oscuro"><div>10.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta de sección y versión</div></td><td data-label="Color sobre fondo"><div><code>--luz-sidebar-label</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Claro"><div>6.7:1</div></td><td data-label="Oscuro"><div>6.6:1</div></td><td data-label="Alto contraste"><div>6.4:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Botón de menú</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde del botón de menú</div></td><td data-label="Color sobre fondo"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4.3:1</div></td><td data-label="Oscuro"><div>3.6:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco del botón de menú</div></td><td data-label="Color sobre fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario corresponde al nivel AA de WCAG 2.2: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el enlace recibe un contorno de 2 px dentro de su borde, del mismo color que su texto, para que el anillo tenga el contraste del propio enlace; los demás controles de la barra lateral usan <code>--luz-sidebar-text-hover</code>. El botón de menú tiene un contorno de 2 px <code>--luz-focus-ring</code>.</li>
+              <li><strong>No solo el color:</strong> el enlace actual tiene un fondo y lleva <code>aria-current</code>.</li>
+              <li><strong>Tamaño del objetivo:</strong> el botón de menú mide 44 px por lado.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 36 tokens que lee <code>components/sidebar.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-sidebar-active-bg"><code>--luz-sidebar-active-bg</code></a>, <a href="/docs/tokens/color/#luz-sidebar-active-text"><code>--luz-sidebar-active-text</code></a>, <a href="/docs/tokens/color/#luz-sidebar-bg"><code>--luz-sidebar-bg</code></a>, <a href="/docs/tokens/color/#luz-sidebar-border"><code>--luz-sidebar-border</code></a>, <a href="/docs/tokens/color/#luz-sidebar-hover"><code>--luz-sidebar-hover</code></a>, <a href="/docs/tokens/color/#luz-sidebar-label"><code>--luz-sidebar-label</code></a>, <a href="/docs/tokens/color/#luz-sidebar-logo-bg"><code>--luz-sidebar-logo-bg</code></a>, <a href="/docs/tokens/color/#luz-sidebar-text"><code>--luz-sidebar-text</code></a>, <a href="/docs/tokens/color/#luz-sidebar-text-hover"><code>--luz-sidebar-text-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code>, <code>--luz-text-xl</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-lg</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code>, <code>--luz-duration-slow</code>, <code>--luz-easing-standard</code></dd></div>
+              <div><dt><a href="/docs/tokens/layers/">Layers</a></dt><dd><code>--luz-z-modal</code>, <code>--luz-z-sidebar</code></dd></div>
+              <div><dt><a href="/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-sidebar-width</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> se explican en la pestaña Código.</p>
+          </div>
+    </div>

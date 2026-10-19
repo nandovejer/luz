@@ -163,8 +163,9 @@ describe("front matter", () => {
     expect(() => parseFrontMatter(PAGE("A", "", "layout: ../evil\n"), "x.html")).toThrow(/layout/);
   });
 
-  it("allows generate: gallery, a-z, snippets and ai, and nothing else", () => {
-    for (const value of ["gallery", "a-z", "snippets", "ai"]) {
+  // "notfound" is the 404: the generator writes, at <!-- luz:generated -->, one block per other docs language
+  it("allows generate: gallery, a-z, snippets, ai and notfound, and nothing else", () => {
+    for (const value of ["gallery", "a-z", "snippets", "ai", "notfound"]) {
       expect(parseFrontMatter(PAGE("A", "", `generate: ${value}\n`), "x.html", areas).meta.generate, value).toBe(value);
     }
     expect(() => parseFrontMatter(PAGE("A", "", "generate: tokens\n"), "x.html", areas)).toThrow(/generate/);
@@ -482,23 +483,53 @@ describe("the LUZ docs site", () => {
     expect([...rendered.keys()].sort()).toEqual([...homes, "/404.html", ...site.pages.map((p) => p.route)].sort());
   });
 
-  it("renders one header for every page from the shared partial, with the current links marked", () => {
+  // Decision D1: a language has docs when apps/docs/i18n/<code>/ exists. The delivery is Spanish; Arabic docs are planned, the home page alone is in Arabic for now (owner, 2026-10-19).
+  const docsLanguages = () => {
+    const folder = join(repo, "apps/docs/i18n");
+    return existsSync(folder) ? readdirSync(folder, { withFileTypes: true }).filter((e) => e.isDirectory() && e.name !== "en").map((e) => e.name).sort() : [];
+  };
+
+  it("has docs in Spanish alone: a folder apps/docs/i18n/<code>/ for it (D1), while the home page is also in Arabic", () => {
+    expect(docsLanguages()).toEqual(["es"]);
+    // Arabic docs are planned: no folder yet, but the home page's catalog and the Arabic typography of the docs stay
+    expect(existsSync(join(repo, "apps/docs/i18n/ar"))).toBe(false);
+    expect(existsSync(join(repo, "apps/landing/i18n/ar.json"))).toBe(true);
+    expect(existsSync(join(repo, "apps/docs/locale-scripts/ar.json"))).toBe(true);
+  });
+
+  it("renders one header for every page from the shared partial, with the current links marked, and the language switcher on the docs pages", () => {
     const header = (html) => html.match(/<header class="site-header"[\s\S]*?<\/header>/)[0];
-    // The English docs header: the home page adds its language switcher, in its language
+    // The docs header and the home's differ in the switcher alone: the home's is in its language, the docs' lists the same page in each language
     const flat = (html) =>
       html
         .replace(/ aria-current="(page|true)"/g, "")
         .replace(/<luz-lang-switch>[\s\S]*?<\/luz-lang-switch>/, "")
         .replace(/\s+/g, " ");
+    const switcherOf = (html) => header(html).match(/<luz-lang-switch>[\s\S]*?<\/luz-lang-switch>/)?.[0] ?? "";
     const docsHeader = flat(header(rendered.get("/docs/")));
     for (const [route, html] of rendered) {
       const own = header(html);
       if (route === "/" || !homes.includes(route)) expect(flat(own), route).toBe(docsHeader);
-      expect(own.includes("<luz-lang-switch>"), route).toBe(homes.includes(route));
+      // A docs page has the switcher (the not-found page, which is no page in any language, does not: its text names the languages)
+      const hasSwitcher = route !== "/404.html";
+      expect(own.includes("<luz-lang-switch>"), route).toBe(hasSwitcher);
       // The site links (Documentation; there is no Home link, the brand is not a navigation item) and the switcher's current language
       const marked = [...own.matchAll(/<a[^>]* href="([^"]*)"[^>]* aria-current="(page|true)">/g)].map(([, href, value]) => [href, value]);
       const expected = [...currentOf(route, homes)].filter(([href]) => href === "/docs/");
-      expect(marked, route).toEqual(homes.includes(route) ? [...expected, [route, "page"]] : expected);
+      // The switcher marks the language the page is in: the home in its own, a docs page the English route of the page
+      expect(marked, route).toEqual(hasSwitcher ? [...expected, [route, "page"]] : expected);
+      if (hasSwitcher && !homes.includes(route)) {
+        // One link per language of the docs, the English page marked, the others not
+        const links = [...switcherOf(html).matchAll(/<a\b([^>]*)>/g)].map(([, attrs]) => ({
+          href: /\shref="([^"]*)"/.exec(attrs)?.[1],
+          lang: /\slang="([^"]*)"/.exec(attrs)?.[1],
+          current: /\saria-current="([^"]*)"/.exec(attrs)?.[1] ?? null,
+        }));
+        const inRegistryOrder = site.i18n.locales.map((l) => l.code).filter((code) => code === "en" || docsLanguages().includes(code));
+        expect(links.map((l) => l.lang), `${route}: languages in the switcher, in the order of the registry`).toEqual(inRegistryOrder);
+        expect(links.find((l) => l.lang === "en"), route).toMatchObject({ href: route, current: "page" });
+        expect(links.filter((l) => l.current), `${route}: only the page in English is marked`).toHaveLength(1);
+      }
     }
   });
 
@@ -528,7 +559,9 @@ describe("the LUZ docs site", () => {
       const area = site.areas.find((a) => a.id === page?.meta.area);
       expect(current, route).toEqual(area ? [route] : []);
       const parents = links.filter((a) => a.attrs.get("aria-current") === "true").map((a) => a.attrs.get("href"));
-      expect(parents, route).toEqual(area && route !== `/docs/${area.slug}/` ? [`/docs/${area.slug}/`] : []);
+      // An area nested in another (site.json "parent") marks both: the parent's link, then its own (the sub-area link)
+      const outer = area?.parent ? [`/docs/${site.areas.find((a) => a.id === area.parent).slug}/`] : [];
+      expect(parents, route).toEqual(area ? [...outer, ...(route !== `/docs/${area.slug}/` ? [`/docs/${area.slug}/`] : [])] : []);
       expect(links.filter((a) => (a.attrs.get("class") ?? "").includes("is-active")), route).toEqual([]);
       // Flat: not only the current area's pages, every page of every area
       const hrefs = links.map((a) => a.attrs.get("href"));
@@ -544,20 +577,41 @@ describe("the LUZ docs site", () => {
     for (const { name } of elements) expect(az, name).toContain(`#el-${name}"`);
   });
 
-  it("reaches every component in two links from any page, without opening anything (ia.md §14)", () => {
+  // The timeout is long on purpose: buildSite({ languages: true }) renders every page in every language (about 350 pages), 4 to 5 s alone and more under load.
+  it("reaches every component in two links from any page, in every language, without opening anything (ia.md §14)", { timeout: 60_000 }, () => {
     // Links shown at every width: the content of main (the header's site
     // links are in the closed drawer on a phone, "On this page" is closed).
+    // A page in a language (/es/, /es/docs/…) must reach the component's page
+    // in that language (/es/docs/components/…): the English one is not its target.
     const components = site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers");
     expect(components).toHaveLength(32);
+    const withLanguages = buildSite(site, { extra: landing, languages: true, unchecked: homes });
+    // Every language of the home page is a start page; only Spanish has docs, so a link from the Arabic home goes to the English docs
+    const homeCodes = homes.filter((h) => h !== "/").map((h) => h.replaceAll("/", ""));
+    const codes = docsLanguages();
+    expect(homeCodes).toEqual(["es", "ar"]);
+    expect(codes).toEqual(["es"]);
+    const prefixOf = (route) => codes.map((code) => `/${code}`).find((prefix) => route === `${prefix}/` || route.startsWith(`${prefix}/`)) ?? "";
     const visible = (html) => {
       const main = html.match(/<main[\s\S]*?<\/main>/)[0].replace(/<nav class="luz-docs-rail__onpage"[\s\S]*?<\/nav>/, "");
-      return new Set([...[...main.matchAll(/href="(\/docs\/[^"#]*)/g)].map((m) => m[1])]);
+      return new Set([...main.matchAll(/href="((?:\/[a-z]{2,3})?\/docs\/[^"#]*)/g)].map((m) => m[1]));
     };
-    const links = new Map([...rendered].map(([route, html]) => [route, visible(html)]));
-    for (const [route] of rendered) {
+    const starts = [...withLanguages.rendered].filter(([route]) => route !== "/404.html");
+    // Every language is a start page, its home and, when it has docs, its docs pages
+    for (const code of homeCodes) expect(starts.some(([route]) => route === `/${code}/`), `${code} home`).toBe(true);
+    for (const code of codes) {
+      expect(starts.some(([route]) => route.startsWith(`/${code}/docs/`)), `${code} docs pages`).toBe(true);
+    }
+    const links = new Map(starts.map(([route, html]) => [route, visible(html)]));
+    for (const [route] of starts) {
+      const prefix = prefixOf(route);
       const one = links.get(route);
       const two = new Set([...one, ...[...one].flatMap((r) => [...(links.get(r) ?? [])])]);
-      for (const c of components) expect(two.has(c.route), `${route} → ${c.route}`).toBe(true);
+      for (const c of components) {
+        const target = prefix + c.route;
+        expect(links.has(target), `${target} is a page`).toBe(true);
+        expect(two.has(target), `${route} → ${target}`).toBe(true);
+      }
     }
   });
 
@@ -716,8 +770,10 @@ describe("the LUZ docs site", () => {
     const expected = site.pages.filter((p) => p.meta.area !== "hub" && p.meta.nav !== "false");
     expect([...order].sort()).toEqual(expected.map((p) => p.route).sort());
     expect(new Set(order).size).toBe(order.length);
-    // The six area indexes, in site.json order, each before its own pages
-    const indexes = site.areas.map((a) => `/docs/${a.slug}/`);
+    // The area indexes, in sidebar order (site.json order, a nested area right after its parent's own pages), each before its own pages
+    const sidebarAreas = site.areas.filter((a) => !a.parent).flatMap((a) => [a, ...site.areas.filter((c) => c.parent === a.id)]);
+    expect(sidebarAreas).toHaveLength(site.areas.length);
+    const indexes = sidebarAreas.map((a) => `/docs/${a.slug}/`);
     expect(order.filter((r) => indexes.includes(r))).toEqual(indexes);
     for (const route of order) {
       const area = site.areas.find((a) => a.id === site.byRoute.get(route).meta.area);
@@ -806,13 +862,14 @@ describe("the LUZ docs site", () => {
         expect(link[2], `${route}: ${kind} has an aria-label`).toBe(false);
       }
     }
-    // Get started → Tokens → HTML elements → Components → Site → Accessibility
+    // Get started → Tokens → Components → Site → … → Documentation → HTML elements (nested in Documentation) → Accessibility
     expect(endOf(rendered.get("/docs/tokens/")).prev?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/tokens/")).next?.[0]).toBe("/docs/tokens/color/");
     expect(endOf(rendered.get("/docs/get-started/classless/")).next?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/get-started/how-luz-is-built/")).next?.[0]).toBe("/docs/tokens/");
-    expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/tokens\//);
-    expect(endOf(rendered.get("/docs/components/")).prev?.[0]).toMatch(/^\/docs\/html\//);
+    expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/documentation\//);
+    expect(endOf(rendered.get("/docs/components/")).prev?.[0]).toMatch(/^\/docs\/tokens\//);
+    expect(endOf(rendered.get("/docs/accessibility/")).prev?.[0]).toMatch(/^\/docs\/html\//);
     expect(endOf(rendered.get("/docs/site/")).prev?.[0]).toMatch(/^\/docs\/components\//);
   });
 

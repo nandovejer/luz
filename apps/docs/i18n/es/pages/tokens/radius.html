@@ -1,0 +1,35 @@
+<!-- luz:page
+title: Radio
+description: La escala de radios de esquina: cuadrado, 2px, como máximo 4px, y redondo.
+source: 24d5d6938582
+reviewed: false
+-->
+    <div class="docs-block" id="t-radius">
+          <p>Todas las cajas tienen la misma esquina, <code class="luz-code-inline">--luz-radius-md</code> (4px): botones, campos con borde completo, tarjetas, alertas, menús y diálogos. Es el límite: ningún rectángulo es más redondeado. <code class="luz-code-inline">--luz-radius-sm</code> se usa en elementos pequeños (código en línea, <code class="luz-code-inline">kbd</code>, casillas de verificación y barras finas) y en una fila dentro de una caja redondeada, para que las dos esquinas sean concéntricas. <code class="luz-code-inline">--luz-radius-none</code> se usa en una caja que se une a otra o en un campo que solo tiene borde inferior, como un selector o un campo de texto.</p>
+          <p><code class="luz-code-inline">--luz-radius-full</code> no es una esquina: crea una píldora o un círculo para formas que son redondas por naturaleza, como la pista de un interruptor o la insignia de recuento. Un punto, un botón de opción o el control de un deslizador se convierte en círculo con <code class="luz-code-inline">50%</code>.</p>
+          <div class="docs-demo__stage">
+            <ul class="docs-specimens">
+              <li>
+                <span class="docs-box docs-box--radius" style="--v: var(--luz-radius-none)" aria-hidden="true"></span>
+                <code>--luz-radius-none</code>
+                <span>0px</span>
+              </li>
+              <li>
+                <span class="docs-box docs-box--radius" style="--v: var(--luz-radius-sm)" aria-hidden="true"></span>
+                <code>--luz-radius-sm</code>
+                <span>2px</span>
+              </li>
+              <li>
+                <span class="docs-box docs-box--radius" style="--v: var(--luz-radius-md)" aria-hidden="true"></span>
+                <code>--luz-radius-md</code>
+                <span>4px</span>
+              </li>
+              <li>
+                <span class="docs-box docs-box--radius" style="--v: var(--luz-radius-full)" aria-hidden="true"></span>
+                <code>--luz-radius-full</code>
+                <span>9999px</span>
+              </li>
+            </ul>
+          </div>
+        
+    </div>

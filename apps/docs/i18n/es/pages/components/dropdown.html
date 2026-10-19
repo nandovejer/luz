@@ -1,0 +1,162 @@
+<!-- luz:page
+title: Desplegable
+description: Un botón que abre debajo una lista breve de acciones o enlaces.
+keywords: menú
+source: 39f978e58bf3
+reviewed: false
+-->
+    <div class="docs-component" id="c-dropdown">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un botón llamado Acciones que abre una lista breve: editar, duplicar, mover y eliminar un proyecto.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-dropdown">
+              <button class="luz-btn luz-btn--secondary" type="button" popovertarget="demo-dropdown">Actions</button>
+              <div class="luz-dropdown__menu" id="demo-dropdown" popover>
+                <ul class="luz-dropdown__list">
+                  <li><a class="luz-dropdown__item" href="#example">Edit</a></li>
+                  <li><button class="luz-dropdown__item" type="button">Duplicate</button></li>
+                  <li><button class="luz-dropdown__item" type="button" aria-disabled="true">Move</button></li>
+                  <li><hr class="luz-dropdown__separator"></li>
+                  <li><button class="luz-dropdown__item luz-dropdown__item--danger" type="button">Delete project</button></li>
+                </ul>
+              </div>
+            </div>
+            <p class="docs-demo__note">Press Escape or click outside to close it.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No hay teclas de flecha: Tab permite recorrer las acciones, como en cualquier lista de botones. En los navegadores sin posicionamiento CSS de anclaje, la lista se abre como una hoja en la parte inferior de la pantalla, no debajo del botón.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de desplegable">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-dropdown" aria-label="Copy the dropdown markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Dropdown markup"><code id="code-dropdown">&lt;div class=&quot;luz-dropdown&quot;&gt;
+  &lt;button class=&quot;luz-btn luz-btn--secondary&quot; type=&quot;button&quot; popovertarget=&quot;project-actions&quot;&gt;Actions&lt;/button&gt;
+  &lt;div class=&quot;luz-dropdown__menu&quot; id=&quot;project-actions&quot; popover&gt;
+    &lt;ul class=&quot;luz-dropdown__list&quot;&gt;
+      &lt;li&gt;&lt;a class=&quot;luz-dropdown__item&quot; href=&quot;/project/edit/&quot;&gt;Edit&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;button class=&quot;luz-dropdown__item&quot; type=&quot;button&quot;&gt;Duplicate&lt;/button&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;hr class=&quot;luz-dropdown__separator&quot;&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;button class=&quot;luz-dropdown__item luz-dropdown__item--danger&quot; type=&quot;button&quot;&gt;Delete project&lt;/button&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Partes del desplegable" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-dropdown</code></div></td><td data-label="Qué hace"><div>El contenedor: el botón y su panel, uno junto al otro en el código fuente. Define el ámbito del anclaje, de modo que cada desplegable de la página se abre debajo de su propio botón</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>popovertarget</code> y <code>popover</code></div></td><td data-label="Qué hace"><div>El botón identifica el panel mediante su <code>id</code>; el panel es el popover. El navegador se encarga del resto</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-dropdown__menu</code></div></td><td data-label="Qué hace"><div>El panel: una superficie con borde y sombra, de al menos 12 rem de ancho, que permite desplazarse si supera los 24 rem de alto</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-dropdown__list</code></div></td><td data-label="Qué hace"><div>La lista <code>&lt;ul&gt;</code> de acciones</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-dropdown__item</code></div></td><td data-label="Qué hace"><div>Un enlace o botón de al menos 44 px de alto y del ancho del panel</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-dropdown__item--danger</code></div></td><td data-label="Qué hace"><div>Una acción destructiva, en el color de peligro</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>aria-disabled="true"</code></div></td><td data-label="Qué hace"><div>Una acción que no está disponible ahora: usa el color de texto desactivado y conserva su lugar en el orden de tabulación para que el lector pueda encontrarla</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-dropdown__separator</code></div></td><td data-label="Qué hace"><div>Una línea entre dos grupos de acciones: un <code>&lt;hr&gt;</code> en su propio <code>&lt;li&gt;</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un <a href="https://developer.mozilla.org/en-US/docs/Web/API/Popover_API">popover</a> nativo que abre un botón con <code>popovertarget</code> y al que da estilo <code>components/dropdown.css</code>. No necesita JavaScript.</p>
+            <ul>
+              <li>El navegador coloca el panel en la capa superior, lo cierra con Escape o al hacer clic fuera, devuelve el foco al botón e indica a la tecnología de asistencia si está expandido.</li>
+              <li>En los navegadores con posicionamiento CSS de anclaje (Chrome y Edge 125, Safari 26 y Firefox 147), el panel se abre debajo del botón, alineado con su borde inicial, y pasa a abrirse encima si no hay espacio. Si no está disponible, el panel aparece como una hoja en la parte inferior de la pantalla.</li>
+              <li>En los navegadores sin la API de popover, la lista permanece en la página, debajo del botón, y todas las acciones siguen funcionando.</li>
+              <li>Es una lista de acciones, no un <code>menu</code> de ARIA: ese role implica teclas de flecha, un tabindex itinerante y búsqueda por escritura, funciones que LUZ no implementa con scripts. Los enlaces y botones normales conservan todos los comportamientos que les proporciona el navegador.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el popover es HTML. Las acciones que son botones necesitan tus propios scripts para hacer algo, como cualquier botón; los enlaces funcionan tal cual.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Enter o Espacio en el botón abre el panel; el foco se mantiene en el botón y el panel aparece a continuación en el orden de tabulación. Tab permite llegar a la primera acción y recorrer las demás; Mayús+Tab permite volver.</p>
+            <p>Escape cierra el panel y devuelve el foco al botón.</p>
+            <ul>
+              <li>Pon al botón un nombre que indique qué contiene: «Acciones» o «Más opciones para Ana», no solo «…».</li>
+              <li>Una acción no disponible usa <code>aria-disabled="true"</code>, no <code>disabled</code>, para que siga siendo accesible y el lector de pantalla pueda anunciarla. No ejecutes la acción cuando se active.</li>
+              <li>El panel no es un diálogo ni contiene formularios: para una decisión o un formulario, usa un <a href="/docs/components/modal/">diálogo modal</a>.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un desplegable para mostrar entre tres y siete acciones relacionadas con un elemento cuando mostrarlas todas recargaría la página: por ejemplo, las acciones de una fila de tabla, una tarjeta o un proyecto.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un desplegable para elegir un valor ni para ocultar la acción principal.</p>
+            <ul>
+              <li>Para elegir un valor de un formulario, usa un <a href="/docs/components/select/">select</a>.</li>
+              <li>Para la acción principal de una página, usa un <a href="/docs/components/button/">botón</a> visible.</li>
+              <li>Para las secciones de un sitio, usa una <a href="/docs/components/sidebar/">barra lateral</a> o una lista de navegación.</li>
+              <li>LUZ no sustituye el menú contextual del botón derecho. El menú del navegador pertenece al lector y sustituirlo impide copiar, pegar y recibir ayuda ortográfica; ofrece las mismas acciones en un desplegable.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Nombra las acciones con verbos y coloca la destructiva al final, separada.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ul class="luz-dropdown__list"><li><span class="luz-dropdown__item">Edit</span></li><li><span class="luz-dropdown__item">Duplicate</span></li><li><hr class="luz-dropdown__separator"></li><li><span class="luz-dropdown__item luz-dropdown__item--danger">Delete project</span></li></ul>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No uses sustantivos que no indiquen qué ocurre ni pongas una acción peligrosa en medio.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ul class="luz-dropdown__list"><li><span class="luz-dropdown__item">Project</span></li><li><span class="luz-dropdown__item luz-dropdown__item--danger">Project data</span></li><li><span class="luz-dropdown__item">Options</span></li></ul>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Empieza cada acción con un verbo y ordénalas como las buscaría el lector.</p>
+            <ul>
+              <li>Dos o tres palabras: «Duplicar», «Mover al archivo».</li>
+              <li>Indica qué elimina la acción destructiva: «Eliminar proyecto», no «Eliminar».</li>
+              <li>Agrupa las acciones con un separador, no con encabezados.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Las acciones usan texto principal sobre la superficie del panel, que tiene un borde y una sombra.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del desplegable en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Acción</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Acción al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Acción pulsada</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-pressed</code></div></td><td data-label="Claro"><div>12.8:1</div></td><td data-label="Oscuro"><div>10.9:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Acción peligrosa</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.5:1</div></td><td data-label="Oscuro"><div>10.8:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Acción desactivada</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-disabled</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>3.7:1</div></td><td data-label="Oscuro"><div>3.9:1</div></td><td data-label="Alto contraste"><div>5.3:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde del panel</div></td><td data-label="Color sobre el fondo"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4.3:1</div></td><td data-label="Oscuro"><div>3.6:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes, iconos y el estado desactivado.</p>
+            <ul>
+              <li><strong>Foco:</strong> cada acción tiene un contorno de 2 px <code>--luz-focus-ring</code> dibujado dentro de su fila, para que el borde del panel no lo recorte.</li>
+              <li><strong>No depende solo del color:</strong> la acción peligrosa indica qué elimina y la acción no disponible se anuncia como desactivada.</li>
+              <li><strong>Colores forzados:</strong> la acción bajo el puntero aparece subrayada y la no disponible usa <code>GrayText</code>.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 19 tokens que lee <code>components/dropdown.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-pressed"><code>--luz-surface-pressed</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

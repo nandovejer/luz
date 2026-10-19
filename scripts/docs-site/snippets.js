@@ -6,8 +6,10 @@
  *
  *   snippetData({ root, readFile, dev })  reads each package's package.json and
  *                                         the dist files of FILES; hashes them
- *   renderSnippets(data)                  pure: the HTML of the page (an index
- *                                         table, eight snippets, the chunks)
+ *   renderSnippets(data, t)               pure: the HTML of the page (an index
+ *                                         table, eight snippets, the chunks); `t`
+ *                                         reads the words of the page in its
+ *                                         language (strings.js, keys snippets.*)
  *
  * `integrity` is `sha384-` + base64 of the SHA-384 of the bytes of
  * `packages/<name>/dist/<file>`, the algorithm of SECURITY.md. The URL carries
@@ -18,6 +20,7 @@
  */
 import { createHash } from "node:crypto";
 import { join } from "node:path";
+import { englishT } from "./strings.js";
 
 /** The files of each package that a snippet or the chunks table names (spec 3.4.1). */
 export const FILES = {
@@ -30,30 +33,27 @@ export const FILES = {
   docs: { css: "docs.min.css", js: null, chunks: [] },
 };
 
-/** What the reader is building: its id, its words, and the package that is its kind (null: none). */
+/** What the reader is building: its id and the package that is its kind (null: none); its words are `snippets.kind.<id>`. */
 export const KINDS = [
-  { id: "atoms", label: "Components only", pkg: null },
-  { id: "landing", label: "Landing page", pkg: "landing" },
-  { id: "blog", label: "Blog or newspaper", pkg: "cms" },
-  { id: "app", label: "Web application", pkg: "app" },
-  { id: "docs", label: "Documentation site", pkg: "docs" },
+  { id: "atoms", pkg: null },
+  { id: "landing", pkg: "landing" },
+  { id: "blog", pkg: "cms" },
+  { id: "app", pkg: "app" },
+  { id: "docs", pkg: "docs" },
 ];
 
-/** How it is loaded. */
-export const WAYS = [
-  { id: "npm", label: "npm and a bundler", heading: "With npm and a bundler" },
-  { id: "cdn", label: "CDN with integrity hashes", heading: "From a CDN, with integrity hashes" },
-];
+/** How it is loaded; its words are `snippets.way.<id>` and `snippets.way-heading.<id>`. */
+export const WAYS = [{ id: "npm" }, { id: "cdn" }];
 
-/** The chunks: where each is loaded from, and when a page needs its line. */
+/** The chunks: where each is loaded from, and the catalog key that says when a page needs its line. */
 const CHUNK_WHEN = {
-  "midi.min.js": ["core", "a <code>.luz-player</code> with <code>data-type=\"midi\"</code>"],
-  "table-sort.min.js": ["core", "a sortable table, with <code>th[data-luz-sort]</code>"],
-  "timeline.min.js": ["core", "a <code>&lt;luz-timeline&gt;</code>"],
-  "i18n-es.min.js": ["core", "an element with <code>lang=\"es\"</code>, on <code>&lt;html&gt;</code> or in the page, outside a link or an option"],
-  "search.min.js": ["site", "a <code>&lt;luz-search&gt;</code>"],
-  "consent.min.js": ["site", "a <code>&lt;luz-consent&gt;</code>"],
-  "mode.min.js": ["site", "a <code>&lt;luz-mode&gt;</code>"],
+  "midi.min.js": ["core", "snippets.when.midi"],
+  "table-sort.min.js": ["core", "snippets.when.table-sort"],
+  "timeline.min.js": ["core", "snippets.when.luz-timeline"],
+  "i18n-es.min.js": ["core", "snippets.when.i18n-es"],
+  "search.min.js": ["site", "snippets.when.luz-search"],
+  "consent.min.js": ["site", "snippets.when.luz-consent"],
+  "mode.min.js": ["site", "snippets.when.luz-mode"],
 };
 
 const CDN = "https://cdn.jsdelivr.net/npm";
@@ -101,6 +101,7 @@ const esc = (s) =>
 /** The lines of a snippet; a `null` is a blank line. */
 const text = (lines) => lines.map((l) => (l === null ? "" : esc(l))).join("\n");
 
+// The comments inside a snippet are code: English in every language (D7)
 const OPTIONAL_SITE = "Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them.";
 const OPTIONAL_SITE_SCRIPT = "Optional, with the site stylesheet: the search and the cookie banner";
 
@@ -130,37 +131,38 @@ function npmCode(kind) {
 const installCommand = (kind) => `pnpm add ${["@luz-ds/tokens", "@luz-ds/core", ...(kind.pkg ? ["@luz-ds/site", `@luz-ds/${kind.pkg}`] : [])].join(" ")}`;
 
 /** A code block with its copy button, in the markup of the Install page. */
-function codeBlock({ id, lang, label, aria, code }) {
+function codeBlock({ id, lang, label, copy, name, code }, t) {
   return `        <div class="docs-snippet">
           <div class="docs-snippet__bar">
             <span class="docs-snippet__lang">${esc(label)}</span>
-            <button class="luz-copy-btn" type="button" data-copy-from="code-${id}" aria-label="Copy ${esc(aria)}">Copy</button>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-${id}" aria-label="${esc(copy)}">${esc(t("snippets.copy"))}</button>
           </div>
-          <pre class="luz-code-block" data-lang="${lang}" tabindex="0" role="region" aria-label="${esc(aria[0].toUpperCase() + aria.slice(1))}"><code id="code-${id}">${code}</code></pre>
+          <pre class="luz-code-block" data-lang="${lang}" tabindex="0" role="region" aria-label="${esc(name)}"><code id="code-${id}">${code}</code></pre>
         </div>`;
 }
 
-function renderSnippet(data, kind, way) {
+function renderSnippet(data, kind, way, t) {
   const id = `${kind.id}-${way.id}`;
-  const open = `      <div data-snippet data-kind="${kind.id}" data-via="${way.id}" id="${id}">\n        <h3>${esc(`${kind.label}: ${way.heading[0].toLowerCase()}${way.heading.slice(1)}`)}</h3>`;
+  const label = t(`snippets.kind.${kind.id}`);
+  const heading = t(`snippets.way-heading.${way.id}`);
+  const open = `      <div data-snippet data-kind="${kind.id}" data-via="${way.id}" id="${id}">\n        <h3>${esc(t("snippets.heading", { kind: label, way: `${heading[0].toLowerCase()}${heading.slice(1)}` }))}</h3>`;
+  const lower = label.toLowerCase();
   if (way.id === "npm") {
     const command = installCommand(kind);
-    const note = kind.pkg
-      ? `\n        <p>Site is optional: leave <code>@luz-ds/site</code> out of the command and out of the imports if the page has no search, cookie banner or language switch.</p>`
-      : "";
+    const note = kind.pkg ? `\n        <p>${t("snippets.site-note")}</p>` : "";
     return `${open}
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
             ${esc(command)}
           </code>
-          <button class="luz-copy-btn" type="button" data-copy="${esc(command)}" aria-label="Copy the install command, ${esc(kind.label.toLowerCase())}">Copy</button>
+          <button class="luz-copy-btn" type="button" data-copy="${esc(command)}" aria-label="${esc(t("snippets.copy-install", { kind: lower }))}">${esc(t("snippets.copy"))}</button>
         </div>${note}
-${codeBlock({ id, lang: "js", label: "Bundler", aria: `the bundler imports, ${kind.label.toLowerCase()}`, code: npmCode(kind) })}
+${codeBlock({ id, lang: "js", label: t("snippets.label-bundler"), copy: t("snippets.copy-bundler", { kind: lower }), name: t("snippets.name-bundler", { kind: lower }), code: npmCode(kind) }, t)}
       </div>`;
   }
   return `${open}
-${codeBlock({ id, lang: "html", label: "HTML", aria: `the CDN tags, ${kind.label.toLowerCase()}`, code: cdnCode(data, kind) })}
+${codeBlock({ id, lang: "html", label: t("snippets.label-html"), copy: t("snippets.copy-cdn", { kind: lower }), name: t("snippets.name-cdn", { kind: lower }), code: cdnCode(data, kind) }, t)}
       </div>`;
 }
 
@@ -168,35 +170,39 @@ ${codeBlock({ id, lang: "html", label: "HTML", aria: `the CDN tags, ${kind.label
  * The index table, and the picker that replaces it with JavaScript. The picker is
  * inside a <template>: without a script it is not in the page at all (docs.spec.js
  * allows no `hidden` element in main), and the script clones it in (step 6).
+ * The region that holds the table carries `data-docs-snippets`, the picker's hook
+ * (its name is text in the page's language).
  */
-function renderIndex() {
+function renderIndex(t) {
+  const way = (w) => t(`snippets.way.${w.id}`);
   const rows = KINDS.map((kind) => {
-    const cell = (way) => {
-      const how = way.id === "npm" ? "with npm" : "from a CDN";
-      return `<td data-label="${esc(way.label)}"><div><a href="#${kind.id}-${way.id}">${esc(kind.label)}, ${how}</a></div></td>`;
+    const label = t(`snippets.kind.${kind.id}`);
+    const cell = (w) => {
+      const how = w.id === "npm" ? t("snippets.with-npm") : t("snippets.from-cdn");
+      return `<td data-label="${esc(way(w))}"><div><a href="#${kind.id}-${w.id}">${esc(label)}, ${esc(how)}</a></div></td>`;
     };
-    return `            <tr><th scope="row">${esc(kind.label)}</th>${cell(WAYS[0])}${cell(WAYS[1])}</tr>`;
+    return `            <tr><th scope="row">${esc(label)}</th>${cell(WAYS[0])}${cell(WAYS[1])}</tr>`;
   });
   return `    <section class="docs-block" aria-labelledby="choose">
-      <h2 class="docs-chapter__title" id="choose">Choose</h2>
+      <h2 class="docs-chapter__title" id="choose">${esc(t("snippets.choose"))}</h2>
       <template data-docs-picker>
       <form class="docs-picker">
         <fieldset>
-          <legend>What are you building?</legend>
-${KINDS.map((k, i) => `          <label><input type="radio" name="kind" value="${k.id}"${i === 0 ? " checked" : ""}> ${esc(k.label)}</label>`).join("\n")}
+          <legend>${esc(t("snippets.picker-kind"))}</legend>
+${KINDS.map((k, i) => `          <label><input type="radio" name="kind" value="${k.id}"${i === 0 ? " checked" : ""}> ${esc(t(`snippets.kind.${k.id}`))}</label>`).join("\n")}
         </fieldset>
         <fieldset>
-          <legend>How do you load it?</legend>
-${WAYS.map((w, i) => `          <label><input type="radio" name="via" value="${w.id}"${i === 0 ? " checked" : ""}> ${esc(w.label)}</label>`).join("\n")}
+          <legend>${esc(t("snippets.picker-way"))}</legend>
+${WAYS.map((w, i) => `          <label><input type="radio" name="via" value="${w.id}"${i === 0 ? " checked" : ""}> ${esc(way(w))}</label>`).join("\n")}
         </fieldset>
         <output data-picker-status></output>
       </form>
       </template>
-      <div class="luz-table-wrap" role="region" aria-label="Every snippet" tabindex="0">
+      <div class="luz-table-wrap" role="region" data-docs-snippets aria-label="${esc(t("snippets.every"))}" tabindex="0">
         <table class="luz-table">
-          <caption>Every snippet</caption>
+          <caption>${esc(t("snippets.every"))}</caption>
           <thead>
-            <tr><th scope="col">What you are building</th><th scope="col">${esc(WAYS[0].label)}</th><th scope="col">${esc(WAYS[1].label)}</th></tr>
+            <tr><th scope="col">${esc(t("snippets.col-kind"))}</th><th scope="col">${esc(way(WAYS[0]))}</th><th scope="col">${esc(way(WAYS[1]))}</th></tr>
           </thead>
           <tbody>
 ${rows.join("\n")}
@@ -206,39 +212,39 @@ ${rows.join("\n")}
     </section>`;
 }
 
-function renderChunks(data) {
-  const copyBlock = (id, aria, code) => `<div class="docs-snippet">
+function renderChunks(data, t) {
+  const copyBlock = (id, copy, name, code) => `<div class="docs-snippet">
                 <div class="docs-snippet__bar">
-                  <span class="docs-snippet__lang">HTML</span>
-                  <button class="luz-copy-btn" type="button" data-copy-from="code-${id}" aria-label="Copy ${esc(aria)}">Copy</button>
+                  <span class="docs-snippet__lang">${esc(t("snippets.label-html"))}</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-${id}" aria-label="${esc(copy)}">${esc(t("snippets.copy"))}</button>
                 </div>
-                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="${esc(aria[0].toUpperCase() + aria.slice(1))}"><code id="code-${id}">${code}</code></pre>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="${esc(name)}"><code id="code-${id}">${code}</code></pre>
               </div>`;
   const search = data.entries["site/search.min.js"];
   const member = (e) => `${JSON.stringify(e.url)}: ${JSON.stringify(e.integrity)}`;
-  const chunks = Object.entries(CHUNK_WHEN).map(([file, [pkg, when]]) => ({ file, pkg, when, e: data.entries[`${pkg}/${file}`] }));
+  const chunks = Object.entries(CHUNK_WHEN).map(([file, [pkg, key]]) => ({ file, pkg, when: t(key), e: data.entries[`${pkg}/${file}`] }));
   const rows = chunks.map(({ file, pkg, when, e }) => {
     const id = `chunk-${pkg}-${file.replace(/\.min\.js$/, "")}`;
     return `            <tr>
               <th scope="row"><code>${esc(file)}</code></th>
-              <td data-label="Add the line only if the page has"><div>${when}</div></td>
-              <td data-label="Line to add">${copyBlock(id, `the line for ${file}`, esc(member(e)))}</td>
+              <td data-label="${esc(t("snippets.col-when"))}"><div>${when}</div></td>
+              <td data-label="${esc(t("snippets.col-line"))}">${copyBlock(id, t("snippets.copy-chunk", { file }), t("snippets.name-chunk", { file }), esc(member(e)))}</td>
             </tr>`;
   });
   const map = `<script type="importmap">\n${JSON.stringify({ integrity: Object.fromEntries(chunks.map(({ e }) => [e.url, e.integrity])) }, null, 2)}\n</script>`;
   return `    <section class="docs-block" aria-labelledby="chunks">
-      <h2 class="docs-chapter__title" id="chunks">Lazy chunks</h2>
-      <p>Core and site load some files only when the page needs them: a sortable table, a timeline, a MIDI player, a page in Spanish, the search, the cookie banner. A hash on a script covers that file only, so a chunk needs its own hash. The way to give it one in every browser is an import map with an <code>integrity</code> section, placed before the first module script: the browser then checks each chunk when the script imports it, and a file with a wrong hash does not run.</p>
-      <p>Safari and Firefox do not use the <code>integrity</code> of a <code>&lt;link rel="modulepreload"&gt;</code> to block a file, so it is a performance hint only: use it, if you like, to fetch a chunk earlier, but do not rely on it as the check. The import map below lists every chunk. Keep only the lines for what the page has, as the rows say, because a hash for a file the page never loads does nothing.</p>
-${copyBlock("chunks-importmap", "the import map with every chunk", esc(map)).replace(/^/, "      ")}
-      <p>A hint to fetch a chunk earlier looks like this. It speeds the page up and checks nothing in Safari and Firefox, so it never replaces the import map:</p>
-${copyBlock("chunks-hint", "the performance hint for the search chunk", esc(`<link rel="modulepreload" href="${search.url}" integrity="${search.integrity}" crossorigin="anonymous">`)).replace(/^/, "      ")}
-      <p>To add one chunk to a map you already have, put its line, from the table, inside <code>integrity</code>, with a comma after every line but the last.</p>
-      <div class="luz-table-wrap" role="region" aria-label="Lazy chunks" tabindex="0">
+      <h2 class="docs-chapter__title" id="chunks">${esc(t("snippets.chunks-title"))}</h2>
+      <p>${t("snippets.chunks-p1")}</p>
+      <p>${t("snippets.chunks-p2")}</p>
+${copyBlock("chunks-importmap", t("snippets.copy-importmap"), t("snippets.name-importmap"), esc(map)).replace(/^/, "      ")}
+      <p>${t("snippets.chunks-p3")}</p>
+${copyBlock("chunks-hint", t("snippets.copy-hint"), t("snippets.name-hint"), esc(`<link rel="modulepreload" href="${search.url}" integrity="${search.integrity}" crossorigin="anonymous">`)).replace(/^/, "      ")}
+      <p>${t("snippets.chunks-p4")}</p>
+      <div class="luz-table-wrap" role="region" aria-label="${esc(t("snippets.chunks-title"))}" tabindex="0">
         <table class="luz-table">
-          <caption>Lazy chunks</caption>
+          <caption>${esc(t("snippets.chunks-title"))}</caption>
           <thead>
-            <tr><th scope="col">File</th><th scope="col">Add the line only if the page has</th><th scope="col">Line to add</th></tr>
+            <tr><th scope="col">${esc(t("snippets.col-file"))}</th><th scope="col">${esc(t("snippets.col-when"))}</th><th scope="col">${esc(t("snippets.col-line"))}</th></tr>
           </thead>
           <tbody>
 ${rows.join("\n")}
@@ -248,31 +254,32 @@ ${rows.join("\n")}
     </section>`;
 }
 
-function renderVerify() {
+function renderVerify(t) {
   return `    <section class="docs-block" aria-labelledby="verify">
-      <h2 class="docs-chapter__title" id="verify">Verify a hash yourself</h2>
-      <p>Every hash on this page is computed from the file that the package publishes, when the documentation is built. To check one, download the file you load and hash it the same way:</p>
+      <h2 class="docs-chapter__title" id="verify">${esc(t("snippets.verify-title"))}</h2>
+      <p>${t("snippets.verify-p1")}</p>
       <div class="docs-snippet">
         <div class="docs-snippet__bar">
-          <span class="docs-snippet__lang">Shell</span>
-          <button class="luz-copy-btn" type="button" data-copy-from="code-verify" aria-label="Copy the command that computes a hash">Copy</button>
+          <span class="docs-snippet__lang">${esc(t("snippets.label-shell"))}</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-verify" aria-label="${esc(t("snippets.verify-copy"))}">${esc(t("snippets.copy"))}</button>
         </div>
-        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Computing a hash"><code id="code-verify">${esc("curl -s <url of the file> | openssl dgst -sha384 -binary | openssl base64 -A")}</code></pre>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="${esc(t("snippets.verify-name"))}"><code id="code-verify">${esc("curl -s <url of the file> | openssl dgst -sha384 -binary | openssl base64 -A")}</code></pre>
       </div>
-      <p>The result, after <code>sha384-</code>, is the value of <code>integrity</code>. If it differs from the page, do not load the file: the version in the URL or the file itself has changed.</p>
+      <p>${t("snippets.verify-p2")}</p>
     </section>`;
 }
 
 /**
  * The HTML of the page: the index table (and the form that JavaScript reveals), a
  * section per kind with its two snippets, the chunks and the note on verifying.
+ * `t` reads the words of the page (English by default).
  */
-export function renderSnippets(data) {
+export function renderSnippets(data, t = englishT()) {
   const sections = KINDS.map(
     (kind) => `    <section data-snippet-kind="${kind.id}" aria-labelledby="${kind.id}">
-      <h2 class="docs-chapter__title" id="${kind.id}">${esc(kind.label)}</h2>
-${WAYS.map((way) => renderSnippet(data, kind, way)).join("\n")}
+      <h2 class="docs-chapter__title" id="${kind.id}">${esc(t(`snippets.kind.${kind.id}`))}</h2>
+${WAYS.map((way) => renderSnippet(data, kind, way, t)).join("\n")}
     </section>`,
   );
-  return [renderIndex(), ...sections, renderChunks(data), renderVerify()].join("\n");
+  return [renderIndex(t), ...sections, renderChunks(data, t), renderVerify(t)].join("\n");
 }

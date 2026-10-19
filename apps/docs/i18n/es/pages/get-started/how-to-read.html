@@ -1,0 +1,140 @@
+<!-- luz:page
+title: Cómo leer LUZ
+description: Qué indican los nombres del CSS, el marcado y los tokens de LUZ, y en cuáles puedes confiar.
+keywords: nombres, prefijo, bem, atributos de datos, elementos personalizados, api pública
+source: 88bc0ce8c3b2
+reviewed: false
+-->
+    <section class="docs-block" aria-labelledby="classes">
+      <h2 class="docs-chapter__title" id="classes">Nombres de clase</h2>
+      <p class="docs-lead">El principio de un nombre de clase indica qué es y de qué paquete procede.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Prefijos de nombres de clase" tabindex="0">
+        <table class="luz-table">
+          <caption>Qué significa cada prefijo de clase</caption>
+          <thead>
+            <tr><th scope="col">Prefijo</th><th scope="col">Qué es</th><th scope="col">Paquete</th><th scope="col">Ejemplo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Prefijo"><div><code>.luz-</code></div></td><td data-label="Qué es"><div>Un componente o una parte de uno</div></td><td data-label="Paquete"><div>core</div></td><td data-label="Ejemplo"><div><code>.luz-btn</code></div></td></tr>
+            <tr><td data-label="Prefijo"><div><code>.o-</code></div></td><td data-label="Qué es"><div>Un objeto de maquetación: organiza elementos y no tiene aspecto propio</div></td><td data-label="Paquete"><div>core</div></td><td data-label="Ejemplo"><div><code>.o-stack</code></div></td></tr>
+            <tr><td data-label="Prefijo"><div><code>.u-</code></div></td><td data-label="Qué es"><div>Una utilidad: una sola función, sin un componente alrededor</div></td><td data-label="Paquete"><div>core</div></td><td data-label="Ejemplo"><div><code>.u-sr-only</code></div></td></tr>
+            <tr><td data-label="Prefijo"><div><code>.luz-landing-</code></div></td><td data-label="Qué es"><div>Una parte de una landing page</div></td><td data-label="Paquete"><div>landing</div></td><td data-label="Ejemplo"><div><code>.luz-landing-hero</code></div></td></tr>
+            <tr><td data-label="Prefijo"><div><code>.luz-cms-</code></div></td><td data-label="Qué es"><div>Una parte de un blog, un periódico o cualquier CMS</div></td><td data-label="Paquete"><div>cms</div></td><td data-label="Ejemplo"><div><code>.luz-cms-header</code></div></td></tr>
+            <tr><td data-label="Prefijo"><div><code>.luz-app-</code></div></td><td data-label="Qué es"><div>Una parte de una aplicación web</div></td><td data-label="Paquete"><div>app</div></td><td data-label="Ejemplo"><div><code>.luz-app-header</code></div></td></tr>
+            <tr><td data-label="Prefijo"><div><code>.luz-docs-</code></div></td><td data-label="Qué es"><div>Una parte de una página de documentación</div></td><td data-label="Paquete"><div>docs</div></td><td data-label="Ejemplo"><div><code>.luz-docs-pager</code></div></td></tr>
+            <tr><td data-label="Prefijo"><div><code>.is-</code></div></td><td data-label="Qué es"><div>Un estado que un script refleja en un elemento. Puedes leerlo, pero no apliques estilos desde fuera: no forma parte de aquello en lo que puedes confiar</div></td><td data-label="Paquete"><div>core</div></td><td data-label="Ejemplo"><div><code>.is-active</code></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Dentro de un componente, dos separadores indican cómo encajan sus partes. Un guion bajo doble nombra una parte del componente: <code>.luz-card__title</code> es el título de una tarjeta.</p>
+      <p>Un guion doble nombra una variante: <code>.luz-btn--primary</code> es el botón principal.</p>
+      <p>Lee este marcado de izquierda a derecha, una clase cada vez.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">HTML</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-read-example" aria-label="Copy the example markup">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="A card with a primary button"><code id="code-read-example">&lt;div class=&quot;o-stack&quot;&gt;
+  &lt;article class=&quot;luz-card&quot;&gt;
+    &lt;h3 class=&quot;luz-card__title&quot;&gt;Team plan&lt;/h3&gt;
+    &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot;&gt;Choose plan&lt;/button&gt;
+  &lt;/article&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+      <ul>
+        <li><code>o-stack</code> es un objeto de maquetación: dispone sus elementos hijos en una columna.</li>
+        <li><code>luz-card</code> es un componente, una tarjeta.</li>
+        <li><code>luz-card__title</code> es una parte de la tarjeta: su título.</li>
+        <li><code>luz-btn</code> es otro componente, un botón, y <code>luz-btn--primary</code> es su variante principal.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" aria-labelledby="tokens">
+      <h2 class="docs-chapter__title" id="tokens">Nombres de tokens</h2>
+      <p class="docs-lead">Un token es una propiedad personalizada de CSS que empieza por <code>--luz-</code>. La palabra siguiente indica qué tipo de valor contiene.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Tipos de token" tabindex="0">
+        <table class="luz-table">
+          <caption>Un token de cada tipo</caption>
+          <thead>
+            <tr><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Qué es</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Nombre"><div><code>--luz-blue-60</code></div></td><td data-label="Tipo"><div>Primitivo</div></td><td data-label="Qué es"><div>Un color sin asignación: una familia y un nivel. No tiene una función y nunca cambia con el modo</div></td></tr>
+            <tr><td data-label="Nombre"><div><code>--luz-brand-primary</code></div></td><td data-label="Tipo"><div>Token semántico</div></td><td data-label="Qué es"><div>Una función: el color de los enlaces y las acciones. Tiene un valor para cada modo</div></td></tr>
+            <tr><td data-label="Nombre"><div><code>--luz-space-md</code></div></td><td data-label="Tipo"><div>Paso de escala</div></td><td data-label="Qué es"><div>Un paso de la escala de espaciado</div></td></tr>
+            <tr><td data-label="Nombre"><div><code>--luz-text-lg</code></div></td><td data-label="Tipo"><div>Paso de escala</div></td><td data-label="Qué es"><div>Un paso de la escala tipográfica</div></td></tr>
+            <tr><td data-label="Nombre"><div><code>--luz-type-base</code></div></td><td data-label="Tipo"><div>Control</div></td><td data-label="Qué es"><div>El valor a partir del cual se calcula una escala entera. Cámbialo para cambiar el tamaño de todos sus pasos</div></td></tr>
+            <tr><td data-label="Nombre"><div><code>--luz-z-modal</code></div></td><td data-label="Tipo"><div>Ajuste</div></td><td data-label="Qué es"><div>Un valor que core usa para distribuir la página: orden de apilado, movimiento y puntos de ruptura</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul>
+        <li>Los componentes de LUZ usan tokens semánticos y pasos de escala. Nunca usan un primitivo ni un control.</li>
+        <li>Puedes definir cualquier token en tu propio CSS. <a href="/docs/get-started/make-it-yours/">Hazlo tuyo</a> explica cómo.</li>
+      </ul>
+      <p>Cada familia tiene su página: <a href="/docs/tokens/color/">color</a>, <a href="/docs/tokens/typography/">tipografía</a>, <a href="/docs/tokens/spacing/">espaciado y tamaño</a>, <a href="/docs/tokens/radius/">radio</a>, <a href="/docs/tokens/shadows/">sombras</a>, <a href="/docs/tokens/motion/">movimiento</a> y <a href="/docs/tokens/layout/">maquetación y puntos de ruptura</a>.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="attributes">
+      <h2 class="docs-chapter__title" id="attributes">Atributos</h2>
+      <p class="docs-lead">Las clases sirven para los estilos. Los atributos que empiezan por <code>data-</code> permiten que un script y tu marcado se comuniquen.</p>
+      <ul>
+        <li><code>data-theme</code> en <code>&lt;html&gt;</code> elige el modo de color (<code>light</code>, <code>dark</code> o <code>high-contrast</code>) o el nombre de un aspecto propio.</li>
+        <li><code>data-mode</code> en <code>&lt;html&gt;</code> elige el modo de color dentro de un aspecto propio: <code>data-theme="my-brand"</code> con <code>data-mode="dark"</code>.</li>
+        <li><code>data-luz-*</code> son los puntos de integración de los scripts de LUZ, como <code>data-luz-js</code>, que el script establece en <code>&lt;html&gt;</code> cuando se ejecuta. Los scripts se conectan a estos atributos, nunca a una clase.</li>
+        <li><code>data-luz-classless</code> activa los <a href="/docs/get-started/classless/">estilos sin clases</a> para el marcado que contiene.</li>
+        <li><code>data-luz-label-*</code> sobrescribe un texto que escribe un script.</li>
+      </ul>
+      <p>Estos son ejemplos, no la lista completa: la página de cada componente indica los atributos que usa.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="elements">
+      <h2 class="docs-chapter__title" id="elements">Elementos que empiezan por luz</h2>
+      <p class="docs-lead">Una etiqueta que empieza por <code>luz-</code> es un elemento personalizado. Los de LUZ usan DOM ligero, así que tu CSS puede acceder a su interior, y sus partes son clases: <code>.luz-&lt;tag&gt;__&lt;part&gt;</code>.</p>
+      <ul>
+        <li><strong>Con script:</strong> <code>&lt;luz-search&gt;</code>, <code>&lt;luz-consent&gt;</code>, <code>&lt;luz-mode&gt;</code> y <code>&lt;luz-timeline&gt;</code> necesitan su script para funcionar.</li>
+        <li><strong>Solo CSS:</strong> <code>&lt;luz-lang-switch&gt;</code>, <code>&lt;luz-submenu&gt;</code> y <code>&lt;luz-banner&gt;</code> no necesitan ningún script. Son etiquetas a las que puedes aplicar estilos con o sin script.</li>
+      </ul>
+      <p>En <a href="/docs/get-started/structure/">Cómo se organiza LUZ</a> se indica qué paquete contiene cada elemento.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="layers">
+      <h2 class="docs-chapter__title" id="layers">Capas, en un párrafo</h2>
+      <p>Todo el CSS de LUZ está en una capa de cascada llamada <code>luz</code>, que contiene capas con nombre, y cualquier CSS tuyo que no esté en una capa prevalece sobre todo sin necesidad de <code>!important</code>. <a href="/docs/get-started/layers/">Capas de cascada</a> las enumera en orden y explica cómo sobrescribir una.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="public">
+      <h2 class="docs-chapter__title" id="public">En qué puedes confiar</h2>
+      <p class="docs-lead">No todos los nombres son una promesa. Estas cuatro partes de LUZ son API pública: cualquier cambio se anuncia.</p>
+      <ul>
+        <li><strong>Tokens</strong>: todas las propiedades personalizadas <code>--luz-</code> de <code>tokens.css</code>, pero no las que un componente declara para sí mismo.</li>
+        <li><strong>Clases</strong>: clases <code>.luz-</code>, <code>.o-</code> y <code>.u-</code> del marcado que muestra la documentación, con sus partes y variantes. No las clases <code>.is-</code>.</li>
+        <li><strong>Atributos</strong>: <code>data-theme</code>, <code>data-mode</code>, <code>data-luz-*</code> y <code>data-luz-label-*</code>. No los atributos que usan los propios scripts del sitio de documentación.</li>
+        <li><strong>Paquetes</strong>: el mapa <code>exports</code> de cada paquete y las rutas de los archivos que publica.</li>
+      </ul>
+      <p>En la beta, cualquier cosa puede cambiar y el changeset de la versión explica cómo migrar. Consulta <a href="https://github.com/nandovejer/luz/blob/main/VERSIONING.md">Qué es API pública, en VERSIONING.md en GitHub</a> para ver la tabla completa.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="files">
+      <h2 class="docs-chapter__title" id="files">Cómo leer el nombre de un archivo</h2>
+      <p class="docs-lead">El nombre de un archivo indica su contenido. Cada archivo CSS también tiene una versión <code>.min</code> con las mismas reglas minimizadas: <code>luz.css</code> y <code>luz.min.css</code>.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Archivos que publica LUZ" tabindex="0">
+        <table class="luz-table">
+          <caption>Archivos de la carpeta dist de cada paquete</caption>
+          <thead>
+            <tr><th scope="col">Archivo</th><th scope="col">Paquete</th><th scope="col">Cuándo cargarlo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Archivo"><div><code>luz-tokens.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Cuándo cargarlo"><div>Siempre, salvo que uses tu propia fuente. Incluye los tokens y las reglas <code>@font-face</code> de ET Book</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>tokens.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/tokens</code></div></td><td data-label="Cuándo cargarlo"><div>En lugar de <code>luz-tokens.css</code>, si usas tu propia fuente: los mismos tokens, sin <code>@font-face</code></div></td></tr>
+            <tr><td data-label="Archivo"><div><code>luz.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Para cargar de una vez el restablecimiento, los elementos sin clases, los objetos de maquetación, los componentes y las utilidades</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>base.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Si solo quieres unos pocos componentes: carga el restablecimiento y los elementos sin clases y, después, un archivo por componente</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>components/&lt;name&gt;.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Después de <code>base.css</code>, para cada componente que uses</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>classless.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Para el marcado al que no puedes añadir clases, dentro de <code>data-luz-classless</code>. Es un archivo independiente, no está en <code>luz.css</code></div></td></tr>
+            <tr><td data-label="Archivo"><div><code>themes/_template.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Nunca lo uses tal cual: cópialo como punto de partida para crear tu propio aspecto</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>site.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Cuándo cargarlo"><div>Cuando la página use un elemento de site, como <code>&lt;luz-search&gt;</code></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Para elegir las líneas de tu compilación, <a href="/docs/get-started/snippet/">elige tu fragmento</a>.</p>
+    </section>

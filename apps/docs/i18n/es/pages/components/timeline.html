@@ -1,0 +1,329 @@
+<!-- luz:page
+title: Línea de tiempo
+description: Muestra eventos fechados en orden, una tarjeta cada vez sobre una línea de fechas o todos a la vez en una línea vertical; sin JavaScript, es una lista.
+source: e89bd206ae96
+reviewed: false
+-->
+    <div class="docs-component" id="c-timeline">
+          <h2 id="example">Ejemplo</h2>
+          <p>Los lanzamientos de una aplicación como línea de tiempo, en sus diseños horizontal y vertical.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <p class="docs-demo__note">Horizontal, the default. Pick a date, or use Previous and Next, the arrow keys on the dates, or swipe.</p>
+            <luz-timeline role="group" aria-label="Releases of an example app">
+              <ol class="luz-timeline">
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025-03">March 2025</time>
+                  <p class="luz-timeline__title">First beta</p>
+                  <p class="luz-timeline__text">Ten teams try the app.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025-06">June 2025</time>
+                  <p class="luz-timeline__title">Public launch</p>
+                  <p class="luz-timeline__text">Sign-up opens to everyone.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025-11">November 2025</time>
+                  <p class="luz-timeline__title">Offline mode</p>
+                  <p class="luz-timeline__text">Notes sync when the connection returns.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2026-04">April 2026</time>
+                  <p class="luz-timeline__title">Version 2</p>
+                  <p class="luz-timeline__text">A new editor and shared folders.</p>
+                </li>
+              </ol>
+            </luz-timeline>
+            <p class="docs-demo__note">With <code>autoplay</code>: it moves on by itself while it is on screen. Pause stops it; it also waits while you point at it or use the keyboard in it.</p>
+            <luz-timeline role="group" aria-label="Milestones of an example project" autoplay interval="4000">
+              <ol class="luz-timeline">
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2023">2023</time>
+                  <p class="luz-timeline__title">The idea</p>
+                  <p class="luz-timeline__text">Two people sketch the first screens.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2024">2024</time>
+                  <p class="luz-timeline__title">The team</p>
+                  <p class="luz-timeline__text">Five people work on it full time.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025">2025</time>
+                  <p class="luz-timeline__title">The first customers</p>
+                  <p class="luz-timeline__text">Fifty schools use it every week.</p>
+                </li>
+              </ol>
+            </luz-timeline>
+            <p class="docs-demo__note">With <code>layout="vertical"</code>: scroll, and the item in the middle of the screen becomes active.</p>
+            <luz-timeline role="group" layout="vertical" aria-label="Versions of an example library">
+              <ol class="luz-timeline">
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2024-02">February 2024</time>
+                  <p class="luz-timeline__title">Version 0.1</p>
+                  <p class="luz-timeline__text">Buttons, forms and tables.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2024-09">September 2024</time>
+                  <h3 class="luz-timeline__title">Version 0.2</h3>
+                  <p class="luz-timeline__text">Dark mode and a print stylesheet.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025-05">May 2025</time>
+                  <h3 class="luz-timeline__title">Version 0.3</h3>
+                  <p class="luz-timeline__text">Right-to-left layouts.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2026-01">January 2026</time>
+                  <h3 class="luz-timeline__title">Version 1.0</h3>
+                  <p class="luz-timeline__text">The API is stable.</p>
+                </li>
+              </ol>
+            </luz-timeline>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Hay tres cosas pendientes y ninguna se ha probado con un lector de pantalla.</p>
+          <ul>
+            <li>Los botones Anterior y Siguiente solo se llaman «Anterior» y «Siguiente». El nombre no indica a qué fecha llevan.</li>
+            <li>No se ha probado si un lector de pantalla anuncia la tarjeta que aparece al cambiar de elemento.</li>
+            <li>La línea de tiempo no se ha probado con ningún lector de pantalla: no se afirma ningún resultado para NVDA, JAWS, VoiceOver, TalkBack ni Orca.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación sobre líneas de tiempo">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Una lista ordenada dentro de <code>&lt;luz-timeline&gt;</code>. Asigna al elemento <code>role="group"</code> y un nombre con <code>aria-label</code> para que también se lea sin JavaScript.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-timeline" aria-label="Copy the timeline markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Timeline markup"><code id="code-timeline">&lt;luz-timeline role=&quot;group&quot; aria-label=&quot;Releases of the app&quot;&gt;
+  &lt;ol class=&quot;luz-timeline&quot;&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2025-03&quot;&gt;March 2025&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;First beta&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Ten teams try the app.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2025-06&quot;&gt;June 2025&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;Public launch&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Sign-up opens to everyone.&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/luz-timeline&gt;</code></pre>
+            </div>
+            <p>Con reproducción automática, cada cuatro segundos:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-timeline-autoplay" aria-label="Copy the timeline with autoplay markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Timeline with autoplay markup"><code id="code-timeline-autoplay">&lt;luz-timeline role=&quot;group&quot; aria-label=&quot;Milestones&quot; autoplay interval=&quot;4000&quot;&gt;
+  &lt;ol class=&quot;luz-timeline&quot;&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2023&quot;&gt;2023&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;The idea&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Two people sketch the first screens.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2024&quot;&gt;2024&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;The team&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Five people work on it full time.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2025&quot;&gt;2025&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;The first customers&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Fifty schools use it every week.&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/luz-timeline&gt;</code></pre>
+            </div>
+            <p>Diseño vertical:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-timeline-vertical" aria-label="Copy the vertical timeline markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Vertical timeline markup"><code id="code-timeline-vertical">&lt;luz-timeline role=&quot;group&quot; layout=&quot;vertical&quot; aria-label=&quot;Versions of the library&quot;&gt;
+  &lt;ol class=&quot;luz-timeline&quot;&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2024-02&quot;&gt;February 2024&lt;/time&gt;
+      &lt;h3 class=&quot;luz-timeline__title&quot;&gt;Version 0.1&lt;/h3&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Buttons, forms and tables.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2024-09&quot;&gt;September 2024&lt;/time&gt;
+      &lt;h3 class=&quot;luz-timeline__title&quot;&gt;Version 0.2&lt;/h3&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Dark mode and a print stylesheet.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2025-05&quot;&gt;May 2025&lt;/time&gt;
+      &lt;h3 class=&quot;luz-timeline__title&quot;&gt;Version 0.3&lt;/h3&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Right-to-left layouts.&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/luz-timeline&gt;</code></pre>
+            </div>
+            <p>Si añades una línea de tiempo a la página después de que se haya cargado, importa el módulo una vez. Define el elemento; no hay que llamar a ningún <code>init</code>:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-timeline-js" aria-label="Copy the timeline script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Timeline script code"><code id="code-timeline-js">import &quot;@luz-ds/core/timeline&quot;;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Las opciones son atributos de <code>&lt;luz-timeline&gt;</code>. Cada elemento tiene una fecha, un título y un texto.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Atributos y partes de la línea de tiempo" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Atributo o clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Atributo o clase"><div><code>aria-label</code></div></td><td data-label="Efecto"><div>El nombre de la línea de tiempo. Escríbelo con <code>role="group"</code>: un nombre en un elemento sin rol no se lee. Si omites el rol, el script lo añade.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>layout="vertical"</code></div></td><td data-label="Efecto"><div>Todos los elementos permanecen visibles en una línea. El elemento del centro de la pantalla está activo y los anteriores ya han pasado.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>autoplay</code></div></td><td data-label="Efecto"><div>Activa el avance automático con botones visibles de Pausa y Reproducir. Solo en horizontal; desactivado si no lo indicas.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>interval</code></div></td><td data-label="Efecto"><div>Milisegundos entre elementos con <code>autoplay</code>. El valor predeterminado es 5000; cualquier valor inferior a 2000 sube a 2000.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>data-luz-label-previous</code>, <code>-next</code>, <code>-pause</code>, <code>-play</code></div></td><td data-label="Efecto"><div>Los nombres de los botones, si LUZ no incluye el idioma de la página o quieres usar otras palabras.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>--luz-timeline-paper</code></div></td><td data-label="Efecto"><div>El color de fondo de la línea de tiempo, que se usa para la elevación del carril y los puntos vacíos. El valor predeterminado es <code>--luz-surface-page</code>; en una tarjeta, asígnalo al elemento con la superficie de la tarjeta: <code>style="--luz-timeline-paper: var(--luz-surface)"</code>.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>.luz-timeline__date</code></div></td><td data-label="Efecto"><div>Un <code>&lt;time&gt;</code>. Su texto es la etiqueta del botón de fecha en el carril, así que debe ser distinto en cada elemento. Si no lo incluyes, el botón muestra el número del elemento.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>.luz-timeline__title</code></div></td><td data-label="Efecto"><div>Un <code>&lt;p&gt;</code> o un encabezado del nivel que necesite tu página: la clase no cambia.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>.luz-timeline__text</code></div></td><td data-label="Efecto"><div>Una o dos frases; se permite un enlace.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>data-luz-state</code></div></td><td data-label="Efecto"><div>El script lo escribe en los elementos de una línea de tiempo vertical: <code>active</code> o <code>past</code>. No lo asignes tú.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un elemento personalizado alrededor de una lista ordenada nativa, con los estilos de <code>components/timeline.css</code> y un script, <code>timeline.js</code>. <code>luz.js</code> solo carga el script en páginas que contienen <code>&lt;luz-timeline&gt;</code>.</p>
+            <p>El elemento busca dentro de sí el primer <code>.luz-timeline</code>; si no lo encuentra, no hace nada.</p>
+            <ul>
+              <li><strong>Horizontal.</strong> El script crea, solo con métodos del DOM, los botones Anterior y Siguiente a los lados de la tarjeta y un carril de fechas debajo: un botón por elemento, con el texto de su fecha. Las tarjetas comparten una celda de cuadrícula, así que la banda tiene la altura de la tarjeta más larga y no salta al cambiar de elemento. Las tarjetas que no están activas son <code>inert</code> y están ocultas. En la tarjeta activa, la fecha se oculta visualmente porque el carril ya la muestra.</li>
+              <li><strong>Cambiar de elemento.</strong> Pulsa una fecha, usa Anterior o Siguiente, las teclas de flecha, Inicio y Fin en el carril, o desliza más de 40 px en horizontal con un dedo o el ratón. Hacia el inicio de la línea está el elemento siguiente. Al llegar a cualquiera de los extremos, vuelve al otro lado. Si el deslizamiento termina sobre un enlace, no se pulsa.</li>
+              <li><strong>El carril.</strong> La fecha activa se desplaza hasta el centro con desplazamiento suave, salvo que la persona haya pedido reducir el movimiento. Al moverse con el teclado, el foco permanece en la nueva fecha activa; también lo hace si el cambio oculta la tarjeta que tenía el foco.</li>
+              <li><strong>Vertical.</strong> El script marca como <code>data-luz-state="active"</code> el elemento que cruza el centro de la pantalla y como <code>past</code> los anteriores. La línea detrás de un elemento pasado adopta el color de marca y el punto activo se rellena y aumenta de tamaño. También funciona con el movimiento reducido, sin transición.</li>
+              <li><strong>Reproducción automática.</strong> Con <code>autoplay</code>, el elemento cambia en bucle cada <code>interval</code> milisegundos. El botón Pausa bajo el carril lo detiene; entonces pasa a llamarse Reproducir y lo vuelve a iniciar. La línea de tiempo también espera sin cambiar el botón mientras el puntero está encima (reanuda tras 4 segundos o al apartarlo), mientras el foco del teclado esté dentro, mientras menos de la mitad esté en pantalla y mientras la pestaña esté oculta. Con movimiento reducido, nunca se inicia y el botón no se muestra.</li>
+              <li><strong>Texto.</strong> «Anterior», «Siguiente», «Pausa» y «Reproducir» aparecen en el idioma de la página que incluye LUZ (inglés o español), según el <code>lang</code> más cercano, o el tuyo mediante <code>registerLocale()</code> y <code>data-luz-label-*</code>. Se incluyen con el script, así que <code>@luz-ds/core/timeline</code> funciona por sí solo. Si la página carga <code>luz.js</code>, también reciben cualquier idioma que añadas con <code>registerLocale()</code>. Consulta los <a href="/docs/get-started/javascript/">módulos de JavaScript</a>.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Una lista ordenada con todos los elementos visibles: una línea en el lado inicial en línea, con un punto en cada elemento; después, la fecha, el título y el texto. La lista tiene el mismo aspecto antes de que el script defina el elemento, así que no hay saltos cuando lo hace.</p>
+            <p>La reproducción automática, el carril, Anterior y Siguiente, el gesto de deslizamiento y la marca activa del diseño vertical necesitan JavaScript.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Tab recorre, en este orden: Anterior, los enlaces de la tarjeta activa, Siguiente, la fecha activa del carril y el botón Pausa o Reproducir. Las demás fechas quedan fuera del orden de Tab; las teclas de flecha permiten moverse entre ellas.</p>
+            <ul>
+              <li><strong>Izquierda y Derecha</strong> en el carril van a la fecha anterior o siguiente, y el foco las acompaña. En texto de derecha a izquierda, se intercambian. Al pasar cualquiera de los extremos, se vuelve al otro lado.</li>
+              <li><strong>Inicio y Fin</strong> van a la primera y la última fecha.</li>
+              <li><strong>Enter o Espacio</strong> pulsa una fecha, Anterior, Siguiente o Pausa: son botones nativos.</li>
+              <li>El elemento tiene <code>role="group"</code> y tu <code>aria-label</code>. La fecha activa tiene <code>aria-current="true"</code>; solo esa fecha se puede recorrer con Tab (usa un <code>tabindex</code> itinerante).</li>
+              <li>Las tarjetas forman una sola región dinámica. Tiene <code>aria-live="polite"</code> cuando la persona cambia el elemento y <code>off</code> durante la reproducción automática, para que no se anuncie una tarjeta que cambia sola.</li>
+              <li>El nombre del botón Pausa o Reproducir indica su acción. Los botones de flecha se llaman «Anterior» y «Siguiente»: consulta los problemas conocidos.</li>
+              <li>Las tarjetas que no están activas son <code>inert</code>: no reciben el foco ni se leen. Si el foco estaba en la tarjeta que desaparece, pasa a la nueva fecha activa.</li>
+              <li>Cada tarjeta tiene <code>aria-posinset</code> y <code>aria-setsize</code>, para que el lector de pantalla pueda decir «2 de 4» cuando solo se muestra una tarjeta.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una línea de tiempo para una serie breve de eventos fechados cuyo orden sea importante: lanzamientos, hitos o la historia de una empresa.</p>
+            <ul>
+              <li>Horizontal, cuando cada evento necesita una tarjeta y la persona los recorre uno a uno.</li>
+              <li>Vertical, cuando se deben ver todos los eventos al desplazarse.</li>
+              <li>De 4 a 10 elementos. A partir de ahí, el carril necesita mucho desplazamiento.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses una línea de tiempo para pasos que haya que seguir en orden ni para eventos sin fecha.</p>
+            <ul>
+              <li>Para un proceso, usa una lista numerada.</li>
+              <li>Para comparar eventos según varios atributos, usa una <a href="/docs/components/table/">tabla</a>.</li>
+              <li>Si se deben ver todos los elementos a la vez, usa el diseño vertical: el horizontal muestra una sola tarjeta.</li>
+              <li>No actives la reproducción automática en contenido que no se deba pasar por alto. Nadie tiene que esperar a la tarjeta siguiente.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Un título que explique qué ha pasado, con la fecha en un formato uniforme.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ol class="luz-timeline">
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-06">June 2025</time><p class="luz-timeline__title">Public launch</p></li>
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-11">November 2025</time><p class="luz-timeline__title">Offline mode</p></li>
+                  </ol>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Un título impreciso y fechas en formatos distintos: hay que abrir la tarjeta para saber qué ha pasado y no se pueden comparar las fechas.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ol class="luz-timeline">
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-06">6/25</time><p class="luz-timeline__title">News</p></li>
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-11">Autumn, last year</time><p class="luz-timeline__title">Update</p></li>
+                  </ol>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Un <code>&lt;time&gt;</code> con un texto diferente en cada elemento: es el nombre del botón del carril.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ol class="luz-timeline">
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-06">June 2025</time><p class="luz-timeline__title">Public launch</p></li>
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-11">November 2025</time><p class="luz-timeline__title">Offline mode</p></li>
+                  </ol>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Omitir la fecha: el carril muestra botones llamados «1» y «2», que no se distinguen.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ol class="luz-timeline">
+                    <li class="luz-timeline__item"><p class="luz-timeline__title">Public launch</p></li>
+                    <li class="luz-timeline__item"><p class="luz-timeline__title">Offline mode</p></li>
+                  </ol>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Pon primero la fecha y, después, qué ha pasado, con pocas palabras.</p>
+            <ul>
+              <li>La fecha: usa el mismo formato en todos los elementos y un texto distinto en cada uno. Es el nombre de un botón.</li>
+              <li>El título: de dos a cinco palabras, con mayúscula inicial y sin punto final. Indica el evento: «Lanzamiento público», no «Novedades».</li>
+              <li>El texto: una frase, de unas pocas líneas como máximo. En el diseño horizontal, la banda tiene la altura de la tarjeta más larga, así que procura que todas tengan una longitud parecida.</li>
+              <li>Usa el atributo <code>datetime</code> para que las máquinas puedan leer la fecha, por ejemplo, <code>2025-06</code>.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto usa el color de texto principal o secundario, sobre la página o la tarjeta. Las marcas (línea, puntos, elevación y flechas) son bordes y trazos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la línea de tiempo en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Necesita</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Fecha y texto de la lista, fechas del carril</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título de la lista, fecha del carril al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título de una tarjeta, flechas Anterior y Siguiente</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto de una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Fecha activa, Pausa y Reproducir</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de las flechas, línea y puntos</div></td><td data-label="Color sobre el fondo"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4.3:1</div></td><td data-label="Oscuro"><div>3.6:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Línea pasada, punto activo y elevación</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. «Necesita» indica el mínimo AA de WCAG 2.2: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> las fechas y los botones Anterior y Siguiente tienen un contorno de <code>--luz-focus-ring</code> de 2 px, a 2 px por fuera. Pausa y Reproducir son botones fantasma y tienen el anillo de foco propio de los botones.</li>
+              <li><strong>No solo el color:</strong> la fecha activa también es más grande y gruesa, y lleva <code>aria-current</code>. En el diseño vertical, el punto activo está relleno y es más grande, además de que la línea pasada usa el color de marca.</li>
+              <li><strong>Colores forzados:</strong> las marcas son bordes y la elevación adopta el color de texto del sistema, así que la línea, los puntos y el estado activo siguen visibles.</li>
+              <li><strong>Área interactiva:</strong> Anterior y Siguiente son botones redondos de 44 px; cada fecha es un botón del ancho de su espacio: 7 rem (10 rem en una banda de 600 px de ancho o más).</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 26 tokens que lee <code>components/timeline.css</code>, por familia. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-sans</code>, <code>--luz-text-lg</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code>, <code>--luz-text-xl</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

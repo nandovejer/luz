@@ -150,6 +150,104 @@ describe("AGENTS.md", () => {
   });
 });
 
+/* ---- AGENTS.md, the docs in three languages ------------------------------------ */
+
+// docs-i18n-decisions.md: the docs are in English and Spanish (/es/docs/; Arabic /ar/docs/ is planned), a language is opt-in by
+// folder (D1), a translation is published with a notice until a named reader reviews it (D5, D16, D17). Allowed to
+// stay red until the docs phase of the work (phase 10 of the design).
+describe("AGENTS.md, the docs in three languages", () => {
+  const agents = read("AGENTS.md");
+  const workflows = () => section(agents, "## Common workflows", /\n## /);
+  const ADD = "### Adding a language to the docs";
+  const TRANSLATE = "### Translating a docs page";
+
+  it("no longer says that the docs and the 404 are English, or that the docs render the shared partials with the English catalog", () => {
+    expect(agents).not.toContain("the docs and the 404 are English");
+    expect(agents).not.toContain("the docs pages render them with the English catalog");
+    // A link from another language into the docs no longer always says hreflang="en": it goes to the docs of its language
+    expect(agents).not.toMatch(/Links from another language into the docs get `hreflang="en"` automatically;/);
+  });
+
+  it("has \"Adding a language to the docs\" and \"Translating a docs page\" beside the other two language workflows, under Common workflows", () => {
+    const text = workflows();
+    for (const heading of ["### Adding a language to the home page", "### Adding a language to core's scripts", ADD, TRANSLATE]) expect(text, heading).toContain(heading);
+  });
+
+  // The bullet moved out of AGENTS.md into dev/DOCS-SITE.md (owner, 2026-10-19); Arabic docs are planned, the home page alone is in Arabic for now
+  it("the Languages bullet of the docs generator (dev/DOCS-SITE.md) names the route /es/docs/ and the 404, and says Arabic is on the home page only for now", () => {
+    const bullet = read("dev/DOCS-SITE.md").split("\n").find((line) => line.startsWith("- Languages:"));
+    expect(bullet, "the Languages bullet").toBeTruthy();
+    expect(bullet).toContain("/es/docs/");
+    expect(bullet).not.toContain("/ar/docs/");
+    expect(bullet).toMatch(/404/);
+    expect(bullet).toMatch(/Arabic is on the home page only/);
+    expect(agents.split("\n").some((line) => line.startsWith("- Languages:")), "AGENTS.md no longer holds it").toBe(false);
+  });
+
+  describe("Adding a language to the docs", () => {
+    const text = () => section(agents, ADD, /\n#{1,3} |\n---\n/);
+
+    it("starts from the folder, which is the opt-in: apps/docs/i18n/<code>/ with strings.json, and the language in the home's registry", () => {
+      expect(text()).toContain("apps/docs/i18n/<code>/");
+      expect(text()).toContain("strings.json");
+      expect(text()).toContain("apps/landing/i18n/locales.json");
+    });
+
+    it("says the keys are those of the English catalog plus the ones derived from site.json, and that the build fails with file:line", () => {
+      expect(text()).toContain("apps/docs/i18n/en/strings.json");
+      expect(text()).toContain("site.json");
+      expect(text()).toMatch(/file:line/);
+    });
+
+    it("says how a right-to-left language gets the strings core's scripts write (registerLocale from a JSON the app owns) and to check 320 px", () => {
+      expect(text()).toMatch(/registerLocale\(/);
+      expect(text()).toMatch(/320 px/);
+    });
+
+    it("runs the gates: pnpm test:unit, pnpm check:strings, pnpm check:i18n and pnpm pages:build", () => {
+      for (const command of ["pnpm test:unit", "pnpm check:strings", "pnpm check:i18n", "pnpm pages:build"]) expect(text(), command).toContain(command);
+    });
+  });
+
+  describe("Translating a docs page", () => {
+    const text = () => section(agents, TRANSLATE, /\n#{1,3} |\n---\n/);
+
+    it("puts the translation in apps/docs/i18n/<code>/pages/ under the same path as the English page, with title, description, source, reviewed and reviewer", () => {
+      expect(text()).toContain("apps/docs/i18n/<code>/pages/");
+      for (const key of ["title", "description", "keywords", "source", "reviewed", "reviewer"]) expect(text(), key).toContain(`\`${key}\``);
+    });
+
+    it("says what stays English: the code in <pre> and <code> byte for byte, and what the parity test holds (ids, headings, link targets, figures)", () => {
+      expect(text()).toMatch(/<pre>/);
+      expect(text()).toMatch(/byte/i);
+      expect(text()).toMatch(/parity/i);
+    });
+
+    it("states the machine-translation rule for the docs: an agent's translation is published with reviewed: false and its notice, and the flag changes only with a named reviewer", () => {
+      const rule = text();
+      expect(rule).toContain("reviewed: false");
+      expect(rule).toContain("reviewed: true");
+      expect(rule).toMatch(/notice/i);
+      expect(rule).toMatch(/reviewer/);
+    });
+
+    it("says an English edit makes `source` stale, that pnpm check:i18n lists it and that --strict blocks a release", () => {
+      const rule = text();
+      expect(rule).toContain("pnpm check:i18n");
+      expect(rule).toContain("--strict");
+      expect(rule).toMatch(/stale/i);
+    });
+
+    it("points to the glossary and the rules of the translators: dev/TRANSLATING.md", () => {
+      expect(text()).toContain("dev/TRANSLATING.md");
+    });
+  });
+
+  it("keeps the rule for core's own language files: not accepted without a reader of the language who says so", () => {
+    expect(agents).toContain("A machine translation is not accepted without a reader of the language who says so.");
+  });
+});
+
 /* ---- VERSIONING.md ---------------------------------------------------------- */
 
 describe("VERSIONING.md names the language surface as public", () => {
@@ -333,12 +431,15 @@ describe("SECURITY.md, the CSP", () => {
 /* ---- the A-Z page ----------------------------------------------------------- */
 
 describe("the A-Z pages stay under the page ceiling", () => {
-  it.each(["/docs/a-z/", "/docs/a-z/m-z/"])("%s renders, with relative links as the Pages build writes it, in less than the 'docs page HTML' ceiling of budgets.json (less a margin for the asset tags Vite adds)", (route) => {
+  // The site is built once for both routes: the build renders every page in every language, so it is slow.
+  let built;
+  const buildOnce = () => (built ??= buildSite(scanSite(`${root}apps/docs`, root)));
+  // The timeout is long on purpose: the first test to run pays for the whole build, and a loaded machine makes it slower.
+  it.each(["/docs/a-z/", "/docs/a-z/m-z/"])("%s renders, with relative links as the Pages build writes it, in less than the 'docs page HTML' ceiling of budgets.json (less a margin for the asset tags Vite adds)", { timeout: 60_000 }, (route) => {
     const { budgets } = JSON.parse(read("budgets.json"));
     const row = budgets.find((b) => b.glob === "docs/**/*.html");
     expect(row, "the docs page HTML row of budgets.json").toBeTruthy();
-    const site = scanSite(`${root}apps/docs`, root);
-    const { rendered } = buildSite(site);
+    const { rendered } = buildOnce();
     expect(rendered.has(route), `${route} is rendered`).toBe(true);
     const html = relativizeLinks(rendered.get(route), route, new Set(rendered.keys()));
     // The built file is a little larger than the generator's: Vite writes the script and link tags (96 bytes in 2026-10)

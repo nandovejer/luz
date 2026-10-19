@@ -1,0 +1,121 @@
+<!-- luz:page
+title: Enlace para saltar al contenido
+description: Permite a quienes usan el teclado saltarse la cabecera e ir al contenido principal.
+source: f2e972fb617e
+reviewed: false
+-->
+    <div class="docs-component" id="c-skip-link">
+          <h2 id="example">Ejemplo</h2>
+          <p>Enlace para saltar al contenido de esta página; aparece cuando recibe el foco.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <p class="docs-demo__note">This page has one: press Tab at the top of the page to see it.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del enlace para saltar al contenido">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-skip-link" aria-label="Copy the skip link markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Skip link markup"><code id="code-skip-link">&lt;body&gt;
+  &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to main content&lt;/a&gt;
+  &lt;header class=&quot;o-sticky&quot;&gt;…&lt;/header&gt;
+  &lt;main id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;…&lt;/main&gt;
+&lt;/body&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay variantes: una clase en un enlace.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clase del enlace para saltar al contenido" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-skip-link</code></div></td><td data-label="Efecto"><div>Fuera de pantalla hasta que recibe el foco; entonces queda fijo en la esquina superior inicial, con el fondo de marca, por encima de todo, incluso de una barra adhesiva. No se imprime.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un enlace normal al <code>id</code> de <code>&lt;main&gt;</code>, al principio de <code>&lt;body&gt;</code> y antes de un aviso de cookies, otro aviso o la cabecera. Solo CSS.</p>
+            <ul>
+              <li>Se desliza a la vista al recibir el foco, durante <code>--luz-duration-fast</code>; con movimiento reducido, aparece de inmediato.</li>
+              <li>El navegador hace el salto. <code>tabindex="-1"</code> en <code>&lt;main&gt;</code> permite que reciba el foco, así que la siguiente pulsación de Tab empieza dentro en todos los navegadores.</li>
+              <li>Debajo de una barra adhesiva (<a href="/docs/components/layout/#objects-page">.o-sticky</a>), el relleno de desplazamiento de la página mantiene el principio de <code>&lt;main&gt;</code> por debajo de la barra tras el salto.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el enlace para saltar al contenido es un enlace y CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Pulsa Tab una vez desde el principio de la página para mostrar el enlace; Enter lo sigue hasta el contenido principal.</p>
+            <ul>
+              <li>Debe ser el primer elemento enfocable de la página, antes de un aviso de cookies o de otro aviso.</li>
+              <li>Sin ARIA: su texto es su nombre.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> se explican en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Añade un enlace para saltar al contenido en cada página que tenga una cabecera, un banner o navegación antes del contenido principal.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No te fíes solo de él: la página sigue necesitando puntos de referencia y un orden lógico de encabezados.</p>
+            <ul>
+              <li>No añadas una lista de enlaces para saltar a cada sección: basta con uno que lleve al contenido principal.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Un enlace que indique adónde lleva: «Saltar al contenido principal».</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <span class="luz-skip-link docs-stage__skip">Skip to main content</span>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No añadas una fila de enlaces para saltar secciones: hay que leerlos todos antes de empezar la página, justo lo que se pretendía evitar.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><span class="luz-skip-link docs-stage__skip">Skip to navigation</span><span class="luz-skip-link docs-stage__skip">Skip to search</span><span class="luz-skip-link docs-stage__skip">Skip to footer</span></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Indica adónde lleva: «Saltar al contenido principal».</p>
+            <ul>
+              <li>Usa el mismo texto en todas las páginas.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El enlace tiene texto blanco sobre el fondo de marca, encima de la página.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del enlace para saltar en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto del enlace</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario corresponde al nivel AA de WCAG 2.2: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el enlace se desliza a la vista al recibir el foco, con el anillo del enlace y un contorno de 2 px <code>--luz-focus-ring</code>, a 2 px por fuera.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 8 tokens que lee <code>components/skip-link.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code>, <code>--luz-easing-enter</code></dd></div>
+              <div><dt><a href="/docs/tokens/layers/">Layers</a></dt><dd><code>--luz-z-toast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> se explican en la pestaña Código.</p>
+          </div>
+    </div>

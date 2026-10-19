@@ -1,0 +1,166 @@
+<!-- luz:page
+title: Barra de navegación
+description: Coloca los enlaces principales de un sitio en una fila de la cabecera y, en pantallas estrechas, en un panel debajo.
+keywords: barra de navegación, barra de navegación
+source: 2c33e925aa31
+reviewed: false
+-->
+    <div class="docs-component" id="c-navbar">
+          <h2 id="example">Ejemplo</h2>
+          <p>Una barra con el nombre Acme y tres enlaces: Productos, Precios y Ayuda.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="docs-bar">
+              <div class="o-row">
+                <button class="luz-nav-toggle" type="button" popovertarget="demo-navbar" aria-label="Menu of the example site">
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
+                </button>
+                <a class="docs-bar__brand" href="#c-navbar">Acme</a>
+                <nav class="luz-navbar" id="demo-navbar" aria-label="Example site" popover>
+                  <ul class="luz-navbar__list">
+                    <li><a class="luz-navbar__link" href="#c-navbar" aria-current="page">Products</a></li>
+                    <li><a class="luz-navbar__link" href="#c-navbar">Pricing</a></li>
+                    <li><a class="luz-navbar__link" href="#c-navbar">Support</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <p class="docs-demo__note">At 768 px of window width and below the links collapse into a menu. Its panel opens under this example's bar where the browser supports CSS anchor positioning, and under the top of the window, where a header sits, elsewhere.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Si sigues pulsando Tab después del último enlace del menú abierto, el foco pasa a la página y el menú permanece abierto por encima, ocultando lo que hay detrás. Pulsa Escape para cerrarlo.</p>
+          <p>Cumple WCAG 2.4.11 (AA), pero no 2.4.12 (AAA).</p>
+          <ul>
+            <li><strong>Navegadores sin posicionamiento de anclas.</strong> En los navegadores compatibles con el posicionamiento de anclas CSS (Chrome y Edge 125, Safari 26 y Firefox 147), el panel se abre debajo de la barra, esté donde esté, incluso si hay un aviso o el banner de cookies encima. En los demás, se abre a <code>--luz-bar-h</code> desde la parte superior de la ventana: con texto ampliado y una barra que salta a una segunda fila, o con una banda por encima antes de desplazar la página, puede tapar parte de la barra. Escape o un clic fuera lo cierran.</li>
+            <li><strong>Colores forzados en Firefox.</strong> No se dibuja la capa atenuada detrás del menú abierto, así que la página no se atenúa. El panel conserva su borde y sigue distinguiéndose.</li>
+            <li><strong>Puntos de ruptura en Safari para Mac.</strong> Con las barras de desplazamiento siempre visibles, Safari no las cuenta en las consultas de medios por ancho (error 52653 de WebKit), así que el menú se contrae, o los enlaces vuelven a la fila, cuando la ventana supera los 768 px por hasta unos 15 px.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la barra de navegación">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>La barra de navegación va en la fila de una barra, después del botón de menú de core y del nombre del sitio. La barra es tuya o es la cabecera de un paquete para un tipo de sitio, que también establece el ancla bajo la que se abre el panel.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-navbar" aria-label="Copy the navbar markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Navbar markup"><code id="code-navbar">&lt;header class=&quot;o-sticky&quot;&gt;
+  &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
+    &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;site-nav&quot; aria-label=&quot;Menu&quot;&gt;
+      &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z&quot;/&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;a href=&quot;/&quot;&gt;Acme&lt;/a&gt;
+    &lt;nav class=&quot;luz-navbar&quot; id=&quot;site-nav&quot; aria-label=&quot;Main&quot; popover&gt;
+      &lt;ul class=&quot;luz-navbar__list&quot;&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/products/&quot; aria-current=&quot;page&quot;&gt;Products&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/pricing/&quot;&gt;Pricing&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/support/&quot;&gt;Support&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Clases de la barra de navegación" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o propiedad</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-navbar</code></div></td><td data-label="Efecto"><div>En el <code>&lt;nav popover&gt;</code>: una fila de la barra a partir de 769 px; un panel debajo, del ancho de la ventana, a 768 px o menos</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-navbar__list</code></div></td><td data-label="Efecto"><div>El <code>&lt;ul&gt;</code>: una fila que salta de línea, sin viñetas; una columna dentro del panel abierto</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-navbar__link</code></div></td><td data-label="Efecto"><div>Cada enlace mide al menos 44 px de alto; con <code>aria-current</code>, usa el color de texto principal y un subrayado de 2 px</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>anchor-name: --luz-bar</code></div></td><td data-label="Efecto"><div>Se establece en la barra, con <code>anchor-scope: --luz-bar</code>, desde la cabecera de un tipo de sitio o por tu parte: el panel se abre debajo. Si no se establece, se abre a <code>--luz-bar-h</code> desde la parte superior de la ventana</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un <code>popover</code> nativo en <code>&lt;nav&gt;</code>, abierto con <code>.luz-nav-toggle</code> de core mediante <code>popovertarget</code>. Sin JavaScript, el navegador gestiona Escape, el cierre al pulsar fuera, la posición del panel abierto en el orden de tabulación y el estado expandido del botón.</p>
+            <ul>
+              <li>A partir de 769 px, el popover cerrado aparece como una fila de la barra y el botón de menú queda oculto.</li>
+              <li>A 768 px o menos, el panel queda fijo debajo de la barra, ocupa todo el ancho de la ventana y tiene una sombra y una capa atenuada que empieza debajo de la barra, para que esta nunca se atenúe.</li>
+              <li>Si el panel queda abierto cuando se amplía la ventana, permanece debajo de la barra hasta que se cierra.</li>
+              <li>Sin la API de popover, los enlaces permanecen en la fila y saltan de línea, y el botón de menú sigue oculto.</li>
+              <li>El submenú de site (<a href="/docs/site/submenu/">Submenú</a>) puede ir dentro de un elemento de lista.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: la barra de navegación usa HTML, un popover nativo y CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Pulsa Tab para llegar a cada enlace, siguiendo el orden de la página.</p>
+            <ul>
+              <li>En pantallas estrechas, cuando está cerrado, los enlaces no forman parte del orden de tabulación. Pulsa Enter o Espacio en el botón de menú para abrir el panel; la siguiente pulsación de Tab llega al primer enlace.</li>
+              <li>Pulsa Escape o haz clic fuera para cerrar el panel y devolver el foco al botón. El botón indica si está expandido.</li>
+              <li>Asigna al elemento <code>&lt;nav&gt;</code> un nombre que no tenga ninguna otra navegación de la página, como «Principal».</li>
+              <li>Marca la página actual con <code>aria-current="page"</code>, o con <code>"true"</code> para la sección a la que pertenece una página.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa la barra de navegación para incluir los pocos enlaces principales de un sitio en la cabecera compartida por todas las páginas.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No la uses en una aplicación con muchas secciones ni para los enlaces de una página.</p>
+            <ul>
+              <li>Para muchas secciones o una jerarquía, usa la <a href="/docs/components/sidebar/">barra lateral</a>.</li>
+              <li>Para indicar dónde está una página dentro de una jerarquía, usa las <a href="/docs/components/breadcrumb/">migas de pan</a>.</li>
+              <li>Para las secciones de una página, usa <a href="/docs/components/tabs/">pestañas</a> o una lista de enlaces internos.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa pocos enlaces con nombres breves y subraya el actual: la fila se entiende de un vistazo.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#c-navbar" aria-current="page">Products</a></li><li><a class="luz-navbar__link" href="#c-navbar">Pricing</a></li><li><a class="luz-navbar__link" href="#c-navbar">Support</a></li></ul>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Incluyas todos los enlaces del sitio en la barra: la fila salta de línea y no destaca ningún punto de entrada.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#c-navbar">Products</a></li><li><a class="luz-navbar__link" href="#c-navbar">Pricing</a></li><li><a class="luz-navbar__link" href="#c-navbar">Support</a></li><li><a class="luz-navbar__link" href="#c-navbar">Blog</a></li><li><a class="luz-navbar__link" href="#c-navbar">About us</a></li><li><a class="luz-navbar__link" href="#c-navbar">Careers</a></li><li><a class="luz-navbar__link" href="#c-navbar">Press</a></li><li><a class="luz-navbar__link" href="#c-navbar">Partners</a></li><li><a class="luz-navbar__link" href="#c-navbar">Contact</a></li></ul>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Nombra cada enlace según la página que abre, con una o dos palabras.</p>
+            <ul>
+              <li>Incluye cinco enlaces como máximo; coloca el resto en el pie o en un <a href="/docs/site/submenu/">submenú</a>.</li>
+              <li>Nombra el botón de menú según lo que abre: «Menú».</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Los enlaces usan el color de texto secundario de la página; el actual usa el color de texto principal y un subrayado.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la barra de navegación en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace actual y su subrayado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> cada enlace recibe el anillo compartido de los enlaces: un contorno de 2 px <code>--luz-focus-ring</code>, a 2 px de distancia.</li>
+              <li><strong>Enlace actual:</strong> el subrayado también lo identifica (línea roja 6) y se conserva con colores forzados.</li>
+              <li><strong>Panel:</strong> usa la superficie de la página, un separador inferior y una sombra; la capa atenuada nunca cubre la barra.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 14 tokens que lee <code>components/navbar.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-lg</code></dd></div>
+              <div><dt><a href="/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-bar-h</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

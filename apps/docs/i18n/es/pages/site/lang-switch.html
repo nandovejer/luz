@@ -1,0 +1,173 @@
+<!-- luz:page
+title: Selector de idioma
+description: Permite acceder desde un botón de la cabecera a la misma página en otro idioma.
+keywords: idioma, traducción, configuración regional, i18n, hreflang
+source: 4bc7f79a43a3
+reviewed: false
+-->
+    <div class="docs-component" id="p-lang-switch">
+          <h2 id="example">Ejemplo</h2>
+          <p>El selector de idioma de una cabecera, con inglés, español y árabe.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <luz-lang-switch>
+              <button class="luz-lang-switch__button" type="button" popovertarget="lang-demo-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Language: </span><span class="luz-lang-switch__name">English</span></button>
+              <nav class="luz-lang-switch__menu" id="lang-demo-menu" popover aria-labelledby="lang-demo-title">
+                <p class="luz-lang-switch__title" id="lang-demo-title">Language</p>
+                <ul class="luz-lang-switch__list">
+                  <li><a class="luz-lang-switch__link" href="/" hreflang="en" lang="en" aria-current="true">English</a></li>
+                  <li><a class="luz-lang-switch__link" href="/es/" hreflang="es" lang="es">Español</a></li>
+                  <li><a class="luz-lang-switch__link" href="/ar/" hreflang="ar" lang="ar">العربية</a></li>
+                </ul>
+              </nav>
+            </luz-lang-switch>
+            <p class="docs-demo__note">The links go to this site’s home page in each language. The list opens under the header, at the end of the row, as it does on the <a href="/">home page</a>; this documentation is in English only.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La lista se abre en una posición fija bajo la cabecera, no bajo su botón: para colocarla junto al botón hace falta el posicionamiento mediante anclas CSS, que aún no está disponible en todos los navegadores. Por debajo de 360 px de ancho, el botón solo muestra el globo para que la cabecera quepa en una fila; el nombre del idioma sigue siendo su nombre accesible, así que quien lo ve tiene que reconocer el globo.</p>
+          <p>Todavía no se ha probado con un lector de pantalla.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del selector de idioma">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Un enlace por idioma, a la misma página en ese idioma, en la cabecera de cada página traducida. En cada página, marca el idioma actual con <code>aria-current="page"</code> y escribe la etiqueta en el idioma de la página.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-lang-switch" aria-label="Copy the language switch markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Language switch markup"><code id="code-lang-switch">&lt;luz-lang-switch&gt;
+  &lt;button class=&quot;luz-lang-switch__button&quot; type=&quot;button&quot; popovertarget=&quot;lang-menu&quot;&gt;
+    &lt;span class=&quot;u-sr-only&quot;&gt;Language: &lt;/span&gt;&lt;span class=&quot;luz-lang-switch__name&quot;&gt;English&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;nav class=&quot;luz-lang-switch__menu&quot; id=&quot;lang-menu&quot; popover aria-labelledby=&quot;lang-title&quot;&gt;
+    &lt;p class=&quot;luz-lang-switch__title&quot; id=&quot;lang-title&quot;&gt;Language&lt;/p&gt;
+    &lt;ul class=&quot;luz-lang-switch__list&quot;&gt;
+      &lt;li&gt;&lt;a class=&quot;luz-lang-switch__link&quot; href=&quot;/&quot; hreflang=&quot;en&quot; lang=&quot;en&quot; aria-current=&quot;page&quot;&gt;English&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a class=&quot;luz-lang-switch__link&quot; href=&quot;/es/&quot; hreflang=&quot;es&quot; lang=&quot;es&quot;&gt;Español&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a class=&quot;luz-lang-switch__link&quot; href=&quot;/ar/&quot; hreflang=&quot;ar&quot; lang=&quot;ar&quot;&gt;العربية&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/luz-lang-switch&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay variantes. Una propiedad personalizada coloca la lista.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Etiqueta, clases y propiedad del selector de idioma" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Etiqueta, clase o propiedad</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>&lt;luz-lang-switch&gt;</code></div></td><td data-label="Efecto"><div>El bloque contiene el botón y la lista. Es una etiqueta que ningún script define y que no tiene clase ni rol propios</div></td></tr>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>.luz-lang-switch__button</code></div></td><td data-label="Efecto"><div>Un botón de 44 px con el nombre del idioma actual; se rellena cuando la lista está abierta</div></td></tr>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>.luz-lang-switch__icon</code></div></td><td data-label="Efecto"><div>Un globo opcional antes del nombre, dibujado en el color del texto. Es decorativo: <code>aria-hidden="true"</code></div></td></tr>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>.luz-lang-switch__name</code></div></td><td data-label="Efecto"><div>El nombre del idioma actual. Por debajo de 360 px queda recortado y solo se ve el globo; el nombre sigue formando parte del nombre del botón</div></td></tr>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>.luz-lang-switch__menu</code></div></td><td data-label="Efecto"><div>El popover: fijo bajo la cabecera, al final de la fila (en el borde izquierdo en texto de derecha a izquierda)</div></td></tr>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>.luz-lang-switch__title</code></div></td><td data-label="Efecto"><div>El nombre visible de la lista</div></td></tr>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>.luz-lang-switch__list</code></div></td><td data-label="Efecto"><div>La lista de idiomas, sin viñetas</div></td></tr>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>.luz-lang-switch__link</code></div></td><td data-label="Efecto"><div>Una fila de 44 px por idioma. Con <code>aria-current</code>: en negrita y subrayada</div></td></tr>
+                  <tr><td data-label="Etiqueta, clase o propiedad"><div><code>--luz-lang-switch-top</code></div></td><td data-label="Efecto"><div>Distancia desde la parte superior de la pantalla a la que se abre la lista. Por defecto es <code>--luz-bar-h</code>, la altura de una barra de una fila con controles de 44 px; establécela en la etiqueta si tu cabecera es más alta.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Cambiar de idioma implica ir a otra página, así que el selector es una lista de enlaces. El botón la abre con el <code>popovertarget</code> nativo y <code>@luz-ds/site</code> solo le da estilo: no hay ningún script.</p>
+            <p><code>&lt;luz-lang-switch&gt;</code> es una etiqueta que ningún script define; solo da un nombre al bloque en el marcado y en CSS, y no añade ningún rol: el significado lo aportan el botón y <code>nav</code>.</p>
+            <ul>
+              <li>Cada idioma se nombra en ese mismo idioma, con <code>lang</code> para que lo pronuncie un lector de pantalla y <code>hreflang</code> para indicar el idioma del enlace.</li>
+              <li>La lista es un popover en la capa superior, fijo bajo la cabecera al final de la línea; se refleja en texto de derecha a izquierda.</li>
+              <li>La propia página declara su idioma y dirección: <code>&lt;html lang="ar" dir="rtl"&gt;</code>. Añade un <code>&lt;link rel="alternate" hreflang="…"&gt;</code> por idioma en el <code>&lt;head&gt;</code> para que los buscadores encuentren las demás versiones.</li>
+              <li>Core cambia el texto en árabe a la sans serif del sistema y elimina el espaciado entre letras: la serif no tiene caracteres árabes y el espaciado rompe las ligaduras de la escritura.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Nada cambia: el botón abre la lista con la API de popover y los enlaces siguen siendo enlaces. En navegadores sin la API de popover, el botón se oculta y los enlaces se muestran en una fila.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Pulsa Tab hasta el botón y Enter o Espacio para abrir la lista; Tab recorre los idiomas y Enter sigue el enlace seleccionado. Escape o un clic fuera cierra la lista.</p>
+            <ul>
+              <li>El navegador indica a las tecnologías de asistencia si la lista está abierta mediante <code>popovertarget</code>.</li>
+              <li>El nombre del botón es «Idioma: English»: primero qué es y luego el texto visible (WCAG 2.5.3). Por debajo de 360 px solo se ve el globo, pero el nombre no cambia.</li>
+              <li>El idioma actual es un enlace con <code>aria-current="page"</code>.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Úsalo en sitios cuyas páginas estén disponibles en dos o más idiomas, en el mismo lugar de la cabecera de cada página traducida.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo añadas a páginas disponibles en un solo idioma, aunque el resto del sitio esté traducido.</p>
+            <ul>
+              <li>No elijas el idioma por el lector según los ajustes del navegador o su ubicación: deja que lo elija y enlaza cada página con sus otras versiones.</li>
+              <li>No lo uses para traducir la página en el sitio mediante un script: cada idioma tiene su propia página y dirección.</li>
+            </ul>
+            <p>No sustituye nada de LUZ. Hace innecesario usar un <code>&lt;select&gt;</code> con un script que cambie la dirección.</p>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Nombra cada idioma en ese mismo idioma para que quienes no entiendan la página encuentren el suyo.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ul class="luz-lang-switch__list">
+                    <li><span class="luz-lang-switch__link">English</span></li>
+                    <li><span class="luz-lang-switch__link">Español</span></li>
+                    <li><span class="luz-lang-switch__link">العربية</span></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> No uses banderas ni nombres los idiomas en el idioma de la página: una bandera representa un país, no un idioma, y «Árabe» no significa nada para quien lee en árabe.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ul class="luz-lang-switch__list">
+                    <li><span class="luz-lang-switch__link">🇬🇧 Inglés</span></li>
+                    <li><span class="luz-lang-switch__link">🇪🇸 Español</span></li>
+                    <li><span class="luz-lang-switch__link">🇸🇦 Árabe</span></li>
+                  </ul>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Escribe el nombre de cada idioma como lo escriben sus hablantes: «English», «Español», «العربية», nunca «EN» ni una bandera.</p>
+            <ul>
+              <li>Escribe la etiqueta en el idioma de la página: «Language», «Idioma», «اللغة».</li>
+              <li>Muestra los idiomas en el mismo orden en todas las páginas.</li>
+              <li>Si algunas páginas no están traducidas, enlaza a la página traducida más cercana e indica en su idioma que el resto está en otro idioma.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El botón está sobre la página; la lista es una superficie elevada con borde y sombra.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del selector de idioma en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto y globo del botón</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Botón, al pasar el puntero o al abrirse</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título de la lista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace de idioma</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace de idioma, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco del botón</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco de un enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> un contorno <code>--luz-focus-ring</code> de 2 px, por fuera del botón y justo por dentro de cada enlace, para que las esquinas redondeadas de la lista nunca lo recorten.</li>
+              <li>El idioma actual aparece en negrita y subrayado, no solo con un color.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 21 tokens que leen las reglas de <code>components/lang-switch.css</code> de site, agrupados por familia. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-muted"><code>--luz-text-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-sm</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-lg</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-bar-h</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

@@ -91,6 +91,7 @@ Words are a component. A button with the wrong label is a broken button. These r
 - **Generated text comes from the dictionary (`SR-7`).** Any visible text or accessible name that LUZ's JS writes comes from `@luz-ds/core/i18n`, never a literal in a module. English is in the entry; every other language LUZ ships is a lazy file, fetched only for the pages that declare it (`loadLocales()`). Consumers register more with `registerLocale()`.
 - **The language is the page's.** Components read the nearest `lang` attribute, so a page declares its language once (WCAG 3.1.1) and multilingual fragments work by marking them with their own `lang` (WCAG 3.1.2). With no `lang`, LUZ falls back to English and warns in the console.
 - **Authored HTML wins.** Text in the markup and `data-luz-label-*` attributes override the dictionary, which overrides English.
+- **The docs are in more than one language.** A language has docs when its folder exists (`apps/docs/i18n/<code>/`); a page not yet translated is shown in English, marked `lang="en"`, with a notice that links to the English page. A translation an agent wrote is published with its notice until a named person has read it (`reviewed: true` and `reviewer`); code stays English, byte for byte.
 - **Works in any writing direction:** logical properties (`SR-4`: `margin-inline-start`, not `margin-left`); test with `dir="rtl"` and with 30 % longer strings.
 
 ## 6. Consistency over novelty

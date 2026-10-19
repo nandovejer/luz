@@ -1,0 +1,31 @@
+{
+  "$header": {
+    "language": "ar",
+    "note": "Draft written by an agent and pending review by a reader of Arabic. The keys and the {placeholders} are those of the English dictionary in packages/core/src/i18n.js. reference.js registers this file with registerLocale('ar', ...) until core ships Arabic (docs-i18n decision D10); then delete it."
+  },
+  "play": "تشغيل",
+  "pause": "إيقاف مؤقت",
+  "mute": "كتم الصوت",
+  "unmute": "تشغيل الصوت",
+  "fullscreen": "عرض بملء الشاشة",
+  "exitFullscreen": "الخروج من ملء الشاشة",
+  "captions": "الترجمة النصية",
+  "captionsOff": "إيقاف",
+  "loading": "جارٍ التحميل…",
+  "midiError": "تعذّر تحميل ملف MIDI. أعد تحميل الصفحة للمحاولة مرة أخرى.",
+  "timeOf": "{current} من {total}",
+  "copy": "نسخ",
+  "copied": "تم النسخ",
+  "copiedStatus": "تم النسخ إلى الحافظة",
+  "copyFailed": "تعذّر النسخ. حدّد النص وانسخه يدويًا.",
+  "codeExample": "مثال ⁨{lang}⁩",
+  "copyCode": "نسخ مثال الشيفرة {n}",
+  "applyTheme": "تطبيق المظهر",
+  "themeApplied": "تم التطبيق",
+  "changeMode": "تغيير وضع الألوان. الوضع الحالي: ⁨{mode}⁩",
+  "modeChanged": "وضع الألوان: ⁨{mode}⁩",
+  "sortedAsc": "مرتّب حسب ⁨{column}⁩، تصاعديًا",
+  "sortedDesc": "مرتّب حسب ⁨{column}⁩، تنازليًا",
+  "previous": "السابق",
+  "next": "التالي"
+}

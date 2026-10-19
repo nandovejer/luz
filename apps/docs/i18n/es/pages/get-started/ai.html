@@ -1,0 +1,177 @@
+<!-- luz:page
+title: Trabajar con IA
+description: Qué puede leer un agente de programación con IA, cómo comprobar lo que ha escrito y qué revisor de accesibilidad puedes darle.
+keywords: llms.txt, agente, Claude, Copilot, Cursor, manifiesto, comprobación
+source: 8cae7a2dd45b
+reviewed: false
+-->
+    <section class="docs-block" aria-labelledby="start">
+      <h2 class="docs-chapter__title" id="start">Dale LUZ a tu agente</h2>
+      <p class="docs-lead">LUZ usa HTML y CSS sin más, así que un agente de programación con IA puede escribirlo si conoce los nombres de clase disponibles. Pega este prompt en tu agente.</p>
+      <p>Indica al agente los archivos que aparecen abajo y le pide que ejecute el comprobador sobre lo que ha escrito. En <a href="#limits">Lo que no hace</a> se explica qué no comprueba.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Prompt</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-prompt" aria-label="Copy the prompt">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Prompt for your agent"><code id="code-prompt">Use LUZ for the markup. Read https://nandovejer.github.io/luz/llms.txt first and use only the classes in each package's classes.json. After you write HTML or CSS, run `npx @luz-ds/check` on the files and fix every finding before you answer.</code></pre>
+      </div>
+    </section>
+
+    <section class="docs-block" aria-labelledby="files">
+      <h2 class="docs-chapter__title" id="files">Qué puede leer un agente</h2>
+      <p class="docs-lead">La compilación de este sitio genera cada archivo a partir de las páginas que estás leyendo, así que tanto un agente como una persona obtienen la misma información. Dale al agente la URL de <code>llms.txt</code>: ahí se enumeran los demás archivos.</p>
+      <!-- luz:ai files -->
+    </section>
+
+    <section class="docs-block" aria-labelledby="check">
+      <h2 class="docs-chapter__title" id="check">Comprueba lo que ha escrito un agente</h2>
+      <p class="docs-lead"><code>npx @luz-ds/check</code> lee sin conexión el HTML y el CSS de un proyecto e indica qué clases, elementos, orden de carga y tokens de color de LUZ son incorrectos. Lee archivos, pero no escribe nada.</p>
+      <p>Necesita Node 20 o posterior.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Shell</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-check-run" aria-label="Copy the commands">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The commands"><code id="code-check-run">npx @luz-ds/check
+npx @luz-ds/check index.html css/site.css
+npx @luz-ds/check src --json</code></pre>
+      </div>
+      <p>Indica <code>npx @luz-ds/check</code> y el ámbito. Una ruta puede ser un archivo, una carpeta (la lectura es recursiva: <code>.html</code>, <code>.htm</code> y <code>.css</code>) o un patrón glob entre comillas, como <code>"src/**/*.html"</code>.</p>
+      <p>Si no indicas ninguna ruta, lee la carpeta actual.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Opciones del comando" tabindex="0">
+        <table class="luz-table">
+          <caption>Opciones del comando</caption>
+          <thead>
+            <tr><th scope="col">Opción</th><th scope="col">Qué hace</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Opción"><div><code>--json</code></div></td><td data-label="Qué hace"><div>Muestra el informe como JSON</div></td></tr>
+            <tr><td data-label="Opción"><div><code>--strict</code></div></td><td data-label="Qué hace"><div>Falla tanto si hay un aviso como si hay un hallazgo bloqueante</div></td></tr>
+            <tr><td data-label="Opción"><div><code>--config &lt;file&gt;</code></div></td><td data-label="Qué hace"><div>Lee esta configuración en lugar de <code>luz-check.json</code></div></td></tr>
+            <tr><td data-label="Opción"><div><code>--theme &lt;file.css&gt;</code></div></td><td data-label="Qué hace"><div>Indica una hoja de estilos que define tokens de color cuyos colores se miden; repítelo para cada archivo, en el orden en que los carga la página</div></td></tr>
+            <tr><td data-label="Opción"><div><code>--ext &lt;list&gt;</code></div></td><td data-label="Qué hace"><div>También lee como HTML archivos con estas extensiones, como <code>.astro,.vue</code></div></td></tr>
+            <tr><td data-label="Opción"><div><code>--version</code></div></td><td data-label="Qué hace"><div>Muestra la versión</div></td></tr>
+            <tr><td data-label="Opción"><div><code>--help</code></div></td><td data-label="Qué hace"><div>Muestra las opciones y los límites del comando</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Un archivo <code>luz-check.json</code> en la carpeta desde la que ejecutas el comando configura <code>ignore</code>, <code>rules</code>, <code>themes</code> y <code>strict</code>. Desde ahí puedes desactivar una regla que avisa; una regla bloqueante solo se silencia con <code>ignore</code>. El resumen indica cuántos hallazgos se han ignorado y cuántas reglas están desactivadas.</p>
+      <h3 class="docs-subhead" id="check-exit">Códigos de salida</h3>
+      <div class="luz-table-wrap" role="region" aria-label="Códigos de salida" tabindex="0">
+        <table class="luz-table">
+          <caption>Códigos de salida del comando</caption>
+          <thead>
+            <tr><th scope="col">Código</th><th scope="col">Significado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Código"><div><code>0</code></div></td><td data-label="Significado"><div>No hay bloqueos. Puede que se hayan mostrado avisos.</div></td></tr>
+            <tr><td data-label="Código"><div><code>1</code></div></td><td data-label="Significado"><div>Hay al menos un hallazgo bloqueante o, con <code>--strict</code>, se ha encontrado un aviso.</div></td></tr>
+            <tr><td data-label="Código"><div><code>2</code></div></td><td data-label="Significado"><div>El comando se ha usado de forma incorrecta, no se puede leer una configuración o no hay nada que leer.</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="docs-subhead" id="check-output">Qué muestra</h3>
+      <p>Una línea por cada hallazgo, en el orden de los archivos y las líneas: un símbolo (<code>✗</code> bloquea, <code>!</code> avisa), la ubicación, la regla y una frase que explica qué está mal y qué hacer. Después de un hallazgo sobre un token de color aparecen las líneas donde se definieron los colores.</p>
+      <p>La última línea cuenta los hallazgos encontrados en los archivos que ha leído.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Output</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-check-out" aria-label="Copy the example output">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Example output"><code id="code-check-out">✗ index.html:14:8 class/unknown  .luz-btn-primary is not a LUZ class; the closest is .luz-btn--primary
+✗ index.html:22:5 load/package-missing  .luz-banner is in @luz-ds/site, which this page does not load; add its stylesheet after core
+! site.css:8:3 css/literal-colour  color is set to #1a5fb4; use a token, such as var(--luz-brand-fill)
+✗ theme.css:3:3 theme/contrast  light: --luz-text-secondary on surface-page is 2.8:1, needs 4.5:1 (text); change one of the two
+    --luz-text-secondary: #999999 is set in theme.css:3
+✗ 3 blocking and 1 warning in 3 files (manifests: @luz-ds/core 0.1.0 from node_modules)</code></pre>
+      </div>
+      <p>La parte <code>(manifests: …)</code> indica con qué versión de LUZ se han comprobado los nombres y de dónde procede: de tu <code>node_modules</code> o de la copia incluida con el comando.</p>
+      <h3 class="docs-subhead" id="check-json">El informe JSON</h3>
+      <p><code>--json</code> muestra un objeto con estos campos. Si un campo no aparece en esta tabla, no forma parte del informe.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Campos del informe JSON" tabindex="0">
+        <table class="luz-table">
+          <caption>Campos del informe JSON</caption>
+          <thead>
+            <tr><th scope="col">Campo</th><th scope="col">Tipo</th><th scope="col">Qué es</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Campo"><div><code>tool</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>Siempre <code>@luz-ds/check</code></div></td></tr>
+            <tr><td data-label="Campo"><div><code>version</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La versión del comprobador</div></td></tr>
+            <tr><td data-label="Campo"><div><code>ok</code></div></td><td data-label="Tipo"><div>booleano</div></td><td data-label="Qué es"><div>Verdadero si no hay bloqueos ni avisos con <code>--strict</code>. No es un resultado de accesibilidad</div></td></tr>
+            <tr><td data-label="Campo"><div><code>files</code></div></td><td data-label="Tipo"><div>lista de cadenas</div></td><td data-label="Qué es"><div>Los archivos que ha leído, ordenados</div></td></tr>
+            <tr><td data-label="Campo"><div><code>manifests</code></div></td><td data-label="Tipo"><div>lista de objetos</div></td><td data-label="Qué es"><div>Los datos de LUZ con los que ha comprobado el proyecto, una entrada por paquete</div></td></tr>
+            <tr><td data-label="Campo"><div><code>manifests[].package</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>El paquete, como <code>@luz-ds/core</code></div></td></tr>
+            <tr><td data-label="Campo"><div><code>manifests[].version</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La versión de los datos de ese paquete</div></td></tr>
+            <tr><td data-label="Campo"><div><code>manifests[].source</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div><code>node_modules</code> si tu proyecto tiene el paquete; <code>bundled</code> si se ha usado la copia del propio comando</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary</code></div></td><td data-label="Tipo"><div>objeto</div></td><td data-label="Qué es"><div>Los recuentos de la ejecución</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.files</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántos archivos ha leído</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.blocking</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántos hallazgos bloquean</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.warnings</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántos hallazgos generan avisos</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.skipped</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántas rutas no ha leído</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.ignored</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántos hallazgos ha eliminado <code>ignore</code> en la configuración</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.off</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántas reglas ha desactivado la configuración</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.truncated</code></div></td><td data-label="Tipo"><div>booleano</div></td><td data-label="Qué es"><div>Verdadero si se ha truncado la lista de hallazgos; los recuentos anteriores están completos</div></td></tr>
+            <tr><td data-label="Campo"><div><code>config</code></div></td><td data-label="Tipo"><div>objeto</div></td><td data-label="Qué es"><div>La configuración que se ha leído</div></td></tr>
+            <tr><td data-label="Campo"><div><code>config.file</code></div></td><td data-label="Tipo"><div>cadena o null</div></td><td data-label="Qué es"><div>El archivo de configuración o null si no había ninguno</div></td></tr>
+            <tr><td data-label="Campo"><div><code>config.off</code></div></td><td data-label="Tipo"><div>lista de cadenas</div></td><td data-label="Qué es"><div>Las reglas que ha desactivado la configuración</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings</code></div></td><td data-label="Tipo"><div>lista de objetos</div></td><td data-label="Qué es"><div>Lo que ha encontrado, en el orden de los archivos y las líneas</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].rule</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La regla, como <code>class/unknown</code></div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].severity</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div><code>block</code> o <code>warn</code></div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].file</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La ruta, relativa a la carpeta desde la que ejecutaste el comando</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].line</code></div></td><td data-label="Tipo"><div>número o null</div></td><td data-label="Qué es"><div>La línea, si el hallazgo tiene una ubicación en el archivo</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].column</code></div></td><td data-label="Tipo"><div>número o null</div></td><td data-label="Qué es"><div>La columna, si el hallazgo tiene una ubicación en el archivo</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].message</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La frase en inglés que explica qué está mal y qué hacer</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].suggestion</code></div></td><td data-label="Tipo"><div>cadena o null</div></td><td data-label="Qué es"><div>El nombre de LUZ más parecido, si hay alguno suficientemente cercano</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].docs</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La URL de la página que explica la regla</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].details</code></div></td><td data-label="Tipo"><div>objeto</div></td><td data-label="Qué es"><div>Solo en algunos hallazgos. Un hallazgo sobre un token de color indica el modo, los colores, la proporción y dónde se definieron los colores</div></td></tr>
+            <tr><td data-label="Campo"><div><code>skipped</code></div></td><td data-label="Tipo"><div>lista de objetos</div></td><td data-label="Qué es"><div>Las rutas que no ha leído</div></td></tr>
+            <tr><td data-label="Campo"><div><code>skipped[].file</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La ruta</div></td></tr>
+            <tr><td data-label="Campo"><div><code>skipped[].reason</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>Motivo: es un enlace, no es un archivo normal, supera 1 MiB, no se ha podido abrir o se ha alcanzado un límite de la ejecución</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Lo mismo ocurre con el texto y con JSON: las rutas y los nombres que contienen caracteres no habituales se escriben con escapes, y el comando nunca cita el contenido de tus archivos.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="rules">
+      <h2 class="docs-chapter__title" id="rules">Qué bloquea y sobre qué avisa check</h2>
+      <p class="docs-lead">Cada regla tiene un id, como <code>class/unknown</code>, que aparece en todos los hallazgos. Una regla bloqueante hace que el código de salida sea 1.</p>
+      <p>Una regla que avisa no lo hace, salvo que pases <code>--strict</code>. Las dos tablas se generan a partir de la lista de reglas del comando.</p>
+      <!-- luz:ai rules -->
+    </section>
+
+    <section class="docs-block" aria-labelledby="agent">
+      <h2 class="docs-chapter__title" id="agent">El revisor de accesibilidad</h2>
+      <p class="docs-lead">El mismo paquete muestra una definición de agente para un asistente de programación con IA: un revisor que lee el código fuente de una página y ofrece recomendaciones de accesibilidad. Cópiala en tu proyecto.</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Shell</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-agent" aria-label="Copy the command">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The command that copies the reviewer"><code id="code-agent">npx @luz-ds/check agent &gt; .claude/agents/luz-accessibility-reviewer.md</code></pre>
+      </div>
+      <ul>
+        <li><strong>Sobrescribe archivos.</strong> El operador <code>&gt;</code> sustituye un archivo existente. Si lo has editado, usa otra ruta o guarda antes tu copia en el control de versiones.</li>
+        <li><strong>Es de solo lectura.</strong> Tiene tres herramientas, <code>Read</code>, <code>Grep</code> y <code>Glob</code>: lee, busca y enumera archivos, pero no escribe nada. Solo lectura no significa que sea inofensivo, porque <code>Read</code> no limita las rutas. Lee el archivo antes de usarlo y revisa cualquier cambio como harías con el código.</li>
+        <li><strong>Ofrece recomendaciones.</strong> Revisa el código fuente según el nivel AA de WCAG 2.2 y EN 301 549, y etiqueta cada hallazgo como confirmado en el código fuente o como algo que requiere un navegador o tecnología de asistencia. Sus hallazgos son sugerencias basadas en la lectura del código, no resultados de pruebas.</li>
+        <li><strong>No usa tecnología de asistencia.</strong> No abre páginas ni ejecuta scripts, y no observa cómo se representa una página, así que no sustituye una prueba con teclado y lector de pantalla.</li>
+      </ul>
+      <p>El archivo también está en el paquete como <code>@luz-ds/check/agents/accessibility.md</code>, para que un paso de compilación lo copie.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="limits">
+      <h2 class="docs-chapter__title" id="limits">Lo que no hace</h2>
+      <p class="docs-lead">Una ejecución sin hallazgos indica lo que el comprobador no ha encontrado en los archivos que ha leído. No es una prueba de la página.</p>
+      <ul>
+        <li><strong>No ejecuta un navegador.</strong> Lee archivos, así que no detecta nada que dependa de cómo se representa una página, como la maquetación, el orden del foco o los colores que calcula el navegador.</li>
+        <li><strong>Solo mide el contraste de tus tokens.</strong> Mide los colores <code>--luz-*</code> que defines en tu propio archivo de tokens de color. No compara los colores escritos directamente en una regla con ningún otro. En <a href="/docs/tokens/contrast/">Comprobación del contraste</a> se explica cómo lee los pares.</li>
+        <li><strong>No detecta las clases creadas en tiempo de ejecución.</strong> Un nombre construido en un script, como <code>"luz-" + name</code>, o escrito por una plantilla, no está en el archivo, así que no se comprueba.</li>
+        <li><strong>No comprueba nombres, etiquetas, texto alternativo, encabezados ni el idioma.</strong> No analiza si un botón tiene nombre, si una imagen tiene una alternativa útil, si los encabezados están ordenados ni si la página tiene un idioma. Una ejecución sin hallazgos no dice nada sobre estos aspectos.</li>
+        <li><strong>No sustituye las pruebas con lector de pantalla.</strong> Ni el comando ni el revisor utilizan tecnología de asistencia. Lo que no se ha probado se enumera en <a href="/docs/accessibility/#h-a11y-not-tested">la declaración de accesibilidad</a>.</li>
+        <li><strong>No accede a la red.</strong> Se ejecuta sin conexión, con los datos de tu <code>node_modules</code> o de su propio paquete.</li>
+        <li><strong>El descubrimiento mediante <code>llms.txt</code> se hace con un enlace.</strong> Este sitio no está en la raíz de un host, así que el agente no encuentra el archivo por sí solo: dale la URL, como hace el prompt anterior.</li>
+        <li><strong>El código de salida 0 no es un resultado de accesibilidad.</strong> Indica que ninguna de las reglas anteriores bloquea los archivos leídos.</li>
+        <li><strong>Los mensajes están en inglés.</strong> No se traducen, sea cual sea el idioma de la página.</li>
+      </ul>
+    </section>

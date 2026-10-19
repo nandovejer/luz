@@ -1,0 +1,52 @@
+<!-- luz:page
+title: Site
+description: Seis componentes independientes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner; y cómo saber si los necesitas.
+source: f1597bf8cb0e
+reviewed: false
+-->
+    <p class="docs-lead">Seis componentes independientes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner; y cómo saber si los necesitas.</p>
+    <p>Una pieza pertenece aquí cuando necesita datos del sitio: su índice de búsqueda, su política de cookies, sus idiomas, su menú o un aviso. Cada una es una etiqueta <code class="luz-code-inline">&lt;luz-*&gt;</code> independiente, que funciona en cualquier cabecera o página.</p>
+    <p>Todo lo demás es un <strong>componente</strong> de core: una pieza reutilizable que encaja en cualquier sitio; los componentes están en <a href="/docs/components/">Componentes</a>.</p>
+    <p>La estructura de la página (la cabecera, el hero, el pie y la cabecera de página) está en los paquetes para cada tipo de sitio: <a href="/docs/landing/">landing</a> para una landing page y <a href="/docs/cms/">CMS</a> para un blog, un periódico o cualquier CMS. Funcionan sin este paquete y usan sus componentes cuando necesitan una búsqueda o un selector de idioma.</p>
+    <ul>
+      <li>Cada etiqueta es el bloque y sus partes siguen el patrón <code class="luz-code-inline">.luz-&lt;tag&gt;__&lt;part&gt;</code>; todas las reglas usan solo tokens semánticos.</li>
+      <li>La <a href="/">página de inicio de LUZ</a> y esta documentación están hechas con ellos.</li>
+      <li>¿No sabes a qué paquete pertenece una pieza? <a href="/docs/get-started/structure/#needs">Qué necesita cada paquete</a> enumera todas las piezas y el paquete que las contiene.</li>
+    </ul>
+
+    <div class="docs-decision-grid">
+        <div class="docs-decision-card">
+          <h2 id="use-site-when" class="docs-decision-card__title">Usa site cuando</h2>
+          <ul>
+            <li>Quieres búsqueda del sitio, un banner de cookies o un selector de idioma sin tener que programarlos.</li>
+            <li>Tu cabecera tiene varios enlaces agrupados bajo un botón.</li>
+            <li>Necesitas un aviso breve encima de la cabecera en todas las páginas.</li>
+          </ul>
+        </div>
+        <div class="docs-decision-card">
+          <h2 id="use-core-alone-when" class="docs-decision-card__title">Usa solo core cuando</h2>
+          <ul>
+            <li>Solo necesitas componentes como botones, formularios y tarjetas.</li>
+            <li>Tu sitio no tiene búsqueda ni cookies opcionales, y solo tiene un idioma.</li>
+            <li>Creas un único widget, no una página completa.</li>
+          </ul>
+        </div>
+      </div>
+
+    <div class="docs-prose">
+        <h2 id="your-own-components-on-top" class="docs-prose__title">Tus propios componentes encima</h2>
+        <p>Da estilo también a lo que añadas con tokens semánticos para que siga el modo de color y cualquier <a href="/docs/tokens/themes/">tema propio</a>.</p>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Semantic tokens in an app-level component"><code>.my-panel {
+  background: var(--luz-surface);
+  border: 1px solid var(--luz-divider);
+  color: var(--luz-text-primary);
+}
+
+.my-panel:hover {
+  background: var(--luz-surface-muted);
+  border-color: var(--luz-outline);
+}
+
+/* Not a primitive colour: it would stay the same in dark mode */
+/* color: var(--luz-gray-100); */</code></pre>
+      </div>

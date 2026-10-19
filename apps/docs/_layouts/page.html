@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="{{lang}}" dir="{{dir}}" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{doctitle}}</title>
   <meta name="description" content="{{description}}">
+  {{alternates}}
   <link rel="icon" href="/apps/site/assets/favicon.ico" sizes="32x32">
   <link rel="icon" href="/apps/site/assets/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apps/site/assets/apple-touch-icon.png">
@@ -24,11 +25,11 @@
   <link rel="stylesheet" href="/apps/docs/elements.css">
 </head>
 <body class="o-shell luz-docs-shell docs-page site-sky">
-  <a class="luz-skip-link" href="#main-content">Skip to main content</a>
+  <a class="luz-skip-link" href="#main-content">{{t:chrome.skip}}</a>
 
   <!-- luz:include header -->
 
-  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentation" tabindex="-1">
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="{{t:chrome.nav}}" tabindex="-1">
     <!-- luz:include site-links -->
 {{nav}}
   </nav>
@@ -36,7 +37,7 @@
 
   <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
 {{pagehead}}
-  <div class="docs-body">
+  {{notice}}<div class="docs-body"{{contentattrs}}>
 {{content}}
 {{generated}}
   </div>

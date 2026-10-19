@@ -1,0 +1,157 @@
+<!-- luz:page
+title: Etiqueta e insignia
+description: Etiqueta un elemento con un estado o categoría breves (etiqueta), o muestra una cantidad (insignia).
+keywords: chip
+source: e75e7601c82d
+reviewed: false
+-->
+    <div class="docs-component" id="c-tag">
+          <h2 id="example">Ejemplo</h2>
+          <p>Siete colores de etiqueta y tres insignias con una cantidad.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-row">
+              <span class="luz-tag luz-tag--gray">Gray</span>
+              <span class="luz-tag luz-tag--blue">Blue</span>
+              <span class="luz-tag luz-tag--green luz-tag--dot">Green</span>
+              <span class="luz-tag luz-tag--red luz-tag--dot">Red</span>
+              <span class="luz-tag luz-tag--yellow">Yellow</span>
+              <span class="luz-tag luz-tag--teal">Teal</span>
+              <span class="luz-tag luz-tag--purple">Purple</span>
+            </div>
+            <div class="o-row">
+              <span class="luz-badge luz-badge--primary">3</span>
+              <span class="luz-badge luz-badge--gray">12</span>
+              <span class="luz-badge luz-badge--danger">99+</span>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de etiquetas e insignias">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-tag" aria-label="Copy the status tag markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Status tag markup"><code id="code-tag">&lt;span class=&quot;luz-tag luz-tag--green luz-tag--dot&quot;&gt;Running&lt;/span&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-badge" aria-label="Copy the count badge markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Count badge markup"><code id="code-badge">&lt;a href=&quot;/inbox/&quot;&gt;Inbox &lt;span class=&quot;luz-badge luz-badge--primary&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;u-sr-only&quot;&gt; unread&lt;/span&gt;&lt;/a&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Una etiqueta usa un color y, si quieres, un punto. Una insignia usa un color.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Variantes de etiquetas e insignias" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-tag--gray</code></div></td><td data-label="Efecto"><div>Neutro: categoría sin estado</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-tag--blue</code></div></td><td data-label="Efecto"><div>Colores de información</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-tag--green</code></div></td><td data-label="Efecto"><div>Colores de éxito</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-tag--yellow</code></div></td><td data-label="Efecto"><div>Colores de advertencia</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-tag--red</code></div></td><td data-label="Efecto"><div>Colores de peligro</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-tag--teal</code>, <code>.luz-tag--purple</code></div></td><td data-label="Efecto"><div>Colores adicionales para categorías, sin significado de estado</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-tag--dot</code></div></td><td data-label="Efecto"><div>Punto pequeño antes del texto, otra señal además del color</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-badge--primary</code></div></td><td data-label="Efecto"><div>Fondo de marca</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-badge--gray</code></div></td><td data-label="Efecto"><div>Fondo neutro</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-badge--danger</code></div></td><td data-label="Efecto"><div>Fondo de peligro</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Elementos <code>&lt;span&gt;</code> en línea, con estilos de <code>components/tag.css</code>. Sin JavaScript.</p>
+            <ul>
+              <li>Una etiqueta mide al menos 24 px de alto, usa texto extrapequeño y va sobre un tinte de su color.</li>
+              <li>Una insignia es una cantidad pequeña y redondeada en tipografía monoespaciada, de al menos 20 px de ancho.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: las etiquetas y las insignias son HTML y CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Las etiquetas y las insignias no son interactivas ni reciben el foco.</p>
+            <ul>
+              <li>El significado está en el texto; el color no aporta nada que necesite un lector de pantalla.</li>
+              <li>Una cantidad necesita contexto: coloca la insignia dentro del enlace o encabezado que cuenta y añade la unidad como texto oculto visualmente si no aparece en pantalla («3 sin leer»).</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> se explican en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una etiqueta para asignar a un elemento un estado o una categoría breves, y una insignia para mostrar una cantidad junto a un enlace o encabezado.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses una etiqueta para una acción: no se puede pulsar.</p>
+            <ul>
+              <li>Para una acción, usa un <a href="/docs/components/button/">botón</a>.</li>
+              <li>Para un mensaje, usa una <a href="/docs/components/alert/">alerta</a>.</li>
+              <li>No des significado de estado al turquesa o al morado: son para categorías.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa colores de estado para los estados: verde en ejecución, amarillo degradado y rojo detenido, cada uno con su palabra.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><span class="luz-tag luz-tag--green luz-tag--dot">Running</span><span class="luz-tag luz-tag--yellow luz-tag--dot">Degraded</span><span class="luz-tag luz-tag--red luz-tag--dot">Stopped</span></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No uses turquesa y morado como estados: son para categorías y no se puede deducir que el turquesa signifique «en ejecución».</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><span class="luz-tag luz-tag--teal luz-tag--dot">Running</span><span class="luz-tag luz-tag--purple luz-tag--dot">Stopped</span></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Una o dos palabras, en estilo oración: «En ejecución», «Degradado».</p>
+            <ul>
+              <li>No uses solo el nombre de un color: puede que no se vea.</li>
+              <li>Las insignias contienen cifras; limítalas («99+») para que no cambien de tamaño.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Cada etiqueta muestra el color de texto sobre su propio tinte; las insignias usan texto blanco sobre un fondo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de etiquetas e insignias en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Etiqueta gris</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>5.4:1</div></td><td data-label="Alto contraste"><div>16.5:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta azul</div></td><td data-label="Color sobre fondo"><div><code>--luz-color-info</code> on <code>--luz-color-info-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>9.0:1</div></td><td data-label="Oscuro"><div>9.7:1</div></td><td data-label="Alto contraste"><div>13.6:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta verde</div></td><td data-label="Color sobre fondo"><div><code>--luz-color-success</code> on <code>--luz-color-success-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.4:1</div></td><td data-label="Oscuro"><div>10.1:1</div></td><td data-label="Alto contraste"><div>8.9:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta roja</div></td><td data-label="Color sobre fondo"><div><code>--luz-color-danger</code> on <code>--luz-color-danger-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.4:1</div></td><td data-label="Oscuro"><div>10.2:1</div></td><td data-label="Alto contraste"><div>8.9:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta amarilla</div></td><td data-label="Color sobre fondo"><div><code>--luz-color-warning</code> on <code>--luz-color-warning-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.8:1</div></td><td data-label="Oscuro"><div>9.0:1</div></td><td data-label="Alto contraste"><div>8.9:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta turquesa</div></td><td data-label="Color sobre fondo"><div><code>--luz-color-teal</code> on <code>--luz-color-teal-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.4:1</div></td><td data-label="Oscuro"><div>7.1:1</div></td><td data-label="Alto contraste"><div>8.9:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta morada</div></td><td data-label="Color sobre fondo"><div><code>--luz-color-purple</code> on <code>--luz-color-purple-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.4:1</div></td><td data-label="Oscuro"><div>12.2:1</div></td><td data-label="Alto contraste"><div>9.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Insignia principal</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Insignia gris</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-outline</code></div></td><td data-label="Claro"><div>4.6:1</div></td><td data-label="Oscuro"><div>4.8:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Insignia de peligro</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-color-danger-fill</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>6.0:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario corresponde al nivel AA de WCAG 2.2: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> las etiquetas y las insignias no lo reciben: no son controles.</li>
+              <li><strong>No solo el color:</strong> la palabra indica el estado; <code>.luz-tag--dot</code> añade una forma a las etiquetas de estado.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 24 tokens que lee <code>components/tag.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-color-danger-bg"><code>--luz-color-danger-bg</code></a>, <a href="/docs/tokens/color/#luz-color-danger-fill"><code>--luz-color-danger-fill</code></a>, <a href="/docs/tokens/color/#luz-color-info"><code>--luz-color-info</code></a>, <a href="/docs/tokens/color/#luz-color-info-bg"><code>--luz-color-info-bg</code></a>, <a href="/docs/tokens/color/#luz-color-purple"><code>--luz-color-purple</code></a>, <a href="/docs/tokens/color/#luz-color-purple-bg"><code>--luz-color-purple-bg</code></a>, <a href="/docs/tokens/color/#luz-color-success"><code>--luz-color-success</code></a>, <a href="/docs/tokens/color/#luz-color-success-bg"><code>--luz-color-success-bg</code></a>, <a href="/docs/tokens/color/#luz-color-teal"><code>--luz-color-teal</code></a>, <a href="/docs/tokens/color/#luz-color-teal-bg"><code>--luz-color-teal-bg</code></a>, <a href="/docs/tokens/color/#luz-color-warning"><code>--luz-color-warning</code></a>, <a href="/docs/tokens/color/#luz-color-warning-bg"><code>--luz-color-warning-bg</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> se explican en la pestaña Código.</p>
+          </div>
+    </div>

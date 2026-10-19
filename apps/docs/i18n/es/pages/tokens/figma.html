@@ -1,0 +1,127 @@
+<!-- luz:page
+title: Tokens en Figma
+description: Los tokens en un único archivo design-tokens para las variables de Figma y otras herramientas de diseño, con los mismos nombres y los tres modos.
+source: 0ed60af9dd4a
+reviewed: false
+-->
+    <div class="docs-block" id="t-figma">
+          <div class="luz-alert luz-alert--warning">
+            <div class="luz-alert__icon" aria-hidden="true">!</div>
+            <div>
+              <p class="luz-alert__title">Aún no se ha probado en Figma</p>
+              <p class="luz-alert__body">Nadie ha importado todavía este archivo a Figma o Tokens Studio. Los límites que se indican a continuación proceden de la ayuda de Figma y de informes, comprobados el 9 de octubre de 2026. Lo que sí se comprueba es que el archivo coincide con el CSS. Si lo importas, <a href="https://github.com/nandovejer/luz/issues">cuéntanos qué ha pasado</a>.</p>
+            </div>
+          </div>
+
+          <h2 id="get-the-file">Obtener el archivo</h2>
+          <p><code>@luz-ds/tokens</code> incluye todos los tokens en formato JSON de W3C Design Tokens (DTCG), en un solo archivo. <code>pnpm tokens:build</code> lo genera a partir de las mismas fuentes que el CSS, por lo que ambos siempre coinciden.</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">Path</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dtcg-path" aria-label="Copy the path of the tokens file">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Where the tokens file is"><code id="code-dtcg-path">node_modules/@luz-ds/tokens/dist/luz-tokens.dtcg.json</code></pre>
+          </div>
+          <ul>
+            <li>Desde un empaquetador o un script: <code>import tokens from "@luz-ds/tokens/dtcg"</code> (la exportación <code>./dtcg</code>).</li>
+            <li>Sin instalar nada: <code>https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.dtcg.json</code>. Descárgalo e importa el archivo descargado.</li>
+          </ul>
+          <p>El archivo tiene dos grupos, uno para cada colección de Figma que quieras crear:</p>
+          <div class="luz-table-wrap" role="region" aria-label="Los dos grupos del archivo de tokens" tabindex="0">
+            <table class="luz-table">
+              <thead>
+                <tr><th scope="col">Grupo del archivo</th><th scope="col">Pensado como colección</th><th scope="col">Modos</th><th scope="col">Procedencia</th></tr>
+              </thead>
+              <tbody>
+                <tr><td data-label="Grupo del archivo"><div><code>primitives</code></div></td><td data-label="Pensado como colección"><div>Primitivos de LUZ</div></td><td data-label="Modos"><div>Uno: valor</div></td><td data-label="Procedencia"><div><code>tokens.json</code>: escalas de color, espacio, tamaños de control, tipografía, radios y sombras</div></td></tr>
+                <tr><td data-label="Grupo del archivo"><div><code>semantic</code></div></td><td data-label="Pensado como colección"><div>Semántica de LUZ</div></td><td data-label="Modos"><div>Claro, oscuro y alto contraste</div></td><td data-label="Procedencia"><div><code>src/semantic.css</code>: los <a href="/docs/tokens/color/">55 colores</a> que cambian según el modo</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Un token semántico apunta a un token primitivo siempre que lo hace el CSS: <code>--luz-divider</code> es <code>var(--luz-gray-20)</code> en el modo claro, así que <code>divider</code> es un alias de <code>{primitives.gray.20}</code>. El movimiento, las capas y los puntos de ruptura se incluyen en <code>@luz-ds/core</code>, así que no están en el archivo.</p>
+
+          <h2 id="names">Una regla para cada nombre</h2>
+          <p>Quita <code>--luz-</code>. La primera palabra pasa a ser el grupo y el resto, el nombre; sepáralos con una barra.</p>
+          <div class="luz-table-wrap" role="region" aria-label="Propiedades personalizadas de CSS y sus variables en Figma" tabindex="0">
+            <table class="luz-table">
+              <thead>
+                <tr><th scope="col">Propiedad personalizada de CSS</th><th scope="col">Variable de Figma</th><th scope="col">Colección</th></tr>
+              </thead>
+              <tbody>
+                <tr><td data-label="Propiedad personalizada de CSS"><div><code>--luz-surface-page</code></div></td><td data-label="Variable de Figma"><div><code>surface/page</code></div></td><td data-label="Colección"><div>Semántica de LUZ</div></td></tr>
+                <tr><td data-label="Propiedad personalizada de CSS"><div><code>--luz-text-secondary</code></div></td><td data-label="Variable de Figma"><div><code>text/secondary</code></div></td><td data-label="Colección"><div>Semántica de LUZ</div></td></tr>
+                <tr><td data-label="Propiedad personalizada de CSS"><div><code>--luz-color-danger-bg</code></div></td><td data-label="Variable de Figma"><div><code>color/danger-bg</code></div></td><td data-label="Colección"><div>Semántica de LUZ</div></td></tr>
+                <tr><td data-label="Propiedad personalizada de CSS"><div><code>--luz-space-md</code></div></td><td data-label="Variable de Figma"><div><code>space/md</code></div></td><td data-label="Colección"><div>Primitivos de LUZ</div></td></tr>
+                <tr><td data-label="Propiedad personalizada de CSS"><div><code>--luz-blue-60</code></div></td><td data-label="Variable de Figma"><div><code>blue/60</code></div></td><td data-label="Colección"><div>Primitivos de LUZ</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Una excepción: <code>--luz-surface</code> también es el nombre de un grupo, así que en el archivo es <code>surface/$root</code>. Figma une los grupos anidados con barras, por lo que una herramienta que conserve el grupo superior escribirá <code>semantic/surface/page</code>: el resto del nombre no cambia.</p>
+
+          <h2 id="modes">Modos de Figma y modos de color</h2>
+          <p>Cada modo de la colección semántica corresponde a un valor de <code>data-theme</code> en <code>&lt;html&gt;</code>. Así, un marco configurado como oscuro en Figma muestra lo mismo que la página con <code>data-theme="dark"</code>.</p>
+          <div class="luz-table-wrap" role="region" aria-label="Modos de Figma y modos de color de la página" tabindex="0">
+            <table class="luz-table">
+              <thead>
+                <tr><th scope="col">Modo de Figma</th><th scope="col"><code>data-theme</code></th><th scope="col">Dónde está en el archivo</th></tr>
+              </thead>
+              <tbody>
+                <tr><td data-label="Modo de Figma"><div>Claro</div></td><td data-label="data-theme"><div><code>light</code>, o ninguno</div></td><td data-label="Dónde está en el archivo"><div><code>$value</code> y <code>$extensions.mode.Light</code></div></td></tr>
+                <tr><td data-label="Modo de Figma"><div>Oscuro</div></td><td data-label="data-theme"><div><code>dark</code></div></td><td data-label="Dónde está en el archivo"><div><code>$extensions.mode.Dark</code></div></td></tr>
+                <tr><td data-label="Modo de Figma"><div>Alto contraste</div></td><td data-label="data-theme"><div><code>high-contrast</code></div></td><td data-label="Dónde está en el archivo"><div><code>$extensions.mode["High contrast"]</code></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Un tema propio, <a href="/docs/tokens/themes/">creado como se explica en esa página</a>, no está en el archivo. Para tenerlo en Figma, añádelo como modo extra y copia sus valores de su archivo CSS. Este paso es opcional.</p>
+
+          <h2 id="import">Importarlo</h2>
+          <p>Hay dos formas. Ninguna se ha probado todavía con este archivo.</p>
+          <ul>
+            <li><strong>Tokens Studio o Terrazzo:</strong> leen archivos DTCG, así que carga este tal cual. Los valores de oscuro y alto contraste están en <code>$extensions.mode</code>, una extensión de LUZ que no forma parte del estándar DTCG, así que comprueba que tu herramienta los convierte en modos.</li>
+            <li><strong>Figma, sin plugin:</strong> el panel Variables importa archivos DTCG, pero crea <strong>un modo por archivo</strong>, y un alias a otra colección necesita la extensión propia de Figma <code>com.figma.aliasData</code>. Por eso, primero hay que convertir este archivo, como se explica más abajo. Si lo importas tal cual, solo obtendrás los valores del modo claro.</li>
+          </ul>
+          <p>Para convertir el archivo para importarlo con la función propia de Figma, usa un script breve o hazlo a mano:</p>
+          <ol>
+            <li>Escribe el grupo <code>primitives</code> en un archivo propio e impórtalo como colección de <strong>primitivos de LUZ</strong>.</li>
+            <li>Para cada modo (claro, oscuro y alto contraste), escribe un archivo con el grupo <code>semantic</code>, donde el <code>$value</code> de cada token sea su valor en <code>$extensions.mode</code> para ese modo.</li>
+            <li>En esos archivos, asigna a cada alias de un token primitivo (<code>{primitives.gray.90}</code>), la extensión <code>com.figma.aliasData</code> que indica el nombre de la variable en los primitivos de LUZ, o escribe el color en lugar del alias.</li>
+            <li>Importa el archivo del modo claro para crear la colección de <strong>semántica de LUZ</strong> y, después, importa cada uno de los otros dos archivos con <em>Import mode</em>, con los nombres Oscuro y Alto contraste.</li>
+          </ol>
+          <p>Es posible que los archivos preparados para cada modo se incluyan en el paquete más adelante, cuando se haya comprobado una importación en un archivo real de Figma.</p>
+
+          <h2 id="spec">El estándar y dónde se encuentran los modos</h2>
+          <p>Ambos archivos siguen la <a href="https://www.designtokens.org/TR/2025.10/">especificación Design Tokens 2025.10</a>, un informe final del Community Group del 28 de octubre de 2025. Es estable, pero no es un estándar del W3C ni forma parte del proceso de estándares del W3C.</p>
+          <ul>
+            <li><strong>El módulo de formato</strong> describe tokens, grupos, tipos y alias, y <strong>no tiene modos</strong>: cada archivo de tokens contiene un valor por token. <code>luz-tokens.dtcg.json</code> usa este formato. El <code>$value</code> de un token semántico es su valor para el modo claro, y los otros dos modos están en <code>$extensions.mode</code>, una convención que leen Tokens Studio y Terrazzo. Es una extensión, no forma parte de la especificación.</li>
+            <li><strong>El módulo de resolución</strong> es donde la especificación sitúa los modos, como un <em>modificador</em>: un conjunto de contextos, cada uno con las fuentes de tokens que se aplican después de la base. <code>luz-tokens.resolver.json</code> (la exportación <code>./dtcg/resolver</code>) usa este formato: el conjunto base es el archivo de tokens y el modificador <code>mode</code> contiene los contextos <code>light</code>, <code>dark</code> y <code>high-contrast</code>, cada uno con todo el grupo semántico de ese modo. El valor predeterminado es <code>light</code>, como en <code>:root</code>.</li>
+          </ul>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">Path</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dtcg-resolver" aria-label="Copy the path of the resolver file">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Where the resolver file is"><code id="code-dtcg-resolver">node_modules/@luz-ds/tokens/dist/luz-tokens.resolver.json</code></pre>
+          </div>
+          <ul>
+            <li><strong>Comprobado con los esquemas oficiales.</strong> Una prueba valida ambos archivos con los esquemas JSON que publica el Community Group para 2025.10 (copiados en el repositorio, sin necesidad de conexión) y comprueba que cada contexto da a cada token el valor que conserva el archivo de tokens para ese modo.</li>
+            <li><strong>No comprobado con una herramienta.</strong> Ninguna implementación de resolución ha cargado el archivo de resolución, y no se ha probado con Figma ni Tokens Studio. La validación confirma que el archivo está bien formado, no que una herramienta concreta lo entienda.</li>
+            <li><strong>Los dos temas incluidos en core</strong> no están en ninguno de los archivos, como se explica más arriba.</li>
+          </ul>
+
+          <h2 id="limits">Límites conocidos</h2>
+          <p>Según <a href="https://help.figma.com/hc/en-us/articles/15343816063383">la ayuda de Figma sobre modos e importación</a> (consultada el 9 de octubre de 2026) o informes de otras personas, y sin comprobarlo con este archivo:</p>
+          <ul>
+            <li><strong>Importa los primitivos antes que los tokens semánticos</strong> que apuntan a ellos, si tu herramienta crea dos colecciones. De lo contrario, no se podrán resolver los alias.</li>
+            <li><strong>Se pierden las descripciones.</strong> La ayuda de Figma no las menciona y hay informes de que no se importan. La función de cada token se indica en la <a href="/docs/tokens/color/">página de color</a>.</li>
+            <li><strong>Se omiten los tamaños en <code>rem</code>.</strong> Figma solo admite dimensiones en <code>px</code>, y la escala tipográfica está en <code>rem</code>.</li>
+            <li><strong>Se omiten las listas de fuentes.</strong> Figma solo admite un nombre de fuente, no una lista. Configura las fuentes en los estilos de texto de Figma.</li>
+            <li><strong>Los modos requieren un plan de pago de Figma</strong> (Professional, Organization, Enterprise o Education), y el número de modos por colección depende del plan.</li>
+          </ul>
+
+          <h2 id="keep-in-step">Mantén Figma y el código sincronizados</h2>
+          <ul>
+            <li>Vuelve a importar cada vez que cambie la versión de <code>@luz-ds/tokens</code>. El archivo se regenera con cada versión.</li>
+            <li>No cambies un valor solo en Figma: cambia el token en el código y Figma lo actualizará en la siguiente importación.</li>
+            <li>Usa la misma regla para nombrar tus propias variables, para que diseñadores y desarrolladores utilicen los mismos términos.</li>
+          </ul>
+    </div>

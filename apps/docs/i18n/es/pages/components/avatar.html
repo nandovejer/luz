@@ -1,0 +1,166 @@
+<!-- luz:page
+title: Avatar
+description: Identifica a una persona o un equipo con sus iniciales o una foto, en tres tamaños.
+source: de0a1a30fab3
+reviewed: false
+-->
+    <div class="docs-component" id="c-avatar">
+          <h2 id="example">Ejemplo</h2>
+          <p>Tres avatares pequeños, medianos y grandes, cada uno con las iniciales de una persona.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-row">
+              <span class="luz-avatar luz-avatar--sm" role="img" aria-label="Ana Belén">AB</span>
+              <span class="luz-avatar luz-avatar--md" role="img" aria-label="Carlos Díaz">CD</span>
+              <span class="luz-avatar luz-avatar--lg" role="img" aria-label="Eva Flores">EF</span>
+            </div>
+            <div class="o-row">
+              <span class="luz-avatar luz-avatar--sm"><img src="/apps/docs/assets/desert-640.jpg" width="24" height="24" alt="Ana Belén"></span>
+              <span class="luz-avatar luz-avatar--md"><img src="/apps/docs/assets/desert-640.jpg" width="36" height="36" alt="Carlos Díaz"></span>
+              <span class="luz-avatar luz-avatar--lg"><img src="/apps/docs/assets/desert-640.jpg" width="48" height="48" alt="Eva Flores"></span>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Si no se carga una foto, el navegador muestra su texto <code>alt</code> dentro del cuadro, en mayúsculas como las iniciales del avatar; un nombre largo puede desbordarlo. El nombre sigue disponible para el lector de pantalla.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de avatar">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-avatar" aria-label="Copy the avatar markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Avatar markup"><code id="code-avatar">&lt;span class=&quot;luz-avatar luz-avatar--md&quot; role=&quot;img&quot; aria-label=&quot;Carlos Díaz&quot;&gt;CD&lt;/span&gt;</code></pre>
+            </div>
+            <p>Junto al nombre de la persona, el avatar lo repite: ocúltalo en su lugar.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-avatar-named" aria-label="Copy the avatar next to a name markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Avatar next to a name markup"><code id="code-avatar-named">&lt;span class=&quot;luz-avatar luz-avatar--sm&quot; aria-hidden=&quot;true&quot;&gt;CD&lt;/span&gt; Carlos Díaz</code></pre>
+            </div>
+            <p>Con una foto: la imagen ocupa el cuadro y se recorta en forma de cuadrado.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-avatar-photo" aria-label="Copy the avatar with a photo markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Avatar with a photo markup"><code id="code-avatar-photo">&lt;span class=&quot;luz-avatar luz-avatar--md&quot;&gt;&lt;img src=&quot;/img/ana.jpg&quot; width=&quot;36&quot; height=&quot;36&quot; alt=&quot;Ana Belén&quot;&gt;&lt;/span&gt;
+
+&lt;span class=&quot;luz-avatar luz-avatar--lg&quot;&gt;&lt;img src=&quot;/img/ana.jpg&quot; width=&quot;48&quot; height=&quot;48&quot; alt=&quot;&quot;&gt;&lt;/span&gt; Ana Belén</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Elige un modificador de tamaño.</p>
+            <p>Sin un modificador, el avatar no tiene un tamaño propio. El contenido son las iniciales o un elemento <code>&lt;img&gt;</code>.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Tamaños de avatar" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o contenido</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o contenido"><div><code>.luz-avatar--sm</code></div></td><td data-label="Efecto"><div>24 × 24 px, texto extrapequeño</div></td></tr>
+                  <tr><td data-label="Clase o contenido"><div><code>.luz-avatar--md</code></div></td><td data-label="Efecto"><div>36 × 36 px, texto pequeño</div></td></tr>
+                  <tr><td data-label="Clase o contenido"><div><code>.luz-avatar--lg</code></div></td><td data-label="Efecto"><div>48 × 48 px, texto base</div></td></tr>
+                  <tr><td data-label="Clase o contenido"><div>Con un elemento <code>&lt;img&gt;</code> dentro</div></td><td data-label="Efecto"><div>Una foto: ocupa el cuadro, se recorta en forma de cuadrado y adopta las esquinas del avatar</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un cuadro en línea que centra el texto, al que da estilo <code>components/avatar.css</code>. No necesita JavaScript.</p>
+            <ul>
+              <li>Las iniciales se muestran en mayúsculas con la fuente mono (<code>text-transform: uppercase</code>).</li>
+              <li>Los colores son el tono suave de marca y el color de texto de marca en todos los modos.</li>
+              <li>Una foto es un elemento <code>&lt;img&gt;</code> que ocupa el <code>100%</code> del cuadro, con <code>object-fit: cover</code> y las esquinas del avatar (<code>border-radius: inherit</code>). El cuadro no recorta el contenido (no usa <code>overflow: hidden</code>), por lo que las iniciales que superan un cuadro pequeño con texto al 200 % siguen siendo legibles.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el avatar solo usa HTML y CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Un avatar no es interactivo ni recibe el foco.</p>
+            <ul>
+              <li>Las iniciales por sí solas son una imagen: usa <code>role="img"</code> y un <code>aria-label</code> con el nombre completo para que el lector de pantalla no deletree las iniciales.</li>
+              <li>Una foto por sí sola se identifica mediante su <code>alt</code>, con el nombre de la persona: no necesita role ni <code>aria-label</code>. Si la foto es lo único que hay dentro de un enlace o botón, el <code>alt</code> identifica el control e indica también la acción: <code>alt="Ana Belén, your account"</code>.</li>
+              <li>Junto al nombre, el avatar es decorativo: añade <code>aria-hidden="true"</code> a las iniciales y <code>alt=""</code> a la foto.</li>
+              <li>Dentro de un enlace o botón con texto, el texto identifica el control; oculta el avatar.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un avatar para identificar a una persona o una cuenta cuando hay poco espacio, por ejemplo, en una lista de miembros o junto a quien escribe un comentario.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un avatar como única forma de distinguir a las personas.</p>
+            <ul>
+              <li>Dos personas pueden tener las mismas iniciales: muestra el nombre en texto junto al avatar.</li>
+              <li>Para indicar un estado o una categoría, usa una <a href="/docs/components/tag/">etiqueta</a>.</li>
+              <li>Para mostrar el retrato de un ponente o un producto a mayor tamaño, usa una tarjeta con el marco de imagen: consulta <a href="/docs/landing/templates/#speakers">Ponentes</a> en las plantillas de la página de inicio. Un avatar mide de 24 a 48 px.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Muestra el nombre junto al avatar: dos personas pueden tener las mismas iniciales.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><span class="luz-avatar luz-avatar--md">AB</span><span>Ana Belén</span></div>
+                  <div class="o-row"><span class="luz-avatar luz-avatar--md">AB</span><span>Álvaro Blanco</span></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No uses solo avatares para distinguir a las personas: «AB» y «AB» pueden ser personas distintas.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><span class="luz-avatar luz-avatar--md">AB</span><span class="luz-avatar luz-avatar--md">AB</span><span class="luz-avatar luz-avatar--md">CD</span></div>
+                </div>
+              </figure>
+            </div>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa el mismo encuadre en todas las fotos de una lista: cabeza y hombros, con la cara alejada de los bordes, porque el cuadro las recorta en forma de cuadrado.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><span class="luz-avatar luz-avatar--lg"><img src="/apps/docs/assets/desert-640.jpg" width="48" height="48" alt=""></span><span class="luz-avatar luz-avatar--lg"><img src="/apps/docs/assets/desert-640.jpg" width="48" height="48" alt=""></span><span class="luz-avatar luz-avatar--lg"><img src="/apps/docs/assets/desert-640.jpg" width="48" height="48" alt=""></span></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No mezcles fotos e iniciales en una lista que podría usar solo una de las dos opciones: quienes no tienen foto parecerán un tipo distinto de miembro.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-row"><span class="luz-avatar luz-avatar--lg"><img src="/apps/docs/assets/desert-640.jpg" width="48" height="48" alt=""></span><span class="luz-avatar luz-avatar--lg">CD</span><span class="luz-avatar luz-avatar--lg"><img src="/apps/docs/assets/desert-640.jpg" width="48" height="48" alt=""></span><span class="luz-avatar luz-avatar--lg">EF</span></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Dos iniciales del nombre que usa la persona.</p>
+            <ul>
+              <li>El nombre accesible es el nombre completo, nunca las iniciales. En una foto, se indica en <code>alt</code>.</li>
+              <li>Usa el mismo tamaño para todos los avatares de una lista.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Las iniciales usan el color de texto de marca sobre el tono suave de marca. La foto es contenido: el sistema no la mide.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del avatar en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Iniciales</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-brand-subtle</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>6.5:1</div></td><td data-label="Alto contraste"><div>13.6:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el avatar no lo recibe. Si forma parte de un enlace, el anillo del enlace lo delimita.</li>
+              <li><strong>No depende solo del color:</strong> las iniciales y el nombre accesible identifican a la persona; el color es igual para todos.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 7 tokens que lee <code>components/avatar.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-base</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

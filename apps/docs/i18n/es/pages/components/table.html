@@ -1,0 +1,262 @@
+<!-- luz:page
+title: Tabla
+description: Compara registros con varios atributos, en filas y columnas que se leen bien a 320 px.
+source: 62f70e282b20
+reviewed: false
+-->
+    <div class="docs-component" id="c-table">
+          <h2 id="example">Ejemplo</h2>
+          <p>Una tabla con tres servicios, su estado, CPU y región.</p>
+          <div class="docs-example" data-docs-specimen>
+          <fieldset class="docs-width" hidden>
+            <legend>Ancho</legend>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="phone"> Móvil</label>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="tablet"> Tableta</label>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="full" checked> Completo</label>
+          </fieldset>
+          <div class="luz-docs-example__frame">
+          <div class="docs-demo__stage">
+            <div class="luz-table-wrap" role="region" aria-label="Service status" tabindex="0">
+              <table class="luz-table luz-table--sticky-col">
+                <caption>Service status</caption>
+                <thead>
+                  <tr><th scope="col">Service</th><th scope="col">Status</th><th scope="col">CPU</th><th scope="col">Region</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Service">api-gateway</td><td data-label="Status"><span class="luz-tag luz-tag--green luz-tag--dot">Running</span></td><td data-label="CPU">12%</td><td data-label="Region">eu-west-1</td></tr>
+                  <tr><td data-label="Service">data-pipeline</td><td data-label="Status"><span class="luz-tag luz-tag--yellow luz-tag--dot">Degraded</span></td><td data-label="CPU">78%</td><td data-label="Region">us-east-1</td></tr>
+                  <tr><td data-label="Service">mailer</td><td data-label="Status"><span class="luz-tag luz-tag--red luz-tag--dot">Stopped</span></td><td data-label="CPU">0%</td><td data-label="Region">eu-west-1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+
+          <p class="docs-demo__note">Make the window narrow: below 480 px of container width each row becomes a card.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La ordenación en el navegador (<code>data-luz-sort</code>) solo se ha comprobado en el árbol de accesibilidad de Chromium; aún no se ha probado con NVDA, JAWS, VoiceOver, TalkBack ni Orca. La columna ordenada se indica con <code>aria-sort</code> en su cabecera y cada ordenación se anuncia en un mensaje de estado; al recorrer las cabeceras con Tab se anuncia el nombre de la columna, y el estado de ordenación se lee en la celda de cabecera y en el mensaje de estado.</p>
+          <ul>
+            <li>Solo se ordenan las filas cargadas en la página; la ordenación no se conserva al recargar y la barra de direcciones no cambia. No se admiten tablas con varias filas de cabecera ni cabeceras con <code>colspan</code>; al convertir una cabecera ordenable en botón se descarta cualquier contenido que no sea su texto o un enlace.</li>
+            <li>Ordenar unos miles de filas las mueve todas en una sola tarea: ordénalas en el servidor. El orden del texto depende de la configuración regional del navegador para el idioma de la tabla.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de tablas">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-table" aria-label="Copy the table markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Table markup"><code id="code-table">&lt;div class=&quot;luz-table-wrap&quot; role=&quot;region&quot; aria-label=&quot;Invoices&quot; tabindex=&quot;0&quot;&gt;
+  &lt;table class=&quot;luz-table&quot;&gt;
+    &lt;caption&gt;Invoices&lt;/caption&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Number&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Date&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Amount (€)&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td data-label=&quot;Number&quot;&gt;INV-0042&lt;/td&gt;&lt;td data-label=&quot;Date&quot;&gt;1 Oct 2026&lt;/td&gt;&lt;td data-label=&quot;Amount (€)&quot;&gt;120.00&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones de tabla" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-table</code></div></td><td data-label="Efecto"><div>Ancho completo, fila de cabecera sobre la superficie intensa, una línea entre filas y resaltado de la fila bajo el puntero</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-table-wrap</code></div></td><td data-label="Efecto"><div>Desplaza la tabla horizontalmente cuando es más ancha que su contenedor</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-table--sticky-col</code></div></td><td data-label="Efecto"><div>Mantiene visible la primera columna mientras la tabla se desplaza horizontalmente</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-table--compact</code></div></td><td data-label="Efecto"><div>Menos espacio encima y debajo de cada fila (unos 33 px para una línea de texto, no 49 px) y menos espacio entre columnas; el tamaño del texto no cambia</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-table__numeric</code> en un <code>&lt;th&gt;</code> y su <code>&lt;td&gt;</code></div></td><td data-label="Efecto"><div>Alinea una columna de números al final de la celda, con cifras del mismo ancho</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-luz-sort</code> en un <code>&lt;th scope="col"&gt;</code></div></td><td data-label="Efecto"><div>La columna se puede ordenar en el navegador: su texto se convierte en un botón</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-sort-value</code> en un <code>&lt;td&gt;</code></div></td><td data-label="Efecto"><div>El criterio de ordenación de la celda cuando no coincide con su texto: un número con formato (<code>1,204</code>), una fecha mostrada como «13 Oct» o un precio con su moneda</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>aria-sort</code> en el <code>&lt;th&gt;</code> ordenado</div></td><td data-label="Efecto"><div><code>ascending</code> o <code>descending</code>, solo en una cabecera: un triángulo indica la dirección</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-label</code> en cada <code>&lt;td&gt;</code></div></td><td data-label="Efecto"><div>El nombre de la columna que se muestra antes del valor cuando las filas pasan a ser tarjetas</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Los números y los datos densos tienen cada uno su propia clase. Aplica la clase numérica a la cabecera y a todas las celdas de la columna.</p>
+            <div class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage">
+              <div class="luz-table-wrap" role="region" aria-label="Shipments this week" tabindex="0">
+                <table class="luz-table luz-table--compact">
+                  <caption>Shipments this week</caption>
+                  <thead>
+                    <tr><th scope="col">Route</th><th scope="col" class="luz-table__numeric">Parcels</th><th scope="col" class="luz-table__numeric">Weight (kg)</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-label="Route">Sevilla to Madrid</td><td class="luz-table__numeric" data-label="Parcels">1,204</td><td class="luz-table__numeric" data-label="Weight (kg)">8,430.5</td></tr>
+                    <tr><td data-label="Route">Cádiz to Málaga</td><td class="luz-table__numeric" data-label="Parcels">312</td><td class="luz-table__numeric" data-label="Weight (kg)">1,912.0</td></tr>
+                    <tr><td data-label="Route">Huelva to Faro</td><td class="luz-table__numeric" data-label="Parcels">58</td><td class="luz-table__numeric" data-label="Weight (kg)">406.3</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </div>
+            <h4 id="sorting">Ordenación en el navegador</h4>
+            <p>Marca cada cabecera ordenable con <code>data-luz-sort</code>. El script convierte su texto en un botón; sin él, la tabla sigue funcionando.</p>
+            <div class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage">
+              <div class="luz-table-wrap" role="region" aria-label="Parcels per route" tabindex="0">
+                <table class="luz-table luz-table--compact">
+                  <caption>Parcels per route</caption>
+                  <thead>
+                    <tr><th scope="col" data-luz-sort aria-sort="ascending">Route</th><th scope="col" class="luz-table__numeric" data-luz-sort>Parcels</th><th scope="col" class="luz-table__numeric" data-luz-sort>Weight (kg)</th><th scope="col">Notes</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-label="Route">Cádiz to Málaga</td><td class="luz-table__numeric" data-label="Parcels" data-sort-value="312">312</td><td class="luz-table__numeric" data-label="Weight (kg)" data-sort-value="1912">1,912.0</td><td data-label="Notes">Daily</td></tr>
+                    <tr><td data-label="Route">Huelva to Faro</td><td class="luz-table__numeric" data-label="Parcels" data-sort-value="58">58</td><td class="luz-table__numeric" data-label="Weight (kg)" data-sort-value="406.3">406.3</td><td data-label="Notes">Monday and Thursday</td></tr>
+                    <tr><td data-label="Route">Sevilla to Madrid</td><td class="luz-table__numeric" data-label="Parcels" data-sort-value="1204">1,204</td><td class="luz-table__numeric" data-label="Weight (kg)" data-sort-value="8430.5">8,430.5</td><td data-label="Notes">Daily</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-table-sort" aria-label="Copy the sortable table markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Sortable table markup"><code id="code-table-sort">&lt;table class=&quot;luz-table&quot; id=&quot;routes&quot;&gt;
+  &lt;caption&gt;Parcels per route&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;!-- With a link: it sorts on the server without JavaScript --&gt;
+      &lt;th scope=&quot;col&quot; data-luz-sort&gt;&lt;a href=&quot;?sort=route#routes&quot;&gt;Route&lt;/a&gt;&lt;/th&gt;
+      &lt;!-- Plain text: the script makes it a button --&gt;
+      &lt;th scope=&quot;col&quot; class=&quot;luz-table__numeric&quot; data-luz-sort&gt;Parcels&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-label=&quot;Route&quot;&gt;Sevilla to Madrid&lt;/td&gt;
+      &lt;td class=&quot;luz-table__numeric&quot; data-label=&quot;Parcels&quot; data-sort-value=&quot;1204&quot;&gt;1,204&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <ul>
+              <li><strong>La ordenación se basa en el texto de la celda,</strong> salvo que tenga <code>data-sort-value</code>. Dos números simples (<code>12</code>, <code>0.5</code>, <code>-3</code>) se ordenan como números; todo lo demás, como texto, según el idioma de la tabla, con <code>Room 2</code> antes que <code>Room 10</code>.</li>
+              <li><strong>Un número con separador de miles, unidad o moneda necesita <code>data-sort-value</code></strong> con el número sin formato (<code>1204</code> para <code>1,204</code>); de lo contrario, se ordena como texto y «1,204» queda antes de «999». Las fechas deben ser ISO (<code>2026-10-13</code>), sea cual sea el formato mostrado.</li>
+              <li><strong>Los valores iguales conservan su orden.</strong> La primera pulsación ordena de forma ascendente, la siguiente de forma descendente, y así sucesivamente; para recuperar el orden inicial, recarga la página.</li>
+              <li><strong>La cabecera solo indica la columna.</strong> No pongas la dirección en su texto ni en el pie: el triángulo, <code>aria-sort</code> y la línea de estado la indican y se actualizan con la ordenación.</li>
+            </ul>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Una <code>&lt;table&gt;</code> nativa con <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code> y <code>&lt;th scope&gt;</code>, con estilos de <code>components/table.css</code>. Sin JavaScript.</p>
+            <ul>
+              <li>El contenedor es un contenedor de consulta: por debajo de 480 px de ancho propio, cada fila se convierte en una tarjeta de parejas de etiqueta y valor, y se reduce el relleno de las celdas. Se adapta al ancho del contenedor, no al de la ventana, así que una tabla estrecha en una página ancha también se apila.</li>
+              <li>Las etiquetas proceden de <code>data-label</code>; las celdas que no lo tienen muestran solo el valor.</li>
+              <li>Las celdas que contienen más de un elemento necesitan un <code>&lt;div&gt;</code> que los envuelva para mantener unido el valor.</li>
+              <li><code>.luz-table__numeric</code> establece <code>text-align: end</code> y <code>font-variant-numeric: tabular-nums</code>, para alinear las cifras de una columna sea cual sea el idioma. En el diseño de tarjetas apiladas, el valor ya queda al final de la fila.</li>
+              <li><code>.luz-table--compact</code> solo cambia el relleno de las celdas: el tamaño del texto se mantiene, así que la tabla es más densa, pero igual de legible.</li>
+              <li><strong>Ordenación en el servidor</strong>, para resultados paginados o filtrados y para todas las tablas sin JavaScript: cada cabecera es un enlace a la misma página, ordenada por esa columna, y solo el <code>&lt;th scope="col"&gt;</code> de la columna ordenada lleva <code>aria-sort="ascending"</code> o <code>"descending"</code>. Indica también la dirección en el texto visible del enlace, por ejemplo, «Importe (€), ascendente»; haz que el texto del enlace empiece con las palabras de la propia cabecera; termina su <code>href</code> con el <code>id</code> de la tabla (<code>?sort=amount&amp;dir=desc#invoices</code>) para que el siguiente Tab llegue a la tabla después de recargar la página; e indica la ordenación en el pie («Facturas, ordenadas por importe, ascendente»).</li>
+              <li><strong>Ordenación en el navegador</strong>, para una tabla que contiene todas sus filas: añade <code>data-luz-sort</code> a las cabeceras. <code>luz.js</code> carga <code>table-sort.js</code> cuando hace falta, solo en páginas con una cabecera así, y el texto de cada cabecera (o el contenido de su enlace) pasa a un <code>&lt;button type="button"&gt;</code>. Al pulsarlo, ordena todos los <code>&lt;tbody&gt;</code> en su sitio, escribe <code>aria-sort</code> solo en esa cabecera e indica «Ordenado por Parcelas, ascendente» en un <code>&lt;output&gt;</code> que se anuncia con cortesía y no se ve. El foco permanece en el botón. Una tabla ordenada en el navegador no lleva la dirección en el pie ni las cabeceras, porque dejaría de ser correcta tras la primera pulsación.</li>
+              <li>El triángulo que aparece tras la cabecera ordenada se dibuja con CSS a partir de <code>aria-sort</code> (es una forma, no texto), así que también aparece en las cabeceras ordenadas en el servidor. Hacia arriba indica orden ascendente; hacia abajo, descendente.</li>
+              <li>Por debajo de 480 px, una fila de cabecera con un enlace o un botón permanece visible: sus cabeceras se muestran en una fila sobre las tarjetas y se ajustan para que se puedan ver y usar los controles. Una fila de cabecera con texto simple se oculta, como antes, porque cada tarjeta lleva sus etiquetas.</li>
+              <li>Las tarjetas cambian la propiedad <code>display</code> de los elementos de la tabla, lo que puede ocultarla a algunos lectores de pantalla. La hoja de estilos recomienda <code>role="table"</code>, <code>"row"</code> y <code>"cell"</code> en las tablas que se apilan.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el desplazamiento, la columna fija y las tarjetas son todo CSS. Una cabecera con enlace se ordena en el servidor; una cabecera de texto simple sigue siendo una cabecera.</p>
+            <p>Las filas nunca se ocultan y, si no se carga el script, la tabla permanece completa.</p>
+            <h4 id="sort-module">Cargar la ordenación por separado</h4>
+            <p>El módulo no importa nada ni tiene efecto hasta que lo llamas. Pásale la función <code>t</code> de las cadenas de core para escribir la línea de estado en el idioma de la tabla; sin ella, la tabla se sigue ordenando, pero la línea de estado queda vacía.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-table-sort-js" aria-label="Copy the table sort code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Table sort code"><code id="code-table-sort-js">import { initTableSort } from &quot;@luz-ds/core/table-sort&quot;;
+import { t } from &quot;@luz-ds/core/i18n&quot;;
+
+initTableSort(document, t);</code></pre>
+            </div>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>El contenedor recibe el foco (<code>tabindex="0"</code>) para que se pueda desplazar con las teclas de flecha.</p>
+            <ul>
+              <li>Asigna al contenedor <code>role="region"</code> y un <code>aria-label</code> para que ese punto de parada del foco tenga un nombre.</li>
+              <li>Usa <code>scope="col"</code> en las cabeceras de columna y <code>scope="row"</code> en la celda de cabecera que identifica su fila.</li>
+              <li>Una cabecera ordenable es un botón: Tab llega a ella, Enter o Espacio ordena y el foco permanece en ella mientras se mueven las filas. Los enlaces que sustituye el script conservan el foco que tenían.</li>
+              <li><code>aria-sort</code> se aplica al único <code>&lt;th scope="col"&gt;</code> ordenado. Cada ordenación se anuncia mediante la línea de estado (<code>&lt;output&gt;</code>, role <code>status</code>), en el idioma de la tabla; las cadenas son <code>sortedAsc</code> y <code>sortedDesc</code> de las cadenas de core (consulta los <a href="/docs/get-started/javascript/">módulos de JavaScript</a>; <code>data-luz-label-sorted-asc</code> y <code>data-luz-label-sorted-desc</code> las sobrescriben).</li>
+              <li>El nombre de la columna es solo el texto de la cabecera: no añadas un carácter de flecha ni «ascendente» al marcado.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una tabla para comparar registros con los mismos atributos: servicios y su estado, facturas e importes.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses una tabla para maquetar.</p>
+            <ul>
+              <li>Para un atributo por elemento, usa una lista.</li>
+              <li>Para unos pocos elementos con la misma importancia, usa <a href="/docs/components/card/">tarjetas</a>.</li>
+              <li>Para una cuadrícula de datos (filtros, selección de filas, edición de celdas o miles de filas), usa una biblioteca diseñada para eso. La tabla de LUZ muestra y ordena filas; no las gestiona. En resultados paginados, ordena en el servidor.</li>
+              <li>Para mostrar una tendencia temporal, usa una biblioteca de gráficos y conserva la tabla como alternativa textual. Una barra por fila es un <a href="/docs/components/meter/">medidor</a> en la celda de su cifra.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> La unidad en la cabecera, los mismos decimales y la columna alineada al final, incluida la cabecera.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-table-wrap"><table class="luz-table"><thead><tr><th>Service</th><th class="luz-table__numeric">CPU (%)</th></tr></thead><tbody><tr><td data-label="Service">api-gateway</td><td class="luz-table__numeric" data-label="CPU (%)">12.0</td></tr><tr><td data-label="Service">mailer</td><td class="luz-table__numeric" data-label="CPU (%)">0.5</td></tr></tbody></table></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Una cabecera imprecisa, la unidad en cada celda, decimales mezclados y sin alineación: cuesta comparar la columna.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-table-wrap"><table class="luz-table"><thead><tr><th>Service</th><th>Value</th></tr></thead><tbody><tr><td data-label="Service">api-gateway</td><td data-label="Value">12 %</td></tr><tr><td data-label="Service">mailer</td><td data-label="Value">0.48 %</td></tr></tbody></table></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>El pie identifica la tabla; los encabezados de columna son sustantivos breves.</p>
+            <ul>
+              <li>Pon las unidades en el encabezado, no en cada celda: «Importe (€)».</li>
+              <li>Coloca primero la columna que identifica la fila.</li>
+              <li>Alinea los números al final con <code>.luz-table__numeric</code>, tanto en la cabecera como en todas las celdas de la columna, y usa el mismo número de decimales. El texto queda al principio.</li>
+              <li>En las tablas que se ordenan en el navegador, la cabecera indica solo el nombre de la columna y su unidad, «Peso (kg)»: no añadas flechas ni la dirección en la cabecera ni en el pie.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Las cabeceras usan la superficie intensa; las celdas, la de la página y, bajo el puntero, la superficie de resalte.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la tabla en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Necesita</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Celda de cabecera</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>13.5:1</div></td><td data-label="Oscuro"><div>10.9:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Celda</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Celda, fila bajo el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Pie y etiquetas de las tarjetas</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco de una cabecera ordenable</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>4.8:1</div></td><td data-label="Oscuro"><div>5.6:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. «Necesita» indica el mínimo AA de WCAG 2.2: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el contenedor desplazable lo recibe, con un contorno de <code>--luz-focus-ring</code> de 2 px a 2 px por fuera. También lo recibe el botón de una cabecera ordenable.</li>
+              <li><strong>No solo el color:</strong> las cabeceras ordenables están subrayadas y la ordenada tiene un triángulo del color del texto que apunta hacia arriba o abajo. La dirección también aparece en <code>aria-sort</code> y en la línea de estado.</li>
+              <li><strong>Área interactiva:</strong> los botones de cabecera miden al menos 24 px de alto, sea cual sea el relleno de la celda.</li>
+              <li><strong>Bordes:</strong> las líneas de las filas (<code>--luz-divider</code>) son decorativas; la cabecera tiene su propia superficie y las celdas, sus encabezados.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 17 tokens que lee <code>components/table.css</code>, por familia. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

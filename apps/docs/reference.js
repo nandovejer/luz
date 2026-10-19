@@ -15,17 +15,19 @@
 
 import { initCopyButtons } from "/packages/core/dist/clipboard.js";
 import { highlightBlock } from "/packages/core/dist/highlight.js";
+import { loadLocales, registerLocale } from "/packages/core/dist/i18n.js";
 import { initTabs } from "/packages/core/dist/tabs.js";
 import { initModals } from "/packages/core/dist/modal.js";
 import { initPlayers } from "/packages/core/dist/player.js";
 import { initSidebar } from "/packages/core/dist/sidebar.js";
+import { initThemeCycle } from "/packages/core/dist/theme.js";
 // Defines <luz-search> at once, not on idle as site.js would: the header's
 // search button is on every page, and wires itself when it connects
 import "/packages/site/dist/search.js";
 // Defines <luz-consent>, for the live example of the Cookie consent page
 // (its answer is stored under its own key, luz-consent-demo)
 import "/packages/site/dist/consent.js";
-import { initSiteHeader } from "/apps/site/header.js";
+import { initSiteChrome } from "/apps/site/header.js";
 import { initDocsView } from "./view.js";
 
 /* ---- Small enhancements ----------------------------------------------- */
@@ -65,8 +67,37 @@ function initOnThisPage() {
   initSidebar(nav);
 }
 
+/* ---- The strings core's scripts write ------------------------------------ */
+
+/**
+ * Fetch the strings core ships for the languages of the page (Spanish), and
+ * register the ones the docs own (Arabic: core has no Arabic yet, docs-i18n
+ * decision D10). The Arabic file is a lazy chunk, fetched only on a page in
+ * Arabic. When a file cannot be loaded the scripts write English: the page
+ * still works. Delete the Arabic file and its branch when core ships `ar`.
+ * Resolves when the strings are there.
+ */
+async function loadStrings() {
+  const jobs = [loadLocales()];
+  if (document.documentElement.lang.toLowerCase().split("-")[0] === "ar") {
+    jobs.push(
+      import("./locale-scripts/ar.json").then((module) => {
+        // `$header` is a note to the translators, not a string
+        const strings = { ...module.default };
+        delete strings.$header;
+        registerLocale("ar", strings);
+      }),
+    );
+  }
+  await Promise.allSettled(jobs);
+}
+
 /* ---- Copy page as Markdown --------------------------------------------- */
 
+// The rail's link carries what it says after a copy, in the page's language
+// (data-docs-copied, data-docs-not-copied; written by the generator from the
+// catalog keys rail.copied and rail.not-copied). These are the fallback for a
+// link without them.
 const COPIED = "Copied the page as Markdown.";
 const NOT_COPIED = "Could not copy the page.";
 
@@ -81,6 +112,8 @@ function initCopyPage() {
   const link = document.querySelector("aside.luz-docs-rail a[data-docs-copy-page]");
   if (!link || !navigator.clipboard) return;
   const href = link.href;
+  const copied = link.dataset.docsCopied || COPIED;
+  const notCopied = link.dataset.docsNotCopied || NOT_COPIED;
   // Only the site's own file: an href to another origin is never fetched, and
   // a click says it could not copy (no request leaves, nothing is copied)
   const own = new URL(href, location.href).origin === location.origin;
@@ -122,10 +155,10 @@ function initCopyPage() {
     read.then(
       (body) =>
         navigator.clipboard.writeText(body).then(
-          () => say(COPIED),
+          () => say(copied),
           () => window.location.assign(href),
         ),
-      () => say(NOT_COPIED),
+      () => say(notCopied),
     );
   });
 }
@@ -165,7 +198,8 @@ function initSnippetPicker() {
   // The form is in a <template>: without a script the table is the index and
   // every snippet shows. State lives in the DOM (checked, hidden) and the URL.
   const template = document.querySelector("template[data-docs-picker]");
-  const index = document.querySelector('[role="region"][aria-label="Every snippet"]');
+  // The region that holds the table of every snippet: scripts/docs-site/snippets.js writes data-docs-snippets on it (its name is text in the page's language, so it is no hook)
+  const index = document.querySelector('[role="region"][data-docs-snippets]');
   if (!template || !index) return;
   template.after(template.content.cloneNode(true));
   const form = template.nextElementSibling;
@@ -432,8 +466,11 @@ function initSlotDemo() {
 
 /* ---- Boot -------------------------------------------------------------- */
 
-// Color mode, menu drawer and header height (shared with the home page)
-initSiteHeader();
+// Menu drawer and header height (shared with the home page), and the
+// colour-mode button: wired now, named once core's strings for the page's
+// language are registered (the markup names it in that language meanwhile)
+initSiteChrome();
+initThemeCycle(document, true);
 // The specimens stay in Vejer whatever the light; the canvas demo paints with
 // the token values, so it repaints per mode and light
 initSpecimenTheme();
@@ -443,11 +480,16 @@ initOnThisPage();
 initCopyPage();
 revealCurrentPage();
 initAssets();
-initCopy();
-// highlightBlock() only: initHighlight() also injects a copy button into each
-// block, and core ships no position for it.
-document.querySelectorAll("pre.luz-code-block").forEach(highlightBlock);
-initTryIt();
+// The copy buttons and the code blocks write strings (their names, "Copied"):
+// they wait for the language of the page to be loaded; the rest does not
+loadStrings().then(() => {
+  initThemeCycle();
+  initCopy();
+  // highlightBlock() only: initHighlight() also injects a copy button into each
+  // block, and core ships no position for it.
+  document.querySelectorAll("pre.luz-code-block").forEach(highlightBlock);
+  initTryIt();
+});
 initExampleWidth();
 // The remembered Code / Design tab first: initTabs() opens the tab it marks,
 // unless the URL fragment points into the other one

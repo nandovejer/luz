@@ -12,7 +12,7 @@
       { "href": "/docs/components/" },
       { "href": "/docs/tokens/figma/" }
     ] },
-    { "id": "html", "label": "HTML elements", "slug": "html", "package": "@luz-ds/core", "essentials": [
+    { "id": "html", "label": "HTML elements", "slug": "html", "parent": "documentation", "package": "@luz-ds/core", "essentials": [
       { "href": "/docs/a-z/" },
       { "href": "/docs/components/form/" },
       { "href": "/docs/components/" }

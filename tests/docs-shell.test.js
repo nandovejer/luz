@@ -325,7 +325,9 @@ describe("the flat sidebar: every area open, every page listed", () => {
       const nav = queryLive(treeOf(p.route), "nav.luz-docs-nav") ?? query(treeOf(p.route), "nav.luz-sidebar");
       expect(query(nav, "ul.docs-nav"), `${p.route} ul.docs-nav`).toBeTruthy();
       const areas = queryAll(nav, "a.docs-nav__area").map((a) => a.attrs.get("href"));
-      expect(areas, p.route).toEqual(site.areas.map((a) => `/docs/${a.slug}/`));
+      // An area nested in another (site.json "parent") is a sub-area link inside its parent's item, not an area link of the list
+      expect(areas, p.route).toEqual(site.areas.filter((a) => !a.parent).map((a) => `/docs/${a.slug}/`));
+      expect(queryAll(nav, "a.docs-nav__subarea").map((a) => a.attrs.get("href")), `${p.route} sub-areas`).toEqual(site.areas.filter((a) => a.parent).map((a) => `/docs/${a.slug}/`));
     }
   });
 
@@ -344,7 +346,9 @@ describe("the flat sidebar: every area open, every page listed", () => {
       const parents = links.filter((a) => a.attrs.get("aria-current") === "true").map((a) => a.attrs.get("href"));
       const area = areaOf(site, p);
       expect(current, `${p.route} page`).toEqual(area ? [p.route] : []);
-      expect(parents, `${p.route} area`).toEqual(area && p.route !== `/docs/${area.slug}/` ? [`/docs/${area.slug}/`] : []);
+      // A nested area marks its parent's link too, then its own (the sub-area link)
+      const outer = area?.parent ? [`/docs/${site.areas.find((a) => a.id === area.parent).slug}/`] : [];
+      expect(parents, `${p.route} area`).toEqual(area ? [...outer, ...(p.route !== `/docs/${area.slug}/` ? [`/docs/${area.slug}/`] : [])] : []);
       expect(links.filter((a) => hasClass(a, "is-active")), p.route).toEqual([]);
     }
   });
