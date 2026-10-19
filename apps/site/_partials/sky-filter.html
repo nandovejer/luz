@@ -1,0 +1,8 @@
+<!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+     a fractal noise that displaces their soft ovals -->
+<svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" scale="120"/>
+  </filter>
+</svg>
