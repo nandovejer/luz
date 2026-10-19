@@ -272,7 +272,9 @@ describe("Pages site: the not-found page (docs-redesign SEC-MISC-3/4/5)", () => 
     // No <base>: it would send the skip link's #main-content to the home page
     expect(html).not.toMatch(/<base\b/);
     const urls = [...html.matchAll(/(?:href|src|action|poster)="([^"]*)"/g)].map((m) => m[1]);
-    for (const url of urls) expect(url.startsWith(base) || url.startsWith("#") || url.startsWith("https://github.com/"), url).toBe(true);
+    // The one other host is the video the lead of the 404 opens in a new tab (docs-site.test.js pins it)
+    const VIDEO = "https://youtu.be/D4eJx-0g3Do";
+    for (const url of urls) expect(url.startsWith(base) || url.startsWith("#") || url.startsWith("https://github.com/") || url === VIDEO, url).toBe(true);
     // Nothing else that loads or sends to a URL, and no path that climbs out of the base
     expect(html).not.toMatch(/\s(srcset|imagesrcset|data|formaction|ping)="|url\(|@import/i);
     expect(html).not.toMatch(/["'(\s]\.\.?\//);

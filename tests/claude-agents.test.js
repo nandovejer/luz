@@ -76,13 +76,16 @@ describe("claude agents: naming scheme", () => {
   });
 });
 
+// OWNER.md section 1: high where quality shows, medium for the mechanical ones (since 2026-10-18)
+const SONNET_EFFORT = { "test-writer": "high", "docs-writer": "high", "test-runner": "medium", "chore-runner": "medium" };
+
 describe("claude agents: the mechanical ones run on Sonnet 5.5", () => {
   for (const name of SONNET_AGENTS) {
-    it(`${name} sets model claude-sonnet-5-5 and effort high`, () => {
+    it(`${name} sets model claude-sonnet-5-5 and effort ${SONNET_EFFORT[name]}`, () => {
       expect(existsSync(resolve(agentsDir, `${name}.md`)), `${name}.md exists`).toBe(true);
       const fm = frontmatter(`${name}.md`);
       expect(fm.model).toBe("claude-sonnet-5-5");
-      expect(fm.effort).toBe("high");
+      expect(fm.effort).toBe(SONNET_EFFORT[name]);
     });
   }
 });
