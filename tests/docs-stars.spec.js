@@ -20,11 +20,13 @@
  *    animation, CSS only, as the home's stars drift), never under reduced motion.
  *  - No layout change, no sideways scroll at 320 px, axe passes in dark.
  *
- * The band has no agreed class name, so `findBand` looks for what the decision
- * describes (an out-of-flow box with a background image, at the top of the page,
- * across it, as tall as the header) on every element and on its ::before and
- * ::after, and marks the host with `data-test-band` so the test can switch it off
- * with an injected style and compare the page with and without it.
+ * The band belongs to the site header (`.site-header::before`); `findBand` looks
+ * for what the decision describes (an out-of-flow box with a background image, at
+ * the top of the page, across it, as tall as the header) on the header and its
+ * ::before and ::after, and marks the host with `data-test-band` so the test can
+ * switch it off with an injected style and compare the page with and without it.
+ * The body's sky (stars across the whole page, fixed to the window) is another
+ * thing and is read by tests/site-sky.spec.js.
  *
  * It needs JavaScript only for what the site does before it (boot.js sets
  * data-theme), so it runs in `chromium`.
@@ -89,7 +91,8 @@ function findBand(page) {
       }
       return { left: 0, top: 0, width: vw, height: window.innerHeight };
     };
-    for (const host of [document.documentElement, ...document.querySelectorAll('*')]) {
+    // Only the header's own band: the page has a second sky, fixed to the window, behind its text (apps/site/sky.css, tests/site-sky.spec.js)
+    for (const host of document.querySelectorAll('.site-header')) {
       for (const pseudo of [null, '::before', '::after']) {
         const s = getComputedStyle(host, pseudo);
         if (pseudo && (s.content === 'none' || s.content === 'normal')) continue;

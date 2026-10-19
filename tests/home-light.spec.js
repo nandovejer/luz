@@ -774,58 +774,156 @@ test.describe('review fixes', () => {
     expect((await html(page)).light).toBe('night');
   });
 
-  /* -- 7b. The line spans the whole width, on the bar's frosted glass ------------- */
+  /* -- 7b. The line spans the whole width; the bar is plain glass --------------------- */
 
-  test('the line spans the width of the light, on the same frosted background as the bar', async ({ page }) => {
+  /** The alpha of a computed colour: `rgba(r, g, b, a)`, `rgb(...)` (1) or `oklab(l a b / a)`. */
+  const alphaOf = (css) => {
+    const slash = css.match(/\/\s*([\d.]+%?)\s*\)$/);
+    if (slash) return slash[1].endsWith('%') ? parseFloat(slash[1]) / 100 : parseFloat(slash[1]);
+    const rgba = css.match(/^rgba\(([^)]+)\)$/);
+    return rgba ? parseFloat(rgba[1].split(',')[3]) : 1;
+  };
+
+  test('the line spans the width of the light, on glass of its own', async ({ page }) => {
     await open(page, '/');
     await openBar(page);
     const m = await page.evaluate(() => {
       const light = document.querySelector('home-light').getBoundingClientRect();
       const lineEl = document.querySelector('home-light .home-light__line');
-      const bar = getComputedStyle(document.querySelector('home-light .home-light__bar'));
       const ls = getComputedStyle(lineEl);
-      return { light: light.width, line: lineEl.getBoundingClientRect().width, lineBlur: ls.backdropFilter, barBlur: bar.backdropFilter, lineBg: ls.backgroundColor, barBg: bar.backgroundColor };
+      return { light: light.width, line: lineEl.getBoundingClientRect().width, lineBlur: ls.backdropFilter, lineBg: ls.backgroundColor };
     });
     expect(m.line, 'the line is as wide as the light').toBeGreaterThanOrEqual(m.light - 1);
-    expect(m.lineBlur).toBe(m.barBlur);
-    expect(m.lineBg).toBe(m.barBg);
+    expect(m.lineBlur, 'the line blurs what is behind it').toMatch(/blur\(/);
+    expect(alphaOf(m.lineBg), 'the line is translucent glass').toBeGreaterThan(0);
+    expect(alphaOf(m.lineBg)).toBeLessThan(1);
   });
 
-  /* -- 7c. Stars at the top of the page, in the dark lights only -------------------- */
+  test("the bar has no visible border: a 1px transparent one, on paper at 60% with a 1px blur", async ({ page }) => {
+    await open(page, '/');
+    await openBar(page);
+    const m = await page.evaluate(() => {
+      const s = getComputedStyle(document.querySelector('home-light .home-light__bar'));
+      return { width: s.borderTopWidth, style: s.borderTopStyle, color: s.borderTopColor, bg: s.backgroundColor, blur: s.backdropFilter };
+    });
+    // A border that is there but cannot be seen: forced colours draws it as the bar's edge
+    expect(m.width).toBe('1px');
+    expect(m.style).not.toBe('none');
+    expect(alphaOf(m.color), 'the border colour is transparent').toBe(0);
+    expect(alphaOf(m.bg), 'the bar is paper at 60%').toBeCloseTo(0.6, 2);
+    expect(m.blur, 'a faint blur, so the globe\'s dotted coasts show through').toBe('blur(1px)');
+  });
+
+  test("while the line is expanded the globe's mask fades later, and it comes back when the line is closed", async ({ page }) => {
+    await open(page, '/');
+    // Where, in percent of the globe's height, the mask has fallen to half: read from the computed gradient
+    const half = () =>
+      page.evaluate(() => {
+        const g = getComputedStyle(document.querySelector('home-light .home-light__stage > home-globe'));
+        const stops = [...(g.maskImage || g.webkitMaskImage).matchAll(/rgba?\(([^)]*)\)\s*([\d.]+)%/g)].map((m) => {
+          const c = m[1].split(',').map(Number);
+          return { alpha: c[3] ?? 1, at: parseFloat(m[2]) };
+        });
+        for (let i = 1; i < stops.length; i++) {
+          if (stops[i].alpha <= 0.5 && stops[i - 1].alpha > 0.5) {
+            const [p, q] = [stops[i - 1], stops[i]];
+            return p.at + ((p.alpha - 0.5) / (p.alpha - q.alpha)) * (q.at - p.at);
+          }
+        }
+        return null;
+      });
+    const closed = await half();
+    expect(closed, 'the globe fades out').not.toBeNull();
+    await openBar(page);
+    await expect.poll(half).toBeGreaterThan(/** @type {number} */ (closed) + 10);
+    await line(page).click();
+    await expect(line(page)).toHaveAttribute('aria-expanded', 'false');
+    await expect.poll(half).toBeCloseTo(/** @type {number} */ (closed), 1);
+  });
+
+  test("the globe's sea is opaque: the stars behind the page do not show through the sphere", async ({ page }) => {
+    await open(page, '/');
+    const fill = await page.evaluate(() => getComputedStyle(document.querySelector('home-globe .home-globe__sea')).fill);
+    expect(fill).not.toBe('none');
+    expect(alphaOf(fill), `the sea's fill (${fill}) has no transparency`).toBe(1);
+  });
+
+  /* -- 7c. The sky: stars in the dark lights, clouds in the light ones (apps/site/sky.css) -- */
 
   for (const [light, time, mode] of LIGHTS) {
     const dark = ['dawn', 'dusk', 'night'].includes(light);
-    test(`${light} (${time}): ${dark ? 'faint stars at the top of the page' : 'no stars'}`, async ({ page }) => {
+    test(`${light} (${time}): ${dark ? 'stars on the two layers of the sky' : 'clouds, no stars'}`, async ({ page }) => {
       await open(page, '/', { time });
       await expect.poll(async () => (await html(page)).light).toBe(light);
       expect(mode).toBe(dark ? 'dark' : 'light');
-      // Two layers of stars behind the page's content (main's ::before and ::after), twinkling at two paces
+      // Two layers behind the page's content (main's ::before and ::after)
       await expect
         .poll(() => page.evaluate(() => {
           const main = document.querySelector('main.luz-landing-main');
           return ['::before', '::after'].map((pseudo) => {
             const s = getComputedStyle(main, pseudo);
-            return { stars: s.content !== 'none' && /radial-gradient/.test(s.backgroundImage) && parseFloat(s.opacity) > 0, events: s.pointerEvents, twinkle: s.animationName !== 'none' };
+            return {
+              layer: s.content !== 'none' && s.position === 'fixed' && s.zIndex === '-1' && parseFloat(s.opacity) > 0,
+              stars: /radial-gradient/.test(s.backgroundImage),
+              clouds: s.boxShadow !== 'none',
+              events: s.pointerEvents,
+              twinkle: s.animationName.split(',').some((n) => n.trim() === 'landing-twinkle'),
+            };
           });
         }))
-        .toEqual([0, 1].map(() => ({ stars: dark, events: 'none', twinkle: dark })));
-      // The page's own background is untouched
-      expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+        .toEqual([0, 1].map(() => ({ layer: true, stars: dark, clouds: !dark, events: 'none', twinkle: dark })));
+      // The page's surface comes from <html>: the body (.o-page) paints nothing, so the sky shows behind the content
+      const bg = await page.evaluate(() => {
+        const b = getComputedStyle(document.body);
+        return { body: b.backgroundColor, image: b.backgroundImage, html: getComputedStyle(document.documentElement).backgroundColor };
+      });
+      expect(alphaOf(bg.body), 'the body has no background of its own').toBe(0);
+      expect(bg.image).toBe('none');
+      expect(alphaOf(bg.html), 'the surface is on <html>').toBe(1);
     });
   }
 
-  test('the stars drift with the scroll: slower than the page, the far layer slower still', async ({ page }) => {
+  test('the sky drifts with the scroll: slower than the page, the far layer slower still', async ({ page }) => {
     await open(page, '/', { time: '23:30' });
     // The block offset of each layer's translate (none is 0)
     const ys = () => page.evaluate(() => ['::before', '::after'].map((p) => parseFloat(getComputedStyle(document.querySelector('main.luz-landing-main'), p).translate.split(' ')[1]) || 0));
     expect(await ys(), 'still at the top of the page').toEqual([0, 0]);
     await page.evaluate(() => window.scrollTo(0, 300));
-    // They stay a little behind: moved down by a part of the scroll, the far layer by more
-    await expect.poll(async () => (await ys())[0]).toBeGreaterThan(5);
+    const scrolled = await page.evaluate(() => window.scrollY);
+    // The near layer (::before) rises by 0.3 of the scroll, the far one (::after) by 0.15
+    await expect.poll(async () => (await ys())[0] / scrolled).toBeCloseTo(-0.3, 1);
+    await expect.poll(async () => (await ys())[1] / scrolled).toBeCloseTo(-0.15, 1);
     const [near, far] = await ys();
-    expect(near, 'the near layer lags a little').toBeLessThan(120);
-    expect(far, 'the far layer lags more').toBeGreaterThan(near);
-    expect(far).toBeLessThan(150);
+    expect(near, 'the near layer rises faster than the far one').toBeLessThan(far);
+    expect(Math.abs(near), 'but slower than the page').toBeLessThan(scrolled);
+  });
+
+  test('the glow of the page rises with the scroll: faint at the top, full at the foot', async ({ page }) => {
+    await open(page, '/', { time: '14:00' });
+    const glow = () =>
+      page.evaluate(() => {
+        const s = getComputedStyle(document.querySelector('.o-page'), '::before');
+        return { layer: s.content !== 'none' && s.position === 'fixed' && s.pointerEvents === 'none' && s.zIndex === '-1', image: s.backgroundImage, opacity: parseFloat(s.opacity), y: parseFloat((s.translate.split(' ')[1] ?? '0')) || 0 };
+      });
+    const top = await glow();
+    expect(top.layer, 'the glow is a layer behind the page').toBe(true);
+    expect(top.image).toMatch(/gradient/);
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await expect.poll(async () => (await glow()).opacity).toBeGreaterThan(top.opacity + 0.3);
+    expect((await glow()).y, 'it has come up from below').toBeLessThan(top.y);
+  });
+
+  test('under reduced motion the glow does not move: a still, faint glow', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, '/', { time: '14:00' });
+    const read = () => page.evaluate(() => { const s = getComputedStyle(document.querySelector('.o-page'), '::before'); return { glow: s.content !== 'none' && /gradient/.test(s.backgroundImage), opacity: parseFloat(s.opacity), animation: s.animationName }; });
+    const top = await read();
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(300);
+    expect(await read()).toEqual(top);
+    expect(top.glow, 'the glow is drawn').toBe(true);
+    expect(top.animation).toBe('none');
+    expect(top.opacity).toBeGreaterThan(0);
   });
 
   test('under reduced motion the stars do not drift with the scroll', async ({ page }) => {
