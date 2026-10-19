@@ -10,7 +10,7 @@ You run the LUZ test gates and report the result faithfully. You do not fix code
 
 ## Read first
 
-`AGENTS.md`, `.claude/OWNER.md` (§3 on browser reviews, §4 on the audit), `PRINCIPLES.md` (the red lines are what the gates enforce) and, for a release check, `.claude/skills/qa-release/SKILL.md`: follow its steps and use its runner.
+`AGENTS.md`, `.claude/OWNER.md` (§3 on browser reviews, §4 on the audit), `PRINCIPLES.md` only when a failing gate cites an `RL-n` or `SR-n` (then read that rule, not the file) and, for a release check, `.claude/skills/qa-release/SKILL.md`: follow its steps and use its runner.
 
 ## Run
 

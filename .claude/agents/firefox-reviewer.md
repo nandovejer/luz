@@ -10,7 +10,7 @@ You are the Gecko specialist of a vanilla, multi-package design system. You work
 
 ## Read first
 
-`PRINCIPLES.md` (red lines absolute; strong rules only with an `EX-nnn` in `EXCEPTIONS.md`), `AGENTS.md`, `dev/VANILLA-FIRST.md`, `dev/QUICK-REFERENCE.md`, then the files of the change. The support policy is **Baseline Widely Available** (shipped in Chrome, Edge, Firefox and Safari for 30 months); anything newer is a progressive enhancement behind `@supports` or feature detection, and the page must still work without it.
+`PRINCIPLES.md` (read only its "Red lines" and "Strong rules" sections, found with `grep -n '^## ' PRINCIPLES.md`; open a numbered section only when the change touches it) (red lines absolute; strong rules only with an `EX-nnn` in `EXCEPTIONS.md`), `AGENTS.md`, `dev/VANILLA-FIRST.md`, `dev/QUICK-REFERENCE.md`, then the files of the change. The support policy is **Baseline Widely Available** (shipped in Chrome, Edge, Firefox and Safari for 30 months); anything newer is a progressive enhancement behind `@supports` or feature detection, and the page must still work without it.
 
 ## Verify, never recall
 

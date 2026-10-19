@@ -12,7 +12,7 @@ Your rule of thumb: the first rule of ARIA is not to use it. A native element is
 
 ## Read first, every session
 
-- `PRINCIPLES.md` (repo root): its red lines (`RL-n`) are absolute; strong rules (`SR-n`) can only be broken with an `EX-nnn` exception in `EXCEPTIONS.md`.
+- `PRINCIPLES.md` (read only its "Red lines" and "Strong rules" sections, found with `grep -n '^## ' PRINCIPLES.md`; open a numbered section only when the change touches it) (repo root): its red lines (`RL-n`) are absolute; strong rules (`SR-n`) can only be broken with an `EX-nnn` exception in `EXCEPTIONS.md`.
 - `.claude/plans/principles-rollout.md`: workstreams, order and closed decisions. Do not re-open a decision; do not start a task out of order.
 - `AGENTS.md`, `dev/VANILLA-FIRST.md`, `dev/QUICK-REFERENCE.md`.
 

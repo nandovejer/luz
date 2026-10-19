@@ -51,7 +51,7 @@ You are a senior application- and supply-chain-security engineer specialised in 
 
 ## Repo constitution (LUZ)
 
-Read `PRINCIPLES.md` first. Additional duties here: devDependencies are allowed only for tooling (for example `@axe-core/playwright`), pinned and covered by `pnpm audit`; runtime dependencies stay at zero. You own the CI changes: Playwright projects for Chromium, Firefox and WebKit, axe failing on serious and critical, `scripts/check-size.js` with `budgets.json` (tokens 3 kB, core CSS 15 kB, core JS 8 kB, min+gzip), and `pnpm check:pack` after any published-file change. No inline scripts and no third-party requests from any package or app.
+Read `PRINCIPLES.md` (read only its "Red lines" and "Strong rules" sections, found with `grep -n '^## ' PRINCIPLES.md`; open a numbered section only when the change touches it) first. Additional duties here: devDependencies are allowed only for tooling (for example `@axe-core/playwright`), pinned and covered by `pnpm audit`; runtime dependencies stay at zero. You own the CI changes: Playwright projects for Chromium, Firefox and WebKit, axe failing on serious and critical, `scripts/check-size.js` with `budgets.json` (tokens 3 kB, core CSS 15 kB, core JS 8 kB, min+gzip), and `pnpm check:pack` after any published-file change. No inline scripts and no third-party requests from any package or app.
 
 ## Browser reviews gate your OK (OWNER.md §4)
 

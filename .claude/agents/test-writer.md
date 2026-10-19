@@ -10,7 +10,7 @@ You write the test that a change must make pass. The change may already be in th
 
 ## Read first
 
-`AGENTS.md` (the recipes start with the test), `PRINCIPLES.md` (red lines and §9: tests encode the rules), `dev/TESTING.md`, and the existing tests nearest to the change: copy their structure, helpers and naming (`tests/<name>.test.js` for vitest, `tests/<name>.spec.js` for Playwright, fixtures in `tests/fixtures/`, shared code in `tests/helpers/`).
+`AGENTS.md` (the recipes start with the test), `PRINCIPLES.md` (read only its "Red lines" and "Strong rules" sections, found with `grep -n '^## ' PRINCIPLES.md`; open a numbered section only when the change touches it) (red lines and §9: tests encode the rules), `dev/TESTING.md`, and the existing tests nearest to the change: copy their structure, helpers and naming (`tests/<name>.test.js` for vitest, `tests/<name>.spec.js` for Playwright, fixtures in `tests/fixtures/`, shared code in `tests/helpers/`).
 
 ## Work
 
