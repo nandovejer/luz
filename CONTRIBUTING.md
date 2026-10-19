@@ -32,8 +32,8 @@ Proposals go to Discussions, work to the public Project. Say what problem you ha
 ## Send a pull request
 
 1. Fork the repository and make a branch.
-2. Write the test first and commit it on its own: `test: what the change must do`. It must fail without your change. A bug fix starts with the test that reproduces it.
-3. Make the change that turns it green. Do not edit `dist/` or `docs/` by hand: rebuild them.
+2. Explore and make the change. Before your first commit, write its test and commit it on its own, first: `test: what the change must do`. It must fail without your change. A bug fix starts with the test that reproduces it.
+3. Commit the change that turns it green. Do not edit `dist/` or `docs/` by hand: rebuild them.
 4. Run `pnpm check:all`. It runs every check; fix what it reports.
 5. Add a changeset with `pnpm changeset` when you change a published package.
 6. Open the pull request and tick the boxes of its template. A red line crossed closes it.

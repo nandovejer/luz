@@ -24,7 +24,7 @@ PRINCIPLES.md has red lines (`RL-n`, absolute, never excepted) and strong rules 
 
 ### 5. Tests first
 
-Every change to `packages/`, `apps/` or `scripts/` starts with a test that fails without it (PRINCIPLES.md SR-9): commit it red (`test: …`), then the change that makes it green. A bug fix starts with the test that reproduces it. Every recipe below starts there. See [TESTING.md](./dev/TESTING.md).
+Every change to `packages/`, `apps/` or `scripts/` is committed as a test that fails without it (PRINCIPLES.md SR-9): commit it red (`test: …`), then the change that makes it green. Explore first: prototype in the working tree without a test, and write the test once the shape is settled, before the first commit. Prove it red on the base (a worktree, never `git stash`) and green with the change, then make the two commits. A bug fix is committed with the test that reproduces it. The "Test first" step of each recipe below is the first commit, not the first thing you type. See [TESTING.md](./dev/TESTING.md).
 
 ### 6. Browsers
 

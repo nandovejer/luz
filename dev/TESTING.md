@@ -23,13 +23,15 @@ pnpm check:all -- --fast      # no build and no check:generated (not for a relea
 
 ## Tests first
 
-Every change to `packages/`, `apps/` or `scripts/` starts with a test that fails without it (PRINCIPLES.md SR-9).
+Every change to `packages/`, `apps/` or `scripts/` is committed as a test that fails without it (PRINCIPLES.md SR-9). The rule is about the history, not the order of work: exploring comes first.
 
-1. Write the test.
-2. Run it and see it fail. Read the failure.
-3. Commit it on its own: `test: what the change must do`.
-4. Write the change. Do not edit the test to get it green.
-5. Commit the change.
+1. Explore. Prototype the change in the working tree, try options, throw them away. No test yet, no commit.
+2. When the shape is settled, write the test of what the change must do, before the first commit. Write it from the behaviour, not from the code you wrote.
+3. Prove it red on the base: in a worktree of `HEAD` (`git worktree add`), copy only the test files and run them. Read the failure.
+4. Prove it green in the working tree, with the change. Do not edit the test to get it green.
+5. Commit the test alone: `test: what the change must do`. Then commit the change.
+
+Before you push, `node scripts/check-red-commit.js <base> HEAD` does what CI does: it checks the `test:` commit out alone on top of the base and expects it to fail.
 
 A bug fix starts with the test that reproduces the bug. In a pull request, CI checks the `test:` commit alone on top of the base and expects it to fail (`scripts/check-red-commit.js`). A change that no machine can check, such as the wording of a page, says so in its pull request.
 
