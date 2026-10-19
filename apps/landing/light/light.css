@@ -130,6 +130,11 @@ home-light .home-light__stage > home-globe {
   );
 }
 
+/* While the bar is open the globe fades later, so its land is there behind the bar's glass */
+home-light:has(.home-light__line[aria-expanded="true"]) .home-light__stage > home-globe {
+  mask-image: linear-gradient(to bottom, #000 60%, rgb(0 0 0 / 0.7) 85%, transparent 100%);
+}
+
 /* --------------------------------------------------------------------------
    The foot: the line that opens the bar, and the bar above it
    -------------------------------------------------------------------------- */
@@ -209,11 +214,14 @@ home-light .home-light__bar {
   max-width: 48rem;
   margin-inline: auto;
   padding: var(--luz-space-sm) var(--luz-space-md);
-  border: 1px solid var(--luz-divider);
+  /* No visible border; a transparent one becomes the bar's edge in forced colors */
+  border: 1px solid transparent;
   border-radius: var(--luz-radius-md);
-  background: color-mix(in oklab, var(--_paper) 55%, transparent);
-  -webkit-backdrop-filter: blur(6px) saturate(1.2);
-  backdrop-filter: blur(6px) saturate(1.2);
+  /* Paper at 60%, with a faint blur: the globe's dotted coasts show through
+     (more blur melts them), the text keeps its contrast */
+  background: color-mix(in oklab, var(--_paper) 60%, transparent);
+  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(1px);
   color: var(--_ink);
   font: 400 var(--luz-text-sm) / 1.4 var(--luz-font-sans);
   text-align: center;
@@ -416,8 +424,10 @@ home-globe > svg {
   overflow: visible;
 }
 
+/* Opaque: the same tint as over the page, but the stars behind it (landing.css)
+   do not show through the sphere; where the globe's mask fades it, they come back with it */
 home-globe .home-globe__sea {
-  fill: color-mix(in oklab, var(--_ink) 4%, transparent);
+  fill: color-mix(in oklab, var(--_ink) 4%, var(--_paper));
 }
 
 home-globe .home-globe__dots path {
