@@ -11,6 +11,7 @@
  * Run with: pnpm test:ui
  */
 
+/* global atob, Blob, createImageBitmap, innerWidth, OffscreenCanvas, ScrollTimeline -- these run in the page, inside page.evaluate() */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
@@ -21,6 +22,8 @@ import { SITE_KINDS } from '../scripts/luz-packages.js';
 import { areaOfPackage } from './helpers/package-areas.js';
 import { KEY as MODE_KEY, seedMode } from './helpers/site-lights.js';
 import { faded } from './helpers/settle.js';
+import { over, parseColor, ratio } from '../packages/tokens/lib/contrast.js';
+import { resolveColor } from './helpers/design-tokens.js';
 
 const fromRepo = (path) => fileURLToPath(new URL(`../${path}`, import.meta.url));
 
@@ -986,15 +989,444 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('the not-found page', () => {
+    const LEAD = 'SYSTEM FAILURE. What you are looking for is not here. Do not try to bend the page... that is impossible. Instead, only try to realize the truth: There is no page.';
+    const VIDEO = 'https://youtu.be/D4eJx-0g3Do';
+    const WIDTHS = [320, 360, 390, 768, 1280, 1920];
+    const green = (token) => {
+      const { r, g, b } = parseColor(resolveColor('dark', token));
+      return `rgb(${r}, ${g}, ${b})`;
+    };
+    const BLACK = 'rgb(0, 0, 0)';
+
     test('says the page is not here and links to the A–Z index, the components and the docs home', async ({ page }) => {
       await page.goto('/404.html');
       await expect(page.locator('h1')).toHaveText('Page not found');
-      const links = page.locator('main').getByRole('link');
+      const links = page.locator('main .docs-not-found__links').getByRole('link');
       await expect(links).toHaveText(['A–Z index', 'Components', 'Docs home']);
       // root-absolute in the source (the Pages build makes them relative), in this order
       expect(await links.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(['/docs/a-z/', '/docs/components/', '/docs/']);
       // The layout has no script of its own (the dev server adds its client)
       expect(readFileSync(fromRepo('apps/docs/_layouts/not-found.html'), 'utf-8')).not.toMatch(/<script/);
+      expect(await page.title()).toMatch(/^Page not found/);
+    });
+
+    test('has no sidebar and lists no documentation page in a nav', async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto('/404.html');
+      await expect(page.locator('ul.docs-nav')).toHaveCount(0);
+      await expect(page.locator('a.docs-nav__area')).toHaveCount(0);
+      await expect(page.locator('nav.luz-docs-nav')).toHaveCount(0);
+      await expect(page.locator('aside')).toHaveCount(0);
+      await expect(page.locator('.luz-docs-rail')).toHaveCount(0);
+    });
+
+    test('keeps the header\'s drawer, with the three site links only', async ({ page }) => {
+      await page.goto('/404.html');
+      const drawer = page.locator('nav#page-nav.luz-sidebar.page-nav.page-nav--drawer');
+      await expect(drawer).toHaveCount(1);
+      await expect(drawer).toHaveAttribute('popover', '');
+      await expect(page.locator('.luz-nav-toggle[popovertarget="page-nav"]')).toHaveCount(1);
+      const hrefs = await drawer.locator('a').evaluateAll((all) => all.map((a) => a.getAttribute('href')));
+      expect(hrefs).toEqual(['/', '/docs/', 'https://github.com/nandovejer/luz']);
+    });
+
+    test('at 390px the menu button opens the drawer and the three site links are reachable', async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 800 });
+      await page.goto('/404.html');
+      const drawer = page.locator('#page-nav');
+      await expect(drawer).toBeHidden();
+      await page.getByRole('button', { name: 'Menu', exact: true }).click();
+      await expect(drawer).toBeVisible();
+      for (const name of ['Home', 'Docs', 'GitHub']) await expect(drawer.getByRole('link', { name })).toBeVisible();
+    });
+
+    test('at 1280px the drawer is not displayed and the header row shows the site links', async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto('/404.html');
+      await expect(page.locator('#page-nav')).toBeHidden();
+      const row = page.locator('.site-header__nav');
+      for (const name of ['Home', 'Docs', 'GitHub']) await expect(row.getByRole('link', { name })).toBeVisible();
+    });
+
+    test('is one centred column: main spans the window, its text is centred, so are the links', async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto('/404.html');
+      const main = await page.locator('main').boundingBox();
+      expect(main.x, 'no sidebar column on the left').toBeLessThanOrEqual(1);
+      expect(main.width, 'main spans the full width of the window').toBeGreaterThanOrEqual(1280 - 20);
+      expect(await page.locator('main').evaluate((el) => getComputedStyle(el).textAlign)).toBe('center');
+      const links = page.locator('main .docs-not-found__links a');
+      await expect(links).toHaveCount(3);
+      const boxes = await links.evaluateAll((all) => all.map((a) => { const r = a.getBoundingClientRect(); return { left: r.left, right: r.right }; }));
+      const left = Math.min(...boxes.map((b) => b.left));
+      const right = Math.max(...boxes.map((b) => b.right));
+      expect((left + right) / 2, 'the three links are centred in the window').toBeCloseTo(640, -1);
+    });
+
+    test('has no horizontal scroll at any width, and the three links stay inside the window', async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      for (const width of [320, 390, 768, 1024, 1280, 1920]) {
+        await page.setViewportSize({ width, height: 800 });
+        await page.goto('/404.html');
+        const facts = await page.evaluate(() => ({
+          scroll: document.documentElement.scrollWidth,
+          inner: innerWidth,
+          links: [...document.querySelectorAll('main .docs-not-found__links a')].map((a) => { const r = a.getBoundingClientRect(); return [r.left, r.right]; }),
+        }));
+        expect(facts.scroll, `${width}px: no sideways scroll`).toBeLessThanOrEqual(facts.inner);
+        expect(facts.links).toHaveLength(3);
+        for (const [l, r] of facts.links) {
+          expect(l, `${width}px: link inside on the left`).toBeGreaterThanOrEqual(0);
+          expect(r, `${width}px: link inside on the right`).toBeLessThanOrEqual(facts.inner);
+        }
+      }
+    });
+
+    test.describe('black and green, whatever the reader\'s mode', () => {
+      /** @param {import('@playwright/test').Page} page */
+      async function expectBlackAndGreen(page) {
+        await page.goto('/404.html');
+        const html = page.locator('html');
+        await expect(html).toHaveAttribute('data-theme', 'dark');
+        expect(await html.getAttribute('data-light'), 'no hour: no script to read it').toBeNull();
+        const colours = await page.evaluate(() => {
+          const c = (selector) => getComputedStyle(document.querySelector(selector));
+          return { body: c('body').backgroundColor, headline: c('.docs-not-found__code').color, lead: c('main .docs-lead').color, button: c('.docs-not-found__links a.luz-btn--outline').color };
+        });
+        expect(colours.body, 'the page is the media surface\'s black').toBe(BLACK);
+        expect(colours.body).toBe(green('--luz-surface-media'));
+        expect(colours.headline, 'the title is green 30').toBe(green('--luz-green-30'));
+        expect(colours.button, 'the links are green 30').toBe(green('--luz-green-30'));
+        expect(colours.lead, 'the lead is green 40').toBe(green('--luz-green-40'));
+      }
+
+      test('as served', async ({ page }) => {
+        await expectBlackAndGreen(page);
+      });
+
+      test.describe('with a light colour scheme', () => {
+        test.use({ colorScheme: 'light' });
+        test('the same', async ({ page }) => {
+          await expectBlackAndGreen(page);
+        });
+      });
+
+      test('with a stored choice of light, the same', async ({ page }) => {
+        await page.addInitScript(() => localStorage.setItem('luz-theme', 'light'));
+        await expectBlackAndGreen(page);
+      });
+
+      test('has none of the home\'s sky or the hours\' light', async ({ page }) => {
+        await page.goto('/404.html');
+        await expect(page.locator('link[rel="stylesheet"][href$="/apps/site/sky.css"]')).toHaveCount(0);
+        await expect(page.locator('link[rel="stylesheet"][href$="theme-light.css"]')).toHaveCount(0);
+        await expect(page.locator('svg.site-sky-filter')).toHaveCount(0);
+        await expect(page.locator('body.site-sky')).toHaveCount(0);
+      });
+
+      test('the lead, the buttons, the footer links and the footer line keep 4.5:1 on the black', async ({ page }) => {
+        await page.goto('/404.html');
+        const pairs = await page.evaluate(() => {
+          const out = [];
+          const own = (el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+          const targets = [...document.querySelectorAll('main .docs-lead a, main .docs-not-found__links a, footer *')].filter(own);
+          for (const el of targets) {
+            const s = getComputedStyle(el);
+            out.push({ what: `${el.localName}.${el.className}: ${el.textContent.trim().slice(0, 24)}`, color: s.color, background: s.backgroundColor });
+          }
+          return out;
+        });
+        expect(pairs.length, 'the lead, three buttons, five footer links and the footer line').toBeGreaterThanOrEqual(10);
+        for (const { what, color, background } of pairs) {
+          const back = over(parseColor(background), parseColor(BLACK));
+          expect(ratio(over(parseColor(color), back), back), what).toBeGreaterThanOrEqual(4.5);
+        }
+        // the primary button is white on green 60
+        const primary = await page.locator('main .luz-btn--primary').evaluate((el) => ({ color: getComputedStyle(el).color, background: getComputedStyle(el).backgroundColor }));
+        expect(primary.color).toBe('rgb(255, 255, 255)');
+        expect(primary.background).toBe(green('--luz-green-60'));
+      });
+    });
+
+    // The picture switches on by squeezing main (docs-crt-on): the geometry is read where motion is not welcome
+    test.describe('the headline', () => {
+      test.use({ reducedMotion: 'reduce' });
+
+      test('is a decorative "SYSTEM FAILURE" before the content in the main', async ({ page }) => {
+        await page.goto('/404.html');
+        const code = page.locator('main p.docs-not-found__code');
+        await expect(code).toHaveCount(1);
+        await expect(code).toHaveText('SYSTEM FAILURE');
+        await expect(code).toHaveAttribute('aria-hidden', 'true');
+        const first = await page.evaluate(() => document.querySelector('main').firstElementChild.className);
+        expect(first, 'the first thing in main').toContain('docs-not-found__code');
+      });
+
+      for (const width of WIDTHS) {
+        test(`${width}px: it is on one line, inside the window, centred, with no sideways scroll`, async ({ page }) => {
+          await page.setViewportSize({ width, height: 800 });
+          await page.goto('/404.html');
+          await expect(page.locator('p.docs-not-found__code')).toHaveCount(1);
+          const f = await page.locator('p.docs-not-found__code').evaluate((el) => {
+            const s = getComputedStyle(el);
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            const r = range.getBoundingClientRect();
+            return { lines: el.getBoundingClientRect().height / parseFloat(s.lineHeight), textLines: r.height / parseFloat(s.lineHeight), size: parseFloat(s.fontSize), nowrap: s.whiteSpace, left: r.left, right: r.right, inner: innerWidth, scroll: document.documentElement.scrollWidth };
+          });
+          expect(Math.round(f.lines), 'one line').toBe(1);
+          expect(Math.round(f.textLines), 'its text is one line').toBe(1);
+          expect(f.nowrap).toBe('nowrap');
+          expect(f.scroll, 'no sideways scroll').toBeLessThanOrEqual(f.inner);
+          expect(f.left, 'inside on the left').toBeGreaterThanOrEqual(0);
+          expect(f.right, 'inside on the right').toBeLessThanOrEqual(f.inner);
+          expect(Math.abs((f.left + f.right) / 2 - f.inner / 2), 'centred within 2px').toBeLessThanOrEqual(2);
+          if (width >= 1280) expect(f.size, 'at most 5.5rem').toBeLessThanOrEqual(88);
+          if (width === 320) expect(Math.abs(f.size - 28)).toBeLessThanOrEqual(2);
+          if (width === 390) expect(Math.abs(f.size - 36)).toBeLessThanOrEqual(2);
+        });
+      }
+    });
+
+    test('the one h1 is said to a screen reader and not painted: "Page not found" in a clipped wrapper', async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.goto('/404.html');
+      await expect(page.locator('h1')).toHaveCount(1);
+      await expect(page.locator('main .u-sr-only h1.docs-title')).toHaveText('Page not found');
+      await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toHaveCount(1);
+      const box = await page.locator('main .u-sr-only:has(h1)').evaluate((el) => { const r = el.getBoundingClientRect(); return [r.width, r.height]; });
+      expect(box, 'the wrapper is 1x1px').toEqual([1, 1]);
+      expect(await page.title()).toMatch(/^Page not found/);
+    });
+
+    test.describe('the lead', () => {
+      test('reads the message, and is one link to the video that opens in a new tab', async ({ page }) => {
+        await page.goto('/404.html');
+        const lead = page.locator('main p.docs-lead');
+        await expect(lead).toHaveCount(1);
+        expect(await lead.evaluate((el) => el.textContent.trim())).toBe(`${LEAD} (opens in a new tab)`);
+        const link = lead.locator('a');
+        await expect(link).toHaveCount(1);
+        await expect(link).toHaveClass(/\bdocs-not-found__lead-link\b/);
+        await expect(link).toHaveAttribute('href', VIDEO);
+        await expect(link).toHaveAttribute('target', '_blank');
+        const rel = (await link.getAttribute('rel')).split(/\s+/);
+        expect(rel).toContain('noopener');
+        expect(rel).toContain('noreferrer');
+        await expect(link.locator('.u-sr-only')).toHaveText('(opens in a new tab)');
+      });
+
+      test('is centred, never justified, and balances its last line; the link looks like the text around it', async ({ page }) => {
+        await page.goto('/404.html');
+        await expect(page.locator('a.docs-not-found__lead-link')).toHaveCount(1);
+        const read = () => page.evaluate(() => {
+          const lead = getComputedStyle(document.querySelector('main p.docs-lead'));
+          const link = getComputedStyle(document.querySelector('a.docs-not-found__lead-link'));
+          const pick = (s) => ({ color: s.color, family: s.fontFamily, size: s.fontSize, decoration: s.textDecorationLine });
+          return { align: lead.textAlign, wrap: lead.textWrap, lead: pick(lead), link: pick(link) };
+        });
+        const rest = await read();
+        expect(rest.align).toBe('center');
+        expect(rest.wrap).toBe('pretty');
+        expect(rest.link.color).toBe(rest.lead.color);
+        expect(rest.link.family).toBe(rest.lead.family);
+        expect(rest.link.size).toBe(rest.lead.size);
+        expect(rest.link.decoration).toBe('none');
+        await page.locator('a.docs-not-found__lead-link').hover();
+        const hover = await read();
+        expect(hover.link.decoration, 'no underline on hover').toBe('none');
+        expect(hover.link.color).toBe(hover.lead.color);
+      });
+
+      test('opens the video in a new page and the 404 stays where it was (the network is never touched)', async ({ page, context }) => {
+        const asked = [];
+        await context.route((url) => url.hostname !== 'localhost', (route) => {
+          asked.push(route.request().url());
+          return route.abort();
+        });
+        await page.goto('/404.html');
+        await expect(page.locator('a.docs-not-found__lead-link')).toHaveCount(1);
+        const opened = context.waitForEvent('page');
+        await page.locator('a.docs-not-found__lead-link').click();
+        const popup = await opened;
+        await expect.poll(() => asked.length, 'the new page asks for the video').toBeGreaterThan(0);
+        expect(asked[0].startsWith('https://youtu.be/') || asked[0].startsWith('https://www.youtube.com/'), asked[0]).toBe(true);
+        expect(popup).not.toBe(page);
+        expect(new URL(page.url()).pathname, 'the 404 stays').toBe('/404.html');
+      });
+
+      test('is reached with Tab and shows a focus ring', async ({ page }) => {
+        await page.goto('/404.html');
+        let found = false;
+        for (let i = 0; i < 40 && !found; i++) {
+          await page.keyboard.press('Tab');
+          found = await page.evaluate(() => document.activeElement?.classList.contains('docs-not-found__lead-link'));
+        }
+        expect(found, 'Tab reaches the link').toBe(true);
+        expect(await page.evaluate(() => getComputedStyle(document.activeElement).outlineStyle), 'the ring shows').not.toBe('none');
+      });
+    });
+
+    test('has no checkbox, input or pause control in the main', async ({ page }) => {
+      await page.goto('/404.html');
+      await expect(page.locator('main input, main [type="checkbox"], #docs-not-found-pause')).toHaveCount(0);
+    });
+
+    test.describe('the scanlines', () => {
+      const crt = (page) => page.locator('div.docs-not-found__crt');
+
+      test('is one empty decorative div, the last child of the body', async ({ page }) => {
+        await page.goto('/404.html');
+        await expect(crt(page)).toHaveCount(1);
+        await expect(crt(page)).toHaveAttribute('aria-hidden', 'true');
+        expect(await crt(page).evaluate((el) => el.childNodes.length), 'empty').toBe(0);
+        expect(await page.evaluate(() => [...document.body.children].filter((n) => n.localName !== 'script').pop().className)).toContain('docs-not-found__crt');
+        await expect(page.locator('svg.docs-not-found__skyline')).toHaveCount(0);
+      });
+
+      for (const [width, height] of [[1280, 800], [390, 800]]) {
+        test(`${width}px: it is fixed and covers the window, above the header, and lets every click through`, async ({ page }) => {
+          await page.setViewportSize({ width, height });
+          await page.goto('/404.html');
+          await expect(crt(page)).toHaveCount(1);
+          const style = await crt(page).evaluate((el) => {
+            const s = getComputedStyle(el);
+            const header = getComputedStyle(document.querySelector('.site-header'));
+            return { position: s.position, events: s.pointerEvents, z: s.zIndex, headerZ: header.zIndex, image: s.backgroundImage, display: s.display };
+          });
+          expect(style.position).toBe('fixed');
+          expect(style.events).toBe('none');
+          expect(style.display).not.toBe('none');
+          expect(Number(style.z), 'above the sticky header').toBeGreaterThan(Number(style.headerZ === 'auto' ? 0 : style.headerZ));
+          expect(style.image, 'the lines').toContain('repeating-linear-gradient');
+          expect(style.image, 'the dark corners').toContain('radial-gradient');
+          expect(await crt(page).boundingBox()).toMatchObject({ x: 0, y: 0, width, height });
+          await page.locator('main').getByRole('link', { name: 'A–Z index' }).click();
+          await expect(page).toHaveURL(/\/docs\/a-z\/$/);
+        });
+      }
+
+      test('is not displayed under forced colors', async ({ page }) => {
+        await page.emulateMedia({ forcedColors: 'active' });
+        await page.goto('/404.html');
+        await expect(crt(page)).toHaveCount(1);
+        await expect(crt(page)).toBeHidden();
+      });
+
+      test('is not displayed in high contrast', async ({ page }) => {
+        await page.goto('/404.html');
+        await expect(crt(page)).toBeVisible();
+        await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'high-contrast'));
+        await expect(crt(page)).toHaveCount(1);
+        await expect(crt(page)).toBeHidden();
+      });
+    });
+
+    test.describe('the rain', () => {
+      const rain = (page) => page.locator('div.docs-not-found__rain');
+      const names = (page) => page.evaluate(() => document.getAnimations().map((a) => a.animationName).filter(Boolean));
+      /** What is painted once the page's own content is out of the way: the share of black pixels, and how many are green (the rain). */
+      async function painted(page) {
+        await page.addStyleTag({ content: 'header, main, footer { visibility: hidden !important; }' });
+        const png = await page.screenshot({ animations: 'allow' });
+        return page.evaluate(async (b64) => {
+          const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+          const bitmap = await createImageBitmap(new Blob([bytes], { type: 'image/png' }));
+          const ctx = new OffscreenCanvas(bitmap.width, bitmap.height).getContext('2d', { willReadFrequently: true });
+          ctx.drawImage(bitmap, 0, 0);
+          const { data } = ctx.getImageData(0, 0, bitmap.width, bitmap.height);
+          let green = 0;
+          let black = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            if (data[i] + data[i + 1] + data[i + 2] < 12) black++;
+            else if (data[i + 1] > 40 && data[i + 1] - data[i] > 20 && data[i + 1] - data[i + 2] > 10) green++;
+          }
+          return { black: black / (data.length / 4), green };
+        }, png.toString('base64'));
+      }
+
+      test('with motion allowed: 28 aria-hidden columns, fixed over the window behind the content, each one falling for ever', async ({ page }) => {
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto('/404.html');
+        await expect(rain(page)).toHaveAttribute('aria-hidden', 'true');
+        await expect(rain(page).locator('> span')).toHaveCount(28);
+        const style = await rain(page).evaluate((el) => { const s = getComputedStyle(el); return { position: s.position, events: s.pointerEvents, z: s.zIndex, display: s.display }; });
+        expect(style).toMatchObject({ position: 'fixed', events: 'none', z: '-1' });
+        expect(style.display).not.toBe('none');
+        expect(await rain(page).boundingBox()).toMatchObject({ x: 0, y: 0, width: 1280, height: 800 });
+        const anims = await page.evaluate(() => document.getAnimations()
+          .filter((a) => a.animationName === 'docs-rain')
+          .map((a) => ({ state: a.playState, iterations: a.effect.getComputedTiming().iterations, target: a.effect.target.parentElement.className })));
+        expect(anims).toHaveLength(28);
+        for (const a of anims) {
+          expect(a.state).toBe('running');
+          expect(a.iterations).toBe(Infinity);
+          expect(a.target).toContain('docs-not-found__rain');
+        }
+      });
+
+      test('with motion allowed it paints green glyphs over the black', async ({ page }) => {
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto('/404.html');
+        await expect.poll(async () => (await painted(page)).green, 'green glyphs').toBeGreaterThan(0);
+        expect((await painted(page)).black, 'on a black page').toBeGreaterThan(0.8);
+      });
+
+      test.describe('under reduced motion', () => {
+        test.use({ reducedMotion: 'reduce' });
+        test('it is not displayed, nothing falls, and nothing is painted', async ({ page }) => {
+          await page.goto('/404.html');
+          await expect(rain(page)).toHaveCount(1);
+        await expect(rain(page)).toBeHidden();
+          expect(await names(page)).not.toContain('docs-rain');
+          expect(await painted(page), 'a black page and no glyphs').toMatchObject({ green: 0, black: 1 });
+        });
+      });
+
+      test('it is not displayed under forced colors', async ({ page }) => {
+        await page.emulateMedia({ forcedColors: 'active' });
+        await page.goto('/404.html');
+        await expect(rain(page)).toHaveCount(1);
+        await expect(rain(page)).toBeHidden();
+      });
+
+      test('it is not displayed in high contrast', async ({ page }) => {
+        await page.goto('/404.html');
+        await expect(rain(page)).toBeVisible();
+        await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'high-contrast'));
+        await expect(rain(page)).toHaveCount(1);
+        await expect(rain(page)).toBeHidden();
+      });
+    });
+
+    test.describe('the switch-on and the roll', () => {
+      test('with motion allowed both end within 6 seconds and only the rain keeps running', async ({ page }) => {
+        await page.goto('/404.html');
+        const read = () => page.evaluate(() => document.getAnimations().map((a) => ({
+          name: a.animationName ?? a.transitionProperty,
+          state: a.playState,
+          pseudo: a.effect.pseudoElement,
+          target: a.effect.target.localName,
+          // The stars of the header drift with the reader's scroll, not with a clock
+          scroll: typeof ScrollTimeline !== 'undefined' && a.timeline instanceof ScrollTimeline,
+        })));
+        const first = await read();
+        expect(first.filter((a) => a.name === 'docs-crt-on' && a.target === 'main'), 'the picture switches on (main)').not.toHaveLength(0);
+        expect(first.filter((a) => a.name === 'docs-crt-roll' && a.pseudo === '::before'), 'the band rolls (crt::before)').not.toHaveLength(0);
+        await expect.poll(async () => (await read()).filter((a) => /^docs-crt-/.test(a.name)).every((a) => a.state === 'finished'), { timeout: 6500 }).toBe(true);
+        const running = (await read()).filter((a) => a.state === 'running' || a.state === 'pending');
+        expect(running.filter((a) => a.name !== 'docs-rain' && !a.scroll), 'only the rain is endless (the scroll-driven stars are the reader\'s own motion)').toEqual([]);
+      });
+
+      test.describe('under reduced motion', () => {
+        test.use({ reducedMotion: 'reduce' });
+        test('neither exists', async ({ page }) => {
+          await page.goto('/404.html');
+          const all = await page.evaluate(() => document.getAnimations().map((a) => a.animationName));
+          expect(all.filter((n) => /^docs-(crt|rain)/.test(n))).toEqual([]);
+        });
+      });
     });
   });
 });

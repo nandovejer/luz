@@ -10,7 +10,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import { readHtml } from "../scripts/docs-site/html.js";
-import { findAll, parse, query, queryAllLive, textOf } from "./helpers/html-dom.js";
+import { classesOf, findAll, isInside, parse, query, queryAllLive, textOf } from "./helpers/html-dom.js";
 import { KIND_AREAS, PATTERN_AREAS } from "./helpers/package-areas.js";
 import { readIndex, search } from "../packages/site/src/search.js";
 import {
@@ -519,6 +519,8 @@ describe("the LUZ docs site", () => {
   it("marks the current page in the sidebar and its area with \"true\", in a flat list where every area is open (NAV-9, NAV-10)", () => {
     const everyPage = readingOrder(site).map((p) => p.route);
     for (const [route, html] of pages) {
+      // The not-found page has no sidebar at all (its own test below)
+      if (route === "/404.html") continue;
       const list = query(parse(html, route), "ul.docs-nav");
       const links = findAll(list, (n) => n.name === "a");
       const current = links.filter((a) => a.attrs.get("aria-current") === "page").map((a) => a.attrs.get("href"));
@@ -921,6 +923,87 @@ describe("the LUZ docs site", () => {
     expect(html).not.toMatch(/<base\b/);
     expect(html).not.toMatch(/<script/i);
     expect(html).toContain("<h1 class=\"docs-title\">Page not found</h1>");
+  });
+
+  it("the not-found page has no sidebar: no list of pages, no area links, no docs nav, no rail", () => {
+    const dom = parse(rendered.get("/404.html"), "/404.html");
+    expect(query(dom, "ul.docs-nav")).toBeNull();
+    expect(query(dom, "a.docs-nav__area")).toBeNull();
+    expect(query(dom, "nav.luz-docs-nav")).toBeNull();
+    expect(query(dom, "aside")).toBeNull();
+    expect(rendered.get("/404.html")).not.toContain("theme-light.css");
+  });
+
+  it("the not-found page keeps the drawer the header's menu button opens, with the site links only", () => {
+    const dom = parse(rendered.get("/404.html"), "/404.html");
+    const drawer = query(dom, "nav.luz-sidebar.page-nav.page-nav--drawer");
+    expect(drawer, "nav.page-nav--drawer").not.toBeNull();
+    expect(drawer.attrs.get("id")).toBe("page-nav");
+    expect(drawer.attrs.has("popover")).toBe(true);
+    expect(query(dom, "button.luz-nav-toggle").attrs.get("popovertarget")).toBe("page-nav");
+    const hrefs = findAll(drawer, (n) => n.name === "a").map((a) => a.attrs.get("href"));
+    expect(hrefs).toEqual(["/", "/docs/", "https://github.com/nandovejer/luz"]);
+  });
+
+  it("the not-found page has a decorative \"SYSTEM FAILURE\" first in the main, and its one h1 in a visually hidden wrapper", () => {
+    const dom = parse(rendered.get("/404.html"), "/404.html");
+    const main = query(dom, "main");
+    const code = main.children[0];
+    expect(classesOf(code)).toContain("docs-not-found__code");
+    expect(code.name).toBe("p");
+    expect(code.attrs.get("aria-hidden")).toBe("true");
+    expect(textOf(code)).toBe("SYSTEM FAILURE");
+    const h1s = findAll(dom, (n) => n.name === "h1");
+    expect(h1s).toHaveLength(1);
+    expect(h1s[0].attrs.get("class")).toBe("docs-title");
+    expect(textOf(h1s[0])).toBe("Page not found");
+    const wrappers = findAll(main, (n) => classesOf(n).includes("u-sr-only") && isInside(h1s[0], n));
+    expect(wrappers, "the h1 sits in a .u-sr-only wrapper").toHaveLength(1);
+    expect(isInside(h1s[0], main)).toBe(true);
+    expect(code.open.index).toBeLessThan(h1s[0].open.index);
+  });
+
+  it("the not-found page is dark whatever the reader's mode: no hour, no sky, no light stylesheet", () => {
+    const html = rendered.get("/404.html");
+    const dom = parse(html, "/404.html");
+    const root = query(dom, "html");
+    expect(root.attrs.get("data-theme")).toBe("dark");
+    expect(root.attrs.has("data-light")).toBe(false);
+    expect(html).not.toContain("sky.css");
+    expect(html).not.toContain("theme-light.css");
+    expect(html).not.toContain("site-sky");
+    expect(html).not.toContain("docs-not-found__skyline");
+    expect(html).toMatch(/<meta name="robots" content="noindex">/);
+  });
+
+  it("the not-found page has the lead as one link to the video, and no checkbox or input", () => {
+    const dom = parse(rendered.get("/404.html"), "/404.html");
+    const lead = query(query(dom, "main"), "p.docs-lead");
+    const links = findAll(lead, (n) => n.name === "a");
+    expect(links).toHaveLength(1);
+    expect(classesOf(links[0])).toContain("docs-not-found__lead-link");
+    expect(links[0].attrs.get("href")).toBe("https://youtu.be/D4eJx-0g3Do");
+    expect(links[0].attrs.get("target")).toBe("_blank");
+    expect(links[0].attrs.get("rel").split(/\s+/)).toEqual(expect.arrayContaining(["noopener", "noreferrer"]));
+    expect(textOf(lead)).toBe("SYSTEM FAILURE. What you are looking for is not here. Do not try to bend the page... that is impossible. Instead, only try to realize the truth: There is no page. (opens in a new tab)");
+    expect(findAll(query(dom, "main"), (n) => n.name === "input")).toEqual([]);
+    expect(rendered.get("/404.html")).not.toContain("docs-not-found-pause");
+  });
+
+  it("the not-found page has 28 columns of rain behind it and ends with an empty scanlines div, both decorative", () => {
+    const html = rendered.get("/404.html");
+    const dom = parse(html, "/404.html");
+    const body = query(dom, "body");
+    const rain = findAll(body, (n) => n.name === "div" && classesOf(n).includes("docs-not-found__rain"));
+    expect(rain).toHaveLength(1);
+    expect(rain[0].attrs.get("aria-hidden")).toBe("true");
+    expect(rain[0].children.filter((n) => n.name === "span")).toHaveLength(28);
+    const crt = findAll(body, (n) => n.name === "div" && classesOf(n).includes("docs-not-found__crt"));
+    expect(crt).toHaveLength(1);
+    expect(crt[0].attrs.get("aria-hidden")).toBe("true");
+    expect(crt[0].children).toEqual([]);
+    expect(textOf(crt[0])).toBe("");
+    expect(body.children.filter((n) => n.name !== "script").at(-1), "the last child of body").toBe(crt[0]);
   });
 });
 

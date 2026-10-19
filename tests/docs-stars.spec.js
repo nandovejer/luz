@@ -507,13 +507,11 @@ test.describe('where the stars are not', () => {
     await expectBand(page, 'the same page without forced colours');
   });
 
-  test('the 404 page links reference.css too: dark gives it the band, as it is served (light, no script) it has none', async ({ page }) => {
+  test('the 404 page links reference.css too, and is served dark: the band of stars is there as served', async ({ page }) => {
     await page.goto('/404.html');
     await expect(page.locator('link[rel="stylesheet"][href$="/apps/docs/reference.css"]'), 'the 404 links reference.css').toHaveCount(1);
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-    expect(await findBand(page), 'the 404 as served is light: no band').toBeNull();
-    await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
-    await expectBand(page, '404 with data-theme dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expectBand(page, '404 as served (dark, no script)');
   });
 });
 
