@@ -82,40 +82,60 @@
 }
 
 /* The list: the browser's popover box (fixed, in the top layer) moved from
-   the middle of the screen to the inline end, under the header */
+   the middle of the screen to the inline end, under the header. Where the
+   browser has anchor positioning it hangs under the button, its end edge
+   on the button's, wherever the button is; elsewhere it sits at the inline
+   end of the window, as before. */
 .luz-lang-switch__menu {
 	inset: auto;
 	inset-block-start: var(--luz-lang-switch-top);
 	inset-inline-end: var(--luz-space-md);
 	margin: 0;
-	min-inline-size: 12rem;
+	min-inline-size: 13rem;
 	max-inline-size: calc(100vw - 2 * var(--luz-space-md));
-	padding: var(--luz-space-xs);
+	padding: var(--luz-space-sm);
 	border: 1px solid var(--luz-divider);
-	border-radius: var(--luz-radius-md);
+	border-radius: var(--luz-radius-lg);
 	background: var(--luz-surface);
 	color: var(--luz-text-primary);
 	box-shadow: var(--luz-shadow-md);
 	font-family: var(--luz-font-sans);
 }
 
+@supports (position-anchor: --luz-lang-switch) {
+	.luz-lang-switch__button {
+		anchor-name: --luz-lang-switch;
+	}
+
+	.luz-lang-switch__menu {
+		position-anchor: --luz-lang-switch;
+		inset-block-start: calc(anchor(bottom) + var(--luz-space-xs));
+		inset-inline-end: anchor(end);
+		position-try-fallbacks: flip-inline;
+	}
+}
+
 .luz-lang-switch__title {
 	margin: 0;
-	padding: var(--luz-space-2xs) var(--luz-space-sm);
-	color: var(--luz-text-secondary);
+	padding: var(--luz-space-2xs) var(--luz-space-sm) var(--luz-space-xs);
+	color: var(--luz-text-muted);
 	font-size: var(--luz-text-sm);
 }
 
 .luz-lang-switch__list {
+	display: grid;
+	gap: var(--luz-space-2xs);
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-/* One row per language, a 44px target */
+/* One row per language, a 44px target. The first column is the tick's:
+   every row keeps it, so the names line up */
 .luz-lang-switch__link {
 	display: flex;
 	align-items: center;
+	gap: var(--luz-space-sm);
 	min-block-size: var(--luz-control-lg);
 	padding-inline: var(--luz-space-sm);
 	border-radius: var(--luz-radius-md);
@@ -124,9 +144,16 @@
 	text-decoration: none;
 }
 
+.luz-lang-switch__link::before {
+	content: "";
+	flex: none;
+	inline-size: 1em;
+	block-size: 1em;
+}
+
 .luz-lang-switch__link:hover {
-	background: var(--luz-surface-muted);
-	text-decoration: underline;
+	background: var(--luz-surface-hover);
+	text-decoration: none;
 }
 
 /* Inside the list's padding, so the rounded box never clips it */
@@ -135,12 +162,29 @@
 	outline-offset: -2px;
 }
 
-/* The current language: weight and an underline, never colour alone (RL-6) */
+/* The current language: a tick in the brand color, a soft fill and weight.
+   The tick is a shape, so it is not colour alone (RL-6), and it is a border,
+   so it stays in forced colors. */
 .luz-lang-switch__link[aria-current] {
+	background: var(--luz-surface-muted);
 	font-weight: 600;
-	text-decoration: underline;
-	text-decoration-thickness: 2px;
-	text-underline-offset: var(--luz-space-2xs);
+}
+
+.luz-lang-switch__link[aria-current]::before {
+	box-sizing: border-box;
+	inline-size: 0.4em;
+	block-size: 0.75em;
+	margin-inline: 0.3em;
+	border: solid var(--luz-brand-primary);
+	border-width: 0 2px 2px 0;
+	rotate: 45deg;
+	translate: 0 -0.1em;
+}
+
+@media (forced-colors: active) {
+	.luz-lang-switch__link[aria-current]::before {
+		border-color: Highlight;
+	}
 }
 
 /* Without the popover API the button would do nothing: the links show in a

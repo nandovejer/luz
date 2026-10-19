@@ -1,13 +1,17 @@
 /* ==========================================================================
    LUZ — SITE HEADER
    One header for every page of the site (home and docs), from one partial
-   (apps/site/_partials/header.html): the menu button, the brand, the site
-   links (Home, Docs, GitHub) and the search button. At 768px and below the
-   site links move into the drawer the menu button opens (#page-nav, see
-   "Menu button and drawer"); the search button stays in the row at every
-   width.
+   (apps/site/_partials/header.html). Above 768px, one row:
+
+     Brand (+ version) · Docs · · · Search · Language · Mode · GitHub
+
+   At 768px and below: Brand (+ version from 400px), Search, Mode and the
+   menu button, which opens the drawer (#page-nav, see "Menu button and
+   drawer"); Docs, GitHub and the languages move into it. The docs pages
+   have no language switch ({{langswitch}} is empty there).
+   Transparent over the sky at the top of the page, solid once it scrolls
+   (see "Scroll").
    This file is the only source of the header's layout: the pages add none.
-   It lives in the docs app; the home page links it from here (F3, D9 a).
    Consumer-side styles on top of tokens + core.
    Rules: semantic tokens only; no literal colors.
    ========================================================================== */
@@ -28,24 +32,28 @@
   scroll-padding-block-start: calc(var(--site-header-h) + var(--luz-space-sm));
 }
 
+/* Solid by default: the page surface and a rule under it. That is the
+   fallback where the browser has no scroll timelines; "Scroll" below makes
+   it transparent at the top. The border is always there (transparent at
+   the top), so the height never changes. */
 .site-header {
   position: sticky;
   inset-block-start: 0;
   z-index: var(--luz-z-overlay);
-  background: var(--luz-surface-page);
-  border-bottom: 1px solid var(--luz-divider);
+  background-color: var(--luz-surface-page);
+  border-block-end: 1px solid var(--luz-divider);
 }
 
-/* One row at every width: 44px controls (the 2.5.5 target size) and a
-   short sticky band, 53px. Full width with the same gutter on every page,
-   so the controls never move when you go from one page to another. It may
-   wrap only where the row cannot hold it: without JavaScript (below), or
-   in a browser without the popover API, where the links stay in the row. */
+/* One row at every width: 44px controls (the 2.5.5 target size), 53px in
+   all. Full width with the same gutter on every page, so the controls
+   never move when you go from one page to another. It may wrap only where
+   the row cannot hold it: in a browser without the popover API, where the
+   links stay in the row. */
 .site-header__inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--luz-space-xs) var(--luz-space-md);
+  gap: var(--luz-space-xs) var(--luz-space-sm);
   padding-block: var(--luz-space-2xs);
   padding-inline: var(--luz-space-md);
 }
@@ -61,8 +69,6 @@
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--luz-text-primary);
-  /* Pushes the links and the color mode to the end of the row */
-  margin-inline-end: auto;
 }
 
 /* The mark is drawn in currentColor: the brand color in every theme */
@@ -71,8 +77,29 @@
   color: var(--luz-brand-primary);
 }
 
+.site-header__brand,
 .site-header__brand:hover {
   text-decoration: none;
+}
+
+/* The version: quiet text beside the brand, a link to the changelog (its
+   accessible name says so). Close to the name, as part of it; a 24px target
+   at least (2.5.8) */
+.site-header__version {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-block-size: var(--luz-control-sm);
+  margin-inline-start: calc(-1 * var(--luz-space-2xs));
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-xs);
+  color: var(--luz-text-muted);
+  text-decoration: none;
+}
+
+.site-header__version:hover {
+  color: var(--luz-text-primary);
+  text-decoration: underline;
 }
 
 .site-header__nav {
@@ -82,7 +109,9 @@
 
 .site-header__nav a {
   display: inline-flex;
+  text-decoration: none;
   align-items: center;
+  gap: var(--luz-space-xs);
   min-block-size: var(--luz-control-lg);
   font-size: var(--luz-text-md);
   color: var(--luz-text-secondary);
@@ -92,52 +121,60 @@
   color: var(--luz-text-primary);
 }
 
-/* The current page, or the section it belongs to (aria-current="true"): an
-   underline as well as color, never color alone (RL-6). Not bold: the links
-   keep their width, so the header is laid out the same on every page. */
-.site-header__nav a[aria-current] {
-  color: var(--luz-text-primary);
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: var(--luz-space-2xs);
+
+
+/* The free space of the row is after the version: the logo and the version
+   sit at the start, Docs, GitHub and the tools at the end. Below 400px the
+   version goes and the logo takes the space */
+.site-header__version {
+  margin-inline-end: auto;
 }
 
-/* Search: @luz-ds/site's <luz-search>, at the end of the row. With
-   JavaScript its button; without it, a link to the A–Z index in the same
-   place. Both are one icon of the same size at every width (the site's
-   compact trigger), so the swap moves nothing: the words, "Search docs" and
-   "A–Z index", stay their accessible names, clipped, not removed, and the
-   button's title shows the shortcut on hover. */
+/* The icon buttons of the row: search (or the A–Z link without
+   JavaScript), the color mode, GitHub and the menu. 44px, no frame; hover
+   fills them, the focus ring stays (core's outline). Their words stay
+   their accessible names, clipped, not removed. */
 .site-header__search,
-.site-header__az {
+.site-header__az,
+.site-header__github,
+.site-header__menu {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
   justify-content: center;
   inline-size: var(--luz-control-lg);
   block-size: var(--luz-control-lg);
-  padding-inline: 0;
-  /* No frame: an icon button like the menu button. Hover fills it; the
-     focus ring stays (core's outline) */
-  border-color: transparent;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--luz-radius-md);
   background: transparent;
+  color: var(--luz-text-secondary);
+  cursor: pointer;
 }
 
 .site-header__search:hover,
-.site-header__az:hover {
+.site-header__az:hover,
+.site-header__github:hover,
+.site-header__menu:hover {
   border-color: transparent;
   background: var(--luz-surface-muted);
-}
-
-/* The link takes the button's quiet colour, so the icon looks the same
-   before and after the swap */
-.site-header__az {
-  color: var(--luz-text-secondary);
-}
-
-.site-header__az:hover {
   color: var(--luz-text-primary);
 }
 
+.site-header__github:focus-visible {
+  outline: 2px solid var(--luz-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Once the search loads, it hides the A–Z fallback: the class's display
+   must not bring it back as an empty gap */
+.site-header__az[hidden] {
+  display: none;
+}
+
 .site-header__search .luz-search__trigger-label,
-.site-header__az .luz-search__fallback-label {
+.site-header__az .luz-search__fallback-label,
+.site-header__github-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -150,62 +187,179 @@
   display: none;
 }
 
-/* The language switch (@luz-ds/site, home page only): last in the
-   row, at every width, like the search; its list opens under the header */
-.site-header luz-lang-switch {
-  --luz-lang-switch-top: var(--site-header-h);
-}
-
-/* GitHub: the mark and its name; below 640px the mark alone, the name
-   clipped, so the row keeps Home, Docs and GitHub on a phone */
-.site-header__github {
-  gap: var(--luz-space-2xs);
-}
-
-.site-header__github-icon {
+.site-header__github-icon,
+.site-header__nav-icon,
+.site-header__search .luz-search__trigger-icon,
+.site-header__az .luz-search__trigger-icon {
   flex: none;
-  inline-size: 1.125rem;
-  block-size: 1.125rem;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
 }
 
-@media (max-width: 639px) {
+/* 769px and up: GitHub and the search are an icon and a word, as Docs is */
+@media (min-width: 769px) {
+  .site-header__search,
+  .site-header__az,
   .site-header__github {
-    justify-content: center;
-    min-inline-size: var(--luz-control-lg);
+    inline-size: auto;
+    gap: var(--luz-space-xs);
+    padding-inline: var(--luz-space-xs);
+    font-family: var(--luz-font-sans);
+    font-size: var(--luz-text-md);
+    text-decoration: none;
   }
 
+  .site-header__search .luz-search__trigger-label,
+  .site-header__az .luz-search__fallback-label,
   .site-header__github-label {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    overflow: visible;
+    clip-path: none;
   }
 
-  .site-header__inner,
-  .site-header__nav {
-    column-gap: var(--luz-space-sm);
+  /* The four controls of the end (Documentation, GitHub, Search, Language)
+     are tabs of the header, not links in a sentence: no underline, no fill,
+     as tall as the header (the row loses its padding, the controls gain
+     it, so the header keeps its height). Hover darkens the text and tints
+     the background a little.
+     The current one (the docs, or the dialog or the list it opened) takes
+     the strong text and a 2px bar on the header's bottom edge: a border,
+     so it stays in forced colors, never color alone (RL-6) */
+  .site-header__inner {
+    align-items: stretch;
+    padding-block: 0;
   }
+
+  .site-header__brand,
+  .site-header__version {
+    align-self: center;
+  }
+
+  .site-header__nav,
+  .site-header :where(luz-search, luz-lang-switch) {
+    display: flex;
+    gap: 0;
+  }
+
+  .site-header__nav a,
+  .site-header__github,
+  .site-header__search,
+  .site-header__az,
+  .site-header .luz-lang-switch__button {
+    block-size: auto;
+    min-block-size: calc(var(--luz-control-lg) + 2 * var(--luz-space-2xs));
+    padding-inline: var(--luz-space-sm);
+    border: 0;
+    border-block: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    color: var(--luz-text-secondary);
+    text-decoration: none;
+  }
+
+  .site-header__nav a:hover,
+  .site-header__github:hover,
+  .site-header__search:hover,
+  .site-header__az:hover,
+  .site-header .luz-lang-switch__button:hover {
+    background: var(--luz-surface-hover);
+    color: var(--luz-text-primary);
+  }
+
+  .site-header__nav a[aria-current],
+  .site-header :where(luz-search):has(dialog[open]) .site-header__search,
+  .site-header .luz-lang-switch__button:has(+ :popover-open) {
+    border-block-end-color: currentcolor;
+    background: transparent;
+    color: var(--luz-text-primary);
+    text-decoration: none;
+  }
+
+  /* The ring sits inside the control: outside it, the header's edge would
+     cut it */
+  .site-header__nav a:focus-visible,
+  .site-header__github:focus-visible,
+  .site-header__search:focus-visible,
+  .site-header__az:focus-visible,
+  .site-header .luz-lang-switch__button:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+/* The language switch (@luz-ds/site, home page only): its list opens
+   under the header */
+.site-header :where(luz-lang-switch) {
+  --luz-lang-switch-top: var(--site-header-h);
 }
 
 /* The row sits in the site frame, with the page's gutter (--luz-space-xl
    above 640px, like the home sections), so the brand starts where the
-   content starts. The brand's auto margin sends the site links and the
-   search to the end of the row, at every width. */
+   content starts. */
 @media (min-width: 641px) {
   .site-header__inner {
     padding-inline: calc(var(--site-edge) + var(--luz-space-xl));
   }
 }
 
-@media (min-width: 769px) {
-  .site-header__inner {
-    column-gap: var(--luz-space-lg);
+
+/* Below 400px the version goes (it is also in the install snippets and the
+   footer): Brand, Search, Mode and the menu fit at 320px */
+@media (max-width: 399px) {
+  .site-header__version {
+    display: none;
   }
 
-  .site-header__nav {
-    gap: var(--luz-space-lg);
+  .site-header__brand {
+    margin-inline-end: auto;
+  }
+
+  .site-header__inner {
+    column-gap: var(--luz-space-2xs);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Scroll. At the top of the page the header is transparent over the sky;
+   over the first --luz-space-xl of scroll it takes the page surface and
+   its rule. A scroll-driven animation, CSS only, where the browser has
+   scroll timelines (the default, solid, is the fallback). Under reduced
+   motion it switches at once instead of fading; in forced colours it is
+   always solid. With the drawer open it is solid too: the panel hangs
+   from it.
+   -------------------------------------------------------------------------- */
+
+@keyframes site-header-solid {
+  from {
+    background-color: transparent;
+    border-block-end-color: transparent;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    animation: site-header-solid linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 var(--luz-space-xl);
+  }
+
+  :root:has(#page-nav:popover-open) .site-header {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    animation-timing-function: steps(1, end);
+  }
+}
+
+@media (forced-colors: active) {
+  .site-header {
+    animation: none;
+    background-color: Canvas;
+    border-block-end-color: CanvasText;
   }
 }
 
@@ -290,6 +444,42 @@
   block-size: var(--luz-control-lg);
 }
 
+/* With scripting on, the switcher is the cycle button, fixed at the bottom
+   right of the window: a small round button on the page surface, above the
+   content and below the header's drawer and the dialogs. Without scripting
+   the radios stay in the footer */
+@media (scripting: enabled) {
+  .site-modes:where(luz-mode) {
+    position: fixed;
+    inset-block-end: var(--luz-space-md);
+    inset-inline-end: var(--luz-space-md);
+    z-index: var(--luz-z-raised);
+    margin: 0;
+  }
+
+  .site-modes:where(luz-mode) .luz-mode-switcher__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .site-modes:where(luz-mode) .luz-mode-cycle {
+    border: 1px solid var(--luz-divider);
+    border-radius: 50%;
+    background: var(--luz-surface);
+    box-shadow: var(--luz-shadow-sm);
+    color: var(--luz-text-secondary);
+  }
+
+  .site-modes:where(luz-mode) .luz-mode-cycle:hover {
+    color: var(--luz-text-primary);
+  }
+}
+
 /* No Auto radio: while the light follows the hour (the clock's, or the one
    the home's globe pinned) no radio is checked, and the button shows the
    Auto icon */
@@ -297,24 +487,18 @@
   display: block;
 }
 
-/* Small screens: the version tag goes (it is also in the install
-   snippets), the name stays beside the mark, and the row keeps room for
-   Components */
-@media (max-width: 639px) {
-  .site-header__tag {
-    display: none;
-  }
-}
 
 /* --------------------------------------------------------------------------
-   Menu button and drawer. The button is core's .luz-nav-toggle and opens
-   #page-nav, core's .luz-sidebar as a native popover drawer with the page's
-   own sections, after the site links (.page-nav__site). On the
-   documentation pages the same nav is the sidebar column on wider screens;
-   elsewhere it is a drawer only (--drawer), hidden unless it is open. One
-   breakpoint, 768px (--luz-mq-md, where core turns the sidebar into a
-   drawer and shows the button): at 768px and below the site links live in
-   the drawer, above it in the header row. Exactly one copy of each link is
+   Menu button and drawer. The button is core's .luz-nav-toggle, last in
+   the row, and opens #page-nav, core's .luz-sidebar as a native popover.
+   At 768px and below (--luz-mq-md, where core shows the button) it is a
+   panel that drops from under the header, the full width of the window,
+   over a dimmed page; the header stays above the backdrop, so the X that
+   closes it is where the menu button was. On the home page it holds the
+   page's sections, the site's links (.page-nav__site) and the languages;
+   on the docs, the site's links and the docs sidebar, which scrolls inside
+   the panel. Above 768px the home drawer is not shown (--drawer) and the
+   docs nav is the sidebar column. Exactly one copy of each link is
    displayed at any width. Both moves depend on the popover API: without it
    there is no drawer, and the links stay in the row.
    -------------------------------------------------------------------------- */
@@ -324,16 +508,39 @@
   display: none;
 }
 
-/* The current page in the drawer: the same underline as in the row, in the
-   sidebar's text color (never color alone, RL-6). Not the filled "active"
-   style, which marks the section in view. */
-.page-nav__site ul {
+.page-nav__list,
+.page-nav__row,
+.page-nav__row > ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.page-nav__site .luz-sidebar__link[aria-current] {
+/* Docs and GitHub, and the languages: one line each, wrapping if it must */
+.page-nav__row,
+.page-nav__row > ul {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--luz-space-2xs);
+}
+
+.page-nav__langs a {
+  display: block;
+  padding: var(--luz-space-xs) var(--luz-space-md);
+  font-size: var(--luz-text-md);
+  color: var(--luz-sidebar-text);
+  text-decoration: none;
+}
+
+.page-nav__langs a:hover {
+  background: var(--luz-sidebar-hover);
+  color: var(--luz-sidebar-text-hover);
+}
+
+/* The current page or language: an underline, never color alone (RL-6).
+   Not the filled "active" style, which marks the section in view. */
+.page-nav__site .luz-sidebar__link[aria-current],
+.page-nav__langs a[aria-current] {
   color: var(--luz-sidebar-text-hover);
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -342,44 +549,129 @@
 
 @supports selector(:popover-open) {
   @media (max-width: 768px) {
-    /* The drawer opens below the header, so the button stays in view and
-       closes it again */
+    /* The row: Brand, Search, Mode, menu */
+    .site-header__nav,
+    .site-header__github,
+    .site-header :where(luz-lang-switch) {
+      display: none;
+    }
+
+    /* A panel under the header, the full width, as tall as its content up
+       to the window; it scrolls inside itself */
     .luz-sidebar.page-nav[popover] {
-      inset-block-start: var(--site-header-h);
-      height: calc(100dvh - var(--site-header-h));
+      inset: var(--site-header-h) 0 auto;
+      inline-size: auto;
+      min-inline-size: 0;
+      block-size: auto;
+      max-block-size: calc(100dvh - var(--site-header-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-block-end: var(--luz-space-sm);
+      border-block-end: 1px solid var(--luz-sidebar-border);
+      opacity: 0;
+      translate: 0 calc(-1 * var(--luz-space-md));
+      transition:
+        opacity var(--luz-duration-base) var(--luz-easing-standard),
+        translate var(--luz-duration-base) var(--luz-easing-standard),
+        overlay var(--luz-duration-base) allow-discrete,
+        display var(--luz-duration-base) allow-discrete;
+    }
+
+    .luz-sidebar.page-nav[popover]:popover-open {
+      opacity: 1;
+      translate: 0 0;
     }
 
     /* The backdrop dims the page, not the header: the X that closes the
        drawer keeps its full contrast (1.4.11) */
     .luz-sidebar.page-nav[popover]::backdrop {
       inset-block-start: var(--site-header-h);
+      opacity: 0;
+      transition:
+        opacity var(--luz-duration-base) var(--luz-easing-standard),
+        overlay var(--luz-duration-base) allow-discrete,
+        display var(--luz-duration-base) allow-discrete;
+    }
+
+    .luz-sidebar.page-nav[popover]:popover-open::backdrop {
+      opacity: 1;
+    }
+
+    @starting-style {
+      .luz-sidebar.page-nav[popover]:popover-open {
+        opacity: 0;
+        translate: 0 calc(-1 * var(--luz-space-md));
+      }
+
+      .luz-sidebar.page-nav[popover]:popover-open::backdrop {
+        opacity: 0;
+      }
     }
 
     .page-nav--drawer:popover-open {
       display: flex;
     }
 
-    .site-header__nav {
-      display: none;
-    }
-
     .page-nav__site {
       display: block;
+    }
+
+    /* On the docs the site's links come first, above the sidebar's groups */
+    .luz-docs-nav > .page-nav__site {
       border-block-end: 1px solid var(--luz-sidebar-border);
     }
 
+    /* A rule between the groups of the panel */
+    .page-nav > .luz-sidebar__section + .luz-sidebar__section {
+      border-block-start: 1px solid var(--luz-sidebar-border);
+    }
+  }
+}
+
+/* Reduced motion: the panel does not travel; core's duration tokens are
+   zero there, so it appears at once */
+@media (prefers-reduced-motion: reduce) {
+  .luz-sidebar.page-nav[popover] {
+    translate: none;
+  }
+}
+
+/* Forced colours drop the shadow and the backdrop: an edge in CanvasText
+   tells the panel from the page */
+@media (forced-colors: active) {
+  .luz-sidebar.page-nav[popover]:popover-open {
+    border-block-end-color: CanvasText;
+  }
+
+  /* The languages line up with core's sidebar links, which take a 3px
+     start border here */
+  .page-nav__langs a {
+    border-inline-start: 3px solid Canvas;
   }
 }
 
 /* Three bars while the drawer is closed, an X while it is open: the top and
    bottom bars (6 units from the middle of the 24-unit icon) meet in the
-   middle and turn 45°, the middle one fades. State
-   comes from the popover itself (:popover-open), no script; reduced motion
-   zeroes the duration token. The button's name stays "Menu"; the browser
-   exposes the expanded state of a popovertarget button. */
+   middle and turn 45°, the middle one fades. State comes from the popover
+   itself (:popover-open), no script; reduced motion zeroes the duration
+   token. The button's name stays "Menu"; the browser exposes the expanded
+   state of a popovertarget button. Core shows the button at 768px and
+   below only. */
+.site-header__menu {
+  display: none;
+}
+
+@supports selector(:popover-open) {
+  @media (max-width: 768px) {
+    .site-header__menu {
+      display: inline-flex;
+    }
+  }
+}
+
 .site-header__menu-icon {
-  inline-size: 100%;
-  block-size: 100%;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
 }
 
 .site-header__menu-bar {

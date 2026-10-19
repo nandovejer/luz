@@ -56,27 +56,29 @@
 
   <!-- luz:include header -->
 
+  <!-- The drawer (768px and below): the sections of this page, the site's
+       links, then the languages with a visible label; above 768px it is
+       not shown (the header row holds the links and the language switch) -->
   <nav class="luz-sidebar page-nav page-nav--drawer" id="page-nav" popover aria-label="{{t:nav.label}}" tabindex="-1">
-    <!-- luz:include site-links -->
-
     <div class="luz-sidebar__section">
-      <div class="luz-sidebar__section-label">{{t:nav.on-page}}</div>
-      <a class="luz-sidebar__link" href="#why">{{t:why.eyebrow}}</a>
-      <a class="luz-sidebar__link" href="#inside">{{t:inside.eyebrow}}</a>
-      <a class="luz-sidebar__link" href="#native">{{t:native.eyebrow}}</a>
-      <a class="luz-sidebar__link" href="#modes">{{t:modes.eyebrow}}</a>
-      <a class="luz-sidebar__link" href="#type">{{t:type.eyebrow}}</a>
-      <a class="luz-sidebar__link" href="#start">{{t:start.eyebrow}}</a>
+      <span class="luz-sidebar__section-label" id="nav-on-page">{{t:nav.on-page}}</span>
+      <ul class="page-nav__list" aria-labelledby="nav-on-page">
+        <li><a class="luz-sidebar__link" href="#why">{{t:why.eyebrow}}</a></li>
+        <li><a class="luz-sidebar__link" href="#inside">{{t:inside.eyebrow}}</a></li>
+        <li><a class="luz-sidebar__link" href="#native">{{t:native.eyebrow}}</a></li>
+        <li><a class="luz-sidebar__link" href="#modes">{{t:modes.eyebrow}}</a></li>
+        <li><a class="luz-sidebar__link" href="#type">{{t:type.eyebrow}}</a></li>
+        <li><a class="luz-sidebar__link" href="#start">{{t:start.eyebrow}}</a></li>
+      </ul>
     </div>
 
-    <div class="luz-sidebar__section">
-      <div class="luz-sidebar__section-label">{{t:nav.docs}}</div>
-      <a class="luz-sidebar__link" href="/docs/get-started/">{{t:nav.get-started}}</a>
-      <a class="luz-sidebar__link" href="/docs/tokens/">{{t:nav.tokens}}</a>
-      <a class="luz-sidebar__link" href="/docs/components/">{{t:nav.core}}</a>
-      <a class="luz-sidebar__link" href="/docs/site/">{{t:nav.site}}</a>
-      <a class="luz-sidebar__link" href="/docs/html/">{{t:nav.html}}</a>
-      <a class="luz-sidebar__link" href="/docs/accessibility/">{{t:nav.accessibility}}</a>
+    <!-- luz:include site-links -->
+
+    <div class="luz-sidebar__section page-nav__langs">
+      <span class="luz-sidebar__section-label" id="nav-langs">{{t:lang.label}}</span>
+      <div class="page-nav__row" role="group" aria-labelledby="nav-langs">
+        {{langlinks}}
+      </div>
     </div>
   </nav>
 

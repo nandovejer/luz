@@ -560,19 +560,6 @@ home-light:defined ~ .landing-light__nojs {
   margin-block-start: var(--luz-space-xl);
 }
 
-/* The switcher's legend stays text beside the cycle button: on the home the
-   button alone would not say what it changes. Core hides it for screen
-   readers only once the button is there */
-.landing-foot .luz-mode-switcher__label {
-  position: static;
-  inline-size: auto;
-  block-size: auto;
-  margin: 0;
-  overflow: visible;
-  clip-path: none;
-  white-space: normal;
-}
-
 /* --------------------------------------------------------------------------
    400 % text at 320 px (WCAG 1.4.4, 1.4.10): a word, a name in code or a
    label longer than the line breaks, and a row wraps, instead of widening

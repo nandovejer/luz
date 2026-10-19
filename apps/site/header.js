@@ -8,7 +8,8 @@
  *   stores the choice under core's "luz-theme" key and, in Auto, follows
  *   the clock: apps/site/boot.js set the same mode before the first paint);
  *   this module defines the element and turns the radios into core's cycle
- *   button.
+ *   button. With scripting on, that button is fixed at the bottom right of
+ *   the window (header.css); without it the radios stay in the footer.
  * - Menu drawer: core's initSidebar() on #page-nav, so a link closes the
  *   drawer and the current section is marked.
  * - Publishes the sticky header's height as --site-header-h on <html>, so
