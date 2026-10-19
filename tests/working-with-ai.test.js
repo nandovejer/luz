@@ -808,8 +808,10 @@ describe("AGENTS.md: the tool and the AI files", () => {
   });
 
   it("names the AI files the generator writes and the manifests", () => {
-    for (const name of ["llms.txt", "llms-full.txt", "classes.json", "custom-elements.json"]) expect(agents(), name).toContain(name);
-    expect(agents()).toContain("scripts/docs-site/ai.js");
+    const docsSite = read("dev/DOCS-SITE.md");
+    for (const name of ["llms.txt", "llms-full.txt", "classes.json", "custom-elements.json"]) expect(docsSite, name).toContain(name);
+    expect(docsSite).toContain("scripts/docs-site/ai.js");
+    expect(agents()).toContain("dev/DOCS-SITE.md");
   });
 
   it("says what the page Working with AI is", () => {

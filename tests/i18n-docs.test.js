@@ -140,11 +140,13 @@ describe("AGENTS.md", () => {
   });
 
   it("no longer says that i18n.js ships en and es; it names loadLocales and the /i18n/<code> export", () => {
-    const row = agents.split("\n").find((line) => line.startsWith("| `i18n.js`"));
-    expect(row, "the i18n.js row of the module table").toBeTruthy();
+    const coreJs = read("dev/CORE-JS.md");
+    const row = coreJs.split("\n").find((line) => line.startsWith("| `i18n.js`"));
+    expect(row, "the i18n.js row of the module table in dev/CORE-JS.md").toBeTruthy();
     expect(row).not.toMatch(BUILT_IN);
     expect(row).toContain("loadLocales");
-    expect(agents).toContain("`/i18n/<code>`");
+    expect(coreJs).toContain("`/i18n/<code>`");
+    expect(agents).toContain("dev/CORE-JS.md");
   });
 });
 

@@ -288,11 +288,15 @@ describe("the old key and the old paths are gone from the apps", () => {
 describe("the texts that say how the site follows the clock", () => {
   it("AGENTS.md says where the header and the shared partials are, and no longer names the old files", () => {
     const agents = read("AGENTS.md");
+    const docsSite = read("dev/DOCS-SITE.md");
     expect(agents).toContain("apps/site/header.js");
-    expect(agents).not.toContain("apps/docs/site-header");
+    expect(agents).toContain("dev/DOCS-SITE.md");
+    for (const text of [agents, docsSite]) {
+      expect(text).not.toContain("apps/docs/site-header");
+      expect(text).not.toMatch(/apps\/docs\/_partials\/(?:header|site-links|footer)\.html/);
+    }
     // "the landing includes the shared partials from apps/site/_partials"
-    expect(agents).toMatch(/apps\/site\/_partials/);
-    expect(agents).not.toMatch(/apps\/docs\/_partials\/(?:header|site-links|footer)\.html/);
+    expect(docsSite).toMatch(/apps\/site\/_partials/);
   });
 
   it("dev/STRUCTURE.md lists apps/site and what is in it", () => {
