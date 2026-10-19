@@ -9,6 +9,12 @@
         "matcher": "Edit|Write|NotebookEdit",
         "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/no-tests-edit.js\"" }]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/lint-on-edit.js\"" }]
+      }
     ]
   }
 }
