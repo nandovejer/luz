@@ -164,11 +164,15 @@ The core JS (`luz.js`) provides no-dependency implementations of:
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/core` 0.0.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/core` 0.1.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1.0. Nothing is deprecated and nothing breaks.
+#### English stays in the entry; every other language LUZ ships is a lazy file, fetched only for the pages that declare it. `loadLocales()` is new, and `luz.js` calls it at boot, so a page with `<html lang="es">` makes one request for `i18n-es.min.js` and a page in English makes none. A language is a JSON file, `packages/core/src/i18n/<code>.json`, that the build validates and writes as `dist/i18n-<code>.js`; it is published as `@luz-ds/core/i18n/<code>`. The dictionary has two more keys, `previous` and `next`. `initTabs()`, `initCopyButtons()`, `initThemeSystem()` and `initThemeCycle()` take a `defer` flag that leaves `data-luz-js` and the strings to a later call.
+
+Breaking: `@luz-ds/core/i18n` and the standalone modules (`/highlight`, `/player`, `/theme`, `/clipboard`) no longer carry Spanish. Before `initHighlight()`, `initPlayers()` and `initThemeCycle()` on a page that is not in English, call `await loadLocales()` from `@luz-ds/core/i18n`, or `registerLocale("es", …)` with your own strings. The `luz.js` entry does it for you.
+
+Older versions: https://github.com/nandovejer/luz/blob/main/packages/core/CHANGELOG.md
 
 ### Read first
 
@@ -185,8 +189,6 @@ This package needs `@luz-ds/tokens` loaded first.
 ### Check what you write
 
 Run `npx @luz-ds/check <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md`.
-
-`@luz-ds/check` is not on npm yet: it ships with the first release.
 
 <!-- luz:ai-agents:end -->
 

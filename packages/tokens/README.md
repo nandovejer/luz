@@ -113,11 +113,13 @@ ET Book ships roman, italic, semi-bold and bold. Sans and mono are system stacks
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/tokens` 0.0.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/tokens` 0.1.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1.0. Nothing is deprecated and nothing breaks.
+First release of `@luz-ds/tokens`. Nothing breaks inside @luz-ds. Coming from `@cai-ds/*`: see the migration note in `CHANGELOG.md`.
+
+Older versions: https://github.com/nandovejer/luz/blob/main/packages/tokens/CHANGELOG.md
 
 ### Read first
 
@@ -133,8 +135,6 @@ Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1
 ### Check what you write
 
 Run `npx @luz-ds/check <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md`.
-
-`@luz-ds/check` is not on npm yet: it ships with the first release.
 
 <!-- luz:ai-agents:end -->
 

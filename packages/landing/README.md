@@ -59,11 +59,13 @@ There is no script. Add core's and site's if you use their behaviours.
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/landing` 0.0.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/landing` 0.1.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1.0. Nothing is deprecated and nothing breaks.
+First release of `@luz-ds/landing`. Nothing breaks inside @luz-ds. Coming from `@cai-ds/*`: see the migration note in `CHANGELOG.md`.
+
+Older versions: https://github.com/nandovejer/luz/blob/main/packages/landing/CHANGELOG.md
 
 ### Read first
 
@@ -81,8 +83,6 @@ This package needs `@luz-ds/tokens` and `@luz-ds/core` loaded first.
 ### Check what you write
 
 Run `npx @luz-ds/check <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md`.
-
-`@luz-ds/check` is not on npm yet: it ships with the first release.
 
 <!-- luz:ai-agents:end -->
 
