@@ -677,7 +677,244 @@
 .docs-not-found__links {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--luz-space-sm);
+}
+
+/* The not-found page: no sidebar, one centred column, black and green like a
+   terminal whatever the reader's colour mode (the layout fixes data-theme to
+   dark: no script, so nothing changes it). The greens are the scale's own, the
+   black is the media surface's. Unlayered, so it wins over the shell's
+   columns at every width. */
+.docs-not-found {
+  /* The headline's size, which the title follows: the window's width over the
+     width of the words, up to 5.5rem */
+  --docs-not-found-big: min(5.5rem, calc((100vw - 3rem) / 9.6));
+
+  /* Its own stacking context: the rain (z-index -1) falls over the page's
+     black, not under it */
+  position: relative;
+  z-index: 0;
+
+  --luz-surface-page: var(--luz-surface-media);
+  --luz-surface: color-mix(in oklab, var(--luz-green-70) 22%, var(--luz-surface-media));
+  --luz-surface-hover: color-mix(in oklab, var(--luz-green-70) 36%, var(--luz-surface-media));
+  --luz-text-primary: var(--luz-green-30);
+  --luz-text-secondary: var(--luz-green-40);
+  --luz-text-muted: var(--luz-green-50);
+  --luz-brand-primary: var(--luz-green-30);
+  --luz-brand-hover: var(--luz-green-20);
+  --luz-brand-active: var(--luz-green-10);
+  --luz-brand-fill: var(--luz-green-60);
+  --luz-brand-fill-hover: var(--luz-green-70);
+  --luz-divider: var(--luz-green-70);
+  --luz-outline: var(--luz-green-50);
+  --luz-focus-ring: var(--luz-green-20);
+
+  grid-template:
+    "head" auto
+    "main" 1fr
+    "foot" auto / minmax(0, 1fr);
+}
+
+.docs-not-found .luz-docs-main {
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  padding-block: var(--luz-space-3xl);
+}
+
+/* The rain: columns of characters that fall behind the content, in the green
+   of the page, fainter at the tail than at the head. Only where motion is
+   welcome (never under reduced motion), and never in high contrast or forced
+   colours. Decoration only. The grid gives each column its place; the
+   pattern of the nth-child rules gives each its own speed and start. */
+.docs-not-found__rain {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .docs-not-found__rain {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: grid;
+    grid-template-columns: repeat(28, minmax(0, 1fr));
+    overflow: hidden;
+    pointer-events: none;
+    font-family: var(--luz-font-mono);
+    font-size: var(--luz-text-md);
+    line-height: 1.1;
+    text-align: center;
+    color: color-mix(in oklab, var(--luz-green-40) 70%, transparent);
+  }
+
+  .docs-not-found__rain > span {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    white-space: nowrap;
+    justify-self: center;
+    animation: docs-rain linear infinite;
+    animation-duration: calc(var(--luz-duration-lazy) * 14);
+    animation-delay: calc(var(--luz-duration-lazy) * -9);
+    /* The head is the last glyph: the tail fades towards the top */
+    mask-image: linear-gradient(to bottom, transparent, var(--luz-text-primary));
+  }
+
+  .docs-not-found__rain > span:nth-child(3n + 1) {
+    animation-duration: calc(var(--luz-duration-lazy) * 19);
+    animation-delay: calc(var(--luz-duration-lazy) * -4);
+    opacity: 0.7;
+  }
+
+  .docs-not-found__rain > span:nth-child(5n + 2) {
+    animation-duration: calc(var(--luz-duration-lazy) * 11);
+    animation-delay: calc(var(--luz-duration-lazy) * -13);
+  }
+
+  .docs-not-found__rain > span:nth-child(7n + 3) {
+    animation-duration: calc(var(--luz-duration-lazy) * 16);
+    animation-delay: calc(var(--luz-duration-lazy) * -1);
+    opacity: 0.5;
+  }
+
+}
+
+:root[data-theme="high-contrast"] .docs-not-found__rain {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  .docs-not-found__rain {
+    display: none;
+  }
+}
+
+@keyframes docs-rain {
+  from {
+    translate: 0 -100%;
+  }
+
+  to {
+    translate: 0 100vh;
+  }
+}
+
+/* An old tube television: scanlines over the whole window, a dark edge
+   like the curve of the glass, and the red and blue fringe of a badly
+   converged tube on the 404. Still: nothing moves (WCAG 2.2.2; the page has
+   no script and so no pause control). The lines are a few percent of the
+   text colour, so the text under them keeps its contrast; never in high
+   contrast or forced colours. Decoration only. */
+.docs-not-found__crt {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--luz-z-overlay) + 1);
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 60%, color-mix(in oklab, var(--luz-surface-media) 70%, transparent) 100%),
+    repeating-linear-gradient(to bottom, transparent 0 2px, color-mix(in oklab, var(--luz-surface-media) 28%, transparent) 2px 4px);
+}
+
+/* A band of light that rolls down the glass, and the picture switching on:
+   both end within 5 seconds and stay still (WCAG 2.2.2), none of it under
+   reduced motion, and no flash (2.3.1: one brightening, once) */
+.docs-not-found__crt::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: -20vh;
+  block-size: 20vh;
+  opacity: 0;
+  background: linear-gradient(to bottom, transparent, color-mix(in oklab, var(--luz-text-primary) 7%, transparent), transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .docs-not-found__crt::before {
+    animation: docs-crt-roll calc(var(--luz-duration-lazy) * 2.5) linear var(--luz-duration-lazy) 2 both;
+  }
+
+  .docs-not-found .luz-docs-main {
+    transform-origin: center;
+    animation: docs-crt-on var(--luz-duration-lazy) ease-out both;
+  }
+}
+
+@keyframes docs-crt-roll {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 140vh;
+  }
+}
+
+@keyframes docs-crt-on {
+  0% {
+    opacity: 0;
+    scale: 1 0.01;
+    filter: brightness(1.8);
+  }
+
+  60% {
+    opacity: 1;
+    scale: 1 0.02;
+    filter: brightness(1.8);
+  }
+
+  100% {
+    opacity: 1;
+    scale: 1 1;
+    filter: brightness(1);
+  }
+}
+
+:root[data-theme="high-contrast"] .docs-not-found__crt {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  .docs-not-found__crt {
+    display: none;
+  }
+}
+
+/* The lead is centred, line by line, never justified; no word left alone on
+   the last line */
+.docs-not-found .docs-lead {
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* The lead is a link, and looks like the text around it: no colour, no
+   underline. It is still a link for the keyboard (the focus ring shows) and
+   for a screen reader. */
+.docs-not-found__lead-link,
+.docs-not-found__lead-link:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Decoration only (aria-hidden): the h1 says it in words */
+.docs-not-found__code {
+  margin: 0;
+  font-family: var(--luz-font-heading);
+  /* One line at every width: the size follows the window (the words are about
+     nine times the font size wide), up to 5.5rem, and never wraps */
+  font-size: var(--docs-not-found-big);
+  white-space: nowrap;
+  max-inline-size: none;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--luz-brand-primary);
+  text-shadow:
+    -0.03em 0 color-mix(in oklab, var(--luz-color-danger) 45%, transparent),
+    0.03em 0 color-mix(in oklab, var(--luz-color-info) 45%, transparent),
+    0 0 0.35em color-mix(in oklab, var(--luz-green-40) 55%, transparent);
 }
 
 .docs-chapter {
