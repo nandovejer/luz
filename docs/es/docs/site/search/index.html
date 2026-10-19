@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Búsqueda – Site – Documentación de LUZ</title>
+  <meta name="description" content="Permite encontrar por su nombre una página, sección o elemento HTML del sitio, mediante un botón de la cabecera.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/site/search/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/site/search/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/site/search/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/site/search/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-Bjvys9Mm.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-DUrDBUjx.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-CdmvI6FB.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-Dp0HT6ep.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CWvVkJ1c.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <a class="site-header__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/site/search/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/site/search/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#example">Ejemplo</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#known-issues">Problemas conocidos</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#code">Código</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#markup">Copiar el marcado</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#variants">Variantes y opciones</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#how">Cómo funciona</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#no-js">Sin JavaScript</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#keyboard">Teclado y ARIA</a></li>
+          </ul>
+        </li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#design">Diseño</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when">Cuándo usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when-not">Cuándo no usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#do-dont">Qué hacer y qué no</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#content">Cómo escribir el contenido</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#contrast">Contraste y foco</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#tokens">Tokens que usa</a></li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/site/search/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/site/search.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=B%C3%BAsqueda">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/site/">Site</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Búsqueda</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Site · Patrones</p>
+    <h1 class="docs-title">Búsqueda</h1>
+    <p class="luz-docs-page-head__lead">Permite encontrar por su nombre una página, sección o elemento HTML del sitio, mediante un botón de la cabecera.</p>
+    <ul class="luz-docs-page-head__meta"><li><code class="docs-demo__file">&lt;luz-search&gt;, .luz-search</code></li><li>JS: search.js</li><li>Claro · Oscuro · Alto contraste</li><li>Con pruebas</li><li><a href="#known-issues">2 problemas conocidos</a></li></ul>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/site/search/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-component" id="p-search">
+          <h2 id="example">Ejemplo</h2>
+          <p>El botón de búsqueda de una cabecera abre el mismo diálogo que aparece en la parte superior de esta página.</p>
+          <div lang="en" class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <a href="../../../../es/docs/a-z/" data-luz-search-fallback>A–Z index</a>
+            <button class="luz-search__trigger" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" hidden>
+              <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <span class="luz-search__trigger-label">Search docs…</span>
+              <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+            </button>
+            <p class="docs-demo__note">A second button for the search in this site’s header: it opens the same dialog. Without JavaScript it is a link to the A–Z index.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La búsqueda todavía no se ha probado con un lector de pantalla. Ctrl+K abre esta búsqueda en lugar del cuadro de búsqueda web del navegador; usa la barra de direcciones para buscar en la web.</p>
+          <p>Con <code>site.js</code>, si pulsas Ctrl+K antes de que se haya cargado el script de búsqueda, este se carga y luego abre el diálogo; la espera puede ser algo más larga con una conexión lenta. Con un zoom del 400 %, se desplaza todo el diálogo, así que el campo puede quedar fuera de la vista mientras lees los resultados.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de búsqueda">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>&lt;luz-search&gt;</code> contiene el enlace a tu índice, el botón que lo sustituye y el diálogo. Colócalo donde vaya la búsqueda, normalmente al final de la cabecera: el enlace y el botón comparten el mismo espacio, así que nada se desplaza cuando el botón toma el relevo, y el diálogo cerrado no ocupa espacio.</p>
+            <p>Todos los textos son tuyos: escríbelos en el idioma de la página.</p>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Search markup"><code>&lt;luz-search&gt;
+  &lt;a class=&quot;luz-search__fallback&quot; href=&quot;/a-z/&quot; data-luz-search-fallback&gt;
+    &lt;svg class=&quot;luz-search__trigger-icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+    &lt;span class=&quot;luz-search__fallback-label&quot;&gt;A–Z index&lt;/span&gt;
+  &lt;/a&gt;
+  &lt;button class=&quot;luz-search__trigger luz-search__trigger--compact&quot; type=&quot;button&quot; data-luz-search-open
+          aria-haspopup=&quot;dialog&quot; aria-keyshortcuts=&quot;Control+K Meta+K&quot; hidden&gt;
+    &lt;svg class=&quot;luz-search__trigger-icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+    &lt;span class=&quot;luz-search__trigger-label&quot;&gt;Search docs…&lt;/span&gt;
+    &lt;kbd class=&quot;luz-search__trigger-key&quot; aria-hidden=&quot;true&quot;&gt;Ctrl K&lt;/kbd&gt;
+  &lt;/button&gt;
+  &lt;dialog class=&quot;luz-modal luz-search&quot; aria-labelledby=&quot;search-title&quot;
+          data-luz-search-src=&quot;/search-index.json&quot;
+          data-luz-label-results=&quot;{n} results&quot;
+          data-luz-label-result=&quot;1 result&quot;
+          data-luz-label-capped=&quot;{shown} of {n} results. Type more to narrow.&quot;
+          data-luz-label-none=&quot;No results for “{query}”. Check the spelling or try a shorter word.&quot;
+          data-luz-label-loading=&quot;Loading the search index…&quot;
+          data-luz-label-error=&quot;Search is not available right now.&quot;&gt;
+    &lt;search class=&quot;luz-search__body&quot;&gt;
+      &lt;div class=&quot;luz-search__head&quot;&gt;
+        &lt;h2 class=&quot;luz-search__title&quot; id=&quot;search-title&quot;&gt;&lt;label for=&quot;search-q&quot;&gt;Search the documentation&lt;/label&gt;&lt;/h2&gt;
+        &lt;form method=&quot;dialog&quot;&gt;&lt;button class=&quot;luz-btn luz-btn--ghost luz-search__close&quot; aria-label=&quot;Close search&quot;&gt;
+          &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M6 6l12 12M18 6 6 18&quot;/&gt;&lt;/svg&gt;
+        &lt;/button&gt;&lt;/form&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;luz-search__field&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+        &lt;input class=&quot;luz-input&quot; id=&quot;search-q&quot; type=&quot;text&quot; maxlength=&quot;100&quot; autocomplete=&quot;off&quot;
+               spellcheck=&quot;false&quot; enterkeyhint=&quot;go&quot; autofocus aria-describedby=&quot;search-hint&quot;&gt;
+      &lt;/div&gt;
+      &lt;p class=&quot;luz-field__helper&quot; id=&quot;search-hint&quot;&gt;Results update as you type. Arrow keys move through them.&lt;/p&gt;
+      &lt;p class=&quot;luz-search__status&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+      &lt;div class=&quot;luz-search__results&quot; data-luz-search-results&gt;
+        &lt;div hidden&gt;&lt;h3&gt;Pages&lt;/h3&gt;&lt;ul data-luz-search-list=&quot;pages&quot;&gt;&lt;/ul&gt;&lt;/div&gt;
+        &lt;div hidden&gt;&lt;h3&gt;Sections&lt;/h3&gt;&lt;ul data-luz-search-list=&quot;sections&quot;&gt;&lt;/ul&gt;&lt;/div&gt;
+        &lt;div hidden&gt;&lt;h3&gt;HTML elements&lt;/h3&gt;&lt;ul data-luz-search-list=&quot;elements&quot;&gt;&lt;/ul&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p class=&quot;luz-search__foot&quot;&gt;Can’t find it? &lt;a href=&quot;/a-z/&quot;&gt;Browse the A–Z index&lt;/a&gt;&lt;/p&gt;
+    &lt;/search&gt;
+  &lt;/dialog&gt;
+&lt;/luz-search&gt;
+
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.1.0/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Todas las opciones se indican en el marcado: son clases o atributos.</p>
+            <ul>
+              <li><code>.luz-search__trigger--compact</code>: a 768 px o menos, el activador solo muestra la lupa, en un espacio de 44 por 44 px, igual que el enlace contiguo; sus nombres se mantienen, aunque recortados, no se eliminan. Añade a ambos un <code>&lt;svg class=&quot;luz-search__trigger-icon&quot;&gt;</code>.</li>
+              <li>Se puede usar más de un activador: todos los <code>[data-luz-search-open]</code> de la página abren el diálogo, estén dentro del elemento o no (este sitio tiene uno en la cabecera y otro en la portada de la documentación). Los que estén fuera permanecen ocultos hasta que funcione la búsqueda y no ocupan espacio: colócalos donde su aparición no desplace nada, por ejemplo, al final de una sección.</li>
+              <li>Un elemento con <code>data-luz-search-show=&quot;idle&quot;</code> dentro de <code>[data-luz-search-results]</code> se muestra mientras el campo está vacío, por ejemplo, con una lista breve de páginas populares; uno con <code>data-luz-search-show=&quot;none&quot;</code> se muestra cuando no hay coincidencias.</li>
+              <li>Omite <code>[data-luz-search-list]</code> para no incluir ese grupo.</li>
+              <li>Los textos que escribe el script son los atributos <code>data-luz-label-*</code> del diálogo: <code>results</code>, <code>result</code>, <code>capped</code>, <code>none</code>, <code>loading</code> y <code>error</code>, con <code>{n}</code>, <code>{shown}</code> y <code>{query}</code>. <code>data-luz-label-idle</code> es el texto que muestra el estado mientras el campo está vacío, por ejemplo, «Escribe para buscar en la documentación». Si falta una etiqueta, no se escribe nada.</li>
+            </ul>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Carga <code>site.min.js</code> como módulo. No carga nada en páginas sin <code>&lt;luz-search&gt;</code>.</p>
+            <p>En una página que sí lo tenga, carga el archivo de búsqueda, <code>search.min.js</code>, cuando el lector pasa el puntero por primera vez, mueve el foco al elemento o pulsa <kbd>Ctrl</kbd> + <kbd>K</kbd>, o cuando el navegador está inactivo, lo que ocurra antes. Ese archivo define <code>&lt;luz-search&gt;</code>, un elemento personalizado en el DOM ligero (sin Shadow DOM), y cada instancia de la página se conecta por sí misma.</p>
+            <ul>
+              <li>El botón ocupa el mismo espacio que el enlace, así que nada se desplaza. Si el enlace tiene el foco del teclado o el puntero está pulsado en ese momento, el cambio espera a que el lector salga del enlace, lo siga o suelte el puntero: el foco nunca se mueve.</li>
+              <li>El botón abre el <code>&lt;dialog&gt;</code> nativo con <code>showModal()</code>: el navegador mantiene el foco dentro, lo cierra con Escape y devuelve el foco a su origen.</li>
+              <li>La primera vez que se abre el diálogo, el script lee el índice.</li>
+              <li>Si no se puede cargar <code>search.min.js</code>, la página conserva el comportamiento sin JavaScript: el enlace funciona y el botón permanece oculto.</li>
+              <li>Si un router o framework añade un <code>&lt;luz-search&gt;</code> después de cargar la página, <code>site.min.js</code> no lo detecta: importa <code>@luz-ds/site/search</code> (o <code>search.min.js</code>) a mano y se conectará al elemento cuando este se inserte. Aunque haya dos copias del archivo en una página, el elemento solo se define una vez.</li>
+            </ul>
+            <p>El índice es un archivo JSON de la versión 1. Cada lista contiene <code>[text, url, meta, lang]</code>; <code>meta</code> (que se muestra atenuado después del texto) y <code>lang</code> son opcionales, y las URL son relativas al archivo:</p>
+            <pre class="luz-code-block" data-lang="json" tabindex="0" role="region" aria-label="Search index format"><code>{
+  &quot;version&quot;: 1,
+  &quot;pages&quot;: [[&quot;Button&quot;, &quot;components/button/&quot;, &quot;Components&quot;]],
+  &quot;sections&quot;: [[&quot;When to use&quot;, &quot;components/button/#when&quot;, &quot;Button › Design&quot;]],
+  &quot;elements&quot;: [[&quot;&lt;table&gt; element, Tables&quot;, &quot;html/tables/#el-table&quot;]]
+}</code></pre>
+            <p>Un resultado coincide cuando el texto y los metadatos contienen todas las palabras escritas, sin distinguir mayúsculas, minúsculas ni acentos; los que empiezan por esas palabras aparecen primero. Cada grupo muestra un máximo de 8 resultados y la línea de estado indica cuántos hay.</p>
+            <p>Qué acepta el componente para que un índice generado por un CMS no pueda dañar la página:</p>
+            <ul>
+              <li>El JSON solo puede proceder del mismo origen de la página, por http o https; si hay una redirección, la solicitud falla. Tu Content-Security-Policy necesita <code>connect-src 'self'</code>; para usar un índice de otro sitio, aloja una copia en el tuyo. El navegador lo almacena en caché como cualquier archivo.</li>
+              <li>Los enlaces solo pueden ser URL <code>http:</code> y <code>https:</code>; se omite cualquier otro elemento. El texto se escribe como texto, nunca como HTML.</li>
+              <li>Límites: 1 000 000 de caracteres JSON, 10 000 resultados, 300 caracteres por texto, 8 palabras por búsqueda y 100 caracteres en el campo. Se ignoran los campos desconocidos. Si el índice no es de la versión 1, se muestra el mensaje de error.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>El botón permanece oculto, no recibe el foco ni se lee; en su lugar se muestra el enlace. Crea una página que enumere todas las páginas por nombre, como un índice alfabético. El diálogo nunca se abre.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Todo funciona con el teclado mediante un atajo.</p>
+            <ul>
+              <li><kbd>Ctrl</kbd> + <kbd>K</kbd> o <kbd>⌘</kbd> + <kbd>K</kbd> abre la búsqueda desde cualquier lugar de la página, excepto mientras escribes en un área de texto o una región editable, o mientras haya otro diálogo abierto. Si lo pulsas de nuevo, selecciona el texto del campo. Si lo pulsas antes de que se cargue <code>search.min.js</code>, lo carga y luego abre el diálogo; en una página sin <code>&lt;luz-search&gt;</code>, el navegador conserva el atajo.</li>
+              <li>La flecha abajo pasa del campo al primer resultado; las flechas arriba y abajo recorren los resultados, incluso entre grupos; Inicio y Fin van al primero y al último. La flecha arriba en el primer resultado vuelve al campo.</li>
+              <li>Enter en el campo abre el primer resultado; en un resultado, sigue el enlace. Si escribes mientras tienes un resultado enfocado, vuelves al campo.</li>
+              <li>Escape o el botón de cierre (un icono × llamado <em>Cerrar búsqueda</em> mediante su <code>aria-label</code>) cierra el diálogo, sea cual sea el contenido del campo, y devuelve el foco a su posición anterior. Por eso el campo es <code>type=&quot;text&quot;</code>: en uno <code>type=&quot;search&quot;</code>, Chrome y Safari usan la primera pulsación de Escape para borrar el texto. Si un resultado lleva a la misma página, el diálogo se cierra y el foco pasa al encabezado de esa sección. Si al abrirlo nada tenía el foco (Ctrl+K en una página recién cargada o un clic en un navegador que no enfoca botones), el script lo pasa al botón que abrió el diálogo o al propio botón de búsqueda tras Ctrl+K, para que la siguiente pulsación de Tab continúe desde la cabecera.</li>
+              <li>El encabezado da nombre al diálogo y etiqueta el campo. El recuento se anuncia cuando el lector deja de escribir (<code>role=&quot;status&quot;</code>). Los resultados son enlaces en listas bajo encabezados, no un combobox.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa la búsqueda en sitios con más de unas pocas páginas, donde el lector pueda buscar un componente, un ajuste o el título de un artículo por su nombre.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses la búsqueda en lugar de la navegación: mantén el menú y una página de índice.</p>
+            <ul>
+              <li>La búsqueda requiere escribir y conocer el nombre, que quizá el lector desconozca.</li>
+              <li>Solo encuentra coincidencias en títulos y encabezados: no puede buscar dentro de textos largos ni en varios sitios.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Explica qué se busca con una etiqueta breve que quepa en todos los idiomas.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <span class="luz-search__trigger"><svg class="luz-search__trigger-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="luz-search__trigger-label">Search docs…</span><kbd class="luz-search__trigger-key">Ctrl K</kbd></span>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Dejes solo la lupa en una pantalla ancha: quien la ve tiene que adivinar qué busca y desaparece la pista del atajo. Reserva el botón con solo el icono para pantallas estrechas.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <span class="luz-search__trigger"><svg class="luz-search__trigger-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Todo el texto está en el marcado, así que puedes redactarlo en el idioma de la página.</p>
+            <ul>
+              <li>El activador indica qué se busca: «Buscar en la documentación…». Mantén el texto breve en todos los idiomas («Buscar…») en lugar de recortarlo.</li>
+              <li>Añade la página a los metadatos de los resultados de secciones: «Cuándo usarlo» con «Botón › Diseño», para que cada resultado se entienda por sí mismo y se encuentre por el nombre de la página.</li>
+              <li>Indica qué probar a continuación en la etiqueta <code>none</code>, que la línea de estado anuncia después de la consulta: «Comprueba la ortografía o prueba con una palabra más corta».</li>
+              <li>Haz que el enlace alternativo y la línea debajo de los resultados lleven a la misma página de índice.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto del botón usa el color de texto secundario sobre el color del campo, no el gris de un marcador de posición; los resultados aparecen sobre la superficie del diálogo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la búsqueda en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto del activador</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto del activador, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde del activador</div></td><td data-label="Color sobre el fondo"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3.7:1</div></td><td data-label="Oscuro"><div>4.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título del resultado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título del resultado, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>6.4:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Encabezado del grupo, página del resultado, recuento e indicación</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Página del resultado, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>6.2:1</div></td><td data-label="Alto contraste"><div>18.4:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Lupa del campo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Icono de cierre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Icono de cierre, al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el activador tiene un contorno <code>--luz-focus-ring</code> de 2 px, a 2 px de distancia; el resultado enfocado tiene el mismo anillo que cualquier enlace.</li>
+              <li><strong>Bordes:</strong> en colores forzados, el diálogo conserva un borde real y la lupa y el icono de cierre se dibujan con el color de texto del sistema.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 22 tokens que lee <code>components/search.css</code> de site, agrupados por familia. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="../../../../es/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="../../../../es/docs/tokens/color/">Color</a></dt><dd><a href="../../../../es/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="../../../../es/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="../../../../es/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="../../../../es/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="../../../../es/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="../../../../es/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="../../../../es/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-lg</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/components/">Componentes</a></li>
+      <li><a href="../../../../es/docs/get-started/">Instala LUZ</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/site/lang-switch/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Selector de idioma</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/site/classes/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Referencia de clases</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/site/search.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=B%C3%BAsqueda">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · v0.0.0 · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

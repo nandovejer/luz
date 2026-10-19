@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color – Tokens – Documentación de LUZ</title>
+  <meta name="description" content="Todos los colores que puede usar un componente, con nombres según su función y sus valores en claro, oscuro y alto contraste, uno junto al otro.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/tokens/color/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/tokens/color/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/tokens/color/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/tokens/color/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-Bjvys9Mm.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-DUrDBUjx.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-CdmvI6FB.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-Dp0HT6ep.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CWvVkJ1c.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <a class="site-header__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/tokens/color/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/tokens/color/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#surfaces-8">Superficies (8)</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#text-5">Texto (5)</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#lines-3">Líneas (3)</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#brand-7">Marca (7)</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#sidebar-9">Barra lateral (9)</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#status-10">Estado (10)</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#inputs-2">Campos (2)</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#extended-5">Ampliados (5)</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#code-syntax-6">Sintaxis de código (6)</a></li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/tokens/color/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/tokens/color.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Color">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/tokens/">Tokens</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Color</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Tokens · Familias de tokens</p>
+    <h1 class="docs-title">Color</h1>
+    <p class="luz-docs-page-head__lead">Todos los colores que puede usar un componente, con nombres según su función y sus valores en claro, oscuro y alto contraste, uno junto al otro.</p>
+    <p class="luz-docs-page-head__files">Archivos: <code class="docs-demo__file">src/semantic.css</code></p>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/tokens/color/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-block" id="t-semantic">
+          <p>Elige un token por la función que cumple, no por su color. El nombre es el mismo en todos los modos; cambia el valor.</p>
+          <ul>
+            <li><strong>Superficies</strong> para fondos, <strong>texto</strong> para palabras, <strong>líneas</strong> para bordes y separadores.</li>
+            <li><strong>Marca</strong> para enlaces y la acción principal; los tokens de <strong>relleno</strong> van detrás del texto blanco.</li>
+            <li><strong>Estado</strong> para éxito, advertencia, peligro e información, y nada más.</li>
+            <li><strong>Barra lateral</strong>, <strong>campos</strong> y <strong>sintaxis de código</strong> solo para esos componentes.</li>
+          </ul>
+          <p class="docs-demo__note">Cada token muestra su función y, al lado, su valor en los modos claro, oscuro y de alto contraste. Un clic en el nombre lo selecciona entero, listo para copiar. En Figma, los mismos nombres son variables: consulta <a href="../../../../es/docs/tokens/figma/">Tokens en Figma</a>.</p>
+          <details class="docs-fold" open data-fold-narrow>
+            <summary>Los <span data-count="semantic">55</span> tokens semánticos, en 9 grupos</summary>
+            <div class="docs-demo__stage">
+            <h2 id="surfaces-8" class="docs-subhead">Superficies (8)</h2>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-surface-page">
+                <code class="u-select-all">--luz-surface-page</code>
+                <span class="docs-token__role">El fondo de la página.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-surface-page)"></span>Claro <code>#fbf8f2</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-surface-page)"></span>Oscuro <code>#1c1712</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-surface-page)"></span>Alto contraste <code>#fff</code></span>
+              </li>
+              <li class="docs-token" id="luz-surface">
+                <code class="u-select-all">--luz-surface</code>
+                <span class="docs-token__role">Tarjetas, diálogos y campos: la misma superficie que la página.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-surface)"></span>Claro <code>#fffdf9</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-surface)"></span>Oscuro <code>#241e18</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-surface)"></span>Alto contraste <code>#fff</code></span>
+              </li>
+              <li class="docs-token" id="luz-surface-hover">
+                <code class="u-select-all">--luz-surface-hover</code>
+                <span class="docs-token__role">Una fila o un control bajo el puntero.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-surface-hover)"></span>Claro <code>#f4ede0</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-surface-hover)"></span>Oscuro <code>#2e261f</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-surface-hover)"></span>Alto contraste <code>#f9fafc</code></span>
+              </li>
+              <li class="docs-token" id="luz-surface-pressed">
+                <code class="u-select-all">--luz-surface-pressed</code>
+                <span class="docs-token__role">Un control mientras se pulsa.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-surface-pressed)"></span>Claro <code>#ebe0cc</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-surface-pressed)"></span>Oscuro <code>#3a3028</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-surface-pressed)"></span>Alto contraste <code>#e9eef4</code></span>
+              </li>
+              <li class="docs-token" id="luz-surface-muted">
+                <code class="u-select-all">--luz-surface-muted</code>
+                <span class="docs-token__role">Bloques de código y áreas de fondo, a un nivel de la página.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-surface-muted)"></span>Claro <code>#fbf8f2</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-surface-muted)"></span>Oscuro <code>#1c1712</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-surface-muted)"></span>Alto contraste <code>#f9fafc</code></span>
+              </li>
+              <li class="docs-token" id="luz-surface-strong">
+                <code class="u-select-all">--luz-surface-strong</code>
+                <span class="docs-token__role">Cabeceras de tabla, etiquetas, tooltips y avisos emergentes, a dos niveles de la página.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-surface-strong)"></span>Claro <code>#efe6d6</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-surface-strong)"></span>Oscuro <code>#3a3028</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-surface-strong)"></span>Alto contraste <code>#e9eef4</code></span>
+              </li>
+              <li class="docs-token" id="luz-scrim">
+                <code class="u-select-all">--luz-scrim</code>
+                <span class="docs-token__role">Oscurece la página detrás de un diálogo o un cajón.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-scrim)"></span>Claro <code>rgba(13, 14, 17, 0.6)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-scrim)"></span>Oscuro <code>rgba(0, 0, 0, 0.7)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-scrim)"></span>Alto contraste <code>rgba(13, 14, 17, 0.6)</code></span>
+              </li>
+              <li class="docs-token" id="luz-surface-media">
+                <code class="u-select-all">--luz-surface-media</code>
+                <span class="docs-token__role">Detrás de un vídeo. Igual en todos los modos.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-surface-media)"></span>Claro <code>#000</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-surface-media)"></span>Oscuro <code>#000</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-surface-media)"></span>Alto contraste <code>#000</code></span>
+              </li>
+            </ul>
+            <h2 id="text-5" class="docs-subhead">Texto (5)</h2>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-text-primary">
+                <code class="u-select-all">--luz-text-primary</code>
+                <span class="docs-token__role">Texto del cuerpo, encabezados e iconos.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-text-primary)"></span>Claro <code>#231c16</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-text-primary)"></span>Oscuro <code>#f3ece1</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-text-primary)"></span>Alto contraste <code>#000</code></span>
+              </li>
+              <li class="docs-token" id="luz-text-secondary">
+                <code class="u-select-all">--luz-text-secondary</code>
+                <span class="docs-token__role">Etiquetas, indicaciones y pies.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-text-secondary)"></span>Claro <code>#6b5a48</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-text-secondary)"></span>Oscuro <code>#b8a690</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-text-secondary)"></span>Alto contraste <code>#0d0e11</code></span>
+              </li>
+              <li class="docs-token" id="luz-text-muted">
+                <code class="u-select-all">--luz-text-muted</code>
+                <span class="docs-token__role">Marcadores de posición y separadores.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-text-muted)"></span>Claro <code>#7a6a58</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-text-muted)"></span>Oscuro <code>#a08f7a</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-text-muted)"></span>Alto contraste <code>#434951</code></span>
+              </li>
+              <li class="docs-token" id="luz-text-disabled">
+                <code class="u-select-all">--luz-text-disabled</code>
+                <span class="docs-token__role">Controles desactivados: 3:1, el mínimo que establece LUZ.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-text-disabled)"></span>Claro <code>#8f8172</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-text-disabled)"></span>Oscuro <code>#877a69</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-text-disabled)"></span>Alto contraste <code>#646b73</code></span>
+              </li>
+              <li class="docs-token" id="luz-text-on-fill">
+                <code class="u-select-all">--luz-text-on-fill</code>
+                <span class="docs-token__role">Texto sobre un fondo sólido: botones principales y de peligro, insignias.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-text-on-fill)"></span>Claro <code>#fff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-text-on-fill)"></span>Oscuro <code>#fff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-text-on-fill)"></span>Alto contraste <code>#fff</code></span>
+              </li>
+            </ul>
+            <h2 id="lines-3" class="docs-subhead">Líneas (3)</h2>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-divider">
+                <code class="u-select-all">--luz-divider</code>
+                <span class="docs-token__role">Líneas decorativas entre bloques de contenido. Sin mínimo.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-divider)"></span>Claro <code>#e3d4b8</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-divider)"></span>Oscuro <code>#43382d</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-divider)"></span>Alto contraste <code>#434951</code></span>
+              </li>
+              <li class="docs-token" id="luz-outline">
+                <code class="u-select-all">--luz-outline</code>
+                <span class="docs-token__role">Bordes que identifican un control: 3:1.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-outline)"></span>Claro <code>#807366</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-outline)"></span>Oscuro <code>#7d7062</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-outline)"></span>Alto contraste <code>#000</code></span>
+              </li>
+              <li class="docs-token" id="luz-focus-ring">
+                <code class="u-select-all">--luz-focus-ring</code>
+                <span class="docs-token__role">El contorno del foco: 3:1 sobre cualquier superficie.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-focus-ring)"></span>Claro <code>#2365a6</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-focus-ring)"></span>Oscuro <code>#6fb1ec</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-focus-ring)"></span>Alto contraste <code>#000</code></span>
+              </li>
+            </ul>
+            <h2 id="brand-7" class="docs-subhead">Marca (7)</h2>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-brand-primary">
+                <code class="u-select-all">--luz-brand-primary</code>
+                <span class="docs-token__role">Enlaces, botones de contorno y fantasma, pestaña activa.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-brand-primary)"></span>Claro <code>#2365a6</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-brand-primary)"></span>Oscuro <code>#6fb1ec</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-brand-primary)"></span>Alto contraste <code>#00256c</code></span>
+              </li>
+              <li class="docs-token" id="luz-brand-hover">
+                <code class="u-select-all">--luz-brand-hover</code>
+                <span class="docs-token__role">Un enlace bajo el puntero.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-brand-hover)"></span>Claro <code>#1b5089</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-brand-hover)"></span>Oscuro <code>#9ccaf2</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-brand-hover)"></span>Alto contraste <code>#000d4e</code></span>
+              </li>
+              <li class="docs-token" id="luz-brand-active">
+                <code class="u-select-all">--luz-brand-active</code>
+                <span class="docs-token__role">Un enlace mientras se pulsa.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-brand-active)"></span>Claro <code>#143d69</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-brand-active)"></span>Oscuro <code>#c8e1f8</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-brand-active)"></span>Alto contraste <code>#020831</code></span>
+              </li>
+              <li class="docs-token" id="luz-brand-subtle">
+                <code class="u-select-all">--luz-brand-subtle</code>
+                <span class="docs-token__role">Un tinte claro de marca: avatares y botones de contorno bajo el puntero.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-brand-subtle)"></span>Claro <code>#e3eef9</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-brand-subtle)"></span>Oscuro <code>rgba(32, 143, 255, 0.14)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-brand-subtle)"></span>Alto contraste <code>#f6fbff</code></span>
+              </li>
+              <li class="docs-token" id="luz-brand-fill">
+                <code class="u-select-all">--luz-brand-fill</code>
+                <span class="docs-token__role">El fondo del texto blanco: botón principal, insignia y casilla marcada.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-brand-fill)"></span>Claro <code>#2365a6</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-brand-fill)"></span>Oscuro <code>#2172c1</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-brand-fill)"></span>Alto contraste <code>#00256c</code></span>
+              </li>
+              <li class="docs-token" id="luz-brand-fill-hover">
+                <code class="u-select-all">--luz-brand-fill-hover</code>
+                <span class="docs-token__role">El botón principal bajo el puntero.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-brand-fill-hover)"></span>Claro <code>#1b5089</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-brand-fill-hover)"></span>Oscuro <code>#18548f</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-brand-fill-hover)"></span>Alto contraste <code>#000d4e</code></span>
+              </li>
+              <li class="docs-token" id="luz-brand-fill-active">
+                <code class="u-select-all">--luz-brand-fill-active</code>
+                <span class="docs-token__role">El botón principal mientras se pulsa.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-brand-fill-active)"></span>Claro <code>#143d69</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-brand-fill-active)"></span>Oscuro <code>#134577</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-brand-fill-active)"></span>Alto contraste <code>#020831</code></span>
+              </li>
+            </ul>
+            <h2 id="sidebar-9" class="docs-subhead">Barra lateral (9)</h2>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-sidebar-bg">
+                <code class="u-select-all">--luz-sidebar-bg</code>
+                <span class="docs-token__role">El panel de la barra lateral.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-bg)"></span>Claro <code>#2a211a</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-bg)"></span>Oscuro <code>#14100c</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-bg)"></span>Alto contraste <code>#000</code></span>
+              </li>
+              <li class="docs-token" id="luz-sidebar-text">
+                <code class="u-select-all">--luz-sidebar-text</code>
+                <span class="docs-token__role">Enlaces de la barra lateral.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-text)"></span>Claro <code>#e3d5bf</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-text)"></span>Oscuro <code>#cbbba5</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-text)"></span>Alto contraste <code>#ced5dd</code></span>
+              </li>
+              <li class="docs-token" id="luz-sidebar-text-hover">
+                <code class="u-select-all">--luz-sidebar-text-hover</code>
+                <span class="docs-token__role">Un enlace de la barra lateral bajo el puntero, el nombre de marca y el anillo de foco.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-text-hover)"></span>Claro <code>#fff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-text-hover)"></span>Oscuro <code>#fff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-text-hover)"></span>Alto contraste <code>#fff</code></span>
+              </li>
+              <li class="docs-token" id="luz-sidebar-hover">
+                <code class="u-select-all">--luz-sidebar-hover</code>
+                <span class="docs-token__role">Detrás de un enlace de la barra lateral bajo el puntero.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-hover)"></span>Claro <code>#3a2f25</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-hover)"></span>Oscuro <code>#241e18</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-hover)"></span>Alto contraste <code>#16191e</code></span>
+              </li>
+              <li class="docs-token" id="luz-sidebar-active-bg">
+                <code class="u-select-all">--luz-sidebar-active-bg</code>
+                <span class="docs-token__role">Detrás del enlace activo de la barra lateral.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-active-bg)"></span>Claro <code>#9cc8ee</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-active-bg)"></span>Oscuro <code>#8cc4f5</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-active-bg)"></span>Alto contraste <code>#fff</code></span>
+              </li>
+              <li class="docs-token" id="luz-sidebar-active-text">
+                <code class="u-select-all">--luz-sidebar-active-text</code>
+                <span class="docs-token__role">El enlace activo de la barra lateral.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-active-text)"></span>Claro <code>#1a140f</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-active-text)"></span>Oscuro <code>#14100c</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-active-text)"></span>Alto contraste <code>#000</code></span>
+              </li>
+              <li class="docs-token" id="luz-sidebar-border">
+                <code class="u-select-all">--luz-sidebar-border</code>
+                <span class="docs-token__role">Líneas decorativas entre las partes de la barra lateral.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-border)"></span>Claro <code>#3d3127</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-border)"></span>Oscuro <code>#2e261f</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-border)"></span>Alto contraste <code>#282d34</code></span>
+              </li>
+              <li class="docs-token" id="luz-sidebar-label">
+                <code class="u-select-all">--luz-sidebar-label</code>
+                <span class="docs-token__role">Etiquetas de sección y la versión.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-label)"></span>Claro <code>#b9a78f</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-label)"></span>Oscuro <code>#a8977f</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-label)"></span>Alto contraste <code>#889099</code></span>
+              </li>
+              <li class="docs-token" id="luz-sidebar-logo-bg">
+                <code class="u-select-all">--luz-sidebar-logo-bg</code>
+                <span class="docs-token__role">Detrás del logotipo.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-sidebar-logo-bg)"></span>Claro <code>#9cc8ee</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-sidebar-logo-bg)"></span>Oscuro <code>#8cc4f5</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-sidebar-logo-bg)"></span>Alto contraste <code>#fff</code></span>
+              </li>
+            </ul>
+            <h2 id="status-10" class="docs-subhead">Estado (10)</h2>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-color-success">
+                <code class="u-select-all">--luz-color-success</code>
+                <span class="docs-token__role">Texto y bordes de éxito.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-success)"></span>Claro <code>#177734</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-success)"></span>Oscuro <code>#89edb8</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-success)"></span>Alto contraste <code>#105224</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-success-bg">
+                <code class="u-select-all">--luz-color-success-bg</code>
+                <span class="docs-token__role">El tinte de éxito de fondo para alertas y etiquetas.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-success-bg)"></span>Claro <code>#eefff5</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-success-bg)"></span>Oscuro <code>rgba(82, 207, 146, 0.12)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-success-bg)"></span>Alto contraste <code>#eefff5</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-danger">
+                <code class="u-select-all">--luz-color-danger</code>
+                <span class="docs-token__role">Texto de error y borde de un campo no válido.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-danger)"></span>Claro <code>#ca1c25</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-danger)"></span>Oscuro <code>#ffc3c1</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-danger)"></span>Alto contraste <code>#8d131a</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-danger-bg">
+                <code class="u-select-all">--luz-color-danger-bg</code>
+                <span class="docs-token__role">El tinte de peligro.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-danger-bg)"></span>Claro <code>#fff8f8</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-danger-bg)"></span>Oscuro <code>rgba(239, 79, 81, 0.12)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-danger-bg)"></span>Alto contraste <code>#fff8f8</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-danger-fill">
+                <code class="u-select-all">--luz-color-danger-fill</code>
+                <span class="docs-token__role">El botón y la insignia de peligro, detrás del texto blanco.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-danger-fill)"></span>Claro <code>#ca1c25</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-danger-fill)"></span>Oscuro <code>#c31a26</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-danger-fill)"></span>Alto contraste <code>#8d131a</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-warning">
+                <code class="u-select-all">--luz-color-warning</code>
+                <span class="docs-token__role">Texto de advertencia.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-warning)"></span>Claro <code>#7c4d00</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-warning)"></span>Oscuro <code>#ffcd51</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-warning)"></span>Alto contraste <code>#5a4300</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-warning-accent">
+                <code class="u-select-all">--luz-color-warning-accent</code>
+                <span class="docs-token__role">El borde inicial de una alerta de advertencia. Decorativo.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-warning-accent)"></span>Claro <code>#ffcd51</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-warning-accent)"></span>Oscuro <code>#ffedb7</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-warning-accent)"></span>Alto contraste <code>#e2a928</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-warning-bg">
+                <code class="u-select-all">--luz-color-warning-bg</code>
+                <span class="docs-token__role">El tinte de advertencia.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-warning-bg)"></span>Claro <code>#fffae8</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-warning-bg)"></span>Oscuro <code>rgba(255, 205, 81, 0.12)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-warning-bg)"></span>Alto contraste <code>#fffae8</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-info">
+                <code class="u-select-all">--luz-color-info</code>
+                <span class="docs-token__role">Texto informativo.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-info)"></span>Claro <code>#004299</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-info)"></span>Oscuro <code>#b3d9ff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-info)"></span>Alto contraste <code>#00256c</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-info-bg">
+                <code class="u-select-all">--luz-color-info-bg</code>
+                <span class="docs-token__role">El tinte informativo.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-info-bg)"></span>Claro <code>#f6fbff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-info-bg)"></span>Oscuro <code>rgba(119, 185, 255, 0.12)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-info-bg)"></span>Alto contraste <code>#f6fbff</code></span>
+              </li>
+            </ul>
+            <h2 id="inputs-2" class="docs-subhead">Campos (2)</h2>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-input-bg">
+                <code class="u-select-all">--luz-input-bg</code>
+                <span class="docs-token__role">Dentro de un campo.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-input-bg)"></span>Claro <code>#fffdf9</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-input-bg)"></span>Oscuro <code>#241e18</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-input-bg)"></span>Alto contraste <code>#fff</code></span>
+              </li>
+              <li class="docs-token" id="luz-input-border">
+                <code class="u-select-all">--luz-input-border</code>
+                <span class="docs-token__role">El borde de un campo: 3:1 sobre cualquier superficie.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-input-border)"></span>Claro <code>#8b7d6f</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-input-border)"></span>Oscuro <code>#877a69</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-input-border)"></span>Alto contraste <code>#000</code></span>
+              </li>
+            </ul>
+            <h2 id="extended-5" class="docs-subhead">Ampliados (5)</h2>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-color-teal">
+                <code class="u-select-all">--luz-color-teal</code>
+                <span class="docs-token__role">Texto de categoría (etiqueta verde azulado). Nunca un estado.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-teal)"></span>Claro <code>#00736f</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-teal)"></span>Oscuro <code>#62c9b5</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-teal)"></span>Alto contraste <code>#00504d</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-teal-bg">
+                <code class="u-select-all">--luz-color-teal-bg</code>
+                <span class="docs-token__role">El tinte verde azulado.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-teal-bg)"></span>Claro <code>#effefa</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-teal-bg)"></span>Oscuro <code>rgba(98, 201, 181, 0.12)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-teal-bg)"></span>Alto contraste <code>#effefa</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-purple">
+                <code class="u-select-all">--luz-color-purple</code>
+                <span class="docs-token__role">Texto de categoría (etiqueta morada). Nunca un estado.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-purple)"></span>Claro <code>#803ae9</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-purple)"></span>Oscuro <code>#f3e8ff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-purple)"></span>Alto contraste <code>#5828a1</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-purple-bg">
+                <code class="u-select-all">--luz-color-purple-bg</code>
+                <span class="docs-token__role">El tinte morado.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-purple-bg)"></span>Claro <code>#fcf9ff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-purple-bg)"></span>Oscuro <code>rgba(202, 154, 255, 0.12)</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-purple-bg)"></span>Alto contraste <code>#fcf9ff</code></span>
+              </li>
+              <li class="docs-token" id="luz-color-code">
+                <code class="u-select-all">--luz-color-code</code>
+                <span class="docs-token__role">Código en línea.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-color-code)"></span>Claro <code>#803ae9</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-color-code)"></span>Oscuro <code>#ca9aff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-color-code)"></span>Alto contraste <code>#5828a1</code></span>
+              </li>
+            </ul>
+            <h2 id="code-syntax-6" class="docs-subhead">Sintaxis de código (6)</h2>
+            <p class="docs-demo__note">Los colores de <code>pre.luz-code-block</code>, measured on <code>--luz-surface-muted</code>: 4.5:1 or more, 7:1 or more in high contrast. See <a href="../../../../es/docs/components/code/#c-code-syntax">the syntax specimen</a>.</p>
+            <ul class="docs-token-grid">
+              <li class="docs-token" id="luz-code-comment">
+                <code class="u-select-all">--luz-code-comment</code>
+                <span class="docs-token__role">Comentarios, también en cursiva.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-code-comment)"></span>Claro <code>#646b73</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-code-comment)"></span>Oscuro <code>#adb5bd</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-code-comment)"></span>Alto contraste <code>#434951</code></span>
+              </li>
+              <li class="docs-token" id="luz-code-keyword">
+                <code class="u-select-all">--luz-code-keyword</code>
+                <span class="docs-token__role">Palabras clave, también en negrita.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-code-keyword)"></span>Claro <code>#231c16</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-code-keyword)"></span>Oscuro <code>#f3ece1</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-code-keyword)"></span>Alto contraste <code>#000</code></span>
+              </li>
+              <li class="docs-token" id="luz-code-name">
+                <code class="u-select-all">--luz-code-name</code>
+                <span class="docs-token__role">Etiquetas, selectores, funciones y comandos.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-code-name)"></span>Claro <code>#004299</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-code-name)"></span>Oscuro <code>#b3d9ff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-code-name)"></span>Alto contraste <code>#00256c</code></span>
+              </li>
+              <li class="docs-token" id="luz-code-property">
+                <code class="u-select-all">--luz-code-property</code>
+                <span class="docs-token__role">Atributos, propiedades, indicadores y variables.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-code-property)"></span>Claro <code>#853bca</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-code-property)"></span>Oscuro <code>#ca9aff</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-code-property)"></span>Alto contraste <code>#610ca0</code></span>
+              </li>
+              <li class="docs-token" id="luz-code-string">
+                <code class="u-select-all">--luz-code-string</code>
+                <span class="docs-token__role">Cadenas.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-code-string)"></span>Claro <code>#007f4d</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-code-string)"></span>Oscuro <code>#52cf92</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-code-string)"></span>Alto contraste <code>#005733</code></span>
+              </li>
+              <li class="docs-token" id="luz-code-literal">
+                <code class="u-select-all">--luz-code-literal</code>
+                <span class="docs-token__role">Números, colores y entidades.</span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="light" style="--v: var(--luz-code-literal)"></span>Claro <code>#7c4d00</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="dark" style="--v: var(--luz-code-literal)"></span>Oscuro <code>#e2a928</code></span>
+                <span class="docs-token__mode"><span class="docs-swatch" data-theme="high-contrast" style="--v: var(--luz-code-literal)"></span>Alto contraste <code>#553000</code></span>
+              </li>
+            </ul>
+          </div>
+          </details>
+        
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+      <li><a href="../../../../es/docs/components/">Componentes</a></li>
+      <li><a href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/tokens/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Tokens</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/tokens/spacing/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Espaciado y tamaños</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/tokens/color.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Color">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · v0.0.0 · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>
