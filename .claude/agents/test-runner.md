@@ -20,7 +20,13 @@ From the repo root:
 - One gate: `pnpm lint:css`, `pnpm lint:js`, `pnpm check:size`, `pnpm check:strings`, `pnpm check:exceptions`, `pnpm check:pack`, `pnpm check:contrast`, `pnpm check:generated`, `pnpm test:unit`.
 - Playwright: always `--project=chromium --project=chromium-nojs`, with 3 workers at most (more overloads the dev server and gives false failures). Narrow it to the spec of the change when the caller names one.
 
+## Per change, not per milestone
+
+When the caller names a change (not a release check), run `pnpm test:affected` (add `--dry` to see the commands, or name files/specs). It runs lint, `vitest related` and the mapped Playwright specs, stops at the first failure and prints only the end of its output. If it reports a source with no spec, say so and run the spec the caller names; do not fall back to the full suite. The full unit suite and the full Playwright run are for milestones and before a merge (`qa-release`).
+
 ## On a failure
+
+Retry budget: at most 2 re-runs of a failing step, each alone and on the same command. A third failure is not retried: report it. Do not carry earlier output forward; each report holds only the command, the first error and its file and line.
 
 Re-run only that step alone. A Playwright test that fails under load and passes alone is flaky: say so, do not hide it. A real failure is reported with the command, the first error and the file and line. Never raise a ceiling in `budgets.json`, never update a visual snapshot, never skip or weaken a test to make a suite pass.
 

@@ -27,6 +27,7 @@
     "tokens:build": "node scripts/build-tokens.js",
     "test:unit": "vitest run",
     "test:ui": "playwright test",
+    "test:affected": "node scripts/test-affected.js",
     "test:ui:install": "playwright install chromium",
     "check:pack": "node scripts/check-pack.js",
     "audit:prod": "pnpm audit --prod --audit-level=high",

@@ -21,6 +21,8 @@ pnpm check:all -- --skip-ui   # no Playwright
 pnpm check:all -- --fast      # no build and no check:generated (not for a release)
 ```
 
+While you work on a change, run only what it touches: `pnpm test:affected` lints the files changed since `HEAD`, runs `vitest related` on them and the Playwright specs that cover them (`chromium` and `chromium-nojs`), and stops at the first failure. `--dry` prints the commands; naming files or a spec (`pnpm test:affected tests/button.spec.js`) replaces the git diff. A source with no spec of its own is reported, not guessed. The full run above is for milestones and before a merge.
+
 ## Tests first
 
 Every change to `packages/`, `apps/` or `scripts/` is committed as a test that fails without it (PRINCIPLES.md SR-9). The rule is about the history, not the order of work: exploring comes first.
