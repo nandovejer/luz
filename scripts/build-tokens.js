@@ -6,7 +6,10 @@
  *                    (packages/tokens/src/semantic.css)
  *   tokens.css     → primitives + semantic, no @font-face (bring your own fonts)
  *   fonts.css      → @font-face only
- *   tokens.json    → primitives source, for tooling
+ *   tokens.json    → primitives source, for tooling (colours, scales, the
+ *                    typography roles, breakpoints and motion; the Arabic
+ *                    role switch and the reduced-motion zeroing are written
+ *                    from it)
  *   luz-tokens.dtcg.json → primitives + semantic (three modes) in the W3C
  *                    Design Tokens (DTCG) format, for Figma and other tools
  *   fonts/         → woff2 files + their MIT licence texts
@@ -87,13 +90,66 @@ function generatePrimitives(tokens) {
     lines.push(`  --luz-shadow-${key}: ${token.value};`);
   }
 
+  // A token's description is its comment in the CSS, as it was in core's
+  // settings before these moved here
+  const said = (token) => (token.description ? ` /* ${token.description} */` : "");
+
+  lines.push("\n  /* Typography roles: headings and running text (serif headings and body, sans for UI, mono for code) */");
+  for (const [key, token] of Object.entries(tokens.role)) {
+    lines.push(`  --luz-${key}: ${token.from ?? token.value};${said(token)}`);
+  }
+
+  lines.push("\n  /* Breakpoints: @media (max-width: var()) does not work in native CSS; a canonical reference for JS and preprocessors */");
+  for (const [key, token] of Object.entries(tokens.breakpoint)) {
+    lines.push(`  --luz-mq-${key}: ${token.value};${said(token)}`);
+  }
+
+  lines.push("\n  /* Motion: durations */");
+  for (const [key, token] of Object.entries(tokens.duration)) {
+    lines.push(`  --luz-duration-${key}: ${token.value};${said(token)}`);
+  }
+
+  lines.push("\n  /* Motion: easing. LUZ's own curves: movement starts promptly and spends\n     most of its time settling, so it reads as calm rather than snappy. */");
+  for (const [key, token] of Object.entries(tokens.easing)) {
+    lines.push(`  --luz-easing-${key}: ${token.value};${said(token)}`);
+  }
+
   // round() is Baseline "newly available" (2024): a browser without it keeps
   // the plain chain, at most 0.25px away on three heading sizes
   const supports = rounded.length
     ? `\n\n/* Whole 1/16 rem steps, where round() exists (the plain chain above is the fallback) */\n@supports (width: round(1px, 1px)) {\n  :root {\n${rounded.join("\n")}\n  }\n}`
     : "";
 
-  return `:root {\n${lines.join("\n")}\n}${supports}`;
+  return `:root {\n${lines.join("\n")}\n}${supports}${languageRoles(tokens)}${reducedMotion(tokens)}`;
+}
+
+/* A role's value for a language: one :where(:lang()) rule per language */
+function languageRoles(tokens) {
+  const byLang = {};
+  for (const [key, token] of Object.entries(tokens.role)) {
+    for (const [lang, value] of Object.entries(token.lang ?? {})) (byLang[lang] ??= []).push(`  --luz-${key}: ${value};`);
+  }
+  const notes = {
+    ar: `/* Arabic: ET Book has no Arabic letters, so running text and headings take
+   the system sans, which has them on every platform (no bundled font, red
+   line 13). Zero specificity: your own rule, outside LUZ's layers, still wins. */`,
+  };
+  return Object.entries(byLang)
+    .map(([lang, decls]) => `\n\n${notes[lang] ?? `/* ${lang} */`}\n:where(:lang(${lang})) {\n${decls.join("\n")}\n}`)
+    .join("");
+}
+
+/* Reduced motion: every duration of tokens.json at 0s */
+function reducedMotion(tokens) {
+  const zero = Object.keys(tokens.duration).map((key) => `    --luz-duration-${key}: 0s;`);
+  return `\n\n/* Reduced motion: one switch. Every transition and animation in LUZ takes
+   its duration from these tokens, so zeroing them removes the motion
+   everywhere without !important. Never hard-code a duration in a component. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+${zero.join("\n")}
+  }
+}`;
 }
 
 // Start from a clean dist so removed sources never linger in the tarball

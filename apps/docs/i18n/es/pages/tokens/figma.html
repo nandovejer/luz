@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Tokens en Figma
 description: Los tokens en un único archivo design-tokens para las variables de Figma y otras herramientas de diseño, con los mismos nombres y los tres modos.
-source: 0ed60af9dd4a
+source: 1718475b2772
 reviewed: false
 -->
     <div class="docs-block" id="t-figma">
@@ -33,12 +33,12 @@ reviewed: false
                 <tr><th scope="col">Grupo del archivo</th><th scope="col">Pensado como colección</th><th scope="col">Modos</th><th scope="col">Procedencia</th></tr>
               </thead>
               <tbody>
-                <tr><td data-label="Grupo del archivo"><div><code>primitives</code></div></td><td data-label="Pensado como colección"><div>Primitivos de LUZ</div></td><td data-label="Modos"><div>Uno: valor</div></td><td data-label="Procedencia"><div><code>tokens.json</code>: escalas de color, espacio, tamaños de control, tipografía, radios y sombras</div></td></tr>
+                <tr><td data-label="Grupo del archivo"><div><code>primitives</code></div></td><td data-label="Pensado como colección"><div>Primitivos de LUZ</div></td><td data-label="Modos"><div>Uno: valor</div></td><td data-label="Procedencia"><div><code>tokens.json</code>: escalas de color, espacio, tamaños de control, tipografía, radios, sombras, roles tipográficos, puntos de ruptura y movimiento</div></td></tr>
                 <tr><td data-label="Grupo del archivo"><div><code>semantic</code></div></td><td data-label="Pensado como colección"><div>Semántica de LUZ</div></td><td data-label="Modos"><div>Claro, oscuro y alto contraste</div></td><td data-label="Procedencia"><div><code>src/semantic.css</code>: los <a href="/docs/tokens/color/">55 colores</a> que cambian según el modo</div></td></tr>
               </tbody>
             </table>
           </div>
-          <p>Un token semántico apunta a un token primitivo siempre que lo hace el CSS: <code>--luz-divider</code> es <code>var(--luz-gray-20)</code> en el modo claro, así que <code>divider</code> es un alias de <code>{primitives.gray.20}</code>. El movimiento, las capas y los puntos de ruptura se incluyen en <code>@luz-ds/core</code>, así que no están en el archivo.</p>
+          <p>Un token semántico apunta a un token primitivo siempre que lo hace el CSS: <code>--luz-divider</code> es <code>var(--luz-gray-20)</code> en el modo claro, así que <code>divider</code> es un alias de <code>{primitives.gray.20}</code>. Un rol tipográfico es un alias de su fuente: <code>font/body</code> es <code>{primitives.font.serif}</code>. Las duraciones son duraciones DTCG y las funciones de aceleración, curvas de Bézier cúbicas. Las capas (z-index) y los anchos de maquetación se incluyen en <code>@luz-ds/core</code>, así que no están en el archivo.</p>
 
           <h2 id="names">Una regla para cada nombre</h2>
           <p>Quita <code>--luz-</code>. La primera palabra pasa a ser el grupo y el resto, el nombre; sepáralos con una barra.</p>

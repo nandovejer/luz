@@ -336,7 +336,7 @@ pnpm tokens:build
 pnpm core:build
 ```
 
-This regenerates `dist/luz.css`, `dist/base.css` (settings + reset + elements, the prerequisite for per-component CSS), `dist/components/*.css`, `dist/classless.css`, `dist/print.css`, the JS modules, the lazy `midi.js` and `table-sort.js` chunks and `dist/themes/*.css`. Core settings (z-index scale, motion, breakpoints, `--luz-font-heading`) ship with core, not with tokens.
+This regenerates `dist/luz.css`, `dist/base.css` (settings + reset + elements, the prerequisite for per-component CSS), `dist/components/*.css`, `dist/classless.css`, `dist/print.css`, the JS modules, the lazy `midi.js` and `table-sort.js` chunks and `dist/themes/*.css`. Core settings (z-index scale, layout widths, `--luz-text-control`) ship with core; motion, breakpoints and the font roles (`--luz-font-heading`, `--luz-font-body`, `--luz-text-body`) ship with tokens.
 
 **Site.** `@luz-ds/site` holds page patterns that are too opinionated for core. It is CSS first; `dist/site.js` defines the search element and warns when core is not loaded.
 

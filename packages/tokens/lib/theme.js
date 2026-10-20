@@ -148,6 +148,12 @@ const schemeOf = (prelude) => prelude.match(/^@media\s*\(\s*prefers-color-scheme
 /** Whether a condition is one we take as true without evaluating. */
 const transparent = (prelude) => /^@(layer|supports)\b/i.test(prelude);
 
+/** LUZ's reduced-motion switch: durations only, so no colour depends on it. */
+const motionSwitch = (condition, rule) =>
+  /^@media\s*\(\s*prefers-reduced-motion\s*:/i.test(condition) &&
+  rule.declarations.length > 0 &&
+  rule.declarations.every(({ name }) => name.startsWith("--luz-duration-"));
+
 /**
  * Targets a stylesheet speaks about: the three base modes, and every custom
  * theme named by a [data-theme] selector, as "name" (default mode) and
@@ -193,6 +199,7 @@ export function valuesFor(target, sources) {
         else if (!transparent(condition)) skip = condition;
       }
       if (skip) {
+        if (motionSwitch(skip, rule)) continue;
         ignored.push({ file, line: rule.line, selector: rule.selectors.join(", "), reason: `${skip} is not evaluated` });
         continue;
       }

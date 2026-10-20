@@ -48,7 +48,7 @@ luz-design-system/
 │   │
 │   ├── core/                          ← @luz-ds/core (publishable)
 │   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── settings/_settings.css ← config tokens (z-index, breakpoints, motion)
+│   │   │   ├── settings/_settings.css ← core config (z-index, layout widths, field text)
 │   │   │   ├── generic/_reset.css     ← reset
 │   │   │   ├── elements/              ← bare HTML elements, one file per MDN category
 │   │   │   │   ├── index.css          ← barrel (document, sections, text, inline, media, forms, interactive)

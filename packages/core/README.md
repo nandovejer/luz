@@ -44,7 +44,7 @@ import '@luz-ds/core'   // optional: the JavaScript, starts every behavior
 
 ### Using a single component (standalone CSS)
 
-Every component also ships as its own file in `dist/components/` — load only what you need. Tokens come first, then `base.css` (core settings such as z-index and motion, reset, bare elements):
+Every component also ships as its own file in `dist/components/` — load only what you need. Tokens come first, then `base.css` (core settings such as z-index and layout widths, reset, bare elements):
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.css">
