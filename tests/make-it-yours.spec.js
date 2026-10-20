@@ -25,8 +25,7 @@ const ROUTE = '/docs/get-started/make-it-yours/';
 const THEMES = ['light', 'dark', 'high-contrast'];
 
 const tokens = JSON.parse(readFileSync(new URL('../packages/tokens/tokens.json', import.meta.url), 'utf-8'));
-const settings = readFileSync(new URL('../packages/core/src/settings/_settings.css', import.meta.url), 'utf-8').replace(/\/\*[\s\S]*?\*\//g, '');
-const BODY_FORMULA = settings.match(/--luz-text-body\s*:\s*([^;]+);/)?.[1].trim() ?? '';
+const BODY_FORMULA = tokens.role['text-body'].from;
 
 const scope = (knobs = {}) => ({
   ...Object.fromEntries(Object.entries(tokens.typography).map(([key, t]) => [`--luz-${key}`, t.fromRounded ?? t.from ?? t.value])),

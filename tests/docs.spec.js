@@ -57,6 +57,9 @@ const jsModules = readdirSync(fromRepo('packages/core/src')).filter((file) => fi
 const settingsCss = readFileSync(fromRepo('packages/core/src/settings/_settings.css'), 'utf-8');
 const settingNames = (prefix) =>
   [...settingsCss.matchAll(new RegExp(`^\\s*(--luz-${prefix}-[\\w-]+):`, 'gm'))].map((m) => m[1]);
+// Motion and breakpoints are tokens now (tokens.json), no longer core settings
+const motionNames = [...Object.keys(tokens.duration).map((k) => `--luz-duration-${k}`), ...Object.keys(tokens.easing).map((k) => `--luz-easing-${k}`)];
+const breakpointNames = Object.keys(tokens.breakpoint).map((k) => `--luz-mq-${k}`);
 
 // Every CSS file of a package of patterns (site: the five `<luz-*>` components,
 // whose classes are `.luz-<tag>__<part>` (F3, D5); landing: the patterns of a
@@ -588,11 +591,11 @@ test.describe('Documentation site', () => {
       expectAll(await text('t-type'), Object.keys(tokens.typography).map((k) => `--luz-${k}`));
       expectAll(await text('t-radius'), Object.keys(tokens.radius).map((k) => `--luz-radius-${k}`));
       expectAll(await text('t-shadow'), Object.keys(tokens.shadow).map((k) => `--luz-shadow-${k}`));
-      expectAll(await text('c-motion'), [...settingNames('duration'), ...settingNames('easing')]);
+      expectAll(await text('c-motion'), motionNames);
       // The z-index scale has its own page (Layers) since 9d5aab4; widths and breakpoints are on Layout
       expectAll(await text('c-layers'), settingNames('z'));
-      expect(settingNames('mq').length).toBeGreaterThan(0);
-      expectAll(await text('c-settings'), [...settingNames('mq'), '--luz-sidebar-width', '--luz-content-max', '--luz-scrollbar-size']);
+      expect(breakpointNames.length).toBeGreaterThan(0);
+      expectAll(await text('c-settings'), [...breakpointNames, '--luz-sidebar-width', '--luz-content-max', '--luz-scrollbar-size']);
     });
 
     test('every component has its page: example, known issues, then the Code and Design tabs (RL-18, SR-5)', async ({ page }) => {

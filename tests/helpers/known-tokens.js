@@ -12,7 +12,8 @@ const repo = fileURLToPath(new URL("../../", import.meta.url));
 const read = (path) => readFileSync(`${repo}${path}`, "utf-8");
 const declared = (css) => [...css.replace(/\/\*[\s\S]*?\*\//g, "").matchAll(/(--luz-[\w-]+)\s*:/g)].map((m) => m[1]);
 
-/** The primitives, as `--luz-…` names: colour families, space, control, typography, radius, shadow. */
+/** The primitives, as `--luz-…` names: colour families, space, control, typography, radius, shadow, the
+ * typography roles, breakpoints, durations and easings. */
 export function primitiveTokens() {
   const tokens = JSON.parse(read("packages/tokens/tokens.json"));
   const names = [];
@@ -22,6 +23,10 @@ export function primitiveTokens() {
   for (const key of Object.keys(tokens.typography)) names.push(`--luz-${key}`);
   for (const key of Object.keys(tokens.radius)) names.push(`--luz-radius-${key}`);
   for (const key of Object.keys(tokens.shadow)) names.push(`--luz-shadow-${key}`);
+  for (const key of Object.keys(tokens.role)) names.push(`--luz-${key}`);
+  for (const key of Object.keys(tokens.breakpoint)) names.push(`--luz-mq-${key}`);
+  for (const key of Object.keys(tokens.duration)) names.push(`--luz-duration-${key}`);
+  for (const key of Object.keys(tokens.easing)) names.push(`--luz-easing-${key}`);
   return names;
 }
 
