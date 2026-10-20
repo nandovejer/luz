@@ -96,21 +96,24 @@ test.describe('tokens alone carry motion, roles and breakpoints', () => {
     for (const name of ['--luz-font-heading', '--luz-font-body']) expect(await stackOf(page, '#probe', name), name).toBe(sans);
   });
 
-  test("a rule of the consumer's own, outside LUZ's layers, still beats the Arabic switch", async ({ page }) => {
+  test("a rule of the consumer's own, outside LUZ's layers, still beats the Arabic switch", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'chromium-nojs', 'page.addStyleTag needs JavaScript');
     await page.goto(FIXTURE);
     expect(await stackOf(page, '#ar-child', '--luz-font-body'), 'the switch is in effect first').toBe(await stackOf(page, '#probe', '--luz-font-sans'));
     await page.addStyleTag({ content: ':lang(ar) { --luz-font-body: monospace; }' });
     expect(await stackOf(page, '#ar-child', '--luz-font-body')).toBe('monospace');
   });
 
-  test("the Arabic switch has specificity 0: a later rule of any specificity in the same layer replaces it", async ({ page }) => {
+  test("the Arabic switch has specificity 0: a later rule of any specificity in the same layer replaces it", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'chromium-nojs', 'page.addStyleTag needs JavaScript');
     await page.goto(FIXTURE);
     expect(await stackOf(page, '#ar-child', '--luz-font-body'), 'the switch is in effect first').toBe(await stackOf(page, '#probe', '--luz-font-sans'));
     await page.addStyleTag({ content: '@layer luz.tokens { * { --luz-font-body: monospace; } }' });
     expect(await stackOf(page, '#ar-child', '--luz-font-body')).toBe('monospace');
   });
 
-  test('a theme in luz.themes that sets --luz-font-body wins over the default', async ({ page }) => {
+  test('a theme in luz.themes that sets --luz-font-body wins over the default', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'chromium-nojs', 'page.addStyleTag needs JavaScript');
     await page.goto(FIXTURE);
     await page.addStyleTag({ content: '@layer luz.themes { :root { --luz-font-body: monospace; } }' });
     expect(await stackOf(page, '#probe', '--luz-font-body')).toBe('monospace');
@@ -118,7 +121,8 @@ test.describe('tokens alone carry motion, roles and breakpoints', () => {
     expect(await stackOf(page, '#probe', '--luz-font-heading')).toBe(await stackOf(page, '#probe', '--luz-font-serif'));
   });
 
-  test('with core loaded too, a theme in luz.themes still wins: core settings no longer sit after the themes', async ({ page }) => {
+  test('with core loaded too, a theme in luz.themes still wins: core settings no longer sit after the themes', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'chromium-nojs', 'page.addStyleTag needs JavaScript');
     await page.goto('/tests/fixtures/level-2-core.html');
     await page.addStyleTag({ content: '@layer luz.themes { :root { --luz-font-body: monospace; --luz-font-heading: monospace; } }' });
     expect(await stackOf(page, 'body', '--luz-font-body')).toBe('monospace');
