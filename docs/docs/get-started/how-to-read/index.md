@@ -49,7 +49,7 @@ One token of each kind
 - `--luz-space-md`: Scale step: One step of the space scale
 - `--luz-text-lg`: Scale step: One step of the type scale
 - `--luz-type-base`: Knob: The value a whole scale is worked out from. Change it to resize every step
-- `--luz-z-modal`: Setting: A value core uses to lay out the page: stacking order, motion and breakpoints
+- `--luz-z-modal`: Setting: A value core uses to lay out the page: stacking order and layout widths
 
 - LUZ's own components read semantic tokens and scale steps. They never read a primitive or a knob.
 - You can set any token in your own CSS. [Make it yours](https://nandovejer.github.io/luz/docs/get-started/make-it-yours/) shows how.

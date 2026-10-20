@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" dir="ltr" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Make your own theme – Tokens – LUZ documentation</title>
   <meta name="description" content="LUZ ships one look in three color modes. A theme of your own is a file of semantic tokens: start from the template, check it, load it.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/docs/tokens/themes/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/tokens/themes/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/tokens/themes/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/tokens/themes/">
   <link rel="icon" href="../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
   <link rel="icon" href="../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../../../assets/apple-touch-icon-QPTLZskv.png">
   <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
   <script src="../../../boot.js" ></script>
-  <script type="module" crossorigin src="../../../assets/header-B5ycFlcC.js"></script>
-  <script type="module" crossorigin src="../../../assets/reference-DI9FOxmb.js"></script>
+  <script type="module" crossorigin src="../../../assets/header-Bjvys9Mm.js"></script>
+  <script type="module" crossorigin src="../../../assets/reference-C-XW2VDm.js"></script>
   <link rel="stylesheet" crossorigin href="../../../assets/header-CdmvI6FB.css">
   <link rel="stylesheet" crossorigin href="../../../assets/reference-CFwLTcYL.css">
-  <link rel="stylesheet" crossorigin href="../../../assets/header-Dp0HT6ep.css">
-  <link rel="stylesheet" crossorigin href="../../../assets/reference-Cn-_Pk4Z.css">
+  <link rel="stylesheet" crossorigin href="../../../assets/header-WsJtbSkD.css">
+  <link rel="stylesheet" crossorigin href="../../../assets/reference-CWvVkJ1c.css">
 </head>
 <body class="o-shell luz-docs-shell docs-page site-sky">
   <a class="luz-skip-link" href="#main-content">Skip to main content</a>
@@ -67,7 +71,16 @@
           </search>
         </dialog>
       </luz-search>
-      
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Language: </span><span class="luz-lang-switch__name">English</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Language</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../docs/tokens/themes/" hreflang="en" lang="en" aria-current="page">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../es/docs/tokens/themes/" hreflang="es" lang="es">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
       <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menu" popovertarget="page-nav">
         <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
@@ -115,23 +128,6 @@
 <li><a class="luz-sidebar__link" href="../../../docs/tokens/figma/">Tokens in Figma</a></li>
 <li><a class="luz-sidebar__link" href="../../../docs/tokens/contrast/">Contrast check</a></li>
 <li><a class="luz-sidebar__link" aria-current="page" href="../../../docs/tokens/themes/">Make your own theme</a></li>
-</ul></li>
-<li><a class="luz-sidebar__link docs-nav__area" href="../../../docs/html/">HTML elements</a>
-<ul class="docs-nav__pages">
-<li><a class="luz-sidebar__link" href="../../../docs/html/forms/">Forms</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/text/">Text blocks</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/inline/">Inline text</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/structure/">Page structure</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/tables/">Tables</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/media/">Images and media</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/widgets/">Built-in widgets</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/embeds/">Frames and embeds</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/svg-mathml/">SVG and MathML</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/scripting/">Script and canvas</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/edits/">Tracked edits</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/metadata/">Page metadata</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/document/">Document root</a></li>
-<li><a class="luz-sidebar__link" href="../../../docs/html/web-components/">Web Components</a></li>
 </ul></li>
 <li><a class="luz-sidebar__link docs-nav__area" href="../../../docs/components/">Components</a>
 <ul class="docs-nav__pages">
@@ -218,6 +214,23 @@
 <li><a class="luz-sidebar__link" href="../../../docs/documentation/pager/">Pager</a></li>
 <li><a class="luz-sidebar__link" href="../../../docs/documentation/page-foot/">Page foot</a></li>
 <li><a class="luz-sidebar__link" href="../../../docs/documentation/templates/">Documentation templates</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../docs/html/">HTML elements</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../docs/html/forms/">Forms</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/text/">Text blocks</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/structure/">Page structure</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/tables/">Tables</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/media/">Images and media</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/widgets/">Built-in widgets</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/embeds/">Frames and embeds</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/svg-mathml/">SVG and MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/scripting/">Script and canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/edits/">Tracked edits</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/metadata/">Page metadata</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/document/">Document root</a></li>
+<li><a class="luz-sidebar__link" href="../../../docs/html/web-components/">Web Components</a></li>
+</ul></li>
 </ul></li>
 <li><a class="luz-sidebar__link docs-nav__area" href="../../../docs/accessibility/">Accessibility</a></li>
     </ul>
@@ -238,7 +251,7 @@
     </details>
   </nav>
     <div class="luz-docs-rail__actions">
-      <a data-docs-copy-page href="../../../docs/tokens/themes/index.md">Copy page as Markdown</a>
+      <a data-docs-copy-page data-docs-copied="Copied the page as Markdown." data-docs-not-copied="Could not copy the page." href="../../../docs/tokens/themes/index.md">Copy page as Markdown</a>
       <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/pages/tokens/themes.html">Edit this page</a>
       <a href="https://github.com/nandovejer/luz/issues/new?title=Make%20your%20own%20theme">Report a problem</a>
     </div>
@@ -368,12 +381,11 @@
     <h2 class="docs-end__title" id="docs-end-title">Keep going</h2>
     <ul class="docs-end__links">
       <li><a href="../../../docs/tokens/modes/">Color modes and themes</a></li>
-      <li><a href="../../../docs/components/">Components</a></li>
       <li><a href="../../../docs/tokens/figma/">Tokens in Figma</a></li>
     </ul>
     <ul class="luz-docs-pager">
       <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../docs/tokens/contrast/"><span class="luz-docs-pager__label">Previous</span> <span class="luz-docs-pager__title">Contrast check</span></a></li>
-      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../docs/html/"><span class="luz-docs-pager__label">Next</span> <span class="luz-docs-pager__title">HTML elements</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../docs/components/"><span class="luz-docs-pager__label">Next</span> <span class="luz-docs-pager__title">Components</span></a></li>
     </ul>
   </nav>
   <p class="luz-docs-page-foot">Last updated <time datetime="2026-10-15">15 October 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/pages/tokens/themes.html">Edit this page</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Make%20your%20own%20theme">Report a problem</a></p>

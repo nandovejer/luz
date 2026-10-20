@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Línea de tiempo – Componentes – Documentación de LUZ</title>
+  <meta name="description" content="Muestra eventos fechados en orden, una tarjeta cada vez sobre una línea de fechas o todos a la vez en una línea vertical; sin JavaScript, es una lista.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/components/timeline/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/components/timeline/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/components/timeline/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/components/timeline/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-Bjvys9Mm.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-C-XW2VDm.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-CdmvI6FB.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-WsJtbSkD.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CWvVkJ1c.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <a class="site-header__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/components/timeline/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/components/timeline/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#example">Ejemplo</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#known-issues">Problemas conocidos</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#code">Código</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#markup">Copiar el marcado</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#variants">Variantes y opciones</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#how">Cómo funciona</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#no-js">Sin JavaScript</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#keyboard">Teclado y ARIA</a></li>
+          </ul>
+        </li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#design">Diseño</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when">Cuándo usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when-not">Cuándo no usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#do-dont">Qué hacer y qué no</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#content">Cómo escribir el contenido</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#contrast">Contraste y foco</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#tokens">Tokens que usa</a></li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/components/timeline/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/components/timeline.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=L%C3%ADnea%20de%20tiempo">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/components/">Componentes</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Línea de tiempo</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Componentes · Mostrar contenido</p>
+    <h1 class="docs-title">Línea de tiempo</h1>
+    <p class="luz-docs-page-head__lead">Muestra eventos fechados en orden, una tarjeta cada vez sobre una línea de fechas o todos a la vez en una línea vertical; sin JavaScript, es una lista.</p>
+    <ul class="luz-docs-page-head__meta"><li><code class="docs-demo__file">components/timeline.css</code></li><li>JS: timeline.js</li><li>Claro · Oscuro · Alto contraste</li><li>Con pruebas</li><li><a href="#known-issues">3 problemas conocidos</a></li></ul>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/components/timeline/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-component" id="c-timeline">
+          <h2 id="example">Ejemplo</h2>
+          <p>Los lanzamientos de una aplicación como línea de tiempo, en sus diseños horizontal y vertical.</p>
+          <div lang="en" class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <p class="docs-demo__note">Horizontal, the default. Pick a date, or use Previous and Next, the arrow keys on the dates, or swipe.</p>
+            <luz-timeline role="group" aria-label="Releases of an example app">
+              <ol class="luz-timeline">
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025-03">March 2025</time>
+                  <p class="luz-timeline__title">First beta</p>
+                  <p class="luz-timeline__text">Ten teams try the app.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025-06">June 2025</time>
+                  <p class="luz-timeline__title">Public launch</p>
+                  <p class="luz-timeline__text">Sign-up opens to everyone.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025-11">November 2025</time>
+                  <p class="luz-timeline__title">Offline mode</p>
+                  <p class="luz-timeline__text">Notes sync when the connection returns.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2026-04">April 2026</time>
+                  <p class="luz-timeline__title">Version 2</p>
+                  <p class="luz-timeline__text">A new editor and shared folders.</p>
+                </li>
+              </ol>
+            </luz-timeline>
+            <p class="docs-demo__note">With <code>autoplay</code>: it moves on by itself while it is on screen. Pause stops it; it also waits while you point at it or use the keyboard in it.</p>
+            <luz-timeline role="group" aria-label="Milestones of an example project" autoplay interval="4000">
+              <ol class="luz-timeline">
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2023">2023</time>
+                  <p class="luz-timeline__title">The idea</p>
+                  <p class="luz-timeline__text">Two people sketch the first screens.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2024">2024</time>
+                  <p class="luz-timeline__title">The team</p>
+                  <p class="luz-timeline__text">Five people work on it full time.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025">2025</time>
+                  <p class="luz-timeline__title">The first customers</p>
+                  <p class="luz-timeline__text">Fifty schools use it every week.</p>
+                </li>
+              </ol>
+            </luz-timeline>
+            <p class="docs-demo__note">With <code>layout="vertical"</code>: scroll, and the item in the middle of the screen becomes active.</p>
+            <luz-timeline role="group" layout="vertical" aria-label="Versions of an example library">
+              <ol class="luz-timeline">
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2024-02">February 2024</time>
+                  <p class="luz-timeline__title">Version 0.1</p>
+                  <p class="luz-timeline__text">Buttons, forms and tables.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2024-09">September 2024</time>
+                  <h3 class="luz-timeline__title">Version 0.2</h3>
+                  <p class="luz-timeline__text">Dark mode and a print stylesheet.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2025-05">May 2025</time>
+                  <h3 class="luz-timeline__title">Version 0.3</h3>
+                  <p class="luz-timeline__text">Right-to-left layouts.</p>
+                </li>
+                <li class="luz-timeline__item">
+                  <time class="luz-timeline__date" datetime="2026-01">January 2026</time>
+                  <h3 class="luz-timeline__title">Version 1.0</h3>
+                  <p class="luz-timeline__text">The API is stable.</p>
+                </li>
+              </ol>
+            </luz-timeline>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Hay tres cosas pendientes y ninguna se ha probado con un lector de pantalla.</p>
+          <ul>
+            <li>Los botones Anterior y Siguiente solo se llaman «Anterior» y «Siguiente». El nombre no indica a qué fecha llevan.</li>
+            <li>No se ha probado si un lector de pantalla anuncia la tarjeta que aparece al cambiar de elemento.</li>
+            <li>La línea de tiempo no se ha probado con ningún lector de pantalla: no se afirma ningún resultado para NVDA, JAWS, VoiceOver, TalkBack ni Orca.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación sobre líneas de tiempo">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Una lista ordenada dentro de <code>&lt;luz-timeline&gt;</code>. Asigna al elemento <code>role="group"</code> y un nombre con <code>aria-label</code> para que también se lea sin JavaScript.</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-timeline" aria-label="Copy the timeline markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Timeline markup"><code id="code-timeline">&lt;luz-timeline role=&quot;group&quot; aria-label=&quot;Releases of the app&quot;&gt;
+  &lt;ol class=&quot;luz-timeline&quot;&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2025-03&quot;&gt;March 2025&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;First beta&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Ten teams try the app.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2025-06&quot;&gt;June 2025&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;Public launch&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Sign-up opens to everyone.&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/luz-timeline&gt;</code></pre>
+            </div>
+            <p>Con reproducción automática, cada cuatro segundos:</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-timeline-autoplay" aria-label="Copy the timeline with autoplay markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Timeline with autoplay markup"><code id="code-timeline-autoplay">&lt;luz-timeline role=&quot;group&quot; aria-label=&quot;Milestones&quot; autoplay interval=&quot;4000&quot;&gt;
+  &lt;ol class=&quot;luz-timeline&quot;&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2023&quot;&gt;2023&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;The idea&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Two people sketch the first screens.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2024&quot;&gt;2024&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;The team&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Five people work on it full time.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2025&quot;&gt;2025&lt;/time&gt;
+      &lt;p class=&quot;luz-timeline__title&quot;&gt;The first customers&lt;/p&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Fifty schools use it every week.&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/luz-timeline&gt;</code></pre>
+            </div>
+            <p>Diseño vertical:</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-timeline-vertical" aria-label="Copy the vertical timeline markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Vertical timeline markup"><code id="code-timeline-vertical">&lt;luz-timeline role=&quot;group&quot; layout=&quot;vertical&quot; aria-label=&quot;Versions of the library&quot;&gt;
+  &lt;ol class=&quot;luz-timeline&quot;&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2024-02&quot;&gt;February 2024&lt;/time&gt;
+      &lt;h3 class=&quot;luz-timeline__title&quot;&gt;Version 0.1&lt;/h3&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Buttons, forms and tables.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2024-09&quot;&gt;September 2024&lt;/time&gt;
+      &lt;h3 class=&quot;luz-timeline__title&quot;&gt;Version 0.2&lt;/h3&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Dark mode and a print stylesheet.&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;luz-timeline__item&quot;&gt;
+      &lt;time class=&quot;luz-timeline__date&quot; datetime=&quot;2025-05&quot;&gt;May 2025&lt;/time&gt;
+      &lt;h3 class=&quot;luz-timeline__title&quot;&gt;Version 0.3&lt;/h3&gt;
+      &lt;p class=&quot;luz-timeline__text&quot;&gt;Right-to-left layouts.&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/luz-timeline&gt;</code></pre>
+            </div>
+            <p>Si añades una línea de tiempo a la página después de que se haya cargado, importa el módulo una vez. Define el elemento; no hay que llamar a ningún <code>init</code>:</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-timeline-js" aria-label="Copy the timeline script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Timeline script code"><code id="code-timeline-js">import &quot;@luz-ds/core/timeline&quot;;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Las opciones son atributos de <code>&lt;luz-timeline&gt;</code>. Cada elemento tiene una fecha, un título y un texto.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Atributos y partes de la línea de tiempo" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Atributo o clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Atributo o clase"><div><code class="docs-name"><span>aria-label</span></code></div></td><td data-label="Efecto"><div>El nombre de la línea de tiempo. Escríbelo con <code>role="group"</code>: un nombre en un elemento sin rol no se lee. Si omites el rol, el script lo añade.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>layout="vertical"</code></div></td><td data-label="Efecto"><div>Todos los elementos permanecen visibles en una línea. El elemento del centro de la pantalla está activo y los anteriores ya han pasado.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>autoplay</code></div></td><td data-label="Efecto"><div>Activa el avance automático con botones visibles de Pausa y Reproducir. Solo en horizontal; desactivado si no lo indicas.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>interval</code></div></td><td data-label="Efecto"><div>Milisegundos entre elementos con <code>autoplay</code>. El valor predeterminado es 5000; cualquier valor inferior a 2000 sube a 2000.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code class="docs-name"><span>data-luz-label-previous</span></code>, <code>-next</code>, <code>-pause</code>, <code>-play</code></div></td><td data-label="Efecto"><div>Los nombres de los botones, si LUZ no incluye el idioma de la página o quieres usar otras palabras.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code>--luz-timeline-paper</code></div></td><td data-label="Efecto"><div>El color de fondo de la línea de tiempo, que se usa para la elevación del carril y los puntos vacíos. El valor predeterminado es <code>--luz-surface-page</code>; en una tarjeta, asígnalo al elemento con la superficie de la tarjeta: <code>style="--luz-timeline-paper: var(--luz-surface)"</code>.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code class="docs-name"><span>.luz-timeline</span><wbr><span>__date</span></code></div></td><td data-label="Efecto"><div>Un <code>&lt;time&gt;</code>. Su texto es la etiqueta del botón de fecha en el carril, así que debe ser distinto en cada elemento. Si no lo incluyes, el botón muestra el número del elemento.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code class="docs-name"><span>.luz-timeline</span><wbr><span>__title</span></code></div></td><td data-label="Efecto"><div>Un <code>&lt;p&gt;</code> o un encabezado del nivel que necesite tu página: la clase no cambia.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code class="docs-name"><span>.luz-timeline</span><wbr><span>__text</span></code></div></td><td data-label="Efecto"><div>Una o dos frases; se permite un enlace.</div></td></tr>
+                  <tr><td data-label="Atributo o clase"><div><code class="docs-name"><span>data-luz-state</span></code></div></td><td data-label="Efecto"><div>El script lo escribe en los elementos de una línea de tiempo vertical: <code>active</code> o <code>past</code>. No lo asignes tú.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un elemento personalizado alrededor de una lista ordenada nativa, con los estilos de <code>components/timeline.css</code> y un script, <code>timeline.js</code>. <code>luz.js</code> solo carga el script en páginas que contienen <code>&lt;luz-timeline&gt;</code>.</p>
+            <p>El elemento busca dentro de sí el primer <code>.luz-timeline</code>; si no lo encuentra, no hace nada.</p>
+            <ul>
+              <li><strong>Horizontal.</strong> El script crea, solo con métodos del DOM, los botones Anterior y Siguiente a los lados de la tarjeta y un carril de fechas debajo: un botón por elemento, con el texto de su fecha. Las tarjetas comparten una celda de cuadrícula, así que la banda tiene la altura de la tarjeta más larga y no salta al cambiar de elemento. Las tarjetas que no están activas son <code>inert</code> y están ocultas. En la tarjeta activa, la fecha se oculta visualmente porque el carril ya la muestra.</li>
+              <li><strong>Cambiar de elemento.</strong> Pulsa una fecha, usa Anterior o Siguiente, las teclas de flecha, Inicio y Fin en el carril, o desliza más de 40 px en horizontal con un dedo o el ratón. Hacia el inicio de la línea está el elemento siguiente. Al llegar a cualquiera de los extremos, vuelve al otro lado. Si el deslizamiento termina sobre un enlace, no se pulsa.</li>
+              <li><strong>El carril.</strong> La fecha activa se desplaza hasta el centro con desplazamiento suave, salvo que la persona haya pedido reducir el movimiento. Al moverse con el teclado, el foco permanece en la nueva fecha activa; también lo hace si el cambio oculta la tarjeta que tenía el foco.</li>
+              <li><strong>Vertical.</strong> El script marca como <code>data-luz-state="active"</code> el elemento que cruza el centro de la pantalla y como <code>past</code> los anteriores. La línea detrás de un elemento pasado adopta el color de marca y el punto activo se rellena y aumenta de tamaño. También funciona con el movimiento reducido, sin transición.</li>
+              <li><strong>Reproducción automática.</strong> Con <code>autoplay</code>, el elemento cambia en bucle cada <code>interval</code> milisegundos. El botón Pausa bajo el carril lo detiene; entonces pasa a llamarse Reproducir y lo vuelve a iniciar. La línea de tiempo también espera sin cambiar el botón mientras el puntero está encima (reanuda tras 4 segundos o al apartarlo), mientras el foco del teclado esté dentro, mientras menos de la mitad esté en pantalla y mientras la pestaña esté oculta. Con movimiento reducido, nunca se inicia y el botón no se muestra.</li>
+              <li><strong>Texto.</strong> «Anterior», «Siguiente», «Pausa» y «Reproducir» aparecen en el idioma de la página que incluye LUZ (inglés o español), según el <code>lang</code> más cercano, o el tuyo mediante <code>registerLocale()</code> y <code>data-luz-label-*</code>. Se incluyen con el script, así que <code>@luz-ds/core/timeline</code> funciona por sí solo. Si la página carga <code>luz.js</code>, también reciben cualquier idioma que añadas con <code>registerLocale()</code>. Consulta los <a href="../../../../es/docs/get-started/javascript/">módulos de JavaScript</a>.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Una lista ordenada con todos los elementos visibles: una línea en el lado inicial en línea, con un punto en cada elemento; después, la fecha, el título y el texto. La lista tiene el mismo aspecto antes de que el script defina el elemento, así que no hay saltos cuando lo hace.</p>
+            <p>La reproducción automática, el carril, Anterior y Siguiente, el gesto de deslizamiento y la marca activa del diseño vertical necesitan JavaScript.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Tab recorre, en este orden: Anterior, los enlaces de la tarjeta activa, Siguiente, la fecha activa del carril y el botón Pausa o Reproducir. Las demás fechas quedan fuera del orden de Tab; las teclas de flecha permiten moverse entre ellas.</p>
+            <ul>
+              <li><strong>Izquierda y Derecha</strong> en el carril van a la fecha anterior o siguiente, y el foco las acompaña. En texto de derecha a izquierda, se intercambian. Al pasar cualquiera de los extremos, se vuelve al otro lado.</li>
+              <li><strong>Inicio y Fin</strong> van a la primera y la última fecha.</li>
+              <li><strong>Enter o Espacio</strong> pulsa una fecha, Anterior, Siguiente o Pausa: son botones nativos.</li>
+              <li>El elemento tiene <code>role="group"</code> y tu <code>aria-label</code>. La fecha activa tiene <code>aria-current="true"</code>; solo esa fecha se puede recorrer con Tab (usa un <code>tabindex</code> itinerante).</li>
+              <li>Las tarjetas forman una sola región dinámica. Tiene <code>aria-live="polite"</code> cuando la persona cambia el elemento y <code>off</code> durante la reproducción automática, para que no se anuncie una tarjeta que cambia sola.</li>
+              <li>El nombre del botón Pausa o Reproducir indica su acción. Los botones de flecha se llaman «Anterior» y «Siguiente»: consulta los problemas conocidos.</li>
+              <li>Las tarjetas que no están activas son <code>inert</code>: no reciben el foco ni se leen. Si el foco estaba en la tarjeta que desaparece, pasa a la nueva fecha activa.</li>
+              <li>Cada tarjeta tiene <code>aria-posinset</code> y <code>aria-setsize</code>, para que el lector de pantalla pueda decir «2 de 4» cuando solo se muestra una tarjeta.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una línea de tiempo para una serie breve de eventos fechados cuyo orden sea importante: lanzamientos, hitos o la historia de una empresa.</p>
+            <ul>
+              <li>Horizontal, cuando cada evento necesita una tarjeta y la persona los recorre uno a uno.</li>
+              <li>Vertical, cuando se deben ver todos los eventos al desplazarse.</li>
+              <li>De 4 a 10 elementos. A partir de ahí, el carril necesita mucho desplazamiento.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses una línea de tiempo para pasos que haya que seguir en orden ni para eventos sin fecha.</p>
+            <ul>
+              <li>Para un proceso, usa una lista numerada.</li>
+              <li>Para comparar eventos según varios atributos, usa una <a href="../../../../es/docs/components/table/">tabla</a>.</li>
+              <li>Si se deben ver todos los elementos a la vez, usa el diseño vertical: el horizontal muestra una sola tarjeta.</li>
+              <li>No actives la reproducción automática en contenido que no se deba pasar por alto. Nadie tiene que esperar a la tarjeta siguiente.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Un título que explique qué ha pasado, con la fecha en un formato uniforme.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ol class="luz-timeline">
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-06">June 2025</time><p class="luz-timeline__title">Public launch</p></li>
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-11">November 2025</time><p class="luz-timeline__title">Offline mode</p></li>
+                  </ol>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Un título impreciso y fechas en formatos distintos: hay que abrir la tarjeta para saber qué ha pasado y no se pueden comparar las fechas.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ol class="luz-timeline">
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-06">6/25</time><p class="luz-timeline__title">News</p></li>
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-11">Autumn, last year</time><p class="luz-timeline__title">Update</p></li>
+                  </ol>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Un <code>&lt;time&gt;</code> con un texto diferente en cada elemento: es el nombre del botón del carril.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ol class="luz-timeline">
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-06">June 2025</time><p class="luz-timeline__title">Public launch</p></li>
+                    <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2025-11">November 2025</time><p class="luz-timeline__title">Offline mode</p></li>
+                  </ol>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Omitir la fecha: el carril muestra botones llamados «1» y «2», que no se distinguen.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <ol class="luz-timeline">
+                    <li class="luz-timeline__item"><p class="luz-timeline__title">Public launch</p></li>
+                    <li class="luz-timeline__item"><p class="luz-timeline__title">Offline mode</p></li>
+                  </ol>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Pon primero la fecha y, después, qué ha pasado, con pocas palabras.</p>
+            <ul>
+              <li>La fecha: usa el mismo formato en todos los elementos y un texto distinto en cada uno. Es el nombre de un botón.</li>
+              <li>El título: de dos a cinco palabras, con mayúscula inicial y sin punto final. Indica el evento: «Lanzamiento público», no «Novedades».</li>
+              <li>El texto: una frase, de unas pocas líneas como máximo. En el diseño horizontal, la banda tiene la altura de la tarjeta más larga, así que procura que todas tengan una longitud parecida.</li>
+              <li>Usa el atributo <code>datetime</code> para que las máquinas puedan leer la fecha, por ejemplo, <code>2025-06</code>.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto usa el color de texto principal o secundario, sobre la página o la tarjeta. Las marcas (línea, puntos, elevación y flechas) son bordes y trazos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la línea de tiempo en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Necesita</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Fecha y texto de la lista, fechas del carril</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título de la lista, fecha del carril al pasar el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Título de una tarjeta, flechas Anterior y Siguiente</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto de una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Fecha activa, Pausa y Reproducir</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de las flechas, línea y puntos</div></td><td data-label="Color sobre el fondo"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4.3:1</div></td><td data-label="Oscuro"><div>3.6:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Línea pasada, punto activo y elevación</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. «Necesita» indica el mínimo AA de WCAG 2.2: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> las fechas y los botones Anterior y Siguiente tienen un contorno de <code>--luz-focus-ring</code> de 2 px, a 2 px por fuera. Pausa y Reproducir son botones fantasma y tienen el anillo de foco propio de los botones.</li>
+              <li><strong>No solo el color:</strong> la fecha activa también es más grande y gruesa, y lleva <code>aria-current</code>. En el diseño vertical, el punto activo está relleno y es más grande, además de que la línea pasada usa el color de marca.</li>
+              <li><strong>Colores forzados:</strong> las marcas son bordes y la elevación adopta el color de texto del sistema, así que la línea, los puntos y el estado activo siguen visibles.</li>
+              <li><strong>Área interactiva:</strong> Anterior y Siguiente son botones redondos de 44 px; cada fecha es un botón del ancho de su espacio: 7 rem (10 rem en una banda de 600 px de ancho o más).</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 26 tokens que lee <code>components/timeline.css</code>, por familia. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="../../../../es/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="../../../../es/docs/tokens/color/">Color</a></dt><dd><a href="../../../../es/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="../../../../es/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="../../../../es/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="../../../../es/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="../../../../es/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="../../../../es/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="../../../../es/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="../../../../es/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-sans</code>, <code>--luz-text-lg</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code>, <code>--luz-text-xl</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/get-started/">Instala LUZ</a></li>
+      <li><a href="../../../../es/docs/tokens/color/">Tokens de color</a></li>
+      <li><a href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/components/tag/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Etiqueta e insignia</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/components/toast/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Aviso emergente</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/components/timeline.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=L%C3%ADnea%20de%20tiempo">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · v0.0.0 · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inline text – Elementos HTML – Documentación de LUZ</title>
+  <meta name="description" content="Mark up words and phrases inside a block: emphasis, abbreviations, code, time, notes. Pick the element for its meaning; the style follows.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/docs/html/inline/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-Bjvys9Mm.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-C-XW2VDm.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-CdmvI6FB.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-WsJtbSkD.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CWvVkJ1c.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <a class="site-header__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/html/inline/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/html/inline/" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" aria-current="true" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" aria-current="page" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list" lang="en">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-a-title">&lt;a&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-abbr-title">&lt;abbr&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-b-title">&lt;b&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-bdi-title">&lt;bdi&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-bdo-title">&lt;bdo&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-br-title">&lt;br&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-cite-title">&lt;cite&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-code-title">&lt;code&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-data-title">&lt;data&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-dfn-title">&lt;dfn&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-em-title">&lt;em&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-i-title">&lt;i&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-kbd-title">&lt;kbd&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-mark-title">&lt;mark&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-q-title">&lt;q&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-rp-title">&lt;rp&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-rt-title">&lt;rt&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-ruby-title">&lt;ruby&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-s-title">&lt;s&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-samp-title">&lt;samp&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-small-title">&lt;small&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-span-title">&lt;span&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-strong-title">&lt;strong&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-sub-title">&lt;sub&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-sup-title">&lt;sup&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-time-title">&lt;time&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-u-title">&lt;u&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-var-title">&lt;var&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-wbr-title">&lt;wbr&gt;</a></li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/html/inline/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/pages/html/inline.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Inline%20text">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/documentation/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/html/">Elementos HTML</a></li>
+        <li><span class="luz-breadcrumb__item" lang="en" aria-current="page">Inline text</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Elementos HTML</p>
+    <h1 class="docs-title" lang="en">Inline text</h1>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta página todavía no está traducida; el texto está en inglés. <a href="../../../../docs/html/inline/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body" lang="en" dir="ltr">
+    <div class="docs-block elements-section" id="cat-inline" data-category="inline">
+        <p class="elements-section__lead">Mark up words and phrases inside a block: emphasis, abbreviations, code, time, notes. Pick the element for its meaning; the style follows.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-a" data-element="a" aria-labelledby="el-a-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-a-title"><code>&lt;a&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a">MDN<span class="u-sr-only"> reference for the a element</span></a>
+          </div>
+          <p class="elements-card__desc">A link to another page, a file, a place on the same page or an email address. LUZ colors it with the brand color and underlines it on hover, with a visible focus ring.</p>
+          <div class="elements-stage">
+            <p>Read the <a href="#">full reference</a> before you start.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-a" aria-label="Copy the a markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="a markup"><code id="code-a">&lt;p&gt;Read the &lt;a href=&quot;#&quot;&gt;full reference&lt;/a&gt; before you start.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-abbr" data-element="abbr" aria-labelledby="el-abbr-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-abbr-title"><code>&lt;abbr&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/abbr">MDN<span class="u-sr-only"> reference for the abbr element</span></a>
+          </div>
+          <p class="elements-card__desc">A short form of a word or phrase, such as HTML. Put the full form in the title attribute; with a title, it gets a dotted underline and a help cursor.</p>
+          <div class="elements-stage">
+            <p>LUZ uses plain <abbr title="Cascading Style Sheets">CSS</abbr>.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-abbr" aria-label="Copy the abbr markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="abbr markup"><code id="code-abbr">&lt;p&gt;LUZ uses plain &lt;abbr title=&quot;Cascading Style Sheets&quot;&gt;CSS&lt;/abbr&gt;.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Not every abbreviation needs it. Spell the term out in full the first time it appears. Use <code>abbr</code> when the expansion has to sit outside the text, and add <code>title</code> only when you cannot expand it inline. Each <code>abbr</code> needs its own <code>title</code>. Widely available since July 2015.</p>
+            <p><strong>Screen readers:</strong> MDN warns that a difference between what is announced and what is displayed can be jarring. It does not say how each screen reader treats <code>title</code> on <code>abbr</code>.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-b" data-element="b" aria-labelledby="el-b-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-b-title"><code>&lt;b&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/b">MDN<span class="u-sr-only"> reference for the b element</span></a>
+          </div>
+          <p class="elements-card__desc">Makes a few words stand out in bold without saying they matter more, such as the option names in a how-to. If they do matter more, use strong.</p>
+          <div class="elements-stage">
+            <p>The <b>ET Book</b> typeface is used for headings.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-b" aria-label="Copy the b markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="b markup"><code id="code-b">&lt;p&gt;The &lt;b&gt;ET Book&lt;/b&gt; typeface is used for headings.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-bdi" data-element="bdi" aria-labelledby="el-bdi-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-bdi-title"><code>&lt;bdi&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/bdi">MDN<span class="u-sr-only"> reference for the bdi element</span></a>
+          </div>
+          <p class="elements-card__desc">Keeps text whose writing direction you cannot know in advance, such as a user name that may be Arabic or Hebrew, from scrambling the text around it.</p>
+          <div class="elements-stage">
+            <p>User <bdi>إيان</bdi> scored 90 points.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-bdi" aria-label="Copy the bdi markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="bdi markup"><code id="code-bdi">&lt;p&gt;User &lt;bdi&gt;إيان&lt;/bdi&gt; scored 90 points.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: it changes no look, only the writing direction, and the browser already isolates it.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Use it around text you do not control, such as a user name, so its direction does not scramble the text around it. If a semantic element fits, such as <code>cite</code>, prefer <code>&lt;cite dir=&quot;auto&quot;&gt;</code>. MDN says not to rely on CSS <code>unicode-bidi: isolate</code> instead: it is not semantic and browsers may ignore it. Widely available since January 2020.</p>
+            <p><strong>Screen readers:</strong> Not tested by LUZ. MDN lists no screen reader issue for it, and the support tables of a11ysupport.io were not checked.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-bdo" data-element="bdo" aria-labelledby="el-bdo-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-bdo-title"><code>&lt;bdo&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/bdo">MDN<span class="u-sr-only"> reference for the bdo element</span></a>
+          </div>
+          <p class="elements-card__desc">Forces its text to run left to right or right to left, as set by dir, whatever the characters are. You rarely need it: bdi covers most cases.</p>
+          <div class="elements-stage">
+            <p><bdo dir="rtl">This text runs right to left.</bdo></p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-bdo" aria-label="Copy the bdo markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="bdo markup"><code id="code-bdo">&lt;p&gt;&lt;bdo dir=&quot;rtl&quot;&gt;This text runs right to left.&lt;/bdo&gt;&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser look is kept.</p>
+        </article>
+
+        <article class="elements-card" id="el-br" data-element="br" aria-labelledby="el-br-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-br-title"><code>&lt;br&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/br">MDN<span class="u-sr-only"> reference for the br element</span></a>
+          </div>
+          <p class="elements-card__desc">A line break that is part of the content, as in a postal address or a poem. Do not use it to add space.</p>
+          <div class="elements-stage">
+            <p>Line one<br>Line two<br>Line three</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-br" aria-label="Copy the br markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="br markup"><code id="code-br">&lt;p&gt;Line one&lt;br&gt;Line two&lt;br&gt;Line three&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser look is kept.</p>
+        </article>
+
+        <article class="elements-card" id="el-cite" data-element="cite" aria-labelledby="el-cite-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-cite-title"><code>&lt;cite&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/cite">MDN<span class="u-sr-only"> reference for the cite element</span></a>
+          </div>
+          <p class="elements-card__desc">The title of a book, film, paper, song or other work you mention. Not for the name of a person.</p>
+          <div class="elements-stage">
+            <p><cite>The Design of Everyday Things</cite> is a book by Don Norman.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-cite" aria-label="Copy the cite markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="cite markup"><code id="code-cite">&lt;p&gt;&lt;cite&gt;The Design of Everyday Things&lt;/cite&gt; is a book by Don Norman.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser sets titles of works in italic, which is the usual convention.</p>
+        </article>
+
+        <article class="elements-card" id="el-code" data-element="code" aria-labelledby="el-code-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-code-title"><code>&lt;code&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/code">MDN<span class="u-sr-only"> reference for the code element</span></a>
+          </div>
+          <p class="elements-card__desc">A short piece of code, a file name or a command inside a sentence. LUZ sets it in the mono font at a readable size.</p>
+          <div class="elements-stage">
+            <p>Use <code>var(--luz-brand-primary)</code> for links.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-code" aria-label="Copy the code markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="code markup"><code id="code-code">&lt;p&gt;Use &lt;code&gt;var(--luz-brand-primary)&lt;/code&gt; for links.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class. For a block of code use pre.luz-code-block; .luz-code-inline adds a chip look to inline code.</p>
+        </article>
+
+        <article class="elements-card" id="el-data" data-element="data" aria-labelledby="el-data-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-data-title"><code>&lt;data&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/data">MDN<span class="u-sr-only"> reference for the data element</span></a>
+          </div>
+          <p class="elements-card__desc">Pairs visible text with a value for software, held in the value attribute, such as a product name with its code. For dates and times, use time.</p>
+          <div class="elements-stage">
+            <p>LUZ has <data value="3">three</data> layers.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-data" aria-label="Copy the data markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="data markup"><code id="code-data">&lt;p&gt;LUZ has &lt;data value=&quot;3&quot;&gt;three&lt;/data&gt; layers.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: it is ordinary text with a value for software, so it should look like the text around it.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Use it when the visible text and the value software needs differ, such as a product name and its code. For dates and times use <code>time</code>, which MDN requires. Widely available since October 2017.</p>
+            <p><strong>Screen readers:</strong> Its role is <code>generic</code>, so the <code>value</code> is for software; people hear the visible text. MDN does not say how the value is exposed to assistive technology.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-dfn" data-element="dfn" aria-labelledby="el-dfn-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-dfn-title"><code>&lt;dfn&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dfn">MDN<span class="u-sr-only"> reference for the dfn element</span></a>
+          </div>
+          <p class="elements-card__desc">Marks a term at the place where the text explains what it means.</p>
+          <div class="elements-stage">
+            <p>A <dfn>design token</dfn> is a named design decision, stored as a variable.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dfn" aria-label="Copy the dfn markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="dfn markup"><code id="code-dfn">&lt;p&gt;A &lt;dfn&gt;design token&lt;/dfn&gt; is a named design decision, stored as a variable.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Use it for the term being defined, inside the sentence, the <code>dt</code> and <code>dd</code> pair or the section that holds the definition. For an abbreviation, nest <code>abbr</code> with its <code>title</code> inside it. Widely available since July 2015.</p>
+            <p><strong>Screen readers:</strong> Its implicit role is <code>term</code>. Not tested by LUZ. MDN lists no screen reader issue for it, and the support tables of a11ysupport.io were not checked.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-em" data-element="em" aria-labelledby="el-em-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-em-title"><code>&lt;em&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/em">MDN<span class="u-sr-only"> reference for the em element</span></a>
+          </div>
+          <p class="elements-card__desc">Puts stress on a word, the one you would say louder, which can change the meaning of the sentence. Browsers show it in italic.</p>
+          <div class="elements-stage">
+            <p>Load the tokens <em>before</em> the core.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-em" aria-label="Copy the em markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="em markup"><code id="code-em">&lt;p&gt;Load the tokens &lt;em&gt;before&lt;/em&gt; the core.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser look is kept.</p>
+        </article>
+
+        <article class="elements-card" id="el-i" data-element="i" aria-labelledby="el-i-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-i-title"><code>&lt;i&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/i">MDN<span class="u-sr-only"> reference for the i element</span></a>
+          </div>
+          <p class="elements-card__desc">Italic text with no extra stress, for words read in another voice: a phrase in another language, a character's inner voice. For stress, use em.</p>
+          <div class="elements-stage">
+            <p>The result is <i lang="la">ad hoc</i>, not a rule.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-i" aria-label="Copy the i markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="i markup"><code id="code-i">&lt;p&gt;The result is &lt;i lang=&quot;la&quot;&gt;ad hoc&lt;/i&gt;, not a rule.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser look is kept.</p>
+        </article>
+
+        <article class="elements-card" id="el-kbd" data-element="kbd" aria-labelledby="el-kbd-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-kbd-title"><code>&lt;kbd&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/kbd">MDN<span class="u-sr-only"> reference for the kbd element</span></a>
+          </div>
+          <p class="elements-card__desc">A key or other input the user should press or type, such as Ctrl + C. LUZ draws it as a key cap.</p>
+          <div class="elements-stage">
+            <p>Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to open the command palette.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-kbd" aria-label="Copy the kbd markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="kbd markup"><code id="code-kbd">&lt;p&gt;Press &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;K&lt;/kbd&gt; to open the command palette.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Use it for what the reader types or presses. For a key combination, nest one <code>kbd</code> per key inside an outer one, or leave the outer one out. Widely available since July 2015.</p>
+            <p><strong>Screen readers:</strong> It has no corresponding ARIA role. Not tested by LUZ. MDN lists no screen reader issue for it, and the support tables of a11ysupport.io were not checked.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-mark" data-element="mark" aria-labelledby="el-mark-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-mark-title"><code>&lt;mark&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/mark">MDN<span class="u-sr-only"> reference for the mark element</span></a>
+          </div>
+          <p class="elements-card__desc">Highlights text because it matters right now, such as the words that matched a search. It does not add importance: use strong for that.</p>
+          <div class="elements-stage">
+            <p>Search results for <mark>tokens</mark>.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-mark" aria-label="Copy the mark markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="mark markup"><code id="code-mark">&lt;p&gt;Search results for &lt;mark&gt;tokens&lt;/mark&gt;.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Use it for text that is relevant to what the reader is doing now, such as the words that matched a search. Not for syntax highlighting (use a <code>span</code>) and not for importance (use <code>strong</code>). Widely available since July 2015.</p>
+            <p><strong>Screen readers:</strong> MDN: most screen readers do not announce <code>mark</code> by default. Text added with <code>::before</code> and <code>::after</code> can announce it, but only where not knowing about the highlight would harm understanding, because some people turn extra verbosity off.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-q" data-element="q" aria-labelledby="el-q-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-q-title"><code>&lt;q&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/q">MDN<span class="u-sr-only"> reference for the q element</span></a>
+          </div>
+          <p class="elements-card__desc">A short quotation inside a sentence. The browser adds the quotation marks of the page language, so do not type your own.</p>
+          <div class="elements-stage">
+            <p>As they say, <q>less is more</q>.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-q" aria-label="Copy the q markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="q markup"><code id="code-q">&lt;p&gt;As they say, &lt;q&gt;less is more&lt;/q&gt;.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser already adds the quotation marks of the page language.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Use it for a short quotation inside a sentence, and <code>blockquote</code> for a long one. Browsers add the quotation marks, so do not type them. The <code>cite</code> attribute holds the source URL and is not shown. Widely available since July 2015.</p>
+            <p><strong>Screen readers:</strong> Not tested by LUZ. MDN lists no screen reader issue for it, and the support tables of a11ysupport.io were not checked.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-rp" data-element="rp" aria-labelledby="el-rp-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-rp-title"><code>&lt;rp&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/rp">MDN<span class="u-sr-only"> reference for the rp element</span></a>
+          </div>
+          <p class="elements-card__desc">Parentheses that appear around a ruby annotation only in browsers that cannot place it above the text.</p>
+          <div class="elements-stage">
+            <ruby>漢<rp>(</rp><rt>kan</rt><rp>)</rp>字<rp>(</rp><rt>ji</rt><rp>)</rp></ruby>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-rp" aria-label="Copy the rp markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="rp markup"><code id="code-rp">&lt;ruby&gt;漢&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;kan&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;字&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;ji&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser look is kept.</p>
+        </article>
+
+        <article class="elements-card" id="el-rt" data-element="rt" aria-labelledby="el-rt-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-rt-title"><code>&lt;rt&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/rt">MDN<span class="u-sr-only"> reference for the rt element</span></a>
+          </div>
+          <p class="elements-card__desc">The text of a ruby annotation, such as how a character is pronounced. LUZ keeps it above the 12px floor.</p>
+          <div class="elements-stage">
+            <ruby>漢<rp>(</rp><rt>kan</rt><rp>)</rp>字<rp>(</rp><rt>ji</rt><rp>)</rp></ruby>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-rt" aria-label="Copy the rt markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="rt markup"><code id="code-rt">&lt;ruby&gt;漢&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;kan&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;字&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;ji&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-ruby" data-element="ruby" aria-labelledby="el-ruby-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-ruby-title"><code>&lt;ruby&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ruby">MDN<span class="u-sr-only"> reference for the ruby element</span></a>
+          </div>
+          <p class="elements-card__desc">Puts small notes above or beside characters, mostly to show how East Asian characters are read. Each note goes in an rt.</p>
+          <div class="elements-stage">
+            <ruby>漢<rp>(</rp><rt>kan</rt><rp>)</rp>字<rp>(</rp><rt>ji</rt><rp>)</rp></ruby>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-ruby" aria-label="Copy the ruby markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="ruby markup"><code id="code-ruby">&lt;ruby&gt;漢&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;kan&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;字&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;ji&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser already sets the notes small, next to their characters, and the right size depends on the script and the content.</p>
+        </article>
+
+        <article class="elements-card" id="el-s" data-element="s" aria-labelledby="el-s-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-s-title"><code>&lt;s&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/s">MDN<span class="u-sr-only"> reference for the s element</span></a>
+          </div>
+          <p class="elements-card__desc">Text that is no longer true or no longer applies, such as an old price. For a tracked removal, use del. LUZ also tones it down to the secondary color.</p>
+          <div class="elements-stage">
+            <p><s>$20</s> $15 this week.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-s" aria-label="Copy the s markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="s markup"><code id="code-s">&lt;p&gt;&lt;s&gt;$20&lt;/s&gt; $15 this week.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-samp" data-element="samp" aria-labelledby="el-samp-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-samp-title"><code>&lt;samp&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/samp">MDN<span class="u-sr-only"> reference for the samp element</span></a>
+          </div>
+          <p class="elements-card__desc">Text a program printed, such as an error message or the output of a terminal command.</p>
+          <div class="elements-stage">
+            <p>The console prints <samp>Layer "tokens" is missing.</samp></p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-samp" aria-label="Copy the samp markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="samp markup"><code id="code-samp">&lt;p&gt;The console prints &lt;samp&gt;Layer &quot;tokens&quot; is missing.&lt;/samp&gt;&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Use it for sample or quoted output of a program. For output that your own script writes into the page, use <code>output</code> instead. Widely available since July 2015.</p>
+            <p><strong>Screen readers:</strong> Its role is <code>generic</code>, so it adds no meaning for assistive technology. Not tested by LUZ. MDN lists no screen reader issue for it, and the support tables of a11ysupport.io were not checked.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-small" data-element="small" aria-labelledby="el-small-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-small-title"><code>&lt;small&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/small">MDN<span class="u-sr-only"> reference for the small element</span></a>
+          </div>
+          <p class="elements-card__desc">Fine print: copyright lines, legal notes, disclaimers. LUZ never sets it under the 12px floor.</p>
+          <div class="elements-stage">
+            <p>Total: $15 <small>Prices include VAT.</small></p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-small" aria-label="Copy the small markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="small markup"><code id="code-small">&lt;p&gt;Total: $15 &lt;small&gt;Prices include VAT.&lt;/small&gt;&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-span" data-element="span" aria-labelledby="el-span-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-span-title"><code>&lt;span&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/span">MDN<span class="u-sr-only"> reference for the span element</span></a>
+          </div>
+          <p class="elements-card__desc">A plain inline wrapper that adds no meaning. Use it to hang a class or a lang attribute on a few words.</p>
+          <div class="elements-stage">
+            <p>LUZ is <span class="luz-tag luz-tag--green">stable</span>.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-span" aria-label="Copy the span markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="span markup"><code id="code-span">&lt;p&gt;LUZ is &lt;span class=&quot;luz-tag luz-tag--green&quot;&gt;stable&lt;/span&gt;.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: the browser look is kept.</p>
+        </article>
+
+        <article class="elements-card" id="el-strong" data-element="strong" aria-labelledby="el-strong-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-strong-title"><code>&lt;strong&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/strong">MDN<span class="u-sr-only"> reference for the strong element</span></a>
+          </div>
+          <p class="elements-card__desc">Words the reader must not miss: a warning, a key condition, a deadline. For stress that changes how a sentence reads, use em.</p>
+          <div class="elements-stage">
+            <p><strong>Warning:</strong> do not edit the dist folder.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-strong" aria-label="Copy the strong markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="strong markup"><code id="code-strong">&lt;p&gt;&lt;strong&gt;Warning:&lt;/strong&gt; do not edit the dist folder.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-sub" data-element="sub" aria-labelledby="el-sub-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-sub-title"><code>&lt;sub&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/sub">MDN<span class="u-sr-only"> reference for the sub element</span></a>
+          </div>
+          <p class="elements-card__desc">Text set lower and smaller, such as the 2 in the formula for water. LUZ keeps it from pushing the lines apart.</p>
+          <div class="elements-stage">
+            <p>Water is H<sub>2</sub>O.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-sub" aria-label="Copy the sub markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="sub markup"><code id="code-sub">&lt;p&gt;Water is H&lt;sub&gt;2&lt;/sub&gt;O.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-sup" data-element="sup" aria-labelledby="el-sup-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-sup-title"><code>&lt;sup&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/sup">MDN<span class="u-sr-only"> reference for the sup element</span></a>
+          </div>
+          <p class="elements-card__desc">Text set higher and smaller, for powers, footnote numbers and the letters in 1st. LUZ keeps it from pushing the lines apart.</p>
+          <div class="elements-stage">
+            <p>E = mc<sup>2</sup></p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-sup" aria-label="Copy the sup markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="sup markup"><code id="code-sup">&lt;p&gt;E = mc&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-time" data-element="time" aria-labelledby="el-time-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-time-title"><code>&lt;time&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/time">MDN<span class="u-sr-only"> reference for the time element</span></a>
+          </div>
+          <p class="elements-card__desc">A date, a time or a duration. Put a form software can read in the datetime attribute, and write whatever suits the reader inside.</p>
+          <div class="elements-stage">
+            <p>Released on <time datetime="2026-10-06">6 October 2026</time>.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-time" aria-label="Copy the time markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="time markup"><code id="code-time">&lt;p&gt;Released on &lt;time datetime=&quot;2026-10-06&quot;&gt;6 October 2026&lt;/time&gt;.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+          <div class="elements-worth">
+            <h3 class="elements-worth__title">Worth using</h3>
+            <p>Use it for a date, a time or a duration that software can read, such as an event a browser could add to a calendar. Write the machine form in <code>datetime</code> (<code>2026-10-09</code>, <code>20:00</code>, <code>PT2H30M</code>). Not for dates before the Gregorian calendar. Widely available since October 2017.</p>
+            <p><strong>Screen readers:</strong> MDN gives no note on how screen readers announce <code>datetime</code>. The visible text is what you can count on.</p>
+            <p class="elements-worth__src">Source: MDN, checked on 11 October 2026.</p>
+          </div>
+        </article>
+
+        <article class="elements-card" id="el-u" data-element="u" aria-labelledby="el-u-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-u-title"><code>&lt;u&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/u">MDN<span class="u-sr-only"> reference for the u element</span></a>
+          </div>
+          <p class="elements-card__desc">An underline for a note that is not a link, such as a flagged spelling mistake. Readers take underlines for links, so use it sparingly.</p>
+          <div class="elements-stage">
+            <p>This word is <u>mispelled</u>.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-u" aria-label="Copy the u markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="u markup"><code id="code-u">&lt;p&gt;This word is &lt;u&gt;mispelled&lt;/u&gt;.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-var" data-element="var" aria-labelledby="el-var-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-var-title"><code>&lt;var&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/var">MDN<span class="u-sr-only"> reference for the var element</span></a>
+          </div>
+          <p class="elements-card__desc">The name of a variable in a formula or in code, such as x in an equation.</p>
+          <div class="elements-stage">
+            <p>Solve <var>x</var> + <var>y</var> = 10.</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-var" aria-label="Copy the var markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="var markup"><code id="code-var">&lt;p&gt;Solve &lt;var&gt;x&lt;/var&gt; + &lt;var&gt;y&lt;/var&gt; = 10.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Styled by <code>elements/inline.css</code>, with no class.</p>
+        </article>
+
+        <article class="elements-card" id="el-wbr" data-element="wbr" aria-labelledby="el-wbr-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-wbr-title"><code>&lt;wbr&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/wbr">MDN<span class="u-sr-only"> reference for the wbr element</span></a>
+          </div>
+          <p class="elements-card__desc">Tells the browser where it may wrap a long word or URL when it runs out of room. Nothing shows when the line does not wrap.</p>
+          <div class="elements-stage">
+            <p style="max-inline-size: 12ch">https://<wbr>example.com/<wbr>very/<wbr>long/<wbr>path</p>
+          </div>
+          <div class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-wbr" aria-label="Copy the wbr markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="wbr markup"><code id="code-wbr">&lt;p style=&quot;max-inline-size: 12ch&quot;&gt;https://&lt;wbr&gt;example.com/&lt;wbr&gt;very/&lt;wbr&gt;long/&lt;wbr&gt;path&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ adds no style: it has no box. It only marks a place where the line may break.</p>
+        </article>
+        </div>
+      
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/a-z/">Índice A–Z: A–L</a></li>
+      <li><a href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+      <li><a href="../../../../es/docs/components/">Componentes</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/html/text/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Bloques de texto</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/html/structure/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Estructura de página</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-14">14 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/pages/html/inline.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Inline%20text">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · v0.0.0 · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>
