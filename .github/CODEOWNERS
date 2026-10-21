@@ -57,3 +57,10 @@ eslint.config.js        @nandovejer
 stylelint.config.js     @nandovejer
 vitest.config.js        @nandovejer
 playwright.config.js    @nandovejer
+
+# The prompt-injection sentinel, its shell hook and its cases: a weaker copy protects nothing
+.claude/agents/prompt-injection-auditor.md   @nandovejer
+.claude/agents/security-auditor.md           @nandovejer
+.claude/hooks/injection-auditor-bash.js      @nandovejer
+.claude/settings.json                        @nandovejer
+.claude/evals/                               @nandovejer
