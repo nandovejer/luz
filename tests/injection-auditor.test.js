@@ -46,6 +46,10 @@ describe("hook injection-auditor-bash.js: what the sentinel may run", () => {
     "gh pr view 12",
     "gh pr diff 12",
     "gh issue list",
+    "git grep -n foo",
+    "git grep -in foo -- apps",
+    "git grep -e foo --or -e bar",
+    "git grep -l foo | head -5",
   ];
   for (const command of ALLOW) {
     it(`allows ${command}`, () => {
@@ -63,6 +67,12 @@ describe("hook injection-auditor-bash.js: what the sentinel may run", () => {
     "git -c core.pager=sh log",
     "git diff --output=out.txt",
     "git grep -O sh x",
+    "git grep -nOsh x",
+    "git grep -Osh x",
+    "git grep -inO sh x",
+    "git grep --open-files-in=sh x",
+    "git grep --open-files-in-pa=sh x",
+    "git grep --open sh x",
     "git diff --ext-diff",
     "git diff --no-index /etc/passwd /dev/null",
     "git status; rm x",
