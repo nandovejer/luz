@@ -42,7 +42,6 @@ import {
 
 // The fixture site has docs in Spanish and Arabic (the right-to-left generator stays covered); the real repository
 // has them in Spanish alone until Arabic docs exist (owner, 2026-10-19), so the real catalogs are en and es.
-const CODES = ["es", "ar"];
 const REAL_CODES = ["es"];
 const SITE_URL = "https://example.github.io/luz/";
 const realCatalog = (code) =>
