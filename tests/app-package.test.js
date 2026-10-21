@@ -326,11 +326,15 @@ describe("@luz-ds/app: the pages that count the kinds", () => {
     expect(page).toContain('href="/docs/app/"');
   });
 
-  it("the home page's `next` list has adopt.next.app, in the template and in the three catalogs, linking the area", () => {
-    expect(readOr("apps/landing/index.html")).toContain("{{html:adopt.next.app}}");
+  it("the home page's fourth level has the app kind, in the template and in the three catalogs, linking the area", () => {
+    const home = readOr("apps/landing/index.html");
+    expect(home).toContain("{{t:inside.kind.app.title}}");
+    expect(home).toContain("{{t:inside.kind.app.text}}");
+    expect(home).toContain('href="/docs/app/"');
     for (const lang of ["en", "es", "ar"]) {
       const catalog = json(`apps/landing/i18n/${lang}.json`);
-      expect(catalog["adopt.next.app"], `${lang}.json`).toContain('href="/docs/app/"');
+      expect(catalog["inside.kind.app.title"], `${lang}.json`).toBeTruthy();
+      expect(catalog["inside.kind.app.text"], `${lang}.json`).toBeTruthy();
     }
   });
 

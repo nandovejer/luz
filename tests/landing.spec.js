@@ -1488,7 +1488,10 @@ test.describe('Landing page', () => {
     test('the beta and version tags are text', async ({ page }) => {
       await open(page);
 
-      await expect(page.locator('.site-header__version')).toContainText(`v${version('core')} beta`);
+      // The version and "beta" are the footer's brand line, as text; the header shows none
+      await expect(page.locator('footer .landing-brand__version')).toContainText(`v${version('core')}`);
+      await expect(page.locator('footer .landing-brand__beta')).toHaveText('beta');
+      await expect(page.locator('.site-header__version')).toHaveCount(0);
       await expect(page.locator('.site-header .luz-tag')).toHaveCount(0);
     });
 

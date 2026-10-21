@@ -46,7 +46,8 @@ const blocks = files.flatMap(blocksWithBackdrop);
 describe("backdrop-filter keeps its -webkit- twin", () => {
   it("finds the backdrop-filter declarations it checks", () => {
     expect(files.length).toBeGreaterThan(10);
-    expect(blocks.length).toBeGreaterThanOrEqual(3);
+    // The modal's backdrop and the home light's bar: the home page's own blurs went with its redesign
+    expect(blocks.length).toBeGreaterThanOrEqual(2);
   });
 
   it("puts -webkit-backdrop-filter, with the same value, before every backdrop-filter in its rule", () => {

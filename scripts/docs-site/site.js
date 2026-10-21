@@ -39,7 +39,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync, statSync } from "node:fs";
 import { gzipSync } from "node:zlib";
 import { dirname, join, relative, resolve, sep } from "node:path";
-import { HtmlError, readHtml, tags } from "./html.js";
+import { HtmlError, compactHtml, readHtml, tags } from "./html.js";
 import { PACKAGES, SITE_KINDS } from "../luz-packages.js";
 import { fillAiMarkers } from "./ai.js";
 import { renderSnippets, snippetData } from "./snippets.js";
@@ -1895,7 +1895,8 @@ export function renderDocument(html, file, route, site, options = {}) {
   const locale = options.locale ?? site.i18n?.default;
   // The switcher's label is a catalog key like any other
   if (site.i18n && locale) options.used?.add("lang.label");
-  const out = expand(html, {
+  // The template's indentation is for the author; the page ships without it
+  const out = compactHtml(expand(html, {
     file,
     partial: reader.partial,
     current: currentOf(route, homesOf(site)),
@@ -1903,7 +1904,7 @@ export function renderDocument(html, file, route, site, options = {}) {
     locale,
     used: options.used,
     values: languageValues(site, locale, { home: true, siteUrl: options.siteUrl, used: options.used }),
-  });
+  }));
   if (!locale || !site.i18n || locale === site.i18n.default) return out;
   // A language that has docs links to them (apps/docs/i18n/<code>/); one that has not, to the English ones, and says so
   return site.docsI18n?.byCode.has(locale.code) ? localizeDocsLinks(out, locale.code) : markDocsLinks(out, DOCS_ROUTE, site.i18n.default.code);

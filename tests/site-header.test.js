@@ -5,7 +5,7 @@
  * are in tests/site-header.spec.js.
  *
  * - Brand: the logo is the link to the home, named "LUZ" for a screen reader with no visible text;
- *   beside it "v<version> beta" is a link to the changelog, not a tag.
+ *   the header shows no version (the changelog is a link of the footer) and no tag.
  * - No Home link in the row. The end of the row, in this order: Documentation, GitHub, Search,
  *   Language (the docs have no language switch), then the menu button. Each has an icon.
  * - The colour mode is not in the header.
@@ -22,7 +22,6 @@ import { find, findAll, hasClass, isInside, parse, query, textOf } from "./helpe
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (file) => readFileSync(join(repo, file), "utf-8");
-const { version } = JSON.parse(read("packages/core/package.json"));
 const GITHUB = "https://github.com/nandovejer/luz";
 
 const site = scanSite(join(repo, "apps/docs"), repo);
@@ -61,24 +60,20 @@ describe("the header's brand", () => {
       expect(name).toBe("LUZ");
     });
 
-    it(`${route}: the version is a link to the changelog, v${version} beta, next to the logo and not a tag`, () => {
+    it(`${route}: the header shows no version and no tag: the changelog is the footer's link`, () => {
       const header = headerOf(route);
-      const all = links(header);
-      const changelog = all.find((a) => /\/CHANGELOG\.md$/.test(href(a) ?? ""));
-      expect(changelog, "a link to CHANGELOG.md").toBeTruthy();
-      expect(visibleText(changelog)).toBe(`v${version} beta`);
-      expect(all.indexOf(changelog), "right after the logo").toBe(1);
+      expect(links(header).find((a) => /\/CHANGELOG\.md$/.test(href(a) ?? "")), "no link to CHANGELOG.md in the header").toBeUndefined();
+      expect(visibleText(header), "no version badge").not.toMatch(/\bv\d+\.\d+\.\d+/);
       expect(findAll(header, (n) => hasClass(n, "luz-tag")), "no tag in the header").toEqual([]);
+      expect(findAll(header, (n) => hasClass(n, "site-header__version")), "no version link").toEqual([]);
     });
   }
 
-  it("the version links to the changelog the home page's footer links to", () => {
+  it("the footer of the home pages links to the changelog", () => {
     for (const route of homes) {
       const tree = treeOf(route);
       const footerChangelog = links(query(tree, "footer")).find((a) => /\/CHANGELOG\.md$/.test(href(a) ?? ""));
       expect(footerChangelog, `${route}: the footer has a changelog link`).toBeTruthy();
-      const own = links(headerOf(route)).find((a) => /\/CHANGELOG\.md$/.test(href(a) ?? ""));
-      expect(href(own), route).toBe(href(footerChangelog));
     }
   });
 });

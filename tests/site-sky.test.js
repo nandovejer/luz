@@ -3,8 +3,8 @@
  * files are and who may define it. How it looks and moves is in
  * tests/site-sky.spec.js.
  *
- *   apps/site/sky.css                   the stars and the clouds, once
- *   apps/site/_partials/sky-filter.html the SVG filter the clouds use (#site-sky-clouds)
+ *   apps/site/sky.css                   the stars, once; by day the sky draws nothing (the clouds went)
+ *   apps/site/_partials/sky-filter.html the SVG filter the clouds used (#site-sky-clouds), still included
  *   the home                            `class="... site-sky"` on <main>, the partial at its end
  *   the docs layout                     `class="... site-sky"` on <body>, the partial included
  *
@@ -87,12 +87,19 @@ describe("the pages that have the sky", () => {
 describe("the sky is defined once, in apps/site/sky.css", () => {
   const sky = stripComments(read("apps/site/sky.css"));
 
-  it("it draws both the stars and the clouds on the two layers", () => {
+  it("it draws the stars on the two layers, and by day (morning, afternoon, sunset over light) nothing: no clouds", () => {
     expect(sky).toMatch(/\.site-sky::before/);
     expect(sky).toMatch(/\.site-sky::after/);
     expect(sky).toMatch(/radial-gradient\(/);
-    expect(sky).toMatch(/box-shadow:/);
-    expect(sky).toMatch(/filter:\s*url\(["']?#site-sky-clouds["']?\)/);
+    expect(sky).not.toMatch(/box-shadow:/);
+    expect(sky).not.toMatch(/filter:\s*url\(/);
+    expect(sky).toMatch(/\.site-sky::after\s*\{[^}]*display:\s*none/);
+    const day = rules("apps/site/sky.css").filter(([selector]) => /data-light="morning"/.test(selector));
+    expect(day.length, "a rule for the lights of the day").toBeGreaterThan(0);
+    for (const [selector, declarations] of day) {
+      expect(selector, "over light only").toContain('[data-theme="light"]');
+      expect(declarations, selector).toEqual(["display"]);
+    }
   });
 
   it("it is for the lights of the hour, never high contrast, and it switches off under forced colours", () => {

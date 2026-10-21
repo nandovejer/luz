@@ -8,7 +8,8 @@
  *   apps/docs/          a copy of the real one (not assets/ or node_modules/)
  *   apps/site/          _partials/ and boot.js, copied
  *   apps/landing/       i18n/ (the home's registry and catalogs) and index.html, copied
- *   packages/, tests/   symbolic links to the real ones (read, never written)
+ *   packages/, tests/, scripts/   symbolic links to the real ones (read, never written)
+ *   budgets.json        copied (the home's weights are measured against it; run `pnpm build` first)
  *
  * so scanSite(docsDir, repoRoot) and the Vite plugin work on it as they do on
  * the real one, and the numbers they give are the real pages in real chrome.
@@ -159,7 +160,10 @@ export function makeSite({ languages = ["es", "ar"], probe = false } = {}) {
   mkdirSync(join(repoRoot, "apps/landing"), { recursive: true });
   cpSync(join(REAL_REPO, "apps/landing/i18n"), join(repoRoot, "apps/landing/i18n"), { recursive: true });
   cpSync(join(REAL_REPO, "apps/landing/index.html"), join(repoRoot, "apps/landing/index.html"));
-  for (const name of ["packages", "tests"]) symlinkSync(join(REAL_REPO, name), join(repoRoot, name));
+  // The home's weights, checks and lists are written from the repository (budgets.json against packages/*/dist,
+  // the tests, scripts/check-contrast.js): the build of the home reads them in the copy as it does in the real one
+  cpSync(join(REAL_REPO, "budgets.json"), join(repoRoot, "budgets.json"));
+  for (const name of ["packages", "tests", "scripts"]) symlinkSync(join(REAL_REPO, name), join(repoRoot, name));
 
   // The languages of the copy: the real folders of `languages` stay, the other ones go
   const i18n = join(docsDir, "i18n");
@@ -204,6 +208,20 @@ export function translatedRoutes(docsDir, code) {
   return out.sort();
 }
 
+/**
+ * What the home page's build reads in the repository besides its sources, for a copy that holds only those:
+ * the built files of each package (the weights of the home are measured on `packages/*\/dist`; run `pnpm build`
+ * first) and the tests (their number and what they cover are counted), linked, never written. budgets.json is
+ * copied by the caller with the sources.
+ */
+export function linkBuiltSources(dir) {
+  for (const name of readdirSync(join(REAL_REPO, "packages"))) {
+    const dist = join(REAL_REPO, "packages", name, "dist");
+    if (existsSync(dist)) symlinkSync(dist, join(dir, "packages", name, "dist"));
+  }
+  symlinkSync(join(REAL_REPO, "tests"), join(dir, "tests"));
+}
+
 /* ---- A copy of the repository for a script that reads its own location ------------- */
 
 /**
@@ -226,6 +244,10 @@ export function makeScriptRepo() {
     ...tracked("packages/check/src"),
     ...tracked("packages/core/src/i18n"),
     ...tracked("packages/core/src/components"),
+    // scripts/check-contrast.js, which the home's checks run, reads these
+    ...tracked("packages/site/src/components"),
+    ...tracked("packages/tokens/lib"),
+    ...tracked("packages/core/src/themes"),
     "packages/core/src/i18n.js",
     "packages/core/src/objects/_objects.css",
     "packages/tokens/tokens.json",
@@ -244,6 +266,7 @@ export function makeScriptRepo() {
     }
   }
   symlinkSync(join(REAL_REPO, "node_modules"), at("node_modules"));
+  linkBuiltSources(dir);
   // No docs language but the reference: the test writes the languages it needs
   const i18n = at("apps/docs/i18n");
   if (existsSync(i18n)) {

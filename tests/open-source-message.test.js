@@ -7,8 +7,9 @@
  *     "Human-first, AI-ready"
  *     "Every change starts with a failing test"
  *
- *   Home page    apps/landing/i18n/{en,es,ar}.json carry the statement in `hero.lead` (trusted
- *                HTML: "We love TDD" is a link to the docs section), translated in es and ar;
+ *   Home page    apps/landing/i18n/{en,es,ar}.json carry the statement in `hero.lead` (the second
+ *                half of the lead: "... and every change starts with a failing test"), translated
+ *                in es and ar; the link to the docs section went with the home's redesign;
  *                apps/landing/index.html writes it as {{html:hero.lead}}; the old built.* keys are gone
  *   README.md, PRINCIPLES.md   both statements before the first `## ` heading
  *   Page         apps/docs/pages/get-started/how-luz-is-built.html: front matter
@@ -43,33 +44,26 @@ const LINE = "Every change starts with a failing test";
 
 describe("the home page says it in three languages", () => {
   const catalog = (code) => JSON.parse(read(`apps/landing/i18n/${code}.json`));
-  const LINK = '<a href="/docs/get-started/how-luz-is-built/#tests-first">';
   const textOfHtml = (html) => html.replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 
-  it("English says it in the lead, in one sentence with the link", () => {
-    // The owner (2026-10-18) put the lead and the TDD statement in one paragraph; README.md and
-    // PRINCIPLES.md keep STATEMENT and LINE.
+  it("English says it in the lead, in one sentence", () => {
+    // README.md and PRINCIPLES.md keep STATEMENT and LINE
     const lead = catalog("en")["hero.lead"];
-    expect(lead).toContain("Every component works before JavaScript loads &amp; ");
-    expect(lead).toContain(`${LINK}We love TDD</a>, every change starts with a failing test.`);
-    expect(textOfHtml(lead)).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads & We love TDD, every change starts with a failing test.");
+    expect(textOfHtml(lead)).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads, and every change starts with a failing test.");
+    expect(textOfHtml(lead).toLowerCase()).toContain(LINE.toLowerCase());
   });
 
-  it.each(["es", "ar"])("%s has the lead with the same link, translated", (code) => {
+  it.each(["es", "ar"])("%s has the lead, translated: not the English text, and no English left but a name", (code) => {
     const en = catalog("en");
     const lead = catalog(code)["hero.lead"];
-    expect(lead, `${code} hero.lead`).toContain(LINK);
     expect(lead, `${code} hero.lead is not the English text`).not.toBe(en["hero.lead"]);
-    // The link's text is the statement itself, translated
-    const linkText = lead.slice(lead.indexOf(LINK) + LINK.length, lead.indexOf("</a>", lead.indexOf(LINK)));
-    expect(linkText.trim().length, `${code} link text`).toBeGreaterThan(0);
-    expect(linkText, `${code} link text is not the English text`).not.toBe("We love TDD");
+    expect(textOfHtml(lead).length, `${code} hero.lead`).toBeGreaterThan(80);
   });
 
-  it("Arabic has no English in the link", () => {
-    const lead = catalog("ar")["hero.lead"];
-    const start = lead.indexOf(LINK) + LINK.length;
-    expect(lead.slice(start, lead.indexOf("</a>", start))).not.toMatch(/[A-Za-z]/);
+  it("Arabic says it in Arabic: the lead has Arabic letters, and only the names of the technologies in Latin", () => {
+    const lead = textOfHtml(catalog("ar")["hero.lead"]);
+    expect(lead).toMatch(/[؀-ۿ]/);
+    expect(lead.replace(/\b(?:CSS|JavaScript|HTML)\b/g, "")).not.toMatch(/[A-Za-z]/);
   });
 
   it("the three built.* keys are gone from every catalog, and the template has no line of its own", () => {

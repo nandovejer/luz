@@ -24,6 +24,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { linkBuiltSources } from "./helpers/docs-i18n-size-fixture.js";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
 const EN_FILE = "packages/core/src/i18n.js";
@@ -52,7 +53,7 @@ function files(path) {
 
 beforeAll(() => {
   dir = mkdtempSync(join(tmpdir(), "luz-check-strings-"));
-  const sources = [...files("apps"), ...files("scripts"), ...files("packages/check/src"), ...files("packages/core/src/i18n"), ...files("packages/core/src/components"), "packages/core/src/objects/_objects.css", "packages/tokens/tokens.json", "packages/tokens/src/semantic.css", EN_FILE, "package.json"];
+  const sources = [...files("apps"), ...files("scripts"), ...files("packages/check/src"), ...files("packages/core/src/i18n"), ...files("packages/core/src/components"), ...files("packages/site/src/components"), ...files("packages/tokens/lib"), ...files("packages/core/src/themes"), "packages/core/src/objects/_objects.css", "packages/tokens/tokens.json", "packages/tokens/src/semantic.css", EN_FILE, "package.json", "budgets.json"];
   for (const name of readdirSync(join(repo, "packages"))) sources.push(`packages/${name}/package.json`);
   for (const rel of new Set(sources)) {
     try {
@@ -63,6 +64,8 @@ beforeAll(() => {
     }
   }
   symlinkSync(join(repo, "node_modules"), at("node_modules"));
+  // The home's weights and checks are read from the built packages and the tests
+  linkBuiltSources(dir);
 });
 
 afterAll(() => rmSync(dir, { recursive: true, force: true }));

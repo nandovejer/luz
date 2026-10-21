@@ -1556,7 +1556,6 @@ test.describe('Site header and navigation toggle', () => {
       [1440, [
         '.luz-skip-link',
         '.site-header__brand',
-        '.site-header__version',
         '.site-header__nav a >> nth=0',
         '.site-header__github',
         '.site-header__search',
