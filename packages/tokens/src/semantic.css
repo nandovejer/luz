@@ -95,7 +95,7 @@
   --luz-code-keyword: var(--luz-text-primary);
   --luz-code-name: var(--luz-blue-70); /* 9.0:1 */
   --luz-code-property: var(--luz-purple-60); /* 5.8:1 */
-  --luz-code-string: var(--luz-green-60); /* 4.9:1 */
+  --luz-code-string: var(--luz-green-70); /* 8.2:1 */
   --luz-code-literal: var(--luz-yellow-60); /* 6.9:1 */
 }
 

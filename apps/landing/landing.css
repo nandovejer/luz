@@ -780,6 +780,12 @@ home-light:defined ~ .landing-light__nojs {
   text-transform: uppercase;
 }
 
+/* The open tab: the ink on the bar's tint (the brand colour is measured on the
+   page); the rule under it and its weight still say which one is open */
+.landing-term__tabs .luz-tab.is-active {
+  color: var(--luz-text-primary);
+}
+
 .landing-term__pane {
   margin: 0;
 }
@@ -892,7 +898,7 @@ home-light:defined ~ .landing-light__nojs {
 
 /* The open tab: a pale chip, as the reference's */
 .landing-panel__tabs .luz-tab[aria-selected="true"] {
-  background: var(--luz-surface-raised);
+  background: var(--luz-surface);
 }
 
 /* Every tab of every panel is one height, whatever it holds: the panel does
@@ -924,6 +930,12 @@ home-light:defined ~ .landing-light__nojs {
   grid-auto-rows: max-content;
   align-content: start;
   gap: var(--luz-space-lg);
+}
+
+/* Only the open tab scrolls (and the tabs script makes it focusable, so a
+   keyboard reaches what scrolls); a closed one keeps its box but not a
+   scroller no key can reach */
+.landing-panel__pane--list:not([hidden]) {
   overflow: auto;
 }
 
@@ -1044,7 +1056,14 @@ home-light:defined ~ .landing-light__nojs {
     overflow-wrap: anywhere;
     border-radius: var(--luz-radius-sm);
     background: color-mix(in oklab, var(--luz-brand-primary) calc(6% + var(--share) * 24%), var(--luz-surface-page));
+    /* The tint deepens with the weight, so the text is the primary ink: the
+       secondary and the brand colours are measured on the page, not on it */
+    color: var(--luz-text-primary);
     line-height: 1.25;
+  }
+
+  :is(.landing-names__list--groups, .landing-names__list--map) .landing-names__n {
+    color: inherit;
   }
 
   .landing-names__list--map a {
@@ -1072,6 +1091,13 @@ home-light:defined ~ .landing-light__nojs {
 .landing-names__list a:hover {
   border-color: var(--luz-brand-primary);
   color: var(--luz-brand-primary);
+}
+
+/* A tile's tint is deeper than the page, where the brand colour is measured */
+@container landing-groups (min-width: 28rem) {
+  :is(.landing-names__list--groups, .landing-names__list--map) a:hover {
+    color: var(--luz-text-primary);
+  }
 }
 
 @media (forced-colors: active) {
@@ -1609,6 +1635,9 @@ home-light:defined ~ .landing-light__nojs {
    changelog; then "beta" as a small tag, so the two read as one statement
    of where LUZ stands */
 .landing-brand__version {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--luz-space-lg); /* 24 px: WCAG 2.5.8 */
   font-family: var(--luz-font-mono);
   font-size: var(--luz-text-sm);
   color: var(--luz-text-secondary);
@@ -1661,6 +1690,12 @@ home-light:defined ~ .landing-light__nojs {
   padding-block-start: var(--luz-space-lg);
   border-block-start: 1px solid color-mix(in oklab, var(--luz-text-primary) 12%, transparent);
   font-size: var(--luz-text-sm);
+}
+
+/* The link in the line is a target of its own: 24 px (WCAG 2.5.8) */
+.landing-legal a {
+  display: inline-block;
+  min-block-size: var(--luz-space-lg);
 }
 
 @media (scripting: enabled) {

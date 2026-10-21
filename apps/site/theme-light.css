@@ -89,7 +89,7 @@
   --luz-code-keyword: #231c16;
   --luz-code-name: #004299;
   --luz-code-property: #853bca;
-  --luz-code-string: #007f4d;
+  --luz-code-string: #006b44;
   --luz-code-literal: #7c4d00;
 }
 
@@ -600,7 +600,7 @@
 @property --luz-code-string {
   syntax: "<color>";
   inherits: true;
-  initial-value: #007f4d;
+  initial-value: #005733;
 }
 
 @property --luz-code-literal {

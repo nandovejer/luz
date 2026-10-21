@@ -168,11 +168,12 @@ test.describe('Modes without JavaScript', () => {
       // The picture of the mode is not read: it is a drawing of the page in that mode
       await expect(box.locator('.landing-cut__picture')).toHaveAttribute('aria-hidden', 'true');
     }
-    const background = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-    const before = await background();
+    // The body is transparent over the sky: what the radios change is the page's surface token
+    const surface = () => page.evaluate(() => getComputedStyle(document.body).getPropertyValue('--luz-surface-page').trim());
+    const before = await surface();
     await page.click('footer .luz-mode-btn:has(input[value="dark"])');
     await expect(page.locator('footer input[name="luz-theme"][value="dark"]')).toBeChecked();
-    await expect.poll(background).not.toBe(before);
+    await expect.poll(surface).not.toBe(before);
   });
 });
 

@@ -5,8 +5,8 @@
  * The markup, the words in each language and the catalogs are in tests/site-header.test.js.
  *
  * Above 768px, one row: the logo (a link to the home, named "LUZ", no visible text; the version is
- * the footer's, not the header's), and at the end Documentation, GitHub, Search and, on
- * the home page, Language. Those four are as tall as the header, have no underline, and the current
+ * the footer's, not the header's), and at the end Documentation, GitHub, Search and Language (the home and the docs have
+ * the switch). Those four are as tall as the header, have no underline, and the current
  * one (the docs page, the open search dialog, the open language list) has a 2px bar at the bottom in
  * a darker colour. The colour mode is not in the header: with scripting on, the footer's cycle
  * button is fixed at the bottom right of the window. At 768px and below the row is the logo, Search
@@ -99,7 +99,7 @@ function controls(page, javaScript) {
     header,
     brand: header.locator('a[href="/"], a[href="/es/"]').first(),
     version: header.locator('a[href$="/CHANGELOG.md"]'),
-    docs: header.locator('a[href="/docs/"]'),
+    docs: header.locator('.site-header__nav a[href="/docs/"]'),
     github: header.locator(`a[href="${GITHUB}"]`),
     search: header.locator(javaScript ? '[data-luz-search-open]' : '[data-luz-search-fallback]'),
     lang: header.locator('luz-lang-switch button'),
@@ -147,11 +147,11 @@ test.describe('the header at the top of a wide screen', () => {
   }
 
   for (const path of [HOME, DOCS]) {
-    test(`${path}: ends with Documentation, GitHub, Search${path === HOME ? ' and Language' : ''}, each with an icon and a word`, async ({ page, javaScriptEnabled }) => {
+    test(`${path}: ends with Documentation, GitHub, Search and Language, each with an icon and a word`, async ({ page, javaScriptEnabled }) => {
       await open(page, path, javaScriptEnabled);
       const c = controls(page, javaScriptEnabled);
-      const row = [c.docs, c.github, c.search, ...(path === HOME ? [c.lang] : [])];
-      if (path !== HOME) await expect(page.locator('#site-header luz-lang-switch')).toHaveCount(0);
+      const row = [c.docs, c.github, c.search, c.lang];
+      await expect(page.locator('#site-header luz-lang-switch'), 'the language switch is on the home and on the docs').toHaveCount(1);
       const boxes = [];
       for (const control of row) {
         await expect(control).toBeVisible();
@@ -188,7 +188,7 @@ test.describe('the header at the top of a wide screen', () => {
       // One row of 44px controls with a small padding above and below, and a 1px rule: the same on every page
       const expected = (await px(page, 'var(--luz-control-lg)')) + 2 * (await px(page, 'var(--luz-space-2xs)')) + 1;
       expect(header.height, 'the height of the header').toBeCloseTo(expected, 0);
-      for (const control of [c.docs, c.github, c.search, ...(path === HOME ? [c.lang] : [])]) {
+      for (const control of [c.docs, c.github, c.search, c.lang]) {
         expect(await style(control, 'textDecorationLine'), 'no underline').toBe('none');
         const b = await box(control);
         expect(header.height - 1 - b.height, 'as tall as the header (less its rule)').toBeLessThanOrEqual(1);
