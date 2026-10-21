@@ -6,7 +6,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  // The hosted runner has 4 cores: three workers leave one for the dev server (one worker took 2 h 20 min)
+  workers: process.env.CI ? 3 : undefined,
   // Terminal: one line per test; the HTML report is written but never opened or served.
   reporter: [[process.env.CI ? 'github' : 'line'], ['html', { open: 'never' }]],
   expect: {
