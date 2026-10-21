@@ -22,7 +22,6 @@
     "docs:build": "node scripts/build-docs.js",
     "luzcheck:build": "node scripts/build-check.js",
     "placeholders:build": "node scripts/build-placeholders.js",
-    "home-shots:build": "node scripts/build-home-shots.js",
     "lint:css": "stylelint \"packages/**/*.css\" \"apps/**/*.css\"",
     "lint:js": "eslint \"packages/**/*.js\" \"apps/**/*.js\" \"scripts/**/*.js\" \"tests/**/*.js\" \"*.config.js\"",
     "tokens:build": "node scripts/build-tokens.js",
