@@ -29,7 +29,9 @@ const pages = site.pages
 /** Measure a container in both directions inside the page. */
 function measure(container) {
   const keep = (el) =>
-    !el.closest('pre, code, svg, canvas, [dir="ltr"], [aria-hidden="true"], [hidden], template') &&
+    !el.closest('pre, code, svg, canvas, [aria-hidden="true"], [hidden], template') &&
+    // a nested dir="ltr" inside the specimen is left to right on purpose; the one on <html> is not
+    !(el.closest('[dir="ltr"]') && container.contains(el.closest('[dir="ltr"]'))) &&
     getComputedStyle(el).display !== 'none' &&
     getComputedStyle(el).display !== 'contents' &&
     (el.matches('input, select, textarea, button, a, th, td, li, label, summary, img, progress, meter, output') ||

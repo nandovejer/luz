@@ -160,15 +160,15 @@ describe("the F3 changesets carry the old -> new migration table", () => {
 
 /* ---- The home page's "next" lists ---------------------------------------------- */
 
-describe("the home page's `adopt.next.*` strings, in en, es and ar", () => {
+describe("the home page's `inside.kind.*` strings (the kinds of site of the fourth level), in en, es and ar", () => {
   const catalogs = Object.fromEntries(["en", "es", "ar"].map((lang) => [lang, JSON.parse(read(`apps/landing/i18n/${lang}.json`))]));
-  const next = (lang) => Object.entries(catalogs[lang]).filter(([key]) => key.startsWith("adopt.next."));
+  const next = (lang) => Object.entries(catalogs[lang]).filter(([key]) => key.startsWith("inside.kind."));
 
   it("have the same keys in the three catalogs", () => {
     const keys = (lang) => next(lang).map(([key]) => key).sort();
     expect(keys("es")).toEqual(keys("en"));
     expect(keys("ar")).toEqual(keys("en"));
-    expect(keys("en")).toEqual(expect.arrayContaining(["adopt.next.app", "adopt.next.cms", "adopt.next.landing"]));
+    expect(keys("en")).toEqual(expect.arrayContaining(["landing", "cms", "app", "docs"].flatMap((kind) => [`inside.kind.${kind}.title`, `inside.kind.${kind}.text`])));
   });
 
   it("do not sell a feature grid: it is a template on core's split grid, not a landing component", () => {

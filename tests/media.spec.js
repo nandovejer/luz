@@ -76,6 +76,8 @@ test.describe('forced-colors: the color mode switcher without JavaScript', () =>
   test('/: the checked mode stays visible', async ({ page, browserName }) => {
     test.skip(browserName === 'webkit', 'WebKit does not emulate forced-colors');
     await page.goto('/');
+    // The home has no Auto radio: Auto is the absence of a choice, so none is checked until the reader picks one
+    await page.locator('footer .luz-mode-btn[data-theme="dark"]').click();
     const styles = await page.locator('footer .luz-mode-btn').evaluateAll((labels) =>
       labels.map((el) => ({
         checked: el.querySelector('input').checked,
@@ -86,6 +88,7 @@ test.describe('forced-colors: the color mode switcher without JavaScript', () =>
     );
     expect(styles.every((s) => s.visible)).toBe(true);
     const [checked] = styles.filter((s) => s.checked);
+    expect(checked, 'the picked mode is checked').toBeDefined();
     const others = styles.filter((s) => !s.checked);
     // The checked option has a system highlight and a thicker border
     for (const other of others) {

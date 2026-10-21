@@ -92,11 +92,10 @@ test.describe('LUZ Design System UI Smoke Tests', () => {
         isOpen = await sidebar.evaluate(el => el.matches(':popover-open'));
         expect(isOpen).toBe(true);
         
-        // The open drawer sits in the top layer over the toggle: light dismiss
-        // (a click on the backdrop) closes it, as does Escape
-        await page.mouse.click(460, 400);
+        // The open panel sits under the header, so the toggle stays reachable: the same button closes it
+        await toggleBtn.click();
         await page.waitForTimeout(100);
-        
+
         isOpen = await sidebar.evaluate(el => el.matches(':popover-open'));
         expect(isOpen).toBe(false);
       }

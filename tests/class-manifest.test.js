@@ -813,8 +813,15 @@ describe("the seven built packages", () => {
   });
 
   it("core: a setting is root scope, in luz.settings", () => {
-    const font = manifests.core.properties.find((p) => p.name === "--luz-font-body");
-    expect(font).toMatchObject({ scope: "root", layer: "luz.settings" });
+    const zIndex = manifests.core.properties.find((p) => p.name === "--luz-z-overlay");
+    expect(zIndex).toMatchObject({ scope: "root", layer: "luz.settings" });
+  });
+
+  it("tokens: the typography roles, motion and breakpoints are root scope, in luz.tokens, and core's manifest no longer has them", () => {
+    for (const name of ["--luz-font-body", "--luz-font-heading", "--luz-text-body", "--luz-duration-base", "--luz-easing-standard", "--luz-mq-md"]) {
+      expect(manifests.tokens.properties.find((p) => p.name === name), name).toMatchObject({ scope: "root", layer: "luz.tokens" });
+      expect(manifests.core.properties.find((p) => p.name === name), `${name} in core`).toBeUndefined();
+    }
   });
 
   it("landing: a core object it sits beside is known, not defined, and its own classes are patterns", () => {

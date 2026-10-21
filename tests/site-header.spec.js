@@ -4,9 +4,9 @@
  * apps/site/header.css, apps/site/header.js), as a browser lays it out and as a keyboard drives it.
  * The markup, the words in each language and the catalogs are in tests/site-header.test.js.
  *
- * Above 768px, one row: the logo (a link to the home, named "LUZ", no visible text), the version
- * ("v<version> beta", a link to the changelog), and at the end Documentation, GitHub, Search and, on
- * the home page, Language. Those four are as tall as the header, have no underline, and the current
+ * Above 768px, one row: the logo (a link to the home, named "LUZ", no visible text; the version is
+ * the footer's, not the header's), and at the end Documentation, GitHub, Search and Language (the home and the docs have
+ * the switch). Those four are as tall as the header, have no underline, and the current
  * one (the docs page, the open search dialog, the open language list) has a 2px bar at the bottom in
  * a darker colour. The colour mode is not in the header: with scripting on, the footer's cycle
  * button is fixed at the bottom right of the window. At 768px and below the row is the logo, Search
@@ -17,12 +17,10 @@
  * playwright.config.js): what needs a script skips itself where scripting is off, what must hold
  * without one skips itself where it is on.
  */
-import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
 
-const { version } = JSON.parse(readFileSync(new URL('../packages/core/package.json', import.meta.url), 'utf-8'));
 const GITHUB = 'https://github.com/nandovejer/luz';
 const HOME = '/';
 const DOCS = '/docs/';
@@ -101,7 +99,7 @@ function controls(page, javaScript) {
     header,
     brand: header.locator('a[href="/"], a[href="/es/"]').first(),
     version: header.locator('a[href$="/CHANGELOG.md"]'),
-    docs: header.locator('a[href="/docs/"]'),
+    docs: header.locator('.site-header__nav a[href="/docs/"]'),
     github: header.locator(`a[href="${GITHUB}"]`),
     search: header.locator(javaScript ? '[data-luz-search-open]' : '[data-luz-search-fallback]'),
     lang: header.locator('luz-lang-switch button'),
@@ -138,38 +136,30 @@ test.describe('the header at the top of a wide screen', () => {
       await expect(header.getByRole('link', { name: 'Home' })).toHaveCount(0);
     });
 
-    test(`${path}: the version is a link to the changelog, "v${version} beta", beside the logo, and not a tag`, async ({ page, javaScriptEnabled }) => {
+    test(`${path}: the header shows no version and no tag: the changelog is a link of the footer`, async ({ page, javaScriptEnabled }) => {
       await open(page, path, javaScriptEnabled);
-      const { brand, version: link, header } = controls(page, javaScriptEnabled);
-      await expect(link).toHaveCount(1);
-      expect(await visibleText(link)).toBe(`v${version} beta`);
+      const { version: link, header } = controls(page, javaScriptEnabled);
+      await expect(link).toHaveCount(0);
+      expect(await visibleText(header)).not.toMatch(/\bv\d+\.\d+\.\d+/);
       await expect(header.locator('.luz-tag')).toHaveCount(0);
-      const [b, v] = [await box(brand), await box(link)];
-      expect(v.left, 'after the logo').toBeGreaterThanOrEqual(b.right - 1);
-      expect(v.left - b.right, 'close to the logo').toBeLessThanOrEqual(await px(page, 'var(--luz-space-lg)'));
-      expect(Math.abs(v.top + v.height / 2 - (b.top + b.height / 2)), 'on the logo\'s line').toBeLessThanOrEqual(2);
-      if (path === HOME) {
-        const footer = await page.locator('footer a[href$="/CHANGELOG.md"]').getAttribute('href');
-        await expect(link).toHaveAttribute('href', footer ?? '');
-      }
+      if (path === HOME) await expect(page.locator('footer a[href$="/CHANGELOG.md"]').first()).toBeVisible();
     });
   }
 
   for (const path of [HOME, DOCS]) {
-    test(`${path}: ends with Documentation, GitHub, Search${path === HOME ? ' and Language' : ''}, each with an icon and a word`, async ({ page, javaScriptEnabled }) => {
+    test(`${path}: ends with Documentation, GitHub, Search and Language, each with an icon and a word`, async ({ page, javaScriptEnabled }) => {
       await open(page, path, javaScriptEnabled);
       const c = controls(page, javaScriptEnabled);
-      await expect(c.version, 'the version link').toHaveCount(1);
-      const row = [c.docs, c.github, c.search, ...(path === HOME ? [c.lang] : [])];
-      if (path !== HOME) await expect(page.locator('#site-header luz-lang-switch')).toHaveCount(0);
+      const row = [c.docs, c.github, c.search, c.lang];
+      await expect(page.locator('#site-header luz-lang-switch'), 'the language switch is on the home and on the docs').toHaveCount(1);
       const boxes = [];
       for (const control of row) {
         await expect(control).toBeVisible();
         boxes.push(await box(control));
       }
       for (let i = 1; i < boxes.length; i++) expect(boxes[i].left, `control ${i} after control ${i - 1}`).toBeGreaterThanOrEqual(boxes[i - 1].right - 1);
-      // At the end of the row: after the version
-      expect(boxes[0].left, 'after the version').toBeGreaterThan((await box(c.version)).right);
+      // At the end of the row: after the logo
+      expect(boxes[0].left, 'after the logo').toBeGreaterThan((await box(c.brand)).right);
       // One line: the same vertical centre
       const middles = boxes.map((b) => b.top + b.height / 2);
       expect(Math.max(...middles) - Math.min(...middles), 'one row').toBeLessThanOrEqual(2);
@@ -198,7 +188,7 @@ test.describe('the header at the top of a wide screen', () => {
       // One row of 44px controls with a small padding above and below, and a 1px rule: the same on every page
       const expected = (await px(page, 'var(--luz-control-lg)')) + 2 * (await px(page, 'var(--luz-space-2xs)')) + 1;
       expect(header.height, 'the height of the header').toBeCloseTo(expected, 0);
-      for (const control of [c.docs, c.github, c.search, ...(path === HOME ? [c.lang] : [])]) {
+      for (const control of [c.docs, c.github, c.search, c.lang]) {
         expect(await style(control, 'textDecorationLine'), 'no underline').toBe('none');
         const b = await box(control);
         expect(header.height - 1 - b.height, 'as tall as the header (less its rule)').toBeLessThanOrEqual(1);
@@ -450,17 +440,13 @@ test.describe('the header on a phone', () => {
     }
   }
 
-  test('the version shows from 400px and is hidden below', async ({ page, javaScriptEnabled }) => {
-    await page.setViewportSize({ width: 399, height: 700 });
+  test('the header has no version at any width', async ({ page, javaScriptEnabled }) => {
     await open(page, DOCS, javaScriptEnabled);
     const { version: link } = controls(page, javaScriptEnabled);
-    await expect(link, 'the changelog link').toHaveCount(1);
-    expect(await visibleText(link), 'hidden at 399px').toBe('');
-    await expect(link).toBeHidden();
-    await page.setViewportSize({ width: 400, height: 700 });
-    expect(await visibleText(link), 'shown at 400px').toBe(`v${version} beta`);
-    await page.setViewportSize({ width: 768, height: 700 });
-    expect(await visibleText(link), 'shown at 768px').toBe(`v${version} beta`);
+    for (const width of [399, 400, 768, 1280]) {
+      await page.setViewportSize({ width, height: 700 });
+      await expect(link, `${width}px`).toHaveCount(0);
+    }
   });
 
   for (const path of [HOME, COMPONENT]) {
