@@ -6,7 +6,7 @@ Two knobs size the whole scale. Set them on `:root`, in rem, in CSS of your own;
 
 ### Font roles
 
-These four ship with core, not with tokens.
+The first three ship with tokens, with the switch to the sans on an element marked `lang="ar"`; `--luz-text-control` ships with core.
 
 ### Type scale and minimum sizes
 

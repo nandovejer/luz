@@ -34,6 +34,8 @@ const TYPES = {
   fontFamily: "fontFamily",
   shadow: "shadow",
   number: "number",
+  duration: "duration",
+  cubicBezier: "cubicBezier",
 };
 
 /** `--luz-surface-page` → ["surface", "page"]; `--luz-scrim` → ["scrim"]. */
@@ -106,7 +108,23 @@ export function number(css) {
   return n;
 }
 
-const VALUE = { color, dimension, fontFamily, shadow, number };
+/** "0.2s" → { value: 0.2, unit: "s" } (DTCG duration: ms or s). */
+export function duration(css) {
+  const m = /^(-?[\d.]+)(ms|s)$/.exec(css);
+  if (!m) throw new Error(`tokens-dtcg: unsupported duration "${css}"`);
+  return { value: Number(m[1]), unit: m[2] };
+}
+
+/** "cubic-bezier(0.3, 0, 0.1, 1)" → [0.3, 0, 0.1, 1]; "linear" → [0, 0, 1, 1] (DTCG cubicBezier). */
+export function cubicBezier(css) {
+  if (css === "linear") return [0, 0, 1, 1];
+  const m = /^cubic-bezier\(([^)]*)\)$/.exec(css);
+  const points = m ? m[1].split(",").map((n) => Number(n.trim())) : [];
+  if (points.length !== 4 || !points.every(Number.isFinite)) throw new Error(`tokens-dtcg: unsupported cubic-bezier "${css}"`);
+  return points;
+}
+
+const VALUE = { color, dimension, fontFamily, shadow, number, duration, cubicBezier };
 
 /** tokens.json group → the CSS custom property prefix build-tokens.js uses. */
 function primitiveEntries(tokens) {
@@ -114,7 +132,7 @@ function primitiveEntries(tokens) {
   for (const [family, shades] of Object.entries(tokens.color)) {
     for (const [shade, token] of Object.entries(shades)) out.push([`--luz-${family}-${shade}`, token]);
   }
-  for (const [group, prefix] of [["spacing", "space-"], ["control", "control-"], ["typography", ""], ["radius", "radius-"], ["shadow", "shadow-"]]) {
+  for (const [group, prefix] of [["spacing", "space-"], ["control", "control-"], ["typography", ""], ["radius", "radius-"], ["shadow", "shadow-"], ["role", ""], ["breakpoint", "mq-"], ["duration", "duration-"], ["easing", "easing-"]]) {
     for (const [key, token] of Object.entries(tokens[group])) out.push([`--luz-${prefix}${key}`, token]);
   }
   return out;
@@ -168,7 +186,10 @@ export function buildDtcg(tokens, semanticCss) {
   for (const [prop, token] of primitiveEntries(tokens)) {
     const $type = TYPES[token.type];
     if (!$type) throw new Error(`tokens-dtcg: no DTCG type for ${prop} (${token.type})`);
-    const out = { $type, $value: VALUE[$type](token.value) };
+    // A role that is another primitive (--luz-font-body: var(--luz-font-serif)) is an alias of it
+    const ref = /^var\((--luz-[\w-]+)\)$/.exec(token.from ?? "")?.[1];
+    const alias = $type === "fontFamily" && primitiveNames.has(ref) ? `{primitives.${pathOf(ref).join(".")}}` : null;
+    const out = { $type, $value: alias ?? VALUE[$type](token.value) };
     if (token.description) out.$description = token.description;
     // A derived size keeps its resolved $value; the formula is for tools that can show it
     if (token.from) out.$extensions = { "com.luz-ds": { from: token.from } };

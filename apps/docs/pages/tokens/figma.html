@@ -35,12 +35,12 @@ files: dist/luz-tokens.dtcg.json; dist/luz-tokens.resolver.json
                 <tr><th scope="col">Group in the file</th><th scope="col">Meant as the collection</th><th scope="col">Modes</th><th scope="col">Comes from</th></tr>
               </thead>
               <tbody>
-                <tr><td data-label="Group in the file"><div><code>primitives</code></div></td><td data-label="Meant as the collection"><div>LUZ primitives</div></td><td data-label="Modes"><div>One: Value</div></td><td data-label="Comes from"><div><code>tokens.json</code>: colour scales, space, control sizes, type, radius, shadows</div></td></tr>
+                <tr><td data-label="Group in the file"><div><code>primitives</code></div></td><td data-label="Meant as the collection"><div>LUZ primitives</div></td><td data-label="Modes"><div>One: Value</div></td><td data-label="Comes from"><div><code>tokens.json</code>: colour scales, space, control sizes, type, radius, shadows, font roles, breakpoints, motion</div></td></tr>
                 <tr><td data-label="Group in the file"><div><code>semantic</code></div></td><td data-label="Meant as the collection"><div>LUZ semantic</div></td><td data-label="Modes"><div>Light, Dark, High contrast</div></td><td data-label="Comes from"><div><code>src/semantic.css</code>: the <a href="/docs/tokens/color/">55 colours</a> that change with the mode</div></td></tr>
               </tbody>
             </table>
           </div>
-          <p>A semantic token points at a primitive whenever the CSS does: <code>--luz-divider</code> is <code>var(--luz-gray-20)</code> in light mode, so <code>divider</code> is an alias of <code>{primitives.gray.20}</code>. Motion, layers and breakpoints ship with <code>@luz-ds/core</code>, so they are not in the file.</p>
+          <p>A semantic token points at a primitive whenever the CSS does: <code>--luz-divider</code> is <code>var(--luz-gray-20)</code> in light mode, so <code>divider</code> is an alias of <code>{primitives.gray.20}</code>. A font role is an alias of its face: <code>font/body</code> is <code>{primitives.font.serif}</code>. Durations are DTCG durations and easings are cubic Béziers. Layers (z-index) and layout widths ship with <code>@luz-ds/core</code>, so they are not in the file.</p>
 
           <h2 id="names">One rule for every name</h2>
           <p>Remove <code>--luz-</code>. The first word becomes the group and the rest becomes the name, joined by a slash.</p>

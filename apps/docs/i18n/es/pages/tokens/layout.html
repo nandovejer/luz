@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Maquetación y puntos de ruptura
-description: El ancho del contenido y dónde cambia la maquetación. Incluido en @luz-ds/core.
-source: ef1c8665bfef
+description: El ancho del contenido y dónde cambia la maquetación. Los anchos se incluyen en @luz-ds/core y los puntos de ruptura en @luz-ds/tokens.
+source: 51455fff4cb2
 reviewed: false
 -->
     <div class="docs-block" id="c-settings">
@@ -27,7 +27,7 @@ reviewed: false
               </ul>
             </div>
           </div>
-          <p class="docs-demo__note">Incluido en core, no en tokens.</p>
+          <p class="docs-demo__note">Los anchos se incluyen en core; los puntos de ruptura, en tokens.</p>
           <ul>
             <li>Los puntos de ruptura son valores de referencia: las consultas de medios no pueden leer propiedades personalizadas, así que escribe el número, por ejemplo, <code class="luz-code-inline">@media (max-width: 768px)</code>.</li>
             <li>Safari en un Mac con barras de desplazamiento siempre visibles no cuenta la barra en las consultas de medios basadas en el ancho (error 52653 de WebKit), así que se alcanza un punto de ruptura cuando la ventana mide hasta unos 15 px más que su valor.</li>

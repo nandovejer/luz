@@ -1,10 +1,10 @@
 # Motion
 
-The durations and easings of every transition, which drop to zero when the reader asks for reduced motion. Ships with @luz-ds/core.
+The durations and easings of every transition, which drop to zero when the reader asks for reduced motion. Ships with @luz-ds/tokens.
 
 Take every duration from a token. Under `prefers-reduced-motion: reduce` all the durations become `0s`, so motion stops everywhere with no extra CSS.
 
-Ships with core, not with tokens.
+Ships with tokens, with the switch to `0s` under reduced motion, so a page with tokens alone loses its motion too.
 
 A transition with motion tokens
 ```css

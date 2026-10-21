@@ -130,12 +130,40 @@ describe.skipIf(!built)("DTCG export (packages/tokens/dist/luz-tokens.dtcg.json)
     for (const [prop, value] of primitives) {
       const token = at(json.primitives, pathOf(prop));
       expect(token, prop).toBeTruthy();
+      // A role that is another primitive (--luz-font-body: var(--luz-font-serif)) is an alias of it:
+      // the token says {primitives.font.serif}, and that one carries the face
+      const target = /^var\((--luz-[\w-]+)\)$/.exec(value)?.[1];
+      if (token.$type === "fontFamily" && target) {
+        expect(token.$value, prop).toBe(`{primitives.${pathOf(target).join(".")}}`);
+        expect(dtcgToCss(at(json.primitives, pathOf(target)).$value), prop).toBe(canon(primitives.get(target)));
+        continue;
+      }
+      // A curve is four numbers in DTCG; the keyword linear is the straight line
+      if (token.$type === "cubicBezier") {
+        const points = value === "linear" ? [0, 0, 1, 1] : /^cubic-bezier\(([^)]*)\)$/.exec(value)[1].split(",").map(Number);
+        expect(token.$value, prop).toEqual(points);
+        continue;
+      }
       if (/\b(?:var|calc|max|min|round)\(/.test(value)) {
         expect(evalLength(dtcgToCss(token.$value)), prop).toBeCloseTo(evalLength(`var(${prop})`, scope), 6);
         continue;
       }
       expect(dtcgToCss(token.$value), prop).toBe(canon(value));
     }
+  });
+
+  it("has the typography roles, breakpoints, durations and easings, typed, in the primitives", () => {
+    const type = (prop) => at(json.primitives, pathOf(prop)).$type;
+    for (const prop of ["--luz-font-heading", "--luz-font-body"]) expect(type(prop), prop).toBe("fontFamily");
+    expect(type("--luz-text-body")).toBe("dimension");
+    for (const prop of primitives.keys()) {
+      if (prop.startsWith("--luz-mq-")) expect(type(prop), prop).toBe("dimension");
+      if (prop.startsWith("--luz-duration-")) expect(type(prop), prop).toBe("duration");
+      if (prop.startsWith("--luz-easing-")) expect(type(prop), prop).toBe("cubicBezier");
+    }
+    expect([...primitives.keys()].filter((p) => p.startsWith("--luz-mq-")), "breakpoints").toHaveLength(6);
+    expect([...primitives.keys()].filter((p) => p.startsWith("--luz-duration-")), "durations").toHaveLength(6);
+    expect([...primitives.keys()].filter((p) => p.startsWith("--luz-easing-")), "easings").toHaveLength(5);
   });
 
   it("has every semantic token in Light, Dark and High contrast, with the same resolved value", () => {

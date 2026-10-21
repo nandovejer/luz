@@ -143,6 +143,8 @@ Words are a component. A button with the wrong label is a broken button. These r
 | The home light controller JS, `apps/landing/light/light.js` (gzip of the source; the LUZ website only, not a package) | — | ≤ 7.25 kB | 7.25 kB | 7.5 kB |
 | The home light visual: `globe`, `apps/landing/light/globe.js` (loaded by `light.js` once the element is built; the code only) | — | ≤ 9.25 kB | 9.25 kB | 9.5 kB |
 | The home light data: `globe`, `apps/landing/light/globe-data.js` (the land, Natural Earth 1:110m countries: loaded by `globe.js` once the globe is on screen and the browser is idle) | — | ≤ 9.5 kB | 9.5 kB | 9.75 kB |
+| A home capture of "What's inside", AVIF, each (`apps/landing/assets/inside/`, written by `scripts/build-home-shots.js`, one per scene and mode, loaded only for the page's mode) | — | ≤ 36 kB | 36 kB | 40 kB |
+| A home capture of "What's inside", WebP, each (the fallback of the AVIF) | — | ≤ 36 kB | 36 kB | 40 kB |
 
 Docs pages are measured as the raw bytes of each built `docs/**/*.html`, without compression and without CSS or JS. A page that reaches the ceiling is split into two pages; the ceiling is never raised (red line 17).
 

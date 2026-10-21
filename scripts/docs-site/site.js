@@ -36,10 +36,11 @@
  * single pass, so text a substitution produced is never expanded again.
  */
 import { execFileSync } from "node:child_process";
-import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync } from "node:fs";
+import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync, statSync } from "node:fs";
+import { gzipSync } from "node:zlib";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { HtmlError, readHtml, tags } from "./html.js";
-import { SITE_KINDS } from "../luz-packages.js";
+import { PACKAGES, SITE_KINDS } from "../luz-packages.js";
 import { fillAiMarkers } from "./ai.js";
 import { renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
@@ -100,9 +101,19 @@ const PLACEHOLDERS = new Set([
   "notice", "contentattrs",
   // The version the packages share (packages/core/package.json): the CDN snippets and the footer of the home
   "version",
+  // The home's weights (budgets.json against packages/*/dist), a list written by the build
+  "weights",
+  // The home's layers of packages and their dependencies (packages/*/package.json)
+  "packages",
+  // The home's checks: the test files of tests/ by what they check
+  "checks",
+  // The weight of each of the home's levels of adoption (budgets.json against dist)
+  "weight1", "weight2", "weight3", "weight4",
+  // What each level of the home brings, as a list of names read from the packages
+  "list1", "list2", "list3",
 ]);
 /** Values inserted as HTML, not escaped. Only the generator produces them. */
-const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "endir", "notice", "contentattrs"]);
+const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "endir", "notice", "contentattrs", "weights", "packages", "checks", "list1", "list2", "list3"]);
 
 /** Where the home page's languages live, from the repository root. */
 export const I18N_DIR = "apps/landing/i18n";
@@ -1484,7 +1495,7 @@ function renderNotice(site, page) {
  * link and the alternates of the languages that translated it, and
  * {{langswitch}} the switcher, when the docs have more than one language.
  */
-function languageValues(site, locale, { home = false, siteUrl = "", page = null } = {}) {
+function languageValues(site, locale, { home = false, siteUrl = "", page = null, used = null } = {}) {
   const i18n = site.i18n;
   const translated = home && i18n && locale;
   const values = {
@@ -1496,6 +1507,11 @@ function languageValues(site, locale, { home = false, siteUrl = "", page = null 
     alternates: translated ? renderAlternates(i18n, locale, siteUrl) : "",
     langswitch: translated ? renderSwitcher(i18n, locale, lookup(locale, "lang.label", `${I18N_DIR}/${locale.code}.json`, null)) : "",
     langlinks: translated ? renderLangLinks(i18n, locale) : "",
+    weights: translated ? renderWeights(site, locale, used ?? site.usage?.used) : "",
+    packages: translated ? renderPackages(site, locale, used ?? site.usage?.used) : "",
+    checks: translated ? renderChecks(site, locale, used ?? site.usage?.used) : "",
+    ...(translated ? levelWeights(site, locale, used ?? site.usage?.used) : {}),
+    ...(translated ? levelLists(site, locale, used ?? site.usage?.used) : {}),
   };
   if (page && page.route !== NOT_FOUND_ROUTE) {
     values.alternates = renderDocsAlternates(site, page, siteUrl);
@@ -1505,6 +1521,316 @@ function languageValues(site, locale, { home = false, siteUrl = "", page = null 
   const version = sharedVersion(site.repoRoot);
   if (version) values.version = version;
   return values;
+}
+
+/**
+ * A row of the home's bar charts: a name, a figure and a bar under them, the
+ * bar's length the value against `max` (a native <meter>, hidden from the
+ * accessibility tree: the figure is the text). `kind` marks a row: "zero"
+ * for a count of none.
+ */
+function barRow(name, figure, value, max, kind = "") {
+  return [
+    `  <li class="landing-bar${kind ? ` landing-bar--${kind}` : ""}">`,
+    `    <span class="landing-bar__name">${escapeHtml(name)}</span>`,
+    `    <span class="landing-bar__figure"><strong>${escapeHtml(figure)}</strong></span>`,
+    `    <meter class="luz-meter landing-bar__meter" min="0" max="${max}" value="${value}" aria-hidden="true">${escapeHtml(figure)}</meter>`,
+    "  </li>",
+  ].join("\n");
+}
+
+/**
+ * What the home's "Light" card shows about weight, measured when the page is
+ * built and never typed: a bar per CSS library (PACKAGES) with the min+gzip
+ * size of everything it publishes (every `file` budget of budgets.json under
+ * its dist), the longest bar the heaviest package, and under them the sum.
+ * Fails when a file is missing: run `pnpm build` first.
+ */
+function renderWeights(site, locale, used) {
+  const file = `${I18N_DIR}/${locale.code}.json`;
+  const say = (key) => lookup(locale, key, file, used);
+  const budgets = JSON.parse(readFileSync(resolve(site.repoRoot, "budgets.json"), "utf-8")).budgets;
+  const number = new Intl.NumberFormat(`${locale.code}-u-nu-latn`, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const kb = (bytes) => `${number.format(bytes / 1024)} ${say("why.weight.unit")}`;
+  const packages = PACKAGES.map((name) => {
+    const size = budgets
+      .filter((b) => b.file?.startsWith(`packages/${name}/dist/`))
+      .reduce((sum, b) => {
+        const path = resolve(site.repoRoot, b.file);
+        if (!existsSync(path)) throw new Error(`${b.file} is missing: run pnpm build before the home page's weights can be read`);
+        return sum + gzipSync(readFileSync(path), { level: 9 }).length;
+      }, 0);
+    return { name, size };
+  });
+  const total = packages.reduce((sum, p) => sum + p.size, 0);
+  const max = Math.max(...packages.map((p) => p.size));
+  return [
+    '<figure class="landing-chart">',
+    `  <ul class="landing-bars" aria-label="${escapeHtml(say("why.weight.list"))}">`,
+    ...packages.map((p) => barRow(p.name, kb(p.size), p.size, max)),
+    "  </ul>",
+    `  <figcaption class="u-text-muted"><strong>${escapeHtml(say("why.weight.total").replace("{total}", kb(total)))}</strong> ${escapeHtml(say("why.weight.caption"))}</figcaption>`,
+    "</figure>",
+  ].join("\n");
+}
+
+/**
+ * The kinds of dependency the home's "Zero-dependency" card counts, each with
+ * the package names that would be one (lower-case, matched against the start
+ * of a dependency's name, or the whole name for a scoped one). The order is
+ * the order of the rows; the words come from the catalog (`why.zero.cat.*`).
+ */
+const ZERO_KINDS = [
+  ["css-frameworks", ["bootstrap", "tailwindcss", "bulma", "foundation-sites", "@picocss/", "open-props", "uikit", "materialize-css"]],
+  ["css-preprocessors", ["sass", "node-sass", "sass-embedded", "less", "stylus", "postcss"]],
+  ["js-frameworks", ["react", "react-dom", "vue", "svelte", "@angular/", "preact", "solid-js", "lit", "alpinejs", "htmx.org", "jquery"]],
+  ["highlighters", ["prismjs", "highlight.js", "shiki", "@shikijs/", "codemirror", "monaco-editor"]],
+  ["icon-libraries", ["@fortawesome/", "lucide", "@heroicons/", "@tabler/icons", "feather-icons", "@phosphor-icons/", "@mdi/"]],
+  ["utilities", ["lodash", "underscore", "moment", "dayjs", "date-fns", "luxon", "axios", "core-js", "@babel/runtime"]],
+  ["search-and-motion", ["fuse.js", "lunr", "flexsearch", "minisearch", "gsap", "framer-motion", "animejs", "motion"]],
+];
+
+/**
+ * What the home's "Zero-dependency" card shows, counted when the page is built
+ * and never typed: for each kind of dependency a page usually drags in (CSS
+ * frameworks, preprocessors, JS frameworks, highlighters, icon sets, utility
+ * libraries, search and motion libraries), how many the CSS libraries
+ * (PACKAGES) ask for at run time, in `dependencies` or in `peerDependencies`
+ * outside @luz-ds. Every count is read, so the card cannot say zero while a
+ * package.json says otherwise; and the build fails outright on any
+ * `dependencies` at all, so the claim and the code cannot drift apart.
+ */
+function renderPackages(site, locale, used) {
+  const file = `${I18N_DIR}/${locale.code}.json`;
+  const say = (key) => lookup(locale, key, file, used);
+  const number = new Intl.NumberFormat(`${locale.code}-u-nu-latn`);
+  const runtime = [];
+  const withDeps = [];
+  for (const name of PACKAGES) {
+    const manifest = JSON.parse(readFileSync(resolve(site.repoRoot, "packages", name, "package.json"), "utf-8"));
+    const deps = Object.keys(manifest.dependencies ?? {});
+    if (deps.length) withDeps.push(`@luz-ds/${name}`);
+    runtime.push(...deps, ...Object.keys(manifest.peerDependencies ?? {}).filter((peer) => !peer.startsWith("@luz-ds/")));
+  }
+  if (withDeps.length) throw new Error(`the home page says "zero dependencies", but ${withDeps.join(", ")} has dependencies in its package.json`);
+  const matches = (dep, names) => names.some((n) => (n.endsWith("/") ? dep.toLowerCase().startsWith(n) : dep.toLowerCase() === n));
+  const rows = ZERO_KINDS.map(([kind, names]) => ({ name: say(`why.zero.cat.${kind}`), count: runtime.filter((dep) => matches(dep, names)).length }));
+  const max = Math.max(1, ...rows.map((r) => r.count));
+  return [
+    '<figure class="landing-chart">',
+    `  <ul class="landing-bars" aria-label="${escapeHtml(say("why.zero.list"))}">`,
+    ...rows.map((r) => barRow(r.name, number.format(r.count), r.count, max, r.count ? "" : "zero")),
+    "  </ul>",
+    `  <figcaption class="u-text-muted"><strong>${escapeHtml(say("why.zero.total").replace("{n}", number.format(runtime.length)))}</strong> ${escapeHtml(say("why.zero.caption"))}</figcaption>`,
+    "</figure>",
+  ].join("\n");
+}
+
+/**
+ * What the home's "Usable" card shows, counted when the page is built and
+ * never typed: seven shares, each a measure of the repository as it is. The
+ * components are the pages of apps/docs/pages/components whose `files` is a
+ * stylesheet of components/ (not a `_` file); the tests are tests/*.spec.js
+ * and *.test.js; the colour pairs are what scripts/check-contrast.js
+ * measures (it fails the build when one does not meet its ratio, so the
+ * first share is whole or the page does not build). The words come from
+ * the catalog (`why.usable.m.*`).
+ */
+const contrastPairs = new Map();
+
+function renderChecks(site, locale, used) {
+  const file = `${I18N_DIR}/${locale.code}.json`;
+  const say = (key) => lookup(locale, key, file, used);
+  const number = new Intl.NumberFormat(`${locale.code}-u-nu-latn`);
+  const percent = new Intl.NumberFormat(`${locale.code}-u-nu-latn`, { style: "percent", maximumFractionDigits: 0 });
+  const root = site.repoRoot;
+  // The components, from their docs pages
+  const pagesDir = resolve(root, "apps/docs/pages/components");
+  const components = readdirSync(pagesDir)
+    .filter((name) => name.endsWith(".html"))
+    .map((name) => ({ route: `/docs/components/${name.slice(0, -5)}/`, source: readFileSync(resolve(pagesDir, name), "utf-8") }))
+    .filter((page) => /^files: components\/[a-z0-9-]+\.css$/m.test(page.source));
+  if (!components.length) throw new Error("apps/docs/pages/components has no component pages to count the home page's shares from");
+  // The pages the right-to-left test skips, from its own source
+  const rtlSpec = readFileSync(resolve(root, "tests/rtl.spec.js"), "utf-8");
+  const skipped = new Set([...(rtlSpec.match(/SKIP_PAGES = new Set\(\[([^\]]*)\]\)/)?.[1] ?? "").matchAll(/'([^']+)'/g)].map((m) => m[1]));
+  // The component stylesheets
+  const cssDir = resolve(root, "packages/core/src/components");
+  const stylesheets = readdirSync(cssDir)
+    .filter((name) => name.endsWith(".css") && name !== "index.css" && !name.startsWith("_"))
+    .map((name) => readFileSync(resolve(cssDir, name), "utf-8"));
+  // The tests
+  const testsDir = resolve(root, "tests");
+  const tests = readdirSync(testsDir)
+    .filter((name) => /\.(spec|test)\.js$/.test(name))
+    .map((name) => readFileSync(resolve(testsDir, name), "utf-8"));
+  // The colour pairs, measured by the script (once per build)
+  if (!contrastPairs.has(root)) {
+    const out = execFileSync(process.execPath, [resolve(root, "scripts/check-contrast.js")], { encoding: "utf-8" });
+    const pairs = Number(out.match(/(\d+) token pairs/)?.[1]);
+    if (!pairs) throw new Error("scripts/check-contrast.js did not say how many token pairs it measured");
+    contrastPairs.set(root, pairs);
+  }
+  const pairs = contrastPairs.get(root);
+  const share = (part, whole) => ({ part, whole, pct: Math.round((100 * part) / whole) });
+  const rows = [
+    ["contrast", share(pairs, pairs)],
+    ["rtl", share(components.filter((p) => p.source.includes("data-docs-specimen") && !skipped.has(p.route)).length, components.length)],
+    ["no-js", share(components.filter((p) => !/^module: /m.test(p.source)).length, components.length)],
+    ["focus", share(stylesheets.filter((css) => css.includes(":focus-visible")).length, stylesheets.length)],
+    ["forced", share(stylesheets.filter((css) => css.includes("forced-colors")).length, stylesheets.length)],
+    ["issues", share(components.filter((p) => p.source.includes("None known")).length, components.length)],
+    ["tests", share(tests.filter((src) => /javaScriptEnabled: false|chromium-nojs|nojs/.test(src)).length, tests.length)],
+  ];
+  const total = say("why.usable.total")
+    .replace("{components}", number.format(components.length))
+    .replace("{tests}", number.format(tests.length))
+    .replace("{pairs}", number.format(pairs));
+  return [
+    '<figure class="landing-chart">',
+    `  <ul class="landing-bars" aria-label="${escapeHtml(say("why.usable.list"))}">`,
+    ...rows.map(([kind, s]) => barRow(say(`why.usable.m.${kind}`), percent.format(s.pct / 100), s.pct, 100)),
+    "  </ul>",
+    `  <figcaption class="u-text-muted"><strong>${escapeHtml(total)}</strong> ${escapeHtml(say("why.usable.caption"))}</figcaption>`,
+    "</figure>",
+  ].join("\n");
+}
+
+/**
+ * The names each of the home's levels brings, read from the packages when
+ * the page is built and never typed, as {{list1}}…{{list3}}: tags under a
+ * heading with their count, each a link to where the documentation
+ * explains it. Level 1 (tokens): the groups of the custom properties
+ * luz-tokens.css defines, with their counts; level 2 (core): its components (the stylesheets of
+ * src/components, not `_` files) and its layout objects (the `.o-*` blocks
+ * of _objects.css); level 3 (site): its components (the same, in
+ * packages/site/src/components). The headings come from the catalog
+ * (`inside.list.*`).
+ */
+function levelLists(site, locale, used) {
+  const file = `${I18N_DIR}/${locale.code}.json`;
+  const say = (key) => lookup(locale, key, file, used);
+  const root = site.repoRoot;
+  const read = (path) => readFileSync(resolve(root, path), "utf-8");
+  const sheets = (dir) =>
+    readdirSync(resolve(root, dir))
+      .filter((name) => name.endsWith(".css") && name !== "index.css" && !name.startsWith("_"))
+      .map((name) => name.slice(0, -4));
+  const pages = "apps/docs/pages";
+  const ids = (path) => new Set([...read(`${pages}/${path}`).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+  // The token groups read the families of colour, the rows of the colour page and the scales
+  const tokenJson = JSON.parse(read("packages/tokens/tokens.json"));
+  const families = new Set(Object.keys(tokenJson.color));
+  const colorIds = ids("tokens/color.html");
+  const SCALES = [
+    [/^--luz-(space|control)-/, "spacing"],
+    [/^--luz-(font|type)-|^--luz-text-(xs|sm|base|md|lg|body|[0-9]*xl)$/, "typography"],
+    [/^--luz-radius-/, "radius"],
+    [/^--luz-shadow-/, "shadows"],
+    [/^--luz-(duration|easing)-/, "motion"],
+    [/^--luz-mq-/, "breakpoints"],
+  ];
+  // A component: the page whose front matter names its stylesheet
+  const pageOf = (dir, area) => {
+    const map = new Map();
+    for (const name of readdirSync(resolve(root, pages, dir)).filter((n) => n.endsWith(".html"))) {
+      for (const m of read(`${pages}/${dir}/${name}`).matchAll(/components\/([a-z0-9-]+)\.css/g)) {
+        if (!map.has(m[1])) map.set(m[1], `/docs/${area}/${name.slice(0, -5)}/`);
+      }
+    }
+    return map;
+  };
+  const coreHref = pageOf("components", "components");
+  const siteHref = pageOf("site", "site");
+  const layoutIds = ids("components/layout.html");
+  const objectHref = (name) => `/docs/components/layout/#${layoutIds.has(`objects-${name.slice(2)}`) ? `objects-${name.slice(2)}` : "objects-reference"}`;
+  const tokens = [...new Set([...read("packages/tokens/dist/luz-tokens.css").matchAll(/^\s*(--luz-[\w-]+):/gm)].map((m) => m[1]))];
+  const objects = [...new Set([...read("packages/core/src/objects/_objects.css").matchAll(/^\s*\.(o-[a-z]+)\b/gm)].map((m) => m[1]))];
+  // Masonry (landing.css): each name a tile whose height grows with the
+  // weight of what it ships (its stylesheet's bytes, or its share of a
+  // shared one), as --share, from 0 to 1 against the heaviest of its list
+  const shareOf = (weights) => (i) => (weights[i] / Math.max(...weights)).toFixed(3);
+  const list = (heading, names, href, weight) => {
+    const share = shareOf(names.map(weight));
+    return [
+      `<div class="landing-names" style="--n:${names.length}">`,
+      `  <h3 class="landing-names__title">${escapeHtml(say(heading))} <span class="landing-names__n">${names.length}</span></h3>`,
+      `  <ul class="landing-names__list landing-names__list--map" dir="ltr">${names.map((n, i) => `<li style="--share:${share(i)}"><a href="${escapeHtml(href(n))}">${escapeHtml(n)}</a></li>`).join("")}</ul>`,
+      "</div>",
+    ].join("\n");
+  };
+  // The weight of a stylesheet of a package: its bytes in dist (1 if it is not built)
+  const sheetBytes = (pkg) => (name) => {
+    const file = resolve(root, `packages/${pkg}/dist/components/${name}.min.css`);
+    return existsSync(file) ? statSync(file).size : 1;
+  };
+  // An object has no file of its own: its weight is how many rules of _objects.css name it
+  const objectsCss = read("packages/core/src/objects/_objects.css");
+  const objectWeight = (name) => (objectsCss.match(new RegExp(`\\.${name}(?![\\w-])`, "g")) ?? []).length || 1;
+  const component = (map, area) => (name) => map.get(name) ?? `/docs/${area}/`;
+  // The tokens by group, one tag each (its name and how many tokens it has),
+  // to the page of the documentation that explains the group: the primitive
+  // colours (a family of tokens.json), the semantic colours (a row of the
+  // colour page), then each scale. A token in no group is counted nowhere,
+  // so the build fails rather than drop it silently
+  const GROUPS = [
+    ["inside.list.primitives", "/docs/tokens/palette/", (n) => families.has(n.slice(2).split("-")[1])],
+    ["inside.list.semantic", "/docs/tokens/color/", (n) => colorIds.has(n.slice(2))],
+    ["inside.list.spacing", "/docs/tokens/spacing/", (n) => SCALES[0][0].test(n)],
+    ["inside.list.typography", "/docs/tokens/typography/", (n) => SCALES[1][0].test(n)],
+    ["inside.list.radius", "/docs/tokens/radius/", (n) => SCALES[2][0].test(n)],
+    ["inside.list.shadows", "/docs/tokens/shadows/", (n) => SCALES[3][0].test(n)],
+    ["inside.list.motion", "/docs/tokens/motion/", (n) => SCALES[4][0].test(n)],
+    ["inside.list.breakpoints", "/docs/tokens/layout/", (n) => SCALES[5][0].test(n)],
+  ];
+  const lost = tokens.filter((name) => !GROUPS.some(([, , test]) => test(name)));
+  if (lost.length) throw new Error(`the home page's list of tokens has no group for ${lost.join(", ")}: add one to GROUPS in scripts/docs-site/site.js`);
+  // Each group a tile of the masonry (landing.css), as tall as its count
+  // against the largest group's
+  const counts = GROUPS.map(([, , test]) => tokens.filter(test).length);
+  const share = shareOf(counts);
+  const tags = GROUPS.map(([key, href], i) => {
+    return `<li style="--share:${share(i)}"><a href="${href}">${escapeHtml(say(key))} <span class="landing-names__n">${counts[i]}</span></a></li>`;
+  });
+  return {
+    list1: [
+      `<div class="landing-names" style="--n:${GROUPS.length}">`,
+      `  <h3 class="landing-names__title">${escapeHtml(say("inside.list.tokens"))} <span class="landing-names__n">${tokens.length}</span></h3>`,
+      `  <ul class="landing-names__list landing-names__list--groups">${tags.join("")}</ul>`,
+      "</div>",
+    ].join("\n"),
+    list2: [list("inside.list.components", sheets("packages/core/src/components"), component(coreHref, "components"), sheetBytes("core")), list("inside.list.objects", objects, objectHref, objectWeight)].join("\n"),
+    list3: list("inside.list.site", sheets("packages/site/src/components"), component(siteHref, "site"), sheetBytes("site")),
+  };
+}
+
+/**
+ * The weights of the home's "Inside" levels, measured when the page is built
+ * and never typed: the min+gzip size of the budgeted files of each package
+ * in dist, summed level by level (tokens; + core; + site), and for the fourth
+ * level the third plus the heaviest package for one kind of site, said as
+ * "up to". Returned as {{weight1}}…{{weight4}}, in the language's number
+ * format. Fails when a file is missing: run `pnpm build`.
+ */
+function levelWeights(site, locale, used) {
+  const file = `${I18N_DIR}/${locale.code}.json`;
+  const say = (key) => lookup(locale, key, file, used);
+  const budgets = JSON.parse(readFileSync(resolve(site.repoRoot, "budgets.json"), "utf-8")).budgets;
+  const number = new Intl.NumberFormat(`${locale.code}-u-nu-latn`, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const kb = (bytes) => `${number.format(bytes / 1024)} ${say("why.weight.unit")}`;
+  const weigh = (name) =>
+    budgets
+      .filter((b) => b.file?.startsWith(`packages/${name}/dist/`))
+      .reduce((sum, b) => {
+        const path = resolve(site.repoRoot, b.file);
+        if (!existsSync(path)) throw new Error(`${b.file} is missing: run pnpm build before the home page's levels can be read`);
+        return sum + gzipSync(readFileSync(path), { level: 9 }).length;
+      }, 0);
+  const one = weigh("tokens");
+  const two = one + weigh("core");
+  const three = two + weigh("site");
+  const four = three + Math.max(...SITE_KINDS.map(weigh));
+  return { weight1: kb(one), weight2: kb(two), weight3: kb(three), weight4: say("inside.upto").replace("{total}", kb(four)) };
 }
 
 /**
@@ -1576,7 +1902,7 @@ export function renderDocument(html, file, route, site, options = {}) {
     placeholders: true,
     locale,
     used: options.used,
-    values: languageValues(site, locale, { home: true, siteUrl: options.siteUrl }),
+    values: languageValues(site, locale, { home: true, siteUrl: options.siteUrl, used: options.used }),
   });
   if (!locale || !site.i18n || locale === site.i18n.default) return out;
   // A language that has docs links to them (apps/docs/i18n/<code>/); one that has not, to the English ones, and says so

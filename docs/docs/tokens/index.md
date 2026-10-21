@@ -6,7 +6,7 @@ CSS custom properties for every colour, space, size and type value. Use the sema
 
 - **Primitives** hold raw values: `--luz-blue-60`, `--luz-space-md`. They are the same in every mode.
 - **Semantic tokens** give a colour a job: `--luz-text-primary`, `--luz-surface-page`. Each mode points them at different primitives.
-- Space, size, radius, shadow and type scales are primitives that components use directly: they do not change with the mode.
+- Space, size, radius, shadow and type scales, font roles, breakpoints and motion are primitives that components use directly: they do not change with the mode.
 
 Where the tokens come from
 ```text

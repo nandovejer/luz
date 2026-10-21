@@ -147,8 +147,7 @@ describe("tokens/typography.html", () => {
   it("says --luz-text-body: its formula is the core setting's, and its default is the body size", () => {
     const about = aboutToken(html, "--luz-text-body");
     expect(about.length).toBeGreaterThan(0);
-    const settings = read("packages/core/src/settings/_settings.css").replace(/\/\*[\s\S]*?\*\//g, "");
-    const formula = squash(settings.match(/--luz-text-body\s*:\s*([^;]+);/)[1]);
+    const formula = squash(tokens.role["text-body"].from);
     const body = px(evalLength(formula, roundedScope));
     expect(about.some((text) => text.includes(formula) && text.includes(body)), `a line with "${formula}" and ${body}`).toBe(true);
   });
