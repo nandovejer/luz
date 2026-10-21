@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloques de texto – Elementos HTML – Documentación de LUZ</title>
+  <meta name="description" content="Contienen el texto de lectura de una página: párrafos, listas, citas y texto preformateado.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/html/text/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/html/text/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/html/text/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/html/text/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-Bjvys9Mm.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-DUrDBUjx.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-CdmvI6FB.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-Dp0HT6ep.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CWvVkJ1c.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <a class="site-header__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/html/text/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/html/text/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" aria-current="true" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-blockquote-title">&lt;blockquote&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-dd-title">&lt;dd&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-div-title">&lt;div&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-dl-title">&lt;dl&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-dt-title">&lt;dt&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-figcaption-title">&lt;figcaption&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-figure-title">&lt;figure&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-hr-title">&lt;hr&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-li-title">&lt;li&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-menu-title">&lt;menu&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-ol-title">&lt;ol&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-p-title">&lt;p&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-pre-title">&lt;pre&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#el-ul-title">&lt;ul&gt;</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#dl-patterns-title">Patrones de listas de descripciones</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#dl-metadata-title">Metadatos</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#dl-keyvalue-title">Pares de nombre y valor</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#dl-glossary-title">Glosario</a></li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/html/text/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/html/text.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Bloques%20de%20texto">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/documentation/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/html/">Elementos HTML</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Bloques de texto</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Elementos HTML</p>
+    <h1 class="docs-title">Bloques de texto</h1>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/html/text/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-block elements-section" id="cat-text" data-category="text">
+        <p class="elements-section__lead">Contienen el texto de lectura de una página: párrafos, listas, citas y texto preformateado.</p>
+        <div class="elements-grid">
+        <article class="elements-card" id="el-blockquote" data-element="blockquote" aria-labelledby="el-blockquote-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-blockquote-title"><code>&lt;blockquote&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/blockquote">MDN<span class="u-sr-only"> referencia del elemento blockquote</span></a>
+          </div>
+          <p class="elements-card__desc">Una cita extensa, separada en su propio bloque. Pon la URL de la fuente en el atributo cite e indica quién lo dijo fuera de la cita, por ejemplo, en un figcaption.</p>
+          <div lang="en" class="elements-stage">
+            <blockquote>
+              <p>The best interface is the one the browser already ships.</p>
+            </blockquote>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-blockquote" aria-label="Copy the blockquote markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="blockquote markup"><code id="code-blockquote">&lt;blockquote&gt;
+  &lt;p&gt;The best interface is the one the browser already ships.&lt;/p&gt;
+&lt;/blockquote&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-dd" data-element="dd" aria-labelledby="el-dd-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-dd-title"><code>&lt;dd&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dd">MDN<span class="u-sr-only"> referencia del elemento dd</span></a>
+          </div>
+          <p class="elements-card__desc">El valor o la explicación que sigue a dt en una lista de descripciones. Un término puede tener varios.</p>
+          <div lang="en" class="elements-stage">
+            <dl>
+              <dt>Token</dt>
+              <dd>A named design decision, stored as a variable.</dd>
+            </dl>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dd" aria-label="Copy the dd markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="dd markup"><code id="code-dd">&lt;dl&gt;
+  &lt;dt&gt;Token&lt;/dt&gt;
+  &lt;dd&gt;A named design decision, stored as a variable.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-div" data-element="div" aria-labelledby="el-div-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-div-title"><code>&lt;div&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/div">MDN<span class="u-sr-only"> referencia del elemento div</span></a>
+          </div>
+          <p class="elements-card__desc">Una caja sencilla sin significado propio. Úsala solo si no encaja ningún otro elemento y asígnale una clase que explique su propósito.</p>
+          <div lang="en" class="elements-stage">
+            <div class="o-stack">
+              <div>First block</div>
+              <div>Second block</div>
+            </div>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-div" aria-label="Copy the div markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="div markup"><code id="code-div">&lt;div class=&quot;o-stack&quot;&gt;
+  &lt;div&gt;First block&lt;/div&gt;
+  &lt;div&gt;Second block&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador. LUZ no añade estilos. El objeto de maquetación o-stack separa sus elementos hijos.</p>
+        </article>
+
+        <article class="elements-card" id="el-dl" data-element="dl" aria-labelledby="el-dl-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-dl-title"><code>&lt;dl&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dl">MDN<span class="u-sr-only"> referencia del elemento dl</span></a>
+          </div>
+          <p class="elements-card__desc">Una lista de nombres asociados a valores: un glosario, las especificaciones de un producto o los datos de un archivo. Cada dt nombra algo y el dd siguiente lo explica.</p>
+          <div lang="en" class="elements-stage">
+            <dl>
+              <dt>Tokens</dt>
+              <dd>Layer 1, standalone.</dd>
+              <dt>Core</dt>
+              <dd>Layer 2, requires tokens.</dd>
+            </dl>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dl" aria-label="Copy the dl markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="dl markup"><code id="code-dl">&lt;dl&gt;
+  &lt;dt&gt;Tokens&lt;/dt&gt;
+  &lt;dd&gt;Layer 1, standalone.&lt;/dd&gt;
+  &lt;dt&gt;Core&lt;/dt&gt;
+  &lt;dd&gt;Layer 2, requires tokens.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-dt" data-element="dt" aria-labelledby="el-dt-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-dt-title"><code>&lt;dt&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dt">MDN<span class="u-sr-only"> referencia del elemento dt</span></a>
+          </div>
+          <p class="elements-card__desc">La parte del nombre de un par nombre-valor en una lista de descripciones, como una palabra de un glosario. LUZ la muestra con un peso mayor.</p>
+          <div lang="en" class="elements-stage">
+            <dl>
+              <dt>Site</dt>
+              <dd>Layer 3, site patterns.</dd>
+            </dl>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dt" aria-label="Copy the dt markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="dt markup"><code id="code-dt">&lt;dl&gt;
+  &lt;dt&gt;Site&lt;/dt&gt;
+  &lt;dd&gt;Layer 3, site patterns.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-figcaption" data-element="figcaption" aria-labelledby="el-figcaption-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-figcaption-title"><code>&lt;figcaption&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figcaption">MDN<span class="u-sr-only"> referencia del elemento figcaption</span></a>
+          </div>
+          <p class="elements-card__desc">El pie de una figura. Colócalo como primer o último elemento hijo de figure.</p>
+          <div lang="en" class="elements-stage">
+            <figure>
+              <img src="../../../../assets/shapes-Cn-BvjOq.svg" alt="A blue square and a grey circle" width="240" height="120">
+              <figcaption>Two shapes, drawn in SVG.</figcaption>
+            </figure>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-figcaption" aria-label="Copy the figcaption markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="figcaption markup"><code id="code-figcaption">&lt;figure&gt;
+  &lt;img src=&quot;shapes.svg&quot; alt=&quot;A blue square and a grey circle&quot; width=&quot;240&quot; height=&quot;120&quot;&gt;
+  &lt;figcaption&gt;Two shapes, drawn in SVG.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-figure" data-element="figure" aria-labelledby="el-figure-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-figure-title"><code>&lt;figure&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figure">MDN<span class="u-sr-only"> referencia del elemento figure</span></a>
+          </div>
+          <p class="elements-card__desc">Envuelve una imagen, un diagrama, un bloque de código o una cita a la que hace referencia el texto, con un pie opcional. Se podría mover a otro lugar de la página sin romper el texto.</p>
+          <div lang="en" class="elements-stage">
+            <figure>
+              <img src="../../../../assets/shapes-Cn-BvjOq.svg" alt="A blue square and a grey circle" width="240" height="120">
+              <figcaption>Two shapes, drawn in SVG.</figcaption>
+            </figure>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-figure" aria-label="Copy the figure markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="figure markup"><code id="code-figure">&lt;figure&gt;
+  &lt;img src=&quot;shapes.svg&quot; alt=&quot;A blue square and a grey circle&quot; width=&quot;240&quot; height=&quot;120&quot;&gt;
+  &lt;figcaption&gt;Two shapes, drawn in SVG.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase. LUZ convierte una figure sin clase en una superficie con relleno. El componente .luz-figure añade más estilos.</p>
+        </article>
+
+        <article class="elements-card" id="el-hr" data-element="hr" aria-labelledby="el-hr-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-hr-title"><code>&lt;hr&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/hr">MDN<span class="u-sr-only"> referencia del elemento hr</span></a>
+          </div>
+          <p class="elements-card__desc">Marca un cambio de tema o de escena entre párrafos. Úsala con ese significado, no como línea decorativa: para una línea sencilla, usa un borde.</p>
+          <div lang="en" class="elements-stage">
+            <p>Above the break.</p>
+            <hr>
+            <p>Below the break.</p>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-hr" aria-label="Copy the hr markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="hr markup"><code id="code-hr">&lt;p&gt;Above the break.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Below the break.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-li" data-element="li" aria-labelledby="el-li-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-li-title"><code>&lt;li&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/li">MDN<span class="u-sr-only"> referencia del elemento li</span></a>
+          </div>
+          <p class="elements-card__desc">Un elemento de una lista. Su padre es ol, ul o menu.</p>
+          <div lang="en" class="elements-stage">
+            <ul>
+              <li>Tokens</li>
+              <li>Core</li>
+              <li>Site</li>
+            </ul>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-li" aria-label="Copy the li markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="li markup"><code id="code-li">&lt;ul&gt;
+  &lt;li&gt;Tokens&lt;/li&gt;
+  &lt;li&gt;Core&lt;/li&gt;
+  &lt;li&gt;Site&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">LUZ no añade estilos: se mantiene el aspecto del navegador.</p>
+        </article>
+
+        <article class="elements-card" id="el-menu" data-element="menu" aria-labelledby="el-menu-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-menu-title"><code>&lt;menu&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/menu">MDN<span class="u-sr-only"> referencia del elemento menu</span></a>
+          </div>
+          <p class="elements-card__desc">Una lista de acciones que se pueden realizar, como los botones de una barra de herramientas. Los navegadores la tratan como ul; LUZ la distribuye en una fila.</p>
+          <div lang="en" class="elements-stage">
+            <menu>
+              <li><button class="luz-btn luz-btn--outline luz-btn--sm" type="button">Cut</button></li>
+              <li><button class="luz-btn luz-btn--outline luz-btn--sm" type="button">Copy</button></li>
+              <li><button class="luz-btn luz-btn--outline luz-btn--sm" type="button">Paste</button></li>
+            </menu>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-menu" aria-label="Copy the menu markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="menu markup"><code id="code-menu">&lt;menu&gt;
+  &lt;li&gt;&lt;button class=&quot;luz-btn luz-btn--outline luz-btn--sm&quot; type=&quot;button&quot;&gt;Cut&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button class=&quot;luz-btn luz-btn--outline luz-btn--sm&quot; type=&quot;button&quot;&gt;Copy&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button class=&quot;luz-btn luz-btn--outline luz-btn--sm&quot; type=&quot;button&quot;&gt;Paste&lt;/button&gt;&lt;/li&gt;
+&lt;/menu&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-ol" data-element="ol" aria-labelledby="el-ol-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-ol-title"><code>&lt;ol&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol">MDN<span class="u-sr-only"> referencia del elemento ol</span></a>
+          </div>
+          <p class="elements-card__desc">Una lista cuyo orden importa, como una serie de pasos o una clasificación. Una lista sin clase recupera los marcadores dentro de su caja.</p>
+          <div lang="en" class="elements-stage">
+            <ol>
+              <li>Install the tokens.</li>
+              <li>Add the core.</li>
+              <li>Add the site package.</li>
+            </ol>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-ol" aria-label="Copy the ol markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="ol markup"><code id="code-ol">&lt;ol&gt;
+  &lt;li&gt;Install the tokens.&lt;/li&gt;
+  &lt;li&gt;Add the core.&lt;/li&gt;
+  &lt;li&gt;Add the site package.&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-p" data-element="p" aria-labelledby="el-p-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-p-title"><code>&lt;p&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/p">MDN<span class="u-sr-only"> referencia del elemento p</span></a>
+          </div>
+          <p class="elements-card__desc">Un párrafo de texto. LUZ pide al navegador que evite dejar una sola palabra aislada en la última línea.</p>
+          <div lang="en" class="elements-stage">
+            <p>LUZ is a vanilla design system: tokens, components and app patterns in plain CSS and ES modules, with no framework and no build step.</p>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-p" aria-label="Copy the p markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="p markup"><code id="code-p">&lt;p&gt;LUZ is a vanilla design system: tokens, components and app patterns in plain CSS and ES modules, with no framework and no build step.&lt;/p&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-pre" data-element="pre" aria-labelledby="el-pre-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-pre-title"><code>&lt;pre&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/pre">MDN<span class="u-sr-only"> referencia del elemento pre</span></a>
+          </div>
+          <p class="elements-card__desc">Texto que se muestra exactamente como se ha escrito, con todos los espacios y saltos de línea, en una fuente de ancho fijo. Para el código, añade la clase .luz-code-block y un elemento code.</p>
+          <div lang="en" class="elements-stage">
+            <pre>$ pnpm add @luz-ds/tokens
+            $ pnpm add @luz-ds/core</pre>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-pre" aria-label="Copy the pre markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="pre markup"><code id="code-pre">&lt;pre&gt;$ pnpm add @luz-ds/tokens
+$ pnpm add @luz-ds/core&lt;/pre&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+
+        <article class="elements-card" id="el-ul" data-element="ul" aria-labelledby="el-ul-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="el-ul-title"><code>&lt;ul&gt;</code></h2>
+            <a class="elements-card__mdn" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ul">MDN<span class="u-sr-only"> referencia del elemento ul</span></a>
+          </div>
+          <p class="elements-card__desc">Una lista cuyo orden no importa, como una lista de características o ingredientes. Una lista sin clase recupera los marcadores dentro de su caja.</p>
+          <div lang="en" class="elements-stage">
+            <ul>
+              <li>Tokens</li>
+              <li>Core</li>
+              <li>Site</li>
+            </ul>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-ul" aria-label="Copy the ul markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="ul markup"><code id="code-ul">&lt;ul&gt;
+  &lt;li&gt;Tokens&lt;/li&gt;
+  &lt;li&gt;Core&lt;/li&gt;
+  &lt;li&gt;Site&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Con estilos de <code>elements/text.css</code>, sin clase.</p>
+        </article>
+        </div>
+      
+    </div>
+
+    <div class="docs-block elements-section" id="dl-patterns">
+        <h2 class="docs-subhead" id="dl-patterns-title">Patrones de listas de descripciones</h2>
+        <p class="elements-section__lead">Tres formas de usar <code>&lt;dl&gt;</code> con los estilos anteriores. Puedes agrupar cada <code>&lt;dt&gt;</code> con su <code>&lt;dd&gt;</code> en un <code>&lt;div&gt;</code>: es HTML válido y LUZ mantiene el mismo espacio entre grupos.</p>
+        <div class="elements-grid">
+        <section class="elements-card" id="dl-metadata" aria-labelledby="dl-metadata-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="dl-metadata-title">Metadatos</h2>
+          </div>
+          <p class="elements-card__desc">Datos sobre algo, como un archivo o un pedido. Cada par tiene un nombre y un valor, y va en su propio div para que un script o una regla de estilo pueda seleccionarlo.</p>
+          <div lang="en" class="elements-stage">
+            <dl>
+              <div>
+                <dt>File</dt>
+                <dd>annual-report.pdf</dd>
+              </div>
+              <div>
+                <dt>Size</dt>
+                <dd>2.4 MB</dd>
+              </div>
+              <div>
+                <dt>Last changed</dt>
+                <dd><time datetime="2026-10-09">9 October 2026</time></dd>
+              </div>
+            </dl>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dl-metadata" aria-label="Copy the metadata markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="metadata markup"><code id="code-dl-metadata">&lt;dl&gt;
+  &lt;div&gt;
+    &lt;dt&gt;File&lt;/dt&gt;
+    &lt;dd&gt;annual-report.pdf&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Size&lt;/dt&gt;
+    &lt;dd&gt;2.4 MB&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Last changed&lt;/dt&gt;
+    &lt;dd&gt;&lt;time datetime=&quot;2026-10-09&quot;&gt;9 October 2026&lt;/time&gt;&lt;/dd&gt;
+  &lt;/div&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Usa <code>&lt;time&gt;</code> con <code>datetime</code> para las fechas. Los nombres son sustantivos breves y los valores, texto sin formato.</p>
+        </section>
+        <section class="elements-card" id="dl-keyvalue" aria-labelledby="dl-keyvalue-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="dl-keyvalue-title">Pares de nombre y valor</h2>
+          </div>
+          <p class="elements-card__desc">Un resumen de ajustes o detalles. Un nombre puede tener varios valores: repite dd, uno por cada valor.</p>
+          <div lang="en" class="elements-stage">
+            <dl>
+              <div>
+                <dt>Plan</dt>
+                <dd>Team</dd>
+              </div>
+              <div>
+                <dt>Members</dt>
+                <dd>Ana Ruiz</dd>
+                <dd>Luis Pérez</dd>
+              </div>
+              <div>
+                <dt>Billing email</dt>
+                <dd><a href="mailto:billing@example.com">billing@example.com</a></dd>
+              </div>
+            </dl>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dl-keyvalue" aria-label="Copy the key and value markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="key and value markup"><code id="code-dl-keyvalue">&lt;dl&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Plan&lt;/dt&gt;
+    &lt;dd&gt;Team&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Members&lt;/dt&gt;
+    &lt;dd&gt;Ana Ruiz&lt;/dd&gt;
+    &lt;dd&gt;Luis Pérez&lt;/dd&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Billing email&lt;/dt&gt;
+    &lt;dd&gt;&lt;a href=&quot;mailto:billing@example.com&quot;&gt;billing@example.com&lt;/a&gt;&lt;/dd&gt;
+  &lt;/div&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Si un nombre tiene varios valores, todos forman un mismo grupo: el lector de pantalla anuncia cada valor por turno.</p>
+        </section>
+        <section class="elements-card" id="dl-glossary" aria-labelledby="dl-glossary-title">
+          <div class="elements-card__head">
+            <h2 class="elements-card__title" id="dl-glossary-title">Glosario</h2>
+          </div>
+          <p class="elements-card__desc">Términos y sus significados. Cada término es un dt con un dfn dentro y tiene un id para que otras páginas puedan enlazar a su entrada.</p>
+          <div lang="en" class="elements-stage">
+            <dl>
+              <dt id="term-token"><dfn>Design token</dfn></dt>
+              <dd>A named value, such as a color or a space, that components read.</dd>
+              <dt id="term-mode"><dfn>Color mode</dfn></dt>
+              <dd>One set of color values for the whole page.</dd>
+              <dd>Light, dark and high contrast are the three LUZ ships.</dd>
+            </dl>
+          </div>
+          <div lang="en" class="elements-snippet">
+            <div class="elements-snippet__bar">
+              <span class="elements-eyebrow">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-dl-glossary" aria-label="Copy the glossary markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="glossary markup"><code id="code-dl-glossary">&lt;dl&gt;
+  &lt;dt id=&quot;term-token&quot;&gt;&lt;dfn&gt;Design token&lt;/dfn&gt;&lt;/dt&gt;
+  &lt;dd&gt;A named value, such as a color or a space, that components read.&lt;/dd&gt;
+  &lt;dt id=&quot;term-mode&quot;&gt;&lt;dfn&gt;Color mode&lt;/dfn&gt;&lt;/dt&gt;
+  &lt;dd&gt;One set of color values for the whole page.&lt;/dd&gt;
+  &lt;dd&gt;Light, dark and high contrast are the three LUZ ships.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+          </div>
+          <p class="elements-card__style">Enlaza a un término con <code>#term-token</code>. Un término puede tener más de un significado: repite dd.</p>
+        </section>
+        </div>
+        <h3 id="dl-notes" class="docs-subhead">Antes de usarlo</h3>
+        <ul>
+          <li>Mantén el valor predeterminado de <code>display</code> de <code>&lt;dl&gt;</code> y sus grupos. Definir <code>flex</code> o <code>grid</code> en elementos de lista ha hecho que algunas combinaciones de navegador y lector de pantalla pierdan la semántica de lista; consulta <a href="https://adrianroselli.com/2020/03/csun-2020-css-display-properties-versus-html-semantics.html">Propiedades display de CSS frente a la semántica de HTML</a>. Distribuye los pares en un contenedor que controles y prueba el resultado.</li>
+          <li>HTML solo permite un <code>&lt;div&gt;</code> dentro de <code>&lt;dl&gt;</code> cuando envuelve un nombre y sus valores. Una fuente que probó un div como contenedor simple detectó problemas con lectores de pantalla en algunos navegadores (<a href="https://s.codepen.io/stevef/debug/GxwaoP">Uso de div en dl</a>; no ofrece resultados). LUZ no ha probado el marcado agrupado con NVDA, JAWS, VoiceOver, TalkBack ni Orca.</li>
+          <li>Para una tabla con muchos valores por fila, usa una <a href="../../../../es/docs/components/table/">tabla</a>, no una lista de descripciones.</li>
+        </ul>
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/a-z/">Índice A–Z: A–L</a></li>
+      <li><a href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+      <li><a href="../../../../es/docs/components/">Componentes</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/html/forms/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Formularios</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/html/inline/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title" lang="en">Inline text</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/html/text.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Bloques%20de%20texto">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · v0.0.0 · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

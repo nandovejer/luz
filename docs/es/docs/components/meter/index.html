@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medidor – Componentes – Documentación de LUZ</title>
+  <meta name="description" content="Representa un valor dentro de un intervalo conocido con una barra junto a la cifra, mediante el elemento meter nativo.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/components/meter/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/components/meter/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/components/meter/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/components/meter/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-Bjvys9Mm.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-DUrDBUjx.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-CdmvI6FB.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-Dp0HT6ep.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CWvVkJ1c.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <a class="site-header__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/components/meter/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/components/meter/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#example">Ejemplo</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#known-issues">Problemas conocidos</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#code">Código</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#markup">Copiar el marcado</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#variants">Variantes y opciones</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#how">Cómo funciona</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#no-js">Sin JavaScript</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#keyboard">Teclado y ARIA</a></li>
+          </ul>
+        </li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#design">Diseño</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when">Cuándo usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when-not">Cuándo no usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#do-dont">Qué hacer y qué no</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#content">Cómo escribir el contenido</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#contrast">Contraste y foco</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#tokens">Tokens que usa</a></li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/components/meter/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/components/meter.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Medidor">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/components/">Componentes</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Medidor</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Componentes · Mostrar contenido</p>
+    <h1 class="docs-title">Medidor</h1>
+    <p class="luz-docs-page-head__lead">Representa un valor dentro de un intervalo conocido con una barra junto a la cifra, mediante el elemento meter nativo.</p>
+    <ul class="luz-docs-page-head__meta"><li><code class="docs-demo__file">components/meter.css</code></li><li>Sin JavaScript</li><li>Claro · Oscuro · Alto contraste</li><li>Con pruebas</li><li><a href="#known-issues">Sin problemas conocidos</a></li></ul>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/components/meter/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-component" id="c-meter">
+          <h2 id="example">Ejemplo</h2>
+          <p>Una tabla de rutas de reparto, cada una con un medidor que muestra sus paquetes de un total de 1.500.</p>
+          <div lang="en" class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-table-wrap" role="region" aria-label="Parcels per route" tabindex="0">
+              <table class="luz-table">
+                <caption>Parcels per route, this week</caption>
+                <thead>
+                  <tr><th scope="col">Route</th><th scope="col" class="luz-table__numeric">Parcels</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Route">Sevilla to Madrid</td><td class="luz-table__numeric" data-label="Parcels">1,204<meter class="luz-meter" value="1204" min="0" max="1500" aria-hidden="true">1,204 of 1,500</meter></td></tr>
+                  <tr><td data-label="Route">Cádiz to Málaga</td><td class="luz-table__numeric" data-label="Parcels">312<meter class="luz-meter" value="312" min="0" max="1500" aria-hidden="true">312 of 1,500</meter></td></tr>
+                  <tr><td data-label="Route">Huelva to Faro</td><td class="luz-table__numeric" data-label="Parcels">58<meter class="luz-meter" value="58" min="0" max="1500" aria-hidden="true">58 of 1,500</meter></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del medidor">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Una barra en la celda de su cifra, dentro de una tabla. La cifra es texto, así que la barra es una representación visual y se oculta a las tecnologías de asistencia:</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-meter-table" aria-label="Copy the meter in a table cell markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meter in a table cell markup"><code id="code-meter-table">&lt;td class=&quot;luz-table__numeric&quot; data-label=&quot;Parcels&quot;&gt;1,204&lt;meter class=&quot;luz-meter&quot; value=&quot;1204&quot; min=&quot;0&quot; max=&quot;1500&quot; aria-hidden=&quot;true&quot;&gt;1,204 of 1,500&lt;/meter&gt;&lt;/td&gt;</code></pre>
+            </div>
+            <p>Una barra independiente, con un nombre visible y la cifra dentro:</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-meter" aria-label="Copy the meter with a visible label markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meter with a visible label markup"><code id="code-meter">&lt;label for=&quot;storage&quot;&gt;Storage used, 6 of 10 GB&lt;/label&gt;
+&lt;meter class=&quot;luz-meter&quot; id=&quot;storage&quot; value=&quot;6&quot; min=&quot;0&quot; max=&quot;10&quot;&gt;6 of 10 GB&lt;/meter&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Una clase. La barra se configura con atributos nativos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Atributos del medidor" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Atributo"><div><code>value</code>, <code>min</code> y <code>max</code></div></td><td data-label="Efecto"><div>El valor y su intervalo: <code>min</code> es 0 y <code>max</code> es 1 si no los indicas. Los valores que quedan fuera del intervalo se ajustan a este</div></td></tr>
+                  <tr><td data-label="Atributo"><div><code>aria-hidden="true"</code></div></td><td data-label="Efecto"><div>Para una barra junto a su cifra: se lee la cifra, pero no la representación visual</div></td></tr>
+                  <tr><td data-label="Atributo"><div><code>low</code>, <code>high</code>, <code>optimum</code></div></td><td data-label="Efecto"><div>No los establezcas: solo cambiarían el color que elige el navegador, y todos los estados se muestran con el color de marca</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>El elemento nativo <code>&lt;meter&gt;</code>, con estilos de <code>components/meter.css</code>: una barra de 8 px, del ancho completo de su contenedor y de al menos 8rem de largo, con el color de marca como relleno y un borde de 1 px del color del borde del campo, para que se vea toda su longitud en cualquier superficie.</p>
+            <ul>
+              <li>El navegador dibuja el relleno como el valor <code>value</code> entre <code>min</code> y <code>max</code>.</li>
+              <li>Todos los estados usan el mismo color. La cifra y la escala indican qué significa el valor, no un color verde o rojo: los colores de estado conservan sus significados (alertas, etiquetas).</li>
+              <li>Usa el mismo <code>max</code> en todas las filas de una tabla; de lo contrario, las barras engañan.</li>
+              <li>En el modo de colores forzados, la barra conserva el borde y muestra el relleno con el color de resaltado del sistema.</li>
+              <li>El texto dentro del elemento es la alternativa para los navegadores que no lo dibujan. Incluye también la cifra.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>La barra muestra el valor del marcado. Para cambiarlo necesitas tu propio script, que establece <code>value</code>.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Un medidor no es interactivo y no recibe el foco.</p>
+            <ul>
+              <li>Junto a su cifra, en la misma celda o línea, oculta la barra con <code>aria-hidden="true"</code>: la cifra es el texto y la tabla es el gráfico accesible. Quien la consulta oye la cifra una sola vez.</li>
+              <li>Coloca la barra en la celda de su cifra, no en una columna propia: una columna de barras se leería como una columna de celdas vacías. Si quieres una columna para la barra, cada celda debe incluir su propio texto visible, como «80 %», bajo un encabezado que explique qué representa.</li>
+              <li>Un medidor que no esté oculto necesita un nombre: un <code>&lt;label for&gt;</code> o <code>aria-labelledby</code>. Entonces se lee como «valor, mínimo, máximo», por lo que repite una cifra que ya aparece: ocúltalo salvo que esté aislado.</li>
+              <li>La barra es una representación visual de la cifra en la misma celda: la tecnología de asistencia lee la cifra.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un medidor para representar un valor dentro de un intervalo conocido, junto a su cifra y en unas pocas filas o unas cuantas decenas de filas que compartan escala: una parte de un total o un recuento respecto a una cuota.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un medidor para una tarea en curso: usa <a href="../../../../es/docs/components/progress/">la barra de progreso</a>.</p>
+            <ul>
+              <li>Para mostrar una tendencia a lo largo del tiempo, usa una biblioteca de gráficos y conserva la <a href="../../../../es/docs/components/table/">tabla</a> como alternativa textual. LUZ no dibuja gráficos de líneas, áreas ni sectores.</li>
+              <li>Si la cifra exacta importa más que la forma, omite la barra: la cifra ya está ahí.</li>
+              <li>No uses el color de la barra para indicar si algo va bien o mal: siempre es el color de marca.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa la misma escala en todas las filas y coloca la cifra junto a cada barra: la longitud permite comparar y el número indica cuánto hay.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <p class="docs-stage__label">Sevilla to Madrid, 1,204</p><meter class="luz-meter" value="1204" min="0" max="1500"></meter>
+                  <p class="docs-stage__label">Cádiz to Málaga, 312</p><meter class="luz-meter" value="312" min="0" max="1500"></meter>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Asignes una escala propia a cada fila: 312 de 400 parece más que 1.204 de 1.500 y no hay ninguna cifra a la vista para comprobarlo.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <meter class="luz-meter" value="1204" min="0" max="1500"></meter>
+                  <meter class="luz-meter" value="312" min="0" max="400"></meter>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>La cifra es el contenido; la barra solo muestra cómo se compara.</p>
+            <ul>
+              <li>Incluye la cifra en texto en la misma celda o línea, y su unidad en el encabezado de la columna: «Paquetes».</li>
+              <li>Indica la escala en el pie o el encabezado cuando no sea evidente: «Paquetes por ruta, esta semana».</li>
+              <li>Dentro del elemento, escribe la cifra y el intervalo como alternativa: «1.204 de 1.500».</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El relleno usa el color de marca sobre una pista apagada. La pista tiene un borde del color del borde del campo, para que se vea dónde acaba la barra.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del medidor en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Relleno sobre la pista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de la pista sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3.7:1</div></td><td data-label="Oscuro"><div>4.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de la pista sobre una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-input-border</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>3.9:1</div></td><td data-label="Oscuro"><div>3.9:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> la barra no lo recibe.</li>
+              <li><strong>No solo color:</strong> la cifra aparece en texto junto a la barra, así que el valor nunca depende de distinguir las dos partes de la barra.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 4 tokens que lee <code>components/meter.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="../../../../es/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="../../../../es/docs/tokens/color/">Color</a></dt><dd><a href="../../../../es/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="../../../../es/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="../../../../es/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/get-started/">Instala LUZ</a></li>
+      <li><a href="../../../../es/docs/tokens/color/">Tokens de color</a></li>
+      <li><a href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/components/meta/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Línea de metadatos</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/components/modal/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Diálogo modal</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/components/meter.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Medidor">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · v0.0.0 · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>
