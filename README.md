@@ -31,12 +31,17 @@ No framework. No build step for consumers.
 LUZ (formerly CAI) is built with plain CSS, ES modules and native browser APIs. Adopt only the tokens, add the components, or take whole-page patterns: the three layers are independent packages that stack in one direction. Packages for one kind of site build on top of them.
 
 ```text
-@luz-ds/tokens  ->  @luz-ds/core  ->  @luz-ds/site  ->  @luz-ds/landing
-   standalone        needs tokens      needs core +   |->  @luz-ds/cms
-                                       tokens         |->  @luz-ds/app
-                                                      \->  @luz-ds/docs
-                                                          each needs core and
-                                                          tokens; site is optional
+@luz-ds/tokens
+      │
+      ▼
+@luz-ds/core ─────────────► @luz-ds/site
+      │                          ┆
+      ├──► @luz-ds/landing ◄┄┄┄┄┄┤
+      ├──► @luz-ds/cms     ◄┄┄┄┄┄┤
+      ├──► @luz-ds/app     ◄┄┄┄┄┄┤
+      └──► @luz-ds/docs    ◄┄┄┄┄┄┘
+
+A ──► B  B needs A        A ┄┄► B  B may use A
 ```
 
 The name stands for Light, Usable & Zero-dependency: light in weight (plain CSS and ES modules, nothing to build for the people who use it), usable by everyone (native HTML, three color modes, tested for accessibility), and with zero runtime dependencies.
