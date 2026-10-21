@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Objetos de maquetación – Componentes – Documentación de LUZ</title>
+  <meta name="description" content="Organiza bloques en una pila, una fila o una cuadrícula; coloca elementos junto a una imagen o agrupa acciones, y estructura la página con su barra fija mediante las clases o-*">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/components/layout/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/components/layout/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/components/layout/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/components/layout/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-CsdZsYUe.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-CDmyJM2e.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-DuVRvlf9.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-BsMkM9X4.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-siYsUwmw.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/components/layout/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/components/layout/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#objects-examples">Ejemplos</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#objects-reference">Elige un objeto</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#objects-page">La página y sus barras</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#objects-actions">Acciones y cuadrícula dividida</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#objects-grid">La cuadrícula</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#objects-lists">Listas</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#objects-markup">Copiar el marcado</a></li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/components/layout/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/components/layout.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Objetos%20de%20maquetaci%C3%B3n">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/components/">Componentes</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Objetos de maquetación</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Componentes · Ayudas</p>
+    <h1 class="docs-title">Objetos de maquetación</h1>
+    <p class="luz-docs-page-head__lead">Organiza bloques en una pila, una fila o una cuadrícula; coloca elementos junto a una imagen o agrupa acciones, y estructura la página con su barra fija mediante las clases o-*</p>
+    <p class="luz-docs-page-head__files">Archivos: <code class="docs-demo__file">objects/_objects.css</code></p>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/components/layout/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-block" id="c-objects">
+          <h2 id="objects-examples">Ejemplos</h2>
+          <div class="docs-demo__stage o-grid docs-cols-2">
+            <div class="docs-demo__stage">
+              <code class="docs-demo__file">.o-stack</code>
+              <div class="o-stack">
+                <div class="docs-box">1</div>
+                <div class="docs-box">2</div>
+                <div class="docs-box">3</div>
+              </div>
+            </div>
+            <div class="docs-demo__stage">
+              <code class="docs-demo__file">.o-row</code>
+              <div class="o-row">
+                <div class="docs-box">1</div>
+                <div class="docs-box">2</div>
+                <div class="docs-box">3</div>
+                <div class="docs-box">4</div>
+                <div class="docs-box">5</div>
+              </div>
+            </div>
+            <div class="docs-demo__stage">
+              <code class="docs-demo__file">.o-grid</code>
+              <div class="o-grid docs-cols-4">
+                <div class="docs-box">1</div>
+                <div class="docs-box">2</div>
+                <div class="docs-box">3</div>
+                <div class="docs-box">4</div>
+              </div>
+            </div>
+            <div class="docs-demo__stage">
+              <code class="docs-demo__file">.o-media</code>
+              <div class="o-media">
+                <span class="luz-avatar luz-avatar--md" aria-hidden="true">AB</span>
+                <div class="o-media__body">
+                  <p>Objeto multimedia</p>
+                  <p class="u-text-muted">Un elemento de tamaño fijo junto al contenido, que ocupa el ancho restante.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="docs-demo__note"><code class="luz-code-inline">.o-shell</code>, <code class="luz-code-inline">.o-main</code> y <code class="luz-code-inline">.o-container</code> se aplican a toda la página: <a href="#page-nav">esta página los usa</a>.</p>
+        
+          <h2 id="objects-reference">Elige un objeto</h2>
+          <p>Los objetos solo organizan la maquetación: no aplican color ni tipografía. El espaciado procede de los tokens de espacio.</p>
+          <div class="luz-table-wrap" role="region" aria-label="Objetos de maquetación" tabindex="0">
+            <table class="luz-table">
+              <thead>
+                <tr><th scope="col">Clase</th><th scope="col">Qué hace</th></tr>
+              </thead>
+              <tbody>
+                <tr><td data-label="Clase"><div><code>.o-stack</code></div></td><td data-label="Qué hace"><div>Una columna, con 12 px entre elementos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-row</code></div></td><td data-label="Qué hace"><div>Una fila que salta de línea, con los elementos centrados en vertical y 12 px entre ellos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-grid</code></div></td><td data-label="Qué hace"><div>Una cuadrícula con espacios de 16 px; define las columnas con tu propio <code>grid-template-columns</code> o con uno de los modificadores siguientes</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-grid--auto</code></div></td><td data-label="Qué hace"><div>Tantas columnas iguales como quepan, ninguna más estrecha que <code>--luz-grid-min</code> (16 rem de forma predeterminada): la cuadrícula se redistribuye sola y no necesita puntos de ruptura</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-grid--2</code>, <code>.o-grid--3</code>, <code>.o-grid--4</code></div></td><td data-label="Qué hace"><div>Ese número de columnas iguales por encima de 768 px; una columna a 768 px o menos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-grid--split</code></div></td><td data-label="Qué hace"><div>Dos columnas iguales cuando cada una alcanza <code>--luz-grid-min</code> (16 rem de forma predeterminada), y una por debajo: una sección destacada con su imagen o dos características en paralelo. Con texto más grande, se apilan automáticamente</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-media</code>, <code>.o-media__body</code></div></td><td data-label="Qué hace"><div>Un elemento de tamaño fijo, como un avatar, junto al contenido, que ocupa el ancho restante</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-container</code></div></td><td data-label="Qué hace"><div>El ancho del contenido (<code>--luz-content-max</code>, 1100 px) y el relleno de la página; menos relleno a 640 px o menos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-container--inline</code></div></td><td data-label="Qué hace"><div>Solo el ancho del contenedor y los márgenes laterales, sin relleno arriba ni abajo: la fila de una barra, para que su contenido empiece donde empieza el de la página</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-page</code></div></td><td data-label="Qué hace"><div>Una página sin barra lateral: una columna de al menos la altura de la ventana cuyo <code>&lt;main&gt;</code> crece, de modo que el pie quede al fondo en las páginas cortas. Antes de la cabecera puede haber cualquier número de bandas</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-sticky</code></div></td><td data-label="Qué hace"><div>Una barra que permanece arriba mientras se desplaza la página, en una ventana de al menos 30 rem de alto, con un relleno de desplazamiento que mantiene fuera de ella lo que se alcanza con Tab</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-actions</code></div></td><td data-label="Qué hace"><div>Dos o tres botones o enlaces relacionados en una fila que salta de línea, separados por 8 px; a 640 px o menos, una columna de acciones de ancho completo cuyas etiquetas pueden saltar de línea</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-shell</code></div></td><td data-label="Qué hace"><div>La maquetación de la aplicación: una columna de barra lateral (<code>--luz-sidebar-width</code>) junto al área principal y un pie que ocupa todo el ancho; una sola columna a 768 px o menos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.o-main</code></div></td><td data-label="Qué hace"><div>El área principal dentro de <code>.o-shell</code></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="objects-page">La página y sus barras</h2>
+          <p>Una página sin barra lateral usa <code>.o-page</code>: primero las bandas que haya (un aviso, la pregunta sobre cookies), y después la cabecera, <code>&lt;main&gt;</code> y el pie. La fila de la cabecera es <code>.o-container.o-container--inline</code>, para que el nombre del sitio empiece donde empieza el contenido, y <code>.o-sticky</code> mantiene la cabecera arriba.</p>
+          <div lang="en" class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-page" aria-label="Copy the page markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page markup"><code id="code-objects-page">&lt;body&gt;
+  &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to main content&lt;/a&gt;
+  &lt;div class=&quot;o-page&quot;&gt;
+    &lt;header class=&quot;o-sticky&quot;&gt;
+      &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;…&lt;/div&gt;
+    &lt;/header&gt;
+    &lt;main id=&quot;main-content&quot; class=&quot;o-container o-stack&quot; tabindex=&quot;-1&quot;&gt;…&lt;/main&gt;
+    &lt;footer&gt;
+      &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;…&lt;/div&gt;
+    &lt;/footer&gt;
+  &lt;/div&gt;
+&lt;/body&gt;</code></pre>
+          </div>
+          <ul>
+            <li>Los objetos solo organizan la maquetación: tu CSS o la cabecera de un paquete para un tipo de sitio se encargan de la superficie y el separador de la cabecera.</li>
+            <li><code>--luz-bar-h</code> es la altura de una barra de una fila con controles de 44 px y el tamaño de texto predeterminado: el control, dos rellenos de 4 px y un separador de 1 px. El panel de la <a href="../../../../es/docs/components/navbar/">barra de navegación</a> se abre a esa altura si no hay nada que lo ancle.</li>
+            <li>Con <code>.o-sticky</code> en la página, el relleno de desplazamiento de <code>&lt;html&gt;</code> es el mayor de <code>--luz-bar-h</code> y 3.5em, más medio control: un campo al que llegas con Tab o el destino del <a href="../../../../es/docs/components/skip-link/">enlace para saltar</a> se detiene debajo de la barra. Es un mínimo: una barra que ocupa varias filas con el texto ampliado es más alta, y Safari puede dejar un campo parcialmente oculto debajo al ampliar el texto al 300 por ciento.</li>
+            <li>Por debajo de 30 rem de alto de ventana, la barra se desplaza con la página, así que nunca ocupa la mayor parte de una pantalla baja.</li>
+          </ul>
+          <h2 id="objects-actions">Acciones y cuadrícula dividida</h2>
+          <div class="docs-demo__stage o-stack">
+            <div class="o-grid o-grid--split">
+              <div class="docs-box">Copiar</div>
+              <div class="docs-box">Imagen</div>
+            </div>
+            <div class="o-actions">
+              <a class="luz-btn luz-btn--primary" href="#objects-actions">Registrarse ahora</a>
+              <a class="luz-btn luz-btn--outline" href="#objects-actions">Ver el programa</a>
+            </div>
+          </div>
+          <div lang="en" class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-actions" aria-label="Copy the split grid and actions markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Split grid and actions markup"><code id="code-objects-actions">&lt;section class=&quot;o-grid o-grid--split&quot;&gt;
+  &lt;div class=&quot;o-stack&quot;&gt;
+    &lt;h1&gt;…&lt;/h1&gt;
+    &lt;div class=&quot;o-actions&quot;&gt;
+      &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;/register/&quot;&gt;Register now&lt;/a&gt;
+      &lt;a class=&quot;luz-btn luz-btn--outline&quot; href=&quot;/programme/&quot;&gt;See the programme&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-image&quot;&gt;…&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- two columns only when each gets 24 rem --&gt;
+&lt;section class=&quot;o-grid o-grid--split hero&quot;&gt;…&lt;/section&gt;
+&lt;style&gt;.hero { --luz-grid-min: 24rem; }&lt;/style&gt;</code></pre>
+          </div>
+          <ul>
+            <li>Una acción principal por grupo y, si hay otra opción, una segunda secundaria con contorno. En la columna estrecha, la principal va primero, como en el orden de origen.</li>
+            <li>Un <code>.luz-btn</code> dentro de <code>.o-actions</code> permite que la etiqueta salte de línea en la columna estrecha, para que nunca se salga de la ventana.</li>
+          </ul>
+          <h2 id="objects-grid">La cuadrícula</h2>
+          <p>LUZ no tiene un sistema de 12 columnas: una cuadrícula de contenido consta de unas pocas columnas iguales, que crea <code>.o-grid</code>. Usa <code>.o-grid--auto</code> cuando los elementos deban decidir cuántas caben, como las tarjetas; usa <code>.o-grid--2</code> a <code>--4</code> cuando el número forme parte del diseño.</p>
+          <div lang="en" class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-grid" aria-label="Copy the grid markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Grid markup"><code id="code-objects-grid">&lt;!-- as many columns as fit, each at least 16 rem --&gt;
+&lt;div class=&quot;o-grid o-grid--auto&quot;&gt;…cards…&lt;/div&gt;
+
+&lt;!-- at least 12 rem: set the property in your own CSS --&gt;
+&lt;div class=&quot;o-grid o-grid--auto gallery&quot;&gt;…&lt;/div&gt;
+&lt;style&gt;.gallery { --luz-grid-min: 12rem; }&lt;/style&gt;
+
+&lt;!-- three columns above 768 px, one below --&gt;
+&lt;div class=&quot;o-grid o-grid--3&quot;&gt;…&lt;/div&gt;</code></pre>
+          </div>
+          <ul>
+            <li>Los elementos conservan el orden de origen: la cuadrícula no los reordena, así que el orden de lectura y de tabulación coincide con el de la página.</li>
+            <li>Las columnas usan <code>minmax(0, 1fr)</code>, así que una palabra larga o una tabla ancha dentro de un elemento no pueden ensanchar la cuadrícula más que su contenedor.</li>
+            <li>Para una maquetación que dependa del ancho de una tarjeta y no de la ventana, coloca la cuadrícula en un contenedor y ajusta allí el tamaño de los elementos; los objetos no consultan el contenedor.</li>
+          </ul>
+          <h2 id="objects-lists">Listas</h2>
+          <p>Si los elementos forman una lista (entradas, ponentes, etiquetas), aplica <code>.o-grid</code>, <code>.o-stack</code> o <code>.o-row</code> al propio <code>&lt;ul&gt;</code> o <code>&lt;ol&gt;</code>. El objeto elimina las viñetas y la sangría, pero los elementos siguen siendo una lista: el lector de pantalla indica cuántos hay y permite saltarlos.</p>
+          <div lang="en" class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-list" aria-label="Copy the list grid markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="List grid markup"><code id="code-objects-list">&lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
+  &lt;li class=&quot;luz-card&quot;&gt;…&lt;/li&gt;
+  &lt;li class=&quot;luz-card&quot;&gt;…&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+          <ul>
+            <li>Safari puede eliminar el rol de lista de una lista sin viñetas que esté fuera de un <code>&lt;nav&gt;</code>. Asigna un encabezado a cada elemento, como en las tarjetas, para que se pueda seguir recorriendo la lista.</li>
+            <li>No necesitas ninguna regla propia. Dentro de <a href="../../../../es/docs/components/prose/">texto corrido</a>, que devuelve las viñetas a las listas, las listas con un objeto siguen sin tenerlas.</li>
+          </ul>
+          <h2 id="objects-markup">Copiar el marcado</h2>
+          <div lang="en" class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-media" aria-label="Copy the media object markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Media object markup"><code id="code-objects-media">&lt;div class=&quot;o-media&quot;&gt;
+  &lt;span class=&quot;luz-avatar luz-avatar--md&quot; aria-hidden=&quot;true&quot;&gt;AB&lt;/span&gt;
+  &lt;div class=&quot;o-media__body&quot;&gt;
+    &lt;p&gt;Ana Belén&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <div lang="en" class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-objects-shell" aria-label="Copy the app shell markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="App shell markup"><code id="code-objects-shell">&lt;body class=&quot;o-shell&quot;&gt;
+  &lt;nav class=&quot;luz-sidebar&quot; aria-label=&quot;Main&quot;&gt;…&lt;/nav&gt;
+  &lt;main class=&quot;o-main&quot; id=&quot;main-content&quot;&gt;
+    &lt;div class=&quot;o-container&quot;&gt;…&lt;/div&gt;
+  &lt;/main&gt;
+  &lt;footer&gt;…&lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+          </div>
+          <p>El pie es un <code>&lt;footer&gt;</code> normal, que core coloca de lado a lado en la parte inferior: nada de esto necesita site. Para páginas completas sin barra lateral, usa <a href="#objects-page"><code>.o-page</code></a>.</p>
+          <p><a href="../../../../es/docs/get-started/structure/#needs">Qué necesita cada paquete</a> enumera todos los elementos.</p>
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/get-started/">Instala LUZ</a></li>
+      <li><a href="../../../../es/docs/tokens/color/">Tokens de color</a></li>
+      <li><a href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/components/tooltip/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Tooltip</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/components/utilities/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Clases de utilidad</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/components/layout.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Objetos%20de%20maquetaci%C3%B3n">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · <a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a> · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

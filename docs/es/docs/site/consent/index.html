@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consentimiento para cookies – Site – Documentación de LUZ</title>
+  <meta name="description" content="Pregunta una vez al visitante si el sitio puede usar cookies opcionales, muestra Aceptar y Rechazar uno junto al otro y recuerda la respuesta.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/site/consent/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/site/consent/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/site/consent/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/site/consent/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-CsdZsYUe.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-CDmyJM2e.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-DuVRvlf9.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-BsMkM9X4.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-siYsUwmw.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/site/consent/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/site/consent/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#example">Ejemplo</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#known-issues">Problemas conocidos</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#code">Código</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#markup">Copiar el marcado</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#variants">Variantes y opciones</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#how">Cómo funciona</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#no-js">Sin JavaScript</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#keyboard">Teclado y ARIA</a></li>
+          </ul>
+        </li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#design">Diseño</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when">Cuándo usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when-not">Cuándo no usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#do-dont">Qué hacer y qué no</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#content">Cómo escribir el contenido</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#contrast">Contraste y foco</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#tokens">Tokens que usa</a></li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/site/consent/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/site/consent.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Consentimiento%20para%20cookies">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/site/">Site</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Consentimiento para cookies</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Site · Patrones</p>
+    <h1 class="docs-title">Consentimiento para cookies</h1>
+    <p class="luz-docs-page-head__lead">Pregunta una vez al visitante si el sitio puede usar cookies opcionales, muestra Aceptar y Rechazar uno junto al otro y recuerda la respuesta.</p>
+    <ul class="luz-docs-page-head__meta"><li><code class="docs-demo__file">.luz-consent, __title, __choices</code></li><li>JS: consent.js</li><li>Claro · Oscuro · Alto contraste</li><li>Con pruebas</li><li><a href="#known-issues">4 problemas conocidos</a></li></ul>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/site/consent/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-component" id="p-consent">
+          <h2 id="example">Ejemplo</h2>
+          <p>El aviso de cookies de una bodega, con las dos opciones de respuesta y la elección de qué cookies permitir.</p>
+          <div lang="en" class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <luz-consent>
+              <section class="luz-consent" data-luz-consent data-luz-consent-key="luz-consent-demo" aria-labelledby="consent-demo-title" hidden>
+                <div data-luz-consent-ask>
+                  <h2 class="luz-consent__title" id="consent-demo-title">Cookies on Bodega Albar</h2>
+                  <p>We use cookies that this site needs to work. We would also like to measure how you use it, to improve it. <a href="#how">Read the cookie policy</a>.</p>
+                  <form class="o-actions">
+                    <button class="luz-btn luz-btn--primary" type="submit" value="all">Accept optional cookies</button>
+                    <button class="luz-btn luz-btn--primary" type="submit" value="none">Reject optional cookies</button>
+                  </form>
+                  <details class="luz-consent__choices">
+                    <summary>Choose which cookies to allow</summary>
+                    <form class="o-stack">
+                      <fieldset class="luz-fieldset">
+                        <legend>Optional cookies</legend>
+                        <div class="luz-check-group">
+                          <label class="luz-check-item"><input type="checkbox" value="analytics"> Measuring visits</label>
+                          <label class="luz-check-item"><input type="checkbox" value="marketing"> Adverts on other sites</label>
+                        </div>
+                      </fieldset>
+                      <div class="o-actions">
+                        <button class="luz-btn luz-btn--secondary" type="submit">Save my choices</button>
+                      </div>
+                    </form>
+                  </details>
+                </div>
+                <div data-luz-consent-done tabindex="-1" hidden>
+                  <p>Your choice is saved. You can change it at any time on the <a href="#how">cookie policy</a> page.</p>
+                  <button class="luz-btn luz-btn--secondary" type="button" data-luz-consent-close>Close</button>
+                </div>
+              </section>
+            </luz-consent>
+            <p class="o-actions"><button class="luz-btn luz-btn--outline" type="button" data-luz-consent-open hidden>Change cookie settings</button></p>
+            <p class="docs-demo__note">The example is live: until you answer it, it shows as a band at the bottom of this window, as it would on your site. Its answer is stored under its own key, <code>luz-consent-demo</code>, so it does not count as an answer for this site; the button above shows it again.</p>
+            <p class="docs-demo__note">Without JavaScript the banner and its button stay hidden.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Sin JavaScript, el aviso no se muestra: no hay nada que responder, porque tampoco se ejecutan los scripts propios del sitio. Si el servidor establece cookies opcionales por su cuenta, sin un script, debe pedir el consentimiento de otra forma.</p>
+          <ul>
+            <li>La respuesta se guarda en el almacenamiento local del navegador, así que el servidor no puede leerla; si borras los datos del sitio, volverá a preguntarte.</li>
+            <li>En una ventana de menos de 30 rem (480 px) de alto, el aviso no queda fijo: se muestra en el flujo, al principio de la página, donde está su marcado, así que la página baja cuando aparece.</li>
+            <li>El estado guardado se oculta cuando el foco sale del aviso hacia la página, pero no al hacer clic en una zona vacía. Usa el botón Cerrar.</li>
+            <li>No se ha probado con un lector de pantalla.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del consentimiento para cookies">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Justo después del <a href="../../../../es/docs/components/skip-link/">enlace para saltar al contenido</a>, antes de un <a href="../../../../es/docs/site/banner/">aviso</a> y de la cabecera de la página (una cabecera de <a href="../../../../es/docs/landing/header/">landing</a> o de <a href="../../../../es/docs/cms/header/">CMS</a>): aparece en la parte inferior de la ventana, pero es lo primero en el orden de lectura y de Tab. Hay una casilla por cada categoría de cookies opcionales; su <code>value</code> es el nombre de la categoría.</p>
+            <p><code>site.min.js</code> carga el archivo propio del aviso, <code>consent.min.js</code>, cuando el navegador está inactivo; una página sin <code>site.min.js</code> carga ese archivo por su cuenta.</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-consent" aria-label="Copy the cookie consent markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Cookie consent markup"><code id="code-consent">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.1.0/dist/site.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;a class=&quot;luz-skip-link&quot; href=&quot;#main&quot;&gt;Skip to main content&lt;/a&gt;
+&lt;luz-consent&gt;
+  &lt;section class=&quot;luz-consent&quot; data-luz-consent aria-labelledby=&quot;consent-title&quot; hidden&gt;
+    &lt;div data-luz-consent-ask&gt;
+      &lt;h2 class=&quot;luz-consent__title&quot; id=&quot;consent-title&quot;&gt;Cookies on Bodega Albar&lt;/h2&gt;
+      &lt;p&gt;We use cookies that this site needs to work. We would also like to measure how you
+        use it, to improve it. &lt;a href=&quot;/cookies/&quot;&gt;Read the cookie policy&lt;/a&gt;.&lt;/p&gt;
+      &lt;form class=&quot;o-actions&quot;&gt;
+        &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;submit&quot; value=&quot;all&quot;&gt;Accept optional cookies&lt;/button&gt;
+        &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;submit&quot; value=&quot;none&quot;&gt;Reject optional cookies&lt;/button&gt;
+      &lt;/form&gt;
+      &lt;details class=&quot;luz-consent__choices&quot;&gt;
+        &lt;summary&gt;Choose which cookies to allow&lt;/summary&gt;
+        &lt;form class=&quot;o-stack&quot;&gt;
+          &lt;fieldset class=&quot;luz-fieldset&quot;&gt;
+            &lt;legend&gt;Optional cookies&lt;/legend&gt;
+            &lt;div class=&quot;luz-check-group&quot;&gt;
+              &lt;label class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; value=&quot;analytics&quot;&gt; Measuring visits&lt;/label&gt;
+              &lt;label class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; value=&quot;marketing&quot;&gt; Adverts on other sites&lt;/label&gt;
+            &lt;/div&gt;
+          &lt;/fieldset&gt;
+          &lt;div class=&quot;o-actions&quot;&gt;
+            &lt;button class=&quot;luz-btn luz-btn--secondary&quot; type=&quot;submit&quot;&gt;Save my choices&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/form&gt;
+      &lt;/details&gt;
+    &lt;/div&gt;
+    &lt;div data-luz-consent-done tabindex=&quot;-1&quot; hidden&gt;
+      &lt;p&gt;Your choice is saved. You can change it at any time on the
+        &lt;a href=&quot;/cookies/&quot;&gt;cookie policy&lt;/a&gt; page.&lt;/p&gt;
+      &lt;button class=&quot;luz-btn luz-btn--secondary&quot; type=&quot;button&quot; data-luz-consent-close&gt;Close&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/luz-consent&gt;
+&lt;header&gt;…&lt;/header&gt;
+
+&lt;!-- On the cookie policy page --&gt;
+&lt;button class=&quot;luz-btn luz-btn--outline&quot; type=&quot;button&quot; data-luz-consent-open hidden&gt;Change cookie settings&lt;/button&gt;</code></pre>
+            </div>
+            <p>Tus scripts leen la respuesta y esperan a que haya una nueva. Carga un script opcional solo para una categoría que la persona visitante haya aceptado:</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-consent-js" aria-label="Copy the script that reads the answer">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Script that reads the answer"><code id="code-consent-js">import { getConsent } from &quot;@luz-ds/site/consent&quot;;
+
+const granted = (answer) =&gt; answer?.granted.includes(&quot;analytics&quot;);
+
+if (granted(getConsent())) startMeasuring();
+document.addEventListener(&quot;luz:consent&quot;, (event) =&gt; {
+  if (granted(event.detail)) startMeasuring();
+  // Withdrawn: the simplest correct answer is to reload the page
+  else location.reload();
+});</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay variantes. Los puntos de extensión son atributos <code>data-luz-consent-*</code>.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases y atributos del consentimiento para cookies" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>.luz-consent</span></code></div></td><td data-label="Efecto"><div>El aviso: una franja fija en la parte inferior de la ventana, de ancho completo y como máximo de media altura, con desplazamiento interno y el texto en la columna de la cabecera, en sans serif. En ventanas de menos de 30 rem de alto, se muestra en el flujo. Mantén <code>hidden</code>: el script lo muestra</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>.luz-consent</span><wbr><span>__title</span></code></div></td><td data-label="Efecto"><div>Su encabezado, en sans serif; da nombre a la región del aviso mediante <code class="docs-name"><span>aria-labelledby</span></code></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>.luz-consent</span><wbr><span>__choices</span></code></div></td><td data-label="Efecto"><div>El <code>&lt;details&gt;</code> con las categorías, debajo de los dos botones</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>&lt;luz-consent&gt;</code></div></td><td data-label="Efecto"><div>El elemento personalizado que define el módulo. Al conectarse, enlaza el aviso que contiene</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>data-luz-consent</span></code></div></td><td data-label="Efecto"><div>En <code>&lt;section&gt;</code>: el aviso. <code class="docs-name"><span>data-luz-consent-days</span></code> es opcional y define cuánto dura una respuesta (180 días por defecto, 395 como máximo); <code class="docs-name"><span>data-luz-consent-key</span></code> define la clave de almacenamiento (debe empezar por <code class="docs-name"><span>luz-</span></code>)</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>data-luz-consent-ask</span></code>, <code class="docs-name"><span>data-luz-consent-done</span></code></div></td><td data-label="Efecto"><div>La pregunta y el mensaje de confirmación que la sustituye. El mensaje tiene <code>tabindex="-1"</code>: recibe el foco</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>data-luz-consent-close</span></code></div></td><td data-label="Efecto"><div>En un botón dentro del mensaje de confirmación: oculta el aviso y devuelve el foco al botón que lo abrió, al primer botón <code class="docs-name"><span>data-luz-consent-open</span></code> o a <code>&lt;main&gt;</code>. El mensaje también se oculta cuando el foco sale hacia la página</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>value="all"</code>, <code>value="none"</code></div></td><td data-label="Efecto"><div>En los botones de envío: Aceptar permite todas las categorías y Rechazar, ninguna. Un botón de envío con otro valor o sin valor permite las categorías marcadas en su formulario</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>data-luz-consent-open</span></code></div></td><td data-label="Efecto"><div>En cualquier botón con <code>hidden</code>: se reserva su espacio, el script lo muestra y permite volver a abrir el aviso con la respuesta guardada marcada</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>--luz-consent-h</code></div></td><td data-label="Efecto"><div>El script lo establece en <code>:root</code> mientras se muestra el aviso: su altura. La página, <code class="docs-name"><span>.o-main</span></code> y <code class="docs-name"><span>.luz-sidebar</span></code> reservan ese espacio al final y desplazan lo que Tab alcanza para que quede por encima del aviso</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>@luz-ds/site</code>, dos formularios nativos y un archivo propio, <code>@luz-ds/site/consent</code> (<code>dist/consent.min.js</code>, menos de 1 kB comprimido), que define <code>&lt;luz-consent&gt;</code>. <code>site.min.js</code> lo carga cuando el navegador está inactivo y solo en páginas con <code>&lt;luz-consent&gt;</code>, así que las demás páginas no lo cargan.</p>
+            <p>Si añades un aviso después de cargar la página, debes importar el archivo a mano; aunque haya dos copias en una página, el elemento solo se define una vez.</p>
+            <ul>
+              <li><strong>Cuándo pregunta:</strong> cuando no hay una respuesta guardada, cuando ha caducado o cuando el aviso ofrece una categoría que no se incluyó al guardar la respuesta. Entonces aparece como una franja en la parte inferior de la ventana, sin desplazar la página: no atrapa ni recibe el foco. La página le reserva espacio al final y desplaza lo que Tab alcanza para que quede por encima del aviso; así puedes leerla y usarla antes de responder.</li>
+              <li><strong>La respuesta:</strong> Aceptar permite todas las categorías; Rechazar, ninguna; Guardar mis opciones, las marcadas. Al pulsar Enter en una casilla se guardan las marcadas, nunca todas. Escape no es una respuesta: no ocurre nada. El mensaje de confirmación sustituye a la pregunta, recibe el foco y se lee. Desaparece al pulsar su botón Cerrar o cuando el foco sale del aviso hacia la página; el foco se queda donde haya ido.</li>
+              <li><strong>Dónde se guarda:</strong> en el <code>localStorage</code> del navegador, bajo <code>luz-consent</code>, como JSON: <code>{"version":1,"expires":…,"asked":["analytics","marketing"],"granted":["analytics"]}</code>, con <code>expires</code> en milisegundos desde 1970. No se guarda en una cookie: esta se enviaría al servidor con cada solicitud y no debería hacer falta una cookie para preguntar por ellas. No se guardan datos personales ni sale nada del navegador. Un valor mal formado cuenta como si no hubiera respuesta. Si el almacenamiento está bloqueado, la respuesta sirve para esa página y la siguiente vuelve a preguntar.</li>
+              <li><strong>Tus scripts:</strong> <code>getConsent()</code> devuelve la respuesta guardada, <code>{ asked, granted, expires }</code>, o <code>null</code>. Cada respuesta nueva envía el evento <code>luz:consent</code> a <code>document</code>, con el mismo objeto en <code>detail</code>. Los nombres de categoría empiezan por una letra minúscula y pueden contener letras minúsculas, números o guiones; hasta 32 caracteres.</li>
+              <li><strong>Cambiar la respuesta:</strong> es tan fácil como darla. Un botón con <code>data-luz-consent-open</code> en la página de la política de cookies vuelve a mostrar el aviso. Pon un único aviso en cada página: todos esos botones lo abren.</li>
+              <li>El script no escribe ningún texto: todas las palabras están en tu marcado, en el idioma de la página.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>El aviso y el botón para volver a mostrarlo permanecen ocultos mediante el atributo <code>hidden</code>. Sin un script no se ejecutan los scripts propios del sitio, así que no hay nada que preguntar y los botones que no funcionarían no se muestran.</p>
+            <p>Incluye un enlace a la política de cookies en el pie de página de todas las páginas, para que siempre se pueda consultar.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Orden:</strong> el enlace para saltar al contenido sigue siendo el primero, para que quienes vuelvan puedan ir directamente al contenido. El aviso va después, antes de la cabecera, aunque se muestre abajo: enlace a la política, Aceptar, Rechazar y, por último, el botón que abre las categorías.</li>
+              <li><strong>Teclas:</strong> Enter o Espacio en un botón; Espacio marca una casilla. Escape no hace nada: no oculta el aviso.</li>
+              <li><strong>Punto de referencia:</strong> un <code>&lt;section&gt;</code> con el nombre de su encabezado es una región, que aparece entre los puntos de referencia antes que el punto de referencia de la cabecera. No es un diálogo: no bloquea la página, así que no necesita <code>role="dialog"</code>.</li>
+              <li><strong>Foco:</strong> ninguno al cargar la página. Tras responder, el foco pasa al mensaje de confirmación; después de pulsar el botón para volver a mostrarlo, pasa al aviso. Cerrar lo devuelve a ese botón, al primero de ellos o a <code>&lt;main&gt;</code>, nunca al principio de la página.</li>
+            </ul>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Úsalo si tu sitio instala cookies o guarda en el navegador datos que no necesita para funcionar, como los de medición de visitas o publicidad: la legislación de la UE y el Reino Unido exige el consentimiento del visitante antes de hacerlo.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses si el sitio solo instala las cookies necesarias para funcionar (de sesión, del carrito o para guardar el idioma o el modo de color): no requieren consentimiento. Explícalo en la política de cookies y no muestres ningún aviso.</p>
+            <ul>
+              <li>No lo uses como una barrera que oculte o bloquee la página hasta que el visitante responda.</li>
+              <li>No lo uses para anunciar noticias u ofertas: para eso tienes el <a href="../../../../es/docs/site/banner/">banner</a>.</li>
+            </ul>
+            <p>Sustituye a un script de consentimiento de terceros. No reemplaza nada de LUZ.</p>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Da el mismo estilo a Aceptar y Rechazar, colócalos uno al lado del otro y explica qué hace cada opción.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-actions">
+                    <span class="luz-btn luz-btn--primary">Accept optional cookies</span>
+                    <span class="luz-btn luz-btn--primary">Reject optional cookies</span>
+                  </div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> No conviertas Aceptar en un botón grande y escondas Rechazar en un enlace pequeño o tras los ajustes: si orientas la respuesta, el consentimiento no es libre.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="o-actions">
+                    <span class="luz-btn luz-btn--primary luz-btn--lg">Accept all</span>
+                    <span class="luz-btn luz-btn--ghost luz-btn--sm">Manage options</span>
+                  </div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Explica en una frase, con palabras sencillas, qué necesita el sitio, qué quiere usar y por qué. Nombra el encabezado con el nombre del sitio: «Cookies en Bodega Albar».</p>
+            <ul>
+              <li>Redacta los botones como una acción y su objeto: «Aceptar las cookies opcionales», «Rechazar las cookies opcionales»; nunca «OK», «Entendido» o «De acuerdo».</li>
+              <li>Nombra cada categoría por lo que hace y para quién: «Medir las visitas», «Anuncios en otros sitios», no «Rendimiento» ni «Segmentación».</li>
+              <li>Enlaza la política de cookies por su nombre y explica en el mensaje de confirmación dónde se puede cambiar la respuesta.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El aviso es una franja con colores atenuados; sus botones y categorías son de core.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del consentimiento para cookies en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Encabezado y texto</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace a la política de cookies</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Aceptar y Rechazar</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de Aceptar y Rechazar</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-fill</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>3.5:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Categorías y su botón</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de la casilla</div></td><td data-label="Color sobre el fondo"><div><code>--luz-outline</code> on <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>4.5:1</div></td><td data-label="Oscuro"><div>3.4:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco en la franja</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo, redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los límites.</p>
+            <ul>
+              <li><strong>Foco:</strong> contorno de 2 px de core, <code>--luz-focus-ring</code>, en el enlace, los botones y las casillas.</li>
+              <li>Aceptar y Rechazar tienen el mismo aspecto: ni el color ni el tamaño dan prioridad a una opción.</li>
+              <li>Las categorías marcadas muestran una marca de verificación, no solo un relleno.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 11 tokens que las reglas de <code>components/consent.css</code> de site leen para el aviso, agrupados por familia; los botones, el cuadro de categorías y las casillas son de core. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="../../../../es/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="../../../../es/docs/tokens/color/">Color</a></dt><dd><a href="../../../../es/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="../../../../es/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="../../../../es/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-lg</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/layers/">Layers</a></dt><dd><code>--luz-z-toast</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-content-max</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+      <li><a href="../../../../es/docs/components/">Componentes</a></li>
+      <li><a href="../../../../es/docs/get-started/">Instala LUZ</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/site/banner/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Banner</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/site/mode/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Modo de color automático</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/site/consent.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Consentimiento%20para%20cookies">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · <a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a> · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabla – Componentes – Documentación de LUZ</title>
+  <meta name="description" content="Compara registros con varios atributos, en filas y columnas que se leen bien a 320 px.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/components/table/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/components/table/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/components/table/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/components/table/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-CsdZsYUe.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-CDmyJM2e.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-DuVRvlf9.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-BsMkM9X4.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-siYsUwmw.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/components/table/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/components/table/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#example">Ejemplo</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#known-issues">Problemas conocidos</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#code">Código</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#markup">Copiar el marcado</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#variants">Variantes y opciones</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#how">Cómo funciona</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#no-js">Sin JavaScript</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#keyboard">Teclado y ARIA</a></li>
+          </ul>
+        </li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#design">Diseño</a>
+          <ul class="luz-docs-rail__sub">
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when">Cuándo usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#when-not">Cuándo no usarlo</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#do-dont">Qué hacer y qué no</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#content">Cómo escribir el contenido</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#contrast">Contraste y foco</a></li>
+            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#tokens">Tokens que usa</a></li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/components/table/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/components/table.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Tabla">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/components/">Componentes</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Tabla</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Componentes · Mostrar contenido</p>
+    <h1 class="docs-title">Tabla</h1>
+    <p class="luz-docs-page-head__lead">Compara registros con varios atributos, en filas y columnas que se leen bien a 320 px.</p>
+    <ul class="luz-docs-page-head__meta"><li><code class="docs-demo__file">components/table.css</code></li><li>JS: table-sort.js</li><li>Claro · Oscuro · Alto contraste</li><li><a href="#known-issues">2 problemas conocidos</a></li></ul>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/components/table/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-component" id="c-table">
+          <h2 id="example">Ejemplo</h2>
+          <p>Una tabla con tres servicios, su estado, CPU y región.</p>
+          <div lang="en" class="docs-example" data-docs-specimen>
+          <fieldset class="docs-width" hidden>
+            <legend>Ancho</legend>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="phone"> Móvil</label>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="tablet"> Tableta</label>
+            <label class="luz-check-item"><input type="radio" name="docs-width" value="full" checked> Completo</label>
+          </fieldset>
+          <div class="luz-docs-example__frame">
+          <div class="docs-demo__stage">
+            <div class="luz-table-wrap" role="region" aria-label="Service status" tabindex="0">
+              <table class="luz-table luz-table--sticky-col">
+                <caption>Service status</caption>
+                <thead>
+                  <tr><th scope="col">Service</th><th scope="col">Status</th><th scope="col">CPU</th><th scope="col">Region</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Service">api-gateway</td><td data-label="Status"><span class="luz-tag luz-tag--green luz-tag--dot">Running</span></td><td data-label="CPU">12%</td><td data-label="Region">eu-west-1</td></tr>
+                  <tr><td data-label="Service">data-pipeline</td><td data-label="Status"><span class="luz-tag luz-tag--yellow luz-tag--dot">Degraded</span></td><td data-label="CPU">78%</td><td data-label="Region">us-east-1</td></tr>
+                  <tr><td data-label="Service">mailer</td><td data-label="Status"><span class="luz-tag luz-tag--red luz-tag--dot">Stopped</span></td><td data-label="CPU">0%</td><td data-label="Region">eu-west-1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+
+          <p class="docs-demo__note">Make the window narrow: below 480 px of container width each row becomes a card.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>La ordenación en el navegador (<code>data-luz-sort</code>) solo se ha comprobado en el árbol de accesibilidad de Chromium; aún no se ha probado con NVDA, JAWS, VoiceOver, TalkBack ni Orca. La columna ordenada se indica con <code>aria-sort</code> en su cabecera y cada ordenación se anuncia en un mensaje de estado; al recorrer las cabeceras con Tab se anuncia el nombre de la columna, y el estado de ordenación se lee en la celda de cabecera y en el mensaje de estado.</p>
+          <ul>
+            <li>Solo se ordenan las filas cargadas en la página; la ordenación no se conserva al recargar y la barra de direcciones no cambia. No se admiten tablas con varias filas de cabecera ni cabeceras con <code>colspan</code>; al convertir una cabecera ordenable en botón se descarta cualquier contenido que no sea su texto o un enlace.</li>
+            <li>Ordenar unos miles de filas las mueve todas en una sola tarea: ordénalas en el servidor. El orden del texto depende de la configuración regional del navegador para el idioma de la tabla.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de tablas">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-table" aria-label="Copy the table markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Table markup"><code id="code-table">&lt;div class=&quot;luz-table-wrap&quot; role=&quot;region&quot; aria-label=&quot;Invoices&quot; tabindex=&quot;0&quot;&gt;
+  &lt;table class=&quot;luz-table&quot;&gt;
+    &lt;caption&gt;Invoices&lt;/caption&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Number&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Date&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Amount (€)&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td data-label=&quot;Number&quot;&gt;INV-0042&lt;/td&gt;&lt;td data-label=&quot;Date&quot;&gt;1 Oct 2026&lt;/td&gt;&lt;td data-label=&quot;Amount (€)&quot;&gt;120.00&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones de tabla" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>.luz-table</span></code></div></td><td data-label="Efecto"><div>Ancho completo, fila de cabecera sobre la superficie intensa, una línea entre filas y resaltado de la fila bajo el puntero</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>.luz-table-wrap</span></code></div></td><td data-label="Efecto"><div>Desplaza la tabla horizontalmente cuando es más ancha que su contenedor</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>.luz-table</span><wbr><span>--sticky-col</span></code></div></td><td data-label="Efecto"><div>Mantiene visible la primera columna mientras la tabla se desplaza horizontalmente</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>.luz-table</span><wbr><span>--compact</span></code></div></td><td data-label="Efecto"><div>Menos espacio encima y debajo de cada fila (unos 33 px para una línea de texto, no 49 px) y menos espacio entre columnas; el tamaño del texto no cambia</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>.luz-table</span><wbr><span>__numeric</span></code> en un <code>&lt;th&gt;</code> y su <code>&lt;td&gt;</code></div></td><td data-label="Efecto"><div>Alinea una columna de números al final de la celda, con cifras del mismo ancho</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>data-luz-sort</span></code> en un <code>&lt;th scope="col"&gt;</code></div></td><td data-label="Efecto"><div>La columna se puede ordenar en el navegador: su texto se convierte en un botón</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>data-sort-value</span></code> en un <code>&lt;td&gt;</code></div></td><td data-label="Efecto"><div>El criterio de ordenación de la celda cuando no coincide con su texto: un número con formato (<code>1,204</code>), una fecha mostrada como «13 Oct» o un precio con su moneda</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>aria-sort</span></code> en el <code>&lt;th&gt;</code> ordenado</div></td><td data-label="Efecto"><div><code>ascending</code> o <code>descending</code>, solo en una cabecera: un triángulo indica la dirección</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code class="docs-name"><span>data-label</span></code> en cada <code>&lt;td&gt;</code></div></td><td data-label="Efecto"><div>El nombre de la columna que se muestra antes del valor cuando las filas pasan a ser tarjetas</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Los números y los datos densos tienen cada uno su propia clase. Aplica la clase numérica a la cabecera y a todas las celdas de la columna.</p>
+            <div lang="en" class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage">
+              <div class="luz-table-wrap" role="region" aria-label="Shipments this week" tabindex="0">
+                <table class="luz-table luz-table--compact">
+                  <caption>Shipments this week</caption>
+                  <thead>
+                    <tr><th scope="col">Route</th><th scope="col" class="luz-table__numeric">Parcels</th><th scope="col" class="luz-table__numeric">Weight (kg)</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-label="Route">Sevilla to Madrid</td><td class="luz-table__numeric" data-label="Parcels">1,204</td><td class="luz-table__numeric" data-label="Weight (kg)">8,430.5</td></tr>
+                    <tr><td data-label="Route">Cádiz to Málaga</td><td class="luz-table__numeric" data-label="Parcels">312</td><td class="luz-table__numeric" data-label="Weight (kg)">1,912.0</td></tr>
+                    <tr><td data-label="Route">Huelva to Faro</td><td class="luz-table__numeric" data-label="Parcels">58</td><td class="luz-table__numeric" data-label="Weight (kg)">406.3</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </div>
+            <h4 id="sorting">Ordenación en el navegador</h4>
+            <p>Marca cada cabecera ordenable con <code>data-luz-sort</code>. El script convierte su texto en un botón; sin él, la tabla sigue funcionando.</p>
+            <div lang="en" class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage">
+              <div class="luz-table-wrap" role="region" aria-label="Parcels per route" tabindex="0">
+                <table class="luz-table luz-table--compact">
+                  <caption>Parcels per route</caption>
+                  <thead>
+                    <tr><th scope="col" data-luz-sort aria-sort="ascending">Route</th><th scope="col" class="luz-table__numeric" data-luz-sort>Parcels</th><th scope="col" class="luz-table__numeric" data-luz-sort>Weight (kg)</th><th scope="col">Notes</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-label="Route">Cádiz to Málaga</td><td class="luz-table__numeric" data-label="Parcels" data-sort-value="312">312</td><td class="luz-table__numeric" data-label="Weight (kg)" data-sort-value="1912">1,912.0</td><td data-label="Notes">Daily</td></tr>
+                    <tr><td data-label="Route">Huelva to Faro</td><td class="luz-table__numeric" data-label="Parcels" data-sort-value="58">58</td><td class="luz-table__numeric" data-label="Weight (kg)" data-sort-value="406.3">406.3</td><td data-label="Notes">Monday and Thursday</td></tr>
+                    <tr><td data-label="Route">Sevilla to Madrid</td><td class="luz-table__numeric" data-label="Parcels" data-sort-value="1204">1,204</td><td class="luz-table__numeric" data-label="Weight (kg)" data-sort-value="8430.5">8,430.5</td><td data-label="Notes">Daily</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </div>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-table-sort" aria-label="Copy the sortable table markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Sortable table markup"><code id="code-table-sort">&lt;table class=&quot;luz-table&quot; id=&quot;routes&quot;&gt;
+  &lt;caption&gt;Parcels per route&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;!-- With a link: it sorts on the server without JavaScript --&gt;
+      &lt;th scope=&quot;col&quot; data-luz-sort&gt;&lt;a href=&quot;?sort=route#routes&quot;&gt;Route&lt;/a&gt;&lt;/th&gt;
+      &lt;!-- Plain text: the script makes it a button --&gt;
+      &lt;th scope=&quot;col&quot; class=&quot;luz-table__numeric&quot; data-luz-sort&gt;Parcels&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-label=&quot;Route&quot;&gt;Sevilla to Madrid&lt;/td&gt;
+      &lt;td class=&quot;luz-table__numeric&quot; data-label=&quot;Parcels&quot; data-sort-value=&quot;1204&quot;&gt;1,204&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <ul>
+              <li><strong>La ordenación se basa en el texto de la celda,</strong> salvo que tenga <code>data-sort-value</code>. Dos números simples (<code>12</code>, <code>0.5</code>, <code>-3</code>) se ordenan como números; todo lo demás, como texto, según el idioma de la tabla, con <code>Room 2</code> antes que <code>Room 10</code>.</li>
+              <li><strong>Un número con separador de miles, unidad o moneda necesita <code>data-sort-value</code></strong> con el número sin formato (<code>1204</code> para <code>1,204</code>); de lo contrario, se ordena como texto y «1,204» queda antes de «999». Las fechas deben ser ISO (<code>2026-10-13</code>), sea cual sea el formato mostrado.</li>
+              <li><strong>Los valores iguales conservan su orden.</strong> La primera pulsación ordena de forma ascendente, la siguiente de forma descendente, y así sucesivamente; para recuperar el orden inicial, recarga la página.</li>
+              <li><strong>La cabecera solo indica la columna.</strong> No pongas la dirección en su texto ni en el pie: el triángulo, <code>aria-sort</code> y la línea de estado la indican y se actualizan con la ordenación.</li>
+            </ul>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Una <code>&lt;table&gt;</code> nativa con <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code> y <code>&lt;th scope&gt;</code>, con estilos de <code>components/table.css</code>. Sin JavaScript.</p>
+            <ul>
+              <li>El contenedor es un contenedor de consulta: por debajo de 480 px de ancho propio, cada fila se convierte en una tarjeta de parejas de etiqueta y valor, y se reduce el relleno de las celdas. Se adapta al ancho del contenedor, no al de la ventana, así que una tabla estrecha en una página ancha también se apila.</li>
+              <li>Las etiquetas proceden de <code>data-label</code>; las celdas que no lo tienen muestran solo el valor.</li>
+              <li>Las celdas que contienen más de un elemento necesitan un <code>&lt;div&gt;</code> que los envuelva para mantener unido el valor.</li>
+              <li><code>.luz-table__numeric</code> establece <code>text-align: end</code> y <code>font-variant-numeric: tabular-nums</code>, para alinear las cifras de una columna sea cual sea el idioma. En el diseño de tarjetas apiladas, el valor ya queda al final de la fila.</li>
+              <li><code>.luz-table--compact</code> solo cambia el relleno de las celdas: el tamaño del texto se mantiene, así que la tabla es más densa, pero igual de legible.</li>
+              <li><strong>Ordenación en el servidor</strong>, para resultados paginados o filtrados y para todas las tablas sin JavaScript: cada cabecera es un enlace a la misma página, ordenada por esa columna, y solo el <code>&lt;th scope="col"&gt;</code> de la columna ordenada lleva <code>aria-sort="ascending"</code> o <code>"descending"</code>. Indica también la dirección en el texto visible del enlace, por ejemplo, «Importe (€), ascendente»; haz que el texto del enlace empiece con las palabras de la propia cabecera; termina su <code>href</code> con el <code>id</code> de la tabla (<code>?sort=amount&amp;dir=desc#invoices</code>) para que el siguiente Tab llegue a la tabla después de recargar la página; e indica la ordenación en el pie («Facturas, ordenadas por importe, ascendente»).</li>
+              <li><strong>Ordenación en el navegador</strong>, para una tabla que contiene todas sus filas: añade <code>data-luz-sort</code> a las cabeceras. <code>luz.js</code> carga <code>table-sort.js</code> cuando hace falta, solo en páginas con una cabecera así, y el texto de cada cabecera (o el contenido de su enlace) pasa a un <code>&lt;button type="button"&gt;</code>. Al pulsarlo, ordena todos los <code>&lt;tbody&gt;</code> en su sitio, escribe <code>aria-sort</code> solo en esa cabecera e indica «Ordenado por Parcelas, ascendente» en un <code>&lt;output&gt;</code> que se anuncia con cortesía y no se ve. El foco permanece en el botón. Una tabla ordenada en el navegador no lleva la dirección en el pie ni las cabeceras, porque dejaría de ser correcta tras la primera pulsación.</li>
+              <li>El triángulo que aparece tras la cabecera ordenada se dibuja con CSS a partir de <code>aria-sort</code> (es una forma, no texto), así que también aparece en las cabeceras ordenadas en el servidor. Hacia arriba indica orden ascendente; hacia abajo, descendente.</li>
+              <li>Por debajo de 480 px, una fila de cabecera con un enlace o un botón permanece visible: sus cabeceras se muestran en una fila sobre las tarjetas y se ajustan para que se puedan ver y usar los controles. Una fila de cabecera con texto simple se oculta, como antes, porque cada tarjeta lleva sus etiquetas.</li>
+              <li>Las tarjetas cambian la propiedad <code>display</code> de los elementos de la tabla, lo que puede ocultarla a algunos lectores de pantalla. La hoja de estilos recomienda <code>role="table"</code>, <code>"row"</code> y <code>"cell"</code> en las tablas que se apilan.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el desplazamiento, la columna fija y las tarjetas son todo CSS. Una cabecera con enlace se ordena en el servidor; una cabecera de texto simple sigue siendo una cabecera.</p>
+            <p>Las filas nunca se ocultan y, si no se carga el script, la tabla permanece completa.</p>
+            <h4 id="sort-module">Cargar la ordenación por separado</h4>
+            <p>El módulo no importa nada ni tiene efecto hasta que lo llamas. Pásale la función <code>t</code> de las cadenas de core para escribir la línea de estado en el idioma de la tabla; sin ella, la tabla se sigue ordenando, pero la línea de estado queda vacía.</p>
+            <div lang="en" class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-table-sort-js" aria-label="Copy the table sort code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Table sort code"><code id="code-table-sort-js">import { initTableSort } from &quot;@luz-ds/core/table-sort&quot;;
+import { t } from &quot;@luz-ds/core/i18n&quot;;
+
+initTableSort(document, t);</code></pre>
+            </div>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>El contenedor recibe el foco (<code>tabindex="0"</code>) para que se pueda desplazar con las teclas de flecha.</p>
+            <ul>
+              <li>Asigna al contenedor <code>role="region"</code> y un <code>aria-label</code> para que ese punto de parada del foco tenga un nombre.</li>
+              <li>Usa <code>scope="col"</code> en las cabeceras de columna y <code>scope="row"</code> en la celda de cabecera que identifica su fila.</li>
+              <li>Una cabecera ordenable es un botón: Tab llega a ella, Enter o Espacio ordena y el foco permanece en ella mientras se mueven las filas. Los enlaces que sustituye el script conservan el foco que tenían.</li>
+              <li><code>aria-sort</code> se aplica al único <code>&lt;th scope="col"&gt;</code> ordenado. Cada ordenación se anuncia mediante la línea de estado (<code>&lt;output&gt;</code>, role <code>status</code>), en el idioma de la tabla; las cadenas son <code>sortedAsc</code> y <code>sortedDesc</code> de las cadenas de core (consulta los <a href="../../../../es/docs/get-started/javascript/">módulos de JavaScript</a>; <code>data-luz-label-sorted-asc</code> y <code>data-luz-label-sorted-desc</code> las sobrescriben).</li>
+              <li>El nombre de la columna es solo el texto de la cabecera: no añadas un carácter de flecha ni «ascendente» al marcado.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una tabla para comparar registros con los mismos atributos: servicios y su estado, facturas e importes.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses una tabla para maquetar.</p>
+            <ul>
+              <li>Para un atributo por elemento, usa una lista.</li>
+              <li>Para unos pocos elementos con la misma importancia, usa <a href="../../../../es/docs/components/card/">tarjetas</a>.</li>
+              <li>Para una cuadrícula de datos (filtros, selección de filas, edición de celdas o miles de filas), usa una biblioteca diseñada para eso. La tabla de LUZ muestra y ordena filas; no las gestiona. En resultados paginados, ordena en el servidor.</li>
+              <li>Para mostrar una tendencia temporal, usa una biblioteca de gráficos y conserva la tabla como alternativa textual. Una barra por fila es un <a href="../../../../es/docs/components/meter/">medidor</a> en la celda de su cifra.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> La unidad en la cabecera, los mismos decimales y la columna alineada al final, incluida la cabecera.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-table-wrap"><table class="luz-table"><thead><tr><th>Service</th><th class="luz-table__numeric">CPU (%)</th></tr></thead><tbody><tr><td data-label="Service">api-gateway</td><td class="luz-table__numeric" data-label="CPU (%)">12.0</td></tr><tr><td data-label="Service">mailer</td><td class="luz-table__numeric" data-label="CPU (%)">0.5</td></tr></tbody></table></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Una cabecera imprecisa, la unidad en cada celda, decimales mezclados y sin alineación: cuesta comparar la columna.</figcaption>
+                <div lang="en" class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-table-wrap"><table class="luz-table"><thead><tr><th>Service</th><th>Value</th></tr></thead><tbody><tr><td data-label="Service">api-gateway</td><td data-label="Value">12 %</td></tr><tr><td data-label="Service">mailer</td><td data-label="Value">0.48 %</td></tr></tbody></table></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>El pie identifica la tabla; los encabezados de columna son sustantivos breves.</p>
+            <ul>
+              <li>Pon las unidades en el encabezado, no en cada celda: «Importe (€)».</li>
+              <li>Coloca primero la columna que identifica la fila.</li>
+              <li>Alinea los números al final con <code>.luz-table__numeric</code>, tanto en la cabecera como en todas las celdas de la columna, y usa el mismo número de decimales. El texto queda al principio.</li>
+              <li>En las tablas que se ordenan en el navegador, la cabecera indica solo el nombre de la columna y su unidad, «Peso (kg)»: no añadas flechas ni la dirección en la cabecera ni en el pie.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Las cabeceras usan la superficie intensa; las celdas, la de la página y, bajo el puntero, la superficie de resalte.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la tabla en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Necesita</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Celda de cabecera</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>13.5:1</div></td><td data-label="Oscuro"><div>10.9:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Celda</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Celda, fila bajo el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Pie y etiquetas de las tarjetas</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Necesita"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco de una cabecera ordenable</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>4.8:1</div></td><td data-label="Oscuro"><div>5.6:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Necesita"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. «Necesita» indica el mínimo AA de WCAG 2.2: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> el contenedor desplazable lo recibe, con un contorno de <code>--luz-focus-ring</code> de 2 px a 2 px por fuera. También lo recibe el botón de una cabecera ordenable.</li>
+              <li><strong>No solo el color:</strong> las cabeceras ordenables están subrayadas y la ordenada tiene un triángulo del color del texto que apunta hacia arriba o abajo. La dirección también aparece en <code>aria-sort</code> y en la línea de estado.</li>
+              <li><strong>Área interactiva:</strong> los botones de cabecera miden al menos 24 px de alto, sea cual sea el relleno de la celda.</li>
+              <li><strong>Bordes:</strong> las líneas de las filas (<code>--luz-divider</code>) son decorativas; la cabecera tiene su propia superficie y las celdas, sus encabezados.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 17 tokens que lee <code>components/table.css</code>, por familia. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="../../../../es/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="../../../../es/docs/tokens/color/">Color</a></dt><dd><a href="../../../../es/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="../../../../es/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="../../../../es/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="../../../../es/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="../../../../es/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="../../../../es/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="../../../../es/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="../../../../es/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/get-started/">Instala LUZ</a></li>
+      <li><a href="../../../../es/docs/tokens/color/">Tokens de color</a></li>
+      <li><a href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/components/skip-link/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Enlace para saltar al contenido</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/components/tabs/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Pestañas</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/components/table.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Tabla">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · <a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a> · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

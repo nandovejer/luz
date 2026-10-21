@@ -1,583 +1,797 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LUZ: نظام تصميم خفيف وسهل الاستخدام وبلا اعتماديات للويب</title>
-  <meta name="description" content="LUZ ‏(Light, Usable &amp; Zero-dependency) نظام تصميم من رموز التصميم وCSS وقليل من JavaScript الخالصة، ينطلق مما يفعله المتصفح أصلًا: HTML أصلي، وثلاثة أوضاع للألوان، وطبقة تتالٍ واحدة يمكنك تجاوزها دائمًا، ولا خطوة بناء.">
-  <link rel="canonical"  href="https://nandovejer.github.io/luz/ar/">
-  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/">
-  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/">
-  <link rel="alternate"  hreflang="ar" href="https://nandovejer.github.io/luz/ar/">
-  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/">
-  <link rel="icon" href="../assets/favicon-CLiQtzsm.ico" sizes="32x32">
-  <link rel="icon" href="../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="../assets/apple-touch-icon-QPTLZskv.png">
-  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
-  <script src="../boot.js" ></script>
-  <script type="module" crossorigin src="../assets/header-B5ycFlcC.js"></script>
-  <script type="module" crossorigin src="../assets/landing-BOzGl6Ms.js"></script>
-  <link rel="stylesheet" crossorigin href="../assets/header-CdmvI6FB.css">
-  <link rel="stylesheet" crossorigin href="../assets/landing-DO1Gy0Sa.css">
-  <link rel="stylesheet" crossorigin href="../assets/header-Dp0HT6ep.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUZ: نظام تصميم خفيف وسهل الاستخدام وبلا اعتماديات للويب</title>
+<meta name="description" content="LUZ ‏(Light, Usable &amp; Zero-dependency) نظام تصميم من رموز التصميم وCSS وقليل من JavaScript الخالصة، ينطلق مما يفعله المتصفح أصلًا: HTML أصلي، وثلاثة أوضاع للألوان، وطبقة تتالٍ واحدة يمكنك تجاوزها دائمًا، ولا خطوة بناء.">
+<link rel="canonical"  href="https://nandovejer.github.io/luz/ar/">
+<link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/">
+<link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/">
+<link rel="alternate"  hreflang="ar" href="https://nandovejer.github.io/luz/ar/">
+<link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/">
+<link rel="icon" href="../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+<link rel="icon" href="../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon-QPTLZskv.png">
+<!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+<script src="../boot.js" ></script>
+  <script type="module" crossorigin src="../assets/header-CsdZsYUe.js"></script>
+  <script type="module" crossorigin src="../assets/landing-BJnc5rzu.js"></script>
+  <link rel="stylesheet" crossorigin href="../assets/header-DuVRvlf9.css">
+  <link rel="stylesheet" crossorigin href="../assets/landing-DQ_h7gIj.css">
+  <link rel="stylesheet" crossorigin href="../assets/header-BsMkM9X4.css">
 </head>
 <!-- The strings core's scripts write (the color mode button, the copy
-     buttons), in the page's language: authored labels win over core's
-     dictionary, which has no Arabic. The light-* ones are the texts of
-     <home-light> (apps/landing/light/light.js), which landing.js also
-     reads for the names of the lights -->
+buttons), in the page's language: authored labels win over core's
+dictionary, which has no Arabic. The light-* ones are the texts of
+<home-light> (apps/landing/light/light.js), which landing.js also
+reads for the names of the lights -->
 <body class="o-page"
-      data-luz-label-change-mode="تغيير وضع الألوان. الوضع الحالي: {mode}"
-      data-luz-label-mode-changed="وضع الألوان: {mode}"
-      data-luz-label-copied="تم النسخ"
-      data-luz-label-copied-status="تم النسخ إلى الحافظة"
-      data-luz-label-copy-failed="تعذّر النسخ. حدّد النص وانسخه يدويًا."
-      data-luz-label-light-open="إظهار شريط الضوء"
-      data-luz-label-light-fact-1="يستغرق الضوء 1.3 ثانية فقط للانتقال من القمر إلى الأرض."
-      data-luz-label-light-fact-2="يستغرق ضوء الشمس حوالي 8 دقائق و20 ثانية ليصل إلينا؛ لو انطفأت الشمس، لاستغرقنا هذا الوقت لنلاحظ ذلك."
-      data-luz-label-light-fact-3="في ثانية واحدة فقط، يمكن لشعاع الضوء أن يدور حول الأرض 7.5 مرة حول خط الاستواء."
-      data-luz-label-light-fact-4="لا تقيس “السنة الضوئية” الوقت، بل المسافة التي يقطعها الضوء في سنة واحدة، وهي تعادل نحو 9.5 تريليون كيلومتر."
-      data-luz-label-light-fact-5="بسبب الوقت الذي يستغرقه الضوء في الانتقال، عندما تنظر إلى النجوم ليلاً فإنك تراها كما كانت قبل عشرات أو مئات أو آلاف السنين."
-      data-luz-label-light-fact-6="وفقاً للفيزياء الحالية، فإن سرعة الضوء في الفراغ هي الحد الأقصى للسرعة الكونية؛ لا شيء يمتلك كتلة يمكنه السفر أسرع منها."
-      data-luz-label-light-fact-7="تنخفض سرعة الضوء إلى حوالي 225,000 كم/ثانية عند انتقاله عبر الماء بسبب كثافة الوسط."
-      data-luz-label-light-fact-8="في المختبر، تمكن العلماء من إبطاء سرعة الضوء إلى 61 كيلومتراً في الساعة فقط عن طريق تمريره عبر صوديوم شديد البرودة."
-      data-luz-label-light-fact-9="تستغرق إشارة الضوء (أو الراديو) ما بين 3 إلى 22 دقيقة للوصول إلى المريخ، بناءً على مدى محاذاة الكواكب."
-      data-luz-label-light-globe-alt="كرة أرضية تضيئها الشمس كما هي الآن، يابستها أحجية من قطعة رمادية باهتة لكل بلد: جانب النهار يواجه الضوء وجانب الليل يخبو."
-      data-luz-label-light-scrub="تصفّح ساعات اليوم"
-      data-luz-label-light-saved="تم حفظ الوضع"
-      data-luz-label-light-sep="، "
-      data-luz-label-light-dawn="الفجر"
-      data-luz-label-light-morning="ضوء الصباح"
-      data-luz-label-light-afternoon="ضوء العصر"
-      data-luz-label-light-sunset="الغروب"
-      data-luz-label-light-dusk="الشفق"
-      data-luz-label-light-night="الليل">
-  <a class="luz-skip-link" href="#main-content">انتقل إلى المحتوى الرئيسي</a>
-
-  <header class="site-header" id="site-header">
-    <div class="site-header__inner">
-      <a class="site-header__brand" href="../ar/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
-      <a class="site-header__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, سجل التغييرات</span></a>
-      <nav class="site-header__nav" aria-label="الموقع">
-        <a href="../docs/" hreflang="en"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>التوثيق</a>
-      </nav>
-      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
-      <luz-search>
-        <a class="luz-search__fallback site-header__az" href="../docs/a-z/" hreflang="en" data-luz-search-fallback>
-          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-          <span class="luz-search__fallback-label"><span class="u-sr-only">فهرس </span>A–Z</span>
-        </a>
-        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="ابحث في التوثيق (Ctrl K)" hidden>
-          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-          <span class="luz-search__trigger-label">بحث</span>
-          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
-        </button>
-        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
-                data-luz-search-src="../docs/search-index.json"
-                data-luz-label-results="عدد النتائج: {n}"
-                data-luz-label-result="نتيجة واحدة"
-                data-luz-label-capped="تُعرض {shown} من أصل {n}. اكتب المزيد لتضييق النتائج."
-                data-luz-label-none="لا توجد نتائج لـ «{query}». تحقّق من الإملاء أو جرّب كلمة أقصر."
-                data-luz-label-loading="جارٍ تحميل فهرس البحث…"
-                data-luz-label-error="البحث غير متاح الآن.">
-          <search class="luz-search__body">
-            <div class="luz-search__head">
-              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">ابحث في التوثيق (باللغة الإنجليزية)</label></h2>
-              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="إغلاق البحث"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
-            </div>
-            <div class="luz-search__field">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
-            </div>
-            <p class="luz-field__helper" id="luz-search-hint">تتغيّر النتائج أثناء الكتابة. استخدم مفاتيح الأسهم للتنقل بينها.</p>
-            <p class="luz-search__status" role="status"></p>
-            <div class="luz-search__results" data-luz-search-results>
-              <div hidden><h3>الصفحات</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
-              <div hidden><h3>الأقسام</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
-              <div hidden><h3>عناصر HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
-            </div>
-            <p class="luz-search__foot">لم تجد ما تبحث عنه؟ <a href="../docs/a-z/" hreflang="en">تصفّح الفهرس من A إلى Z</a></p>
-          </search>
-        </dialog>
-      </luz-search>
-      <luz-lang-switch>
-    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">اللغة: </span><span class="luz-lang-switch__name">العربية</span></button>
-    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
-      <p class="luz-lang-switch__title" id="luz-lang-title">اللغة</p>
-      <ul class="luz-lang-switch__list">
-        <li><a class="luz-lang-switch__link" href="../" hreflang="en" lang="en">English</a></li>
-        <li><a class="luz-lang-switch__link" href="../es/" hreflang="es" lang="es">Español</a></li>
-        <li><a class="luz-lang-switch__link" href="../ar/" hreflang="ar" lang="ar" aria-current="page">العربية</a></li>
-      </ul>
-    </nav>
-  </luz-lang-switch>
-      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="القائمة" popovertarget="page-nav">
-        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
-          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
-          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
-        </svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- The drawer (768px and below): the sections of this page, the site's
-       links, then the languages with a visible label; above 768px it is
-       not shown (the header row holds the links and the language switch) -->
-  <nav class="luz-sidebar page-nav page-nav--drawer" id="page-nav" popover aria-label="الصفحة الرئيسية" tabindex="-1">
-    <div class="luz-sidebar__section">
-      <span class="luz-sidebar__section-label" id="nav-on-page">في هذه الصفحة</span>
-      <ul class="page-nav__list" aria-labelledby="nav-on-page">
-        <li><a class="luz-sidebar__link" href="#why">لماذا LUZ</a></li>
-        <li><a class="luz-sidebar__link" href="#inside">ماذا يتضمن</a></li>
-        <li><a class="luz-sidebar__link" href="#native">يعمل دون JavaScript</a></li>
-        <li><a class="luz-sidebar__link" href="#modes">ثلاثة أوضاع للألوان</a></li>
-        <li><a class="luz-sidebar__link" href="#type">الطباعة</a></li>
-        <li><a class="luz-sidebar__link" href="#start">البدء</a></li>
-      </ul>
-    </div>
-
-    <div class="luz-sidebar__section page-nav__site">
-      <ul class="page-nav__row" aria-label="الموقع">
-        <li><a class="luz-sidebar__link" href="../docs/" hreflang="en">التوثيق</a></li>
-        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
-      </ul>
-    </div>
-
-    <div class="luz-sidebar__section page-nav__langs">
-      <span class="luz-sidebar__section-label" id="nav-langs">اللغة</span>
-      <div class="page-nav__row" role="group" aria-labelledby="nav-langs">
-        <ul>
-  <li><a href="../" hreflang="en" lang="en">English</a></li>
-  <li><a href="../es/" hreflang="es" lang="es">Español</a></li>
-  <li><a href="../ar/" hreflang="ar" lang="ar" aria-current="page">العربية</a></li>
+data-luz-label-change-mode="تغيير وضع الألوان. الوضع الحالي: {mode}"
+data-luz-label-mode-changed="وضع الألوان: {mode}"
+data-luz-label-copied="تم النسخ"
+data-luz-label-copied-status="تم النسخ إلى الحافظة"
+data-luz-label-copy-failed="تعذّر النسخ. حدّد النص وانسخه يدويًا."
+data-luz-label-light-open="إظهار شريط الضوء"
+data-luz-label-light-fact-1="يستغرق الضوء 1.3 ثانية فقط للانتقال من القمر إلى الأرض."
+data-luz-label-light-fact-2="يستغرق ضوء الشمس حوالي 8 دقائق و20 ثانية ليصل إلينا؛ لو انطفأت الشمس، لاستغرقنا هذا الوقت لنلاحظ ذلك."
+data-luz-label-light-fact-3="في ثانية واحدة فقط، يمكن لشعاع الضوء أن يدور حول الأرض 7.5 مرة حول خط الاستواء."
+data-luz-label-light-fact-4="لا تقيس “السنة الضوئية” الوقت، بل المسافة التي يقطعها الضوء في سنة واحدة، وهي تعادل نحو 9.5 تريليون كيلومتر."
+data-luz-label-light-fact-5="بسبب الوقت الذي يستغرقه الضوء في الانتقال، عندما تنظر إلى النجوم ليلاً فإنك تراها كما كانت قبل عشرات أو مئات أو آلاف السنين."
+data-luz-label-light-fact-6="وفقاً للفيزياء الحالية، فإن سرعة الضوء في الفراغ هي الحد الأقصى للسرعة الكونية؛ لا شيء يمتلك كتلة يمكنه السفر أسرع منها."
+data-luz-label-light-fact-7="تنخفض سرعة الضوء إلى حوالي 225,000 كم/ثانية عند انتقاله عبر الماء بسبب كثافة الوسط."
+data-luz-label-light-fact-8="في المختبر، تمكن العلماء من إبطاء سرعة الضوء إلى 61 كيلومتراً في الساعة فقط عن طريق تمريره عبر صوديوم شديد البرودة."
+data-luz-label-light-fact-9="تستغرق إشارة الضوء (أو الراديو) ما بين 3 إلى 22 دقيقة للوصول إلى المريخ، بناءً على مدى محاذاة الكواكب."
+data-luz-label-light-globe-alt="كرة أرضية تضيئها الشمس كما هي الآن، يابستها أحجية من قطعة رمادية باهتة لكل بلد: جانب النهار يواجه الضوء وجانب الليل يخبو."
+data-luz-label-light-scrub="تصفّح ساعات اليوم"
+data-luz-label-light-saved="تم حفظ الوضع"
+data-luz-label-light-sep="، "
+data-luz-label-light-dawn="الفجر"
+data-luz-label-light-morning="ضوء الصباح"
+data-luz-label-light-afternoon="ضوء العصر"
+data-luz-label-light-sunset="الغروب"
+data-luz-label-light-dusk="الشفق"
+data-luz-label-light-night="الليل">
+<a class="luz-skip-link" href="#main-content">انتقل إلى المحتوى الرئيسي</a>
+<header class="site-header" id="site-header">
+<div class="site-header__inner">
+<a class="site-header__brand" href="../ar/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+<nav class="site-header__nav" aria-label="الموقع">
+<a href="../docs/" hreflang="en"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>التوثيق</a>
+</nav>
+<a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+<luz-search>
+<a class="luz-search__fallback site-header__az" href="../docs/a-z/" hreflang="en" data-luz-search-fallback>
+<svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+<span class="luz-search__fallback-label"><span class="u-sr-only">فهرس </span>A–Z</span>
+</a>
+<button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="ابحث في التوثيق (Ctrl K)" hidden>
+<svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+<span class="luz-search__trigger-label">بحث</span>
+<kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+</button>
+<dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+data-luz-search-src="../docs/search-index.json"
+data-luz-label-results="عدد النتائج: {n}"
+data-luz-label-result="نتيجة واحدة"
+data-luz-label-capped="تُعرض {shown} من أصل {n}. اكتب المزيد لتضييق النتائج."
+data-luz-label-none="لا توجد نتائج لـ «{query}». تحقّق من الإملاء أو جرّب كلمة أقصر."
+data-luz-label-loading="جارٍ تحميل فهرس البحث…"
+data-luz-label-error="البحث غير متاح الآن.">
+<search class="luz-search__body">
+<div class="luz-search__head">
+<h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">ابحث في التوثيق (باللغة الإنجليزية)</label></h2>
+<form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="إغلاق البحث"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+</div>
+<div class="luz-search__field">
+<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+<input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+</div>
+<p class="luz-field__helper" id="luz-search-hint">تتغيّر النتائج أثناء الكتابة. استخدم مفاتيح الأسهم للتنقل بينها.</p>
+<p class="luz-search__status" role="status"></p>
+<div class="luz-search__results" data-luz-search-results>
+<div hidden><h3>الصفحات</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+<div hidden><h3>الأقسام</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+<div hidden><h3>عناصر HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+</div>
+<p class="luz-search__foot">لم تجد ما تبحث عنه؟ <a href="../docs/a-z/" hreflang="en">تصفّح الفهرس من A إلى Z</a></p>
+</search>
+</dialog>
+</luz-search>
+<luz-lang-switch>
+<button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">اللغة: </span><span class="luz-lang-switch__name">العربية</span></button>
+<nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+<p class="luz-lang-switch__title" id="luz-lang-title">اللغة</p>
+<ul class="luz-lang-switch__list">
+<li><a class="luz-lang-switch__link" href="../" hreflang="en" lang="en" dir="ltr">English</a></li>
+<li><a class="luz-lang-switch__link" href="../es/" hreflang="es" lang="es" dir="ltr">Español</a></li>
+<li><a class="luz-lang-switch__link" href="../ar/" hreflang="ar" lang="ar" aria-current="page">العربية</a></li>
 </ul>
-      </div>
-    </div>
-  </nav>
+</nav>
+</luz-lang-switch>
+<button class="luz-nav-toggle site-header__menu" type="button" aria-label="القائمة" popovertarget="page-nav">
+<svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+<rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+<rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+<rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+</svg>
+</button>
+</div>
+</header>
+<!-- The drawer (768px and below): the sections of this page, the site's
+links, then the languages with a visible label; above 768px it is
+not shown (the header row holds the links and the language switch) -->
+<nav class="luz-sidebar page-nav page-nav--drawer" id="page-nav" popover aria-label="الصفحة الرئيسية" tabindex="-1">
+<div class="luz-sidebar__section">
+<span class="luz-sidebar__section-label" id="nav-on-page">في هذه الصفحة</span>
+<ul class="page-nav__list" aria-labelledby="nav-on-page">
+<li><a class="luz-sidebar__link" href="#inside">ماذا يتضمن</a></li>
+<li><a class="luz-sidebar__link" href="#why">لماذا LUZ</a></li>
+<li><a class="luz-sidebar__link" href="#native">HTML دلالي بتنسيق جاهز</a></li>
+<li><a class="luz-sidebar__link" href="#modes">ثلاثة أوضاع للألوان</a></li>
+</ul>
+</div>
+<div class="luz-sidebar__section page-nav__site">
+<ul class="page-nav__row" aria-label="الموقع">
+<li><a class="luz-sidebar__link" href="../docs/" hreflang="en">التوثيق</a></li>
+<li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+</ul>
+</div>
+<div class="luz-sidebar__section page-nav__langs">
+<span class="luz-sidebar__section-label" id="nav-langs">اللغة</span>
+<div class="page-nav__row" role="group" aria-labelledby="nav-langs">
+<ul>
+<li><a href="../" hreflang="en" lang="en" dir="ltr">English</a></li>
+<li><a href="../es/" hreflang="es" lang="es" dir="ltr">Español</a></li>
+<li><a href="../ar/" hreflang="ar" lang="ar" aria-current="page">العربية</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<main id="main-content" class="o-container o-stack luz-landing-main landing-wrap site-sky" tabindex="-1">
+<!-- The first screen: the hero and the light fill the window under the header (landing.css) -->
+<div class="landing-first">
+<!-- ====================== 1. HERO ====================== -->
+<section class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
+<div class="luz-landing-hero__copy">
+<h1 class="luz-landing-hero__title" id="hero-title"><span class="landing-hero__brand">LUZ</span> نظام تصميم <em>للإنسان</em>، جاهز <em>للذكاء الاصطناعي</em>.</h1>
+<p class="luz-landing-hero__lead">رموز التصميم وCSS وقليل من JavaScript الخالصة، مبنية على ما يفعله المتصفح أصلًا. كل مكوّن يعمل قبل تحميل JavaScript، وكل تغيير يبدأ باختبار فاشل.</p>
+<div class="o-actions">
+<a class="luz-btn luz-btn--primary luz-btn--lg" href="#inside">ابدأ الآن</a>
+<a class="luz-btn luz-btn--outline luz-btn--lg" href="../docs/" hreflang="en">اقرأ التوثيق، باللغة الإنجليزية</a>
+</div>
+</div>
+</section>
+<!-- ====================== 2. THE LIGHT ======================
+The visitor's sky over a globe (apps/landing/light/),
+from edge to edge of the window. Without JavaScript the element stays
+empty, light.css keeps its room and the sentence after it says what
+the room is for; once <home-light> is defined the sentence goes -->
+<section class="luz-landing-hero__media luz-landing-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
+<h2 class="u-sr-only" id="light-title">الضوء حيث أنت</h2>
+<home-light bleed favicon></home-light>
+<p class="landing-light__nojs">عند تفعيل JavaScript، يُرسم هنا ضوء ساعتك.</p>
+</section>
+</div>
+<!-- ====================== 4. INSIDE: one section per level of adoption ====================== -->
+<section class="landing-inside" id="inside" aria-labelledby="inside-1-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>الأساس</span></p>
+<h2 class="landing-inside__title" id="inside-1-title">علامتك في <span class="landing-mark">رموز</span></h2>
+<p class="landing-inside__lead">الألوان والمقاييس والأوضاع الثلاثة كخصائص CSS مخصّصة. بلا مكوّنات: ترميزك وأصنافك.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>الألوان.</strong> 53 لونًا أوليًا و55 رمزًا دلاليًا، في الفاتح والداكن والتباين العالي.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>المقاييس.</strong> المسافات والنص والانحناءات والظلال، من ثلاثة مفاتيح.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>الحجم.</strong> 2.8 ك.ب مضغوطًا بـ gzip، مع كل ما قبله.</span></li>
+</ul>
+</div>
+<div class="landing-panel">
+<nav class="luz-tabs landing-panel__tabs" aria-label="المستوى 1 بالشيفرة">
+<a class="luz-tab" href="#in1-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>التثبيت</span></a>
+<a class="luz-tab" href="#in1-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>القائمة</span></a>
+<a class="luz-tab" href="#in1-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>مثال برمجي</span></a>
+</nav>
+<div class="luz-tabpanel landing-panel__pane" id="in1-install">
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">npm</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in1-npm" aria-label="نسخ أمر npm" hidden>نسخ</button>
+</div>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in1-npm">npm install @luz-ds/tokens</code></pre>
+</div>
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">CDN</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in1-cdn" aria-label="نسخ وسوم CDN" hidden>نسخ</button>
+</div>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in1-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in1-list">
+<div class="landing-names" style="--n:8">
+<h3 class="landing-names__title">الرموز <span class="landing-names__n">165</span></h3>
+<ul class="landing-names__list landing-names__list--groups"><li style="--share:0.964"><a href="../docs/tokens/palette/" hreflang="en">الألوان الأولية <span class="landing-names__n">53</span></a></li><li style="--share:1.000"><a href="../docs/tokens/color/" hreflang="en">الألوان الدلالية <span class="landing-names__n">55</span></a></li><li style="--share:0.273"><a href="../docs/tokens/spacing/" hreflang="en">المسافات وعناصر التحكم <span class="landing-names__n">15</span></a></li><li style="--share:0.309"><a href="../docs/tokens/typography/" hreflang="en">الخطوط <span class="landing-names__n">17</span></a></li><li style="--share:0.073"><a href="../docs/tokens/radius/" hreflang="en">الانحناءات <span class="landing-names__n">4</span></a></li><li style="--share:0.073"><a href="../docs/tokens/shadows/" hreflang="en">الظلال <span class="landing-names__n">4</span></a></li><li style="--share:0.200"><a href="../docs/tokens/motion/" hreflang="en">الحركة <span class="landing-names__n">11</span></a></li><li style="--share:0.109"><a href="../docs/tokens/layout/" hreflang="en">نقاط التوقف <span class="landing-names__n">6</span></a></li></ul>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane" id="in1-code">
+<pre class="luz-code-block" data-lang="css" dir="ltr" tabindex="0" role="region" aria-label="مثال برمجي"><code id="in1-code-code">.cta {
+  background: var(--luz-brand-fill);
+  color: var(--luz-text-on-fill);
+}
 
-  <main id="main-content" class="o-container o-stack luz-landing-main landing-wrap site-sky" tabindex="-1">
+.cta:hover {
+  background: var(--luz-brand-fill-hover);
+}
 
-    <!-- ====================== 1. HERO ====================== -->
-    <section class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
-      <div class="luz-landing-hero__copy">
-        <p class="luz-landing-hero__eyebrow" lang="en">Light, usable &amp; zero-dependency</p>
-        <h1 class="luz-landing-hero__title" id="hero-title">LUZ، نظام تصميم <em>للإنسان</em>، جاهز <em>للذكاء الاصطناعي</em>.</h1>
-        <p class="luz-landing-hero__lead">رموز التصميم وCSS وقليل من JavaScript الخالصة، مبنية على ما يفعله المتصفح أصلًا. كل مكوّن يعمل قبل تحميل JavaScript و<a href="../docs/get-started/how-luz-is-built/#tests-first" hreflang="en">نحب التطوير الموجَّه بالاختبارات</a>، كل تغيير يبدأ باختبار فاشل.</p>
-        <div class="o-actions">
-          <a class="luz-btn luz-btn--primary luz-btn--lg" href="../docs/" hreflang="en">اقرأ التوثيق، باللغة الإنجليزية</a>
-          <a class="luz-btn luz-btn--outline luz-btn--lg" href="https://github.com/nandovejer/luz">اعرض الشيفرة على GitHub</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================== 2. THE LIGHT ======================
-         The visitor's sky over a globe (apps/landing/light/),
-         from edge to edge of the window. Without JavaScript the element stays
-         empty, light.css keeps its room and the sentence after it says what
-         the room is for; once <home-light> is defined the sentence goes -->
-    <section class="luz-landing-hero__media luz-landing-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
-      <h2 class="u-sr-only" id="light-title">الضوء حيث أنت</h2>
-      <home-light bleed favicon></home-light>
-      <p class="landing-light__nojs">عند تفعيل JavaScript، يُرسم هنا ضوء ساعتك.</p>
-    </section>
-
-    <!-- ====================== 3. WHY ====================== -->
-    <section class="o-stack luz-landing-section" id="why" aria-labelledby="why-title">
-      <p class="luz-landing-section__eyebrow">لماذا LUZ</p>
-      <h2 class="luz-landing-section__title" id="why-title">ثلاث كلمات، ووعد <em>واحد</em>.</h2>
-      <p class="luz-landing-section__lead">نظام تصميم للويب ينطلق من CSS ولا يحتاج إلى خطوة بناء. أنماط CSS الخاصة بك تغلب دائمًا، وJavaScript تحسين فقط، وكل صفحة تعمل قبل أن تُحمَّل.</p>
-
-      <div class="o-grid landing-trio">
-        <article class="luz-card o-stack" aria-labelledby="why-light">
-          <h3 class="luz-card__title landing-word" id="why-light" lang="en">Light</h3>
-          <p class="luz-card__body">خفيف: CSS عادية ووحدات ES صغيرة من شبكة توصيل محتوى أو من npm. لا معالج مسبق ولا مترجم: ما تقرؤه في الملفات هو ما يشغّله المتصفح.</p>
-          <!-- Each swatch asks <luz-mode> to preview a light (landing.js); without a script they are not shown -->
-          <div class="o-stack landing-swatches" role="group" aria-label="جرّب هذه الصفحة في ضوء آخر" hidden>
-            <div class="o-row landing-swatches__row">
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="dawn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6 17a6 6 0 0 1 12 0Z"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 18h18"/></svg><span class="u-sr-only">الفجر</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="morning" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle fill="currentColor" cx="8" cy="11" r="4.5"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 20h18"/></svg><span class="u-sr-only">ضوء الصباح</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="afternoon" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle fill="currentColor" cx="12" cy="8" r="4.5"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 20h18"/></svg><span class="u-sr-only">ضوء العصر</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="sunset" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle fill="currentColor" cx="16" cy="14" r="4.5"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 20h18"/></svg><span class="u-sr-only">الغروب</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="dusk" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" d="M18 17a6 6 0 0 0-12 0"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 18h18"/></svg><span class="u-sr-only">الشفق</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="night" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17 14.5A6.5 6.5 0 0 1 9.5 7a6.5 6.5 0 1 0 7.5 7.5Z"/></svg><span class="u-sr-only">الليل</span></button>
-            </div>
-            <!-- The light the page shows, by name: the pressed swatch's or the clock's (landing.js) -->
-            <div class="o-row landing-swatches__now">
-              <button class="luz-btn luz-btn--outline luz-btn--sm" type="button" data-phase-live hidden>العودة إلى الآن</button>
-              <span class="landing-swatches__name" data-shown-light></span>
-            </div>
-          </div>
-          <p class="u-text-muted">هذه الصفحة تتبع ساعتك. <span data-needs-js hidden>انقر على ضوء لتستعير ساعة أخرى.</span></p>
-        </article>
-
-        <article class="luz-card o-stack" aria-labelledby="why-usable">
-          <h3 class="luz-card__title landing-word" id="why-usable" lang="en">Usable</h3>
-          <p class="luz-card__body">سهل الاستخدام: العناصر الأصلية أولًا، مثل dialog وpopover وdetails وrange وprogress. دعم لوحة المفاتيح والتركيز المرئي وتباين نص بنسبة 4.5:1 جزء من كل مكوّن، لا خيار إضافي.</p>
-          <div class="luz-dropdown">
-            <button class="luz-btn luz-btn--outline" type="button" popovertarget="why-keyboard">اضغط Tab ثم مفتاح المسافة</button>
-            <div class="luz-dropdown__menu" id="why-keyboard" popover>
-              <p class="landing-note">هذه كانت لوحة المفاتيح وحدها. اضغط Escape لإغلاق هذه الملاحظة.</p>
-            </div>
-          </div>
-          <p class="u-text-muted">حلقة التركيز تأخذ لون إجراءات الصفحة، ولا تختفي أبدًا.</p>
-        </article>
-
-        <article class="luz-card o-stack" aria-labelledby="why-zero">
-          <h3 class="luz-card__title landing-word" id="why-zero" lang="en">Zero-dependency</h3>
-          <div class="luz-landing-stat">
-            <p class="luz-landing-stat__value">0</p>
-            <p class="luz-landing-stat__label">اعتماديات وقت التشغيل. لا شيء تثبّته لتجربته، ولا إطار عمل تلاحق تحديثاته لسنوات.</p>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ====================== 4. INSIDE ====================== -->
-    <section class="o-stack luz-landing-section" id="inside" aria-labelledby="inside-title">
-      <p class="luz-landing-section__eyebrow">ماذا يتضمن</p>
-      <h2 class="luz-landing-section__title" id="inside-title">اعتمده <em>طبقةً</em> طبقة.</h2>
-      <p class="luz-landing-section__lead">اتجاه واحد: كل حزمة تحتاج إلى ما تحتها ولا شيء مما فوقها، وتثبيتها يجلب ما تحتها. اختر المستوى الذي تحتاج إليه وتوقّف عنده.</p>
-
-      <div class="landing-levels">
-
-        <article class="landing-level" aria-labelledby="level-1-title">
-          <div class="landing-level__intro">
-            <h3 class="landing-level__title" id="level-1-title"><span class="landing-eyebrow">المستوى 1</span> رموز التصميم فقط</h3>
-            <span class="luz-tag luz-tag--gray">مستقل</span>
-            <p>اختره إذا كانت لديك مكونات أو إطار عمل بالفعل ولا تريد إلا قيمًا متسقة وأوضاعًا للألوان.</p>
-          </div>
-          <div class="landing-level__body">
-            <h4 class="landing-eyebrow">تحصل على</h4>
-            <ul class="landing-level__get">
-              <li>53 لونًا أساسيًا، و55 رمزًا دلاليًا معرَّفًا للوضع الفاتح والداكن والتباين العالي</li>
-              <li>سلالم للمسافات وارتفاعات عناصر التحكم وأحجام الخط وأنصاف أقطار الزوايا والظلال</li>
-            </ul>
-          </div>
-          <div class="landing-level__actions">
-            <a class="luz-btn luz-btn--outline" href="../docs/get-started/#level-1-tokens-only" hreflang="en">ثبّت المستوى 1</a>
-            <a href="../docs/tokens/" hreflang="en">اعرض رموز التصميم</a>
-          </div>
-        </article>
-
-        <article class="landing-level" aria-labelledby="level-2-title">
-          <div class="landing-level__intro">
-            <h3 class="landing-level__title" id="level-2-title"><span class="landing-eyebrow">المستوى 2</span> Tokens + Core</h3>
-            <span class="luz-tag luz-tag--gray">يتطلب tokens</span>
-            <p>اختره إذا كنت تبني صفحات أو تطبيقًا وتستخدم تخطيط صفحاتك الخاص.</p>
-          </div>
-          <div class="landing-level__body">
-            <h4 class="landing-eyebrow">يضيف إلى المستوى 1</h4>
-            <ul class="landing-level__get">
-              <li>32 مكوّنًا، من الأزرار والنماذج إلى علامات التبويب ومشغّل الوسائط، و10 كائنات تخطيط</li>
-              <li>كل شيء في <a href="../docs/get-started/layers/" hreflang="en">طبقة تتالٍ</a> واحدة، <code class="luz-code-inline">luz</code>: أنماط CSS الخاصة بك تتقدّم دون <code class="luz-code-inline">!important</code></li>
-            </ul>
-          </div>
-          <div class="landing-level__actions">
-            <a class="luz-btn luz-btn--outline" href="../docs/get-started/#level-2-tokens-and-core" hreflang="en">ثبّت المستوى 2</a>
-            <a href="../docs/components/" hreflang="en">اعرض المكونات</a>
-          </div>
-        </article>
-
-        <article class="landing-level" aria-labelledby="level-3-title">
-          <div class="landing-level__intro">
-            <h3 class="landing-level__title" id="level-3-title"><span class="landing-eyebrow">المستوى 3</span> Tokens + Core + Site</h3>
-            <span class="luz-tag luz-tag--gray">يتطلب core وtokens</span>
-            <p>اختره إذا كان موقعك يحتاج إلى بحث أو شريط لملفات تعريف الارتباط أو أكثر من لغة. هذه الصفحة الرئيسية مبنية عليه.</p>
-          </div>
-          <div class="landing-level__body">
-            <h4 class="landing-eyebrow">يضيف إلى المستوى 2</h4>
-            <ul class="landing-level__get">
-              <li>البحث في الموقع، وشريط للموافقة على ملفات تعريف الارتباط لا يغطي شيئًا، مع JavaScript اختيارية</li>
-              <li>مبدّل للغة، وقوائم فرعية لروابط الترويسة، وشريط إعلان فوقها</li>
-            </ul>
-          </div>
-          <div class="landing-level__actions">
-            <a class="luz-btn luz-btn--outline" href="../docs/get-started/#level-3-tokens-core-and-site" hreflang="en">ثبّت المستوى 3</a>
-            <a href="../docs/site/" hreflang="en">اعرض الأنماط</a>
-          </div>
-        </article>
-
-      </div>
-
-      <div class="o-stack landing-kinds">
-        <h3 class="landing-kinds__title" id="kinds-title">المستوى 4 · حزمة لنوع موقعك</h3>
-        <p class="u-text-muted">كل منها مبني على site. ثبّت حزمة موقعك: فهي تجلب كل ما تحتها.</p>
-        <ul class="o-row landing-kinds__list" aria-labelledby="kinds-title">
-          <li><a href="../docs/landing/" hreflang="en"><code class="luz-code-inline">landing</code> لصفحة هبوط</a></li>
-          <li><a href="../docs/cms/" hreflang="en"><code class="luz-code-inline">cms</code> لمدونة أو صحيفة</a></li>
-          <li><a href="../docs/app/" hreflang="en"><code class="luz-code-inline">app</code> لتطبيق ويب</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ====================== 5. NATIVE ====================== -->
-    <section class="o-stack luz-landing-section" id="native" aria-labelledby="native-title">
-      <p class="luz-landing-section__eyebrow">يعمل دون JavaScript</p>
-      <h2 class="luz-landing-section__title" id="native-title">ينطلق مما يفعله المتصفح <em>أصلًا</em>.</h2>
-      <p class="luz-landing-section__lead">كل مكوّن عنصر أصلي فوقه ورقة أنماط. عطّل JavaScript وستظل تُفتح وتُغلق وتنزلق وتتيح الاختيار.</p>
-
-      <div class="o-grid landing-specimens">
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;details&gt;</code></h3>
-          <details>
-            <summary>ماذا تعني «بلا خطوة بناء»؟</summary>
-            <p>أن لا خطوة بين الملفات التي تقرؤها والصفحة التي يعرضها المتصفح. انسخها، واربطها، وانتهى الأمر.</p>
-          </details>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;dialog&gt;</code></h3>
-          <div>
-            <button class="luz-btn luz-btn--outline" type="button" commandfor="native-dialog" command="show-modal">افتح مربع حوار</button>
-          </div>
-          <p class="u-text-muted">يُفتح دون سكربت حيث يدعم المتصفح <code class="luz-code-inline">command</code>؛ وفي غيره يفتحه سكربت صغير.</p>
-          <dialog class="luz-modal" id="native-dialog" aria-labelledby="native-dialog-title">
-            <div class="luz-modal__header">
-              <p class="luz-modal__title" id="native-dialog-title">مربع حوار أصلي</p>
-            </div>
-            <div class="luz-modal__body">
-              <p>ينتقل التركيز إليه، ويغلقه مفتاح Escape، ويُبقي المتصفح الصفحة التي خلفه بعيدة عن المتناول. لم تكتب أي مكتبة شيئًا من ذلك.</p>
-            </div>
-            <div class="luz-modal__footer">
-              <button class="luz-btn luz-btn--primary" type="button" commandfor="native-dialog" command="close">أغلق مربع الحوار</button>
-            </div>
-          </dialog>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>popover</code></h3>
-          <div class="luz-dropdown">
-            <button class="luz-btn luz-btn--outline" type="button" popovertarget="native-popover">افتح نافذة منبثقة</button>
-            <div class="luz-dropdown__menu" id="native-popover" popover>
-              <p class="landing-note">تُغلق بالنقر خارجها وتظهر في الطبقة العليا، دون صراع مع z-index. المتصفح يتولى ذلك.</p>
-              <ul class="luz-dropdown__list">
-                <li><a class="luz-dropdown__item" href="../docs/components/dropdown/" hreflang="en">اعرض القائمة المنسدلة، المبنية على نافذة منبثقة</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;input type="range"&gt;</code></h3>
-          <div class="luz-field">
-            <label class="luz-field__label" for="native-range">السطوع</label>
-            <input class="luz-input" id="native-range" type="range" min="0" max="100" value="64">
-          </div>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;progress&gt;</code></h3>
-          <div class="luz-field">
-            <label class="luz-field__label" for="native-progress">الملف الشخصي: اكتملت 3 من 5 خطوات</label>
-            <progress class="luz-progress" id="native-progress" max="5" value="3"></progress>
-          </div>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;select&gt;</code></h3>
-          <div class="luz-field">
-            <label class="luz-field__label" for="native-select">المقاس</label>
-            <select class="luz-select" id="native-select">
-              <option value="small">صغير</option>
-              <option value="medium" selected>متوسط</option>
-              <option value="large">كبير</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================== 6. MODES ====================== -->
-    <section class="o-stack luz-landing-section" id="modes" aria-labelledby="modes-title">
-      <p class="luz-landing-section__eyebrow">ثلاثة أوضاع للألوان</p>
-      <h2 class="luz-landing-section__title" id="modes-title">فاتح، داكن، تباين عالٍ. <em>والساعة.</em></h2>
-      <p class="luz-landing-section__lead">كل لون دلالي معرَّف للأوضاع الثلاثة، والسمة <code class="luz-code-inline">data-theme</code> تبدّل بينها، في الصفحة كلها أو في جزء منها. وتضيف هذه الصفحة محورًا خاصًا بها: الوقت حيث أنت.</p>
-
-      <!-- The same invoice three times: each scope re-defines the semantic tokens -->
-      <div class="o-grid landing-modes">
-        <figure class="landing-mode">
-          <figcaption class="landing-eyebrow">فاتح</figcaption>
-          <div class="landing-mode__scope" data-theme="light">
-            <div class="luz-card">
-              <p class="luz-card__title">الفاتورة 1042</p>
-              <p class="luz-card__body">دُفعت في 3 أكتوبر. شكرًا لك.</p>
-              <span class="luz-tag luz-tag--green luz-tag--dot">مدفوعة</span>
-            </div>
-          </div>
-        </figure>
-        <figure class="landing-mode">
-          <figcaption class="landing-eyebrow">داكن</figcaption>
-          <div class="landing-mode__scope" data-theme="dark">
-            <div class="luz-card">
-              <p class="luz-card__title">الفاتورة 1042</p>
-              <p class="luz-card__body">دُفعت في 3 أكتوبر. شكرًا لك.</p>
-              <span class="luz-tag luz-tag--green luz-tag--dot">مدفوعة</span>
-            </div>
-          </div>
-        </figure>
-        <figure class="landing-mode">
-          <figcaption class="landing-eyebrow">تباين عالٍ</figcaption>
-          <div class="landing-mode__scope" data-theme="high-contrast">
-            <div class="luz-card">
-              <p class="luz-card__title">الفاتورة 1042</p>
-              <p class="luz-card__body">دُفعت في 3 أكتوبر. شكرًا لك.</p>
-              <span class="luz-tag luz-tag--green luz-tag--dot">مدفوعة</span>
-            </div>
-          </div>
-        </figure>
-      </div>
-
-      <!-- The day strip: decoration; the line under it says the light in words (landing.js) -->
-      <div class="landing-day" aria-hidden="true">
-        <div class="landing-day__strip"><span class="landing-day__now" hidden></span></div>
-        <div class="landing-day__ticks">
-          <span>الفجر</span>
-          <span>ضوء الصباح</span>
-          <span>ضوء العصر</span>
-          <span>الغروب</span>
-          <span>الشفق</span>
-          <span>الليل</span>
-        </div>
-      </div>
-      <p class="u-text-muted" data-day-line hidden>ضوء هذه الساعة: <strong data-day-phase></strong></p>
-    </section>
-
-    <!-- ====================== 7. TYPE ====================== -->
-    <section class="o-stack luz-landing-section" id="type" aria-labelledby="type-title">
-      <p class="luz-landing-section__eyebrow">الطباعة</p>
-      <h2 class="luz-landing-section__title" id="type-title">صُمّم <em>ليُقرأ</em>.</h2>
-      <p class="luz-landing-section__lead">خط ET Book للنص والعناوين اللاتينية، مستضاف ذاتيًا ومرخَّص بترخيص MIT. وخطوط النظام لعناصر التحكم والتسميات والشيفرة، وللعربية.</p>
-
-      <blockquote class="landing-type__quote"><p>الضوء هو المادة الأولى للصفحة. وكل ما عداه يوضع فيه.</p></blockquote>
-    </section>
-
-    <!-- ====================== 8. START ======================
-         The snippets, then who LUZ fits and who it does not, then the two actions -->
-    <section class="o-stack luz-landing-section" id="start" aria-labelledby="start-title">
-      <p class="luz-landing-section__eyebrow">البدء</p>
-      <h2 class="luz-landing-section__title" id="start-title">وسم link واحد لكل <em>طبقة</em>.</h2>
-      <p class="luz-landing-section__lead">اختر مستوى، وانسخ المقتطف، وانشر. ثبّت رقم إصدار محددًا ما دام LUZ في مرحلة تجريبية.</p>
-
-      <div class="landing-snippet">
-        <div class="landing-snippet__bar">
-          <span class="landing-eyebrow">من شبكة توصيل محتوى</span>
-          <button class="luz-copy-btn" type="button" data-copy-from="snip-cdn" aria-label="نسخ مقتطف شبكة توصيل المحتوى" hidden>نسخ</button>
-        </div>
-        <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="مقتطف شبكة توصيل المحتوى"><code id="snip-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
+a {
+  color: var(--luz-brand-primary);
+}</code></pre>
+</div>
+</div>
+</section>
+<section class="landing-inside landing-inside--flip" id="inside-2" aria-labelledby="inside-2-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>الأساس + Core</span></p>
+<h2 class="landing-inside__title" id="inside-2-title">مكوّنات مع <span class="landing-mark">core</span></h2>
+<p class="landing-inside__lead">المكوّنات والتخطيط فوق الرموز، في طبقة تتالٍ واحدة تغلبها أنماطك دائمًا.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>المكوّنات.</strong> 32 مكوّنًا، من الأزرار والنماذج إلى الألسنة ومشغّل الوسائط.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>التخطيط.</strong> 10 كائنات للصفوف والشبكات والأكوام والحاويات.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>الحجم.</strong> 30.8 ك.ب مضغوطًا بـ gzip، مع كل ما قبله.</span></li>
+</ul>
+</div>
+<div class="landing-panel">
+<nav class="luz-tabs landing-panel__tabs" aria-label="المستوى 2 بالشيفرة">
+<a class="luz-tab" href="#in2-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>التثبيت</span></a>
+<a class="luz-tab" href="#in2-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>القائمة</span></a>
+<a class="luz-tab" href="#in2-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>مثال برمجي</span></a>
+</nav>
+<div class="luz-tabpanel landing-panel__pane" id="in2-install">
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">npm</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in2-npm" aria-label="نسخ أمر npm" hidden>نسخ</button>
+</div>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in2-npm">npm install @luz-ds/tokens @luz-ds/core</code></pre>
+</div>
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">CDN</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in2-cdn" aria-label="نسخ وسوم CDN" hidden>نسخ</button>
+</div>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in2-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot;&gt;
-
-&lt;button class=&quot;luz-btn luz-btn--primary&quot;&gt;حفظ التغييرات&lt;/button&gt;
-&lt;span class=&quot;luz-tag luz-tag--green luz-tag--dot&quot;&gt;منشور&lt;/span&gt;</code></pre>
-      </div>
-
-      <div class="landing-render">
-        <p class="landing-eyebrow">وهذه نتيجته</p>
-        <div class="o-row">
-          <button class="luz-btn luz-btn--primary" type="button">حفظ التغييرات</button>
-          <span class="luz-tag luz-tag--green luz-tag--dot">منشور</span>
-        </div>
-      </div>
-
-      <div class="landing-snippet">
-        <div class="landing-snippet__bar">
-          <span class="landing-eyebrow">من npm</span>
-          <button class="luz-copy-btn" type="button" data-copy-from="snip-npm" aria-label="نسخ مقتطف npm" hidden>نسخ</button>
-        </div>
-        <pre class="luz-code-block" data-lang="js" dir="ltr" tabindex="0" role="region" aria-label="مقتطف npm"><code id="snip-npm">npm install @luz-ds/tokens @luz-ds/core
-
-import &quot;@luz-ds/tokens/css&quot;;
-import &quot;@luz-ds/core/css&quot;;
-import &quot;@luz-ds/core&quot;;</code></pre>
-      </div>
-
-      <p>ثم اكتب HTML. ‏<code class="luz-code-inline">&lt;button class="luz-btn"&gt;</code> زر. ‏<code class="luz-code-inline">&lt;dialog class="luz-modal"&gt;</code> مربع حوار. هذه هي الفكرة كلها.</p>
-
-      <div class="o-grid o-grid--split landing-fit">
-        <div>
-          <h3 class="landing-fit__title">يناسبك</h3>
-          <ul class="landing-fit__list">
-            <li>مواقع المحتوى والتوثيق والخدمات العامة التي يجب أن تستوفي WCAG 2.2 AA.</li>
-            <li>الصفحات التي تُولَّد على الخادم والمواقع الثابتة، بأي لغة برمجة للخادم.</li>
-            <li>الفرق التي تريد أن تقرأ CSS الخاص بها وتملكه.</li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="landing-fit__title">لا يناسبك</h3>
-          <ul class="landing-fit__list">
-            <li>تحتاج إلى مكونات React أو Vue جاهزة.</li>
-            <li>تحتاج إلى جدول بيانات متقدم أو رسوم بيانية أو أداة لاختيار نطاق تواريخ: لا يوفّر LUZ أيًّا منها.</li>
-            <li>تحتاج إلى واجهة برمجية مستقرة اليوم: LUZ في مرحلة تجريبية، وقد تتغير الأسماء.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="o-actions">
-        <a class="luz-btn luz-btn--primary" href="../docs/" hreflang="en">اقرأ التوثيق، باللغة الإنجليزية</a>
-        <a class="luz-btn luz-btn--outline" href="../docs/components/" hreflang="en">تصفّح المكونات، باللغة الإنجليزية</a>
-      </div>
-    </section>
-    <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
-         a fractal noise that displaces their soft ovals -->
-    <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
-      <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
-        <feDisplacementMap in="SourceGraphic" scale="120"/>
-      </filter>
-    </svg>
-  </main>
-
-  <footer class="luz-landing-footer">
-    <div class="o-container o-container--inline o-grid">
-      <div class="luz-landing-footer__brand">
-        <p class="landing-brand"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg><strong>LUZ</strong> <span>v0.0.0</span></p>
-        <p class="u-text-muted">تجريبي · ترخيص MIT</p>
-        <p class="u-text-muted">الضوء، حيثما كنت.</p>
-      </div>
-      <nav class="luz-landing-footer__col" aria-labelledby="footer-docs">
-        <h2 class="luz-landing-footer__col-title" id="footer-docs">التوثيق</h2>
-        <ul>
-          <li><a href="../docs/get-started/" hreflang="en">البدء</a></li>
-          <li><a href="../docs/tokens/" hreflang="en">رموز التصميم</a></li>
-          <li><a href="../docs/components/" hreflang="en">المكونات</a></li>
-          <li><a href="../docs/site/" hreflang="en">الأنماط</a></li>
-          <li><a href="../docs/accessibility/" hreflang="en">بيان إمكانية الوصول</a></li>
-        </ul>
-      </nav>
-      <nav class="luz-landing-footer__col" aria-labelledby="footer-project">
-        <h2 class="luz-landing-footer__col-title" id="footer-project">المشروع</h2>
-        <ul>
-          <li><a href="https://github.com/nandovejer/luz">GitHub</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">سجل التغييرات</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/CONTRIBUTING.md">كيف تساهم</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/dev/BROWSER-REVIEWS.md">المراجعات في المتصفحات</a></li>
-        </ul>
-      </nav>
-      <!-- Named apart from the header's language menu: two landmarks, two names -->
-      <nav class="luz-landing-footer__col" aria-label="لغات هذه الصفحة">
-        <h2 class="luz-landing-footer__col-title">اللغة</h2>
-        <ul>
-  <li><a href="../" hreflang="en" lang="en">English</a></li>
-  <li><a href="../es/" hreflang="es" lang="es">Español</a></li>
-  <li><a href="../ar/" hreflang="ar" lang="ar" aria-current="page">العربية</a></li>
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in2-list">
+<div class="landing-names" style="--n:32">
+<h3 class="landing-names__title">المكوّنات <span class="landing-names__n">32</span></h3>
+<ul class="landing-names__list landing-names__list--map" dir="ltr"><li style="--share:0.076"><a href="../docs/components/accordion/" hreflang="en">accordion</a></li><li style="--share:0.199"><a href="../docs/components/alert/" hreflang="en">alert</a></li><li style="--share:0.100"><a href="../docs/components/avatar/" hreflang="en">avatar</a></li><li style="--share:0.056"><a href="../docs/components/band/" hreflang="en">band</a></li><li style="--share:0.117"><a href="../docs/components/breadcrumb/" hreflang="en">breadcrumb</a></li><li style="--share:0.298"><a href="../docs/components/button/" hreflang="en">button</a></li><li style="--share:0.258"><a href="../docs/components/card/" hreflang="en">card</a></li><li style="--share:0.211"><a href="../docs/components/code/" hreflang="en">code</a></li><li style="--share:0.131"><a href="../docs/components/copy-button/" hreflang="en">copy-btn</a></li><li style="--share:0.316"><a href="../docs/components/dropdown/" hreflang="en">dropdown</a></li><li style="--share:0.079"><a href="../docs/components/figure/" hreflang="en">figure</a></li><li style="--share:0.941"><a href="../docs/components/form/" hreflang="en">form</a></li><li style="--share:0.109"><a href="../docs/components/icon-grid/" hreflang="en">icon-grid</a></li><li style="--share:0.099"><a href="../docs/components/image/" hreflang="en">image</a></li><li style="--share:0.094"><a href="../docs/components/meta/" hreflang="en">meta</a></li><li style="--share:0.160"><a href="../docs/components/meter/" hreflang="en">meter</a></li><li style="--share:0.226"><a href="../docs/components/modal/" hreflang="en">modal</a></li><li style="--share:0.662"><a href="../docs/components/mode-switcher/" hreflang="en">mode-switcher</a></li><li style="--share:0.244"><a href="../docs/components/navbar/" hreflang="en">navbar</a></li><li style="--share:0.211"><a href="../docs/components/pagination/" hreflang="en">pagination</a></li><li style="--share:0.737"><a href="../docs/components/player/" hreflang="en">player</a></li><li style="--share:0.231"><a href="../docs/components/progress/" hreflang="en">progress</a></li><li style="--share:0.159"><a href="../docs/components/prose/" hreflang="en">prose</a></li><li style="--share:0.485"><a href="../docs/components/select/" hreflang="en">select</a></li><li style="--share:0.595"><a href="../docs/components/sidebar/" hreflang="en">sidebar</a></li><li style="--share:0.083"><a href="../docs/components/skip-link/" hreflang="en">skip-link</a></li><li style="--share:0.541"><a href="../docs/components/table/" hreflang="en">table</a></li><li style="--share:0.186"><a href="../docs/components/tabs/" hreflang="en">tabs</a></li><li style="--share:0.212"><a href="../docs/components/tag/" hreflang="en">tag</a></li><li style="--share:1.000"><a href="../docs/components/timeline/" hreflang="en">timeline</a></li><li style="--share:0.158"><a href="../docs/components/toast/" hreflang="en">toast</a></li><li style="--share:0.219"><a href="../docs/components/tooltip/" hreflang="en">tooltip</a></li></ul>
+</div>
+<div class="landing-names" style="--n:10">
+<h3 class="landing-names__title">كائنات التخطيط <span class="landing-names__n">10</span></h3>
+<ul class="landing-names__list landing-names__list--map" dir="ltr"><li style="--share:1.000"><a href="../docs/components/layout/#objects-reference" hreflang="en">o-shell</a></li><li style="--share:0.286"><a href="../docs/components/layout/#objects-reference" hreflang="en">o-main</a></li><li style="--share:0.286"><a href="../docs/components/layout/#objects-reference" hreflang="en">o-container</a></li><li style="--share:0.286"><a href="../docs/components/layout/#objects-page" hreflang="en">o-page</a></li><li style="--share:0.286"><a href="../docs/components/layout/#objects-reference" hreflang="en">o-sticky</a></li><li style="--share:0.286"><a href="../docs/components/layout/#objects-grid" hreflang="en">o-grid</a></li><li style="--share:0.286"><a href="../docs/components/layout/#objects-reference" hreflang="en">o-row</a></li><li style="--share:0.429"><a href="../docs/components/layout/#objects-actions" hreflang="en">o-actions</a></li><li style="--share:0.286"><a href="../docs/components/layout/#objects-reference" hreflang="en">o-stack</a></li><li style="--share:0.143"><a href="../docs/components/layout/#objects-reference" hreflang="en">o-media</a></li></ul>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane" id="in2-code">
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="مثال برمجي"><code id="in2-code-code">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;f-name&quot;&gt;Project name&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;f-name&quot; type=&quot;text&quot; aria-describedby=&quot;f-name-help&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;f-name-help&quot;&gt;Shown on the dashboard.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;f-slug&quot;&gt;Slug&lt;/label&gt;
+  &lt;input class=&quot;luz-input luz-input--error&quot; id=&quot;f-slug&quot; type=&quot;text&quot;
+         aria-invalid=&quot;true&quot; aria-describedby=&quot;f-slug-error&quot;&gt;
+  &lt;div class=&quot;luz-field__error&quot; id=&quot;f-slug-error&quot;&gt;Use letters, numbers and dashes only.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="landing-inside" id="inside-3" aria-labelledby="inside-3-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>الأساس + Core + مكوّنات رائعة</span></p>
+<h2 class="landing-inside__title" id="inside-3-title">موقع كامل مع <span class="landing-mark">مكوّنات رائعة</span></h2>
+<p class="landing-inside__lead">ما يحتاجه الموقع كله: البحث فيه، والسؤال عن ملفات تعريف الارتباط، وتبديل اللغة.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>البحث.</strong> حوار يُفتح بـ Ctrl K، وبدون JavaScript هو رابط إلى الفهرس.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>اللغة والإشعارات.</strong> مبدّل لغة وقوائم فرعية وإشعار ملفات تعريف ارتباط لا يغطي شيئًا.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>الحجم.</strong> 38.9 ك.ب مضغوطًا بـ gzip، مع كل ما قبله.</span></li>
 </ul>
-      </nav>
-    </div>
-    <div class="o-stack landing-foot">
-      <luz-mode class="site-modes" remember by="clock">
-        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
-          <legend class="luz-mode-switcher__label">وضع الألوان</legend>
-          <button class="luz-mode-cycle" type="button" aria-label="تغيير وضع الألوان"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
-          <span class="luz-mode-cycle__status" role="status"></span>
-          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>فاتح</label>
-          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>داكن</label>
-          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>تباين عالٍ</label>
-        </fieldset>
-      </luz-mode>
-      <p class="u-text-muted" data-needs-js hidden>يُحسب الضوء من ساعتك، لا من موقعك أبدًا. ويبقى اختيارك في هذا المتصفح.</p>
-    </div>
-  </footer>
-
+</div>
+<div class="landing-panel">
+<nav class="luz-tabs landing-panel__tabs" aria-label="المستوى 3 بالشيفرة">
+<a class="luz-tab" href="#in3-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>التثبيت</span></a>
+<a class="luz-tab" href="#in3-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>القائمة</span></a>
+<a class="luz-tab" href="#in3-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>مثال برمجي</span></a>
+</nav>
+<div class="luz-tabpanel landing-panel__pane" id="in3-install">
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">npm</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in3-npm" aria-label="نسخ أمر npm" hidden>نسخ</button>
+</div>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in3-npm">npm install @luz-ds/tokens @luz-ds/core @luz-ds/site</code></pre>
+</div>
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">CDN</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in3-cdn" aria-label="نسخ وسوم CDN" hidden>نسخ</button>
+</div>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in3-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot;&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in3-list">
+<div class="landing-names" style="--n:6">
+<h3 class="landing-names__title">مكوّنات الموقع <span class="landing-names__n">6</span></h3>
+<ul class="landing-names__list landing-names__list--map" dir="ltr"><li style="--share:0.147"><a href="../docs/site/banner/" hreflang="en">banner</a></li><li style="--share:0.265"><a href="../docs/site/classes/" hreflang="en">consent</a></li><li style="--share:0.603"><a href="../docs/site/classes/" hreflang="en">lang-switch</a></li><li style="--share:0.038"><a href="../docs/site/" hreflang="en">mode</a></li><li style="--share:1.000"><a href="../docs/site/classes/" hreflang="en">search</a></li><li style="--share:0.310"><a href="../docs/site/classes/" hreflang="en">submenu</a></li></ul>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane" id="in3-code">
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="مثال برمجي"><code id="in3-code-code">&lt;luz-search&gt;
+  &lt;a class=&quot;luz-search__fallback&quot; href=&quot;/docs/a-z/&quot; data-luz-search-fallback&gt;A–Z&lt;/a&gt;
+  &lt;button class=&quot;luz-search__trigger&quot; type=&quot;button&quot; data-luz-search-open hidden&gt;Search&lt;/button&gt;
+  &lt;dialog class=&quot;luz-modal luz-search&quot; id=&quot;luz-search&quot;
+          data-luz-search-src=&quot;/search-index.json&quot;&gt;
+    &lt;search class=&quot;luz-search__body&quot;&gt;
+      &lt;input class=&quot;luz-input&quot; id=&quot;luz-search-q&quot; type=&quot;text&quot;&gt;
+      &lt;p class=&quot;luz-search__status&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+      &lt;div class=&quot;luz-search__results&quot; data-luz-search-results&gt;…&lt;/div&gt;
+    &lt;/search&gt;
+  &lt;/dialog&gt;
+&lt;/luz-search&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="landing-inside landing-inside--flip" id="inside-4" aria-labelledby="inside-4-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>الأساس + Core + مكوّنات رائعة + قالب المشروع</span></p>
+<h2 class="landing-inside__title" id="inside-4-title">لكل موقع <span class="landing-mark">قالبه</span></h2>
+<p class="landing-inside__lead">حزمة لكل نوع من المواقع، فوق كل ما سبق: ثبّت حزمتك فتجلب ما تحتاجه.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>أربعة أنواع.</strong> صفحة هبوط ومنشور وتطبيق وموقع توثيق.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>CSS فقط.</strong> لا تضيف أي منها JavaScript: إنها تخطيط وأنماط.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>الحجم.</strong> حتى 40.7 ك.ب مضغوطًا بـ gzip، مع كل ما قبله.</span></li>
+</ul>
+</div>
+<ul class="landing-inside__kinds" aria-label="الحزم لكل نوع من المواقع">
+<li class="landing-kind landing-kind--landing">
+<div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M7 8.5h10M8.5 11.5h7"/><rect x="9" y="14.5" width="6" height="2.5" rx="1.25"/></g></svg><hgroup class="landing-kind__name"><h3>صفحة هبوط</h3><p>الترويسة والواجهة الرئيسية والأقسام والأرقام لصفحة هبوط، والتذييل الذي يختمها.</p></hgroup></div>
+<div class="landing-term">
+<nav class="luz-tabs landing-term__tabs" aria-label="التثبيت landing">
+<a class="luz-tab" href="#in4-landing-npm-pane">npm</a>
+<a class="luz-tab" href="#in4-landing-cdn-pane">CDN</a>
+</nav>
+<div class="luz-tabpanel landing-term__pane" id="in4-landing-npm-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-landing-npm" aria-label="نسخ أمر npm" hidden>نسخ</button>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in4-landing-npm">npm install @luz-ds/landing</code></pre>
+</div>
+<div class="luz-tabpanel landing-term__pane" id="in4-landing-cdn-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-landing-cdn" aria-label="نسخ وسوم CDN" hidden>نسخ</button>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in4-landing-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.0.0/dist/landing.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="../docs/landing/" hreflang="en">التوثيق<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</li>
+<li class="landing-kind landing-kind--cms">
+<div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11"/><path d="M7.5 9h4M7.5 12.5h7M7.5 16h7"/><path d="m17.5 3.5 3 3-6 6H11.5v-3l6-6Z"/></g></svg><hgroup class="landing-kind__name"><h3>مدونة أو صحيفة</h3><p>الترويسة وعناوين الصفحة والمقال وجدول المحتويات والتذييل لموقع مقالات.</p></hgroup></div>
+<div class="landing-term">
+<nav class="luz-tabs landing-term__tabs" aria-label="التثبيت cms">
+<a class="luz-tab" href="#in4-cms-npm-pane">npm</a>
+<a class="luz-tab" href="#in4-cms-cdn-pane">CDN</a>
+</nav>
+<div class="luz-tabpanel landing-term__pane" id="in4-cms-npm-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-cms-npm" aria-label="نسخ أمر npm" hidden>نسخ</button>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in4-cms-npm">npm install @luz-ds/cms</code></pre>
+</div>
+<div class="luz-tabpanel landing-term__pane" id="in4-cms-cdn-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-cms-cdn" aria-label="نسخ وسوم CDN" hidden>نسخ</button>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in4-cms-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.0.0/dist/cms.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="../docs/cms/" hreflang="en">التوثيق<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</li>
+<li class="landing-kind landing-kind--app">
+<div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 9h17M9 9v10"/></g></svg><hgroup class="landing-kind__name"><h3>تطبيق ويب</h3><p>الترويسة ولوحة المعلومات لتطبيق ويب، فوق هيكل core وشريطه الجانبي.</p></hgroup></div>
+<div class="landing-term">
+<nav class="luz-tabs landing-term__tabs" aria-label="التثبيت app">
+<a class="luz-tab" href="#in4-app-npm-pane">npm</a>
+<a class="luz-tab" href="#in4-app-cdn-pane">CDN</a>
+</nav>
+<div class="luz-tabpanel landing-term__pane" id="in4-app-npm-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-app-npm" aria-label="نسخ أمر npm" hidden>نسخ</button>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in4-app-npm">npm install @luz-ds/app</code></pre>
+</div>
+<div class="luz-tabpanel landing-term__pane" id="in4-app-cdn-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-app-cdn" aria-label="نسخ وسوم CDN" hidden>نسخ</button>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in4-app-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/app@0.0.0/dist/app.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="../docs/app/" hreflang="en">التوثيق<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</li>
+<li class="landing-kind landing-kind--docs">
+<div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></g></svg><hgroup class="landing-kind__name"><h3>موقع توثيق</h3><p>الهيكل ورأس الصفحة والشريط الجانبي والأمثلة وافعل ولا تفعل والتنقل بين الصفحات لموقع توثيق.</p></hgroup></div>
+<div class="landing-term">
+<nav class="luz-tabs landing-term__tabs" aria-label="التثبيت docs">
+<a class="luz-tab" href="#in4-docs-npm-pane">npm</a>
+<a class="luz-tab" href="#in4-docs-cdn-pane">CDN</a>
+</nav>
+<div class="luz-tabpanel landing-term__pane" id="in4-docs-npm-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-docs-npm" aria-label="نسخ أمر npm" hidden>نسخ</button>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in4-docs-npm">npm install @luz-ds/docs</code></pre>
+</div>
+<div class="luz-tabpanel landing-term__pane" id="in4-docs-cdn-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-docs-cdn" aria-label="نسخ وسوم CDN" hidden>نسخ</button>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in4-docs-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.0.0/dist/docs.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="../docs/documentation/" hreflang="en">التوثيق<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</li>
+</ul>
+</section>
+<!-- ====================== 4b. WHY ====================== -->
+<section class="o-stack luz-landing-section" id="why" aria-labelledby="why-title">
+<p class="luz-landing-section__eyebrow">لماذا LUZ</p>
+<h2 class="luz-landing-section__title" id="why-title">ثلاث كلمات، ووعد <em>واحد</em>.</h2>
+<p class="luz-landing-section__lead">نظام تصميم للويب ينطلق من CSS ولا يحتاج إلى خطوة بناء. أنماط CSS الخاصة بك تغلب دائمًا، وJavaScript تحسين فقط، وكل صفحة تعمل قبل أن تُحمَّل.</p>
+<div class="landing-why">
+<article class="luz-card o-stack landing-why__card landing-why__card--light" aria-labelledby="why-light">
+<h3 class="luz-card__title landing-word" id="why-light" lang="en">Light</h3>
+<p class="landing-word__sub">شيفرة قليلة، وبلا خطوة بناء.</p>
+<figure class="landing-chart">
+<ul class="landing-bars" aria-label="الحزم حسب الحجم">
+<li class="landing-bar">
+<span class="landing-bar__name">tokens</span>
+<span class="landing-bar__figure"><strong>2.8 ك.ب</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28765" value="2825" aria-hidden="true">2.8 ك.ب</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">core</span>
+<span class="landing-bar__figure"><strong>28.1 ك.ب</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28765" value="28765" aria-hidden="true">28.1 ك.ب</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">site</span>
+<span class="landing-bar__figure"><strong>8.0 ك.ب</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28765" value="8224" aria-hidden="true">8.0 ك.ب</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">landing</span>
+<span class="landing-bar__figure"><strong>1.4 ك.ب</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28765" value="1408" aria-hidden="true">1.4 ك.ب</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">cms</span>
+<span class="landing-bar__figure"><strong>1.3 ك.ب</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28765" value="1381" aria-hidden="true">1.3 ك.ب</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">app</span>
+<span class="landing-bar__figure"><strong>0.7 ك.ب</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28765" value="742" aria-hidden="true">0.7 ك.ب</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">docs</span>
+<span class="landing-bar__figure"><strong>1.8 ك.ب</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28765" value="1864" aria-hidden="true">1.8 ك.ب</meter>
+</li>
+</ul>
+<figcaption class="u-text-muted"><strong>LUZ كلها: 44.1 ك.ب.</strong> الحجم المضغوط لما تنشره كل حزمة، مقيسًا في dist عند بناء هذه الصفحة.</figcaption>
+</figure>
+<p class="luz-card__body">CSS عادية ووحدات ES صغيرة، من شبكة توصيل محتوى أو من npm. لا معالج مسبق ولا مترجم ولا خطوة بناء: ما تقرؤه في الملفات هو بالضبط ما يشغّله المتصفح، ولكل حزمة سقف للحجم لا يُرفع أبدًا.</p>
+</article>
+<article class="luz-card o-stack landing-why__card" aria-labelledby="why-usable">
+<h3 class="luz-card__title landing-word" id="why-usable" lang="en">Usable</h3>
+<p class="landing-word__sub">متاح افتراضيًا، لا بإضافات لاحقة.</p>
+<figure class="landing-chart">
+<ul class="landing-bars" aria-label="إمكانية الوصول بالنسب المئوية">
+<li class="landing-bar">
+<span class="landing-bar__name">تباين الألوان</span>
+<span class="landing-bar__figure"><strong>100‎%‎</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="100" aria-hidden="true">100‎%‎</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">مختبر من اليمين لليسار</span>
+<span class="landing-bar__figure"><strong>97‎%‎</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="97" aria-hidden="true">97‎%‎</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">بلا JavaScript</span>
+<span class="landing-bar__figure"><strong>69‎%‎</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="69" aria-hidden="true">69‎%‎</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">تركيز خاص</span>
+<span class="landing-bar__figure"><strong>44‎%‎</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="44" aria-hidden="true">44‎%‎</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">الألوان المفروضة</span>
+<span class="landing-bar__figure"><strong>44‎%‎</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="44" aria-hidden="true">44‎%‎</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">بلا مشكلات معروفة</span>
+<span class="landing-bar__figure"><strong>38‎%‎</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="38" aria-hidden="true">38‎%‎</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">اختبارات بلا JavaScript</span>
+<span class="landing-bar__figure"><strong>28‎%‎</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="28" aria-hidden="true">28‎%‎</meter>
+</li>
+</ul>
+<figcaption class="u-text-muted"><strong>32 مكوّنًا، 208 ملف اختبار.</strong> يُحسب عند بناء هذه الصفحة؛ ما لا يبلغ 100% مذكور في البيان.</figcaption>
+</figure>
+<p class="luz-card__body">مبني وفق WCAG 2.2 AA والمعيار الأوروبي EN 301 549. ينطلق مما يحسنه المتصفح أصلًا، ويضيف تركيزًا مرئيًا وتباينًا وحركة مخفّضة، ويفحص ذلك بأداة axe في كل تغيير. اقرأ <a href="../docs/accessibility/" hreflang="en">بيان إمكانية الوصول</a>.</p>
+</article>
+<article class="luz-card o-stack landing-why__card landing-why__card--zero" aria-labelledby="why-zero">
+<h3 class="luz-card__title landing-word" id="why-zero" lang="en">Zero-dependency</h3>
+<p class="landing-word__sub">شيفرتك أنت، لا شجرة من شيفرة غيرك.</p>
+<figure class="landing-chart">
+<ul class="landing-bars" aria-label="اعتماديات وقت التشغيل حسب النوع">
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">أطر CSS</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">معالجات CSS المسبقة</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">أطر JavaScript</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">مكتبات تلوين الشيفرة</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">مكتبات الأيقونات</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">مكتبات الأدوات المساعدة</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">البحث والحركة</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+</ul>
+<figcaption class="u-text-muted"><strong>اعتماديات وقت التشغيل: 0.</strong> يُحسب في package.json لكل حزمة عند بناء هذه الصفحة.</figcaption>
+</figure>
+<p class="luz-card__body">تُنشر حزم LUZ بلا اعتماديات: CSS ووحدات ES فقط فوق ما يوفّره المتصفح أصلًا. لا شيء تثبّته لتجربتها، ولا إطار عمل تلاحقه، ولا شيء ينكسر حين تُصدر مكتبة أخرى إصدارًا رئيسيًا جديدًا.</p>
+</article>
+</div>
+<!-- Who LUZ fits and who it does not: two cards, a tick and a cross; the second is not a
+warning, so it stays neutral -->
+<div class="landing-fit">
+<div class="landing-fit__col landing-fit__col--good">
+<h3 class="landing-fit__title"><span class="landing-fit__badge"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>يناسبك</h3>
+<ul class="landing-fit__list">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>مواقع المحتوى والتوثيق والخدمات العامة التي يجب أن تستوفي WCAG 2.2 AA.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>الصفحات التي تُولَّد على الخادم والمواقع الثابتة، بأي لغة برمجة للخادم.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>الفرق التي تريد أن تقرأ CSS الخاص بها وتملكه.</span></li>
+</ul>
+</div>
+<div class="landing-fit__col landing-fit__col--bad">
+<h3 class="landing-fit__title"><span class="landing-fit__badge"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg></span>لا يناسبك</h3>
+<ul class="landing-fit__list">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>تحتاج إلى مكونات React أو Vue جاهزة.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>تحتاج إلى جدول بيانات متقدم أو رسوم بيانية أو أداة لاختيار نطاق تواريخ: لا يوفّر LUZ أيًّا منها.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>تحتاج إلى واجهة برمجية مستقرة اليوم: LUZ في مرحلة تجريبية، وقد تتغير الأسماء.</span></li>
+</ul>
+</div>
+</div>
+</section>
+<!-- ====================== 5. NATIVE ====================== -->
+<section class="landing-inside" id="native" aria-labelledby="native-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5M14 5l-4 14"/></svg><span>HTML دلالي بتنسيق جاهز</span></p>
+<h2 class="landing-inside__title" id="native-title">وسم واحد، <span class="landing-mark">صنف واحد</span>، بلا JS</h2>
+<p class="landing-inside__lead">اكتب العنصر الذي تقصده. أضف صنف LUZ. والمتصفح يتولى الباقي.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v14H4zM4 9h16M8 13h5"/></svg><span><strong>بلا سكربت.</strong> 22 من 32 مكوّنًا هي CSS فقط: لا شيء يُحمَّل.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>صنف واحد لكل مكوّن.</strong> المكوّن عنصر أصلي وصنف واحد: بلا أغلفة ولا سلاسل أصناف مساعدة.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 3 4 6v6c0 4.5 3.2 7.8 8 9 4.8-1.2 8-4.5 8-9V6l-8-3Zm-3 9 2.2 2.2L15.5 10"/></svg><span><strong>والباقي، بشبكة أمان.</strong> يتحسّن الـ 10 الباقية بسكربت، وكل صفحة تقول ما تحصل عليه دونه.</span></li>
+</ul>
+<a class="luz-btn luz-btn--primary landing-inside__cta" href="../docs/html/" hreflang="en">اعرض كل وسوم HTML<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</div>
+<!-- The scenes play one after another on a CSS loop (landing.css): no script. With reduced motion, or
+with no CSS animation, the first scene shows its last frame: the whole code and its result.
+The results are pictures of the code beside them: inert, out of the tab order and of the
+accessibility tree; the code is what a reader reads -->
+<div class="landing-typed__panel" role="group" aria-label="عناصر أصلية تعمل دون سكربت">
+<div class="landing-typed__scene landing-typed__scene--meter">
+<pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="ترميز عنصر meter، يُكتب أمامك"><code><span class="landing-typed__line"><span class="tok-name">&lt;meter</span></span>
+<span class="landing-typed__line">  <span class="tok-property">value</span>=<span class="tok-string">&quot;0.7&quot;</span></span>
+<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-meter&quot;</span></span>
+<span class="landing-typed__line">  <span class="tok-property">aria-label</span>=<span class="tok-string">&quot;المساحة المستخدمة، 7 من 10 غيغابايت&quot;</span>&gt;</span>
+<span class="landing-typed__line"><span class="tok-name">&lt;/meter</span>&gt;</span></code></pre>
+<div class="landing-typed__result" inert>
+<div class="landing-typed__state landing-typed__state--raw">
+<meter value="0.7"></meter>
+<p class="landing-typed__caption">عنصر meter الخاص بالمتصفح</p>
+</div>
+<div class="landing-typed__state landing-typed__state--luz">
+<meter class="luz-meter" value="0.7" aria-label="المساحة المستخدمة، 7 من 10 غيغابايت"></meter>
+<p class="landing-typed__caption landing-typed__extra"><span>اسمه لقارئ الشاشة:</span> <q>المساحة المستخدمة، 7 من 10 غيغابايت</q></p>
+</div>
+<div class="landing-typed__modes">
+<div class="landing-typed__mode" data-theme="light"><meter class="luz-meter" value="0.7"></meter><span>فاتح</span></div>
+<div class="landing-typed__mode" data-theme="dark"><meter class="luz-meter" value="0.7"></meter><span>داكن</span></div>
+<div class="landing-typed__mode" data-theme="high-contrast"><meter class="luz-meter" value="0.7"></meter><span>تباين عالٍ</span></div>
+</div>
+</div>
+</div>
+<div class="landing-typed__scene landing-typed__scene--input">
+<pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="ترميز حقل بريد إلكتروني، يُكتب أمامك"><code><span class="landing-typed__line"><span class="tok-name">&lt;input</span></span>
+<span class="landing-typed__line">  <span class="tok-property">type</span>=<span class="tok-string">&quot;email&quot;</span></span>
+<span class="landing-typed__line">  <span class="tok-property">value</span>=<span class="tok-string">&quot;ana@luz.dev&quot;</span></span>
+<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-input&quot;</span>&gt;</span></code></pre>
+<div class="landing-typed__result" inert>
+<div class="landing-typed__state landing-typed__state--raw">
+<input type="email" value="ana@luz.dev" aria-label="البريد الإلكتروني">
+<p class="landing-typed__caption">الحقل الخاص بالمتصفح</p>
+</div>
+<div class="landing-typed__state landing-typed__state--luz">
+<input class="luz-input" type="email" value="ana@luz.dev" aria-label="البريد الإلكتروني">
+</div>
+<div class="landing-typed__modes">
+<div class="landing-typed__mode" data-theme="light"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="البريد الإلكتروني"><span>فاتح</span></div>
+<div class="landing-typed__mode" data-theme="dark"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="البريد الإلكتروني"><span>داكن</span></div>
+<div class="landing-typed__mode" data-theme="high-contrast"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="البريد الإلكتروني"><span>تباين عالٍ</span></div>
+</div>
+</div>
+</div>
+<div class="landing-typed__scene landing-typed__scene--button">
+<pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="ترميز زر، يُكتب أمامك"><code><span class="landing-typed__line"><span class="tok-name">&lt;button</span></span>
+<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-btn luz-btn--primary&quot;</span>&gt;</span>
+<span class="landing-typed__line">  حفظ التغييرات</span>
+<span class="landing-typed__line"><span class="tok-name">&lt;/button</span>&gt;</span></code></pre>
+<div class="landing-typed__result" inert>
+<div class="landing-typed__state landing-typed__state--raw">
+<button type="button">حفظ التغييرات</button>
+<p class="landing-typed__caption">الزر الخاص بالمتصفح</p>
+</div>
+<div class="landing-typed__state landing-typed__state--luz">
+<button class="luz-btn luz-btn--primary" type="button">حفظ التغييرات</button>
+</div>
+<div class="landing-typed__modes">
+<div class="landing-typed__mode" data-theme="light"><button class="luz-btn luz-btn--primary" type="button">حفظ التغييرات</button><span>فاتح</span></div>
+<div class="landing-typed__mode" data-theme="dark"><button class="luz-btn luz-btn--primary" type="button">حفظ التغييرات</button><span>داكن</span></div>
+<div class="landing-typed__mode" data-theme="high-contrast"><button class="luz-btn luz-btn--primary" type="button">حفظ التغييرات</button><span>تباين عالٍ</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ====================== 6. MODES ====================== -->
+<section class="landing-modes" id="modes" aria-labelledby="modes-title">
+<div class="landing-modes__head">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path fill="currentColor" stroke="none" d="M12 4a8 8 0 0 1 0 16Z"/></g></svg><span>ثلاثة أوضاع للألوان</span></p>
+<h2 class="landing-inside__title" id="modes-title">واجهة واحدة، <span class="landing-mark">ثلاثة أوضاع</span></h2>
+<p class="landing-inside__lead">كل لون دلالي معرَّف للوضع الفاتح والداكن والتباين العالي. سمة واحدة، <code class="luz-code-inline">data-theme</code>، تبدّل بينها: في الصفحة كلها أو في جزء منها، كما في كل صندوق أدناه.</p>
+</div>
+<!-- One box per mode (data-theme), each telling its own mode. The box is a picture of the
+mode: inert and hidden from the accessibility tree. Each box has a button (shown with
+JavaScript, landing.js) that checks the footer's radio of its mode: <luz-mode> applies
+it, remembers it and moves the cycle button -->
+<div class="landing-modes__figure">
+<div class="landing-cuts">
+<div class="landing-cut landing-cut--1" data-theme="light">
+<div class="landing-cut__picture" inert aria-hidden="true">
+<p class="landing-cut__label">فاتح</p>
+<div class="landing-ui">
+<p class="landing-ui__title">فاتح، للقراءة نهارًا</p>
+<p class="landing-ui__text">ورق دافئ وحبر بني: نغمة Vejer. إنه الوضع الافتراضي: من دون data-theme تبدو الصفحة هكذا.</p>
+</div>
+</div>
+<button class="landing-cut__apply" type="button" data-apply-mode="light" aria-pressed="false" hidden data-needs-js>
+<span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg></span>
+<span class="landing-cut__now">انقر لترى الصفحة في الوضع الفاتح</span>
+</button>
+</div>
+<div class="landing-cut landing-cut--2" data-theme="dark">
+<div class="landing-cut__picture" inert aria-hidden="true">
+<p class="landing-cut__label">داكن</p>
+<div class="landing-ui">
+<p class="landing-ui__title">داكن، لليل</p>
+<p class="landing-ui__text">أسطح عميقة ونص فاتح لا يبهر. الرموز نفسها بقيم أخرى: لا يغيّر أي مكوّن سطرًا واحدًا.</p>
+</div>
+</div>
+<button class="landing-cut__apply" type="button" data-apply-mode="dark" aria-pressed="false" hidden data-needs-js>
+<span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg></span>
+<span class="landing-cut__now">انقر لترى الصفحة في الوضع الداكن</span>
+</button>
+</div>
+<div class="landing-cut landing-cut--3" data-theme="high-contrast">
+<div class="landing-cut__picture" inert aria-hidden="true">
+<p class="landing-cut__label">تباين عالٍ</p>
+<div class="landing-ui">
+<p class="landing-ui__title">تباين عالٍ، لرؤية كل حافة</p>
+<p class="landing-ui__text">أسود على أبيض وحواف واضحة، لمن يحتاج إلى المزيد. ليس الوضع الداكن: إنه وضع قائم بذاته، يُقاس مثل الوضعين الآخرين.</p>
+</div>
+</div>
+<button class="landing-cut__apply" type="button" data-apply-mode="high-contrast" aria-pressed="false" hidden data-needs-js>
+<span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></span>
+<span class="landing-cut__now">انقر لترى الصفحة في التباين العالي</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+a fractal noise that displaces their soft ovals -->
+<svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+<filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+<feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+<feDisplacementMap in="SourceGraphic" scale="120"/>
+</filter>
+</svg>
+</main>
+<footer class="luz-landing-footer">
+<div class="o-container o-container--inline o-grid">
+<div class="luz-landing-footer__brand">
+<p class="landing-brand"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg><strong class="u-sr-only">LUZ</strong> <a class="landing-brand__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0<span class="u-sr-only">, سجل التغييرات</span></a> <span class="landing-brand__beta">تجريبي</span></p>
+</div>
+<!-- The docs: one title over two lists, the guides, and under a small label the docs of
+each package (in the order they stack: the base, then the templates) -->
+<nav class="luz-landing-footer__col landing-foot-docs" aria-labelledby="footer-docs">
+<h2 class="luz-landing-footer__col-title" id="footer-docs">التوثيق</h2>
+<ul>
+<li><a href="../docs/get-started/" hreflang="en">البدء</a></li>
+<li><a href="../docs/site/" hreflang="en">الأنماط</a></li>
+<li><a href="../docs/accessibility/" hreflang="en">بيان إمكانية الوصول</a></li>
+</ul>
+<h3 class="landing-foot-label" id="footer-packages">الحزم</h3>
+<ul aria-labelledby="footer-packages">
+<li><a href="../docs/tokens/" hreflang="en">رموز التصميم</a></li>
+<li><a href="../docs/components/" hreflang="en">المكوّنات الأساسية</a></li>
+<li><a href="../docs/site/" hreflang="en">مكوّنات الموقع</a></li>
+<li><a href="../docs/landing/" hreflang="en">قالب صفحة هبوط</a></li>
+<li><a href="../docs/cms/" hreflang="en">قالب مدونة</a></li>
+<li><a href="../docs/app/" hreflang="en">قالب تطبيق ويب</a></li>
+<li><a href="../docs/documentation/" hreflang="en">قالب توثيق</a></li>
+</ul>
+</nav>
+<nav class="luz-landing-footer__col" aria-labelledby="footer-project">
+<h2 class="luz-landing-footer__col-title" id="footer-project">المشروع</h2>
+<ul>
+<li><a href="https://github.com/nandovejer/luz">GitHub</a></li>
+<li><a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">سجل التغييرات</a></li>
+<li><a href="https://github.com/nandovejer/luz/blob/main/CONTRIBUTING.md">كيف تساهم</a></li>
+<li><a href="https://github.com/nandovejer/luz/blob/main/dev/BROWSER-REVIEWS.md">المراجعات في المتصفحات</a></li>
+</ul>
+</nav>
+</div>
+<div class="o-stack landing-foot">
+<luz-mode class="site-modes" remember by="clock">
+<fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+<legend class="luz-mode-switcher__label">وضع الألوان</legend>
+<button class="luz-mode-cycle" type="button" aria-label="تغيير وضع الألوان"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+<span class="luz-mode-cycle__status" role="status"></span>
+<label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>فاتح</label>
+<label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>داكن</label>
+<label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>تباين عالٍ</label>
+</fieldset>
+</luz-mode>
+<p class="u-text-muted landing-legal">© 2024–2026 Fernando Muñoz. يُنشر LUZ بموجب <a href="https://github.com/nandovejer/luz/blob/main/LICENSE">رخصة MIT</a>: استخدمه وعدّله وشاركه، حتى في الأعمال التجارية، ما دام الإشعار يرافقه. كل ملف ينشره، بما في ذلك الخطوط والأيقونات، مرخّص بـ MIT.</p>
+</div>
+</footer>
 </body>
 </html>

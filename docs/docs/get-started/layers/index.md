@@ -24,7 +24,7 @@ Core and the other packages put their rules in their own layers inside `luz`. Th
 
 - `luz.tokens`: tokens: The `--luz-*` custom properties
 - `luz.themes`: core: Your own looks (only custom properties; [make one](https://nandovejer.github.io/luz/docs/tokens/themes/)). LUZ ships none: its default look is in `luz.tokens`
-- `luz.settings`: core: Motion, z-index and breakpoint settings
+- `luz.settings`: core: Z-index, layout and field text settings
 - `luz.generic`: core: The reset
 - `luz.elements`: core: Bare HTML elements, at specificity 0
 - `luz.objects`: core: Layout objects: `.o-*`

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabajar con IA – Primeros pasos – Documentación de LUZ</title>
+  <meta name="description" content="Qué puede leer un agente de programación con IA, cómo comprobar lo que ha escrito y qué revisor de accesibilidad puedes darle.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/get-started/ai/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/get-started/ai/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/get-started/ai/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/get-started/ai/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-CsdZsYUe.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-CDmyJM2e.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-DuVRvlf9.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-BsMkM9X4.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-siYsUwmw.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/get-started/ai/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/get-started/ai/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#start">Dale LUZ a tu agente</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#files">Qué puede leer un agente</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#check">Comprueba lo que ha escrito un agente</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#rules">Qué bloquea y sobre qué avisa check</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#agent">El revisor de accesibilidad</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#limits">Lo que no hace</a></li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/get-started/ai/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/get-started/ai.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Trabajar%20con%20IA">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/get-started/">Primeros pasos</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Trabajar con IA</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Primeros pasos</p>
+    <h1 class="docs-title">Trabajar con IA</h1>
+    <p class="luz-docs-page-head__lead">Qué puede leer un agente de programación con IA, cómo comprobar lo que ha escrito y qué revisor de accesibilidad puedes darle.</p>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/get-started/ai/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <section class="docs-block" aria-labelledby="start">
+      <h2 class="docs-chapter__title" id="start">Dale LUZ a tu agente</h2>
+      <p class="docs-lead">LUZ usa HTML y CSS sin más, así que un agente de programación con IA puede escribirlo si conoce los nombres de clase disponibles. Pega este prompt en tu agente.</p>
+      <p>Indica al agente los archivos que aparecen abajo y le pide que ejecute el comprobador sobre lo que ha escrito. En <a href="#limits">Lo que no hace</a> se explica qué no comprueba.</p>
+      <div lang="en" class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Prompt</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-prompt" aria-label="Copy the prompt">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Prompt for your agent"><code id="code-prompt">Use LUZ for the markup. Read https://nandovejer.github.io/luz/llms.txt first and use only the classes in each package's classes.json. After you write HTML or CSS, run `npx @luz-ds/check` on the files and fix every finding before you answer.</code></pre>
+      </div>
+    </section>
+
+    <section class="docs-block" aria-labelledby="files">
+      <h2 class="docs-chapter__title" id="files">Qué puede leer un agente</h2>
+      <p class="docs-lead">La compilación de este sitio genera cada archivo a partir de las páginas que estás leyendo, así que tanto un agente como una persona obtienen la misma información. Dale al agente la URL de <code>llms.txt</code>: ahí se enumeran los demás archivos.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Archivos que puede leer un agente" tabindex="0">
+        <table class="luz-table">
+          <caption>Archivos que puede leer un agente</caption>
+          <thead><tr><th scope="col">Archivo</th><th scope="col">URL</th><th scope="col">Descripción</th><th scope="col">Generado por</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Archivo"><div><code>llms.txt</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/llms.txt</code></div></td><td data-label="Descripción"><div>El índice de la documentación para un agente: todas las páginas con su descripción, en orden de lectura.</div></td><td data-label="Generado por"><div>scripts/docs-site/ai.js, durante la compilación de las páginas</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>llms-full.txt</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/llms-full.txt</code></div></td><td data-label="Descripción"><div>Las mismas páginas en texto sin formato: el marcado, las variantes, cuándo usar cada una y su uso con el teclado.</div></td><td data-label="Generado por"><div>scripts/docs-site/ai.js, durante la compilación de las páginas</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>examples/&lt;area&gt;/&lt;slug&gt;.html</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/examples/components/button.html</code></div></td><td data-label="Descripción"><div>El marcado de una página de componente o patrón, con estilos de LUZ; cada página que tenga una sección de marcado dispone del suyo en /examples/.</div></td><td data-label="Generado por"><div>scripts/docs-site/ai.js, durante la compilación de las páginas</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/tokens/classes.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/tokens/classes.json</code></div></td><td data-label="Descripción"><div>Todas las clases, propiedades personalizadas y atributos de enganche del paquete: los nombres que puede usar un agente. Paquete: @luz-ds/tokens.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/core/classes.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/core/classes.json</code></div></td><td data-label="Descripción"><div>Todas las clases, propiedades personalizadas y atributos de enganche del paquete: los nombres que puede usar un agente. Paquete: @luz-ds/core.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/core/custom-elements.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/core/custom-elements.json</code></div></td><td data-label="Descripción"><div>Los elementos personalizados que define o declara el paquete, con los atributos que lee cada uno. Paquete: @luz-ds/core.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/site/classes.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/site/classes.json</code></div></td><td data-label="Descripción"><div>Todas las clases, propiedades personalizadas y atributos de enganche del paquete: los nombres que puede usar un agente. Paquete: @luz-ds/site.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/site/custom-elements.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/site/custom-elements.json</code></div></td><td data-label="Descripción"><div>Los elementos personalizados que define o declara el paquete, con los atributos que lee cada uno. Paquete: @luz-ds/site.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/landing/classes.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/landing/classes.json</code></div></td><td data-label="Descripción"><div>Todas las clases, propiedades personalizadas y atributos de enganche del paquete: los nombres que puede usar un agente. Paquete: @luz-ds/landing.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/cms/classes.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/cms/classes.json</code></div></td><td data-label="Descripción"><div>Todas las clases, propiedades personalizadas y atributos de enganche del paquete: los nombres que puede usar un agente. Paquete: @luz-ds/cms.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/app/classes.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/app/classes.json</code></div></td><td data-label="Descripción"><div>Todas las clases, propiedades personalizadas y atributos de enganche del paquete: los nombres que puede usar un agente. Paquete: @luz-ds/app.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+            <tr><td data-label="Archivo"><div><code>manifests/docs/classes.json</code></div></td><td data-label="URL"><div><code>https://nandovejer.github.io/luz/manifests/docs/classes.json</code></div></td><td data-label="Descripción"><div>Todas las clases, propiedades personalizadas y atributos de enganche del paquete: los nombres que puede usar un agente. Paquete: @luz-ds/docs.</div></td><td data-label="Generado por"><div>scripts/ai-manifests.js, durante la compilación de cada paquete</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="docs-block" aria-labelledby="check">
+      <h2 class="docs-chapter__title" id="check">Comprueba lo que ha escrito un agente</h2>
+      <p class="docs-lead"><code>npx @luz-ds/check</code> lee sin conexión el HTML y el CSS de un proyecto e indica qué clases, elementos, orden de carga y tokens de color de LUZ son incorrectos. Lee archivos, pero no escribe nada.</p>
+      <p>Necesita Node 20 o posterior.</p>
+      <div lang="en" class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Shell</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-check-run" aria-label="Copy the commands">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The commands"><code id="code-check-run">npx @luz-ds/check
+npx @luz-ds/check index.html css/site.css
+npx @luz-ds/check src --json</code></pre>
+      </div>
+      <p>Indica <code>npx @luz-ds/check</code> y el ámbito. Una ruta puede ser un archivo, una carpeta (la lectura es recursiva: <code>.html</code>, <code>.htm</code> y <code>.css</code>) o un patrón glob entre comillas, como <code>"src/**/*.html"</code>.</p>
+      <p>Si no indicas ninguna ruta, lee la carpeta actual.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Opciones del comando" tabindex="0">
+        <table class="luz-table">
+          <caption>Opciones del comando</caption>
+          <thead>
+            <tr><th scope="col">Opción</th><th scope="col">Qué hace</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Opción"><div><code>--json</code></div></td><td data-label="Qué hace"><div>Muestra el informe como JSON</div></td></tr>
+            <tr><td data-label="Opción"><div><code>--strict</code></div></td><td data-label="Qué hace"><div>Falla tanto si hay un aviso como si hay un hallazgo bloqueante</div></td></tr>
+            <tr><td data-label="Opción"><div><code>--config &lt;file&gt;</code></div></td><td data-label="Qué hace"><div>Lee esta configuración en lugar de <code>luz-check.json</code></div></td></tr>
+            <tr><td data-label="Opción"><div><code>--theme &lt;file.css&gt;</code></div></td><td data-label="Qué hace"><div>Indica una hoja de estilos que define tokens de color cuyos colores se miden; repítelo para cada archivo, en el orden en que los carga la página</div></td></tr>
+            <tr><td data-label="Opción"><div><code>--ext &lt;list&gt;</code></div></td><td data-label="Qué hace"><div>También lee como HTML archivos con estas extensiones, como <code>.astro,.vue</code></div></td></tr>
+            <tr><td data-label="Opción"><div><code>--version</code></div></td><td data-label="Qué hace"><div>Muestra la versión</div></td></tr>
+            <tr><td data-label="Opción"><div><code>--help</code></div></td><td data-label="Qué hace"><div>Muestra las opciones y los límites del comando</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Un archivo <code>luz-check.json</code> en la carpeta desde la que ejecutas el comando configura <code>ignore</code>, <code>rules</code>, <code>themes</code> y <code>strict</code>. Desde ahí puedes desactivar una regla que avisa; una regla bloqueante solo se silencia con <code>ignore</code>. El resumen indica cuántos hallazgos se han ignorado y cuántas reglas están desactivadas.</p>
+      <h3 class="docs-subhead" id="check-exit">Códigos de salida</h3>
+      <div class="luz-table-wrap" role="region" aria-label="Códigos de salida" tabindex="0">
+        <table class="luz-table">
+          <caption>Códigos de salida del comando</caption>
+          <thead>
+            <tr><th scope="col">Código</th><th scope="col">Significado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Código"><div><code>0</code></div></td><td data-label="Significado"><div>No hay bloqueos. Puede que se hayan mostrado avisos.</div></td></tr>
+            <tr><td data-label="Código"><div><code>1</code></div></td><td data-label="Significado"><div>Hay al menos un hallazgo bloqueante o, con <code>--strict</code>, se ha encontrado un aviso.</div></td></tr>
+            <tr><td data-label="Código"><div><code>2</code></div></td><td data-label="Significado"><div>El comando se ha usado de forma incorrecta, no se puede leer una configuración o no hay nada que leer.</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="docs-subhead" id="check-output">Qué muestra</h3>
+      <p>Una línea por cada hallazgo, en el orden de los archivos y las líneas: un símbolo (<code>✗</code> bloquea, <code>!</code> avisa), la ubicación, la regla y una frase que explica qué está mal y qué hacer. Después de un hallazgo sobre un token de color aparecen las líneas donde se definieron los colores.</p>
+      <p>La última línea cuenta los hallazgos encontrados en los archivos que ha leído.</p>
+      <div lang="en" class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Output</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-check-out" aria-label="Copy the example output">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Example output"><code id="code-check-out">✗ index.html:14:8 class/unknown  .luz-btn-primary is not a LUZ class; the closest is .luz-btn--primary
+✗ index.html:22:5 load/package-missing  .luz-banner is in @luz-ds/site, which this page does not load; add its stylesheet after core
+! site.css:8:3 css/literal-colour  color is set to #1a5fb4; use a token, such as var(--luz-brand-fill)
+✗ theme.css:3:3 theme/contrast  light: --luz-text-secondary on surface-page is 2.8:1, needs 4.5:1 (text); change one of the two
+    --luz-text-secondary: #999999 is set in theme.css:3
+✗ 3 blocking and 1 warning in 3 files (manifests: @luz-ds/core 0.1.0 from node_modules)</code></pre>
+      </div>
+      <p>La parte <code>(manifests: …)</code> indica con qué versión de LUZ se han comprobado los nombres y de dónde procede: de tu <code>node_modules</code> o de la copia incluida con el comando.</p>
+      <h3 class="docs-subhead" id="check-json">El informe JSON</h3>
+      <p><code>--json</code> muestra un objeto con estos campos. Si un campo no aparece en esta tabla, no forma parte del informe.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Campos del informe JSON" tabindex="0">
+        <table class="luz-table">
+          <caption>Campos del informe JSON</caption>
+          <thead>
+            <tr><th scope="col">Campo</th><th scope="col">Tipo</th><th scope="col">Qué es</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Campo"><div><code>tool</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>Siempre <code>@luz-ds/check</code></div></td></tr>
+            <tr><td data-label="Campo"><div><code>version</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La versión del comprobador</div></td></tr>
+            <tr><td data-label="Campo"><div><code>ok</code></div></td><td data-label="Tipo"><div>booleano</div></td><td data-label="Qué es"><div>Verdadero si no hay bloqueos ni avisos con <code>--strict</code>. No es un resultado de accesibilidad</div></td></tr>
+            <tr><td data-label="Campo"><div><code>files</code></div></td><td data-label="Tipo"><div>lista de cadenas</div></td><td data-label="Qué es"><div>Los archivos que ha leído, ordenados</div></td></tr>
+            <tr><td data-label="Campo"><div><code>manifests</code></div></td><td data-label="Tipo"><div>lista de objetos</div></td><td data-label="Qué es"><div>Los datos de LUZ con los que ha comprobado el proyecto, una entrada por paquete</div></td></tr>
+            <tr><td data-label="Campo"><div><code>manifests[].package</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>El paquete, como <code>@luz-ds/core</code></div></td></tr>
+            <tr><td data-label="Campo"><div><code>manifests[].version</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La versión de los datos de ese paquete</div></td></tr>
+            <tr><td data-label="Campo"><div><code>manifests[].source</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div><code>node_modules</code> si tu proyecto tiene el paquete; <code>bundled</code> si se ha usado la copia del propio comando</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary</code></div></td><td data-label="Tipo"><div>objeto</div></td><td data-label="Qué es"><div>Los recuentos de la ejecución</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.files</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántos archivos ha leído</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.blocking</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántos hallazgos bloquean</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.warnings</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántos hallazgos generan avisos</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.skipped</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántas rutas no ha leído</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.ignored</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántos hallazgos ha eliminado <code>ignore</code> en la configuración</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.off</code></div></td><td data-label="Tipo"><div>número</div></td><td data-label="Qué es"><div>Cuántas reglas ha desactivado la configuración</div></td></tr>
+            <tr><td data-label="Campo"><div><code>summary.truncated</code></div></td><td data-label="Tipo"><div>booleano</div></td><td data-label="Qué es"><div>Verdadero si se ha truncado la lista de hallazgos; los recuentos anteriores están completos</div></td></tr>
+            <tr><td data-label="Campo"><div><code>config</code></div></td><td data-label="Tipo"><div>objeto</div></td><td data-label="Qué es"><div>La configuración que se ha leído</div></td></tr>
+            <tr><td data-label="Campo"><div><code>config.file</code></div></td><td data-label="Tipo"><div>cadena o null</div></td><td data-label="Qué es"><div>El archivo de configuración o null si no había ninguno</div></td></tr>
+            <tr><td data-label="Campo"><div><code>config.off</code></div></td><td data-label="Tipo"><div>lista de cadenas</div></td><td data-label="Qué es"><div>Las reglas que ha desactivado la configuración</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings</code></div></td><td data-label="Tipo"><div>lista de objetos</div></td><td data-label="Qué es"><div>Lo que ha encontrado, en el orden de los archivos y las líneas</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].rule</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La regla, como <code>class/unknown</code></div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].severity</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div><code>block</code> o <code>warn</code></div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].file</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La ruta, relativa a la carpeta desde la que ejecutaste el comando</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].line</code></div></td><td data-label="Tipo"><div>número o null</div></td><td data-label="Qué es"><div>La línea, si el hallazgo tiene una ubicación en el archivo</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].column</code></div></td><td data-label="Tipo"><div>número o null</div></td><td data-label="Qué es"><div>La columna, si el hallazgo tiene una ubicación en el archivo</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].message</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La frase en inglés que explica qué está mal y qué hacer</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].suggestion</code></div></td><td data-label="Tipo"><div>cadena o null</div></td><td data-label="Qué es"><div>El nombre de LUZ más parecido, si hay alguno suficientemente cercano</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].docs</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La URL de la página que explica la regla</div></td></tr>
+            <tr><td data-label="Campo"><div><code>findings[].details</code></div></td><td data-label="Tipo"><div>objeto</div></td><td data-label="Qué es"><div>Solo en algunos hallazgos. Un hallazgo sobre un token de color indica el modo, los colores, la proporción y dónde se definieron los colores</div></td></tr>
+            <tr><td data-label="Campo"><div><code>skipped</code></div></td><td data-label="Tipo"><div>lista de objetos</div></td><td data-label="Qué es"><div>Las rutas que no ha leído</div></td></tr>
+            <tr><td data-label="Campo"><div><code>skipped[].file</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>La ruta</div></td></tr>
+            <tr><td data-label="Campo"><div><code>skipped[].reason</code></div></td><td data-label="Tipo"><div>cadena</div></td><td data-label="Qué es"><div>Motivo: es un enlace, no es un archivo normal, supera 1 MiB, no se ha podido abrir o se ha alcanzado un límite de la ejecución</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Lo mismo ocurre con el texto y con JSON: las rutas y los nombres que contienen caracteres no habituales se escriben con escapes, y el comando nunca cita el contenido de tus archivos.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="rules">
+      <h2 class="docs-chapter__title" id="rules">Qué bloquea y sobre qué avisa check</h2>
+      <p class="docs-lead">Cada regla tiene un id, como <code>class/unknown</code>, que aparece en todos los hallazgos. Una regla bloqueante hace que el código de salida sea 1.</p>
+      <p>Una regla que avisa no lo hace, salvo que pases <code>--strict</code>. Las dos tablas se generan a partir de la lista de reglas del comando.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Reglas que bloquean" tabindex="0">
+        <table class="luz-table" lang="en">
+          <caption>Rules that block</caption>
+          <thead><tr><th scope="col">Rule</th><th scope="col">What it finds</th><th scope="col">Severity</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Rule"><div><code>class/unknown</code></div></td><td data-label="What it finds"><div>A class starting with luz- that no classes.json lists, or an o- or u- class a typo away from one LUZ has.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>element/unknown</code></div></td><td data-label="What it finds"><div>A &lt;luz-*&gt; tag that no custom-elements.json declares and that is not the block of a class.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>element/unknown-attribute</code></div></td><td data-label="What it finds"><div>An attribute on a LUZ element that its custom-elements.json does not declare; global, aria-*, data-* and framework attributes are left alone.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>load/layer-statement</code></div></td><td data-label="What it finds"><div>A &lt;style&gt; that declares the layers after the first LUZ stylesheet, when the order of the layers is already fixed.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>load/package-missing</code></div></td><td data-label="What it finds"><div>A class or tag from a package whose stylesheet the page does not load, such as a site class with no site stylesheet.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>load/tokens-missing</code></div></td><td data-label="What it finds"><div>A page that links core, site or a package for one kind of site and does not link @luz-ds/tokens.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>misuse/host-element</code></div></td><td data-label="What it finds"><div>A class on an element it is not made for, such as a button class on a &lt;div&gt;; classes.json lists each class's elements.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>misuse/modifier-alone</code></div></td><td data-label="What it finds"><div>A modifier such as luz-btn--primary on an element that does not also have the class it modifies.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>parse/error</code></div></td><td data-label="What it finds"><div>A file that ends inside a comment, tag, string or brace, so the rest of it cannot be read.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>theme/contrast</code></div></td><td data-label="What it finds"><div>A foreground and background pair in your colour token files that is under its WCAG contrast minimum in light, dark or high contrast.</div></td><td data-label="Severity"><div>block</div></td></tr>
+            <tr><td data-label="Rule"><div><code>theme/unreadable</code></div></td><td data-label="What it finds"><div>A LUZ colour token, in a file that sets colour tokens, whose value cannot be read as an sRGB colour, so its contrast cannot be measured.</div></td><td data-label="Severity"><div>block</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="luz-table-wrap" role="region" aria-label="Reglas que avisan" tabindex="0">
+        <table class="luz-table" lang="en">
+          <caption>Rules that warn</caption>
+          <thead><tr><th scope="col">Rule</th><th scope="col">What it finds</th><th scope="col">Severity</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Rule"><div><code>a11y/link-no-href</code></div></td><td data-label="What it finds"><div>An &lt;a&gt; that has a class made for links and no href, so it is not a link and a keyboard cannot reach it.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>a11y/role-on-generic</code></div></td><td data-label="What it finds"><div>A widget role, or onclick, on a &lt;div&gt; or &lt;span&gt; where a native element such as &lt;button&gt; does the same with the keyboard.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>attr/unknown-hook</code></div></td><td data-label="What it finds"><div>A data-luz-* attribute on an element that no package reads: usually a misspelling of one it does.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>class/reserved-prefix</code></div></td><td data-label="What it finds"><div>A stylesheet of yours that defines a class starting with luz-, the prefix LUZ keeps for itself.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>class/unknown-in-css</code></div></td><td data-label="What it finds"><div>A selector in your stylesheet that names a .luz-* class no classes.json lists.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>css/important</code></div></td><td data-label="What it finds"><div>!important in a declaration, in a custom property too; a rule outside the layers already wins over LUZ.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>css/knob-in-px</code></div></td><td data-label="What it finds"><div>--luz-type-base or --luz-space-unit set in px, which ignores the text size the reader chose.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>css/literal-colour</code></div></td><td data-label="What it finds"><div>A colour written out in a declaration (hex, rgb, hsl and the other functions) instead of a token.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>css/literal-size</code></div></td><td data-label="What it finds"><div>A px or rem length in font-size, margin, padding, gap or border-radius instead of a space, text or radius token.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>css/private-token</code></div></td><td data-label="What it finds"><div>A --luz-* property that one component sets for itself, set or read outside that component.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>css/unknown-token</code></div></td><td data-label="What it finds"><div>A --luz-* property that no package declares, set or read: usually a misspelling.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>file/skipped</code></div></td><td data-label="What it finds"><div>A path the check did not read, such as a symlink or a file that is too large; the finding says why.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>load/no-stylesheet</code></div></td><td data-label="What it finds"><div>Checked files that load no LUZ stylesheet at all, so a class can only be told from your own by its name.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>load/order</code></div></td><td data-label="What it finds"><div>LUZ stylesheets linked out of order; the order is tokens, core, site, then the package for your kind of site.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>misuse/part-orphan</code></div></td><td data-label="What it finds"><div>A part such as luz-card__title with no element of its block around it.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>misuse/state-class</code></div></td><td data-label="What it finds"><div>An is-* class that LUZ's own script sets, written in the markup.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+            <tr><td data-label="Rule"><div><code>theme/advisory</code></div></td><td data-label="What it finds"><div>A note on how the colour check ran: the file order it used, a token no colour mode can place, a wide-gamut colour it does not measure, or sets of colour tokens past its limit.</div></td><td data-label="Severity"><div>warn</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="docs-block" aria-labelledby="agent">
+      <h2 class="docs-chapter__title" id="agent">El revisor de accesibilidad</h2>
+      <p class="docs-lead">El mismo paquete muestra una definición de agente para un asistente de programación con IA: un revisor que lee el código fuente de una página y ofrece recomendaciones de accesibilidad. Cópiala en tu proyecto.</p>
+      <div lang="en" class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Shell</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-agent" aria-label="Copy the command">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The command that copies the reviewer"><code id="code-agent">npx @luz-ds/check agent &gt; .claude/agents/luz-accessibility-reviewer.md</code></pre>
+      </div>
+      <ul>
+        <li><strong>Sobrescribe archivos.</strong> El operador <code>&gt;</code> sustituye un archivo existente. Si lo has editado, usa otra ruta o guarda antes tu copia en el control de versiones.</li>
+        <li><strong>Es de solo lectura.</strong> Tiene tres herramientas, <code>Read</code>, <code>Grep</code> y <code>Glob</code>: lee, busca y enumera archivos, pero no escribe nada. Solo lectura no significa que sea inofensivo, porque <code>Read</code> no limita las rutas. Lee el archivo antes de usarlo y revisa cualquier cambio como harías con el código.</li>
+        <li><strong>Ofrece recomendaciones.</strong> Revisa el código fuente según el nivel AA de WCAG 2.2 y EN 301 549, y etiqueta cada hallazgo como confirmado en el código fuente o como algo que requiere un navegador o tecnología de asistencia. Sus hallazgos son sugerencias basadas en la lectura del código, no resultados de pruebas.</li>
+        <li><strong>No usa tecnología de asistencia.</strong> No abre páginas ni ejecuta scripts, y no observa cómo se representa una página, así que no sustituye una prueba con teclado y lector de pantalla.</li>
+      </ul>
+      <p>El archivo también está en el paquete como <code>@luz-ds/check/agents/accessibility.md</code>, para que un paso de compilación lo copie.</p>
+    </section>
+
+    <section class="docs-block" aria-labelledby="limits">
+      <h2 class="docs-chapter__title" id="limits">Lo que no hace</h2>
+      <p class="docs-lead">Una ejecución sin hallazgos indica lo que el comprobador no ha encontrado en los archivos que ha leído. No es una prueba de la página.</p>
+      <ul>
+        <li><strong>No ejecuta un navegador.</strong> Lee archivos, así que no detecta nada que dependa de cómo se representa una página, como la maquetación, el orden del foco o los colores que calcula el navegador.</li>
+        <li><strong>Solo mide el contraste de tus tokens.</strong> Mide los colores <code>--luz-*</code> que defines en tu propio archivo de tokens de color. No compara los colores escritos directamente en una regla con ningún otro. En <a href="../../../../es/docs/tokens/contrast/">Comprobación del contraste</a> se explica cómo lee los pares.</li>
+        <li><strong>No detecta las clases creadas en tiempo de ejecución.</strong> Un nombre construido en un script, como <code>"luz-" + name</code>, o escrito por una plantilla, no está en el archivo, así que no se comprueba.</li>
+        <li><strong>No comprueba nombres, etiquetas, texto alternativo, encabezados ni el idioma.</strong> No analiza si un botón tiene nombre, si una imagen tiene una alternativa útil, si los encabezados están ordenados ni si la página tiene un idioma. Una ejecución sin hallazgos no dice nada sobre estos aspectos.</li>
+        <li><strong>No sustituye las pruebas con lector de pantalla.</strong> Ni el comando ni el revisor utilizan tecnología de asistencia. Lo que no se ha probado se enumera en <a href="../../../../es/docs/accessibility/#h-a11y-not-tested">la declaración de accesibilidad</a>.</li>
+        <li><strong>No accede a la red.</strong> Se ejecuta sin conexión, con los datos de tu <code>node_modules</code> o de su propio paquete.</li>
+        <li><strong>El descubrimiento mediante <code>llms.txt</code> se hace con un enlace.</strong> Este sitio no está en la raíz de un host, así que el agente no encuentra el archivo por sí solo: dale la URL, como hace el prompt anterior.</li>
+        <li><strong>El código de salida 0 no es un resultado de accesibilidad.</strong> Indica que ninguna de las reglas anteriores bloquea los archivos leídos.</li>
+        <li><strong>Los mensajes están en inglés.</strong> No se traducen, sea cual sea el idioma de la página.</li>
+      </ul>
+    </section>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/components/">Componentes</a></li>
+      <li><a href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+      <li><a href="../../../../es/docs/tokens/color/">Tokens de color</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/get-started/print/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Estilos de impresión</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/get-started/classless/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Estilos sin clases</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/get-started/ai.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Trabajar%20con%20IA">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · <a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a> · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

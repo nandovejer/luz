@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elige tu fragmento – Primeros pasos – Documentación de LUZ</title>
+  <meta name="description" content="Elige qué estás creando y cómo lo cargas; después, copia las líneas. Las líneas de CDN incluyen hashes de integridad calculados a partir de los archivos publicados.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/get-started/snippet/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/get-started/snippet/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/get-started/snippet/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/get-started/snippet/">
+  <link rel="icon" href="../../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../../assets/header-CsdZsYUe.js"></script>
+  <script type="module" crossorigin src="../../../../assets/reference-CDmyJM2e.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-DuVRvlf9.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/header-BsMkM9X4.css">
+  <link rel="stylesheet" crossorigin href="../../../../assets/reference-siYsUwmw.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../../docs/get-started/snippet/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../../es/docs/get-started/snippet/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="true" href="../../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" aria-current="page" href="../../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#choose">Elige</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#atoms">Solo componentes</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#landing">Página de landing</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#blog">Blog o periódico</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#app">Aplicación web</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#docs">Sitio de documentación</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#chunks">Archivos que se cargan bajo demanda</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#verify">Comprueba un hash por tu cuenta</a></li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../../es/docs/get-started/snippet/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/get-started/snippet.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Elige%20tu%20fragmento">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/">Documentación</a></li>
+        <li><a class="luz-breadcrumb__item" href="../../../../es/docs/get-started/">Primeros pasos</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Elige tu fragmento</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Primeros pasos</p>
+    <h1 class="docs-title">Elige tu fragmento</h1>
+    <p class="luz-docs-page-head__lead">Elige qué estás creando y cómo lo cargas; después, copia las líneas. Las líneas de CDN incluyen hashes de integridad calculados a partir de los archivos publicados.</p>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. <a href="../../../../docs/get-started/snippet/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-block" id="intro">
+      <p>Cada fragmento carga primero los tokens, luego core y, por último, el paquete para el tipo de sitio que uses, en el orden que esperan las <a href="../../../../es/docs/get-started/layers/">capas de cascada</a>. El paquete site es opcional para una landing page, un blog y una aplicación, por eso sus líneas están marcadas y puedes eliminarlas sin riesgo.</p>
+      <p>Para ver la explicación paso a paso, lee <a href="../../../../es/docs/get-started/">Instalar LUZ</a>; si usas una herramienta de compilación, consulta <a href="../../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a>.</p>
+    </div>
+    <section class="docs-block" aria-labelledby="choose">
+      <h2 class="docs-chapter__title" id="choose">Elige</h2>
+      <template data-docs-picker>
+      <form class="docs-picker">
+        <fieldset>
+          <legend>¿Qué estás creando?</legend>
+          <label><input type="radio" name="kind" value="atoms" checked> Solo componentes</label>
+          <label><input type="radio" name="kind" value="landing"> Página de landing</label>
+          <label><input type="radio" name="kind" value="blog"> Blog o periódico</label>
+          <label><input type="radio" name="kind" value="app"> Aplicación web</label>
+          <label><input type="radio" name="kind" value="docs"> Sitio de documentación</label>
+        </fieldset>
+        <fieldset>
+          <legend>¿Cómo lo vas a cargar?</legend>
+          <label><input type="radio" name="via" value="npm" checked> npm y un empaquetador</label>
+          <label><input type="radio" name="via" value="cdn"> CDN con hashes de integridad</label>
+        </fieldset>
+        <output data-picker-status></output>
+      </form>
+      </template>
+      <div class="luz-table-wrap" role="region" data-docs-snippets aria-label="Todos los fragmentos de código" tabindex="0">
+        <table class="luz-table">
+          <caption>Todos los fragmentos de código</caption>
+          <thead>
+            <tr><th scope="col">Qué estás creando</th><th scope="col">npm y un empaquetador</th><th scope="col">CDN con hashes de integridad</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Solo componentes</th><td data-label="npm y un empaquetador"><div><a href="#atoms-npm">Solo componentes, con npm</a></div></td><td data-label="CDN con hashes de integridad"><div><a href="#atoms-cdn">Solo componentes, desde un CDN</a></div></td></tr>
+            <tr><th scope="row">Página de landing</th><td data-label="npm y un empaquetador"><div><a href="#landing-npm">Página de landing, con npm</a></div></td><td data-label="CDN con hashes de integridad"><div><a href="#landing-cdn">Página de landing, desde un CDN</a></div></td></tr>
+            <tr><th scope="row">Blog o periódico</th><td data-label="npm y un empaquetador"><div><a href="#blog-npm">Blog o periódico, con npm</a></div></td><td data-label="CDN con hashes de integridad"><div><a href="#blog-cdn">Blog o periódico, desde un CDN</a></div></td></tr>
+            <tr><th scope="row">Aplicación web</th><td data-label="npm y un empaquetador"><div><a href="#app-npm">Aplicación web, con npm</a></div></td><td data-label="CDN con hashes de integridad"><div><a href="#app-cdn">Aplicación web, desde un CDN</a></div></td></tr>
+            <tr><th scope="row">Sitio de documentación</th><td data-label="npm y un empaquetador"><div><a href="#docs-npm">Sitio de documentación, con npm</a></div></td><td data-label="CDN con hashes de integridad"><div><a href="#docs-cdn">Sitio de documentación, desde un CDN</a></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section data-snippet-kind="atoms" aria-labelledby="atoms">
+      <h2 class="docs-chapter__title" id="atoms">Solo componentes</h2>
+      <div data-snippet data-kind="atoms" data-via="npm" id="atoms-npm">
+        <h3>Solo componentes: con npm y un empaquetador</h3>
+        <div class="docs-command-block">
+          <code class="docs-command-block__cmd">
+            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
+            pnpm add @luz-ds/tokens @luz-ds/core
+          </code>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core" aria-label="Copiar el comando de instalación, solo componentes">Copiar</button>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">Empaquetador</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-atoms-npm" aria-label="Copiar los imports del empaquetador, solo componentes">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Los imports del empaquetador, solo componentes"><code id="code-atoms-npm">import &quot;@luz-ds/tokens/css&quot;;
+import &quot;@luz-ds/core/css&quot;;
+
+// Optional: copy buttons, tabs, players, the color mode
+import &quot;@luz-ds/core&quot;;</code></pre>
+        </div>
+      </div>
+      <div data-snippet data-kind="atoms" data-via="cdn" id="atoms-cdn">
+        <h3>Solo componentes: desde un CDN, con hashes de integridad</h3>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-atoms-cdn" aria-label="Copiar las etiquetas del CDN, solo componentes">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Las etiquetas del CDN, solo componentes"><code id="code-atoms-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot; integrity=&quot;sha384-G1hvt1Cwt3oYiqJaTJ3EcR3uot4Lunr3Kw+ujLcQJ4Q60EmbrDO3aCevVHu+WnkJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot; integrity=&quot;sha384-flgr16kJahjsLVCGUUzvn6Jz5B2yzVTSBLxJjqLTipv0MMOnBGdeeaczfgzwCOz6&quot; crossorigin=&quot;anonymous&quot;&gt;
+
+&lt;!-- Optional: copy buttons, tabs, players, the color mode --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot; integrity=&quot;sha384-kB7ZLDU3F6C/Zz059fyVvf+Nb0BsKxTC8AXnVIgUVgLs5LzntcaQ63xnGPdtGBNm&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+    <section data-snippet-kind="landing" aria-labelledby="landing">
+      <h2 class="docs-chapter__title" id="landing">Página de landing</h2>
+      <div data-snippet data-kind="landing" data-via="npm" id="landing-npm">
+        <h3>Página de landing: con npm y un empaquetador</h3>
+        <div class="docs-command-block">
+          <code class="docs-command-block__cmd">
+            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/landing
+          </code>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/landing" aria-label="Copiar el comando de instalación, página de landing">Copiar</button>
+        </div>
+        <p>Site es opcional: omite <code>@luz-ds/site</code> del comando y de los imports si la página no tiene búsqueda, banner de cookies ni selector de idioma.</p>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">Empaquetador</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-landing-npm" aria-label="Copiar los imports del empaquetador, página de landing">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Los imports del empaquetador, página de landing"><code id="code-landing-npm">import &quot;@luz-ds/tokens/css&quot;;
+import &quot;@luz-ds/core/css&quot;;
+// Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them.
+import &quot;@luz-ds/site/css&quot;;
+import &quot;@luz-ds/landing/css&quot;;
+
+// Optional: copy buttons, tabs, players, the color mode
+import &quot;@luz-ds/core&quot;;
+// Optional, with the site stylesheet: the search and the cookie banner
+import &quot;@luz-ds/site&quot;;</code></pre>
+        </div>
+      </div>
+      <div data-snippet data-kind="landing" data-via="cdn" id="landing-cdn">
+        <h3>Página de landing: desde un CDN, con hashes de integridad</h3>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-landing-cdn" aria-label="Copiar las etiquetas del CDN, página de landing">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Las etiquetas del CDN, página de landing"><code id="code-landing-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot; integrity=&quot;sha384-G1hvt1Cwt3oYiqJaTJ3EcR3uot4Lunr3Kw+ujLcQJ4Q60EmbrDO3aCevVHu+WnkJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot; integrity=&quot;sha384-flgr16kJahjsLVCGUUzvn6Jz5B2yzVTSBLxJjqLTipv0MMOnBGdeeaczfgzwCOz6&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;!-- Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them. --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot; integrity=&quot;sha384-G4iMzhaSbx+VoUBL1vfhi+JY5uea5dtjZrfUSrKbvUP56eWPpeMEA/dINgZZWUjJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.0.0/dist/landing.min.css&quot; integrity=&quot;sha384-+yqrIGjQpdtcFmUWOekk21w8iydbBF+gRARmpcvJdGydaDECtQXMFwHava6pPKkE&quot; crossorigin=&quot;anonymous&quot;&gt;
+
+&lt;!-- Optional: copy buttons, tabs, players, the color mode --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot; integrity=&quot;sha384-kB7ZLDU3F6C/Zz059fyVvf+Nb0BsKxTC8AXnVIgUVgLs5LzntcaQ63xnGPdtGBNm&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;!-- Optional, with the site stylesheet: the search and the cookie banner --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot; integrity=&quot;sha384-Kl5mPaCoWXAjnJ+1IcqRBjePjqkSA4/GIE7XZ5/eGkZQgF1cO4R6CWjMJS7icL/Q&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+    <section data-snippet-kind="blog" aria-labelledby="blog">
+      <h2 class="docs-chapter__title" id="blog">Blog o periódico</h2>
+      <div data-snippet data-kind="blog" data-via="npm" id="blog-npm">
+        <h3>Blog o periódico: con npm y un empaquetador</h3>
+        <div class="docs-command-block">
+          <code class="docs-command-block__cmd">
+            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/cms
+          </code>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/cms" aria-label="Copiar el comando de instalación, blog o periódico">Copiar</button>
+        </div>
+        <p>Site es opcional: omite <code>@luz-ds/site</code> del comando y de los imports si la página no tiene búsqueda, banner de cookies ni selector de idioma.</p>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">Empaquetador</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-blog-npm" aria-label="Copiar los imports del empaquetador, blog o periódico">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Los imports del empaquetador, blog o periódico"><code id="code-blog-npm">import &quot;@luz-ds/tokens/css&quot;;
+import &quot;@luz-ds/core/css&quot;;
+// Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them.
+import &quot;@luz-ds/site/css&quot;;
+import &quot;@luz-ds/cms/css&quot;;
+
+// Optional: copy buttons, tabs, players, the color mode
+import &quot;@luz-ds/core&quot;;
+// Optional, with the site stylesheet: the search and the cookie banner
+import &quot;@luz-ds/site&quot;;</code></pre>
+        </div>
+      </div>
+      <div data-snippet data-kind="blog" data-via="cdn" id="blog-cdn">
+        <h3>Blog o periódico: desde un CDN, con hashes de integridad</h3>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-blog-cdn" aria-label="Copiar las etiquetas del CDN, blog o periódico">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Las etiquetas del CDN, blog o periódico"><code id="code-blog-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot; integrity=&quot;sha384-G1hvt1Cwt3oYiqJaTJ3EcR3uot4Lunr3Kw+ujLcQJ4Q60EmbrDO3aCevVHu+WnkJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot; integrity=&quot;sha384-flgr16kJahjsLVCGUUzvn6Jz5B2yzVTSBLxJjqLTipv0MMOnBGdeeaczfgzwCOz6&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;!-- Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them. --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot; integrity=&quot;sha384-G4iMzhaSbx+VoUBL1vfhi+JY5uea5dtjZrfUSrKbvUP56eWPpeMEA/dINgZZWUjJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.0.0/dist/cms.min.css&quot; integrity=&quot;sha384-GtTB3UzvdqhYlxLFT3swuCOkG18E//wbeXsErtToMaWJlZfa1vN8u2EGWLzf0Vkv&quot; crossorigin=&quot;anonymous&quot;&gt;
+
+&lt;!-- Optional: copy buttons, tabs, players, the color mode --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot; integrity=&quot;sha384-kB7ZLDU3F6C/Zz059fyVvf+Nb0BsKxTC8AXnVIgUVgLs5LzntcaQ63xnGPdtGBNm&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;!-- Optional, with the site stylesheet: the search and the cookie banner --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot; integrity=&quot;sha384-Kl5mPaCoWXAjnJ+1IcqRBjePjqkSA4/GIE7XZ5/eGkZQgF1cO4R6CWjMJS7icL/Q&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+    <section data-snippet-kind="app" aria-labelledby="app">
+      <h2 class="docs-chapter__title" id="app">Aplicación web</h2>
+      <div data-snippet data-kind="app" data-via="npm" id="app-npm">
+        <h3>Aplicación web: con npm y un empaquetador</h3>
+        <div class="docs-command-block">
+          <code class="docs-command-block__cmd">
+            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app
+          </code>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app" aria-label="Copiar el comando de instalación, aplicación web">Copiar</button>
+        </div>
+        <p>Site es opcional: omite <code>@luz-ds/site</code> del comando y de los imports si la página no tiene búsqueda, banner de cookies ni selector de idioma.</p>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">Empaquetador</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-app-npm" aria-label="Copiar los imports del empaquetador, aplicación web">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Los imports del empaquetador, aplicación web"><code id="code-app-npm">import &quot;@luz-ds/tokens/css&quot;;
+import &quot;@luz-ds/core/css&quot;;
+// Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them.
+import &quot;@luz-ds/site/css&quot;;
+import &quot;@luz-ds/app/css&quot;;
+
+// Optional: copy buttons, tabs, players, the color mode
+import &quot;@luz-ds/core&quot;;
+// Optional, with the site stylesheet: the search and the cookie banner
+import &quot;@luz-ds/site&quot;;</code></pre>
+        </div>
+      </div>
+      <div data-snippet data-kind="app" data-via="cdn" id="app-cdn">
+        <h3>Aplicación web: desde un CDN, con hashes de integridad</h3>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-app-cdn" aria-label="Copiar las etiquetas del CDN, aplicación web">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Las etiquetas del CDN, aplicación web"><code id="code-app-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot; integrity=&quot;sha384-G1hvt1Cwt3oYiqJaTJ3EcR3uot4Lunr3Kw+ujLcQJ4Q60EmbrDO3aCevVHu+WnkJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot; integrity=&quot;sha384-flgr16kJahjsLVCGUUzvn6Jz5B2yzVTSBLxJjqLTipv0MMOnBGdeeaczfgzwCOz6&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;!-- Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them. --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot; integrity=&quot;sha384-G4iMzhaSbx+VoUBL1vfhi+JY5uea5dtjZrfUSrKbvUP56eWPpeMEA/dINgZZWUjJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/app@0.0.0/dist/app.min.css&quot; integrity=&quot;sha384-NEhIOQhBNxy3F8Q5apzF2zo/6ZLpHuT+Eyi8kOQ/D0WTsYDUXJkio2KRlwwk7TSp&quot; crossorigin=&quot;anonymous&quot;&gt;
+
+&lt;!-- Optional: copy buttons, tabs, players, the color mode --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot; integrity=&quot;sha384-kB7ZLDU3F6C/Zz059fyVvf+Nb0BsKxTC8AXnVIgUVgLs5LzntcaQ63xnGPdtGBNm&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;!-- Optional, with the site stylesheet: the search and the cookie banner --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot; integrity=&quot;sha384-Kl5mPaCoWXAjnJ+1IcqRBjePjqkSA4/GIE7XZ5/eGkZQgF1cO4R6CWjMJS7icL/Q&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+    <section data-snippet-kind="docs" aria-labelledby="docs">
+      <h2 class="docs-chapter__title" id="docs">Sitio de documentación</h2>
+      <div data-snippet data-kind="docs" data-via="npm" id="docs-npm">
+        <h3>Sitio de documentación: con npm y un empaquetador</h3>
+        <div class="docs-command-block">
+          <code class="docs-command-block__cmd">
+            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/docs
+          </code>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/docs" aria-label="Copiar el comando de instalación, sitio de documentación">Copiar</button>
+        </div>
+        <p>Site es opcional: omite <code>@luz-ds/site</code> del comando y de los imports si la página no tiene búsqueda, banner de cookies ni selector de idioma.</p>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">Empaquetador</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-docs-npm" aria-label="Copiar los imports del empaquetador, sitio de documentación">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Los imports del empaquetador, sitio de documentación"><code id="code-docs-npm">import &quot;@luz-ds/tokens/css&quot;;
+import &quot;@luz-ds/core/css&quot;;
+// Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them.
+import &quot;@luz-ds/site/css&quot;;
+import &quot;@luz-ds/docs/css&quot;;
+
+// Optional: copy buttons, tabs, players, the color mode
+import &quot;@luz-ds/core&quot;;
+// Optional, with the site stylesheet: the search and the cookie banner
+import &quot;@luz-ds/site&quot;;</code></pre>
+        </div>
+      </div>
+      <div data-snippet data-kind="docs" data-via="cdn" id="docs-cdn">
+        <h3>Sitio de documentación: desde un CDN, con hashes de integridad</h3>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-docs-cdn" aria-label="Copiar las etiquetas del CDN, sitio de documentación">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Las etiquetas del CDN, sitio de documentación"><code id="code-docs-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot; integrity=&quot;sha384-G1hvt1Cwt3oYiqJaTJ3EcR3uot4Lunr3Kw+ujLcQJ4Q60EmbrDO3aCevVHu+WnkJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot; integrity=&quot;sha384-flgr16kJahjsLVCGUUzvn6Jz5B2yzVTSBLxJjqLTipv0MMOnBGdeeaczfgzwCOz6&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;!-- Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them. --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot; integrity=&quot;sha384-G4iMzhaSbx+VoUBL1vfhi+JY5uea5dtjZrfUSrKbvUP56eWPpeMEA/dINgZZWUjJ&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.0.0/dist/docs.min.css&quot; integrity=&quot;sha384-oFwLLXce0TvAnIjz8m7ZnIXNycNVff4xve7q1Zbh2bYGCFO9rnFMJUMbhLYaNp+g&quot; crossorigin=&quot;anonymous&quot;&gt;
+
+&lt;!-- Optional: copy buttons, tabs, players, the color mode --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot; integrity=&quot;sha384-kB7ZLDU3F6C/Zz059fyVvf+Nb0BsKxTC8AXnVIgUVgLs5LzntcaQ63xnGPdtGBNm&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;!-- Optional, with the site stylesheet: the search and the cookie banner --&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot; integrity=&quot;sha384-Kl5mPaCoWXAjnJ+1IcqRBjePjqkSA4/GIE7XZ5/eGkZQgF1cO4R6CWjMJS7icL/Q&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+    <section class="docs-block" aria-labelledby="chunks">
+      <h2 class="docs-chapter__title" id="chunks">Archivos que se cargan bajo demanda</h2>
+      <p>Core y site solo cargan algunos archivos cuando la página los necesita: una tabla ordenable, una línea de tiempo, un reproductor MIDI, una página en español, la búsqueda o el banner de cookies. El hash de un script solo cubre ese archivo, así que cada archivo necesita su propio hash. Para proporcionárselo en todos los navegadores, usa un mapa de importaciones con una sección <code>integrity</code>, antes del primer script de módulo: así, el navegador comprueba cada archivo cuando el script lo importa y no ejecuta los archivos cuyo hash no coincide.</p>
+      <p>Safari y Firefox no usan el valor <code>integrity</code> de un <code>&lt;link rel="modulepreload"&gt;</code> para bloquear un archivo, así que solo sirve como indicación de rendimiento: úsalo, si quieres, para descargar un archivo antes, pero no confíes en él como comprobación. El mapa de importaciones de abajo enumera todos esos archivos. Conserva solo las líneas correspondientes a lo que incluye la página, como indica la tabla: un hash de un archivo que la página nunca carga no sirve de nada.</p>
+      <div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunks-importmap" aria-label="Copiar el mapa de importaciones con todos los archivos">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="El mapa de importaciones con todos los archivos"><code id="code-chunks-importmap">&lt;script type=&quot;importmap&quot;&gt;
+{
+  &quot;integrity&quot;: {
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/midi.min.js&quot;: &quot;sha384-1/jMwUxslzdTelDpKZnWaNfcn11b+/hcvpxbX+SLH35MVtexPnyFKINInbVxwzV8&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/table-sort.min.js&quot;: &quot;sha384-R+imdkLSyzPq7oSWCtDRr7lxmMxpy4ukmtJG2wc+DtF7AfPuRnKbaMxnSEPQrMFi&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/timeline.min.js&quot;: &quot;sha384-rdSAZnrRmxzTwdgicXrH3AJuwhb8FGnBbIwYahJAnt/hX9z2q8WY69hhfA4Dtq+d&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/i18n-es.min.js&quot;: &quot;sha384-WTwhB4JiLC3pI34wrjtORywtuYNTpKexHegaj7p+M120f0lVaNFjuZkgrDU8o+xU&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/search.min.js&quot;: &quot;sha384-hxqJRDacF2+DuZRdRU9HDWFsihewTmN9OKry3yybWXoiLENDS6MV/eGeg65biuVC&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/consent.min.js&quot;: &quot;sha384-4AD7Vj38jnaQJcboRkMLqopiK2sUgJpuJSakDNHNIG/cZ9c5MSFP3oVBVZHBW9+R&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/mode.min.js&quot;: &quot;sha384-WgfWhHMe6q/ipyhFOgARnpHqCtEV0AOJRziZFh+Iq1HV/5XrEvA+e/tlWGGh7GUq&quot;
+  }
+}
+&lt;/script&gt;</code></pre>
+              </div>
+      <p>Una indicación para descargar un archivo antes se escribe así. Acelera la página y no comprueba nada en Safari ni Firefox, así que nunca sustituye al mapa de importaciones:</p>
+      <div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunks-hint" aria-label="Copiar la indicación de rendimiento del archivo de búsqueda">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="La indicación de rendimiento del archivo de búsqueda"><code id="code-chunks-hint">&lt;link rel=&quot;modulepreload&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/search.min.js&quot; integrity=&quot;sha384-hxqJRDacF2+DuZRdRU9HDWFsihewTmN9OKry3yybWXoiLENDS6MV/eGeg65biuVC&quot; crossorigin=&quot;anonymous&quot;&gt;</code></pre>
+              </div>
+      <p>Para añadir un archivo a un mapa que ya tienes, incluye su línea de la tabla dentro de <code>integrity</code>, con una coma al final de todas las líneas menos la última.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Archivos que se cargan bajo demanda" tabindex="0">
+        <table class="luz-table">
+          <caption>Archivos que se cargan bajo demanda</caption>
+          <thead>
+            <tr><th scope="col">Archivo</th><th scope="col">Añade la línea solo si la página incluye</th><th scope="col">Línea que añadir</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>midi.min.js</code></th>
+              <td data-label="Añade la línea solo si la página incluye"><div>un <code>.luz-player</code> con <code>data-type="midi"</code></div></td>
+              <td data-label="Línea que añadir"><div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunk-core-midi" aria-label="Copiar la línea de midi.min.js">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="La línea de midi.min.js"><code id="code-chunk-core-midi">&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/midi.min.js&quot;: &quot;sha384-1/jMwUxslzdTelDpKZnWaNfcn11b+/hcvpxbX+SLH35MVtexPnyFKINInbVxwzV8&quot;</code></pre>
+              </div></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>table-sort.min.js</code></th>
+              <td data-label="Añade la línea solo si la página incluye"><div>una tabla ordenable, con <code>th[data-luz-sort]</code></div></td>
+              <td data-label="Línea que añadir"><div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunk-core-table-sort" aria-label="Copiar la línea de table-sort.min.js">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="La línea de table-sort.min.js"><code id="code-chunk-core-table-sort">&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/table-sort.min.js&quot;: &quot;sha384-R+imdkLSyzPq7oSWCtDRr7lxmMxpy4ukmtJG2wc+DtF7AfPuRnKbaMxnSEPQrMFi&quot;</code></pre>
+              </div></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>timeline.min.js</code></th>
+              <td data-label="Añade la línea solo si la página incluye"><div>un <code>&lt;luz-timeline&gt;</code></div></td>
+              <td data-label="Línea que añadir"><div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunk-core-timeline" aria-label="Copiar la línea de timeline.min.js">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="La línea de timeline.min.js"><code id="code-chunk-core-timeline">&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/timeline.min.js&quot;: &quot;sha384-rdSAZnrRmxzTwdgicXrH3AJuwhb8FGnBbIwYahJAnt/hX9z2q8WY69hhfA4Dtq+d&quot;</code></pre>
+              </div></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>i18n-es.min.js</code></th>
+              <td data-label="Añade la línea solo si la página incluye"><div>un elemento con <code>lang="es"</code>, en <code>&lt;html&gt;</code> o en la página, fuera de un enlace o una opción</div></td>
+              <td data-label="Línea que añadir"><div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunk-core-i18n-es" aria-label="Copiar la línea de i18n-es.min.js">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="La línea de i18n-es.min.js"><code id="code-chunk-core-i18n-es">&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/i18n-es.min.js&quot;: &quot;sha384-WTwhB4JiLC3pI34wrjtORywtuYNTpKexHegaj7p+M120f0lVaNFjuZkgrDU8o+xU&quot;</code></pre>
+              </div></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>search.min.js</code></th>
+              <td data-label="Añade la línea solo si la página incluye"><div>un <code>&lt;luz-search&gt;</code></div></td>
+              <td data-label="Línea que añadir"><div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunk-site-search" aria-label="Copiar la línea de search.min.js">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="La línea de search.min.js"><code id="code-chunk-site-search">&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/search.min.js&quot;: &quot;sha384-hxqJRDacF2+DuZRdRU9HDWFsihewTmN9OKry3yybWXoiLENDS6MV/eGeg65biuVC&quot;</code></pre>
+              </div></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>consent.min.js</code></th>
+              <td data-label="Añade la línea solo si la página incluye"><div>un <code>&lt;luz-consent&gt;</code></div></td>
+              <td data-label="Línea que añadir"><div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunk-site-consent" aria-label="Copiar la línea de consent.min.js">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="La línea de consent.min.js"><code id="code-chunk-site-consent">&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/consent.min.js&quot;: &quot;sha384-4AD7Vj38jnaQJcboRkMLqopiK2sUgJpuJSakDNHNIG/cZ9c5MSFP3oVBVZHBW9+R&quot;</code></pre>
+              </div></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>mode.min.js</code></th>
+              <td data-label="Añade la línea solo si la página incluye"><div>un <code>&lt;luz-mode&gt;</code></div></td>
+              <td data-label="Línea que añadir"><div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-chunk-site-mode" aria-label="Copiar la línea de mode.min.js">Copiar</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="La línea de mode.min.js"><code id="code-chunk-site-mode">&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/mode.min.js&quot;: &quot;sha384-WgfWhHMe6q/ipyhFOgARnpHqCtEV0AOJRziZFh+Iq1HV/5XrEvA+e/tlWGGh7GUq&quot;</code></pre>
+              </div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="docs-block" aria-labelledby="verify">
+      <h2 class="docs-chapter__title" id="verify">Comprueba un hash por tu cuenta</h2>
+      <p>Todos los hashes de esta página se calculan a partir del archivo que publica el paquete al compilar la documentación. Para comprobar uno, descarga el archivo que cargas y calcula su hash del mismo modo:</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">Shell</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-verify" aria-label="Copiar el comando que calcula un hash">Copiar</button>
+        </div>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Cálculo de un hash"><code id="code-verify">curl -s &lt;url of the file&gt; | openssl dgst -sha384 -binary | openssl base64 -A</code></pre>
+      </div>
+      <p>El resultado, después de <code>sha384-</code>, es el valor de <code>integrity</code>. Si no coincide con el de la página, no cargues el archivo: la versión de la URL o el propio archivo han cambiado.</p>
+    </section>
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../../es/docs/components/">Componentes</a></li>
+      <li><a href="../../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+      <li><a href="../../../../es/docs/tokens/color/">Tokens de color</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../../es/docs/get-started/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Instala LUZ</span></a></li>
+      <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="../../../../es/docs/get-started/structure/"><span class="luz-docs-pager__label">Siguiente</span> <span class="luz-docs-pager__title">Cómo se organiza LUZ</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-18">18 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/get-started/snippet.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Elige%20tu%20fragmento">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · <a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a> · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

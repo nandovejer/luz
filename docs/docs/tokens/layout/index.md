@@ -1,8 +1,8 @@
 # Layout and breakpoints
 
-How wide content gets, and where the layout changes. Ships with @luz-ds/core.
+How wide content gets, and where the layout changes. Widths ship with @luz-ds/core, breakpoints with @luz-ds/tokens.
 
-Ships with core, not with tokens.
+The widths ship with core; the breakpoints ship with tokens.
 
 - Breakpoints are reference values: media queries cannot read custom properties, so write the number, such as `@media (max-width: 768px)`.
 - Safari on a Mac with always-visible scrollbars does not count the scrollbar in width media queries (WebKit bug 52653), so a breakpoint is crossed when the window is up to about 15 px wider than its value.
