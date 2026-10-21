@@ -18,7 +18,7 @@ Every package here is a development-only tool (build, lint, test) of the reposit
 | rollup | 4.63.5 | MIT | . |
 | stylelint | 16.26.1 | MIT | . |
 | stylelint-config-standard | 36.0.1 | MIT | . |
-| vite | 6.4.3 | MIT | . |
+| vite | 6.4.5 | MIT | . |
 | vitest | 4.1.11 | MIT | . |
 
 Not on the allowlist, accepted by name (`ACCEPTED_DEV` in `scripts/check-license.js`):
