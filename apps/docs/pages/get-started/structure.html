@@ -71,7 +71,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
           <p>Core's CSS comes in native cascade layers (<code>@layer</code>), in ITCSS order, inside one container layer called <code>luz</code>. The six below are the ones that hold its rules; <a href="/docs/get-started/layers/">the layers page</a> lists them all, with tokens, site and print.</p>
           <p>A later layer wins over an earlier one, and any CSS of yours that is not in a layer wins over all of LUZ, with no <code>!important</code>. <a href="/docs/get-started/layers/">How to order and override them</a>.</p>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Core cascade layers"><code>packages/core/src/
-  settings/_settings.css      luz.settings    motion, z-index, breakpoints
+  settings/_settings.css      luz.settings    z-index, layout widths, field text
   generic/_reset.css          luz.generic     the reset
   elements/*.css              luz.elements    bare HTML elements, zero specificity
   objects/_objects.css        luz.objects     layout: .o-*

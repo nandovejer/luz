@@ -13,7 +13,7 @@ generate: gallery
             <ul>
               <li><strong>Primitives</strong> hold raw values: <code class="luz-code-inline">--luz-blue-60</code>, <code class="luz-code-inline">--luz-space-md</code>. They are the same in every mode.</li>
               <li><strong>Semantic tokens</strong> give a colour a job: <code class="luz-code-inline">--luz-text-primary</code>, <code class="luz-code-inline">--luz-surface-page</code>. Each mode points them at different primitives.</li>
-              <li>Space, size, radius, shadow and type scales are primitives that components use directly: they do not change with the mode.</li>
+              <li>Space, size, radius, shadow and type scales, font roles, breakpoints and motion are primitives that components use directly: they do not change with the mode.</li>
             </ul>
             <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Where the tokens come from"><code>packages/tokens/tokens.json        the source of the primitives
 packages/tokens/src/semantic.css   the semantic colours, per mode

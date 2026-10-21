@@ -131,6 +131,9 @@ export const PAIRS = [
   { fg: ["color-code"], bg: ["surface-strong"], min: 4.5, kind: "text" },
   // Syntax colours on the code block (.luz-code-block sits on surface-muted)
   { fg: CODE, bg: ["surface-muted"], min: 4.5, kind: "text" },
+  // ... and where a page draws the block recessed (a window with a title bar,
+  // a terminal: the text colour tinted over the page), no lighter than a hovered row
+  { fg: CODE, bg: ["surface-hover"], min: 4.5, kind: "text" },
   // The field border on every surface a field can sit on (WCAG 1.4.11)
   { fg: ["input-border"], bg: [...SURFACES, "surface-strong"], min: 3, kind: "ui" },
   // .luz-badge--gray: white text on the outline colour

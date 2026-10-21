@@ -43,7 +43,7 @@ export const INLINE_HTML = {
 };
 
 /** The counts a catalog value may say as `{n:<name>}`, in this order. */
-export const NUMBER_NAMES = ["components", "objects", "primitives", "semantic"];
+export const NUMBER_NAMES = ["components", "objects", "primitives", "semantic", "cssonly", "withjs"];
 
 /**
  * The counts of NUMBER_NAMES, read from the packages of `repoRoot`:
@@ -51,6 +51,8 @@ export const NUMBER_NAMES = ["components", "objects", "primitives", "semantic"];
  *   objects     the distinct `.o-*` blocks of packages/core/src/objects/_objects.css
  *   primitives  the colour steps of packages/tokens/tokens.json
  *   semantic    the tokens of the light block of packages/tokens/src/semantic.css
+ *   withjs      the stylesheets of the docs pages of components that name a script (`module:`)
+ *   cssonly     the components that name none: no script to load
  */
 export function siteNumbers(repoRoot) {
   const read = (path) => readFileSync(join(repoRoot, path), "utf-8");
@@ -62,7 +64,16 @@ export function siteNumbers(repoRoot) {
   const css = read("packages/tokens/src/semantic.css");
   const light = css.slice(css.indexOf('[data-theme="light"] {'), css.indexOf('[data-theme="dark"],'));
   const semantic = [...light.matchAll(/^\s*(--luz-[\w-]+):/gm)].length;
-  return { components, objects, primitives, semantic };
+  // A component page names its stylesheet in `files:` and its script, if it has one, in `module:`
+  const pages = join(repoRoot, "apps/docs/pages/components");
+  const scripted = new Set();
+  for (const file of readdirSync(pages).filter((name) => name.endsWith(".html"))) {
+    const head = readFileSync(join(pages, file), "utf-8").split("-->")[0];
+    if (!/^module:/m.test(head)) continue;
+    for (const m of head.matchAll(/components\/([a-z0-9-]+)\.css/g)) scripted.add(m[1]);
+  }
+  const withjs = scripted.size;
+  return { components, objects, primitives, semantic, cssonly: components - withjs, withjs };
 }
 
 /**

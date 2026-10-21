@@ -758,6 +758,9 @@
   --luz-brand-active: var(--luz-green-10);
   --luz-brand-fill: var(--luz-green-60);
   --luz-brand-fill-hover: var(--luz-green-70);
+  /* The hover fill of the outline and ghost buttons: without it the mode's own
+     (light in light) sits under the green text */
+  --luz-brand-subtle: var(--luz-surface-hover);
   --luz-divider: var(--luz-green-70);
   --luz-outline: var(--luz-green-50);
   --luz-focus-ring: var(--luz-green-20);
@@ -797,7 +800,12 @@
     font-size: var(--luz-text-md);
     line-height: 1.1;
     text-align: center;
-    color: color-mix(in oklab, var(--luz-green-40) 70%, transparent);
+    /* The glyphs are drawn in the full green and fade through their mask
+       (--docs-rain-peak: the share left at the head), never through a
+       translucent colour or opacity: the text is decoration (aria-hidden), and
+       a checker that measures the colour finds the real one, 4.5:1 or more on
+       the black */
+    color: var(--luz-green-40);
   }
 
   .docs-not-found__rain > span {
@@ -809,13 +817,15 @@
     animation-duration: calc(var(--luz-duration-lazy) * 14);
     animation-delay: calc(var(--luz-duration-lazy) * -9);
     /* The head is the last glyph: the tail fades towards the top */
-    mask-image: linear-gradient(to bottom, transparent, var(--luz-text-primary));
+    --docs-rain-peak: 70%;
+
+    mask-image: linear-gradient(to bottom, transparent, color-mix(in oklab, var(--luz-text-primary) var(--docs-rain-peak), transparent));
   }
 
   .docs-not-found__rain > span:nth-child(3n + 1) {
     animation-duration: calc(var(--luz-duration-lazy) * 19);
     animation-delay: calc(var(--luz-duration-lazy) * -4);
-    opacity: 0.7;
+    --docs-rain-peak: 49%;
   }
 
   .docs-not-found__rain > span:nth-child(5n + 2) {
@@ -826,7 +836,7 @@
   .docs-not-found__rain > span:nth-child(7n + 3) {
     animation-duration: calc(var(--luz-duration-lazy) * 16);
     animation-delay: calc(var(--luz-duration-lazy) * -1);
-    opacity: 0.5;
+    --docs-rain-peak: 35%;
   }
 
 }
@@ -1022,6 +1032,16 @@
 .docs-footer > .o-container {
   max-inline-size: none;
   padding-inline: 0;
+}
+
+/* With scripting on, the colour-mode button is fixed at the bottom end of the
+   window (apps/site/header.css): the footer row stops before it, so the last
+   link is never under the button (WCAG 2.4.11, 2.5.8). Without scripting the
+   radios are in the row and need no room. */
+@media (scripting: enabled) {
+  .docs-footer > .o-container {
+    padding-inline-end: calc(var(--luz-control-lg) + var(--luz-space-xs));
+  }
 }
 
 /* --------------------------------------------------------------------------

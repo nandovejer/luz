@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Cómo se organiza LUZ
 description: Paquetes con dependencias en una sola dirección, CSS en capas de cascada dentro de una llamada luz y un script opcional.
-source: 4dd1443eadb7
+source: acc5ae572e89
 reviewed: false
 -->
     <section class="docs-block" id="packages" aria-labelledby="packages-title">
@@ -71,7 +71,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
           <p>El CSS de core usa capas de cascada nativas (<code>@layer</code>), en el orden ITCSS y dentro de una capa contenedora llamada <code>luz</code>. Las seis de abajo contienen sus reglas; <a href="/docs/get-started/layers/">la página sobre capas</a> las enumera todas, junto con tokens, site e impresión.</p>
           <p>Una capa posterior prevalece sobre una anterior, y cualquier CSS tuyo que no esté en una capa prevalece sobre todo LUZ, sin <code>!important</code>. <a href="/docs/get-started/layers/">Cómo ordenarlas y sobrescribirlas</a>.</p>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Core cascade layers"><code>packages/core/src/
-  settings/_settings.css      luz.settings    motion, z-index, breakpoints
+  settings/_settings.css      luz.settings    z-index, layout widths, field text
   generic/_reset.css          luz.generic     the reset
   elements/*.css              luz.elements    bare HTML elements, zero specificity
   objects/_objects.css        luz.objects     layout: .o-*

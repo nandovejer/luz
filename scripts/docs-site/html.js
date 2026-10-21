@@ -31,6 +31,18 @@ const CLOSES_P = new Set([
 export { HtmlError, VOID, decodeEntities, tags };
 
 /**
+ * Drop the indentation and the blank lines a template leaves between tags.
+ * A line break stays (it is white space to a browser, as before); the
+ * content of `<pre>`, `<textarea>`, `<script>` and `<style>` is untouched.
+ */
+export function compactHtml(html) {
+  return html
+    .split(/(<(pre|textarea|script|style)\b[\s\S]*?<\/\2>)/i)
+    .map((part, i) => (i % 3 === 0 ? part.replace(/[ \t]*\n\s*/g, "\n") : i % 3 === 1 ? part : ""))
+    .join("");
+}
+
+/**
  * Read a document or fragment: check its nesting and collect what the
  * generator needs. Throws an HtmlError on the first nesting problem.
  *

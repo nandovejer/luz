@@ -1,10 +1,10 @@
 <!-- luz:page
 title: Motion
-description: The durations and easings of every transition, which drop to zero when the reader asks for reduced motion. Ships with @luz-ds/core.
+description: The durations and easings of every transition, which drop to zero when the reader asks for reduced motion. Ships with @luz-ds/tokens.
 area: tokens
 order: 7
 group: families
-files: settings/_settings.css
+files: tokens.json → duration; tokens.json → easing
 -->
     <div class="docs-block" id="c-motion">
           <p>Take every duration from a token. Under <code class="luz-code-inline">prefers-reduced-motion: reduce</code> all the durations become <code class="luz-code-inline">0s</code>, so motion stops everywhere with no extra CSS.</p>
@@ -83,7 +83,7 @@ files: settings/_settings.css
               </div>
             </div>
           </div>
-          <p class="docs-demo__note">Ships with core, not with tokens.</p>
+          <p class="docs-demo__note">Ships with tokens, with the switch to <code class="luz-code-inline">0s</code> under reduced motion, so a page with tokens alone loses its motion too.</p>
           <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A transition with motion tokens"><code>.panel {
   transition: opacity var(--luz-duration-base) var(--luz-easing-standard);
 }</code></pre>

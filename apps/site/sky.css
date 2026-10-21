@@ -4,11 +4,11 @@
    The home page and the docs share it; each puts the class site-sky on the
    element whose ::before and ::after are the sky (the home its <main>, the
    docs their <body>), and includes the partial sky-filter (the SVG filter
-   the clouds use). It follows the light of the hour (data-light, which
+   the clouds once used). It follows the light of the hour (data-light, which
    boot.js and <luz-mode by="clock"> write on <html>):
 
      dawn, dusk, night            stars
-     morning, afternoon, sunset   clouds (over light only)
+     morning, afternoon, sunset   nothing (over light): the page is the light
 
    Both layers are fixed to the window and drift with the scroll, slower
    than the page, the far layer slower still: a scroll-driven translate, no
@@ -159,110 +159,13 @@
 }
 
 /* --------------------------------------------------------------------------
-   Clouds: each layer is one small oval, out of sight above and left of the
-   window; its box-shadows are the clouds: soft ovals, white puffs over a
-   belly in a tint of the theme's blue (the belly is what shows a white cloud
-   on a pale page), towards the sides of the window, where the text rarely
-   runs, and the SVG filter of the partial sky-filter (#site-sky-clouds, a
-   fractal noise) frays their edges. The near layer (::after) is larger and
-   rises faster with the scroll than the far one
+   By day (morning, afternoon, sunset, over light) the sky draws nothing: the
+   page itself is the light
    -------------------------------------------------------------------------- */
-
-:root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky {
-  --_cloud: color-mix(in oklab, var(--luz-color-info-bg) 60%, var(--luz-text-on-fill));
-  /* The theme's blue, the same in every light; 12% (under the layer's opacity)
-     keeps secondary text at 4.5:1 over it in every light */
-  --_belly: color-mix(in oklab, var(--luz-color-info) 12%, transparent);
-}
 
 :root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::before,
 :root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::after {
-  inset: -1000px auto auto -1000px;
-  inline-size: 18rem;
-  block-size: 7rem;
-  border-radius: 50%;
-  opacity: 1;
-  background: none;
-  filter: url("#site-sky-clouds");
-}
-
-:root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::before {
-  opacity: 0.7;
-  box-shadow:
-    calc(1000px + 14vw) calc(1000px + 4vh) 25px 21px var(--_cloud),
-    calc(1000px + 18vw) calc(1000px + 2vh) 25px 30px var(--_cloud),
-    calc(1000px + 19vw) calc(1000px + 2vh) 25px 31px var(--_cloud),
-    calc(1000px + 95vw) calc(1000px + 40vh) 25px 29px var(--_cloud),
-    calc(1000px + 99vw) calc(1000px + 37vh) 25px 24px var(--_cloud),
-    calc(1000px + 91vw) calc(1000px + 39vh) 25px 40px var(--_cloud),
-    calc(1000px + 17vw) calc(1000px + 88vh) 25px 20px var(--_cloud),
-    calc(1000px + 15vw) calc(1000px + 87vh) 25px 35px var(--_cloud),
-    calc(1000px + 17vw) calc(1000px + 84vh) 25px 24px var(--_cloud),
-    calc(1000px + 88vw) calc(1000px + 121vh) 25px 39px var(--_cloud),
-    calc(1000px + 89vw) calc(1000px + 120vh) 25px 27px var(--_cloud),
-    calc(1000px + 84vw) calc(1000px + 120vh) 25px 28px var(--_cloud),
-    calc(1000px + 1vw) calc(1000px + 157vh) 25px 32px var(--_cloud),
-    calc(1000px + 5vw) calc(1000px + 157vh) 25px 18px var(--_cloud),
-    calc(1000px + -5vw) calc(1000px + 159vh) 25px 18px var(--_cloud),
-    calc(1000px + 14vw) calc(1000px + 11vh) 29px 13px var(--_belly),
-    calc(1000px + 96vw) calc(1000px + 45vh) 29px 26px var(--_belly),
-    calc(1000px + 17vw) calc(1000px + 93vh) 29px 17px var(--_belly),
-    calc(1000px + 86vw) calc(1000px + 129vh) 29px 14px var(--_belly),
-    calc(1000px + -2vw) calc(1000px + 165vh) 29px 21px var(--_belly);
-}
-
-:root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::after {
-  opacity: 0.85;
-  box-shadow:
-    calc(1000px + 85vw) calc(1000px + 9vh) 42px 45px var(--_cloud),
-    calc(1000px + 89vw) calc(1000px + 9vh) 42px 33px var(--_cloud),
-    calc(1000px + 82vw) calc(1000px + 10vh) 42px 40px var(--_cloud),
-    calc(1000px + 2vw) calc(1000px + 52vh) 42px 49px var(--_cloud),
-    calc(1000px + 4vw) calc(1000px + 49vh) 42px 55px var(--_cloud),
-    calc(1000px + 6vw) calc(1000px + 51vh) 42px 60px var(--_cloud),
-    calc(1000px + 95vw) calc(1000px + 95vh) 42px 42px var(--_cloud),
-    calc(1000px + 86vw) calc(1000px + 96vh) 42px 49px var(--_cloud),
-    calc(1000px + 95vw) calc(1000px + 96vh) 42px 59px var(--_cloud),
-    calc(1000px + 10vw) calc(1000px + 138vh) 42px 67px var(--_cloud),
-    calc(1000px + 11vw) calc(1000px + 136vh) 42px 35px var(--_cloud),
-    calc(1000px + 3vw) calc(1000px + 141vh) 42px 47px var(--_cloud),
-    calc(1000px + 87vw) calc(1000px + 15vh) 49px 50px var(--_belly),
-    calc(1000px + 3vw) calc(1000px + 57vh) 49px 22px var(--_belly),
-    calc(1000px + 94vw) calc(1000px + 101vh) 49px 32px var(--_belly),
-    calc(1000px + 7vw) calc(1000px + 145vh) 49px 29px var(--_belly);
-}
-
-/* On a phone the same clouds are half as large, so they stay at the sides
-   instead of covering the text with a haze */
-@media (max-width: 640px) {
-  :root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::before,
-  :root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::after {
-    inline-size: 8rem;
-    block-size: 3rem;
-  }
-}
-
-@keyframes site-sky-clouds-drift {
-  to {
-    translate: 0 var(--_rise);
-  }
-}
-
-/* Over the whole page the near clouds rise by 60% of the window, the far ones by 30% */
-@supports (animation-timeline: scroll()) {
-  :root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::before,
-  :root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::after {
-    animation: site-sky-clouds-drift linear both;
-    animation-timeline: scroll(root);
-  }
-
-  :root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::before {
-    --_rise: -30vh;
-  }
-
-  :root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::after {
-    --_rise: -60vh;
-  }
+  display: none;
 }
 
 @media (forced-colors: active) {

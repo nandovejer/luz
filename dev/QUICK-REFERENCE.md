@@ -52,13 +52,16 @@ pnpm lint:js        # ESLint
 ### Size knobs (Set on `:root`, Never Read by a Component)
 - `--luz-type-base` (`1rem`), `--luz-type-ratio` (`1.25`), `--luz-space-unit` (`0.25rem`): the three inputs of the type and space scales, in `tokens.json`. Write the lengths in rem so the reader's browser font size keeps working. A knob set on `body` or a section changes nothing: the steps are resolved on `:root`.
 - Each derived step has `from` (the plain chain) and, for type, `fromRounded` (the same with `round()` to 1/16 rem, emitted in `@supports (width: round(1px, 1px))`); `value` is the resolved default.
-- `--luz-text-body` (core setting): running text, `calc(var(--luz-text-base) * 1.0625)`, 17px at the defaults.
+- `--luz-text-body` (a font role, in `tokens.json`): running text, `calc(var(--luz-text-base) * 1.0625)`, 17px at the defaults.
 
-### Configuration (Theme-Independent, Core Settings)
-- Z-index: `--luz-z-base`, `--luz-z-raised`, `--luz-z-overlay`, `--luz-z-sidebar`, `--luz-z-modal`, `--luz-z-toast`
+### Theme-Independent Tokens (`tokens.json`)
 - Breakpoints (reference values; a media query cannot read them): `--luz-mq-sm` (640), `--luz-mq-md` (768), `--luz-mq-lg` (1024), `--luz-mq-xl` (1280), `--luz-mq-xxl` (1536), `--luz-mq-xxxl` (1920)
-- Motion: `--luz-duration-*`, `--luz-easing-*`
-- Fonts: `--luz-font-heading`, `--luz-font-body`, `--luz-font-sans|serif|mono`; field text `--luz-text-control`
+- Motion: `--luz-duration-*` (all `0s` under `prefers-reduced-motion: reduce`), `--luz-easing-*`
+- Fonts: `--luz-font-heading`, `--luz-font-body` (both the sans under `:lang(ar)`), `--luz-font-sans|serif|mono`
+
+### Configuration (Core Settings, `settings/_settings.css`)
+- Z-index: `--luz-z-base`, `--luz-z-raised`, `--luz-z-overlay`, `--luz-z-sidebar`, `--luz-z-modal`, `--luz-z-toast`
+- Layout: `--luz-sidebar-width`, `--luz-content-max`, `--luz-bar-h`, `--luz-scrollbar-size`; field text `--luz-text-control`
 
 ## Core Components
 
@@ -119,7 +122,7 @@ Each component ships as its own file in `@luz-ds/core/dist/components/`:
 <link rel="stylesheet" href=".../@luz-ds/core@0.1.0/dist/components/button.css">
 ```
 
-Requires the tokens layer, then `base.css` (core settings such as z-index and motion, reset, bare elements), loaded first.
+Requires the tokens layer, then `base.css` (core settings such as z-index and layout widths, reset, bare elements), loaded first.
 
 ## File Organization
 

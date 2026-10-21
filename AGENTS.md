@@ -121,7 +121,7 @@ The scales are computed from three knobs in `tokens.json`: `--luz-type-base`, `-
 
 ### Modifying a breakpoint or motion token
 
-**Test first:** the spec of what the change must do (a layout at the new width, a duration under reduced motion). Then edit `packages/core/src/settings/_settings.css` only, and regenerate `dist/luz.css`.
+**Test first:** the spec of what the change must do (a layout at the new width, a duration under reduced motion). Then edit the `breakpoint`, `duration` or `easing` group of `packages/tokens/tokens.json` (the reduced-motion block is written from `duration`), run `pnpm tokens:build`, and update `tokens/layout.html` or `tokens/motion.html`.
 
 ### Adding a style for a bare HTML element
 
@@ -143,7 +143,7 @@ The build is the test here: it fails on a missing or extra key.
 2. Copy `en.json` to `fr.json` and translate every value. Keep `{n}`, `{mode}`, `{n:components}`… as they are, and the markup of the HTML keys.
 3. Run `pnpm test:unit` and `pnpm check:strings`, then `pnpm pages:build`. Nothing else: the route, the build entry, the switcher, the alternates and the link check follow the registry.
 
-The build fails with `file:line` on a key a template uses that a catalog lacks, on a catalog that misses a key of `en.json` or has one it does not, and on a key no template uses. Links from the home into the docs go to the docs of their language (`/es/docs/`) once `apps/docs/i18n/<code>/` exists, and say `hreflang="en"` until then; the entries of a page that is not translated are English (`lang="en"` on their lists). A language core's i18n does not ship (Arabic) still gets the scripts' strings in its own language: the landing's `<body>` carries `data-luz-label-*` from the catalog. For a right-to-left language check the page at 320 px; for a script ET Book lacks, add its `:lang()` font switch to `packages/core/src/settings/_settings.css`, as Arabic has.
+The build fails with `file:line` on a key a template uses that a catalog lacks, on a catalog that misses a key of `en.json` or has one it does not, and on a key no template uses. Links from the home into the docs go to the docs of their language (`/es/docs/`) once `apps/docs/i18n/<code>/` exists, and say `hreflang="en"` until then; the entries of a page that is not translated are English (`lang="en"` on their lists). A language core's i18n does not ship (Arabic) still gets the scripts' strings in its own language: the landing's `<body>` carries `data-luz-label-*` from the catalog. For a right-to-left language check the page at 320 px; for a script ET Book lacks, add its `lang` value to `--luz-font-heading` and `--luz-font-body` in the `role` group of `packages/tokens/tokens.json` (the build writes the `:where(:lang())` rule), as Arabic has.
 
 ### Adding a language to core's scripts
 

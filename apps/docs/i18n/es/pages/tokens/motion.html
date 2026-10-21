@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Movimiento
-description: Las duraciones y funciones de aceleración de cada transición, que pasan a cero cuando quien lee prefiere reducir el movimiento. Incluido en @luz-ds/core.
-source: d9c18dfe4f98
+description: Las duraciones y funciones de aceleración de cada transición, que pasan a cero cuando quien lee prefiere reducir el movimiento. Incluido en @luz-ds/tokens.
+source: a9b281547255
 reviewed: false
 -->
     <div class="docs-block" id="c-motion">
@@ -81,7 +81,7 @@ reviewed: false
               </div>
             </div>
           </div>
-          <p class="docs-demo__note">Incluido en core, no en tokens.</p>
+          <p class="docs-demo__note">Incluido en tokens, con el cambio a <code class="luz-code-inline">0s</code> cuando se prefiere reducir el movimiento, así que una página solo con tokens también pierde su movimiento.</p>
           <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A transition with motion tokens"><code>.panel {
   transition: opacity var(--luz-duration-base) var(--luz-easing-standard);
 }</code></pre>
