@@ -65,8 +65,11 @@ jobs:
     name: Build, unit tests & tarball contract
     runs-on: ubuntu-latest
     steps:
+      # Full history: each docs page shows the date of its last commit
+      # (`git log -1 -- <file>`), so check:generated needs more than one commit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Setup pnpm
