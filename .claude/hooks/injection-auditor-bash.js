@@ -14,6 +14,11 @@ const GIT = new Set([
   'merge-base', 'cat-file', 'blame', 'grep', 'shortlog', 'diff-tree', 'show-ref', 'describe',
 ]);
 const GIT_FLAGS_DENIED = /^(--output(=|$)|--ext-diff$|--textconv$|--no-index$|--open-files-in-pager(=|$)|-O|--exec|--upload-pack|--receive-pack|--git-dir|--work-tree|--contents$)/;
+// git accepts clustered short options and abbreviated long options, so the anchored list above is not enough:
+// -O in a cluster (-nOsh) and any prefix of --output or, for grep, of --open-files-in-pager (--o is also --or).
+const GIT_CLUSTER_DENIED = /^-[A-Za-z]*O/;
+const GIT_ABBREV_DENIED = /^--ou/;
+const GIT_GREP_ABBREV_DENIED = /^--o(?!r$)/;
 const GH = {
   pr: new Set(['view', 'diff', 'list', 'status', 'checks']),
   issue: new Set(['view', 'list', 'status']),
@@ -71,7 +76,13 @@ function allowed(words, first) {
   const [cmd, sub, verb] = words;
   if (first && cmd === 'git') {
     if (!sub || !GIT.has(sub)) return false;
-    return !words.slice(2).some((w) => GIT_FLAGS_DENIED.test(w));
+    return !words.slice(2).some(
+      (w) =>
+        GIT_FLAGS_DENIED.test(w) ||
+        GIT_CLUSTER_DENIED.test(w) ||
+        GIT_ABBREV_DENIED.test(w) ||
+        (sub === 'grep' && GIT_GREP_ABBREV_DENIED.test(w)),
+    );
   }
   if (first && cmd === 'gh') {
     if (!GH[sub]?.has(verb)) return false;
