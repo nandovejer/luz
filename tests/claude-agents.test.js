@@ -76,13 +76,17 @@ describe("claude agents: naming scheme", () => {
   });
 });
 
+// Medium for the two mechanical runners since 2026-10-18 (OWNER.md §1); high where quality shows.
+const MEDIUM_EFFORT = ["test-runner", "chore-runner"];
+
 describe("claude agents: the mechanical ones run on Sonnet 5.5", () => {
   for (const name of SONNET_AGENTS) {
-    it(`${name} sets model claude-sonnet-5-5 and effort high`, () => {
+    const effort = MEDIUM_EFFORT.includes(name) ? "medium" : "high";
+    it(`${name} sets model claude-sonnet-5-5 and effort ${effort}`, () => {
       expect(existsSync(resolve(agentsDir, `${name}.md`)), `${name}.md exists`).toBe(true);
       const fm = frontmatter(`${name}.md`);
       expect(fm.model).toBe("claude-sonnet-5-5");
-      expect(fm.effort).toBe("high");
+      expect(fm.effort).toBe(effort);
     });
   }
 });
