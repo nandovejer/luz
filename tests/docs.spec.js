@@ -268,14 +268,15 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('navigation', () => {
-    test('the sidebar shows the nine areas, all open, with every page listed, and HTML elements nested in Documentation', async ({ page }) => {
+    test('the sidebar shows the ten areas, all open, with every page listed, and HTML elements as an area of its own', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await gotoId(page, 'c-button');
       const areas = page.locator('.docs-nav a.docs-nav__area');
-      await expect(areas).toHaveText(['Get started', 'Tokens', 'Core', 'Catalog', 'Landing', 'CMS', 'App', 'Documentation', 'Accessibility']);
-      // HTML elements is a submenu of the Documentation item, after its own pages
-      await expect(page.locator('.docs-nav .docs-nav__sub a.docs-nav__subarea')).toHaveText('HTML elements');
-      await expect(page.locator('.docs-nav .docs-nav__sub')).toHaveCount(1);
+      await expect(areas).toHaveText(['Get started', 'Tokens', 'Core', 'Catalog', 'Landing', 'CMS', 'App', 'Documentation', 'HTML elements', 'Accessibility']);
+      // HTML elements is an area like the others, not nested in Documentation
+      await expect(page.locator('.docs-nav > li > a.docs-nav__area[href="/docs/html/"]')).toHaveText('HTML elements');
+      await expect(page.locator('.docs-nav .docs-nav__sub')).toHaveCount(0);
+      await expect(page.locator('.docs-nav a.docs-nav__subarea')).toHaveCount(0);
       // Flat: no accordion, and every page of every area is a link
       await expect(page.locator('nav.luz-docs-nav details')).toHaveCount(0);
       await expect(page.locator('.docs-nav a[aria-current="true"]')).toHaveText('Core');

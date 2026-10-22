@@ -454,10 +454,10 @@ describe("@luz-ds/docs: the docs area", () => {
   const site = scanSite(join(root, "apps/docs"), root);
   const inArea = (group) => site.pages.filter((p) => p.meta.area === "documentation" && (group ? p.meta.group === group : true));
 
-  it("has the area `documentation`, labelled Documentation, right after app and before accessibility", () => {
+  it("has the area `documentation`, labelled Documentation, right after app and before HTML elements and accessibility", () => {
     const area = siteJson.areas?.find((a) => a.id === "documentation");
     expect(area).toMatchObject({ id: "documentation", label: "Documentation", slug: "documentation" });
-    expect(areas.slice(areas.indexOf("app"))).toEqual(["app", "documentation", "accessibility"]);
+    expect(areas.slice(areas.indexOf("app"))).toEqual(["app", "documentation", "html", "accessibility"]);
   });
 
   it("groups it as the other kinds are: patterns, then a reference list, with essentials", () => {
