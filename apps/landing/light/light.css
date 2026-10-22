@@ -429,12 +429,16 @@ home-light .home-light__sr {
     }
   }
 
-  /* A shorter phrase box and a smaller bar, so both fit in the first screen:
-     the hour one step down, the "Saved" notice over the corner instead of
-     taking a line of its own */
+  /* A shorter phrase box, and the page's ink, not its muted one: the globe
+     rises behind the phrase here, so the bright land can be under it, and
+     the phrase keeps 4.5:1 over whatever the visual draws */
   home-light .home-light__line {
     padding-block: var(--luz-space-md);
+    color: var(--_ink);
   }
+
+  /* A smaller bar, so both fit in the first screen: the hour one step down,
+     the "Saved" notice over the corner instead of taking a line of its own */
 
   home-light .home-light__time {
     font-size: var(--luz-text-xl);

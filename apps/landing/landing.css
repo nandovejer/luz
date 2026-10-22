@@ -448,7 +448,7 @@ home-light:defined ~ .landing-light__nojs {
 
 .landing-why__card {
   gap: var(--luz-space-md);
-  padding: var(--luz-space-xl);
+  padding: min(var(--luz-space-xl), 12%);
   border-color: color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
   border-radius: var(--luz-radius-lg);
   background: color-mix(in oklab, var(--luz-surface-page) 45%, transparent);
@@ -510,6 +510,8 @@ home-light:defined ~ .landing-light__nojs {
    each cell is its own */
 .landing-bar__meter {
   grid-column: 1 / -1;
+  /* Core's meter is never narrower than 8rem: 512px at 400 % text */
+  min-inline-size: 0;
   block-size: 12px;
   border: 0;
   border-radius: 0;
@@ -557,7 +559,11 @@ home-light:defined ~ .landing-light__nojs {
 /* Each level is a section of the home of its own, as far from the next as
    any other section */
 .landing-inside {
+  container: inside / inline-size;
   display: grid;
+  /* One column that may be narrower than its content, so a word or a button
+     longer than the line cannot widen the track (and the page) */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--luz-space-xl) var(--luz-space-3xl);
   align-items: center;
 }
@@ -580,6 +586,7 @@ home-light:defined ~ .landing-light__nojs {
 
 .landing-inside__copy {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--luz-space-md);
   align-content: start;
 }
@@ -862,7 +869,8 @@ home-light:defined ~ .landing-light__nojs {
   display: grid;
   gap: 0;
   min-inline-size: 0;
-  padding: var(--luz-space-md);
+  /* A share of the width caps it at 400 % text; at any usual size the token is the smaller */
+  padding: min(var(--luz-space-md), 5%);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
   border-radius: var(--luz-radius-lg);
   background: var(--luz-surface-page);
@@ -968,6 +976,9 @@ home-light:defined ~ .landing-light__nojs {
 .landing-names__list a {
   display: inline-flex;
   align-items: center;
+  /* A name longer than the line breaks instead of widening the page */
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
   min-block-size: 1.5rem;
   padding: 0 var(--luz-space-xs);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 18%, transparent);
@@ -1219,8 +1230,8 @@ home-light:defined ~ .landing-light__nojs {
   position: relative;
   display: grid;
   min-inline-size: 0;
-  min-inline-size: 0;
-  padding: var(--luz-space-xl);
+  /* A share of the width caps the padding at 400 % text; at any usual size the token is the smaller */
+  padding: min(var(--luz-space-xl), 12%);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
   border-radius: var(--luz-radius-lg);
   background: var(--luz-surface-page);
@@ -1243,7 +1254,7 @@ home-light:defined ~ .landing-light__nojs {
   place-content: center;
   justify-items: center;
   gap: var(--luz-space-sm);
-  padding: var(--luz-space-md);
+  padding: min(var(--luz-space-md), 5%);
   border: 0;
   border-radius: inherit;
   background: color-mix(in oklab, var(--luz-surface-page) 82%, transparent);
@@ -1273,8 +1284,8 @@ home-light:defined ~ .landing-light__nojs {
 .landing-cut__icon {
   display: grid;
   place-items: center;
-  inline-size: 5.5rem;
-  block-size: 5.5rem;
+  inline-size: min(5.5rem, 100%);
+  aspect-ratio: 1;
   border: 1px solid var(--luz-divider);
   border-radius: var(--luz-radius-full);
   background: var(--luz-surface);
@@ -1287,8 +1298,9 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 .landing-cut__icon svg {
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
+  inline-size: min(2.75rem, 50%);
+  aspect-ratio: 1;
+  block-size: auto;
 }
 
 .landing-cut:hover .landing-cut__icon {
@@ -1453,7 +1465,8 @@ home-light:defined ~ .landing-light__nojs {
   display: grid;
   align-content: start;
   gap: var(--luz-space-md);
-  padding: var(--luz-space-lg) var(--luz-space-xl);
+  /* A share of the width caps the padding at 400 % text; at any usual size the token is the smaller */
+  padding: min(var(--luz-space-lg), 10%) min(var(--luz-space-xl), 10%);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 12%, transparent);
   border-radius: var(--luz-radius-lg);
   background: color-mix(in oklab, var(--luz-surface-page) 60%, transparent);
@@ -1466,6 +1479,7 @@ home-light:defined ~ .landing-light__nojs {
 
 .landing-fit__title {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--luz-space-sm);
   margin: 0;
@@ -1528,7 +1542,7 @@ home-light:defined ~ .landing-light__nojs {
   }
 
   .landing-fit__col {
-    padding: var(--luz-space-lg);
+    padding: min(var(--luz-space-lg), 10%);
   }
 }
 
@@ -1996,6 +2010,48 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 
+/* 400 % text at 320 px (WCAG 1.4.4, 1.4.10): the sizes of the timeline, the
+   cards and their icons are in rem, so as the text grows they take the whole
+   width and the terminals are pushed out of the window. Measured in the
+   level's own em, not in px, the query holds when the text is large for the
+   width, whatever the window: the spine, the branches and the circles go,
+   the icon sits in the card as it does in a card of any level, the card's
+   padding is a share of its width and the icon and the name wrap. A phone at
+   the usual size has more than 16em and keeps the timeline. */
+@container inside (max-inline-size: 16em) {
+  #inside-4 .landing-inside__kinds {
+    padding-inline-start: 0;
+  }
+
+  #inside-4 .landing-inside__kinds::after,
+  #inside-4 .landing-inside__kinds::before,
+  #inside-4 .landing-kind::before {
+    display: none;
+  }
+
+  #inside-4 .landing-kind__icon {
+    position: static;
+    border: 0;
+    border-radius: var(--luz-radius-md);
+    background: color-mix(in oklab, var(--luz-brand-primary) 12%, transparent);
+  }
+
+  .landing-kind {
+    padding: min(var(--luz-space-lg), 7%);
+  }
+
+  .landing-kind__head {
+    flex-wrap: wrap;
+  }
+
+  /* The title a step down: a letter of the largest size, with the marked
+     word's padding, is wider than the line */
+  .landing-inside__title {
+    font-size: var(--luz-text-3xl);
+  }
+}
+
+
 /* The button under the points: the way to the page of every HTML tag, its
    arrow nudging toward where it goes (mirrored in right-to-left) */
 .landing-inside__cta {
@@ -2036,7 +2092,7 @@ home-light:defined ~ .landing-light__nojs {
   content-visibility: auto;
   contain-intrinsic-size: auto 30rem;
   min-inline-size: 0;
-  padding: var(--luz-space-lg);
+  padding: min(var(--luz-space-lg), 10%);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
   border-radius: var(--luz-radius-lg);
   background: var(--luz-surface-page);
@@ -2045,7 +2101,7 @@ home-light:defined ~ .landing-light__nojs {
 
 .landing-typed__code {
   margin: 0;
-  padding: var(--luz-space-lg);
+  padding: min(var(--luz-space-lg), 10%);
   overflow-x: auto;
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 12%, transparent);
   border-radius: var(--luz-radius-md);
@@ -2066,11 +2122,14 @@ home-light:defined ~ .landing-light__nojs {
   display: grid;
   gap: var(--luz-space-lg);
   min-inline-size: 0;
+  /* A caption longer than the line breaks at 400 % text instead of widening the page */
+  overflow-wrap: anywhere;
 }
 
 /* The browser's meter and LUZ's share one place: one replaces the other */
 .landing-typed__state {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-area: 1 / 1;
   gap: var(--luz-space-xs);
 }
@@ -2096,6 +2155,13 @@ home-light:defined ~ .landing-light__nojs {
   gap: var(--luz-space-xs);
 }
 
+/* The three strips go one under the other when the text is large for the width */
+@container inside (max-inline-size: 16em) {
+  .landing-typed__modes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .landing-typed__mode {
   display: grid;
   gap: var(--luz-space-2xs);
@@ -2108,8 +2174,8 @@ home-light:defined ~ .landing-light__nojs {
   font-size: var(--luz-text-xs);
 }
 
-.landing-typed__mode .luz-meter,
-.landing-typed__mode .luz-input {
+.landing-typed__result .luz-meter,
+.landing-typed__result .luz-input {
   min-inline-size: 0;
 }
 
