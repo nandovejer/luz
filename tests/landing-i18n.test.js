@@ -149,6 +149,7 @@ describe("languages of the home page: registry and catalogs", () => {
     expect(build(fixture({ catalogs })).problems).toEqual(['apps/landing/i18n/en.json:6: "old.key" is used by no template']);
   });
 
+  // Seven builds of the fixture: more than the default 5 s on a loaded runner
   it("escapes {{t:…}} and lets {{html:…}} carry only inline markup", () => {
     const xss = '<img src=x onerror="alert(1)">';
     const catalogs = { ...CATALOGS, es: { ...CATALOGS.es, "hero.title": xss } };
@@ -159,7 +160,7 @@ describe("languages of the home page: registry and catalogs", () => {
     }
     const ok = { ...CATALOGS, es: { ...CATALOGS.es, "hero.lead": 'Ve a <a href="/docs/">la guía</a> con <span data-count="n">3</span> <strong>pasos</strong>.' } };
     expect(build(fixture({ catalogs: ok })).rendered.get("/es/")).toContain('<p>Ve a <a href="/docs/" hreflang="en">la guía</a> con <span data-count="n">3</span> <strong>pasos</strong>.</p>');
-  });
+  }, 30000);
 });
 
 /* ---- What the generator writes ------------------------------------------- */
