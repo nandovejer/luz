@@ -1045,7 +1045,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Sidebar: the areas of site.json, the current one expanded (generated, see
+   Sidebar: the areas of site.json, each a fold, the current one open (generated, see
    scripts/docs-site). The current page and its area are marked by weight
    and a start border, a real border so forced colors keep it (RL-6).
    -------------------------------------------------------------------------- */
@@ -1072,13 +1072,78 @@
 
 .docs-nav__area {
   font-weight: 600;
+  /* Room for the fold's button at the end of the row */
+  padding-inline-end: calc(var(--luz-space-xl) + var(--luz-space-xs));
 }
 
-.docs-nav__pages .luz-sidebar__link {
+/* The fold of an area: a native <details> with its button (the empty summary) over the end of the
+   area's row; the link keeps going to the area's index. Closed folds hide their links from the
+   keyboard and from the page, so only the area of the current page lists its pages. */
+.docs-nav > li {
+  position: relative;
+}
+
+/* core styles a bare details as a framed box and its summary with a negative margin: neither here */
+.docs-nav details {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.docs-nav details > summary {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  display: grid;
+  place-items: center;
+  inline-size: calc(var(--luz-space-xl) + var(--luz-space-xs));
+  /* The height of the link beside it: its line and its padding */
+  block-size: calc(1lh + 2 * var(--luz-space-xs));
+  font-size: var(--luz-text-md);
+  color: var(--luz-sidebar-text);
+  cursor: pointer;
+}
+
+.docs-nav details > summary:hover {
+  background: var(--luz-sidebar-hover);
+  color: var(--luz-sidebar-text-hover);
+}
+
+.docs-nav details > summary:focus-visible {
+  outline: 2px solid var(--luz-sidebar-text-hover);
+  outline-offset: -2px;
+}
+
+/* The chevron: two borders of a square, turned. It points to the end of the line when closed
+   and down when open; in right-to-left the end is the left */
+.docs-nav details > summary::after {
+  content: "";
+  inline-size: 0.5em;
+  block-size: 0.5em;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--luz-duration-fast);
+}
+
+.docs-nav details:dir(rtl) > summary::after {
+  transform: rotate(135deg);
+}
+
+.docs-nav details[open] > summary::after {
+  transform: rotate(45deg);
+}
+
+.docs-nav details .luz-sidebar__link {
   padding-inline-start: var(--luz-space-xl);
 }
 
-.docs-nav__pages .docs-nav__pages .luz-sidebar__link {
+.docs-nav details .docs-nav__pages .luz-sidebar__link {
   padding-inline-start: calc(var(--luz-space-xl) + var(--luz-space-sm));
 }
 
@@ -1117,6 +1182,11 @@
 @media (pointer: coarse) {
   .docs-nav .luz-sidebar__link {
     min-block-size: var(--luz-control-lg);
+  }
+
+  .docs-nav details > summary {
+    block-size: var(--luz-control-lg);
+    inline-size: var(--luz-control-lg);
   }
 }
 

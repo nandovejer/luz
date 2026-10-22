@@ -541,8 +541,11 @@ function headingsOf(page) {
 const link = (href, text, attrs = "") => `<a${attrs} href="${escapeHtml(href)}">${escapeHtml(text)}</a>`;
 
 /**
- * The sidebar, flat: every area of site.json with every page of it, so a
- * page of another area is one link away and nothing is folded. A group
+ * The sidebar: every area of site.json with every page of it, so a page of
+ * another area is one click away. Each area with pages is a native <details>
+ * (all of one name, so opening one closes the others), open for the area of the
+ * current page and closed for the rest; its link to the area index stays
+ * outside the fold. A group
  * marked `sidebar: true` is a labelled sub-list. aria-current="page" on the
  * current page (the area link on an area index), "true" on its area link.
  * No .is-active: that is the scroll spy's mark. One line per link, without
@@ -580,11 +583,17 @@ export function renderNav(site, page) {
       ];
     });
   const items = site.areas.map((area) => {
-    const head = areaHead(area, ' class="luz-sidebar__link docs-nav__area"');
     const own = listOf(area);
     const children = pagesOf(own);
-    if (!children.length) return `<li>${head}</li>`;
-    return [`<li>${head}`, `<ul class="docs-nav__pages"${own.allEnglish ? enLang(site) : ""}>`, ...children, "</ul></li>"].join("\n");
+    if (!children.length) return `<li>${areaHead(area, ' class="luz-sidebar__link docs-nav__area"')}</li>`;
+    // The area's link goes to its index; the fold beside it opens and closes its pages. Only the area of the
+    // current page is open, and one name makes the folds an accordion: opening one closes the others
+    const id = `a-${area.id}`;
+    return [
+      `<li>${areaHead(area, ` class="luz-sidebar__link docs-nav__area" id="${id}"`)}<details name="nav"${current?.id === area.id ? " open" : ""}><summary aria-labelledby="${id}"></summary><ul${own.allEnglish ? enLang(site) : ""}>`,
+      ...children,
+      "</ul></details></li>",
+    ].join("\n");
   });
   return `    <ul class="docs-nav">\n${items.join("\n")}\n    </ul>`;
 }
