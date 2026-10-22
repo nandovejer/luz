@@ -22,6 +22,7 @@ const EXPECTED = [
   "firefox-reviewer",
   "frontend-engineer",
   "outside-reviewer",
+  "prompt-injection-auditor",
   "safari-reviewer",
   "security-auditor",
   "test-runner",
@@ -57,7 +58,7 @@ function run(hook, input, env = {}) {
 }
 
 describe("claude agents: naming scheme", () => {
-  it("has exactly the eleven agents", () => {
+  it("has exactly the twelve agents", () => {
     expect(files.map((f) => f.replace(/\.md$/, ""))).toEqual(EXPECTED);
   });
 
@@ -78,6 +79,26 @@ describe("claude agents: naming scheme", () => {
 
 // Medium for the two mechanical runners since 2026-10-18 (OWNER.md §1); high where quality shows.
 const MEDIUM_EFFORT = ["test-runner", "chore-runner"];
+
+describe("claude agents: the prompt-injection-auditor", () => {
+  const fm = () => frontmatter("prompt-injection-auditor.md");
+
+  it("has a frontmatter name equal to its file", () => {
+    expect(fm().name).toBe("prompt-injection-auditor");
+  });
+
+  it("runs on opus", () => {
+    expect(fm().model).toBe("opus");
+  });
+
+  it("has exactly the tools Read, Grep, Glob and Bash", () => {
+    const tools = (fm().tools ?? "").split(",").map((t) => t.trim()).filter(Boolean);
+    expect(tools.sort()).toEqual(["Bash", "Glob", "Grep", "Read"]);
+    for (const banned of ["Edit", "Write", "NotebookEdit", "WebFetch", "WebSearch", "Agent"]) {
+      expect(tools, `no ${banned}`).not.toContain(banned);
+    }
+  });
+});
 
 describe("claude agents: the mechanical ones run on Sonnet 5.5", () => {
   for (const name of SONNET_AGENTS) {

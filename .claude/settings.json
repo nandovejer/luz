@@ -6,6 +6,10 @@
         "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/sonnet-agents.js\"" }]
       },
       {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/injection-auditor-bash.js\"" }]
+      },
+      {
         "matcher": "Edit|Write|NotebookEdit",
         "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/no-tests-edit.js\"" }]
       }
