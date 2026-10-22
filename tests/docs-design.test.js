@@ -21,7 +21,7 @@ const text = (html) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 
 describe("Design tab of every component and pattern page", () => {
   it("covers the 57 pages", () => {
-    expect(viewPages).toHaveLength(57);
+    expect(viewPages).toHaveLength(58);
   });
 
   it("Do and don't: a Do then a Don't, labelled with a word, never a live barrier (a11y.md TAB-20)", () => {

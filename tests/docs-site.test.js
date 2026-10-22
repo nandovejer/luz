@@ -584,7 +584,7 @@ describe("the LUZ docs site", () => {
     // A page in a language (/es/, /es/docs/…) must reach the component's page
     // in that language (/es/docs/components/…): the English one is not its target.
     const components = site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers");
-    expect(components).toHaveLength(32);
+    expect(components).toHaveLength(33);
     const withLanguages = buildSite(site, { extra: landing, languages: true, unchecked: homes });
     // Every language of the home page is a start page; only Spanish has docs, so a link from the Arabic home goes to the English docs
     const homeCodes = homes.filter((h) => h !== "/").map((h) => h.replaceAll("/", ""));
@@ -621,7 +621,7 @@ describe("the LUZ docs site", () => {
     const viewPages = site.pages.filter(
       (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group === "patterns"),
     );
-    expect(viewPages).toHaveLength(57);
+    expect(viewPages).toHaveLength(58);
     const CODE = ["markup", "variants", "how", "no-js", "keyboard"];
     const DESIGN = ["when", "when-not", "do-dont", "content", "contrast", "tokens"];
     for (const page of viewPages) {

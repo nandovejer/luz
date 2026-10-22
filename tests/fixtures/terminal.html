@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terminal and pill tabs</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+</head>
+<body>
+  <main>
+    <h1>Terminal and pill tabs</h1>
+
+    <div class="luz-terminal" id="term">
+      <nav class="luz-tabs luz-terminal__tabs" aria-label="Install">
+        <a class="luz-tab" href="#term-npm-pane">npm</a>
+        <a class="luz-tab" href="#term-cdn-pane">CDN</a>
+      </nav>
+      <div class="luz-tabpanel luz-terminal__pane" id="term-npm-pane">
+        <button class="luz-copy-btn" type="button" data-copy="npm install @luz-ds/core" aria-label="Copy the npm command">Copy</button>
+        <pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="term-npm">npm install @luz-ds/core</code></pre>
+      </div>
+      <div class="luz-tabpanel luz-terminal__pane" id="term-cdn-pane">
+        <button class="luz-copy-btn" type="button" data-copy="&lt;link rel=&quot;stylesheet&quot; href=&quot;luz.css&quot;&gt;" aria-label="Copy the CDN tag">Copy</button>
+        <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="term-cdn">&lt;link rel="stylesheet" href="luz.css"&gt;</code></pre>
+      </div>
+    </div>
+
+    <div id="pill">
+      <nav class="luz-tabs luz-tabs--pill" aria-label="Inside">
+        <a class="luz-tab" href="#pill-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>Install</span></a>
+        <a class="luz-tab" href="#pill-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11"/></svg><span>List</span></a>
+        <a class="luz-tab" href="#pill-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>Code example</span></a>
+      </nav>
+      <div class="luz-tabpanel" id="pill-install"><p>Install panel</p></div>
+      <div class="luz-tabpanel" id="pill-list"><p>List panel</p></div>
+      <div class="luz-tabpanel" id="pill-code"><p>Code panel</p></div>
+    </div>
+  </main>
+  <script type="module" src="/packages/core/dist/luz.js"></script>
+</body>
+</html>
