@@ -7,7 +7,8 @@
  *              then aside.luz-docs-rail "About this page", then main.luz-docs-main
  *              (the rail is before main in the markup, and the grid places it: the
  *              third column from 80rem, above the content below it)
- *   sidebar    flat: every area of site.json open, every page listed, no accordion
+ *   sidebar    an accordion: every area of site.json with pages is a native details (one name), open only for
+ *              the area of the current page, every page listed (tests/docs-nav-fold.test.js holds the markup)
  *   page head  header.luz-docs-page-head: eyebrow "Area · Group", h1, lead and,
  *              on a component or pattern page, the chips
  *   rail       "On this page" (outside main) and the three actions
@@ -296,13 +297,13 @@ describe("the shell: body.o-shell.luz-docs-shell, the sidebar, the rail, then ma
 });
 
 /* ===================================================================================
- * 2. The flat sidebar
+ * 2. The sidebar, an accordion of areas
  * =================================================================================== */
 
-describe("the flat sidebar: every area open, every page listed", () => {
+describe("the sidebar: every area a fold, only the current one open, every page listed", () => {
   /** The page links of the sidebar, without the site links (Home, Docs, GitHub) the drawer starts with. */
   const pageLinks = (root) => {
-    // Until the shell classes exist (the first describe) the sidebar is the core one: the flat list is checked on it
+    // Until the shell classes exist (the first describe) the sidebar is the core one: the list is checked on it
     const nav = queryLive(root, "nav.luz-docs-nav") ?? query(root, "nav.luz-sidebar");
     const siteLinks = find(nav, (n) => hasClass(n, "page-nav__site"));
     return findAll(nav, (n) => n.name === "a" && !(siteLinks && isInside(n, siteLinks)));
@@ -320,7 +321,7 @@ describe("the flat sidebar: every area open, every page listed", () => {
     }
   });
 
-  it("keeps ul.docs-nav and a.docs-nav__area for each area, in its flat form", () => {
+  it("keeps ul.docs-nav and a.docs-nav__area for each area, outside its fold", () => {
     for (const p of site.pages) {
       const nav = queryLive(treeOf(p.route), "nav.luz-docs-nav") ?? query(treeOf(p.route), "nav.luz-sidebar");
       expect(query(nav, "ul.docs-nav"), `${p.route} ul.docs-nav`).toBeTruthy();
@@ -331,11 +332,18 @@ describe("the flat sidebar: every area open, every page listed", () => {
     }
   });
 
-  it("has no accordion: no <details>, <summary>, hidden or aria-expanded inside the sidebar", () => {
+  it("folds each area that has pages in a native details of one name (an accordion), open only for the area of the current page, with no script state", () => {
     for (const p of site.pages) {
       const nav = queryLive(treeOf(p.route), "nav.luz-docs-nav") ?? query(treeOf(p.route), "nav.luz-sidebar");
-      const folded = findAll(nav, (n) => n.name === "details" || n.name === "summary" || n.attrs.has("hidden") || n.attrs.has("aria-expanded"));
-      expect(folded.map((n) => n.name), p.route).toEqual([]);
+      const folds = findAll(nav, (n) => n.name === "details");
+      expect(folds.length, `${p.route}: the areas with pages are folds`).toBeGreaterThan(0);
+      expect(folds.map((n) => n.attrs.get("name")), `${p.route}: one name makes it an accordion`).toEqual(folds.map(() => "nav"));
+      const area = areaOf(site, p);
+      const open = folds.filter((n) => n.attrs.has("open")).map((n) => query(n.parent, "a.docs-nav__area").attrs.get("href"));
+      expect(open, `${p.route}: only the fold of the page's area is open`).toEqual(area && folds.some((n) => query(n.parent, "a.docs-nav__area").attrs.get("href") === `/docs/${area.slug}/`) ? [`/docs/${area.slug}/`] : []);
+      // The state is the browser's: nothing is hidden by the markup and no aria-expanded is written
+      const scripted = findAll(nav, (n) => n.attrs.has("hidden") || n.attrs.has("aria-expanded"));
+      expect(scripted.map((n) => n.name), p.route).toEqual([]);
     }
   });
 

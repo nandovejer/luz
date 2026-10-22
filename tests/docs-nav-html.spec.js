@@ -7,10 +7,11 @@
  * holds what needs a layout, a keyboard or a window:
  *
  *   1  the area link is visible on /docs/html/forms/ and /es/docs/html/forms/, with its pages
- *      indented under it as the pages of Documentation are under theirs, and the current page is
- *      marked by more than colour
+ *      (in its open fold) indented under it as the pages of Documentation are under theirs on
+ *      /docs/documentation/, and the current page is marked by more than colour
  *   2  the sidebar scrolls to the current page (JavaScript)
- *   3  Tab walks the Documentation pages, then HTML elements, then its pages, then Accessibility
+ *   3  Tab walks the Documentation fold button, then HTML elements, its fold button, its pages, then
+ *      Accessibility (the pages of a closed fold are not in the order; the folds are tests/docs-nav-fold.spec.js)
  *   4  nothing sticks out of the window at 320 px, at 100 % and at 400 % text
  *   5  the drawer at 375 px lists the area, closes with Escape and on a link
  *   6  axe: no serious or critical violation in light, dark and high contrast on
@@ -57,20 +58,24 @@ test.describe('HTML elements on a wide screen', () => {
       const head = nav.locator(`ul.docs-nav > li > a.docs-nav__area[href="${prefix}${HTML_INDEX}"]`);
       await expect(head).toBeVisible();
       await expect(head).toHaveText(label(code));
-      const pages = head.locator('xpath=following-sibling::ul[contains(@class, "docs-nav__pages")]//a');
+      const pages = head.locator('xpath=following-sibling::details//ul//a');
       await expect(pages).toHaveCount(listed.length);
       await expect(pages.first()).toBeVisible();
       await expect(pages.last()).toBeVisible();
-      // Geometry: the area link of Documentation, then of HTML elements at the same level, its pages indented as Documentation's are
-      const docsHead = nav.locator(`a.docs-nav__area[href="${prefix}${DOCS_INDEX}"]`);
-      const docsPage = nav.locator(`a[href="${prefix}${ownDocumentation[0]}"]`);
+      // Geometry: the area link of HTML elements is at the level of the other areas' links (Documentation's is just above), its pages indented under it...
       const box = async (/** @type {import('@playwright/test').Locator} */ l) => l.evaluate((el) => { const r = el.getBoundingClientRect(); return { left: r.left + parseFloat(getComputedStyle(el).paddingInlineStart), top: r.top + window.scrollY }; });
-      const [dh, dp, h, p] = [await box(docsHead), await box(docsPage), await box(head), await box(pages.first())];
-      expect(h.top, 'HTML elements is below the pages of Documentation').toBeGreaterThan(dp.top);
+      const docsHead = nav.locator(`a.docs-nav__area[href="${prefix}${DOCS_INDEX}"]`);
+      const [dh, h, p] = [await box(docsHead), await box(head), await box(pages.first())];
+      expect(h.top, 'HTML elements is below Documentation').toBeGreaterThan(dh.top);
       expect(h.left, 'its link is at the level of the link of Documentation').toBeCloseTo(dh.left, 0);
       expect(p.top, 'its pages are below its link').toBeGreaterThan(h.top);
       expect(p.left, 'its pages are indented under its link').toBeGreaterThan(h.left + 4);
-      expect(p.left - h.left, 'by as much as the pages of Documentation under theirs').toBeCloseTo(dp.left - dh.left, 0);
+      // ... by as much as the pages of Documentation under theirs, on the page where that fold is the open one
+      await page.goto(`${prefix}${DOCS_INDEX}`);
+      const docsPage = nav.locator(`a[href="${prefix}${ownDocumentation[0]}"]`);
+      await expect(docsPage).toBeVisible();
+      const [dh2, dp2] = [await box(docsHead), await box(docsPage)];
+      expect(p.left - h.left, 'by as much as the pages of Documentation under theirs').toBeCloseTo(dp2.left - dh2.left, 0);
     });
 
     test(`${where}: the current page and its area link are marked, the page by more than colour, and Documentation is not`, async ({ page }) => {
@@ -84,14 +89,16 @@ test.describe('HTML elements on a wide screen', () => {
       expect(await style('.docs-nav a[aria-current="page"]')).not.toBe(await style(`.docs-nav a[href="${prefix}/docs/html/text/"]`));
     });
 
-    test(`${where}: Tab walks the pages of Documentation, then HTML elements, then its pages, then Accessibility`, async ({ page }) => {
+    test(`${where}: Tab walks Documentation's button, then HTML elements, its button, its pages, then Accessibility`, async ({ page }) => {
       // At 1024 px, below the three-column layout: from 80rem "On this page" is a column on the right, before main in the markup, by design
       await page.setViewportSize({ width: 1024, height: 800 });
       await page.goto(`${prefix}${FORMS}`);
       const nav = page.locator('nav.luz-docs-nav');
-      await nav.locator(`a[href="${prefix}${ownDocumentation.at(-1)}"]`).focus();
+      await nav.locator('summary[aria-labelledby="a-documentation"]').focus();
       await page.keyboard.press('Tab');
       await expect(nav.locator(`a.docs-nav__area[href="${prefix}${HTML_INDEX}"]`)).toBeFocused();
+      await page.keyboard.press('Tab');
+      await expect(nav.locator('summary[aria-labelledby="a-html"]')).toBeFocused();
       const walked = [];
       for (let i = 0; i < listed.length; i++) {
         await page.keyboard.press('Tab');
@@ -147,7 +154,7 @@ test.describe('nothing sticks out of the window at 320 px', () => {
           if (!nav) return { sideways: -1, outside: ['no #page-nav'], clipped: [], page: 0 };
           const width = document.documentElement.clientWidth;
           const head = nav.querySelector(`.docs-nav a.docs-nav__area[href="${href}"]`);
-          const links = head ? [head, ...(head.parentElement?.querySelectorAll('ul.docs-nav__pages a') ?? [])] : [];
+          const links = head ? [head, ...(head.parentElement?.querySelectorAll('details > ul a') ?? [])] : [];
           const box = (a) => ({ text: a.textContent?.trim().slice(0, 30), r: a.getBoundingClientRect() });
           return {
             sideways: nav.scrollWidth - nav.clientWidth,
@@ -188,7 +195,7 @@ test.describe('the drawer at 375 px', () => {
       await head.scrollIntoViewIfNeeded();
       await expect(head).toBeVisible();
       await expect(head).toHaveText(label(code));
-      await expect(head.locator('xpath=following-sibling::ul[contains(@class, "docs-nav__pages")]//a')).toHaveCount(listed.length);
+      await expect(head.locator('xpath=following-sibling::details//ul//a')).toHaveCount(listed.length);
       await expect(drawer.locator('a[aria-current="page"]')).toHaveAttribute('href', `${prefix}${FORMS}`);
       await page.keyboard.press('Escape');
       await expect(drawer).toBeHidden();

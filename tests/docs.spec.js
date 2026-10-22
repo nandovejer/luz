@@ -268,7 +268,7 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('navigation', () => {
-    test('the sidebar shows the ten areas, all open, with every page listed, and HTML elements as an area of its own', async ({ page }) => {
+    test('the sidebar shows the ten areas, an accordion with only the current one open, every page listed, and HTML elements as an area of its own', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await gotoId(page, 'c-button');
       const areas = page.locator('.docs-nav a.docs-nav__area');
@@ -277,8 +277,10 @@ test.describe('Documentation site', () => {
       await expect(page.locator('.docs-nav > li > a.docs-nav__area[href="/docs/html/"]')).toHaveText('HTML elements');
       await expect(page.locator('.docs-nav .docs-nav__sub')).toHaveCount(0);
       await expect(page.locator('.docs-nav a.docs-nav__subarea')).toHaveCount(0);
-      // Flat: no accordion, and every page of every area is a link
-      await expect(page.locator('nav.luz-docs-nav details')).toHaveCount(0);
+      // An accordion: a fold per area with pages (all of one name), only Core's open, and every page of every area is a link in the markup
+      await expect(page.locator('nav.luz-docs-nav details[name="nav"]')).toHaveCount(site.areas.filter((a) => readingOrder(site).some((p) => p.meta.area === a.id && p.route !== `/docs/${a.slug}/`)).length);
+      await expect(page.locator('nav.luz-docs-nav details[open]')).toHaveCount(1);
+      await expect(page.locator('nav.luz-docs-nav details[open] a[aria-current="page"]')).toHaveText('Button');
       await expect(page.locator('.docs-nav a[aria-current="true"]')).toHaveText('Core');
       await expect(page.locator('.docs-nav a[aria-current="page"]')).toHaveText('Button');
       const hrefs = await page.locator('.docs-nav a').evaluateAll((links) => links.map((a) => a.getAttribute('href')));

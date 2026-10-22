@@ -24,6 +24,8 @@ import { focusAndHitTest, ringBeyondInlineStart } from './helpers/obscured.js';
 import { readingOrder as walkTheTabOrder } from './helpers/reading-order.js';
 
 const BUTTON = '/docs/components/button/';
+/** The areas that have pages under their index: each is a fold of the sidebar. */
+const FOLDED = site.areas.filter((a) => readingOrder(site).some((p) => p.meta.area === a.id && p.route !== `/docs/${a.slug}/`)).length;
 const rail = (page) => page.getByRole('complementary', { name: 'About this page' });
 const box = async (page, selector) => {
   const element = page.locator(selector).first();
@@ -135,19 +137,28 @@ test.describe('docs shell, with JavaScript', () => {
     }
   });
 
-  test('the sidebar is flat: every area is open, so a page of another area is a link away, with no accordion', async ({ page }) => {
+  test('the sidebar is an accordion: every area is a link, only the open one lists its pages, and a page of another area is one click away', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
     const nav = page.locator('nav.luz-docs-nav');
-    await expect(nav.locator('details, summary')).toHaveCount(0);
-    for (const href of ['/docs/tokens/color/', '/docs/get-started/snippet/', '/docs/site/search/', '/docs/documentation/rail/', '/docs/accessibility/']) {
-      await expect(nav.locator(`a[href="${href}"]`), href).toBeVisible();
+    // One fold per area with pages, of one name; the area of the page (Core) is the open one
+    await expect(nav.locator('details[name="nav"]')).toHaveCount(FOLDED);
+    await expect(nav.locator('details[open]')).toHaveCount(1);
+    await expect(nav.locator('details[open] a[href="/docs/components/button/"]')).toBeVisible();
+    // Every area is a link, open or not; the pages of the closed folds are in the markup, not on the screen
+    for (const area of site.areas) await expect(nav.locator(`a.docs-nav__area[href="/docs/${area.slug}/"]`), area.id).toBeVisible();
+    for (const href of ['/docs/tokens/color/', '/docs/get-started/snippet/', '/docs/site/search/', '/docs/documentation/rail/']) {
+      await expect(nav.locator(`a[href="${href}"]`), href).toBeHidden();
     }
-    // Every page of the reading order is in it, once
+    // Every page of the reading order is in it, once (an area index is the area link)
     expect(await nav.locator('a[href^="/docs/"]').count()).toBeGreaterThanOrEqual(readingOrder(site).length);
     await expect(nav.locator('a[aria-current="page"]')).toHaveText('Button');
     // The drawer's site links (Home, Docs) are in the nav too, and "Docs" is "true" on every docs page: they are not an area
     await expect(nav.locator('a[aria-current="true"]:not(.page-nav__site a)')).toHaveText('Core');
+    // One click on another area's button shows its pages
+    await nav.locator('summary[aria-labelledby="a-tokens"]').click();
+    await expect(nav.locator('a[href="/docs/tokens/color/"]')).toBeVisible();
+    await expect(nav.locator('a[href="/docs/components/button/"]')).toBeHidden();
   });
 
   test('the page ends with the pager, then the foot: Last updated, Edit and Report', async ({ page }) => {
@@ -507,15 +518,17 @@ test.describe('M2 Copy page as Markdown is a button with JavaScript', () => {
   });
 });
 
-/* ---- M3: the current page, in the flat sidebar, is in view when the page loads --------------------- */
+/* ---- M3: the current page, in the open fold of the sidebar, is in view when the page loads --------------------- */
 
 test.describe('M3 the current page in the sidebar is in view', () => {
   test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript');
 
+  // The last page of Core, the longest fold: with the other folds shut, the list is still longer than the sidebar
+  const LAST_CORE = readingOrder(site).filter((p) => p.meta.area === 'components').at(-1)?.route ?? '';
   for (const width of [1440, 860]) {
-    test(`${width}px: /docs/accessibility/ shows its own link inside the sidebar's box, without moving the page or the focus`, async ({ page }) => {
+    test(`${width}px: ${LAST_CORE} shows its own link inside the sidebar's box, without moving the page or the focus`, async ({ page }) => {
       await page.setViewportSize({ width, height: 800 });
-      await page.goto('/docs/accessibility/');
+      await page.goto(LAST_CORE);
       await idle(page);
       const scroller = await page.locator('#page-nav').evaluate((nav) => {
         const cs = getComputedStyle(nav);

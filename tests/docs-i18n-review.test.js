@@ -147,7 +147,7 @@ describe("the fixture site, rendered once for the review tests", () => {
           n.attrs.get("aria-current") === "page",
         "a title of the pager": (n) => hasClass(n, "luz-docs-pager__title"),
         "a list of the sidebar": (n) =>
-          n.name === "ul" && hasClass(n, "docs-nav__pages"),
+          n.name === "ul" && (hasClass(n, "docs-nav__pages") || n.parent?.name === "details"),
         "a link of the sidebar": (n) =>
           n.name === "a" && hasClass(n, "luz-sidebar__link"),
         "the list of 'On this page'": (n) => hasClass(n, "luz-docs-rail__list"),

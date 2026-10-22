@@ -8,7 +8,7 @@
  *
  *   site.json     no area carries "parent"; scanSite does not read it (no check, no field).
  *   sidebar       `html` is a top-level item of `ul.docs-nav`: `a.docs-nav__area` (the area label, linking
- *                 to the area index) and `ul.docs-nav__pages` with the 14 other pages, as Documentation and
+ *                 to the area index) and the list of the 14 other pages in its fold, as Documentation and
  *                 Accessibility. Order: Get started, Tokens, Core, Catalog, Landing, CMS, App, Documentation,
  *                 HTML elements, Accessibility. `.docs-nav__sub` and `a.docs-nav__subarea` are gone.
  *   aria-current  on an HTML page: "page" on its own link and "true" on the HTML elements area link (and not
@@ -124,7 +124,7 @@ describe("the sidebar lists HTML elements as an area of its own", () => {
     }
   });
 
-  it("holds HTML elements in its own item of ul.docs-nav: the area link, then ul.docs-nav__pages with the 14 pages, like Documentation", () => {
+  it("holds HTML elements in its own item of ul.docs-nav: the area link, then the list in its fold with the 14 pages, like Documentation", () => {
     const label = site.areas.find((a) => a.id === "html").label;
     expect(label).toBe("HTML elements");
     for (const p of site.pages) {
@@ -135,7 +135,7 @@ describe("the sidebar lists HTML elements as an area of its own", () => {
       const head = query(item, "a.docs-nav__area");
       expect(textOf(head), p.route).toBe(label);
       expect(hasClass(head, "luz-sidebar__link"), `${p.route}: it is a sidebar link`).toBe(true);
-      const lists = queryAll(item, "ul.docs-nav__pages");
+      const lists = queryAll(item, "ul");
       expect(lists, `${p.route}: one list of pages`).toHaveLength(1);
       expect(head.open.index, p.route).toBeLessThan(lists[0].open.index);
       expect(
@@ -155,10 +155,13 @@ describe("the sidebar lists HTML elements as an area of its own", () => {
     }
   });
 
-  it("keeps the sidebar flat: nothing folded, every page of every area still listed once, in reading order", () => {
+  it("folds the areas with pages and still lists every page of every area once, in reading order", () => {
     for (const p of site.pages) {
-      const folded = findAll(listOf(p.route), (n) => n.name === "details" || n.name === "summary" || n.attrs.has("hidden") || n.attrs.has("aria-expanded"));
+      // The HTML elements area is a fold of its own, a sibling of the others, with its pages in it; nothing is hidden by the markup
+      const folded = findAll(listOf(p.route), (n) => n.attrs.has("hidden") || n.attrs.has("aria-expanded"));
       expect(folded.map((n) => n.name), p.route).toEqual([]);
+      expect(query(areaItem(listOf(p.route), HTML_INDEX), "details"), `${p.route}: HTML elements has a fold`).toBeTruthy();
+      expect(queryAll(listOf(p.route), "details").every((d) => d.parent.parent === listOf(p.route)), `${p.route}: no fold is nested in another`).toBe(true);
       const hrefs = linksOf(p.route).map((a) => a.attrs.get("href"));
       let at = -1;
       for (const route of orderRoutes) {
@@ -364,7 +367,7 @@ describe("the sidebar in Spanish (real) and Arabic (a stand-in copy of the docs)
 
       it("lists the 14 pages under it in the language of the page, each as English (lang=en, left to right) when it is not translated", () => {
         const item = areaItem(list("/docs/html/forms/"), `${root}${HTML_INDEX}`);
-        const links = findAll(query(item, "ul.docs-nav__pages"), (n) => n.name === "a");
+        const links = findAll(query(item, "ul"), (n) => n.name === "a");
         expect(
           links.map((a) => a.attrs.get("href")),
           code,
