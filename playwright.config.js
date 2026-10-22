@@ -5,11 +5,13 @@ export default defineConfig({
   testMatch: '**/*.spec.js',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  // One retry: a test that passes on it is listed as flaky in the CI summary (scripts/ui-summary.js), to be fixed
+  retries: process.env.CI ? 1 : 0,
   // The hosted runner has 4 cores: three workers leave one for the dev server (one worker took 2 h 20 min)
   workers: process.env.CI ? 3 : undefined,
   // Terminal: one line per test; the HTML report is written but never opened or served.
-  reporter: [[process.env.CI ? 'github' : 'line'], ['html', { open: 'never' }]],
+  // CI: a blob report per shard, merged by the summary job of ui-tests.yml.
+  reporter: process.env.CI ? [['github'], ['blob']] : [['line'], ['html', { open: 'never' }]],
   expect: {
     // Visual regression (tests/visual.spec.js). threshold is the per-pixel
     // colour distance (0 to 1; the default 0.2 lets a one-step token change

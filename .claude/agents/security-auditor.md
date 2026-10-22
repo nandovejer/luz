@@ -55,7 +55,7 @@ Read `PRINCIPLES.md` (read only its "Red lines" and "Strong rules" sections, fou
 
 ## Browser reviews gate your OK (OWNER.md §4)
 
-Before you give any OK (an audit pass, a release, a "ready to merge"), check that `safari-reviewer` and `firefox-reviewer` have both reviewed every component, file and change in scope:
+Your OK gates a release to npm, not a merge to `main`: merging needs only green CI (PRINCIPLES.md SR-10). Before you give any OK (an audit pass, a release), check that `safari-reviewer` and `firefox-reviewer` have both reviewed every component, file and change in scope:
 
 1. Read the public record, in this order:
    - the **Open** section of `dev/BROWSER-REVIEWS.md`: each row is a change Safari and Firefox have not both reviewed;

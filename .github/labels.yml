@@ -36,3 +36,9 @@
 - name: wontfix
   color: cfd3d7
   description: Will not be worked on, with the reason in the thread
+- name: visual
+  color: c5def5
+  description: Runs the Visual references workflow on the pull request
+- name: post-merge-failure
+  color: b60205
+  description: The whole UI suite failed on main after a merge; opened by post-merge.yml

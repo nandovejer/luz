@@ -32,6 +32,7 @@ jobs:
     name: Version PR
     needs: ci
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     permissions:
       contents: write
       pull-requests: write
@@ -51,10 +52,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
 
-      # No `publish` input: this job can only open the version PR
+      # No `publish` input: this job can only open the version PR.
+      # v1, not v2: v2 needs the Changesets CLI v3 and the repo is on v2.
+      # Pinned by commit SHA of the tag v1.9.0 (2026-06-03)
       - name: Create or update the version PR
         id: changesets
-        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
           version: pnpm release:version
           title: "chore(release): version packages"
@@ -75,6 +78,7 @@ jobs:
     needs: [version, ui-full]
     if: needs.version.outputs.hasChangesets == 'false'
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     environment: release
     permissions:
       contents: read
