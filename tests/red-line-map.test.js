@@ -46,9 +46,9 @@ describe("RL-19 (nothing only for AI agents): the row names the drift gate (F5 s
   const row = rows.find((r) => r.line === "RL-19");
   const files = [...(row?.checks ?? "").matchAll(/`([^`]+)`/g)].map((m) => m[1]);
 
-  it("names the three layers: the Pages comparison, the drift gate and the fact tests", () => {
+  it("names the two layers: the drift gate and the fact tests", () => {
     expect(row, "the RL-19 row").toBeTruthy();
-    expect(files).toEqual(expect.arrayContaining(["scripts/check-generated.js", "scripts/check-ai.js", "tests/ai-files.test.js"]));
+    expect(files).toEqual(expect.arrayContaining(["scripts/check-ai.js", "tests/ai-files.test.js"]));
   });
 
   it("no longer says the files for agents and the test that regenerates them do not exist", () => {
