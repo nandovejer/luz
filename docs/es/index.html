@@ -1,583 +1,797 @@
 <!DOCTYPE html>
 <html lang="es" dir="ltr" data-theme="light">
 <head>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LUZ: un sistema de diseño ligero, usable y sin dependencias para la web</title>
-  <meta name="description" content="LUZ (Light, Usable &amp; Zero-dependency) es un sistema de diseño de tokens, CSS y un poco de JavaScript sin frameworks que parte de lo que el navegador ya hace: HTML nativo, tres modos de color, una capa de cascada que siempre puedes sobrescribir y ningún paso de compilación.">
-  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/">
-  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/">
-  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/">
-  <link rel="alternate"  hreflang="ar" href="https://nandovejer.github.io/luz/ar/">
-  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/">
-  <link rel="icon" href="../assets/favicon-CLiQtzsm.ico" sizes="32x32">
-  <link rel="icon" href="../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="../assets/apple-touch-icon-QPTLZskv.png">
-  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
-  <script src="../boot.js" ></script>
-  <script type="module" crossorigin src="../assets/header-B5ycFlcC.js"></script>
-  <script type="module" crossorigin src="../assets/landing-BOzGl6Ms.js"></script>
-  <link rel="stylesheet" crossorigin href="../assets/header-CdmvI6FB.css">
-  <link rel="stylesheet" crossorigin href="../assets/landing-DO1Gy0Sa.css">
-  <link rel="stylesheet" crossorigin href="../assets/header-Dp0HT6ep.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUZ: un sistema de diseño ligero, usable y sin dependencias para la web</title>
+<meta name="description" content="LUZ (Light, Usable &amp; Zero-dependency) es un sistema de diseño de tokens, CSS y un poco de JavaScript sin frameworks que parte de lo que el navegador ya hace: HTML nativo, tres modos de color, una capa de cascada que siempre puedes sobrescribir y ningún paso de compilación.">
+<link rel="canonical"  href="https://nandovejer.github.io/luz/es/">
+<link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/">
+<link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/">
+<link rel="alternate"  hreflang="ar" href="https://nandovejer.github.io/luz/ar/">
+<link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/">
+<link rel="icon" href="../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+<link rel="icon" href="../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon-QPTLZskv.png">
+<!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+<script src="../boot.js" ></script>
+  <script type="module" crossorigin src="../assets/header-dmAN8MCP.js"></script>
+  <script type="module" crossorigin src="../assets/landing-Coc5MbB5.js"></script>
+  <link rel="stylesheet" crossorigin href="../assets/header-DuVRvlf9.css">
+  <link rel="stylesheet" crossorigin href="../assets/landing-Bat5XF_7.css">
+  <link rel="stylesheet" crossorigin href="../assets/header-BsMkM9X4.css">
 </head>
 <!-- The strings core's scripts write (the color mode button, the copy
-     buttons), in the page's language: authored labels win over core's
-     dictionary, which has no Arabic. The light-* ones are the texts of
-     <home-light> (apps/landing/light/light.js), which landing.js also
-     reads for the names of the lights -->
+buttons), in the page's language: authored labels win over core's
+dictionary, which has no Arabic. The light-* ones are the texts of
+<home-light> (apps/landing/light/light.js), which landing.js also
+reads for the names of the lights -->
 <body class="o-page"
-      data-luz-label-change-mode="Cambiar el modo de color. Actual: {mode}"
-      data-luz-label-mode-changed="Modo de color: {mode}"
-      data-luz-label-copied="Copiado"
-      data-luz-label-copied-status="Copiado al portapapeles"
-      data-luz-label-copy-failed="No se pudo copiar. Selecciona el texto y cópialo a mano."
-      data-luz-label-light-open="Mostrar la barra de la luz"
-      data-luz-label-light-fact-1="La luz tarda solo 1,3 segundos en viajar desde la Luna hasta la Tierra."
-      data-luz-label-light-fact-2="La luz del Sol tarda unos 8 minutos y 20 segundos en llegar a nosotros; si el Sol se apagara, tardaríamos ese tiempo en darnos cuenta."
-      data-luz-label-light-fact-3="En tan solo un segundo, un rayo de luz podría dar la vuelta a la Tierra 7,5 veces por el ecuador."
-      data-luz-label-light-fact-4="Un “año luz” no mide tiempo, sino la distancia que recorre la luz en un año, lo que equivale a casi 9,5 billones de kilómetros."
-      data-luz-label-light-fact-5="Debido al tiempo que tarda la luz en viajar, cuando miras las estrellas de noche estás viendo cómo eran hace decenas, cientos o miles de años."
-      data-luz-label-light-fact-6="Según la física actual, la velocidad de la luz en el vacío es el límite de velocidad cósmico; nada que tenga masa puede viajar más rápido que ella."
-      data-luz-label-light-fact-7="La luz disminuye su velocidad a unos 225.000 km/s cuando viaja a través del agua debido a la densidad del medio."
-      data-luz-label-light-fact-8="En un laboratorio, científicos lograron ralentizar la luz hasta apenas 61 kilómetros por hora haciéndola pasar a través de sodio extremadamente frío."
-      data-luz-label-light-fact-9="Una señal de luz (o de radio) tarda entre 3 y 22 minutos en llegar a Marte, dependiendo de qué tan alineados estén los planetas."
-      data-luz-label-light-globe-alt="Un globo iluminado por el sol tal como está ahora, con la tierra hecha un puzle de una pieza gris tenue por país: el lado de día mira a la luz y el de noche se apaga."
-      data-luz-label-light-scrub="Recorrer el día"
-      data-luz-label-light-saved="Modo guardado"
-      data-luz-label-light-sep=", "
-      data-luz-label-light-dawn="Amanecer"
-      data-luz-label-light-morning="Luz de mañana"
-      data-luz-label-light-afternoon="Luz de tarde"
-      data-luz-label-light-sunset="Atardecer"
-      data-luz-label-light-dusk="Anochecer"
-      data-luz-label-light-night="Noche">
-  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
-
-  <header class="site-header" id="site-header">
-    <div class="site-header__inner">
-      <a class="site-header__brand" href="../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
-      <a class="site-header__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a>
-      <nav class="site-header__nav" aria-label="Sitio">
-        <a href="../docs/" hreflang="en"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
-      </nav>
-      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
-      <luz-search>
-        <a class="luz-search__fallback site-header__az" href="../docs/a-z/" hreflang="en" data-luz-search-fallback>
-          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
-        </a>
-        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
-          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-          <span class="luz-search__trigger-label">Buscar</span>
-          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
-        </button>
-        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
-                data-luz-search-src="../docs/search-index.json"
-                data-luz-label-results="{n} resultados"
-                data-luz-label-result="1 resultado"
-                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
-                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
-                data-luz-label-loading="Cargando el índice de búsqueda…"
-                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
-          <search class="luz-search__body">
-            <div class="luz-search__head">
-              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
-              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
-            </div>
-            <div class="luz-search__field">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
-            </div>
-            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
-            <p class="luz-search__status" role="status"></p>
-            <div class="luz-search__results" data-luz-search-results>
-              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
-              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
-              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
-            </div>
-            <p class="luz-search__foot">¿No lo encuentras? <a href="../docs/a-z/" hreflang="en">Consulta el índice de la A a la Z</a></p>
-          </search>
-        </dialog>
-      </luz-search>
-      <luz-lang-switch>
-    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
-    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
-      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
-      <ul class="luz-lang-switch__list">
-        <li><a class="luz-lang-switch__link" href="../" hreflang="en" lang="en">English</a></li>
-        <li><a class="luz-lang-switch__link" href="../es/" hreflang="es" lang="es" aria-current="page">Español</a></li>
-        <li><a class="luz-lang-switch__link" href="../ar/" hreflang="ar" lang="ar">العربية</a></li>
-      </ul>
-    </nav>
-  </luz-lang-switch>
-      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
-        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
-          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
-          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
-        </svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- The drawer (768px and below): the sections of this page, the site's
-       links, then the languages with a visible label; above 768px it is
-       not shown (the header row holds the links and the language switch) -->
-  <nav class="luz-sidebar page-nav page-nav--drawer" id="page-nav" popover aria-label="Página de inicio" tabindex="-1">
-    <div class="luz-sidebar__section">
-      <span class="luz-sidebar__section-label" id="nav-on-page">En esta página</span>
-      <ul class="page-nav__list" aria-labelledby="nav-on-page">
-        <li><a class="luz-sidebar__link" href="#why">Por qué LUZ</a></li>
-        <li><a class="luz-sidebar__link" href="#inside">Qué incluye</a></li>
-        <li><a class="luz-sidebar__link" href="#native">Funciona sin JavaScript</a></li>
-        <li><a class="luz-sidebar__link" href="#modes">Tres modos de color</a></li>
-        <li><a class="luz-sidebar__link" href="#type">Tipografía</a></li>
-        <li><a class="luz-sidebar__link" href="#start">Primeros pasos</a></li>
-      </ul>
-    </div>
-
-    <div class="luz-sidebar__section page-nav__site">
-      <ul class="page-nav__row" aria-label="Sitio">
-        <li><a class="luz-sidebar__link" href="../docs/" hreflang="en">Documentación</a></li>
-        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
-      </ul>
-    </div>
-
-    <div class="luz-sidebar__section page-nav__langs">
-      <span class="luz-sidebar__section-label" id="nav-langs">Idioma</span>
-      <div class="page-nav__row" role="group" aria-labelledby="nav-langs">
-        <ul>
-  <li><a href="../" hreflang="en" lang="en">English</a></li>
-  <li><a href="../es/" hreflang="es" lang="es" aria-current="page">Español</a></li>
-  <li><a href="../ar/" hreflang="ar" lang="ar">العربية</a></li>
+data-luz-label-change-mode="Cambiar el modo de color. Actual: {mode}"
+data-luz-label-mode-changed="Modo de color: {mode}"
+data-luz-label-copied="Copiado"
+data-luz-label-copied-status="Copiado al portapapeles"
+data-luz-label-copy-failed="No se pudo copiar. Selecciona el texto y cópialo a mano."
+data-luz-label-light-open="Mostrar la barra de la luz"
+data-luz-label-light-fact-1="La luz tarda solo 1,3 segundos en viajar desde la Luna hasta la Tierra."
+data-luz-label-light-fact-2="La luz del Sol tarda unos 8 minutos y 20 segundos en llegar a nosotros; si el Sol se apagara, tardaríamos ese tiempo en darnos cuenta."
+data-luz-label-light-fact-3="En tan solo un segundo, un rayo de luz podría dar la vuelta a la Tierra 7,5 veces por el ecuador."
+data-luz-label-light-fact-4="Un “año luz” no mide tiempo, sino la distancia que recorre la luz en un año, lo que equivale a casi 9,5 billones de kilómetros."
+data-luz-label-light-fact-5="Debido al tiempo que tarda la luz en viajar, cuando miras las estrellas de noche estás viendo cómo eran hace decenas, cientos o miles de años."
+data-luz-label-light-fact-6="Según la física actual, la velocidad de la luz en el vacío es el límite de velocidad cósmico; nada que tenga masa puede viajar más rápido que ella."
+data-luz-label-light-fact-7="La luz disminuye su velocidad a unos 225.000 km/s cuando viaja a través del agua debido a la densidad del medio."
+data-luz-label-light-fact-8="En un laboratorio, científicos lograron ralentizar la luz hasta apenas 61 kilómetros por hora haciéndola pasar a través de sodio extremadamente frío."
+data-luz-label-light-fact-9="Una señal de luz (o de radio) tarda entre 3 y 22 minutos en llegar a Marte, dependiendo de qué tan alineados estén los planetas."
+data-luz-label-light-globe-alt="Un globo iluminado por el sol tal como está ahora, con la tierra hecha un puzle de una pieza gris tenue por país: el lado de día mira a la luz y el de noche se apaga."
+data-luz-label-light-scrub="Recorrer el día"
+data-luz-label-light-saved="Modo guardado"
+data-luz-label-light-sep=", "
+data-luz-label-light-dawn="Amanecer"
+data-luz-label-light-morning="Luz de mañana"
+data-luz-label-light-afternoon="Luz de tarde"
+data-luz-label-light-sunset="Atardecer"
+data-luz-label-light-dusk="Anochecer"
+data-luz-label-light-night="Noche">
+<a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+<header class="site-header" id="site-header">
+<div class="site-header__inner">
+<a class="site-header__brand" href="../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+<nav class="site-header__nav" aria-label="Sitio">
+<a href="../es/docs/"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+</nav>
+<a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+<luz-search>
+<a class="luz-search__fallback site-header__az" href="../es/docs/a-z/" data-luz-search-fallback>
+<svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+<span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+</a>
+<button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+<svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+<span class="luz-search__trigger-label">Buscar</span>
+<kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+</button>
+<dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+data-luz-search-src="../es/docs/search-index.json"
+data-luz-label-results="{n} resultados"
+data-luz-label-result="1 resultado"
+data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+data-luz-label-loading="Cargando el índice de búsqueda…"
+data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+<search class="luz-search__body">
+<div class="luz-search__head">
+<h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+<form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+</div>
+<div class="luz-search__field">
+<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+<input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+</div>
+<p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+<p class="luz-search__status" role="status"></p>
+<div class="luz-search__results" data-luz-search-results>
+<div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+<div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+<div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+</div>
+<p class="luz-search__foot">¿No lo encuentras? <a href="../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+</search>
+</dialog>
+</luz-search>
+<luz-lang-switch>
+<button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+<nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+<p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+<ul class="luz-lang-switch__list">
+<li><a class="luz-lang-switch__link" href="../" hreflang="en" lang="en">English</a></li>
+<li><a class="luz-lang-switch__link" href="../es/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+<li><a class="luz-lang-switch__link" href="../ar/" hreflang="ar" lang="ar">العربية</a></li>
 </ul>
-      </div>
-    </div>
-  </nav>
+</nav>
+</luz-lang-switch>
+<button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+<svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+<rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+<rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+<rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+</svg>
+</button>
+</div>
+</header>
+<!-- The drawer (768px and below): the sections of this page, the site's
+links, then the languages with a visible label; above 768px it is
+not shown (the header row holds the links and the language switch) -->
+<nav class="luz-sidebar page-nav page-nav--drawer" id="page-nav" popover aria-label="Página de inicio" tabindex="-1">
+<div class="luz-sidebar__section">
+<span class="luz-sidebar__section-label" id="nav-on-page">En esta página</span>
+<ul class="page-nav__list" aria-labelledby="nav-on-page">
+<li><a class="luz-sidebar__link" href="#inside">Qué incluye</a></li>
+<li><a class="luz-sidebar__link" href="#why">Por qué LUZ</a></li>
+<li><a class="luz-sidebar__link" href="#native">HTML semántico, con estilo</a></li>
+<li><a class="luz-sidebar__link" href="#modes">Tres modos de color</a></li>
+</ul>
+</div>
+<div class="luz-sidebar__section page-nav__site">
+<ul class="page-nav__row" aria-label="Sitio">
+<li><a class="luz-sidebar__link" href="../es/docs/">Documentación</a></li>
+<li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+</ul>
+</div>
+<div class="luz-sidebar__section page-nav__langs">
+<span class="luz-sidebar__section-label" id="nav-langs">Idioma</span>
+<div class="page-nav__row" role="group" aria-labelledby="nav-langs">
+<ul>
+<li><a href="../" hreflang="en" lang="en">English</a></li>
+<li><a href="../es/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+<li><a href="../ar/" hreflang="ar" lang="ar">العربية</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<main id="main-content" class="o-container o-stack luz-landing-main landing-wrap site-sky" tabindex="-1">
+<!-- The first screen: the hero and the light fill the window under the header (landing.css) -->
+<div class="landing-first">
+<!-- ====================== 1. HERO ====================== -->
+<section class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
+<div class="luz-landing-hero__copy">
+<h1 class="luz-landing-hero__title" id="hero-title"><span class="landing-hero__brand">LUZ</span> Sistema de diseño para el <em>humano</em>, listo para la <em>IA</em></h1>
+<p class="luz-landing-hero__lead">Tokens, CSS y un poco de JavaScript, sobre lo que el navegador ya hace. Cada componente funciona antes de que cargue JavaScript y cada cambio empieza con una prueba que falla.</p>
+<div class="o-actions">
+<a class="luz-btn luz-btn--primary luz-btn--lg" href="#inside">Primeros pasos</a>
+<a class="luz-btn luz-btn--outline luz-btn--lg" href="../es/docs/">Leer la documentación, en inglés</a>
+</div>
+</div>
+</section>
+<!-- ====================== 2. THE LIGHT ======================
+The visitor's sky over a globe (apps/landing/light/),
+from edge to edge of the window. Without JavaScript the element stays
+empty, light.css keeps its room and the sentence after it says what
+the room is for; once <home-light> is defined the sentence goes -->
+<section class="luz-landing-hero__media luz-landing-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
+<h2 class="u-sr-only" id="light-title">La luz donde estás</h2>
+<home-light bleed favicon></home-light>
+<p class="landing-light__nojs">Con JavaScript activado, aquí se dibuja la luz de tu hora.</p>
+</section>
+</div>
+<!-- ====================== 4. INSIDE: one section per level of adoption ====================== -->
+<section class="landing-inside" id="inside" aria-labelledby="inside-1-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>Base</span></p>
+<h2 class="landing-inside__title" id="inside-1-title">Tu marca, en <span class="landing-mark">tokens</span></h2>
+<p class="landing-inside__lead">Colores, escalas y los tres modos como propiedades personalizadas de CSS. Sin componentes: tu marcado, tus clases.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>Colores.</strong> 53 primitivos y 55 tokens semánticos, en claro, oscuro y alto contraste.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>Escalas.</strong> Espacio, texto, radios y sombras, desde tres mandos.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>Peso.</strong> 2,8 KB en gzip, con todo lo anterior.</span></li>
+</ul>
+</div>
+<div class="landing-panel">
+<nav class="luz-tabs landing-panel__tabs" aria-label="El nivel 1 en código">
+<a class="luz-tab" href="#in1-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>Instalar</span></a>
+<a class="luz-tab" href="#in1-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>Lista</span></a>
+<a class="luz-tab" href="#in1-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>Ejemplo de código</span></a>
+</nav>
+<div class="luz-tabpanel landing-panel__pane" id="in1-install">
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">npm</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in1-npm" aria-label="Copiar el comando de npm" hidden>Copiar</button>
+</div>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in1-npm">npm install @luz-ds/tokens</code></pre>
+</div>
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">CDN</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in1-cdn" aria-label="Copiar las etiquetas del CDN" hidden>Copiar</button>
+</div>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in1-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in1-list">
+<div class="landing-names" style="--n:8">
+<h3 class="landing-names__title">Tokens <span class="landing-names__n">165</span></h3>
+<ul class="landing-names__list landing-names__list--groups"><li style="--share:0.964"><a href="../es/docs/tokens/palette/">Colores primitivos <span class="landing-names__n">53</span></a></li><li style="--share:1.000"><a href="../es/docs/tokens/color/">Colores semánticos <span class="landing-names__n">55</span></a></li><li style="--share:0.273"><a href="../es/docs/tokens/spacing/">Espacio y controles <span class="landing-names__n">15</span></a></li><li style="--share:0.309"><a href="../es/docs/tokens/typography/">Tipografía <span class="landing-names__n">17</span></a></li><li style="--share:0.073"><a href="../es/docs/tokens/radius/">Radios <span class="landing-names__n">4</span></a></li><li style="--share:0.073"><a href="../es/docs/tokens/shadows/">Sombras <span class="landing-names__n">4</span></a></li><li style="--share:0.200"><a href="../es/docs/tokens/motion/">Movimiento <span class="landing-names__n">11</span></a></li><li style="--share:0.109"><a href="../es/docs/tokens/layout/">Puntos de ruptura <span class="landing-names__n">6</span></a></li></ul>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane" id="in1-code">
+<pre class="luz-code-block" data-lang="css" dir="ltr" tabindex="0" role="region" aria-label="Ejemplo de código"><code id="in1-code-code">.cta {
+  background: var(--luz-brand-fill);
+  color: var(--luz-text-on-fill);
+}
 
-  <main id="main-content" class="o-container o-stack luz-landing-main landing-wrap site-sky" tabindex="-1">
+.cta:hover {
+  background: var(--luz-brand-fill-hover);
+}
 
-    <!-- ====================== 1. HERO ====================== -->
-    <section class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
-      <div class="luz-landing-hero__copy">
-        <p class="luz-landing-hero__eyebrow" lang="en">Light, usable &amp; zero-dependency</p>
-        <h1 class="luz-landing-hero__title" id="hero-title">LUZ, sistema de diseño para el <em>humano</em>, listo para la <em>IA</em></h1>
-        <p class="luz-landing-hero__lead">Tokens, CSS y un poco de JavaScript, sobre lo que el navegador ya hace. Cada componente funciona antes de que cargue JavaScript y <a href="../docs/get-started/how-luz-is-built/#tests-first" hreflang="en">nos encanta TDD</a>, cada cambio empieza con una prueba que falla.</p>
-        <div class="o-actions">
-          <a class="luz-btn luz-btn--primary luz-btn--lg" href="../docs/" hreflang="en">Leer la documentación, en inglés</a>
-          <a class="luz-btn luz-btn--outline luz-btn--lg" href="https://github.com/nandovejer/luz">Ver el código en GitHub</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================== 2. THE LIGHT ======================
-         The visitor's sky over a globe (apps/landing/light/),
-         from edge to edge of the window. Without JavaScript the element stays
-         empty, light.css keeps its room and the sentence after it says what
-         the room is for; once <home-light> is defined the sentence goes -->
-    <section class="luz-landing-hero__media luz-landing-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
-      <h2 class="u-sr-only" id="light-title">La luz donde estás</h2>
-      <home-light bleed favicon></home-light>
-      <p class="landing-light__nojs">Con JavaScript activado, aquí se dibuja la luz de tu hora.</p>
-    </section>
-
-    <!-- ====================== 3. WHY ====================== -->
-    <section class="o-stack luz-landing-section" id="why" aria-labelledby="why-title">
-      <p class="luz-landing-section__eyebrow">Por qué LUZ</p>
-      <h2 class="luz-landing-section__title" id="why-title">Tres palabras, <em>una</em> promesa.</h2>
-      <p class="luz-landing-section__lead">Un sistema de diseño para la web que parte del CSS y no necesita compilación. Tu CSS siempre gana, JavaScript solo mejora la experiencia y cada página funciona antes de que cargue.</p>
-
-      <div class="o-grid landing-trio">
-        <article class="luz-card o-stack" aria-labelledby="why-light">
-          <h3 class="luz-card__title landing-word" id="why-light" lang="en">Light</h3>
-          <p class="luz-card__body">Ligero: CSS sin más y módulos ES pequeños desde un CDN o npm. Sin preprocesador ni compilador: lo que lees en los archivos es lo que ejecuta el navegador.</p>
-          <!-- Each swatch asks <luz-mode> to preview a light (landing.js); without a script they are not shown -->
-          <div class="o-stack landing-swatches" role="group" aria-label="Prueba esta página con otra luz" hidden>
-            <div class="o-row landing-swatches__row">
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="dawn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6 17a6 6 0 0 1 12 0Z"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 18h18"/></svg><span class="u-sr-only">Amanecer</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="morning" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle fill="currentColor" cx="8" cy="11" r="4.5"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 20h18"/></svg><span class="u-sr-only">Luz de mañana</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="afternoon" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle fill="currentColor" cx="12" cy="8" r="4.5"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 20h18"/></svg><span class="u-sr-only">Luz de tarde</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="sunset" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle fill="currentColor" cx="16" cy="14" r="4.5"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 20h18"/></svg><span class="u-sr-only">Atardecer</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="dusk" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" d="M18 17a6 6 0 0 0-12 0"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 18h18"/></svg><span class="u-sr-only">Anochecer</span></button>
-              <button class="luz-btn luz-btn--ghost luz-btn--sm landing-swatch" type="button" data-phase="night" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17 14.5A6.5 6.5 0 0 1 9.5 7a6.5 6.5 0 1 0 7.5 7.5Z"/></svg><span class="u-sr-only">Noche</span></button>
-            </div>
-            <!-- The light the page shows, by name: the pressed swatch's or the clock's (landing.js) -->
-            <div class="o-row landing-swatches__now">
-              <button class="luz-btn luz-btn--outline luz-btn--sm" type="button" data-phase-live hidden>Volver a ahora</button>
-              <span class="landing-swatches__name" data-shown-light></span>
-            </div>
-          </div>
-          <p class="u-text-muted">Esta página sigue tu reloj. <span data-needs-js hidden>Toca una luz para ver la página a otra hora.</span></p>
-        </article>
-
-        <article class="luz-card o-stack" aria-labelledby="why-usable">
-          <h3 class="luz-card__title landing-word" id="why-usable" lang="en">Usable</h3>
-          <p class="luz-card__body">Usable: lo nativo primero, con dialog, popover, details, range y progress. El teclado, el foco visible y un contraste de texto de 4,5:1 forman parte de cada componente; no son una opción.</p>
-          <div class="luz-dropdown">
-            <button class="luz-btn luz-btn--outline" type="button" popovertarget="why-keyboard">Pulsa Tab y luego Espacio</button>
-            <div class="luz-dropdown__menu" id="why-keyboard" popover>
-              <p class="landing-note">Eso ha sido solo el teclado. Pulsa Escape para cerrar esta nota.</p>
-            </div>
-          </div>
-          <p class="u-text-muted">El anillo de foco toma el color de las acciones de la página, y nunca se oculta.</p>
-        </article>
-
-        <article class="luz-card o-stack" aria-labelledby="why-zero">
-          <h3 class="luz-card__title landing-word" id="why-zero" lang="en">Zero-dependency</h3>
-          <div class="luz-landing-stat">
-            <p class="luz-landing-stat__value">0</p>
-            <p class="luz-landing-stat__label">dependencias en tiempo de ejecución. Nada que instalar para probarlo y ningún framework que seguir durante años.</p>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ====================== 4. INSIDE ====================== -->
-    <section class="o-stack luz-landing-section" id="inside" aria-labelledby="inside-title">
-      <p class="luz-landing-section__eyebrow">Qué incluye</p>
-      <h2 class="luz-landing-section__title" id="inside-title">Adóptalo <em>capa</em> a capa.</h2>
-      <p class="luz-landing-section__lead">Una sola dirección: cada paquete necesita los que tiene debajo y nada de lo que tiene encima, y al instalarlo los trae consigo. Elige el nivel que necesitas y quédate ahí.</p>
-
-      <div class="landing-levels">
-
-        <article class="landing-level" aria-labelledby="level-1-title">
-          <div class="landing-level__intro">
-            <h3 class="landing-level__title" id="level-1-title"><span class="landing-eyebrow">Nivel 1</span> Solo tokens</h3>
-            <span class="luz-tag luz-tag--gray">Independiente</span>
-            <p>Elígelo si ya tienes componentes o un framework y solo quieres valores coherentes y modos de color.</p>
-          </div>
-          <div class="landing-level__body">
-            <h4 class="landing-eyebrow">Incluye</h4>
-            <ul class="landing-level__get">
-              <li>53 colores primitivos y 55 tokens semánticos, estos definidos para claro, oscuro y alto contraste</li>
-              <li>Escalas de espaciado, alturas de control, tamaños de texto, radios y sombras</li>
-            </ul>
-          </div>
-          <div class="landing-level__actions">
-            <a class="luz-btn luz-btn--outline" href="../docs/get-started/#level-1-tokens-only" hreflang="en">Instalar el nivel 1</a>
-            <a href="../docs/tokens/" hreflang="en">Ver los tokens</a>
-          </div>
-        </article>
-
-        <article class="landing-level" aria-labelledby="level-2-title">
-          <div class="landing-level__intro">
-            <h3 class="landing-level__title" id="level-2-title"><span class="landing-eyebrow">Nivel 2</span> Tokens + Core</h3>
-            <span class="luz-tag luz-tag--gray">Necesita tokens</span>
-            <p>Elígelo si construyes páginas o una aplicación y la maquetación de la página la pones tú.</p>
-          </div>
-          <div class="landing-level__body">
-            <h4 class="landing-eyebrow">Añade al nivel 1</h4>
-            <ul class="landing-level__get">
-              <li>32 componentes, de botones y formularios a pestañas y un reproductor multimedia, y 10 objetos de maquetación</li>
-              <li>Todo en una sola <a href="../docs/get-started/layers/" hreflang="en">capa de cascada</a>, <code class="luz-code-inline">luz</code>: tu propio CSS gana sin <code class="luz-code-inline">!important</code></li>
-            </ul>
-          </div>
-          <div class="landing-level__actions">
-            <a class="luz-btn luz-btn--outline" href="../docs/get-started/#level-2-tokens-and-core" hreflang="en">Instalar el nivel 2</a>
-            <a href="../docs/components/" hreflang="en">Ver los componentes</a>
-          </div>
-        </article>
-
-        <article class="landing-level" aria-labelledby="level-3-title">
-          <div class="landing-level__intro">
-            <h3 class="landing-level__title" id="level-3-title"><span class="landing-eyebrow">Nivel 3</span> Tokens + Core + Site</h3>
-            <span class="luz-tag luz-tag--gray">Necesita core + tokens</span>
-            <p>Elígelo si tu sitio necesita una búsqueda, un aviso de cookies o más de un idioma. Esta página de inicio está construida sobre él.</p>
-          </div>
-          <div class="landing-level__body">
-            <h4 class="landing-eyebrow">Añade al nivel 2</h4>
-            <ul class="landing-level__get">
-              <li>Búsqueda en el sitio y un aviso de cookies que no tapa nada, con JavaScript opcional</li>
-              <li>Un selector de idioma, submenús para los enlaces de una cabecera y un aviso encima de ella</li>
-            </ul>
-          </div>
-          <div class="landing-level__actions">
-            <a class="luz-btn luz-btn--outline" href="../docs/get-started/#level-3-tokens-core-and-site" hreflang="en">Instalar el nivel 3</a>
-            <a href="../docs/site/" hreflang="en">Ver los patrones</a>
-          </div>
-        </article>
-
-      </div>
-
-      <div class="o-stack landing-kinds">
-        <h3 class="landing-kinds__title" id="kinds-title">Nivel 4 · un paquete para tu tipo de sitio</h3>
-        <p class="u-text-muted">Cada uno se construye sobre site. Instala el de tu sitio: trae todo lo que tiene debajo.</p>
-        <ul class="o-row landing-kinds__list" aria-labelledby="kinds-title">
-          <li><a href="../docs/landing/" hreflang="en"><code class="luz-code-inline">landing</code> para una landing page</a></li>
-          <li><a href="../docs/cms/" hreflang="en"><code class="luz-code-inline">cms</code> para un blog o un periódico</a></li>
-          <li><a href="../docs/app/" hreflang="en"><code class="luz-code-inline">app</code> para una aplicación web</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ====================== 5. NATIVE ====================== -->
-    <section class="o-stack luz-landing-section" id="native" aria-labelledby="native-title">
-      <p class="luz-landing-section__eyebrow">Funciona sin JavaScript</p>
-      <h2 class="luz-landing-section__title" id="native-title">Parte de lo que el navegador <em>ya</em> hace.</h2>
-      <p class="luz-landing-section__lead">Cada componente es un elemento nativo con una hoja de estilos encima. Desactiva JavaScript y siguen abriéndose, cerrándose, deslizándose y dejando elegir.</p>
-
-      <div class="o-grid landing-specimens">
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;details&gt;</code></h3>
-          <details>
-            <summary>¿Qué significa «sin compilación»?</summary>
-            <p>Que no hay ningún paso entre los archivos que lees y la página que muestra el navegador. Los copias, los enlazas y listo.</p>
-          </details>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;dialog&gt;</code></h3>
-          <div>
-            <button class="luz-btn luz-btn--outline" type="button" commandfor="native-dialog" command="show-modal">Abrir un diálogo</button>
-          </div>
-          <p class="u-text-muted">Se abre sin script donde el navegador tiene <code class="luz-code-inline">command</code>; en los demás lo abre un pequeño script.</p>
-          <dialog class="luz-modal" id="native-dialog" aria-labelledby="native-dialog-title">
-            <div class="luz-modal__header">
-              <p class="luz-modal__title" id="native-dialog-title">Un diálogo nativo</p>
-            </div>
-            <div class="luz-modal__body">
-              <p>El foco entra en él, Escape lo cierra y el navegador deja fuera de alcance la página de detrás. Ninguna biblioteca ha escrito nada de eso.</p>
-            </div>
-            <div class="luz-modal__footer">
-              <button class="luz-btn luz-btn--primary" type="button" commandfor="native-dialog" command="close">Cerrar el diálogo</button>
-            </div>
-          </dialog>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>popover</code></h3>
-          <div class="luz-dropdown">
-            <button class="luz-btn luz-btn--outline" type="button" popovertarget="native-popover">Abrir un popover</button>
-            <div class="luz-dropdown__menu" id="native-popover" popover>
-              <p class="landing-note">Se cierra al pulsar fuera y va en la capa superior, sin pelearse con z-index. Lo resuelve el navegador.</p>
-              <ul class="luz-dropdown__list">
-                <li><a class="luz-dropdown__item" href="../docs/components/dropdown/" hreflang="en">Ver el desplegable, hecho con un popover</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;input type="range"&gt;</code></h3>
-          <div class="luz-field">
-            <label class="luz-field__label" for="native-range">Brillo</label>
-            <input class="luz-input" id="native-range" type="range" min="0" max="100" value="64">
-          </div>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;progress&gt;</code></h3>
-          <div class="luz-field">
-            <label class="luz-field__label" for="native-progress">Perfil: 3 de 5 pasos completados</label>
-            <progress class="luz-progress" id="native-progress" max="5" value="3"></progress>
-          </div>
-        </div>
-
-        <div class="luz-card o-stack">
-          <h3 class="luz-card__title"><code>&lt;select&gt;</code></h3>
-          <div class="luz-field">
-            <label class="luz-field__label" for="native-select">Talla</label>
-            <select class="luz-select" id="native-select">
-              <option value="small">Pequeña</option>
-              <option value="medium" selected>Mediana</option>
-              <option value="large">Grande</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================== 6. MODES ====================== -->
-    <section class="o-stack luz-landing-section" id="modes" aria-labelledby="modes-title">
-      <p class="luz-landing-section__eyebrow">Tres modos de color</p>
-      <h2 class="luz-landing-section__title" id="modes-title">Claro, oscuro, alto contraste. <em>Y la hora.</em></h2>
-      <p class="luz-landing-section__lead">Cada color semántico está definido para los tres modos, y el atributo <code class="luz-code-inline">data-theme</code> los cambia, en toda la página o en una parte. Esta página añade un eje propio: la hora del lugar donde estás.</p>
-
-      <!-- The same invoice three times: each scope re-defines the semantic tokens -->
-      <div class="o-grid landing-modes">
-        <figure class="landing-mode">
-          <figcaption class="landing-eyebrow">Claro</figcaption>
-          <div class="landing-mode__scope" data-theme="light">
-            <div class="luz-card">
-              <p class="luz-card__title">Factura 1042</p>
-              <p class="luz-card__body">Pagada el 3 de octubre. Gracias.</p>
-              <span class="luz-tag luz-tag--green luz-tag--dot">Pagada</span>
-            </div>
-          </div>
-        </figure>
-        <figure class="landing-mode">
-          <figcaption class="landing-eyebrow">Oscuro</figcaption>
-          <div class="landing-mode__scope" data-theme="dark">
-            <div class="luz-card">
-              <p class="luz-card__title">Factura 1042</p>
-              <p class="luz-card__body">Pagada el 3 de octubre. Gracias.</p>
-              <span class="luz-tag luz-tag--green luz-tag--dot">Pagada</span>
-            </div>
-          </div>
-        </figure>
-        <figure class="landing-mode">
-          <figcaption class="landing-eyebrow">Alto contraste</figcaption>
-          <div class="landing-mode__scope" data-theme="high-contrast">
-            <div class="luz-card">
-              <p class="luz-card__title">Factura 1042</p>
-              <p class="luz-card__body">Pagada el 3 de octubre. Gracias.</p>
-              <span class="luz-tag luz-tag--green luz-tag--dot">Pagada</span>
-            </div>
-          </div>
-        </figure>
-      </div>
-
-      <!-- The day strip: decoration; the line under it says the light in words (landing.js) -->
-      <div class="landing-day" aria-hidden="true">
-        <div class="landing-day__strip"><span class="landing-day__now" hidden></span></div>
-        <div class="landing-day__ticks">
-          <span>Amanecer</span>
-          <span>Luz de mañana</span>
-          <span>Luz de tarde</span>
-          <span>Atardecer</span>
-          <span>Anochecer</span>
-          <span>Noche</span>
-        </div>
-      </div>
-      <p class="u-text-muted" data-day-line hidden>La luz de esta hora: <strong data-day-phase></strong></p>
-    </section>
-
-    <!-- ====================== 7. TYPE ====================== -->
-    <section class="o-stack luz-landing-section" id="type" aria-labelledby="type-title">
-      <p class="luz-landing-section__eyebrow">Tipografía</p>
-      <h2 class="luz-landing-section__title" id="type-title">Hecha para <em>leer</em>.</h2>
-      <p class="luz-landing-section__lead">ET Book para el texto corrido y los títulos, alojada en el propio paquete y con licencia MIT. Las fuentes del sistema para controles, etiquetas y código.</p>
-
-      <blockquote class="landing-type__quote"><p>La luz es el primer material de una página. Todo lo demás se coloca en ella.</p></blockquote>
-    </section>
-
-    <!-- ====================== 8. START ======================
-         The snippets, then who LUZ fits and who it does not, then the two actions -->
-    <section class="o-stack luz-landing-section" id="start" aria-labelledby="start-title">
-      <p class="luz-landing-section__eyebrow">Primeros pasos</p>
-      <h2 class="luz-landing-section__title" id="start-title">Una etiqueta <code class="luz-code-inline">&lt;link&gt;</code> por <em>capa</em>.</h2>
-      <p class="luz-landing-section__lead">Elige un nivel, copia el fragmento y publica. Fija una versión exacta mientras LUZ esté en beta.</p>
-
-      <div class="landing-snippet">
-        <div class="landing-snippet__bar">
-          <span class="landing-eyebrow">Desde un CDN</span>
-          <button class="luz-copy-btn" type="button" data-copy-from="snip-cdn" aria-label="Copiar el fragmento del CDN" hidden>Copiar</button>
-        </div>
-        <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="El fragmento del CDN"><code id="snip-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
+a {
+  color: var(--luz-brand-primary);
+}</code></pre>
+</div>
+</div>
+</section>
+<section class="landing-inside landing-inside--flip" id="inside-2" aria-labelledby="inside-2-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>Base + Core</span></p>
+<h2 class="landing-inside__title" id="inside-2-title">Componentes con <span class="landing-mark">core</span></h2>
+<p class="landing-inside__lead">Los componentes y la maquetación encima de los tokens, en una capa de cascada que tu CSS siempre gana.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>Componentes.</strong> 32, de botones y formularios a pestañas y un reproductor.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>Maquetación.</strong> 10 objetos para filas, rejillas, pilas y contenedores.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>Peso.</strong> 30,8 KB en gzip, con todo lo anterior.</span></li>
+</ul>
+</div>
+<div class="landing-panel">
+<nav class="luz-tabs landing-panel__tabs" aria-label="El nivel 2 en código">
+<a class="luz-tab" href="#in2-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>Instalar</span></a>
+<a class="luz-tab" href="#in2-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>Lista</span></a>
+<a class="luz-tab" href="#in2-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>Ejemplo de código</span></a>
+</nav>
+<div class="luz-tabpanel landing-panel__pane" id="in2-install">
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">npm</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in2-npm" aria-label="Copiar el comando de npm" hidden>Copiar</button>
+</div>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in2-npm">npm install @luz-ds/tokens @luz-ds/core</code></pre>
+</div>
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">CDN</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in2-cdn" aria-label="Copiar las etiquetas del CDN" hidden>Copiar</button>
+</div>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in2-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot;&gt;
-
-&lt;button class=&quot;luz-btn luz-btn--primary&quot;&gt;Guardar los cambios&lt;/button&gt;
-&lt;span class=&quot;luz-tag luz-tag--green luz-tag--dot&quot;&gt;Publicado&lt;/span&gt;</code></pre>
-      </div>
-
-      <div class="landing-render">
-        <p class="landing-eyebrow">Así se ve</p>
-        <div class="o-row">
-          <button class="luz-btn luz-btn--primary" type="button">Guardar los cambios</button>
-          <span class="luz-tag luz-tag--green luz-tag--dot">Publicado</span>
-        </div>
-      </div>
-
-      <div class="landing-snippet">
-        <div class="landing-snippet__bar">
-          <span class="landing-eyebrow">Desde npm</span>
-          <button class="luz-copy-btn" type="button" data-copy-from="snip-npm" aria-label="Copiar el fragmento de npm" hidden>Copiar</button>
-        </div>
-        <pre class="luz-code-block" data-lang="js" dir="ltr" tabindex="0" role="region" aria-label="El fragmento de npm"><code id="snip-npm">npm install @luz-ds/tokens @luz-ds/core
-
-import &quot;@luz-ds/tokens/css&quot;;
-import &quot;@luz-ds/core/css&quot;;
-import &quot;@luz-ds/core&quot;;</code></pre>
-      </div>
-
-      <p>Después, escribe HTML. <code class="luz-code-inline">&lt;button class="luz-btn"&gt;</code> es un botón. <code class="luz-code-inline">&lt;dialog class="luz-modal"&gt;</code> es un diálogo modal. Esa es toda la idea.</p>
-
-      <div class="o-grid o-grid--split landing-fit">
-        <div>
-          <h3 class="landing-fit__title">Encaja bien</h3>
-          <ul class="landing-fit__list">
-            <li>Sitios de contenido, documentación y servicios públicos que deben cumplir WCAG 2.2 AA.</li>
-            <li>Páginas generadas en el servidor y sitios estáticos, con cualquier lenguaje de servidor.</li>
-            <li>Equipos que quieren entender su CSS y controlarlo.</li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="landing-fit__title">No encaja</h3>
-          <ul class="landing-fit__list">
-            <li>Necesitas componentes de React o Vue ya hechos.</li>
-            <li>Necesitas una tabla de datos avanzada, gráficos o un selector de rango de fechas: LUZ no los incluye.</li>
-            <li>Necesitas una API estable hoy: LUZ está en beta y los nombres aún pueden cambiar.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="o-actions">
-        <a class="luz-btn luz-btn--primary" href="../docs/" hreflang="en">Leer la documentación, en inglés</a>
-        <a class="luz-btn luz-btn--outline" href="../docs/components/" hreflang="en">Ver los componentes, en inglés</a>
-      </div>
-    </section>
-    <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
-         a fractal noise that displaces their soft ovals -->
-    <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
-      <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
-        <feDisplacementMap in="SourceGraphic" scale="120"/>
-      </filter>
-    </svg>
-  </main>
-
-  <footer class="luz-landing-footer">
-    <div class="o-container o-container--inline o-grid">
-      <div class="luz-landing-footer__brand">
-        <p class="landing-brand"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg><strong>LUZ</strong> <span>v0.0.0</span></p>
-        <p class="u-text-muted">Beta · Licencia MIT</p>
-        <p class="u-text-muted">Luz, allí donde estés.</p>
-      </div>
-      <nav class="luz-landing-footer__col" aria-labelledby="footer-docs">
-        <h2 class="luz-landing-footer__col-title" id="footer-docs">Documentación</h2>
-        <ul>
-          <li><a href="../docs/get-started/" hreflang="en">Primeros pasos</a></li>
-          <li><a href="../docs/tokens/" hreflang="en">Tokens</a></li>
-          <li><a href="../docs/components/" hreflang="en">Componentes</a></li>
-          <li><a href="../docs/site/" hreflang="en">Patrones</a></li>
-          <li><a href="../docs/accessibility/" hreflang="en">Declaración de accesibilidad</a></li>
-        </ul>
-      </nav>
-      <nav class="luz-landing-footer__col" aria-labelledby="footer-project">
-        <h2 class="luz-landing-footer__col-title" id="footer-project">Proyecto</h2>
-        <ul>
-          <li><a href="https://github.com/nandovejer/luz">GitHub</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">Registro de cambios</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/CONTRIBUTING.md">Cómo contribuir</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/dev/BROWSER-REVIEWS.md">Revisiones en navegadores</a></li>
-        </ul>
-      </nav>
-      <!-- Named apart from the header's language menu: two landmarks, two names -->
-      <nav class="luz-landing-footer__col" aria-label="Idiomas de esta página">
-        <h2 class="luz-landing-footer__col-title">Idioma</h2>
-        <ul>
-  <li><a href="../" hreflang="en" lang="en">English</a></li>
-  <li><a href="../es/" hreflang="es" lang="es" aria-current="page">Español</a></li>
-  <li><a href="../ar/" hreflang="ar" lang="ar">العربية</a></li>
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in2-list">
+<div class="landing-names" style="--n:32">
+<h3 class="landing-names__title">Componentes <span class="landing-names__n">32</span></h3>
+<ul class="landing-names__list landing-names__list--map" dir="ltr"><li style="--share:0.076"><a href="../es/docs/components/accordion/">accordion</a></li><li style="--share:0.199"><a href="../es/docs/components/alert/">alert</a></li><li style="--share:0.100"><a href="../es/docs/components/avatar/">avatar</a></li><li style="--share:0.056"><a href="../es/docs/components/band/">band</a></li><li style="--share:0.117"><a href="../es/docs/components/breadcrumb/">breadcrumb</a></li><li style="--share:0.298"><a href="../es/docs/components/button/">button</a></li><li style="--share:0.258"><a href="../es/docs/components/card/">card</a></li><li style="--share:0.211"><a href="../es/docs/components/code/">code</a></li><li style="--share:0.131"><a href="../es/docs/components/copy-button/">copy-btn</a></li><li style="--share:0.316"><a href="../es/docs/components/dropdown/">dropdown</a></li><li style="--share:0.079"><a href="../es/docs/components/figure/">figure</a></li><li style="--share:0.941"><a href="../es/docs/components/form/">form</a></li><li style="--share:0.109"><a href="../es/docs/components/icon-grid/">icon-grid</a></li><li style="--share:0.099"><a href="../es/docs/components/image/">image</a></li><li style="--share:0.094"><a href="../es/docs/components/meta/">meta</a></li><li style="--share:0.160"><a href="../es/docs/components/meter/">meter</a></li><li style="--share:0.226"><a href="../es/docs/components/modal/">modal</a></li><li style="--share:0.662"><a href="../es/docs/components/mode-switcher/">mode-switcher</a></li><li style="--share:0.244"><a href="../es/docs/components/navbar/">navbar</a></li><li style="--share:0.211"><a href="../es/docs/components/pagination/">pagination</a></li><li style="--share:0.737"><a href="../es/docs/components/player/">player</a></li><li style="--share:0.231"><a href="../es/docs/components/progress/">progress</a></li><li style="--share:0.159"><a href="../es/docs/components/prose/">prose</a></li><li style="--share:0.485"><a href="../es/docs/components/select/">select</a></li><li style="--share:0.595"><a href="../es/docs/components/sidebar/">sidebar</a></li><li style="--share:0.083"><a href="../es/docs/components/skip-link/">skip-link</a></li><li style="--share:0.541"><a href="../es/docs/components/table/">table</a></li><li style="--share:0.186"><a href="../es/docs/components/tabs/">tabs</a></li><li style="--share:0.212"><a href="../es/docs/components/tag/">tag</a></li><li style="--share:1.000"><a href="../es/docs/components/timeline/">timeline</a></li><li style="--share:0.158"><a href="../es/docs/components/toast/">toast</a></li><li style="--share:0.219"><a href="../es/docs/components/tooltip/">tooltip</a></li></ul>
+</div>
+<div class="landing-names" style="--n:10">
+<h3 class="landing-names__title">Objetos de maquetación <span class="landing-names__n">10</span></h3>
+<ul class="landing-names__list landing-names__list--map" dir="ltr"><li style="--share:1.000"><a href="../es/docs/components/layout/#objects-reference">o-shell</a></li><li style="--share:0.286"><a href="../es/docs/components/layout/#objects-reference">o-main</a></li><li style="--share:0.286"><a href="../es/docs/components/layout/#objects-reference">o-container</a></li><li style="--share:0.286"><a href="../es/docs/components/layout/#objects-page">o-page</a></li><li style="--share:0.286"><a href="../es/docs/components/layout/#objects-reference">o-sticky</a></li><li style="--share:0.286"><a href="../es/docs/components/layout/#objects-grid">o-grid</a></li><li style="--share:0.286"><a href="../es/docs/components/layout/#objects-reference">o-row</a></li><li style="--share:0.429"><a href="../es/docs/components/layout/#objects-actions">o-actions</a></li><li style="--share:0.286"><a href="../es/docs/components/layout/#objects-reference">o-stack</a></li><li style="--share:0.143"><a href="../es/docs/components/layout/#objects-reference">o-media</a></li></ul>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane" id="in2-code">
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="Ejemplo de código"><code id="in2-code-code">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;f-name&quot;&gt;Project name&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;f-name&quot; type=&quot;text&quot; aria-describedby=&quot;f-name-help&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;f-name-help&quot;&gt;Shown on the dashboard.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;f-slug&quot;&gt;Slug&lt;/label&gt;
+  &lt;input class=&quot;luz-input luz-input--error&quot; id=&quot;f-slug&quot; type=&quot;text&quot;
+         aria-invalid=&quot;true&quot; aria-describedby=&quot;f-slug-error&quot;&gt;
+  &lt;div class=&quot;luz-field__error&quot; id=&quot;f-slug-error&quot;&gt;Use letters, numbers and dashes only.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="landing-inside" id="inside-3" aria-labelledby="inside-3-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>Base + Core + Componentes cool</span></p>
+<h2 class="landing-inside__title" id="inside-3-title">Un sitio entero con <span class="landing-mark">componentes cool</span></h2>
+<p class="landing-inside__lead">Lo que necesita un sitio entero: buscar en él, preguntar por las cookies, cambiar de idioma.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>Búsqueda.</strong> Un diálogo con Ctrl K que, sin JavaScript, es un enlace al índice.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>Idioma y avisos.</strong> Un selector de idioma, submenús y un aviso de cookies que no tapa nada.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>Peso.</strong> 38,9 KB en gzip, con todo lo anterior.</span></li>
 </ul>
-      </nav>
-    </div>
-    <div class="o-stack landing-foot">
-      <luz-mode class="site-modes" remember by="clock">
-        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
-          <legend class="luz-mode-switcher__label">Modo de color</legend>
-          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
-          <span class="luz-mode-cycle__status" role="status"></span>
-          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
-          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
-          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
-        </fieldset>
-      </luz-mode>
-      <p class="u-text-muted" data-needs-js hidden>La luz se calcula con tu reloj, nunca con tu ubicación. Tu elección se queda en este navegador.</p>
-    </div>
-  </footer>
-
+</div>
+<div class="landing-panel">
+<nav class="luz-tabs landing-panel__tabs" aria-label="El nivel 3 en código">
+<a class="luz-tab" href="#in3-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>Instalar</span></a>
+<a class="luz-tab" href="#in3-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>Lista</span></a>
+<a class="luz-tab" href="#in3-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>Ejemplo de código</span></a>
+</nav>
+<div class="luz-tabpanel landing-panel__pane" id="in3-install">
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">npm</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in3-npm" aria-label="Copiar el comando de npm" hidden>Copiar</button>
+</div>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in3-npm">npm install @luz-ds/tokens @luz-ds/core @luz-ds/site</code></pre>
+</div>
+<div class="landing-install">
+<div class="landing-install__bar">
+<span class="landing-install__label">CDN</span>
+<button class="luz-copy-btn" type="button" data-copy-from="in3-cdn" aria-label="Copiar las etiquetas del CDN" hidden>Copiar</button>
+</div>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in3-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot;&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in3-list">
+<div class="landing-names" style="--n:6">
+<h3 class="landing-names__title">Componentes de sitio <span class="landing-names__n">6</span></h3>
+<ul class="landing-names__list landing-names__list--map" dir="ltr"><li style="--share:0.147"><a href="../es/docs/site/banner/">banner</a></li><li style="--share:0.265"><a href="../es/docs/site/classes/">consent</a></li><li style="--share:0.603"><a href="../es/docs/site/classes/">lang-switch</a></li><li style="--share:0.038"><a href="../es/docs/site/">mode</a></li><li style="--share:1.000"><a href="../es/docs/site/classes/">search</a></li><li style="--share:0.310"><a href="../es/docs/site/classes/">submenu</a></li></ul>
+</div>
+</div>
+<div class="luz-tabpanel landing-panel__pane" id="in3-code">
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="Ejemplo de código"><code id="in3-code-code">&lt;luz-search&gt;
+  &lt;a class=&quot;luz-search__fallback&quot; href=&quot;/docs/a-z/&quot; data-luz-search-fallback&gt;A–Z&lt;/a&gt;
+  &lt;button class=&quot;luz-search__trigger&quot; type=&quot;button&quot; data-luz-search-open hidden&gt;Search&lt;/button&gt;
+  &lt;dialog class=&quot;luz-modal luz-search&quot; id=&quot;luz-search&quot;
+          data-luz-search-src=&quot;/search-index.json&quot;&gt;
+    &lt;search class=&quot;luz-search__body&quot;&gt;
+      &lt;input class=&quot;luz-input&quot; id=&quot;luz-search-q&quot; type=&quot;text&quot;&gt;
+      &lt;p class=&quot;luz-search__status&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
+      &lt;div class=&quot;luz-search__results&quot; data-luz-search-results&gt;…&lt;/div&gt;
+    &lt;/search&gt;
+  &lt;/dialog&gt;
+&lt;/luz-search&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="landing-inside landing-inside--flip" id="inside-4" aria-labelledby="inside-4-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>Base + Core + Componentes cool + Plantilla de proyecto</span></p>
+<h2 class="landing-inside__title" id="inside-4-title">Cada sitio con su <span class="landing-mark">plantilla</span></h2>
+<p class="landing-inside__lead">Un paquete para cada tipo de sitio, encima de todo lo anterior: instala el tuyo y trae lo que necesita.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>Cuatro tipos.</strong> Una landing, una publicación, una aplicación y un sitio de documentación.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>Solo CSS.</strong> Ninguno añade JavaScript: son maquetación y estilo.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>Peso.</strong> hasta 40,7 KB en gzip, con todo lo anterior.</span></li>
+</ul>
+</div>
+<ul class="landing-inside__kinds" aria-label="Los paquetes para cada tipo de sitio">
+<li class="landing-kind landing-kind--landing">
+<div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M7 8.5h10M8.5 11.5h7"/><rect x="9" y="14.5" width="6" height="2.5" rx="1.25"/></g></svg><hgroup class="landing-kind__name"><h3>Landing page</h3><p>La cabecera, el hero, las secciones y las cifras de una landing, y el pie que la cierra.</p></hgroup></div>
+<div class="landing-term">
+<nav class="luz-tabs landing-term__tabs" aria-label="Instalar landing">
+<a class="luz-tab" href="#in4-landing-npm-pane">npm</a>
+<a class="luz-tab" href="#in4-landing-cdn-pane">CDN</a>
+</nav>
+<div class="luz-tabpanel landing-term__pane" id="in4-landing-npm-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-landing-npm" aria-label="Copiar el comando de npm" hidden>Copiar</button>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in4-landing-npm">npm install @luz-ds/landing</code></pre>
+</div>
+<div class="luz-tabpanel landing-term__pane" id="in4-landing-cdn-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-landing-cdn" aria-label="Copiar las etiquetas del CDN" hidden>Copiar</button>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in4-landing-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.0.0/dist/landing.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="../es/docs/landing/">Documentación<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</li>
+<li class="landing-kind landing-kind--cms">
+<div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11"/><path d="M7.5 9h4M7.5 12.5h7M7.5 16h7"/><path d="m17.5 3.5 3 3-6 6H11.5v-3l6-6Z"/></g></svg><hgroup class="landing-kind__name"><h3>Blog o periódico</h3><p>La cabecera, los encabezados de página y de artículo, el índice y el pie de un sitio de artículos.</p></hgroup></div>
+<div class="landing-term">
+<nav class="luz-tabs landing-term__tabs" aria-label="Instalar cms">
+<a class="luz-tab" href="#in4-cms-npm-pane">npm</a>
+<a class="luz-tab" href="#in4-cms-cdn-pane">CDN</a>
+</nav>
+<div class="luz-tabpanel landing-term__pane" id="in4-cms-npm-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-cms-npm" aria-label="Copiar el comando de npm" hidden>Copiar</button>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in4-cms-npm">npm install @luz-ds/cms</code></pre>
+</div>
+<div class="luz-tabpanel landing-term__pane" id="in4-cms-cdn-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-cms-cdn" aria-label="Copiar las etiquetas del CDN" hidden>Copiar</button>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in4-cms-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.0.0/dist/cms.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="../es/docs/cms/">Documentación<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</li>
+<li class="landing-kind landing-kind--app">
+<div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 9h17M9 9v10"/></g></svg><hgroup class="landing-kind__name"><h3>Aplicación web</h3><p>La cabecera y el panel de una aplicación web, sobre el armazón y la barra lateral de core.</p></hgroup></div>
+<div class="landing-term">
+<nav class="luz-tabs landing-term__tabs" aria-label="Instalar app">
+<a class="luz-tab" href="#in4-app-npm-pane">npm</a>
+<a class="luz-tab" href="#in4-app-cdn-pane">CDN</a>
+</nav>
+<div class="luz-tabpanel landing-term__pane" id="in4-app-npm-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-app-npm" aria-label="Copiar el comando de npm" hidden>Copiar</button>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in4-app-npm">npm install @luz-ds/app</code></pre>
+</div>
+<div class="luz-tabpanel landing-term__pane" id="in4-app-cdn-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-app-cdn" aria-label="Copiar las etiquetas del CDN" hidden>Copiar</button>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in4-app-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/app@0.0.0/dist/app.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="../es/docs/app/">Documentación<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</li>
+<li class="landing-kind landing-kind--docs">
+<div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></g></svg><hgroup class="landing-kind__name"><h3>Sitio de documentación</h3><p>El armazón, la cabecera de página, el raíl, los ejemplos, el sí y el no y la paginación de un sitio de documentación.</p></hgroup></div>
+<div class="landing-term">
+<nav class="luz-tabs landing-term__tabs" aria-label="Instalar docs">
+<a class="luz-tab" href="#in4-docs-npm-pane">npm</a>
+<a class="luz-tab" href="#in4-docs-cdn-pane">CDN</a>
+</nav>
+<div class="luz-tabpanel landing-term__pane" id="in4-docs-npm-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-docs-npm" aria-label="Copiar el comando de npm" hidden>Copiar</button>
+<pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="npm"><code id="in4-docs-npm">npm install @luz-ds/docs</code></pre>
+</div>
+<div class="luz-tabpanel landing-term__pane" id="in4-docs-cdn-pane">
+<button class="luz-copy-btn" type="button" data-copy-from="in4-docs-cdn" aria-label="Copiar las etiquetas del CDN" hidden>Copiar</button>
+<pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="CDN"><code id="in4-docs-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.0.0/dist/docs.min.css&quot;&gt;</code></pre>
+</div>
+</div>
+<a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="../es/docs/documentation/">Documentación<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</li>
+</ul>
+</section>
+<!-- ====================== 4b. WHY ====================== -->
+<section class="o-stack luz-landing-section" id="why" aria-labelledby="why-title">
+<p class="luz-landing-section__eyebrow">Por qué LUZ</p>
+<h2 class="luz-landing-section__title" id="why-title">Tres palabras, <em>una</em> promesa.</h2>
+<p class="luz-landing-section__lead">Un sistema de diseño para la web que parte del CSS y no necesita compilación. Tu CSS siempre gana, JavaScript solo mejora la experiencia y cada página funciona antes de que cargue.</p>
+<div class="landing-why">
+<article class="luz-card o-stack landing-why__card landing-why__card--light" aria-labelledby="why-light">
+<h3 class="luz-card__title landing-word" id="why-light" lang="en">Light</h3>
+<p class="landing-word__sub">Poco código y ningún paso de compilación.</p>
+<figure class="landing-chart">
+<ul class="landing-bars" aria-label="Paquetes por tamaño">
+<li class="landing-bar">
+<span class="landing-bar__name">tokens</span>
+<span class="landing-bar__figure"><strong>2,8 KB</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28759" value="2825" aria-hidden="true">2,8 KB</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">core</span>
+<span class="landing-bar__figure"><strong>28,1 KB</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28759" value="28759" aria-hidden="true">28,1 KB</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">site</span>
+<span class="landing-bar__figure"><strong>8,0 KB</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28759" value="8224" aria-hidden="true">8,0 KB</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">landing</span>
+<span class="landing-bar__figure"><strong>1,4 KB</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28759" value="1408" aria-hidden="true">1,4 KB</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">cms</span>
+<span class="landing-bar__figure"><strong>1,3 KB</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28759" value="1381" aria-hidden="true">1,3 KB</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">app</span>
+<span class="landing-bar__figure"><strong>0,7 KB</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28759" value="742" aria-hidden="true">0,7 KB</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">docs</span>
+<span class="landing-bar__figure"><strong>1,8 KB</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="28759" value="1864" aria-hidden="true">1,8 KB</meter>
+</li>
+</ul>
+<figcaption class="u-text-muted"><strong>Todo LUZ: 44,1 KB.</strong> El peso gzip de lo que publica cada paquete, medido en dist al construir esta página.</figcaption>
+</figure>
+<p class="luz-card__body">CSS sin más y módulos ES pequeños, desde un CDN o desde npm. Sin preprocesador, sin compilador y sin paso de build: lo que lees en los archivos es justo lo que ejecuta el navegador, y cada paquete tiene un techo de peso que nunca sube.</p>
+</article>
+<article class="luz-card o-stack landing-why__card" aria-labelledby="why-usable">
+<h3 class="luz-card__title landing-word" id="why-usable" lang="en">Usable</h3>
+<p class="landing-word__sub">Accesible de serie, no con parches.</p>
+<figure class="landing-chart">
+<ul class="landing-bars" aria-label="Accesibilidad, en porcentajes">
+<li class="landing-bar">
+<span class="landing-bar__name">Contraste de color</span>
+<span class="landing-bar__figure"><strong>100 %</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="100" aria-hidden="true">100 %</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">Probado en RTL</span>
+<span class="landing-bar__figure"><strong>97 %</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="97" aria-hidden="true">97 %</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">Sin JavaScript</span>
+<span class="landing-bar__figure"><strong>69 %</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="69" aria-hidden="true">69 %</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">Foco propio</span>
+<span class="landing-bar__figure"><strong>44 %</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="44" aria-hidden="true">44 %</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">Colores forzados</span>
+<span class="landing-bar__figure"><strong>44 %</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="44" aria-hidden="true">44 %</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">Sin problemas conocidos</span>
+<span class="landing-bar__figure"><strong>38 %</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="38" aria-hidden="true">38 %</meter>
+</li>
+<li class="landing-bar">
+<span class="landing-bar__name">Tests sin JavaScript</span>
+<span class="landing-bar__figure"><strong>27 %</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="100" value="27" aria-hidden="true">27 %</meter>
+</li>
+</ul>
+<figcaption class="u-text-muted"><strong>32 componentes, 208 archivos de test.</strong> Contado al construir. Lo que no llega al 100 %, en la declaración.</figcaption>
+</figure>
+<p class="luz-card__body">Pensado para WCAG 2.2 AA y EN 301 549, la norma europea de accesibilidad digital. Parte de lo que el navegador ya hace bien, añade foco visible, contraste y movimiento reducido, y lo comprueba con axe en cada cambio. Lee la <a href="../es/docs/accessibility/">declaración</a>.</p>
+</article>
+<article class="luz-card o-stack landing-why__card landing-why__card--zero" aria-labelledby="why-zero">
+<h3 class="luz-card__title landing-word" id="why-zero" lang="en">Zero-dependency</h3>
+<p class="landing-word__sub">Tu código, no un árbol del código de otros.</p>
+<figure class="landing-chart">
+<ul class="landing-bars" aria-label="Dependencias en tiempo de ejecución, por tipo">
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">Frameworks de CSS</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">Preprocesadores de CSS</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">Frameworks de JavaScript</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">Resaltadores de código</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">Librerías de iconos</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">Librerías de utilidades</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+<li class="landing-bar landing-bar--zero">
+<span class="landing-bar__name">Búsqueda y animación</span>
+<span class="landing-bar__figure"><strong>0</strong></span>
+<meter class="luz-meter landing-bar__meter" min="0" max="1" value="0" aria-hidden="true">0</meter>
+</li>
+</ul>
+<figcaption class="u-text-muted"><strong>Dependencias en tiempo de ejecución: 0.</strong> Contado en el package.json de cada paquete al construir esta página.</figcaption>
+</figure>
+<p class="luz-card__body">Los paquetes de LUZ se publican sin dependencias: solo CSS y módulos ES sobre lo que el navegador ya ofrece. Nada que instalar para probarlo, ningún framework que seguir y nada que se rompa cuando otra librería publica una versión mayor.</p>
+</article>
+</div>
+<!-- Who LUZ fits and who it does not: two cards, a tick and a cross; the second is not a
+warning, so it stays neutral -->
+<div class="landing-fit">
+<div class="landing-fit__col landing-fit__col--good">
+<h3 class="landing-fit__title"><span class="landing-fit__badge"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>Encaja bien</h3>
+<ul class="landing-fit__list">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>Sitios de contenido, documentación y servicios públicos que deben cumplir WCAG 2.2 AA.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>Páginas generadas en el servidor y sitios estáticos, con cualquier lenguaje de servidor.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>Equipos que quieren entender su CSS y controlarlo.</span></li>
+</ul>
+</div>
+<div class="landing-fit__col landing-fit__col--bad">
+<h3 class="landing-fit__title"><span class="landing-fit__badge"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg></span>No encaja</h3>
+<ul class="landing-fit__list">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>Necesitas componentes de React o Vue ya hechos.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>Necesitas una tabla de datos avanzada, gráficos o un selector de rango de fechas: LUZ no los incluye.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>Necesitas una API estable hoy: LUZ está en beta y los nombres aún pueden cambiar.</span></li>
+</ul>
+</div>
+</div>
+</section>
+<!-- ====================== 5. NATIVE ====================== -->
+<section class="landing-inside" id="native" aria-labelledby="native-title">
+<div class="landing-inside__copy">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5M14 5l-4 14"/></svg><span>HTML semántico, con estilo</span></p>
+<h2 class="landing-inside__title" id="native-title">Una etiqueta, <span class="landing-mark">una clase</span>, cero JS</h2>
+<p class="landing-inside__lead">Escribe el elemento que quieres decir. Añade la clase de LUZ. El navegador hace el resto.</p>
+<ul class="landing-inside__points">
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v14H4zM4 9h16M8 13h5"/></svg><span><strong>Sin script.</strong> 22 de 32 componentes son solo CSS: nada que cargar.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>Una clase cada uno.</strong> Un componente es un elemento nativo y una clase: sin envoltorios ni cadenas de utilidades.</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 3 4 6v6c0 4.5 3.2 7.8 8 9 4.8-1.2 8-4.5 8-9V6l-8-3Zm-3 9 2.2 2.2L15.5 10"/></svg><span><strong>El resto, con red.</strong> Los otros 10 mejoran con un script, y cada página dice qué obtienes sin él.</span></li>
+</ul>
+<a class="luz-btn luz-btn--primary landing-inside__cta" href="../es/docs/html/">Ver todas las etiquetas HTML<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</div>
+<!-- The scenes play one after another on a CSS loop (landing.css): no script. With reduced motion, or
+with no CSS animation, the first scene shows its last frame: the whole code and its result.
+The results are pictures of the code beside them: inert, out of the tab order and of the
+accessibility tree; the code is what a reader reads -->
+<div class="landing-typed__panel" role="group" aria-label="Elementos nativos, funcionando sin script">
+<div class="landing-typed__scene landing-typed__scene--meter">
+<pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="El marcado de un meter, escrito mientras miras"><code><span class="landing-typed__line"><span class="tok-name">&lt;meter</span></span>
+<span class="landing-typed__line">  <span class="tok-property">value</span>=<span class="tok-string">&quot;0.7&quot;</span></span>
+<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-meter&quot;</span></span>
+<span class="landing-typed__line">  <span class="tok-property">aria-label</span>=<span class="tok-string">&quot;Disco usado, 7 de 10 GB&quot;</span>&gt;</span>
+<span class="landing-typed__line"><span class="tok-name">&lt;/meter</span>&gt;</span></code></pre>
+<div class="landing-typed__result" inert>
+<div class="landing-typed__state landing-typed__state--raw">
+<meter value="0.7"></meter>
+<p class="landing-typed__caption">El meter propio del navegador</p>
+</div>
+<div class="landing-typed__state landing-typed__state--luz">
+<meter class="luz-meter" value="0.7" aria-label="Disco usado, 7 de 10 GB"></meter>
+<p class="landing-typed__caption landing-typed__extra"><span>Su nombre para un lector de pantalla:</span> <q>Disco usado, 7 de 10 GB</q></p>
+</div>
+<div class="landing-typed__modes">
+<div class="landing-typed__mode" data-theme="light"><meter class="luz-meter" value="0.7"></meter><span>Claro</span></div>
+<div class="landing-typed__mode" data-theme="dark"><meter class="luz-meter" value="0.7"></meter><span>Oscuro</span></div>
+<div class="landing-typed__mode" data-theme="high-contrast"><meter class="luz-meter" value="0.7"></meter><span>Alto contraste</span></div>
+</div>
+</div>
+</div>
+<div class="landing-typed__scene landing-typed__scene--input">
+<pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="El marcado de un campo de correo, escrito mientras miras"><code><span class="landing-typed__line"><span class="tok-name">&lt;input</span></span>
+<span class="landing-typed__line">  <span class="tok-property">type</span>=<span class="tok-string">&quot;email&quot;</span></span>
+<span class="landing-typed__line">  <span class="tok-property">value</span>=<span class="tok-string">&quot;ana@luz.dev&quot;</span></span>
+<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-input&quot;</span>&gt;</span></code></pre>
+<div class="landing-typed__result" inert>
+<div class="landing-typed__state landing-typed__state--raw">
+<input type="email" value="ana@luz.dev" aria-label="Correo">
+<p class="landing-typed__caption">El campo propio del navegador</p>
+</div>
+<div class="landing-typed__state landing-typed__state--luz">
+<input class="luz-input" type="email" value="ana@luz.dev" aria-label="Correo">
+</div>
+<div class="landing-typed__modes">
+<div class="landing-typed__mode" data-theme="light"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="Correo"><span>Claro</span></div>
+<div class="landing-typed__mode" data-theme="dark"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="Correo"><span>Oscuro</span></div>
+<div class="landing-typed__mode" data-theme="high-contrast"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="Correo"><span>Alto contraste</span></div>
+</div>
+</div>
+</div>
+<div class="landing-typed__scene landing-typed__scene--button">
+<pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="El marcado de un botón, escrito mientras miras"><code><span class="landing-typed__line"><span class="tok-name">&lt;button</span></span>
+<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-btn luz-btn--primary&quot;</span>&gt;</span>
+<span class="landing-typed__line">  Guardar cambios</span>
+<span class="landing-typed__line"><span class="tok-name">&lt;/button</span>&gt;</span></code></pre>
+<div class="landing-typed__result" inert>
+<div class="landing-typed__state landing-typed__state--raw">
+<button type="button">Guardar cambios</button>
+<p class="landing-typed__caption">El botón propio del navegador</p>
+</div>
+<div class="landing-typed__state landing-typed__state--luz">
+<button class="luz-btn luz-btn--primary" type="button">Guardar cambios</button>
+</div>
+<div class="landing-typed__modes">
+<div class="landing-typed__mode" data-theme="light"><button class="luz-btn luz-btn--primary" type="button">Guardar cambios</button><span>Claro</span></div>
+<div class="landing-typed__mode" data-theme="dark"><button class="luz-btn luz-btn--primary" type="button">Guardar cambios</button><span>Oscuro</span></div>
+<div class="landing-typed__mode" data-theme="high-contrast"><button class="luz-btn luz-btn--primary" type="button">Guardar cambios</button><span>Alto contraste</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ====================== 6. MODES ====================== -->
+<section class="landing-modes" id="modes" aria-labelledby="modes-title">
+<div class="landing-modes__head">
+<p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path fill="currentColor" stroke="none" d="M12 4a8 8 0 0 1 0 16Z"/></g></svg><span>Tres modos de color</span></p>
+<h2 class="landing-inside__title" id="modes-title">Una interfaz, <span class="landing-mark">tres modos</span></h2>
+<p class="landing-inside__lead">Cada color semántico está definido para claro, oscuro y alto contraste. Un atributo, <code class="luz-code-inline">data-theme</code>, los cambia: en toda la página o en una parte, como en cada caja de abajo.</p>
+</div>
+<!-- One box per mode (data-theme), each telling its own mode. The box is a picture of the
+mode: inert and hidden from the accessibility tree. Each box has a button (shown with
+JavaScript, landing.js) that checks the footer's radio of its mode: <luz-mode> applies
+it, remembers it and moves the cycle button -->
+<div class="landing-modes__figure">
+<div class="landing-cuts">
+<div class="landing-cut landing-cut--1" data-theme="light">
+<div class="landing-cut__picture" inert aria-hidden="true">
+<p class="landing-cut__label">Claro</p>
+<div class="landing-ui">
+<p class="landing-ui__title">Claro, para leer de día</p>
+<p class="landing-ui__text">Papel cálido y tinta marrón: el tono de Vejer. Es el modo por defecto: sin data-theme, la página se ve así.</p>
+</div>
+</div>
+<button class="landing-cut__apply" type="button" data-apply-mode="light" aria-pressed="false" hidden data-needs-js>
+<span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg></span>
+<span class="landing-cut__now">Haz clic para ver la página en modo claro</span>
+</button>
+</div>
+<div class="landing-cut landing-cut--2" data-theme="dark">
+<div class="landing-cut__picture" inert aria-hidden="true">
+<p class="landing-cut__label">Oscuro</p>
+<div class="landing-ui">
+<p class="landing-ui__title">Oscuro, para la noche</p>
+<p class="landing-ui__text">Fondos profundos y un texto claro que no deslumbra. Los mismos tokens con otros valores: ningún componente cambia una línea.</p>
+</div>
+</div>
+<button class="landing-cut__apply" type="button" data-apply-mode="dark" aria-pressed="false" hidden data-needs-js>
+<span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg></span>
+<span class="landing-cut__now">Haz clic para ver la página en modo oscuro</span>
+</button>
+</div>
+<div class="landing-cut landing-cut--3" data-theme="high-contrast">
+<div class="landing-cut__picture" inert aria-hidden="true">
+<p class="landing-cut__label">Alto contraste</p>
+<div class="landing-ui">
+<p class="landing-ui__title">Alto contraste, para ver cada borde</p>
+<p class="landing-ui__text">Negro sobre blanco y bordes marcados, para quien necesita más. No es el modo oscuro: es un modo propio, medido como los otros dos.</p>
+</div>
+</div>
+<button class="landing-cut__apply" type="button" data-apply-mode="high-contrast" aria-pressed="false" hidden data-needs-js>
+<span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></span>
+<span class="landing-cut__now">Haz clic para ver la página en alto contraste</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+a fractal noise that displaces their soft ovals -->
+<svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+<filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+<feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+<feDisplacementMap in="SourceGraphic" scale="120"/>
+</filter>
+</svg>
+</main>
+<footer class="luz-landing-footer">
+<div class="o-container o-container--inline o-grid">
+<div class="luz-landing-footer__brand">
+<p class="landing-brand"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg><strong class="u-sr-only">LUZ</strong> <a class="landing-brand__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0<span class="u-sr-only">, Registro de cambios</span></a> <span class="landing-brand__beta">beta</span></p>
+</div>
+<!-- The docs: one title over two lists, the guides, and under a small label the docs of
+each package (in the order they stack: the base, then the templates) -->
+<nav class="luz-landing-footer__col landing-foot-docs" aria-labelledby="footer-docs">
+<h2 class="luz-landing-footer__col-title" id="footer-docs">Documentación</h2>
+<ul>
+<li><a href="../es/docs/get-started/">Primeros pasos</a></li>
+<li><a href="../es/docs/site/">Patrones</a></li>
+<li><a href="../es/docs/accessibility/">Declaración de accesibilidad</a></li>
+</ul>
+<h3 class="landing-foot-label" id="footer-packages">Paquetes</h3>
+<ul aria-labelledby="footer-packages">
+<li><a href="../es/docs/tokens/">Tokens de diseño</a></li>
+<li><a href="../es/docs/components/">Componentes base</a></li>
+<li><a href="../es/docs/site/">Componentes de sitio</a></li>
+<li><a href="../es/docs/landing/">Plantilla de landing</a></li>
+<li><a href="../es/docs/cms/">Plantilla de blog</a></li>
+<li><a href="../es/docs/app/">Plantilla de aplicación</a></li>
+<li><a href="../es/docs/documentation/">Plantilla de documentación</a></li>
+</ul>
+</nav>
+<nav class="luz-landing-footer__col" aria-labelledby="footer-project">
+<h2 class="luz-landing-footer__col-title" id="footer-project">Proyecto</h2>
+<ul>
+<li><a href="https://github.com/nandovejer/luz">GitHub</a></li>
+<li><a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">Registro de cambios</a></li>
+<li><a href="https://github.com/nandovejer/luz/blob/main/CONTRIBUTING.md">Cómo contribuir</a></li>
+<li><a href="https://github.com/nandovejer/luz/blob/main/dev/BROWSER-REVIEWS.md">Revisiones en navegadores</a></li>
+</ul>
+</nav>
+</div>
+<div class="o-stack landing-foot">
+<luz-mode class="site-modes" remember by="clock">
+<fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+<legend class="luz-mode-switcher__label">Modo de color</legend>
+<button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+<span class="luz-mode-cycle__status" role="status"></span>
+<label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+<label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+<label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+</fieldset>
+</luz-mode>
+<p class="u-text-muted landing-legal">© 2024–2026 Fernando Muñoz. LUZ se publica con la <a href="https://github.com/nandovejer/luz/blob/main/LICENSE">licencia MIT</a>: úsalo, cámbialo y compártelo, también en trabajos comerciales, siempre que conserves el aviso. Todo lo que publica, fuentes e iconos incluidos, es MIT.</p>
+</div>
+</footer>
 </body>
 </html>

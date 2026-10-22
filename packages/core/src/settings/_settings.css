@@ -1,21 +1,15 @@
 /* ==========================================================================
    LUZ — 1. SETTINGS
-   No CSS output. Defines configuration custom properties
-   that do not live in tokens (layout, z-index scale, motion, etc.)
+   No CSS output. Defines the custom properties of core's own machinery,
+   which are not design decisions: the z-index scale, the layout widths and
+   the bar height, the text size of a form field and the scrollbar size.
+   The design decisions (colours, scales, typography roles, breakpoints and
+   motion, with the reduced-motion switch and the Arabic font switch) are in
+   @luz-ds/tokens (tokens.json).
    Requires: luz-tokens.css loaded first.
    ========================================================================== */
 
 :root {
-  /* Typography — serif for headings, sans for UI, mono for code */
-  --luz-font-heading: var(--luz-font-serif);
-  /* Running text: what <body> and everything that inherits from it uses.
-     The serif; controls, labels, tables and navigation keep
-     --luz-font-sans. A theme of your own can set it to the sans. */
-  --luz-font-body: var(--luz-font-serif);
-  /* Running text: a step above --luz-text-base, because ET Book's x-height
-     is small (17px at the default 16px base). It follows the base knob. A
-     theme that sets the sans can set it to var(--luz-text-base). */
-  --luz-text-body: calc(var(--luz-text-base) * 1.0625);
   /* Text inside form fields. Never below 16px on touch screens: iOS Safari
      zooms the page when a focused field is smaller. */
   --luz-text-control: var(--luz-text-md);
@@ -35,55 +29,8 @@
      Exact at the default text size only: a bar that wraps is taller. */
   --luz-bar-h: calc(var(--luz-control-lg) + var(--luz-space-xs) + 1px);
 
-  /* Breakpoints — using @media (max-width: var()) does not work in native CSS,
-     but they are documented here as a canonical reference for JS and preprocessors */
-  --luz-mq-sm: 640px; /* mobile */
-  --luz-mq-md: 768px; /* tablet / sidebar collapse */
-  --luz-mq-lg: 1024px; /* narrow desktop */
-  --luz-mq-xl: 1280px; /* standard desktop */
-  --luz-mq-xxl: 1536px; /* wide screen */
-  --luz-mq-xxxl: 1920px; /* full HD */
-
-  /* Motion — durations */
-  --luz-duration-instant: 0.05s;
-  --luz-duration-fast: 0.1s;
-  --luz-duration-base: 0.2s;
-  --luz-duration-slow: 0.3s;
-  --luz-duration-slower: 0.5s;
-  --luz-duration-lazy: 0.8s;
-
-  /* Motion — easing. LUZ's own curves: movement starts promptly and spends
-     most of its time settling, so it reads as calm rather than snappy. */
-  --luz-easing-standard: cubic-bezier(0.3, 0, 0.1, 1); /* moves within the page */
-  --luz-easing-enter: cubic-bezier(0.15, 0.6, 0.3, 1); /* arrives quickly, settles slowly */
-  --luz-easing-exit: cubic-bezier(0.5, 0, 0.85, 0.4); /* leaves without a long tail */
-  --luz-easing-spring: cubic-bezier(0.3, 1.35, 0.55, 1); /* a small overshoot */
-  --luz-easing-linear: linear;
-
   /* Scrollbar */
   --luz-scrollbar-size: 4px;
-}
-
-/* Arabic: ET Book has no Arabic letters, so running text and headings take
-   the system sans, which has them on every platform (no bundled font, red
-   line 13). Zero specificity: your own rule, outside LUZ's layers, still wins. */
-:where(:lang(ar)) {
-  --luz-font-heading: var(--luz-font-sans);
-  --luz-font-body: var(--luz-font-sans);
-}
-
-/* Reduced motion: one switch. Every transition and animation in core takes
-   its duration from these tokens, so zeroing them removes the motion
-   everywhere without !important. Never hard-code a duration in a component. */
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --luz-duration-instant: 0s;
-    --luz-duration-fast: 0s;
-    --luz-duration-base: 0s;
-    --luz-duration-slow: 0s;
-    --luz-duration-slower: 0s;
-    --luz-duration-lazy: 0s;
-  }
 }
 
 @media (max-width: 768px), (pointer: coarse) {

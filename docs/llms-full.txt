@@ -26,7 +26,7 @@ Names, classes and behaviour can still change before the stable release. Pin an 
 
 ### Level 1: tokens only
 
-CSS custom properties: the colour, space and type scales, and the colours of light, dark and high contrast. No other LUZ package is needed.
+CSS custom properties: the colour, space and type scales, the font roles, the breakpoints and the motion durations, and the colours of light, dark and high contrast. No other LUZ package is needed.
 
 `pnpm add @luz-ds/tokens`
 
@@ -286,7 +286,7 @@ A later layer wins over an earlier one, and any CSS of yours that is not in a la
 Core cascade layers
 ```text
 packages/core/src/
-  settings/_settings.css      luz.settings    motion, z-index, breakpoints
+  settings/_settings.css      luz.settings    z-index, layout widths, field text
   generic/_reset.css          luz.generic     the reset
   elements/*.css              luz.elements    bare HTML elements, zero specificity
   objects/_objects.css        luz.objects     layout: .o-*
@@ -389,7 +389,7 @@ One token of each kind
 - `--luz-space-md`: Scale step: One step of the space scale
 - `--luz-text-lg`: Scale step: One step of the type scale
 - `--luz-type-base`: Knob: The value a whole scale is worked out from. Change it to resize every step
-- `--luz-z-modal`: Setting: A value core uses to lay out the page: stacking order, motion and breakpoints
+- `--luz-z-modal`: Setting: A value core uses to lay out the page: stacking order and layout widths
 
 - LUZ's own components read semantic tokens and scale steps. They never read a primitive or a knob.
 - You can set any token in your own CSS. [Make it yours](https://nandovejer.github.io/luz/docs/get-started/make-it-yours/) shows how.
@@ -1054,7 +1054,7 @@ Core and the other packages put their rules in their own layers inside `luz`. Th
 
 - `luz.tokens`: tokens: The `--luz-*` custom properties
 - `luz.themes`: core: Your own looks (only custom properties; [make one](https://nandovejer.github.io/luz/docs/tokens/themes/)). LUZ ships none: its default look is in `luz.tokens`
-- `luz.settings`: core: Motion, z-index and breakpoint settings
+- `luz.settings`: core: Z-index, layout and field text settings
 - `luz.generic`: core: The reset
 - `luz.elements`: core: Bare HTML elements, at specificity 0
 - `luz.objects`: core: Layout objects: `.o-*`
@@ -1379,7 +1379,7 @@ CSS custom properties for every colour, space, size and type value. Use the sema
 
 - **Primitives** hold raw values: `--luz-blue-60`, `--luz-space-md`. They are the same in every mode.
 - **Semantic tokens** give a colour a job: `--luz-text-primary`, `--luz-surface-page`. Each mode points them at different primitives.
-- Space, size, radius, shadow and type scales are primitives that components use directly: they do not change with the mode.
+- Space, size, radius, shadow and type scales, font roles, breakpoints and motion are primitives that components use directly: they do not change with the mode.
 
 Where the tokens come from
 ```text
@@ -1470,7 +1470,7 @@ Two knobs size the whole scale. Set them on `:root`, in rem, in CSS of your own;
 
 ### Font roles
 
-These four ship with core, not with tokens.
+The first three ship with tokens, with the switch to the sans on an element marked `lang="ar"`; `--luz-text-control` ships with core.
 
 ### Type scale and minimum sizes
 
@@ -1572,13 +1572,13 @@ The values are not repeated here: the primitives are in `tokens.json` of @luz-ds
 
 ## Motion
 URL: https://nandovejer.github.io/luz/docs/tokens/motion/
-Files: settings/_settings.css
+Files: tokens.json → duration, tokens.json → easing
 
-The durations and easings of every transition, which drop to zero when the reader asks for reduced motion. Ships with @luz-ds/core.
+The durations and easings of every transition, which drop to zero when the reader asks for reduced motion. Ships with @luz-ds/tokens.
 
 Take every duration from a token. Under `prefers-reduced-motion: reduce` all the durations become `0s`, so motion stops everywhere with no extra CSS.
 
-Ships with core, not with tokens.
+Ships with tokens, with the switch to `0s` under reduced motion, so a page with tokens alone loses its motion too.
 
 A transition with motion tokens
 ```css
@@ -1609,11 +1609,11 @@ The values are not repeated here: the primitives are in `tokens.json` of @luz-ds
 
 ## Layout and breakpoints
 URL: https://nandovejer.github.io/luz/docs/tokens/layout/
-Files: settings/_settings.css
+Files: settings/_settings.css, tokens.json → breakpoint
 
-How wide content gets, and where the layout changes. Ships with @luz-ds/core.
+How wide content gets, and where the layout changes. Widths ship with @luz-ds/core, breakpoints with @luz-ds/tokens.
 
-Ships with core, not with tokens.
+The widths ship with core; the breakpoints ship with tokens.
 
 - Breakpoints are reference values: media queries cannot read custom properties, so write the number, such as `@media (max-width: 768px)`.
 - Safari on a Mac with always-visible scrollbars does not count the scrollbar in width media queries (WebKit bug 52653), so a breakpoint is crossed when the window is up to about 15 px wider than its value.

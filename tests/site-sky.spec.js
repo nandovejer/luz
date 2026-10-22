@@ -7,8 +7,9 @@
  *  - The class `site-sky` goes on the host: the home's `<main>`, the docs' `<body>`.
  *    Its `::before` and `::after` are two fixed layers, 200vh tall, behind the
  *    content (z-index -1), decorative (no text, `pointer-events: none`).
- *  - The partial `sky-filter` (an SVG with `<filter id="site-sky-clouds">`) is in
- *    the page: at the end of the home's `<main>` and in the docs layout.
+ *  - The partial `sky-filter` (an SVG with `<filter id="site-sky-clouds">`, the
+ *    filter the clouds used) is still in the page: at the end of the home's
+ *    `<main>` and in the docs layout.
  *  - Dark lights (dawn, dusk, night): stars across the WHOLE page, not a strip at
  *    the top; the layers are fixed to the window and slide up with the scroll,
  *    slower than the page (one layer at 0.3 of its speed, the other at 0.15),
@@ -17,12 +18,11 @@
  *    clock (WCAG 2.2.2, there is no pause control there). On the home the layers
  *    are fully opaque; in the docs a star may be at most 15% of the text colour
  *    (reference.css), so text keeps 4.5:1 over it.
- *  - Light lights (morning, afternoon, sunset): clouds instead of stars, the same
- *    two layers with box-shadows, `filter: url(#site-sky-clouds)`, bluish, near
- *    layer (::after) at opacity 0.85 and far (::before) at 0.7, drifting with the
- *    scroll, half the size at 640px and under. No stars in light, no clouds in dark.
+ *  - Light lights (morning, afternoon, sunset): nothing. The clouds went with the
+ *    home's redesign: by day the page itself is the light, and both layers are
+ *    `display: none`. No stars in light.
  *  - Never in high contrast or forced colours; under prefers-reduced-motion the
- *    sky is drawn and nothing moves.
+ *    stars are drawn and nothing moves.
  *
  * The tests set the light with the clock (no stored choice), as
  * tests/helpers/site-lights.js does, and read the computed style of the layers.
@@ -107,7 +107,7 @@ const switchOff = '.site-sky::before, .site-sky::after { display: none !importan
 
 for (const [name, route, host] of PAGES) {
   test.describe(`the sky on the ${name} (${route})`, () => {
-    test(`${host} carries site-sky, and the page includes the cloud filter`, async ({ page }) => {
+    test(`${host} carries site-sky, and the page includes the filter of the partial`, async ({ page }) => {
       await open(page, route, 'night');
       await expect(page.locator('.site-sky')).toHaveCount(1);
       await expect(page.locator(`${host}.site-sky`)).toHaveCount(1);
@@ -209,80 +209,23 @@ for (const [name, route, host] of PAGES) {
     });
 
     for (const [light] of LIGHT) {
-      test.describe(`${light}: clouds`, () => {
-        test('the same two layers draw clouds (box-shadows through the filter), not stars', async ({ page }) => {
+      test.describe(`${light}: nothing`, () => {
+        test('by day the sky draws nothing: both layers are display none, with no stars and no clouds', async ({ page }) => {
           await open(page, route, light);
-          await expect.poll(async () => (await layers(page, host))?.every((l) => l.opacity > 0)).toBe(true);
-          const ls = /** @type {NonNullable<Awaited<ReturnType<typeof layers>>>} */ (await layers(page, host));
-          for (const l of ls) {
-            expect(l.content).toBe('""');
-            expect(l.position).toBe('fixed');
-            expect(l.zIndex).toBe('-1');
-            expect(l.events).toBe('none');
-            expect(l.stars, 'no stars in the light').toBe(false);
-            expect(l.shadow, 'the clouds are box-shadows').not.toBe('none');
-            expect(l.filter, 'frayed by the filter of the partial').toContain('#site-sky-clouds');
-            expect(l.animation.includes('landing-twinkle'), 'clouds do not twinkle').toBe(false);
-          }
-          // far (::before) at 0.7, near (::after) at 0.85
-          expect(ls[0].opacity).toBeCloseTo(0.7, 2);
-          expect(ls[1].opacity).toBeCloseTo(0.85, 2);
-        });
-
-        test('the clouds are bluish: the colour of the shadows leans to blue', async ({ page }) => {
-          await open(page, route, light);
-          const leans = await page.evaluate((selector) => {
-            const el = /** @type {Element} */ (document.querySelector(selector));
-            const probe = new OffscreenCanvas(1, 1).getContext('2d', { willReadFrequently: true });
-            const out = [];
-            for (const pseudo of ['::before', '::after']) {
-              const colours = new Set(getComputedStyle(el, pseudo).boxShadow.match(/(?:rgba?|oklab|color)\([^)]*\)/g) ?? []);
-              for (const css of colours) {
-                probe.clearRect(0, 0, 1, 1);
-                probe.fillStyle = css;
-                probe.fillRect(0, 0, 1, 1);
-                const [r, , b, a] = probe.getImageData(0, 0, 1, 1).data;
-                if (a > 0) out.push(b - r);
-              }
-            }
-            return out;
-          }, host);
-          expect(leans.length).toBeGreaterThan(0);
-          expect(leans.every((d) => d >= 0), `no shadow leans to red (blue minus red: ${leans})`).toBe(true);
-          expect(Math.max(...leans), 'at least one of them is plainly blue').toBeGreaterThan(8);
-        });
-
-        test('the clouds rise with the scroll: both layers, the near one (::after) faster', async ({ page }) => {
-          await open(page, route, light);
-          expect((await layers(page, host))?.map((l) => l.translateY), 'still at the top of the page').toEqual([0, 0]);
-          const range = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
-          await scrollToY(page, range);
-          await expect.poll(async () => (await layers(page, host))?.[1].translateY).toBeLessThan(-5);
-          const [far, near] = /** @type {NonNullable<Awaited<ReturnType<typeof layers>>>} */ (await layers(page, host));
-          expect(far.translateY, 'the far layer rises too').toBeLessThan(0);
-          expect(near.translateY, 'the near layer rises further').toBeLessThan(far.translateY);
-        });
-
-        test('the clouds are half the size at 640px and under', async ({ page }) => {
-          await open(page, route, light);
-          const wide = /** @type {NonNullable<Awaited<ReturnType<typeof layers>>>} */ (await layers(page, host));
-          await page.setViewportSize({ width: 641, height: 800 });
-          const edge = /** @type {NonNullable<Awaited<ReturnType<typeof layers>>>} */ (await layers(page, host));
-          expect(edge[0].width, 'at 641px they are as large as on a desktop').toBeCloseTo(wide[0].width, 0);
-          await page.setViewportSize({ width: 640, height: 800 });
-          const narrow = /** @type {NonNullable<Awaited<ReturnType<typeof layers>>>} */ (await layers(page, host));
-          for (const i of [0, 1]) {
-            expect(narrow[i].width, `layer ${i} is at most half as wide`).toBeLessThanOrEqual(wide[i].width / 2 + 0.5);
-            expect(narrow[i].height, `layer ${i} is at most half as tall`).toBeLessThanOrEqual(wide[i].height / 2 + 0.5);
-            expect(narrow[i].width).toBeGreaterThan(0);
+          await expect.poll(async () => (await layers(page, host))?.every((l) => l.display === 'none')).toBe(true);
+          for (const l of /** @type {NonNullable<Awaited<ReturnType<typeof layers>>>} */ (await layers(page, host))) {
+            expect(drawn(l), 'nothing is drawn').toBe(false);
+            expect(l.shadow, 'no clouds').toBe('none');
+            expect(l.filter, 'no cloud filter').toBe('none');
+            expect(l.animation, 'no animation').toBe('none');
           }
         });
       });
     }
 
-    test('no stars in the light, no clouds in the dark: switching the mode swaps the sky', async ({ page }) => {
+    test('switching the mode swaps the sky: nothing by day, stars at night', async ({ page }) => {
       await open(page, route, 'afternoon');
-      await expect.poll(async () => (await layers(page, host))?.[0].shadow).not.toBe('none');
+      await expect.poll(async () => (await layers(page, host))?.map((l) => l.display)).toEqual(['none', 'none']);
       await page.evaluate(() => {
         document.documentElement.setAttribute('data-light', 'night');
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -314,7 +257,7 @@ for (const [name, route, host] of PAGES) {
       }
     });
 
-    for (const light of ['night', 'afternoon']) {
+    for (const light of ['night']) {
       test(`reduced motion (${light}): the sky is drawn and nothing moves`, async ({ page }) => {
         await page.emulateMedia({ reducedMotion: 'reduce' });
         await open(page, route, light);
@@ -333,15 +276,16 @@ for (const [name, route, host] of PAGES) {
       test(`${light}: the sky never gets in the way (no sideways scroll at 320px)`, async ({ page }) => {
         await page.setViewportSize({ width: 320, height: 700 });
         await open(page, route, light);
-        await expect.poll(async () => (await layers(page, host))?.every(drawn)).toBe(true);
+        // By day nothing is drawn: there is nothing that could widen the page
+        await expect.poll(async () => (await layers(page, host))?.every(drawn)).toBe(light === 'night');
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
       });
     }
 
     for (const light of ['night', 'afternoon']) {
-      test(`axe: no serious or critical violation under the ${light} sky`, async ({ page }) => {
+      test(`axe: no serious or critical violation in the ${light} light${light === 'night' ? ', under its stars' : ', with no sky'}`, async ({ page }) => {
         await open(page, route, light);
-        await expect.poll(async () => (await layers(page, host))?.every(drawn)).toBe(true);
+        await expect.poll(async () => (await layers(page, host))?.every(drawn)).toBe(light === 'night');
         await faded(page);
         const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
         const blocking = violations.filter((v) => ['serious', 'critical'].includes(v.impact ?? ''));

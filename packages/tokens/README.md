@@ -48,7 +48,7 @@ Exit code `0` when every pair passes, `1` when one fails or a color could not be
 
 ## What's included
 
-- **Primitives** (Layer 1): Color scales, spacing, typography, shadows, radius tokens — generated from `tokens.json`. The colour scales are LUZ's own palette, computed in OKLCH (one lightness curve for every family, so a step number means the same contrast in every colour)
+- **Primitives** (Layer 1): Color scales, spacing, typography, shadows, radius tokens, the font roles (`--luz-font-heading`, `--luz-font-body`, `--luz-text-body`), breakpoints (`--luz-mq-*`) and motion (`--luz-duration-*`, `--luz-easing-*`) — generated from `tokens.json`. Under `prefers-reduced-motion: reduce` every duration is `0s`, so a page with tokens alone loses its motion too. The colour scales are LUZ's own palette, computed in OKLCH (one lightness curve for every family, so a step number means the same contrast in every colour)
 - **Semantic tokens** (Layer 2): the default look, Vejer, in the light, dark and high-contrast color modes — source in `src/semantic.css`
 - **One self-hosted font**, MIT licensed: ET Book (serif, for running text and headings), included in `luz-tokens.css`
 - **System font stacks** for sans and mono, so controls, labels, tables and code download nothing
@@ -108,7 +108,7 @@ ET Book ships roman, italic, semi-bold and bold. Sans and mono are system stacks
 - `--luz-font-sans`: `system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`
 - `--luz-font-mono`: `ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace`
 
-`@luz-ds/core` ships no fonts. It sets the serif for running text through `--luz-font-body`, using this ET Book.
+`@luz-ds/core` ships no fonts. The serif for running text and headings is set here, through `--luz-font-body` and `--luz-font-heading`, using this ET Book; on an element marked `lang="ar"` both take the sans, since ET Book has no Arabic letters.
 
 <!-- luz:ai-agents:start -->
 ## For AI agents

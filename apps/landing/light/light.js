@@ -2,8 +2,9 @@
  * <home-light>: the light of the visitor's sky on the home page. It draws the
  * sun and the moon where the visitor is, from the time zone of the browser's
  * clock (Intl, never the network or GPS), over a globe (<home-globe>,
- * globe.js). A line under the globe opens a bar: the hour in large type,
- * the place and the light under it, and a slider to scrub the day. Letting
+ * globe.js). A line under the globe opens a bar (on a desktop it stays
+ * open): the place and the light, the hour in large type under them, and a
+ * slider to scrub the day. Letting
  * the slider go pins its hour (<luz-mode>.pin()): the page keeps that light,
  * on a reload too, until the footer's Light, Dark or High contrast is
  * chosen; a short "Saved" notice says so. Only the
@@ -29,6 +30,8 @@
  */
 
 const DEG = Math.PI / 180;
+// A desktop with a pointer that hovers: the bar is always there, resting faint until the pointer or the focus comes (light.css)
+const RESTING = "(min-width: 1024px) and (hover: hover)";
 // A place for each common time zone, latitude and longitude; another zone gets its offset's meridian at 30°
 const PLACES = {
   "Europe/Madrid": [40.42, -3.7], "Atlantic/Canary": [28.1, -15.4], "Europe/Lisbon": [38.72, -9.14],
@@ -165,6 +168,14 @@ class LuzLight extends HTMLElement {
       { signal },
     );
     document.addEventListener("visibilitychange", () => !document.hidden && this._tick(), { signal });
+    // On a desktop the bar stays open; on a narrow screen it opens from its line
+    this._wide = window.matchMedia(RESTING);
+    const rest = () => {
+      if (this._wide.matches) this._show();
+      else this.close();
+    };
+    this._wide.addEventListener("change", rest, { signal });
+    rest();
   }
 
   disconnectedCallback() {
@@ -181,13 +192,20 @@ class LuzLight extends HTMLElement {
   }
 
   open() {
+    this._show();
+    // The bar opens inside the window: a small screen scrolls just enough to show it all
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    this._bar.scrollIntoView({ block: "nearest", behavior: still ? "auto" : "smooth" });
+  }
+
+  _show() {
     this._bar.hidden = false;
     this._line.setAttribute("aria-expanded", "true");
   }
 
-  /** Close the bar; a pinned hour stays. */
+  /** Close the bar; a pinned hour stays. On a desktop the bar stays. */
   close() {
-    if (this._bar.hidden) return;
+    if (this._bar.hidden || this._wide?.matches) return;
     this._bar.hidden = true;
     this._line.setAttribute("aria-expanded", "false");
   }
@@ -228,7 +246,7 @@ class LuzLight extends HTMLElement {
     this._saved = h("p", { class: "home-light__saved", role: "status" });
     this._time = h("p", { class: "home-light__time" });
     this._where = h("p", { class: "home-light__where" });
-    bar.append(this._saved, this._time, this._where, day);
+    bar.append(this._saved, this._where, this._time, day);
     this._line = h("button", { type: "button", class: "home-light__line", "aria-expanded": "false", "aria-controls": bar.id });
     // The phrase alone; the light and the hour are in the bar
     this._q = h("span", { class: "home-light__q" });

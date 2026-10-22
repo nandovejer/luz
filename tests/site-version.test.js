@@ -1,7 +1,7 @@
 /**
  * No version is typed by hand in the header or the footers of the site
- * (F7 decision of the accessibility review): the header's tag and the docs
- * footer say what the home footer says, the `version` of
+ * (F7 decision of the accessibility review): the docs footer
+ * says what the home footer says, the `version` of
  * packages/core/package.json, through `{{version}}` (scripts/docs-site/site.js).
  * A literal `v0.1.0` in a partial, a layout or the home template goes stale at
  * the next release. The pages as the browser shows them are checked in
@@ -32,9 +32,10 @@ describe("no version is typed by hand in the partials, the layouts and the home 
     });
   }
 
-  it("the header and the docs footer use {{version}}", () => {
-    for (const file of ["apps/site/_partials/header.html", "apps/docs/_partials/footer-links.html"]) {
-      expect(readFileSync(join(ROOT, file), "utf-8").includes("{{version}}"), `${file} writes {{version}}`).toBe(true);
+  it("the docs footer and the home's footer use {{version}}; the header shows no version", () => {
+    for (const file of ["apps/docs/_partials/footer-links.html", "apps/landing/index.html"]) {
+      expect(readFileSync(join(ROOT, file), "utf-8").includes("v{{version}}"), `${file} writes v{{version}}`).toBe(true);
     }
+    expect(readFileSync(join(ROOT, "apps/site/_partials/header.html"), "utf-8"), "the header").not.toContain("{{version}}");
   });
 });

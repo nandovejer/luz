@@ -78,7 +78,8 @@ describe("RL-1: no runtime dependency", () => {
 /* ---- RL-8: one switch for reduced motion ---------------------------------- */
 
 describe("RL-8: every duration token is zeroed under prefers-reduced-motion", () => {
-  const settings = read("packages/core/src/settings/_settings.css").replace(/\/\*[\s\S]*?\*\//g, "");
+  // The durations and the switch are tokens (packages/tokens/tokens.json); the built file is what a page loads
+  const settings = read("packages/tokens/dist/luz-tokens.css").replace(/\/\*[\s\S]*?\*\//g, "");
   const reduce = settings.match(/@media \(prefers-reduced-motion: reduce\)\s*\{\s*:root\s*\{([^}]*)\}/)?.[1] ?? "";
   const declared = [...new Set([...settings.matchAll(/(--luz-duration-[\w-]+)\s*:/g)].map((m) => m[1]))];
 
@@ -87,13 +88,18 @@ describe("RL-8: every duration token is zeroed under prefers-reduced-motion", ()
     expect(reduce).not.toBe("");
   });
 
+  it("core's settings keep no duration and no reduce block of their own", () => {
+    const own = read("packages/core/src/settings/_settings.css").replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(own).not.toMatch(/--luz-duration-[\w-]+\s*:/);
+    expect(own).not.toMatch(/prefers-reduced-motion/);
+  });
+
   it.each(declared)("%s is 0 in the reduce block", (token) => {
     expect(reduce).toMatch(new RegExp(`${token}\\s*:\\s*0m?s\\s*;`));
   });
 
   it("no other file redefines a duration token (it would escape the switch)", () => {
     const offenders = filesIn(["packages", "apps"], [".css", ".html"])
-      .filter((p) => !p.endsWith("_settings.css"))
       .filter((p) => /--luz-duration-[\w-]+\s*:/.test(readFileSync(p, "utf-8")))
       .map(rel);
     expect(offenders).toEqual([]);
@@ -272,7 +278,9 @@ describe("Pages site: the not-found page (docs-redesign SEC-MISC-3/4/5)", () => 
     // No <base>: it would send the skip link's #main-content to the home page
     expect(html).not.toMatch(/<base\b/);
     const urls = [...html.matchAll(/(?:href|src|action|poster)="([^"]*)"/g)].map((m) => m[1]);
-    for (const url of urls) expect(url.startsWith(base) || url.startsWith("#") || url.startsWith("https://github.com/"), url).toBe(true);
+    // The owner's one deliberate link out of the 404 page (its rel and target are checked in docs-site.test.js)
+    const NOT_FOUND_VIDEO = "https://youtu.be/D4eJx-0g3Do";
+    for (const url of urls) expect(url.startsWith(base) || url.startsWith("#") || url.startsWith("https://github.com/") || url === NOT_FOUND_VIDEO, url).toBe(true);
     // Nothing else that loads or sends to a URL, and no path that climbs out of the base
     expect(html).not.toMatch(/\s(srcset|imagesrcset|data|formaction|ping)="|url\(|@import/i);
     expect(html).not.toMatch(/["'(\s]\.\.?\//);

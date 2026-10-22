@@ -31,12 +31,17 @@ No framework. No build step for consumers.
 LUZ (formerly CAI) is built with plain CSS, ES modules and native browser APIs. Adopt only the tokens, add the components, or take whole-page patterns: the three layers are independent packages that stack in one direction. Packages for one kind of site build on top of them.
 
 ```text
-@luz-ds/tokens  ->  @luz-ds/core  ->  @luz-ds/site  ->  @luz-ds/landing
-   standalone        needs tokens      needs core +   |->  @luz-ds/cms
-                                       tokens         |->  @luz-ds/app
-                                                      \->  @luz-ds/docs
-                                                          each needs core and
-                                                          tokens; site is optional
+@luz-ds/tokens
+      │
+      ▼
+@luz-ds/core ─────────────► @luz-ds/site
+      │                          ┆
+      ├──► @luz-ds/landing ◄┄┄┄┄┄┤
+      ├──► @luz-ds/cms     ◄┄┄┄┄┄┤
+      ├──► @luz-ds/app     ◄┄┄┄┄┄┤
+      └──► @luz-ds/docs    ◄┄┄┄┄┄┘
+
+A ──► B  B needs A        A ┄┄► B  B may use A
 ```
 
 The name stands for Light, Usable & Zero-dependency: light in weight (plain CSS and ES modules, nothing to build for the people who use it), usable by everyone (native HTML, three color modes, tested for accessibility), and with zero runtime dependencies.
@@ -336,7 +341,7 @@ pnpm tokens:build
 pnpm core:build
 ```
 
-This regenerates `dist/luz.css`, `dist/base.css` (settings + reset + elements, the prerequisite for per-component CSS), `dist/components/*.css`, `dist/classless.css`, `dist/print.css`, the JS modules, the lazy `midi.js` and `table-sort.js` chunks and `dist/themes/*.css`. Core settings (z-index scale, motion, breakpoints, `--luz-font-heading`) ship with core, not with tokens.
+This regenerates `dist/luz.css`, `dist/base.css` (settings + reset + elements, the prerequisite for per-component CSS), `dist/components/*.css`, `dist/classless.css`, `dist/print.css`, the JS modules, the lazy `midi.js` and `table-sort.js` chunks and `dist/themes/*.css`. Core settings (z-index scale, layout widths, `--luz-text-control`) ship with core; motion, breakpoints and the font roles (`--luz-font-heading`, `--luz-font-body`, `--luz-text-body`) ship with tokens.
 
 **Site.** `@luz-ds/site` holds page patterns that are too opinionated for core. It is CSS first; `dist/site.js` defines the search element and warns when core is not loaded.
 

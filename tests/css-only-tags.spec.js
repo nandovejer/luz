@@ -51,24 +51,40 @@ test.describe('what the tags give, with or without JavaScript', () => {
     expect(display).toEqual({ banner: 'block', submenu: 'contents' });
   });
 
-  test('--luz-lang-switch-top defaults to --luz-bar-h: the list opens under a one-row bar', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto(FIXTURE);
-    await page.getByRole('button', { name: 'Language: English' }).click();
-    const [top, bar] = await page.evaluate(() => {
-      const probe = Object.assign(document.createElement('div'), { style: 'position:absolute;visibility:hidden;block-size:var(--luz-bar-h)' });
+  // Where the browser has anchor positioning, the list hangs under its button (its top is the button's bottom plus --luz-space-xs) and
+  // --luz-lang-switch-top is not read; elsewhere the list sits at --luz-lang-switch-top from the top of the window
+  const anchored = (page) => page.evaluate(() => globalThis.CSS.supports('position-anchor', '--luz-lang-switch'));
+  const length = (page, value) =>
+    page.evaluate((v) => {
+      const probe = Object.assign(document.createElement('div'), { style: `position:absolute;visibility:hidden;block-size:${v}` });
       document.body.append(probe);
       const h = probe.getBoundingClientRect().height;
       probe.remove();
-      return [document.getElementById('lang-menu').getBoundingClientRect().top, h];
-    });
-    expect(bar).toBeGreaterThan(0);
-    expect(Math.abs(top - bar)).toBeLessThanOrEqual(1);
-  });
+      return h;
+    }, value);
 
-  test('--luz-lang-switch-top set on the tag moves the list; the old property does nothing', async ({ page }) => {
+  test('the list opens under the button where anchor positioning exists, and under a one-row bar (--luz-bar-h) where it does not', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(FIXTURE);
+    const button = page.getByRole('button', { name: 'Language: English' });
+    await button.click();
+    const top = await page.locator('#lang-menu').evaluate((el) => el.getBoundingClientRect().top);
+    if (await anchored(page)) {
+      const bottom = await button.evaluate((el) => el.getBoundingClientRect().bottom);
+      const gap = await length(page, 'var(--luz-space-xs)');
+      expect(gap).toBeGreaterThan(0);
+      expect(Math.abs(top - (bottom + gap))).toBeLessThanOrEqual(1);
+    } else {
+      const bar = await length(page, 'var(--luz-bar-h)');
+      expect(bar).toBeGreaterThan(0);
+      expect(Math.abs(top - bar)).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test('--luz-lang-switch-top set on the tag moves the list where there is no anchor positioning; the old property does nothing', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(FIXTURE);
+    test.skip(await anchored(page), 'with anchor positioning the list hangs under the button and --luz-lang-switch-top is not read');
     await page.evaluate(() => {
       const host = document.getElementById('lang');
       host.style.setProperty('--luz-lang-switch-top', '90px');
@@ -76,5 +92,13 @@ test.describe('what the tags give, with or without JavaScript', () => {
     });
     await page.getByRole('button', { name: 'Language: English' }).click();
     expect(await page.locator('#lang-menu').evaluate((el) => el.getBoundingClientRect().top)).toBe(90);
+  });
+
+  test('the old property --luz-site-lang-switcher-top does nothing', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(FIXTURE);
+    await page.evaluate(() => document.getElementById('lang').style.setProperty('--luz-site-lang-switcher-top', '400px'));
+    await page.getByRole('button', { name: 'Language: English' }).click();
+    expect(await page.locator('#lang-menu').evaluate((el) => el.getBoundingClientRect().top)).toBeLessThan(300);
   });
 });

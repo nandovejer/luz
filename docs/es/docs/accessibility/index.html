@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; object-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Declaración de accesibilidad – Accesibilidad – Documentación de LUZ</title>
+  <meta name="description" content="LUZ aspira a cumplir WCAG 2.2 nivel AA. Aquí se explica qué se comprueba en cada cambio, qué no se ha probado y cuáles son los problemas conocidos. Última revisión: 17 de octubre de 2026.">
+  <link rel="canonical"  href="https://nandovejer.github.io/luz/es/docs/accessibility/">
+  <link rel="alternate"  hreflang="en" href="https://nandovejer.github.io/luz/docs/accessibility/">
+  <link rel="alternate"  hreflang="es" href="https://nandovejer.github.io/luz/es/docs/accessibility/">
+  <link rel="alternate"  hreflang="x-default" href="https://nandovejer.github.io/luz/docs/accessibility/">
+  <link rel="icon" href="../../../assets/favicon-CLiQtzsm.ico" sizes="32x32">
+  <link rel="icon" href="../../../assets/favicon-Cnbu5NPQ.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../../assets/apple-touch-icon-QPTLZskv.png">
+  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
+  <script src="../../../boot.js" ></script>
+  <script type="module" crossorigin src="../../../assets/header-dmAN8MCP.js"></script>
+  <script type="module" crossorigin src="../../../assets/reference-2wBTKmwv.js"></script>
+  <link rel="stylesheet" crossorigin href="../../../assets/header-DuVRvlf9.css">
+  <link rel="stylesheet" crossorigin href="../../../assets/reference-CFwLTcYL.css">
+  <link rel="stylesheet" crossorigin href="../../../assets/header-BsMkM9X4.css">
+  <link rel="stylesheet" crossorigin href="../../../assets/reference-siYsUwmw.css">
+</head>
+<body class="o-shell luz-docs-shell docs-page site-sky">
+  <a class="luz-skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="../../../es/"><span class="site-header__mark"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg></span><span class="u-sr-only">LUZ</span></a>
+      <nav class="site-header__nav" aria-label="Sitio">
+        <a href="../../../es/docs/" aria-current="true"><svg class="site-header__nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg>Documentación</a>
+      </nav>
+      <a class="site-header__github" href="https://github.com/nandovejer/luz"><svg class="site-header__github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="site-header__github-label">GitHub</span></a>
+      <luz-search>
+        <a class="luz-search__fallback site-header__az" href="../../../es/docs/a-z/" data-luz-search-fallback>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__fallback-label"><span class="u-sr-only">Índice </span>A–Z</span>
+        </a>
+        <button class="luz-search__trigger luz-search__trigger--compact site-header__search" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" title="Buscar en la documentación (Ctrl K)" hidden>
+          <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="luz-search__trigger-label">Buscar</span>
+          <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
+        </button>
+        <dialog class="luz-modal luz-search" id="luz-search" aria-labelledby="luz-search-title"
+                data-luz-search-src="../../../es/docs/search-index.json"
+                data-luz-label-results="{n} resultados"
+                data-luz-label-result="1 resultado"
+                data-luz-label-capped="{shown} de {n} resultados. Escribe más para acotar."
+                data-luz-label-none="No hay resultados para «{query}». Revisa la ortografía o prueba con una palabra más corta."
+                data-luz-label-loading="Cargando el índice de búsqueda…"
+                data-luz-label-error="La búsqueda no está disponible ahora mismo.">
+          <search class="luz-search__body">
+            <div class="luz-search__head">
+              <h2 class="luz-search__title" id="luz-search-title"><label for="luz-search-q">Buscar en la documentación (en inglés)</label></h2>
+              <form method="dialog"><button class="luz-btn luz-btn--ghost luz-search__close" aria-label="Cerrar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></form>
+            </div>
+            <div class="luz-search__field">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input class="luz-input" id="luz-search-q" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" autofocus aria-describedby="luz-search-hint">
+            </div>
+            <p class="luz-field__helper" id="luz-search-hint">Los resultados cambian mientras escribes. Muévete por ellos con las flechas.</p>
+            <p class="luz-search__status" role="status"></p>
+            <div class="luz-search__results" data-luz-search-results>
+              <div hidden><h3>Páginas</h3><ul data-luz-search-list="pages" lang="en"></ul></div>
+              <div hidden><h3>Secciones</h3><ul data-luz-search-list="sections" lang="en"></ul></div>
+              <div hidden><h3>Elementos HTML</h3><ul data-luz-search-list="elements" lang="en"></ul></div>
+            </div>
+            <p class="luz-search__foot">¿No lo encuentras? <a href="../../../es/docs/a-z/">Consulta el índice de la A a la Z</a></p>
+          </search>
+        </dialog>
+      </luz-search>
+      <luz-lang-switch>
+    <button class="luz-lang-switch__button" type="button" popovertarget="luz-lang-menu"><svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><span class="u-sr-only">Idioma: </span><span class="luz-lang-switch__name">Español</span></button>
+    <nav class="luz-lang-switch__menu" id="luz-lang-menu" popover aria-labelledby="luz-lang-title">
+      <p class="luz-lang-switch__title" id="luz-lang-title">Idioma</p>
+      <ul class="luz-lang-switch__list">
+        <li><a class="luz-lang-switch__link" href="../../../docs/accessibility/" hreflang="en" lang="en">English</a></li>
+        <li><a class="luz-lang-switch__link" href="../../../es/docs/accessibility/" hreflang="es" lang="es" aria-current="page">Español</a></li>
+      </ul>
+    </nav>
+  </luz-lang-switch>
+      <button class="luz-nav-toggle site-header__menu" type="button" aria-label="Menú" popovertarget="page-nav">
+        <svg class="site-header__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="site-header__menu-bar" x="3" y="5" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="11" width="18" height="2" rx="1"/>
+          <rect class="site-header__menu-bar" x="3" y="17" width="18" height="2" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="luz-sidebar page-nav luz-docs-nav" id="page-nav" popover aria-label="Documentación" tabindex="-1">
+    <div class="luz-sidebar__section page-nav__site">
+      <ul class="page-nav__row" aria-label="Sitio">
+        <li><a class="luz-sidebar__link" href="../../../es/docs/" aria-current="true">Documentación</a></li>
+        <li><a class="luz-sidebar__link" href="https://github.com/nandovejer/luz">GitHub</a></li>
+      </ul>
+    </div>
+    <ul class="docs-nav">
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../es/docs/get-started/">Primeros pasos</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/snippet/">Elige tu fragmento</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/structure/">Cómo se organiza LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/how-to-read/">Cómo leer LUZ</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/make-it-yours/">Hazlo tuyo</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/bundler/">Con un empaquetador o framework</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/javascript/">Módulos de JavaScript</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/layers/">Capas de cascada</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/print/">Estilos de impresión</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/ai/">Trabajar con IA</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/classless/">Estilos sin clases</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/get-started/how-luz-is-built/">Cómo se construye LUZ</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../es/docs/tokens/">Tokens</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/color/">Color</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/spacing/">Espaciado y tamaños</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/typography/">Tipografía</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/modes/">Modos de color y temas</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/radius/">Radio</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/shadows/">Sombras</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/motion/">Movimiento</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/layers/">Capas</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/layout/">Maquetación y puntos de ruptura</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/palette/">Paleta de colores</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/figma/">Tokens en Figma</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/contrast/">Comprobador de contraste</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/tokens/themes/">Crea tu propio tema</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../es/docs/components/">Componentes</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/accordion/">Acordeón</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/alert/">Alerta</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/avatar/">Avatar</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/band/">Franja</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/breadcrumb/">Migas de pan</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/button/">Botón</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/card/">Tarjeta</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/code/">Código</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/mode-switcher/">Selector de modo de color</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/copy-button/">Botón para copiar</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/dropdown/">Desplegable</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/figure/">Figura</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/form/">Campos de formulario</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/icon-grid/">Cuadrícula de iconos</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/image/">Imagen</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/meta/">Línea de metadatos</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/meter/">Medidor</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/modal/">Diálogo modal</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/navbar/">Barra de navegación</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/pagination/">Paginación</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/player/">Reproductor multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/progress/">Progreso</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/prose/">Texto corrido</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/select/">Select</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/sidebar/">Barra lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/skip-link/">Enlace para saltar al contenido</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/table/">Tabla</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/tabs/">Pestañas</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/tag/">Etiqueta e insignia</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/timeline/">Línea de tiempo</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/toast/">Aviso emergente</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/tooltip/">Tooltip</a></li>
+<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-helpers">Ayudas</span>
+<ul class="docs-nav__pages" aria-labelledby="nav-helpers">
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/layout/">Objetos de maquetación</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/utilities/">Clases de utilidad</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/components/keyframes/">Fotogramas clave</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../es/docs/site/">Site</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../es/docs/site/submenu/">Submenú</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/site/banner/">Banner</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/site/consent/">Consentimiento para cookies</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/site/mode/">Modo de color automático</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/site/lang-switch/">Selector de idioma</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/site/search/">Búsqueda</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/site/classes/">Referencia de clases</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../es/docs/landing/">Landing</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../es/docs/landing/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/landing/hero/">Hero</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/landing/section/">Contenido principal y secciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/landing/footer/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/landing/stat/">Dato destacado</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/landing/templates/">Plantillas de páginas de aterrizaje</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../es/docs/cms/">CMS</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../es/docs/cms/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/cms/page-header/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/cms/article-header/">Cabecera de artículo</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/cms/toc/">Índice</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/cms/footer/">Pie</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/cms/templates/">Plantillas de CMS</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../es/docs/app/">App</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../es/docs/app/header/">Cabecera</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/app/dashboard/">Panel de control</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/app/templates/">Plantillas de app</a></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" href="../../../es/docs/documentation/">Documentación</a>
+<ul class="docs-nav__pages">
+<li><a class="luz-sidebar__link" href="../../../es/docs/documentation/shell/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/documentation/page-head/">Cabecera de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/documentation/rail/">Índice lateral</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/documentation/example/">Ejemplo</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/documentation/dodont/">Qué hacer y qué no</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/documentation/pager/">Navegación entre páginas</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/documentation/page-foot/">Pie de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/documentation/templates/">Plantillas de documentación</a></li>
+<li class="docs-nav__sub"><a class="luz-sidebar__link docs-nav__subarea" id="nav-html" href="../../../es/docs/html/">Elementos HTML</a>
+<ul class="docs-nav__pages" aria-labelledby="nav-html">
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/forms/">Formularios</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/text/">Bloques de texto</a></li>
+<li><a class="luz-sidebar__link" lang="en" href="../../../es/docs/html/inline/">Inline text</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/structure/">Estructura de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/tables/">Tablas</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/media/">Imágenes y multimedia</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/widgets/">Widgets integrados</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/embeds/">Marcos e inserciones</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/svg-mathml/">SVG y MathML</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/scripting/">Scripts y canvas</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/edits/">Cambios controlados</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/metadata/">Metadatos de página</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/document/">Raíz del documento</a></li>
+<li><a class="luz-sidebar__link" href="../../../es/docs/html/web-components/">Web Components</a></li>
+</ul></li>
+</ul></li>
+<li><a class="luz-sidebar__link docs-nav__area" aria-current="page" href="../../../es/docs/accessibility/">Accesibilidad</a></li>
+    </ul>
+  </nav>
+  <aside class="luz-docs-rail" aria-label="Acerca de esta página">
+  <div class="luz-docs-rail__inner">
+  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">
+    <details class="luz-docs-rail__fold" open>
+      <summary class="luz-docs-rail__title" id="docs-rail-title">En esta página</summary>
+      <ul class="luz-docs-rail__list">
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#h-a11y-target">Objetivo</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#h-a11y-checked">Qué se comprueba en cada cambio</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#h-a11y-not-tested">Qué no se ha probado</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#h-a11y-known">Problemas conocidos</a></li>
+        <li><a class="luz-sidebar__link luz-docs-rail__link" href="#h-a11y-report">Informar de un problema de accesibilidad</a></li>
+      </ul>
+    </details>
+  </nav>
+    <div class="luz-docs-rail__actions">
+      <a data-docs-copy-page data-docs-copied="Página copiada como Markdown." data-docs-not-copied="No se pudo copiar la página." href="../../../es/docs/accessibility/index.md">Copiar la página en Markdown</a>
+      <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/accessibility.html">Editar esta página</a>
+      <a href="https://github.com/nandovejer/luz/issues/new?title=Declaraci%C3%B3n%20de%20accesibilidad">Avisar de un problema</a>
+    </div>
+  </div>
+  </aside>
+
+  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
+    <nav class="docs-breadcrumb" aria-label="Ruta de navegación">
+      <ol class="luz-breadcrumb">
+        <li><a class="luz-breadcrumb__item" href="../../../es/docs/">Documentación</a></li>
+        <li><span class="luz-breadcrumb__item" aria-current="page">Declaración de accesibilidad</span></li>
+      </ol>
+    </nav>
+  <header class="luz-docs-page-head">
+    <p class="luz-docs-page-head__eyebrow">Accesibilidad</p>
+    <h1 class="docs-title">Declaración de accesibilidad</h1>
+  </header>
+  <div class="luz-alert luz-alert--info docs-notice">
+    <div class="luz-alert__icon" aria-hidden="true">ℹ</div>
+    <div>
+      <div class="luz-alert__body">Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona. Hasta que la revise una persona, prevalece el texto en inglés. <a href="../../../docs/accessibility/" hreflang="en">Leer esta página en inglés</a></div>
+    </div>
+  </div>
+  <div class="docs-body">
+    <div class="docs-block docs-prose-chapter" id="accessibility">
+      <p class="docs-lead">LUZ aspira a cumplir WCAG 2.2 nivel AA. Aquí se explica qué se comprueba en cada cambio, qué no se ha probado y cuáles son los problemas conocidos. Última revisión: 17 de octubre de 2026.</p>
+      <h2 id="h-a11y-target">Objetivo</h2>
+      <p>LUZ aspira a cumplir el <a href="https://www.w3.org/TR/WCAG22/">nivel AA de WCAG 2.2</a>, el nivel al que hacen referencia EN 301 549 y la Ley Europea de Accesibilidad.</p>
+      <p>Un sistema de diseño no puede hacer que un servicio sea accesible por sí solo: el resultado depende de cómo uses los componentes. En la página de cada componente se explica qué debes hacer, en las secciones <em>Teclado y ARIA</em> y <em>Cómo escribir el contenido</em>.</p>
+
+      <h2 id="h-a11y-checked">Qué se comprueba en cada cambio</h2>
+      <ul>
+        <li>Análisis automatizado con axe-core de la página de inicio, en inglés, español y árabe, y de todas las páginas de la documentación en los modos claro, oscuro y de alto contraste. En las páginas de componentes y patrones, el análisis se ejecuta una vez con cada pestaña abierta; en una selección de páginas, también se ejecuta con el diálogo de búsqueda abierto, tanto con resultados como sin ellos. Un hallazgo grave o crítico hace que falle la compilación.</li>
+        <li>Uso con teclado del panel lateral, el diálogo modal, las pestañas, las pestañas Código y Diseño de las páginas de componentes, el índice «En esta página» (cuyos enlaces abren la pestaña de la sección a la que apuntan) y la búsqueda: Ctrl+K, las flechas para recorrer los resultados, Enter y Escape.</li>
+        <li>La estructura de las páginas de documentación. El enlace para saltar lleva al contenido principal (WCAG 2.4.1, Evitar bloques). La cabecera, la barra lateral, las migas de pan, la página, la barra de navegación y el pie son regiones de referencia; cada navegación tiene su propio nombre. La barra lateral es una lista plana con todas las áreas desplegadas. A partir de 769 píxeles de ancho se muestra como columna. Por debajo, es un panel que se abre con el botón Menú, mediante la API popover y sin script. Con JavaScript, al cargar la página la barra lateral desplaza el enlace de la página actual a la vista; la página y el foco no se mueven.</li>
+      <li>La barra lateral de navegación de una página de documentación: aparece antes del contenido en el código fuente, y el enlace para saltar la sobrepasa para llegar al contenido. A partir de 80 rem de ancho es una columna fija junto al contenido; por debajo, se dibuja encima del contenido para evitar el desplazamiento horizontal. En ese caso, con JavaScript, «En esta página» está plegado al cargar la página y su resumen permite abrirlo. «Copiar página como Markdown» copia la página en el portapapeles y lo indica en un mensaje de estado; si falla, el mismo mensaje lo indica. Se comprueba con y sin JavaScript.</li>
+      <li>La luz de la página de inicio: el control deslizante con teclado, el estado abierto o cerrado de la barra, los nombres y el texto de valor en cada idioma, axe con la barra abierta en distintas luces, los colores forzados y que, con movimiento reducido, nada solicite un fotograma de animación.</li>
+      <li>Las páginas sin JavaScript: el contenido se puede leer a 320 píxeles de ancho, las secciones Código y Diseño de una página de componente aparecen una detrás de otra, el botón de búsqueda es un enlace al índice A–Z y no queda en pantalla ningún control que necesite JavaScript sin funcionar. El selector de modo de color del pie muestra una opción de modo automático y tres opciones para los modos, que siguen permitiendo cambiarlo. Sin JavaScript, la elección de modo de color solo se aplica a la página actual. Además, un enlace a una sección de la misma página deja abierto el menú; Escape o el botón de menú lo cierran. «Copiar página como Markdown» es un enlace al archivo <code class="luz-code-inline">index.md</code> de la página. El formulario «Pruébalo» y la opción de ancho Teléfono, Tablet y Completo de los ejemplos permanecen ocultos. El selector de idioma de la página de inicio abre su lista de idiomas, que son enlaces, mediante la API popover y sin script.</li>
+        <li>Movimiento reducido: no se ejecuta ninguna transición ni animación cuando la persona visitante solicita menos movimiento.</li>
+        <li>La línea de tiempo: sus teclas (flechas, Home y End para las fechas, reflejadas de derecha a izquierda), los botones Anterior y Siguiente, los nombres de los botones, que la reproducción automática es opcional y tiene un botón visible Pausar / Reproducir, y que con movimiento reducido no se inicia la reproducción automática ni se muestra el botón.</li>
+        <li>Colores forzados: los botones y resultados de búsqueda mantienen un contorno visible al recibir el foco, la pestaña seleccionada conserva el subrayado y el diálogo de búsqueda mantiene el borde.</li>
+        <li>La página de inicio en árabe, de derecha a izquierda: no debe desbordarse a 320 píxeles de ancho, ni con JavaScript ni sin él.</li>
+        <li>Texto de derecha a izquierda: el ejemplo de cada componente, excepto el reproductor, se dispone con <code class="luz-code-inline">dir="rtl"</code> junto a su versión de izquierda a derecha. Cada elemento con texto y cada control deben ocupar la posición que les corresponde al reflejar el diseño, y nada debe desbordarse. Se comprueba con y sin JavaScript.</li>
+        <li>Contraste del texto escrito para las páginas de inicio y de documentación, en los tres modos.</li>
+        <li>Antes de esta versión, las mismas pruebas automatizadas se ejecutaron una vez en Firefox 155 y en WebKit 26.6 y 27.2 (el motor de Safari), en Linux, y se corrigieron los hallazgos. No se ejecutan en cada cambio y tampoco se prueba en macOS ni iOS.</li>
+        <li><code class="luz-code-inline">llms.txt</code> y <code class="luz-code-inline">classes.json</code> se regeneran en cada cambio; si alguno está desactualizado, la compilación falla.</li>
+        <li>Un script comprueba el contraste de cada par de tokens que representa un componente, en los tres modos base. El mismo script mide cualquier <a href="../../../es/docs/tokens/themes/">tema propio</a>, como se explica en la página de temas.</li>
+      </ul>
+
+      <h2 id="h-a11y-not-tested">Qué no se ha probado</h2>
+      <ul>
+        <li>Lectores de pantalla. En esta versión no se ha probado con ninguna tecnología de asistencia: no se han probado NVDA, JAWS, VoiceOver, TalkBack ni Orca. Nada de lo que se indica aquí garantiza que un componente funcione con ellos.</li>
+        <li>Software de reconocimiento de voz y de ampliación de pantalla.</li>
+        <li>Texto de derecha a izquierda revisado por una persona que lo lea o con un lector de pantalla. Un script solo mide la maquetación, no los controles del reproductor.</li>
+        <li>Ampliación manual al 400 %. Solo se mide el ancho de 320 píxeles.</li>
+        <li>Investigación con personas con discapacidad.</li>
+        <li>El informe de accesibilidad que muestra <code class="luz-code-inline">@luz-ds/check</code> y la propia herramienta <code class="luz-code-inline">luz-check</code>. Analizan archivos fuente y ofrecen recomendaciones; no abren páginas, no miden lo que se ve en pantalla ni usan tecnología de asistencia. Que una ejecución no encuentre problemas no significa que la página sea accesible.</li>
+      </ul>
+      <p>Las herramientas automatizadas solo detectan una parte de los problemas. Considera esta lista como lo que queda por comprobar y prueba tus propias páginas.</p>
+
+      <h2 id="h-a11y-known">Problemas conocidos</h2>
+      <ul>
+        <li><strong>Tooltip.</strong> Escape no lo cierra. Incumple parcialmente WCAG 1.4.13 (Contenido al pasar el puntero o al recibir el foco). No hagas que los tooltips contengan información imprescindible.</li>
+        <li><strong>Modal.</strong> Sus botones usan los atributos <code class="luz-code-inline">command</code> y <code class="luz-code-inline">commandfor</code>. En un navegador que no los admite, si tampoco hay JavaScript, el botón de apertura no hace nada.</li>
+        <li><strong>Reproductor.</strong> MIDI necesita JavaScript y Web Audio. Sin ellos, el reproductor muestra un mensaje. En esta web de documentación, los archivos de subtítulos del vídeo de ejemplo solo se cargan con JavaScript; sin él, el navegador muestra las pistas, pero no el texto.</li>
+        <li><strong>Select.</strong> La lista abierta pertenece al navegador o al sistema, así que su aspecto y funcionamiento varían. En los navegadores que admiten <code class="luz-code-inline">appearance: base-select</code> (Chrome y Edge 135, Safari 27), LUZ también aplica estilos a la lista, que aún no se ha probado con un lector de pantalla. Funciona sin JavaScript.</li>
+        <li><strong>Tarjeta enlazada.</strong> El enlace del título cubre toda la tarjeta, por lo que no se puede seleccionar con el ratón el texto del cuerpo. Se puede seleccionar con el teclado, encontrar en la página y leer con lectores de pantalla como de costumbre.</li>
+        <li><strong>Tabla ordenada en el navegador.</strong> La columna ordenada se indica con <code class="luz-code-inline">aria-sort</code> en su encabezado, y cada ordenación se anuncia en un mensaje de estado. Al recorrer los encabezados con Tab se anuncia el nombre de la columna; el estado de ordenación se lee en la celda de encabezado y en el mensaje de estado. Solo se ha comprobado en el árbol de accesibilidad de Chromium; aún no se ha probado con NVDA, JAWS, VoiceOver, TalkBack ni Orca.</li>
+        <li><strong>Avatar con foto.</strong> Si la foto no se carga, el navegador muestra dentro del recuadro su texto alternativo en mayúsculas; si el nombre es largo, puede sobresalir.</li>
+        <li><strong>Pestañas Código y Diseño.</strong> La última pestaña elegida se abre una vez cargada la página, por lo que el contenido inferior puede desplazarse una vez.</li>
+        <li><strong>Buscar en la página.</strong> En los navegadores que no admiten <code class="luz-code-inline">hidden="until-found"</code> (Safari anterior a la versión 26.2, Firefox anterior a la 139), la búsqueda en la página (Ctrl+F) no encuentra texto en la pestaña cerrada. En Safari 26.2 y posteriores, abre la pestaña, pero no se desplaza hasta la coincidencia. Abre la otra pestaña o desactiva JavaScript para verlas ambas.</li>
+        <li><strong>Elige tu fragmento.</strong> Sin JavaScript, el selector no aparece en la página, se muestran todos los fragmentos uno tras otro y la tabla de índice, cuyas celdas enlazan a los fragmentos, sirve para navegar. Con JavaScript, el selector reemplaza la tabla, muestra un fragmento y lo anuncia mediante su <code class="luz-code-inline">&lt;output&gt;</code>, una región de estado. El foco se queda en la opción que has elegido. El anuncio aún no se ha probado con un lector de pantalla.</li>
+        <li><strong>Personaliza LUZ, demostración de tamaños.</strong> La demostración de tamaños es opcional: la tabla de ajustes predefinidos de la página los enumera sin ella. Sin JavaScript, la demostración no aparece, así que no queda ningún control en pantalla sin funcionar. Con JavaScript, los controles deslizantes cambian el tamaño de la propia página, no de un ejemplo, y el botón Restablecer tamaños devuelve la página a su estado inicial; no se guarda nada, así que recargarla tiene el mismo efecto. Los controles cambian el tamaño del texto y el espaciado de la página; se respeta el tamaño de texto elegido por cada persona, porque la escala usa rem y sigue el tamaño configurado en el navegador.</li>
+        <li><strong>Atajo de búsqueda.</strong> Ctrl+K (⌘K en Mac) abre la búsqueda de la documentación en lugar del cuadro de búsqueda web del navegador. Usa la barra de direcciones del navegador para buscar en la web. El botón de búsqueda muestra el atajo; no hace nada mientras escribes en un área de texto o contenido editable, y no hay atajos de una sola tecla. En un campo de una línea sí abre la búsqueda, así que en Mac sustituye allí a Ctrl+K («borrar hasta el final de la línea»). En un sitio que carga la búsqueda con <code class="luz-code-inline">site.js</code>, el script propio de búsqueda se carga cuando la página está inactiva o al señalar o enfocar la búsqueda: si pulsas Ctrl+K antes, el script se carga y luego abre la búsqueda, tras una breve espera si la conexión es lenta. En una página sin búsqueda, Ctrl+K sigue siendo del navegador.</li>
+        <li><strong>Búsqueda.</strong> No se ha probado con un lector de pantalla. El número de resultados se anuncia cuando dejas de escribir. Hasta que se carga su script, la búsqueda es un enlace al índice A–Z en el mismo lugar; si estás sobre ese enlace cuando llega el script, permanece hasta que salgas de él y el foco nunca se desplaza. Si no se puede cargar el script, el enlace permanece. Al cerrar la búsqueda, el foco vuelve a donde estaba; si no había ningún elemento enfocado, como ocurre al pulsar Ctrl+K justo después de cargar la página, pasa al botón de búsqueda y el siguiente Tab continúa desde ahí.</li>
+        <li><strong>Búsqueda con zoom al 400 %.</strong> Todo el diálogo de búsqueda se desplaza, por lo que el campo de búsqueda puede desaparecer de la vista mientras lees los resultados. Pulsa Shift+Tab o la flecha arriba desde el primer resultado para volver al campo.</li>
+        <li><strong>Barra lateral de documentación.</strong> Cada página de la documentación aparece como enlace en una única lista larga de la barra lateral, con todas las áreas desplegadas. El enlace de la página actual lleva <code class="luz-code-inline">aria-current="page"</code> y su área lleva <code class="luz-code-inline">aria-current="true"</code>. Usa el enlace para saltar, la búsqueda (Ctrl+K) o el índice A–Z para evitar recorrer toda la lista con Tab. Con JavaScript, al cargar la página la barra lateral se desplaza hasta la página actual y el foco permanece donde estaba. Sin JavaScript, empieza por arriba. El panel lateral que aparece por debajo de 769 píxeles de ancho es un popover nativo: Escape lo cierra. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Barra de navegación lateral y «Copiar página como Markdown».</strong> La barra incluye «En esta página», un elemento <code class="luz-code-inline">&lt;details&gt;</code> nativo que está abierto (con JavaScript se cierra al cargar por debajo de 80 rem de ancho), y tres acciones. A partir de 80 rem de ancho, la barra permanece fija y el indicador de la sección visible depende del script de core. Sin JavaScript, «Copiar página como Markdown» es un enlace que abre el archivo Markdown de la página. Con JavaScript y acceso al portapapeles, es un botón con el mismo texto y no abandona la página. Su mensaje de estado («Página copiada como Markdown» o «No se ha podido copiar la página») es una región de estado y desaparece al cabo de cinco segundos. Si el archivo se carga, pero el navegador impide copiarlo al portapapeles, el navegador lo abre en su lugar. Si no se puede leer el archivo, el mensaje lo indica y el foco permanece en el botón. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Probar y elegir el ancho del ejemplo.</strong> «Pruébalo» está en la página Botón; la opción Teléfono, Tablet y Ancho completo está en las páginas Botón, Tarjeta, Formulario y Tabla. Ambos controles están ocultos en el HTML y los muestra el script de la página, así que sin JavaScript no queda ningún control en pantalla sin funcionar. Ambos usan botones de opción nativos; «Pruébalo» también añade una casilla nativa. Al cambiar la opción, cambia la vista previa y, en «Pruébalo», el código que aparece debajo; el botón Copiar copia el nuevo código. No se anuncia el cambio. El botón de vista previa es lo que se prueba, no un control del formulario, y no hace nada. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Índice A–Z.</strong> El índice tiene dos páginas, A–L y M–Z, para que ninguna sea demasiado extensa. La parte superior de cada página indica su intervalo y la fila de letras enlaza con las letras de la otra página. Los nombres que no empiezan por una letra de la A a la Z, como los que empiezan por un dígito, aparecen al final de la segunda página, en «Otros». El botón de búsqueda enlaza a la primera página hasta que se carga el script de búsqueda. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Luz de la página de inicio.</strong> La sección bajo el hero dibuja el sol y la luna según la ubicación de la persona visitante, a partir de la zona horaria del navegador y sin solicitudes de red. Sin JavaScript, la sección está vacía y una frase explica para qué sirve. Con JavaScript, la frase bajo el dibujo es un botón (uno de los datos de la página sobre la luz, elegido al azar en cada carga) cuyo nombre termina con «Mostrar la barra de la luz», y lleva <code class="luz-code-inline">aria-expanded</code>. La barra que controla muestra, de arriba abajo, la ubicación (la ciudad de la zona horaria del navegador) y la luz, la hora en tamaño grande y después un control deslizante llamado «Recorrer el día», cuyo texto de valor indica la luz y la hora (solo la hora mientras hay un modo elegido en el pie). El control deslizante es un campo de rango normal: las flechas, Inicio y Fin lo mueven. Por debajo de 1024 píxeles de ancho, y en una pantalla que no puede pasar el puntero, el botón abre y cierra la barra, y Escape la cierra y devuelve el foco al botón. Desde 1024 píxeles de ancho en una pantalla que sí puede pasar el puntero, la barra está siempre abierta: Escape y el botón no la cierran. En reposo se dibuja tenue, al 25 por ciento de opacidad, y aparece completa bajo el puntero o cuando el foco está dentro, de modo que el texto de la ubicación, la luz y la hora queda por debajo del contraste de texto habitual hasta entonces. Al cambiar el tamaño de la ventana por encima o por debajo de 1024 píxeles, la barra se abre o se cierra en consecuencia. Al moverlo, toda la página adopta la luz y el modo de esa hora. Al soltarlo, esa hora se mantiene en todo el sitio, incluso después de recargar, hasta que se elige Claro, Oscuro o Alto contraste en el pie; un aviso «Modo guardado» en una región de estado lo confirma y desaparece al poco tiempo. El control deslizante muestra un sol de día y una luna de noche, además del texto de valor. El dibujo no es un control: el globo es una imagen que se puede arrastrar con el puntero y no tiene controles de teclado. Con movimiento reducido, nada del dibujo se anima. Además, las estrellas de la parte superior de la página al amanecer, al atardecer y de noche no parpadean ni se desplazan con el movimiento de la página. El globo se dibuja de inmediato; el terreno aparece un poco después, cuando el navegador está inactivo. Con colores forzados, el dibujo usa el color del texto y no se muestran las estrellas. El icono de la pestaña de la página de inicio sigue el cielo: de día muestra el sol sobre el horizonte y de noche, la luna, con los colores de la página; lo dibuja el script. Las demás páginas mantienen un icono fijo. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Movimiento de la luz de la página de inicio.</strong> El globo gira despacio y las estrellas del amanecer, el atardecer y la noche parpadean y se desplazan con la página durante más de cinco segundos. El globo y las estrellas incumplen el criterio de éxito 2.2.2 de WCAG 2.2 (Pausar, detener, ocultar, nivel A). El movimiento solo se detiene con el ajuste de movimiento reducido del sistema; la página no tiene ningún botón ni otro control para pausarlo. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Selector de idioma.</strong> La lista de idiomas se abre en una posición fija debajo de la cabecera, no junto al botón. Por debajo de 360 píxeles de ancho, el botón solo muestra un globo; el nombre del idioma sigue siendo su nombre accesible. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Menú de la navbar.</strong> En pantallas estrechas, el menú de una navbar de una cabecera de landing, CMS o docs se abre en un panel debajo de la cabecera. Si sigues pulsando Tab después del último enlace, el foco pasa a la página y el panel permanece abierto sobre ella. Pulsa Escape para cerrarlo. (Criterio de éxito 2.4.12 de WCAG 2.2, nivel AAA; se cumple el criterio 2.4.11 de nivel AA). Cuando se admite el posicionamiento de anclas CSS (Chrome y Edge 125, Safari 26, Firefox 147), el panel se abre debajo de la cabecera, dondequiera que termine. En navegadores más antiguos se abre desde la parte superior de la ventana, a la altura de una barra de una sola fila con el tamaño de texto predeterminado (<code class="luz-code-inline">--luz-bar-h</code>): si se amplía el texto y la cabecera ocupa dos filas, o hay un banner encima antes de desplazar la página, puede cubrir parte de la cabecera.</li>
+        <li><strong>Submenú.</strong> Un submenú de los enlaces de una cabecera es un elemento de revelado nativo: Escape y un clic fuera no lo cierran; sí lo hace su propio botón o abrir otro (en Firefox anterior a 130 y Safari anterior a 17.2 pueden quedar varios abiertos). A partir de 769 píxeles de ancho, el submenú abierto permanece sobre la parte superior de la página, así que si sigues pulsando Tab después de él, puede quedar oculto un enlace que hay detrás (criterio de éxito 2.4.11 de WCAG 2.2, Foco no oculto, nivel mínimo). Pulsa su botón para cerrarlo. En el menú estrecho, sus enlaces siguen el flujo y Escape cierra todo el menú. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Banner.</strong> No se puede cerrar. No tiene script.</li>
+        <li><strong>Consentimiento de cookies.</strong> Sin JavaScript, el banner no aparece, porque tampoco se ejecuta ningún script propio del sitio; la política de cookies está enlazada en todas las páginas. Con JavaScript, el banner aparece como una banda fija en la parte inferior de la ventana, así que nada de la página se desplaza. Va después del enlace para saltar en el orden de lectura y de Tab, no recibe el foco al cargar la página, no bloquea la página y Escape no confirma ni oculta nada. Mientras aparece, la página reserva espacio al final y desplaza hacia arriba lo que alcanza Tab (criterio de éxito 2.4.11 de WCAG 2.2); en Safari, que ignora ese relleno de desplazamiento para los campos de texto, un script vuelve a desplazar el campo alcanzado con Tab por encima de la banda. En ventanas de menos de 30 rem de alto, aparece en el flujo, al principio de la página, que se desplaza hacia abajo al mostrarse. El botón Cerrar oculta el banner de confirmación y devuelve el foco al botón que lo abrió o al contenido principal; también se oculta al salir el foco hacia la página. Un clic en una zona vacía de la página no lo oculta. La respuesta se guarda en el navegador, no en una cookie. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Modo de color automático.</strong> <code class="luz-code-inline">&lt;luz-mode&gt;</code> añade una opción Automático al selector de modo de color. Sin JavaScript, las opciones siguen cambiando el modo, pero Automático equivale a claro. Si falta el pequeño script de la cabecera, una página que sigue el modo oscuro del sistema puede mostrarse primero en claro. Con <code class="luz-code-inline">by="clock"</code>, como en este sitio, Automático usa el modo oscuro de 20:30 a 07:30, independientemente de lo que indique el dispositivo, y las cuatro luces del sitio alcanzan el mismo contraste que sus modos. Con <code class="luz-code-inline">prefers-contrast: more</code>, Automático activa el alto contraste. El botón cíclico muestra Automático, no el modo aplicado. El pie de este sitio no tiene una opción Automático: las páginas siguen la hora —o la hora que se ha fijado con la barra de luz de la página de inicio— hasta que se elige Claro, Oscuro o Alto contraste; al volver a mover la barra, la hora vuelve a tener prioridad. Mientras la hora tiene prioridad, no hay ninguna opción marcada: el botón cíclico muestra el icono Automático y su nombre indica «—» como modo actual. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Cabecera fija, texto ampliado.</strong> Una cabecera fija (<code class="luz-code-inline">.o-sticky</code>) deja un espacio mínimo para que no tape un campo al que se llega con Tab. Funciona con el texto al 100 % y al 200 %. Con el texto al 300 %, cuando la cabecera ocupa varias filas, Safari todavía puede dejar el campo parcialmente cubierto; Chrome, Edge y Firefox lo mantienen visible. Las páginas Objetos de maquetación y Cabecera de landing y CMS explican cómo ajustar el relleno de tu propia cabecera. En Firefox con colores forzados no se dibuja la capa oscura detrás del menú abierto; el panel conserva el borde.</li>
+        <li><strong>Banda.</strong> Una banda (<code class="luz-code-inline">.luz-band</code>) recorta lo que sobresale por arriba o por abajo, así que un tooltip del primer control queda recortado con el texto al 200 % o más; empieza la banda con un encabezado. Al pasar el puntero sobre un botón de contorno o fantasma en una banda, no se aprecia ningún cambio. Con colores forzados, la banda no tiene tinte, solo dos líneas finas, una arriba y otra abajo.</li>
+        <li><strong>Prosa.</strong> Si una tabla es más ancha que la columna de texto y no está dentro de <code class="luz-code-inline">.luz-table-wrap</code>, toda la página se desplaza horizontalmente en una pantalla estrecha. Un bloque largo de texto preformateado se desplaza dentro de sí mismo; asígnale <code class="luz-code-inline">tabindex="0"</code> y un nombre, como al bloque de código, o quienes usen Safari no podrán desplazarse por él con el teclado.</li>
+        <li><strong>Línea de metadatos.</strong> Los puntos entre los datos se ocultan a los lectores de pantalla con texto alternativo para contenido generado. En un navegador que no lo admite (Firefox anterior a 128, Safari anterior a 17.4), un lector de pantalla lee cada punto.</li>
+        <li><strong>Listas maquetadas como cuadrícula, pila o fila.</strong> Safari no anuncia como lista los elementos de una lista cuyos marcadores se han eliminado y que está fuera de una región de navegación. Aun así, los elementos se leen en orden y sus encabezados permiten recorrerla.</li>
+        <li><strong>Cabecera de mancheta (cms).</strong> En los navegadores sin posicionamiento de anclas CSS, el menú de secciones de la cabecera de mancheta se abre cerca de la parte superior de la ventana y, mientras está abierto, cubre el nombre de la publicación y el botón de menú. Escape o un clic fuera del menú lo cierra y devuelve el foco a la página.</li>
+        <li><strong>Índice (cms).</strong> El indicador de la sección visible depende del script de core (<code class="luz-code-inline">data-luz-spy</code>); sin él, no se marca ningún enlace, pero los enlaces siguen funcionando. Junto al texto, el índice muestra las secciones al final de la línea, pero aparece antes en el código fuente, así que Tab llega a él antes que al texto. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Lista de cuenta (app).</strong> La lista del botón de cuenta de una aplicación es una lista de enlaces en un popover, no un menú ARIA: no tiene teclas de flecha y Tab recorre los enlaces. En los navegadores sin posicionamiento de anclas CSS, se abre como un panel en la parte inferior de la ventana, no debajo del botón; Escape o un clic fuera lo cierra. El nombre del botón combina las iniciales y el nombre, así que se lee «AM Ana Martín» en cualquier ancho. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Panel de control (app).</strong> Los paneles mantienen el orden del HTML, así que uno ancho que no cabe en el espacio restante de una fila empieza en la siguiente y deja un hueco; el orden de lectura y el visual siempre coinciden. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Patrones de documentación (docs).</strong> Los siete patrones de <code class="luz-code-inline">@luz-ds/docs</code> son CSS, sin script. La barra aparece antes del contenido en el código fuente. Por debajo de 80 rem de ancho se dibuja encima del contenido, bajo la cabecera; a partir de 80 rem, es una columna a su lado. La barra es fija y se desplaza por sí sola si supera la altura de la ventana; el indicador de la sección visible depende del script de core y, sin él, no se marca ningún enlace, aunque todos funcionan. El escenario de Qué hacer y qué no es inerte y está oculto para la tecnología de asistencia, así que el pie de figura comunica el significado y los errores que supondrían una barrera se muestran como código. En navegadores sin texto alternativo para contenido generado (Safari anterior a 17.4, Firefox anterior a 128), un lector de pantalla puede leer la marca o la cruz antes de «Sí» o «No»; siempre lee la palabra siguiente. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Línea de tiempo.</strong> Sin JavaScript, es una lista ordenada con una línea y un punto por elemento, y todos los elementos están visibles. Con JavaScript, solo se lee y se alcanza con Tab la tarjeta actual; las demás son inertes. Los botones Anterior y Siguiente solo se llaman «Anterior» y «Siguiente»: el nombre no indica a qué fecha llevan. No se ha comprobado si un lector de pantalla anuncia la tarjeta que aparece al cambiar de elemento, y la línea de tiempo no se ha probado con ningún lector de pantalla. La reproducción automática está desactivada salvo que la página la solicite. Cuando se activa, cambia de tarjeta cada pocos segundos; un botón visible Pausar / Reproducir la detiene y la reanuda. También se pausa si el puntero pasa por encima, el foco del teclado está dentro, menos de la mitad aparece en pantalla o la pestaña está oculta; nunca se inicia con movimiento reducido. Mientras se reproduce, la tarjeta no se anuncia.</li>
+        <li><strong>Idiomas que LUZ no incluye.</strong> En una página en un idioma para el que LUZ no tiene textos, como francés o árabe, las etiquetas y los mensajes generados por sus scripts (botones del reproductor y de copia, nombres de bloques de código, estado de ordenación) aparecen en inglés dentro de una página marcada con otro idioma, así que el lector de pantalla los lee con la voz de ese idioma (WCAG 3.1.2, Idioma de las partes). Los scripts muestran un aviso en la consola. Define una vez todos los atributos <code class="luz-code-inline">data-luz-label-*</code> en <code class="luz-code-inline">&lt;html&gt;</code> o <code class="luz-code-inline">&lt;body&gt;</code>, o llama a <code class="luz-code-inline">registerLocale()</code> antes de iniciar los scripts, para que aparezcan en tu idioma. La página de inicio lo hace para el árabe.</li>
+        <li><strong>Botones de tema heredados.</strong> En una página en otro idioma, los botones Aplicar tema / Tema aplicado del marcado heredado de temas personalizados (<code class="luz-code-inline">luz-theme-apply-btn</code>) aparecen en inglés hasta que se cambia el tema, a menos que la página defina <code class="luz-code-inline">data-luz-label-apply-theme</code> y <code class="luz-code-inline">data-luz-label-theme-applied</code>. No se ha probado con un lector de pantalla.</li>
+        <li><strong>Textos en un idioma que LUZ sí incluye.</strong> El archivo de español se carga cuando una página lo declara. Si no se puede cargar, las etiquetas que añaden los scripts de LUZ aparecen en inglés dentro de una página marcada con otro idioma, y un lector de pantalla las lee con la voz de ese idioma. La página y el texto escrito en ella no se ven afectados. Las etiquetas se escriben cuando llega el archivo o tras dos segundos sin él. Si se hace clic antes de que llegue el idioma, el anuncio aparece en inglés; si llega tarde, se mezclan las etiquetas en inglés escritas al inicio con las etiquetas en español que se escriben al cambiar de estado, como al reproducir o pausar. No se ha probado con NVDA, JAWS, VoiceOver, TalkBack ni Orca. Los módulos independientes (<code class="luz-code-inline">/highlight</code>, <code class="luz-code-inline">/player</code>, <code class="luz-code-inline">/theme</code>, <code class="luz-code-inline">/clipboard</code>) solo incluyen inglés: una página en español que los importe directamente debe llamar a <code class="luz-code-inline">loadLocales()</code> o <code class="luz-code-inline">registerLocale()</code>.</li>
+        <li><strong>Botón.</strong> <code class="luz-code-inline">.luz-btn</code> no ajusta el texto de su etiqueta (<code class="luz-code-inline">white-space: nowrap</code>), así que un botón con una etiqueta larga puede desbordar su contenedor a 320 píxeles de ancho con el texto al 130 % (WCAG 1.4.10, Reajuste). Acorta la etiqueta o define <code class="luz-code-inline">white-space: normal</code> en tu propia capa.</li>
+        <li><strong>Botón de copia.</strong> Si el navegador no permite copiar, se anuncia el error a los lectores de pantalla, pero no se muestra ningún mensaje junto al botón.</li>
+      </ul>
+
+      <h2 id="h-a11y-report">Informar de un problema de accesibilidad</h2>
+      <p>Si algo no funciona para ti, <a href="https://github.com/nandovejer/luz/issues">abre una incidencia en GitHub</a> y explica qué intentabas hacer, qué navegador y qué tecnología de asistencia usas.</p>
+    
+    </div>
+
+  </div>
+  <nav class="docs-end" aria-labelledby="docs-end-title">
+    <h2 class="docs-end__title" id="docs-end-title">Sigue explorando</h2>
+    <ul class="docs-end__links">
+      <li><a href="../../../es/docs/components/">Componentes</a></li>
+      <li><a href="../../../es/docs/get-started/">Instala LUZ</a></li>
+      <li><a href="../../../es/docs/a-z/">Índice A–Z: A–L</a></li>
+    </ul>
+    <ul class="luz-docs-pager">
+      <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="../../../es/docs/html/web-components/"><span class="luz-docs-pager__label">Anterior</span> <span class="luz-docs-pager__title">Web Components</span></a></li>
+    </ul>
+  </nav>
+  <p class="luz-docs-page-foot">Última actualización <time datetime="2026-10-22">22 de octubre de 2026</time> · <a href="https://github.com/nandovejer/luz/edit/main/apps/docs/i18n/es/pages/accessibility.html">Editar esta página</a> · <a href="https://github.com/nandovejer/luz/issues/new?title=Declaraci%C3%B3n%20de%20accesibilidad">Avisar de un problema</a></p>
+  </main>
+
+  <footer class="docs-footer luz-landing-footer" id="site-footer">
+    <div class="o-container o-container--inline o-row">
+      <p class="u-text-muted">Sistema de diseño LUZ · <a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v0.0.0 beta<span class="u-sr-only">, Registro de cambios</span></a> · Beta · Licencia MIT</p>
+      <nav class="o-actions" aria-label="Enlaces del proyecto">
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../es/">Inicio</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz">GitHub</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../es/docs/a-z/">Índice A–Z</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="../../../es/docs/accessibility/">Declaración de accesibilidad</a>
+        <a class="luz-btn luz-btn--ghost luz-btn--sm" href="https://github.com/nandovejer/luz/issues">Problemas en GitHub</a>
+      </nav>
+      <luz-mode class="site-modes" remember by="clock">
+        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
+          <legend class="luz-mode-switcher__label">Modo de color</legend>
+          <button class="luz-mode-cycle" type="button" aria-label="Cambiar el modo de color"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <span class="luz-mode-cycle__status" role="status"></span>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Claro</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Oscuro</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+        </fieldset>
+      </luz-mode>
+    </div>
+  </footer>
+
+  <!-- The filter that gives the clouds of apps/site/sky.css their ragged edge:
+       a fractal noise that displaces their soft ovals -->
+  <svg class="site-sky-filter" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="site-sky-clouds" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="120"/>
+    </filter>
+  </svg>
+
+</body>
+</html>

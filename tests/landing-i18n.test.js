@@ -15,6 +15,7 @@ import { docsSite } from "../scripts/docs-site/plugin.js";
 import { PAGES_BASE, SITE_URL } from "../vite.config.js";
 import { buildSite, currentOf, landingDocuments, relativizeLinks, renderDocument, scanSite } from "../scripts/docs-site/site.js";
 import { addDocsLanguage } from "./helpers/docs-i18n-size-fixture.js";
+import { generatorStrings, giveHomeSources } from "./helpers/home-sources.js";
 import { findAll, parse, query } from "./helpers/html-dom.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -65,17 +66,22 @@ function fixture({ registry = REGISTRY, catalogs = CATALOGS, landing = LANDING, 
     "apps/docs/pages/index.html": "<!-- luz:page\ntitle: Docs\ndescription: The docs.\narea: hub\n-->\n<p>Hello.</p>\n",
     "apps/landing/index.html": landing,
     "apps/landing/i18n/locales.json": registry === null ? null : JSON.stringify(registry, null, 2),
-    ...Object.fromEntries(Object.entries(catalogs).map(([code, strings]) => [`apps/landing/i18n/${code}.json`, strings && JSON.stringify(strings, null, 2)])),
+    // The generator reads its own words from the catalog (the weights, the lists...): after the test's own, so their lines stay
+    ...Object.fromEntries(Object.entries(catalogs).map(([code, strings]) => [`apps/landing/i18n/${code}.json`, strings && JSON.stringify({ ...strings, ...generatorStrings(code) }, null, 2)])),
   };
   for (const [path, text] of Object.entries(files)) {
     if (text === null || text === undefined) continue;
-    mkdirSync(dirname(join(repoRoot, path)), { recursive: true });
-    writeFileSync(join(repoRoot, path), text);
+    // The fixture's small docs site is in mini-docs/: apps/docs/pages holds the real pages the home's lists read
+    const at = path.replace(/^apps\/docs\//, "mini-docs/");
+    mkdirSync(dirname(join(repoRoot, at)), { recursive: true });
+    writeFileSync(join(repoRoot, at), text);
   }
+  giveHomeSources(repoRoot);
   return repoRoot;
 }
 
-const scan = (repoRoot) => scanSite(join(repoRoot, "apps/docs"), repoRoot);
+const docsDirOf = (repoRoot) => join(repoRoot, "mini-docs");
+const scan = (repoRoot) => scanSite(docsDirOf(repoRoot), repoRoot);
 const build = (repoRoot) => {
   const site = scan(repoRoot);
   const html = readFileSync(join(repoRoot, "apps/landing/index.html"), "utf-8");
@@ -143,6 +149,7 @@ describe("languages of the home page: registry and catalogs", () => {
     expect(build(fixture({ catalogs })).problems).toEqual(['apps/landing/i18n/en.json:6: "old.key" is used by no template']);
   });
 
+  // Seven builds of the fixture: more than the default 5 s on a loaded runner
   it("escapes {{t:…}} and lets {{html:…}} carry only inline markup", () => {
     const xss = '<img src=x onerror="alert(1)">';
     const catalogs = { ...CATALOGS, es: { ...CATALOGS.es, "hero.title": xss } };
@@ -153,7 +160,7 @@ describe("languages of the home page: registry and catalogs", () => {
     }
     const ok = { ...CATALOGS, es: { ...CATALOGS.es, "hero.lead": 'Ve a <a href="/docs/">la guía</a> con <span data-count="n">3</span> <strong>pasos</strong>.' } };
     expect(build(fixture({ catalogs: ok })).rendered.get("/es/")).toContain('<p>Ve a <a href="/docs/" hreflang="en">la guía</a> con <span data-count="n">3</span> <strong>pasos</strong>.</p>');
-  });
+  }, 30000);
 });
 
 /* ---- What the generator writes ------------------------------------------- */
@@ -245,7 +252,7 @@ describe("languages of the home page: generated markup", () => {
 
     const docsOf = (codes, options) => {
       const repoRoot = fixture(options);
-      for (const code of codes) addDocsLanguage(join(repoRoot, "apps/docs"), code);
+      for (const code of codes) addDocsLanguage(docsDirOf(repoRoot), code);
       const withDocs = scan(repoRoot);
       const render = (route, code) => renderDocument(options?.landing ?? LANDING, "apps/landing/index.html", route, withDocs, { locale: withDocs.i18n.byCode.get(code) });
       return { render };
@@ -367,10 +374,10 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
   const template = readFileSync(join(repo, "apps/landing/index.html"), "utf-8");
   const docs = landingDocuments(site, "apps/landing/index.html", template);
   const { rendered, problems } = buildSite(site, { extra: docs });
-  const SECTIONS = ["hero", "light", "why", "inside", "native", "modes", "type", "start"];
+  const SECTIONS = ["hero", "light", "inside", "inside-2", "inside-3", "inside-4", "why", "native", "modes"];
   const placeholders = (value) => [...value.matchAll(/\{[a-z]+(?::[a-z]+)?\}/g)].map((m) => m[0]).sort();
   /** Values that are the same word in the three languages: a brand, a command, a symbol. */
-  const SAME = /^(?:[^\p{L}]*|GitHub|LUZ|ET Book|Core|Site|Tokens|Auto|Tokens \+ Core(?: \+ Site)?)$/u;
+  const SAME = /^(?:[^\p{L}]*|GitHub|LUZ|ET Book|Core|Site|Tokens|Auto|Tokens \+ Core(?: \+ Site)?|Base(?: \+ Core)?|npm|CDN|KB|beta|Landing page|Light|Usable|Zero-dependency)$/u;
 
   it("the three catalogs have the same keys, and every key is used by a template: no orphan, no missing key", () => {
     expect(Object.keys(catalogs.es).sort()).toEqual(Object.keys(catalogs.en).sort());
@@ -397,18 +404,17 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
     expect(bare).toEqual([]);
   });
 
-  it("the hero's brand line is English in every language: the eyebrow carries lang=\"en\"", () => {
+  it("the hero's brand is LUZ in every language, and the three words of the name stay English (lang=\"en\") in Why", () => {
     for (const doc of docs) {
       const html = rendered.get(doc.route);
-      const tag = html.match(/<p\b[^>]*luz-landing-hero__eyebrow[^>]*>/);
-      expect(tag, `${doc.route} has the hero's eyebrow`).not.toBeNull();
-      expect(tag[0], doc.route).toMatch(/\slang="en"/);
-      const text = html.slice(html.indexOf(tag[0]) + tag[0].length).match(/^\s*([^<]*)</)[1].replace(/&amp;/g, "&").trim();
-      expect(text, doc.route).toBe("Light, usable & zero-dependency");
+      expect(html, doc.route).toMatch(/<span class="landing-hero__brand">LUZ<\/span>/);
+      for (const [id, word] of [["why-light", "Light"], ["why-usable", "Usable"], ["why-zero", "Zero-dependency"]]) {
+        expect(html, `${doc.route} ${id}`).toMatch(new RegExp(`<h3\\b[^>]*\\sid="${id}"[^>]*\\slang="en"[^>]*>${word}</h3>`));
+      }
     }
   });
 
-  it("each language renders the eight sections in order (fit is inside start), one h1 and no template syntax left", () => {
+  it("each language renders the nine sections in order (the fit lists are inside why), one h1 and no template syntax left", () => {
     for (const doc of docs) {
       const html = rendered.get(doc.route);
       const at = SECTIONS.map((id) => html.search(new RegExp(`<section\\b[^>]*\\sid="${id}"`)));
@@ -427,24 +433,23 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
     }
   });
 
-  it("the footer is the brand and three columns, with the languages and the privacy line, in every language", () => {
+  it("the footer is the brand and two columns, the mode switcher and the licence, and the header has the languages, in every language", () => {
     for (const doc of docs) {
       const html = rendered.get(doc.route);
       const footer = html.slice(html.indexOf("<footer"), html.indexOf("</footer>"));
       expect(footer, doc.route).toContain("luz-landing-footer__brand");
-      expect(footer.match(/luz-landing-footer__col-title/g), doc.route).toHaveLength(3);
+      // Two columns (the docs, the project), and the packages as a label inside the first
+      expect(footer.match(/class="luz-landing-footer__col-title"/g), doc.route).toHaveLength(2);
+      expect(footer.match(/class="landing-foot-label"/g), doc.route).toHaveLength(1);
       expect(footer, doc.route).toMatch(/<luz-mode\b[^>]*\sremember\b[^>]*\sby="clock"/);
-      for (const lang of ["en", "es", "ar"]) expect(footer, `${doc.route} → ${lang}`).toMatch(new RegExp(`hreflang="${lang}"`));
+      // The languages are the header's switch (not a list in the footer), with a link to each
+      const header = html.slice(html.indexOf("<header"), html.indexOf("</header>"));
+      for (const lang of ["en", "es", "ar"]) expect(header, `${doc.route} → ${lang}`).toMatch(new RegExp(`<a class="luz-lang-switch__link"[^>]*hreflang="${lang}"`));
     }
-    expect(rendered.get("/")).toContain("The light is computed from your clock, never from your location. Your choice stays in this browser.");
-    expect(rendered.get("/es/")).not.toContain("Your choice stays in this browser.");
-    expect(rendered.get("/ar/")).not.toContain("Your choice stays in this browser.");
   });
 
-  it("the hero's lead is the longer one the owner kept, with the TDD statement in it, in every language", () => {
-    // The owner (2026-10-18): the lead and "We love TDD, every change starts with a failing test" are one sentence;
-    // "We love TDD" is a link to the docs section that says how it is done.
-    expect(catalogs.en["hero.lead"]).toBe('Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads &amp; <a href="/docs/get-started/how-luz-is-built/#tests-first">We love TDD</a>, every change starts with a failing test.');
+  it("the hero's lead keeps the TDD statement in every language: the lead is one sentence about what works and how it changes", () => {
+    expect(catalogs.en["hero.lead"]).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads, and every change starts with a failing test.");
     for (const code of ["en", "es", "ar"]) expect(catalogs[code]["hero.lead"].replace(/<[^>]*>/g, "").length, code).toBeGreaterThan(120);
   });
 
@@ -460,16 +465,6 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
     it("a design system is \"sistema de diseño\" everywhere: no \"design system\" outside a lang=\"en\" span", () => {
       const offenders = Object.entries(catalogs.es).filter(([, value]) => /design system/i.test(spanish(value))).map(([key]) => key);
       expect(offenders).toEqual([]);
-    });
-
-    it("the progress bar counts steps \"completados\", not \"hechos\"", () => {
-      expect(catalogs.es["native.progress.label"]).toContain("completados");
-      expect(catalogs.es["native.progress.label"]).not.toContain("hechos");
-    });
-
-    it("the title of \"Get started\" writes the tag: <link>", () => {
-      const title = catalogs.es["start.title"];
-      expect(title.includes("<link>") || title.includes("&lt;link&gt;"), title).toBe(true);
     });
   });
 

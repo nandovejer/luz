@@ -21,8 +21,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # The UI smoke is skipped here: the pull request ran it, and the whole suite
+  # runs below (ui-full) once a publish is certain
   ci:
     uses: ./.github/workflows/ci.yml
+    with:
+      skip-ui: true
 
   version:
     name: Version PR
@@ -58,9 +62,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  # Every version that leaves has passed the whole Playwright suite on this
+  # commit, not only the specs its pull request touched
+  ui-full:
+    name: UI tests (full)
+    needs: version
+    if: needs.version.outputs.hasChangesets == 'false'
+    uses: ./.github/workflows/ui-tests.yml
+
   publish:
     name: Publish to npm
-    needs: version
+    needs: [version, ui-full]
     if: needs.version.outputs.hasChangesets == 'false'
     runs-on: ubuntu-latest
     environment: release

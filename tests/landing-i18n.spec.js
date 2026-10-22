@@ -276,26 +276,17 @@ test.describe('Arabic typography', () => {
     const style = (selector) =>
       page.locator(selector).first().evaluate((el) => ({ font: getComputedStyle(el).fontFamily, spacing: getComputedStyle(el).letterSpacing }));
     const sans = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--luz-font-sans').trim());
-    for (const selector of ['h1', '.luz-landing-section__title', '.luz-landing-section__eyebrow', '.luz-landing-section__lead', '.landing-level__title .landing-eyebrow']) {
+    for (const selector of ['h1', '.luz-landing-section__title', '.luz-landing-section__eyebrow', '.luz-landing-section__lead', '.landing-install__label', '.landing-cut__label', '.landing-foot-label', '.landing-brand__beta']) {
       await expect(page.locator(selector).first(), selector).toBeAttached();
       const { font, spacing } = await style(selector);
       expect(font, selector).not.toMatch(/ET Book/i);
       expect(font.replace(/\s/g, ''), selector).toBe(sans.replace(/\s/g, ''));
       expect(['normal', '0px'], `${selector} letter-spacing`).toContain(spacing);
     }
-    // English text on the same page keeps its own face
-    await expect(page.locator('.luz-landing-hero__copy > .luz-landing-hero__eyebrow[lang="en"]')).toHaveCount(1);
-    const { font } = await style('.luz-landing-hero__copy > .luz-landing-hero__eyebrow[lang="en"]');
+    // The three English words of "Why" stay marked as English inside the Arabic page; code keeps its mono face
+    await expect(page.locator('.landing-word[lang="en"]')).toHaveCount(3);
+    const { font } = await style('pre code');
     expect(font).toMatch(/mono/i);
-  });
-
-  test('the page tint sits in the top right corner', async ({ page }) => {
-    await open(page, '/ar/');
-    const background = await page.evaluate(() => {
-      document.body.classList.add('luz-landing-glow');
-      return getComputedStyle(document.body).backgroundImage;
-    });
-    expect(background).toMatch(/at right top|at top right|at 100% 0%/);
   });
 });
 

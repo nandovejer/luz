@@ -17,7 +17,7 @@ Names, classes and behaviour can still change before the stable release. Pin an 
 
 ### Level 1: tokens only
 
-CSS custom properties: the colour, space and type scales, and the colours of light, dark and high contrast. No other LUZ package is needed.
+CSS custom properties: the colour, space and type scales, the font roles, the breakpoints and the motion durations, and the colours of light, dark and high contrast. No other LUZ package is needed.
 
 `pnpm add @luz-ds/tokens`
 

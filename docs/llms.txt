@@ -26,9 +26,9 @@ Packages, in load order: @luz-ds/tokens, @luz-ds/core, @luz-ds/site, then one fo
 - [Color modes and themes](https://nandovejer.github.io/luz/docs/tokens/modes/): Switch between light, dark and high contrast with one attribute, or make a look of your own.
 - [Radius](https://nandovejer.github.io/luz/docs/tokens/radius/): The corner radius scale: square, 2px, 4px at most, and round.
 - [Shadows](https://nandovejer.github.io/luz/docs/tokens/shadows/): The elevation scale: how far a surface seems to float above the page.
-- [Motion](https://nandovejer.github.io/luz/docs/tokens/motion/): The durations and easings of every transition, which drop to zero when the reader asks for reduced motion. Ships with @luz-ds/core.
+- [Motion](https://nandovejer.github.io/luz/docs/tokens/motion/): The durations and easings of every transition, which drop to zero when the reader asks for reduced motion. Ships with @luz-ds/tokens.
 - [Layers](https://nandovejer.github.io/luz/docs/tokens/layers/): Which layer sits on top: the z-index of every overlay, in order. Ships with @luz-ds/core.
-- [Layout and breakpoints](https://nandovejer.github.io/luz/docs/tokens/layout/): How wide content gets, and where the layout changes. Ships with @luz-ds/core.
+- [Layout and breakpoints](https://nandovejer.github.io/luz/docs/tokens/layout/): How wide content gets, and where the layout changes. Widths ship with @luz-ds/core, breakpoints with @luz-ds/tokens.
 - [Color palette](https://nandovejer.github.io/luz/docs/tokens/palette/): The primitive colour scales. For theme authors only: components never use them.
 - [Tokens in Figma](https://nandovejer.github.io/luz/docs/tokens/figma/): The tokens as one design-tokens file for Figma variables and other design tools, with the same names and the three modes.
 - [Contrast check](https://nandovejer.github.io/luz/docs/tokens/contrast/): Check your own color overrides against the contrast LUZ promises, with one command or in the page, before they reach a user.

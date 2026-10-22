@@ -3,9 +3,9 @@
    One header for every page of the site (home and docs), from one partial
    (apps/site/_partials/header.html). Above 768px, one row:
 
-     Brand (+ version) · Docs · · · Search · Language · Mode · GitHub
+     Brand · Docs · · · Search · Language · Mode · GitHub
 
-   At 768px and below: Brand (+ version from 400px), Search, Mode and the
+   At 768px and below: Brand, Search, Mode and the
    menu button, which opens the drawer (#page-nav, see "Menu button and
    drawer"); Docs, GitHub and the languages move into it. The docs pages
    have no language switch ({{langswitch}} is empty there).
@@ -82,26 +82,6 @@
   text-decoration: none;
 }
 
-/* The version: quiet text beside the brand, a link to the changelog (its
-   accessible name says so). Close to the name, as part of it; a 24px target
-   at least (2.5.8) */
-.site-header__version {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  min-block-size: var(--luz-control-sm);
-  margin-inline-start: calc(-1 * var(--luz-space-2xs));
-  font-family: var(--luz-font-mono);
-  font-size: var(--luz-text-xs);
-  color: var(--luz-text-muted);
-  text-decoration: none;
-}
-
-.site-header__version:hover {
-  color: var(--luz-text-primary);
-  text-decoration: underline;
-}
-
 .site-header__nav {
   display: flex;
   gap: var(--luz-space-md);
@@ -123,10 +103,9 @@
 
 
 
-/* The free space of the row is after the version: the logo and the version
-   sit at the start, Docs, GitHub and the tools at the end. Below 400px the
-   version goes and the logo takes the space */
-.site-header__version {
+/* The free space of the row is after the logo: the logo sits at the start,
+   Docs, GitHub and the tools at the end */
+.site-header__brand {
   margin-inline-end: auto;
 }
 
@@ -232,8 +211,7 @@
     padding-block: 0;
   }
 
-  .site-header__brand,
-  .site-header__version {
+  .site-header__brand {
     align-self: center;
   }
 
@@ -304,17 +282,8 @@
 }
 
 
-/* Below 400px the version goes (it is also in the install snippets and the
-   footer): Brand, Search, Mode and the menu fit at 320px */
+/* Brand, Search, Mode and the menu fit at 320px */
 @media (max-width: 399px) {
-  .site-header__version {
-    display: none;
-  }
-
-  .site-header__brand {
-    margin-inline-end: auto;
-  }
-
   .site-header__inner {
     column-gap: var(--luz-space-2xs);
   }
@@ -557,7 +526,11 @@
     }
 
     /* A panel under the header, the full width, as tall as its content up
-       to the window; it scrolls inside itself */
+       to the window; it scrolls inside itself. It fades in and does not
+       travel: a panel that moves for 0.2 s is not at rest for a scroll
+       into view started at the same moment (tests/docs-nav-submenu.spec.js),
+       and core's duration tokens are zero under reduced motion, so it
+       appears at once there */
     .luz-sidebar.page-nav[popover] {
       inset: var(--site-header-h) 0 auto;
       inline-size: auto;
@@ -569,17 +542,14 @@
       padding-block-end: var(--luz-space-sm);
       border-block-end: 1px solid var(--luz-sidebar-border);
       opacity: 0;
-      translate: 0 calc(-1 * var(--luz-space-md));
       transition:
         opacity var(--luz-duration-base) var(--luz-easing-standard),
-        translate var(--luz-duration-base) var(--luz-easing-standard),
         overlay var(--luz-duration-base) allow-discrete,
         display var(--luz-duration-base) allow-discrete;
     }
 
     .luz-sidebar.page-nav[popover]:popover-open {
       opacity: 1;
-      translate: 0 0;
     }
 
     /* The backdrop dims the page, not the header: the X that closes the
@@ -600,7 +570,6 @@
     @starting-style {
       .luz-sidebar.page-nav[popover]:popover-open {
         opacity: 0;
-        translate: 0 calc(-1 * var(--luz-space-md));
       }
 
       .luz-sidebar.page-nav[popover]:popover-open::backdrop {
@@ -625,14 +594,6 @@
     .page-nav > .luz-sidebar__section + .luz-sidebar__section {
       border-block-start: 1px solid var(--luz-sidebar-border);
     }
-  }
-}
-
-/* Reduced motion: the panel does not travel; core's duration tokens are
-   zero there, so it appears at once */
-@media (prefers-reduced-motion: reduce) {
-  .luz-sidebar.page-nav[popover] {
-    translate: none;
   }
 }
 

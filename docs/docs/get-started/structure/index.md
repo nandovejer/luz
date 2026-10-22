@@ -67,7 +67,7 @@ A later layer wins over an earlier one, and any CSS of yours that is not in a la
 Core cascade layers
 ```text
 packages/core/src/
-  settings/_settings.css      luz.settings    motion, z-index, breakpoints
+  settings/_settings.css      luz.settings    z-index, layout widths, field text
   generic/_reset.css          luz.generic     the reset
   elements/*.css              luz.elements    bare HTML elements, zero specificity
   objects/_objects.css        luz.objects     layout: .o-*

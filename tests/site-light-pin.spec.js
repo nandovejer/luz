@@ -14,8 +14,10 @@
  *   - the footer has no Auto: three radios, none checked while the light
  *     follows the clock or the globe.
  *
- * The bar shows, above the slider, the slider's hour in large type and,
- * under it, the place (the city of the time zone) and the light's name.
+ * The bar shows, above the slider, the place (the city of the time zone) and
+ * the light's name, and under them the slider's hour in large type. Below
+ * 1024px it opens from the line and Escape closes it; from 1024px with a
+ * hover it is always open, so the test of closing it runs at NARROW.
  */
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
@@ -23,6 +25,8 @@ import { NO_CHOICE, TIMEZONE, atTime } from './helpers/site-lights.js';
 
 test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
 
+/** Below 1024px the bar is a disclosure (from 1024px with a hover it is always open). */
+const NARROW = { width: 800, height: 900 };
 const en = JSON.parse(readFileSync(new URL('../apps/landing/i18n/en.json', import.meta.url), 'utf-8'));
 
 test.beforeEach(() => {
@@ -68,7 +72,7 @@ test('the docs footer has no Auto either', async ({ page }) => {
   expect(values).toEqual(['light', 'dark', 'high-contrast']);
 });
 
-test('the bar shows the slider\'s hour in large type, and under it the place and the light', async ({ page }) => {
+test('the bar shows the place and the light, and under them the slider\'s hour in large type', async ({ page }) => {
   await atTime(page, '10:05');
   await page.goto('/');
   await openBar(page);
@@ -79,8 +83,8 @@ test('the bar shows the slider\'s hour in large type, and under it the place and
   // Larger than the phrase and the place
   const size = (loc) => loc.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
   expect(await size(time)).toBeGreaterThan(1.8 * (await size(where)));
-  // In the order of the owner's sketch: the time, the place, then the slider
-  const tops = await page.evaluate(() => ['.home-light__time', '.home-light__where', 'input[type="range"]'].map((s) => document.querySelector(`home-light ${s}`).getBoundingClientRect().top));
+  // In the order of the bar: the place and the light, the hour, then the slider
+  const tops = await page.evaluate(() => ['.home-light__where', '.home-light__time', 'input[type="range"]'].map((s) => document.querySelector(`home-light ${s}`).getBoundingClientRect().top));
   expect(tops[0]).toBeLessThan(tops[1]);
   expect(tops[1]).toBeLessThan(tops[2]);
   await slideTo(page, '19:30');
@@ -89,6 +93,7 @@ test('the bar shows the slider\'s hour in large type, and under it the place and
 });
 
 test('moving the slider pins its hour: saved, shown for a moment, kept on closing, after a reload and on the docs', async ({ page }) => {
+  await page.setViewportSize(NARROW);
   await atTime(page, '10:05');
   await page.goto('/');
   const saved = page.locator('home-light .home-light__saved');

@@ -200,7 +200,8 @@ describe("light.js: <luz-mode> is the only writer of data-theme and data-light",
 
   it("has no Pause motion: no still attribute, no pause button, no home-light__still, no light-pause label", () => {
     const s = source();
-    expect(/\bstill\b/.test(s), "light.js names the still attribute").toBe(false);
+    // `still` is a name in the code (the reduced-motion query); the attribute would be a string or a property
+    expect(/["'`[]still["'`\]]|\.still\b|\b_still\b|\bstill:/.test(s), "light.js names the still attribute").toBe(false);
     expect(/home-light__still|_pause\b|_text\(\s*["']pause["']\s*\)/.test(s), "light.js builds the pause button").toBe(false);
   });
 
@@ -513,10 +514,8 @@ describe("the strings of <home-light> in the catalogs of the home", () => {
     expect(body).toMatch(new RegExp(`data-luz-label-[\\w-]+="\\{\\{t:${key.replace(/\./g, "\\.")}\\}\\}"`));
   });
 
-  it("light.live is still \"Back to now\" (the Why section's button), but the light's bar has none: <body> hands it no light-live label", () => {
-    expect(en["light.live"]).toBe("Back to now");
-    expect(es["light.live"]).toBe("Volver a ahora");
-    expect(ar["light.live"]).toBe("العودة إلى الآن");
+  it("the Back to now button went with the swatches: no light.live key in any catalog, none in <body>, and no key with the value \"Live\"", () => {
+    for (const [code, catalog] of Object.entries({ en, es, ar })) expect(catalog, `${code}.json`).not.toHaveProperty("light.live");
     expect(html.match(/<body[^>]*>/)[0]).not.toMatch(/data-luz-label-light-live=/);
     expect(Object.values(en), "no key is left with the value \"Live\"").not.toContain("Live");
   });

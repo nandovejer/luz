@@ -6,7 +6,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  // The hosted runner has 4 cores: three workers leave one for the dev server (one worker took 2 h 20 min)
+  workers: process.env.CI ? 3 : undefined,
   // Terminal: one line per test; the HTML report is written but never opened or served.
   reporter: [[process.env.CI ? 'github' : 'line'], ['html', { open: 'never' }]],
   expect: {
@@ -43,7 +44,7 @@ export default defineConfig({
     {
       name: 'chromium-nojs',
       use: { ...devices['Desktop Chrome'], javaScriptEnabled: false },
-      testMatch: ['**/nojs.spec.js', '**/rtl.spec.js', '**/landing-i18n.spec.js', '**/site-header.spec.js', '**/product-card.spec.js', '**/section-band.spec.js', '**/site-hero.spec.js', '**/speakers.spec.js', '**/table-sort.spec.js', '**/meter.spec.js', '**/avatar.spec.js', '**/cms.spec.js', '**/prose.spec.js', '**/meta.spec.js', '**/site-submenu.spec.js', '**/site-banner.spec.js', '**/css-only-tags.spec.js', '**/site-consent.spec.js', '**/site-mode.spec.js', '**/timeline.spec.js', '**/objects.spec.js', '**/navbar.spec.js', '**/band.spec.js', '**/image.spec.js', '**/skip-link.spec.js', '**/landing-header.spec.js', '**/landing-hero.spec.js', '**/landing-footer.spec.js', '**/landing-section.spec.js', '**/landing-optional-site.spec.js', '**/cms-header.spec.js', '**/cms-page-header.spec.js', '**/cms-optional-site.spec.js', '**/app.spec.js', '**/type-space-scale.spec.js', '**/snippet-picker.spec.js', '**/make-it-yours.spec.js', '**/knobs-reader.spec.js', '**/examples.spec.js', '**/i18n-loader.spec.js', '**/shell-sidebar.spec.js', '**/home-light.spec.js', '**/docs-patterns.spec.js', '**/docs-try-it.spec.js', '**/site-reflow.spec.js', '**/ai-page-reflow.spec.js', '**/docs-nav-submenu.spec.js'],
+      testMatch: ['**/nojs.spec.js', '**/rtl.spec.js', '**/landing-i18n.spec.js', '**/site-header.spec.js', '**/product-card.spec.js', '**/section-band.spec.js', '**/site-hero.spec.js', '**/speakers.spec.js', '**/table-sort.spec.js', '**/meter.spec.js', '**/avatar.spec.js', '**/cms.spec.js', '**/prose.spec.js', '**/meta.spec.js', '**/site-submenu.spec.js', '**/site-banner.spec.js', '**/css-only-tags.spec.js', '**/site-consent.spec.js', '**/site-mode.spec.js', '**/timeline.spec.js', '**/objects.spec.js', '**/navbar.spec.js', '**/band.spec.js', '**/image.spec.js', '**/skip-link.spec.js', '**/landing-header.spec.js', '**/landing-hero.spec.js', '**/landing-footer.spec.js', '**/landing-section.spec.js', '**/landing-optional-site.spec.js', '**/cms-header.spec.js', '**/cms-page-header.spec.js', '**/cms-optional-site.spec.js', '**/app.spec.js', '**/type-space-scale.spec.js', '**/snippet-picker.spec.js', '**/make-it-yours.spec.js', '**/knobs-reader.spec.js', '**/examples.spec.js', '**/i18n-loader.spec.js', '**/shell-sidebar.spec.js', '**/home-light.spec.js', '**/docs-patterns.spec.js', '**/docs-try-it.spec.js', '**/site-reflow.spec.js', '**/ai-page-reflow.spec.js', '**/docs-nav-submenu.spec.js', '**/tokens-motion-roles.spec.js'],
     },
   ],
 

@@ -80,8 +80,11 @@ export function activateTab(tab, { moveFocus = false } = {}) {
   const tablist = tab.closest(".luz-tabs");
   if (!tablist) return;
 
-  const tabs = Array.from(tablist.querySelectorAll(".luz-tab"));
-  tabs.forEach((item) => {
+  // The new panel is shown before the old one is hidden (it comes first, and
+  // is set again in its place): the other way round the page is for a moment
+  // shorter than the scroll position, the browser clamps it, and a sticky
+  // element above the panels comes unstuck
+  [tab, ...tablist.querySelectorAll(".luz-tab")].forEach((item) => {
     const isActive = item === tab;
     item.classList.toggle("is-active", isActive);
     item.setAttribute("aria-selected", String(isActive));

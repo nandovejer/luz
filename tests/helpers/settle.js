@@ -37,15 +37,18 @@ export async function faded(page) {
 }
 
 /**
- * Wait for the network to go quiet. WebKit's driver sometimes never reports it
- * on the Button page of the docs although no request is pending (Safari review
- * 2026-10-17, probed with Playwright's WebKit: the page loads, no request is
- * left, `networkidle` still times out in about one load in two), so there the
- * wait is bounded and the expectations that follow do the waiting. Everywhere
- * else it is exactly `waitForLoadState('networkidle')`.
+ * Wait for the network to go quiet, for at most 5 seconds. `networkidle` is
+ * not a promise: under load (three workers on the hosted runner, with a dev
+ * server that is busy too) it can stay unreported for a minute although every
+ * request is done, and WebKit's driver sometimes never reports it on the Button
+ * page of the docs (Safari review 2026-10-17, probed with Playwright's WebKit:
+ * the page loads, no request is left, `networkidle` still times out in about
+ * one load in two). So the wait is bounded in every engine and the fonts are
+ * awaited as a condition that does settle; the expectations that follow do the
+ * rest of the waiting.
  * @param {import('@playwright/test').Page} page
  */
 export async function idle(page) {
-  if (page.context().browser()?.browserType().name() === 'webkit') await page.waitForLoadState('networkidle', { timeout: 3000 }).catch(() => {});
-  else await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+  await page.evaluate(() => document.fonts.ready);
 }

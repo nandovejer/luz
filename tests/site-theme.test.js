@@ -262,7 +262,7 @@ describe("the light cross-fades", () => {
     const text = groups.map((g) => [g.props.transition, g.props["transition-property"], g.props["transition-duration"]].join(" ")).join(" ");
     for (const name of registered) expect(text, name).toContain(name);
     // RL-8: a duration is a --luz-duration-* token (stylelint); 1.4s is the lazy step (0.8s) × 1.75
-    const lazy = readFileSync(resolve(repo, "packages/core/src/settings/_settings.css"), "utf-8").match(/--luz-duration-lazy:\s*([\d.]+)s/)[1];
+    const lazy = JSON.parse(readFileSync(resolve(repo, "packages/tokens/tokens.json"), "utf-8")).duration.lazy.value.match(/^([\d.]+)s$/)[1];
     const factor = text.match(/calc\(\s*var\(--luz-duration-lazy\)\s*\*\s*([\d.]+)\s*\)/)?.[1];
     expect(factor, "the duration is calc(var(--luz-duration-lazy) * n)").toBeTruthy();
     expect(Number(lazy) * Number(factor)).toBeCloseTo(1.4, 5);

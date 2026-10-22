@@ -241,19 +241,19 @@ for (const home of ['/', '/es/', '/ar/']) {
   });
 }
 
-// The new home (F5 of .claude/plans/luz-home-docs-identity.md, section 3.6): eight sections in a fixed order (the fit lists
-// are in "start"), all of them words and native elements; what needs a script (the swatches of the lights, Back to now, the copy buttons) is not shown dead
-const SECTIONS = ['hero', 'light', 'why', 'inside', 'native', 'modes', 'type', 'start'];
+// The home: nine sections in a fixed order (the hero, the light, the four levels of "inside", why, native and modes), all of them
+// words and native elements; what needs a script (the buttons of Modes, the copy buttons) is not shown dead
+const SECTIONS = ['hero', 'light', 'inside', 'inside-2', 'inside-3', 'inside-4', 'why', 'native', 'modes'];
 const HOME_CATALOG = { '/': 'en', '/es/': 'es', '/ar/': 'ar' };
 const homeCatalog = (home) => JSON.parse(readFileSync(fileURLToPath(new URL(`../apps/landing/i18n/${HOME_CATALOG[home]}.json`, import.meta.url)), 'utf-8'));
 
 for (const home of ['/', '/es/', '/ar/']) {
-  test(`${home}: the eight sections are in the page, in order, and every one but the light has words`, async ({ page }) => {
+  test(`${home}: the nine sections are in the page, in order, and every one but the light has words`, async ({ page }) => {
     await page.goto(home);
-    expect(await page.locator('main > section').evaluateAll((all) => all.map((el) => el.id))).toEqual(SECTIONS);
+    expect(await page.locator('main section').evaluateAll((all) => all.map((el) => el.id))).toEqual(SECTIONS);
     await expect(page.locator('h1')).toHaveCount(1);
     for (const id of SECTIONS.filter((section) => section !== 'light')) {
-      const section = page.locator(`main > section#${id}`);
+      const section = page.locator(`main section#${id}`);
       await expect(section.locator('h1, h2').first(), id).toBeVisible();
       expect((await section.innerText()).trim().length, id).toBeGreaterThan(30);
     }
@@ -278,56 +278,34 @@ for (const home of ['/', '/es/', '/ar/']) {
     expect(sentences, `visible text in #light: ${JSON.stringify(shown)}`).not.toEqual([]);
   });
 
-  test(`${home}: the swatches of the lights are not shown without a script`, async ({ page }) => {
+  test(`${home}: the buttons of the three modes are not shown without a script, and the boxes are pictures`, async ({ page }) => {
     await page.goto(home);
-    const shown = await page.locator('#why button').evaluateAll((all) =>
-      all.filter((el) => el.checkVisibility({ visibilityProperty: true }) && el.hasAttribute('aria-pressed')).map((el) => el.textContent.trim()),
-    );
-    expect(shown).toEqual([]);
-    // A control that is in the page and visible must be able to do something: the light card keeps its words
-    await expect(page.locator('#why .luz-card').first()).toBeVisible();
+    const buttons = page.locator('#modes [data-apply-mode]');
+    await expect(buttons).toHaveCount(3);
+    for (const button of await buttons.all()) await expect(button).toBeHidden();
+    // A control that is in the page and visible must be able to do something: the boxes keep their words
+    for (const picture of await page.locator('#modes .landing-cut__picture').all()) await expect(picture).toBeVisible();
   });
 
-  test(`${home}: the six native specimens work: details, popover, range, select, progress and the dialog`, async ({ page }) => {
+  test(`${home}: Native is three scenes of code and its result, plain text and native elements, with no script`, async ({ page }) => {
+    // Under reduced motion the panel rests on its first scene, on its last frame (the loop is CSS)
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(home);
-    const native = page.locator('#native');
-    await expect(native.locator('.luz-card')).toHaveCount(6);
-
-    const details = native.locator('details');
-    await details.locator('summary').click();
-    expect(await details.evaluate((el) => el.open)).toBe(true);
-
-    const trigger = native.locator('button[popovertarget]');
-    const popover = page.locator(`#${await trigger.getAttribute('popovertarget')}`);
-    await trigger.click();
-    expect(await popover.evaluate((el) => el.matches(':popover-open'))).toBe(true);
-    await page.keyboard.press('Escape');
-    expect(await popover.evaluate((el) => el.matches(':popover-open'))).toBe(false);
-
-    const range = native.locator('input[type="range"]');
-    const before = await range.inputValue();
-    await range.focus();
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowRight');
-    expect(await range.inputValue()).not.toBe(before);
-
-    const select = native.locator('select');
-    const options = await select.locator('option').evaluateAll((all) => all.map((o) => o.value));
-    const chosen = await select.inputValue();
-    await select.selectOption(options.find((value) => value !== chosen));
-    expect(await select.inputValue()).not.toBe(chosen);
-
-    await expect(native.locator('progress.luz-progress')).toHaveCount(1);
-
-    // The dialog opens by command / commandfor where the browser does it
-    if (await page.evaluate(() => 'commandForElement' in HTMLButtonElement.prototype)) {
-      const opener = native.locator('button[command="show-modal"][commandfor]');
-      const dialog = page.locator(`#${await opener.getAttribute('commandfor')}`);
-      await opener.click();
-      expect(await dialog.evaluate((el) => el.open)).toBe(true);
-      await page.keyboard.press('Escape');
-      expect(await dialog.evaluate((el) => el.open)).toBe(false);
-    }
+    const panel = page.locator('#native .landing-typed__panel');
+    await expect(panel).toBeVisible();
+    const scenes = panel.locator('.landing-typed__scene');
+    await expect(scenes).toHaveCount(3);
+    const code = scenes.nth(0).locator('pre.luz-code-block');
+    await expect(code).toBeVisible();
+    await expect(code).toContainText('<meter');
+    // The code of the other two scenes is in the page too, as text
+    expect(await scenes.nth(1).locator('pre.luz-code-block').textContent()).toContain('<input');
+    expect(await scenes.nth(2).locator('pre.luz-code-block').textContent()).toContain('<button');
+    // The result is a picture of the code: native elements, inert
+    await expect(scenes.nth(0).locator('.landing-typed__result')).toHaveJSProperty('inert', true);
+    await expect(scenes.nth(0).locator('.landing-typed__state--luz meter.luz-meter')).toBeVisible();
+    // The points and the link to every tag are plain links and text
+    await expect(page.locator('#native a.landing-inside__cta')).toBeVisible();
   });
 
   test(`${home}: the three mode cards are re-scoped by their own data-theme, with no script`, async ({ page }) => {
@@ -343,12 +321,14 @@ for (const home of ['/', '/es/', '/ar/']) {
     expect(new Set(surfaces).size).toBe(3);
   });
 
-  test(`${home}: the footer lists the columns and the three languages, and the privacy line is words`, async ({ page }) => {
+  test(`${home}: the footer lists its two columns, the three colour modes and the legal line, and the three languages are in the header`, async ({ page }) => {
     await page.goto(home);
     const footer = page.locator('footer.luz-landing-footer');
-    await expect(footer.locator('.luz-landing-footer__col')).toHaveCount(3);
-    await expect(footer.locator('.luz-landing-footer__col').nth(2).locator('a')).toHaveCount(3);
+    await expect(footer.locator('.luz-landing-footer__col')).toHaveCount(2);
+    await expect(footer.locator('.luz-landing-footer__col').nth(1).locator('a')).toHaveCount(4);
     await expect(footer.locator('luz-mode input[name="luz-theme"]')).toHaveCount(3);
     expect((await footer.locator('p').allInnerTexts()).join(' ').length).toBeGreaterThan(40);
+    // The languages are links of the header's switch (a popover nav, in the markup without a script)
+    await expect(page.locator('.site-header luz-lang-switch a')).toHaveCount(3);
   });
 }
