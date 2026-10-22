@@ -112,7 +112,8 @@ export function initHighlight() {
       pre.setAttribute("aria-label", t("codeExample", pre, { lang }));
     }
 
-    if (!pre.querySelector(".luz-code-block__copy")) {
+    // A terminal has its own copy button at the end of its title bar: no second one inside the block
+    if (!pre.querySelector(".luz-code-block__copy") && !pre.closest(".luz-terminal")) {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "luz-copy-btn luz-code-block__copy";

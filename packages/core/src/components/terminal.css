@@ -1,0 +1,74 @@
+/* --------------------------------------------------------------------------
+   LUZ Component: terminal
+   A command in a framed block: tabs as its title bar, a copy button at the
+   end of the line it copies
+   Layer: components (ITCSS 5) · Prefix: .luz-
+   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   -------------------------------------------------------------------------- */
+
+
+.luz-terminal {
+  position: relative;
+  display: grid;
+  /* One column that may be narrower than its content: a long command scrolls
+     inside its block instead of widening the frame */
+  grid-template-columns: minmax(0, 1fr);
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--luz-text-primary) 16%, transparent);
+  border-radius: var(--luz-radius-md);
+  background: color-mix(in oklab, var(--luz-text-primary) 4%, var(--luz-surface-page));
+}
+
+/* The tabs are the title bar: a tint of the ink, a hairline under it */
+.luz-terminal__tabs {
+  gap: 0;
+  margin: 0;
+  padding-inline: var(--luz-space-2xs);
+  border-block-end: 1px solid color-mix(in oklab, var(--luz-text-primary) 12%, transparent);
+  background: color-mix(in oklab, var(--luz-text-primary) 7%, var(--luz-surface-page));
+}
+
+.luz-terminal__tabs .luz-tab {
+  padding: var(--luz-space-2xs) var(--luz-space-sm);
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* The open tab: the ink on the bar's tint; the rule under it and its weight
+   still say which one is open */
+.luz-terminal__tabs .luz-tab.is-active {
+  color: var(--luz-text-primary);
+}
+
+.luz-terminal__pane {
+  margin: 0;
+}
+
+/* The copy button of the open pane sits at the end of the title bar */
+.luz-terminal__pane .luz-copy-btn {
+  position: absolute;
+  inset-block-start: var(--luz-space-3xs);
+  inset-inline-end: var(--luz-space-xs);
+}
+
+.luz-terminal .luz-code-block {
+  margin: 0;
+  padding: var(--luz-space-sm);
+  overflow-x: auto;
+  border: 0;
+  background: transparent;
+  font-size: var(--luz-text-xs);
+}
+
+.luz-terminal .luz-code-block::before {
+  display: none;
+}
+
+/* A shell command shows its prompt */
+.luz-terminal .luz-code-block[data-lang="bash"] code::before {
+  content: "$ ";
+  color: var(--luz-text-secondary);
+}

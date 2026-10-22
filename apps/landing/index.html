@@ -124,7 +124,7 @@
           </ul>
         </div>
       <div class="landing-panel">
-        <nav class="luz-tabs landing-panel__tabs" aria-label="{{t:inside.l1.panel}}">
+        <nav class="luz-tabs luz-tabs--pill" aria-label="{{t:inside.l1.panel}}">
           <a class="luz-tab" href="#in1-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>{{t:inside.tab.install}}</span></a>
           <a class="luz-tab" href="#in1-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>{{t:inside.tab.list}}</span></a>
           <a class="luz-tab" href="#in1-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>{{t:inside.tab.code}}</span></a>
@@ -176,7 +176,7 @@ a {
           </ul>
         </div>
       <div class="landing-panel">
-        <nav class="luz-tabs landing-panel__tabs" aria-label="{{t:inside.l2.panel}}">
+        <nav class="luz-tabs luz-tabs--pill" aria-label="{{t:inside.l2.panel}}">
           <a class="luz-tab" href="#in2-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>{{t:inside.tab.install}}</span></a>
           <a class="luz-tab" href="#in2-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>{{t:inside.tab.list}}</span></a>
           <a class="luz-tab" href="#in2-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>{{t:inside.tab.code}}</span></a>
@@ -229,7 +229,7 @@ a {
           </ul>
         </div>
       <div class="landing-panel">
-        <nav class="luz-tabs landing-panel__tabs" aria-label="{{t:inside.l3.panel}}">
+        <nav class="luz-tabs luz-tabs--pill" aria-label="{{t:inside.l3.panel}}">
           <a class="luz-tab" href="#in3-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>{{t:inside.tab.install}}</span></a>
           <a class="luz-tab" href="#in3-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>{{t:inside.tab.list}}</span></a>
           <a class="luz-tab" href="#in3-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>{{t:inside.tab.code}}</span></a>
@@ -287,16 +287,16 @@ a {
       <ul class="landing-inside__kinds" aria-label="{{t:inside.l4.panel}}">
           <li class="landing-kind landing-kind--landing">
             <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M7 8.5h10M8.5 11.5h7"/><rect x="9" y="14.5" width="6" height="2.5" rx="1.25"/></g></svg><hgroup class="landing-kind__name"><h3>{{t:inside.kind.landing.title}}</h3><p>{{t:inside.kind.landing.text}}</p></hgroup></div>
-            <div class="landing-term">
-              <nav class="luz-tabs landing-term__tabs" aria-label="{{t:inside.tab.install}} landing">
+            <div class="luz-terminal">
+              <nav class="luz-tabs luz-terminal__tabs" aria-label="{{t:inside.tab.install}} landing">
                 <a class="luz-tab" href="#in4-landing-npm-pane">{{t:inside.install.npm}}</a>
                 <a class="luz-tab" href="#in4-landing-cdn-pane">{{t:inside.install.cdn}}</a>
               </nav>
-              <div class="luz-tabpanel landing-term__pane" id="in4-landing-npm-pane">
+              <div class="luz-tabpanel luz-terminal__pane" id="in4-landing-npm-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="in4-landing-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
                 <pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in4-landing-npm">npm install @luz-ds/landing</code></pre>
               </div>
-              <div class="luz-tabpanel landing-term__pane" id="in4-landing-cdn-pane">
+              <div class="luz-tabpanel luz-terminal__pane" id="in4-landing-cdn-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="in4-landing-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
                 <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in4-landing-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/landing@{{version}}/dist/landing.min.css&quot;&gt;</code></pre>
               </div>
@@ -305,16 +305,16 @@ a {
           </li>
           <li class="landing-kind landing-kind--cms">
             <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11"/><path d="M7.5 9h4M7.5 12.5h7M7.5 16h7"/><path d="m17.5 3.5 3 3-6 6H11.5v-3l6-6Z"/></g></svg><hgroup class="landing-kind__name"><h3>{{t:inside.kind.cms.title}}</h3><p>{{t:inside.kind.cms.text}}</p></hgroup></div>
-            <div class="landing-term">
-              <nav class="luz-tabs landing-term__tabs" aria-label="{{t:inside.tab.install}} cms">
+            <div class="luz-terminal">
+              <nav class="luz-tabs luz-terminal__tabs" aria-label="{{t:inside.tab.install}} cms">
                 <a class="luz-tab" href="#in4-cms-npm-pane">{{t:inside.install.npm}}</a>
                 <a class="luz-tab" href="#in4-cms-cdn-pane">{{t:inside.install.cdn}}</a>
               </nav>
-              <div class="luz-tabpanel landing-term__pane" id="in4-cms-npm-pane">
+              <div class="luz-tabpanel luz-terminal__pane" id="in4-cms-npm-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="in4-cms-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
                 <pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in4-cms-npm">npm install @luz-ds/cms</code></pre>
               </div>
-              <div class="luz-tabpanel landing-term__pane" id="in4-cms-cdn-pane">
+              <div class="luz-tabpanel luz-terminal__pane" id="in4-cms-cdn-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="in4-cms-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
                 <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in4-cms-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/cms@{{version}}/dist/cms.min.css&quot;&gt;</code></pre>
               </div>
@@ -323,16 +323,16 @@ a {
           </li>
           <li class="landing-kind landing-kind--app">
             <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 9h17M9 9v10"/></g></svg><hgroup class="landing-kind__name"><h3>{{t:inside.kind.app.title}}</h3><p>{{t:inside.kind.app.text}}</p></hgroup></div>
-            <div class="landing-term">
-              <nav class="luz-tabs landing-term__tabs" aria-label="{{t:inside.tab.install}} app">
+            <div class="luz-terminal">
+              <nav class="luz-tabs luz-terminal__tabs" aria-label="{{t:inside.tab.install}} app">
                 <a class="luz-tab" href="#in4-app-npm-pane">{{t:inside.install.npm}}</a>
                 <a class="luz-tab" href="#in4-app-cdn-pane">{{t:inside.install.cdn}}</a>
               </nav>
-              <div class="luz-tabpanel landing-term__pane" id="in4-app-npm-pane">
+              <div class="luz-tabpanel luz-terminal__pane" id="in4-app-npm-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="in4-app-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
                 <pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in4-app-npm">npm install @luz-ds/app</code></pre>
               </div>
-              <div class="luz-tabpanel landing-term__pane" id="in4-app-cdn-pane">
+              <div class="luz-tabpanel luz-terminal__pane" id="in4-app-cdn-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="in4-app-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
                 <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in4-app-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/app@{{version}}/dist/app.min.css&quot;&gt;</code></pre>
               </div>
@@ -341,16 +341,16 @@ a {
           </li>
           <li class="landing-kind landing-kind--docs">
             <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></g></svg><hgroup class="landing-kind__name"><h3>{{t:inside.kind.docs.title}}</h3><p>{{t:inside.kind.docs.text}}</p></hgroup></div>
-            <div class="landing-term">
-              <nav class="luz-tabs landing-term__tabs" aria-label="{{t:inside.tab.install}} docs">
+            <div class="luz-terminal">
+              <nav class="luz-tabs luz-terminal__tabs" aria-label="{{t:inside.tab.install}} docs">
                 <a class="luz-tab" href="#in4-docs-npm-pane">{{t:inside.install.npm}}</a>
                 <a class="luz-tab" href="#in4-docs-cdn-pane">{{t:inside.install.cdn}}</a>
               </nav>
-              <div class="luz-tabpanel landing-term__pane" id="in4-docs-npm-pane">
+              <div class="luz-tabpanel luz-terminal__pane" id="in4-docs-npm-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="in4-docs-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
                 <pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in4-docs-npm">npm install @luz-ds/docs</code></pre>
               </div>
-              <div class="luz-tabpanel landing-term__pane" id="in4-docs-cdn-pane">
+              <div class="luz-tabpanel luz-terminal__pane" id="in4-docs-cdn-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="in4-docs-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
                 <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in4-docs-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/docs@{{version}}/dist/docs.min.css&quot;&gt;</code></pre>
               </div>

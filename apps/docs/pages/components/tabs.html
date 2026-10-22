@@ -47,6 +47,20 @@ toc: h2,h3
             </div>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-tabs-pill" aria-label="Copy the pill tabs markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Pill tabs markup"><code id="code-tabs-pill">&lt;nav class=&quot;luz-tabs luz-tabs--pill&quot; aria-label=&quot;Project&quot;&gt;
+  &lt;a class=&quot;luz-tab&quot; href=&quot;#project-summary&quot;&gt;
+    &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;…&lt;/svg&gt;Summary
+  &lt;/a&gt;
+  &lt;a class=&quot;luz-tab&quot; href=&quot;#project-settings&quot;&gt;
+    &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;…&lt;/svg&gt;Settings
+  &lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">JS</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-tabs-js" aria-label="Copy the tabs script code">Copy</button>
               </div>
@@ -54,7 +68,19 @@ toc: h2,h3
 initTabs();</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
-            <p>One look. The tab that opens first is the first one that matches:</p>
+            <p>One class changes the look:</p>
+            <div class="luz-table-wrap" role="region" aria-label="Tabs classes" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Class</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Class"><div><code>.luz-tabs</code></div></td><td data-label="Effect"><div>A row of text tabs over a rule; the open one is brand text with a brand underline</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-tabs--pill</code></div></td><td data-label="Effect"><div>Pill: a tab may hold an icon (an <code>svg</code> before the text, at the size and colour of the text), and the open tab is a chip on <code>--luz-surface</code> with no rule under the row. Below 640 px the icons are hidden, so the tabs fit</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>The tab that opens first is the first one that matches:</p>
             <div class="luz-table-wrap" role="region" aria-label="Which tab opens first" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -78,6 +104,7 @@ initTabs();</code></pre>
             <h3 id="no-js">Without JavaScript</h3>
             <p>The tabs are a row of links, and every panel is shown, stacked, in order. Each link jumps to its panel.</p>
             <p>Give each panel a heading, so the stacked page still reads well.</p>
+            <p>In the pill look the chip is drawn for <code>aria-selected="true"</code>, which the script sets: without JavaScript no tab has a chip.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <p>Tab moves into the tab row, to the selected tab; Tab again leaves for the panel.</p>
             <ul>
@@ -121,7 +148,7 @@ initTabs();</code></pre>
               <li>Use the same name for the panel's heading.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
-            <p>Tabs are secondary text; the current one is brand text over a brand underline.</p>
+            <p>Tabs are secondary text; the current one is brand text over a brand underline. In the pill look it is also on a chip.</p>
             <div class="luz-table-wrap" role="region" aria-label="Tabs contrast in each mode" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>
@@ -131,6 +158,7 @@ initTabs();</code></pre>
                   <tr><td data-label="Part"><div>Tab</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Tab, hover</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Current tab and its underline</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Current tab, pill</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>7.2:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
                 </tbody>
               </table>
@@ -138,14 +166,16 @@ initTabs();</code></pre>
             <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
             <ul>
               <li><strong>Focus:</strong> a 2 px <code>--luz-focus-ring</code> outline drawn inside the tab, so the scrolling row never cuts it.</li>
-              <li><strong>Not colour alone:</strong> the current tab has a 2 px underline; the row's line under the others is <code>--luz-divider</code>.</li>
+              <li><strong>Not colour alone:</strong> the current tab has a 2 px underline; the row's line under the others is <code>--luz-divider</code>. The pill look keeps the underline and the weight on the chip.</li>
+              <li><strong>Icons:</strong> mark an icon <code>aria-hidden="true"</code>, so the tab is named by its text; below 640 px the icon is hidden, so never let it carry the meaning alone.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 10 tokens that <code>components/tabs.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 15 tokens that <code>components/tabs.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
-              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
               <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
             </dl>
             <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
