@@ -5,8 +5,7 @@
  *
  * A budget with a `glob` instead of a `file` applies to each file it
  * matches ("dir/**\/*.ext"): the docs pages, each measured as raw bytes
- * (`"compression": "none"`) in the committed docs/ (which check:generated
- * proves equal to a fresh build).
+ * (`"compression": "none"`) in docs/, the Pages build (`pnpm pages:build`; git-ignored output).
  *
  * A `file` budget of a package that does not exist yet (no
  * packages/<name>/package.json) passes vacuously with a note; once the package

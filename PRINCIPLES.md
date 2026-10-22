@@ -203,12 +203,12 @@ Each red line has at least one check that fails when it is broken. The table is 
 | RL-11 | `scripts/stylelint/no-bare-element.js` | Nothing known |
 | RL-12 | `eslint.config.js`, `tests/red-lines.test.js`, `tests/red-lines.spec.js` | A request made by a browser extension, or by an embedded `iframe` a consumer adds |
 | RL-13 | `scripts/check-pack.js`, `tests/red-lines.test.js` | For now it checks fonts only: code or images copied into the repo without their origin, and the licence text being correct for the file |
-| RL-14 | `scripts/check-generated.js` | A hand edit to `dist/`: it is ignored by git and a later build overwrites it, so only `docs/` can be committed edited, and that is what the check compares |
+| RL-14 | `.gitignore`, `.github/workflows/pages.yml`, `tests/pages-in-actions.test.js` | `dist/` and `docs/` are ignored by git, so a hand edit never reaches a commit, and `pages.yml` builds the site from the sources and deploys it on every push to `main`. A hand edit that is never committed is not seen: a later build overwrites it |
 | RL-15 | `tests/red-lines.test.js` | Whether a *new use* of a status colour has the right meaning |
 | RL-16 | `eslint.config.js` | Sniffing written through a library: there are none (RL-1) |
 | RL-17 | `scripts/check-size.js` | Anything that is not in `budgets.json` |
 | RL-18 | `tests/docs-site.test.js`, `tests/docs.spec.js` | Whether the text of *When to use* is true |
-| RL-19 | `scripts/check-generated.js`, `scripts/check-ai.js`, `tests/ai-files.test.js` | The first compares `docs/` with a fresh build, the second regenerates the manifests, `llms.txt`, the examples, the README blocks and the agent snapshot and compares bytes, the third checks their facts. Prose only an agent would read is not seen, nor is the meaning of a description |
+| RL-19 | `scripts/check-ai.js`, `tests/ai-files.test.js` | The first regenerates the manifests, `llms.txt`, the examples, the README blocks and the agent snapshot and compares bytes, the second checks their facts. Prose only an agent would read is not seen, nor is the meaning of a description |
 
 ## Strong rules
 

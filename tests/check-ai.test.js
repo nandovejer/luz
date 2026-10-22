@@ -32,8 +32,8 @@
  *   `packages/<p>/dist` and `pnpm build`, never a stack trace.
  *
  * The behaviour runs on a copy of the repository in a temporary folder: the
- * script reads its root from its own location (like check-generated.js and
- * check-size.js). The copy is made right by writing, with the repository's own
+ * script reads its root from its own location (like check-size.js and
+ * check-contrast.js). The copy is made right by writing, with the repository's own
  * generators, what the pages build would have written, so each case differs
  * from a passing workspace by exactly one change.
  *
@@ -380,10 +380,10 @@ describe("pnpm check:ai on this repository", () => {
 /* ---- Where it runs ------------------------------------------------------------------ */
 
 describe("check:ai is a script, a step of qa-release and a step of CI", () => {
-  it("the root package.json has check:ai, next to check:generated", () => {
+  it("the root package.json has check:ai, and no check:generated any more (docs/ is built by Actions, not committed)", () => {
     const scripts = JSON.parse(read("package.json")).scripts;
     expect(scripts["check:ai"]).toBe("node scripts/check-ai.js");
-    expect(scripts["check:generated"]).toBe("node scripts/check-generated.js");
+    expect(scripts["check:generated"]).toBeUndefined();
   });
 
   it("scripts/qa-release.js has a step that runs `pnpm check:ai`, always, after the build and before the browsers", () => {
@@ -396,23 +396,23 @@ describe("check:ai is a script, a step of qa-release and a step of CI", () => {
     expect(line, "not skipped by --fast or --skip-ui").not.toMatch(/args\.has\(/);
     expect(line).toMatch(/cmd:\s*\[pnpm,\s*"check:ai"\]/);
     expect(line, "its name cites the red line").toMatch(/RL-19/);
-    const build = lines.findIndex((l) => /\[pnpm,\s*"build"\]/.test(l));
+    const build = lines.findIndex((l) => /\[pnpm,\s*"pages:build"\]/.test(l));
     const browsers = lines.findIndex((l) => l.includes("playwright"));
-    expect(build, "the build step").toBeGreaterThanOrEqual(0);
+    expect(build, "the build step (pages:build: the packages and the Pages site)").toBeGreaterThanOrEqual(0);
     expect(at[0]).toBeGreaterThan(build);
     expect(at[0]).toBeLessThan(browsers);
   });
 
-  it(".github/workflows/ci.yml runs `pnpm check:ai` in the job that builds, after `pnpm build`", () => {
+  it(".github/workflows/ci.yml runs `pnpm check:ai` in the job that builds, after `pnpm pages:build`", () => {
     const workflow = read(".github/workflows/ci.yml");
     const start = workflow.indexOf("\n  build-and-test:");
     expect(start, "the build-and-test job").toBeGreaterThan(-1);
     const rest = workflow.slice(start + 1);
     const next = rest.slice(1).search(/\n {2}[\w-]+:\s*\n/);
     const job = next === -1 ? rest : rest.slice(0, next + 1);
-    const build = job.search(/^\s*run:\s*pnpm build\s*$/m);
+    const build = job.search(/^\s*run:\s*pnpm pages:build\s*$/m);
     const gate = job.search(/^\s*run:\s*pnpm check:ai\s*$/m);
-    expect(build, "pnpm build in the job").toBeGreaterThan(-1);
+    expect(build, "pnpm pages:build in the job").toBeGreaterThan(-1);
     expect(gate, "pnpm check:ai in the job").toBeGreaterThan(build);
   });
 });

@@ -74,7 +74,7 @@ jobs:
     timeout-minutes: 25
     steps:
       # Full history: each docs page shows the date of its last commit
-      # (`git log -1 -- <file>`), so check:generated needs more than one commit
+      # (`git log -1 -- <file>`), so the Pages build needs more than one commit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
@@ -92,8 +92,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run build
-        run: pnpm build
+      # The packages and the Pages site (docs/, git-ignored build output): a
+      # broken page or link fails the pull request here, and the checks below
+      # that measure or compare the built site have it to read. pages.yml
+      # builds it again on main to deploy it.
+      - name: Run build and the Pages build
+        run: pnpm pages:build
 
       # RL-19: llms.txt, the manifests, the examples, the README blocks and the
       # agent snapshot are what the generators write; a stale one fails
@@ -120,10 +124,6 @@ jobs:
       # Red line 7: text 4.5:1, focus ring and borders 3:1, three themes
       - name: Check token contrast
         run: pnpm check:contrast
-
-      # Red line 14: docs/ is exactly the output of the Pages build
-      - name: Check generated files
-        run: pnpm check:generated
 
       - name: Check exceptions register
         run: pnpm check:exceptions

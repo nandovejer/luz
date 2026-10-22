@@ -10,7 +10,7 @@
  *
  * Usage: node scripts/qa-release.js [--skip-ui] [--fast]
  *   --skip-ui  skip the Playwright suites (lint, checks and unit tests only)
- *   --fast     skip `pnpm build` and `check:generated` (the packages are
+ *   --fast     skip `pnpm pages:build` (the packages and the site are
  *              already built; do not use for a release); `check:ai` always runs
  * Exit code: 0 when every step passed, 1 when one failed.
  */
@@ -37,7 +37,7 @@ const git = (...argv) => (spawnSync("git", argv, { cwd: root, encoding: "utf-8" 
 
 const UI = ["--project=chromium", "--project=chromium-nojs", "--reporter=line", "--workers=3"];
 const steps = [
-  ...(args.has("--fast") ? [] : [{ name: "Build (tokens, core, site, landing, cms, app, docs)", cmd: [pnpm, "build"] }]),
+  ...(args.has("--fast") ? [] : [{ name: "Build (tokens, core, site, landing, cms, app, docs) and the Pages site into docs/", cmd: [pnpm, "pages:build"] }]),
   { name: "Lint CSS (stylelint: RL-5, 8, 10, 11, SR-3, SR-4)", cmd: [pnpm, "lint:css"] },
   { name: "Lint JS (ESLint: RL-3, HTML sinks)", cmd: [pnpm, "lint:js"] },
   { name: "Size budgets (RL-17)", cmd: [pnpm, "check:size"] },
@@ -47,7 +47,6 @@ const steps = [
   { name: "Licences (RL-1, RL-13: published packages MIT with no dependencies; dev/LICENSES.md)", cmd: [pnpm, "check:license"] },
   { name: "Tarball contents", cmd: [pnpm, "check:pack"] },
   { name: "Token contrast (RL-7)", cmd: [pnpm, "check:contrast"] },
-  ...(args.has("--fast") ? [] : [{ name: "Generated files (RL-14: docs/ is the Pages build)", cmd: [pnpm, "check:generated"] }]),
   { name: "Files for AI agents (RL-19: manifests, llms.txt, examples, READMEs, agent)", cmd: [pnpm, "check:ai"] },
   { name: "Unit tests", cmd: [pnpm, "test:unit"] },
   ...(args.has("--skip-ui") ? [] : [{ name: "Playwright: chromium and chromium-nojs", cmd: [pnpm, "exec", "playwright", "test", ...UI] }]),

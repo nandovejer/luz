@@ -1,8 +1,8 @@
 /**
  * The home's weights are the same on every machine. Node's zlib is Chromium's
  * fork, whose output changes a few bytes with the CPU, so a build on the hosted
- * runner wrote other figures than a local one and `pnpm check:generated`
- * failed. scripts/docs-site/site.js measures with the system `gzip -9 -n`
+ * runner wrote other figures than a local one. scripts/docs-site/site.js
+ * measures with the system `gzip -9 -n`
  * and falls back to node's zlib only where there is no such program.
  *
  *  - the source: the weights go through one function that runs `gzip` with

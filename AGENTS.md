@@ -12,7 +12,7 @@ See [DIST-RULES.md](./dev/DIST-RULES.md) for full regeneration steps.
 
 ### 2. `docs/` is the generated GitHub Pages site
 
-`docs/` at the repo root is the output of `pnpm pages:build` (Vite, `--mode pages`, relative URLs) and is committed so GitHub Pages can serve it. Never edit it by hand: change `apps/` or `packages/`, rebuild, and commit the result.
+`docs/` at the repo root is the output of `pnpm pages:build` (Vite, `--mode pages`, relative URLs). It is git-ignored, like `dist/`: `.github/workflows/pages.yml` builds it from the sources on every push to `main` and deploys it to GitHub Pages (Settings > Pages > Source is "GitHub Actions"), and the CI of a pull request builds it too, so a broken page or link fails there. Never edit it by hand: change `apps/` or `packages/`, and run `pnpm pages:build` to look at the result; there is nothing to commit.
 
 ### 3. Everything published or served is MIT, and only MIT
 
