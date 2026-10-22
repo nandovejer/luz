@@ -23,6 +23,10 @@
  * the slider (a range input named "Scrub the day"), `.home-light__q` the
  * phrase (closing the bar brings the light back to now), and <home-globe> for the drawing.
  *
+ * The bar opens from the line on a narrow window or a touch screen; from 1024px
+ * with a pointer that hovers it is always open (resting faint until the pointer
+ * or the focus comes), so the tests of opening and closing run at NARROW.
+ *
  * Without JavaScript the element is empty and light.css reserves its height.
  * That block turns JavaScript off for itself, so it runs in the chromium
  * project; every other test needs JavaScript and skips itself where it is off.
@@ -48,6 +52,8 @@ const ROUTES = [
   ['/es/', 'es'],
   ['/ar/', 'ar'],
 ];
+/** Below 1024px the bar is a disclosure: closed on load, opened and closed by its line. From 1024px with a hover it is always open. */
+const NARROW = { width: 800, height: 900 };
 /** The origin of the server under test, whatever its port (the project's baseURL). */
 const origin = () => new URL(test.info().project.use.baseURL).origin;
 
@@ -255,6 +261,7 @@ test.describe('with JavaScript', () => {
   });
 
   test('the slider is a keyboard control named from the catalog, and its value text says the hour', async ({ page }) => {
+    await page.setViewportSize(NARROW);
     await open(page, '/', { time: '14:00' });
     await openBar(page);
     const range = page.getByRole('slider', { name: text('en', 'Scrub the day') });
@@ -270,6 +277,7 @@ test.describe('with JavaScript', () => {
   });
 
   test('the button under the visual opens and closes the bar, and says so by aria-expanded', async ({ page }) => {
+    await page.setViewportSize(NARROW);
     await open(page);
     const line = page.locator('home-light .home-light__line');
     await expect(line).toHaveAttribute('aria-expanded', 'false');
@@ -279,6 +287,44 @@ test.describe('with JavaScript', () => {
     await expect(page.locator('home-light .home-light__bar')).toBeVisible();
     await line.click();
     await expect(line).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('from 1024px with a pointer that hovers the bar is always open: after load, Escape and a click on the line, resting faint and whole under the pointer', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await open(page);
+    const line = page.locator('home-light .home-light__line');
+    const bar = page.locator('home-light .home-light__bar');
+    const opacity = () => bar.evaluate((el) => parseFloat(getComputedStyle(el).opacity));
+    await expect(bar).toBeVisible();
+    await expect(line).toHaveAttribute('aria-expanded', 'true');
+    // Nothing closes it here: not Escape, not the line, not a click elsewhere
+    await page.keyboard.press('Escape');
+    await line.click();
+    await page.mouse.click(5, 400);
+    await expect(bar).toBeVisible();
+    await expect(line).toHaveAttribute('aria-expanded', 'true');
+    // At rest it is faint, and the pointer or the focus brings it up whole
+    await page.mouse.move(5, 5);
+    await expect.poll(opacity).toBeLessThan(0.5);
+    const box = /** @type {{ x: number, y: number, width: number, height: number }} */ (await bar.boundingBox());
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await expect.poll(opacity).toBe(1);
+    await page.mouse.move(5, 5);
+    await expect.poll(opacity).toBeLessThan(0.5);
+    await slider(page).focus();
+    await expect.poll(opacity).toBe(1);
+  });
+
+  test('narrowing the window below 1024px closes the bar, and widening it opens it again', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await open(page);
+    const bar = page.locator('home-light .home-light__bar');
+    await expect(bar).toBeVisible();
+    await page.setViewportSize(NARROW);
+    await expect(bar).toBeHidden();
+    await expect(page.locator('home-light .home-light__line')).toHaveAttribute('aria-expanded', 'false');
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await expect(bar).toBeVisible();
   });
 
   /* -- <luz-mode> is the only writer ------------------------------------- */
@@ -696,10 +742,10 @@ test.describe('review fixes', () => {
     });
   }
 
-  /* -- 6b. The globe rises behind the hero's buttons (the owner's sketch, 2026-10-17) -- */
+  /* -- 6b. The globe rises behind the hero: its top edge is above the buttons, which stay on top (the owner's sketch, 2026-10-17; the edge rose higher with the home's redesign) -- */
 
   for (const width of [375, 1024, 1440]) {
-    test(`${width} px: the globe's top edge is behind the hero's buttons, which stay on top and can be clicked`, async ({ page }) => {
+    test(`${width} px: the globe's top edge is behind the hero's text, above its buttons, which stay on top and can be clicked`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await open(page, '/');
       await expect(page.locator('home-globe[land]')).toHaveCount(1);
@@ -707,19 +753,22 @@ test.describe('review fixes', () => {
         const buttons = [...document.querySelectorAll('#hero .luz-btn')];
         const low = buttons.map((b) => b.getBoundingClientRect()).reduce((a, r) => (r.bottom > a.bottom ? r : a));
         const rim = document.querySelector('home-globe .home-globe__rim').getBoundingClientRect();
+        const hero = document.querySelector('#hero').getBoundingClientRect();
         const onTop = buttons.every((b) => {
           const r = b.getBoundingClientRect();
           return b.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2));
         });
-        return { rimTop: rim.top, top: low.top, bottom: low.bottom, onTop };
+        return { rimTop: rim.top, heroTop: hero.top, top: low.top, onTop };
       });
-      expect(m.rimTop, "the globe's top edge is not above the lowest button").toBeGreaterThanOrEqual(m.top);
-      expect(m.rimTop, "the globe's top edge is not below the lowest button").toBeLessThanOrEqual(m.bottom);
+      // The edge is inside the hero (behind its sentence or its description) and higher than the buttons
+      expect(m.rimTop, "the globe's top edge is above the lowest button's top").toBeLessThan(m.top);
+      expect(m.rimTop, "the globe's top edge is not above the hero").toBeGreaterThan(m.heroTop);
       expect(m.onTop, 'each button is the element at its centre').toBe(true);
     });
   }
 
   test('the line has no mark under the phrase: the phrase alone opens the bar', async ({ page }) => {
+    await page.setViewportSize(NARROW);
     await open(page, '/');
     await expect(line(page).locator('svg, .home-light__mark')).toHaveCount(0);
     await expect(line(page)).toHaveAttribute('aria-expanded', 'false');
@@ -763,6 +812,7 @@ test.describe('review fixes', () => {
   /* -- 7. No Back to now: closing the bar keeps the hour the slider was let go at (2026-10-18) -- */
 
   test('the bar has no Back to now button, and clicking the line to close it keeps the hour the slider pinned', async ({ page }) => {
+    await page.setViewportSize(NARROW);
     await open(page, '/', { time: '14:00' });
     await openBar(page);
     await expect(page.locator('home-light .home-light__live')).toHaveCount(0);
@@ -799,7 +849,7 @@ test.describe('review fixes', () => {
     expect(alphaOf(m.lineBg)).toBeLessThan(1);
   });
 
-  test("the bar has no visible border: a 1px transparent one, on paper at 60% with a 1px blur", async ({ page }) => {
+  test("the bar has no visible border (a 1px transparent one) and no glass: no background and no blur, its text sits straight on the sky", async ({ page }) => {
     await open(page, '/');
     await openBar(page);
     const m = await page.evaluate(() => {
@@ -810,11 +860,12 @@ test.describe('review fixes', () => {
     expect(m.width).toBe('1px');
     expect(m.style).not.toBe('none');
     expect(alphaOf(m.color), 'the border colour is transparent').toBe(0);
-    expect(alphaOf(m.bg), 'the bar is paper at 60%').toBeCloseTo(0.6, 2);
-    expect(m.blur, 'a faint blur, so the globe\'s dotted coasts show through').toBe('blur(1px)');
+    expect(alphaOf(m.bg), 'the bar has no background of its own').toBe(0);
+    expect(m.blur, 'the bar blurs nothing').toBe('none');
   });
 
   test("while the line is expanded the globe's mask fades later, and it comes back when the line is closed", async ({ page }) => {
+    await page.setViewportSize(NARROW);
     await open(page, '/');
     // Where, in percent of the globe's height, the mask has fallen to half: read from the computed gradient
     const half = () =>
@@ -848,11 +899,11 @@ test.describe('review fixes', () => {
     expect(alphaOf(fill), `the sea's fill (${fill}) has no transparency`).toBe(1);
   });
 
-  /* -- 7c. The sky: stars in the dark lights, clouds in the light ones (apps/site/sky.css) -- */
+  /* -- 7c. The sky: stars in the dark lights, nothing in the light ones: by day the page itself is the light (apps/site/sky.css) -- */
 
   for (const [light, time, mode] of LIGHTS) {
     const dark = ['dawn', 'dusk', 'night'].includes(light);
-    test(`${light} (${time}): ${dark ? 'stars on the two layers of the sky' : 'clouds, no stars'}`, async ({ page }) => {
+    test(`${light} (${time}): ${dark ? 'stars on the two layers of the sky' : 'no stars and no clouds: the layers are not drawn'}`, async ({ page }) => {
       await open(page, '/', { time });
       await expect.poll(async () => (await html(page)).light).toBe(light);
       expect(mode).toBe(dark ? 'dark' : 'light');
@@ -863,15 +914,15 @@ test.describe('review fixes', () => {
           return ['::before', '::after'].map((pseudo) => {
             const s = getComputedStyle(main, pseudo);
             return {
-              layer: s.content !== 'none' && s.position === 'fixed' && s.zIndex === '-1' && parseFloat(s.opacity) > 0,
-              stars: /radial-gradient/.test(s.backgroundImage),
+              layer: s.display !== 'none' && s.content !== 'none' && s.position === 'fixed' && s.zIndex === '-1' && parseFloat(s.opacity) > 0,
+              stars: s.display !== 'none' && /radial-gradient/.test(s.backgroundImage),
               clouds: s.boxShadow !== 'none',
               events: s.pointerEvents,
               twinkle: s.animationName.split(',').some((n) => n.trim() === 'landing-twinkle'),
             };
           });
         }))
-        .toEqual([0, 1].map(() => ({ layer: true, stars: dark, clouds: !dark, events: 'none', twinkle: dark })));
+        .toEqual([0, 1].map(() => ({ layer: dark, stars: dark, clouds: false, events: 'none', twinkle: dark })));
       // The page's surface comes from <html>: the body (.o-page) paints nothing, so the sky shows behind the content
       const bg = await page.evaluate(() => {
         const b = getComputedStyle(document.body);
@@ -1134,6 +1185,7 @@ test.describe('no Pause motion button', () => {
   });
 
   test('using the bar (open, scrub, close) leaves no luz-home-light key', async ({ page }) => {
+    await page.setViewportSize(NARROW);
     await open(page);
     await page.waitForLoadState('networkidle');
     await scrub(page, '10:00');

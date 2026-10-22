@@ -15,7 +15,7 @@
  */
 import { test, expect } from '@playwright/test';
 import { LIGHTS, NO_CHOICE, TIMEZONE, atTime, colorOf, channels, lightToken, seedMode, vejer } from './helpers/site-lights.js';
-import { faded } from './helpers/settle.js';
+import { faded, idle } from './helpers/settle.js';
 
 // A fixed zone, so "the local hour" is the same on every machine; and nothing
 // stored unless a test seeds it (the project's state does not decide Auto)
@@ -64,7 +64,7 @@ const state = (page) =>
 /** The modules have run: <luz-mode> is defined, core has had its turn and the page is quiet. */
 async function modulesRan(page) {
   await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
-  await page.waitForLoadState('networkidle');
+  await idle(page);
 }
 
 /** Resolve when the next change of the system's colour scheme has been delivered to every listener. */
@@ -295,10 +295,17 @@ test.describe('the cross-fade follows the visitor\'s motion setting', () => {
     await seedMode(page, 'light');
     await page.goto('/docs/');
     await modulesRan(page);
+    // Listen before the click: a transition that has started is an event, whereas "in flight right after the click" is a race with the runner
+    await page.evaluate(() => {
+      const w = /** @type {any} */ (window);
+      w.__fades = [];
+      document.documentElement.addEventListener('transitionrun', (event) => {
+        if (event.target === document.documentElement && event.propertyName.startsWith('--luz-')) w.__fades.push(event.propertyName);
+      });
+    });
     await page.locator('footer .luz-mode-cycle').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    const running = await page.evaluate(() => document.documentElement.getAnimations().filter((a) => a.playState === 'running').map((a) => /** @type {any} */ (a).transitionProperty));
-    expect(running.filter((name) => String(name).startsWith('--luz-')).length, 'the colour tokens of <html> are transitioning').toBeGreaterThan(0);
+    await expect.poll(() => page.evaluate(() => /** @type {any} */ (window).__fades.length), 'the colour tokens of <html> are transitioning').toBeGreaterThan(0);
     await faded(page);
     expect(channels(await colorOf(page.locator('html'), '--luz-surface-page'))).toEqual(vejer('dark', '--luz-surface-page'));
   });

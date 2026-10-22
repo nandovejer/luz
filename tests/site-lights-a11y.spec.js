@@ -10,7 +10,7 @@
  */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { faded } from './helpers/settle.js';
+import { faded, idle } from './helpers/settle.js';
 import { LIGHTS, NO_CHOICE, TIMEZONE, atTime } from './helpers/site-lights.js';
 
 test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
@@ -26,7 +26,7 @@ for (const path of PAGES) {
       await page.goto(path);
       await expect.poll(() => page.evaluate(() => document.documentElement.dataset.light)).toBe(light);
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
-      await page.waitForLoadState('networkidle');
+      await idle(page);
       // The boot script sets the light before the first frame, so there is nothing to wait for:
       // a fade running at load would be measured mid-way by axe, so it is a failure, not a delay
       expect(await page.evaluate(() => document.documentElement.getAnimations().map((a) => /** @type {any} */ (a).transitionProperty))).toEqual([]);

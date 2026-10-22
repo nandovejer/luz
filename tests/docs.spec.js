@@ -873,78 +873,88 @@ test.describe('Documentation site', () => {
       }
     });
 
+    // The routes in slices, so that a test is a few seconds long and a loaded runner does not push one
+    // past its timeout; every route is still measured in every mode.
+    const SLICE = 8;
     for (const mode of MODES) {
-      test(`docs-local text has a contrast of 4.5:1 or more in ${mode}`, async ({ page }) => {
-        test.slow();
-        await page.addInitScript((value) => {
-          localStorage.setItem('luz-theme', value);
-        }, mode);
-        let total = 0;
-        for (const route of ALL) {
-          await page.goto(route);
-          await page.waitForLoadState('networkidle');
-          expect(await theme(page)).toBe(mode);
-          await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
-
-          const { checked, failures } = await page.evaluate(() => {
-            const parse = (value) => {
-              const parts = value.match(/rgba?\(([^)]+)\)/)[1].split(/[,\s/]+/).filter(Boolean).map(Number);
-              return { r: parts[0], g: parts[1], b: parts[2], a: parts[3] ?? 1 };
-            };
-            const over = (top, bottom) => ({
-              r: top.r * top.a + bottom.r * (1 - top.a),
-              g: top.g * top.a + bottom.g * (1 - top.a),
-              b: top.b * top.a + bottom.b * (1 - top.a),
-              a: 1,
+      for (let from = 0; from < ALL.length; from += SLICE) {
+        const slice = ALL.slice(from, from + SLICE);
+        test(`docs-local text has a contrast of 4.5:1 or more in ${mode} (pages ${from + 1} to ${from + slice.length} of ${ALL.length})`, async ({ page }) => {
+          await page.addInitScript((value) => {
+            localStorage.setItem('luz-theme', value);
+          }, mode);
+          let total = 0;
+          for (const route of slice) {
+            // The load event is the wait: the boot script sets the mode before the first frame and the colours
+            // come from stylesheets, so nothing else has to settle (no networkidle, no style tag to wait for)
+            await page.goto(route);
+            expect(await theme(page), route).toBe(mode);
+            await page.evaluate(() => {
+              const style = document.createElement('style');
+              style.textContent = '*, *::before, *::after { transition: none !important; }';
+              document.head.append(style);
             });
-            const luminance = ({ r, g, b }) => {
-              const channel = (v) => {
-                const c = v / 255;
-                return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-              };
-              return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
-            };
-            const backgroundOf = (el) => {
-              const layers = [];
-              for (let node = el; node; node = node.parentElement) {
-                const color = parse(getComputedStyle(node).backgroundColor);
-                if (color.a > 0) layers.push(color);
-                if (color.a === 1) break;
-              }
-              let result = layers.pop() ?? { r: 255, g: 255, b: 255, a: 1 };
-              while (layers.length) result = over(layers.pop(), result);
-              return result;
-            };
 
-            // Text styled by this site: an element with a docs-* class, or a
-            // plain element (no class of its own) directly inside one
-            const isLocal = (el) =>
-              /(^|\s)docs-/.test(el.className) ||
-              (!el.className && /(^|\s)docs-/.test(el.parentElement?.className ?? ''));
-            const failures = [];
-            let checked = 0;
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-            while (walker.nextNode()) {
-              const node = walker.currentNode;
-              const el = node.parentElement;
-              if (!node.textContent.trim() || typeof el.className !== 'string' || !isLocal(el)) continue;
-              if (!el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true })) continue;
-              checked += 1;
-              const background = backgroundOf(el);
-              const color = over(parse(getComputedStyle(el).color), background);
-              const [a, b] = [luminance(color), luminance(background)];
-              const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
-              if (ratio < 4.5) {
-                failures.push(`${ratio.toFixed(2)} ${el.tagName}.${el.className} "${node.textContent.trim().slice(0, 30)}"`);
+            const { checked, failures } = await page.evaluate(() => {
+              const parse = (value) => {
+                const parts = value.match(/rgba?\(([^)]+)\)/)[1].split(/[,\s/]+/).filter(Boolean).map(Number);
+                return { r: parts[0], g: parts[1], b: parts[2], a: parts[3] ?? 1 };
+              };
+              const over = (top, bottom) => ({
+                r: top.r * top.a + bottom.r * (1 - top.a),
+                g: top.g * top.a + bottom.g * (1 - top.a),
+                b: top.b * top.a + bottom.b * (1 - top.a),
+                a: 1,
+              });
+              const luminance = ({ r, g, b }) => {
+                const channel = (v) => {
+                  const c = v / 255;
+                  return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+                };
+                return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+              };
+              const backgroundOf = (el) => {
+                const layers = [];
+                for (let node = el; node; node = node.parentElement) {
+                  const color = parse(getComputedStyle(node).backgroundColor);
+                  if (color.a > 0) layers.push(color);
+                  if (color.a === 1) break;
+                }
+                let result = layers.pop() ?? { r: 255, g: 255, b: 255, a: 1 };
+                while (layers.length) result = over(layers.pop(), result);
+                return result;
+              };
+
+              // Text styled by this site: an element with a docs-* class, or a
+              // plain element (no class of its own) directly inside one
+              const isLocal = (el) =>
+                /(^|\s)docs-/.test(el.className) ||
+                (!el.className && /(^|\s)docs-/.test(el.parentElement?.className ?? ''));
+              const failures = [];
+              let checked = 0;
+              const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+              while (walker.nextNode()) {
+                const node = walker.currentNode;
+                const el = node.parentElement;
+                if (!node.textContent.trim() || typeof el.className !== 'string' || !isLocal(el)) continue;
+                if (!el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true })) continue;
+                checked += 1;
+                const background = backgroundOf(el);
+                const color = over(parse(getComputedStyle(el).color), background);
+                const [a, b] = [luminance(color), luminance(background)];
+                const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+                if (ratio < 4.5) {
+                  failures.push(`${ratio.toFixed(2)} ${el.tagName}.${el.className} "${node.textContent.trim().slice(0, 30)}"`);
+                }
               }
-            }
-            return { checked, failures: [...new Set(failures)] };
-          });
-          total += checked;
-          expect(failures, route).toEqual([]);
-        }
-        expect(total).toBeGreaterThan(200);
-      });
+              return { checked, failures: [...new Set(failures)] };
+            });
+            total += checked;
+            expect(failures, route).toEqual([]);
+          }
+          expect(total, 'text nodes measured').toBeGreaterThan(slice.length * 5);
+        });
+      }
     }
 
     test('keyboard: skip link first, focus trapped in the modal and returned', async ({ page }) => {
