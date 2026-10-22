@@ -5,8 +5,13 @@ on:
     branches: [dev]
   pull_request:
     branches: [main, dev]
-  # Reused by publish.yml so a release can never skip these checks
+  # Reused by publish.yml so a release can never skip these checks. publish.yml
+  # skips the UI smoke below and runs the full suite itself (ui-tests.yml)
   workflow_call:
+    inputs:
+      skip-ui:
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -125,14 +130,21 @@ jobs:
       - name: Check licences
         run: pnpm check:license
 
+  # The specs the change touches, plus a baseline (no JavaScript, axe). The
+  # whole suite is ui-tests.yml: it runs before every publish and every night,
+  # so a regression that gets past this job is caught before a version leaves.
+  # The name stays "UI Tests (Playwright)": a required check of the ruleset
+  # resolves by it.
   test-ui:
     name: UI Tests (Playwright)
+    if: inputs.skip-ui != true
     runs-on: ubuntu-latest
-    # Runs on every PR and push: the accessibility rules in PRINCIPLES.md are
-    # enforced here (axe, no-JS, reduced motion, forced colors, 3 engines)
+    timeout-minutes: 30
     steps:
+      # Full history: the diff against the base needs the base commit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Setup pnpm
@@ -156,8 +168,24 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Run UI tests
-        run: pnpm exec playwright test --project=chromium --project=chromium-nojs
+      # `test-affected --dry` prints the Playwright command for the changed files
+      # (the same mapping as `pnpm test:affected`); the line is split into words,
+      # never evaluated, so a file name cannot run anything.
+      - name: Run the specs the change touches
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then BASE_SHA=HEAD~1; fi
+          git diff --name-only -z --diff-filter=d "$BASE_SHA" HEAD > "$RUNNER_TEMP/changed"
+          mapfile -d '' changed < "$RUNNER_TEMP/changed"
+          line=$(node scripts/test-affected.js --dry "${changed[@]}" | grep '^pnpm exec playwright' || true)
+          if [ -n "$line" ]; then
+            read -ra cmd <<< "$line"
+          else
+            cmd=(pnpm exec playwright test --project=chromium --project=chromium-nojs --workers=3)
+          fi
+          "${cmd[@]}" tests/nojs.spec.js tests/a11y.spec.js
 
   # SR-9: a pull request that changes packages/, apps/ or scripts/ carries a
   # `test:` commit that fails on its own on top of the base. The script checks

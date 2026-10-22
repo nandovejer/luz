@@ -1,0 +1,53 @@
+name: UI tests (full)
+
+# The whole Playwright suite (chromium and chromium-nojs, AGENTS.md §6), split
+# into shards that run side by side. A pull request runs only the specs its
+# change touches (ci.yml); this runs the rest:
+#   - publish.yml, before `Publish to npm`: no version leaves without it;
+#   - every night, on main;
+#   - by hand (Actions > UI tests (full) > Run workflow).
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  ui-full:
+    name: UI Tests (full, shard ${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run build
+        run: pnpm build
+
+      # The firefox and webkit projects are the maintainer's (dev/BROWSER-REVIEWS.md)
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run UI tests
+        run: pnpm exec playwright test --project=chromium --project=chromium-nojs --shard=${{ matrix.shard }}/4

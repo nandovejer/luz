@@ -311,6 +311,16 @@ In this order. A failed step does not stop the next one.
 
 After a deliberate change to what a package ships, run `node scripts/check-pack.js --update`.
 
+## What CI runs, and when
+
+The whole Playwright suite takes more than an hour on one runner, so CI splits it:
+
+- **Pull request, and push to `dev`:** the job `UI Tests (Playwright)` runs the specs that cover the changed files (the mapping of `pnpm test:affected`) plus `tests/nojs.spec.js` and `tests/a11y.spec.js`. Lint, unit tests, the checks, the red-commit proof and the visual references run in full, as before.
+- **Before every publish:** `release` (`publish.yml`) runs `ui-tests.yml`, the whole suite (`chromium` and `chromium-nojs`) in four shards, on the commit to be published, and `Publish to npm` waits for it. No version leaves without it, major or not.
+- **Every night, on `main`, and by hand:** the same `ui-tests.yml`, so a regression that a pull request's specs missed shows up the next day, not at the release.
+
+A pull request is therefore not proof that the whole suite is green. Before a merge that touches tokens, layout or a shared object, run `pnpm check:all`.
+
 ## What is not in check:all
 
 - **The `firefox` and `webkit` Playwright projects.** The maintainer runs them before a release, through the `firefox-reviewer` and `safari-reviewer` agents. Do not run them for everyday work.
