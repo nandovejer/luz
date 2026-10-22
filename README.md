@@ -74,7 +74,7 @@ Each package needs the ones below it and nothing above it. Adopt one level and s
 ```bash
 npm install @luz-ds/tokens                                   # level 1
 npm install @luz-ds/tokens @luz-ds/core                      # level 2
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site         # level 3
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/site         # level 3, the Catalog
 npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/landing   # a landing page
 npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/cms       # a blog or a newspaper
 npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app       # a web application
