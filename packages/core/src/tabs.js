@@ -81,6 +81,10 @@ export function activateTab(tab, { moveFocus = false } = {}) {
   if (!tablist) return;
 
   const tabs = Array.from(tablist.querySelectorAll(".luz-tab"));
+  // The new panel is shown before the old one is hidden: the other way round
+  // the page is for a moment shorter than the scroll position, the browser
+  // clamps it, and a sticky element above the panels comes unstuck
+  tabs.sort((a, b) => (b === tab) - (a === tab));
   tabs.forEach((item) => {
     const isActive = item === tab;
     item.classList.toggle("is-active", isActive);
