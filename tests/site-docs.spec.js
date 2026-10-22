@@ -26,7 +26,7 @@ const PACKAGES = {
   // F3 step 12 and F1 of the identity plan: site is six self-contained components, each a `<luz-*>` tag that is the
   // block (`.luz-<tag>__<part>`, D5). The page structure moved to the kinds and to core
   site: {
-    label: 'Site',
+    label: 'Catalog',
     patternOf: {
       search: 'search',
       consent: 'consent',

@@ -684,7 +684,7 @@ describe("the LUZ docs site", () => {
     const urls = new Set(items.map(([, url]) => new URL(url, base).pathname + new URL(url, base).hash));
     for (const entry of indexEntries(site)) expect(urls.has(entry.href), entry.href).toBe(true);
     // Pages, with their area
-    expect(index.pages).toContainEqual(["Button", "components/button/", "Components"]);
+    expect(index.pages).toContainEqual(["Button", "components/button/", "Core"]);
     expect(index.pages).toContainEqual(["LUZ documentation", "./"]);
     expect(index.pages.find(([title]) => title === "A–Z index")).toBeUndefined();
     // Template headings are kept, their page and tab in the meta; the tab row is not
@@ -717,7 +717,7 @@ describe("the LUZ docs site", () => {
     expect(new Set(names).size).toBe(names.length);
     expect(names.length).toBeGreaterThan(250);
     // Keywords: after the area, not already in the title; the page keeps its place
-    expect(index.pages).toContainEqual(["Navbar", "components/navbar/", "Components · nav bar, navigation bar"]);
+    expect(index.pages).toContainEqual(["Navbar", "components/navbar/", "Core · nav bar, navigation bar"]);
     // The page of the language switch is site/lang-switch/ (the tag is the block); its title is the page's own
     expect(index.pages.filter(([, url]) => url === "site/lang-switch/").map(([, , keywords]) => keywords)).toEqual(["Site · translation, locale, i18n, hreflang"]);
     expect(index.pages.filter(([, url]) => url === "site/lang-switcher/")).toEqual([]);

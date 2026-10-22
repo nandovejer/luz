@@ -105,7 +105,7 @@ test.describe('docs shell, with JavaScript', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
     const head = page.locator('header.luz-docs-page-head');
-    await expect(head.locator('p.luz-docs-page-head__eyebrow')).toHaveText('Components · Actions and input');
+    await expect(head.locator('p.luz-docs-page-head__eyebrow')).toHaveText('Core · Actions and input');
     await expect(head.locator('h1')).toHaveText('Button');
     await expect(head.locator('p.luz-docs-page-head__lead')).toHaveText(site.byRoute.get(BUTTON)?.meta.description ?? '');
     const [eyebrow, h1, lead, meta] = await Promise.all(
@@ -147,7 +147,7 @@ test.describe('docs shell, with JavaScript', () => {
     expect(await nav.locator('a[href^="/docs/"]').count()).toBeGreaterThanOrEqual(readingOrder(site).length);
     await expect(nav.locator('a[aria-current="page"]')).toHaveText('Button');
     // The drawer's site links (Home, Docs) are in the nav too, and "Docs" is "true" on every docs page: they are not an area
-    await expect(nav.locator('a[aria-current="true"]:not(.page-nav__site a)')).toHaveText('Components');
+    await expect(nav.locator('a[aria-current="true"]:not(.page-nav__site a)')).toHaveText('Core');
   });
 
   test('the page ends with the pager, then the foot: Last updated, Edit and Report', async ({ page }) => {

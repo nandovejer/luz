@@ -272,13 +272,13 @@ test.describe('Documentation site', () => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await gotoId(page, 'c-button');
       const areas = page.locator('.docs-nav a.docs-nav__area');
-      await expect(areas).toHaveText(['Get started', 'Tokens', 'Components', 'Site', 'Landing', 'CMS', 'App', 'Documentation', 'Accessibility']);
+      await expect(areas).toHaveText(['Get started', 'Tokens', 'Core', 'Catalog', 'Landing', 'CMS', 'App', 'Documentation', 'Accessibility']);
       // HTML elements is a submenu of the Documentation item, after its own pages
       await expect(page.locator('.docs-nav .docs-nav__sub a.docs-nav__subarea')).toHaveText('HTML elements');
       await expect(page.locator('.docs-nav .docs-nav__sub')).toHaveCount(1);
       // Flat: no accordion, and every page of every area is a link
       await expect(page.locator('nav.luz-docs-nav details')).toHaveCount(0);
-      await expect(page.locator('.docs-nav a[aria-current="true"]')).toHaveText('Components');
+      await expect(page.locator('.docs-nav a[aria-current="true"]')).toHaveText('Core');
       await expect(page.locator('.docs-nav a[aria-current="page"]')).toHaveText('Button');
       const hrefs = await page.locator('.docs-nav a').evaluateAll((links) => links.map((a) => a.getAttribute('href')));
       for (const { route } of readingOrder(site)) expect(hrefs, route).toContain(route);
@@ -298,7 +298,7 @@ test.describe('Documentation site', () => {
 
     test('breadcrumb and Previous / Next follow the sidebar order', async ({ page }) => {
       await gotoId(page, 'c-button');
-      await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).locator('a, [aria-current]')).toHaveText(['Docs', 'Components', 'Button']);
+      await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).locator('a, [aria-current]')).toHaveText(['Docs', 'Core', 'Button']);
       // Each link is named by its visible text, not by an aria-label (WCAG 2.5.3)
       const pager = page.locator('.luz-docs-pager');
       await expect(pager.getByRole('link', { name: 'Previous Breadcrumb', exact: true })).toHaveAttribute('rel', 'prev');
@@ -312,7 +312,7 @@ test.describe('Documentation site', () => {
       const pager = page.locator('.luz-docs-pager');
       await expect(pager.getByRole('link', { name: 'Previous How LUZ is built', exact: true })).toHaveAttribute('href', /\/docs\/get-started\/how-luz-is-built\/$/);
       await expect(pager.getByRole('link', { name: 'Next Color', exact: true })).toHaveAttribute('href', /\/docs\/tokens\/color\/$/);
-      await expect(end.locator('.docs-end__links a')).toHaveText(['Color modes and themes', 'Components', 'Tokens in Figma']);
+      await expect(end.locator('.docs-end__links a')).toHaveText(['Color modes and themes', 'Core', 'Tokens in Figma']);
     });
 
     test('the end of the page: one "Keep going" landmark, reached by Tab, with link blocks of 24px or more', async ({ page }) => {
@@ -448,7 +448,7 @@ test.describe('Documentation site', () => {
     test('a gallery card is one link, named like its heading (HUB-1)', async ({ page }) => {
       await open(page, '/docs/components/');
       const cards = page.locator('.docs-card');
-      await expect(cards).toHaveCount(32);
+      await expect(cards).toHaveCount(33);
       for (const card of await cards.all()) {
         await expect(card.getByRole('link')).toHaveCount(1);
       }

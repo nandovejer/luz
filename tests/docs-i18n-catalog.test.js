@@ -72,7 +72,7 @@ describe("the English catalog of the real docs is the reference", () => {
       "LUZ documentation", "Copied the page as Markdown.", "Could not copy the page.",
       // the A–Z index and what an entry is
       "Parts of the index", "This index has two pages:", "Letters", "Other",
-      "Get started", "Component", "Token page", "Site pattern", "Landing pattern", "CMS pattern", "App pattern",
+      "Get started", "Component", "Token page", "Catalog pattern", "Landing pattern", "CMS pattern", "App pattern",
       "Documentation pattern", "HTML elements", "Accessibility",
     ];
     expect(real.docsI18n, "scanSite(...).docsI18n").toBeTruthy();
