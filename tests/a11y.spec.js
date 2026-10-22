@@ -10,7 +10,8 @@ import { notFoundRoute, routeOf, routes, routesWith } from './helpers/docs-site.
 
 // Every page in Chromium; a sample of layouts in Firefox and WebKit (a11y.md TEST-1)
 // The home page in each of its languages (apps/landing/i18n)
-const APPS = ['/', '/es/', '/ar/', ...routes(), notFoundRoute];
+const HOMES = ['/', '/es/', '/ar/'];
+const APPS = [...HOMES, ...routes(), notFoundRoute];
 const SAMPLE = ['/', '/docs/', '/docs/components/', routeOf('c-button'), '/docs/a-z/', routeOf('h-a11y-target')];
 const THEMES = ['light', 'dark', 'high-contrast'];
 const BLOCKING = ['serious', 'critical'];
@@ -23,6 +24,10 @@ for (const app of [...APPS, ...DESIGN]) {
   for (const theme of THEMES) {
     test(`axe: ${app} in ${theme}`, async ({ page, browserName }, testInfo) => {
       test.skip(browserName !== 'chromium' && !SAMPLE.includes(app), 'sampled outside Chromium');
+      // The home plays its scenes on a 42 s loop and each one fades out: axe would
+      // measure a colour at a random point of the fade. Reduced motion keeps the
+      // first scene at its last frame, the same on every machine.
+      if (HOMES.includes(app)) await page.emulateMedia({ reducedMotion: 'reduce' });
       await page.goto(app);
       if (app.endsWith('#design')) await expect(page.locator('#design-panel')).toBeVisible();
       await page.evaluate((t) => {
