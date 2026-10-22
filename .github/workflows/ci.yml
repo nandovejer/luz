@@ -133,9 +133,9 @@ jobs:
       - name: Check licences
         run: pnpm check:license
 
-  # The whole Playwright suite in six shards (ui-tests.yml), about 10 minutes
-  # whatever the change, so a pull request has its verdict in 30 minutes at
-  # most (PRINCIPLES.md SR-10). `pnpm test:affected` is for working locally.
+  # The whole Playwright suite in eight shards (ui-tests.yml), whatever the
+  # change, so a pull request has its verdict in 30 minutes at most
+  # (PRINCIPLES.md SR-10). `pnpm test:affected` is for working locally.
   ui-shards:
     name: UI shards
     if: inputs.skip-ui != true
