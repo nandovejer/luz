@@ -151,7 +151,7 @@ const AREA_KIND = {
   "get-started": "Get started",
   components: "Component",
   tokens: "Token page",
-  site: "Site pattern",
+  site: "Catalog pattern",
   landing: "Landing pattern",
   cms: "CMS pattern",
   app: "App pattern",

@@ -1,12 +1,12 @@
 <!-- luz:page
-title: Site
+title: Catálogo
 description: Seis componentes independientes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner; y cómo saber si los necesitas.
-source: f1597bf8cb0e
+source: 7917d48d1761
 reviewed: false
 -->
     <p class="docs-lead">Seis componentes independientes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner; y cómo saber si los necesitas.</p>
     <p>Una pieza pertenece aquí cuando necesita datos del sitio: su índice de búsqueda, su política de cookies, sus idiomas, su menú o un aviso. Cada una es una etiqueta <code class="luz-code-inline">&lt;luz-*&gt;</code> independiente, que funciona en cualquier cabecera o página.</p>
-    <p>Todo lo demás es un <strong>componente</strong> de core: una pieza reutilizable que encaja en cualquier sitio; los componentes están en <a href="/docs/components/">Componentes</a>.</p>
+    <p>Todo lo demás es un <strong>componente</strong> de core: una pieza reutilizable que encaja en cualquier sitio; los componentes están en <a href="/docs/components/">Core</a>.</p>
     <p>La estructura de la página (la cabecera, el hero, el pie y la cabecera de página) está en los paquetes para cada tipo de sitio: <a href="/docs/landing/">landing</a> para una landing page y <a href="/docs/cms/">CMS</a> para un blog, un periódico o cualquier CMS. Funcionan sin este paquete y usan sus componentes cuando necesitan una búsqueda o un selector de idioma.</p>
     <ul>
       <li>Cada etiqueta es el bloque y sus partes siguen el patrón <code class="luz-code-inline">.luz-&lt;tag&gt;__&lt;part&gt;</code>; todas las reglas usan solo tokens semánticos.</li>
@@ -16,7 +16,7 @@ reviewed: false
 
     <div class="docs-decision-grid">
         <div class="docs-decision-card">
-          <h2 id="use-site-when" class="docs-decision-card__title">Usa site cuando</h2>
+          <h2 id="use-site-when" class="docs-decision-card__title">Usa el catálogo cuando</h2>
           <ul>
             <li>Quieres búsqueda del sitio, un banner de cookies o un selector de idioma sin tener que programarlos.</li>
             <li>Tu cabecera tiene varios enlaces agrupados bajo un botón.</li>

@@ -17,7 +17,7 @@
       { "href": "/docs/components/form/" },
       { "href": "/docs/components/" }
     ] },
-    { "id": "components", "label": "Components", "slug": "components", "package": "@luz-ds/core", "groups": [
+    { "id": "components", "label": "Core", "slug": "components", "package": "@luz-ds/core", "groups": [
       { "id": "actions", "label": "Actions and input" },
       { "id": "content", "label": "Show content" },
       { "id": "feedback", "label": "Feedback and status" },
@@ -29,7 +29,7 @@
       { "href": "/docs/tokens/color/", "label": "Color tokens" },
       { "href": "/docs/landing/templates/" }
     ] },
-    { "id": "site", "label": "Site", "slug": "site", "package": "@luz-ds/site", "groups": [
+    { "id": "site", "label": "Catalog", "slug": "site", "package": "@luz-ds/site", "groups": [
       { "id": "patterns", "label": "Patterns" },
       { "id": "reference", "label": "Reference", "list": true }
     ], "essentials": [

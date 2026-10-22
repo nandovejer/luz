@@ -20,7 +20,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
 @luz-ds/app      -> header and dashboard of a web application (own version, 0.x)
 @luz-ds/docs     -> shell, page head, rail, example, do and don't, pager and page foot of a documentation site (own version, 0.x)</code></pre>
       <ul>
-        <li>Landing, cms, app and docs need tokens and core, and can use site when you load it, never each other; site needs core and tokens; core needs tokens; tokens needs nothing.</li>
+        <li>Landing, cms, app and docs need tokens and core, and can use the catalog when you load it, never each other; the catalog needs core and tokens; core needs tokens; tokens needs nothing.</li>
         <li>Tokens, core and site share one version. A package for one kind of site, such as landing, cms, app or docs, has its own, and names the major of the others it needs.</li>
         <li>The packages say so as peer dependencies: required for tokens and core, optional for site in landing, cms, app and docs. The core and site scripts warn in the console when a level is missing.</li>
       </ul>
@@ -62,7 +62,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
       </div>
       <ul>
         <li><strong>Two ways to lay out a page, both core's.</strong> <code>.o-shell</code> with <code>.o-main</code>: a sidebar column beside the main area. <code>.o-page</code>: a header, the content and a footer in one column. Pick one for the grid of the page: the first when it has a sidebar, the second when it has none. A landing or CMS header and footer work with both; these docs use <code>.o-shell</code>.</li>
-        <li>Site needs core, and core needs tokens, so a row at a level also needs every package under it. Landing, CMS, app and docs need core and tokens; site is optional for them.</li>
+        <li>The catalog needs core, and core needs tokens, so a row at a level also needs every package under it. Landing, CMS, app and docs need core and tokens; the catalog is optional for them.</li>
       </ul>
     </section>
 
@@ -78,7 +78,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
   components/*.css            luz.components  the components: .luz-*
   utilities/_utilities.css    luz.utilities   single-purpose helpers: .u-*</code></pre>
           <ul>
-            <li>The components layer holds <span data-count="components">32</span> components.</li>
+            <li>The components layer holds <span data-count="components">33</span> components.</li>
             <li><code>dist/luz.css</code> holds these six layers and <code>luz.print</code>. Tokens are in <code>luz.tokens</code>, site in <code>luz.site</code>, landing in <code>luz.landing</code>, cms in <code>luz.cms</code>, app in <code>luz.app</code> and docs in <code>luz.docs</code>; <code>luz.themes</code> is empty, kept for a look of your own. For a page that needs a few components only, load <code>dist/base.css</code> (settings, reset and elements), then <code>dist/components/&lt;name&gt;.css</code> for each one.</li>
             <li>Rules for bare elements are wrapped in <code>:where()</code>, so any class wins over them.</li>
           </ul>

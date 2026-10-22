@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Cómo se organiza LUZ
 description: Paquetes con dependencias en una sola dirección, CSS en capas de cascada dentro de una llamada luz y un script opcional.
-source: acc5ae572e89
+source: 77762f3c700a
 reviewed: false
 -->
     <section class="docs-block" id="packages" aria-labelledby="packages-title">
@@ -20,7 +20,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
 @luz-ds/app      -> header and dashboard of a web application (own version, 0.x)
 @luz-ds/docs     -> shell, page head, rail, example, do and don't, pager and page foot of a documentation site (own version, 0.x)</code></pre>
       <ul>
-        <li>Landing, cms, app y docs necesitan tokens y core, y pueden usar site si lo cargas; nunca dependen unos de otros. Site necesita core y tokens; core necesita tokens; tokens no necesita nada.</li>
+        <li>Landing, cms, app y docs necesitan tokens y core, y pueden usar el catálogo si lo cargas; nunca dependen unos de otros. El catálogo necesita core y tokens; core necesita tokens; tokens no necesita nada.</li>
         <li>Tokens, core y site comparten versión. Un paquete para un tipo de sitio, como landing, cms, app o docs, tiene su propia versión y especifica la versión principal de los otros paquetes que necesita.</li>
         <li>Los paquetes lo declaran como dependencias peer: obligatorias para tokens y core, y opcionales para site en landing, cms, app y docs. Los scripts de core y site avisan en la consola si falta una capa.</li>
       </ul>
@@ -62,7 +62,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
       </div>
       <ul>
         <li><strong>Dos formas de maquetar una página, ambas de core.</strong> <code>.o-shell</code> con <code>.o-main</code>: una columna lateral junto al área principal. <code>.o-page</code>: cabecera, contenido y pie en una columna. Elige una para la estructura de la página: la primera si tiene barra lateral y la segunda si no. Las cabeceras y los pies de landing o CMS funcionan con ambas; esta documentación usa <code>.o-shell</code>.</li>
-        <li>Site necesita core, y core necesita tokens, así que cada paquete necesita también todos los paquetes de debajo. Landing, CMS, app y docs necesitan core y tokens; site es opcional para ellos.</li>
+        <li>El catálogo necesita core, y core necesita tokens, así que cada paquete necesita también todos los paquetes de debajo. Landing, CMS, app y docs necesitan core y tokens; el catálogo es opcional para ellos.</li>
       </ul>
     </section>
 
@@ -78,7 +78,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
   components/*.css            luz.components  the components: .luz-*
   utilities/_utilities.css    luz.utilities   single-purpose helpers: .u-*</code></pre>
           <ul>
-            <li>La capa de componentes contiene <span data-count="components">32</span> componentes.</li>
+            <li>La capa de componentes contiene <span data-count="components">33</span> componentes.</li>
             <li><code>dist/luz.css</code> contiene estas seis capas y <code>luz.print</code>. Tokens está en <code>luz.tokens</code>, site en <code>luz.site</code>, landing en <code>luz.landing</code>, cms en <code>luz.cms</code>, app en <code>luz.app</code> y docs en <code>luz.docs</code>; <code>luz.themes</code> está vacía, reservada para un tema propio. Si una página solo necesita unos pocos componentes, carga <code>dist/base.css</code> (ajustes, restablecimiento y elementos) y luego <code>dist/components/&lt;name&gt;.css</code> para cada uno.</li>
             <li>Las reglas de los elementos sin clase están dentro de <code>:where()</code>, así que cualquier clase prevalece sobre ellas.</li>
           </ul>
