@@ -12,11 +12,6 @@
       { "href": "/docs/components/" },
       { "href": "/docs/tokens/figma/" }
     ] },
-    { "id": "html", "label": "HTML elements", "slug": "html", "parent": "documentation", "package": "@luz-ds/core", "essentials": [
-      { "href": "/docs/a-z/" },
-      { "href": "/docs/components/form/" },
-      { "href": "/docs/components/" }
-    ] },
     { "id": "components", "label": "Core", "slug": "components", "package": "@luz-ds/core", "groups": [
       { "id": "actions", "label": "Actions and input" },
       { "id": "content", "label": "Show content" },
@@ -68,6 +63,11 @@
       { "href": "/docs/documentation/templates/" },
       { "href": "/docs/components/" },
       { "href": "/docs/site/" }
+    ] },
+    { "id": "html", "label": "HTML elements", "slug": "html", "package": "@luz-ds/core", "essentials": [
+      { "href": "/docs/a-z/" },
+      { "href": "/docs/components/form/" },
+      { "href": "/docs/components/" }
     ] },
     { "id": "accessibility", "label": "Accessibility", "slug": "accessibility", "essentials": [
       { "href": "/docs/components/" },

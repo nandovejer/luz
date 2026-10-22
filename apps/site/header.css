@@ -528,7 +528,7 @@
     /* A panel under the header, the full width, as tall as its content up
        to the window; it scrolls inside itself. It fades in and does not
        travel: a panel that moves for 0.2 s is not at rest for a scroll
-       into view started at the same moment (tests/docs-nav-submenu.spec.js),
+       into view started at the same moment (tests/docs-nav-html.spec.js),
        and core's duration tokens are zero under reduced motion, so it
        appears at once there */
     .luz-sidebar.page-nav[popover] {

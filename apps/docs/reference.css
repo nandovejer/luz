@@ -1074,21 +1074,6 @@
   font-weight: 600;
 }
 
-/* HTML elements, nested in the Documentation section: its link sits at the level of that
-   section's pages and its own pages one step in, by the list's margin (the link keeps
-   the same padding, so the start border that marks the current page lines up) */
-.docs-nav__subarea {
-  font-weight: 600;
-}
-
-.docs-nav__sub > .docs-nav__pages {
-  margin-inline-start: var(--luz-space-sm);
-}
-
-.docs-nav__sub .docs-nav__pages .luz-sidebar__link {
-  padding-inline-start: var(--luz-space-xl);
-}
-
 .docs-nav__pages .luz-sidebar__link {
   padding-inline-start: var(--luz-space-xl);
 }
