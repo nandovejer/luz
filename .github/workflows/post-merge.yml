@@ -1,0 +1,45 @@
+name: Post-merge
+
+# The whole suite (ui-tests.yml) on every push to main. A pull request is not
+# required to be up to date with main, so two pull requests green on their own
+# can still break it together: this catches that within minutes of the merge,
+# without adding time to the merge itself. A failure opens an issue labelled
+# `post-merge-failure`; the fix is another pull request.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A newer merge tests everything the older one had
+concurrency:
+  group: post-merge
+  cancel-in-progress: true
+
+jobs:
+  ui-full:
+    name: UI tests (full)
+    uses: ./.github/workflows/ui-tests.yml
+
+  report:
+    name: Open an issue on failure
+    needs: ui-full
+    if: failure()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      # Only values GitHub writes reach the command, through the environment
+      - name: Open the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue create --repo "$REPO" --label post-merge-failure \
+            --title "The whole UI suite fails on main at ${SHA:0:7}" \
+            --body "The post-merge run of the whole Playwright suite failed on $SHA: $RUN_URL. Two pull requests green on their own may break each other; fix it with a pull request."

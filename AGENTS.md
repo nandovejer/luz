@@ -30,6 +30,10 @@ Every change to `packages/`, `apps/` or `scripts/` is committed as a test that f
 
 Test runs use `--project=chromium --project=chromium-nojs`. The `firefox` and `webkit` Playwright projects, and the Safari and Firefox reviews, are run by the maintainer before a release; the record is [BROWSER-REVIEWS.md](./dev/BROWSER-REVIEWS.md).
 
+### 7. A pull request has its verdict in 30 minutes
+
+From the last push of a pull request to `main`, every required check is green or red within 30 minutes (PRINCIPLES.md SR-10): the whole Playwright suite runs in shards (`ui-tests.yml`), every job has a `timeout-minutes` of 25 at most, and a red check is never merged. When the summary warns that the slowest shard passed 20 minutes, add shards; never drop a check or skip a test to fit. Merging needs only green CI: the security audit and the Safari and Firefox reviews are made before a release to npm. See [TESTING.md](./dev/TESTING.md).
+
 ---
 
 ## JS in `packages/core/src/`

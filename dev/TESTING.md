@@ -313,13 +313,14 @@ After a deliberate change to what a package ships, run `node scripts/check-pack.
 
 ## What CI runs, and when
 
-The whole Playwright suite takes more than an hour on one runner, so CI splits it:
+A pull request to `main` has its verdict in 30 minutes at most, failures included (PRINCIPLES.md `SR-10`). The whole Playwright suite takes more than an hour on one runner, so CI splits it into shards that run side by side:
 
-- **Pull request, and push to `dev`:** the job `UI Tests (Playwright)` runs the specs that cover the changed files (the mapping of `pnpm test:affected`) plus `tests/nojs.spec.js` and `tests/a11y.spec.js`. Lint, unit tests, the checks, the red-commit proof and the visual references run in full, as before.
-- **Before every publish:** `release` (`publish.yml`) runs `ui-tests.yml`, the whole suite (`chromium` and `chromium-nojs`) in four shards, on the commit to be published, and `Publish to npm` waits for it. No version leaves without it, major or not.
-- **Every night, on `main`, and by hand:** the same `ui-tests.yml`, so a regression that a pull request's specs missed shows up the next day, not at the release.
+- **Pull request, and push to `dev`:** `ci.yml` runs lint, the dependency audit, the build, the unit tests and the checks, the red-commit proof, and the whole Playwright suite (`chromium` and `chromium-nojs`) through `ui-tests.yml`, in six shards of about 10 minutes. The required check `UI Tests (Playwright)` is green only when every shard is. Every job has a `timeout-minutes` of 25 at most, so a hang is a red check. A test is retried once; one that passes on the retry is listed as flaky in the run's summary (`scripts/ui-summary.js`), to be fixed.
+- **Push to `main`:** `post-merge.yml` runs the same `ui-tests.yml`. A pull request does not have to be up to date with `main`, so two that are green on their own can break it together; a failure opens an issue labelled `post-merge-failure`, and the fix is another pull request.
+- **Before every publish:** `release` (`publish.yml`) runs `ui-tests.yml` on the commit to be published, and `Publish to npm` waits for it.
+- **Visual references, on demand:** `visual-references.yml` makes the reference screenshots on the runner's Linux image when a pull request has the label `visual`, or by hand. The comparison itself is part of the suite and blocks.
 
-A pull request is therefore not proof that the whole suite is green. Before a merge that touches tokens, layout or a shared object, run `pnpm check:all`.
+The summary of the shards gives the time of each one and warns when the slowest passes 20 minutes: add shards to the matrix of `ui-tests.yml` then. Never drop a check or skip a test to fit the 30 minutes. `pnpm test:affected` is for working locally.
 
 ## What is not in check:all
 

@@ -16,6 +16,7 @@ build/
 # Testing
 playwright-report/
 test-results/
+blob-report/
 .nyc_output/
 coverage/
 /html/
