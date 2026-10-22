@@ -1540,6 +1540,22 @@ function barRow(name, figure, value, max, kind = "") {
 }
 
 /**
+ * The min+gzip size of a file, as the `gzip -9` of the system says it. Node's
+ * zlib is Chromium's fork, whose output changes a few bytes with the CPU it
+ * runs on, so the same build would write another figure on the hosted runner
+ * and `pnpm check:generated` would fail; the gzip program does not. Where
+ * there is none (Windows), node's zlib answers.
+ */
+function gzipBytes(path) {
+  const data = readFileSync(path);
+  try {
+    return execFileSync("gzip", ["-9", "-n", "-c"], { input: data, maxBuffer: 64 * 1024 * 1024, stdio: ["pipe", "pipe", "ignore"] }).length;
+  } catch {
+    return gzipSync(data, { level: 9 }).length;
+  }
+}
+
+/**
  * What the home's "Light" card shows about weight, measured when the page is
  * built and never typed: a bar per CSS library (PACKAGES) with the min+gzip
  * size of everything it publishes (every `file` budget of budgets.json under
@@ -1558,7 +1574,7 @@ function renderWeights(site, locale, used) {
       .reduce((sum, b) => {
         const path = resolve(site.repoRoot, b.file);
         if (!existsSync(path)) throw new Error(`${b.file} is missing: run pnpm build before the home page's weights can be read`);
-        return sum + gzipSync(readFileSync(path), { level: 9 }).length;
+        return sum + gzipBytes(path);
       }, 0);
     return { name, size };
   });
@@ -1824,7 +1840,7 @@ function levelWeights(site, locale, used) {
       .reduce((sum, b) => {
         const path = resolve(site.repoRoot, b.file);
         if (!existsSync(path)) throw new Error(`${b.file} is missing: run pnpm build before the home page's levels can be read`);
-        return sum + gzipSync(readFileSync(path), { level: 9 }).length;
+        return sum + gzipBytes(path);
       }, 0);
   const one = weigh("tokens");
   const two = one + weigh("core");
