@@ -8,7 +8,8 @@ export default defineConfig({
   // One retry: a test that passes on it is listed as flaky in the CI summary (scripts/ui-summary.js), to be fixed
   retries: process.env.CI ? 1 : 0,
   // The hosted runner has 4 cores: three workers leave one for the dev server (one worker took 2 h 20 min)
-  workers: process.env.CI ? 3 : undefined,
+  // Locally: four, not half the cores (six on 12), each with its own Chromium; six ran a 14 GB laptop out of memory
+  workers: process.env.CI ? 3 : 4,
   // Terminal: one line per test; the HTML report is written but never opened or served.
   // CI: a blob report per shard, merged by the summary job of ui-tests.yml.
   reporter: process.env.CI ? [['github'], ['blob']] : [['line'], ['html', { open: 'never' }]],
