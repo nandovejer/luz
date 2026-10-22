@@ -18,7 +18,7 @@ Install the browser once with `pnpm test:ui:install`.
 
 ```bash
 pnpm check:all -- --skip-ui   # no Playwright
-pnpm check:all -- --fast      # no build and no check:generated (not for a release)
+pnpm check:all -- --fast      # no build (not for a release)
 ```
 
 While you work on a change, run only what it touches: `pnpm test:affected` lints the files changed since `HEAD`, runs `vitest related` on them and the Playwright specs that cover them (`chromium` and `chromium-nojs`), and stops at the first failure. `--dry` prints the commands; naming files or a spec (`pnpm test:affected tests/button.spec.js`) replaces the git diff. A source with no spec of its own is reported, not guessed. The full run above is for milestones and before a merge.
@@ -256,14 +256,12 @@ pnpm check:size
 
 ## The generated site
 
-Some files are made by a build and are never edited by hand. Two checks keep them honest. Run `pnpm build` first.
+Some files are made by a build and are never edited by hand. `dist/` and `docs/` (the Pages site) are git-ignored: CI builds them (`pnpm pages:build`), and `pages.yml` deploys the site on every push to `main`, so there is nothing to commit and nothing to compare. `check:ai` keeps the committed generated files honest. Run `pnpm pages:build` first.
 
 ```bash
-pnpm check:generated   # docs/ (the Pages site) against a fresh build
 pnpm check:ai          # manifests, llms.txt, examples and READMEs against their generators
 ```
 
-- `check:generated` builds the site again into a temporary folder and compares it, file by file, with `docs/`. It fails on a hand edit, or on a change to `apps/` or `packages/` that was not followed by a rebuild. Fix it with `pnpm pages:build`, then commit `docs/`.
 - `check:ai` regenerates the files for AI agents in memory and compares bytes. It fails with one line per stale file and what to run.
 
 `dist/` is not committed; do not edit it.
@@ -295,7 +293,7 @@ pnpm pages:build  # build, then the Pages site into docs/
 
 In this order. A failed step does not stop the next one.
 
-1. `pnpm build` (not with `--fast`)
+1. `pnpm pages:build`: the packages and the Pages site (not with `--fast`)
 2. `pnpm lint:css`
 3. `pnpm lint:js`
 4. `pnpm check:size`
@@ -304,10 +302,9 @@ In this order. A failed step does not stop the next one.
 7. `pnpm check:license`
 8. `pnpm check:pack`
 9. `pnpm check:contrast`
-10. `pnpm check:generated` (not with `--fast`)
-11. `pnpm check:ai`
-12. `pnpm test:unit`
-13. Playwright, `chromium` and `chromium-nojs` (not with `--skip-ui`)
+10. `pnpm check:ai`
+11. `pnpm test:unit`
+12. Playwright, `chromium` and `chromium-nojs` (not with `--skip-ui`)
 
 After a deliberate change to what a package ships, run `node scripts/check-pack.js --update`.
 

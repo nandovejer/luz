@@ -263,7 +263,7 @@ luz-design-system/
 │   └── docs/                  # @luz-ds/docs (its own version, 0.x)
 │       ├── src/
 │       └── dist/
-├── docs/                      # Generated GitHub Pages site (pnpm pages:build): do not edit
+├── docs/                      # Generated GitHub Pages site (pnpm pages:build), git-ignored: do not edit
 ├── scripts/                   # Build, tarball check and publish helpers
 └── tests/                     # Vitest unit tests and Playwright UI tests
 ```
@@ -378,7 +378,7 @@ pnpm docs:build
 The public site is the optimized build of the apps, committed in `docs/` (landing at `/`, documentation at `/docs/`). Configure Pages to deploy from the `main` branch, `/docs` folder.
 
 ```bash
-pnpm pages:build   # packages + Vite build with relative URLs, then commit docs/
+pnpm pages:build   # packages + Vite build with relative URLs into docs/ (git-ignored; CI deploys it)
 ```
 
 `docs/` is generated: change the sources under `apps/` and `packages/`, then rebuild. URLs are relative, so the site works under `https://<user>.github.io/<repo>/` and on a custom domain.

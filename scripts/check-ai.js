@@ -57,7 +57,7 @@ const stale = (path, why, fix) => {
   fixes.add(fix);
 };
 const BUILD = "`pnpm build` (the packages' dist/, then the manifests)";
-const PAGES = "`pnpm pages:build`, then commit docs/";
+const PAGES = "`pnpm pages:build` (docs/ is git-ignored build output)";
 
 /** The bytes of a file of the repository, or null when there is none. */
 const bytesOf = (path) => (existsSync(join(root, path)) ? readFileSync(join(root, path)) : null);
@@ -138,7 +138,7 @@ layer("the pages of docs/", PAGES, () => {
     const expected = new Map();
     for (const doc of exampleDocuments(site, { csp: PAGES_CSP, versions, root })) expected.set(`docs${doc.route}`, doc.html);
     for (const [path, html] of expected) compare(path, html, PAGES);
-    // The files the build copies beside them (docs/examples/dist/) are check-generated's
+    // The files the build copies beside them (docs/examples/dist/) are the Pages build's own
     const have = filesUnder("docs/examples").filter((path) => path.endsWith(".html") && !path.startsWith("docs/examples/dist/"));
     for (const path of have) if (!expected.has(path)) stale(path, "is not produced by any page", PAGES);
   }

@@ -8,8 +8,8 @@ import { docsSite } from "./scripts/docs-site/plugin.js";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const distRoot = resolve(__dirname, "dist");
 // `vite build --mode pages` builds the GitHub Pages site into docs/.
-// LUZ_PAGES_OUT builds it elsewhere: scripts/check-generated.js compares
-// that fresh build with the committed docs/ (red line 14).
+// docs/ is git-ignored build output: CI builds it and pages.yml deploys it (red line 14).
+// LUZ_PAGES_OUT builds it elsewhere (a folder inside the OS temp dir).
 const pagesRoot = resolve(__dirname, process.env.LUZ_PAGES_OUT ?? "docs");
 // emptyOutDir wipes pagesRoot: allow only docs/ or a folder inside the OS temp dir
 const insideTmp = pagesRoot.startsWith(resolve(tmpdir()) + sep);

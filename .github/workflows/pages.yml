@@ -1,0 +1,74 @@
+name: Pages
+
+# The Pages site is built here, never committed: docs/ is git-ignored build
+# output (PRINCIPLES.md RL-14). Every push to main builds it with
+# `pnpm pages:build` and deploys it, without waiting for the post-merge suite:
+# the pull request already passed the whole one. Settings > Pages > Source must
+# be "GitHub Actions". The environment `github-pages` only deploys from main.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time; a newer push replaces a queued one but never cuts a running deploy
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build the Pages site
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      # Full history: each docs page shows the date of its last commit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the packages and the Pages site into docs/
+        run: pnpm pages:build
+
+      # Pinned by commit SHA of the tag v6.0.0 (2026-03-25)
+      - name: Configure Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      # Pinned by commit SHA of the tag v5.0.0 (2026-04-10)
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: docs
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write # deploy-pages proves the artifact is this run's
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Pinned by commit SHA of the tag v5.0.1 (2026-09-01)
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

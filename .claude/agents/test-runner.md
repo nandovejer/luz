@@ -17,7 +17,7 @@ You run the LUZ test gates and report the result faithfully. You do not fix code
 From the repo root:
 
 - Release check: `node scripts/qa-release.js` (`--fast` when the packages are already built, `--skip-ui` without Playwright). It takes several minutes: run it in the background and wait for it.
-- One gate: `pnpm lint:css`, `pnpm lint:js`, `pnpm check:size`, `pnpm check:strings`, `pnpm check:exceptions`, `pnpm check:pack`, `pnpm check:contrast`, `pnpm check:generated`, `pnpm test:unit`.
+- One gate: `pnpm lint:css`, `pnpm lint:js`, `pnpm check:size`, `pnpm check:strings`, `pnpm check:exceptions`, `pnpm check:pack`, `pnpm check:contrast`, `pnpm test:unit`.
 - Playwright: always `--project=chromium --project=chromium-nojs`, with 3 workers at most (more overloads the dev server and gives false failures). Narrow it to the spec of the change when the caller names one.
 
 ## Per change, not per milestone

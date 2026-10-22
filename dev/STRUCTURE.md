@@ -131,7 +131,7 @@ luz-design-system/
 │       └── dist/                      ← GENERATED (do not edit)
 │           └── luz-check.js
 │
-├── docs/                              ← GENERATED GitHub Pages site (pnpm pages:build); do not edit
+├── docs/                              ← GENERATED GitHub Pages site (pnpm pages:build), git-ignored, deployed by CI; do not edit
 │
 ├── dev/                               ← contributor guides (this file, QUICK-REFERENCE, DIST-RULES, TESTING, VANILLA-FIRST, BROWSER-REVIEWS)
 │

@@ -1543,7 +1543,7 @@ function barRow(name, figure, value, max, kind = "") {
  * The min+gzip size of a file, as the `gzip -9` of the system says it. Node's
  * zlib is Chromium's fork, whose output changes a few bytes with the CPU it
  * runs on, so the same build would write another figure on the hosted runner
- * and `pnpm check:generated` would fail; the gzip program does not. Where
+ * and the weights on the home would depend on the machine that built it; the gzip program does not. Where
  * there is none (Windows), node's zlib answers.
  */
 function gzipBytes(path) {
