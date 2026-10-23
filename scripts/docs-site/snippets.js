@@ -26,7 +26,7 @@ import { englishT } from "./strings.js";
 export const FILES = {
   tokens: { css: "luz-tokens.min.css", js: null, chunks: [] },
   core: { css: "luz.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js"] },
-  site: { css: "site.min.css", js: "site.min.js", chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
+  catalog: { css: "catalog.min.css", js: "catalog.min.js", chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
   landing: { css: "landing.min.css", js: null, chunks: [] },
   cms: { css: "cms.min.css", js: null, chunks: [] },
   app: { css: "app.min.css", js: null, chunks: [] },
@@ -51,9 +51,9 @@ const CHUNK_WHEN = {
   "table-sort.min.js": ["core", "snippets.when.table-sort"],
   "timeline.min.js": ["core", "snippets.when.luz-timeline"],
   "i18n-es.min.js": ["core", "snippets.when.i18n-es"],
-  "search.min.js": ["site", "snippets.when.luz-search"],
-  "consent.min.js": ["site", "snippets.when.luz-consent"],
-  "mode.min.js": ["site", "snippets.when.luz-mode"],
+  "search.min.js": ["catalog", "snippets.when.luz-search"],
+  "consent.min.js": ["catalog", "snippets.when.luz-consent"],
+  "mode.min.js": ["catalog", "snippets.when.luz-mode"],
 };
 
 const CDN = "https://cdn.jsdelivr.net/npm";
@@ -111,24 +111,24 @@ function cdnCode(data, kind) {
   const script = (e) => `<script type="module" src="${e.url}" integrity="${e.integrity}" crossorigin="anonymous"></script>`;
   const lines = [link(at("tokens", FILES.tokens.css)), link(at("core", FILES.core.css))];
   if (kind.pkg) {
-    lines.push(`<!-- ${OPTIONAL_SITE} -->`, link(at("site", FILES.site.css)), link(at(kind.pkg, FILES[kind.pkg].css)));
+    lines.push(`<!-- ${OPTIONAL_SITE} -->`, link(at("catalog", FILES.catalog.css)), link(at(kind.pkg, FILES[kind.pkg].css)));
   }
   lines.push(null, "<!-- Optional: copy buttons, tabs, players, the color mode -->", script(at("core", FILES.core.js)));
-  if (kind.pkg) lines.push(`<!-- ${OPTIONAL_SITE_SCRIPT} -->`, script(at("site", FILES.site.js)));
+  if (kind.pkg) lines.push(`<!-- ${OPTIONAL_SITE_SCRIPT} -->`, script(at("catalog", FILES.catalog.js)));
   return text(lines);
 }
 
 function npmCode(kind) {
   const lines = ['import "@luz-ds/tokens/css";', 'import "@luz-ds/core/css";'];
   if (kind.pkg) {
-    lines.push(`// ${OPTIONAL_SITE}`, 'import "@luz-ds/site/css";', `import "@luz-ds/${kind.pkg}/css";`);
+    lines.push(`// ${OPTIONAL_SITE}`, 'import "@luz-ds/catalog/css";', `import "@luz-ds/${kind.pkg}/css";`);
   }
   lines.push(null, "// Optional: copy buttons, tabs, players, the color mode", 'import "@luz-ds/core";');
-  if (kind.pkg) lines.push(`// ${OPTIONAL_SITE_SCRIPT}`, 'import "@luz-ds/site";');
+  if (kind.pkg) lines.push(`// ${OPTIONAL_SITE_SCRIPT}`, 'import "@luz-ds/catalog";');
   return text(lines);
 }
 
-const installCommand = (kind) => `pnpm add ${["@luz-ds/tokens", "@luz-ds/core", ...(kind.pkg ? ["@luz-ds/site", `@luz-ds/${kind.pkg}`] : [])].join(" ")}`;
+const installCommand = (kind) => `pnpm add ${["@luz-ds/tokens", "@luz-ds/core", ...(kind.pkg ? ["@luz-ds/catalog", `@luz-ds/${kind.pkg}`] : [])].join(" ")}`;
 
 /** A code block with its copy button, in the markup of the Install page. */
 function codeBlock({ id, lang, label, copy, name, code }, t) {
@@ -220,7 +220,7 @@ function renderChunks(data, t) {
                 </div>
                 <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="${esc(name)}"><code id="code-${id}">${code}</code></pre>
               </div>`;
-  const search = data.entries["site/search.min.js"];
+  const search = data.entries["catalog/search.min.js"];
   const member = (e) => `${JSON.stringify(e.url)}: ${JSON.stringify(e.integrity)}`;
   const chunks = Object.entries(CHUNK_WHEN).map(([file, [pkg, key]]) => ({ file, pkg, when: t(key), e: data.entries[`${pkg}/${file}`] }));
   const rows = chunks.map(({ file, pkg, when, e }) => {

@@ -1,6 +1,6 @@
 ---
 "@luz-ds/core": patch
-"@luz-ds/site": patch
+"@luz-ds/catalog": patch
 "@luz-ds/check": patch
 ---
 

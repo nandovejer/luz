@@ -12,7 +12,7 @@ luz-design-system/
 │   │   │   ├── get-started/           ← install, structure, JavaScript modules
 │   │   │   ├── components/            ← gallery (index.html), one page per component, helpers; _thumbs/ = gallery thumbnails
 │   │   │   ├── tokens/                ← index and one page per family
-│   │   │   ├── site/                  ← index, one page per pattern, templates, class reference
+│   │   │   ├── catalog/               ← index, one page per pattern, templates, class reference
 │   │   │   ├── landing/               ← index, one page per pattern, landing page templates
 │   │   │   ├── cms/                   ← index, one page per pattern, CMS templates (post card, listing, author box)
 │   │   │   ├── app/                   ← index, header, dashboard, app templates (app page, no sidebar, empty dashboard)
@@ -82,15 +82,15 @@ luz-design-system/
 │   │       ├── fonts/custom-faces/    ← copied for the themes
 │   │       └── themes/*.css
 │   │
-│   ├── site/                      ← @luz-ds/site (publishable)
+│   ├── catalog/                   ← @luz-ds/catalog (publishable)
 │   │   ├── src/                       ← EDIT HERE
 │   │   │   ├── components/{search,consent,lang-switch,submenu,banner}.css, _print.css
 │   │   │   ├── index.css
-│   │   │   ├── site.js                ← the presence loader
+│   │   │   ├── catalog.js                ← the presence loader
 │   │   │   └── search.js, consent.js  ← lazy chunks
 │   │   └── dist/                      ← GENERATED (do not edit)
-│   │       ├── site.css (+ .min), print.css, components/*.css
-│   │       └── site.js, search.js, consent.js (+ .min)
+│   │       ├── catalog.css (+ .min), print.css, components/*.css
+│   │       └── catalog.js, search.js, consent.js (+ .min)
 │   │
 │   ├── landing/                   ← @luz-ds/landing (publishable, its own version, 0.x)
 │   │   ├── src/                       ← EDIT HERE
@@ -140,13 +140,13 @@ luz-design-system/
 │
 └── scripts/
     ├── docs-site/                     ← the docs site generator (Vite plugin, dev tooling only)
-    │   ├── site.js                    ← pure: scan pages, front matter, routes, render, link check (unit-tested)
+    │   ├── catalog.js                    ← pure: scan pages, front matter, routes, render, link check (unit-tested)
     │   ├── html.js                    ← strict tokenizer: fails on bad nesting with file:line
     │   └── plugin.js                  ← Vite glue: build inputs, dev routes (301 without slash), relative URLs, HMR
     ├── build-tokens.js                ← fonts + primitives (tokens.json) + semantic (src/semantic.css)
     ├── build-core.js                  ← inlines src/index.css @imports + per-component dist + JS
-    ├── build-package.js               ← shared builder of site, landing, cms, app and docs: @import inlining, layer, min, JS bundle, assets
-    ├── build-site.js                  ← site: calls build-package.js (CSS, the loader and its two chunks)
+    ├── build-package.js               ← shared builder of catalog, landing, cms, app and docs: @import inlining, layer, min, JS bundle, assets
+    ├── build-catalog.js               ← catalog: calls build-package.js (CSS, the loader and its two chunks)
     ├── build-landing.js               ← landing: calls build-package.js (CSS only)
     ├── build-cms.js                   ← cms: calls build-package.js (CSS only)
     ├── build-app.js                   ← app: calls build-package.js (CSS only)
@@ -163,9 +163,9 @@ luz-design-system/
 ```
 @luz-ds/tokens
     ↓
-@luz-ds/core  (consumes tokens, must never import site)
+@luz-ds/core  (consumes tokens, must never import catalog)
     ↓
-@luz-ds/site  (app-level patterns)
+@luz-ds/catalog  (app-level patterns)
     ↓
 @luz-ds/landing  (patterns of a landing page; own version, 0.x)
 @luz-ds/cms      (patterns of a blog or a newspaper, any CMS; own version, 0.x; never depends on landing)
@@ -173,12 +173,12 @@ luz-design-system/
 @luz-ds/docs     (the pieces of a documentation page; own version, 0.x; never depends on landing, cms or app)
 ```
 
-Tokens, core and site share one version; landing, cms, app and docs have their own and peer ranges on the base's major. `@luz-ds/check` is a tool, not a layer: it sits outside the chain, has its own version and no peers, and bundles what it needs at build time.
+Tokens, core and catalog share one version; landing, cms, app and docs have their own and peer ranges on the base's major. `@luz-ds/check` is a tool, not a layer: it sits outside the chain, has its own version and no peers, and bundles what it needs at build time.
 
 ## Key Rules
 
 - **Never edit `dist/`** — it is generated from `src/`
 - **Layer order lives in `src/index.css`** — build scripts inline its `@import` graph; there is no duplicated file list
-- **What gets published** — `packages/tokens/`, `packages/core/`, `packages/site/`, `packages/landing/`, `packages/cms/`, `packages/app/`, `packages/docs/`, `packages/check/` (consumers download these)
+- **What gets published** — `packages/tokens/`, `packages/core/`, `packages/catalog/`, `packages/landing/`, `packages/cms/`, `packages/app/`, `packages/docs/`, `packages/check/` (consumers download these)
 - **Where the guides live** — `dev/` holds the contributor guides. `.claude/` holds the Claude Code agents, hooks, `settings.json` and skills (all versioned) plus the maintainer's private notes (not in git)
 - **What does not** — `apps/docs/`, `apps/landing/`, `apps/site/` (internal apps only)

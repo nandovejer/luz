@@ -9,7 +9,7 @@ dist is missing.
 ## Full Build
 
 ```bash
-pnpm build  # Runs tokens:build + core:build + site:build + landing:build + cms:build + app:build + docs:build + luzcheck:build
+pnpm build  # Runs tokens:build + core:build + catalog:build + landing:build + cms:build + app:build + docs:build + luzcheck:build
 ```
 
 ## @luz-ds/tokens
@@ -53,16 +53,16 @@ This:
    verbatim to `dist/` — the source IS the artifact (vanilla-first).
 5. Copies + minifies `src/themes/*.css` → `dist/themes/`.
 
-## @luz-ds/site
+## @luz-ds/catalog
 
-After editing `packages/site/src/`:
+After editing `packages/catalog/src/`:
 
 ```bash
-pnpm site:build
+pnpm catalog:build
 ```
 
 This inlines the `@import` graph of `src/index.css` →
-`dist/site.css` (+ `.min`), syncs `site.js`, `search.js` and `consent.js` and bundles
+`dist/catalog.css` (+ `.min`), syncs `catalog.js`, `search.js` and `consent.js` and bundles
 each into a `.min.js`. It runs the shared
 builder, `scripts/build-package.js`, which also emits every
 `src/components/*.css` whose name does not start with `_` as

@@ -1,0 +1,54 @@
+<!-- luz:page
+title: Catalog
+description: Six self-contained components that need data of the site: search, cookie consent, color mode, language switch, submenu and banner, and how to tell whether you need them.
+area: catalog
+order: 0
+lead: false
+generate: gallery
+-->
+    <p class="docs-lead">Six self-contained components that need data of the site: search, cookie consent, color mode, language switch, submenu and banner, and how to tell whether you need them.</p>
+    <p>A piece is here when it needs data of the site: its search index, its cookie policy, its languages, its menu, an announcement. Each is a <code class="luz-code-inline">&lt;luz-*&gt;</code> tag that works on its own, in any header or page.</p>
+    <p>Everything else is a <strong>component</strong> of core, one reusable piece that fits inside anything; components are in <a href="/docs/components/">Core</a>.</p>
+    <p>The page structure (the header, the hero, the footer, the page header) is in the packages for one kind of site: <a href="/docs/landing/">landing</a> for a landing page and <a href="/docs/cms/">CMS</a> for a blog, a newspaper or any CMS. They work without this package, and take its components where a search or a language switch goes.</p>
+    <ul>
+      <li>Each tag is the block, and its parts are <code class="luz-code-inline">.luz-&lt;tag&gt;__&lt;part&gt;</code>; every rule uses semantic tokens only.</li>
+      <li><a href="/">The LUZ home page</a> and these docs are built with them.</li>
+      <li>Not sure which package a piece belongs to? <a href="/docs/get-started/structure/#needs">What each package needs</a> lists every piece, with the package it is in.</li>
+    </ul>
+
+    <div class="docs-decision-grid">
+        <div class="docs-decision-card">
+          <h2 id="use-catalog-when" class="docs-decision-card__title">Use the catalog when</h2>
+          <ul>
+            <li>You want a site search, a cookie banner or a language switch without writing them yourself.</li>
+            <li>Your header has a few links grouped under one button.</li>
+            <li>You need a short announcement above the header on every page.</li>
+          </ul>
+        </div>
+        <div class="docs-decision-card">
+          <h2 id="use-core-alone-when" class="docs-decision-card__title">Use core alone when</h2>
+          <ul>
+            <li>You only need components such as buttons, forms and cards.</li>
+            <li>Your site has no search, no optional cookies and one language.</li>
+            <li>You build a single widget, not a whole page.</li>
+          </ul>
+        </div>
+      </div>
+
+    <div class="docs-prose">
+        <h2 id="your-own-components-on-top" class="docs-prose__title">Your own components on top</h2>
+        <p>Style what you add with semantic tokens too, so it follows the color mode and any <a href="/docs/tokens/themes/">theme of your own</a>.</p>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Semantic tokens in an app-level component"><code>.my-panel {
+  background: var(--luz-surface);
+  border: 1px solid var(--luz-divider);
+  color: var(--luz-text-primary);
+}
+
+.my-panel:hover {
+  background: var(--luz-surface-muted);
+  border-color: var(--luz-outline);
+}
+
+/* Not a primitive colour: it would stay the same in dark mode */
+/* color: var(--luz-gray-100); */</code></pre>
+      </div>

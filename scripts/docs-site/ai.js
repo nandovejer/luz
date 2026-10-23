@@ -75,7 +75,7 @@ const DETAILS =
   "After you write HTML or CSS, run `npx @luz-ds/check` on the files and fix what it reports; it reads source, so it does not replace testing in a browser.";
 
 /** The package a page of these areas documents; the other areas name none. */
-const PACKAGE_OF_AREA = { components: "core", site: "site", landing: "landing", cms: "cms", app: "app", documentation: "docs" };
+const PACKAGE_OF_AREA = { components: "core", catalog: "catalog", landing: "landing", cms: "cms", app: "app", documentation: "docs" };
 
 /** The pages the A-Z index lists (indexData() keeps exactly these). */
 const listed = (page) => page.meta.search !== "false";
@@ -129,7 +129,7 @@ export function renderLlmsTxt(site, { siteUrl = "" } = {}) {
     out.push(`- [Markup example: ${sample.meta.title}](${urlOf(exampleRouteOf(sample), siteUrl)}): A page of the markup of ${sample.meta.title}, styled by LUZ; every component and pattern page has one under /examples/.`);
   }
   out.push(`- [Classes of @luz-ds/core](${urlOf(`${AI_ROUTES.manifests}core/classes.json`, siteUrl)}): Every class, element and custom property of the package; each package has its own folder under /manifests/.`);
-  out.push(`- [Elements of @luz-ds/site](${urlOf(`${AI_ROUTES.manifests}site/custom-elements.json`, siteUrl)}): The custom elements the package defines or declares, with their attributes; core has one too, in its own folder.`);
+  out.push(`- [Elements of @luz-ds/catalog](${urlOf(`${AI_ROUTES.manifests}catalog/custom-elements.json`, siteUrl)}): The custom elements the package defines or declares, with their attributes; core has one too, in its own folder.`);
   out.push("");
   return out.join("\n");
 }
@@ -746,10 +746,10 @@ function markupBlocks(page) {
 /** The areas of the packages for one kind of site: the package's name, but `documentation` for docs (/docs/docs/ would read as a typo). */
 const KIND_AREAS = new Set(Object.keys(PACKAGE_OF_AREA).filter((area) => SITE_KINDS.includes(PACKAGE_OF_AREA[area])));
 
-/** The tags of the elements `@luz-ds/site` declares, from the manifest it ships. */
+/** The tags of the elements `@luz-ds/catalog` declares, from the manifest it ships. */
 function siteElements(root) {
-  const file = join(root, "packages/site/dist/custom-elements.json");
-  if (!existsSync(file)) throw missing("packages/site/dist/custom-elements.json");
+  const file = join(root, "packages/catalog/dist/custom-elements.json");
+  if (!existsSync(file)) throw missing("packages/catalog/dist/custom-elements.json");
   const modules = JSON.parse(readFileSync(file, "utf-8")).modules ?? [];
   return modules
     .flatMap((m) => m.declarations ?? [])
@@ -774,7 +774,7 @@ function exampleDocument(page, { csp, versions, packages }) {
   const docsUrl = `../..${page.route}#markup`;
   const snippetUrl = "../../docs/get-started/snippet/";
   const links = packages.map((pkg) => `  <link rel="stylesheet" href="../dist/${pkg}/${exampleCssOf(pkg)}">`);
-  const scripts = ["core", ...packages.filter((pkg) => pkg === "site")].map((pkg) => `  <script type="module" src="../dist/${pkg}/${exampleJsOf(pkg)}"></script>`);
+  const scripts = ["core", ...packages.filter((pkg) => pkg === "catalog")].map((pkg) => `  <script type="module" src="../dist/${pkg}/${exampleJsOf(pkg)}"></script>`);
   const sections = kept.map(
     (block, i) =>
       `    <section class="o-stack" aria-labelledby="ex-${i + 1}">\n      <h2 id="ex-${i + 1}">${escText(block.label)}</h2>\n${block.code}\n    </section>`,
@@ -828,8 +828,8 @@ export function exampleDocuments(site, { csp, versions, root = REPO_ROOT }) {
     if (!hasMarkup(page)) continue;
     const area = page.route.split("/")[2];
     const { kept } = markupBlocks(page);
-    const withSite = area === "site" || kept.some((b) => tags.some((tag) => tag.test(b.code)));
-    const packages = ["tokens", "core", ...(withSite ? ["site"] : []), ...(KIND_AREAS.has(area) ? [PACKAGE_OF_AREA[area]] : [])];
+    const withSite = area === "catalog" || kept.some((b) => tags.some((tag) => tag.test(b.code)));
+    const packages = ["tokens", "core", ...(withSite ? ["catalog"] : []), ...(KIND_AREAS.has(area) ? [PACKAGE_OF_AREA[area]] : [])];
     documents.push(exampleDocument(page, { csp, versions, packages }));
   }
   return documents;

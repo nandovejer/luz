@@ -82,7 +82,7 @@ toc: h2,h3
                 <tbody>
                   <tr><td data-label="Class"><div><code>.luz-landing-header</code></div></td><td data-label="Effect"><div>On <code>&lt;header&gt;</code>: the page surface, a rule underneath, the gaps of its row, and the anchor its panels open under</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-landing-header__brand</code></div></td><td data-label="Effect"><div>The site's name as a link to the home page: semibold, not underlined, at least 44 px tall; it takes the free room of the row</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-header__actions</code></div></td><td data-label="Effect"><div>On a <code>.o-row</code> at the end of the row: a search, a <a href="/docs/site/lang-switch/">language switch</a>, a button</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-landing-header__actions</code></div></td><td data-label="Effect"><div>On a <code>.o-row</code> at the end of the row: a search, a <a href="/docs/catalog/lang-switch/">language switch</a>, a button</div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-sticky</code> (core)</div></td><td data-label="Effect"><div>Keeps the header at the top while the page scrolls, in a window at least 30 rem tall; see <a href="/docs/components/layout/#objects-page">the page and its bars</a></div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-container.o-container--inline.o-row</code> (core)</div></td><td data-label="Effect"><div>The row: the width and gutters of the page, wrapping rather than overflowing</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (core)</div></td><td data-label="Effect"><div>The menu button and the links: see the <a href="/docs/components/navbar/">navbar</a></div></td></tr>
@@ -90,12 +90,12 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/landing</code> on core's objects and navbar. No JavaScript, and <code>@luz-ds/site</code> is optional.</p>
+            <p>CSS from <code>@luz-ds/landing</code> on core's objects and navbar. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
             <ul>
               <li>The landing adds the skin only: the page surface, the rule underneath, the brand, and the gaps of the row (8 px between rows, 16 px between items, 24 px from 769 px). Core gives the rest: <code>.o-sticky</code> the stickiness and the scroll padding, <code>.o-container--inline</code> the gutters, <code>.o-row</code> the wrapping row, and the navbar the links and their panel.</li>
               <li>A one-row header is core's <code>--luz-bar-h</code> tall: 44 px controls, 4 px above and below, and the 1 px rule. With enlarged text the row wraps and the header grows.</li>
-              <li>The header names itself the anchor <code>--luz-bar</code>, scoped to itself. Where the browser supports CSS anchor positioning, the navbar's panel and the list of site's <code>&lt;luz-lang-switch&gt;</code> open under it on one row or on two. Elsewhere they open at <code>--luz-bar-h</code> from the top of the window.</li>
-              <li>Without <code>@luz-ds/site</code> nothing changes: its rules that refine site's elements match nothing.</li>
+              <li>The header names itself the anchor <code>--luz-bar</code>, scoped to itself. Where the browser supports CSS anchor positioning, the navbar's panel and the list of the catalog's <code>&lt;luz-lang-switch&gt;</code> open under it on one row or on two. Elsewhere they open at <code>--luz-bar-h</code> from the top of the window.</li>
+              <li>Without <code>@luz-ds/catalog</code> nothing changes: its rules that refine the catalog's elements match nothing.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>Nothing changes: the menu is a popover opened by the button's <code>popovertarget</code>, with no script, and the links are plain links.</p>

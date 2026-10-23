@@ -13,9 +13,9 @@
 import { initCopyButtons } from "/packages/core/dist/clipboard.js";
 import { highlightBlock } from "/packages/core/dist/highlight.js";
 import { initTabs } from "/packages/core/dist/tabs.js";
-// Defines <luz-search> at once, not on idle as site.js would: the header's
+// Defines <luz-search> at once, not on idle as catalog.js would: the header's
 // search button wires itself when it connects
-import "/packages/site/dist/search.js";
+import "/packages/catalog/dist/search.js";
 import { initSiteHeader } from "/apps/site/header.js";
 // <home-light>, the visitor's sky under the hero: defines the element, which
 // loads its one visual

@@ -1,13 +1,13 @@
 /* ==========================================================================
    LUZ — LANDING PAGE
    Consumer-side styles for apps/landing, written the way any level-3 consumer
-   would: on top of tokens + core + site + landing. The hero, the head of each
+   would: on top of tokens + core + catalog + landing. The hero, the head of each
    section, the stat and the footer's columns are @luz-ds/landing's; what is
    here is the home's own layout and the few pieces only it has.
    Rules:
      - semantic tokens only (no primitive color tokens, no literal colors);
      - media queries use the literal values of --luz-mq-* (640, 768, 1024),
-       max-width like core and site, so both collapse at the same widths;
+       max-width like core and catalog, so both collapse at the same widths;
      - this file is not in a layer, so it wins over the packages': it never
        sets `display` on an element that carries `hidden` (core's utility
        hides it from its own layer).

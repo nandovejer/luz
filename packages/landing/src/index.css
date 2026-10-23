@@ -5,7 +5,7 @@
    a native element, laid out in the markup by core's objects (.o-page,
    .o-sticky, .o-container, .o-row, .o-stack, .o-grid--split); the landing
    adds only its skin and its rhythm.
-   Requires: @luz-ds/tokens and @luz-ds/core loaded first; @luz-ds/site
+   Requires: @luz-ds/tokens and @luz-ds/core loaded first; @luz-ds/catalog
    optional, loaded before this file.
    ========================================================================== */
 

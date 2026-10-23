@@ -2,7 +2,7 @@
 title: Instala LUZ
 description: Elige un nivel y copia un comando de instalación o las etiquetas de CDN. Cada nivel necesita los que están por debajo, pero ninguno de los que están por encima.
 keywords: npm, CDN
-source: 853f605fe8a6
+source: ac0a791d6453
 reviewed: false
 -->
     <div class="docs-block" id="installation">
@@ -96,15 +96,15 @@ import &quot;@luz-ds/core&quot;;</code></pre>
       </div>
 
       <div class="docs-prose">
-        <h2 id="level-3-tokens-core-and-site" class="docs-prose__title">Nivel 3, el Catálogo: tokens, core y site</h2>
+        <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Nivel 3, el Catálogo: tokens, core y catalog</h2>
         <p>Seis componentes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner. El catálogo necesita core y tokens.</p>
         <p>La estructura de la página, desde la cabecera hasta el pie, está en landing y cms, que funcionan sin el catálogo.</p>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog
           </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site" aria-label="Copia el comando para instalar el stack completo">Copiar</button>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog" aria-label="Copia el comando para instalar el stack completo">Copiar</button>
         </div>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
@@ -113,11 +113,11 @@ import &quot;@luz-ds/core&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, level 3"><code id="code-cdn-level-3">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.css&quot;&gt;
 
 &lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
 &lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
         </div>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
@@ -126,11 +126,11 @@ import &quot;@luz-ds/core&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Bundler imports, level 3"><code id="code-bundler-level-3">import &quot;@luz-ds/tokens/css&quot;;
 import &quot;@luz-ds/core/css&quot;;
-import &quot;@luz-ds/site/css&quot;;
+import &quot;@luz-ds/catalog/css&quot;;
 
 // Optional: core behaviours, and the site search
 import &quot;@luz-ds/core&quot;;
-import &quot;@luz-ds/site&quot;;</code></pre>
+import &quot;@luz-ds/catalog&quot;;</code></pre>
         </div>
       </div>
 
@@ -148,9 +148,9 @@ import &quot;@luz-ds/site&quot;;</code></pre>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/landing
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/landing
           </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/landing" aria-label="Copia el comando para instalar landing">Copiar</button>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/landing" aria-label="Copia el comando para instalar landing">Copiar</button>
         </div>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
@@ -159,19 +159,19 @@ import &quot;@luz-ds/site&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, landing"><code id="code-cdn-landing">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.0.0/dist/landing.min.css&quot;&gt;
 
 &lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
 &lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
         </div>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/cms
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/cms
           </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/cms" aria-label="Copia el comando para instalar cms">Copiar</button>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/cms" aria-label="Copia el comando para instalar cms">Copiar</button>
         </div>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
@@ -180,19 +180,19 @@ import &quot;@luz-ds/site&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, cms"><code id="code-cdn-cms">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.0.0/dist/cms.min.css&quot;&gt;
 
 &lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
 &lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
         </div>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/app
           </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app" aria-label="Copia el comando para instalar app">Copiar</button>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/app" aria-label="Copia el comando para instalar app">Copiar</button>
         </div>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
@@ -201,19 +201,19 @@ import &quot;@luz-ds/site&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, app"><code id="code-cdn-app">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.0.0/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/app@0.0.0/dist/app.min.css&quot;&gt;
 
 &lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
 &lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
         </div>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/docs
+            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs
           </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/docs" aria-label="Copia el comando para instalar docs">Copiar</button>
+          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs" aria-label="Copia el comando para instalar docs">Copiar</button>
         </div>
         <ul>
           <li>Landing, cms, app y docs tienen versiones propias y necesitan la versión <code>^0.1.0</code> de los paquetes base. Fija ambas versiones.</li>
@@ -227,7 +227,7 @@ import &quot;@luz-ds/site&quot;;</code></pre>
         <ul>
           <li>npm y pnpm instalan automáticamente los niveles inferiores. Yarn solo muestra un aviso, así que indica todos los paquetes, como arriba.</li>
           <li>En un CDN, fija una versión exacta y añade un hash <code class="luz-code-inline">integrity</code> con <code class="luz-code-inline">crossorigin="anonymous"</code>. Calcula el hash a partir del archivo que cargas, como se muestra abajo.</li>
-          <li>Los scripts de core y site muestran un aviso en la consola si falta el nivel inferior.</li>
+          <li>Los scripts de core y catalog muestran un aviso en la consola si falta el nivel inferior.</li>
           <li>Establece <code class="luz-code-inline">lang</code> en <code class="luz-code-inline">&lt;html&gt;</code>: los scripts de core escriben sus textos en ese idioma (se incluyen inglés y español).</li>
         </ul>
         <div class="docs-snippet">
@@ -238,24 +238,24 @@ import &quot;@luz-ds/site&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Computing the integrity hash"><code id="code-integrity">curl -s https://cdn.jsdelivr.net/npm/@luz-ds/core@0.0.0/dist/luz.min.css | openssl dgst -sha384 -binary | openssl base64 -A</code></pre>
         </div>
         <p>Añade el resultado como <code class="luz-code-inline">integrity="sha384-…"</code> a la etiqueta que carga ese archivo y repite el proceso con cada archivo.</p>
-        <p>El hash de un script solo cubre ese archivo, no los que carga después. <code class="luz-code-inline">site.min.js</code> carga <code class="luz-code-inline">search.min.js</code> en páginas con búsqueda, <code class="luz-code-inline">consent.min.js</code> en páginas con un banner de cookies y <code class="luz-code-inline">mode.min.js</code> en páginas con el modo de color automático.</p>
+        <p>El hash de un script solo cubre ese archivo, no los que carga después. <code class="luz-code-inline">catalog.min.js</code> carga <code class="luz-code-inline">search.min.js</code> en páginas con búsqueda, <code class="luz-code-inline">consent.min.js</code> en páginas con un banner de cookies y <code class="luz-code-inline">mode.min.js</code> en páginas con el modo de color automático.</p>
         <p>Asigna a cada uno su propio hash en un mapa de importaciones, antes del primer script de módulo. Funciona en Chrome 127, Safari 18 y Firefox 138 y posteriores; un navegador más antiguo lo ignora y carga los archivos sin comprobarlos.</p>
         <p>Un <code class="luz-code-inline">&lt;link rel="modulepreload"&gt;</code> con un hash no protege en Safari ni en Firefox: úsalo solo como indicación para mejorar el rendimiento.</p>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
             <span class="docs-snippet__lang">HTML</span>
-            <button class="luz-copy-btn" type="button" data-copy-from="code-integrity-chunks" aria-label="Copy the tags that check the site scripts">Copy</button>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-integrity-chunks" aria-label="Copy the tags that check the catalog scripts">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Integrity for the site scripts"><code id="code-integrity-chunks">&lt;script type=&quot;importmap&quot;&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Integrity for the catalog scripts"><code id="code-integrity-chunks">&lt;script type=&quot;importmap&quot;&gt;
 {
   &quot;integrity&quot;: {
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/search.min.js&quot;: &quot;sha384-…&quot;,
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/consent.min.js&quot;: &quot;sha384-…&quot;,
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/mode.min.js&quot;: &quot;sha384-…&quot;
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/search.min.js&quot;: &quot;sha384-…&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/consent.min.js&quot;: &quot;sha384-…&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/mode.min.js&quot;: &quot;sha384-…&quot;
   }
 }
 &lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@0.0.0/dist/site.min.js&quot; integrity=&quot;sha384-…&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</code></pre>
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.0.0/dist/catalog.min.js&quot; integrity=&quot;sha384-…&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</code></pre>
         </div>
       </div>
 

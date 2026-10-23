@@ -164,7 +164,7 @@ const PAGE = (base, label) => `<!doctype html>
   <title>LUZ smoke test: ${label}</title>
   <link rel="stylesheet" href="${base.tokens}/dist/luz-tokens.css">
   <link rel="stylesheet" href="${base.core}/dist/luz.css">
-  <link rel="stylesheet" href="${base.site}/dist/site.css">
+  <link rel="stylesheet" href="${base.site}/dist/catalog.css">
   <link rel="stylesheet" href="${base.landing}/dist/landing.css">
   <link rel="stylesheet" href="${base.cms}/dist/cms.css">
   <link rel="stylesheet" href="${base.app}/dist/app.css">
@@ -192,7 +192,7 @@ const PAGE = (base, label) => `<!doctype html>
       [site + "/dist/search.js"]: ["search"],
       [site + "/dist/consent.js"]: ["getConsent"],
       [site + "/dist/mode.js"]: ["phaseOf"],
-      [site + "/dist/site.js"]: [],
+      [site + "/dist/catalog.js"]: [],
     };
     const missing = [];
     for (const [url, names] of Object.entries(wanted)) {
@@ -258,7 +258,7 @@ const APP_ALONE = (base) => `<!doctype html>
 const local = {
   tokens: "/node_modules/@luz-ds/tokens",
   core: "/node_modules/@luz-ds/core",
-  site: "/node_modules/@luz-ds/site",
+  site: "/node_modules/@luz-ds/catalog",
   landing: "/node_modules/@luz-ds/landing",
   cms: "/node_modules/@luz-ds/cms",
   app: "/node_modules/@luz-ds/app",
@@ -346,7 +346,7 @@ if (browser) {
     check(`${label2} no failed request, console message or request off the machine`, problems.length === 0, problems.join("\n"));
     check(`${label2} tokens loaded (--luz-brand-fill is defined)`, state.token !== "", "the custom property is empty");
     check(`${label2} core CSS applied (.luz-btn--primary uses the token)`, state.buttonBackground === state.tokenBackground && state.buttonBackground !== "rgba(0, 0, 0, 0)", `${state.buttonBackground} vs ${state.tokenBackground}`);
-    check(`${label2} site CSS applied (<luz-banner> is a block)`, state.sectionDisplay === "block", state.sectionDisplay);
+    check(`${label2} catalog CSS applied (<luz-banner> is a block)`, state.sectionDisplay === "block", state.sectionDisplay);
     check(`${label2} landing CSS applied (.luz-landing-footer has its rule)`, state.landingBorder === "solid", state.landingBorder);
     check(`${label2} cms CSS applied (.luz-cms-article-header is a grid)`, state.articleDisplay === "grid", state.articleDisplay);
     check(`${label2} app CSS applied (.luz-app-dashboard is a size container)`, state.dashboardType === "inline-size", state.dashboardType);
@@ -361,7 +361,7 @@ if (browser) {
     const page = await browser.newPage();
     const problems = [];
     page.on("response", (r) => r.status() >= 400 && problems.push(`${r.status()} ${new URL(r.url()).pathname}`));
-    page.on("request", (r) => r.url().includes("/@luz-ds/site") && problems.push(`asked for site: ${new URL(r.url()).pathname}`));
+    page.on("request", (r) => r.url().includes("/@luz-ds/catalog") && problems.push(`asked for site: ${new URL(r.url()).pathname}`));
     page.on("console", (m) => ["error", "warning"].includes(m.type()) && problems.push(`console ${m.type()}: ${m.text()}`));
     await page.goto(origin + "/landing-alone.html");
     const state = await page.evaluate(() => ({
@@ -379,7 +379,7 @@ if (browser) {
     const page = await browser.newPage();
     const problems = [];
     page.on("response", (r) => r.status() >= 400 && problems.push(`${r.status()} ${new URL(r.url()).pathname}`));
-    page.on("request", (r) => r.url().includes("/@luz-ds/site") && problems.push(`asked for site: ${new URL(r.url()).pathname}`));
+    page.on("request", (r) => r.url().includes("/@luz-ds/catalog") && problems.push(`asked for site: ${new URL(r.url()).pathname}`));
     page.on("console", (m) => ["error", "warning"].includes(m.type()) && problems.push(`console ${m.type()}: ${m.text()}`));
     await page.goto(origin + "/app-alone.html");
     const state = await page.evaluate(() => ({

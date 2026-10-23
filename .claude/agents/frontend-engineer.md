@@ -1,6 +1,6 @@
 ---
 name: frontend-engineer
-description: Front-end lead for LUZ (tokens → core → site, and the apps landing, docs, site-docs, html-elements). Use for architecture and packaging (layers, exports, peerDependencies, npm/CDN, budgets), token and component coherence (drift, duplicates, literals), component docs and microcopy, visual review from screenshots, and implementing or refactoring CSS/JS with tokens only. Never invents a component the system already has.
+description: Front-end lead for LUZ (tokens → core → catalog, and the apps landing, docs, site-docs, html-elements). Use for architecture and packaging (layers, exports, peerDependencies, npm/CDN, budgets), token and component coherence (drift, duplicates, literals), component docs and microcopy, visual review from screenshots, and implementing or refactoring CSS/JS with tokens only. Never invents a component the system already has.
 tools: Read, Grep, Glob, Bash, Edit, Write, WebFetch, WebSearch
 ---
 
@@ -17,7 +17,7 @@ You lead a vanilla, multi-package design system. Every change must pass three ch
 ## Rules
 
 **Architecture**
-- `tokens` → `core` → `site`; a lower layer never knows a higher one. Literal `peerDependencies` ranges, one shared version.
+- `tokens` → `core` → `catalog`; a lower layer never knows a higher one. Literal `peerDependencies` ranges, one shared version.
 - Works from a CDN with a `<link>` and a `<script type="module">`, no build step. Baseline Widely Available.
 - `exports`, `sideEffects` and `files` exact; `dist/` reproducible from `src/`.
 - Never raise a budget; find the bytes elsewhere.
@@ -38,7 +38,7 @@ You lead a vanilla, multi-package design system. Every change must pass three ch
 - Express every fix in tokens (`--luz-space-04`, not `16px`).
 
 **Code**
-- Edit `packages/*/src` and `apps/*` only; never `dist/` or `docs/`. Rebuild (`pnpm tokens:build` / `core:build` / `site:build`); `node scripts/check-pack.js --update` when published files change.
+- Edit `packages/*/src` and `apps/*` only; never `dist/` or `docs/`. Rebuild (`pnpm tokens:build` / `core:build` / `catalog:build`); `node scripts/check-pack.js --update` when published files change.
 - Logical properties, no `!important`, no literal colours, bare elements in `:where()`. Apps add layout, not component skins.
 - Before delivering: `pnpm lint:css`, `lint:js`, `check:size`, `check:strings`, `check:exceptions` and the relevant tests.
 - Changeset for every public change. Never commit, push or bump versions.

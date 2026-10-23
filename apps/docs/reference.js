@@ -5,7 +5,7 @@
  * template, custom element), "On this page" and "Copy page as Markdown" in
  * the rail, the Code / Design tab the
  * reader chose last (view.js), and the site search and the cookie consent
- * example (@luz-ds/site).
+ * example (@luz-ds/catalog).
  *
  * luz.js is deliberately not loaded: its auto-init applies the stored or
  * default custom theme to <html>, and this page shows the base color modes
@@ -21,12 +21,12 @@ import { initModals } from "/packages/core/dist/modal.js";
 import { initPlayers } from "/packages/core/dist/player.js";
 import { initSidebar } from "/packages/core/dist/sidebar.js";
 import { initThemeCycle } from "/packages/core/dist/theme.js";
-// Defines <luz-search> at once, not on idle as site.js would: the header's
+// Defines <luz-search> at once, not on idle as catalog.js would: the header's
 // search button is on every page, and wires itself when it connects
-import "/packages/site/dist/search.js";
+import "/packages/catalog/dist/search.js";
 // Defines <luz-consent>, for the live example of the Cookie consent page
 // (its answer is stored under its own key, luz-consent-demo)
-import "/packages/site/dist/consent.js";
+import "/packages/catalog/dist/consent.js";
 import { initSiteChrome } from "/apps/site/header.js";
 import { initDocsView } from "./view.js";
 

@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Cómo se organiza LUZ
 description: Paquetes con dependencias en una sola dirección, CSS en capas de cascada dentro de una llamada luz y un script opcional.
-source: 77762f3c700a
+source: d3c1e212a467
 reviewed: false
 -->
     <section class="docs-block" id="packages" aria-labelledby="packages-title">
@@ -12,17 +12,17 @@ reviewed: false
       ↓ required by
 @luz-ds/core     -> components, objects, bare-element styles, optional JS
       ↓ required by
-@luz-ds/site     -> search, consent, mode, lang-switch, submenu and banner
+@luz-ds/catalog     -> search, consent, mode, lang-switch, submenu and banner
 
-Each of these needs tokens and core, and takes site as an optional peer:
+Each of these needs tokens and core, and takes catalog as an optional peer:
 @luz-ds/landing  -> header, hero, sections and footer of a landing page (own version, 0.x)
 @luz-ds/cms      -> page structure of a blog, a newspaper or any CMS (own version, 0.x)
 @luz-ds/app      -> header and dashboard of a web application (own version, 0.x)
 @luz-ds/docs     -> shell, page head, rail, example, do and don't, pager and page foot of a documentation site (own version, 0.x)</code></pre>
       <ul>
         <li>Landing, cms, app y docs necesitan tokens y core, y pueden usar el catálogo si lo cargas; nunca dependen unos de otros. El catálogo necesita core y tokens; core necesita tokens; tokens no necesita nada.</li>
-        <li>Tokens, core y site comparten versión. Un paquete para un tipo de sitio, como landing, cms, app o docs, tiene su propia versión y especifica la versión principal de los otros paquetes que necesita.</li>
-        <li>Los paquetes lo declaran como dependencias peer: obligatorias para tokens y core, y opcionales para site en landing, cms, app y docs. Los scripts de core y site avisan en la consola si falta una capa.</li>
+        <li>Tokens, core y catalog comparten versión. Un paquete para un tipo de sitio, como landing, cms, app o docs, tiene su propia versión y especifica la versión principal de los otros paquetes que necesita.</li>
+        <li>Los paquetes lo declaran como dependencias peer: obligatorias para tokens y core, y opcionales para catalog en landing, cms, app y docs. Los scripts de core y catalog avisan en la consola si falta una capa.</li>
       </ul>
     </section>
 
@@ -49,12 +49,12 @@ Each of these needs tokens and core, and takes site as an optional peer:
           <tr><td data-label="Pieza"><div>La cabecera y el panel de control de una aplicación web</div></td><td data-label="Clases o atributos"><div><code>.luz-app-header</code> (<code>__product</code>, <code>__actions</code>, <code>__account</code>), <code>.luz-app-dashboard</code> (<code>__head</code>, <code>__title</code>, <code>__panel</code>)</div></td><td data-label="Paquete"><div>app</div></td><td data-label="Notas"><div>Se basa en la estructura, la barra lateral, la barra fija, la cuadrícula y la tarjeta de core; site es opcional, para la búsqueda. Sin script. Consulta <a href="/docs/app/">App</a></div></td></tr>
           <tr><td data-label="Pieza"><div>La estructura, la cabecera de página, la barra lateral, el ejemplo, Qué hacer y qué no, la paginación y el pie de una web de documentación</div></td><td data-label="Clases o atributos"><div><code>.luz-docs-shell</code>, <code>.luz-docs-page-head</code>, <code>.luz-docs-rail</code>, <code>.luz-docs-example</code>, <code>.luz-docs-dodont</code>, <code>.luz-docs-pager</code>, <code>.luz-docs-page-foot</code></div></td><td data-label="Paquete"><div>docs</div></td><td data-label="Notas"><div>Se basa en la estructura, la barra lateral, el bloque de código y las tablas de core; site es opcional, para la búsqueda. Sin script. Consulta <a href="/docs/documentation/">Documentación</a></div></td></tr>
           <tr><td data-label="Pieza"><div>Los enlaces de una cabecera y su botón de menú</div></td><td data-label="Clases o atributos"><div><code>.luz-navbar</code>, <code>.luz-nav-toggle</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Notas"><div>Panel popover a 768 px o menos, sin script</div></td></tr>
-          <tr><td data-label="Pieza"><div>Submenú y banner</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-submenu&gt;</code>, <code>&lt;luz-banner&gt;</code></div></td><td data-label="Paquete"><div>site</div></td><td data-label="Notas"><div>Etiquetas sin script ni clase: el submenú es un <code>&lt;details&gt;</code> nativo entre los enlaces de una cabecera; el banner, una <code>&lt;section&gt;</code></div></td></tr>
-          <tr><td data-label="Pieza"><div>Consentimiento de cookies</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-consent&gt;</code>, <code>.luz-consent</code></div></td><td data-label="Paquete"><div>site</div></td><td data-label="Notas"><div><code>site.js</code> carga el script <code>consent.js</code> cuando la página contiene el elemento; muestra una banda fija en la parte inferior de la ventana; sin el script permanece oculta</div></td></tr>
-          <tr><td data-label="Pieza"><div>Modo de color automático</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-mode&gt;</code></div></td><td data-label="Paquete"><div>site</div></td><td data-label="Notas"><div><code>site.js</code> carga el script <code>mode.js</code> cuando la página contiene el elemento; sin él, los botones de opción del selector de core siguen funcionando y el modo automático es claro</div></td></tr>
-          <tr><td data-label="Pieza"><div>Selector de idioma</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-lang-switch&gt;</code></div></td><td data-label="Paquete"><div>site</div></td><td data-label="Notas"><div>Sin script</div></td></tr>
-          <tr><td data-label="Pieza"><div>Búsqueda del sitio</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-search&gt;</code>, <code>.luz-search</code></div></td><td data-label="Paquete"><div>site</div></td><td data-label="Notas"><div>Necesita el script (<code>site.js</code>, que carga <code>search.js</code> cuando la página contiene el elemento) y un archivo de índice; sin ellos, es un enlace</div></td></tr>
-          <tr><td data-label="Pieza"><div>Estilos de impresión</div></td><td data-label="Clases o atributos"><div>No hay que añadir nada</div></td><td data-label="Paquete"><div>core</div></td><td data-label="Notas"><div>En <code>luz.css</code>; site añade sus propias reglas de impresión</div></td></tr>
+          <tr><td data-label="Pieza"><div>Submenú y banner</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-submenu&gt;</code>, <code>&lt;luz-banner&gt;</code></div></td><td data-label="Paquete"><div>catalog</div></td><td data-label="Notas"><div>Etiquetas sin script ni clase: el submenú es un <code>&lt;details&gt;</code> nativo entre los enlaces de una cabecera; el banner, una <code>&lt;section&gt;</code></div></td></tr>
+          <tr><td data-label="Pieza"><div>Consentimiento de cookies</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-consent&gt;</code>, <code>.luz-consent</code></div></td><td data-label="Paquete"><div>catalog</div></td><td data-label="Notas"><div><code>catalog.js</code> carga el script <code>consent.js</code> cuando la página contiene el elemento; muestra una banda fija en la parte inferior de la ventana; sin el script permanece oculta</div></td></tr>
+          <tr><td data-label="Pieza"><div>Modo de color automático</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-mode&gt;</code></div></td><td data-label="Paquete"><div>catalog</div></td><td data-label="Notas"><div><code>catalog.js</code> carga el script <code>mode.js</code> cuando la página contiene el elemento; sin él, los botones de opción del selector de core siguen funcionando y el modo automático es claro</div></td></tr>
+          <tr><td data-label="Pieza"><div>Selector de idioma</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-lang-switch&gt;</code></div></td><td data-label="Paquete"><div>catalog</div></td><td data-label="Notas"><div>Sin script</div></td></tr>
+          <tr><td data-label="Pieza"><div>Búsqueda del sitio</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-search&gt;</code>, <code>.luz-search</code></div></td><td data-label="Paquete"><div>catalog</div></td><td data-label="Notas"><div>Necesita el script (<code>catalog.js</code>, que carga <code>search.js</code> cuando la página contiene el elemento) y un archivo de índice; sin ellos, es un enlace</div></td></tr>
+          <tr><td data-label="Pieza"><div>Estilos de impresión</div></td><td data-label="Clases o atributos"><div>No hay que añadir nada</div></td><td data-label="Paquete"><div>core</div></td><td data-label="Notas"><div>En <code>luz.css</code>; el catálogo añade sus propias reglas de impresión</div></td></tr>
           <tr><td data-label="Pieza"><div>Marcado al que no puedes añadir clases</div></td><td data-label="Clases o atributos"><div><code>data-luz-classless</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Notas"><div><code>classless.css</code>, un archivo independiente</div></td></tr>
           <tr><td data-label="Pieza"><div>Comprobación de lo que has escrito tú o un agente de IA</div></td><td data-label="Clases o atributos"><div><code>npx @luz-ds/check</code>, el comando <code>luz-check</code></div></td><td data-label="Paquete"><div>check</div></td><td data-label="Notas"><div>Una herramienta sin CSS ni capa, que no necesita ningún otro paquete: analiza tu HTML y CSS sin conexión. Consulta <a href="/docs/get-started/ai/">Trabajar con IA</a></div></td></tr>
           </tbody>
@@ -68,7 +68,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
 
     <section class="docs-block" id="core-architecture" aria-labelledby="core-architecture-title">
           <h2 class="docs-chapter__title" id="core-architecture-title">Capas CSS</h2>
-          <p>El CSS de core usa capas de cascada nativas (<code>@layer</code>), en el orden ITCSS y dentro de una capa contenedora llamada <code>luz</code>. Las seis de abajo contienen sus reglas; <a href="/docs/get-started/layers/">la página sobre capas</a> las enumera todas, junto con tokens, site e impresión.</p>
+          <p>El CSS de core usa capas de cascada nativas (<code>@layer</code>), en el orden ITCSS y dentro de una capa contenedora llamada <code>luz</code>. Las seis de abajo contienen sus reglas; <a href="/docs/get-started/layers/">la página sobre capas</a> las enumera todas, junto con tokens, catálogo e impresión.</p>
           <p>Una capa posterior prevalece sobre una anterior, y cualquier CSS tuyo que no esté en una capa prevalece sobre todo LUZ, sin <code>!important</code>. <a href="/docs/get-started/layers/">Cómo ordenarlas y sobrescribirlas</a>.</p>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Core cascade layers"><code>packages/core/src/
   settings/_settings.css      luz.settings    z-index, layout widths, field text
@@ -79,7 +79,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
   utilities/_utilities.css    luz.utilities   single-purpose helpers: .u-*</code></pre>
           <ul>
             <li>La capa de componentes contiene <span data-count="components">33</span> componentes.</li>
-            <li><code>dist/luz.css</code> contiene estas seis capas y <code>luz.print</code>. Tokens está en <code>luz.tokens</code>, site en <code>luz.site</code>, landing en <code>luz.landing</code>, cms en <code>luz.cms</code>, app en <code>luz.app</code> y docs en <code>luz.docs</code>; <code>luz.themes</code> está vacía, reservada para un tema propio. Si una página solo necesita unos pocos componentes, carga <code>dist/base.css</code> (ajustes, restablecimiento y elementos) y luego <code>dist/components/&lt;name&gt;.css</code> para cada uno.</li>
+            <li><code>dist/luz.css</code> contiene estas seis capas y <code>luz.print</code>. Tokens está en <code>luz.tokens</code>, catalog en <code>luz.catalog</code>, landing en <code>luz.landing</code>, cms en <code>luz.cms</code>, app en <code>luz.app</code> y docs en <code>luz.docs</code>; <code>luz.themes</code> está vacía, reservada para un tema propio. Si una página solo necesita unos pocos componentes, carga <code>dist/base.css</code> (ajustes, restablecimiento y elementos) y luego <code>dist/components/&lt;name&gt;.css</code> para cada uno.</li>
             <li>Las reglas de los elementos sin clase están dentro de <code>:where()</code>, así que cualquier clase prevalece sobre ellas.</li>
           </ul>
     </section>

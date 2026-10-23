@@ -35,7 +35,7 @@ const REPO_URL = "https://github.com/nandovejer/luz";
 /** The packages that define a custom element, so ship a `custom-elements.json`. */
 /** The scope of the package this one replaces, spelled in pieces so that tests/luz-name.test.js passes. */
 const FORMER_SCOPE = `@${["c", "ai"].join("")}-ds/*`;
-const WITH_ELEMENTS = new Set(["core", "site"]);
+const WITH_ELEMENTS = new Set(["core", "catalog"]);
 
 /* ---- The changelog ------------------------------------------------------ */
 

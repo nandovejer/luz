@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" href="/apps/site/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/site/dist/site.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/catalog.css">
   <link rel="stylesheet" href="/packages/landing/dist/landing.css">
   <link rel="stylesheet" href="/apps/site/header.css">
   <link rel="stylesheet" href="/apps/site/theme-light.css">
@@ -240,7 +240,7 @@ a {
               <span class="landing-install__label">{{t:inside.install.npm}}</span>
               <button class="luz-copy-btn" type="button" data-copy-from="in3-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
             </div>
-            <pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in3-npm">npm install @luz-ds/tokens @luz-ds/core @luz-ds/site</code></pre>
+            <pre class="luz-code-block" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in3-npm">npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog</code></pre>
           </div>
           <div class="landing-install">
             <div class="landing-install__bar">
@@ -249,9 +249,9 @@ a {
             </div>
             <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in3-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@{{version}}/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@{{version}}/dist/site.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@{{version}}/dist/catalog.min.css&quot;&gt;
 &lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/site@{{version}}/dist/site.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@{{version}}/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
           </div>
         </div>
         <div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in3-list">
@@ -566,14 +566,14 @@ a {
         <h2 class="luz-landing-footer__col-title" id="footer-docs">{{t:site.docs}}</h2>
         <ul>
           <li><a href="/docs/get-started/">{{t:nav.get-started}}</a></li>
-          <li><a href="/docs/site/">{{t:footer.patterns}}</a></li>
+          <li><a href="/docs/catalog/">{{t:footer.patterns}}</a></li>
           <li><a href="/docs/accessibility/">{{t:footer.accessibility}}</a></li>
         </ul>
         <h3 class="landing-foot-label" id="footer-packages">{{t:footer.packages}}</h3>
         <ul aria-labelledby="footer-packages">
           <li><a href="/docs/tokens/">{{t:footer.pkg.tokens}}</a></li>
           <li><a href="/docs/components/">{{t:footer.pkg.core}}</a></li>
-          <li><a href="/docs/site/">{{t:footer.pkg.site}}</a></li>
+          <li><a href="/docs/catalog/">{{t:footer.pkg.catalog}}</a></li>
           <li><a href="/docs/landing/">{{t:footer.pkg.landing}}</a></li>
           <li><a href="/docs/cms/">{{t:footer.pkg.cms}}</a></li>
           <li><a href="/docs/app/">{{t:footer.pkg.app}}</a></li>

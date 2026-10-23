@@ -100,7 +100,7 @@ Suggested scope for the specs:
 - Keyboard navigation in tabs and player controls
 - Core responsive checks at 480px, 768px, 1024px
 
-If you touch `packages/site/src/`, run `pnpm build` and check that the apps that use it still render.
+If you touch `packages/catalog/src/`, run `pnpm build` and check that the apps that use it still render.
 
 Keep specs small and high-value. These tools are development-only dependencies, never runtime ones.
 
@@ -285,7 +285,7 @@ Visual snapshots (`tests/visual.spec.js`) are Chromium on Linux only. Look at ea
 ```bash
 pnpm lint:css     # stylelint: packages/ and apps/
 pnpm lint:js      # ESLint: packages/, apps/, scripts/ and tests/
-pnpm build        # tokens, core, site, landing, cms, app, docs and check
+pnpm build        # tokens, core, catalog, landing, cms, app, docs and check
 pnpm pages:build  # build, then the Pages site into docs/
 ```
 

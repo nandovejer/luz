@@ -13,7 +13,7 @@ body:
       options:
         - "@luz-ds/tokens"
         - "@luz-ds/core"
-        - "@luz-ds/site"
+        - "@luz-ds/catalog"
         - "@luz-ds/landing"
         - "@luz-ds/cms"
         - "@luz-ds/app"

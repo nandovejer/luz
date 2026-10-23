@@ -75,7 +75,7 @@ export const MESSAGES = {
   "element/unknown:none": {
     severity: "block",
     template: "<{tag}> is not a LUZ element; see custom-elements.json of @luz-ds/{package}",
-    sample: { tag: "luz-serach", package: "site" },
+    sample: { tag: "luz-serach", package: "catalog" },
   },
   "element/unknown-attribute": {
     severity: "block",
@@ -95,12 +95,12 @@ export const MESSAGES = {
   "load/package-missing": {
     severity: "block",
     template: ".{name} is in @luz-ds/{package}, which this page does not load; add its stylesheet after core",
-    sample: { name: "luz-banner", package: "site" },
+    sample: { name: "luz-banner", package: "catalog" },
   },
   "load/package-missing:tag": {
     severity: "block",
     template: "<{tag}> is in @luz-ds/{package}, which this page does not load; add its stylesheet after core",
-    sample: { tag: "luz-banner", package: "site" },
+    sample: { tag: "luz-banner", package: "catalog" },
   },
   "load/layer-statement": {
     severity: "block",

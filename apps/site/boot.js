@@ -14,7 +14,7 @@
  *   2. else the light is the phase of the hour the globe's bar pinned
  *      (<luz-mode>.pin(), stored under "luz-light" in minutes of the day),
  *      or of the local hour (the boundaries of
- *      phaseOf in packages/site/src/mode.js). With prefers-contrast: more
+ *      phaseOf in packages/catalog/src/mode.js). With prefers-contrast: more
  *      the mode is high contrast, with that light, as <luz-mode by="clock">
  *      writes it after it upgrades (theme-light.css never overrides high
  *      contrast, so the light changes nothing on screen); otherwise dawn,

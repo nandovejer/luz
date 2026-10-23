@@ -22,7 +22,7 @@
  *   - the lazy chunks (SEC-CHUNK-1, SEC-CHUNK-2): every import() of a
  *     published .min.js names a string literal; every chunk (a file another
  *     one imports lazily, in any package, and site's search, consent and
- *     mode) imports nothing, static or dynamic; site.min.js, the presence
+ *     mode) imports nothing, static or dynamic; catalog.min.js, the presence
  *     loader, has no static import, and its dynamic imports are exactly its
  *     three chunks. The same holds for the home's light, which no build
  *     touches: apps/landing/light/light.js loads exactly globe.js, globe.js
@@ -103,7 +103,7 @@ const IMPORT_CALL = /\bimport\s*\(/g;
 const LITERAL_IMPORT = /\bimport\s*\(\s*(["'])([^"'`]+)\1\s*\)/g;
 const STATIC_IMPORT = /(?:^|[;}\s])(?:import\b(?!\s*[(.])|export\b[^"'();]*?\bfrom\b)/;
 const LOADERS = {
-  "packages/site/dist/site.min.js": ["./consent.min.js", "./mode.min.js", "./search.min.js"],
+  "packages/catalog/dist/catalog.min.js": ["./consent.min.js", "./mode.min.js", "./search.min.js"],
   // The home's light (apps/landing/light/): served as written, no build, so the same rules hold for its sources
   "apps/landing/light/light.js": ["./globe.js"],
   "apps/landing/light/globe.js": ["./globe-data.js"],

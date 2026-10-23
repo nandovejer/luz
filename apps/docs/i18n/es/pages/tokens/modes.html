@@ -2,7 +2,7 @@
 title: Modos de color y temas
 description: Cambia entre claro, oscuro y alto contraste con un solo atributo, o crea tu propio aspecto.
 keywords: modo oscuro, prefers-color-scheme
-source: c469a870f14b
+source: 493325a95ca2
 reviewed: false
 -->
     <div class="docs-block" id="t-modes">
@@ -105,10 +105,10 @@ reviewed: false
         <li>Lee la configuración una vez, al cargar la página. Para seguir un cambio mientras la página está abierta, escucha el evento <code class="luz-code-inline">change</code> de <code class="luz-code-inline">matchMedia()</code> y llama a <code class="luz-code-inline">applyTheme(mode, { persist: false })</code> desde <code class="luz-code-inline">@luz-ds/core/theme</code>, solo mientras <code class="luz-code-inline">getStoredTheme()</code> sea <code class="luz-code-inline">null</code>.</li>
         <li>Establece los tres modos. Para definir un tema propio, usa <code class="luz-code-inline">data-theme</code> y <code class="luz-code-inline">data-mode</code>, como se explica en <a href="/docs/tokens/themes/">la página de temas</a>.</li>
       </ul>
-      <p>El script establece el modo una sola vez. Para seguir el sistema mientras la página está abierta y ofrecer la opción Automático junto a los tres modos, envuelve el selector en <a href="/docs/site/mode/"><code class="luz-code-inline">&lt;luz-mode&gt;</code></a>, de <code class="luz-code-inline">@luz-ds/site</code>.</p>
+      <p>El script establece el modo una sola vez. Para seguir el sistema mientras la página está abierta y ofrecer la opción Automático junto a los tres modos, envuelve el selector en <a href="/docs/catalog/mode/"><code class="luz-code-inline">&lt;luz-mode&gt;</code></a>, de <code class="luz-code-inline">@luz-ds/catalog</code>.</p>
       <ul>
         <li>Automático sigue el sistema: <code class="luz-code-inline">prefers-contrast: more</code> activa el alto contraste; si no, <code class="luz-code-inline">prefers-color-scheme: dark</code> activa el modo oscuro; en los demás casos, el claro.</li>
-        <li>Con <code class="luz-code-inline">by="clock"</code>, Automático sigue la hora del día y escribe la fase en <code class="luz-code-inline">data-light</code>: consulta <a href="/docs/site/mode/#how">cómo funciona</a>.</li>
+        <li>Con <code class="luz-code-inline">by="clock"</code>, Automático sigue la hora del día y escribe la fase en <code class="luz-code-inline">data-light</code>: consulta <a href="/docs/catalog/mode/#how">cómo funciona</a>.</li>
         <li>El modo que elija quien lee tiene prioridad sobre ambos. Sin JavaScript, Automático usa el modo claro.</li>
       </ul>
     </section>

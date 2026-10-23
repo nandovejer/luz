@@ -2,7 +2,7 @@
  * LUZ check: the rules of loading (f5-ai-ready.md 5.5 and 5.6): what a page
  * links, and in which order.
  *
- *   load/tokens-missing   core, site or a kind is linked and tokens is not
+ *   load/tokens-missing   core, catalog or a kind is linked and tokens is not
  *   load/package-missing  a class or tag of a package whose stylesheet is not linked
  *   load/layer-statement  a <style> declares the layers, luz among them, after the first LUZ link
  *   load/order            the LUZ stylesheets are linked out of order (a warning)
@@ -11,7 +11,7 @@
  * A LUZ stylesheet is something a document names, by `<link rel="stylesheet">`
  * or by an `@import` in a <style>, and its package is read from the URL:
  * `@luz-ds/<pkg>` or `/packages/<pkg>/` anywhere in it, else a file name of
- * luz.css, luz.min.css (core) or luz-tokens(.min).css (tokens). `site`,
+ * luz.css, luz.min.css (core) or luz-tokens(.min).css (tokens). `catalog`,
  * `landing`, `cms`, `app` and `docs` as a bare file name may be the project's own: a
  * `copy`, which keeps load/package-missing silent for that package and is
  * never a reason to block. A URL a template computes may be anything: while a
@@ -23,16 +23,16 @@ import { finding } from "../report.js";
 import { classAttribute, classTokens } from "./shared.js";
 
 const TEMPLATE = /\{\{|<%|\$\{/;
-const IN_URL = /@luz-ds\/(tokens|core|site|landing|cms|app|docs)(?![\w-])/;
-const IN_DEV = /\/packages\/(tokens|core|site|landing|cms|app|docs)\//;
-// luz.css and luz-tokens.css are LUZ's; a bare site.css, landing.css, cms.css, app.css or docs.css may be the project's own
-const FILE = /^(?:luz(-tokens)?|(site|landing|cms|app|docs))(?:\.min)?\.css$/;
+const IN_URL = /@luz-ds\/(tokens|core|catalog|landing|cms|app|docs)(?![\w-])/;
+const IN_DEV = /\/packages\/(tokens|core|catalog|landing|cms|app|docs)\//;
+// luz.css and luz-tokens.css are LUZ's; a bare catalog.css, landing.css, cms.css, app.css or docs.css may be the project's own
+const FILE = /^(?:luz(-tokens)?|(catalog|landing|cms|app|docs))(?:\.min)?\.css$/;
 const IMPORT = /@import\s+(?:url\(\s*)?["']?([^"')\s;]+)/g;
 const LAYER = /@layer\s+([^;{}@]{0,512})([;{}])/g;
 export const STYLESHEET = /(?:^|\s)stylesheet(?:\s|$)/i;
 const REMOTE = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
-// tokens, then core, then site, then the kinds in any order
-const ORDER = ["tokens", "core", "site"];
+// tokens, then core, then catalog, then the kinds in any order
+const ORDER = ["tokens", "core", "catalog"];
 
 /** What a URL names: { pkg, copy } for LUZ's, "template" for a computed one, null for anything else. */
 function classify(url) {

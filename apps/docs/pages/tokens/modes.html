@@ -106,10 +106,10 @@ keywords: dark mode, prefers-color-scheme
         <li>It reads the setting once, when the page loads. To follow a change while the page is open, listen to the <code class="luz-code-inline">change</code> event of <code class="luz-code-inline">matchMedia()</code> and call <code class="luz-code-inline">applyTheme(mode, { persist: false })</code> from <code class="luz-code-inline">@luz-ds/core/theme</code>, only while <code class="luz-code-inline">getStoredTheme()</code> is <code class="luz-code-inline">null</code>.</li>
         <li>It sets the three modes. A theme of your own is set with <code class="luz-code-inline">data-theme</code> and <code class="luz-code-inline">data-mode</code>, as <a href="/docs/tokens/themes/">the themes page</a> says.</li>
       </ul>
-      <p>The script sets the mode once. To keep following the system while the page is open, and to give the reader an Auto choice beside the three modes, wrap the switcher in <a href="/docs/site/mode/"><code class="luz-code-inline">&lt;luz-mode&gt;</code></a>, from <code class="luz-code-inline">@luz-ds/site</code>.</p>
+      <p>The script sets the mode once. To keep following the system while the page is open, and to give the reader an Auto choice beside the three modes, wrap the switcher in <a href="/docs/catalog/mode/"><code class="luz-code-inline">&lt;luz-mode&gt;</code></a>, from <code class="luz-code-inline">@luz-ds/catalog</code>.</p>
       <ul>
         <li>Auto follows the system: <code class="luz-code-inline">prefers-contrast: more</code> gives high contrast, then <code class="luz-code-inline">prefers-color-scheme: dark</code> gives dark, otherwise light.</li>
-        <li>With <code class="luz-code-inline">by="clock"</code> Auto follows the time of day instead, and writes the phase as <code class="luz-code-inline">data-light</code>: see <a href="/docs/site/mode/#how">how it works</a>.</li>
+        <li>With <code class="luz-code-inline">by="clock"</code> Auto follows the time of day instead, and writes the phase as <code class="luz-code-inline">data-light</code>: see <a href="/docs/catalog/mode/#how">how it works</a>.</li>
         <li>A mode the reader chooses wins over both. Without JavaScript Auto is light.</li>
       </ul>
     </section>

@@ -1,5 +1,5 @@
 ---
-"@luz-ds/site": minor
+"@luz-ds/catalog": minor
 "@luz-ds/check": patch
 ---
 
@@ -20,4 +20,4 @@
 | `components/lang-switcher.css`, `components/banners.css` | `components/lang-switch.css`, `components/banner.css` and `components/consent.css` |
 | `.luz-consent` in the flow, above the header | `.luz-consent` fixed at the bottom of the window (in the flow under 30 rem tall); keep it first after the skip link in the markup |
 | `<p data-luz-consent-done tabindex="-1" hidden>…</p>` | `<div data-luz-consent-done tabindex="-1" hidden><p>…</p><button type="button" data-luz-consent-close>Close</button></div>` |
-| Docs: `/docs/site/lang-switcher/`, `/docs/site/notice/` | `/docs/site/lang-switch/`, `/docs/site/banner/` |
+| Docs: `/docs/catalog/lang-switcher/`, `/docs/catalog/notice/` | `/docs/catalog/lang-switch/`, `/docs/catalog/banner/` |

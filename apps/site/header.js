@@ -22,7 +22,7 @@
 import { initThemeCycle } from "/packages/core/dist/theme.js";
 import { initSidebar } from "/packages/core/dist/sidebar.js";
 // Defines <luz-mode>: the footer's switcher on every page, which owns the mode
-import "/packages/site/dist/mode.js";
+import "/packages/catalog/dist/mode.js";
 
 function publishHeight(header) {
   const publish = () =>

@@ -2,13 +2,13 @@
    LUZ — DOCUMENTATION PAGE
    Consumer-side styles for apps/docs (the pages of the documentation site),
    written the way any level-3 consumer would: on top of tokens + core +
-   site. The page shell is core's .o-shell with a .luz-sidebar, under
+   catalog. The page shell is core's .o-shell with a .luz-sidebar, under
    the site header shared with the home page (apps/site/header.css).
    The HTML elements reference has its own file, elements.css.
    Rules:
      - semantic tokens only (no primitive color tokens, no literal colors);
      - media queries use the literal values of --luz-mq-* (640, 768, 1024),
-       max-width like core and site, so both collapse at the same widths;
+       max-width like core and catalog, so both collapse at the same widths;
      - the token a specimen illustrates arrives as an inline custom property,
        style="--v: var(--luz-…)", and is consumed here as var(--v).
    ========================================================================== */
@@ -1830,7 +1830,7 @@ h2.docs-demo__title {
 }
 
 /* --------------------------------------------------------------------------
-   Site: when to use it, class reference
+   Catalog: when to use it, class reference
    -------------------------------------------------------------------------- */
 
 .docs-decision-grid {

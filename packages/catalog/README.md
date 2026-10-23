@@ -1,0 +1,164 @@
+# @luz-ds/catalog
+
+Six self-contained catalog components, each a light-DOM `<luz-*>` tag: search, cookie consent, color mode, language switch, submenu and banner. A piece is here when it can go in any section of a page of any kind of site and acts for the site as a whole; everything else is in `@luz-ds/core`. The page structure (header, hero, page header, footer) is never here: it is in the packages for one kind of site, which work without this one. [`@luz-ds/landing`](../landing) is for a landing page, [`@luz-ds/cms`](../cms) for a blog, a newspaper or any CMS, and [`@luz-ds/app`](../app) for a web application.
+
+> **Beta.** The tokens, components and patterns work and are tested, but names, classes and behavior can still change before the stable release. Pin an exact version and read the changelog before you upgrade.
+
+## Prerequisites
+
+Requires `@luz-ds/tokens` and `@luz-ds/core` (both declared as peer dependencies), loaded in that order before this package.
+
+## Installation
+
+```bash
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog
+```
+
+## Usage
+
+### Via npm/bundler
+
+```js
+import '@luz-ds/tokens/css'
+import '@luz-ds/core/css'
+import '@luz-ds/catalog/css'
+
+import '@luz-ds/core'        // optional: the core behaviors
+import '@luz-ds/catalog'    // the loader: the search, the cookie banner and the color mode, when the page has them
+```
+
+`@luz-ds/core` and `@luz-ds/catalog` without `/css` are the scripts.
+
+### Via CDN
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.js"></script>
+<!-- The loader: it loads search.min.js on a page with a <luz-search>,
+     consent.min.js on a page with a <luz-consent> and mode.min.js on a
+     page with a <luz-mode>, and nothing else -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.js"></script>
+```
+
+With Subresource Integrity, an `integrity` on the `<script>` covers `catalog.min.js` only. To check each chunk the page may load, put an import map with an `integrity` section before the first module script. It works in Chrome 127 and later, Safari 18 and later and Firefox 138 and later; an older browser ignores the key and loads the chunks unchecked.
+
+```html
+<script type="importmap">
+{
+  "integrity": {
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/search.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/consent.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/mode.min.js": "sha384-…"
+  }
+}
+</script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.js" integrity="sha384-…" crossorigin></script>
+```
+
+A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari and Firefox do not block a chunk with a wrong hash. Add `modulepreload` only as a performance hint.
+
+## Package exports
+
+- **`.`** → `catalog.js` — The presence loader. Warns when core is not loaded, scans the page once and loads `search.js` when it has a `<luz-search>` (on the first pointerdown or focus in it, Ctrl+K, or idle) `consent.js` when it has a `<luz-consent>` (on idle) and `mode.js` when it has a `<luz-mode>` (on idle). `catalog.min.js` imports `./search.min.js`, `./consent.min.js` and `./mode.min.js` and nothing else
+- **`./search`** → `search.js` — defines `<luz-search>`, a custom element (light DOM) that holds the fallback link, the trigger and the search `<dialog>`, and wires them when it connects; importing it in a page defines the element (once, however many copies), importing it in Node does nothing. Import it by hand for a `<luz-search>` added after the page has loaded
+- **`./consent`** → `consent.js` — defines `<luz-consent>`, the cookie banner (light DOM), and exports `getConsent(key?)`. Importing it in Node does nothing but give `getConsent`
+- **`./mode`** → `mode.js` — defines `<luz-mode>`, the color mode switcher with an Auto state (light DOM), and exports `phaseOf(hour)`, the phase of the day at a local hour. Importing it in Node does nothing but give `phaseOf`
+- **`./css`** → `catalog.css` — The six components' styles (`./css/min` for the minified twin)
+- **`./components/*`** → `dist/components/` — one stylesheet per component, `<name>.css` and `<name>.min.css`, each in `luz.catalog`, for a page that loads only what it uses
+- **`./print.css`** → `print.css` — what catalog's pieces do on paper, in `luz.catalog`, for a page that loads components one by one (`catalog.css` already has it)
+
+## Tags and classes included
+
+Each tag is the block; its parts are `.luz-<tag>__<part>`.
+
+- `<luz-submenu>` — An item of the header's links that holds more links: a tag (no class, no script, `display: contents`) around a native `<details name>`, in the flow in the menu panel and a box under its button from 769 px
+- `<luz-banner>` (`tone="warning"`) — A tag (no class, no script) around one `<section aria-labelledby>`: a band above the header with one short announcement and one link; no close button
+- `<luz-consent>` and `.luz-consent` (`__title`, `__choices`) — The cookie banner, first after the skip link in the markup and shown as a band fixed at the bottom of the window (in the flow under 30rem tall), hidden until `consent.js` shows it; its confirmation has a `[data-luz-consent-close]` button, and while it shows `consent.js` sets `--luz-consent-h` on `:root` so the page keeps room for it
+- `<luz-mode>` — Color mode: a tag around core's `.luz-mode-switcher` radios (and its `--cycle` variant) with a fourth, "Auto", radio first; `mode.js` makes Auto follow the system or the clock
+- `<luz-lang-switch>` with `.luz-lang-switch__button`, `__menu`, `__list`, `__link`, `__name`, `__title`, `__icon` — Language switch: a tag (no script) around a button that opens a native popover list of links; `--luz-lang-switch-top` (default `--luz-bar-h`) places the list
+- `<luz-search>` with `.luz-search__fallback` (`__fallback-label`), `.luz-search__trigger` (`--compact`, `__trigger-icon`, `__trigger-label`, `__trigger-key`) and `.luz-search` (`__body`, `__head`, `__title`, `__field`, `__status`, `__close`, `__results`, `__foot`) — Site search: a link to your index that a button replaces, in the same space, and a native `<dialog>` of grouped links
+
+## Search
+
+A button shaped like a field ("Search docs…", <kbd>Ctrl K</kbd>) opens a native `<dialog>` with a field and the results as links, grouped under Pages, Sections and HTML elements (8 per group at most). Ctrl+K and ⌘K open it too, also before its script has loaded. Without JavaScript the button stays hidden and a plain link to your index page shows in its place. Every fixed text is in your markup, and the few the script writes (the count, "no results", loading, error) are `data-luz-label-*` attributes on the dialog, in the page's language. The full markup, the keyboard model and the index format are on the [Search page of the docs](https://nandovejer.github.io/luz/docs/catalog/search/).
+
+The index is a JSON file on the same origin (`data-luz-search-src`), format version 1, with URLs relative to the file:
+
+```json
+{ "version": 1,
+  "pages": [["Button", "components/button/", "Components"]],
+  "sections": [["When to use, Button › Design", "components/button/#when"]],
+  "elements": [["<table> element, Tables", "html/tables/#el-table"]] }
+```
+
+Each item is `[text, url, meta?, lang?]`. The component fetches it only from the page's own origin, without following redirects (your CSP needs `connect-src 'self'`), keeps only `http:` and `https:` links, writes every text as text, and has limits: 1,000,000 characters of JSON, 10,000 results, 300 characters a text, 8 words a search. Unknown fields are ignored.
+
+## Cookie consent
+
+A band fixed at the bottom of the window asks once whether the site may use optional cookies: Accept and Reject side by side, with the same style, and a `<details>` with one checkbox per category. It is `hidden` in the markup and `consent.js` shows it when no answer is stored, when the stored one has expired (180 days by default, `data-luz-consent-days`, 395 at most), or when it offers a category the stored answer was not asked about. It does not take focus, and while it shows it reserves the page's height, so it covers nothing; Escape is not an answer. Without JavaScript it stays hidden: none of your scripts run either, and the cookie policy is a link on every page.
+
+The answer is stored in `localStorage` under `luz-consent` (or `data-luz-consent-key`, starting with `luz-`), as `{"version":1,"expires":<ms>,"asked":[…],"granted":[…]}`. Read it with `getConsent()`, which returns `{ asked, granted, expires }` or `null`, and listen for `luz:consent` on `document`, dispatched with the same object as `detail` on every new answer. A button with `data-luz-consent-open` (and `hidden`) shows the banner again. The script writes no text. Full markup on the [Cookie consent page of the docs](https://nandovejer.github.io/luz/docs/catalog/consent/).
+
+```js
+import { getConsent } from "@luz-ds/catalog/consent";
+const granted = (answer) => answer?.granted.includes("analytics");
+if (granted(getConsent())) startMeasuring();
+document.addEventListener("luz:consent", (e) => (granted(e.detail) ? startMeasuring() : location.reload()));
+```
+
+## Color mode
+
+`<luz-mode>` wraps core's color mode radios and adds an "Auto" radio, first. Without JavaScript the radios change the mode through the tokens, and Auto leaves the page light. With it, Auto follows the system (`prefers-contrast: more`, then `prefers-color-scheme: dark`) or, with `by="clock"`, the phase of the day from the local hour, written as `data-light` (`dawn`, `morning`, `afternoon`, `sunset`, `dusk`, `night`; dawn, dusk and night are dark), checked again each minute. A chosen mode is applied as `data-theme`, and with the clock its light is pinned (light: `afternoon`, dark and high contrast: `night`). With `remember` the choice is stored under core's `luz-theme` key, and Auto removes it; without it nothing is stored. `for` names the element that gets the attributes (default `<html>`), `light-attr` the attribute of the light (a `data-*` name, default `data-light`). The script writes no text: its labels are the radios'. With `luz.js` on the page, core's cycle button steps through the four states.
+
+```html
+<luz-mode remember by="clock">
+  <fieldset class="luz-mode-switcher luz-mode-switcher--cycle">
+    <legend class="luz-mode-switcher__label">Color mode</legend>
+    <label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="auto" checked>Auto</label>
+    <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light">Light</label>
+    <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark">Dark</label>
+    <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast">High contrast</label>
+  </fieldset>
+</luz-mode>
+```
+
+The element has `mode` (`"auto"`, `"light"`, `"dark"` or `"high-contrast"`), `light` (the phase, or `null` without the clock) and `preview(phase | hour | null)`, which shows another hour of the day with the clock (and returns `false` without it). It dispatches `luz-mode:change`, bubbling, after it starts and on every change, with `{ mode, theme, light, remembered, simulated }`. Full markup, the boot snippet for `<head>` and a theme with a day and a night light on the [Color mode page of the docs](https://nandovejer.github.io/luz/docs/catalog/mode/).
+
+## What moved out
+
+Before 0.1, this package also held the page structure. The skip link, the image frame (`.luz-image`, a flat surface with no placeholder), the band, the action group (`.o-actions`), the sticky bar (`.o-sticky`), the page column (`.o-page`) and the header's links (`.luz-navbar`) are in `@luz-ds/core`; the header, hero, sections and footer of a landing page in `@luz-ds/landing`; the header, page header and footer of a blog in `@luz-ds/cms`. The image placeholders are no longer published.
+
+<!-- luz:ai-agents:start -->
+## For AI agents
+
+`@luz-ds/catalog` 0.0.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+
+### Breaking changes
+
+Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1.0. Nothing is deprecated and nothing breaks.
+
+### Read first
+
+1. `dist/classes.json` in this package: the classes and custom properties its CSS defines. Write only those.
+2. `dist/custom-elements.json` in this package: the `<luz-*>` elements it defines, with their attributes.
+3. https://nandovejer.github.io/luz/llms.txt: the index of the documentation, short enough for a small context.
+4. https://nandovejer.github.io/luz/llms-full.txt: the same pages in full.
+5. https://nandovejer.github.io/luz/examples/: one standalone page of markup for each component and pattern.
+
+### Load order
+
+This package needs `@luz-ds/tokens` and `@luz-ds/core` loaded first.
+
+### Check what you write
+
+Run `npx @luz-ds/check <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md`.
+
+`@luz-ds/check` is not on npm yet: it ships with the first release.
+
+<!-- luz:ai-agents:end -->
+
+## License
+
+MIT

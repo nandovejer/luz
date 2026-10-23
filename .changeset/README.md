@@ -4,7 +4,7 @@ Each file here describes one change to the LUZ packages and how it affects the p
 
 - Add one with `pnpm changeset`: pick the packages, the kind of bump, and write what changed in plain words.
 - Breaking changes say how to migrate (see "A breaking change" below).
-- `@luz-ds/tokens`, `@luz-ds/core` and `@luz-ds/site` always share one version (`fixed` in `config.json`).
+- `@luz-ds/tokens`, `@luz-ds/core` and `@luz-ds/catalog` always share one version (`fixed` in `config.json`).
 
 ## A breaking change
 

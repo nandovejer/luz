@@ -266,7 +266,7 @@
   }
 }
 
-/* The language switch (@luz-ds/site, home page only): its list opens
+/* The language switch (@luz-ds/catalog, home page only): its list opens
    under the header */
 .site-header :where(luz-lang-switch) {
   --luz-lang-switch-top: var(--site-header-h);

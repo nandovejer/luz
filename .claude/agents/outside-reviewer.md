@@ -30,7 +30,7 @@ Only what a user of LUZ sees:
 
 - the landing: `/` in full, `/es/` in full (judge whether the Spanish sounds natural), `/ar/` only visually (right-to-left layout, broken or misplaced things);
 - every docs page under `/docs/` (all areas of the sidebar, the A–Z index, search, the 404), in both tabs (Code and Design) of each component page, in light, dark and high-contrast modes, and at a phone width as well as a desktop one;
-- `README.md` and `packages/tokens/README.md`, `packages/core/README.md`, `packages/site/README.md`;
+- `README.md` and `packages/tokens/README.md`, `packages/core/README.md`, `packages/catalog/README.md`;
 - what an install gives you: `packages/*/dist/` and the `exports` of each `packages/*/package.json`.
 
 Do not read `PRINCIPLES.md`, `AGENTS.md`, `EXCEPTIONS.md`, `.claude/` (except your own reports), `tests/`, `scripts/` or `packages/*/src/`. A user never sees them, and knowing them would make you forgive what a user would not. If something only makes sense once you have read the source, that is a finding.
