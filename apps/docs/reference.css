@@ -1131,12 +1131,19 @@
   transition: transform var(--luz-duration-fast);
 }
 
+/* The corner of border-inline-end + border-block-end already mirrors in a
+   right-to-left line, so the turn is not the same number: closed it points to
+   the start edge, open it points down, in both directions */
 .docs-nav details:dir(rtl) > summary::after {
-  transform: rotate(135deg);
+  transform: rotate(45deg);
 }
 
 .docs-nav details[open] > summary::after {
   transform: rotate(45deg);
+}
+
+.docs-nav details[open]:dir(rtl) > summary::after {
+  transform: rotate(-45deg);
 }
 
 .docs-nav details .luz-sidebar__link {
