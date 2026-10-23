@@ -68,7 +68,7 @@ const PREFIXES = ["load/"];
 
 const TOKENS = linkTo("tokens", "luz-tokens.min.css");
 const CORE = linkTo("core", "luz.min.css");
-const SITE = linkTo("site", "site.min.css");
+const SITE = linkTo("catalog", "catalog.min.css");
 const LANDING = linkTo("landing", "landing.min.css");
 const style = (css) => `  <style>\n    ${css.split("\n").join("\n    ")}\n  </style>\n`;
 
@@ -133,7 +133,7 @@ describe("load/tokens-missing", () => {
   });
 
   it.each([
-    ["site", SITE],
+    ["catalog", SITE],
     ["landing", LANDING],
   ])("names the package that needs tokens: only %s is linked", (pkg, link) => {
     const result = check({ "index.html": page('  <p class="o-stack">x</p>', links(link)) });
@@ -185,7 +185,7 @@ describe("load/tokens-missing", () => {
     for (const head of [
       "",
       links(TOKENS),
-      links('  <link rel="stylesheet" href="css/site.css">', '  <link rel="stylesheet" href="css/app.css">', '  <link rel="stylesheet" href="/apps/site/header.css">'),
+      links('  <link rel="stylesheet" href="css/catalog.css">', '  <link rel="stylesheet" href="css/app.css">', '  <link rel="stylesheet" href="/apps/site/header.css">'),
     ]) {
       const result = check({ "index.html": page('  <p class="o-stack">x</p>', head) });
       expect(rulesOf(result, "load/tokens-missing"), head).toEqual([]);
@@ -239,7 +239,7 @@ describe("load/package-missing", () => {
     expect(found).toHaveLength(1);
     expect(found[0]).toMatchObject({ rule: "load/package-missing", severity: "block", line: at.line, column: at.column });
     expect(found[0].message).toContain("<luz-search>");
-    expect(found[0].message).toContain("@luz-ds/site");
+    expect(found[0].message).toContain("@luz-ds/catalog");
     expect(wordsOf("load/package-missing", found[0].message)).toBe(true);
   });
 
@@ -247,14 +247,14 @@ describe("load/package-missing", () => {
     const body = '  <main class="o-container"><section class="luz-landing-hero"><luz-banner tone="warning">x</luz-banner></section></main>';
     const ways = {
       "the bundles": links(TOKENS, CORE, SITE, LANDING),
-      "one component file each": links(TOKENS, linkTo("core", "components/button.css"), linkTo("site", "components/banner.css"), linkTo("landing", "components/hero.css")),
+      "one component file each": links(TOKENS, linkTo("core", "components/button.css"), linkTo("catalog", "components/banner.css"), linkTo("landing", "components/hero.css")),
       "the dev server's paths": links(
         '  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">',
         '  <link rel="stylesheet" href="/packages/core/dist/luz.css">',
-        '  <link rel="stylesheet" href="/packages/site/dist/site.css">',
+        '  <link rel="stylesheet" href="/packages/catalog/dist/catalog.css">',
         '  <link rel="stylesheet" href="/packages/landing/dist/landing.css">',
       ),
-      "@import in a <style>": style('@import "@luz-ds/tokens/css";\n@import "@luz-ds/core/css";\n@import url("@luz-ds/site/css");\n@import "@luz-ds/landing/css";'),
+      "@import in a <style>": style('@import "@luz-ds/tokens/css";\n@import "@luz-ds/core/css";\n@import url("@luz-ds/catalog/css");\n@import "@luz-ds/landing/css";'),
     };
     for (const [label, head] of Object.entries(ways)) {
       const result = check({ "index.html": page(body, head) });
@@ -435,14 +435,14 @@ describe("load/order", () => {
     expect(found[0].docs).toBe(messages.docsUrl("load/order"));
   });
 
-  it("names the first pair that is out of order: site before core", () => {
+  it("names the first pair that is out of order: catalog before core", () => {
     const result = check({ "index.html": page(body, links(TOKENS, SITE, CORE)) });
-    expect(ofRule(result, "load/").map((f) => [f.rule, f.message])).toEqual([["load/order", messages.message("load/order", { first: "site", second: "core" })]]);
+    expect(ofRule(result, "load/").map((f) => [f.rule, f.message])).toEqual([["load/order", messages.message("load/order", { first: "catalog", second: "core" })]]);
   });
 
   it("is silent for the order the docs give, a component file of core after the bundle, and the kinds in any order", () => {
     const orders = {
-      "tokens, core, site, landing": links(TOKENS, CORE, SITE, LANDING),
+      "tokens, core, catalog, landing": links(TOKENS, CORE, SITE, LANDING),
       "core's components after its bundle": links(TOKENS, CORE, linkTo("core", "components/button.css")),
       "landing, cms, app": links(TOKENS, CORE, linkTo("app", "app.min.css"), linkTo("cms", "cms.min.css")),
     };

@@ -60,10 +60,10 @@ describe("@luz-ds/app: the package", () => {
     expect(manifest.sideEffects).toEqual(["*.css"]);
   });
 
-  it("requires tokens and core, takes site as an optional peer, with literal ranges", () => {
-    expect(manifest.peerDependencies).toEqual({ "@luz-ds/core": "^0.1.0", "@luz-ds/site": "^0.1.0", "@luz-ds/tokens": "^0.1.0" });
-    expect(manifest.peerDependenciesMeta).toEqual({ "@luz-ds/site": { optional: true } });
-    expect(manifest.devDependencies).toEqual({ "@luz-ds/core": "workspace:*", "@luz-ds/site": "workspace:*", "@luz-ds/tokens": "workspace:*" });
+  it("requires tokens and core, takes catalog as an optional peer, with literal ranges", () => {
+    expect(manifest.peerDependencies).toEqual({ "@luz-ds/core": "^0.1.0", "@luz-ds/catalog": "^0.1.0", "@luz-ds/tokens": "^0.1.0" });
+    expect(manifest.peerDependenciesMeta).toEqual({ "@luz-ds/catalog": { optional: true } });
+    expect(manifest.devDependencies).toEqual({ "@luz-ds/core": "workspace:*", "@luz-ds/catalog": "workspace:*", "@luz-ds/tokens": "workspace:*" });
   });
 
   it("has its README, LICENSE, pack-files.txt and stylesheets", () => {
@@ -80,9 +80,9 @@ describe("@luz-ds/app: the package", () => {
     expect(imports.sort()).toEqual(COMPONENTS);
   });
 
-  it("says in index.css what it requires: tokens and core first, site optional and loaded before it (§5)", () => {
+  it("says in index.css what it requires: tokens and core first, catalog optional and loaded before it (§5)", () => {
     const index = readOr("packages/app/src/index.css");
-    expect(index).toMatch(/Requires: @luz-ds\/tokens and @luz-ds\/core loaded first; @luz-ds\/site\s+optional, loaded before this file/);
+    expect(index).toMatch(/Requires: @luz-ds\/tokens and @luz-ds\/core loaded first; @luz-ds\/catalog\s+optional, loaded before this file/);
   });
 
   it("lists exactly its files in pack-files.txt, each component plain and minified", () => {
@@ -205,9 +205,9 @@ describe("@luz-ds/app: header.css", () => {
     expect(rule).not.toMatch(/font-size\s*:\s*0\b/);
   });
 
-  it("uses no `luz-site-*` class or property", () => {
+  it("uses no `luz-catalog-*` class or property", () => {
     expect(css.length, "header.css exists").toBeGreaterThan(0);
-    expect(css).not.toMatch(/luz-site-/);
+    expect(css).not.toMatch(/luz-(?:site|catalog)-/);
   });
 });
 
@@ -237,10 +237,10 @@ describe("@luz-ds/app: dashboard.css", () => {
     expect(css).not.toMatch(/row-reverse|column-reverse/);
   });
 
-  it("leaves the grid to core's .o-grid: no second sticky bar, no sidebar, and no `luz-site-*`", () => {
+  it("leaves the grid to core's .o-grid: no second sticky bar, no sidebar, and no `luz-catalog-*`", () => {
     expect(css.length, "dashboard.css exists").toBeGreaterThan(0);
     expect(css).not.toMatch(/position\s*:\s*sticky/);
-    expect(css).not.toMatch(/luz-sidebar|luz-site-/);
+    expect(css).not.toMatch(/luz-sidebar|luz-(?:site|catalog)-/);
   });
 });
 
@@ -322,7 +322,7 @@ describe("@luz-ds/app: the pages that count the kinds", () => {
 
   it("get-started/index.html has app in its packages for one kind of site, with the install command", () => {
     const page = readOr("apps/docs/pages/get-started/index.html");
-    expect(page).toContain("pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app");
+    expect(page).toContain("pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/app");
     expect(page).toContain('href="/docs/app/"');
   });
 

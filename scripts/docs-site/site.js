@@ -140,7 +140,7 @@ const TEMPLATE_HEADINGS = new Set([
  * (/docs/docs/ would read as a typo).
  */
 const AREA_OF_PACKAGE = { docs: "documentation" };
-const PACKAGE_AREAS = new Set(["site", ...SITE_KINDS.map((name) => AREA_OF_PACKAGE[name] ?? name)]);
+const PACKAGE_AREAS = new Set(["catalog", ...SITE_KINDS.map((name) => AREA_OF_PACKAGE[name] ?? name)]);
 
 /**
  * What an A–Z entry is, by the area of its page: the English index's own words.
@@ -151,7 +151,7 @@ const AREA_KIND = {
   "get-started": "Get started",
   components: "Component",
   tokens: "Token page",
-  site: "Catalog pattern",
+  catalog: "Catalog pattern",
   landing: "Landing pattern",
   cms: "CMS pattern",
   app: "App pattern",
@@ -1047,8 +1047,8 @@ export const searchIndexRouteOf = (site) => `${docsRootOf(site)}search-index.jso
 const NOT_SEARCHED = new Set(["example", "code", "design"]);
 
 /**
- * The search index of @luz-ds/site's search (format version 1, the
- * public contract documented on /docs/site/search/), from the same data
+ * The search index of @luz-ds/catalog's search (format version 1, the
+ * public contract documented on /docs/catalog/search/), from the same data
  * as the A–Z index: three lists of [text, url, meta?]. URLs are relative to
  * the JSON file, so the site works under any path; a section's URL carries
  * its page and its fragment, since "#how" exists on many pages. A section
@@ -1695,7 +1695,7 @@ function renderChecks(site, locale, used) {
  * luz-tokens.css defines, with their counts; level 2 (core): its components (the stylesheets of
  * src/components, not `_` files) and its layout objects (the `.o-*` blocks
  * of _objects.css); level 3 (site): its components (the same, in
- * packages/site/src/components). The headings come from the catalog
+ * packages/catalog/src/components). The headings come from the catalog
  * (`inside.list.*`).
  */
 function levelLists(site, locale, used) {
@@ -1732,7 +1732,7 @@ function levelLists(site, locale, used) {
     return map;
   };
   const coreHref = pageOf("components", "components");
-  const siteHref = pageOf("site", "site");
+  const siteHref = pageOf("catalog", "catalog");
   const layoutIds = ids("components/layout.html");
   const objectHref = (name) => `/docs/components/layout/#${layoutIds.has(`objects-${name.slice(2)}`) ? `objects-${name.slice(2)}` : "objects-reference"}`;
   const tokens = [...new Set([...read("packages/tokens/dist/luz-tokens.css").matchAll(/^\s*(--luz-[\w-]+):/gm)].map((m) => m[1]))];
@@ -1791,14 +1791,14 @@ function levelLists(site, locale, used) {
       "</div>",
     ].join("\n"),
     list2: [list("inside.list.components", sheets("packages/core/src/components"), component(coreHref, "components"), sheetBytes("core")), list("inside.list.objects", objects, objectHref, objectWeight)].join("\n"),
-    list3: list("inside.list.site", sheets("packages/site/src/components"), component(siteHref, "site"), sheetBytes("site")),
+    list3: list("inside.list.catalog", sheets("packages/catalog/src/components"), component(siteHref, "catalog"), sheetBytes("catalog")),
   };
 }
 
 /**
  * The weights of the home's "Inside" levels, measured when the page is built
  * and never typed: the min+gzip size of the budgeted files of each package
- * in dist, summed level by level (tokens; + core; + site), and for the fourth
+ * in dist, summed level by level (tokens; + core; + catalog), and for the fourth
  * level the third plus the heaviest package for one kind of site, said as
  * "up to". Returned as {{weight1}}…{{weight4}}, in the language's number
  * format. Fails when a file is missing: run `pnpm build`.
@@ -1819,7 +1819,7 @@ function levelWeights(site, locale, used) {
       }, 0);
   const one = weigh("tokens");
   const two = one + weigh("core");
-  const three = two + weigh("site");
+  const three = two + weigh("catalog");
   const four = three + Math.max(...SITE_KINDS.map(weigh));
   return { weight1: kb(one), weight2: kb(two), weight3: kb(three), weight4: say("inside.upto").replace("{total}", kb(four)) };
 }

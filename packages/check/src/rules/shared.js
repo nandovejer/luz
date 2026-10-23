@@ -30,7 +30,7 @@ const PACKAGE_PREFIXES = [
   ["luz-cms-", "cms"],
   ["luz-app-", "app"],
   ["luz-docs-", "docs"],
-  ["luz-site-", "site"],
+  ["luz-catalog-", "catalog"],
 ];
 
 export function packageOfName(name) {

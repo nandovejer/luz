@@ -1,5 +1,5 @@
 /**
- * The CSS-only tags of @luz-ds/site: <luz-lang-switch>, <luz-submenu> and
+ * The CSS-only tags of @luz-ds/catalog: <luz-lang-switch>, <luz-submenu> and
  * <luz-banner> (.claude/plans/specs/f3-package-model.md section 2.2, step 8).
  * Their sources are read as text; no browser, no build.
  *
@@ -19,9 +19,9 @@ import { selectorsOf } from "./helpers/css-blocks.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const FILES = {
-  "luz-lang-switch": "packages/site/src/components/lang-switch.css",
-  "luz-submenu": "packages/site/src/components/submenu.css",
-  "luz-banner": "packages/site/src/components/banner.css",
+  "luz-lang-switch": "packages/catalog/src/components/lang-switch.css",
+  "luz-submenu": "packages/catalog/src/components/submenu.css",
+  "luz-banner": "packages/catalog/src/components/banner.css",
 };
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
 
@@ -99,7 +99,7 @@ describe("stylelint (luz/no-bare-element) on the selectors of a CSS-only tag", (
   const lint = async (code) => {
     const { results } = await stylelint.lint({
       code,
-      codeFilename: "packages/site/src/components/fixture.css",
+      codeFilename: "packages/catalog/src/components/fixture.css",
       config: { plugins: [`${root}scripts/stylelint/no-bare-element.js`], rules: { "luz/no-bare-element": true } },
     });
     return results[0].warnings.map((w) => w.text);

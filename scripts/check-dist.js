@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const sentinels = [
   "../packages/tokens/dist/luz-tokens.css",
   "../packages/core/dist/luz.css",
-  "../packages/site/dist/site.css",
+  "../packages/catalog/dist/catalog.css",
   "../packages/landing/dist/landing.css",
   "../packages/cms/dist/cms.css",
   "../packages/app/dist/app.css",

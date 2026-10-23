@@ -1,9 +1,9 @@
 /**
  * The guard of scripts/check-size.js and the files it guards, for the lazy
- * chunks of @luz-ds/site (.claude/plans/specs/f3-package-model.md section 2.3,
+ * chunks of @luz-ds/catalog (.claude/plans/specs/f3-package-model.md section 2.3,
  * 9 step 7; security requirements R1 and R2, rows SEC-CHUNK-1 and SEC-CHUNK-2):
  *   - every chunk of every package imports nothing, static or dynamic;
- *   - site.min.js has no static import, and its dynamic imports are exactly
+ *   - catalog.min.js has no static import, and its dynamic imports are exactly
  *     "./search.min.js", "./consent.min.js" and "./mode.min.js", each a string literal;
  *   - any import() whose argument is not a literal fails;
  *   - a bare specifier still fails (red line 1).
@@ -32,35 +32,35 @@ const STATIC = /(?:^|[;}\s])(?:import\b(?!\s*[(.])|export\b[^"'();]*?\bfrom\b)/;
 const dynamicTargets = (code) => [...code.matchAll(LITERAL_IMPORT)].map((m) => m[2]).sort();
 const sizeOf = (path) => gzipSync(readFileSync(join(repo, path)), { level: 9 }).length;
 
-describe("the built site files", () => {
-  it("site.min.js has no static import and loads exactly the three chunks, each by a literal specifier", () => {
-    const code = read("packages/site/dist/site.min.js");
+describe("the built catalog files", () => {
+  it("catalog.min.js has no static import and loads exactly the three chunks, each by a literal specifier", () => {
+    const code = read("packages/catalog/dist/catalog.min.js");
     expect(STATIC.test(code), "a static import or export-from").toBe(false);
     expect(dynamicTargets(code)).toEqual(["./consent.min.js", "./mode.min.js", "./search.min.js"]);
     expect(code.match(IMPORT_CALL)).toHaveLength(3);
   });
 
   it.each(["search", "consent", "mode"])("%s.min.js imports nothing, static or dynamic", (name) => {
-    const code = read(`packages/site/dist/${name}.min.js`);
+    const code = read(`packages/catalog/dist/${name}.min.js`);
     expect(STATIC.test(code), "a static import or export-from").toBe(false);
     expect(code.match(IMPORT_CALL)).toBeNull();
   });
 
-  it("the sources follow: site.js names the chunks as literals, and the chunks import nothing (SEC-CHUNK-1)", () => {
-    const loader = read("packages/site/src/site.js");
+  it("the sources follow: catalog.js names the chunks as literals, and the chunks import nothing (SEC-CHUNK-1)", () => {
+    const loader = read("packages/catalog/src/catalog.js");
     expect(dynamicTargets(loader)).toEqual(["./consent.js", "./mode.js", "./search.js"]);
     expect(loader.match(IMPORT_CALL)).toHaveLength(3);
     expect(loader).not.toMatch(/import\.meta/);
     for (const name of ["search", "consent", "mode"]) {
-      const source = read(`packages/site/src/${name}.js`);
+      const source = read(`packages/catalog/src/${name}.js`);
       expect(STATIC.test(source), `${name}.js static import`).toBe(false);
       expect(source.match(IMPORT_CALL), `${name}.js dynamic import`).toBeNull();
     }
   });
 
   it("the entry is much smaller than before (it no longer bundles the search), and the search chunk fits its ceiling", () => {
-    expect(sizeOf("packages/site/dist/site.min.js")).toBeLessThanOrEqual(1024);
-    expect(sizeOf("packages/site/dist/search.min.js")).toBeLessThanOrEqual(2560);
+    expect(sizeOf("packages/catalog/dist/catalog.min.js")).toBeLessThanOrEqual(1024);
+    expect(sizeOf("packages/catalog/dist/search.min.js")).toBeLessThanOrEqual(2560);
   });
 });
 
@@ -71,22 +71,22 @@ describe("budgets.json and PRINCIPLES.md section 8", () => {
   const principles = read("PRINCIPLES.md");
 
   it("has a row for the search chunk, with a ceiling of 2.5 kB", () => {
-    expect(budgets.find((b) => b.name === "site JS lazy chunk: search")).toMatchObject({ file: "packages/site/dist/search.min.js", ideal: 2048, max: 2560 });
-    expect(principles).toMatch(/^\| `site` JS lazy chunk: `search`[^\n]*\| 2\.5 kB \|$/m);
+    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: search")).toMatchObject({ file: "packages/catalog/dist/search.min.js", ideal: 2048, max: 2560 });
+    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `search`[^\n]*\| 2\.5 kB \|$/m);
   });
 
   it("calls the consent file a lazy chunk, with the same file and ceiling", () => {
-    expect(budgets.find((b) => b.name.startsWith("site JS lazy chunk: consent"))).toMatchObject({ file: "packages/site/dist/consent.min.js", ideal: 1024, max: 1536 });
-    expect(principles).toMatch(/^\| `site` JS lazy chunk: `consent`[^\n]*\| 1\.5 kB \|$/m);
+    expect(budgets.find((b) => b.name.startsWith("catalog JS lazy chunk: consent"))).toMatchObject({ file: "packages/catalog/dist/consent.min.js", ideal: 1024, max: 1536 });
+    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `consent`[^\n]*\| 1\.5 kB \|$/m);
   });
 
   it("has a row for the mode chunk, the size of the consent one (a new row, no other ceiling raised)", () => {
-    expect(budgets.find((b) => b.name === "site JS lazy chunk: mode")).toEqual({ name: "site JS lazy chunk: mode", file: "packages/site/dist/mode.min.js", ideal: 1024, max: 1536 });
-    expect(principles).toMatch(/^\| `site` JS lazy chunk: `mode`[^\n]*\| 1\.5 kB \|$/m);
+    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: mode")).toEqual({ name: "catalog JS lazy chunk: mode", file: "packages/catalog/dist/mode.min.js", ideal: 1024, max: 1536 });
+    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `mode`[^\n]*\| 1\.5 kB \|$/m);
   });
 
-  it("keeps the site entry row, with its ceiling of 2 kB unchanged", () => {
-    expect(budgets.find((b) => b.name === "site JS")).toMatchObject({ file: "packages/site/dist/site.min.js", ideal: 1024, max: 2048 });
+  it("keeps the catalog entry row, with its ceiling of 2 kB unchanged", () => {
+    expect(budgets.find((b) => b.name === "catalog JS")).toMatchObject({ file: "packages/catalog/dist/catalog.min.js", ideal: 1024, max: 2048 });
   });
 
   it("keeps the budgets and the PRINCIPLES table in step, as check-size does", () => {
@@ -117,10 +117,10 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     ["core JS lazy chunk: midi", 4 * KiB],
     ["core JS lazy chunk: table-sort", 2 * KiB],
     ["core JS lazy chunk: timeline", 3 * KiB],
-    ["site CSS", 4 * KiB],
-    ["site JS", 2 * KiB],
-    ["site JS lazy chunk: search", 2.5 * KiB],
-    ["site JS lazy chunk: consent", 1.5 * KiB],
+    ["catalog CSS", 4 * KiB],
+    ["catalog JS", 2 * KiB],
+    ["catalog JS lazy chunk: search", 2.5 * KiB],
+    ["catalog JS lazy chunk: consent", 1.5 * KiB],
     ["landing CSS", 2 * KiB],
     ["cms CSS", 4 * KiB],
     ["app CSS", 2 * KiB],
@@ -137,7 +137,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(budgets.slice(BEFORE.length + 3).map((b) => b.name)).toEqual([
       "docs CSS",
       "core JS lazy chunk: i18n-es",
-      "site JS lazy chunk: mode",
+      "catalog JS lazy chunk: mode",
       "home light controller JS",
       "home light visual: globe",
       "home light data: globe",
@@ -241,7 +241,7 @@ describe("the language chunks of core", () => {
     const at = table.findIndex((cells) => /^`core` JS lazy chunk: `i18n-es`/.test(cells[0]));
     const last = table[at];
     expect(at, "the i18n-es row is in the table").toBeGreaterThan(-1);
-    expect(table[at + 1][0], "the row after it").toMatch(/^`site` JS lazy chunk: `mode`/);
+    expect(table[at + 1][0], "the row after it").toMatch(/^`catalog` JS lazy chunk: `mode`/);
     expect(last[1]).toBe("\u2014");
     expect(kib(last[2])).toBe(768);
     expect(kib(last[3])).toBe(768);
@@ -302,19 +302,19 @@ const CHUNK = (tag) => `customElements.get("${tag}")||customElements.define("${t
 describe("scripts/check-size.js on a copy of the repository", () => {
   let dir;
 
-  /** A repository with the four site files; `files` overrides the content of any of them. */
+  /** A repository with the four catalog files; `files` overrides the content of any of them. */
   function build(files = {}) {
-    const content = { "site.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "consent.min.js": CHUNK("luz-consent"), "mode.min.js": CHUNK("luz-mode"), ...files };
+    const content = { "catalog.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "consent.min.js": CHUNK("luz-consent"), "mode.min.js": CHUNK("luz-mode"), ...files };
     mkdirSync(join(dir, "scripts"), { recursive: true });
-    mkdirSync(join(dir, "packages/site/dist"), { recursive: true });
+    mkdirSync(join(dir, "packages/catalog/dist"), { recursive: true });
     cpSync(join(repo, "scripts/check-size.js"), join(dir, "scripts/check-size.js"));
-    const rows = Object.keys(content).map((name, i) => ({ name: `site JS row ${i}`, file: `packages/site/dist/${name}`, max: 2048 }));
+    const rows = Object.keys(content).map((name, i) => ({ name: `catalog JS row ${i}`, file: `packages/catalog/dist/${name}`, max: 2048 }));
     writeFileSync(join(dir, "budgets.json"), JSON.stringify({ budgets: rows }));
     writeFileSync(
       join(dir, "PRINCIPLES.md"),
       ["| Artifact | Warns below | Ideal | Warns above | Ceiling |", "| --- | --- | --- | --- | --- |", ...rows.map((r) => `| ${r.name} | - | - | - | 2 kB |`)].join("\n") + "\n",
     );
-    for (const [name, code] of Object.entries(content)) writeFileSync(join(dir, "packages/site/dist", name), code);
+    for (const [name, code] of Object.entries(content)) writeFileSync(join(dir, "packages/catalog/dist", name), code);
     const run = spawnSync(process.execPath, [join(dir, "scripts/check-size.js")], { encoding: "utf-8" });
     return { status: run.status, output: run.stdout + run.stderr };
   }
@@ -333,13 +333,13 @@ describe("scripts/check-size.js on a copy of the repository", () => {
   });
 
   it("fails a loader with a static import", () => {
-    const { status, output } = build({ "site.min.js": `import "./search.min.js";${LOADER}` });
+    const { status, output } = build({ "catalog.min.js": `import "./search.min.js";${LOADER}` });
     expect(status).toBe(1);
-    expect(output).toMatch(/site\.min\.js/);
+    expect(output).toMatch(/catalog\.min\.js/);
   });
 
   it("fails a loader that imports a file other than the three chunks", () => {
-    const { status, output } = build({ "site.min.js": `${LOADER}import("./other.min.js");` });
+    const { status, output } = build({ "catalog.min.js": `${LOADER}import("./other.min.js");` });
     expect(status).toBe(1);
     expect(output).toMatch(/other\.min\.js/);
   });
@@ -347,7 +347,7 @@ describe("scripts/check-size.js on a copy of the repository", () => {
   it.each(["search", "consent", "mode"])("fails a loader that is missing the %s chunk", (missing) => {
     const loader = LOADER.split(";").filter((part) => part && !part.includes(`./${missing}.min.js`)).join(";") + ";";
     expect(loader).not.toContain(`./${missing}.min.js`);
-    const { status, output } = build({ "site.min.js": loader });
+    const { status, output } = build({ "catalog.min.js": loader });
     expect(status).toBe(1);
     expect(output).toContain(`${missing}.min.js`);
   });
@@ -357,7 +357,7 @@ describe("scripts/check-size.js on a copy of the repository", () => {
     ["a concatenation", `${LOADER}import("./"+document.title+".min.js");`],
     ["a template literal with a value", `${LOADER}import(\`./\${document.title}.min.js\`);`],
   ])("fails an import() whose argument is %s, and says it is not a literal", (_, code) => {
-    const { status, output } = build({ "site.min.js": code });
+    const { status, output } = build({ "catalog.min.js": code });
     expect(status).toBe(1);
     expect(output).toMatch(/literal/i);
   });
@@ -386,7 +386,7 @@ describe("scripts/check-size.js on a copy of the repository", () => {
 
   it("the copy reads its own files, not the repository's", () => {
     build();
-    expect(existsSync(join(dir, "packages/site/dist/site.min.js"))).toBe(true);
+    expect(existsSync(join(dir, "packages/catalog/dist/catalog.min.js"))).toBe(true);
   });
 });
 

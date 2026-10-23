@@ -1,0 +1,230 @@
+<!-- luz:page
+title: Referencia de clases
+description: Todas las etiquetas y clases de los componentes del catálogo, el elemento al que se aplican y su función, en un solo lugar.
+source: 66401df2d06a
+reviewed: false
+-->
+    <div class="docs-block" id="p-reference">
+          <p>Busca una etiqueta o una clase por nombre. La página de cada componente incluye su marcado y las recomendaciones de uso.</p>
+          <p>La estructura de página que antes proporcionaba el catálogo, desde la carcasa hasta el pie, está en core (<a href="/docs/components/layout/">maquetación</a>, <a href="/docs/components/skip-link/">enlace para saltar al contenido</a>, <a href="/docs/components/image/">imagen</a>, <a href="/docs/components/band/">franja</a>) y en los paquetes para cada tipo de sitio (<a href="/docs/landing/">landing</a>, <a href="/docs/cms/">CMS</a>).</p>
+          <div class="docs-prose">
+            <h2 id="search" class="docs-prose__title">Búsqueda</h2>
+            <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Clases del catálogo: búsqueda">
+          <table class="luz-table docs-ref-table">
+            <thead>
+              <tr>
+                <th scope="col">Clase</th>
+                <th scope="col">Elemento</th>
+                <th scope="col">Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Clase"><div>&lt;luz-search&gt;</div></td>
+                <td data-label="Elemento"><div>&lt;luz-search&gt;</div></td>
+                <td data-label="Descripción"><div>El elemento que define <code class="luz-code-inline">search.min.js</code>. Contiene el enlace alternativo, el botón y el diálogo; el enlace y el botón comparten un espacio para que nada se mueva cuando el botón sustituye al enlace.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__fallback</div></td>
+                <td data-label="Elemento"><div>&lt;a&gt;</div></td>
+                <td data-label="Descripción"><div>El enlace a un índice de todas las páginas, visible hasta que funciona la búsqueda. Es un control elevado, con la lupa antes del texto.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__fallback-label</div></td>
+                <td data-label="Elemento"><div>&lt;span&gt;</div></td>
+                <td data-label="Descripción"><div>El texto del enlace, que también es su nombre. Se recorta, pero no se elimina, junto a un botón compacto a 768 píxeles o menos.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__trigger</div></td>
+                <td data-label="Elemento"><div>&lt;button&gt;</div></td>
+                <td data-label="Descripción"><div>El botón de búsqueda, con forma de campo: etiqueta y, después, el atajo de teclado. Está oculto en el marcado y en su lugar; el script lo muestra.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__trigger--compact</div></td>
+                <td data-label="Elemento"><div>&lt;button&gt;</div></td>
+                <td data-label="Descripción"><div>Modificador. A 768 píxeles o menos solo se ve la lupa, y también aparece el enlace junto a ella; el texto sigue formando parte de sus nombres.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__trigger-icon</div></td>
+                <td data-label="Elemento"><div>&lt;svg&gt;</div></td>
+                <td data-label="Descripción"><div>La lupa, con el color del texto, en el botón y en el enlace.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__trigger-label</div></td>
+                <td data-label="Elemento"><div>&lt;span&gt;</div></td>
+                <td data-label="Descripción"><div>La etiqueta visible, que también es el nombre del botón.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__trigger-key</div></td>
+                <td data-label="Elemento"><div>&lt;kbd aria-hidden="true"&gt;</div></td>
+                <td data-label="Descripción"><div>La indicación del atajo «Ctrl K». Oculta en pantallas táctiles y para las tecnologías de asistencia, que leen <code class="luz-code-inline">aria-keyshortcuts</code>.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search</div></td>
+                <td data-label="Elemento"><div>&lt;dialog&gt;</div></td>
+                <td data-label="Descripción"><div>Con <code class="luz-code-inline">.luz-modal</code>: el diálogo de búsqueda, una columna con resultados desplazables; a pantalla completa a 768 píxeles o menos.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__body</div></td>
+                <td data-label="Elemento"><div>&lt;search&gt;</div></td>
+                <td data-label="Descripción"><div>El campo, el estado y los resultados.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__head</div></td>
+                <td data-label="Elemento"><div>&lt;div&gt;</div></td>
+                <td data-label="Descripción"><div>El título y el botón de cierre en una fila que se ajusta.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__title</div></td>
+                <td data-label="Elemento"><div>&lt;h2&gt;</div></td>
+                <td data-label="Descripción"><div>El nombre del diálogo; su etiqueta da nombre al campo.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__field</div></td>
+                <td data-label="Elemento"><div>&lt;div&gt;</div></td>
+                <td data-label="Descripción"><div>El campo, con una lupa <code class="luz-code-inline">svg</code> decorativa al principio.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__status</div></td>
+                <td data-label="Elemento"><div>&lt;p&gt;</div></td>
+                <td data-label="Descripción"><div>El número de resultados, <code class="luz-code-inline">role="status"</code>, en tamaño pequeño y con el color atenuado.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__close</div></td>
+                <td data-label="Elemento"><div>&lt;button&gt;</div></td>
+                <td data-label="Descripción"><div>El botón de cierre, de 44 píxeles de alto, dentro de un <code class="luz-code-inline">form method="dialog"</code>.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__results</div></td>
+                <td data-label="Elemento"><div>&lt;div&gt;</div></td>
+                <td data-label="Descripción"><div>Los grupos de resultados: cada uno con un encabezado y una lista de enlaces.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-search__foot</div></td>
+                <td data-label="Elemento"><div>&lt;p&gt;</div></td>
+                <td data-label="Descripción"><div>La última línea, con el enlace a la página del índice.</div></td>
+              </tr>
+            </tbody>
+          </table>
+            </div>
+          </div>
+          <div class="docs-prose">
+            <h2 id="language-switch" class="docs-prose__title">Selector de idioma</h2>
+            <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Clases del catálogo: selector de idioma">
+          <table class="luz-table docs-ref-table">
+            <thead>
+              <tr>
+                <th scope="col">Clase</th>
+                <th scope="col">Elemento</th>
+                <th scope="col">Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Clase"><div>&lt;luz-lang-switch&gt;</div></td>
+                <td data-label="Elemento"><div>etiqueta a</div></td>
+                <td data-label="Descripción"><div>El bloque: contiene el botón y la lista, sin clase ni rol propios. Define <code class="luz-code-inline">--luz-lang-switch-top</code>, la distancia desde arriba a la que se abre la lista (por defecto, la de <code class="luz-code-inline">--luz-bar-h</code> de core).</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-lang-switch__button</div></td>
+                <td data-label="Elemento"><div>&lt;button&gt;</div></td>
+                <td data-label="Descripción"><div>Abre la lista con <code class="luz-code-inline">popovertarget</code>. Muestra el idioma actual; su nombre empieza por la etiqueta, que está oculta.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-lang-switch__icon</div></td>
+                <td data-label="Elemento"><div>&lt;svg&gt;</div></td>
+                <td data-label="Descripción"><div>El globo, decorativo y con el color del texto.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-lang-switch__name</div></td>
+                <td data-label="Elemento"><div>&lt;span&gt;</div></td>
+                <td data-label="Descripción"><div>El nombre del idioma actual en el botón. Se recorta por debajo de 360 píxeles y solo se ve el globo, pero sigue formando parte del nombre del botón.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-lang-switch__menu</div></td>
+                <td data-label="Elemento"><div>&lt;nav&gt;</div></td>
+                <td data-label="Descripción"><div>El popover con la lista, fijado debajo de la cabecera al final de la fila.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-lang-switch__title</div></td>
+                <td data-label="Elemento"><div>&lt;p&gt;</div></td>
+                <td data-label="Descripción"><div>El nombre visible de la lista, que etiqueta la navegación.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-lang-switch__list</div></td>
+                <td data-label="Elemento"><div>&lt;ul&gt;</div></td>
+                <td data-label="Descripción"><div>Los idiomas, uno por fila y sin viñetas.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-lang-switch__link</div></td>
+                <td data-label="Elemento"><div>&lt;a&gt;</div></td>
+                <td data-label="Descripción"><div>Un idioma que se nombra a sí mismo, con <code class="luz-code-inline">lang</code> y <code class="luz-code-inline">hreflang</code>; en negrita y subrayado con <code class="luz-code-inline">aria-current</code>.</div></td>
+              </tr>
+            </tbody>
+          </table>
+            </div>
+          </div>
+          <div class="docs-prose">
+            <h2 id="submenu" class="docs-prose__title">Submenú</h2>
+            <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Clases del catálogo: submenú">
+          <table class="luz-table docs-ref-table">
+            <thead>
+              <tr>
+                <th scope="col">Clase</th>
+                <th scope="col">Elemento</th>
+                <th scope="col">Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Clase"><div>&lt;luz-submenu&gt;</div></td>
+                <td data-label="Elemento"><div>alrededor de un &lt;details&gt;</div></td>
+                <td data-label="Descripción"><div>Una etiqueta sin clase: un elemento de los enlaces de la cabecera que contiene otros enlaces. <code class="luz-code-inline">&lt;summary&gt;</code> es el botón y el <code class="luz-code-inline">&lt;ul&gt;</code> siguiente contiene los enlaces. Sin scripts.</div></td>
+              </tr>
+            </tbody>
+          </table>
+            </div>
+          </div>
+          <div class="docs-prose">
+            <h2 id="banner-and-consent" class="docs-prose__title">Banner y consentimiento de cookies</h2>
+            <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Clases del catálogo: banner y consentimiento de cookies">
+          <table class="luz-table docs-ref-table">
+            <thead>
+              <tr>
+                <th scope="col">Clase</th>
+                <th scope="col">Elemento</th>
+                <th scope="col">Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Clase"><div>&lt;luz-banner&gt;</div></td>
+                <td data-label="Elemento"><div>alrededor de un &lt;section&gt;</div></td>
+                <td data-label="Descripción"><div>Una etiqueta sin clase: una franja sobre la cabecera con un anuncio breve y un enlace, cuyo texto se alinea con la columna de la cabecera. Sin scripts ni botón de cierre.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>tone="warning"</div></td>
+                <td data-label="Elemento"><div>&lt;luz-banner&gt;</div></td>
+                <td data-label="Descripción"><div>Los colores de aviso, para algo que impide a quien visita la página hacer lo que venía a hacer; las palabras también lo indican.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-consent</div></td>
+                <td data-label="Elemento"><div>&lt;section hidden&gt;</div></td>
+                <td data-label="Descripción"><div>El banner de cookies, dentro de un <code class="luz-code-inline">&lt;luz-consent&gt;</code> anterior a la cabecera, que se muestra como una franja fija en la parte inferior de la ventana. Está oculto en el marcado: <code class="luz-code-inline">consent.min.js</code> lo muestra si no hay ninguna respuesta guardada.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-consent__title</div></td>
+                <td data-label="Elemento"><div>&lt;h2&gt;</div></td>
+                <td data-label="Descripción"><div>El encabezado del banner, en sans; da nombre a la región.</div></td>
+              </tr>
+              <tr>
+                <td data-label="Clase"><div>.luz-consent__choices</div></td>
+                <td data-label="Elemento"><div>&lt;details&gt;</div></td>
+                <td data-label="Descripción"><div>Las categorías de cookies opcionales, como casillas de verificación en un formulario, debajo de Aceptar y Rechazar.</div></td>
+              </tr>
+            </tbody>
+          </table>
+            </div>
+          </div>
+        
+    </div>

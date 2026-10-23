@@ -27,13 +27,13 @@
  *      dist/data/index.json
  *          { "schema": 1, "packages": [{ "package": "@luz-ds/tokens", "version": "0.0.0" }, ...] }
  *          the seven, in dependency order, the version of each package.json
- *      dist/data/<pkg>/classes.json          for each of tokens, core, site, landing, cms, app, docs
+ *      dist/data/<pkg>/classes.json          for each of tokens, core, catalog, landing, cms, app, docs
  *          { schema, package, version, classes, properties, hooks? }
  *          the package's dist/classes.json with only what a rule reads:
  *          classes [{ name, kind, defined, block?, modifier?, part?, hosts? }],
  *          properties [{ name, scope }], hooks as in the manifest. No layer,
  *          no files, no text.
- *      dist/data/<core|site>/custom-elements.json    only the packages that have one
+ *      dist/data/<core|catalog>/custom-elements.json    only the packages that have one
  *          the Custom Elements Manifest reduced to { schemaVersion, modules:
  *          [{ kind, path, declarations: [{ kind, name, customElement, tagName,
  *          attributes: [{ name }] }] }] }: names, no description, type,
@@ -60,7 +60,7 @@ import { buildCheckTo, builtOnce, removeBuilds, root } from "./helpers/check-bui
 
 afterAll(removeBuilds);
 
-const LIBRARIES = ["tokens", "core", "site", "landing", "cms", "app", "docs"];
+const LIBRARIES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
 const readJson = (path) => JSON.parse(readFileSync(path, "utf-8"));
 
 /* ---- hooks in classes.json ------------------------------------------------------------------- */
@@ -183,18 +183,18 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(existsSync(join(dataDir(), "index.json")), "data/index.json").toBe(true);
   });
 
-  it("holds exactly index.json, the seven classes.json, the custom-elements.json of core and site, and LUZ's tokens for the theme rules", () => {
+  it("holds exactly index.json, the seven classes.json, the custom-elements.json of core and catalog, and LUZ's tokens for the theme rules", () => {
     expect(built.error).toBeNull();
     expect(filesUnder(dataDir())).toEqual([
       "app/classes.json",
+      "catalog/classes.json",
+      "catalog/custom-elements.json",
       "cms/classes.json",
       "core/classes.json",
       "core/custom-elements.json",
       "docs/classes.json",
       "index.json",
       "landing/classes.json",
-      "site/classes.json",
-      "site/custom-elements.json",
       "tokens/classes.json",
       "tokens/tokens.css",
     ]);
@@ -239,7 +239,7 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     }
   });
 
-  it.each(["core", "site"])("%s/custom-elements.json keeps the tags and the attribute names of the manifest, with no text", (name) => {
+  it.each(["core", "catalog"])("%s/custom-elements.json keeps the tags and the attribute names of the manifest, with no text", (name) => {
     expect(built.error).toBeNull();
     const source = readJson(`${root}packages/${name}/dist/custom-elements.json`);
     const copy = snapshot(name, "custom-elements.json");

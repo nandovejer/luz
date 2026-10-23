@@ -6,7 +6,7 @@
    class on a native element, on core's objects and components (.o-shell,
    .o-main, .luz-sidebar, .luz-code-block). Docs adds only its layout, its
    skin and its rhythm. No JavaScript.
-   Requires: @luz-ds/tokens and @luz-ds/core loaded first; @luz-ds/site
+   Requires: @luz-ds/tokens and @luz-ds/core loaded first; @luz-ds/catalog
    optional, loaded before this file.
    ========================================================================== */
 

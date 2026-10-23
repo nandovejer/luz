@@ -7,7 +7,7 @@
  * three engines is an import map with an `integrity` section, before any module
  * script. The documentation says so:
  *
- *   SECURITY.md, packages/site/README.md, packages/core/README.md and
+ *   SECURITY.md, packages/catalog/README.md, packages/core/README.md and
  *   apps/docs/pages/get-started/index.html
  *     - no longer claim that the preload's verdict is what the import uses, or
  *       that a wrong hash "never runs" there
@@ -36,7 +36,7 @@ const preBlocks = (html) => [...html.matchAll(/<pre\b[^>]*>\s*<code\b[^>]*>([\s\
 
 const DOCS = [
   { name: "SECURITY.md", text: () => read("SECURITY.md"), blocks: (t) => fenced(t), chunks: ["midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js", "search.min.js", "consent.min.js", "mode.min.js"] },
-  { name: "packages/site/README.md", text: () => read("packages/site/README.md"), blocks: (t) => fenced(t), chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
+  { name: "packages/catalog/README.md", text: () => read("packages/catalog/README.md"), blocks: (t) => fenced(t), chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
   { name: "packages/core/README.md", text: () => read("packages/core/README.md"), blocks: (t) => fenced(t), chunks: ["i18n-es.min.js"] },
   { name: "apps/docs/pages/get-started/index.html", text: () => read("apps/docs/pages/get-started/index.html"), blocks: (t) => preBlocks(t), chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
 ];
@@ -66,7 +66,7 @@ describe.each(DOCS)("$name documents the import map as the way to check a lazy c
   it("lists the chunk URLs of this file, each with a sha384 hash", () => {
     const { map } = importMapOf(blocks(text())) ?? { map: { integrity: {} } };
     for (const file of chunks) {
-      const url = Object.keys(map.integrity ?? {}).find((u) => new RegExp(`^https://cdn\\.jsdelivr\\.net/npm/@luz-ds/(core|site)@[^/]+/dist/${file.replace(".", "\\.")}$`).test(u));
+      const url = Object.keys(map.integrity ?? {}).find((u) => new RegExp(`^https://cdn\\.jsdelivr\\.net/npm/@luz-ds/(core|catalog)@[^/]+/dist/${file.replace(".", "\\.")}$`).test(u));
       expect(url, `${file} in the integrity section`).toBeTruthy();
       expect(map.integrity[url], file).toMatch(/^sha384-/);
     }

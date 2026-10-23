@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * The submenu of the site header (@luz-ds/site, <luz-submenu>, a CSS-only
+ * The submenu of the site header (@luz-ds/catalog, <luz-submenu>, a CSS-only
  * tag: .claude/plans/specs/f3-package-model.md section 2.2, step 8): a native
  * <details name> in the header's list of links, wrapped in a tag that no
  * script defines and that has no classes inside it. On the page of

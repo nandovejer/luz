@@ -1,8 +1,8 @@
 # @luz-ds/docs
 
-The pieces of a documentation page: the shell (the sidebar, the content and a rail), the page head, the rail ("On this page" and the page's actions), the frame of a live example and its code, do and don't, Previous / Next and the page foot. Each is a class on a native element, on `@luz-ds/core`'s objects and components (`.o-shell`, `.o-main`, `.luz-sidebar`, `.luz-code-block`); docs adds only its layout, its skin and its rhythm. `@luz-ds/site` is optional: its search goes in the header.
+The pieces of a documentation page: the shell (the sidebar, the content and a rail), the page head, the rail ("On this page" and the page's actions), the frame of a live example and its code, do and don't, Previous / Next and the page foot. Each is a class on a native element, on `@luz-ds/core`'s objects and components (`.o-shell`, `.o-main`, `.luz-sidebar`, `.luz-code-block`); docs adds only its layout, its skin and its rhythm. `@luz-ds/catalog` is optional: its search goes in the header.
 
-> **Beta, version 0.x.** Docs has a version of its own, apart from tokens, core and site, and grows in minor versions while it is 0.x: any of them may change a class. Pin an exact version and read the changelog before you upgrade.
+> **Beta, version 0.x.** Docs has a version of its own, apart from tokens, core and catalog, and grows in minor versions while it is 0.x: any of them may change a class. Pin an exact version and read the changelog before you upgrade.
 
 ## When to use it
 
@@ -14,12 +14,12 @@ The shell has three columns from 80 rem (the sidebar 16.5 rem, the content, the 
 
 ## Prerequisites
 
-Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/site` (`^0.1.0`) is an optional peer: load it before this package if you use its search; the patterns work without it.
+Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/catalog` (`^0.1.0`) is an optional peer: load it before this package if you use its search; the patterns work without it.
 
 ## Installation
 
 ```bash
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/docs
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/docs
 ```js
 import '@luz-ds/tokens/css'
 import '@luz-ds/core/css'
-import '@luz-ds/site/css'
+import '@luz-ds/catalog/css'
 import '@luz-ds/docs/css'
 ```
 
@@ -38,7 +38,7 @@ import '@luz-ds/docs/css'
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/site@0.1.0/dist/site.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.1.0/dist/docs.min.css">
 ```
 
@@ -79,7 +79,7 @@ Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1
 
 This package needs `@luz-ds/tokens` and `@luz-ds/core` loaded first.
 
-`@luz-ds/site` is optional: the CSS of this package works with the packages above alone.
+`@luz-ds/catalog` is optional: the CSS of this package works with the packages above alone.
 
 ### Check what you write
 

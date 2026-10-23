@@ -1,7 +1,7 @@
 ---
 "@luz-ds/tokens": minor
 "@luz-ds/core": minor
-"@luz-ds/site": minor
+"@luz-ds/catalog": minor
 "@luz-ds/landing": minor
 "@luz-ds/cms": minor
 "@luz-ds/check": patch

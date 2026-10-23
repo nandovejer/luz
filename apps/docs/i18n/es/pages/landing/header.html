@@ -2,7 +2,7 @@
 title: Cabecera
 description: Inicia cada página de un sitio de landing con su nombre, sus enlaces principales y algunos controles, en una fila que permanece arriba.
 keywords: barra superior, cabecera
-source: 06aeab86a250
+source: ef62a5c9f0cf
 reviewed: false
 -->
     <div class="docs-component" id="p-landing-header">
@@ -79,7 +79,7 @@ reviewed: false
                 <tbody>
                   <tr><td data-label="Clase"><div><code>.luz-landing-header</code></div></td><td data-label="Efecto"><div>En <code>&lt;header&gt;</code>: la superficie de la página, una línea debajo, los espacios de la fila y el ancla bajo la que se abren sus paneles.</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-landing-header__brand</code></div></td><td data-label="Efecto"><div>El nombre del sitio como enlace a la página de inicio: seminegrita, sin subrayar, de al menos 44 px de alto; ocupa el espacio libre de la fila.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-header__actions</code></div></td><td data-label="Efecto"><div>Al final de una fila <code>.o-row</code>: búsqueda, un <a href="/docs/site/lang-switch/">selector de idioma</a> y un botón.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-header__actions</code></div></td><td data-label="Efecto"><div>Al final de una fila <code>.o-row</code>: búsqueda, un <a href="/docs/catalog/lang-switch/">selector de idioma</a> y un botón.</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.o-sticky</code> (core)</div></td><td data-label="Efecto"><div>Mantiene la cabecera arriba mientras se desplaza la página, en ventanas de al menos 30 rem de alto; consulta <a href="/docs/components/layout/#objects-page">la página y sus barras</a>.</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.o-container.o-container--inline.o-row</code> (core)</div></td><td data-label="Efecto"><div>La fila: el ancho y los márgenes interiores de la página; se ajusta en vez de desbordarse.</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (core)</div></td><td data-label="Efecto"><div>El botón del menú y los enlaces: consulta la <a href="/docs/components/navbar/">barra de navegación</a>.</div></td></tr>
@@ -87,12 +87,12 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/landing</code> sobre los objetos y la barra de navegación de core. No usa JavaScript y <code>@luz-ds/site</code> es opcional.</p>
+            <p>CSS de <code>@luz-ds/landing</code> sobre los objetos y la barra de navegación de core. No usa JavaScript y <code>@luz-ds/catalog</code> es opcional.</p>
             <ul>
               <li>Landing solo añade la apariencia: la superficie de la página, la línea inferior, la marca y los espacios de la fila (8 px entre filas, 16 px entre elementos y 24 px a partir de 769 px). Core aporta el resto: <code>.o-sticky</code>, la posición fija y el relleno de desplazamiento; <code>.o-container--inline</code>, los márgenes interiores; <code>.o-row</code>, la fila adaptable; y la barra de navegación, los enlaces y su panel.</li>
               <li>Una cabecera de una fila mide lo que <code>--luz-bar-h</code> de core: controles de 44 px, 4 px arriba y abajo y una línea de 1 px. Con el texto ampliado, la fila se ajusta y la cabecera crece.</li>
               <li>La cabecera se asigna a sí misma el ancla <code>--luz-bar</code>. En los navegadores compatibles con el posicionamiento mediante anclas CSS, el panel de la barra de navegación y la lista del <code>&lt;luz-lang-switch&gt;</code> del sitio se abren debajo, con una o dos filas. En los demás se abren a <code>--luz-bar-h</code> desde la parte superior de la ventana.</li>
-              <li>Sin <code>@luz-ds/site</code> no cambia nada: sus reglas adicionales no coinciden con ningún elemento.</li>
+              <li>Sin <code>@luz-ds/catalog</code> no cambia nada: sus reglas adicionales no coinciden con ningún elemento.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>No cambia nada: el botón abre el menú como popover con <code>popovertarget</code>, sin scripts, y los enlaces son enlaces normales.</p>

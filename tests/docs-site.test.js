@@ -12,7 +12,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { readHtml } from "../scripts/docs-site/html.js";
 import { classesOf, findAll, isInside, parse, query, queryAllLive, textOf } from "./helpers/html-dom.js";
 import { KIND_AREAS, PATTERN_AREAS } from "./helpers/package-areas.js";
-import { readIndex, search } from "../packages/site/src/search.js";
+import { readIndex, search } from "../packages/catalog/src/search.js";
 import {
   SEARCH_INDEX_ROUTE,
   buildSearchIndex,
@@ -717,11 +717,11 @@ describe("the LUZ docs site", () => {
     expect(names.length).toBeGreaterThan(250);
     // Keywords: after the area, not already in the title; the page keeps its place
     expect(index.pages).toContainEqual(["Navbar", "components/navbar/", "Core · nav bar, navigation bar"]);
-    // The page of the language switch is site/lang-switch/ (the tag is the block); its title is the page's own
-    expect(index.pages.filter(([, url]) => url === "site/lang-switch/").map(([, , keywords]) => keywords)).toEqual(["Catalog · translation, locale, i18n, hreflang"]);
-    expect(index.pages.filter(([, url]) => url === "site/lang-switcher/")).toEqual([]);
-    expect(index.pages.filter(([, url]) => url === "site/notice/")).toEqual([]);
-    expect(index.pages.filter(([, url]) => url === "site/banner/")).toHaveLength(1);
+    // The page of the language switch is catalog/lang-switch/ (the tag is the block); its title is the page's own
+    expect(index.pages.filter(([, url]) => url === "catalog/lang-switch/").map(([, , keywords]) => keywords)).toEqual(["Catalog · translation, locale, i18n, hreflang"]);
+    expect(index.pages.filter(([, url]) => url === "catalog/lang-switcher/")).toEqual([]);
+    expect(index.pages.filter(([, url]) => url === "catalog/notice/")).toEqual([]);
+    expect(index.pages.filter(([, url]) => url === "catalog/banner/")).toHaveLength(1);
     // A keyword is never the title of another page: that page would come second in its own search
     const titles = new Set(site.pages.map((p) => p.meta.title.toLowerCase()));
     for (const { keywords, title } of indexData(site)) for (const k of keywords) expect(titles.has(k.toLowerCase()), `${title}: ${k}`).toBe(false);
@@ -729,7 +729,7 @@ describe("the LUZ docs site", () => {
     expect(indexEntries(site)).toContainEqual({ name: "nav bar", href: "/docs/components/navbar/", kind: "Another name for Navbar" });
   });
 
-  it("answers what a developer types: class names, tokens, other names, and a part of a title (the search of @luz-ds/site)", () => {
+  it("answers what a developer types: class names, tokens, other names, and a part of a title (the search of @luz-ds/catalog)", () => {
     const results = readIndex(buildSearchIndex(site), `https://example.org${SEARCH_INDEX_ROUTE}`);
     const [PAGES, SECTIONS] = [0, 1];
     const first = (query, group = SECTIONS) => search(results, query)[group].map((r) => r.text);
@@ -867,7 +867,7 @@ describe("the LUZ docs site", () => {
     expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/documentation\//);
     expect(endOf(rendered.get("/docs/components/")).prev?.[0]).toMatch(/^\/docs\/tokens\//);
     expect(endOf(rendered.get("/docs/accessibility/")).prev?.[0]).toMatch(/^\/docs\/html\//);
-    expect(endOf(rendered.get("/docs/site/")).prev?.[0]).toMatch(/^\/docs\/components\//);
+    expect(endOf(rendered.get("/docs/catalog/")).prev?.[0]).toMatch(/^\/docs\/components\//);
   });
 
   it("lists up to three essentials per area (site.json), never the page itself nor its Previous / Next, all existing pages", () => {
@@ -892,30 +892,30 @@ describe("the LUZ docs site", () => {
     expect(endOf(rendered.get("/docs/tokens/modes/")).links).toEqual(["/docs/components/", "/docs/tokens/figma/"]);
   });
 
-  // F3 step 12: what moved out of site leaves its pages behind. Each went to core (shell and
+  // F3 step 12: what moved out of catalog leaves its pages behind. Each went to core (shell and
   // actions to `layout`, section to `band`, image, skip link), to landing (hero, footer, header,
   // section) or to cms (header, footer, page header); the old URLs fall to the 404 page
   const LEFT_SITE = ["actions", "footer", "hero", "image", "lang-switcher", "notice", "page-header", "section", "shell", "site-header", "skip-link", "templates"];
 
-  it("the Site area holds its six components and its class reference, and nothing of the page structure that moved out", () => {
-    const routes = site.pages.filter((p) => p.meta.area === "site").map((p) => p.route).sort();
-    expect(routes).toEqual(["/docs/site/", ...["banner", "classes", "consent", "lang-switch", "mode", "search", "submenu"].map((slug) => `/docs/site/${slug}/`)]);
-    const patterns = site.pages.filter((p) => p.meta.area === "site" && p.meta.group === "patterns").map((p) => p.route);
-    expect(patterns.sort()).toEqual(["banner", "consent", "lang-switch", "mode", "search", "submenu"].map((slug) => `/docs/site/${slug}/`));
+  it("the Catalog area holds its six components and its class reference, and nothing of the page structure that moved out", () => {
+    const routes = site.pages.filter((p) => p.meta.area === "catalog").map((p) => p.route).sort();
+    expect(routes).toEqual(["/docs/catalog/", ...["banner", "classes", "consent", "lang-switch", "mode", "search", "submenu"].map((slug) => `/docs/catalog/${slug}/`)]);
+    const patterns = site.pages.filter((p) => p.meta.area === "catalog" && p.meta.group === "patterns").map((p) => p.route);
+    expect(patterns.sort()).toEqual(["banner", "consent", "lang-switch", "mode", "search", "submenu"].map((slug) => `/docs/catalog/${slug}/`));
   });
 
-  // F3 step 15 (.claude/plans/specs/f3-package-model.md, §7 and §9): the structure page says what site
+  // F3 step 15 (.claude/plans/specs/f3-package-model.md, §7 and §9): the structure page says what catalog
   // is now, in its chain of packages, not only in the table of parts below it
-  it("the structure page's package chain lists site's six components and the three kinds, with site optional for them", () => {
+  it("the structure page's package chain lists catalog's six components and the three kinds, with catalog optional for them", () => {
     const body = site.byRoute.get("/docs/get-started/structure/").body;
     const chain = body
       .match(/<pre[^>]*aria-label="Package dependency chain"[^>]*><code>([\s\S]*?)<\/code><\/pre>/)[1]
       .replace(/&gt;/g, ">")
       .replace(/&lt;/g, "<")
       .replace(/&amp;/g, "&");
-    for (const tag of ["search", "consent", "mode", "lang-switch", "submenu", "banner"]) expect(chain, `site's ${tag}`).toContain(tag);
+    for (const tag of ["search", "consent", "mode", "lang-switch", "submenu", "banner"]) expect(chain, `catalog's ${tag}`).toContain(tag);
     for (const kind of ["landing", "cms", "app", "docs"]) expect(chain, `the ${kind} kind`).toContain(`@luz-ds/${kind}`);
-    // Site no longer holds page structure ("page patterns"), and the kinds take it as an optional peer
+    // Catalog no longer holds page structure ("page patterns"), and the kinds take it as an optional peer
     expect(chain).not.toMatch(/page patterns/i);
     expect(chain).toMatch(/optional/i);
   });
@@ -928,7 +928,7 @@ describe("the LUZ docs site", () => {
   });
 
   it("nothing links to a page that left site: pages, partials, layouts, the home page, its catalogs and site.json", () => {
-    const old = new RegExp(`/docs/site/(?:${LEFT_SITE.join("|")})/`);
+    const old = new RegExp(`/docs/catalog/(?:${LEFT_SITE.join("|")})/`);
     const files = [];
     const walk = (dir) => {
       for (const entry of readdirSync(dir)) {
@@ -939,7 +939,7 @@ describe("the LUZ docs site", () => {
       }
     };
     walk(join(repo, "apps"));
-    for (const dir of ["packages/site", "packages/landing", "packages/cms", "packages/core"]) {
+    for (const dir of ["packages/catalog", "packages/landing", "packages/cms", "packages/core"]) {
       for (const entry of ["README.md"]) if (existsSync(join(repo, dir, entry))) files.push(join(repo, dir, entry));
     }
     files.push(join(repo, "README.md"));
@@ -949,7 +949,7 @@ describe("the LUZ docs site", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("no page, partial, layout, home page or stylesheet of the apps uses a class or property of site's old blocks", () => {
+  it("no page, partial, layout, home page or stylesheet of the apps uses a class or property of catalog's old blocks", () => {
     // `luz-site-mode` is the key of the stored colour mode. A sentence that says what a class was called before
     // F3 is fine; a `class` attribute (in a demo or in a snippet) or a selector is not
     const inMarkup = /\bclass=(?:"|&quot;)[^"&]*\bluz-site-(?!mode)/;

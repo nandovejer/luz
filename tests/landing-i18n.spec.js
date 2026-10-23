@@ -1,7 +1,7 @@
 // @ts-check
 /**
  * The home page in English (/), Spanish (/es/) and Arabic (/ar/), and the
- * language switch of @luz-ds/site in its header (<luz-lang-switch>, a CSS-only
+ * language switch of @luz-ds/catalog in its header (<luz-lang-switch>, a CSS-only
  * tag that no script defines: .claude/plans/specs/f3-package-model.md section
  * 2.2, step 8). Each language is a
  * static page: its own lang, dir, title and alternates, no redirect and no

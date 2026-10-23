@@ -49,7 +49,7 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>The bar, in <code>.o-main</code> beside the sidebar, with site's search before the account:</p>
+            <p>The bar, in <code>.o-main</code> beside the sidebar, with catalog's search before the account:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -92,7 +92,7 @@ toc: h2,h3
                 <tbody>
                   <tr><td data-label="Class"><div><code>.luz-app-header</code></div></td><td data-label="Effect"><div>On <code>&lt;header&gt;</code>, a child of <code>.o-main</code>: the page surface and a rule underneath. It is one row of <code>--luz-bar-h</code>; its <code>.o-row</code> has the gutters of the content</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-app-header__product</code></div></td><td data-label="Effect"><div>The product's name in medium text, semibold. It shows only at 768 px and below, where the sidebar is a drawer and its brand is out of sight</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-app-header__actions</code></div></td><td data-label="Effect"><div>On a <code>.o-row</code>: the global tools at the inline end of the bar. The catalog's <a href="/docs/site/search/">search</a>, then the account</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-app-header__actions</code></div></td><td data-label="Effect"><div>On a <code>.o-row</code>: the global tools at the inline end of the bar. The catalog's <a href="/docs/catalog/search/">search</a>, then the account</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-app-header__account</code></div></td><td data-label="Effect"><div>On the <code>.luz-btn.luz-btn--ghost</code> that opens the account list: at least 44 by 44 px, with its initials in a <code>.luz-avatar</code> and then the name</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-app-header__account-name</code></div></td><td data-label="Effect"><div>The account's name. At 640 px and below it is clipped to nothing, and stays in the button's name</div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-sticky</code> (core)</div></td><td data-label="Effect"><div>Keeps the bar at the top while the page scrolls, in a window at least 30 rem tall; see <a href="/docs/components/layout/#objects-page">the page and its bars</a></div></td></tr>
@@ -101,18 +101,18 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/app</code> on core's shell, sticky bar, drawer and dropdown. No JavaScript, and <code>@luz-ds/site</code> is optional.</p>
+            <p>CSS from <code>@luz-ds/app</code> on core's shell, sticky bar, drawer and dropdown. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
             <ul>
               <li>App adds the skin only: the page surface, the rule underneath and the gaps of the row (8 px between rows, 16 px between items). Core gives the rest: <code>.o-sticky</code> the stickiness and the scroll padding, <code>.o-row</code> the row, the nav toggle and the sidebar the drawer, and the dropdown the account list.</li>
               <li>A one-row bar is core's <code>--luz-bar-h</code> tall: 44 px controls, 4 px above and below, and the 1 px rule. With enlarged text the row wraps and the bar grows.</li>
               <li>The page is what scrolls, not <code>.o-main</code>, so the sticky bar stays at the window's top. If you give <code>.o-main</code> a height of its own and make it scroll, what it focuses stays clear of the bar through its scroll padding.</li>
               <li>The account list opens under its button and ends where the button ends, so it never leaves the window at the inline end of the bar.</li>
-              <li>Without site there is no search: leave <code>&lt;luz-search&gt;</code> out. Nothing else changes.</li>
+              <li>Without the catalog there is no search: leave <code>&lt;luz-search&gt;</code> out. Nothing else changes.</li>
               <li>The view's <code>h1</code> and its main action are not here: they are the first row of the <a href="/docs/app/dashboard/">dashboard</a>. The bar holds only what is the same in every view.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>Nothing changes.</p>
-            <p>The drawer and the account list are popovers opened by the button's <code>popovertarget</code>, with no script, and site's search shows its link to the A–Z index. In a browser without the popover API the sidebar stays in the page above the content, the menu button is not shown, and the account list stays under its button.</p>
+            <p>The drawer and the account list are popovers opened by the button's <code>popovertarget</code>, with no script, and catalog's search shows its link to the A–Z index. In a browser without the popover API the sidebar stays in the page above the content, the menu button is not shown, and the account list stays under its button.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <ul>
               <li><strong>Order:</strong> the order of the source and of the screen. Skip link, the sidebar (a column from 769 px), the search, the account, then the view. At 768 px and below the closed drawer is out of the order: skip link, menu button, search, account, then the view.</li>

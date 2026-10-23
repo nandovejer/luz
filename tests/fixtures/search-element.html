@@ -6,7 +6,7 @@
   <title>LUZ search element fixture</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/site/dist/site.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/catalog.css">
 </head>
 <body>
   <!-- A button outside the element: the chunk shows it when it wires -->
@@ -29,6 +29,6 @@
     // The element is added by script, as a router or a framework would
     window.addSearch = () => document.getElementById('slot').append(document.getElementById('markup').content.cloneNode(true));
   </script>
-  <script type="module" src="/packages/site/dist/search.js"></script>
+  <script type="module" src="/packages/catalog/dist/search.js"></script>
 </body>
 </html>

@@ -47,7 +47,7 @@
     "@luz-ds/core": "workspace:*",
     "@luz-ds/docs": "workspace:*",
     "@luz-ds/landing": "workspace:*",
-    "@luz-ds/site": "workspace:*",
+    "@luz-ds/catalog": "workspace:*",
     "@luz-ds/tokens": "workspace:*"
   }
 }

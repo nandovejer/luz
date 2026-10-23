@@ -16,9 +16,9 @@
  *   luz.objects     layout (.o-*)
  *   luz.components  .luz-* components
  *   luz.utilities   .u-* helpers: they win over components by order
- *   luz.site        .luz-site-* patterns of @luz-ds/site
+ *   luz.catalog     .luz-catalog-* patterns of @luz-ds/catalog
  *   luz.landing     .luz-landing-* patterns of @luz-ds/landing (one kind of
- *                   site, built on site: after it, so it can refine it)
+ *                   site, built on catalog: after it, so it can refine it)
  *   luz.cms         .luz-cms-* patterns of @luz-ds/cms (a blog, a newspaper,
  *                   any CMS). Landing and cms never meet (no shared class),
  *                   so their order decides nothing; cms comes after landing
@@ -38,7 +38,7 @@
  * Every file repeats the statement first, so the order is the same whichever
  * file a page loads first.
  */
-export const LAYERS = ["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "site", "landing", "cms", "app", "docs", "print"];
+export const LAYERS = ["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "catalog", "landing", "cms", "app", "docs", "print"];
 
 export const LAYER_ORDER = `@layer ${LAYERS.map((l) => `luz.${l}`).join(", ")};\n`;
 

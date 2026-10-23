@@ -39,17 +39,17 @@
   },
   "peerDependencies": {
     "@luz-ds/core": "^0.1.0",
-    "@luz-ds/site": "^0.1.0",
+    "@luz-ds/catalog": "^0.1.0",
     "@luz-ds/tokens": "^0.1.0"
   },
   "peerDependenciesMeta": {
-    "@luz-ds/site": {
+    "@luz-ds/catalog": {
       "optional": true
     }
   },
   "devDependencies": {
     "@luz-ds/core": "workspace:*",
-    "@luz-ds/site": "workspace:*",
+    "@luz-ds/catalog": "workspace:*",
     "@luz-ds/tokens": "workspace:*"
   }
 }

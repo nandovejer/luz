@@ -38,7 +38,7 @@ describe("the core / site rule (spec §7)", () => {
   const layering = between(read("AGENTS.md"), "## Package layering", /\n---\n/);
 
   it("AGENTS.md's package layering says site is what can go in any section", () => {
-    expect(layering).toMatch(/site is what can go in any section/i);
+    expect(layering).toMatch(/catalog is what can go in any section/i);
   });
 
   it("AGENTS.md no longer sorts site by the data it needs or the page structure it holds", () => {
@@ -47,30 +47,30 @@ describe("the core / site rule (spec §7)", () => {
   });
 
   it("AGENTS.md says page structure (header, footer, hero) is never site", () => {
-    expect(layering).toMatch(/page structure[^.]*is never `?site`?/i);
+    expect(layering).toMatch(/page structure[^.]*is never `?catalog`?/i);
   });
 
   it('AGENTS.md\'s "Adding one" says a kind takes site as an optional peer, with `peerDependenciesMeta`', () => {
-    expect(layering).toMatch(/literal peers[^\n]*on tokens and core[^\n]*site[^\n]*`peerDependenciesMeta`[^\n]*optional/);
-    expect(layering).not.toMatch(/on tokens, core and site, site optional/);
+    expect(layering).toMatch(/literal peers[^\n]*on tokens and core[^\n]*catalog[^\n]*`peerDependenciesMeta`[^\n]*optional/);
+    expect(layering).not.toMatch(/on tokens, core and catalog, catalog optional/);
   });
 
   describe("PRINCIPLES.md §6 \"Core or site\"", () => {
     const bullet = read("PRINCIPLES.md")
       .split("\n")
-      .find((line) => line.startsWith("- **Core or site.**"));
+      .find((line) => line.startsWith("- **Core or catalog.**"));
 
-    it("says the same: site is what can go in any section, and page structure is not site's", () => {
+    it("says the same: catalog is what can go in any section, and page structure is not catalog's", () => {
       expect(bullet, "the bullet exists").toBeTruthy();
       expect(bullet).toMatch(/can go in any section/i);
-      expect(bullet).toMatch(/page structure[^.]*(never|not)[^.]*`?site`?/i);
+      expect(bullet).toMatch(/page structure[^.]*(never|not)[^.]*`?catalog`?/i);
       expect(bullet).not.toMatch(/needs data of the site/i);
     });
 
-    it("names the four kinds, as optional users of site, with no chain that puts a kind after site", () => {
+    it("names the four kinds, as optional users of catalog, with no chain that puts a kind after catalog", () => {
       for (const kind of ["landing", "cms", "app", "docs"]) expect(bullet, kind).toContain(`\`${kind}\``);
       expect(bullet).toMatch(/optional/i);
-      expect(bullet).not.toMatch(/site\s*→\s*(cms|landing|app)/);
+      expect(bullet).not.toMatch(/catalog\s*→\s*(cms|landing|app)/);
       expect(bullet).not.toMatch(/wordpress/i);
     });
   });
@@ -78,8 +78,8 @@ describe("the core / site rule (spec §7)", () => {
 
 /* ---- site's README ---------------------------------------------------------- */
 
-describe("@luz-ds/site's README says what site is now", () => {
-  const readme = read("packages/site/README.md");
+describe("@luz-ds/catalog's README says what site is now", () => {
+  const readme = read("packages/catalog/README.md");
 
   it("sorts its pieces by the new rule, not by the data they need", () => {
     expect(readme).toMatch(/any section/i);
@@ -143,7 +143,7 @@ describe("the F3 changesets carry the old -> new migration table", () => {
     ["luz-site-image", ".luz-image"],
     ["luz-site-page-header", "luz-cms-page-header"],
     ["luz-landing-feature-grid", "o-grid--split"],
-    ["@luz-ds/site/placeholders", /removed|no longer/],
+    ["@luz-ds/catalog/placeholders", /removed|no longer/],
   ];
 
   it("has at least one f3-*.md changeset", () => {

@@ -215,8 +215,8 @@ describe("the drawer the menu button opens", () => {
   });
 });
 
-describe("the language list's stylesheet (packages/site/src/components/lang-switch.css)", () => {
-  const css = read("packages/site/src/components/lang-switch.css").replace(/\/\*[\s\S]*?\*\//g, "");
+describe("the language list's stylesheet (packages/catalog/src/components/lang-switch.css)", () => {
+  const css = read("packages/catalog/src/components/lang-switch.css").replace(/\/\*[\s\S]*?\*\//g, "");
   /** The declarations of every rule whose selector list contains `selector` exactly, joined. */
   const rule = (selector) =>
     [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]

@@ -34,7 +34,7 @@ LUZ (formerly CAI) is built with plain CSS, ES modules and native browser APIs. 
 @luz-ds/tokens
       │
       ▼
-@luz-ds/core ─────────────► @luz-ds/site
+@luz-ds/core ─────────────► @luz-ds/catalog
       │                          ┆
       ├──► @luz-ds/landing ◄┄┄┄┄┄┤
       ├──► @luz-ds/cms     ◄┄┄┄┄┄┤
@@ -48,11 +48,11 @@ The name stands for Light, Usable & Zero-dependency: light in weight (plain CSS 
 
 - [`@luz-ds/tokens`](./packages/tokens): design tokens (CSS custom properties), the three color modes and the font.
 - [`@luz-ds/core`](./packages/core): the components, the layout objects, the styles of bare HTML elements and optional JavaScript.
-- [`@luz-ds/site`](./packages/site): page patterns (page shell, site header, footer, image frame) and the site search.
-- [`@luz-ds/landing`](./packages/landing): the page structure of a landing page (header, hero, sections, footer). It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of site if you use it.
-- [`@luz-ds/cms`](./packages/cms): patterns for a blog, a newspaper or any CMS, with any stack (the article header and the table of contents). It has its own version, 0.x, and needs `^0.1.0` of tokens, core and site.
-- [`@luz-ds/app`](./packages/app): the header and the dashboard of a web application, on core's shell and sidebar. It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of site if you use its search.
-- [`@luz-ds/docs`](./packages/docs): the pieces of a documentation page (the shell with a rail, the page head, the example frame, do and don't, Previous / Next, the page foot), on core's shell and sidebar. It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of site if you use its search.
+- [`@luz-ds/catalog`](./packages/catalog): page patterns (page shell, site header, footer, image frame) and the site search.
+- [`@luz-ds/landing`](./packages/landing): the page structure of a landing page (header, hero, sections, footer). It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of catalog if you use it.
+- [`@luz-ds/cms`](./packages/cms): patterns for a blog, a newspaper or any CMS, with any stack (the article header and the table of contents). It has its own version, 0.x, and needs `^0.1.0` of tokens, core and catalog.
+- [`@luz-ds/app`](./packages/app): the header and the dashboard of a web application, on core's shell and sidebar. It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of catalog if you use its search.
+- [`@luz-ds/docs`](./packages/docs): the pieces of a documentation page (the shell with a rail, the page head, the example frame, do and don't, Previous / Next, the page foot), on core's shell and sidebar. It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of catalog if you use its search.
 - [`@luz-ds/check`](./packages/check): a tool, not a stylesheet. The `luz-check` command reads the HTML and CSS of your project, offline, and says which LUZ classes, elements, load order and theme colors are wrong. It has its own version, 0.x, and needs no other package.
 
 ## Install and load
@@ -63,22 +63,22 @@ Each package needs the ones below it and nothing above it. Adopt one level and s
 | --- | --- | --- |
 | Tokens only | `@luz-ds/tokens` | `luz-tokens.css` |
 | Tokens + components | `@luz-ds/tokens` `@luz-ds/core` | `luz-tokens.css`, `luz.css`, optionally `luz.js` |
-| Tokens + components + page patterns | `@luz-ds/tokens` `@luz-ds/core` `@luz-ds/site` | `luz-tokens.css`, `luz.css`, `site.css`, optionally `luz.js` and `site.js` |
+| Tokens + components + page patterns | `@luz-ds/tokens` `@luz-ds/core` `@luz-ds/catalog` | `luz-tokens.css`, `luz.css`, `catalog.css`, optionally `luz.js` and `catalog.js` |
 | A landing page | the three above and `@luz-ds/landing` | the files of the row above, then `landing.css` |
 | A blog or a newspaper | the three above and `@luz-ds/cms` | the files of level 3, then `cms.css` |
 | A web application | the three above and `@luz-ds/app` | the files of level 3, then `app.css` |
 | A documentation site | the three above and `@luz-ds/docs` | the files of level 3, then `docs.css` |
 
-`@luz-ds/core` declares `@luz-ds/tokens` as a required peer dependency; `@luz-ds/site` declares both, and `@luz-ds/landing`, `@luz-ds/cms`, `@luz-ds/app` and `@luz-ds/docs` require tokens and core and take `@luz-ds/site` as an optional peer (install it if you use its pieces). npm and pnpm install required peers automatically; Yarn only warns, so list every package explicitly.
+`@luz-ds/core` declares `@luz-ds/tokens` as a required peer dependency; `@luz-ds/catalog` declares both, and `@luz-ds/landing`, `@luz-ds/cms`, `@luz-ds/app` and `@luz-ds/docs` require tokens and core and take `@luz-ds/catalog` as an optional peer (install it if you use its pieces). npm and pnpm install required peers automatically; Yarn only warns, so list every package explicitly.
 
 ```bash
 npm install @luz-ds/tokens                                   # level 1
 npm install @luz-ds/tokens @luz-ds/core                      # level 2
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site         # level 3, the Catalog
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/landing   # a landing page
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/cms       # a blog or a newspaper
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app       # a web application
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/docs      # a documentation site
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog         # level 3, the Catalog
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/landing   # a landing page
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/cms       # a blog or a newspaper
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/app       # a web application
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs      # a documentation site
 ```
 
 ### With a bundler
@@ -86,17 +86,17 @@ npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/docs      # a docum
 ```js
 import "@luz-ds/tokens/css";
 import "@luz-ds/core/css";
-import "@luz-ds/site/css"; // level 3 only
+import "@luz-ds/catalog/css"; // level 3 only
 import "@luz-ds/landing/css"; // a landing page only
 import "@luz-ds/cms/css"; // a blog or a newspaper only
 import "@luz-ds/app/css"; // a web application only
 import "@luz-ds/docs/css"; // a documentation site only
 
 import "@luz-ds/core";         // optional: the JavaScript, starts every behavior
-import "@luz-ds/site";     // level 3, only if you use the search
+import "@luz-ds/catalog";     // level 3, only if you use the search
 ```
 
-`@luz-ds/core` and `@luz-ds/site` without `/css` are the scripts, not the stylesheets.
+`@luz-ds/core` and `@luz-ds/catalog` without `/css` are the scripts, not the stylesheets.
 
 ### From a CDN
 
@@ -105,13 +105,13 @@ Drop the lines for the levels you do not use:
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/site@0.1.0/dist/site.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.1.0/dist/landing.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.1.0/dist/cms.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/app@0.1.0/dist/app.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.1.0/dist/docs.min.css">
 <script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.js"></script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/site@0.1.0/dist/site.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.js"></script>
 ```
 
 Pin an exact version and add an `integrity` hash in production; see [SECURITY.md](./SECURITY.md). A console warning tells you when a layer is loaded without the one below it.
@@ -127,8 +127,8 @@ Pin an exact version and add an `integrity` hash in production; see [SECURITY.md
 | `print.css` | core | The print styles on their own; `luz.css` already contains them |
 | `themes/_template.css` | core | The starting point of a theme of your own |
 | `tokens.css`, `fonts.css` | tokens | The tokens without `@font-face`, or the `@font-face` only |
-| `search.js` | site | The search element on its own (`@luz-ds/site/search`) |
-| `consent.js` | site | The cookie banner (`@luz-ds/site/consent`): `site.js` does not include it |
+| `search.js` | catalog | The search element on its own (`@luz-ds/catalog/search`) |
+| `consent.js` | catalog | The cookie banner (`@luz-ds/catalog/consent`): `catalog.js` does not include it |
 
 ### JavaScript modules
 
@@ -143,7 +143,7 @@ Published modules: `theme`, `sidebar`, `clipboard`, `modal`, `highlight`, `playe
 
 ## What each package needs
 
-The page shell of a whole page is site; the layout objects of an app with a sidebar are core; the hero of a landing page is landing. The full table, checked against the CSS, is on [How LUZ is organised](https://nandovejer.github.io/luz/docs/get-started/structure/#needs).
+The page shell of a whole page is catalog; the layout objects of an app with a sidebar are core; the hero of a landing page is landing. The full table, checked against the CSS, is on [How LUZ is organised](https://nandovejer.github.io/luz/docs/get-started/structure/#needs).
 
 ## Color modes and themes
 
@@ -233,7 +233,7 @@ See [STRUCTURE.md](./dev/STRUCTURE.md) for the full annotated directory layout. 
 luz-design-system/
 ├── apps/                      # Internal apps (not publishable)
 │   ├── landing/               # Home page: what LUZ is for, why, and how to adopt it
-│   └── docs/                  # The documentation: install, tokens, components, site patterns, HTML elements
+│   └── docs/                  # The documentation: install, tokens, components, catalog patterns, HTML elements
 ├── packages/
 │   ├── tokens/                # @luz-ds/tokens
 │   │   ├── tokens.json        # Source of truth for primitives
@@ -248,7 +248,7 @@ luz-design-system/
 │   │   │   ├── themes/        # _template.css, the starting point of a theme of your own
 │   │   │   └── *.js           # One module per behavior
 │   │   └── dist/              # Generated: do not edit directly
-│   ├── site/                  # @luz-ds/site
+│   ├── catalog/               # @luz-ds/catalog
 │   │   ├── src/
 │   │   └── dist/
 │   ├── landing/               # @luz-ds/landing (its own version, 0.x)
@@ -289,18 +289,18 @@ pnpm dev
 | Landing | `http://localhost:5173/` | `apps/landing/` |
 | Documentation | `http://localhost:5173/docs/` | `apps/docs/` |
 
-Edits to files under `apps/` reload on save. Edits to package sources (`packages/*/src`) need a rebuild (`pnpm build`, or `pnpm tokens:build` / `pnpm core:build` / `pnpm site:build` / `pnpm landing:build` / `pnpm cms:build` / `pnpm app:build` / `pnpm docs:build`), and then a restart of `pnpm dev`: Vite does not pick up regenerated `dist/` files and keeps serving the old CSS until it restarts. To use a different port, pass it through: `pnpm dev --port 3000`.
+Edits to files under `apps/` reload on save. Edits to package sources (`packages/*/src`) need a rebuild (`pnpm build`, or `pnpm tokens:build` / `pnpm core:build` / `pnpm catalog:build` / `pnpm landing:build` / `pnpm cms:build` / `pnpm app:build` / `pnpm docs:build`), and then a restart of `pnpm dev`: Vite does not pick up regenerated `dist/` files and keeps serving the old CSS until it restarts. To use a different port, pass it through: `pnpm dev --port 3000`.
 
-To load the packages from this repository in a page of your own, point at `dist/`: `/packages/tokens/dist/luz-tokens.css`, `/packages/core/dist/luz.css`, `/packages/site/dist/site.css`, `/packages/landing/dist/landing.css`, `/packages/cms/dist/cms.css`, `/packages/app/dist/app.css`, `/packages/docs/dist/docs.css` and `/packages/core/dist/luz.js`.
+To load the packages from this repository in a page of your own, point at `dist/`: `/packages/tokens/dist/luz-tokens.css`, `/packages/core/dist/luz.css`, `/packages/catalog/dist/catalog.css`, `/packages/landing/dist/landing.css`, `/packages/cms/dist/cms.css`, `/packages/app/dist/app.css`, `/packages/docs/dist/docs.css` and `/packages/core/dist/luz.js`.
 
 ### Commands
 
 ```bash
 pnpm dev             # Vite dev server
-pnpm build           # tokens:build + core:build + site:build + landing:build + cms:build + app:build + docs:build + luzcheck:build
+pnpm build           # tokens:build + core:build + catalog:build + landing:build + cms:build + app:build + docs:build + luzcheck:build
 pnpm tokens:build    # Regenerate packages/tokens/dist
 pnpm core:build      # Regenerate packages/core/dist
-pnpm site:build      # Regenerate packages/site/dist
+pnpm catalog:build      # Regenerate packages/catalog/dist
 pnpm landing:build   # Regenerate packages/landing/dist
 pnpm cms:build       # Regenerate packages/cms/dist
 pnpm app:build       # Regenerate packages/app/dist
@@ -343,19 +343,19 @@ pnpm core:build
 
 This regenerates `dist/luz.css`, `dist/base.css` (settings + reset + elements, the prerequisite for per-component CSS), `dist/components/*.css`, `dist/classless.css`, `dist/print.css`, the JS modules, the lazy `midi.js` and `table-sort.js` chunks and `dist/themes/*.css`. Core settings (z-index scale, layout widths, `--luz-text-control`) ship with core; motion, breakpoints and the font roles (`--luz-font-heading`, `--luz-font-body`, `--luz-text-body`) ship with tokens.
 
-**Site.** `@luz-ds/site` holds page patterns that are too opinionated for core. It is CSS first; `dist/site.js` defines the search element and warns when core is not loaded.
+**Catalog.** `@luz-ds/catalog` holds page patterns that are too opinionated for core. It is CSS first; `dist/catalog.js` defines the search element and warns when core is not loaded.
 
 ```bash
-pnpm site:build
+pnpm catalog:build
 ```
 
-**Landing.** `@luz-ds/landing` holds the patterns of a landing page, on top of site. CSS only: `dist/landing.css` and `landing.min.css`, in the `luz.landing` layer. Site and landing build through one shared builder, `scripts/build-package.js` (a package for another kind of site adds a three-line `scripts/build-<name>.js`).
+**Landing.** `@luz-ds/landing` holds the patterns of a landing page, on top of catalog. CSS only: `dist/landing.css` and `landing.min.css`, in the `luz.landing` layer. Catalog and landing build through one shared builder, `scripts/build-package.js` (a package for another kind of site adds a three-line `scripts/build-<name>.js`).
 
 ```bash
 pnpm landing:build
 ```
 
-**CMS.** `@luz-ds/cms` holds the patterns of a blog, a newspaper or any CMS, on top of site, through the same builder. CSS only: `dist/cms.css` and `cms.min.css`, in the `luz.cms` layer. Landing and cms never depend on each other.
+**CMS.** `@luz-ds/cms` holds the patterns of a blog, a newspaper or any CMS, on top of catalog, through the same builder. CSS only: `dist/cms.css` and `cms.min.css`, in the `luz.cms` layer. Landing and cms never depend on each other.
 
 ```bash
 pnpm cms:build
@@ -385,7 +385,7 @@ pnpm pages:build   # packages + Vite build with relative URLs into docs/ (git-ig
 
 ### Releases
 
-Tokens, core and site share one version and are released together with [changesets](https://github.com/changesets/changesets). A package for one kind of site (landing) has its own version, 0.x for now, and peer ranges on the major of the other three:
+Tokens, core and catalog share one version and are released together with [changesets](https://github.com/changesets/changesets). A package for one kind of site (landing) has its own version, 0.x for now, and peer ranges on the major of the other three:
 
 1. Add a changeset to your PR: `pnpm changeset`.
 2. Merging to `main` opens a "version packages" PR.

@@ -3,7 +3,7 @@
 "@luz-ds/check": patch
 ---
 
-New package: the pieces of a documentation page, on core's shell and sidebar. CSS only (no script), in the cascade layer `luz.docs`, after `luz.app`. Requires `@luz-ds/tokens` and `@luz-ds/core` (`^0.1.0`); `@luz-ds/site` is an optional peer, for the search in the header. Exports `./css`, `./css/min`, the class manifest and `./components/*`.
+New package: the pieces of a documentation page, on core's shell and sidebar. CSS only (no script), in the cascade layer `luz.docs`, after `luz.app`. Requires `@luz-ds/tokens` and `@luz-ds/core` (`^0.1.0`); `@luz-ds/catalog` is an optional peer, for the search in the header. Exports `./css`, `./css/min`, the class manifest and `./components/*`.
 
 - `.luz-docs-shell`, `.luz-docs-nav`, `.luz-docs-main`: `body.o-shell.luz-docs-shell` > header, `nav.luz-sidebar.luz-docs-nav`, `main.o-main.luz-docs-main`, `aside.luz-docs-rail`, footer. Three columns from 80 rem (the sidebar 16.5 rem, the content, the rail 14 rem), two from 60 rem (the rail under the content), one below, in the order of the markup. Every child of the content keeps to `--luz-docs-measure`, 46 rem.
 - `.luz-docs-page-head`, `__eyebrow`, `__lead`, `__meta`: the area and group, the `h1`, one sentence and a row of chips.

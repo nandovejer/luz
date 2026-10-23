@@ -2,7 +2,7 @@
 title: Selector de modo de color
 description: Permite elegir entre los modos claro, oscuro y de alto contraste: con botones de opción que funcionan sin JavaScript o con un único botón que los alterna.
 keywords: modo oscuro
-source: 7ceb2cb09e39
+source: ae52038daaab
 reviewed: false
 -->
     <div class="docs-component" id="c-mode-switcher">
@@ -93,7 +93,7 @@ initThemeCycle();</code></pre>
               <li><code>initThemeCycle()</code> convierte cada grupo <code>--cycle</code> en un único botón. Cada pulsación selecciona el siguiente modo y dispara su evento <code>change</code>, para que lo aplique lo que escucha los botones de opción. Añade el botón si no está en el marcado.</li>
               <li>Un estilo propio (<a href="/docs/tokens/themes/">crea uno</a>) se incluye en las opciones si su nombre aparece en <code>data-luz-themes</code> de <code>&lt;html&gt;</code>: solo se aceptan los tres modos y esos nombres como valores guardados.</li>
               <li><code>luz.js</code> ejecuta ambas funciones.</li>
-              <li>Para añadir una opción Automático que siga el ajuste del sistema o la hora del día, envuelve los botones de opción, con un cuarto para esta opción, en <a href="/docs/site/mode/"><code>&lt;luz-mode&gt;</code></a> de <code>@luz-ds/site</code>.</li>
+              <li>Para añadir una opción Automático que siga el ajuste del sistema o la hora del día, envuelve los botones de opción, con un cuarto para esta opción, en <a href="/docs/catalog/mode/"><code>&lt;luz-mode&gt;</code></a> de <code>@luz-ds/catalog</code>.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>Se muestran los tres botones de opción, incluso en la variante de alternancia, y elegir uno cambia el modo de la página. La elección no se recuerda en la página siguiente.</p>

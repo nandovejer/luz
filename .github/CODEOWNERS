@@ -17,11 +17,11 @@ scripts/build-core.js   @nandovejer
 # A language file runs on every page that declares its language: reviewed on its own line
 packages/core/src/i18n* @nandovejer
 
-# Site layer (builds on core)
-packages/site/      @nandovejer
-scripts/build-site.js @nandovejer
+# Catalog layer (builds on core)
+packages/catalog/      @nandovejer
+scripts/build-catalog.js @nandovejer
 
-# Packages for one kind of site (build on site; own version)
+# Packages for one kind of site (build on catalog; own version)
 packages/landing/        @nandovejer
 scripts/build-landing.js @nandovejer
 packages/cms/            @nandovejer

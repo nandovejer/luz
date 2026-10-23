@@ -1,5 +1,5 @@
 /**
- * LUZ — the site search of @luz-ds/site (<luz-search>), in the docs (a11y.md
+ * LUZ — the site search of @luz-ds/catalog (<luz-search>), in the docs (a11y.md
  * §2 SRCH-*, TEST-5; security.md SEC-IDX, SEC-NET-6). The pure half (index
  * checks, matching, the shortcut filter) is tests/search.test.js; the
  * no-JavaScript state is in tests/nojs.spec.js; the loading of the chunk is

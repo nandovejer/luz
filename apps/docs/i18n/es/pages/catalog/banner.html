@@ -1,0 +1,156 @@
+<!-- luz:page
+title: Banner
+description: Comunica una sola cosa breve a todas las personas que visitan el sitio, en la parte superior de la página, como una oferta, un evento o un mantenimiento previsto.
+keywords: aviso, barra de anuncios, barra superior, mensaje de mantenimiento
+source: 5ded2795a488
+reviewed: false
+-->
+    <div class="docs-component" id="p-banner">
+          <h2 id="example">Ejemplo</h2>
+          <p>Dos banners: una invitación a una jornada de puertas abiertas y un aviso de mantenimiento previsto.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <luz-banner>
+              <section aria-labelledby="banner-demo-label">
+                <p><strong id="banner-demo-label">Open day.</strong> Visit the winery on Saturday 25 October, from 11:00 to 18:00. <a href="#example">Book a visit</a></p>
+              </section>
+            </luz-banner>
+            <luz-banner tone="warning">
+              <section aria-labelledby="banner-demo-warning">
+                <p><strong id="banner-demo-warning">Planned maintenance.</strong> The shop will be closed on Monday 3 November from 07:00 to 09:00. <a href="#example">See what still works</a></p>
+              </section>
+            </luz-banner>
+          </div>
+          <p class="docs-demo__note">On a site the banner goes above the header, as wide as the window, and its text starts where the header’s row starts. Here it is as wide as the example.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se puede cerrar: un botón de cierre necesita un script, y para recordar una elección entre páginas hace falta almacenamiento. Mantén el banner breve y elimínalo del marcado cuando ya no haga falta.</p>
+          <p>En los navegadores sin posicionamiento de anclas CSS (anteriores a Chrome y Edge 125, Safari 26 y Firefox 147), el menú de la cabecera, a 768 px o menos, se abre en la parte superior de la ventana; antes de desplazarse por la página, cubre parte de la cabecera bajo el banner. Se cierra con Escape o al hacer clic fuera.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del banner">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>&lt;luz-banner&gt;</code> alrededor de un <code>&lt;section&gt;</code>, cuyo nombre indican sus primeras palabras. Va después del <a href="/docs/components/skip-link/">enlace para saltar al contenido</a> y del <a href="/docs/catalog/consent/">consentimiento de cookies</a>, y antes de la cabecera de la página (de una <a href="/docs/landing/header/">landing</a> o de un <a href="/docs/cms/header/">CMS</a>).</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-banner" aria-label="Copy the banner markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Banner markup"><code id="code-banner">&lt;a class=&quot;luz-skip-link&quot; href=&quot;#main&quot;&gt;Skip to main content&lt;/a&gt;
+&lt;luz-banner&gt;
+  &lt;section aria-labelledby=&quot;banner-label&quot;&gt;
+    &lt;p&gt;&lt;strong id=&quot;banner-label&quot;&gt;Open day.&lt;/strong&gt; Visit the winery on Saturday 25 October,
+      from 11:00 to 18:00. &lt;a href=&quot;/visits/&quot;&gt;Book a visit&lt;/a&gt;&lt;/p&gt;
+  &lt;/section&gt;
+&lt;/luz-banner&gt;
+&lt;header&gt;…&lt;/header&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Etiqueta y atributo del banner" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Etiqueta o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Etiqueta o atributo"><div><code>&lt;luz-banner&gt;</code></div></td><td data-label="Efecto"><div>Envuelve un solo <code>&lt;section&gt;</code>, que se convierte en una franja del ancho de su contenedor, con una superficie atenuada y una línea inferior, en texto sans pequeño. El texto empieza donde empieza la fila de la cabecera. Una etiqueta que ningún script define: no tiene clase ni rol propios.</div></td></tr>
+                  <tr><td data-label="Etiqueta o atributo"><div><code>tone="warning"</code></div></td><td data-label="Efecto"><div>En la etiqueta, el único tono: los colores de aviso, para algo que impide a quien visita la página hacer lo que venía a hacer, como un mantenimiento. Exprésalo también con palabras: «Mantenimiento previsto». Cualquier otro valor deja la franja sencilla.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>@luz-ds/catalog</code>. Sin JavaScript: <code>&lt;luz-banner&gt;</code> es una etiqueta que ningún script define.</p>
+            <ul>
+              <li>Es una franja de la página, dentro del flujo: se desplaza con la página y una cabecera <code>.o-sticky</code> permanece fija arriba, debajo. No cubre la página.</li>
+              <li>Su relleno en línea alinea el texto con la fila de la cabecera, hasta un ancho de <code>--luz-content-max</code>, en ambas direcciones de escritura.</li>
+              <li>No tiene botón de cierre. Para cerrarlo de forma permanente se necesita un script y un valor almacenado en el navegador; nunca se muestra un botón que no hace nada sin un script. Un banner dura poco: elimina su marcado cuando termina el evento.</li>
+              <li>No hay un tono de éxito o error: un banner no responde a algo que haya hecho quien visita la página. Para eso, usa una <a href="/docs/components/alert/">alerta</a> en la página.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: no hay ningún script.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Orden:</strong> su enlace va después del enlace para saltar al contenido y antes de la cabecera.</li>
+              <li><strong>Región:</strong> un <code>&lt;section&gt;</code> con nombre es una región, así que el lector de pantalla la incluye entre las regiones de la página; asígnale un nombre con <code>aria-labelledby</code> que apunte a sus primeras palabras. Si solo contiene esa frase, basta un <code>&lt;div&gt;</code> sin nombre.</li>
+              <li><strong>No es una región dinámica:</strong> aparece al cargar la página, así que no necesita <code>role="status"</code> ni <code>role="alert"</code>; el lector de pantalla lo lee junto con el resto de la página.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Úsalo para comunicar durante unos días y en todas las páginas una sola cosa breve y oportuna que deba saber quien visita el sitio: una oferta, un evento, un mantenimiento previsto o un cambio de horario.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses para algo que corresponda a una sola página o a una persona: inclúyelo en la página o responde con una <a href="/docs/components/alert/">alerta</a> o un <a href="/docs/components/toast/">aviso emergente</a>.</p>
+            <ul>
+              <li>No muestres dos banners a la vez ni dejes uno durante meses: si una franja nunca cambia, la gente deja de leerla.</li>
+              <li>No lo uses para pedir consentimiento para las cookies: usa el banner de <a href="/docs/catalog/consent/">consentimiento de cookies</a>.</li>
+              <li>No incluyas un formulario ni más de un enlace.</li>
+            </ul>
+            <p>Sustituye las barras de anuncios que cada sitio crea con su propio CSS. No elimina nada de LUZ.</p>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Empieza con el tema en negrita, indica cuándo y termina con un único enlace que explique adónde lleva.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <luz-banner tone="warning">
+                    <section>
+                      <p><strong>Planned maintenance.</strong> The shop will be closed on Monday 3 November from 07:00 to 09:00. <a href="#example">See what still works</a></p>
+                    </section>
+                  </luz-banner>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Confíes solo en el amarillo para indicar que es un aviso, no escribas todo en mayúsculas ni omitas la fecha: el mensaje debe entenderse solo con las palabras y «pronto» deja de ser correcto al día siguiente.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <luz-banner tone="warning">
+                    <section>
+                      <p>IMPORTANT!!! THE SHOP WILL BE CLOSED SOON.</p>
+                    </section>
+                  </luz-banner>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Una frase, dos como máximo. Empieza indicando el tema en negrita y termina con un punto: «Jornada de puertas abiertas.» o «Mantenimiento previsto.».</p>
+            <ul>
+              <li>Indica la fecha y la hora, incluido el día de la semana, para que la información siga siendo válida aunque se lea más tarde.</li>
+              <li>Termina con un enlace que explique adónde lleva: «Reserva una visita», no «Más información».</li>
+              <li>Escribe con mayúscula inicial y sin signos de exclamación.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto y el enlace aparecen sobre la superficie de la franja.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del banner en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Texto</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto, aviso</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-color-warning-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>16.0:1</div></td><td data-label="Oscuro"><div>11.5:1</div></td><td data-label="Alto contraste"><div>20.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace, aviso</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-color-warning-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.7:1</div></td><td data-label="Oscuro"><div>5.9:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco en el enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco en el enlace, aviso</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-color-warning-bg</code> over <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.7:1</div></td><td data-label="Oscuro"><div>5.9:1</div></td><td data-label="Alto contraste"><div>20.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo AA de WCAG 2.2 es: 4,5:1 para texto y 3:1 para anillos de foco.</p>
+            <ul>
+              <li><strong>Foco:</strong> contorno de 2 px de core con <code>--luz-focus-ring</code> alrededor del enlace.</li>
+              <li>El enlace está subrayado, como todos los enlaces dentro del texto: no se distingue solo por el color.</li>
+              <li>El amarillo del aviso nunca es la única señal: las primeras palabras explican de qué se trata.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 11 tokens que leen las reglas de <code>components/banner.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-warning-accent"><code>--luz-color-warning-accent</code></a>, <a href="/docs/tokens/color/#luz-color-warning-bg"><code>--luz-color-warning-bg</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-content-max</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

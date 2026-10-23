@@ -26,4 +26,4 @@
 | `components/feature-grid.css` | `components/header.css`, `hero.css`, `main.css`, `section.css`, `footer.css`, `glow.css` | landing |
 | Docs: `/docs/landing/feature-grid/` | `/docs/landing/header/`, `/hero/`, `/section/`, `/footer/`; the feature grid block on `/docs/landing/templates/` | — |
 
-Site's old page classes (`.luz-site-header`, `.luz-site-hero`, `.luz-site-footer` and the rest of the table above) are gone from `@luz-ds/site` in this release.
+Site's old page classes (`.luz-site-header`, `.luz-site-hero`, `.luz-site-footer` and the rest of the table above) are gone from `@luz-ds/catalog` in this release.

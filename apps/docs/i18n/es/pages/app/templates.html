@@ -1,11 +1,11 @@
 <!-- luz:page
 title: Plantillas de app
 description: Las partes de una aplicación que no necesitan CSS propio, listas para copiar y adaptar: la página con barra lateral, una app sin barra lateral y un panel de control vacío.
-source: 41bf61a78fb7
+source: 1da3fcd72fda
 reviewed: false
 -->
     <div class="docs-block" id="p-app-templates">
-          <p>Cada plantilla es marcado que puedes copiar en tu aplicación, sustituyendo el ejemplo por tu propio texto. Solo usan las clases de core y app (y la búsqueda de site, donde corresponda): lo que necesite CSS propio es un patrón con su página, y <a href="#not-here">la última sección</a> indica qué no ofrece LUZ todavía.</p>
+          <p>Cada plantilla es marcado que puedes copiar en tu aplicación, sustituyendo el ejemplo por tu propio texto. Solo usan las clases de core y app (y la búsqueda del catálogo, donde corresponda): lo que necesite CSS propio es un patrón con su página, y <a href="#not-here">la última sección</a> indica qué no ofrece LUZ todavía.</p>
           <p>El <code>&lt;h1&gt;</code> y la acción principal de la vista van en la primera fila del panel de control, nunca en la barra. La barra contiene los elementos comunes a todas las vistas.</p>
           <div class="docs-prose">
             <h2 id="app-page" class="docs-prose__title">Página de app</h2>
@@ -13,7 +13,7 @@ reviewed: false
             <ul>
               <li><code>.o-shell</code> coloca la barra lateral en una columna y <code>.o-main</code> a su lado. A 768 px o menos, la barra lateral es un panel que abre el botón de menú, sin scripts.</li>
               <li>El enlace para saltar al contenido va primero y su destino es <code>&lt;main&gt;</code>, para que quien usa el teclado se salte la barra lateral y la barra superior.</li>
-              <li>Omite <code>&lt;luz-search&gt;</code> si no cargas site. Si cargas el script de core, marcará el enlace actual de la barra lateral y cerrará el panel al seguir un enlace.</li>
+              <li>Omite <code>&lt;luz-search&gt;</code> si no cargas el catálogo. Si cargas el script de core, marcará el enlace actual de la barra lateral y cerrará el panel al seguir un enlace.</li>
             </ul>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">

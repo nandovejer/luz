@@ -6,7 +6,7 @@ Reusable CSS components and vanilla JS behaviors for the LUZ Design System.
 
 ## Prerequisites
 
-Requires `@luz-ds/tokens` (declared as a peer dependency), loaded first. `@luz-ds/site` is optional and builds on this package.
+Requires `@luz-ds/tokens` (declared as a peer dependency), loaded first. `@luz-ds/catalog` is optional and builds on this package.
 
 ## Installation
 
@@ -117,7 +117,7 @@ Keys: `play`, `pause`, `mute`, `unmute`, `fullscreen`, `exitFullscreen`, `captio
 
 ## Cascade layers
 
-Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.tokens`, `luz.themes`, `luz.settings`, `luz.generic`, `luz.elements`, `luz.objects`, `luz.components`, `luz.utilities`, `luz.site`, `luz.landing`, `luz.cms`, `luz.app`, `luz.docs`, `luz.print`. Your unlayered CSS wins over all of them; to order LUZ as one unit, declare `@layer reset, luz, app;` first. The names are public API.
+Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.tokens`, `luz.themes`, `luz.settings`, `luz.generic`, `luz.elements`, `luz.objects`, `luz.components`, `luz.utilities`, `luz.catalog`, `luz.landing`, `luz.cms`, `luz.app`, `luz.docs`, `luz.print`. Your unlayered CSS wins over all of them; to order LUZ as one unit, declare `@layer reset, luz, app;` first. The names are public API.
 
 ## Package exports
 

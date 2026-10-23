@@ -1,8 +1,8 @@
 # @luz-ds/app
 
-The header and the dashboard of a web application: the bar at the top of the main area (the menu button, the product's name on a phone, the search and the account) and the view's grid of panels. Each is a class on a native element, laid out in the markup by `@luz-ds/core`'s objects (`.o-shell`, `.o-main`, `.o-sticky`, `.o-row`, `.o-actions`, `.o-grid`) and its sidebar, dropdown, avatar and card; app adds only its skin and its rhythm. `@luz-ds/site` is optional: its search goes in the header's actions.
+The header and the dashboard of a web application: the bar at the top of the main area (the menu button, the product's name on a phone, the search and the account) and the view's grid of panels. Each is a class on a native element, laid out in the markup by `@luz-ds/core`'s objects (`.o-shell`, `.o-main`, `.o-sticky`, `.o-row`, `.o-actions`, `.o-grid`) and its sidebar, dropdown, avatar and card; app adds only its skin and its rhythm. `@luz-ds/catalog` is optional: its search goes in the header's actions.
 
-> **Beta, version 0.x.** App has a version of its own, apart from tokens, core and site, and grows in minor versions while it is 0.x: any of them may change a class. Pin an exact version and read the changelog before you upgrade.
+> **Beta, version 0.x.** App has a version of its own, apart from tokens, core and catalog, and grows in minor versions while it is 0.x: any of them may change a class. Pin an exact version and read the changelog before you upgrade.
 
 ## When to use it
 
@@ -14,12 +14,12 @@ There is no sidebar of its own: core's `.luz-sidebar` is a column from 769 px an
 
 ## Prerequisites
 
-Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/site` (`^0.1.0`) is an optional peer: load it before this package if you use its search; the patterns work without it.
+Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/catalog` (`^0.1.0`) is an optional peer: load it before this package if you use its search; the patterns work without it.
 
 ## Installation
 
 ```bash
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/app
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/app
 ```js
 import '@luz-ds/tokens/css'
 import '@luz-ds/core/css'
-import '@luz-ds/site/css'
+import '@luz-ds/catalog/css'
 import '@luz-ds/app/css'
 ```
 
@@ -38,7 +38,7 @@ import '@luz-ds/app/css'
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/site@0.1.0/dist/site.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/app@0.1.0/dist/app.min.css">
 ```
 
@@ -76,7 +76,7 @@ Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1
 
 This package needs `@luz-ds/tokens` and `@luz-ds/core` loaded first.
 
-`@luz-ds/site` is optional: the CSS of this package works with the packages above alone.
+`@luz-ds/catalog` is optional: the CSS of this package works with the packages above alone.
 
 ### Check what you write
 

@@ -139,7 +139,7 @@ describe("packages", () => {
   });
 
   it("changesets keep tokens, core and site on one version", () => {
-    expect(json(".changeset/config.json").fixed).toEqual([["@luz-ds/tokens", "@luz-ds/core", "@luz-ds/site"]]);
+    expect(json(".changeset/config.json").fixed).toEqual([["@luz-ds/tokens", "@luz-ds/core", "@luz-ds/catalog"]]);
   });
 });
 

@@ -1,12 +1,12 @@
 /**
  * Shared by tests/site-loader.spec.js, tests/search-upgrade.spec.js and
- * tests/search-slot.spec.js: the pages that load site.min.js (the presence
+ * tests/search-slot.spec.js: the pages that load catalog.min.js (the presence
  * loader of .claude/plans/specs/f3-package-model.md, section 2.3), and the
  * tools to hold its two triggers (idle, the network) and to count layout
  * shifts.
  */
 
-/** A page with a <luz-search> and a <luz-consent>, loading site.min.js. */
+/** A page with a <luz-search> and a <luz-consent>, loading catalog.min.js. */
 export const PAGE = '/tests/fixtures/site-loader.html';
 /** The same loader, and neither element. */
 export const EMPTY = '/tests/fixtures/site-loader-empty.html';

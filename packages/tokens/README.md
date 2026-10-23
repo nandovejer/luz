@@ -4,7 +4,7 @@ Design tokens and self-hosted web fonts for the LUZ Design System.
 
 > **Beta.** The tokens, components and patterns work and are tested, but names, classes and behavior can still change before the stable release. Pin an exact version and read the changelog before you upgrade.
 
-This is the base layer and works on its own: it has no dependencies. `@luz-ds/core` and `@luz-ds/site` build on it.
+This is the base layer and works on its own: it has no dependencies. `@luz-ds/core` and `@luz-ds/catalog` build on it.
 
 ## Installation
 

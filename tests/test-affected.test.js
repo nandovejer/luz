@@ -24,7 +24,7 @@ describe("plan(): what a change touches", () => {
 
   it("ignores a dist/ or node_modules/ folder at any depth", () => {
     const p = plan(
-      ["packages/core/dist/luz.css", "packages/core/dist/luz.js", "packages/site/node_modules/x/index.js"],
+      ["packages/core/dist/luz.css", "packages/core/dist/luz.js", "packages/catalog/node_modules/x/index.js"],
       none,
     );
     expect(p.lintJs).toEqual([]);

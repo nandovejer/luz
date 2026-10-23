@@ -75,7 +75,7 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>The blog bar, with site's search and language switch in its actions:</p>
+            <p>The blog bar, with catalog's search and language switch in its actions:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -134,7 +134,7 @@ toc: h2,h3
                   <tr><td data-label="Class"><div><code>.luz-cms-header</code></div></td><td data-label="Effect"><div>On <code>&lt;header&gt;</code>: the blog bar. The page surface, a rule underneath, the gaps of its row, and the anchor its panels open under</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-cms-header--masthead</code></div></td><td data-label="Effect"><div>The newspaper's masthead: three rows in an <code>.o-stack</code>, 16 px above and below, not sticky</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-cms-header__brand</code></div></td><td data-label="Effect"><div>The publication's name as a link to the home page, in the heading font, semibold, underlined on hover only. In the bar it takes the free room of the row; in the masthead it is large and centred. A logo <code>&lt;img&gt;</code> inside it is 44 px tall in the bar, 88 px in the masthead</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-cms-header__actions</code></div></td><td data-label="Effect"><div>On a <code>.o-row</code>: site's <a href="/docs/site/search/">search</a>, then its <a href="/docs/site/lang-switch/">language switch</a></div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-cms-header__actions</code></div></td><td data-label="Effect"><div>On a <code>.o-row</code>: catalog's <a href="/docs/catalog/search/">search</a>, then its <a href="/docs/catalog/lang-switch/">language switch</a></div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-cms-header__top</code></div></td><td data-label="Effect"><div>Masthead only, on a <code>.o-row</code>: the date at the start and the actions at the end, on one row</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-cms-header__date</code></div></td><td data-label="Effect"><div>Masthead only: today's date in a <code>&lt;time datetime&gt;</code>, small and secondary; it wraps to give the actions their room</div></td></tr>
                   <tr><td data-label="Class"><div><code>.luz-cms-header__sections</code></div></td><td data-label="Effect"><div>Masthead only, on a <code>.o-row</code>: the menu button and the navbar between two rules, centred from 769 px; its panel opens under this row</div></td></tr>
@@ -145,17 +145,17 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/cms</code> on core's objects and navbar. No JavaScript, and <code>@luz-ds/site</code> is optional.</p>
+            <p>CSS from <code>@luz-ds/cms</code> on core's objects and navbar. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
             <ul>
               <li>cms adds the skin only: the page surface, the rule underneath, the brand, and the gaps of the row (8 px between rows, 16 px between items, 24 px from 769 px). Core gives the rest: <code>.o-sticky</code> the stickiness and the scroll padding, <code>.o-container--inline</code> the gutters, <code>.o-row</code> and <code>.o-stack</code> the rows, and the navbar the links and their panel.</li>
               <li>A one-row bar is core's <code>--luz-bar-h</code> tall: 44 px controls, 4 px above and below, and the 1 px rule. At 768 px and below the brand fills the room between the menu button and the actions and wraps there, so the controls stay on one row; with enlarged text the row wraps and the bar grows.</li>
               <li>The masthead is not sticky: three rows stuck to the top would take a third of a phone's screen. Its brand is 49 px from 1024 px, 39 px below and 31 px at 640 px and below (<code>--luz-text-4xl</code>, <code>-3xl</code> and <code>-2xl</code>, the steps of the landing hero).</li>
               <li>The bar, and in the masthead the sections row, name themselves the anchor <code>--luz-bar</code>, scoped to themselves. Where the browser supports CSS anchor positioning, the navbar's panel opens under them. Elsewhere it opens at <code>--luz-bar-h</code> from the top of the window (see Known issues).</li>
-              <li>With <code>@luz-ds/site</code>, the list of its <code>&lt;luz-lang-switch&gt;</code> opens under the bar. Without it nothing changes: the rules that refine site's elements match nothing.</li>
+              <li>With <code>@luz-ds/catalog</code>, the list of its <code>&lt;luz-lang-switch&gt;</code> opens under the bar. Without it nothing changes: the rules that refine the catalog's elements match nothing.</li>
               <li>The <a href="/docs/cms/toc/">table of contents</a> of an article sticks under a bar with <code>.o-sticky</code>.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
-            <p>Nothing changes: the menu is a popover opened by the button's <code>popovertarget</code>, with no script, the links are plain links, and site's search shows its link to the A–Z index.</p>
+            <p>Nothing changes: the menu is a popover opened by the button's <code>popovertarget</code>, with no script, the links are plain links, and catalog's search shows its link to the A–Z index.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <ul>
               <li><strong>Order:</strong> the order of the source. In the bar: the menu button, the brand, the sections, then the actions. In the masthead: the actions of the top row, the brand, then the menu button and the sections.</li>

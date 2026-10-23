@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@luz-ds/core": "workspace:*",
-    "@luz-ds/site": "workspace:*",
+    "@luz-ds/catalog": "workspace:*",
     "@luz-ds/tokens": "workspace:*"
   }
 }

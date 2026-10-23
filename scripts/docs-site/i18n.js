@@ -247,7 +247,7 @@ const GLOBE =
 const isolate = (current, l) => (current.dir === "rtl" && l.dir === "ltr" ? ' dir="ltr"' : "");
 
 /**
- * The language switch of @luz-ds/site for the page in `current`
+ * The language switch of @luz-ds/catalog for the page in `current`
  * (<luz-lang-switch>, a CSS-only tag: no script defines it): a
  * button that opens a native popover with one link per language, each name
  * in its own language (lang, hreflang), the current one marked

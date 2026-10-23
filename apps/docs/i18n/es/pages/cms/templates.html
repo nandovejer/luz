@@ -1,11 +1,11 @@
 <!-- luz:page
 title: Plantillas de CMS
 description: Las partes de un blog o periódico que no necesitan CSS propio, listas para copiar y adaptar: la página de contenido, la página de artículo, una tarjeta de artículo, listas de artículos, artículos relacionados y el recuadro del autor.
-source: c4bfafbf2055
+source: 213cb0cc2265
 reviewed: false
 -->
     <div class="docs-block" id="p-cms-templates">
-          <p>Cada plantilla es marcado que puedes copiar en la plantilla de tu CMS, sustituyendo el texto de ejemplo por tus propios campos. Solo usan las clases de core y cms (y los elementos de site para la búsqueda o el selector de idioma): lo que necesite CSS propio es un patrón con su página, y <a href="#not-here">la última sección</a> indica qué no ofrece LUZ todavía.</p>
+          <p>Cada plantilla es marcado que puedes copiar en la plantilla de tu CMS, sustituyendo el texto de ejemplo por tus propios campos. Solo usan las clases de core y cms (y los elementos del catálogo para la búsqueda o el selector de idioma): lo que necesite CSS propio es un patrón con su página, y <a href="#not-here">la última sección</a> indica qué no ofrece LUZ todavía.</p>
           <p>Una lista de artículos es un <code>&lt;ul&gt;</code> con <code>.o-grid</code> o <code>.o-stack</code> de core, que quitan los marcadores y la sangría. Safari puede quitar el rol de lista si no hay marcadores; los encabezados permiten recorrer los artículos.</p>
           <div class="docs-prose">
             <h2 id="content-page" class="docs-prose__title">Página de contenido</h2>
@@ -13,7 +13,7 @@ reviewed: false
             <ul>
               <li><code>.o-page</code> convierte el body en una columna al menos tan alta como la ventana, de modo que el pie quede abajo en las páginas cortas.</li>
               <li>Para un periódico, sustituye la barra por la cabecera destacada (<code>.luz-cms-header--masthead</code>, no fija).</li>
-              <li>La búsqueda y el selector de idioma son elementos de site; si no cargas site, omítelos o quita todo <code>__actions</code>.</li>
+              <li>La búsqueda y el selector de idioma son elementos del catálogo; si no cargas el catálogo, omítelos o quita todo <code>__actions</code>.</li>
             </ul>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">

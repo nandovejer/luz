@@ -2,7 +2,7 @@
 title: Cabecera
 description: Abre cada página de un blog o periódico con el nombre de la publicación, sus secciones y una búsqueda: una fila fija arriba o una cabecera de tres filas.
 keywords: barra superior, cabecera, periódico, cabecera de blog
-source: c4e44a4b733a
+source: 64c84050397f
 reviewed: false
 -->
     <div class="docs-component" id="p-cms-header">
@@ -72,7 +72,7 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
-            <p>La barra de blog, con la búsqueda y el selector de idioma de site en sus acciones:</p>
+            <p>La barra de blog, con la búsqueda y el selector de idioma del catálogo en sus acciones:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -131,7 +131,7 @@ reviewed: false
                   <tr><td data-label="Clase"><div><code>.luz-cms-header</code></div></td><td data-label="Efecto"><div>En <code>&lt;header&gt;</code>: la barra de blog. La superficie de la página, una línea debajo, los espacios de la fila y el ancla bajo la que se abren sus paneles</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-cms-header--masthead</code></div></td><td data-label="Efecto"><div>La cabecera destacada del periódico: tres filas en un <code>.o-stack</code>, 16 px de espacio arriba y abajo, no fija</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-cms-header__brand</code></div></td><td data-label="Efecto"><div>El nombre de la publicación enlaza a la página de inicio, con la tipografía de encabezado en seminegrita y subrayado solo al pasar el puntero. En la barra ocupa el espacio libre de la fila; en la cabecera destacada es grande y centrado. El logotipo <code>&lt;img&gt;</code> mide 44 px de alto en la barra y 88 px en la cabecera destacada</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-cms-header__actions</code></div></td><td data-label="Efecto"><div>En un <code>.o-row</code>: la <a href="/docs/site/search/">búsqueda</a> de site y después su <a href="/docs/site/lang-switch/">selector de idioma</a></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-header__actions</code></div></td><td data-label="Efecto"><div>En un <code>.o-row</code>: la <a href="/docs/catalog/search/">búsqueda</a> del catálogo y después su <a href="/docs/catalog/lang-switch/">selector de idioma</a></div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-cms-header__top</code></div></td><td data-label="Efecto"><div>Solo en la cabecera destacada, en un <code>.o-row</code>: la fecha al principio y las acciones al final, en una sola fila</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-cms-header__date</code></div></td><td data-label="Efecto"><div>Solo en la cabecera destacada: la fecha de hoy en un <code>&lt;time datetime&gt;</code>, pequeña y secundaria; salta de línea para dejar sitio a las acciones</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-cms-header__sections</code></div></td><td data-label="Efecto"><div>Solo en la cabecera destacada, en un <code>.o-row</code>: el botón de menú y la barra de navegación entre dos líneas, centrados a partir de 769 px; el panel se abre debajo de esta fila</div></td></tr>
@@ -142,17 +142,17 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/cms</code> aplicado a los objetos y la barra de navegación de core. Sin JavaScript; <code>@luz-ds/site</code> es opcional.</p>
+            <p>CSS de <code>@luz-ds/cms</code> aplicado a los objetos y la barra de navegación de core. Sin JavaScript; <code>@luz-ds/catalog</code> es opcional.</p>
             <ul>
               <li>cms solo aporta la apariencia: la superficie de la página, la línea inferior, la marca y los espacios de la fila (8 px entre filas, 16 px entre elementos y 24 px a partir de 769 px). Core se ocupa del resto: <code>.o-sticky</code> aporta la fijación y el relleno de desplazamiento, <code>.o-container--inline</code> los márgenes internos, <code>.o-row</code> y <code>.o-stack</code> las filas, y la barra de navegación los enlaces y su panel.</li>
               <li>Una barra de una fila tiene la altura <code>--luz-bar-h</code> de core: controles de 44 px, 4 px arriba y abajo y una línea de 1 px. A 768 px o menos, la marca ocupa el espacio entre el botón de menú y las acciones, y salta de línea ahí para mantener los controles en una sola fila; al ampliar el texto, la fila se parte y la barra crece.</li>
               <li>La cabecera destacada no es fija: tres filas pegadas arriba ocuparían un tercio de la pantalla del móvil. La marca mide 49 px a partir de 1024 px, 39 px por debajo y 31 px a 640 px o menos (<code>--luz-text-4xl</code>, <code>-3xl</code> y <code>-2xl</code>, los tamaños del hero de landing).</li>
               <li>La barra, y la fila de secciones de la cabecera destacada, se identifican como el ancla <code>--luz-bar</code>, dentro de su propio ámbito. En los navegadores compatibles con el posicionamiento de anclas CSS, el panel de navegación se abre debajo. En los demás, se abre a <code>--luz-bar-h</code> desde la parte superior de la ventana (consulta Problemas conocidos).</li>
-              <li>Con <code>@luz-ds/site</code>, la lista de <code>&lt;luz-lang-switch&gt;</code> se abre debajo de la barra. Sin él, no cambia nada: las reglas que amplían los elementos de site no coinciden con ninguno.</li>
+              <li>Con <code>@luz-ds/catalog</code>, la lista de <code>&lt;luz-lang-switch&gt;</code> se abre debajo de la barra. Sin él, no cambia nada: las reglas que amplían los elementos del catálogo no coinciden con ninguno.</li>
               <li>El <a href="/docs/cms/toc/">índice</a> de un artículo se queda fijo debajo de una barra con <code>.o-sticky</code>.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
-            <p>No cambia nada: el menú es una ventana emergente que abre <code>popovertarget</code> del botón, sin scripts; los enlaces son enlaces normales y la búsqueda de site muestra un enlace al índice alfabético.</p>
+            <p>No cambia nada: el menú es una ventana emergente que abre <code>popovertarget</code> del botón, sin scripts; los enlaces son enlaces normales y la búsqueda del catálogo muestra un enlace al índice alfabético.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
             <ul>
               <li><strong>Orden:</strong> el del código fuente. En la barra: botón de menú, marca, secciones y acciones. En la cabecera destacada: acciones de la fila superior, marca, botón de menú y secciones.</li>

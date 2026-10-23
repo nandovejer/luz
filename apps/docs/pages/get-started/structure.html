@@ -12,17 +12,17 @@ order: 3
       ↓ required by
 @luz-ds/core     -> components, objects, bare-element styles, optional JS
       ↓ required by
-@luz-ds/site     -> search, consent, mode, lang-switch, submenu and banner
+@luz-ds/catalog     -> search, consent, mode, lang-switch, submenu and banner
 
-Each of these needs tokens and core, and takes site as an optional peer:
+Each of these needs tokens and core, and takes catalog as an optional peer:
 @luz-ds/landing  -> header, hero, sections and footer of a landing page (own version, 0.x)
 @luz-ds/cms      -> page structure of a blog, a newspaper or any CMS (own version, 0.x)
 @luz-ds/app      -> header and dashboard of a web application (own version, 0.x)
 @luz-ds/docs     -> shell, page head, rail, example, do and don't, pager and page foot of a documentation site (own version, 0.x)</code></pre>
       <ul>
         <li>Landing, cms, app and docs need tokens and core, and can use the catalog when you load it, never each other; the catalog needs core and tokens; core needs tokens; tokens needs nothing.</li>
-        <li>Tokens, core and site share one version. A package for one kind of site, such as landing, cms, app or docs, has its own, and names the major of the others it needs.</li>
-        <li>The packages say so as peer dependencies: required for tokens and core, optional for site in landing, cms, app and docs. The core and site scripts warn in the console when a level is missing.</li>
+        <li>Tokens, core and catalog share one version. A package for one kind of site, such as landing, cms, app or docs, has its own, and names the major of the others it needs.</li>
+        <li>The packages say so as peer dependencies: required for tokens and core, optional for catalog in landing, cms, app and docs. The core and catalog scripts warn in the console when a level is missing.</li>
       </ul>
     </section>
 
@@ -49,12 +49,12 @@ Each of these needs tokens and core, and takes site as an optional peer:
           <tr><td data-label="Piece"><div>The header and the dashboard of a web application</div></td><td data-label="Classes or attributes"><div><code>.luz-app-header</code> (<code>__product</code>, <code>__actions</code>, <code>__account</code>), <code>.luz-app-dashboard</code> (<code>__head</code>, <code>__title</code>, <code>__panel</code>)</div></td><td data-label="Package"><div>app</div></td><td data-label="Notes"><div>On core's shell, sidebar, sticky bar, grid and card; site is optional, for the search. No script. See <a href="/docs/app/">App</a></div></td></tr>
           <tr><td data-label="Piece"><div>The shell, page head, rail, example, do and don't, pager and page foot of a documentation site</div></td><td data-label="Classes or attributes"><div><code>.luz-docs-shell</code>, <code>.luz-docs-page-head</code>, <code>.luz-docs-rail</code>, <code>.luz-docs-example</code>, <code>.luz-docs-dodont</code>, <code>.luz-docs-pager</code>, <code>.luz-docs-page-foot</code></div></td><td data-label="Package"><div>docs</div></td><td data-label="Notes"><div>On core's shell, sidebar, code block and tables; site is optional, for the search. No script. See <a href="/docs/documentation/">Documentation</a></div></td></tr>
           <tr><td data-label="Piece"><div>The links of a header, and its menu button</div></td><td data-label="Classes or attributes"><div><code>.luz-navbar</code>, <code>.luz-nav-toggle</code></div></td><td data-label="Package"><div>core</div></td><td data-label="Notes"><div>A popover panel at 768 px and below, with no script</div></td></tr>
-          <tr><td data-label="Piece"><div>Submenu, banner</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-submenu&gt;</code>, <code>&lt;luz-banner&gt;</code></div></td><td data-label="Package"><div>site</div></td><td data-label="Notes"><div>Tags with no script and no class: the submenu is a native <code>&lt;details&gt;</code> in a header's links, the banner a <code>&lt;section&gt;</code></div></td></tr>
-          <tr><td data-label="Piece"><div>Cookie consent</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-consent&gt;</code>, <code>.luz-consent</code></div></td><td data-label="Package"><div>site</div></td><td data-label="Notes"><div><code>site.js</code> loads its script, <code>consent.js</code>, when the page has one; a band fixed at the bottom of the window; without the script it stays hidden</div></td></tr>
-          <tr><td data-label="Piece"><div>Auto color mode</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-mode&gt;</code></div></td><td data-label="Package"><div>site</div></td><td data-label="Notes"><div><code>site.js</code> loads its script, <code>mode.js</code>, when the page has one; without it the radios of core's switcher still work and Auto is light</div></td></tr>
-          <tr><td data-label="Piece"><div>Language switch</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-lang-switch&gt;</code></div></td><td data-label="Package"><div>site</div></td><td data-label="Notes"><div>No script</div></td></tr>
-          <tr><td data-label="Piece"><div>Site search</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-search&gt;</code>, <code>.luz-search</code></div></td><td data-label="Package"><div>site</div></td><td data-label="Notes"><div>Needs the script (<code>site.js</code>, which loads <code>search.js</code> when the page has one) and an index file; without them it is a link</div></td></tr>
-          <tr><td data-label="Piece"><div>Print styles</div></td><td data-label="Classes or attributes"><div>Nothing to add</div></td><td data-label="Package"><div>core</div></td><td data-label="Notes"><div>In <code>luz.css</code>; site adds its own print rules</div></td></tr>
+          <tr><td data-label="Piece"><div>Submenu, banner</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-submenu&gt;</code>, <code>&lt;luz-banner&gt;</code></div></td><td data-label="Package"><div>catalog</div></td><td data-label="Notes"><div>Tags with no script and no class: the submenu is a native <code>&lt;details&gt;</code> in a header's links, the banner a <code>&lt;section&gt;</code></div></td></tr>
+          <tr><td data-label="Piece"><div>Cookie consent</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-consent&gt;</code>, <code>.luz-consent</code></div></td><td data-label="Package"><div>catalog</div></td><td data-label="Notes"><div><code>catalog.js</code> loads its script, <code>consent.js</code>, when the page has one; a band fixed at the bottom of the window; without the script it stays hidden</div></td></tr>
+          <tr><td data-label="Piece"><div>Auto color mode</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-mode&gt;</code></div></td><td data-label="Package"><div>catalog</div></td><td data-label="Notes"><div><code>catalog.js</code> loads its script, <code>mode.js</code>, when the page has one; without it the radios of core's switcher still work and Auto is light</div></td></tr>
+          <tr><td data-label="Piece"><div>Language switch</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-lang-switch&gt;</code></div></td><td data-label="Package"><div>catalog</div></td><td data-label="Notes"><div>No script</div></td></tr>
+          <tr><td data-label="Piece"><div>Site search</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-search&gt;</code>, <code>.luz-search</code></div></td><td data-label="Package"><div>catalog</div></td><td data-label="Notes"><div>Needs the script (<code>catalog.js</code>, which loads <code>search.js</code> when the page has one) and an index file; without them it is a link</div></td></tr>
+          <tr><td data-label="Piece"><div>Print styles</div></td><td data-label="Classes or attributes"><div>Nothing to add</div></td><td data-label="Package"><div>core</div></td><td data-label="Notes"><div>In <code>luz.css</code>; catalog adds its own print rules</div></td></tr>
           <tr><td data-label="Piece"><div>Markup you cannot add classes to</div></td><td data-label="Classes or attributes"><div><code>data-luz-classless</code></div></td><td data-label="Package"><div>core</div></td><td data-label="Notes"><div><code>classless.css</code>, a file of its own</div></td></tr>
           <tr><td data-label="Piece"><div>Checking what you or an AI agent wrote</div></td><td data-label="Classes or attributes"><div><code>npx @luz-ds/check</code>, the <code>luz-check</code> command</div></td><td data-label="Package"><div>check</div></td><td data-label="Notes"><div>A tool with no CSS and no layer, and no other package needed: it reads your HTML and CSS offline. See <a href="/docs/get-started/ai/">Working with AI</a></div></td></tr>
           </tbody>
@@ -68,7 +68,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
 
     <section class="docs-block" id="core-architecture" aria-labelledby="core-architecture-title">
           <h2 class="docs-chapter__title" id="core-architecture-title">CSS layers</h2>
-          <p>Core's CSS comes in native cascade layers (<code>@layer</code>), in ITCSS order, inside one container layer called <code>luz</code>. The six below are the ones that hold its rules; <a href="/docs/get-started/layers/">the layers page</a> lists them all, with tokens, site and print.</p>
+          <p>Core's CSS comes in native cascade layers (<code>@layer</code>), in ITCSS order, inside one container layer called <code>luz</code>. The six below are the ones that hold its rules; <a href="/docs/get-started/layers/">the layers page</a> lists them all, with tokens, catalog and print.</p>
           <p>A later layer wins over an earlier one, and any CSS of yours that is not in a layer wins over all of LUZ, with no <code>!important</code>. <a href="/docs/get-started/layers/">How to order and override them</a>.</p>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Core cascade layers"><code>packages/core/src/
   settings/_settings.css      luz.settings    z-index, layout widths, field text
@@ -79,7 +79,7 @@ Each of these needs tokens and core, and takes site as an optional peer:
   utilities/_utilities.css    luz.utilities   single-purpose helpers: .u-*</code></pre>
           <ul>
             <li>The components layer holds <span data-count="components">33</span> components.</li>
-            <li><code>dist/luz.css</code> holds these six layers and <code>luz.print</code>. Tokens are in <code>luz.tokens</code>, site in <code>luz.site</code>, landing in <code>luz.landing</code>, cms in <code>luz.cms</code>, app in <code>luz.app</code> and docs in <code>luz.docs</code>; <code>luz.themes</code> is empty, kept for a look of your own. For a page that needs a few components only, load <code>dist/base.css</code> (settings, reset and elements), then <code>dist/components/&lt;name&gt;.css</code> for each one.</li>
+            <li><code>dist/luz.css</code> holds these six layers and <code>luz.print</code>. Tokens are in <code>luz.tokens</code>, catalog in <code>luz.catalog</code>, landing in <code>luz.landing</code>, cms in <code>luz.cms</code>, app in <code>luz.app</code> and docs in <code>luz.docs</code>; <code>luz.themes</code> is empty, kept for a look of your own. For a page that needs a few components only, load <code>dist/base.css</code> (settings, reset and elements), then <code>dist/components/&lt;name&gt;.css</code> for each one.</li>
             <li>Rules for bare elements are wrapped in <code>:where()</code>, so any class wins over them.</li>
           </ul>
     </section>

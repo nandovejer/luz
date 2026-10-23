@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * The cookie consent of @luz-ds/site: the banner (.luz-consent) and
+ * The cookie consent of @luz-ds/catalog: the banner (.luz-consent) and
  * its module, consent.js (<luz-consent>; D5 of .claude/plans/specs/f3-package-model.md:
  * no `site-` in the names), loaded on its own as dist/consent.min.js by
  * tests/fixtures/site-top.html. A band fixed at the block end of the window
@@ -79,7 +79,7 @@ test.describe('cookie consent', () => {
   test('loaded from two copies of the module, one answer is one luz:consent event', async ({ page }) => {
     await listen(page);
     await open(page);
-    await page.evaluate(() => import('/packages/site/dist/consent.js'));
+    await page.evaluate(() => import('/packages/catalog/dist/consent.js'));
     await page.click('#accept');
     await expect(page.locator('#done')).toBeVisible();
     expect(await page.evaluate(() => window.__events)).toHaveLength(1);

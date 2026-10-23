@@ -607,7 +607,7 @@ test.describe('app without site: nothing of site is asked for', () => {
     page.on('response', (res) => responses.push({ url: res.url(), status: res.status(), type: res.headers()['content-type'] ?? '' }));
     await page.goto(PLAIN);
     await page.waitForLoadState('networkidle');
-    expect(requests.filter((url) => url.includes('/packages/site/'))).toEqual([]);
+    expect(requests.filter((url) => url.includes('/packages/catalog/'))).toEqual([]);
     const app = responses.find((r) => r.url.includes('/packages/app/dist/app.css'));
     expect(app, 'a request for packages/app/dist/app.css').toBeTruthy();
     expect(app?.status).toBe(200);

@@ -53,6 +53,9 @@ importers:
       '@luz-ds/app':
         specifier: workspace:*
         version: link:../../packages/app
+      '@luz-ds/catalog':
+        specifier: workspace:*
+        version: link:../../packages/catalog
       '@luz-ds/cms':
         specifier: workspace:*
         version: link:../../packages/cms
@@ -65,48 +68,54 @@ importers:
       '@luz-ds/landing':
         specifier: workspace:*
         version: link:../../packages/landing
-      '@luz-ds/site':
-        specifier: workspace:*
-        version: link:../../packages/site
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
 
   apps/landing:
     dependencies:
+      '@luz-ds/catalog':
+        specifier: workspace:*
+        version: link:../../packages/catalog
       '@luz-ds/core':
         specifier: workspace:*
         version: link:../../packages/core
       '@luz-ds/landing':
         specifier: workspace:*
         version: link:../../packages/landing
-      '@luz-ds/site':
-        specifier: workspace:*
-        version: link:../../packages/site
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
 
   apps/site:
     dependencies:
+      '@luz-ds/catalog':
+        specifier: workspace:*
+        version: link:../../packages/catalog
       '@luz-ds/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@luz-ds/site':
-        specifier: workspace:*
-        version: link:../../packages/site
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
 
   packages/app:
     devDependencies:
+      '@luz-ds/catalog':
+        specifier: workspace:*
+        version: link:../catalog
       '@luz-ds/core':
         specifier: workspace:*
         version: link:../core
-      '@luz-ds/site':
+      '@luz-ds/tokens':
         specifier: workspace:*
-        version: link:../site
+        version: link:../tokens
+
+  packages/catalog:
+    devDependencies:
+      '@luz-ds/core':
+        specifier: workspace:*
+        version: link:../core
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../tokens
@@ -116,6 +125,9 @@ importers:
       '@luz-ds/app':
         specifier: workspace:*
         version: link:../app
+      '@luz-ds/catalog':
+        specifier: workspace:*
+        version: link:../catalog
       '@luz-ds/cms':
         specifier: workspace:*
         version: link:../cms
@@ -128,21 +140,18 @@ importers:
       '@luz-ds/landing':
         specifier: workspace:*
         version: link:../landing
-      '@luz-ds/site':
-        specifier: workspace:*
-        version: link:../site
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../tokens
 
   packages/cms:
     devDependencies:
+      '@luz-ds/catalog':
+        specifier: workspace:*
+        version: link:../catalog
       '@luz-ds/core':
         specifier: workspace:*
         version: link:../core
-      '@luz-ds/site':
-        specifier: workspace:*
-        version: link:../site
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../tokens
@@ -155,30 +164,21 @@ importers:
 
   packages/docs:
     devDependencies:
+      '@luz-ds/catalog':
+        specifier: workspace:*
+        version: link:../catalog
       '@luz-ds/core':
         specifier: workspace:*
         version: link:../core
-      '@luz-ds/site':
-        specifier: workspace:*
-        version: link:../site
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../tokens
 
   packages/landing:
     devDependencies:
-      '@luz-ds/core':
+      '@luz-ds/catalog':
         specifier: workspace:*
-        version: link:../core
-      '@luz-ds/site':
-        specifier: workspace:*
-        version: link:../site
-      '@luz-ds/tokens':
-        specifier: workspace:*
-        version: link:../tokens
-
-  packages/site:
-    devDependencies:
+        version: link:../catalog
       '@luz-ds/core':
         specifier: workspace:*
         version: link:../core

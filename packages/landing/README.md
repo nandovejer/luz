@@ -1,8 +1,8 @@
 # @luz-ds/landing
 
-The page structure of one kind of site, a landing page: the page of a product, a service or an event that asks the visitor to act. Its header, hero, main, sections, stats, footer and glow are classes on native elements, laid out in the markup by core's objects (`.o-page`, `.o-sticky`, `.o-container`, `.o-row`, `.o-stack`, `.o-grid--split`) and core's navbar; this package adds only their skin and rhythm. `@luz-ds/site` is optional: load it for the search, the language switch or the cookie banner.
+The page structure of one kind of site, a landing page: the page of a product, a service or an event that asks the visitor to act. Its header, hero, main, sections, stats, footer and glow are classes on native elements, laid out in the markup by core's objects (`.o-page`, `.o-sticky`, `.o-container`, `.o-row`, `.o-stack`, `.o-grid--split`) and core's navbar; this package adds only their skin and rhythm. `@luz-ds/catalog` is optional: load it for the search, the language switch or the cookie banner.
 
-> **Beta, version 0.x.** Landing has a version of its own, apart from tokens, core and site, and grows in minor versions while it is 0.x: any of them may change a class. Pin an exact version and read the changelog before you upgrade.
+> **Beta, version 0.x.** Landing has a version of its own, apart from tokens, core and catalog, and grows in minor versions while it is 0.x: any of them may change a class. Pin an exact version and read the changelog before you upgrade.
 
 ## When to use it
 
@@ -13,12 +13,12 @@ The blocks of an event landing page (hero, programme, speakers, tickets, call to
 
 ## Prerequisites
 
-Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/site` (`^0.1.0`) is an optional peer: load it before this package if you use its pieces; the patterns work without it.
+Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/catalog` (`^0.1.0`) is an optional peer: load it before this package if you use its pieces; the patterns work without it.
 
 ## Installation
 
 ```bash
-npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/landing
+npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/landing
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ npm install @luz-ds/tokens @luz-ds/core @luz-ds/site @luz-ds/landing
 ```js
 import '@luz-ds/tokens/css'
 import '@luz-ds/core/css'
-import '@luz-ds/site/css'
+import '@luz-ds/catalog/css'
 import '@luz-ds/landing/css'
 ```
 
@@ -37,15 +37,15 @@ import '@luz-ds/landing/css'
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/site@0.1.0/dist/site.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.1.0/dist/landing.min.css">
 ```
 
-There is no script. Add core's and site's if you use their behaviours.
+There is no script. Add core's and catalog's if you use their behaviours.
 
 ## Package exports
 
-- **`./css`** → `landing.css` — the patterns, in the cascade layer `luz.landing`, after `luz.site` (`./css/min` for the minified twin)
+- **`./css`** → `landing.css` — the patterns, in the cascade layer `luz.landing`, after `luz.catalog` (`./css/min` for the minified twin)
 - **`./components/*`** → `dist/components/` — one stylesheet per pattern, `<name>.css` and `<name>.min.css`, each in `luz.landing`, for a page that loads only what it uses
 
 ## Classes included
@@ -76,7 +76,7 @@ Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1
 
 This package needs `@luz-ds/tokens` and `@luz-ds/core` loaded first.
 
-`@luz-ds/site` is optional: the CSS of this package works with the packages above alone.
+`@luz-ds/catalog` is optional: the CSS of this package works with the packages above alone.
 
 ### Check what you write
 

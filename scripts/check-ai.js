@@ -45,7 +45,7 @@ import { PAGES_CSP, SITE_URL } from "../vite.config.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SNAPSHOT = "tests/fixtures/check/agent.md";
-const ELEMENT_PACKAGES = ["core", "site"];
+const ELEMENT_PACKAGES = ["core", "catalog"];
 
 /** `✗ <path>: <why>` per stale file, in the order found. */
 const problems = [];
@@ -131,7 +131,7 @@ layer("the pages of docs/", PAGES, () => {
   compare("docs/llms-full.txt", renderLlmsFull(site, { siteUrl: SITE_URL }), PAGES);
 
   // The examples: one document per page with a markup section, and no other
-  if (existsSync(join(root, "packages", "site", "dist", "custom-elements.json"))) {
+  if (existsSync(join(root, "packages", "catalog", "dist", "custom-elements.json"))) {
     const versions = Object.fromEntries(
       PACKAGES.map((name) => [name, JSON.parse(readFileSync(join(root, "packages", name, "package.json"), "utf-8")).version]),
     );

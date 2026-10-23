@@ -4,7 +4,7 @@
  * contents. The page is tests/fixtures/cms-article.html, a whole story as a
  * consumer builds it with tokens, core and cms only (the sticky `.luz-cms-header`
  * on core's `.o-sticky`, the article, the author box and related posts, which
- * are templates of core classes; @luz-ds/site is an optional peer), served at
+ * are templates of core classes; @luz-ds/catalog is an optional peer), served at
  * /__cms__ with the language and direction each test needs.
  *
  * The table of contents follows the room the article has (a size
@@ -157,7 +157,7 @@ test.describe('cms article page', () => {
     p.on('request', (req) => requests.push(req.url()));
     await open(p, 1280);
     await p.waitForLoadState('networkidle');
-    expect(requests.filter((url) => url.includes('/packages/site/'))).toEqual([]);
+    expect(requests.filter((url) => url.includes('/packages/catalog/'))).toEqual([]);
   });
 
   for (const width of [768, 320]) {

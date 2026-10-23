@@ -1,6 +1,6 @@
 /**
  * The home page in several languages (scripts/docs-site/i18n.js and its use
- * in site.js): the registry and the catalogs, the {{t:…}} and {{html:…}}
+ * in catalog.js): the registry and the catalogs, the {{t:…}} and {{html:…}}
  * strings with file:line on every mistake, the unused-key check, the
  * language switcher and the <link rel="alternate"> generated from the
  * registry, and the real catalogs of apps/landing/i18n.

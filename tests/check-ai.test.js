@@ -251,7 +251,7 @@ describe("node scripts/check-ai.js, on a copy of the repository", () => {
 
   it("fails, naming each one, when classes.json of a package or custom-elements.json differs from what its dist generates", () => {
     needsScript();
-    const files = [...PACKAGES.map((name) => `packages/${name}/dist/classes.json`), "packages/core/dist/custom-elements.json", "packages/site/dist/custom-elements.json"];
+    const files = [...PACKAGES.map((name) => `packages/${name}/dist/classes.json`), "packages/core/dist/custom-elements.json", "packages/catalog/dist/custom-elements.json"];
     const r = withChanges(files.map((path) => [path, stale]), run);
     failedNaming(r, files);
   }, 150_000);
@@ -273,7 +273,7 @@ describe("node scripts/check-ai.js, on a copy of the repository", () => {
       run,
     );
     failedNaming(r, [path]);
-    expect(r.err).not.toContain("packages/site/dist/classes.json");
+    expect(r.err).not.toContain("packages/catalog/dist/classes.json");
   }, 150_000);
 
   it("fails, naming packages/<p>/dist and `pnpm build`, when a package is not built", () => {
@@ -323,8 +323,8 @@ describe("node scripts/check-ai.js, on a copy of the repository", () => {
 
   it("fails when a generated file is missing from docs/", () => {
     needsScript();
-    const r = withChanges([["docs/llms.txt", null], ["docs/manifests/site/custom-elements.json", null]], run);
-    failedNaming(r, ["docs/llms.txt", "docs/manifests/site/custom-elements.json"]);
+    const r = withChanges([["docs/llms.txt", null], ["docs/manifests/catalog/custom-elements.json", null]], run);
+    failedNaming(r, ["docs/llms.txt", "docs/manifests/catalog/custom-elements.json"]);
   }, 150_000);
 
   it("fails on an example that no page produces any more", () => {
@@ -351,7 +351,7 @@ describe("node scripts/check-ai.js, on a copy of the repository", () => {
       run,
     );
     failedNaming(r, [path]);
-    expect(r.err).not.toContain("packages/site/README.md");
+    expect(r.err).not.toContain("packages/catalog/README.md");
   }, 150_000);
 
   it("fails, naming the snapshot, when tests/fixtures/check/agent.md is not the agent the package builds", () => {
@@ -470,7 +470,7 @@ describe("the changesets of the manifests", () => {
     expect(own.map((c) => c.file), `a minor changeset for @luz-ds/${name} that names ./classes.json`).not.toEqual([]);
   });
 
-  it.each(["core", "site"])("@luz-ds/%s has a minor changeset that says it now exports ./custom-elements.json", (name) => {
+  it.each(["core", "catalog"])("@luz-ds/%s has a minor changeset that says it now exports ./custom-elements.json", (name) => {
     const own = changesets.filter((c) => c.bumps.some((b) => b.name === `@luz-ds/${name}` && b.level === "minor") && c.body.includes("./custom-elements.json"));
     expect(own.map((c) => c.file)).not.toEqual([]);
   });

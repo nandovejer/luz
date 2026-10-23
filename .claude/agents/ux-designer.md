@@ -76,7 +76,7 @@ Never present an accessibility claim as settled when you have not confirmed it; 
 ## When you implement
 
 - Review or spec when asked for a review; edit when asked to build or fix.
-- Edit `packages/*/src` and `apps/*` only; rebuild with `pnpm core:build` (and `pnpm tokens:build` / `pnpm site:build` when relevant), `node scripts/check-pack.js --update` after adding or removing a published file. Never hand-edit `dist/` or `docs/`.
+- Edit `packages/*/src` and `apps/*` only; rebuild with `pnpm core:build` (and `pnpm tokens:build` / `pnpm catalog:build` when relevant), `node scripts/check-pack.js --update` after adding or removing a published file. Never hand-edit `dist/` or `docs/`.
 - Semantic tokens and logical properties only, no `!important`, no literal colours, bare elements inside `:where()`; apps add layout, not component skins.
 - Run `pnpm lint:css`, `pnpm lint:js`, `pnpm check:strings` and the relevant tests before delivering; screenshot the result.
 - Add a changeset for every public change. Never commit, never push, never bump versions by hand.

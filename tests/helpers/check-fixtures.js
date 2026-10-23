@@ -34,7 +34,7 @@ export const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 export const FIXTURES = join(ROOT, "tests/fixtures/check");
 export const VERSION = "9.9.9";
 /** The seven libraries, in dependency order: the order `manifests` is written in. */
-export const LIBRARIES = ["tokens", "core", "site", "landing", "cms", "app", "docs"];
+export const LIBRARIES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
 
 /* ---- The `expect:` comments ----------------------------------------------------------------- */
 
@@ -147,7 +147,7 @@ export function removeWorkspaces() {
 /* ---- A small world of manifests, made by hand ------------------------------------------------- */
 
 const BEM = /^(.+?)(?:__(.+?))?(?:--(.+))?$/;
-const kindOf = (name) => (/^luz-(?:site|landing|cms|app|docs)-/.test(name) ? "pattern" : name.startsWith("o-") ? "object" : name.startsWith("u-") ? "utility" : name.startsWith("is-") ? "state" : "component");
+const kindOf = (name) => (/^luz-(?:catalog|landing|cms|app|docs)-/.test(name) ? "pattern" : name.startsWith("o-") ? "object" : name.startsWith("u-") ? "utility" : name.startsWith("is-") ? "state" : "component");
 
 /** A class as a manifest lists it: name, kind, layer, files, defined, then block, modifier, part. */
 function fullClass(pkg, spec) {
@@ -199,8 +199,8 @@ export const MINI = {
     elements: [{ tag: "luz-timeline", attributes: ["layout", "autoplay", "interval", "data-luz-label-previous", "data-luz-label-next", "data-luz-label-pause", "data-luz-label-play"] }],
     hooks: ["data-luz-classless", "data-luz-sort", "data-luz-spy"],
   },
-  site: {
-    classes: ["luz-consent", "luz-search", "luz-search__field", "luz-search__results", "luz-sidebar", "luz-site-hero"],
+  catalog: {
+    classes: ["luz-consent", "luz-search", "luz-search__field", "luz-search__results", "luz-sidebar", "luz-catalog-hero"],
     properties: [],
     elements: [
       { tag: "luz-banner", attributes: ["tone"] },

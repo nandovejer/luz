@@ -118,7 +118,7 @@ export default {
         "packages/core/src/components/**/*.css",
         "packages/core/src/elements/**/*.css",
         "packages/core/src/objects/**/*.css",
-        "packages/site/src/**/*.css",
+        "packages/catalog/src/**/*.css",
         "packages/landing/src/**/*.css",
         "packages/cms/src/**/*.css",
         "packages/app/src/**/*.css",

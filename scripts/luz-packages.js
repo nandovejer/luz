@@ -5,8 +5,8 @@
  * Order matters: a package comes after every package it depends on, so
  * publish.js never uploads one before its peers exist.
  *
- *   BASE       share one version (changesets `fixed`): tokens → core → site
- *   SITE_KINDS packages for one kind of site, built on site, each with its
+ *   BASE       share one version (changesets `fixed`): tokens → core → catalog
+ *   SITE_KINDS packages for one kind of site, built on catalog, each with its
  *              own version (0.x while it grows) and literal peer ranges on
  *              the base's major: landing, cms, app, docs
  *   PACKAGES   BASE and SITE_KINDS: the CSS libraries. The docs tests and the
@@ -17,7 +17,7 @@
  *              smoke-consumer pack, check and upload. A tool comes last: its
  *              tarball is built from the others' dist and nothing depends on it.
  */
-export const BASE = ["tokens", "core", "site"];
+export const BASE = ["tokens", "core", "catalog"];
 export const SITE_KINDS = ["landing", "cms", "app", "docs"];
 export const PACKAGES = [...BASE, ...SITE_KINDS];
 export const TOOLS = ["check"];

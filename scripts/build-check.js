@@ -20,8 +20,8 @@
  * never inlined in the bundle (f5-ai-ready.md 5.4, 5.1):
  *
  *   packages/check/dist/data/index.json                    the seven packages and their versions
- *   packages/check/dist/data/<pkg>/classes.json            tokens, core, site, landing, cms, app, docs
- *   packages/check/dist/data/<core|site>/custom-elements.json
+ *   packages/check/dist/data/<pkg>/classes.json            tokens, core, catalog, landing, cms, app, docs
+ *   packages/check/dist/data/<core|catalog>/custom-elements.json
  *   packages/check/dist/data/tokens/tokens.css             LUZ's colour tokens, for the theme rules
  *
  * Each is what the package's own dist/ says, reduced to what a rule reads
@@ -65,7 +65,7 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const entry = resolve(repoRoot, "packages", "check", "src", "main.js");
 const defaultOutdir = resolve(repoRoot, "packages", "check", "dist");
 // In dependency order: the order the facts are listed in
-const PACKAGES = ["tokens", "core", "site", "landing", "cms", "app", "docs"];
+const PACKAGES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
 
 const readJson = (path) => {
   if (!existsSync(path)) throw new Error(`${path} does not exist; build the packages first (pnpm build)`);

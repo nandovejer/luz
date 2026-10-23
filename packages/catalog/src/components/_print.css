@@ -1,0 +1,16 @@
+/* ==========================================================================
+   LUZ Catalog — print
+   What the catalog components do on paper. Core's print layer (luz.print)
+   sets the colors and the breaks, and hides the skip link; this hides what
+   only works on a screen. In the luz.catalog layer, after the screen rules.
+   ========================================================================== */
+
+@media print {
+  /* <luz-search> takes its fallback link, its trigger and its dialog
+     with it; a trigger elsewhere on the page has the class */
+  :where(luz-search),
+  .luz-search__trigger,
+  .luz-consent {
+    display: none;
+  }
+}

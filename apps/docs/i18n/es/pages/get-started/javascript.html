@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Módulos de JavaScript
 description: Qué añade cada script opcional, cómo cargar solo el que necesitas y qué hace la página sin ellos.
-source: ba653cc9d45e
+source: 4cbe6bf90b01
 reviewed: false
 -->
     <div class="docs-block" id="c-js">
@@ -26,7 +26,7 @@ initTabs();</code></pre>
             <li><code>luz.js</code> inicia todos los módulos al cargar la página.</li>
             <li>Importar un solo módulo no hace nada hasta que llamas a su función <code>init</code>.</li>
             <li><code>midi.js</code>, <code>table-sort.js</code> y <code>timeline.js</code> son fragmentos independientes: <code>luz.js</code> carga cada uno cuando hace falta y solo en las páginas que lo necesitan.</li>
-            <li>La búsqueda del sitio está en <code>@luz-ds/site</code>: consulta <a href="/docs/site/search/">Búsqueda</a>. El aviso de cookies también está ahí, en un módulo propio que <code>site.js</code> no incluye: consulta <a href="/docs/site/consent/">Consentimiento de cookies</a>. El modo de color automático es un tercer módulo del mismo tipo, <code>mode.js</code>, que <code>site.js</code> carga solo en páginas con <code>&lt;luz-mode&gt;</code>: consulta <a href="/docs/site/mode/">Modo de color automático</a>.</li>
+            <li>La búsqueda del sitio está en <code>@luz-ds/catalog</code>: consulta <a href="/docs/catalog/search/">Búsqueda</a>. El aviso de cookies también está ahí, en un módulo propio que <code>catalog.js</code> no incluye: consulta <a href="/docs/catalog/consent/">Consentimiento de cookies</a>. El modo de color automático es un tercer módulo del mismo tipo, <code>mode.js</code>, que <code>catalog.js</code> carga solo en páginas con <code>&lt;luz-mode&gt;</code>: consulta <a href="/docs/catalog/mode/">Modo de color automático</a>.</li>
           </ul>
           <h2 id="js-modules">Los módulos</h2>
           <details class="docs-fold" open data-fold-narrow>
@@ -72,7 +72,7 @@ initTabs();</code></pre>
               <tbody>
                 <tr><td data-label="Componente"><div><a href="/docs/components/tabs/">Pestañas</a></div></td><td data-label="Sin JavaScript"><div>Enlaces y todos los paneles apilados</div></td></tr>
                 <tr><td data-label="Componente"><div><a href="/docs/components/mode-switcher/">Selector del modo de color</a></div></td><td data-label="Sin JavaScript"><div>Tres botones de opción que siguen cambiando el modo; no se recuerda la elección</div></td></tr>
-                <tr><td data-label="Componente"><div><a href="/docs/site/mode/">Modo de color automático</a></div></td><td data-label="Sin JavaScript"><div>Los cuatro botones de opción siguen cambiando el modo; Automático equivale a claro, y no se sigue ni el sistema ni el reloj</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/catalog/mode/">Modo de color automático</a></div></td><td data-label="Sin JavaScript"><div>Los cuatro botones de opción siguen cambiando el modo; Automático equivale a claro, y no se sigue ni el sistema ni el reloj</div></td></tr>
                 <tr><td data-label="Componente"><div><a href="/docs/components/copy-button/">Botón de copia</a></div></td><td data-label="Sin JavaScript"><div>Oculto; el texto sigue pudiéndose seleccionar</div></td></tr>
                 <tr><td data-label="Componente"><div><a href="/docs/components/player/">Reproductor</a></div></td><td data-label="Sin JavaScript"><div>Los controles propios del navegador para archivos multimedia; MIDI muestra su texto alternativo</div></td></tr>
                 <tr><td data-label="Componente"><div><a href="/docs/components/modal/">Diálogo modal</a></div></td><td data-label="Sin JavaScript"><div>Se abre donde el navegador admite <code>command</code>; en los demás casos, el botón de apertura no hace nada</div></td></tr>

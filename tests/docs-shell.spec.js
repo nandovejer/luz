@@ -147,7 +147,7 @@ test.describe('docs shell, with JavaScript', () => {
     await expect(nav.locator('details[open] a[href="/docs/components/button/"]')).toBeVisible();
     // Every area is a link, open or not; the pages of the closed folds are in the markup, not on the screen
     for (const area of site.areas) await expect(nav.locator(`a.docs-nav__area[href="/docs/${area.slug}/"]`), area.id).toBeVisible();
-    for (const href of ['/docs/tokens/color/', '/docs/get-started/snippet/', '/docs/site/search/', '/docs/documentation/rail/']) {
+    for (const href of ['/docs/tokens/color/', '/docs/get-started/snippet/', '/docs/catalog/search/', '/docs/documentation/rail/']) {
       await expect(nav.locator(`a[href="${href}"]`), href).toBeHidden();
     }
     // Every page of the reading order is in it, once (an area index is the area link)

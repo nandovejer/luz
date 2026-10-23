@@ -402,7 +402,7 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
 
   it("puts them after the mode chunk row, the last row that existed (no other row moved or raised)", () => {
     const names = budgets.map((b) => b.name);
-    const mode = names.indexOf("site JS lazy chunk: mode");
+    const mode = names.indexOf("catalog JS lazy chunk: mode");
     expect(names.slice(mode + 1)).toEqual(ROWS.map(([name]) => name));
   });
 
@@ -413,7 +413,7 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
       .slice(header + 2)
       .filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")))
       .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
-    const at = table.findIndex((cells) => /^`site` JS lazy chunk: `mode`/.test(cells[0]));
+    const at = table.findIndex((cells) => /^`catalog` JS lazy chunk: `mode`/.test(cells[0]));
     const rows = table.slice(at + 1);
     expect(rows).toHaveLength(ROWS.length);
     rows.forEach((cells, i) => {

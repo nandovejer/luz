@@ -2,7 +2,7 @@
 title: Con un empaquetador o framework
 description: Importa el CSS y el script de LUZ en Astro o en cualquier herramienta que resuelva nombres de paquetes, y conserva el orden de las capas y las fuentes.
 keywords: vite, astro, empaquetador, framework, import
-source: dffff15fb784
+source: a71d02461d99
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="imports">
@@ -17,9 +17,9 @@ reviewed: false
 import "@luz-ds/core/css";
 import "@luz-ds/core";
 
-// Only if the page uses a site element: search, consent, language switch
-import "@luz-ds/site/css";
-import "@luz-ds/site";
+// Only if the page uses a catalog element: search, consent, language switch
+import "@luz-ds/catalog/css";
+import "@luz-ds/catalog";
 
 // Only for one kind of site: landing, cms or app
 import "@luz-ds/landing/css";</code></pre>
@@ -72,16 +72,16 @@ import "@luz-ds/landing/css";</code></pre>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./i18n/*</code></div></td><td data-label="Qué es"><div>Los textos de uno de los idiomas que incluye LUZ, por ejemplo <code>@luz-ds/core/i18n/es</code>: su exportación predeterminada es un objeto de textos que se carga cuando hace falta</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./custom-elements.json</code></div></td><td data-label="Qué es"><div>Todos los elementos personalizados que define o estiliza el paquete, con sus atributos y eventos, en formato Custom Elements Manifest para editores y agentes de IA</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>.</code></div></td><td data-label="Qué es"><div><code>site.js</code>: carga el script de cada elemento del sitio que haya en la página</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./search</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-search&gt;</code></div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./consent</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-consent&gt;</code> y <code>getConsent</code></div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./mode</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-mode&gt;</code></div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>site.css</code>: los estilos de los elementos del sitio</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>site.min.css</code>: lo mismo, minimizado</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./print.css</code></div></td><td data-label="Qué es"><div>Solo las reglas de impresión de los elementos del sitio</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento del sitio: banner, consentimiento, selector de idioma, modo, búsqueda y submenú</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/site</code></div></td><td data-label="Exportación"><div><code>./custom-elements.json</code></div></td><td data-label="Qué es"><div>Todos los elementos personalizados que define o estiliza el paquete, con sus atributos y eventos, en formato Custom Elements Manifest para editores y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>.</code></div></td><td data-label="Qué es"><div><code>catalog.js</code>: carga el script de cada elemento del sitio que haya en la página</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./search</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-search&gt;</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./consent</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-consent&gt;</code> y <code>getConsent</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./mode</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-mode&gt;</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>catalog.css</code>: los estilos de los elementos del sitio</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>catalog.min.css</code>: lo mismo, minimizado</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./print.css</code></div></td><td data-label="Qué es"><div>Solo las reglas de impresión de los elementos del sitio</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento del sitio: banner, consentimiento, selector de idioma, modo, búsqueda y submenú</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./custom-elements.json</code></div></td><td data-label="Qué es"><div>Todos los elementos personalizados que define o estiliza el paquete, con sus atributos y eventos, en formato Custom Elements Manifest para editores y agentes de IA</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>landing.css</code>: los elementos de una landing page</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>landing.min.css</code>: lo mismo, minimizado</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
@@ -208,8 +208,8 @@ import Base from "../layouts/Base.astro";
         <li><a href="https://nuxt.com/docs">Documentación de Nuxt</a></li>
         <li><a href="https://svelte.dev/docs/kit">Documentación de SvelteKit</a></li>
       </ul>
-      <p>Hay algo que todas comparten. Un módulo de LUZ no produce efectos secundarios al importarlo hasta que llamas a su función <code>init</code>, y <code>luz.js</code> y <code>site.js</code> comprueban primero que exista <code>document</code>.</p>
-      <p>Por eso, los frameworks que renderizan en el servidor pueden importarlos. En Node sin <code>document</code> se importaron diez módulos de core y site sin errores.</p>
+      <p>Hay algo que todas comparten. Un módulo de LUZ no produce efectos secundarios al importarlo hasta que llamas a su función <code>init</code>, y <code>luz.js</code> y <code>catalog.js</code> comprueban primero que exista <code>document</code>.</p>
+      <p>Por eso, los frameworks que renderizan en el servidor pueden importarlos. En Node sin <code>document</code> se importaron diez módulos de core y catalog sin errores.</p>
     </section>
 
     <section class="docs-block" aria-labelledby="fonts">

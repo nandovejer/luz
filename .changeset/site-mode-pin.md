@@ -1,5 +1,5 @@
 ---
-"@luz-ds/site": minor
+"@luz-ds/catalog": minor
 "@luz-ds/check": patch
 ---
 

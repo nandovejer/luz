@@ -398,7 +398,7 @@ describe("element/unknown", () => {
     const [found] = result.findings;
     expect(found).toMatchObject({ rule: "element/unknown", severity: "block", line: at.line, column: at.column, suggestion: null });
     expect(Object.keys(found).sort()).toEqual(BASE_KEYS);
-    expect(found.message).toMatch(/^<luz-carousel> is not a LUZ element; see custom-elements\.json of @luz-ds\/(?:core|site)$/);
+    expect(found.message).toMatch(/^<luz-carousel> is not a LUZ element; see custom-elements\.json of @luz-ds\/(?:core|catalog)$/);
     expect(found.docs).toBe(messages.docsUrl("element/unknown"));
   });
 
@@ -445,7 +445,7 @@ describe("element/unknown", () => {
     expect(result.findings[0].message).toContain(UNREADABLE);
   });
 
-  it("does not say a tag of site is unknown on a page that loads only core (load/package-missing's to say)", () => {
+  it("does not say a tag of catalog is unknown on a page that loads only core (load/package-missing's to say)", () => {
     const result = check({ "index.html": page("  <luz-search></luz-search>") });
     expect(ofRule(result, "element/")).toEqual([]);
   });
@@ -522,7 +522,7 @@ describe("element/unknown-attribute", () => {
   });
 
   it("blocks every non-global attribute of an element that declares none", () => {
-    const withSite = links(linkTo("tokens", "luz-tokens.min.css"), linkTo("core", "luz.min.css"), linkTo("site", "site.min.css"));
+    const withSite = links(linkTo("tokens", "luz-tokens.min.css"), linkTo("core", "luz.min.css"), linkTo("catalog", "catalog.min.css"));
     const result = check({ "index.html": page('  <luz-lang-switch foo="1" class="x"></luz-lang-switch>', withSite) });
     expect(result.findings.map((f) => f.message.split(" ")[0])).toEqual(["foo"]);
   });
@@ -653,7 +653,7 @@ describe("the manifests: node_modules first, then the snapshot", () => {
     expect(result.data.manifests.map((m) => [m.package, m.version, m.source])).toEqual([
       ["@luz-ds/tokens", "0.1.0", "bundled"],
       ["@luz-ds/core", "9.9.0", "node_modules"],
-      ["@luz-ds/site", "0.1.0", "bundled"],
+      ["@luz-ds/catalog", "0.1.0", "bundled"],
       ["@luz-ds/landing", "0.1.0", "bundled"],
       ["@luz-ds/cms", "0.1.0", "bundled"],
       ["@luz-ds/app", "0.1.0", "bundled"],

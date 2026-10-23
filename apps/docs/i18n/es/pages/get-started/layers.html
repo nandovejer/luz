@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Capas de cascada
 description: Cómo se integra LUZ en tu cascada: una capa llamada luz, el orden que debes declarar y cómo sobrescribir sus estilos sin !important.
-source: 8356e79fbd61
+source: 61052ef47237
 reviewed: false
 -->
     <section class="docs-block" id="order" aria-labelledby="order-title">
@@ -34,9 +34,9 @@ reviewed: false
             <tr><td data-label="Capa"><div><code>luz.objects</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Objetos de maquetación: <code>.o-*</code></div></td></tr>
             <tr><td data-label="Capa"><div><code>luz.components</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Los componentes: <code>.luz-*</code></div></td></tr>
             <tr><td data-label="Capa"><div><code>luz.utilities</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Ayudas de una sola función: <code>.u-*</code>. Prevalecen sobre los componentes por orden, no mediante <code>!important</code></div></td></tr>
-            <tr><td data-label="Capa"><div><code>luz.site</code></div></td><td data-label="Paquete"><div>site</div></td><td data-label="Qué contiene"><div>Los cinco componentes de site: <code>&lt;luz-search&gt;</code>, <code>&lt;luz-consent&gt;</code>, <code>&lt;luz-lang-switch&gt;</code>, <code>&lt;luz-submenu&gt;</code>, <code>&lt;luz-banner&gt;</code> y sus clases <code>.luz-&lt;tag&gt;__*</code></div></td></tr>
-            <tr><td data-label="Capa"><div><code>luz.landing</code></div></td><td data-label="Paquete"><div>landing</div></td><td data-label="Qué contiene"><div>Los patrones de una landing page: <code>.luz-landing-*</code>. Va después de site para que pueda ampliarlo</div></td></tr>
-            <tr><td data-label="Capa"><div><code>luz.cms</code></div></td><td data-label="Paquete"><div>cms</div></td><td data-label="Qué contiene"><div>Los patrones de un blog, un periódico o cualquier CMS: <code>.luz-cms-*</code>. Va después de site; landing y cms no comparten clases, así que su orden no cambia nada</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.catalog</code></div></td><td data-label="Paquete"><div>catalog</div></td><td data-label="Qué contiene"><div>Los cinco componentes del catálogo: <code>&lt;luz-search&gt;</code>, <code>&lt;luz-consent&gt;</code>, <code>&lt;luz-lang-switch&gt;</code>, <code>&lt;luz-submenu&gt;</code>, <code>&lt;luz-banner&gt;</code> y sus clases <code>.luz-&lt;tag&gt;__*</code></div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.landing</code></div></td><td data-label="Paquete"><div>landing</div></td><td data-label="Qué contiene"><div>Los patrones de una landing page: <code>.luz-landing-*</code>. Va después del catálogo para que pueda ampliarlo</div></td></tr>
+            <tr><td data-label="Capa"><div><code>luz.cms</code></div></td><td data-label="Paquete"><div>cms</div></td><td data-label="Qué contiene"><div>Los patrones de un blog, un periódico o cualquier CMS: <code>.luz-cms-*</code>. Va después del catálogo; landing y cms no comparten clases, así que su orden no cambia nada</div></td></tr>
             <tr><td data-label="Capa"><div><code>luz.app</code></div></td><td data-label="Paquete"><div>app</div></td><td data-label="Qué contiene"><div>La cabecera y el panel de una aplicación web: <code>.luz-app-*</code>. Va después de cms; landing, cms y app no comparten clases, así que su orden no cambia nada</div></td></tr>
             <tr><td data-label="Capa"><div><code>luz.docs</code></div></td><td data-label="Paquete"><div>docs</div></td><td data-label="Qué contiene"><div>Las partes de una página de documentación: <code>.luz-docs-*</code>. Va después de app; no comparte clases con otros paquetes, así que su posición no mueve ninguna otra capa</div></td></tr>
             <tr><td data-label="Capa"><div><code>luz.print</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Qué contiene"><div>Lo que cambia en papel, dentro de <code>@media print</code>: <a href="/docs/get-started/print/">Estilos de impresión</a>. Va al final para prevalecer sobre los estilos de pantalla de todos los paquetes</div></td></tr>
@@ -72,7 +72,7 @@ reviewed: false
     min-height: 3rem;
   }
 
-  /* A site component */
+  /* A catalog component */
   luz-banner {
     font-size: 1rem;
   }
@@ -103,7 +103,7 @@ reviewed: false
 
 @import url("@luz-ds/tokens/css");
 @import url("@luz-ds/core/css");
-@import url("@luz-ds/site/css");
+@import url("@luz-ds/catalog/css");
 @import url("@luz-ds/landing/css"); /* only for a landing page */
 @import url("@luz-ds/cms/css");     /* only for a blog or a newspaper */
 @import url("@luz-ds/app/css");     /* only for a web application */

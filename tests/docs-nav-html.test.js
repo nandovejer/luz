@@ -33,7 +33,7 @@ import { findAll, hasClass, parse, query, queryAll, queryAllLive, queryLive, tex
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** The top-level areas of the sidebar, in order (the owner's list). */
-const AREA_ORDER = ["get-started", "tokens", "components", "site", "landing", "cms", "app", "documentation", "html", "accessibility"];
+const AREA_ORDER = ["get-started", "tokens", "components", "catalog", "landing", "cms", "app", "documentation", "html", "accessibility"];
 
 /* ---- site.json: "parent" is gone ----------------------------------------------------------------- */
 

@@ -86,7 +86,7 @@ const TWO_VERSIONS = `# @luz-ds/core
   Breaking: this older note must not be listed.
 `;
 
-const MAJOR = `# @luz-ds/site
+const MAJOR = `# @luz-ds/catalog
 
 ## 1.0.0
 
@@ -144,7 +144,7 @@ const manifest = (name, version, peers = {}, optional = []) => ({
   peerDependenciesMeta: Object.fromEntries(optional.map((p) => [p, { optional: true }])),
 });
 const CORE = manifest("core", "0.1.0", { "@luz-ds/tokens": "^0.1.0" });
-const LANDING = manifest("landing", "0.1.0", { "@luz-ds/core": "^0.1.0", "@luz-ds/site": "^0.1.0", "@luz-ds/tokens": "^0.1.0" }, ["@luz-ds/site"]);
+const LANDING = manifest("landing", "0.1.0", { "@luz-ds/core": "^0.1.0", "@luz-ds/catalog": "^0.1.0", "@luz-ds/tokens": "^0.1.0" }, ["@luz-ds/catalog"]);
 const render = (name, man, changelog) => lib().renderAiSection({ name, manifest: man, changelog, siteUrl: SITE });
 
 /* ---- breakingChanges: what is read from a changelog --------------------- */
@@ -260,7 +260,7 @@ describe("renderAiSection({ name, manifest, changelog, siteUrl })", () => {
   });
 
   it("lists a Major Changes bullet of the top version as breaking", () => {
-    const block = render("site", manifest("site", "1.0.0"), MAJOR);
+    const block = render("catalog", manifest("catalog", "1.0.0"), MAJOR);
     expect(block).toMatch(/^#### Remove `<luz-banner>`\.$/m);
     expect(block).not.toMatch(/old major/);
   });
@@ -290,8 +290,8 @@ describe("renderAiSection({ name, manifest, changelog, siteUrl })", () => {
     expect(block.indexOf("llms-full.txt")).toBeLessThan(block.indexOf("examples/"));
   });
 
-  it("names custom-elements.json only for the packages that define a tag (core and site)", () => {
-    expect(render("site", manifest("site", "0.1.0", { "@luz-ds/core": "^0.1.0" }), FIRST_RELEASE)).toMatch(/custom-elements\.json/);
+  it("names custom-elements.json only for the packages that define a tag (core and catalog)", () => {
+    expect(render("catalog", manifest("catalog", "0.1.0", { "@luz-ds/core": "^0.1.0" }), FIRST_RELEASE)).toMatch(/custom-elements\.json/);
     expect(render("landing", LANDING, FIRST_RELEASE)).not.toMatch(/custom-elements\.json/);
     expect(render("tokens", manifest("tokens", "0.1.0"), FIRST_RELEASE)).not.toMatch(/custom-elements\.json/);
   });
@@ -299,7 +299,7 @@ describe("renderAiSection({ name, manifest, changelog, siteUrl })", () => {
   it("says what a package needs loaded first, and what is optional, from its peer dependencies", () => {
     const block = render("landing", LANDING, FIRST_RELEASE);
     expect(block).toMatch(/needs[^\n]*@luz-ds\/tokens[^\n]*@luz-ds\/core[^\n]*first/);
-    expect(block).toMatch(/@luz-ds\/site[^\n]*optional/);
+    expect(block).toMatch(/@luz-ds\/catalog[^\n]*optional/);
     expect(render("core", CORE, FIRST_RELEASE)).toMatch(/needs[^\n]*@luz-ds\/tokens[^\n]*first/);
   });
 
@@ -573,10 +573,10 @@ describe("the READMEs of the packages", () => {
   const packages = readdirSync(join(repo, "packages")).filter((p) => existsSync(join(repo, "packages", p, "package.json")) && existsSync(join(repo, "packages", p, "README.md")));
 
   it("there are packages with a README to check", () => {
-    expect(packages).toEqual(expect.arrayContaining(["tokens", "core", "site", "landing", "cms", "app", "docs"]));
+    expect(packages).toEqual(expect.arrayContaining(["tokens", "core", "catalog", "landing", "cms", "app", "docs"]));
   });
 
-  it.each(["tokens", "core", "site", "landing", "cms", "app", "docs"])("%s has one block, between the markers, right before '## License'", (name) => {
+  it.each(["tokens", "core", "catalog", "landing", "cms", "app", "docs"])("%s has one block, between the markers, right before '## License'", (name) => {
     const text = read(`packages/${name}/README.md`);
     expect(text.split(START), "start markers").toHaveLength(2);
     expect(text.split(END), "end markers").toHaveLength(2);

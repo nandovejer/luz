@@ -2,13 +2,13 @@
 
 A command line that reads the HTML and CSS of a project that uses LUZ and says what is wrong with them, offline. It is for the person who writes the page and for the AI agent that writes it for them. It is a tool, not a stylesheet: it loads nothing in a page.
 
-> **Beta, version 0.x.** This package has its own version, apart from tokens, core and site. Pin an exact version and read the changelog before you upgrade.
+> **Beta, version 0.x.** This package has its own version, apart from tokens, core and catalog. Pin an exact version and read the changelog before you upgrade.
 
 ## Usage
 
 ```bash
 npx @luz-ds/check --help
-npx @luz-ds/check index.html css/site.css
+npx @luz-ds/check index.html css/catalog.css
 npx @luz-ds/check src --json
 ```
 

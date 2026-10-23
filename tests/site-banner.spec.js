@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * The banner of @luz-ds/site (<luz-banner>, a CSS-only tag around one
+ * The banner of @luz-ds/catalog (<luz-banner>, a CSS-only tag around one
  * section[aria-labelledby]: .claude/plans/specs/f3-package-model.md section
  * 2.2, D1 and D4, step 8; accessibility requirement O2). A band above the
  * site header with one announcement and an optional link. No script and no

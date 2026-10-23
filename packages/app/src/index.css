@@ -5,7 +5,7 @@
    .o-main with the sidebar, .o-sticky, .o-row, .o-actions, .o-grid) and
    core's components (sidebar, nav toggle, dropdown, avatar, card, button).
    App adds only its skin and its rhythm. No JavaScript.
-   Requires: @luz-ds/tokens and @luz-ds/core loaded first; @luz-ds/site
+   Requires: @luz-ds/tokens and @luz-ds/core loaded first; @luz-ds/catalog
    optional, loaded before this file.
    ========================================================================== */
 

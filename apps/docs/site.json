@@ -24,11 +24,11 @@
       { "href": "/docs/tokens/color/", "label": "Color tokens" },
       { "href": "/docs/landing/templates/" }
     ] },
-    { "id": "site", "label": "Catalog", "slug": "site", "package": "@luz-ds/site", "groups": [
+    { "id": "catalog", "label": "Catalog", "slug": "catalog", "package": "@luz-ds/catalog", "groups": [
       { "id": "patterns", "label": "Patterns" },
       { "id": "reference", "label": "Reference", "list": true }
     ], "essentials": [
-      { "href": "/docs/site/classes/" },
+      { "href": "/docs/catalog/classes/" },
       { "href": "/docs/components/" },
       { "href": "/docs/get-started/" }
     ] },
@@ -38,7 +38,7 @@
     ], "essentials": [
       { "href": "/docs/landing/templates/" },
       { "href": "/docs/components/" },
-      { "href": "/docs/site/" }
+      { "href": "/docs/catalog/" }
     ] },
     { "id": "cms", "label": "CMS", "slug": "cms", "package": "@luz-ds/cms", "groups": [
       { "id": "patterns", "label": "Patterns" },
@@ -46,7 +46,7 @@
     ], "essentials": [
       { "href": "/docs/cms/templates/" },
       { "href": "/docs/components/" },
-      { "href": "/docs/site/" }
+      { "href": "/docs/catalog/" }
     ] },
     { "id": "app", "label": "App", "slug": "app", "package": "@luz-ds/app", "groups": [
       { "id": "patterns", "label": "Patterns" },
@@ -54,7 +54,7 @@
     ], "essentials": [
       { "href": "/docs/app/templates/" },
       { "href": "/docs/components/" },
-      { "href": "/docs/site/" }
+      { "href": "/docs/catalog/" }
     ] },
     { "id": "documentation", "label": "Documentation", "slug": "documentation", "package": "@luz-ds/docs", "groups": [
       { "id": "patterns", "label": "Patterns" },
@@ -62,7 +62,7 @@
     ], "essentials": [
       { "href": "/docs/documentation/templates/" },
       { "href": "/docs/components/" },
-      { "href": "/docs/site/" }
+      { "href": "/docs/catalog/" }
     ] },
     { "id": "html", "label": "HTML elements", "slug": "html", "package": "@luz-ds/core", "essentials": [
       { "href": "/docs/a-z/" },

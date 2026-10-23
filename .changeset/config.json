@@ -6,7 +6,7 @@
     [
       "@luz-ds/tokens",
       "@luz-ds/core",
-      "@luz-ds/site"
+      "@luz-ds/catalog"
     ]
   ],
   "linked": [],

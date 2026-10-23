@@ -130,7 +130,7 @@
   "inside.list.breakpoints": "Breakpoints",
   "inside.list.components": "Components",
   "inside.list.objects": "Layout objects",
-  "inside.list.site": "Site components",
+  "inside.list.catalog": "Catalog components",
   "inside.weight": "Weight.",
   "inside.gzip": "gzipped, with everything before it.",
   "inside.l1.eyebrow": "Base",
@@ -219,7 +219,7 @@
 
   "footer.pkg.tokens": "Design tokens",
   "footer.pkg.core": "Core components",
-  "footer.pkg.site": "Catalog components",
+  "footer.pkg.catalog": "Catalog components",
   "footer.pkg.landing": "Landing page template",
   "footer.pkg.cms": "Blog template",
   "footer.pkg.app": "Web app template",
