@@ -250,10 +250,10 @@ describe("@luz-ds/app: the docs area", () => {
   const siteJson = json("apps/docs/site.json");
   const areas = (siteJson.areas ?? []).map((a) => a.id);
 
-  it("has the area `app`, labelled App, right after cms and before documentation (F6a)", () => {
+  it("has the area `app`, labelled App, right after cms and before documentation, HTML elements and accessibility (F6a)", () => {
     const area = siteJson.areas?.find((a) => a.id === "app");
     expect(area).toMatchObject({ id: "app", label: "App", slug: "app" });
-    expect(areas.slice(areas.indexOf("cms"))).toEqual(["cms", "app", "documentation", "accessibility"]);
+    expect(areas.slice(areas.indexOf("cms"))).toEqual(["cms", "app", "documentation", "html", "accessibility"]);
   });
 
   it("groups it as the other kinds are: patterns, then a reference list, with essentials", () => {

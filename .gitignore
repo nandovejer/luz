@@ -11,7 +11,7 @@ node_modules/
 # Build & dist
 dist/
 # The Pages site: pnpm pages:build writes it, pages.yml deploys it (RL-14)
-docs/
+/docs/
 build/
 *.tgz
 

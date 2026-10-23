@@ -559,9 +559,8 @@ describe("the LUZ docs site", () => {
       const area = site.areas.find((a) => a.id === page?.meta.area);
       expect(current, route).toEqual(area ? [route] : []);
       const parents = links.filter((a) => a.attrs.get("aria-current") === "true").map((a) => a.attrs.get("href"));
-      // An area nested in another (site.json "parent") marks both: the parent's link, then its own (the sub-area link)
-      const outer = area?.parent ? [`/docs/${site.areas.find((a) => a.id === area.parent).slug}/`] : [];
-      expect(parents, route).toEqual(area ? [...outer, ...(route !== `/docs/${area.slug}/` ? [`/docs/${area.slug}/`] : [])] : []);
+      // No area is nested in another: the area link is marked "true" unless the page is the area index
+      expect(parents, route).toEqual(area ? (route !== `/docs/${area.slug}/` ? [`/docs/${area.slug}/`] : []) : []);
       expect(links.filter((a) => (a.attrs.get("class") ?? "").includes("is-active")), route).toEqual([]);
       // Flat: not only the current area's pages, every page of every area
       const hrefs = links.map((a) => a.attrs.get("href"));
@@ -584,7 +583,7 @@ describe("the LUZ docs site", () => {
     // A page in a language (/es/, /es/docs/…) must reach the component's page
     // in that language (/es/docs/components/…): the English one is not its target.
     const components = site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers");
-    expect(components).toHaveLength(32);
+    expect(components).toHaveLength(33);
     const withLanguages = buildSite(site, { extra: landing, languages: true, unchecked: homes });
     // Every language of the home page is a start page; only Spanish has docs, so a link from the Arabic home goes to the English docs
     const homeCodes = homes.filter((h) => h !== "/").map((h) => h.replaceAll("/", ""));
@@ -621,7 +620,7 @@ describe("the LUZ docs site", () => {
     const viewPages = site.pages.filter(
       (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group === "patterns"),
     );
-    expect(viewPages).toHaveLength(57);
+    expect(viewPages).toHaveLength(58);
     const CODE = ["markup", "variants", "how", "no-js", "keyboard"];
     const DESIGN = ["when", "when-not", "do-dont", "content", "contrast", "tokens"];
     for (const page of viewPages) {
@@ -684,7 +683,7 @@ describe("the LUZ docs site", () => {
     const urls = new Set(items.map(([, url]) => new URL(url, base).pathname + new URL(url, base).hash));
     for (const entry of indexEntries(site)) expect(urls.has(entry.href), entry.href).toBe(true);
     // Pages, with their area
-    expect(index.pages).toContainEqual(["Button", "components/button/", "Components"]);
+    expect(index.pages).toContainEqual(["Button", "components/button/", "Core"]);
     expect(index.pages).toContainEqual(["LUZ documentation", "./"]);
     expect(index.pages.find(([title]) => title === "A–Z index")).toBeUndefined();
     // Template headings are kept, their page and tab in the meta; the tab row is not
@@ -717,9 +716,9 @@ describe("the LUZ docs site", () => {
     expect(new Set(names).size).toBe(names.length);
     expect(names.length).toBeGreaterThan(250);
     // Keywords: after the area, not already in the title; the page keeps its place
-    expect(index.pages).toContainEqual(["Navbar", "components/navbar/", "Components · nav bar, navigation bar"]);
+    expect(index.pages).toContainEqual(["Navbar", "components/navbar/", "Core · nav bar, navigation bar"]);
     // The page of the language switch is site/lang-switch/ (the tag is the block); its title is the page's own
-    expect(index.pages.filter(([, url]) => url === "site/lang-switch/").map(([, , keywords]) => keywords)).toEqual(["Site · translation, locale, i18n, hreflang"]);
+    expect(index.pages.filter(([, url]) => url === "site/lang-switch/").map(([, , keywords]) => keywords)).toEqual(["Catalog · translation, locale, i18n, hreflang"]);
     expect(index.pages.filter(([, url]) => url === "site/lang-switcher/")).toEqual([]);
     expect(index.pages.filter(([, url]) => url === "site/notice/")).toEqual([]);
     expect(index.pages.filter(([, url]) => url === "site/banner/")).toHaveLength(1);
@@ -770,10 +769,8 @@ describe("the LUZ docs site", () => {
     const expected = site.pages.filter((p) => p.meta.area !== "hub" && p.meta.nav !== "false");
     expect([...order].sort()).toEqual(expected.map((p) => p.route).sort());
     expect(new Set(order).size).toBe(order.length);
-    // The area indexes, in sidebar order (site.json order, a nested area right after its parent's own pages), each before its own pages
-    const sidebarAreas = site.areas.filter((a) => !a.parent).flatMap((a) => [a, ...site.areas.filter((c) => c.parent === a.id)]);
-    expect(sidebarAreas).toHaveLength(site.areas.length);
-    const indexes = sidebarAreas.map((a) => `/docs/${a.slug}/`);
+    // The area indexes, in sidebar order (site.json order: no area is nested), each before its own pages
+    const indexes = site.areas.map((a) => `/docs/${a.slug}/`);
     expect(order.filter((r) => indexes.includes(r))).toEqual(indexes);
     for (const route of order) {
       const area = site.areas.find((a) => a.id === site.byRoute.get(route).meta.area);
@@ -862,7 +859,7 @@ describe("the LUZ docs site", () => {
         expect(link[2], `${route}: ${kind} has an aria-label`).toBe(false);
       }
     }
-    // Get started → Tokens → Components → Site → … → Documentation → HTML elements (nested in Documentation) → Accessibility
+    // Get started → Tokens → Components → Site → … → Documentation → HTML elements → Accessibility
     expect(endOf(rendered.get("/docs/tokens/")).prev?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/tokens/")).next?.[0]).toBe("/docs/tokens/color/");
     expect(endOf(rendered.get("/docs/get-started/classless/")).next?.[0]).toBe("/docs/get-started/how-luz-is-built/");

@@ -67,6 +67,8 @@ dist/components/tabs.css
 dist/components/tabs.min.css
 dist/components/tag.css
 dist/components/tag.min.css
+dist/components/terminal.css
+dist/components/terminal.min.css
 dist/components/timeline.css
 dist/components/timeline.min.css
 dist/components/toast.css

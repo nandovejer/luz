@@ -79,7 +79,7 @@ initSiteHeader();
 initCopy();
 initModes();
 // The panels of "What's inside": install, code and result
-for (const panel of document.querySelectorAll(".landing-panel, .landing-term")) initTabs(panel);
+for (const panel of document.querySelectorAll(".landing-panel, .luz-terminal")) initTabs(panel);
 // highlightBlock() only: initHighlight() also injects a copy button into each
 // block, and core ships no position for it.
 // Not the typed scene: its lines are spans the scroll reveals, coloured in the markup

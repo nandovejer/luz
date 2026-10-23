@@ -151,7 +151,7 @@ const AREA_KIND = {
   "get-started": "Get started",
   components: "Component",
   tokens: "Token page",
-  site: "Site pattern",
+  site: "Catalog pattern",
   landing: "Landing pattern",
   cms: "CMS pattern",
   app: "App pattern",
@@ -327,22 +327,6 @@ export function scanSite(docsDir, repoRoot = resolve(docsDir, "../..")) {
     throw new Error(`${rel(join(docsDir, "site.json"))}: "areas" is a list of { id, label, slug, package?, groups?, essentials? }`);
   }
 
-  // An area may be nested in another one's sidebar section ("parent"): one level, no groups of its own
-  const siteFile = rel(join(docsDir, "site.json"));
-  const lineOf = (area) => {
-    const at = siteText.search(new RegExp(`"id"\\s*:\\s*"${area.id}"`));
-    return at === -1 ? 1 : siteText.slice(0, at).split("\n").length;
-  };
-  for (const area of areas) {
-    if (area.parent === undefined) continue;
-    const where = `${siteFile}:${lineOf(area)}: area "${area.id}"`;
-    const parent = areas.find((a) => a.id === area.parent);
-    if (area.parent === area.id) throw new Error(`${where}: "parent" cannot be the area itself`);
-    if (!parent) throw new Error(`${where}: "parent" is "${area.parent}", which is not an area of site.json`);
-    if (parent.parent !== undefined) throw new Error(`${where}: "parent" is "${area.parent}", which is itself nested: one level only`);
-    if (area.groups !== undefined) throw new Error(`${where}: a nested area (with a "parent") has no "groups"`);
-  }
-
   const pagesDir = join(docsDir, "pages");
   const pages = [];
   const walk = (dir, prefix) => {
@@ -485,16 +469,13 @@ export function sectionsOf(site, area) {
 /** The pages of an area under its index in sidebar order, flat. */
 const flatPagesOf = (site, area) => sectionsOf(site, area).flatMap((s) => s.pages);
 
-/** The areas in sidebar order: site.json's, a nested area (`parent`) right after the pages of its parent. */
-const sidebarAreas = (site) => site.areas.filter((a) => !a.parent).flatMap((a) => [a, ...site.areas.filter((c) => c.parent === a.id)]);
-
 /**
  * The reading order of Previous / Next: the sidebar order across the areas,
  * each area's index first. The hub area (the home, the A–Z index) and the
  * not-found page are not in it. Cached on the site.
  */
 export function readingOrder(site) {
-  site.readingOrder ??= sidebarAreas(site).flatMap((area) => [indexOf(site, area), ...flatPagesOf(site, area)].filter(Boolean));
+  site.readingOrder ??= site.areas.flatMap((area) => [indexOf(site, area), ...flatPagesOf(site, area)].filter(Boolean));
   return site.readingOrder;
 }
 
@@ -560,8 +541,11 @@ function headingsOf(page) {
 const link = (href, text, attrs = "") => `<a${attrs} href="${escapeHtml(href)}">${escapeHtml(text)}</a>`;
 
 /**
- * The sidebar, flat: every area of site.json with every page of it, so a
- * page of another area is one link away and nothing is folded. A group
+ * The sidebar: every area of site.json with every page of it, so a page of
+ * another area is one click away. Each area with pages is a native <details>
+ * (all of one name, so opening one closes the others), open for the area of the
+ * current page and closed for the rest; its link to the area index stays
+ * outside the fold. A group
  * marked `sidebar: true` is a labelled sub-list. aria-current="page" on the
  * current page (the area link on an area index), "true" on its area link.
  * No .is-active: that is the scroll spy's mark. One line per link, without
@@ -575,8 +559,7 @@ export function renderNav(site, page) {
     `<li>${link(p.route, p.meta.title, ` class="luz-sidebar__link"${p.fallback && !listIsEnglish ? enLang(site) : ""}${p.route === page.route ? ' aria-current="page"' : ""}`)}</li>`;
   const mark = (area) => {
     const route = areaRoute(area, root);
-    const here = current?.id === area.id || current?.parent === area.id;
-    return !here ? "" : page.route === route ? ' aria-current="page"' : ' aria-current="true"';
+    return current?.id !== area.id ? "" : page.route === route ? ' aria-current="page"' : ' aria-current="true"';
   };
   const areaHead = (area, attrs) => {
     const route = areaRoute(area, root);
@@ -599,25 +582,19 @@ export function renderNav(site, page) {
         "</ul></li>",
       ];
     });
-  // A nested area is a block at the end of its parent's list: its link, named by an id, then its pages
-  const subOf = (area) => {
-    const inner = listOf(area);
-    const head = areaHead(area, ` class="luz-sidebar__link docs-nav__subarea" id="nav-${area.id}"`);
-    const children = pagesOf(inner);
-    if (!children.length) return [`<li class="docs-nav__sub">${head}</li>`];
-    return [`<li class="docs-nav__sub">${head}`, `<ul class="docs-nav__pages"${inner.allEnglish ? enLang(site) : ""} aria-labelledby="nav-${area.id}">`, ...children, "</ul></li>"];
-  };
-  const items = site.areas
-    .filter((area) => !area.parent)
-    .map((area) => {
-      const head = areaHead(area, ' class="luz-sidebar__link docs-nav__area"');
-      const subs = site.areas.filter((a) => a.parent === area.id);
-      const own = listOf(area);
-      // With a nested block in the list, the language of each link is its own: the block's label is not English
-      const children = [...pagesOf(subs.length ? { ...own, allEnglish: false } : own), ...subs.flatMap(subOf)];
-      if (!children.length) return `<li>${head}</li>`;
-      return [`<li>${head}`, `<ul class="docs-nav__pages"${own.allEnglish && !subs.length ? enLang(site) : ""}>`, ...children, "</ul></li>"].join("\n");
-    });
+  const items = site.areas.map((area) => {
+    const own = listOf(area);
+    const children = pagesOf(own);
+    if (!children.length) return `<li>${areaHead(area, ' class="luz-sidebar__link docs-nav__area"')}</li>`;
+    // The area's link goes to its index; the fold beside it opens and closes its pages. Only the area of the
+    // current page is open, and one name makes the folds an accordion: opening one closes the others
+    const id = `a-${area.id}`;
+    return [
+      `<li>${areaHead(area, ` class="luz-sidebar__link docs-nav__area" id="${id}"`)}<details name="nav"${current?.id === area.id ? " open" : ""}><summary aria-labelledby="${id}"></summary><ul${own.allEnglish ? enLang(site) : ""}>`,
+      ...children,
+      "</ul></details></li>",
+    ].join("\n");
+  });
   return `    <ul class="docs-nav">\n${items.join("\n")}\n    </ul>`;
 }
 
@@ -633,8 +610,6 @@ export function renderBreadcrumb(site, page) {
   const root = docsRootOf(site);
   const area = areaOf(site, page);
   const trail = [link(root, t("chrome.crumb-docs"), ' class="luz-breadcrumb__item"')];
-  const outer = area?.parent ? site.areas.find((a) => a.id === area.parent) : null;
-  if (outer && indexOf(site, outer)) trail.push(link(areaRoute(outer, root), outer.label, ' class="luz-breadcrumb__item"'));
   if (area && page.route !== areaRoute(area, root) && indexOf(site, area)) {
     trail.push(link(areaRoute(area, root), area.label, ' class="luz-breadcrumb__item"'));
   }

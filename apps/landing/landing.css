@@ -603,8 +603,7 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 .landing-inside__eyebrow svg,
-.landing-inside__points svg,
-.landing-panel__tabs svg {
+.landing-inside__points svg {
   flex: none;
   inline-size: 1.15em;
   block-size: 1.15em;
@@ -754,73 +753,10 @@ home-light:defined ~ .landing-light__nojs {
   color: var(--luz-text-secondary);
 }
 
-/* The terminal: its tabs are its title bar, the copy button sits at the end
-   of the line it copies */
-.landing-term,
+/* The command and the link to its docs line up under the package's name */
+.landing-kind .luz-terminal,
 .landing-kind__docs {
   margin-inline-start: var(--landing-kind-indent);
-}
-
-.landing-term {
-  position: relative;
-  display: grid;
-  min-inline-size: 0;
-  overflow: hidden;
-  border: 1px solid color-mix(in oklab, var(--luz-text-primary) 16%, transparent);
-  border-radius: var(--luz-radius-md);
-  background: color-mix(in oklab, var(--luz-text-primary) 4%, var(--luz-surface-page));
-}
-
-.landing-term__tabs {
-  gap: 0;
-  margin: 0;
-  padding-inline: var(--luz-space-2xs);
-  border-block-end: 1px solid color-mix(in oklab, var(--luz-text-primary) 12%, transparent);
-  background: color-mix(in oklab, var(--luz-text-primary) 7%, var(--luz-surface-page));
-}
-
-.landing-term__tabs .luz-tab {
-  padding: var(--luz-space-2xs) var(--luz-space-sm);
-  font-family: var(--luz-font-mono);
-  font-size: var(--luz-text-xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-/* The open tab: the ink on the bar's tint (the brand colour is measured on the
-   page); the rule under it and its weight still say which one is open */
-.landing-term__tabs .luz-tab.is-active {
-  color: var(--luz-text-primary);
-}
-
-.landing-term__pane {
-  margin: 0;
-}
-
-/* The copy button of the open tab sits at the end of the title bar */
-.landing-term__pane .luz-copy-btn {
-  position: absolute;
-  inset-block-start: var(--luz-space-3xs);
-  inset-inline-end: var(--luz-space-xs);
-}
-
-.landing-term .luz-code-block {
-  margin: 0;
-  padding: var(--luz-space-sm);
-  overflow-x: auto;
-  border: 0;
-  background: transparent;
-  font-size: var(--luz-text-xs);
-  white-space: pre;
-}
-
-.landing-term .luz-code-block::before {
-  display: none;
-}
-
-.landing-term .luz-code-block[data-lang="bash"] code::before {
-  content: "$ ";
-  color: var(--luz-text-muted);
 }
 
 .landing-kind__docs {
@@ -854,8 +790,7 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 @media (forced-colors: active) {
-  .landing-kind,
-  .landing-term {
+  .landing-kind {
     border-color: CanvasText;
   }
 }
@@ -876,37 +811,6 @@ home-light:defined ~ .landing-light__nojs {
   background: var(--luz-surface-page);
   color: var(--luz-text-primary);
   box-shadow: 0 1.5rem 3rem -1.5rem color-mix(in oklab, var(--luz-text-primary) 25%, transparent);
-}
-
-.landing-panel__tabs {
-  gap: var(--luz-space-2xs);
-  margin-block-end: var(--luz-space-md);
-  border: 0;
-}
-
-.landing-panel__tabs .luz-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--luz-space-xs);
-  border-radius: var(--luz-radius-md);
-}
-
-/* A phone: the three tabs fit without their icons */
-@media (max-width: 640px) {
-  .landing-panel__tabs svg {
-    display: none;
-  }
-
-  /* Three tabs with a long middle one fit at 320px: a step smaller, closer */
-  .landing-panel__tabs .luz-tab {
-    padding-inline: var(--luz-space-xs);
-    font-size: var(--luz-text-sm);
-  }
-}
-
-/* The open tab: a pale chip, as the reference's */
-.landing-panel__tabs .luz-tab[aria-selected="true"] {
-  background: var(--luz-surface);
 }
 
 /* Every tab of every panel is one height, whatever it holds: the panel does
@@ -1678,7 +1582,7 @@ home-light:defined ~ .landing-light__nojs {
    them in capitals, in the mono) takes none of that in Arabic, and the sans */
 .landing-eyebrow:lang(ar),
 .landing-bar__name:lang(ar),
-.landing-term__tabs .luz-tab:lang(ar),
+.luz-terminal__tabs .luz-tab:lang(ar),
 .landing-install__label:lang(ar),
 .landing-cut__label:lang(ar),
 .landing-foot-label:lang(ar),

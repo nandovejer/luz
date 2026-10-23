@@ -258,3 +258,15 @@ describe("the rules say where docs/ comes from", () => {
     expect(rule).not.toMatch(/commit the result/);
   });
 });
+
+describe(".gitignore ignores the built site and not the docs app", () => {
+  const ignored = (file) => git("check-ignore", "-q", file).status === 0;
+
+  it("ignores docs/ at the root, where pnpm pages:build writes", () => {
+    expect(ignored("docs/index.html")).toBe(true);
+  });
+
+  it("does not ignore a new page of apps/docs/", () => {
+    expect(ignored("apps/docs/pages/components/a-new-page.html")).toBe(false);
+  });
+});

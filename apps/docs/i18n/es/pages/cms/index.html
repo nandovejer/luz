@@ -1,17 +1,17 @@
 <!-- luz:page
 title: CMS
 description: La estructura de páginas de un blog, un periódico o cualquier sitio de artículos, desde la cabecera hasta el listado de publicaciones; y cómo saber si lo necesitas.
-source: 7736455733ad
+source: 168585cfe3c1
 reviewed: false
 -->
     <p class="docs-lead">La estructura de páginas de un blog, un periódico o cualquier sitio de artículos, desde la cabecera hasta el listado de publicaciones; y cómo saber si lo necesitas.</p>
     <p>Un sitio de artículos publica muchas páginas con la misma estructura: una historia con cabecera, texto y autor, y listados que llevan hasta ellas. Este paquete contiene la estructura de página de ese tipo de sitio: la cabecera (una barra o una mancheta), la cabecera de página, la cabecera del artículo con su índice y el pie.</p>
-    <p>La maquetación que necesita cada página (la página, la barra fija y la navbar) es de core; las piezas que actúan en todo el sitio (búsqueda, idioma y consentimiento de cookies) están en <a href="/docs/site/">Site</a>.</p>
+    <p>La maquetación que necesita cada página (la página, la barra fija y la navbar) es de core; las piezas que actúan en todo el sitio (búsqueda, idioma y consentimiento de cookies) están en el <a href="/docs/site/">Catálogo</a>.</p>
     <ul>
       <li>Funciona con cualquier CMS y cualquier stack. Puedes poner las clases en cualquier elemento, así que una plantilla de WordPress, Drupal, Ghost, Hugo o tu propio código puede incluirlas.</li>
       <li>Todas las clases empiezan por <code class="luz-code-inline">.luz-cms-</code>, usan solo tokens semánticos y están en la capa de cascada <code class="luz-code-inline">luz.cms</code>, después de la de site. Cada patrón es una clase sobre un elemento nativo, maquetado en el HTML con los objetos de core.</li>
       <li>No tiene script. Carga <code class="luz-code-inline">cms.css</code> después del CSS de tokens y core (y de site, si lo usas): <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> incluye el comando y las etiquetas CDN. Con el script de core, el índice marca la sección visible.</li>
-      <li>Tiene su propia versión, 0.x mientras sigue creciendo, y necesita la versión <code>^0.1.0</code> de tokens y core, declarados como dependencias peer. Site es una dependencia peer opcional: sin él, los patrones se muestran igual y las reglas que refinan sus elementos no afectan a nada.</li>
+      <li>Tiene su propia versión, 0.x mientras sigue creciendo, y necesita la versión <code>^0.1.0</code> de tokens y core, declarados como dependencias peer. El catálogo es una dependencia peer opcional: sin él, los patrones se muestran igual y las reglas que refinan sus elementos no afectan a nada.</li>
       <li>La tarjeta de publicación, el listado, las publicaciones relacionadas y la ficha del autor no necesitan su propio CSS: se componen con la tarjeta, el avatar y la paginación de core en <a href="/docs/cms/templates/">plantillas de CMS</a>.</li>
     </ul>
 

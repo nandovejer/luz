@@ -268,17 +268,20 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('navigation', () => {
-    test('the sidebar shows the nine areas, all open, with every page listed, and HTML elements nested in Documentation', async ({ page }) => {
+    test('the sidebar shows the ten areas, an accordion with only the current one open, every page listed, and HTML elements as an area of its own', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await gotoId(page, 'c-button');
       const areas = page.locator('.docs-nav a.docs-nav__area');
-      await expect(areas).toHaveText(['Get started', 'Tokens', 'Components', 'Site', 'Landing', 'CMS', 'App', 'Documentation', 'Accessibility']);
-      // HTML elements is a submenu of the Documentation item, after its own pages
-      await expect(page.locator('.docs-nav .docs-nav__sub a.docs-nav__subarea')).toHaveText('HTML elements');
-      await expect(page.locator('.docs-nav .docs-nav__sub')).toHaveCount(1);
-      // Flat: no accordion, and every page of every area is a link
-      await expect(page.locator('nav.luz-docs-nav details')).toHaveCount(0);
-      await expect(page.locator('.docs-nav a[aria-current="true"]')).toHaveText('Components');
+      await expect(areas).toHaveText(['Get started', 'Tokens', 'Core', 'Catalog', 'Landing', 'CMS', 'App', 'Documentation', 'HTML elements', 'Accessibility']);
+      // HTML elements is an area like the others, not nested in Documentation
+      await expect(page.locator('.docs-nav > li > a.docs-nav__area[href="/docs/html/"]')).toHaveText('HTML elements');
+      await expect(page.locator('.docs-nav .docs-nav__sub')).toHaveCount(0);
+      await expect(page.locator('.docs-nav a.docs-nav__subarea')).toHaveCount(0);
+      // An accordion: a fold per area with pages (all of one name), only Core's open, and every page of every area is a link in the markup
+      await expect(page.locator('nav.luz-docs-nav details[name="nav"]')).toHaveCount(site.areas.filter((a) => readingOrder(site).some((p) => p.meta.area === a.id && p.route !== `/docs/${a.slug}/`)).length);
+      await expect(page.locator('nav.luz-docs-nav details[open]')).toHaveCount(1);
+      await expect(page.locator('nav.luz-docs-nav details[open] a[aria-current="page"]')).toHaveText('Button');
+      await expect(page.locator('.docs-nav a[aria-current="true"]')).toHaveText('Core');
       await expect(page.locator('.docs-nav a[aria-current="page"]')).toHaveText('Button');
       const hrefs = await page.locator('.docs-nav a').evaluateAll((links) => links.map((a) => a.getAttribute('href')));
       for (const { route } of readingOrder(site)) expect(hrefs, route).toContain(route);
@@ -298,7 +301,7 @@ test.describe('Documentation site', () => {
 
     test('breadcrumb and Previous / Next follow the sidebar order', async ({ page }) => {
       await gotoId(page, 'c-button');
-      await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).locator('a, [aria-current]')).toHaveText(['Docs', 'Components', 'Button']);
+      await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).locator('a, [aria-current]')).toHaveText(['Docs', 'Core', 'Button']);
       // Each link is named by its visible text, not by an aria-label (WCAG 2.5.3)
       const pager = page.locator('.luz-docs-pager');
       await expect(pager.getByRole('link', { name: 'Previous Breadcrumb', exact: true })).toHaveAttribute('rel', 'prev');
@@ -312,7 +315,7 @@ test.describe('Documentation site', () => {
       const pager = page.locator('.luz-docs-pager');
       await expect(pager.getByRole('link', { name: 'Previous How LUZ is built', exact: true })).toHaveAttribute('href', /\/docs\/get-started\/how-luz-is-built\/$/);
       await expect(pager.getByRole('link', { name: 'Next Color', exact: true })).toHaveAttribute('href', /\/docs\/tokens\/color\/$/);
-      await expect(end.locator('.docs-end__links a')).toHaveText(['Color modes and themes', 'Components', 'Tokens in Figma']);
+      await expect(end.locator('.docs-end__links a')).toHaveText(['Color modes and themes', 'Core', 'Tokens in Figma']);
     });
 
     test('the end of the page: one "Keep going" landmark, reached by Tab, with link blocks of 24px or more', async ({ page }) => {
@@ -448,7 +451,7 @@ test.describe('Documentation site', () => {
     test('a gallery card is one link, named like its heading (HUB-1)', async ({ page }) => {
       await open(page, '/docs/components/');
       const cards = page.locator('.docs-card');
-      await expect(cards).toHaveCount(32);
+      await expect(cards).toHaveCount(33);
       for (const card of await cards.all()) {
         await expect(card.getByRole('link')).toHaveCount(1);
       }

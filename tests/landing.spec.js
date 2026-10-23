@@ -618,11 +618,11 @@ test.describe('Landing page', () => {
 
     test('the panel is tabs: Install first, then List and Code example; a click or the arrow keys change the tab', async ({ page }) => {
       await open(page);
-      await expect.poll(() => page.locator('#inside .landing-panel__tabs').getAttribute('role')).toBe('tablist');
+      await expect.poll(() => page.locator('#inside .luz-tabs--pill').getAttribute('role')).toBe('tablist');
 
       const tabs = page.locator('#inside').getByRole('tab');
       await expect(tabs).toHaveText([EN['inside.tab.install'], EN['inside.tab.list'], EN['inside.tab.code']]);
-      await expect(page.locator('#inside .landing-panel__tabs')).toHaveAccessibleName(EN['inside.l1.panel']);
+      await expect(page.locator('#inside .luz-tabs--pill')).toHaveAccessibleName(EN['inside.l1.panel']);
       await expect(tabs.nth(0)).toHaveAttribute('aria-selected', 'true');
       expect([await shown(page, 'in1-install'), await shown(page, 'in1-list'), await shown(page, 'in1-code')]).toEqual([true, false, false]);
 
@@ -1041,7 +1041,7 @@ test.describe('Landing page', () => {
       await open(page, '/ar/');
 
       await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-      for (const block of await page.locator('#inside pre.luz-code-block').all()) expect(await block.evaluate((el) => getComputedStyle(el).direction)).toBe('ltr');
+      for (const block of await page.locator('#inside pre.luz-code-block, #inside-4 pre.luz-terminal__code').all()) expect(await block.evaluate((el) => getComputedStyle(el).direction)).toBe('ltr');
       // In English the text of the first level is at the start (left) and the panel after it; in Arabic, the other way round
       const copyFirst = await page.locator('#inside').evaluate((section) => section.querySelector('.landing-inside__copy').getBoundingClientRect().left < section.querySelector('.landing-panel').getBoundingClientRect().left);
       expect(copyFirst).toBe(false);
@@ -1115,7 +1115,7 @@ test.describe('Landing page', () => {
     test('the snippets are text that can be selected, and the code blocks are focusable regions', async ({ page }) => {
       await page.goto('/');
 
-      const blocks = page.locator('main pre.luz-code-block');
+      const blocks = page.locator('main pre.luz-code-block, main pre.luz-terminal__code'); // the terminal's code is not a .luz-code-block
       expect(await blocks.count()).toBeGreaterThanOrEqual(20);
       for (const block of await blocks.all()) {
         await expect(block).toHaveAttribute('tabindex', '0');

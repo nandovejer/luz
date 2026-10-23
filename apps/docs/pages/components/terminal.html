@@ -1,0 +1,173 @@
+<!-- luz:page
+title: Terminal
+description: Shows a command in a framed block, with tabs as its title bar and a copy button for the open one.
+area: components
+group: content
+files: components/terminal.css
+module: tabs.js
+toc: h2,h3
+-->
+    <div class="docs-component" id="c-terminal">
+          <h2 id="example">Example</h2>
+          <p>An install command, in two tabs: npm and the CDN.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-terminal">
+              <nav class="luz-tabs luz-terminal__tabs" aria-label="Install LUZ">
+                <a class="luz-tab" href="#terminal-demo-npm-pane">npm</a>
+                <a class="luz-tab" href="#terminal-demo-cdn-pane">CDN</a>
+              </nav>
+              <div class="luz-tabpanel luz-terminal__pane" id="terminal-demo-npm-pane">
+                <button class="luz-copy-btn" type="button" data-copy-from="terminal-demo-npm" aria-label="Copy the npm command">Copy</button>
+                <pre class="luz-terminal__code" data-lang="bash" tabindex="0" role="region" aria-label="npm command"><code id="terminal-demo-npm">npm install @luz-ds/core</code></pre>
+              </div>
+              <div class="luz-tabpanel luz-terminal__pane" id="terminal-demo-cdn-pane">
+                <button class="luz-copy-btn" type="button" data-copy-from="terminal-demo-cdn" aria-label="Copy the CDN link">Copy</button>
+                <pre class="luz-terminal__code" data-lang="html" tabindex="0" role="region" aria-label="CDN link"><code id="terminal-demo-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css&quot;&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <p class="docs-demo__note">Open the CDN tab, then press Copy: the button copies the command of the open tab. Only the npm command shows a <code class="luz-code-inline">$</code> prompt.</p>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>None known.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Terminal documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-terminal" aria-label="Copy the terminal markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Terminal markup"><code id="code-terminal">&lt;div class=&quot;luz-terminal&quot;&gt;
+  &lt;nav class=&quot;luz-tabs luz-terminal__tabs&quot; aria-label=&quot;Install&quot;&gt;
+    &lt;a class=&quot;luz-tab&quot; href=&quot;#install-npm-pane&quot;&gt;npm&lt;/a&gt;
+    &lt;a class=&quot;luz-tab&quot; href=&quot;#install-cdn-pane&quot;&gt;CDN&lt;/a&gt;
+  &lt;/nav&gt;
+  &lt;div class=&quot;luz-tabpanel luz-terminal__pane&quot; id=&quot;install-npm-pane&quot;&gt;
+    &lt;button class=&quot;luz-copy-btn&quot; type=&quot;button&quot; data-copy=&quot;npm install @luz-ds/core&quot; aria-label=&quot;Copy the npm command&quot;&gt;Copy&lt;/button&gt;
+    &lt;pre class=&quot;luz-terminal__code&quot; data-lang=&quot;bash&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;npm command&quot;&gt;&lt;code&gt;npm install @luz-ds/core&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-tabpanel luz-terminal__pane&quot; id=&quot;install-cdn-pane&quot;&gt;
+    &lt;button class=&quot;luz-copy-btn&quot; type=&quot;button&quot; data-copy=&quot;…&quot; aria-label=&quot;Copy the CDN link&quot;&gt;Copy&lt;/button&gt;
+    &lt;pre class=&quot;luz-terminal__code&quot; data-lang=&quot;html&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;CDN link&quot;&gt;&lt;code&gt;…&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-terminal-js" aria-label="Copy the terminal script code">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Terminal script code"><code id="code-terminal-js">import { initTabs } from &quot;@luz-ds/core/tabs&quot;;
+import { initCopyButtons } from &quot;@luz-ds/core/clipboard&quot;;
+initTabs();
+initCopyButtons();</code></pre>
+            </div>
+            <h3 id="variants">Variants and options</h3>
+            <p>One look. Its parts are classes of the block, and the language of a pane decides whether it shows a prompt:</p>
+            <div class="luz-table-wrap" role="region" aria-label="Terminal classes and attributes" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Class or attribute</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-terminal</code></div></td><td data-label="Effect"><div>The frame: a hairline border, rounded corners, a faint tint of the ink</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-terminal__tabs</code></div></td><td data-label="Effect"><div>Goes on the <code>.luz-tabs</code> row: the title bar, with small uppercase tabs in the mono face</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-terminal__pane</code></div></td><td data-label="Effect"><div>Goes on a <code>.luz-tabpanel</code>: holds a copy button and a code block</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>data-lang="bash"</code></div></td><td data-label="Effect"><div>On the <code>pre.luz-terminal__code</code>: the command starts with a <code>$</code> prompt. Any other language shows none</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>A tab row, a copy button and a code block in one frame, styled by <code>components/terminal.css</code>. It has no script of its own: it is <a href="/docs/components/tabs/">tabs</a>, a <a href="/docs/components/copy-button/">copy button</a> and a <a href="/docs/components/code/">code block</a>.</p>
+            <ul>
+              <li><code>initTabs()</code> upgrades the row and shows one pane at a time. <code>luz.js</code> runs it.</li>
+              <li><code>initCopyButtons()</code> copies the <code>data-copy</code> text of the button. <code>luz.js</code> runs it.</li>
+              <li>The copy button of the open pane sits at the end of the title bar. The code block shows no language label.</li>
+              <li>The command is a <code>.luz-terminal__code</code>, not a <code>.luz-code-block</code>, so <code>highlight.js</code> leaves it alone: it adds no second copy button and no syntax colours.</li>
+              <li>The prompt is drawn by CSS, so it is not part of the text the button copies.</li>
+            </ul>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>The title bar is a row of links, and every pane is shown, stacked, in order. Each link jumps to its pane.</p>
+            <p>The copy buttons are hidden, because they would do nothing. The command stays on the page, so the reader selects and copies it.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <p>Tab moves into the title bar, to the selected tab; Tab again goes to the copy button, then to the command.</p>
+            <ul>
+              <li>Left and Right (or Up and Down) move to the next tab and select it; Home and End go to the first and the last. In right-to-left text, Left and Right follow the reading direction.</li>
+              <li>Enter or Space presses the copy button. Focus stays on it.</li>
+              <li>Name the tab row with <code>aria-label</code>, and each code block with <code>aria-label</code> and <code>role="region"</code>: the block scrolls, so it takes focus.</li>
+              <li>The visible label of the button is “Copy”; its <code>aria-label</code> starts with it and says what is copied. The result is announced in the polite live region shared by every copy button.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use a terminal for a command the reader will paste into a shell, or a line to add to a page, that comes in more than one form: npm or the CDN, one package manager or another.</p>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use a terminal for code that is not a command, or for a single form with nothing to switch.</p>
+            <ul>
+              <li>For code to read, such as markup or styles, use a <a href="/docs/components/code/">code block</a>.</li>
+              <li>For one value to copy, use a <a href="/docs/components/copy-button/">copy button</a> next to it.</li>
+              <li>For a long session with its output, use a code block the reader can select.</li>
+            </ul>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> One command, exactly as it is typed, so the copy button gives the reader something that runs.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-terminal"><div class="luz-terminal__tabs"><span class="luz-tab is-active">npm</span></div><pre class="luz-terminal__code" data-lang="bash"><code>npm install @luz-ds/core</code></pre></div>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Put the output of the command in the block: the copy button copies it too, and the reader pastes a line that is not a command.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <div class="luz-terminal"><div class="luz-terminal__tabs"><span class="luz-tab is-active">npm</span></div><pre class="luz-terminal__code" data-lang="bash"><code>npm install @luz-ds/core
+added 3 packages in 2s</code></pre></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>Name each tab after the way, in one word: “npm”, “CDN”. The source is written as is; the stylesheet shows it in capitals.</p>
+            <ul>
+              <li>Write the command without the prompt sign: for <code>data-lang="bash"</code> the stylesheet adds it.</li>
+              <li>Copy exactly what is shown, with no extra spaces and no placeholder the reader must change first.</li>
+              <li>Start the accessible name of each copy button with “Copy” and say what it copies: “Copy the npm command”.</li>
+            </ul>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>The command is primary text; the tabs are secondary, and the open one is primary. The prompt is secondary text, like the tabs.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Terminal contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Command</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Tab</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Open tab</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Prompt</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons. The block is the page colour with 4% of the ink mixed in, and the title bar 7%, which the token pairs above cannot name: the rows are measured on the page colour, and on the tints each ratio is lower, but every pair still meets its minimum.</p>
+            <ul>
+              <li><strong>Focus:</strong> a tab has the 2 px <code>--luz-focus-ring</code> outline drawn inside it, and the copy button the same ring outside it (see <a href="/docs/components/tabs/#contrast">tabs</a> and <a href="/docs/components/copy-button/#contrast">copy button</a>).</li>
+              <li><strong>Not colour alone:</strong> the open tab has a 2 px underline and a heavier weight, and a hairline under the title bar separates it from the command.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 11 tokens that <code>components/terminal.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

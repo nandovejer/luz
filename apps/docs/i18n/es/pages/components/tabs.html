@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Pestañas
 description: Permite cambiar entre paneles de contenido relacionado en un mismo lugar; sin JavaScript, los paneles se muestran apilados en secciones.
-source: 0cc298c8b5c2
+source: 26255578df4a
 reviewed: false
 -->
     <div class="docs-component" id="c-tabs">
@@ -44,6 +44,20 @@ reviewed: false
             </div>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-tabs-pill" aria-label="Copy the pill tabs markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Pill tabs markup"><code id="code-tabs-pill">&lt;nav class=&quot;luz-tabs luz-tabs--pill&quot; aria-label=&quot;Project&quot;&gt;
+  &lt;a class=&quot;luz-tab&quot; href=&quot;#project-summary&quot;&gt;
+    &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;…&lt;/svg&gt;Summary
+  &lt;/a&gt;
+  &lt;a class=&quot;luz-tab&quot; href=&quot;#project-settings&quot;&gt;
+    &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;…&lt;/svg&gt;Settings
+  &lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">JS</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-tabs-js" aria-label="Copy the tabs script code">Copy</button>
               </div>
@@ -51,7 +65,19 @@ reviewed: false
 initTabs();</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
-            <p>Un solo aspecto. La primera pestaña que se abre es la primera que cumpla una de estas condiciones:</p>
+            <p>Una clase cambia el aspecto:</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases de las pestañas" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-tabs</code></div></td><td data-label="Efecto"><div>Una fila de pestañas de texto sobre una línea; la abierta usa texto de marca con un subrayado de marca</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-tabs--pill</code></div></td><td data-label="Efecto"><div>Píldora: una pestaña puede llevar un icono (un <code>svg</code> antes del texto, con el tamaño y el color del texto), y la pestaña abierta es una pastilla sobre <code>--luz-surface</code>, sin línea bajo la fila. Por debajo de 640 px los iconos se ocultan para que las pestañas quepan</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>La primera pestaña que se abre es la primera que cumpla una de estas condiciones:</p>
             <div class="luz-table-wrap" role="region" aria-label="Qué pestaña se abre primero" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -75,6 +101,7 @@ initTabs();</code></pre>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>Las pestañas son una fila de enlaces y todos los paneles se muestran apilados en orden. Cada enlace salta a su panel.</p>
             <p>Asigna un encabezado a cada panel para que la página apilada siga siendo fácil de leer.</p>
+            <p>En el aspecto de píldora, la pastilla se dibuja con <code>aria-selected="true"</code>, que pone el script: sin JavaScript ninguna pestaña tiene pastilla.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
             <p>Tab entra en la fila de pestañas y lleva a la seleccionada; otra pulsación de Tab sale de la fila hacia el panel.</p>
             <ul>
@@ -118,7 +145,7 @@ initTabs();</code></pre>
               <li>Usa el mismo nombre para el encabezado del panel.</li>
             </ul>
             <h3 id="contrast">Contraste y foco</h3>
-            <p>Las pestañas usan texto secundario; la actual usa texto de marca y un subrayado de marca.</p>
+            <p>Las pestañas usan texto secundario; la actual usa texto de marca y un subrayado de marca. En el aspecto de píldora, además, va sobre una pastilla.</p>
             <div class="luz-table-wrap" role="region" aria-label="Contraste de pestañas en cada modo" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>
@@ -128,6 +155,7 @@ initTabs();</code></pre>
                   <tr><td data-label="Parte"><div>Pestaña</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Parte"><div>Pestaña al pasar el puntero</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Parte"><div>Pestaña actual y su subrayado</div></td><td data-label="Color sobre fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Pestaña actual, píldora</div></td><td data-label="Color sobre fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
                 </tbody>
               </table>
@@ -135,14 +163,16 @@ initTabs();</code></pre>
             <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo necesario corresponde al nivel AA de WCAG 2.2: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
             <ul>
               <li><strong>Foco:</strong> contorno de 2 px <code>--luz-focus-ring</code> dibujado dentro de la pestaña, para que la fila desplazable nunca lo recorte.</li>
-              <li><strong>No solo el color:</strong> la pestaña actual tiene un subrayado de 2 px; la línea de la fila bajo las demás usa <code>--luz-divider</code>.</li>
+              <li><strong>No solo el color:</strong> la pestaña actual tiene un subrayado de 2 px; la línea de la fila bajo las demás usa <code>--luz-divider</code>. El aspecto de píldora conserva el subrayado y el peso en la pastilla.</li>
+              <li><strong>Iconos:</strong> marca cada icono con <code>aria-hidden="true"</code> para que el nombre de la pestaña sea su texto; por debajo de 640 px el icono se oculta, así que nunca debe llevar solo el significado.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 10 tokens que lee <code>components/tabs.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 15 tokens que lee <code>components/tabs.css</code>, agrupados por familia. Cada familia enlaza a su página, donde aparecen los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
-              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
               <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
             </dl>
             <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> se explican en la pestaña Código.</p>

@@ -76,6 +76,42 @@
   font-weight: 600;
 }
 
+/* Pill: tabs that may hold an icon, the open one a pale chip instead of a
+   rule. The icon follows the text's size and colour; on a phone it goes, so
+   three tabs fit */
+.luz-tabs--pill {
+  gap: var(--luz-space-2xs);
+  border: 0;
+}
+
+.luz-tabs--pill .luz-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--luz-space-xs);
+  border-radius: var(--luz-radius-md);
+}
+
+.luz-tabs--pill .luz-tab svg {
+  flex: none;
+  inline-size: 1.15em;
+  block-size: 1.15em;
+}
+
+.luz-tabs--pill .luz-tab[aria-selected="true"] {
+  background: var(--luz-surface);
+}
+
+@media (max-width: 640px) {
+  .luz-tabs--pill .luz-tab svg {
+    display: none;
+  }
+
+  .luz-tabs--pill .luz-tab {
+    padding-inline: var(--luz-space-xs);
+    font-size: var(--luz-text-sm);
+  }
+}
+
 /* Forced colors: a transparent border may be painted in the text colour, so
    inactive tabs draw theirs in Canvas and only the selected tab shows its
    underline, in Highlight (with its weight, the cue is not colour alone). */
