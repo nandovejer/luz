@@ -116,7 +116,7 @@ Drop the lines for the levels you do not use:
 
 Pin an exact version and add an `integrity` hash in production; see [SECURITY.md](./SECURITY.md). A console warning tells you when a layer is loaded without the one below it.
 
-> **Release status:** LUZ is in beta. The `0.1.0` snippets above work once the first release is published. Until then the packages in this repository are at `0.0.0`, with the changesets that release them as `0.1.0`.
+> **Release status:** LUZ is in beta. `@luz-ds/tokens`, `core`, `landing`, `cms`, `app`, `docs` and `check` are published at `0.1.0`, which is also what this repository says. `@luz-ds/catalog` (the package `@luz-ds/site` became) is not published yet: it comes with the next release, `0.2.0`, together with tokens and core, whose layer order now names `luz.catalog`. Until then the level 3 snippets above do not resolve.
 
 ### Other files you can load
 

@@ -45,7 +45,9 @@ const EN = catalog('en');
 /** The text of a catalog value that is trusted inline HTML, as a reader gets it. */
 const plain = (html) => html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 const version = (pkg) => JSON.parse(readFileSync(fromRepo(`packages/${pkg}/package.json`), 'utf-8')).version;
-const cdn = (pkg, file) => `@luz-ds/${pkg}@${version(pkg)}/dist/${file}`;
+// The home pins every package with the version of core (`{{version}}`); tokens, core and catalog share one version (changesets `fixed`)
+// once released, and catalog is at 0.0.0 until its first release, so it is read from core too
+const cdn = (pkg, file) => `@luz-ds/${pkg}@${version(pkg === 'catalog' ? 'core' : pkg)}/dist/${file}`;
 
 /** The levels of adoption of the first three sections of "What's inside". */
 const LEVELS = [
@@ -1402,7 +1404,7 @@ test.describe('Landing page', () => {
 
   test.describe('install guide', () => {
     // The Install page writes each CDN URL with the version of that package.json (owner decision D9),
-    // so the test reads it too: it is 0.0.0 before `changeset version` and 0.1.0 after
+    // so the test reads it too: it is 0.1.0 (published by hand on 2026-10-19) and changes with `changeset version`
     const cdn = (pkg, file) => `@luz-ds/${pkg}@${version(pkg)}/dist/${file}`;
     const levels = [
       {
