@@ -68,7 +68,7 @@ test.describe('terminal', () => {
     await expect(page.locator('#term-npm-pane')).toBeVisible();
     await expect(page.locator('#term-cdn-pane')).toBeHidden();
     // The title bar is above the code, and a hairline separates them
-    const [bar, code] = await Promise.all([box(page.locator('#term .luz-terminal__tabs')), box(page.locator('#term-npm-pane pre'))]);
+    const [bar, code] = await Promise.all([box(page.locator('#term .luz-terminal__tabs')), box(page.locator('#term-npm-pane pre.luz-terminal__code'))]);
     expect(bar.bottom).toBeLessThanOrEqual(code.top);
     expect(await page.locator('#term .luz-terminal__tabs').evaluate((el) => getComputedStyle(el).borderBottomWidth)).toBe('1px');
   });
@@ -101,7 +101,7 @@ test.describe('terminal', () => {
   });
 
   test('the code block has no frame, no fill and no language label of its own', async ({ page }) => {
-    const pre = page.locator('#term-npm-pane pre');
+    const pre = page.locator('#term-npm-pane pre.luz-terminal__code');
     const facts = await pre.evaluate((el) => {
       const s = getComputedStyle(el);
       const before = getComputedStyle(el, '::before');
@@ -109,7 +109,7 @@ test.describe('terminal', () => {
     });
     expect(facts.border).toBe('0px');
     expect(facts.bg).toBe('rgba(0, 0, 0, 0)');
-    expect(facts.before, 'the ::before label of .luz-code-block is off').toBe(true);
+    expect(facts.before, 'the ::before language label of .luz-code-block does not apply to .luz-terminal__code').toBe(true);
   });
 
   test('a bash block shows a "$ " prompt before the command; another language does not', async ({ page }) => {
@@ -151,8 +151,71 @@ test.describe('terminal', () => {
     for (const [tab, pane] of [['npm', 'term-npm-pane'], ['CDN', 'term-cdn-pane']]) {
       await page.locator('#term').getByRole('tab', { name: tab }).click();
       await expect(page.locator(`#${pane} .luz-copy-btn:visible`), tab).toHaveCount(1);
-      await expect(page.locator(`#${pane} pre .luz-copy-btn`), tab).toHaveCount(0);
+      await expect(page.locator(`#${pane} pre.luz-terminal__code .luz-copy-btn`), tab).toHaveCount(0);
     }
+  });
+
+  test('with luz.js loaded the code of a pane is left as the markup wrote it: no button, no new name, no highlighting', async ({ page }) => {
+    for (const [tab, pane, name] of [['npm', 'term-npm-pane', 'npm'], ['CDN', 'term-cdn-pane', 'CDN']]) {
+      await page.locator('#term').getByRole('tab', { name: tab }).click();
+      const pre = page.locator(`#${pane} pre`);
+      // It is the terminal's own code element, not a .luz-code-block that initHighlight() enhances
+      await expect(pre, tab).toHaveClass('luz-terminal__code');
+      await expect(pre.locator('button'), `${tab}: a button inside the code`).toHaveCount(0);
+      await expect(page.locator(`#${pane} .luz-code-block__copy`), tab).toHaveCount(0);
+      await expect(pre, `${tab}: aria-label is the markup's`).toHaveAttribute('aria-label', name);
+      await expect(pre, tab).toHaveAttribute('role', 'region');
+      await expect(pre, tab).toHaveAttribute('tabindex', '0');
+      await expect(pre.locator('code > *'), `${tab}: the command is not split in highlight tokens`).toHaveCount(0);
+    }
+  });
+
+  test('the code is monospace, never wraps, scrolls sideways and keeps the rhythm of a code block', async ({ page }) => {
+    const facts = await page.locator('#term-npm-pane pre.luz-terminal__code').evaluate((el) => {
+      const s = getComputedStyle(el);
+      const probe = document.createElement('span');
+      probe.style.fontFamily = 'var(--luz-font-mono)';
+      document.body.append(probe);
+      const mono = getComputedStyle(probe).fontFamily;
+      probe.remove();
+      const code = getComputedStyle(el.querySelector('code'));
+      return {
+        font: s.fontFamily, mono, whiteSpace: s.whiteSpace, overflowX: s.overflowX,
+        lineHeight: parseFloat(s.lineHeight) / parseFloat(s.fontSize),
+        padding: [s.paddingTop, s.paddingRight, s.paddingBottom, s.paddingLeft].map(parseFloat),
+        codeFont: code.fontFamily, codeColor: code.color, preColor: s.color,
+        codeSize: code.fontSize, preSize: s.fontSize,
+      };
+    });
+    expect(facts.mono, 'the --luz-font-mono token resolves to a stack').toMatch(/monospace/i);
+    expect(facts.font).toBe(facts.mono);
+    expect(facts.whiteSpace).toBe('pre');
+    expect(facts.overflowX).toBe('auto');
+    expect(facts.lineHeight).toBeCloseTo(1.6, 1);
+    for (const side of facts.padding) expect(side, 'padding').toBeGreaterThan(0);
+    expect(facts.codeFont, 'the code inherits the font').toBe(facts.font);
+    expect(facts.codeColor, 'the code inherits the colour').toBe(facts.preColor);
+    expect(facts.codeSize, 'the code inherits the size').toBe(facts.preSize);
+  });
+
+  test('the "$ " prompt is only on a bash block', async ({ page }) => {
+    await page.locator('#term').getByRole('tab', { name: 'CDN' }).click();
+    const content = await page.locator('#term-cdn-pane pre.luz-terminal__code').evaluate((el) => ({
+      pre: getComputedStyle(el, '::before').content,
+      code: getComputedStyle(el.querySelector('code'), '::before').content,
+    }));
+    expect(['none', 'normal']).toContain(content.pre);
+    expect(['none', 'normal']).toContain(content.code);
+  });
+
+  test('the code takes the keyboard focus from the Copy button and shows a ring', async ({ page }) => {
+    const pre = page.locator('#term-npm-pane pre.luz-terminal__code');
+    await page.locator('#term').getByRole('tab', { name: 'npm' }).focus();
+    for (let i = 0; i < 6 && !(await pre.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press('Tab');
+    await expect(pre).toBeFocused();
+    const ring = await pre.evaluate((el) => { const s = getComputedStyle(el); return { style: s.outlineStyle, width: parseFloat(s.outlineWidth) }; });
+    expect(ring.style).not.toBe('none');
+    expect(ring.width).toBeGreaterThan(0);
   });
 
   test('the Copy button copies the command of its pane and says so', async ({ page, context, browserName }) => {
@@ -194,7 +257,7 @@ test.describe('terminal', () => {
       await setMode(page, mode);
       const code = page.locator('#term-npm');
       // Left padding of the pre, outside the text
-      const pre = page.locator('#term-npm-pane pre');
+      const pre = page.locator('#term-npm-pane pre.luz-terminal__code');
       const bg = await pixelIn(page, pre, 3, 20);
       expect(ratio(rgb(await textOf(code)), rgb(bg)), 'command').toBeGreaterThanOrEqual(AA);
       // The prompt is not the only thing: the muted prompt reads too
@@ -244,7 +307,7 @@ test.describe('terminal', () => {
       el.textContent = 'npm install @luz-ds/core @luz-ds/site @luz-ds/landing @luz-ds/cms @luz-ds/app @luz-ds/docs';
     });
     const facts = await page.evaluate(() => {
-      const pre = document.querySelector('#term-npm-pane pre');
+      const pre = document.querySelector('#term-npm-pane pre.luz-terminal__code');
       const frame = document.querySelector('#term').getBoundingClientRect();
       return {
         page: document.documentElement.scrollWidth - document.documentElement.clientWidth,
