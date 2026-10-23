@@ -12,7 +12,7 @@
     "predev": "node scripts/check-dist.js",
     "dev": "vite",
     "build": "pnpm tokens:build && pnpm core:build && pnpm catalog:build && pnpm landing:build && pnpm cms:build && pnpm app:build && pnpm docs:build && pnpm luzcheck:build",
-    "release:version": "changeset version && node scripts/ai-readme.js --write",
+    "release:version": "changeset version && node scripts/release-sync.js && node scripts/ai-readme.js --write",
     "pages:build": "pnpm build && vite build --mode pages",
     "core:build": "node scripts/build-core.js",
     "catalog:build": "node scripts/build-catalog.js",
