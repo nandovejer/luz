@@ -54,21 +54,38 @@
   inset-inline-end: var(--luz-space-xs);
 }
 
-.luz-terminal .luz-code-block {
+/* The command. Not a .luz-code-block: initHighlight() would add a second Copy
+   button inside it, and the pane already has its own */
+.luz-terminal__code {
   margin: 0;
   padding: var(--luz-space-sm);
   overflow-x: auto;
   border: 0;
   background: transparent;
+  color: var(--luz-text-primary);
+  font-family: var(--luz-font-mono);
   font-size: var(--luz-text-xs);
+  line-height: 1.6;
+  white-space: pre;
+  tab-size: 2;
 }
 
-.luz-terminal .luz-code-block::before {
-  display: none;
+.luz-terminal__code code {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  white-space: inherit;
+}
+
+.luz-terminal__code:focus-visible {
+  outline: 2px solid var(--luz-focus-ring);
+  outline-offset: -2px;
 }
 
 /* A shell command shows its prompt */
-.luz-terminal .luz-code-block[data-lang="bash"] code::before {
+.luz-terminal__code[data-lang="bash"] code::before {
   content: "$ ";
   color: var(--luz-text-secondary);
 }

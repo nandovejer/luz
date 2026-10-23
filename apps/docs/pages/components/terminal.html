@@ -19,11 +19,11 @@ toc: h2,h3
               </nav>
               <div class="luz-tabpanel luz-terminal__pane" id="terminal-demo-npm-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="terminal-demo-npm" aria-label="Copy the npm command">Copy</button>
-                <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="npm command"><code id="terminal-demo-npm">npm install @luz-ds/core</code></pre>
+                <pre class="luz-terminal__code" data-lang="bash" tabindex="0" role="region" aria-label="npm command"><code id="terminal-demo-npm">npm install @luz-ds/core</code></pre>
               </div>
               <div class="luz-tabpanel luz-terminal__pane" id="terminal-demo-cdn-pane">
                 <button class="luz-copy-btn" type="button" data-copy-from="terminal-demo-cdn" aria-label="Copy the CDN link">Copy</button>
-                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN link"><code id="terminal-demo-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css&quot;&gt;</code></pre>
+                <pre class="luz-terminal__code" data-lang="html" tabindex="0" role="region" aria-label="CDN link"><code id="terminal-demo-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css&quot;&gt;</code></pre>
               </div>
             </div>
           </div>
@@ -51,11 +51,11 @@ toc: h2,h3
   &lt;/nav&gt;
   &lt;div class=&quot;luz-tabpanel luz-terminal__pane&quot; id=&quot;install-npm-pane&quot;&gt;
     &lt;button class=&quot;luz-copy-btn&quot; type=&quot;button&quot; data-copy=&quot;npm install @luz-ds/core&quot; aria-label=&quot;Copy the npm command&quot;&gt;Copy&lt;/button&gt;
-    &lt;pre class=&quot;luz-code-block&quot; data-lang=&quot;bash&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;npm command&quot;&gt;&lt;code&gt;npm install @luz-ds/core&lt;/code&gt;&lt;/pre&gt;
+    &lt;pre class=&quot;luz-terminal__code&quot; data-lang=&quot;bash&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;npm command&quot;&gt;&lt;code&gt;npm install @luz-ds/core&lt;/code&gt;&lt;/pre&gt;
   &lt;/div&gt;
   &lt;div class=&quot;luz-tabpanel luz-terminal__pane&quot; id=&quot;install-cdn-pane&quot;&gt;
     &lt;button class=&quot;luz-copy-btn&quot; type=&quot;button&quot; data-copy=&quot;…&quot; aria-label=&quot;Copy the CDN link&quot;&gt;Copy&lt;/button&gt;
-    &lt;pre class=&quot;luz-code-block&quot; data-lang=&quot;html&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;CDN link&quot;&gt;&lt;code&gt;…&lt;/code&gt;&lt;/pre&gt;
+    &lt;pre class=&quot;luz-terminal__code&quot; data-lang=&quot;html&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;CDN link&quot;&gt;&lt;code&gt;…&lt;/code&gt;&lt;/pre&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
             </div>
@@ -80,7 +80,7 @@ initCopyButtons();</code></pre>
                   <tr><td data-label="Class or attribute"><div><code>.luz-terminal</code></div></td><td data-label="Effect"><div>The frame: a hairline border, rounded corners, a faint tint of the ink</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-terminal__tabs</code></div></td><td data-label="Effect"><div>Goes on the <code>.luz-tabs</code> row: the title bar, with small uppercase tabs in the mono face</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-terminal__pane</code></div></td><td data-label="Effect"><div>Goes on a <code>.luz-tabpanel</code>: holds a copy button and a code block</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>data-lang="bash"</code></div></td><td data-label="Effect"><div>On the <code>pre.luz-code-block</code>: the command starts with a <code>$</code> prompt. Any other language shows none</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>data-lang="bash"</code></div></td><td data-label="Effect"><div>On the <code>pre.luz-terminal__code</code>: the command starts with a <code>$</code> prompt. Any other language shows none</div></td></tr>
                 </tbody>
               </table>
             </div>
@@ -89,8 +89,8 @@ initCopyButtons();</code></pre>
             <ul>
               <li><code>initTabs()</code> upgrades the row and shows one pane at a time. <code>luz.js</code> runs it.</li>
               <li><code>initCopyButtons()</code> copies the <code>data-copy</code> text of the button. <code>luz.js</code> runs it.</li>
-              <li>The copy button of the open pane sits at the end of the title bar. The block's own language label is not shown.</li>
-              <li>The terminal has its own copy button, so <code>highlight.js</code> adds none to the code block inside it.</li>
+              <li>The copy button of the open pane sits at the end of the title bar. The code block shows no language label.</li>
+              <li>The command is a <code>.luz-terminal__code</code>, not a <code>.luz-code-block</code>, so <code>highlight.js</code> leaves it alone: it adds no second copy button and no syntax colours.</li>
               <li>The prompt is drawn by CSS, so it is not part of the text the button copies.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
@@ -122,13 +122,13 @@ initCopyButtons();</code></pre>
               <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
                 <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> One command, exactly as it is typed, so the copy button gives the reader something that runs.</figcaption>
                 <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-terminal"><div class="luz-terminal__tabs"><span class="luz-tab is-active">npm</span></div><pre class="luz-code-block" data-lang="bash"><code>npm install @luz-ds/core</code></pre></div>
+                  <div class="luz-terminal"><div class="luz-terminal__tabs"><span class="luz-tab is-active">npm</span></div><pre class="luz-terminal__code" data-lang="bash"><code>npm install @luz-ds/core</code></pre></div>
                 </div>
               </figure>
               <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
                 <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Put the output of the command in the block: the copy button copies it too, and the reader pastes a line that is not a command.</figcaption>
                 <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-terminal"><div class="luz-terminal__tabs"><span class="luz-tab is-active">npm</span></div><pre class="luz-code-block" data-lang="bash"><code>npm install @luz-ds/core
+                  <div class="luz-terminal"><div class="luz-terminal__tabs"><span class="luz-tab is-active">npm</span></div><pre class="luz-terminal__code" data-lang="bash"><code>npm install @luz-ds/core
 added 3 packages in 2s</code></pre></div>
                 </div>
               </figure>
