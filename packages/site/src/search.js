@@ -134,14 +134,14 @@ export function parseIndex(text, base) {
 /**
  * The results that contain every word of `query` (8 words at most), per
  * group, best first: the earlier the query appears in the name, the better
- * (so a name that starts with it comes first), then the shorter name (so an
- * exact match comes first of all).
+ * (so a name that starts with it comes first), then the shorter title, not
+ * counting its meta (so an exact match comes first of all).
  */
 export function search(results, query) {
   const terms = fold(query).split(" ").filter(Boolean).slice(0, 8);
   const q = terms.join(" ");
   // -1 (several words, not side by side) becomes the largest number
-  const rank = ({ name }) => (name.indexOf(q) >>> 0) * 1e3 + name.length;
+  const rank = ({ name, text }) => (name.indexOf(q) >>> 0) * 1e3 + text.length;
   return GROUPS.map((_, g) =>
     q ? results.filter((r) => r.g === g && terms.every((t) => r.name.includes(t))).sort((a, b) => rank(a) - rank(b)) : [],
   );
