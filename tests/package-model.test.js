@@ -294,3 +294,22 @@ describe("core after F6: the languages are published as a pattern export and the
   });
 });
 
+
+describe("versions: the repository matches npm", () => {
+  // On 2026-10-19 the owner published 0.1.0 of these seven by hand. The repo must say the same, or the
+  // Version Packages PR of changesets proposes 0.1.0 again: a version npm already has, with other content.
+  // `catalog` (formerly `site`) was never published: it stays at 0.0.0, and a minor changeset makes it 0.2.0
+  // with tokens and core (the `fixed` group)
+  const PUBLISHED_BY_HAND = ["tokens", "core", "check", "landing", "cms", "app", "docs"];
+  const version = (name) => JSON.parse(readFileSync(`${root}packages/${name}/package.json`, "utf-8")).version;
+
+  for (const name of PUBLISHED_BY_HAND) {
+    it(`@luz-ds/${name} is at 0.1.0, the version on npm`, () => {
+      expect(version(name)).toBe("0.1.0");
+    });
+  }
+
+  it("@luz-ds/catalog was never published and stays at 0.0.0", () => {
+    expect(version("catalog")).toBe("0.0.0");
+  });
+});
