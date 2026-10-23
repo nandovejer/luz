@@ -85,7 +85,11 @@ const axOf = async (/** @type {import('@playwright/test').Page} */ page, /** @ty
     await cdp.detach();
   }
 };
-/** The turn of the chevron, in degrees: -45 to the end of a left-to-right line, 135 to the end of a right-to-left one, 45 down. */
+/**
+ * The turn of the chevron, in degrees. The corner it draws (border-inline-end + border-block-end)
+ * already mirrors in a right-to-left line, so the angles are not the same: left-to-right, -45 points
+ * to the end (the right) and 45 down; right-to-left, 45 points to the end (the left) and -45 down.
+ */
 const turn = (/** @type {import('@playwright/test').Locator} */ summary) =>
   summary.evaluate((el) => {
     const t = getComputedStyle(el, '::after').transform;
@@ -335,8 +339,8 @@ test.describe('the look of the button', () => {
     await page.evaluate(() => {
       document.documentElement.dir = 'rtl';
     });
-    expect(await turn(button(page, 'tokens')), 'closed').toBe(135);
-    expect(await turn(button(page, 'components')), 'open').toBe(45);
+    expect(await turn(button(page, 'tokens')), 'closed').toBe(45);
+    expect(await turn(button(page, 'components')), 'open').toBe(-45);
     for (const id of ['tokens', 'components']) {
       const geometry = await page.evaluate((area) => {
         const link = /** @type {HTMLElement} */ (document.getElementById(`a-${area}`)).getBoundingClientRect();
@@ -346,6 +350,20 @@ test.describe('the look of the button', () => {
       expect(geometry.summaryLeft, `${id}: it is at the start of the row, the left of a right-to-left page, where the row ends`).toBeCloseTo(geometry.linkLeft, 0);
       expect(geometry.summaryRight, id).toBeLessThan(geometry.linkRight - 8);
     }
+  });
+
+  test('in a right-to-left page the chevron is down (-45) when open and to the left (45) when closed, and swaps when another fold is opened', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(BUTTON);
+    await page.evaluate(() => {
+      document.documentElement.dir = 'rtl';
+    });
+    expect(await openAreas(page)).toEqual(['components']);
+    expect(await turn(button(page, 'components')), 'Core is open').toBe(-45);
+    expect(await turn(button(page, 'tokens')), 'Tokens is closed').toBe(45);
+    await button(page, 'tokens').click();
+    await expect.poll(() => turn(button(page, 'tokens')), 'Tokens opened').toBe(-45);
+    await expect.poll(() => turn(button(page, 'components')), 'Core closed').toBe(45);
   });
 
   test('is drawn in forced colors: a visible chevron in the text colour, not a background', async ({ page }) => {
