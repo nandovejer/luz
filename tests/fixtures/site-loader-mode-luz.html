@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LUZ site loader fixture: a luz-mode loaded by site.min.js, with luz.js and the boot snippet</title>
+  <title>LUZ site loader fixture: a luz-mode loaded by catalog.min.js, with luz.js and the boot snippet</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/site/dist/site.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/catalog.css">
   <!-- The boot snippet, as a page has it in <head>: the served theme, before first paint.
        The query string authors it: ?boot=dark -->
   <script>
@@ -17,7 +17,7 @@
   </script>
   <!-- The real loading path: core, then the site loader, which loads mode.min.js on idle -->
   <script type="module" src="/packages/core/dist/luz.min.js"></script>
-  <script type="module" src="/packages/site/dist/site.min.js"></script>
+  <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
 </head>
 <body>
   <main id="main">

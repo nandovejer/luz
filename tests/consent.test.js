@@ -1,9 +1,9 @@
 /**
- * Unit tests for packages/site/src/consent.js: reading the stored choice.
+ * Unit tests for packages/catalog/src/consent.js: reading the stored choice.
  * The banner itself is tested in the browser (tests/site-consent.spec.js).
  */
 import { afterEach, describe, expect, it } from "vitest";
-import { getConsent } from "../packages/site/src/consent.js";
+import { getConsent } from "../packages/catalog/src/consent.js";
 
 const items = new Map();
 globalThis.localStorage = {

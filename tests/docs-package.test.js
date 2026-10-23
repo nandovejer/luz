@@ -80,10 +80,10 @@ describe("@luz-ds/docs: the package", () => {
     expect(manifest.sideEffects).toEqual(["*.css"]);
   });
 
-  it("requires tokens and core, takes site as an optional peer, with literal ranges", () => {
-    expect(manifest.peerDependencies).toEqual({ "@luz-ds/core": "^0.1.0", "@luz-ds/site": "^0.1.0", "@luz-ds/tokens": "^0.1.0" });
-    expect(manifest.peerDependenciesMeta).toEqual({ "@luz-ds/site": { optional: true } });
-    expect(manifest.devDependencies).toEqual({ "@luz-ds/core": "workspace:*", "@luz-ds/site": "workspace:*", "@luz-ds/tokens": "workspace:*" });
+  it("requires tokens and core, takes catalog as an optional peer, with literal ranges", () => {
+    expect(manifest.peerDependencies).toEqual({ "@luz-ds/core": "^0.1.0", "@luz-ds/catalog": "^0.1.0", "@luz-ds/tokens": "^0.1.0" });
+    expect(manifest.peerDependenciesMeta).toEqual({ "@luz-ds/catalog": { optional: true } });
+    expect(manifest.devDependencies).toEqual({ "@luz-ds/core": "workspace:*", "@luz-ds/catalog": "workspace:*", "@luz-ds/tokens": "workspace:*" });
   });
 
   it("has its README, LICENSE, pack-files.txt and stylesheets", () => {
@@ -101,8 +101,8 @@ describe("@luz-ds/docs: the package", () => {
     expect(walk("packages/docs", [".js", ".mjs", ".cjs", ".ts"]), "a JavaScript file in the package").toEqual([]);
   });
 
-  it("says in index.css what it requires: tokens and core first, site optional and loaded before it", () => {
-    expect(has(readOr("packages/docs/src/index.css"), /Requires: @luz-ds\/tokens and @luz-ds\/core loaded first; @luz-ds\/site\s+optional, loaded before this file/), `"packages/docs/src/index.css" matches ${/Requires: @luz-ds\/tokens and @luz-ds\/core loaded first; @luz-ds\/site\s+optional, loaded before this file/}`).toBe(true);
+  it("says in index.css what it requires: tokens and core first, catalog optional and loaded before it", () => {
+    expect(has(readOr("packages/docs/src/index.css"), /Requires: @luz-ds\/tokens and @luz-ds\/core loaded first; @luz-ds\/catalog\s+optional, loaded before this file/), `"packages/docs/src/index.css" matches ${/Requires: @luz-ds\/tokens and @luz-ds\/core loaded first; @luz-ds\/catalog\s+optional, loaded before this file/}`).toBe(true);
   });
 
   it("lists exactly its files in pack-files.txt, each component plain and minified", () => {
@@ -154,7 +154,7 @@ describe("@luz-ds/docs: the build, the release scripts and the layer", () => {
     expect(has(readOr("scripts/check-dist.js"), "../packages/docs/dist/docs.css"), `"scripts/check-dist.js" has ${"../packages/docs/dist/docs.css"}`).toBe(true);
     const qa = readOr("scripts/qa-release.js");
     expect(qa.match(/\^packages\\\/\(([^)]*)\)\\\/src\\\//)?.[1].split("|")).toContain("docs");
-    expect(has(qa, "Build (tokens, core, site, landing, cms, app, docs)"), "qa-release step name").toBe(true);
+    expect(has(qa, "Build (tokens, core, catalog, landing, cms, app, docs)"), "qa-release step name").toBe(true);
     const smoke = readOr("scripts/smoke-consumer.js");
     expect(has(smoke, "/node_modules/@luz-ds/docs"), "smoke-consumer: " + "/node_modules/@luz-ds/docs").toBe(true);
     expect(has(smoke, "/dist/docs.css"), "smoke-consumer: " + "/dist/docs.css").toBe(true);
@@ -201,10 +201,10 @@ describe("@luz-ds/docs: the budget, the lint rules and the owners", () => {
     expect(has(read("PRINCIPLES.md"), /^\| `docs` CSS \|[^\n]*\| 4 kB \|$/m), "PRINCIPLES.md table row").toBe(true);
   });
 
-  it("is named in the PRINCIPLES.md introduction and in its Core or site rule", () => {
+  it("is named in the PRINCIPLES.md introduction and in its Core or catalog rule", () => {
     const text = read("PRINCIPLES.md");
     expect(has(text, /`@luz-ds\/docs`/), "PRINCIPLES.md intro").toBe(true);
-    const bullet = text.split("\n").find((line) => line.startsWith("- **Core or site.**")) ?? "";
+    const bullet = text.split("\n").find((line) => line.startsWith("- **Core or catalog.**")) ?? "";
     expect(bullet).toContain("`docs`");
   });
 
@@ -230,7 +230,7 @@ describe("@luz-ds/docs: the budget, the lint rules and the owners", () => {
     const head = (text) => text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
     expect(changesets.some((text) => /"@luz-ds\/docs": minor/.test(head(text)))).toBe(true);
     expect(changesets.some((text) => /"@luz-ds\/tokens": minor/.test(head(text)) && /"@luz-ds\/core": minor/.test(head(text)) && /luz\.docs/.test(text))).toBe(true);
-    expect(json(".changeset/config.json").fixed).toEqual([["@luz-ds/tokens", "@luz-ds/core", "@luz-ds/site"]]);
+    expect(json(".changeset/config.json").fixed).toEqual([["@luz-ds/tokens", "@luz-ds/core", "@luz-ds/catalog"]]);
   });
 
   it("has the guides of the repository know the package", () => {
@@ -343,7 +343,7 @@ describe("@luz-ds/docs: the stylesheets", () => {
 
   it("uses no class or property of another kind of site", () => {
     expect(files.length, "packages/docs/src/**/*.css").toBeGreaterThan(0);
-    expect(has(css, /luz-(?:site|landing|cms|app)-/), "another kind's class").toBe(false);
+    expect(has(css, /luz-(?:site|catalog|landing|cms|app)-/), "another kind's class").toBe(false);
   });
 });
 

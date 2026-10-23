@@ -37,7 +37,7 @@
  *   area but the hub, in the same order, opening with `## <title>` then a
  *   header block that starts `URL: <url>` and, for a page with `files`, has
  *   `Files: <files> · Package: @luz-ds/<package>` (the package of the area:
- *   components is core; site, landing, cms and app are their own), a blank line, the page's description,
+ *   components is core; catalog, landing, cms and app are their own), a blank line, the page's description,
  *   then `### <heading>` sections taken by id: the known issues, `#markup`
  *   (each `pre[data-lang=html]` as a fenced block, its `aria-label` as the
  *   caption line before the fence), `#variants` (a table row is
@@ -523,9 +523,9 @@ describe("llms.txt: the index of the site for an agent", () => {
 
 /* ---- llms-full.txt, the real pages ------------------------------------------ */
 
-const markupAreas = ["components", "site", "landing", "cms", "app", "documentation"];
+const markupAreas = ["components", "catalog", "landing", "cms", "app", "documentation"];
 // Pages that print "&lt;tag" as plain text on purpose (counted in apps/docs/pages)
-const PLAIN_TAGS = new Set(["/docs/components/copy-button/", "/docs/components/icon-grid/", "/docs/site/classes/"]);
+const PLAIN_TAGS = new Set(["/docs/components/copy-button/", "/docs/components/icon-grid/", "/docs/catalog/classes/"]);
 
 describe("llms-full.txt: the curated text of the pages, from the real site", () => {
   // read lazily: while ai.js does not exist each test fails on its own, not the whole file
@@ -586,10 +586,10 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
     expect(button.text.split("\n")).toContain("- `.luz-btn--primary`: Brand fill: the main action of the view");
   });
 
-  it("gives a page of site its own package", () => {
-    const banner = entry("/docs/site/banner/");
+  it("gives a page of catalog its own package", () => {
+    const banner = entry("/docs/catalog/banner/");
     expect(banner, "an entry for Banner").toBeTruthy();
-    expect(banner.text).toContain("Package: @luz-ds/site");
+    expect(banner.text).toContain("Package: @luz-ds/catalog");
   });
 
   it("keeps the sections a person reads by id and leaves the computed and the demo ones out, on Button", () => {
@@ -846,7 +846,7 @@ describe("the Vite plugin emits and serves the two files", () => {
  *     manifestAssets(root)
  *         -> [{ route, from }]: `/manifests/<pkg>/classes.json` for each
  *         package of PACKAGES, and `/manifests/<pkg>/custom-elements.json`
- *         for each package that has one in dist (core and site), `from` being
+ *         for each package that has one in dist (core and catalog), `from` being
  *         `packages/<pkg>/dist/<file>`.
  *
  *   One example document (the shell of spec 1.4):
@@ -855,15 +855,15 @@ describe("the Vite plugin emits and serves the two files", () => {
  *     <title> `<Title>: markup examples – LUZ`, a header comment (it says
  *     "Do not edit", MIT and the version of core from `versions`), one
  *     <link rel=stylesheet> per package the page needs in load order (tokens,
- *     core, then site when the page's area is `site` or a kept block names a
- *     <luz-*> tag site's custom-elements.json declares, then the kind's when
+ *     core, then catalog when the page's area is `catalog` or a kept block names a
+ *     <luz-*> tag catalog's custom-elements.json declares, then the kind's when
  *     the area is landing, cms or app), each `../dist/<pkg>/<file>`; `<h1>`
  *     the page's title; the first link is to its docs page (relative, ending
  *     `#markup`); then, for each `html` block of `#markup` that has no
  *     <script> and no on*= attribute, `<h2 id="ex-<n>">` with the block's
  *     aria-label and the block's text, decoded once, as markup; the scripts at
  *     the end: `<script type="module" src="../dist/core/luz.min.js">` and, with
- *     site, `../dist/site/site.min.js`. Blocks skipped for a <script> or an
+ *     catalog, `../dist/catalog/catalog.min.js`. Blocks skipped for a <script> or an
  *     on*= attribute are named (their aria-label) in the last comment of the
  *     document. No <style>, no inline <script>, no on*= attribute, no <base>,
  *     no third-party URL; no `style=` outside the blocks' own text.
@@ -887,7 +887,7 @@ const readJson = (relative) => JSON.parse(readFileSync(join(root, relative), "ut
 /** Distinct, so a document that writes another package's version is caught. */
 const VERSIONS = Object.fromEntries(PACKAGES.map((name, i) => [name, `${i + 11}.7.3`]));
 const REAL_VERSIONS = Object.fromEntries(PACKAGES.map((name) => [name, readJson(`packages/${name}/package.json`).version]));
-const SITE_ELEMENTS = readJson("packages/site/dist/custom-elements.json")
+const SITE_ELEMENTS = readJson("packages/catalog/dist/custom-elements.json")
   .modules.flatMap((m) => m.declarations ?? [])
   .map((d) => d.tagName)
   .filter(Boolean);
@@ -927,8 +927,8 @@ const markupPages = (from = site) => from.pages.filter((p) => markupSection(p) !
 function packagesFor(page) {
   const area = areaOf(page.route);
   const { kept } = blocksOf(page);
-  const useSite = area === "site" || kept.some((b) => SITE_ELEMENTS.some((tag) => new RegExp(`<${tag}[\\s>/]`).test(b.code)));
-  return ["tokens", "core", ...(useSite ? ["site"] : []), ...(KIND_AREAS.includes(area) ? [PACKAGE_OF_AREA[area] ?? area] : [])];
+  const useSite = area === "catalog" || kept.some((b) => SITE_ELEMENTS.some((tag) => new RegExp(`<${tag}[\\s>/]`).test(b.code)));
+  return ["tokens", "core", ...(useSite ? ["catalog"] : []), ...(KIND_AREAS.includes(area) ? [PACKAGE_OF_AREA[area] ?? area] : [])];
 }
 
 /* ---- reading a generated document ------------------------------------------- */
@@ -1042,7 +1042,7 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
       const pkgs = packagesFor(e.page);
       expect(doc.links.map((l) => l.rel), e.route).toEqual(pkgs.map(() => "stylesheet"));
       expect(doc.links.map((l) => l.href), e.route).toEqual(pkgs.map((pkg) => `../dist/${pkg}/${cssOf(pkg)}`));
-      const js = ["core", ...pkgs.filter((p) => p === "site")];
+      const js = ["core", ...pkgs.filter((p) => p === "catalog")];
       expect(doc.scripts.map((s) => s.src), e.route).toEqual(js.map((pkg) => `../dist/${pkg}/${FILES[pkg].js}`));
       const bodyAt = e.html.search(/<body\b/i);
       for (const script of doc.scripts) expect(script.index, e.route).toBeGreaterThan(bodyAt);
@@ -1165,7 +1165,7 @@ describe("exampleDocuments: the rules on a small site", () => {
     "site.json": JSON.stringify({
       areas: [
         { id: "components", label: "Components", slug: "components" },
-        { id: "site", label: "Site", slug: "site" },
+        { id: "catalog", label: "Catalog", slug: "catalog" },
         { id: "landing", label: "Landing", slug: "landing" },
         { id: "tokens", label: "Tokens", slug: "tokens" },
       ],
@@ -1185,7 +1185,7 @@ describe("exampleDocuments: the rules on a small site", () => {
     ),
     "pages/components/timeline.html": page("Timeline", "components", [["Timeline markup", "html", '<luz-timeline role="group" aria-label="Releases"><ol class="luz-timeline"></ol></luz-timeline>']]),
     "pages/components/plain.html": FRONT("Plain", "A page with no markup section.", "components") + "<h2 id=\"how\">How</h2><p>PLAIN-TEXT</p>\n",
-    "pages/site/banner.html": page("Banner", "site", [["Banner markup", "html", '<luz-banner tone="warning">Closed on Monday</luz-banner>']]),
+    "pages/catalog/banner.html": page("Banner", "catalog", [["Banner markup", "html", '<luz-banner tone="warning">Closed on Monday</luz-banner>']]),
     "pages/landing/index.html": FRONT("Landing", "The landing patterns, for the tests.", "landing", "generate: gallery\nlead: false\n") + "<p>LANDING</p>\n",
     "pages/landing/header.html": page("Header", "landing", [["Header markup", "html", '<header class="luz-landing-header"><luz-search>…</luz-search></header>']]),
     "pages/tokens/color.html": TOKENS_PAGE,
@@ -1201,7 +1201,7 @@ describe("exampleDocuments: the rules on a small site", () => {
       build()
         .map((d) => d.route)
         .sort(),
-    ).toEqual(["/examples/components/timeline.html", "/examples/components/widget.html", "/examples/landing/header.html", "/examples/site/banner.html"]);
+    ).toEqual(["/examples/catalog/banner.html", "/examples/components/timeline.html", "/examples/components/widget.html", "/examples/landing/header.html"]);
   });
 
   it("writes the kept html blocks as markup, decoded once, and leaves out the js block, the handler, the script and other sections", () => {
@@ -1227,25 +1227,25 @@ describe("exampleDocuments: the rules on a small site", () => {
     expect(widget).not.toMatch(/<title>[^<]*&[^a-z#]/i);
   });
 
-  it("loads only tokens and core for a component, and site's too for an element site declares", () => {
+  it("loads only tokens and core for a component, and catalog's too for an element catalog declares", () => {
     const docs = build();
     const hrefs = (route) => inspect(byRoute(docs, route).html, route).links.map((l) => l.href);
     expect(hrefs("/examples/components/widget.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css"]);
     // <luz-timeline> is core's tag
     expect(hrefs("/examples/components/timeline.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css"]);
-    expect(hrefs("/examples/site/banner.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/site/site.min.css"]);
+    expect(hrefs("/examples/catalog/banner.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/catalog.min.css"]);
     expect(hrefs("/examples/landing/header.html")).toEqual([
       "../dist/tokens/tokens.min.css",
       "../dist/core/luz.min.css",
-      "../dist/site/site.min.css",
+      "../dist/catalog/catalog.min.css",
       "../dist/landing/landing.min.css",
     ]);
     const scripts = (route) => inspect(byRoute(docs, route).html, route).scripts.map((s) => s.src);
     expect(scripts("/examples/components/widget.html")).toEqual(["../dist/core/luz.min.js"]);
-    expect(scripts("/examples/landing/header.html")).toEqual(["../dist/core/luz.min.js", "../dist/site/site.min.js"]);
+    expect(scripts("/examples/landing/header.html")).toEqual(["../dist/core/luz.min.js", "../dist/catalog/catalog.min.js"]);
   });
 
-  it("takes the kind's stylesheet from the area even when no tag of site is named", () => {
+  it("takes the kind's stylesheet from the area even when no tag of catalog is named", () => {
     const plainLanding = { ...files, "pages/landing/header.html": page("Header", "landing", [["Header markup", "html", '<header class="luz-landing-header">Name</header>']]) };
     const docs = exampleDocuments(fixtureSite(plainLanding).scan(), { csp: "default-src 'self'", versions: VERSIONS });
     const links = inspect(byRoute(docs, "/examples/landing/header.html").html, "header").links.map((l) => l.href);
@@ -1270,7 +1270,7 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
   it("names each as { route, from }: a file of the package's dist at /examples/dist/<pkg>/<file>", () => {
     expect(assets().length).toBeGreaterThan(10);
     for (const asset of assets()) {
-      const m = /^\/examples\/dist\/(tokens|core|site|landing|cms|app|docs)\/([A-Za-z0-9._-]+\.(?:css|js))$/.exec(asset.route);
+      const m = /^\/examples\/dist\/(tokens|core|catalog|landing|cms|app|docs)\/([A-Za-z0-9._-]+\.(?:css|js))$/.exec(asset.route);
       expect(m, asset.route).toBeTruthy();
       expect(asset.from, asset.route).toBe(`packages/${m[1]}/dist/${m[2]}`);
       expect(existsSync(join(root, asset.from)), `${asset.from} exists (run pnpm build)`).toBe(true);
@@ -1296,7 +1296,7 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
 
   it("carries every chunk an entry imports by name, beside it", () => {
     const routes = new Set(assets().map((a) => a.route));
-    for (const asset of assets().filter((a) => /\/(luz|site)\.min\.js$/.test(a.route))) {
+    for (const asset of assets().filter((a) => /\/(luz|catalog)\.min\.js$/.test(a.route))) {
       const text = readFileSync(join(root, asset.from), "utf-8");
       const chunks = [...text.matchAll(/["']\.\/([A-Za-z0-9._-]+\.js)["']/g)].map((m) => m[1]);
       expect(chunks.length, asset.route).toBeGreaterThan(0);
@@ -1314,7 +1314,7 @@ describe("manifestAssets: the manifests of every package, served from /manifests
     const expected = PACKAGES.flatMap((pkg) =>
       ["classes.json", "custom-elements.json"].filter((file) => existsSync(join(root, "packages", pkg, "dist", file))).map((file) => ({ route: `/manifests/${pkg}/${file}`, from: `packages/${pkg}/dist/${file}` })),
     );
-    expect(expected.map((e) => e.route)).toEqual(expect.arrayContaining(["/manifests/core/classes.json", "/manifests/core/custom-elements.json", "/manifests/site/custom-elements.json", "/manifests/landing/classes.json"]));
+    expect(expected.map((e) => e.route)).toEqual(expect.arrayContaining(["/manifests/core/classes.json", "/manifests/core/custom-elements.json", "/manifests/catalog/custom-elements.json", "/manifests/landing/classes.json"]));
     expect([...manifests()].sort((a, b) => a.route.localeCompare(b.route))).toEqual(expected.sort((a, b) => a.route.localeCompare(b.route)));
     for (const asset of manifests()) expect(existsSync(join(root, asset.from)), asset.from).toBe(true);
   });
@@ -1326,13 +1326,13 @@ describe("llms.txt and llms-full.txt name the examples and the manifests", () =>
   const optional = () => parseTxt(txt()).sections.at(-1);
   const exampleRoutes = () => new Set(markupPages().map(exampleRouteOf));
 
-  it("links under Optional an example page that is emitted, and the manifests of core and site", () => {
+  it("links under Optional an example page that is emitted, and the manifests of core and catalog", () => {
     const urls = optional().items.map((i) => i.url);
     const routes = urls.filter((u) => u.startsWith(`${SITE_URL}examples/`)).map((u) => `/${u.slice(SITE_URL.length)}`);
     expect(routes.length).toBeGreaterThan(0);
     for (const route of routes) expect(exampleRoutes().has(route), route).toBe(true);
     expect(urls).toContain(`${SITE_URL}manifests/core/classes.json`);
-    expect(urls).toContain(`${SITE_URL}manifests/site/custom-elements.json`);
+    expect(urls).toContain(`${SITE_URL}manifests/catalog/custom-elements.json`);
     expect(urls).toContain(`${SITE_URL}llms-full.txt`);
   });
 

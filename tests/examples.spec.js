@@ -32,7 +32,7 @@ import { site } from './helpers/docs-site.js';
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const THEMES = ['light', 'dark', 'high-contrast'];
 const BLOCKING = ['serious', 'critical'];
-const PACKAGE_NAMES = ['tokens', 'core', 'site', 'landing', 'cms', 'app'];
+const PACKAGE_NAMES = ['tokens', 'core', 'catalog', 'landing', 'cms', 'app'];
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8' };
 
 /** The pages that have a #markup section, as the generator reads them; their example route. */

@@ -245,7 +245,7 @@ export function makeScriptRepo() {
     ...tracked("packages/core/src/i18n"),
     ...tracked("packages/core/src/components"),
     // scripts/check-contrast.js, which the home's checks run, reads these
-    ...tracked("packages/site/src/components"),
+    ...tracked("packages/catalog/src/components"),
     ...tracked("packages/tokens/lib"),
     ...tracked("packages/core/src/themes"),
     "packages/core/src/i18n.js",

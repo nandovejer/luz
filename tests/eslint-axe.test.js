@@ -32,7 +32,7 @@ const IMPORTS = [
 ];
 const FILES = [
   "packages/core/src/axe-fixture.js",
-  "packages/site/src/axe-fixture.js",
+  "packages/catalog/src/axe-fixture.js",
   "apps/docs/axe-fixture.js",
   "apps/landing/axe-fixture.js",
 ];

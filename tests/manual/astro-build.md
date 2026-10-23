@@ -27,7 +27,7 @@ my-site/
    └─ pages/index.astro
 ```
 
-`Base.astro` imports `@luz-ds/tokens/css`, `@luz-ds/core/css` and `../styles/site.css` in its frontmatter and has `<script>import "@luz-ds/core";</script>` before `</body>`. `site.css` holds `:root { --luz-type-base: 1.125rem; }`.
+`Base.astro` imports `@luz-ds/tokens/css`, `@luz-ds/core/css` and `../styles/catalog.css` in its frontmatter and has `<script>import "@luz-ds/core";</script>` before `</body>`. `catalog.css` holds `:root { --luz-type-base: 1.125rem; }`.
 
 ## What is verified
 
@@ -35,7 +35,7 @@ my-site/
 - The build output holds the layers in the declared order (`luz.tokens` first, `luz.print` last), the fonts as hashed assets, and the consumer's unlayered `:root { --luz-type-base: 1.125rem }` last.
 - A `<script>` with `import "@luz-ds/core";` is bundled by Astro into one `type="module"` file with the lazy chunks split (about 23 kB unminified in that build; Astro's size, not LUZ's budget).
 - `<link rel="stylesheet" integrity crossorigin>` in `<head>` and `<script type="module" src="https://…" integrity crossorigin>` are written out unchanged; `is:inline` on the script also leaves it as written. Astro processes only a `<script>` with no attributes other than `src`.
-- Every module of `@luz-ds/core` and `@luz-ds/site` imports in plain Node with no `document` (10 modules tried, no error).
+- Every module of `@luz-ds/core` and `@luz-ds/catalog` imports in plain Node with no `document` (10 modules tried, no error).
 
 ## Not verified
 

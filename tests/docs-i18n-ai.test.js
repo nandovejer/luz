@@ -7,7 +7,7 @@
  *                      text (links to the language's pages) when it is not
  *   llms.txt, llms-full.txt   English, byte for byte what they are without the feature
  *   search-index.json  one per language at `/<code>/docs/search-index.json`, in the format version 1 that
- *                      packages/site/src/search.js reads (`readIndex`), every link resolving to a page of that
+ *                      packages/catalog/src/search.js reads (`readIndex`), every link resolving to a page of that
  *                      language, the translated entries carrying their `lang`; the English one is unchanged
  *
  * The files are the ones the Vite plugin emits (generateBundle), from a throwaway copy of the real docs with a
@@ -25,7 +25,7 @@ import { readHtml } from "../scripts/docs-site/html.js";
 import { docsSite } from "../scripts/docs-site/plugin.js";
 import { buildSite, scanSite } from "../scripts/docs-site/site.js";
 import { PAGES_BASE, SITE_URL } from "../vite.config.js";
-import { readIndex } from "../packages/site/src/search.js";
+import { readIndex } from "../packages/catalog/src/search.js";
 import { PROBE, makeSite, translatedRoutes } from "./helpers/docs-i18n-size-fixture.js";
 
 const LANGUAGES = ["es", "ar"];

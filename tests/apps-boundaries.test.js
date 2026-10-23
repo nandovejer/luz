@@ -91,7 +91,7 @@ describe("apps/site holds what the home page and the docs share", () => {
     expect(pkg.private).toBe(true);
     expect(pkg.dependencies).toEqual({
       "@luz-ds/core": "workspace:*",
-      "@luz-ds/site": "workspace:*",
+      "@luz-ds/catalog": "workspace:*",
       "@luz-ds/tokens": "workspace:*",
     });
   });
@@ -128,7 +128,7 @@ describe("the header moved to apps/site keeps what it did", () => {
     expect(code).toMatch(/\binitThemeCycle\s*\(/);
     expect(code).toMatch(/\binitSidebar\s*\(/);
     expect(code).toContain("--site-header-h");
-    expect(code).toMatch(/import\s*["']\/packages\/site\/dist\/mode\.js["']|from\s*["']\/packages\/site\/dist\/mode\.js["']/);
+    expect(code).toMatch(/import\s*["']\/packages\/catalog\/dist\/mode\.js["']|from\s*["']\/packages\/catalog\/dist\/mode\.js["']/);
     expect(code).not.toMatch(/onModeChange|luz-site-mode|initModes/);
   });
 });

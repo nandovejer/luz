@@ -15,8 +15,8 @@ export const areaOfPackage = (name) => AREA_OF[name] ?? name;
 /** The package a docs area documents. */
 export const packageOfArea = (area) => Object.entries(AREA_OF).find(([, value]) => value === area)?.[0] ?? area;
 
-/** The areas of the packages of patterns, site first: site, landing, cms, app, documentation. */
-export const PATTERN_AREAS = ["site", ...SITE_KINDS.map(areaOfPackage)];
+/** The areas of the packages of patterns, catalog first: catalog, landing, cms, app, documentation. */
+export const PATTERN_AREAS = ["catalog", ...SITE_KINDS.map(areaOfPackage)];
 
 /** The areas of the packages for one kind of site. */
 export const KIND_AREAS = SITE_KINDS.map(areaOfPackage);

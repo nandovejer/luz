@@ -71,9 +71,9 @@ const classesOf = (name) => {
     .filter((file) => file.endsWith('.css'))
     .map((file) => readFileSync(`${dir}/${file}`, 'utf-8'))
     .join('\n');
-  return [...new Set(css.match(name === 'site' ? SITE_CLASS : new RegExp(`\\.luz-${name}-[a-z_-]+`, 'g')))];
+  return [...new Set(css.match(name === 'catalog' ? SITE_CLASS : new RegExp(`\\.luz-${name}-[a-z_-]+`, 'g')))];
 };
-const PATTERN_PACKAGES = ['site', ...SITE_KINDS];
+const PATTERN_PACKAGES = ['catalog', ...SITE_KINDS];
 
 const MODES = ['light', 'dark', 'high-contrast'];
 
@@ -866,7 +866,7 @@ test.describe('Documentation site', () => {
     });
 
     test('standalone links are targets of 24px or more', async ({ page }) => {
-      for (const route of ['/docs/', '/docs/components/', routeOf('c-button'), '/docs/a-z/', '/docs/site/']) {
+      for (const route of ['/docs/', '/docs/components/', routeOf('c-button'), '/docs/a-z/', '/docs/catalog/']) {
         await page.goto(route);
         const heights = await page
           .locator('.docs-nav a, .docs-end a, .docs-gallery__rows a, .docs-hub__more a, .docs-az__list a, .site-header__nav a')
@@ -1501,7 +1501,7 @@ test.describe('Site header and navigation toggle', () => {
     const header = read('apps/site/header.js');
     expect(header).not.toContain('luz-site-mode');
     expect(header).not.toMatch(/onModeChange/);
-    expect(header).toMatch(/\/packages\/site\/dist\/mode\.js/);
+    expect(header).toMatch(/\/packages\/catalog\/dist\/mode\.js/);
     expect(read('apps/docs/reference.js')).toMatch(/luz-mode:change/);
   });
 

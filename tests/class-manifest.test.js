@@ -51,7 +51,7 @@
  * (relative to dist/, as for a stylesheet: the files that name it, or the
  * package's bundle, `exports["."]`, only when no other script does), `kind`,
  * `block`, `modifier` and `part` as for any class, and `layer` the package's
- * own component layer (core `luz.components`, site `luz.site`, …). A class a
+ * own component layer (core `luz.components`, catalog `luz.catalog`, …). A class a
  * stylesheet already lists is unchanged: its entry, files and `defined` stay
  * what the CSS says, never a script. `*.min.js` is not read.
  */
@@ -630,25 +630,25 @@ describe("the generator: classes the unminified scripts name (RL-19)", () => {
 
   it("puts a script class of a package for one kind of site in that package's layer", () => {
     const dir = fixtureRoot(
-      "site",
-      { name: "@luz-ds/site", version: "0.4.0", exports: { ".": "./dist/site.js", "./search": "./dist/search.js", "./css": "./dist/site.css" } },
+      "catalog",
+      { name: "@luz-ds/catalog", version: "0.4.0", exports: { ".": "./dist/catalog.js", "./search": "./dist/search.js", "./css": "./dist/catalog.css" } },
       {
-        "site.css": `${ORDER}@layer luz.site {\n.luz-search { display: grid; }\n}\n`,
+        "catalog.css": `${ORDER}@layer luz.catalog {\n.luz-search { display: grid; }\n}\n`,
         "search.js": 'el.querySelector(".luz-search__trigger-hook");\n',
-        "site.js": 'import("./search.js");\nel.classList.add("luz-site-loader-hook");\n',
+        "catalog.js": 'import("./search.js");\nel.classList.add("luz-catalog-loader-hook");\n',
       },
     );
-    const { classes } = buildClassManifest("site", { root: dir });
+    const { classes } = buildClassManifest("catalog", { root: dir });
     expect(classes.find((c) => c.name === "luz-search__trigger-hook")).toStrictEqual({
       name: "luz-search__trigger-hook",
       kind: "component",
-      layer: "luz.site",
+      layer: "luz.catalog",
       files: ["search.js"],
       defined: false,
       block: "luz-search",
       part: "trigger-hook",
     });
-    expect(classes.find((c) => c.name === "luz-site-loader-hook")).toMatchObject({ kind: "pattern", layer: "luz.site", files: ["site.js"], defined: false });
+    expect(classes.find((c) => c.name === "luz-catalog-loader-hook")).toMatchObject({ kind: "pattern", layer: "luz.catalog", files: ["catalog.js"], defined: false });
   });
 
   it("reads a script it cannot make sense of without failing the build", () => {
@@ -673,15 +673,15 @@ describe("the seven built packages", () => {
   const OWN_LAYERS = {
     tokens: ["tokens"],
     core: ["themes", "settings", "generic", "elements", "objects", "components", "utilities", "print"],
-    site: ["site", "print"],
+    catalog: ["catalog", "print"],
     landing: ["landing", "print"],
     cms: ["cms", "print"],
     app: ["app", "print"],
     docs: ["docs", "print"],
   };
 
-  it("covers exactly tokens, core, site, landing, cms, app and docs", () => {
-    expect(PACKAGES).toEqual(["tokens", "core", "site", "landing", "cms", "app", "docs"]);
+  it("covers exactly tokens, core, catalog, landing, cms, app and docs", () => {
+    expect(PACKAGES).toEqual(["tokens", "core", "catalog", "landing", "cms", "app", "docs"]);
   });
 
   it.each(PACKAGES)("%s: schema, package name and version come from its package.json", (name) => {
@@ -725,7 +725,7 @@ describe("the seven built packages", () => {
 
   it.each(PACKAGES)("%s: kind follows the name; block, modifier and part are its BEM split", (name) => {
     for (const c of manifests[name].classes) {
-      const kind = /^luz-(?:site|landing|cms|app|docs)-/.test(c.name) ? "pattern" : c.name.startsWith("o-") ? "object" : c.name.startsWith("u-") ? "utility" : c.name.startsWith("is-") ? "state" : "component";
+      const kind = /^luz-(?:catalog|landing|cms|app|docs)-/.test(c.name) ? "pattern" : c.name.startsWith("o-") ? "object" : c.name.startsWith("u-") ? "utility" : c.name.startsWith("is-") ? "state" : "component";
       expect(c.kind, c.name).toBe(kind);
       if (kind === "utility" || kind === "state") {
         expect(c, c.name).not.toHaveProperty("block");
@@ -757,8 +757,8 @@ describe("the seven built packages", () => {
     for (const c of manifests[name].classes) {
       expect(OWN_LAYERS[name].map((l) => `luz.${l}`), `${c.name} is in ${c.layer}`).toContain(c.layer);
       if (!c.defined) continue;
-      if (name === "core") expect(c.name, c.name).not.toMatch(/^luz-(?:site|landing|cms|app)-/);
-      else if (name === "site") expect(c.name, c.name).toMatch(/^luz-/);
+      if (name === "core") expect(c.name, c.name).not.toMatch(/^luz-(?:catalog|landing|cms|app)-/);
+      else if (name === "catalog") expect(c.name, c.name).toMatch(/^luz-/);
       else if (SITE_KIND_PREFIX[name]) expect(c.name.startsWith(SITE_KIND_PREFIX[name]), `${name} defines ${c.name}`).toBe(true);
     }
   });

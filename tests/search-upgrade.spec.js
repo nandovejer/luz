@@ -10,7 +10,7 @@
  *       and neither retries nor loops (R4, SEC-CHUNK-3; decided in steps 6-7:
  *       a failed module stays in the browser's module map, and a cache-busting
  *       URL would break SEC-CHUNK-1/2).
- * Page: tests/fixtures/site-loader.html (the loader, site.min.js). Idle is held.
+ * Page: tests/fixtures/site-loader.html (the loader, catalog.min.js). Idle is held.
  */
 import { test, expect } from '@playwright/test';
 import { EMPTY, PAGE, SEARCH_CHUNK, chunkRequests, hold, holdIdle, isDefined, releaseIdle } from './helpers/site-loader.js';

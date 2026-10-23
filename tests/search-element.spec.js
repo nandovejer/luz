@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * <luz-search> (packages/site/src/search.js): a light-DOM custom element
+ * <luz-search> (packages/catalog/src/search.js): a light-DOM custom element
  * that holds the trigger, the fallback link and the search dialog, and wires
  * them, and the buttons of the page, when it connects (D5 of
  * .claude/plans/specs/f3-package-model.md: no `site-` in the names). The
@@ -23,7 +23,7 @@ test.describe('<luz-search>', () => {
     const info = await page.evaluate(async () => {
       const before = customElements.get('luz-search');
       // Importing the module again does not define it twice (and does not throw)
-      await import('/packages/site/dist/search.js?again');
+      await import('/packages/catalog/dist/search.js?again');
       window.addSearch();
       const el = document.querySelector('luz-search');
       return { same: before === customElements.get('luz-search'), shadow: !!el.shadowRoot, isHtml: el instanceof HTMLElement };
@@ -98,7 +98,7 @@ test.describe('<luz-search> loaded from two copies of the module (R7)', () => {
     await page.goto(FIXTURE);
     await expect.poll(() => page.evaluate(() => !!customElements.get('luz-search'))).toBe(true);
     await page.evaluate(async () => {
-      await import('/packages/site/dist/search.min.js');
+      await import('/packages/catalog/dist/search.min.js');
       window.addSearch();
     });
     await expect(page.locator('#trigger')).toBeVisible();

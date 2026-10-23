@@ -6,7 +6,7 @@
  * buildPackage() writes dist/components/<name>.css and <name>.min.css for
  * every src/components/<name>.css whose name does not start with `_`, each
  * in the package's own layer; `_print.css` is emitted as dist/print.css.
- * Core already does this; site and the kinds of site follow.
+ * Core already does this; catalog and the kinds of site follow.
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -15,7 +15,7 @@ import { LAYER_ORDER } from "../scripts/luz-layers.js";
 import { SITE_KINDS } from "../scripts/luz-packages.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const PACKAGES = ["site", ...SITE_KINDS];
+const PACKAGES = ["catalog", ...SITE_KINDS];
 
 const list = (dir, filter) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(filter).sort() : []);
 const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");
@@ -82,20 +82,20 @@ for (const name of PACKAGES) {
   });
 }
 
-describe("@luz-ds/site: the print stylesheet", () => {
-  const built = existsSync(`${root}packages/site/dist/site.css`);
+describe("@luz-ds/catalog: the print stylesheet", () => {
+  const built = existsSync(`${root}packages/catalog/dist/catalog.css`);
 
   it("is emitted as dist/print.css, not as a component", () => {
-    expect(existsSync(`${root}packages/site/src/components/_print.css`)).toBe(true);
-    const packed = readFileSync(`${root}packages/site/pack-files.txt`, "utf-8").split("\n");
+    expect(existsSync(`${root}packages/catalog/src/components/_print.css`)).toBe(true);
+    const packed = readFileSync(`${root}packages/catalog/pack-files.txt`, "utf-8").split("\n");
     expect(packed).toContain("dist/print.css");
   });
 
-  it.skipIf(!built)("dist/print.css starts with the layer order and is in luz.site", () => {
-    expect(existsSync(`${root}packages/site/dist/print.css`), "dist/print.css exists").toBe(true);
-    const css = readFileSync(`${root}packages/site/dist/print.css`, "utf-8");
+  it.skipIf(!built)("dist/print.css starts with the layer order and is in luz.catalog", () => {
+    expect(existsSync(`${root}packages/catalog/dist/print.css`), "dist/print.css exists").toBe(true);
+    const css = readFileSync(`${root}packages/catalog/dist/print.css`, "utf-8");
     expect(css.startsWith(LAYER_ORDER)).toBe(true);
-    expect(blocks(css, "site")).toHaveLength(1);
+    expect(blocks(css, "catalog")).toHaveLength(1);
     expect(css).toContain("@media print");
   });
 });

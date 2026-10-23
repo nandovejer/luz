@@ -1,8 +1,8 @@
 // @ts-check
 /**
- * The CSS-only tags of @luz-ds/site in a browser: <luz-lang-switch>,
+ * The CSS-only tags of @luz-ds/catalog in a browser: <luz-lang-switch>,
  * <luz-submenu>, <luz-banner> (.claude/plans/specs/f3-package-model.md
- * section 2.2, step 8). No LUZ script ever defines them: after site.min.js
+ * section 2.2, step 8). No LUZ script ever defines them: after catalog.min.js
  * has run and both chunks have loaded, `customElements.get()` still answers
  * undefined and the tags are `:not(:defined)`. On
  * tests/fixtures/css-only-tags.html, which also holds a <luz-search> and a
@@ -34,8 +34,8 @@ test.describe('the CSS-only tags are never defined', () => {
   test('importing the two chunks by hand does not define them either', async ({ page }) => {
     await page.goto(FIXTURE);
     await page.evaluate(async () => {
-      await import('/packages/site/dist/search.min.js');
-      await import('/packages/site/dist/consent.min.js');
+      await import('/packages/catalog/dist/search.min.js');
+      await import('/packages/catalog/dist/consent.min.js');
     });
     expect(await page.evaluate((tags) => tags.map((tag) => !!customElements.get(tag)), TAGS)).toEqual([false, false, false]);
   });

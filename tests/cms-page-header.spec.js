@@ -9,7 +9,7 @@
  * below), and a lead in the secondary text colour, 600px wide at most.
  *
  * The page is tests/fixtures/cms-page.html: tokens, core and cms, no site
- * (@luz-ds/site is an optional peer). No script: runs in `chromium` and
+ * (@luz-ds/catalog is an optional peer). No script: runs in `chromium` and
  * `chromium-nojs`.
  */
 import { test, expect } from '@playwright/test';

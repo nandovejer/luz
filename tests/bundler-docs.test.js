@@ -74,7 +74,7 @@ describe("the page is the seven sections of the spec", () => {
 describe("every import the page writes exists", () => {
   it("names the imports the spec shows", () => {
     const names = specifiers();
-    for (const spec of ["@luz-ds/tokens/css", "@luz-ds/core/css", "@luz-ds/core", "@luz-ds/site/css", "@luz-ds/tokens/tokens.css"]) {
+    for (const spec of ["@luz-ds/tokens/css", "@luz-ds/core/css", "@luz-ds/core", "@luz-ds/catalog/css", "@luz-ds/tokens/tokens.css"]) {
       expect(resolveSpecifier(spec), `${spec} is not an export: the spec's list is stale`).not.toBeNull();
       expect(names, `the page never writes ${spec}`).toContain(spec);
     }

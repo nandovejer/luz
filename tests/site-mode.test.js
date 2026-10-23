@@ -1,14 +1,14 @@
 /**
- * <luz-mode> of @luz-ds/site, the parts that need no browser
+ * <luz-mode> of @luz-ds/catalog, the parts that need no browser
  * (.claude/plans/luz-home-docs-identity.md section 3.3, F1; the behaviour is
  * in tests/site-mode.spec.js):
  *   - the phase of the day, from the local hour: the boundaries are 5, 7.5,
  *     12, 17.5, 20.5 and 22.5;
  *   - mode.js is a lazy chunk like search.js and consent.js: it imports
- *     nothing (SEC-CHUNK-2), site.js loads it by a literal specifier
- *     (SEC-CHUNK-1), scripts/build-site.js and scripts/check-size.js know it;
+ *     nothing (SEC-CHUNK-2), catalog.js loads it by a literal specifier
+ *     (SEC-CHUNK-1), scripts/build-catalog.js and scripts/check-size.js know it;
  *   - its row in budgets.json and in the table of PRINCIPLES.md section 8,
- *     the same size as consent's, and no other site row moves;
+ *     the same size as consent's, and no other catalog row moves;
  *   - its header comment feeds custom-elements.json (@element, @attr, @fires).
  */
 import { existsSync, readFileSync } from "node:fs";
@@ -18,7 +18,7 @@ import { describe, expect, it } from "vitest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => readFileSync(join(repo, rel), "utf-8");
-const MODE = "packages/site/src/mode.js";
+const MODE = "packages/catalog/src/mode.js";
 /** The text of mode.js; a missing file is the assertion that fails, not an ENOENT. */
 const readMode = () => {
   expect(existsSync(join(repo, MODE)), `${MODE} exists`).toBe(true);
@@ -32,7 +32,7 @@ const readMode = () => {
  */
 async function load() {
   expect(existsSync(join(repo, MODE)), `${MODE} exists`).toBe(true);
-  return import("../packages/site/src/mode.js");
+  return import("../packages/catalog/src/mode.js");
 }
 
 /* ---- The phase of the day ------------------------------------------------ */
@@ -128,16 +128,16 @@ describe("mode.js is a lazy chunk that imports nothing", () => {
   });
 });
 
-describe("site.js, the build and the size guard know the chunk", () => {
-  it("site.js loads it by a literal import(\"./mode.js\"), for the tag luz-mode", () => {
-    const loader = read("packages/site/src/site.js");
+describe("catalog.js, the build and the size guard know the chunk", () => {
+  it("catalog.js loads it by a literal import(\"./mode.js\"), for the tag luz-mode", () => {
+    const loader = read("packages/catalog/src/catalog.js");
     expect([...loader.matchAll(LITERAL_IMPORT)].map((m) => m[2]).sort()).toContain("./mode.js");
     expect(loader).toMatch(/["']luz-mode["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/mode\.js["']\s*\)/);
     expect(code(loader).match(IMPORT_CALL)).toHaveLength(3);
   });
 
-  it("scripts/build-site.js lists mode.js among the chunks", () => {
-    const build = read("scripts/build-site.js");
+  it("scripts/build-catalog.js lists mode.js among the chunks", () => {
+    const build = read("scripts/build-catalog.js");
     const chunks = /chunks:\s*\[([^\]]*)\]/.exec(build)?.[1] ?? "";
     expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "consent.js", "mode.js"]);
   });
@@ -151,15 +151,15 @@ describe("site.js, the build and the size guard know the chunk", () => {
   });
 
   it("package.json exports it as ./mode and lists its files as side effects", () => {
-    const manifest = JSON.parse(read("packages/site/package.json"));
+    const manifest = JSON.parse(read("packages/catalog/package.json"));
     expect(manifest.exports["./mode"]).toBe("./dist/mode.js");
     expect(manifest.sideEffects).toEqual(expect.arrayContaining(["./dist/mode.js", "./dist/mode.min.js"]));
   });
 
-  it("has a stylesheet of its own, imported by the package index, in the luz.site layer's component list", () => {
-    expect(existsSync(join(repo, "packages/site/src/components/mode.css")), "components/mode.css").toBe(true);
-    expect(read("packages/site/src/components/mode.css")).toMatch(/(?<![.\w#-])luz-mode(?![\w-])/);
-    expect(read("packages/site/src/index.css")).toMatch(/@import url\("\.\/components\/mode\.css"\)/);
+  it("has a stylesheet of its own, imported by the package index, in the luz.catalog layer's component list", () => {
+    expect(existsSync(join(repo, "packages/catalog/src/components/mode.css")), "components/mode.css").toBe(true);
+    expect(read("packages/catalog/src/components/mode.css")).toMatch(/(?<![.\w#-])luz-mode(?![\w-])/);
+    expect(read("packages/catalog/src/index.css")).toMatch(/@import url\("\.\/components\/mode\.css"\)/);
   });
 
   it("scripts/smoke-consumer.js probes dist/mode.js for its phaseOf() export, as it does for consent's getConsent()", () => {
@@ -171,7 +171,7 @@ describe("site.js, the build and the size guard know the chunk", () => {
   it("scripts/docs-site/snippets.js lists the chunk and says when a page needs it", () => {
     const snippets = read("scripts/docs-site/snippets.js");
     expect(snippets).toContain("mode.min.js");
-    expect(snippets).toMatch(/["']mode\.min\.js["']\s*:\s*\[\s*["']site["']\s*,\s*["'][^"']*luz-mode/);
+    expect(snippets).toMatch(/["']mode\.min\.js["']\s*:\s*\[\s*["']catalog["']\s*,\s*["'][^"']*luz-mode/);
   });
 });
 
@@ -180,27 +180,27 @@ describe("site.js, the build and the size guard know the chunk", () => {
 describe("the budget of the mode chunk", () => {
   const budgets = JSON.parse(read("budgets.json")).budgets;
 
-  it("has the row `site JS lazy chunk: mode`: dist/mode.min.js, ideal 1 kB, ceiling 1.5 kB", () => {
-    expect(budgets.find((b) => b.name === "site JS lazy chunk: mode")).toEqual({
-      name: "site JS lazy chunk: mode",
-      file: "packages/site/dist/mode.min.js",
+  it("has the row `catalog JS lazy chunk: mode`: dist/mode.min.js, ideal 1 kB, ceiling 1.5 kB", () => {
+    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: mode")).toEqual({
+      name: "catalog JS lazy chunk: mode",
+      file: "packages/catalog/dist/mode.min.js",
       ideal: 1024,
       max: 1536,
     });
   });
 
-  it("leaves the other site rows as they were (a new row, never a raised ceiling)", () => {
-    const site = budgets.filter((b) => /^site /.test(b.name) && b.name !== "site JS lazy chunk: mode");
-    expect(site).toEqual([
-      { name: "site CSS", file: "packages/site/dist/site.min.css", ideal: 2048, max: 4096 },
-      { name: "site JS", file: "packages/site/dist/site.min.js", ideal: 1024, max: 2048 },
-      { name: "site JS lazy chunk: search", file: "packages/site/dist/search.min.js", ideal: 2048, max: 2560 },
-      { name: "site JS lazy chunk: consent", file: "packages/site/dist/consent.min.js", ideal: 1024, max: 1536 },
+  it("leaves the other catalog rows as they were (a new row, never a raised ceiling)", () => {
+    const rows = budgets.filter((b) => /^catalog /.test(b.name) && b.name !== "catalog JS lazy chunk: mode");
+    expect(rows).toEqual([
+      { name: "catalog CSS", file: "packages/catalog/dist/catalog.min.css", ideal: 2048, max: 4096 },
+      { name: "catalog JS", file: "packages/catalog/dist/catalog.min.js", ideal: 1024, max: 2048 },
+      { name: "catalog JS lazy chunk: search", file: "packages/catalog/dist/search.min.js", ideal: 2048, max: 2560 },
+      { name: "catalog JS lazy chunk: consent", file: "packages/catalog/dist/consent.min.js", ideal: 1024, max: 1536 },
     ]);
   });
 
   it("repeats the row in the table of PRINCIPLES.md section 8, with the ceiling of 1.5 kB", () => {
-    expect(read("PRINCIPLES.md")).toMatch(/^\| `site` JS lazy chunk: `mode`[^\n]*\| ≤ 1 kB \| 1 kB \| 1\.5 kB \|$/m);
+    expect(read("PRINCIPLES.md")).toMatch(/^\| `catalog` JS lazy chunk: `mode`[^\n]*\| ≤ 1 kB \| 1 kB \| 1\.5 kB \|$/m);
   });
 });
 

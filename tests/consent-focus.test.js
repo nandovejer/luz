@@ -4,7 +4,7 @@
  * with its own scroll that ignores `scroll-padding` and `scroll-margin`
  * (links and buttons honour them). WCAG 2.4.11. The Playwright check is
  * tests/consent-band.spec.js C4 and fails in WebKit only; this is the guard
- * that runs in Chromium: packages/site/src/consent.js listens to `focusin` and
+ * that runs in Chromium: packages/catalog/src/consent.js listens to `focusin` and
  * brings a target the band covers back above it with
  * `scrollIntoView({ block: "nearest" })`, which does honour the padding.
  */
@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const source = readFileSync(join(repo, "packages/site/src/consent.js"), "utf-8");
+const source = readFileSync(join(repo, "packages/catalog/src/consent.js"), "utf-8");
 
 /** The text of the `focusin` handler: from the listener to the end of its statement. */
 const handler = () => {

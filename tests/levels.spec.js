@@ -71,7 +71,7 @@ test.describe('Adoption levels', () => {
 
     expect(failed).toEqual([]);
     expect(warnings).toEqual([]);
-    // A custom element is inline until site.css styles its tag: block means the stylesheet is there
+    // A custom element is inline until catalog.css styles its tag: block means the stylesheet is there
     const display = await page
       .locator('#probe')
       .evaluate((el) => getComputedStyle(el).display);

@@ -38,7 +38,7 @@ const json = (path) => JSON.parse(readOr(path) || "{}");
 /** The text without comments, so a word in one is not a use of it. */
 const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
 
-const LIBRARIES = ["tokens", "core", "site", "landing", "cms", "app", "docs"];
+const LIBRARIES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
 const distOfRepo = `${root}packages/check/dist/${BUNDLE}`;
 const distBefore = existsSync(distOfRepo) ? statSync(distOfRepo).mtimeMs : null;
 
@@ -167,7 +167,7 @@ describe("scripts/build-check.js: the build", () => {
   });
 
   it("snapshots the facts of the seven libraries, docs last, so luz-check knows every luz-docs-* class", () => {
-    expect(/const PACKAGES = \["tokens", "core", "site", "landing", "cms", "app", "docs"\];/.test(source), "PACKAGES in scripts/build-check.js").toBe(true);
+    expect(/const PACKAGES = \["tokens", "core", "catalog", "landing", "cms", "app", "docs"\];/.test(source), "PACKAGES in scripts/build-check.js").toBe(true);
   });
 
   it("bundles packages/check/src/main.js with esbuild, as build-package.js does: node, ESM, node20, builtins external", () => {
@@ -311,7 +311,7 @@ describe("the release scripts read PUBLISHED, and the CSS probes keep PACKAGES",
   it("scripts/qa-release.js counts packages/check/src among the sources it reports", () => {
     const line = readOr("scripts/qa-release.js").split("\n").find((l) => l.startsWith("const uiFiles")) ?? "";
     const group = line.match(/\^packages\\\/\(([^)]*)\)\\\/src\\\//)?.[1] ?? "";
-    expect(group.split("|").sort()).toEqual(["app", "check", "cms", "core", "docs", "landing", "site", "tokens"]);
+    expect(group.split("|").sort()).toEqual(["app", "catalog", "check", "cms", "core", "docs", "landing", "tokens"]);
   });
 
   it("the root build ends with the bundle of check, after docs: root script luzcheck:build (spec 7.1)", () => {
@@ -410,8 +410,8 @@ describe("the changesets: @luz-ds/check has its own version (D7)", () => {
       return { file, text, bumps };
     });
 
-  it("keeps check out of `fixed` and `linked` and out of `ignore`: tokens, core and site stay the only group", () => {
-    expect(config.fixed).toEqual([["@luz-ds/tokens", "@luz-ds/core", "@luz-ds/site"]]);
+  it("keeps check out of `fixed` and `linked` and out of `ignore`: tokens, core and catalog stay the only group", () => {
+    expect(config.fixed).toEqual([["@luz-ds/tokens", "@luz-ds/core", "@luz-ds/catalog"]]);
     expect(JSON.stringify([config.fixed, config.linked, config.ignore])).not.toContain("@luz-ds/check");
   });
 

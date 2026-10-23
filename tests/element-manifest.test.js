@@ -2,7 +2,7 @@
  * F5 step 3, `custom-elements.json` (.claude/plans/specs/f5-ai-ready.md §2.3,
  * §2.2, §10 row 3; decisions D5 and D6, and "Review answers"). One manifest in
  * each package that ships a tag, in the Custom Elements Manifest format, schema
- * version 2.1.0: core ships `<luz-timeline>`; site ships `<luz-search>`,
+ * version 2.1.0: core ships `<luz-timeline>`; catalog ships `<luz-search>`,
  * `<luz-consent>` and the CSS-only `<luz-lang-switch>`, `<luz-submenu>`,
  * `<luz-banner>`. Tokens, landing, cms and app ship none.
  *
@@ -68,7 +68,7 @@
  *   A CSS-only tag has a declaration and no `exports`; its description starts
  *   "CSS-only: no script defines this tag." (D6-A). No slots, no cssParts.
  *
- *   Each shipping package.json (core, site): exports["./custom-elements.json"]
+ *   Each shipping package.json (core, catalog): exports["./custom-elements.json"]
  *   is "./dist/custom-elements.json" and `customElements` is
  *   "dist/custom-elements.json"; its pack-files.txt lists the file. No other
  *   package has either.
@@ -118,15 +118,15 @@ function walk(dir, out = []) {
 // [tag, package, file as the package exports it, a script defines it]
 const TAGS = [
   { tag: "luz-timeline", pkg: "core", file: "timeline.js", script: true },
-  { tag: "luz-search", pkg: "site", file: "search.js", script: true },
-  { tag: "luz-consent", pkg: "site", file: "consent.js", script: true },
+  { tag: "luz-search", pkg: "catalog", file: "search.js", script: true },
+  { tag: "luz-consent", pkg: "catalog", file: "consent.js", script: true },
   // F1 of the identity plan. The generator's grammar applies: attributes are the literal names of
   // getAttribute("…") / hasAttribute("…") (remember, by, for, light-attr), a boolean one is only ever
   // read with hasAttribute, and a declared default exists only for a number
-  { tag: "luz-mode", pkg: "site", file: "mode.js", script: true },
-  { tag: "luz-lang-switch", pkg: "site", file: "components/lang-switch.css", script: false },
-  { tag: "luz-submenu", pkg: "site", file: "components/submenu.css", script: false },
-  { tag: "luz-banner", pkg: "site", file: "components/banner.css", script: false },
+  { tag: "luz-mode", pkg: "catalog", file: "mode.js", script: true },
+  { tag: "luz-lang-switch", pkg: "catalog", file: "components/lang-switch.css", script: false },
+  { tag: "luz-submenu", pkg: "catalog", file: "components/submenu.css", script: false },
+  { tag: "luz-banner", pkg: "catalog", file: "components/banner.css", script: false },
 ];
 const SHIPPING = [...new Set(TAGS.map((t) => t.pkg))];
 const tagsOf = (pkg) => TAGS.filter((t) => t.pkg === pkg).map((t) => t.tag);
@@ -290,12 +290,12 @@ function firstColumnCodes(html) {
 /* ---- tests ------------------------------------------------------------------ */
 
 describe("which tags exist (the scan of the sources agrees with the spec)", () => {
-  it("the tags a script defines are timeline in core, and search, consent and mode in site", () => {
+  it("the tags a script defines are timeline in core, and search, consent and mode in catalog", () => {
     const defined = definedTags();
     expect([...defined].sort()).toEqual(TAGS.filter((t) => t.script).map((t) => [t.tag, t.pkg]).sort());
   });
 
-  it("the tags no script defines are lang-switch, submenu and banner, in site", () => {
+  it("the tags no script defines are lang-switch, submenu and banner, in catalog", () => {
     const cssOnly = cssOnlyTags(definedTags());
     expect([...cssOnly].sort()).toEqual(TAGS.filter((t) => !t.script).map((t) => [t.tag, t.pkg]).sort());
   });
@@ -506,8 +506,8 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
   });
 
   it("names the class of an anonymous definition after the tag, reads dataset.luzFooBar as data-luz-foo-bar, and ignores a stylesheet that only styles a defined tag", () => {
-    const dir = fixtureRoot("site", { "search.js": SEARCH, "components/search.css": SEARCH_CSS, "components/banner.css": BANNER });
-    const manifest = buildElementManifest("site", { root: dir });
+    const dir = fixtureRoot("catalog", { "search.js": SEARCH, "components/search.css": SEARCH_CSS, "components/banner.css": BANNER });
+    const manifest = buildElementManifest("catalog", { root: dir });
     expect(manifest.modules.map((m) => m.path)).toEqual(["components/banner.css", "search.js"]);
     const search = manifest.modules[1];
     expect(search.declarations).toStrictEqual([
@@ -525,8 +525,8 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
   });
 
   it("declares a CSS-only tag as a custom element with no definition export, and reads the attribute selector written on the tag", () => {
-    const dir = fixtureRoot("site", { "components/banner.css": BANNER });
-    const [module] = buildElementManifest("site", { root: dir }).modules;
+    const dir = fixtureRoot("catalog", { "components/banner.css": BANNER });
+    const [module] = buildElementManifest("catalog", { root: dir }).modules;
     expect(module).toStrictEqual({
       kind: "javascript-module",
       path: "components/banner.css",

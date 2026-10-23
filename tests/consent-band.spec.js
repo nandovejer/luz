@@ -1,12 +1,12 @@
 // @ts-check
 /**
- * The cookie band of @luz-ds/site (<luz-consent>, D7 of
+ * The cookie band of @luz-ds/catalog (<luz-consent>, D7 of
  * .claude/plans/specs/f3-package-model.md, step 9, and the accessibility
  * requirements C1 to C11 and the owner's second round on C3 and C5): a band
  * fixed at the block end of the window, so showing it shifts nothing, whose
  * height is published as --luz-consent-h so that nothing Tab reaches ends up
  * under it (WCAG 2.4.11). On tests/fixtures/consent-band.html: a shell with a
- * long sidebar, a long page and a footer, loaded through site.min.js (the
+ * long sidebar, a long page and a footer, loaded through catalog.min.js (the
  * presence loader), so the idle trigger of C9 is the real one. The band's
  * behaviour on tests/fixtures/site-top.html (the answers, the storage, axe)
  * stays in tests/site-consent.spec.js.

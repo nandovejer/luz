@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * <luz-mode> of @luz-ds/site (.claude/plans/luz-home-docs-identity.md section 3.3, F1):
+ * <luz-mode> of @luz-ds/catalog (.claude/plans/luz-home-docs-identity.md section 3.3, F1):
  * the color mode switcher with an "Auto" state, wrapped around core's radios.
  * Its module, mode.js, is loaded on its own as dist/mode.min.js by
  * tests/fixtures/site-mode.html (the loader is checked in
@@ -23,7 +23,7 @@
  * JavaScript and skips itself where it is off.
  *
  * tests/fixtures/site-loader-mode-luz.html is the real loading path: luz.js,
- * the boot snippet in <head> and site.min.js, which loads mode.min.js on idle.
+ * the boot snippet in <head> and catalog.min.js, which loads mode.min.js on idle.
  * Every fixture is lang="en": core's cycle button takes its name from the
  * language of the page, and in English core's two boot waves run in one task,
  * so "Current: Auto" is there when the chunk has upgraded the element.
@@ -797,7 +797,7 @@ test.describe('<luz-mode> on a page that also loads luz.js', () => {
     expect(await state(page)).toEqual({ theme: 'dark', light: 'night', mode: 'dark', checked: 'dark' });
   });
 
-  test('the real loading path (luz.js, the boot snippet, site.min.js loading the chunk on idle): data-theme only ever takes "dark", the auto radio stays checked', async ({ page }) => {
+  test('the real loading path (luz.js, the boot snippet, catalog.min.js loading the chunk on idle): data-theme only ever takes "dark", the auto radio stays checked', async ({ page }) => {
     await open(page, 'boot=dark', { fixture: LOADED, scheme: 'dark' });
     await settled(page);
     expect(new Set(await history(page))).toEqual(new Set(['dark']));

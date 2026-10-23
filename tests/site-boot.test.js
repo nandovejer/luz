@@ -12,7 +12,7 @@
  *   2. else prefers-contrast: more is the high contrast mode, with the light of
  *      the local hour (what <luz-mode by="clock"> writes after it upgrades);
  *   3. else the phase of the local hour (the boundaries of phaseOf in
- *      packages/site/src/mode.js) is data-light, and dawn, dusk and night
+ *      packages/catalog/src/mode.js) is data-light, and dawn, dusk and night
  *      are dark, the others light. The system's colour scheme is not read.
  * Storage may throw. The script is classic (no import) and writes nothing.
  */
@@ -21,7 +21,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import { describe, expect, it } from "vitest";
-import { phaseOf } from "../packages/site/src/mode.js";
+import { phaseOf } from "../packages/catalog/src/mode.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => readFileSync(join(repo, rel), "utf-8");

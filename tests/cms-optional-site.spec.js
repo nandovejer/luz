@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * @luz-ds/cms works without @luz-ds/site (.claude/plans/specs/f3-package-model.md,
+ * @luz-ds/cms works without @luz-ds/catalog (.claude/plans/specs/f3-package-model.md,
  * §5 and §9 step 11): site is an optional peer of a kind of site. A page that
  * loads tokens, core and cms and nothing else (tests/fixtures/cms-page.html: no
  * site stylesheet, no site script) still renders its header, page header and
@@ -46,7 +46,7 @@ test.describe('cms without site', () => {
     page.on('request', (req) => requests.push(req.url()));
     await page.goto(FIXTURE);
     await page.waitForLoadState('networkidle');
-    expect(requests.filter((url) => url.includes('/packages/site/'))).toEqual([]);
+    expect(requests.filter((url) => url.includes('/packages/catalog/'))).toEqual([]);
     expect(requests.some((url) => url.includes('/packages/cms/dist/cms.css'))).toBe(true);
     expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-consent, luz-lang-switch, luz-submenu, luz-banner').length)).toBe(0);
   });

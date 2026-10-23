@@ -18,7 +18,7 @@ const files = [
   "packages/tokens/dist/tokens.css",
   "packages/core/dist/luz.css",
   "packages/core/dist/base.css",
-  "packages/site/dist/site.css",
+  "packages/catalog/dist/catalog.css",
   "packages/landing/dist/landing.css",
   "packages/cms/dist/cms.css",
   "packages/app/dist/app.css",
@@ -55,7 +55,7 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
   it("covers every package's CSS", () => {
     expect(files.some((f) => f.includes("tokens/dist"))).toBe(true);
     expect(files.some((f) => f.endsWith("luz.css"))).toBe(true);
-    expect(files.some((f) => f.endsWith("site.css"))).toBe(true);
+    expect(files.some((f) => f.endsWith("catalog.css"))).toBe(true);
     expect(files.some((f) => f.endsWith("landing.css"))).toBe(true);
     expect(files.some((f) => f.endsWith("cms.css"))).toBe(true);
     expect(files.some((f) => f.endsWith("app.css")), "packages/app/dist/app.css (pnpm app:build)").toBe(true);
@@ -92,7 +92,7 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
    share a class: their order among themselves decides nothing. */
 describe("the luz.app layer", () => {
   it("comes right after luz.cms, and the layers before it did not move", () => {
-    expect(LAYERS.slice(0, 12)).toEqual(["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "site", "landing", "cms", "app"]);
+    expect(LAYERS.slice(0, 12)).toEqual(["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "catalog", "landing", "cms", "app"]);
     expect(LAYER_ORDER).toContain("luz.landing, luz.cms, luz.app, luz.docs, luz.print;");
   });
 
@@ -107,10 +107,10 @@ describe("the luz.app layer", () => {
    shares no class with any other package (`.luz-docs-*`), so its place moves no other layer
    (.claude/plans/luz-home-docs-identity.md, section 3.2). */
 describe("the luz.docs layer", () => {
-  const STATEMENT = "@layer luz.tokens, luz.themes, luz.settings, luz.generic, luz.elements, luz.objects, luz.components, luz.utilities, luz.site, luz.landing, luz.cms, luz.app, luz.docs, luz.print;";
+  const STATEMENT = "@layer luz.tokens, luz.themes, luz.settings, luz.generic, luz.elements, luz.objects, luz.components, luz.utilities, luz.catalog, luz.landing, luz.cms, luz.app, luz.docs, luz.print;";
 
   it("comes right after luz.app and right before luz.print, and no other layer moved", () => {
-    expect(LAYERS).toEqual(["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "site", "landing", "cms", "app", "docs", "print"]);
+    expect(LAYERS).toEqual(["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "catalog", "landing", "cms", "app", "docs", "print"]);
     expect(LAYER_ORDER).toBe(`${STATEMENT}\n`);
   });
 

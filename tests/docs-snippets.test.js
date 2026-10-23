@@ -28,7 +28,7 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const FILES = {
   tokens: ["luz-tokens.min.css"],
   core: ["luz.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js"],
-  site: ["site.min.css", "site.min.js", "search.min.js", "consent.min.js", "mode.min.js"],
+  catalog: ["catalog.min.css", "catalog.min.js", "search.min.js", "consent.min.js", "mode.min.js"],
   landing: ["landing.min.css"],
   cms: ["cms.min.css"],
   app: ["app.min.css"],
@@ -43,8 +43,8 @@ const cdnFor = (kind) => {
   const pkg = KIND_PACKAGE[kind];
   const withSite = pkg !== null;
   return {
-    css: [["tokens", "luz-tokens.min.css"], ["core", "luz.min.css"], ...(withSite ? [["site", "site.min.css"], [pkg, `${pkg}.min.css`]] : [])],
-    js: [["core", "luz.min.js"], ...(withSite ? [["site", "site.min.js"]] : [])],
+    css: [["tokens", "luz-tokens.min.css"], ["core", "luz.min.css"], ...(withSite ? [["catalog", "catalog.min.css"], [pkg, `${pkg}.min.css`]] : [])],
+    js: [["core", "luz.min.js"], ...(withSite ? [["catalog", "catalog.min.js"]] : [])],
   };
 };
 
@@ -169,7 +169,7 @@ describe("the snippet generator", () => {
       const html = build(root);
 
       for (const kind of KINDS) {
-        it(`${kind}, from a CDN: the files of its table, tokens then core then site then the kind, every line with its own hash`, () => {
+        it(`${kind}, from a CDN: the files of its table, tokens then core then catalog then the kind, every line with its own hash`, () => {
           const tags = tagsOf(codeOf(html, `${kind}-cdn`));
           const want = cdnFor(kind);
           const sheets = tags.filter((t) => t.tag === "link");
@@ -189,18 +189,18 @@ describe("the snippet generator", () => {
         it(`${kind}, with npm: install command and imports in layer order, core's script after the styles`, () => {
           const pkg = KIND_PACKAGE[kind];
           const el = snippetOf(html, `${kind}-npm`);
-          const add = ["@luz-ds/tokens", "@luz-ds/core", ...(pkg ? ["@luz-ds/site", `@luz-ds/${pkg}`] : [])];
+          const add = ["@luz-ds/tokens", "@luz-ds/core", ...(pkg ? ["@luz-ds/catalog", `@luz-ds/${pkg}`] : [])];
           expect(el).toContain(`data-copy="pnpm add ${add.join(" ")}"`);
           const code = codeOf(html, `${kind}-npm`);
           const imports = [...code.matchAll(/\bimport\s+["']([^"']+)["']/g)].map((m) => m[1]);
           const css = imports.filter((s) => s.endsWith("/css"));
           expect(css).toEqual(add.map((p) => `${p}/css`));
           const js = imports.filter((s) => !s.endsWith("/css")).sort();
-          expect(js).toEqual(pkg ? ["@luz-ds/core", "@luz-ds/site"] : ["@luz-ds/core"]);
+          expect(js).toEqual(pkg ? ["@luz-ds/catalog", "@luz-ds/core"] : ["@luz-ds/core"]);
         });
       }
 
-      it("marks the site lines of landing, blog and app as optional, in both ways of loading", () => {
+      it("marks the catalog lines of landing, blog and app as optional, in both ways of loading", () => {
         for (const kind of KINDS.filter((k) => KIND_PACKAGE[k])) {
           for (const via of ["npm", "cdn"]) expect(codeOf(html, `${kind}-${via}`), `${kind}-${via}`).toMatch(/optional/i);
         }
@@ -288,11 +288,11 @@ describe("the snippet generator", () => {
   it("takes each version from its own package.json: the seven fixture versions are all different", () => {
     const html = build(fixture);
     const versions = new Set(tagsOf(codeOf(html, "app-cdn")).map((t) => parts(t.url).version));
-    expect(versions.size).toBe(4); // tokens, core, site, app
+    expect(versions.size).toBe(4); // tokens, core, catalog, app
     expect(versions.has(versionOf(fixture, "tokens"))).toBe(true);
     expect(versions.has(versionOf(fixture, "app"))).toBe(true);
     const docs = new Set(tagsOf(codeOf(html, "docs-cdn")).map((t) => parts(t.url).version));
-    expect(docs.size).toBe(4); // tokens, core, site, docs
+    expect(docs.size).toBe(4); // tokens, core, catalog, docs
     expect(docs.has(versionOf(fixture, "docs"))).toBe(true);
     expect(docs.has(versionOf(fixture, "app"))).toBe(false);
   });
@@ -380,7 +380,7 @@ describe("the hashes and URLs of the docs are never typed", () => {
       const commands = new Set([...source.matchAll(/data-copy="(pnpm add [^"]+)"/g)].map((m) => m[1]));
       for (const kind of KINDS) {
         const pkg = KIND_PACKAGE[kind];
-        const add = `pnpm add ${["@luz-ds/tokens", "@luz-ds/core", ...(pkg ? ["@luz-ds/site", `@luz-ds/${pkg}`] : [])].join(" ")}`;
+        const add = `pnpm add ${["@luz-ds/tokens", "@luz-ds/core", ...(pkg ? ["@luz-ds/catalog", `@luz-ds/${pkg}`] : [])].join(" ")}`;
         expect(commands.has(add), add).toBe(true);
         expect(snippetOf(html, `${kind}-npm`)).toContain(`data-copy="${add}"`);
       }

@@ -482,7 +482,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     const expected = {
       components: "@luz-ds/core",
       tokens: "@luz-ds/tokens",
-      site: "@luz-ds/site",
+      catalog: "@luz-ds/catalog",
       landing: "@luz-ds/landing",
       cms: "@luz-ds/cms",
       app: "@luz-ds/app",

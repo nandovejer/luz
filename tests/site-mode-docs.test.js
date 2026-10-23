@@ -1,6 +1,6 @@
 /**
  * The docs that go with <luz-mode> (.claude/plans/luz-home-docs-identity.md
- * section 3.3, F1): the pattern page apps/docs/pages/site/mode.html and the
+ * section 3.3, F1): the pattern page apps/docs/pages/catalog/mode.html and the
  * pages that point at it. tests/docs-site.test.js and tests/site-docs.spec.js
  * hold the structure every pattern page has and the attributes against the
  * element manifest; this file holds the content only this element has:
@@ -32,8 +32,8 @@ import { describe, expect, it } from "vitest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PAGES = "apps/docs/pages";
-const MODE_PAGE = `${PAGES}/site/mode.html`;
-const ROUTE = "/docs/site/mode/";
+const MODE_PAGE = `${PAGES}/catalog/mode.html`;
+const ROUTE = "/docs/catalog/mode/";
 
 /** A page's source; a missing page is the assertion that fails, not an ENOENT. */
 const page = (rel) => {
@@ -57,18 +57,18 @@ const DARK = new Set(["dawn", "dusk", "night"]);
 
 /* ---- The page ---------------------------------------------------------------- */
 
-describe("apps/docs/pages/site/mode.html", () => {
-  it("is a pattern page of the Site area: front matter with the module and the files", () => {
+describe("apps/docs/pages/catalog/mode.html", () => {
+  it("is a pattern page of the Catalog area: front matter with the module and the files", () => {
     const meta = frontMatter(page(MODE_PAGE));
-    expect(meta).toMatchObject({ area: "site", group: "patterns", module: "mode.js", toc: "h2,h3" });
+    expect(meta).toMatchObject({ area: "catalog", group: "patterns", module: "mode.js", toc: "h2,h3" });
     expect(meta.title, "title").toBeTruthy();
     expect(meta.description, "description").toBeTruthy();
     expect(meta.files, "files").toMatch(/mode\.css|luz-mode/);
   });
 
   it("has the table of the six phases: hours computed from phaseOf(), and dark or light", async () => {
-    expect(existsSync(join(repo, "packages/site/src/mode.js")), "packages/site/src/mode.js exists").toBe(true);
-    const { phaseOf } = await import("../packages/site/src/mode.js");
+    expect(existsSync(join(repo, "packages/catalog/src/mode.js")), "packages/catalog/src/mode.js exists").toBe(true);
+    const { phaseOf } = await import("../packages/catalog/src/mode.js");
     const html = page(MODE_PAGE);
     const table = rows(html);
     // Where each phase starts and ends, on the 24-hour circle, read off the function
@@ -169,7 +169,7 @@ describe("the boot snippet for <head> on the docs page", () => {
 
   const script = () => {
     const found = bootScript();
-    expect(found, "an inline <script> in a code block of site/mode.html that reads `luz-theme`").not.toBeNull();
+    expect(found, "an inline <script> in a code block of catalog/mode.html that reads `luz-theme`").not.toBeNull();
     return found;
   };
 
@@ -244,7 +244,7 @@ describe("the pages that point at <luz-mode>", () => {
     const html = page(`${PAGES}/tokens/modes.html`);
     const heading = /<h2\b[^>]*\bid="([\w-]+)"[^>]*>\s*Following the system or the clock\s*<\/h2>/.exec(html);
     expect(heading, 'an <h2 id="…">Following the system or the clock</h2>').not.toBeNull();
-    expect(hasLink(html.slice(heading.index), ROUTE), "a link to /docs/site/mode/ after the heading").toBe(true);
+    expect(hasLink(html.slice(heading.index), ROUTE), "a link to /docs/catalog/mode/ after the heading").toBe(true);
   });
 
   it("accessibility.html states the Auto radio and the element", () => {
@@ -273,7 +273,7 @@ const section = (html, id) => {
 const labelsOf = (markup) => [...markup.matchAll(/<label\b[^>]*\bluz-mode-btn\b[^>]*>[\s\S]*?<\/label>/g)].map((m) => m[0]);
 const ICON = /<svg\b(?=[^>]*\bclass="[^"]*\bluz-mode-btn__icon\b)(?=[^>]*\baria-hidden="true")[^>]*>/;
 
-describe("site/mode.html: the icons are in the labels (the cycle button shows the checked label's icon)", () => {
+describe("catalog/mode.html: the icons are in the labels (the cycle button shows the checked label's icon)", () => {
   it("every label of the markup snippet has a .luz-mode-btn__icon svg with aria-hidden=\"true\", Auto included", () => {
     const snippet = codeBlocks(page(MODE_PAGE)).find((c) => c.includes("<luz-mode"));
     expect(snippet, "the code block with <luz-mode>").toBeTruthy();
@@ -297,7 +297,7 @@ describe("site/mode.html: the icons are in the labels (the cycle button shows th
   });
 
   it("the header comment of mode.js has the icons in its example too", () => {
-    const src = readFileSync(join(repo, "packages/site/src/mode.js"), "utf-8");
+    const src = readFileSync(join(repo, "packages/catalog/src/mode.js"), "utf-8");
     // reads packages/ only; the implementer edits it, this test does not
     expect(src).toMatch(/luz-mode-btn__icon/);
   });
@@ -305,7 +305,7 @@ describe("site/mode.html: the icons are in the labels (the cycle button shows th
 
 describe("what Auto does that a reader would not expect: on the page and in the accessibility statement", () => {
   const where = {
-    "site/mode.html (When not to use or Known issues)": () => text(section(page(MODE_PAGE), "when-not")) + " " + text(section(page(MODE_PAGE), "known-issues")),
+    "catalog/mode.html (When not to use or Known issues)": () => text(section(page(MODE_PAGE), "when-not")) + " " + text(section(page(MODE_PAGE), "known-issues")),
     "accessibility.html": () => text(page(`${PAGES}/accessibility.html`).split(/Auto color mode/)[1] ?? ""),
   };
   for (const [name, get] of Object.entries(where)) {
@@ -334,7 +334,7 @@ describe("what Auto does that a reader would not expect: on the page and in the 
 
 describe("the CSP sentence for the script for the head", () => {
   const CSP = /\bCSP\b|Content[- ]Security[- ]Policy/;
-  it("site/mode.html #boot says: under a CSP without 'unsafe-inline', serve it as a classic file in <head> or allow it by its sha256 hash", () => {
+  it("catalog/mode.html #boot says: under a CSP without 'unsafe-inline', serve it as a classic file in <head> or allow it by its sha256 hash", () => {
     const t = text(section(page(MODE_PAGE), "boot"));
     expect(t).toMatch(CSP);
     expect(t).toMatch(/unsafe-inline/);

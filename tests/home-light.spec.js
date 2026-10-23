@@ -332,7 +332,7 @@ test.describe('with JavaScript', () => {
   test('without <luz-mode> the visuals follow the slider and nothing writes data-theme or data-light', async ({ page }) => {
     // The module that defines <luz-mode> is replaced by an empty one: the page has the element, nobody upgrades it
     for (const file of ['mode.js', 'mode.min.js']) {
-      await page.route(`**/packages/site/dist/${file}`, (route) => route.fulfill({ contentType: 'text/javascript', body: 'export {};' }));
+      await page.route(`**/packages/catalog/dist/${file}`, (route) => route.fulfill({ contentType: 'text/javascript', body: 'export {};' }));
     }
     await open(page, '/', { time: '14:00' });
     expect(await page.evaluate(() => !!customElements.get('luz-mode'))).toBe(false);

@@ -49,22 +49,22 @@ const cdn = (pkg, file) => `@luz-ds/${pkg}@${version(pkg)}/dist/${file}`;
 
 /** The levels of adoption of the first three sections of "What's inside". */
 const LEVELS = [
-  { id: 'inside', n: 1, npm: 'npm install @luz-ds/tokens', files: [cdn('tokens', 'luz-tokens.min.css')], absent: ['@luz-ds/core', '@luz-ds/site'], list: ['inside.list.tokens'] },
+  { id: 'inside', n: 1, npm: 'npm install @luz-ds/tokens', files: [cdn('tokens', 'luz-tokens.min.css')], absent: ['@luz-ds/core', '@luz-ds/catalog'], list: ['inside.list.tokens'] },
   {
     id: 'inside-2',
     n: 2,
     npm: 'npm install @luz-ds/tokens @luz-ds/core',
     files: [cdn('tokens', 'luz-tokens.min.css'), cdn('core', 'luz.min.css'), cdn('core', 'luz.min.js')],
-    absent: ['@luz-ds/site'],
+    absent: ['@luz-ds/catalog'],
     list: ['inside.list.components', 'inside.list.objects'],
   },
   {
     id: 'inside-3',
     n: 3,
-    npm: 'npm install @luz-ds/tokens @luz-ds/core @luz-ds/site',
-    files: [cdn('tokens', 'luz-tokens.min.css'), cdn('core', 'luz.min.css'), cdn('site', 'site.min.css'), cdn('core', 'luz.min.js'), cdn('site', 'site.min.js')],
+    npm: 'npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog',
+    files: [cdn('tokens', 'luz-tokens.min.css'), cdn('core', 'luz.min.css'), cdn('catalog', 'catalog.min.css'), cdn('core', 'luz.min.js'), cdn('catalog', 'catalog.min.js')],
     absent: [],
-    list: ['inside.list.site'],
+    list: ['inside.list.catalog'],
   },
 ];
 /** The fourth: one package for each kind of site [catalog key, package, docs area]. */
@@ -790,7 +790,7 @@ test.describe('Landing page', () => {
           };
         }),
       );
-      expect(bars.map((bar) => bar.name)).toEqual(['tokens', 'core', 'site', 'landing', 'cms', 'app', 'docs']);
+      expect(bars.map((bar) => bar.name)).toEqual(['tokens', 'core', 'catalog', 'landing', 'cms', 'app', 'docs']);
       // The figure is the text; the meter beside it is the picture, out of the accessibility tree
       expect(bars.every((bar) => bar.hidden === 'true')).toBe(true);
       for (const bar of bars) {
@@ -930,11 +930,11 @@ test.describe('Landing page', () => {
         await expect(docs.locator('h3')).toHaveText(words['footer.packages']);
         const guides = docs.locator('ul').first().locator('a');
         await expect(guides).toHaveText([words['nav.get-started'], words['footer.patterns'], words['footer.accessibility']]);
-        expect(await guides.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(['/docs/get-started/', '/docs/site/', '/docs/accessibility/'].map((path) => (lang === 'es' ? `/es${path}` : path)));
+        expect(await guides.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(['/docs/get-started/', '/docs/catalog/', '/docs/accessibility/'].map((path) => (lang === 'es' ? `/es${path}` : path)));
         const packages = docs.locator('ul').last().locator('a');
-        await expect(packages).toHaveText(['tokens', 'core', 'site', 'landing', 'cms', 'app', 'docs'].map((name) => words[`footer.pkg.${name}`]));
+        await expect(packages).toHaveText(['tokens', 'core', 'catalog', 'landing', 'cms', 'app', 'docs'].map((name) => words[`footer.pkg.${name}`]));
         expect(await packages.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(
-          ['/docs/tokens/', '/docs/components/', '/docs/site/', '/docs/landing/', '/docs/cms/', '/docs/app/', '/docs/documentation/'].map((path) => (lang === 'es' ? `/es${path}` : path)),
+          ['/docs/tokens/', '/docs/components/', '/docs/catalog/', '/docs/landing/', '/docs/cms/', '/docs/app/', '/docs/documentation/'].map((path) => (lang === 'es' ? `/es${path}` : path)),
         );
         // The list of packages is named by its label
         await expect(docs.locator('ul').last()).toHaveAccessibleName(words['footer.packages']);
@@ -1409,7 +1409,7 @@ test.describe('Landing page', () => {
         id: 'level-1-tokens-only',
         install: 'pnpm add @luz-ds/tokens',
         files: [cdn('tokens', 'luz-tokens.min.css')],
-        absent: ['@luz-ds/core', '@luz-ds/site'],
+        absent: ['@luz-ds/core', '@luz-ds/catalog'],
       },
       {
         id: 'level-2-tokens-and-core',
@@ -1419,17 +1419,17 @@ test.describe('Landing page', () => {
           cdn('core', 'luz.min.css'),
           cdn('core', 'luz.min.js'),
         ],
-        absent: ['@luz-ds/site'],
+        absent: ['@luz-ds/catalog'],
       },
       {
-        id: 'level-3-tokens-core-and-site',
-        install: 'pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/site',
+        id: 'level-3-tokens-core-and-catalog',
+        install: 'pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog',
         files: [
           cdn('tokens', 'luz-tokens.min.css'),
           cdn('core', 'luz.min.css'),
-          cdn('site', 'site.min.css'),
+          cdn('catalog', 'catalog.min.css'),
           cdn('core', 'luz.min.js'),
-          cdn('site', 'site.min.js'),
+          cdn('catalog', 'catalog.min.js'),
         ],
         absent: [],
       },
@@ -1466,7 +1466,7 @@ test.describe('Landing page', () => {
         const urls = snippet.match(/https:\/\/cdn\.jsdelivr\.net\/npm\/\S+?(?=")/g);
         expect(urls).toHaveLength(level.files.length);
         for (const url of urls) {
-          const [, pkg, pinned] = url.match(/@luz-ds\/(tokens|core|site)@([^/]+)\//) ?? [];
+          const [, pkg, pinned] = url.match(/@luz-ds\/(tokens|core|catalog)@([^/]+)\//) ?? [];
           expect(pkg, url).toBeTruthy();
           expect(pinned, url).toBe(version(pkg));
         }

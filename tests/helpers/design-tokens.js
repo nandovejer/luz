@@ -85,7 +85,7 @@ function sourceOf(page) {
   if (page.meta.area === "components") {
     return { css: page.meta.files.split(";").map((f) => read(`packages/core/src/${f.trim()}`)).join("\n"), classes: null, tags: [] };
   }
-  if (page.meta.module === "search.js") return { css: read("packages/site/src/components/search.css"), classes: null, tags: [] };
+  if (page.meta.module === "search.js") return { css: read("packages/catalog/src/components/search.css"), classes: null, tags: [] };
   const entries = page.meta.files.split(",").map((f) => f.trim());
   const classes = entries.filter((f) => f.startsWith(".")).map((f) => f.slice(1));
   // A CSS-only tag (<luz-banner>) is styled by :where(luz-banner …) selectors, not by a class
@@ -98,8 +98,8 @@ function sourceOf(page) {
   // The shell patterns, and the patterns with a file of their own (the language switcher, the site header, the submenu, the notice and the cookie banner)
   // (renamed in F3: lang-switcher.css to lang-switch.css, banners.css split into banner.css and consent.css; whichever exist)
   const files = ["_components.css", "lang-switcher.css", "lang-switch.css", "site-header.css", "submenu.css", "banners.css", "banner.css", "consent.css"]
-    .filter((f) => existsSync(`${repo}packages/site/src/components/${f}`))
-    .map((f) => read(`packages/site/src/components/${f}`));
+    .filter((f) => existsSync(`${repo}packages/catalog/src/components/${f}`))
+    .map((f) => read(`packages/catalog/src/components/${f}`));
   return { css: files.join("\n"), classes, tags };
 }
 
@@ -121,7 +121,7 @@ export function tokensUsedBy(page) {
     for (const [, name] of body.matchAll(/var\(\s*(--luz-[\w-]+)/g)) used.add(name);
   }
   // --luz-site-* and --luz-<kind>-* (landing, cms…) are properties a pattern sets for its own parts, not design tokens
-  const patternProperty = new RegExp(`^--luz-(?:${["site", ...SITE_KINDS].join("|")})-`);
+  const patternProperty = new RegExp(`^--luz-(?:${["catalog", ...SITE_KINDS].join("|")})-`);
   return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !ownProperty?.test(t)).sort();
 }
 

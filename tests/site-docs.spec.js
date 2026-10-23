@@ -1,8 +1,8 @@
 /**
  * LUZ Design System — Pattern docs guidance, per package
- * Every block class that a package of patterns ships (@luz-ds/site,
+ * Every block class that a package of patterns ships (@luz-ds/catalog,
  * @luz-ds/landing, @luz-ds/cms, @luz-ds/app, @luz-ds/docs) belongs to a pattern, and every pattern has
- * its page in the documentation, in the area of its package (/docs/site/,
+ * its page in the documentation, in the area of its package (/docs/catalog/,
  * /docs/landing/, /docs/cms/, /docs/app/, /docs/documentation/), with the same structure as a component page: example,
  * known issues, then the Code and Design tabs (PRINCIPLES.md red line 18 and
  * strong rule SR-5). The class list is read from each package's source, so
@@ -25,7 +25,7 @@ const fromRepo = (path) => fileURLToPath(new URL(`../${path}`, import.meta.url))
 const PACKAGES = {
   // F3 step 12 and F1 of the identity plan: site is six self-contained components, each a `<luz-*>` tag that is the
   // block (`.luz-<tag>__<part>`, D5). The page structure moved to the kinds and to core
-  site: {
+  catalog: {
     label: 'Catalog',
     patternOf: {
       search: 'search',
@@ -99,7 +99,7 @@ function blocksOf(name) {
     .filter((file) => file.endsWith('.css'))
     .map((file) => readFileSync(`${dir}/${file}`, 'utf-8'))
     .join('\n');
-  if (name === 'site') return [...blocksOfCss(css)].filter((block) => block.startsWith('luz-')).map((block) => block.slice('luz-'.length));
+  if (name === 'catalog') return [...blocksOfCss(css)].filter((block) => block.startsWith('luz-')).map((block) => block.slice('luz-'.length));
   return [...new Set([...css.matchAll(new RegExp(`\\.luz-${name}-([\\w-]+)`, 'g'))].map((m) => m[1].split(/__|--/)[0]))];
 }
 
@@ -113,9 +113,9 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
   test.describe(`${label} docs`, () => {
     test(`every ${name} class belongs to a pattern`, () => {
       const blocks = blocksOf(name);
-      expect(blocks.length, `packages/${name} has no ${name === 'site' ? '<luz-*> block' : `.luz-${name}-* class`}`).toBeGreaterThan(0);
+      expect(blocks.length, `packages/${name} has no ${name === 'catalog' ? '<luz-*> block' : `.luz-${name}-* class`}`).toBeGreaterThan(0);
       for (const block of blocks) {
-        expect(patternOf[block], `${name === 'site' ? `luz-${block}` : `.luz-${name}-${block}`} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
+        expect(patternOf[block], `${name === 'catalog' ? `luz-${block}` : `.luz-${name}-${block}`} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
       }
     });
 
@@ -131,16 +131,16 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
       });
     }
 
-    if (name === 'site') {
+    if (name === 'catalog') {
       test('site ships exactly its six components: search, consent, mode, lang-switch, submenu and banner', () => {
-        expect(blocksOf('site').sort()).toEqual(['banner', 'consent', 'lang-switch', 'mode', 'search', 'submenu']);
+        expect(blocksOf('catalog').sort()).toEqual(['banner', 'consent', 'lang-switch', 'mode', 'search', 'submenu']);
       });
 
       test('the Site gallery lists the six components and the class reference, and nothing of the page structure that moved out', async ({ page }) => {
-        await page.goto('/docs/site/');
+        await page.goto('/docs/catalog/');
         const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
-        expect(cards.filter((href) => href.startsWith('/docs/site/')).sort()).toEqual(
-          ['banner', 'classes', 'consent', 'lang-switch', 'mode', 'search', 'submenu'].map((slug) => `/docs/site/${slug}/`),
+        expect(cards.filter((href) => href.startsWith('/docs/catalog/')).sort()).toEqual(
+          ['banner', 'classes', 'consent', 'lang-switch', 'mode', 'search', 'submenu'].map((slug) => `/docs/catalog/${slug}/`),
         );
       });
     }

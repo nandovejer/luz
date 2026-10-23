@@ -1,7 +1,7 @@
 // @ts-check
 /**
- * The presence loader (packages/site/src/site.js, .claude/plans/specs/f3-package-model.md,
- * section 2.3 and 9 step 7): site.min.js scans the page once and loads
+ * The presence loader (packages/catalog/src/catalog.js, .claude/plans/specs/f3-package-model.md,
+ * section 2.3 and 9 step 7): catalog.min.js scans the page once and loads
  * search.min.js only when there is a <luz-search> (on its first pointerdown or
  * focusin, or on idle) and consent.min.js only when there is a <luz-consent>
  * (on idle) and mode.min.js only when there is a <luz-mode> (on idle). Content added later is not upgraded until the page imports the
@@ -22,7 +22,7 @@ test.describe('the loader: which chunk, and when', () => {
   test('(a) a page with neither element requests neither chunk, even when idle comes', async ({ page }) => {
     await holdIdle(page);
     const seen = chunkRequests(page);
-    const entry = page.waitForRequest(/\/site\.min\.js(\?.*)?$/);
+    const entry = page.waitForRequest(/\/catalog\.min\.js(\?.*)?$/);
     await page.goto(EMPTY);
     await entry;
     await releaseIdle(page);
@@ -155,7 +155,7 @@ test.describe('the loader: content added after the scan', () => {
     await expect(page.locator('#fallback')).toBeVisible();
     await expect(page.locator('#trigger')).toBeHidden();
 
-    await page.evaluate(() => import('/packages/site/dist/search.min.js'));
+    await page.evaluate(() => import('/packages/catalog/dist/search.min.js'));
     expect(await page.locator('luz-search').evaluate((el) => el.matches(':defined'))).toBe(true);
     await expect(page.locator('#trigger')).toBeVisible();
     await expect(page.locator('#fallback')).toBeHidden();
@@ -194,10 +194,10 @@ test.describe('the loader: layout shift (d)', () => {
 });
 
 // SEC-CHUNK-4 (R5), the full-SRI path: an import map with an `integrity` section
-// before site.min.js. WebKit 26.6 and Firefox 155 honour it; so does Chromium
+// before catalog.min.js. WebKit 26.6 and Firefox 155 honour it; so does Chromium
 // (127+). The page is the fixture with the import map added.
 test.describe('the loader: an import map with integrity (R5)', () => {
-  /** The fixture with `<script type="importmap">{"integrity": {...}}</script>` before site.min.js. */
+  /** The fixture with `<script type="importmap">{"integrity": {...}}</script>` before catalog.min.js. */
   async function withImportMap(page, integrity) {
     await page.route(/\/tests\/fixtures\/site-loader\.html$/, async (route) => {
       const response = await route.fetch();
@@ -208,7 +208,7 @@ test.describe('the loader: an import map with integrity (R5)', () => {
       await route.fulfill({ response, body: html });
     });
   }
-  const CHUNK_URL = '/packages/site/dist/search.min.js';
+  const CHUNK_URL = '/packages/catalog/dist/search.min.js';
 
   test('the right hash lets the chunk run: the element is defined', async ({ page }) => {
     const body = await (await page.request.get(CHUNK_URL)).body();
@@ -234,7 +234,7 @@ test.describe('the loader: an import map with integrity (R5)', () => {
 
   test('each URL has its own entry: a wrong hash for the consent chunk blocks that one only, the search chunk (not listed) loads', async ({ page }) => {
     const body = await (await page.request.get(CHUNK_URL)).body();
-    await withImportMap(page, { '/packages/site/dist/consent.min.js': `sha384-${createHash('sha384').update(body).digest('base64')}` });
+    await withImportMap(page, { '/packages/catalog/dist/consent.min.js': `sha384-${createHash('sha384').update(body).digest('base64')}` });
     await page.goto(PAGE);
     // the entry for consent.min.js holds the hash of search.min.js, so the consent chunk is blocked; the search is not listed and loads
     await expect.poll(() => isDefined(page)).toBe(true);
@@ -246,20 +246,20 @@ test.describe('the loader: an import map with integrity (R5)', () => {
 // A <link rel="modulepreload" integrity> is a performance hint, not a guard: only Chromium
 // reuses its verdict (SEC-CHUNK-4, M1 of the Safari and Firefox reviews).
 test.describe('the loader: modulepreload with integrity (R5, a hint)', () => {
-  /** The fixture with a modulepreload of the search chunk, with `integrity`, before site.min.js. */
+  /** The fixture with a modulepreload of the search chunk, with `integrity`, before catalog.min.js. */
   async function withPreload(page, integrity) {
     await page.route(/\/tests\/fixtures\/site-loader\.html$/, async (route) => {
       const response = await route.fetch();
       const html = (await response.text()).replace(
         '<script type="module"',
-        `<link rel="modulepreload" href="/packages/site/dist/search.min.js" integrity="${integrity}" crossorigin>\n  <script type="module"`,
+        `<link rel="modulepreload" href="/packages/catalog/dist/search.min.js" integrity="${integrity}" crossorigin>\n  <script type="module"`,
       );
       await route.fulfill({ response, body: html });
     });
   }
 
   test('the right hash lets the chunk run: the element is defined', async ({ page }) => {
-    const body = await (await page.request.get('/packages/site/dist/search.min.js')).body();
+    const body = await (await page.request.get('/packages/catalog/dist/search.min.js')).body();
     await withPreload(page, `sha384-${createHash('sha384').update(body).digest('base64')}`);
     await page.goto(PAGE);
     await expect.poll(() => isDefined(page)).toBe(true);
