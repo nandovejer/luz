@@ -17,9 +17,10 @@
  * peer, the accessibility statement's no-JS states of search and consent, its
  * Ctrl+K before load and its consent band, and no screen reader named as tested.
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { releaseNotes } from "./helpers/release-notes.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
@@ -114,10 +115,10 @@ describe("VERSIONING.md's public API", () => {
 /* ---- The changesets of F3: the migration table of spec §8 --------------------- */
 
 describe("the F3 changesets carry the old -> new migration table", () => {
-  const dir = `${root}.changeset/`;
-  const lines = readdirSync(dir)
-    .filter((file) => /^f3-.*\.md$/.test(file))
-    .flatMap((file) => readFileSync(`${dir}${file}`, "utf-8").split("\n"));
+  // The f3-*.md changesets, or their entries in the CHANGELOGs once the Version Packages PR consumed them
+  const lines = releaseNotes(root)
+    .filter((note) => /^f3-.*\.md$/.test(note.file) || note.released)
+    .flatMap((note) => note.text.split("\n"));
 
   // A row passes when one line of some f3-*.md holds the old name and its replacement
   const ROWS = [

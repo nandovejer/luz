@@ -27,6 +27,7 @@ import { buildSite, relativizeLinks, scanSite } from "../scripts/docs-site/site.
 import { decodeEntities, readHtml } from "../scripts/docs-site/html.js";
 import { readPage } from "./helpers/page-facts.js";
 import { enDictionary, readCore } from "./helpers/i18n-source.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
@@ -450,9 +451,11 @@ describe("the A-Z pages stay under the page ceiling", () => {
 
 /* ---- the changeset ---------------------------------------------------------- */
 
-describe(".changeset/core-languages.md", () => {
-  const text = read(".changeset/core-languages.md");
-  const [, front, body] = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(text) ?? [];
+describe("the changeset of core's languages", () => {
+  // .changeset/core-languages.md, or its entry in the CHANGELOG of core once the Version Packages PR consumed it
+  const breaking = (note) => note.body.split(/\n\s*\n/).find((p) => p.startsWith("Breaking:") && p.includes("loadLocales()"));
+  const note = releaseNotes(root).find((n) => n.bumps.some((b) => b.name === "@luz-ds/core") && breaking(n));
+  const [, front, body] = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(note?.text ?? "") ?? [];
 
   it("releases @luz-ds/core as a minor", () => {
     expect(front, "front matter").toBeTruthy();

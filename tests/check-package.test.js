@@ -29,6 +29,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { ESLint } from "eslint";
 import { BASE, PACKAGES, PUBLISHED, SITE_KINDS, TOOLS } from "../scripts/luz-packages.js";
 import { BUNDLE, buildCheckTo, builtOnce, removeBuilds, root } from "./helpers/check-build.js";
+import { releaseNotes } from "./helpers/release-notes.js";
+import { isNpmOrReleased } from "./helpers/versions.js";
 
 const exists = (path) => existsSync(`${root}${path}`);
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
@@ -49,9 +51,9 @@ afterAll(removeBuilds);
 describe("@luz-ds/check: package.json", () => {
   const manifest = json("packages/check/package.json");
 
-  it("is @luz-ds/check, MIT, ESM, 0.1.0 (published by hand on 2026-10-19), and public", () => {
+  it("is @luz-ds/check, MIT, ESM and public, at 0.1.0 (published by hand on 2026-10-19) or at the version its CHANGELOG lists", () => {
     expect(manifest.name).toBe("@luz-ds/check");
-    expect(manifest.version).toBe("0.1.0");
+    expect(isNpmOrReleased(root, "check", "0.1.0")).toBe(true);
     expect(manifest.license).toBe("MIT");
     expect(manifest.type).toBe("module");
     expect(manifest.private).not.toBe(true);
@@ -400,15 +402,8 @@ describe("eslint.config.js: packages/check/src is Node code, with an allow-list"
 
 describe("the changesets: @luz-ds/check has its own version (D7)", () => {
   const config = JSON.parse(read(".changeset/config.json"));
-  const dir = `${root}.changeset/`;
-  const changesets = readdirSync(dir)
-    .filter((f) => f.endsWith(".md") && f !== "README.md")
-    .map((file) => {
-      const text = readFileSync(`${dir}${file}`, "utf-8");
-      const head = text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
-      const bumps = [...head.matchAll(/^["']?(@luz-ds\/[\w-]+)["']?\s*:\s*(major|minor|patch)\s*$/gm)].map((m) => ({ name: m[1], level: m[2] }));
-      return { file, text, bumps };
-    });
+  // The pending changesets and, once the Version Packages PR has consumed them, the entries of the CHANGELOGs
+  const changesets = releaseNotes(root);
 
   it("keeps check out of `fixed` and `linked` and out of `ignore`: tokens, core and catalog stay the only group", () => {
     expect(config.fixed).toEqual([["@luz-ds/tokens", "@luz-ds/core", "@luz-ds/catalog"]]);
