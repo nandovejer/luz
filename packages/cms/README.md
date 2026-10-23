@@ -13,7 +13,7 @@ The classes go on any element, so a template of any CMS can write them (in a blo
 
 ## Prerequisites
 
-Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/catalog` (`^0.1.0`) is an optional peer: load it before this package if you use its pieces; the patterns work without it.
+Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0 || ^0.2.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/catalog` (`^0.1.0 || ^0.2.0`) is an optional peer: load it before this package if you use its pieces; the patterns work without it.
 
 ## Installation
 

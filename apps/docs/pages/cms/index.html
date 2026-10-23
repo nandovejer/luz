@@ -13,7 +13,7 @@ generate: gallery
       <li>It works with any CMS and any stack. The classes go on any element, so a template of WordPress, Drupal, Ghost, Hugo or your own code can write them.</li>
       <li>Every class starts with <code class="luz-code-inline">.luz-cms-</code>, uses semantic tokens only and sits in the cascade layer <code class="luz-code-inline">luz.cms</code>, after catalog's. Each pattern is a class on a native element, laid out in the markup by core's objects.</li>
       <li>It has no script. Load <code class="luz-code-inline">cms.css</code> after the CSS of tokens and core (and catalog's, if you use it): <a href="/docs/get-started/#site-kinds">Install LUZ</a> has the command and the CDN tags. With core's script, the table of contents marks the section in view.</li>
-      <li>It has a version of its own, 0.x while it grows, and needs version <code>^0.1.0</code> of tokens and core, declared as peer dependencies. The catalog is an optional peer: without it the patterns render the same, and the rules that refine the catalog's elements match nothing.</li>
+      <li>It has a version of its own, 0.x while it grows, and needs version <code>^0.1.0 || ^0.2.0</code> of tokens and core, declared as peer dependencies. The catalog is an optional peer: without it the patterns render the same, and the rules that refine the catalog's elements match nothing.</li>
       <li>The post card, the post listing, related posts and the author box need no CSS of their own: they are core's card, avatar and pagination, put together on <a href="/docs/cms/templates/">CMS templates</a>.</li>
     </ul>
 

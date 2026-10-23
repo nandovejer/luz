@@ -14,7 +14,7 @@ The shell has three columns from 80 rem (the sidebar 16.5 rem, the content, the 
 
 ## Prerequisites
 
-Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/catalog` (`^0.1.0`) is an optional peer: load it before this package if you use its search; the patterns work without it.
+Requires `@luz-ds/tokens` and `@luz-ds/core`, version `^0.1.0 || ^0.2.0`, declared as peer dependencies, loaded in that order before this package. `@luz-ds/catalog` (`^0.1.0 || ^0.2.0`) is an optional peer: load it before this package if you use its search; the patterns work without it.
 
 ## Installation
 
