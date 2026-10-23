@@ -104,7 +104,11 @@ export function renderAiSection({ name, manifest, changelog, siteUrl }) {
 
   out.push("### Breaking changes", "");
   if (!has) {
-    out.push(`Not released yet: ${version} is the workspace's placeholder; the first release is 0.1.0. Nothing is deprecated and nothing breaks.`);
+    out.push(
+      released
+        ? `No changelog yet: ${version} is published and its release notes will be listed here from the next release. Nothing is deprecated and nothing breaks.`
+        : `Not released yet: ${version} is the workspace's placeholder; the first release is 0.1.0. Nothing is deprecated and nothing breaks.`,
+    );
   } else if (items.length) {
     for (const item of items) {
       const [first, ...rest] = safe(item).split("\n");

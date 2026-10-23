@@ -121,11 +121,10 @@ describe("packages", () => {
     expect(pkgs.length).toBeGreaterThan(0);
   });
 
-  it("every package is @luz-ds/* at version 0.0.0", () => {
+  it("every package is @luz-ds/* (their versions are in package-model.test.js)", () => {
     for (const p of pkgs) {
       const pkg = json(p);
       expect(pkg.name, `${p} name`).toMatch(/^@luz-ds\//);
-      expect(pkg.version, `${p} version`).toBe("0.0.0");
     }
   });
 

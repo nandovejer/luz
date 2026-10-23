@@ -1,6 +1,6 @@
 {
   "name": "@luz-ds/docs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "LUZ Design System — the pieces of a documentation page (the shell, the page head, the rail, the example frame, do and don't, the pager and the page foot), built on @luz-ds/core",
   "license": "MIT",
   "type": "module",

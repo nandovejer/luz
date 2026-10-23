@@ -229,6 +229,15 @@ describe("renderAiSection({ name, manifest, changelog, siteUrl })", () => {
     expect(block).toContain("Not released yet: 0.0.0 is the workspace's placeholder; the first release is 0.1.0. Nothing is deprecated and nothing breaks.");
   });
 
+  it("says there is no changelog yet, not that nothing was released, for a published version with no changelog", () => {
+    for (const changelog of [null, undefined]) {
+      const block = render("core", manifest("core", "0.1.0"), changelog);
+      expect(block).toContain("No changelog yet: 0.1.0 is published and its release notes will be listed here from the next release. Nothing is deprecated and nothing breaks.");
+      expect(block).not.toContain("Not released yet");
+      expect(block).not.toContain("placeholder");
+    }
+  });
+
   it("states the first release, with the migration note, when there is one version and no breaking item", () => {
     const block = render("core", CORE, FIRST_RELEASE);
     expect(block).toContain(

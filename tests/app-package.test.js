@@ -36,10 +36,10 @@ const COMPONENTS = ["dashboard", "header"];
 describe("@luz-ds/app: the package", () => {
   const manifest = json("packages/app/package.json");
 
-  it("is @luz-ds/app, MIT, 0.0.0 until its first release, CSS only", () => {
+  it("is @luz-ds/app, MIT, 0.1.0 (published by hand on 2026-10-19), CSS only", () => {
     expect(manifest.name).toBe("@luz-ds/app");
     expect(manifest.license).toBe("MIT");
-    expect(manifest.version).toBe("0.0.0");
+    expect(manifest.version).toBe("0.1.0");
     expect(manifest.type).toBe("module");
     expect(manifest.publishConfig).toEqual({ access: "public" });
     expect(manifest.repository?.directory).toBe("packages/app");

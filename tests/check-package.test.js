@@ -49,9 +49,9 @@ afterAll(removeBuilds);
 describe("@luz-ds/check: package.json", () => {
   const manifest = json("packages/check/package.json");
 
-  it("is @luz-ds/check, MIT, ESM, 0.0.0 until its first release, and public", () => {
+  it("is @luz-ds/check, MIT, ESM, 0.1.0 (published by hand on 2026-10-19), and public", () => {
     expect(manifest.name).toBe("@luz-ds/check");
-    expect(manifest.version).toBe("0.0.0");
+    expect(manifest.version).toBe("0.1.0");
     expect(manifest.license).toBe("MIT");
     expect(manifest.type).toBe("module");
     expect(manifest.private).not.toBe(true);
@@ -415,7 +415,7 @@ describe("the changesets: @luz-ds/check has its own version (D7)", () => {
     expect(JSON.stringify([config.fixed, config.linked, config.ignore])).not.toContain("@luz-ds/check");
   });
 
-  it("has a minor changeset for @luz-ds/check that says what it is (it releases as 0.1.0)", () => {
+  it("has a minor changeset for @luz-ds/check that says what it is (it is at 0.1.0 on npm, so it releases as 0.2.0)", () => {
     const own = changesets.filter((c) => c.bumps.some((b) => b.name === "@luz-ds/check" && b.level === "minor"));
     expect(own.length, "a changeset with \"@luz-ds/check\": minor").toBeGreaterThan(0);
     for (const c of own) expect(c.text.replace(/^---[\s\S]*?\n---/, "").trim().length, `${c.file} has a description`).toBeGreaterThan(40);
