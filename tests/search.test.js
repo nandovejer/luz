@@ -132,6 +132,19 @@ describe("matching", () => {
     expect(names(search(results, "tab"))[0]).toEqual(["Tabs", "Table", "Tables", "Data table"]);
   });
 
+  it("ranks equal positions by the length of the title, whatever the length of the meta", () => {
+    const ranked = readIndex(
+      index({
+        pages: [
+          ["Page header", "cms/page-header/", "CMS"],
+          ["Page head", "docs/page-head/", "Documentation · title, lead, eyebrow, chips, page top"],
+        ],
+      }),
+      BASE,
+    );
+    expect(names(search(ranked, "Page head"))[0]).toEqual(["Page head", "Page header"]);
+  });
+
   it("finds nothing for an empty query, and reads 8 words at most", () => {
     expect(names(search(results, "   "))).toEqual([[], [], []]);
     expect(names(search(results, "table a b c d e f g zebra"))[0]).toEqual([]);
