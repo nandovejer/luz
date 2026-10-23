@@ -229,7 +229,7 @@ import Base from "../layouts/Base.astro";
     <section class="docs-block" aria-labelledby="problems">
       <h2 class="docs-chapter__title" id="problems">If something does not work</h2>
       <ul>
-        <li><strong>A warning about a peer dependency.</strong> <code>@luz-ds/core</code> asks for <code>@luz-ds/tokens</code> at <code>^0.1.0</code>. Install both, at the same version: <code>npm install @luz-ds/tokens @luz-ds/core</code>.</li>
+        <li><strong>A warning about a peer dependency.</strong> <code>@luz-ds/core</code> asks for <code>@luz-ds/tokens</code> at <code>^0.1.0 || ^0.2.0</code>. Install both, at the same version: <code>npm install @luz-ds/tokens @luz-ds/core</code>.</li>
         <li><strong>The tool cannot resolve <code>@luz-ds/core/css</code>.</strong> The export is <code>./css</code>, with no file extension. If your tool reports an unresolved import, add the package to <code>vite.ssr.noExternal</code>, as <a href="https://docs.astro.build/en/guides/styling/">Astro's styling guide</a> describes.</li>
         <li><strong>The styles come out in the wrong order.</strong> Two copies of LUZ on the page, for example one from a CDN and one from your bundler, put their rules in the same layers: load it once. An <code>@import</code> with <code>layer(luz)</code> nests the names as <code>luz.luz.components</code>: drop the <code>layer()</code>. <a href="/docs/get-started/layers/">Cascade layers</a> explains the order.</li>
       </ul>

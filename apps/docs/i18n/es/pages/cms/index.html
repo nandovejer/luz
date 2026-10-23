@@ -1,7 +1,7 @@
 <!-- luz:page
 title: CMS
 description: La estructura de páginas de un blog, un periódico o cualquier sitio de artículos, desde la cabecera hasta el listado de publicaciones; y cómo saber si lo necesitas.
-source: e3b086b2f065
+source: 2ace12dc6a10
 reviewed: false
 -->
     <p class="docs-lead">La estructura de páginas de un blog, un periódico o cualquier sitio de artículos, desde la cabecera hasta el listado de publicaciones; y cómo saber si lo necesitas.</p>
@@ -11,7 +11,7 @@ reviewed: false
       <li>Funciona con cualquier CMS y cualquier stack. Puedes poner las clases en cualquier elemento, así que una plantilla de WordPress, Drupal, Ghost, Hugo o tu propio código puede incluirlas.</li>
       <li>Todas las clases empiezan por <code class="luz-code-inline">.luz-cms-</code>, usan solo tokens semánticos y están en la capa de cascada <code class="luz-code-inline">luz.cms</code>, después de la del catálogo. Cada patrón es una clase sobre un elemento nativo, maquetado en el HTML con los objetos de core.</li>
       <li>No tiene script. Carga <code class="luz-code-inline">cms.css</code> después del CSS de tokens y core (y del catálogo, si lo usas): <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> incluye el comando y las etiquetas CDN. Con el script de core, el índice marca la sección visible.</li>
-      <li>Tiene su propia versión, 0.x mientras sigue creciendo, y necesita la versión <code>^0.1.0</code> de tokens y core, declarados como dependencias peer. El catálogo es una dependencia peer opcional: sin él, los patrones se muestran igual y las reglas que refinan sus elementos no afectan a nada.</li>
+      <li>Tiene su propia versión, 0.x mientras sigue creciendo, y necesita la versión <code>^0.1.0 || ^0.2.0</code> de tokens y core, declarados como dependencias peer. El catálogo es una dependencia peer opcional: sin él, los patrones se muestran igual y las reglas que refinan sus elementos no afectan a nada.</li>
       <li>La tarjeta de publicación, el listado, las publicaciones relacionadas y la ficha del autor no necesitan su propio CSS: se componen con la tarjeta, el avatar y la paginación de core en <a href="/docs/cms/templates/">plantillas de CMS</a>.</li>
     </ul>
 

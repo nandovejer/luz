@@ -128,12 +128,50 @@ describe("packages", () => {
     }
   });
 
-  it("every peer dependency on @luz-ds/* is exactly ^0.1.0", () => {
+  it("every peer dependency on @luz-ds/* is exactly ^0.1.0 || ^0.2.0", () => {
     for (const p of pkgs) {
       const peers = json(p).peerDependencies ?? {};
       for (const [name, range] of Object.entries(peers)) {
-        if (name.startsWith("@luz-ds/")) expect(range, `${p} peer ${name}`).toBe("^0.1.0");
+        if (name.startsWith("@luz-ds/")) expect(range, `${p} peer ${name}`).toBe("^0.1.0 || ^0.2.0");
       }
+    }
+  });
+
+  // The next release takes tokens, core and catalog (one `fixed` version) to 0.2.0. A peer range of
+  // `^0.1.0` does not include 0.2.0, so with `onlyUpdatePeerDependentsWhenOutOfRange` changesets would
+  // take every dependent (catalog, landing, cms, app, docs) to a MAJOR, 1.0.0, and the `fixed` group
+  // would drag tokens and core with it. The literal range `^0.1.0 || ^0.2.0` holds both versions.
+  const luzPeers = () =>
+    pkgs.flatMap((p) =>
+      Object.entries(json(p).peerDependencies ?? {})
+        .filter(([name]) => name.startsWith("@luz-ds/"))
+        .map(([name, range]) => ({ p, name, range })),
+    );
+
+  // A range of `^0.x.y` alternatives joined by `||`: a 0.x caret holds the same minor, from that patch up
+  const satisfies = (version, range) => {
+    const [maj, min, pat] = version.split(".").map(Number);
+    return range.split("||").some((alt) => {
+      const m = /^\s*\^(\d+)\.(\d+)\.(\d+)\s*$/.exec(alt);
+      if (!m) throw new Error(`not a caret range: "${alt}" in "${range}"`);
+      const [, rMaj, rMin, rPat] = m.map(Number);
+      return rMaj === 0 && maj === rMaj && min === rMin && pat >= rPat;
+    });
+  };
+
+  it("every peer dependency on @luz-ds/* holds both 0.1.0 and 0.2.0, so the next release is not a major", () => {
+    const peers = luzPeers();
+    expect(peers.length).toBeGreaterThan(0);
+    for (const { p, name, range } of peers) {
+      expect(satisfies("0.1.0", range), `${p} peer ${name} "${range}" holds 0.1.0`).toBe(true);
+      expect(satisfies("0.2.0", range), `${p} peer ${name} "${range}" holds 0.2.0`).toBe(true);
+    }
+  });
+
+  it("no peer dependency on @luz-ds/* is workspace: or *", () => {
+    for (const { p, name, range } of luzPeers()) {
+      expect(range, `${p} peer ${name}`).not.toMatch(/^workspace:/);
+      expect(range.trim(), `${p} peer ${name}`).not.toBe("*");
     }
   });
 

@@ -38,9 +38,9 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@luz-ds/core": "^0.1.0",
-    "@luz-ds/catalog": "^0.1.0",
-    "@luz-ds/tokens": "^0.1.0"
+    "@luz-ds/core": "^0.1.0 || ^0.2.0",
+    "@luz-ds/catalog": "^0.1.0 || ^0.2.0",
+    "@luz-ds/tokens": "^0.1.0 || ^0.2.0"
   },
   "peerDependenciesMeta": {
     "@luz-ds/catalog": {

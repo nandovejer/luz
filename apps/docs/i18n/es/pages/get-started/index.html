@@ -2,7 +2,7 @@
 title: Instala LUZ
 description: Elige un nivel y copia un comando de instalación o las etiquetas de CDN. Cada nivel necesita los que están por debajo, pero ninguno de los que están por encima.
 keywords: npm, CDN
-source: bcac8a362cbc
+source: 3fcbec3866b4
 reviewed: false
 -->
     <div class="docs-block" id="installation">
@@ -216,7 +216,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs" aria-label="Copia el comando para instalar docs">Copiar</button>
         </div>
         <ul>
-          <li>Landing, cms, app y docs tienen versiones propias y necesitan la versión <code>^0.1.0</code> de los paquetes base. Fija ambas versiones.</li>
+          <li>Landing, cms, app y docs tienen versiones propias y necesitan la versión <code>^0.1.0 || ^0.2.0</code> de los paquetes base. Fija ambas versiones.</li>
           <li>Con un bundler, añade <code class="luz-code-inline">import "@luz-ds/landing/css";</code>, <code class="luz-code-inline">import "@luz-ds/cms/css";</code>, <code class="luz-code-inline">import "@luz-ds/app/css";</code> o <code class="luz-code-inline">import "@luz-ds/docs/css";</code> después de las importaciones del nivel 3.</li>
           <li>Ninguno tiene un script. El de core es opcional: con cms, marca la sección visible en el índice; con app, marca el enlace actual de la barra lateral y cierra el panel al seguir un enlace.</li>
         </ul>

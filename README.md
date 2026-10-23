@@ -49,10 +49,10 @@ The name stands for Light, Usable & Zero-dependency: light in weight (plain CSS 
 - [`@luz-ds/tokens`](./packages/tokens): design tokens (CSS custom properties), the three color modes and the font.
 - [`@luz-ds/core`](./packages/core): the components, the layout objects, the styles of bare HTML elements and optional JavaScript.
 - [`@luz-ds/catalog`](./packages/catalog): page patterns (page shell, site header, footer, image frame) and the site search.
-- [`@luz-ds/landing`](./packages/landing): the page structure of a landing page (header, hero, sections, footer). It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of catalog if you use it.
-- [`@luz-ds/cms`](./packages/cms): patterns for a blog, a newspaper or any CMS, with any stack (the article header and the table of contents). It has its own version, 0.x, and needs `^0.1.0` of tokens, core and catalog.
-- [`@luz-ds/app`](./packages/app): the header and the dashboard of a web application, on core's shell and sidebar. It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of catalog if you use its search.
-- [`@luz-ds/docs`](./packages/docs): the pieces of a documentation page (the shell with a rail, the page head, the example frame, do and don't, Previous / Next, the page foot), on core's shell and sidebar. It has its own version, 0.x, and needs `^0.1.0` of tokens and core, and of catalog if you use its search.
+- [`@luz-ds/landing`](./packages/landing): the page structure of a landing page (header, hero, sections, footer). It has its own version, 0.x, and needs `^0.1.0 || ^0.2.0` of tokens and core, and of catalog if you use it.
+- [`@luz-ds/cms`](./packages/cms): patterns for a blog, a newspaper or any CMS, with any stack (the article header and the table of contents). It has its own version, 0.x, and needs `^0.1.0 || ^0.2.0` of tokens, core and catalog.
+- [`@luz-ds/app`](./packages/app): the header and the dashboard of a web application, on core's shell and sidebar. It has its own version, 0.x, and needs `^0.1.0 || ^0.2.0` of tokens and core, and of catalog if you use its search.
+- [`@luz-ds/docs`](./packages/docs): the pieces of a documentation page (the shell with a rail, the page head, the example frame, do and don't, Previous / Next, the page foot), on core's shell and sidebar. It has its own version, 0.x, and needs `^0.1.0 || ^0.2.0` of tokens and core, and of catalog if you use its search.
 - [`@luz-ds/check`](./packages/check): a tool, not a stylesheet. The `luz-check` command reads the HTML and CSS of your project, offline, and says which LUZ classes, elements, load order and theme colors are wrong. It has its own version, 0.x, and needs no other package.
 
 ## Install and load

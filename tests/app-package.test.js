@@ -61,7 +61,7 @@ describe("@luz-ds/app: the package", () => {
   });
 
   it("requires tokens and core, takes catalog as an optional peer, with literal ranges", () => {
-    expect(manifest.peerDependencies).toEqual({ "@luz-ds/core": "^0.1.0", "@luz-ds/catalog": "^0.1.0", "@luz-ds/tokens": "^0.1.0" });
+    expect(manifest.peerDependencies).toEqual({ "@luz-ds/core": "^0.1.0 || ^0.2.0", "@luz-ds/catalog": "^0.1.0 || ^0.2.0", "@luz-ds/tokens": "^0.1.0 || ^0.2.0" });
     expect(manifest.peerDependenciesMeta).toEqual({ "@luz-ds/catalog": { optional: true } });
     expect(manifest.devDependencies).toEqual({ "@luz-ds/core": "workspace:*", "@luz-ds/catalog": "workspace:*", "@luz-ds/tokens": "workspace:*" });
   });

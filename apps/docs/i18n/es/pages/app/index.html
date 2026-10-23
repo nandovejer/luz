@@ -1,7 +1,7 @@
 <!-- luz:page
 title: App
 description: La cabecera y el panel de control de una aplicación web, sobre la estructura y la barra lateral de core; y cómo saber si las necesitas.
-source: ddf23f1c8de0
+source: 84e441db196e
 reviewed: false
 -->
     <p class="docs-lead">La cabecera y el panel de control de una aplicación web, sobre la estructura y la barra lateral de core; y cómo saber si las necesitas.</p>
@@ -10,7 +10,7 @@ reviewed: false
     <ul>
       <li>Todas las clases empiezan por <code class="luz-code-inline">.luz-app-</code>, usan solo tokens semánticos y están en la capa de cascada <code class="luz-code-inline">luz.app</code>, después de las capas de catalog, landing y cms. Cada patrón es una clase sobre un elemento nativo, maquetado en el HTML con los objetos de core.</li>
       <li>No tiene script. Carga <code class="luz-code-inline">app.css</code> después del CSS de tokens y core (y del catálogo, si usas su búsqueda): <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> incluye el comando y las etiquetas CDN. La barra lateral es de core y tiene su propio script opcional.</li>
-      <li>Tiene su propia versión, 0.x mientras sigue creciendo, y necesita la versión <code>^0.1.0</code> de tokens y core, declarados como dependencias peer. El catálogo es una dependencia peer opcional: sin él, la barra no incluye búsqueda y el resto se muestra igual.</li>
+      <li>Tiene su propia versión, 0.x mientras sigue creciendo, y necesita la versión <code>^0.1.0 || ^0.2.0</code> de tokens y core, declarados como dependencias peer. El catálogo es una dependencia peer opcional: sin él, la barra no incluye búsqueda y el resto se muestra igual.</li>
       <li>No tiene barra lateral propia: la <a href="/docs/components/sidebar/">barra lateral de core</a> se abre como un panel deslizable a 768 px o menos, sin script. La barra de iconos y la barra lateral plegable no están en la versión 0.1.</li>
       <li>La página de la aplicación, un panel de control vacío y una aplicación sin barra lateral no necesitan CSS propio: son fragmentos de HTML que puedes copiar de <a href="/docs/app/templates/">las plantillas de App</a>.</li>
     </ul>

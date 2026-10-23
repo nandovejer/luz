@@ -217,7 +217,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs" aria-label="Copy the docs install command">Copy</button>
         </div>
         <ul>
-          <li>Landing, cms, app and docs each have their own version and need <code>^0.1.0</code> of the base. Pin both numbers.</li>
+          <li>Landing, cms, app and docs each have their own version and need <code>^0.1.0 || ^0.2.0</code> of the base. Pin both numbers.</li>
           <li>With a bundler, add <code class="luz-code-inline">import "@luz-ds/landing/css";</code>, <code class="luz-code-inline">import "@luz-ds/cms/css";</code>, <code class="luz-code-inline">import "@luz-ds/app/css";</code> or <code class="luz-code-inline">import "@luz-ds/docs/css";</code> after the imports of level 3.</li>
           <li>None has a script. Core's script is optional: with cms, it marks the section in view in the table of contents; with app, it marks the current link of the sidebar and closes the drawer when a link is followed.</li>
         </ul>

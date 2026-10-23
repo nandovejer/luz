@@ -118,9 +118,9 @@ describe("peers: a kind of site works without catalog", () => {
     const manifest = JSON.parse(readFileSync(`${root}packages/${kind}/package.json`, "utf-8"));
 
     it(`${kind} requires tokens and core and lists catalog as an optional peer`, () => {
-      expect(manifest.peerDependencies["@luz-ds/tokens"]).toBe("^0.1.0");
-      expect(manifest.peerDependencies["@luz-ds/core"]).toBe("^0.1.0");
-      expect(manifest.peerDependencies["@luz-ds/catalog"], "catalog stays a peer, with the literal range").toBe("^0.1.0");
+      expect(manifest.peerDependencies["@luz-ds/tokens"]).toBe("^0.1.0 || ^0.2.0");
+      expect(manifest.peerDependencies["@luz-ds/core"]).toBe("^0.1.0 || ^0.2.0");
+      expect(manifest.peerDependencies["@luz-ds/catalog"], "catalog stays a peer, with the literal range").toBe("^0.1.0 || ^0.2.0");
       expect(manifest.peerDependenciesMeta?.["@luz-ds/catalog"]).toEqual({ optional: true });
     });
 
