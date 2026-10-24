@@ -92,7 +92,9 @@ const safe = (text) => text.replaceAll("<!--", "&lt;!--");
  * @param {{ name: string, manifest: object, changelog: string | null, siteUrl: string }} input
  * @returns {string} the block, markers included, without a trailing newline
  */
-export function renderAiSection({ name, manifest, changelog, siteUrl }) {
+export function renderAiSection({ name, manifest, changelog, siteUrl, checkVersion }) {
+  // The tool the block tells an agent to run is pinned to the version of this workspace: a release nobody read must not run by itself (security audit 2026-10-24)
+  const pin = checkVersion ? `@${checkVersion}` : "";
   const pkg = `@luz-ds/${name}`;
   const version = manifest.version;
   const released = version !== "0.0.0";
@@ -129,7 +131,7 @@ export function renderAiSection({ name, manifest, changelog, siteUrl }) {
   // A tool has no CSS, so no class list: it is read through its README and its --help
   const tool = TOOLS.includes(name);
   const read = tool
-    ? [`${code("README.md")} in this package: what the command does and its exit codes.`, `${code(`npx ${pkg} --help`)}: the command's options, from the version you run.`]
+    ? [`${code("README.md")} in this package: what the command does and its exit codes.`, `${code(`npx ${pkg}${pin} --help`)}: the command's options, from the version you run.`]
     : [`${code("dist/classes.json")} in this package: the classes and custom properties its CSS defines. Write only those.`];
   if (WITH_ELEMENTS.has(name)) read.push(`${code("dist/custom-elements.json")} in this package: the \`<luz-*>\` elements it defines, with their attributes.`);
   read.push(
@@ -155,7 +157,7 @@ export function renderAiSection({ name, manifest, changelog, siteUrl }) {
   out.push("");
 
   out.push("### Check what you write", "");
-  out.push(`Run ${code("npx @luz-ds/check <files>")} on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: ${code("npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md")}.`);
+  out.push(`Run ${code(`npx @luz-ds/check${pin} <files>`)} on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: ${code(`npx @luz-ds/check${pin} agent > .claude/agents/luz-accessibility-reviewer.md`)}.`);
   if (!released) out.push("", `${code("@luz-ds/check")} is not on npm yet: it ships with the first release.`);
   out.push("", END);
   return out.join("\n");
@@ -192,6 +194,8 @@ function main(argv) {
   const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
   const packagesDir = resolve(root, "packages");
   const stale = [];
+  const checkManifest = resolve(packagesDir, "check", "package.json");
+  const checkVersion = existsSync(checkManifest) ? JSON.parse(readFileSync(checkManifest, "utf-8")).version : undefined;
   for (const dir of readdirSync(packagesDir).sort()) {
     const manifestPath = resolve(packagesDir, dir, "package.json");
     const readmePath = resolve(packagesDir, dir, "README.md");
@@ -202,6 +206,7 @@ function main(argv) {
       manifest: JSON.parse(readFileSync(manifestPath, "utf-8")),
       changelog: existsSync(changelogPath) ? readFileSync(changelogPath, "utf-8") : null,
       siteUrl: SITE_URL,
+      checkVersion,
     });
     const before = readFileSync(readmePath, "utf-8");
     const after = applyAiSection(before, block);

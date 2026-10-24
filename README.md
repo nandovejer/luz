@@ -181,7 +181,7 @@ Every component has a page in the documentation with a live example, the markup 
 
 ## For AI agents
 
-LUZ is plain HTML and CSS, so an AI coding agent can write it when it knows which names exist. Give it this: read [`llms.txt`](https://nandovejer.github.io/luz/llms.txt) first, use only the classes in the `classes.json` of each package, and run `npx @luz-ds/check` on every HTML and CSS file it writes.
+LUZ is plain HTML and CSS, so an AI coding agent can write it when it knows which names exist. Give it this: read [`llms.txt`](https://nandovejer.github.io/luz/llms.txt) first, use only the classes in the `classes.json` of each package, and run `npx @luz-ds/check@0.2.0` on every HTML and CSS file it writes.
 
 What an agent can read, what the check reports and what it does not do are on [Working with AI](https://nandovejer.github.io/luz/docs/get-started/ai/). The same page has a prompt you can paste.
 

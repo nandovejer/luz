@@ -41,7 +41,7 @@ test.describe('Contrast check in the page', () => {
     test('hides the tool and keeps the explanation of the command', async ({ page }) => {
       await page.goto(ROUTE);
       await expect(page.locator('[data-contrast-tool]')).toBeHidden();
-      await expect(page.locator('#code-contrast-run')).toContainText('npx @luz-ds/tokens check-contrast');
+      await expect(page.locator('#code-contrast-run')).toContainText(/npx @luz-ds\/tokens@\d+\.\d+\.\d+ check-contrast/);
     });
   });
 });

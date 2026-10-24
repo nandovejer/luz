@@ -14,7 +14,9 @@
  * The markdown that shows an install snippet is in step too (`MARKDOWN`: the README of each package, the root
  * README, SECURITY.md and the quick reference): there a pinned `@luz-ds/<name>@<version>` takes the version
  * of its package, in a URL or not. A README ships in its tarball, so it says its own version. A range
- * (`@luz-ds/core@3`) is not a version and is left alone.
+ * (`@luz-ds/core@3`) is not a version and is left alone. The commands an agent is told to run
+ * (`npx @luz-ds/check@0.2.0 <files>`, `npx @luz-ds/tokens@0.2.0 check-contrast`) name the version too, in a page
+ * as in a README: a version of the tool that was not the one the project pinned must not run by itself.
  *
  *   syncVersions(root)   write the versions; returns the files it changed, as paths from `root` with `/`
  *   releaseDrift(root)   "file:line: …" for each CDN URL that does not say the version of its package
@@ -29,6 +31,7 @@ import { PUBLISHED } from "./luz-packages.js";
 
 const CDN_URL = /(https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/)([a-z]+)@([0-9A-Za-z.+-]+)(\/dist\/)/g;
 const PINNED = /(@luz-ds\/)([a-z]+)@(\d+\.\d+\.\d+[0-9A-Za-z.+-]*)/g;
+const NPX = /(npx (?:-y )?@luz-ds\/)(check|tokens)@(\d+\.\d+\.\d+[0-9A-Za-z.+-]*)/g;
 const MARKDOWN = ["README.md", "SECURITY.md", "dev/QUICK-REFERENCE.md"];
 const FRONT_MATTER = /^<!-- luz:page\n([\s\S]*?)\n-->\n/;
 
@@ -71,7 +74,10 @@ function pagesOf(root) {
   return pages;
 }
 
-const rewrite = (text, versions) => text.replace(CDN_URL, (url, head, name, _version, tail) => (versions[name] ? `${head}${name}@${versions[name]}${tail}` : url));
+const rewrite = (text, versions) =>
+  text
+    .replace(CDN_URL, (url, head, name, _version, tail) => (versions[name] ? `${head}${name}@${versions[name]}${tail}` : url))
+    .replace(NPX, (command, head, name) => (versions[name] ? `${head}${name}@${versions[name]}` : command));
 const rewritePinned = (text, versions) => text.replace(PINNED, (pin, head, name) => (versions[name] ? `${head}${name}@${versions[name]}` : pin));
 
 /** The markdown files of `MARKDOWN` and the README of each published package that exist under `root`, as paths from `root`. */
@@ -118,7 +124,7 @@ export function releaseDrift(root) {
     readFileSync(page.abs, "utf-8")
       .split("\n")
       .forEach((line, i) => {
-        for (const [, , name, version] of line.matchAll(CDN_URL)) {
+        for (const [, , name, version] of [...line.matchAll(CDN_URL), ...line.matchAll(NPX)]) {
           if (versions[name] && versions[name] !== version) drift.push(`${rel(root, page.abs)}:${i + 1}: @luz-ds/${name} is at ${versions[name]}, the URL says ${version}`);
         }
       });

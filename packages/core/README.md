@@ -149,7 +149,7 @@ Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.t
 
 LUZ ships one look, Vejer, in three color modes (`light`, `dark`, `high-contrast`): ET Book for running text, whitewash and sandstone surfaces, iron-black text, sky-blue links and actions, every link underlined.
 
-A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, with `data-mode` for its light, dark and high-contrast variants. Copy `@luz-ds/core/themes/_template.css`, and check it with `npx @luz-ds/tokens check-contrast my-brand.css`. List its name in `<html data-luz-themes="my-brand">` so the mode switcher remembers the choice.
+A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, with `data-mode` for its light, dark and high-contrast variants. Copy `@luz-ds/core/themes/_template.css`, and check it with `npx @luz-ds/tokens@0.2.0 check-contrast my-brand.css`. List its name in `<html data-luz-themes="my-brand">` so the mode switcher remembers the choice.
 
 ## Vanilla JS behaviors
 
@@ -190,7 +190,7 @@ This package needs `@luz-ds/tokens` loaded first.
 
 ### Check what you write
 
-Run `npx @luz-ds/check <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.2.0 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.2.0 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 
