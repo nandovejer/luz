@@ -8,8 +8,13 @@
  * `source` was the hash of the English page keeps being in step with it (a stale one is left stale: its
  * `source` still says which text it was made from).
  *
- * Only the URL of a CDN file is rewritten. A version in a sentence ("since 0.1.0") is history, and a
+ * Only the URL of a CDN file is rewritten in a page. A version in a sentence ("since 0.1.0") is history, and a
  * CHANGELOG is never read here.
+ *
+ * The markdown that shows an install snippet is in step too (`MARKDOWN`: the README of each package, the root
+ * README, SECURITY.md and the quick reference): there a pinned `@luz-ds/<name>@<version>` takes the version
+ * of its package, in a URL or not. A README ships in its tarball, so it says its own version. A range
+ * (`@luz-ds/core@3`) is not a version and is left alone.
  *
  *   syncVersions(root)   write the versions; returns the files it changed, as paths from `root` with `/`
  *   releaseDrift(root)   "file:line: …" for each CDN URL that does not say the version of its package
@@ -23,6 +28,8 @@ import { sourceHash } from "./docs-site/docs-i18n.js";
 import { PUBLISHED } from "./luz-packages.js";
 
 const CDN_URL = /(https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/)([a-z]+)@([0-9A-Za-z.+-]+)(\/dist\/)/g;
+const PINNED = /(@luz-ds\/)([a-z]+)@(\d+\.\d+\.\d+[0-9A-Za-z.+-]*)/g;
+const MARKDOWN = ["README.md", "SECURITY.md", "dev/QUICK-REFERENCE.md"];
 const FRONT_MATTER = /^<!-- luz:page\n([\s\S]*?)\n-->\n/;
 
 const rel = (root, path) => relative(root, path).split(sep).join("/");
@@ -65,6 +72,13 @@ function pagesOf(root) {
 }
 
 const rewrite = (text, versions) => text.replace(CDN_URL, (url, head, name, _version, tail) => (versions[name] ? `${head}${name}@${versions[name]}${tail}` : url));
+const rewritePinned = (text, versions) => text.replace(PINNED, (pin, head, name) => (versions[name] ? `${head}${name}@${versions[name]}` : pin));
+
+/** The markdown files of `MARKDOWN` and the README of each published package that exist under `root`, as paths from `root`. */
+function markdownOf(root) {
+  const readmes = PUBLISHED.map((name) => `packages/${name}/README.md`);
+  return [...MARKDOWN, ...readmes].filter((path) => existsSync(join(root, path)));
+}
 const bodyOf = (text) => text.replace(FRONT_MATTER, "");
 
 export function syncVersions(root) {
@@ -86,6 +100,14 @@ export function syncVersions(root) {
       changed.push(rel(root, page.abs));
     }
   }
+  for (const path of markdownOf(root)) {
+    const before = readFileSync(join(root, path), "utf-8");
+    const after = rewritePinned(before, versions);
+    if (after !== before) {
+      writeFileSync(join(root, path), after);
+      changed.push(path);
+    }
+  }
   return changed.sort();
 }
 
@@ -98,6 +120,15 @@ export function releaseDrift(root) {
       .forEach((line, i) => {
         for (const [, , name, version] of line.matchAll(CDN_URL)) {
           if (versions[name] && versions[name] !== version) drift.push(`${rel(root, page.abs)}:${i + 1}: @luz-ds/${name} is at ${versions[name]}, the URL says ${version}`);
+        }
+      });
+  }
+  for (const path of markdownOf(root)) {
+    readFileSync(join(root, path), "utf-8")
+      .split("\n")
+      .forEach((line, i) => {
+        for (const [, , name, version] of line.matchAll(PINNED)) {
+          if (versions[name] && versions[name] !== version) drift.push(`${path}:${i + 1}: @luz-ds/${name} is at ${versions[name]}, the URL says ${version}`);
         }
       });
   }
