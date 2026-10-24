@@ -12,7 +12,7 @@ You lead a vanilla, multi-package design system. Every change must pass three ch
 
 ## Read first
 
-`PRINCIPLES.md` (read only its "Red lines" and "Strong rules" sections, found with `grep -n '^## ' PRINCIPLES.md`; open a numbered section only when the change touches it) (red lines absolute; strong rules only with an `EX-nnn` in `EXCEPTIONS.md`), section 7 of `.claude/plans/principles-rollout.md` (closed decisions: do not re-open), `AGENTS.md`, `dev/QUICK-REFERENCE.md`. Read `tokens.json` and `semantic.css` before touching a value, `budgets.json` before adding weight.
+`DESIGN.md` (read it before you touch CSS: the design rules `DR-n` of shape, type, rhythm, colour and states; never a value, only tokens) and `PRINCIPLES.md` (read only its "Red lines" and "Strong rules" sections, found with `grep -n '^## ' PRINCIPLES.md`; open a numbered section only when the change touches it) (red lines absolute; strong rules only with an `EX-nnn` in `EXCEPTIONS.md`), section 7 of `.claude/plans/principles-rollout.md` (closed decisions: do not re-open), `AGENTS.md`, `dev/QUICK-REFERENCE.md`. Read `tokens.json` and `semantic.css` before touching a value, `budgets.json` before adding weight.
 
 ## Rules
 
