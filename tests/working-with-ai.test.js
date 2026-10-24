@@ -106,10 +106,12 @@ const TITLES = {
   limits: "What this does not do",
 };
 const DESCRIPTION = "What an AI coding agent can read, how to check what it wrote, and the accessibility reviewer you can give it.";
+// The tool is pinned to the version in the workspace (security audit 2026-10-24), as the page's own text is
+const CHECK = JSON.parse(readFileSync(join(import.meta.dirname, "..", "packages", "check", "package.json"), "utf-8")).version;
 const PROMPT =
   `Use LUZ for the markup. Read ${SITE_URL}llms.txt first and use only the classes in each package's classes.json. ` +
-  "After you write HTML or CSS, run `npx @luz-ds/check` on the files and fix every finding before you answer.";
-const AGENT_COMMAND = "npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md";
+  `After you write HTML or CSS, run \`npx @luz-ds/check@${CHECK}\` on the files and fix every finding before you answer.`;
+const AGENT_COMMAND = `npx @luz-ds/check@${CHECK} agent > .claude/agents/luz-accessibility-reviewer.md`;
 const NOT_TESTED = "/docs/accessibility/#h-a11y-not-tested";
 const STATEMENT_BULLET =
   "The accessibility reviewer that @luz-ds/check prints, and luz-check itself. They read source files and give advice; " +

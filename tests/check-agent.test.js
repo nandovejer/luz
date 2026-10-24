@@ -895,9 +895,9 @@ describe("the README of @luz-ds/check, on the agent", () => {
   const readme = readOr("packages/check/README.md");
   const sections = readme.split(/^(?=#{1,6}\s)/m);
 
-  it("shows the command that copies it, with `npx @luz-ds/check`, and says it overwrites a file", () => {
+  it("shows the command that copies it, with `npx @luz-ds/check@<version>`, and says it overwrites a file", () => {
     const command =
-      /npx @luz-ds\/check agent > \.claude\/agents\/luz-accessibility-reviewer\.md/;
+      /npx @luz-ds\/check@\d+\.\d+\.\d+ agent > \.claude\/agents\/luz-accessibility-reviewer\.md/;
     expect(readme).toMatch(command);
     const warned = sections.some(
       (section) => command.test(section) && /overwrit/i.test(section)
