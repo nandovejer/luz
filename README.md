@@ -412,6 +412,7 @@ Nobody publishes from a local machine. See [VERSIONING.md](./VERSIONING.md#publi
 | File | Purpose |
 | --- | --- |
 | **[PRINCIPLES.md](./PRINCIPLES.md)** | Red lines and strong rules every change must respect |
+| **[DESIGN.md](./DESIGN.md)** | Design rules (`DR-n`) of how tokens, core and catalog look |
 | **[VANILLA-FIRST.md](./dev/VANILLA-FIRST.md)** | Architectural philosophy: why vanilla, decision framework |
 | **[STRUCTURE.md](./dev/STRUCTURE.md)** | Annotated monorepo directory layout |
 | **[DIST-RULES.md](./dev/DIST-RULES.md)** | Build workflow: `src/` to `dist/` regeneration steps |

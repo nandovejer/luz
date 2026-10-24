@@ -1,6 +1,6 @@
 # LUZ Design System — agent context
 
-**See [PRINCIPLES.md](./PRINCIPLES.md) for the principles and red lines every change must respect, [VANILLA-FIRST.md](./dev/VANILLA-FIRST.md) for architectural principles, [STRUCTURE.md](./dev/STRUCTURE.md) for directory layout, and [QUICK-REFERENCE.md](./dev/QUICK-REFERENCE.md) for naming, tokens, and commands.**
+**See [PRINCIPLES.md](./PRINCIPLES.md) for the principles and red lines every change must respect, [DESIGN.md](./DESIGN.md) for the design rules of how the published system looks, [VANILLA-FIRST.md](./dev/VANILLA-FIRST.md) for architectural principles, [STRUCTURE.md](./dev/STRUCTURE.md) for directory layout, and [QUICK-REFERENCE.md](./dev/QUICK-REFERENCE.md) for naming, tokens, and commands.**
 
 ---
 
@@ -18,9 +18,9 @@ See [DIST-RULES.md](./dev/DIST-RULES.md) for full regeneration steps.
 
 Every file a package ships and every file the Pages site serves (code, fonts, icons, images, audio, examples) has the repository's licence (MIT) as its only licence (PRINCIPLES.md red line 13). Dual-licensed work is not accepted, even when MIT is one of the options, and neither is OFL or Creative Commons. Third-party MIT work keeps its notice next to it; a font's is `LICENSE-<Font>.txt` (`pnpm check:pack` enforces it). Sans and mono use the system stacks; prefer them to bundling a face.
 
-### 4. Two levels of rules
+### 4. Three levels of rules
 
-PRINCIPLES.md has red lines (`RL-n`, absolute, never excepted) and strong rules (`SR-n`). A strong rule may be broken only with a `luz-exception: EX-nnn` comment next to the code and a row in [EXCEPTIONS.md](./EXCEPTIONS.md); `pnpm check:exceptions` keeps them in step. Size ceilings in `budgets.json` are a red line: never raise one.
+PRINCIPLES.md has red lines (`RL-n`, absolute, never excepted) and strong rules (`SR-n`). A strong rule may be broken only with a `luz-exception: EX-nnn` comment next to the code and a row in [EXCEPTIONS.md](./EXCEPTIONS.md); `pnpm check:exceptions` keeps them in step. [DESIGN.md](./DESIGN.md) has the design rules (`DR-n`) of how tokens, core and catalog look; a design rule is broken only with the reason written next to it in DESIGN.md, never with a `luz-exception` comment or a row in EXCEPTIONS.md, and `ux-designer` runs their "Look at" lines at the end of a visual batch. Size ceilings in `budgets.json` are a red line: never raise one.
 
 ### 5. Tests first
 
