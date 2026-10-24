@@ -12,6 +12,7 @@ One row is one `needs-browser-review` issue: the issue repeats the Scope, the Fi
 
 | Scope | Files | What to look at | Browser |
 |---|---|---|---|
+| The install blocks of the home wrap their bar at 400 % text (2026-10-24) | `apps/landing/landing.css` (`.landing-install__bar`, `.landing-install__label`) | At 320 px with the root font size at 400 %, the label and the copy button of each install block stay inside the block (the bar wraps; the label does not stack a letter per line), in LTR and RTL. Found by the Firefox review of the same day; checked in Chromium only. | Safari, Firefox |
 
 ## Closed
 

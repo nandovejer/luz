@@ -1051,7 +1051,8 @@ home-light:defined ~ .landing-light__nojs {
 .landing-install__bar {
   display: flex;
   align-items: center;
-  gap: var(--luz-space-sm);
+  flex-wrap: wrap;
+  gap: var(--luz-space-2xs) var(--luz-space-sm);
   padding: var(--luz-space-2xs) var(--luz-space-sm);
   border-block-end: 1px solid color-mix(in oklab, var(--luz-text-primary) 12%, transparent);
   background: color-mix(in oklab, var(--luz-text-primary) 7%, var(--luz-surface-page));
@@ -1066,6 +1067,8 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 .landing-install__label {
+  /* At 400 % text the bar wraps, and a label never stacks a letter per line */
+  white-space: nowrap;
   font-family: var(--luz-font-mono);
   font-size: var(--luz-text-xs);
   letter-spacing: 0.08em;
