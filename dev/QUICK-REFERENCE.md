@@ -117,9 +117,9 @@ pnpm lint:js        # ESLint
 Each component ships as its own file in `@luz-ds/core/dist/components/`:
 
 ```html
-<link rel="stylesheet" href=".../@luz-ds/tokens@0.2.0/dist/luz-tokens.css">
-<link rel="stylesheet" href=".../@luz-ds/core@0.2.0/dist/base.css">
-<link rel="stylesheet" href=".../@luz-ds/core@0.2.0/dist/components/button.css">
+<link rel="stylesheet" href=".../@luz-ds/tokens@0.2.1/dist/luz-tokens.css">
+<link rel="stylesheet" href=".../@luz-ds/core@0.2.1/dist/base.css">
+<link rel="stylesheet" href=".../@luz-ds/core@0.2.1/dist/components/button.css">
 ```
 
 Requires the tokens layer, then `base.css` (core settings such as z-index and layout widths, reset, bare elements), loaded first.
