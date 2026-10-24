@@ -67,12 +67,14 @@ const bytes = (text) => Buffer.byteLength(text, "utf-8");
 /* ---- The parts of the two files, from constants ---------------------------- */
 
 const SUMMARY_FALLBACK = "LUZ is a vanilla CSS and JavaScript design system for plain HTML.";
+/** The version of the tool an agent is told to run: pinned, so a release nobody read does not run by itself (security audit 2026-10-24). */
+const CHECK = JSON.parse(readFileSync(fileURLToPath(new URL("../../packages/check/package.json", import.meta.url)), "utf-8")).version;
 const SUMMARY_TAIL = "MIT licence. In beta: any release may break anything, and the changelog says how to migrate.";
 const list = (names) => `${names.slice(0, -1).join(", ")} or ${names.at(-1)}`;
 const DETAILS =
   `Packages, in load order: ${BASE.map((n) => `@luz-ds/${n}`).join(", ")}, then one for your kind of site ` +
   `(${list(SITE_KINDS.map((n) => `@luz-ds/${n}`))}). Use only the classes listed in each package's classes.json. ` +
-  "After you write HTML or CSS, run `npx @luz-ds/check` on the files and fix what it reports; it reads source, so it does not replace testing in a browser.";
+  "After you write HTML or CSS, run `npx @luz-ds/check@" + CHECK + "` on the files and fix what it reports; it reads source, so it does not replace testing in a browser.";
 
 /** The package a page of these areas documents; the other areas name none. */
 const PACKAGE_OF_AREA = { components: "core", catalog: "catalog", landing: "landing", cms: "cms", app: "app", documentation: "docs" };
@@ -538,7 +540,7 @@ const OUTLINE_POINTERS = new Map([
 // is not trimmed.
 const AI_ROUTE = "/docs/get-started/ai/";
 const AI_POINTER =
-  "The files an agent can read are linked from `llms.txt`. The commands with paths, the options and exit codes (`npx @luz-ds/check --help`), a sample of the output, the fields of `--json` and the tables of the files and of the rules are on the page at the URL above.";
+  "The files an agent can read are linked from `llms.txt`. The commands with paths, the options and exit codes (`npx @luz-ds/check@" + CHECK + " --help`), a sample of the output, the fields of `--json` and the tables of the files and of the rules are on the page at the URL above.";
 
 /** The first `<p>` of a piece of markup, as markup. */
 const firstParagraph = (html) => /<p\b[\s\S]*?<\/p>/.exec(html)?.[0] ?? "";

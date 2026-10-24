@@ -82,7 +82,7 @@ This package needs `@luz-ds/tokens` and `@luz-ds/core` loaded first.
 
 ### Check what you write
 
-Run `npx @luz-ds/check <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.2.0 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.2.0 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 

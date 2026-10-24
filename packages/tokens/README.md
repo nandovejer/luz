@@ -40,8 +40,8 @@ import '@luz-ds/tokens'
 `luz-tokens check-contrast` reads the `--luz-*` overrides of your stylesheet, puts them over LUZ's tokens as the browser would, and measures the pairs LUZ promises to keep readable (WCAG 2.x: 4.5:1 for text, 3:1 for disabled text, focus rings, field borders and icons) in light, dark, high contrast and every `[data-theme]` you define. It needs Node 20 or later and has no dependencies.
 
 ```bash
-npx @luz-ds/tokens check-contrast my-theme.css
-npx @luz-ds/tokens check-contrast base.css my-theme.css --json
+npx @luz-ds/tokens@0.2.0 check-contrast my-theme.css
+npx @luz-ds/tokens@0.2.0 check-contrast base.css my-theme.css --json
 ```
 
 Exit code `0` when every pair passes, `1` when one fails or a color could not be read, `2` for a usage or file error. What it reads, and what it reports as not read, is on [the contrast page of the docs](https://nandovejer.github.io/luz/docs/tokens/contrast/).
@@ -134,7 +134,7 @@ Older versions: https://github.com/nandovejer/luz/blob/main/packages/tokens/CHAN
 
 ### Check what you write
 
-Run `npx @luz-ds/check <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.2.0 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.2.0 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 

@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Cómo se organiza LUZ
 description: Paquetes con dependencias en una sola dirección, CSS en capas de cascada dentro de una llamada luz y un script opcional.
-source: 22aabbf0465a
+source: 081a1424ae40
 reviewed: false
 -->
     <section class="docs-block" id="packages" aria-labelledby="packages-title">
@@ -56,7 +56,7 @@ Each of these needs tokens and core, and takes catalog as an optional peer:
           <tr><td data-label="Pieza"><div>Búsqueda del sitio</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-search&gt;</code>, <code>.luz-search</code></div></td><td data-label="Paquete"><div>catalog</div></td><td data-label="Notas"><div>Necesita el script (<code>catalog.js</code>, que carga <code>search.js</code> cuando la página contiene el elemento) y un archivo de índice; sin ellos, es un enlace</div></td></tr>
           <tr><td data-label="Pieza"><div>Estilos de impresión</div></td><td data-label="Clases o atributos"><div>No hay que añadir nada</div></td><td data-label="Paquete"><div>core</div></td><td data-label="Notas"><div>En <code>luz.css</code>; el catálogo añade sus propias reglas de impresión</div></td></tr>
           <tr><td data-label="Pieza"><div>Marcado al que no puedes añadir clases</div></td><td data-label="Clases o atributos"><div><code>data-luz-classless</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Notas"><div><code>classless.css</code>, un archivo independiente</div></td></tr>
-          <tr><td data-label="Pieza"><div>Comprobación de lo que has escrito tú o un agente de IA</div></td><td data-label="Clases o atributos"><div><code>npx @luz-ds/check</code>, el comando <code>luz-check</code></div></td><td data-label="Paquete"><div>check</div></td><td data-label="Notas"><div>Una herramienta sin CSS ni capa, que no necesita ningún otro paquete: analiza tu HTML y CSS sin conexión. Consulta <a href="/docs/get-started/ai/">Trabajar con IA</a></div></td></tr>
+          <tr><td data-label="Pieza"><div>Comprobación de lo que has escrito tú o un agente de IA</div></td><td data-label="Clases o atributos"><div><code>npx @luz-ds/check@0.2.0</code>, el comando <code>luz-check</code></div></td><td data-label="Paquete"><div>check</div></td><td data-label="Notas"><div>Una herramienta sin CSS ni capa, que no necesita ningún otro paquete: analiza tu HTML y CSS sin conexión. Consulta <a href="/docs/get-started/ai/">Trabajar con IA</a></div></td></tr>
           </tbody>
         </table>
       </div>
