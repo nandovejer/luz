@@ -18,27 +18,27 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 ### DR-1 Corners follow containment
 
-**Rule:** a surface that stands on its own (a card, a field, a button, a panel, a menu) takes the medium radius; a thing inside another rounded thing, or inline with text (code, a chip, a meter), takes the small one; a pill or a dot takes the full one. There is no larger radius. A part that touches the edge of its neighbour (a row of a joined group) has square corners on the sides that touch.
+**Rule:** a surface that stands on its own (a card, a button, a panel, a menu) takes the medium radius; a text field and a select are a line under the text, not a box, and have no radius; a thing inside another rounded thing, or inline with text (code, a chip, a meter), takes the small one; a pill or a dot takes the full one. There is no larger radius. A part that touches the edge of its neighbour (a row of a joined group) has square corners on the sides that touch.
 
 **Why:** one corner for the surfaces gives the system its softness without making every box a different size of round, and the step down for what is inside keeps the curves concentric.
 
 **Tokens:** `--luz-radius-md`, `--luz-radius-sm`, `--luz-radius-full`.
 
-**Look at:** is every standalone surface at the medium radius? Is an inner or inline part at the small one? Is a pill at the full one? Does a part inside a rounded box use a larger radius than the box? Does a component name a radius token that does not exist?
+**Look at:** is every standalone box at the medium radius, and every text field a line? Is an inner or inline part at the small one? Is a pill at the full one? Does a part inside a rounded box use a larger radius than the box? Does a component name a radius token that does not exist?
 
-**Exceptions:** none.
+**Exceptions:** a box that reflows into a plain list on a narrow window (the head of a sortable table) and a dialog that fills the window (the search) are square; a joined group has square corners where its parts touch (the accordion).
 
 ### DR-2 Lines have one job each
 
-**Rule:** a line between rows and sections is the divider; the edge of a control (a field, a select, a meter's track) is the input border; the boundary of a thing that must stand out from the page, without a fill, is the outline; emphasis (the current item, an accent edge) is the primary brand colour. A line is a hairline, except an accent bar on the inline start edge, which is one width everywhere. Nothing names a colour of its own.
+**Rule:** a line between rows and sections is the divider; the edge of a control (a field, a select, a meter's track) is the input border; the boundary of a thing that must stand out from the page, without a fill, is the outline; emphasis (the current item, an accent edge) is the primary brand colour. A line is a hairline, except an accent bar on the inline start edge, which has one of two widths: the thin one on a box that already has its own border (the alert), the thick one on a block that has no other edge (a quotation, the figure). Nothing names a colour of its own.
 
 **Why:** a reader learns that a quiet line separates and a coloured line points, and a field is always found by its edge, whatever surface it sits on.
 
 **Tokens:** `--luz-divider`, `--luz-input-border`, `--luz-outline`, `--luz-brand-primary`.
 
-**Look at:** is each line the token of its job? Do two accent bars in the system have the same width? Is a control's edge still visible on the surface it sits on, in the three modes?
+**Look at:** is each line the token of its job? Is an accent bar the thin width on a box with its own border and the thick one on a block without? Is a control's edge still visible on the surface it sits on, in the three modes?
 
-**Exceptions:** a transparent border that keeps the box the same size when forced colors paints it is not a line.
+**Exceptions:** the two widths of the accent bar (decided 2026-10-24); a transparent border that keeps the box the same size when forced colors paints it is not a line.
 
 ### DR-3 Elevation has three steps
 
@@ -102,7 +102,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is the inline padding at least the block padding? Do two like boxes (two controls, two cards) have the same pair?
 
-**Exceptions:** none.
+**Exceptions:** a dense control (a text field, a select, the terminal) and the bars and cells of a layout (the navbar, the sidebar, a table) may take an inline step two above the block one, for the gutter their text needs (decided 2026-10-24).
 
 ### DR-8 The gap inside a thing is one step small
 
@@ -156,7 +156,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 ### DR-12 The current item is told by weight and by a mark
 
-**Rule:** the current, selected or pressed item is heavier (DR-6) and has a mark besides colour: the brand fill with the on-fill text for a chip or a page number, an edge or an underline for a tab or a link. The mark is the same family wherever an item is "the one you are on".
+**Rule:** the current, selected or pressed item is heavier (DR-6) and has a mark besides colour: the brand fill with the on-fill text for a chip or a page number, an edge or an underline for a link, a surface step with a line for a tab. The mark is the same family wherever an item is "the one you are on".
 
 **Why:** a person who does not see the colour still finds where they are, and a reader learns one sign.
 
@@ -164,11 +164,11 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is the current item told apart in forced colors and in grayscale? Do two groups with a current item use the same sign?
 
-**Exceptions:** none.
+**Exceptions:** the language list takes an edge and a surface for its current language (decided 2026-10-24).
 
 ### DR-13 A state is one step from its resting state
 
-**Rule:** hover steps a neutral surface to its hover surface and the text to the primary colour; a control tinted by the brand steps to the subtle brand fill; a link gains or loses its underline. Pressed is the pressed surface. A thing never moves, grows or changes shape on hover, except that a card raises to the small shadow.
+**Rule:** hover steps a neutral surface to its hover surface (a component may expose a hover token of its own, as the sidebar and the mode switcher do, if it defaults to the shared one) and the text to the primary colour; a control tinted by the brand steps to the subtle brand fill; a link gains or loses its underline. Pressed is the pressed surface. A thing never moves, grows or changes shape on hover, except that a card raises to the small shadow.
 
 **Why:** a state that is the same small change everywhere is felt and not read, and one that moves is a state that gets in the way.
 
@@ -188,7 +188,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is a disabled thing readable? Does it change on hover? Is it told by more than its colour?
 
-**Exceptions:** none.
+**Exceptions:** a control that is drawn without text of its own (a checkbox, a radio, a switch) fades as a whole (decided 2026-10-24).
 
 ### DR-15 One focus ring
 
@@ -200,7 +200,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is the ring the same width, colour and offset as the others? Is it drawn on a thing with a rounded edge along that edge?
 
-**Exceptions:** a ring on a fill, where the focus colour would not meet its contrast against the fill, takes the colour of the text on that fill.
+**Exceptions:** a ring on a fill, where the focus colour would not meet its contrast against the fill, takes the colour of the text on that fill (the sidebar and the mode switcher); the offset is wider where a border would swallow the ring (the featured card) or the thumb would (a range) (decided 2026-10-24).
 
 ### DR-16 Motion is short and says what changed
 
@@ -216,18 +216,8 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 ## Open
 
-Deviations from the rules above, found by the audit of 2026-10-24 (the first). Each is a pending decision of the owner: **fix** (a change with its test and a patch changeset, which removes its row) or **exception** (the reason goes under the rule's Exceptions field). None is decided yet. This list is the only record: there are no GitHub issues for it.
+Deviations from the rules above that are a mistake and not yet fixed, with the component and the rule. **None** at the moment.
 
-| Component | Rule | Deviation |
-|---|---|---|
-| `catalog` lang-switch menu | DR-1 | The menu names a large radius token, a token that does not exist (the scale has none, small, medium and full), so the declaration is invalid and the menu has square corners. The rule says a menu takes the medium radius. |
-| `core` accordion, select, table head with links, `catalog` search | DR-1 | Square corners on the whole box, not only on the sides that touch a neighbour. To confirm that each part touches one. |
-| `core` alert and figure | DR-2 | Two accent bars on the inline start edge with two different widths, and the alert's has no colour token of its own. |
-| `core` figure | DR-4 | The caption's size is derived from the surrounding text instead of a step of the scale. |
-| `core` form, select, terminal, navbar, sidebar, table | DR-7 | Padding pairs that jump two steps between the block and the inline sides, where nearly every other component uses one. |
-| `core` form | DR-14 | A disabled control is faded by its opacity instead of taking the disabled text colour. |
-| `core` tabs, `catalog` lang-switch | DR-12 | The current item is told by a surface (tabs) or by an edge and a surface (lang-switch), where chips and pages take the brand fill. |
-| `core` breadcrumb | DR-6 | The current page is medium, where every other current item in the system is semibold. |
-| `core` sidebar, mode-switcher | DR-13 | Hover reads a token of the component's own (the sidebar's hover token and the switcher's own) instead of the shared hover surface. |
-| `core` sidebar, mode-switcher, `catalog` consent and others | DR-15 | A ring in a colour of the component's own, with an offset that is not the shared one in a few places. |
-| Tokens | DR-5, DR-6 | There are no tokens for weight or for line height: components type a weight (three values) and a line height (five values) by hand. Decide whether the tokens exist, or the rules stay in words. |
+The first audit (2026-10-24) found eleven. Two were mistakes and are fixed: the language switcher's menu read a radius token that does not exist, so it had square corners (`tests/css-tokens-defined.test.js` now fails on any token a stylesheet reads that nothing defines), and the figure caption derived its size instead of taking a step of the scale (the same test holds every component's font size to the scale). The rest were not mistakes, and each is written as an exception under its rule above, or as a correction of the rule where the rule had it wrong (fields are a line, not a box).
+
+**No tokens for weight and line height.** Components type a weight (three kinds, DR-6) and a line height by hand. Decided on 2026-10-24 not to add tokens for them yet: it would be a release of the tokens package and a sweep of every component for no change to the look. The rules stay in words (DR-5 and DR-6); revisit if a theme needs to change them.
