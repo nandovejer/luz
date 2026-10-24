@@ -12,6 +12,7 @@ One row is one `needs-browser-review` issue: the issue repeats the Scope, the Fi
 
 | Scope | Files | What to look at | Browser |
 |---|---|---|---|
+| The brand word of the home on a narrow phone (2026-10-24) | `apps/landing/landing.css` (`.landing-hero__brand`, `font-size: min(3.75em, 15svh, 30vi)`) | At 320, 340, 360 and 375 px wide the word "LUZ" is on one line and inside the window, LTR and RTL, with the halo of its `text-shadow`; the first screen keeps its composition. Found by the Firefox review of the same day; checked in Chromium only. | Safari, Firefox |
 
 ## Closed
 
