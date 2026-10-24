@@ -127,7 +127,7 @@ The three packages are versioned together (same version number) with [changesets
    ```
    Pick the bump (patch / minor / major) and write the changelog entry. Commit the generated `.changeset/*.md` file with your PR.
 
-2. Merge the PR into `main`. The Release workflow (`.github/workflows/publish.yml`) opens or updates a **"chore(release): version packages"** PR that bumps the versions and writes the changelogs. The same step (`pnpm release:version`) writes the new versions in the CDN URLs of the install pages and their translations (`scripts/release-sync.js`) and in the "For AI agents" block of each README, so that PR passes the same CI as any other. A test that reads a changeset reads `tests/helpers/release-notes.js`, which finds it in `.changeset/` or, once the PR has consumed it, in the CHANGELOG.
+2. Merge the PR into `main`. The Release workflow (`.github/workflows/publish.yml`) opens or updates a **"chore(release): version packages"** PR that bumps the versions and writes the changelogs. The same step (`pnpm release:version`) writes the new versions in the CDN URLs of the install pages and their translations (`scripts/release-sync.js`), in the pinned `@luz-ds/<name>@<version>` of the READMEs, SECURITY.md and the quick reference, and in the "For AI agents" block of each README, so that PR passes the same CI as any other. A test that reads a changeset reads `tests/helpers/release-notes.js`, which finds it in `.changeset/` or, once the PR has consumed it, in the CHANGELOG.
 
 3. Merge that PR when you want to release. The workflow then:
    - runs lint, audit, build, unit tests and the tarball contract check
