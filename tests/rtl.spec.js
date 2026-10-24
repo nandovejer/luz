@@ -76,7 +76,10 @@ for (const route of pages) {
   const slug = route.split('/').filter(Boolean).pop();
   test(`${slug} mirrors in right-to-left text`, async ({ page }) => {
     await page.goto(route);
-    await page.waitForLoadState('networkidle');
+    // Not 'networkidle': Playwright's WebKit never reports it against the Vite dev server (Safari review 2026-10-24).
+    // The load event has the stylesheets and the page's scripts, and the fonts are awaited as a condition that settles.
+    await page.waitForLoadState('load');
+    await page.evaluate(() => document.fonts.ready);
     const specimens = page.locator('[data-docs-specimen]');
     const n = await specimens.count();
     for (let i = 0; i < n; i++) {
