@@ -179,7 +179,7 @@ git diff pnpm-lock.yaml
 | Date | Finding | Status | Action |
 |------|---------|--------|--------|
 | 2026-05-20 | Plaintext npm token committed | ⚠️ Verify | The token is still readable in git history (commits `9669d54`, `9df4341`). It must be revoked on npmjs.com; removing the files did not remove it from history |
-| 2026-05-20 | No code owner enforcement | ✅ Resolved | CODEOWNERS file added |
+| 2026-05-20 | No code owner enforcement | ⚠️ Partly resolved | CODEOWNERS file added; the `main` ruleset does not require a code-owner review yet, so the required status checks are the gate |
 | 2026-05-20 | No dependency scanning | ✅ Resolved | Dependabot configured |
 | 2026-09-30 | `main` is not protected | ✅ Resolved | A ruleset on `main`: pull request required, the four status checks required (lint, audit, build and unit tests, UI tests), no force-push |
 | 2026-09-30 | Publishing used a long-lived npm token, hid failures and skipped CI | ✅ Resolved | OIDC trusted publishing, changesets release PR, CI gate (requires the npm and GitHub settings above) |
@@ -207,7 +207,7 @@ Before each release:
 - [ ] Every change has a changeset (`pnpm changeset`)
 - [ ] `pnpm check:pack` passes (tarball contents match the snapshots)
 - [ ] CDN URLs are tested (check jsDelivr links)
-- [ ] Code review approved by CODEOWNERS
+- [ ] The pull requests of the release are reviewed by the maintainer (CODEOWNERS is not enforced by the ruleset yet)
 
 ---
 
