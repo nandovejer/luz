@@ -28,7 +28,8 @@ Thank you for helping keep LUZ secure!
 
 | Version | Status | Support Until | Security Fixes |
 |---------|--------|---------------|----------------|
-| **0.1.x** | ✅ Active | Current | Yes |
+| **0.2.x** | ✅ Active | Current | Yes |
+| 0.1.x | ❌ Replaced | Superseded by 0.2.0 (2026-10-24) | No |
 
 ---
 
@@ -156,11 +157,11 @@ git diff pnpm-lock.yaml
 - The publish job runs in the `release` environment, which requires a reviewer's approval.
 - The publish job installs with `--ignore-scripts`: no dependency lifecycle script runs while it can mint an OIDC token.
 - A release happens only when the changesets "version packages" PR is merged, and only after lint, audit, build, unit tests and the tarball contract check (`pnpm check:pack`) pass.
-- Nobody publishes from a laptop.
+- Since 0.2.0 nobody publishes from a laptop. The 0.1.0 versions and the placeholder versions of `@luz-ds/catalog` and `@luz-ds/site` were published by hand, before the workflow existed.
 
 **Code Review Requirements:**
 - Changes reach `main` through pull requests with passing status checks (branch ruleset).
-- CODEOWNERS specifies the required reviewers per package.
+- CODEOWNERS lists who is asked to review each package. The ruleset does not enforce a code-owner review yet (no required approvals), so today the required status checks are the gate.
 
 **Dependencies:**
 - Published packages have zero runtime dependencies.
@@ -180,13 +181,16 @@ git diff pnpm-lock.yaml
 | 2026-05-20 | Plaintext npm token committed | ⚠️ Verify | The token is still readable in git history (commits `9669d54`, `9df4341`). It must be revoked on npmjs.com; removing the files did not remove it from history |
 | 2026-05-20 | No code owner enforcement | ✅ Resolved | CODEOWNERS file added |
 | 2026-05-20 | No dependency scanning | ✅ Resolved | Dependabot configured |
-| 2026-09-30 | `main` is not protected | ⚠️ Open | Add a ruleset: PR required, status checks required, no force-push |
+| 2026-09-30 | `main` is not protected | ✅ Resolved | A ruleset on `main`: pull request required, the four status checks required (lint, audit, build and unit tests, UI tests), no force-push |
 | 2026-09-30 | Publishing used a long-lived npm token, hid failures and skipped CI | ✅ Resolved | OIDC trusted publishing, changesets release PR, CI gate (requires the npm and GitHub settings above) |
 | 2026-09-30 | MIDI parser could hang the page on malformed files | ✅ Resolved | Bounds and length validation, size and event limits, regression tests |
 | 2026-09-30 | 40 advisories in dev dependencies | ✅ Resolved | vitest upgraded, unused dependencies and stale overrides removed |
-| 2026-10-12 | `release` environment missing (GitHub would create it unprotected) and `main` still unprotected | ⚠️ Open | Create `release` with a required reviewer and main-only deployments; add the `main` ruleset; npm trusted publishers point at `publish.yml` + `release` |
-| 2026-10-12 | The two token commits are still served by SHA on GitHub | ⚠️ Open | Revoke the token, ask GitHub Support to purge `9669d54` and `9df4341`, then delete `NPM_TOKEN` and disallow tokens on npm |
+| 2026-10-12 | `release` environment missing (GitHub would create it unprotected) and `main` still unprotected | ⚠️ Partly resolved: the environment exists with a required reviewer and `main` has its ruleset; deployments from any branch are still allowed (2026-10-24 audit) | Create `release` with a required reviewer and main-only deployments; add the `main` ruleset; npm trusted publishers point at `publish.yml` + `release` |
+| 2026-10-12 | The two token commits are still served by SHA on GitHub | ⚠️ Open | Confirm the token is revoked on npmjs.com, ask GitHub Support to purge `9669d54` and `9df4341`, and set "Require two-factor authentication and disallow tokens" on each `@luz-ds` package (trusted publishing keeps working). The `NPM_TOKEN` secret no longer exists |
 | 2026-10-12 | `escapeHtml` did not escape `'`; publish job ran install scripts with `id-token: write`; Pages CSP allowed `data:` frames and objects; no Dependabot cooldown | ✅ Resolved | `&#39;` escaped; `--ignore-scripts` in the publish job; `data:` dropped; 7-day cooldown |
+| 2026-10-24 | The READMEs, the docs and `llms.txt` told an AI agent to run `npx @luz-ds/check` and `npx @luz-ds/tokens` with no version, so a bad future release would run in every consumer's agent session | ✅ Resolved | The commands name the version, and `pnpm release:version` keeps it in step |
+| 2026-10-24 | `release` accepts deployments from any branch and admins can bypass it; secret scanning, push protection and Dependabot security updates are off; the hand-published placeholder versions of `@luz-ds/catalog` are not deprecated and its `stage` tag still points at one | ⚠️ Open | Settings of the owner: deployment branches "Selected: main" and no admin bypass on `release`; turn the three scanners on; `npm deprecate` the placeholders and `npm dist-tag rm @luz-ds/catalog stage` |
+| 2026-10-24 | Dev-only advisories (vitest 4.1.11, fast-uri 3.1.8 through ajv and stylelint): 0 high, 4 moderate, 2 low; none reachable, the packages have no runtime dependencies | ⚠️ Open | Raise vitest to `^4.1.12` and override `fast-uri` to `>=3.1.9` |
 | 2026-09-30 | Tarballs shipped without licence texts | ✅ Resolved | LICENSE per package, licence text next to every font (all fonts MIT since 2026-09-30) |
 
 ---
@@ -217,4 +221,4 @@ For non-security questions, use [CONTRIBUTING.md](./CONTRIBUTING.md) or GitHub d
 
 ---
 
-**Last Updated:** September 30, 2026
+**Last Updated:** October 24, 2026
