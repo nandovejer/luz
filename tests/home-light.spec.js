@@ -771,6 +771,12 @@ test.describe('review fixes', () => {
     test(`${width} px: the globe's top edge is behind the hero's text, above its buttons, which stay on top and can be clicked`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await open(page, '/');
+      // WebKit's classic scrollbar (4 px) is taken out of the width a media query sees, so 1024 would be under the layout of 1024: widen the window by it and load again (0 in Chromium and Firefox)
+      const bar = await page.evaluate(() => window.innerWidth - document.documentElement.clientWidth);
+      if (bar > 0) {
+        await page.setViewportSize({ width: width + bar, height: 900 });
+        await open(page, '/');
+      }
       await expect(page.locator('home-globe[land]')).toHaveCount(1);
       const m = await page.evaluate(() => {
         const buttons = [...document.querySelectorAll('#hero .luz-btn')];
@@ -959,10 +965,13 @@ test.describe('review fixes', () => {
 
   test('the sky drifts with the scroll: slower than the page, the far layer slower still', async ({ page }) => {
     await open(page, '/', { time: '23:30' });
+    test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the layers cannot drift without the timeline)');
     // The block offset of each layer's translate (none is 0)
     const ys = () => page.evaluate(() => ['::before', '::after'].map((p) => parseFloat(getComputedStyle(document.querySelector('main.luz-landing-main'), p).translate.split(' ')[1]) || 0));
     expect(await ys(), 'still at the top of the page').toEqual([0, 0]);
-    await page.evaluate(() => window.scrollTo(0, 300));
+    // 'instant': html has scroll-behavior: smooth, and WebKit animates a plain scrollTo
+    await page.evaluate(() => window.scrollTo({ top: 300, behavior: 'instant' }));
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(300);
     const scrolled = await page.evaluate(() => window.scrollY);
     // The near layer (::before) rises by 0.3 of the scroll, the far one (::after) by 0.15
     await expect.poll(async () => (await ys())[0] / scrolled).toBeCloseTo(-0.3, 1);
@@ -974,6 +983,7 @@ test.describe('review fixes', () => {
 
   test('the glow of the page rises with the scroll: faint at the top, full at the foot', async ({ page }) => {
     await open(page, '/', { time: '14:00' });
+    test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the layers cannot drift without the timeline)');
     const glow = () =>
       page.evaluate(() => {
         const s = getComputedStyle(document.querySelector('.o-page'), '::before');
@@ -982,7 +992,7 @@ test.describe('review fixes', () => {
     const top = await glow();
     expect(top.layer, 'the glow is a layer behind the page').toBe(true);
     expect(top.image).toMatch(/gradient/);
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
     await expect.poll(async () => (await glow()).opacity).toBeGreaterThan(top.opacity + 0.3);
     expect((await glow()).y, 'it has come up from below').toBeLessThan(top.y);
   });
@@ -1057,6 +1067,8 @@ test.describe('review fixes', () => {
       let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
       for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        // The screen-reader-only spans are clipped to 1 px, but their text rects are not: they run past the window and widen the clip
+        if (node.parentElement?.closest('.home-light__sr')) continue;
         const range = document.createRange();
         range.selectNodeContents(node);
         for (const box of range.getClientRects()) {

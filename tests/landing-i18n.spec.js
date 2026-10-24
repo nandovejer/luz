@@ -280,7 +280,9 @@ test.describe('Arabic typography', () => {
       await expect(page.locator(selector).first(), selector).toBeAttached();
       const { font, spacing } = await style(selector);
       expect(font, selector).not.toMatch(/ET Book/i);
-      expect(font.replace(/\s/g, ''), selector).toBe(sans.replace(/\s/g, ''));
+      // WebKit serialises "Segoe UI" without its quotes: the stacks are compared with the quotes taken out
+      const plain = (stack) => stack.replace(/["'\s]/g, '');
+      expect(plain(font), selector).toBe(plain(sans));
       expect(['normal', '0px'], `${selector} letter-spacing`).toContain(spacing);
     }
     // The three English words of "Why" stay marked as English inside the Arabic page; code keeps its mono face

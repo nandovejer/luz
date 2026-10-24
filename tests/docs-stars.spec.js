@@ -55,7 +55,7 @@ async function open(page, route, mode, hhmm = NIGHT) {
   await page.goto(route);
   await expect(page.locator('html')).toHaveAttribute('data-theme', mode);
   await faded(page);
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
 }
 
 /** Two frames, so a style toggled a moment ago is the one painted (WebKit applies a media toggle late). */
@@ -372,10 +372,32 @@ async function offsets(page, band) {
   }, band.pseudo);
 }
 
-/** Scroll to y, and wait for the frames that paint it. */
+/**
+ * Scroll to y, and wait for the frames that paint it. 'instant': html has scroll-behavior: smooth, and WebKit animates
+ * a plain scrollTo, so the offsets would be read on the way. WebKit also paints the scroll timeline a few frames late,
+ * so the layers' offsets are awaited until they have not changed for ten frames in a row.
+ */
 async function scrollToY(page, y) {
-  await page.evaluate((top) => window.scrollTo(0, top), y);
-  await nextFrames(page);
+  await page.evaluate((top) => window.scrollTo({ top, left: 0, behavior: 'instant' }), y);
+  await page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        const host = document.querySelector('[data-test-band]');
+        const mark = host?.getAttribute('data-test-band');
+        const read = () => (host ? getComputedStyle(host, mark === 'self' ? null : mark).backgroundPosition : '') + window.scrollY;
+        let last = read();
+        let still = 0;
+        let frames = 0;
+        const tick = () => {
+          const now = read();
+          still = now === last ? still + 1 : 0;
+          last = now;
+          if (still >= 10 || ++frames > 120) resolve(undefined);
+          else requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }),
+  );
 }
 
 /** The most the page can scroll, in px. */
@@ -388,6 +410,7 @@ test.describe('the stars drift with the scroll, quietly (dark, motion allowed)',
 
   test('scrolling moves the stars of the top strip sideways; the few in the middle of the row stay where they are', async ({ page }) => {
     await open(page, ROUTE, 'dark');
+    test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the stars cannot drift without the timeline)');
     const band = await expectBand(page, ROUTE);
     const top = await offsets(page, band);
     const range = await scrollRange(page);
@@ -441,6 +464,7 @@ test.describe('the stars drift with the scroll, quietly (dark, motion allowed)',
 
   test('the drift is driven by the scroll, never by a clock: every animation on the band has a scroll timeline', async ({ page }) => {
     await open(page, ROUTE, 'dark');
+    test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the stars cannot drift without the timeline)');
     const band = await expectBand(page, ROUTE);
     const info = await page.evaluate((pseudo) => {
       const host = document.querySelector('[data-test-band]');

@@ -180,7 +180,7 @@ test.describe('Modes without JavaScript', () => {
 test.describe('Native: the panel works with no script', () => {
   test.use({ javaScriptEnabled: false, reducedMotion: 'reduce' });
 
-  test('rests on its first scene: the whole markup, and the result of it, inert', async ({ page }) => {
+  test('rests on its first scene: the whole markup, and the result of it, inert', async ({ page, browserName }) => {
     await page.goto('/');
     const panel = page.locator('#native .landing-typed__panel');
     await panel.scrollIntoViewIfNeeded();
@@ -205,7 +205,9 @@ test.describe('Native: the panel works with no script', () => {
     await expect(code).toContainText('</meter>');
 
     // The result is a picture of the code: out of the tab order and of the accessibility tree
-    await expect(scenes.nth(0).locator('.landing-typed__result')).toHaveJSProperty('inert', true);
+    // Firefox reads the inert property as undefined when JavaScript is off (the property is not exposed to the driver), so there the attribute that sets it is what is read
+    if (browserName === 'firefox') await expect(scenes.nth(0).locator('.landing-typed__result')).toHaveAttribute('inert', '');
+    else await expect(scenes.nth(0).locator('.landing-typed__result')).toHaveJSProperty('inert', true);
     await expect(scenes.nth(0).locator('.landing-typed__state--luz meter.luz-meter')).toBeVisible();
     await expect(scenes.nth(0).locator('.landing-typed__mode')).toHaveCount(3);
     for (const [mode] of MODES) await expect(scenes.nth(0).locator(`.landing-typed__mode[data-theme="${mode}"] meter`)).toBeVisible();

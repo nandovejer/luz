@@ -167,13 +167,15 @@ test.describe('the button of a fold', () => {
   for (const { code, prefix } of LANGUAGES) {
     const where = code || 'en';
 
-    test(`${where}: is a button named by its area, one per area with pages, and none for an area with no pages`, async ({ page }) => {
+    test(`${where}: is a button named by its area, one per area with pages, and none for an area with no pages`, async ({ page, browserName }) => {
       await page.goto(`${prefix}${BUTTON}`);
       await expect(page.locator('ul.docs-nav summary')).toHaveCount(folded.length);
       for (const area of folded) {
         const label = labelOf(code, area);
         const summary = button(page, area.id);
         await expect(summary).toHaveCount(1);
+        // The accessibility tree is read through a CDP session (newCDPSession), which only Chromium has
+        if (browserName !== 'chromium') continue;
         const ax = await axOf(page, area.id);
         expect(ax.ignored, `${area.id}: it is in the accessibility tree`).toBe(false);
         // Chromium's own name for a summary is a disclosure triangle, which platform APIs expose as a button with an expanded state (HTML-AAM)
@@ -187,7 +189,8 @@ test.describe('the button of a fold', () => {
       }
     });
 
-    test(`${where}: says whether it is open: expanded for the open area, collapsed for the others`, async ({ page }) => {
+    test(`${where}: says whether it is open: expanded for the open area, collapsed for the others`, async ({ page, browserName }) => {
+      test.skip(browserName !== 'chromium', 'reads the accessibility tree through a CDP session (newCDPSession), which only Chromium has');
       await page.goto(`${prefix}${BUTTON}`);
       for (const area of folded) expect((await axOf(page, area.id)).expanded, `${area.id} on Button`).toBe(area.id === 'components');
       await button(page, 'tokens').click();

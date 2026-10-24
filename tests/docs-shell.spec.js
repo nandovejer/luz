@@ -221,6 +221,12 @@ test.describe('docs shell, with JavaScript', () => {
     test(`${width}px: "On this page" is ${open ? 'open' : 'closed'} when the page loads`, async ({ page }) => {
       await page.setViewportSize({ width, height: 800 });
       await page.goto(BUTTON);
+      // WebKit's classic scrollbar (4 px) is taken out of the width a media query sees: widen the window by it, so 1280 is 80rem there too (0 in Chromium and Firefox)
+      const bar = await page.evaluate(() => window.innerWidth - document.documentElement.clientWidth);
+      if (bar > 0) {
+        await page.setViewportSize({ width: width + bar, height: 800 });
+        await page.reload();
+      }
       await idle(page);
       const fold = rail(page).locator('nav.luz-docs-rail__onpage details');
       await expect(fold.locator('> summary'), 'the title is always visible').toBeVisible();
@@ -341,7 +347,9 @@ test.describe('docs shell, without JavaScript', () => {
     test(`${width}px: the order of the markup is the order of the screen: every control Tab reaches is below the one before it, or in a column to its right`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(BUTTON);
-      await idle(page);
+      // idle() awaits document.fonts.ready, a promise that never settles in Playwright's Firefox with JavaScript off: poll the status instead
+      await page.waitForLoadState('load');
+      await expect.poll(() => page.evaluate(() => document.fonts.status)).toBe('loaded');
       const walk = await walkTheTabOrder(page);
       expect(walk.count, 'the page has controls').toBeGreaterThan(20);
       expect(walk.problems, walk.steps.join('\n')).toEqual([]);

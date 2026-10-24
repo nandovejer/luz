@@ -121,7 +121,8 @@ test.describe('Code and Design tabs on a component page', () => {
   });
 
   test('"On this page" opens the tab of the section it links to, scrolls to it and focuses it (NAV-13)', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
+    // 1300, not 1280: WebKit's classic scrollbar (4 px) is taken out of the width its media queries see, which would put the rail under 80rem, folded
+    await page.setViewportSize({ width: 1300, height: 800 });
     await page.goto(BUTTON);
     const toc = page.getByRole('navigation', { name: 'On this page' });
     await toc.getByRole('link', { name: 'When not to use' }).click();
