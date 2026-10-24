@@ -10,10 +10,11 @@ LUZ is npm packages for developers who install it without talking to us: `@luz-d
 
 ## How the rules work
 
-There are two levels.
+There are three levels, the third of them in [DESIGN.md](./DESIGN.md).
 
 - **Red lines (`RL-n`)** are absolute. No exception, no deadline, no "just this once". A PR that crosses one is closed, not reviewed.
 - **Strong rules (`SR-n`)** are mandatory by default. A change may break one only with a written exception: a `luz-exception: EX-nnn` comment next to the code and a row in [EXCEPTIONS.md](./EXCEPTIONS.md). `pnpm check:exceptions` keeps the two in step. Everything in sections 1–9 that is not a red line is a strong rule (`SR-8`).
+- **Design rules (`DR-n`)** are in [DESIGN.md](./DESIGN.md): how the published system looks, in tokens and never in values. A change may break one with the reason written next to the rule there; no check fails on them, and `ux-designer` holds a visual batch to them.
 - **Aspirations** are marked as such. They guide the work but block nothing.
 
 **Who decides.** The maintainer owns these rules and approves every exception. Changing this file needs its own changeset that says what changed and why, so the rules never erode silently.
