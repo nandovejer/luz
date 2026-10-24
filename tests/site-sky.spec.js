@@ -57,7 +57,7 @@ async function open(page, route, light) {
   await page.goto(route);
   await expect(page.locator('html')).toHaveAttribute('data-light', light);
   await faded(page);
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
 }
 
 /**
@@ -98,8 +98,26 @@ const drawn = (/** @type {{ display: string, opacity: number, stars: boolean, sh
 
 /** Scroll to y and wait for the frames that paint it. */
 async function scrollToY(page, y) {
-  await page.evaluate((top) => window.scrollTo(0, top), y);
-  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  // 'instant': html has scroll-behavior: smooth, and WebKit animates a plain scrollTo
+  await page.evaluate((top) => window.scrollTo({ top, left: 0, behavior: 'instant' }), y);
+  // WebKit paints the scroll timeline a few frames after the scroll: the frames go by until the translates of the layers have not changed for ten in a row
+  await page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        const read = () => ['::before', '::after'].map((p) => [...document.querySelectorAll('.site-sky')].map((el) => getComputedStyle(el, p).translate).join('|')).join('#') + window.scrollY;
+        let last = read();
+        let still = 0;
+        let frames = 0;
+        const tick = () => {
+          const now = read();
+          still = now === last ? still + 1 : 0;
+          last = now;
+          if (still >= 10 || ++frames > 120) resolve(undefined);
+          else requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }),
+  );
   return page.evaluate(() => window.scrollY);
 }
 
@@ -164,6 +182,7 @@ for (const [name, route, host] of PAGES) {
 
         test('the stars drift with the scroll, slower than the page: one layer at 0.3 of its speed, the other at 0.15', async ({ page }) => {
           await open(page, route, light);
+          test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the stars cannot drift without the timeline)');
           expect((await layers(page, host))?.map((l) => l.translateY), 'still at the top of the page').toEqual([0, 0]);
           const scrolled = await scrollToY(page, 300);
           expect(scrolled).toBeGreaterThan(250);
@@ -177,6 +196,8 @@ for (const [name, route, host] of PAGES) {
 
         test('they are not animated by a clock in the docs, and they twinkle on the home', async ({ page }) => {
           await open(page, route, light);
+          // The docs' drift is driven by the scroll: without the timeline there is nothing to see there. The home's twinkle is a clock and needs no timeline
+          if (name !== 'home') test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the stars cannot drift without the timeline)');
           const ls = /** @type {NonNullable<Awaited<ReturnType<typeof layers>>>} */ (await layers(page, host));
           const names = ls.map((l) => l.animation.split(',').map((n) => n.trim()));
           const info = await page.evaluate((selector) => {
