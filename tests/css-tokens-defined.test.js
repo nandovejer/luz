@@ -51,15 +51,18 @@ describe("the tokens the packages' CSS reads", () => {
   });
 });
 
+/** The sizes that are relative on purpose (DESIGN.md, DR-4, Exceptions), by file: the caption is sized from the text it captions. */
+const RELATIVE_ON_PURPOSE = { "packages/core/src/components/figure.css": /font-size:\s*0\.875em;/ };
+
 describe("the text sizes of the components (DESIGN.md, DR-4)", () => {
-  it("are steps of the text scale: no component derives a size of its own", () => {
+  it("are steps of the text scale: no component derives a size of its own, but the ones the rule excepts", () => {
     const derived = [];
     for (const dir of ["packages/core/src/components", "packages/catalog/src/components"]) {
       for (const file of cssUnder(join(root, dir))) {
         strip(readFileSync(file, "utf-8"))
           .split("\n")
           .forEach((line, i) => {
-            if (/^\s*font-size:/.test(line) && !/var\(--luz-text-[a-z0-9]+\)/.test(line)) derived.push(`${file.slice(root.length + 1)}:${i + 1}: ${line.trim()}`);
+            if (/^\s*font-size:/.test(line) && !/var\(--luz-text-[a-z0-9]+\)/.test(line) && !RELATIVE_ON_PURPOSE[file.slice(root.length + 1)]?.test(line)) derived.push(`${file.slice(root.length + 1)}:${i + 1}: ${line.trim()}`);
           });
       }
     }

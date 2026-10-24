@@ -64,7 +64,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is every font size a token? Is a text field at the control step?
 
-**Exceptions:** none.
+**Exceptions:** the caption of a figure is sized from the text it captions, a little under it, and not from the scale (decided 2026-10-24: a step of the scale would change its look by a pixel; `tests/css-tokens-defined.test.js` names it).
 
 ### DR-5 Headings are light, tight and in their own face
 
@@ -218,6 +218,6 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 Deviations from the rules above that are a mistake and not yet fixed, with the component and the rule. **None** at the moment.
 
-The first audit (2026-10-24) found eleven. Two were mistakes and are fixed: the language switcher's menu read a radius token that does not exist, so it had square corners (`tests/css-tokens-defined.test.js` now fails on any token a stylesheet reads that nothing defines), and the figure caption derived its size instead of taking a step of the scale (the same test holds every component's font size to the scale). The rest were not mistakes, and each is written as an exception under its rule above, or as a correction of the rule where the rule had it wrong (fields are a line, not a box).
+The first audit (2026-10-24) found eleven. One was a mistake and is fixed: the language switcher's menu read a radius token that does not exist, so it had square corners (`tests/css-tokens-defined.test.js` now fails on any token a stylesheet reads that nothing defines); nothing else derives a font size of its own (the same test holds every component's font size to the scale, except the figure caption, which is sized from the text it captions and is an exception of DR-4). The rest were not mistakes, and each is written as an exception under its rule above, or as a correction of the rule where the rule had it wrong (fields are a line, not a box).
 
 **No tokens for weight and line height.** Components type a weight (three kinds, DR-6) and a line height by hand. Decided on 2026-10-24 not to add tokens for them yet: it would be a release of the tokens package and a sweep of every component for no change to the look. The rules stay in words (DR-5 and DR-6); revisit if a theme needs to change them.
