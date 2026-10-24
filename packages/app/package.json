@@ -1,6 +1,6 @@
 {
   "name": "@luz-ds/app",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "LUZ Design System — the header and the dashboard of a web application (a bar with search and the account, a grid of panels), built on @luz-ds/core",
   "license": "MIT",
   "type": "module",

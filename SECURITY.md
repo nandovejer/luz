@@ -42,20 +42,20 @@ Thank you for helping keep LUZ secure!
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.min.css"
+  href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css"
   integrity="sha384-<hash>"
   crossorigin="anonymous"
 />
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.css"
+  href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css"
   integrity="sha384-<hash>"
   crossorigin="anonymous"
 />
 
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/catalog.min.css"
+  href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css"
   integrity="sha384-<hash>"
   crossorigin="anonymous"
 />
@@ -65,26 +65,26 @@ Thank you for helping keep LUZ secure!
 <script type="importmap">
 {
   "integrity": {
-    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/midi.min.js": "sha384-<hash>",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/table-sort.min.js": "sha384-<hash>",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/timeline.min.js": "sha384-<hash>",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/i18n-es.min.js": "sha384-<hash>",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/search.min.js": "sha384-<hash>",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/consent.min.js": "sha384-<hash>",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/mode.min.js": "sha384-<hash>"
+    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/midi.min.js": "sha384-<hash>",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/table-sort.min.js": "sha384-<hash>",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/timeline.min.js": "sha384-<hash>",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/i18n-es.min.js": "sha384-<hash>",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/search.min.js": "sha384-<hash>",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/consent.min.js": "sha384-<hash>",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/mode.min.js": "sha384-<hash>"
   }
 }
 </script>
 
 <script
   type="module"
-  src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.js"
+  src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js"
   integrity="sha384-<hash>"
   crossorigin="anonymous"
 ></script>
 <script
   type="module"
-  src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/catalog.min.js"
+  src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.js"
   integrity="sha384-<hash>"
   crossorigin="anonymous"
 ></script>
@@ -93,7 +93,7 @@ Thank you for helping keep LUZ secure!
      checks nothing outside Chromium -->
 <link
   rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/search.min.js"
+  href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/search.min.js"
   crossorigin="anonymous"
 />
 ```
@@ -122,7 +122,7 @@ Content-Security-Policy:
 LUZ's chunks, the language files among them, are loaded by a dynamic `import()` from the entry. A CSP that allows scripts by hash or nonce, without `'strict-dynamic'`, blocks that `import()`: the language chunk does not load, and the page falls back to English, with one console warning. Add `'strict-dynamic'`, or allow the origin of the files as above. A language file is a module of the same origin as the entry and runs with its authority; the build writes it from a validated JSON file, so the bytes a contributor wrote are never the module.
 
 3. **Use specific versions** (not latest):
-- ✅ Good: `@luz-ds/core@0.2.0`
+- ✅ Good: `@luz-ds/core@0.2.1`
 - ❌ Avoid: `@luz-ds/core@latest`
 
 ### When Installing from npm

@@ -2,7 +2,7 @@
 title: Trabajar con IA
 description: Qué puede leer un agente de programación con IA, cómo comprobar lo que ha escrito y qué revisor de accesibilidad puedes darle.
 keywords: llms.txt, agente, Claude, Copilot, Cursor, manifiesto, comprobación
-source: f1ebe2fb9594
+source: 0f30bbd6f00a
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="start">
@@ -14,7 +14,7 @@ reviewed: false
           <span class="docs-snippet__lang">Prompt</span>
           <button class="luz-copy-btn" type="button" data-copy-from="code-prompt" aria-label="Copy the prompt">Copy</button>
         </div>
-        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Prompt for your agent"><code id="code-prompt">Use LUZ for the markup. Read https://nandovejer.github.io/luz/llms.txt first and use only the classes in each package's classes.json. After you write HTML or CSS, run `npx @luz-ds/check@0.2.0` on the files and fix every finding before you answer.</code></pre>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Prompt for your agent"><code id="code-prompt">Use LUZ for the markup. Read https://nandovejer.github.io/luz/llms.txt first and use only the classes in each package's classes.json. After you write HTML or CSS, run `npx @luz-ds/check@0.2.1` on the files and fix every finding before you answer.</code></pre>
       </div>
     </section>
 
@@ -26,18 +26,18 @@ reviewed: false
 
     <section class="docs-block" aria-labelledby="check">
       <h2 class="docs-chapter__title" id="check">Comprueba lo que ha escrito un agente</h2>
-      <p class="docs-lead"><code>npx @luz-ds/check@0.2.0</code> lee sin conexión el HTML y el CSS de un proyecto e indica qué clases, elementos, orden de carga y tokens de color de LUZ son incorrectos. Lee archivos, pero no escribe nada.</p>
+      <p class="docs-lead"><code>npx @luz-ds/check@0.2.1</code> lee sin conexión el HTML y el CSS de un proyecto e indica qué clases, elementos, orden de carga y tokens de color de LUZ son incorrectos. Lee archivos, pero no escribe nada.</p>
       <p>Necesita Node 20 o posterior.</p>
       <div class="docs-snippet">
         <div class="docs-snippet__bar">
           <span class="docs-snippet__lang">Shell</span>
           <button class="luz-copy-btn" type="button" data-copy-from="code-check-run" aria-label="Copy the commands">Copy</button>
         </div>
-        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The commands"><code id="code-check-run">npx @luz-ds/check@0.2.0
-npx @luz-ds/check@0.2.0 index.html css/catalog.css
-npx @luz-ds/check@0.2.0 src --json</code></pre>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The commands"><code id="code-check-run">npx @luz-ds/check@0.2.1
+npx @luz-ds/check@0.2.1 index.html css/catalog.css
+npx @luz-ds/check@0.2.1 src --json</code></pre>
       </div>
-      <p>Indica <code>npx @luz-ds/check@0.2.0</code> y el ámbito. Una ruta puede ser un archivo, una carpeta (la lectura es recursiva: <code>.html</code>, <code>.htm</code> y <code>.css</code>) o un patrón glob entre comillas, como <code>"src/**/*.html"</code>.</p>
+      <p>Indica <code>npx @luz-ds/check@0.2.1</code> y el ámbito. Una ruta puede ser un archivo, una carpeta (la lectura es recursiva: <code>.html</code>, <code>.htm</code> y <code>.css</code>) o un patrón glob entre comillas, como <code>"src/**/*.html"</code>.</p>
       <p>Si no indicas ninguna ruta, lee la carpeta actual.</p>
       <div class="luz-table-wrap" role="region" aria-label="Opciones del comando" tabindex="0">
         <table class="luz-table">
@@ -149,7 +149,7 @@ npx @luz-ds/check@0.2.0 src --json</code></pre>
           <span class="docs-snippet__lang">Shell</span>
           <button class="luz-copy-btn" type="button" data-copy-from="code-agent" aria-label="Copy the command">Copy</button>
         </div>
-        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The command that copies the reviewer"><code id="code-agent">npx @luz-ds/check@0.2.0 agent &gt; .claude/agents/luz-accessibility-reviewer.md</code></pre>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The command that copies the reviewer"><code id="code-agent">npx @luz-ds/check@0.2.1 agent &gt; .claude/agents/luz-accessibility-reviewer.md</code></pre>
       </div>
       <ul>
         <li><strong>Sobrescribe archivos.</strong> El operador <code>&gt;</code> sustituye un archivo existente. Si lo has editado, usa otra ruta o guarda antes tu copia en el control de versiones.</li>
