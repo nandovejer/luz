@@ -95,7 +95,7 @@
 	max-inline-size: calc(100vw - 2 * var(--luz-space-md));
 	padding: var(--luz-space-sm);
 	border: 1px solid var(--luz-divider);
-	border-radius: var(--luz-radius-lg);
+	border-radius: var(--luz-radius-md);
 	background: var(--luz-surface);
 	color: var(--luz-text-primary);
 	box-shadow: var(--luz-shadow-md);
