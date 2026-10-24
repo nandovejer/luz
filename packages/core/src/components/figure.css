@@ -21,7 +21,7 @@
 }
 
 .luz-figure__caption {
-  font-size: 0.875em;
+  font-size: var(--luz-text-sm);
   color: var(--luz-text-secondary);
   margin-top: var(--luz-space-xs);
   font-style: italic;
