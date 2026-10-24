@@ -103,15 +103,15 @@ import "@luz-ds/catalog";     // level 3, only if you use the search
 Drop the lines for the levels you do not use:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.1.0/dist/landing.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.1.0/dist/cms.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/app@0.1.0/dist/app.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.1.0/dist/docs.min.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.js"></script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.1.0/dist/catalog.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/catalog.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.2.0/dist/landing.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.2.0/dist/cms.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/app@0.2.0/dist/app.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.2.0/dist/docs.min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/catalog.min.js"></script>
 ```
 
 Pin an exact version and add an `integrity` hash in production; see [SECURITY.md](./SECURITY.md). A console warning tells you when a layer is loaded without the one below it.

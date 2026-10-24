@@ -31,11 +31,11 @@ import '@luz-ds/core'   // optional: the JavaScript, starts every behavior
 
 ```html
 <!-- Tokens first -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.css">
 
 <!-- Then core -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.js"></script>
 
 <!-- A theme of your own (optional): start from themes/_template.css -->
 <link rel="stylesheet" href="/my-brand.css">
@@ -47,10 +47,10 @@ import '@luz-ds/core'   // optional: the JavaScript, starts every behavior
 Every component also ships as its own file in `dist/components/` — load only what you need. Tokens come first, then `base.css` (core settings such as z-index and layout widths, reset, bare elements):
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/base.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/components/button.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/components/card.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/base.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/components/button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/components/card.css">
 ```
 
 Available: `accordion`, `alert`, `avatar`, `breadcrumb`, `button`, `card`, `code`, `copy-btn`, `dropdown`, `figure`, `form`, `icon-grid`, `modal`, `mode-switcher`, `pagination`, `player`, `progress`, `select`, `sidebar`, `table`, `tabs`, `tag`, `toast`, `tooltip` (+ `_animations` for the shared keyframes). Each has a `.min.css` twin.
@@ -102,11 +102,11 @@ To check the language file, put an import map with an `integrity` section before
 <script type="importmap">
 {
   "integrity": {
-    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/i18n-es.min.js": "sha384-…"
+    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/i18n-es.min.js": "sha384-…"
   }
 }
 </script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.1.0/dist/luz.min.js" integrity="sha384-…" crossorigin></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.js" integrity="sha384-…" crossorigin></script>
 ```
 
 A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari and Firefox do not block a file with a wrong hash. Use it as a performance hint only.

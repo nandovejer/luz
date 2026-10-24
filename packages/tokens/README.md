@@ -23,7 +23,7 @@ import '@luz-ds/tokens'
 ### Via CDN (jsDelivr)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.1.0/dist/luz-tokens.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.min.css">
 ```
 
 ## Package exports
