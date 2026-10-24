@@ -21,6 +21,8 @@ import { describe, expect, it } from "vitest";
 import { LAYERS } from "../scripts/luz-layers.js";
 import { BASE, PACKAGES, SITE_KINDS } from "../scripts/luz-packages.js";
 import { routeOf, site } from "./helpers/docs-site.js";
+import { releaseNotes } from "./helpers/release-notes.js";
+import { isNpmOrReleased } from "./helpers/versions.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const exists = (path) => existsSync(`${root}${path}`);
@@ -36,10 +38,10 @@ const COMPONENTS = ["dashboard", "header"];
 describe("@luz-ds/app: the package", () => {
   const manifest = json("packages/app/package.json");
 
-  it("is @luz-ds/app, MIT, 0.1.0 (published by hand on 2026-10-19), CSS only", () => {
+  it("is @luz-ds/app, MIT, CSS only, at 0.1.0 (published by hand on 2026-10-19) or at the version its CHANGELOG lists", () => {
     expect(manifest.name).toBe("@luz-ds/app");
     expect(manifest.license).toBe("MIT");
-    expect(manifest.version).toBe("0.1.0");
+    expect(isNpmOrReleased(root, "app", "0.1.0")).toBe(true);
     expect(manifest.type).toBe("module");
     expect(manifest.publishConfig).toEqual({ access: "public" });
     expect(manifest.repository?.directory).toBe("packages/app");
@@ -169,10 +171,11 @@ describe("@luz-ds/app: the budget, the lint rules and the owners", () => {
   });
 
   it("has a minor changeset of its own, out of the fixed group, and one for tokens and core (their dist repeats the layer statement)", () => {
-    const changesets = readdirSync(`${root}.changeset`).filter((f) => f.endsWith(".md") && f !== "README.md").map((f) => read(`.changeset/${f}`));
-    const head = (text) => text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
-    expect(changesets.some((text) => /"@luz-ds\/app": minor/.test(head(text)))).toBe(true);
-    expect(changesets.some((text) => /"@luz-ds\/tokens": minor/.test(head(text)) && /"@luz-ds\/core": minor/.test(head(text)) && /luz\.app/.test(text))).toBe(true);
+    // A pending changeset, or the entry the Version Packages PR wrote in the CHANGELOGs
+    const notes = releaseNotes(root);
+    const minor = (note, name) => note.bumps.some((b) => b.name === `@luz-ds/${name}` && b.level === "minor");
+    expect(notes.some((note) => minor(note, "app"))).toBe(true);
+    expect(notes.some((note) => minor(note, "tokens") && minor(note, "core") && /luz\.app/.test(note.text))).toBe(true);
   });
 });
 

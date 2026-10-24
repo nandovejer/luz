@@ -538,8 +538,8 @@ describe("the script's capabilities (security-auditor Q1, condition a)", () => {
 describe("the release flow runs ai-readme in the version step, without lifecycle hooks", () => {
   const pkg = JSON.parse(read("package.json"));
 
-  it("the root package.json has a release:version script: changeset version, then ai-readme --write", () => {
-    expect(pkg.scripts["release:version"]).toBe("changeset version && node scripts/ai-readme.js --write");
+  it("the root package.json has a release:version script: changeset version, the versions of the install pages, then ai-readme --write", () => {
+    expect(pkg.scripts["release:version"]).toBe("changeset version && node scripts/release-sync.js && node scripts/ai-readme.js --write");
   });
 
   it("has no prerelease:version or postrelease:version script (pnpm runs those hooks; --ignore-scripts does not cover them)", () => {

@@ -65,6 +65,7 @@ import { exampleDocuments, manifestAssets, renderLlmsFull, renderLlmsTxt } from 
 import { scanSite } from "../scripts/docs-site/site.js";
 import { PAGES_CSP, SITE_URL } from "../vite.config.js";
 import { capabilitiesOf } from "./helpers/js-capabilities.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 
 const repo = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(join(repo, path), "utf-8");
@@ -455,15 +456,8 @@ describe("the accessibility statement says the files for agents are checked", ()
 /* ---- The changesets ---------------------------------------------------------------- */
 
 describe("the changesets of the manifests", () => {
-  const dir = `${repo}.changeset/`;
-  const changesets = readdirSync(dir)
-    .filter((f) => f.endsWith(".md") && f !== "README.md")
-    .map((file) => {
-      const text = readFileSync(`${dir}${file}`, "utf-8");
-      const head = text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
-      const bumps = [...head.matchAll(/^["']?(@luz-ds\/[\w-]+)["']?\s*:\s*(major|minor|patch)\s*$/gm)].map((m) => ({ name: m[1], level: m[2] }));
-      return { file, body: text.replace(/^---[\s\S]*?\n---/, "").trim(), bumps };
-    });
+  // The pending changesets and, once the Version Packages PR has consumed them, the entries of the CHANGELOGs
+  const changesets = releaseNotes(repo);
 
   it.each(PACKAGES)("@luz-ds/%s has a minor changeset that says it now exports ./classes.json", (name) => {
     const own = changesets.filter((c) => c.bumps.some((b) => b.name === `@luz-ds/${name}` && b.level === "minor") && c.body.includes("./classes.json"));

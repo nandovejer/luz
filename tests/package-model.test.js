@@ -15,6 +15,7 @@ import { SITE_KINDS } from "../scripts/luz-packages.js";
 import { JPEG_LONG_SIDES, LONG_SIDES, RATIOS, VARIANTS, sizeOf } from "../scripts/build-placeholders.js";
 import { LAYER_ORDER } from "../scripts/luz-layers.js";
 import { blocksOfCss } from "./helpers/css-blocks.js";
+import { isNpmOrReleased } from "./helpers/versions.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const SITE_TAGS = ["search", "consent", "lang-switch", "submenu", "banner"];
@@ -303,13 +304,14 @@ describe("versions: the repository matches npm", () => {
   const PUBLISHED_BY_HAND = ["tokens", "core", "check", "landing", "cms", "app", "docs"];
   const version = (name) => JSON.parse(readFileSync(`${root}packages/${name}/package.json`, "utf-8")).version;
 
+  // Until the Version Packages PR is merged. On it, and after it, a package is at the version its CHANGELOG lists
   for (const name of PUBLISHED_BY_HAND) {
-    it(`@luz-ds/${name} is at 0.1.0, the version on npm`, () => {
-      expect(version(name)).toBe("0.1.0");
+    it(`@luz-ds/${name} is at 0.1.0, the version on npm, or at a version its CHANGELOG lists`, () => {
+      expect(isNpmOrReleased(root, name, "0.1.0"), `${name} is at ${version(name)}`).toBe(true);
     });
   }
 
-  it("@luz-ds/catalog was never published and stays at 0.0.0", () => {
-    expect(version("catalog")).toBe("0.0.0");
+  it("@luz-ds/catalog stays at 0.0.0 until it is released, then at a version its CHANGELOG lists", () => {
+    expect(isNpmOrReleased(root, "catalog", "0.0.0"), `catalog is at ${version("catalog")}`).toBe(true);
   });
 });
