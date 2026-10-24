@@ -432,7 +432,8 @@ test.describe('the header on a phone', () => {
         }
         // In order, without overlap
         for (let i = 1; i < shown.length; i++) expect(shown[i].left, `${shown[i].name} after ${shown[i - 1].name}`).toBeGreaterThanOrEqual(shown[i - 1].right - 1);
-        expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), 'no horizontal scroll').toBe(0);
+        // clientWidth, not innerWidth: WebKit's classic scrollbar takes 4 px of innerWidth when the page scrolls vertically
+        expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 'no horizontal scroll').toBe(0);
         // The row is as tall at every width
         const expected = (await px(page, 'var(--luz-control-lg)')) + 2 * (await px(page, 'var(--luz-space-2xs)')) + 1;
         expect((await box(controls(page, javaScriptEnabled).header)).height).toBeCloseTo(expected, 0);
