@@ -19,7 +19,7 @@ Every package here is a development-only tool (build, lint, test) of the reposit
 | stylelint | 16.26.1 | MIT | . |
 | stylelint-config-standard | 36.0.1 | MIT | . |
 | vite | 6.4.5 | MIT | . |
-| vitest | 4.1.11 | MIT | . |
+| vitest | 4.1.12 | MIT | . |
 
 Not on the allowlist, accepted by name (`ACCEPTED_DEV` in `scripts/check-license.js`):
 
