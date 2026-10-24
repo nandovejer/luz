@@ -5,7 +5,9 @@
  * the tests of the docs and of the home compare it with `packages/<name>/package.json`. `changeset version`
  * moves the package versions and nothing else, so `pnpm release:version` runs `scripts/release-sync.js`
  * after it: the URLs of the pages and of their translations take the new versions, and a translation that
- * was in step with its English page (`source`) stays in step.
+ * was in step with its English page (`source`) stays in step. The READMEs of the packages, the root README,
+ * SECURITY.md and the quick reference are in the same boat: the version in their snippets is the one of the
+ * package it names (a package README ships in its tarball, so it says its own version).
  */
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -46,6 +48,10 @@ beforeEach(() => {
     page(`title: Instalar\nsource: ${sourceHash(english("0.1.0", "0.1.0"))}\nreviewed: false`, english("0.1.0", "0.1.0")),
   );
   put("packages/core/CHANGELOG.md", `## 0.2.0\n\n- abc1234: see ${CDN}/core@0.1.0/dist/luz.min.css\n`);
+  put("packages/core/README.md", `# core\n\n\`\`\`html\n<link href="${CDN}/core@0.1.0/dist/luz.css">\n<script src="${CDN}/catalog@0.1.0/dist/catalog.min.js"></script>\n\`\`\`\n\nA range such as \`@luz-ds/core@3\` cannot carry an SRI hash.\n`);
+  put("README.md", `<link href="${CDN}/landing@0.1.0/dist/landing.min.css">\n`);
+  put("SECURITY.md", `- Good: \`@luz-ds/core@0.1.0\`\n"${CDN}/core@0.1.0/dist/i18n-es.min.js": "sha384-<hash>"\n`);
+  put("dev/QUICK-REFERENCE.md", `<link href=".../@luz-ds/tokens@0.1.0/dist/luz-tokens.css">\n`);
 });
 afterEach(() => rmSync(root, { recursive: true, force: true }));
 
@@ -56,7 +62,7 @@ describe("syncVersions", () => {
     expect(get("apps/docs/pages/get-started/index.html")).toContain(`${CDN}/tokens@0.2.0/dist/luz-tokens.min.css`);
     expect(get("apps/docs/pages/get-started/index.html")).toContain(`${CDN}/landing@0.1.4/dist/landing.min.css`);
     expect(get("apps/docs/i18n/es/pages/get-started/index.html")).toContain(`${CDN}/tokens@0.2.0/dist/luz-tokens.min.css`);
-    expect(changed).toEqual(["apps/docs/i18n/es/pages/get-started/index.html", "apps/docs/pages/get-started/index.html"]);
+    expect(changed.filter((file) => file.startsWith("apps/"))).toEqual(["apps/docs/i18n/es/pages/get-started/index.html", "apps/docs/pages/get-started/index.html"]);
   });
 
   it("leaves prose that names a version alone: only the URL of a CDN file is a snippet", () => {
@@ -106,9 +112,35 @@ describe("syncVersions", () => {
   });
 });
 
+describe("syncVersions: the markdown that shows a snippet", () => {
+  it("writes the version of the package it names in a package README, the root README, SECURITY.md and the quick reference", () => {
+    const changed = syncVersions(root);
+
+    expect(get("packages/core/README.md")).toContain(`${CDN}/core@0.2.0/dist/luz.css`);
+    expect(get("packages/core/README.md")).toContain(`${CDN}/catalog@0.2.0/dist/catalog.min.js`);
+    expect(get("README.md")).toContain(`${CDN}/landing@0.1.4/dist/landing.min.css`);
+    expect(get("SECURITY.md")).toContain(`${CDN}/core@0.2.0/dist/i18n-es.min.js`);
+    expect(get("SECURITY.md")).toContain("`@luz-ds/core@0.2.0`");
+    expect(get("dev/QUICK-REFERENCE.md")).toContain(".../@luz-ds/tokens@0.2.0/dist/luz-tokens.css");
+    expect(changed).toEqual(expect.arrayContaining(["README.md", "SECURITY.md", "dev/QUICK-REFERENCE.md", "packages/core/README.md"]));
+  });
+
+  it("leaves a range alone: `@luz-ds/core@3` is not a version", () => {
+    syncVersions(root);
+
+    expect(get("packages/core/README.md")).toContain("`@luz-ds/core@3`");
+  });
+
+  it("changes nothing the second time", () => {
+    syncVersions(root);
+
+    expect(syncVersions(root)).toEqual([]);
+  });
+});
+
 describe("releaseDrift", () => {
   it("lists the file and line of a CDN URL that does not say the version of its package", () => {
-    const drift = releaseDrift(root);
+    const drift = releaseDrift(root).filter((line) => line.startsWith("apps/"));
 
     expect(drift).toEqual([
       "apps/docs/i18n/es/pages/get-started/index.html:8: @luz-ds/tokens is at 0.2.0, the URL says 0.1.0",
@@ -116,6 +148,14 @@ describe("releaseDrift", () => {
       "apps/docs/pages/get-started/index.html:6: @luz-ds/tokens is at 0.2.0, the URL says 0.1.0",
       "apps/docs/pages/get-started/index.html:7: @luz-ds/landing is at 0.1.4, the URL says 0.1.0",
     ]);
+  });
+
+  it("lists the markdown snippets too, with their file and line", () => {
+    const drift = releaseDrift(root);
+
+    expect(drift).toContain("README.md:1: @luz-ds/landing is at 0.1.4, the URL says 0.1.0");
+    expect(drift).toContain("packages/core/README.md:4: @luz-ds/core is at 0.2.0, the URL says 0.1.0");
+    expect(drift).toContain("SECURITY.md:1: @luz-ds/core is at 0.2.0, the URL says 0.1.0");
   });
 
   it("is empty once the versions are synced", () => {
@@ -126,7 +166,7 @@ describe("releaseDrift", () => {
 });
 
 describe("this repository", () => {
-  it("has no CDN URL in a page that says another version than its package", () => {
+  it("has no CDN URL in a page, a README or SECURITY.md that says another version than its package", () => {
     expect(releaseDrift(repo)).toEqual([]);
   });
 
