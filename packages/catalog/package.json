@@ -1,6 +1,6 @@
 {
   "name": "@luz-ds/catalog",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "LUZ Design System — self-contained catalog components (search, cookie consent, color mode, language switch, submenu, banner) as light-DOM `<luz-*>` elements, built on @luz-ds/core",
   "license": "MIT",
   "type": "module",

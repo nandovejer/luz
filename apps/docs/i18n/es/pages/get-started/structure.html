@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Cómo se organiza LUZ
 description: Paquetes con dependencias en una sola dirección, CSS en capas de cascada dentro de una llamada luz y un script opcional.
-source: 081a1424ae40
+source: 576c02cacf9d
 reviewed: false
 -->
     <section class="docs-block" id="packages" aria-labelledby="packages-title">
@@ -56,7 +56,7 @@ Each of these needs tokens and core, and takes catalog as an optional peer:
           <tr><td data-label="Pieza"><div>Búsqueda del sitio</div></td><td data-label="Clases o atributos"><div><code>&lt;luz-search&gt;</code>, <code>.luz-search</code></div></td><td data-label="Paquete"><div>catalog</div></td><td data-label="Notas"><div>Necesita el script (<code>catalog.js</code>, que carga <code>search.js</code> cuando la página contiene el elemento) y un archivo de índice; sin ellos, es un enlace</div></td></tr>
           <tr><td data-label="Pieza"><div>Estilos de impresión</div></td><td data-label="Clases o atributos"><div>No hay que añadir nada</div></td><td data-label="Paquete"><div>core</div></td><td data-label="Notas"><div>En <code>luz.css</code>; el catálogo añade sus propias reglas de impresión</div></td></tr>
           <tr><td data-label="Pieza"><div>Marcado al que no puedes añadir clases</div></td><td data-label="Clases o atributos"><div><code>data-luz-classless</code></div></td><td data-label="Paquete"><div>core</div></td><td data-label="Notas"><div><code>classless.css</code>, un archivo independiente</div></td></tr>
-          <tr><td data-label="Pieza"><div>Comprobación de lo que has escrito tú o un agente de IA</div></td><td data-label="Clases o atributos"><div><code>npx @luz-ds/check@0.2.0</code>, el comando <code>luz-check</code></div></td><td data-label="Paquete"><div>check</div></td><td data-label="Notas"><div>Una herramienta sin CSS ni capa, que no necesita ningún otro paquete: analiza tu HTML y CSS sin conexión. Consulta <a href="/docs/get-started/ai/">Trabajar con IA</a></div></td></tr>
+          <tr><td data-label="Pieza"><div>Comprobación de lo que has escrito tú o un agente de IA</div></td><td data-label="Clases o atributos"><div><code>npx @luz-ds/check@0.2.1</code>, el comando <code>luz-check</code></div></td><td data-label="Paquete"><div>check</div></td><td data-label="Notas"><div>Una herramienta sin CSS ni capa, que no necesita ningún otro paquete: analiza tu HTML y CSS sin conexión. Consulta <a href="/docs/get-started/ai/">Trabajar con IA</a></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -92,7 +92,7 @@ Each of these needs tokens and core, and takes catalog as an optional peer:
               <span class="docs-snippet__lang">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-core-script" aria-label="Copy the core script tag">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Load the core script"><code id="code-core-script">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Load the core script"><code id="code-core-script">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
           </div>
           <p>Para cargar menos código, importa un módulo y llama a su función <code>init</code>. Consulta <a href="/docs/get-started/javascript/">Módulos de JavaScript</a>.</p>
     </section>
@@ -110,8 +110,8 @@ Each of these needs tokens and core, and takes catalog as an optional peer:
   &lt;meta charset=&quot;utf-8&quot;&gt;
   &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
   &lt;title&gt;Sign up – Acme&lt;/title&gt;
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.min.css&quot;&gt;
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
 &lt;/head&gt;
 &lt;body&gt;
   &lt;main class=&quot;o-container&quot;&gt;

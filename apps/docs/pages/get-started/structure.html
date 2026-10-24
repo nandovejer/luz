@@ -56,7 +56,7 @@ Each of these needs tokens and core, and takes catalog as an optional peer:
           <tr><td data-label="Piece"><div>Site search</div></td><td data-label="Classes or attributes"><div><code>&lt;luz-search&gt;</code>, <code>.luz-search</code></div></td><td data-label="Package"><div>catalog</div></td><td data-label="Notes"><div>Needs the script (<code>catalog.js</code>, which loads <code>search.js</code> when the page has one) and an index file; without them it is a link</div></td></tr>
           <tr><td data-label="Piece"><div>Print styles</div></td><td data-label="Classes or attributes"><div>Nothing to add</div></td><td data-label="Package"><div>core</div></td><td data-label="Notes"><div>In <code>luz.css</code>; catalog adds its own print rules</div></td></tr>
           <tr><td data-label="Piece"><div>Markup you cannot add classes to</div></td><td data-label="Classes or attributes"><div><code>data-luz-classless</code></div></td><td data-label="Package"><div>core</div></td><td data-label="Notes"><div><code>classless.css</code>, a file of its own</div></td></tr>
-          <tr><td data-label="Piece"><div>Checking what you or an AI agent wrote</div></td><td data-label="Classes or attributes"><div><code>npx @luz-ds/check@0.2.0</code>, the <code>luz-check</code> command</div></td><td data-label="Package"><div>check</div></td><td data-label="Notes"><div>A tool with no CSS and no layer, and no other package needed: it reads your HTML and CSS offline. See <a href="/docs/get-started/ai/">Working with AI</a></div></td></tr>
+          <tr><td data-label="Piece"><div>Checking what you or an AI agent wrote</div></td><td data-label="Classes or attributes"><div><code>npx @luz-ds/check@0.2.1</code>, the <code>luz-check</code> command</div></td><td data-label="Package"><div>check</div></td><td data-label="Notes"><div>A tool with no CSS and no layer, and no other package needed: it reads your HTML and CSS offline. See <a href="/docs/get-started/ai/">Working with AI</a></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -92,7 +92,7 @@ Each of these needs tokens and core, and takes catalog as an optional peer:
               <span class="docs-snippet__lang">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-core-script" aria-label="Copy the core script tag">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Load the core script"><code id="code-core-script">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Load the core script"><code id="code-core-script">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
           </div>
           <p>To load less, import one module and call its <code>init</code> function. See <a href="/docs/get-started/javascript/">JavaScript modules</a>.</p>
     </section>
@@ -110,8 +110,8 @@ Each of these needs tokens and core, and takes catalog as an optional peer:
   &lt;meta charset=&quot;utf-8&quot;&gt;
   &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
   &lt;title&gt;Sign up – Acme&lt;/title&gt;
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.min.css&quot;&gt;
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
 &lt;/head&gt;
 &lt;body&gt;
   &lt;main class=&quot;o-container&quot;&gt;
