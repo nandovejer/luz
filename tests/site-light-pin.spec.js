@@ -23,7 +23,8 @@ import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { NO_CHOICE, TIMEZONE, atTime } from './helpers/site-lights.js';
 
-test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
+// The file is about state (the light, the mode, what is stored), not about the motion of the globe: reduced motion stops the globe's frame loop (RL-8). A frame costs the main thread tens of milliseconds in software rendering, so on a loaded runner the loop leaves every round trip into the page seconds long.
+test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE, reducedMotion: 'reduce' });
 
 /** Below 1024px the bar is a disclosure (from 1024px with a hover it is always open). */
 const NARROW = { width: 800, height: 900 };

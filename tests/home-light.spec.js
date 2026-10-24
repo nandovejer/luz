@@ -72,6 +72,20 @@ async function open(page, path = '/', { time } = {}) {
   await expect(page.locator('home-light').locator('home-globe').filter({ visible: true })).toHaveCount(1);
 }
 
+/**
+ * A test of state (the light, the mode, what is stored) is not about the
+ * motion of the globe, so it asks for the system's reduced motion, which
+ * stops the globe's frame loop (RL-8). A frame of the globe costs the main
+ * thread tens of milliseconds in software rendering; on a loaded runner the
+ * loop leaves every round trip into the page seconds long, and a test of
+ * thirty of them runs past its 30 s.
+ * @param {import('@playwright/test').Page} page
+ */
+const still = (page) => page.emulateMedia({ reducedMotion: 'reduce' });
+
+/** How long a test waits for the globe to have asked for 10 frames: a count it reaches in a second or two on an idle machine, and in seconds more on a loaded one. Half of the test's 30 s. */
+const FRAMES_WITHIN = 15_000;
+
 /** The state of the page the light reads and writes. */
 const html = (page) =>
   page.evaluate(() => ({
@@ -214,6 +228,7 @@ test.describe('with JavaScript', () => {
   /* -- The slider and Live call <luz-mode>.preview() --------------------- */
 
   test('in Auto the slider scrubs the page: data-light and data-theme follow the hour, and closing the bar keeps the hour it was let go at', async ({ page }) => {
+    await still(page);
     await open(page, '/', { time: '14:00' });
     await expect.poll(async () => (await html(page)).light).toBe('afternoon');
     expect((await html(page)).theme).toBe('light');
@@ -243,6 +258,7 @@ test.describe('with JavaScript', () => {
   });
 
   test('after a mode chosen in the footer, moving the slider gives the hour back the lead: its light and its mode (the last touched wins)', async ({ page }) => {
+    await still(page);
     await open(page, '/', { time: '14:00' });
     await chooseMode(page, 'dark');
     await expect.poll(async () => (await html(page)).theme).toBe('dark');
@@ -444,14 +460,19 @@ test.describe('with JavaScript', () => {
 
   /* -- Reduced motion ------------------------------------------------------ */
 
-  /** Count the animation frames the light's own files ask for during `ms`. */
+  /** Count the animation frames the light's own files ask for during `ms` (for "none": a window shows an absence). */
   async function framesAsked(page, ms) {
-    await page.evaluate(() => {
+    await framesFrom(page);
+    await page.waitForTimeout(ms);
+    return framesSoFar(page);
+  }
+  /** Start counting the frames the light's own files ask for. */
+  const framesFrom = (page) =>
+    page.evaluate(() => {
       /** @type {any} */ (window).__frames = 0;
     });
-    await page.waitForTimeout(ms);
-    return page.evaluate(() => /** @type {any} */ (window).__frames);
-  }
+  /** The frames counted since `framesFrom`. */
+  const framesSoFar = (page) => page.evaluate(() => /** @type {any} */ (window).__frames ?? 0);
   const countFrames = (page) =>
     page.addInitScript(() => {
       const ask = window.requestAnimationFrame.bind(window);
@@ -476,7 +497,9 @@ test.describe('with JavaScript', () => {
     await open(page);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1500);
-    expect(await framesAsked(page, 1500)).toBeGreaterThan(10);
+    await framesFrom(page);
+    // A count, not a rate: a frame of the globe costs the main thread tens of milliseconds in software rendering, so how many fit in 1.5 s depends on the runner's load
+    await expect.poll(() => framesSoFar(page), { message: 'the globe asks for animation frames', timeout: FRAMES_WITHIN }).toBeGreaterThan(10);
   });
 
   test('reduced motion: the land still comes', async ({ page }) => {
@@ -1130,12 +1153,12 @@ test.describe('no Pause motion button', () => {
         return ask(callback);
       };
     });
-  const framesIn = async (page, ms) => {
+  /** Start counting, then wait until the globe has asked for more than 10 frames: a count, not a rate (a frame costs tens of milliseconds of main thread in software rendering, so how many fit in a window depends on the runner's load). */
+  const asksForFrames = async (page, message) => {
     await page.evaluate(() => {
       /** @type {any} */ (window).__frames = 0;
     });
-    await page.waitForTimeout(ms);
-    return page.evaluate(() => /** @type {any} */ (window).__frames ?? 0);
+    await expect.poll(() => page.evaluate(() => /** @type {any} */ (window).__frames ?? 0), { message, timeout: FRAMES_WITHIN }).toBeGreaterThan(10);
   };
 
   for (const [route] of ROUTES) {
@@ -1158,10 +1181,10 @@ test.describe('no Pause motion button', () => {
     await open(page);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500);
-    expect(await framesIn(page, 1500), 'control: the globe spins before the attribute').toBeGreaterThan(10);
+    await asksForFrames(page, 'control: the globe spins before the attribute');
     await page.locator('home-light').evaluate((el) => el.setAttribute('still', ''));
     await page.waitForTimeout(600);
-    expect(await framesIn(page, 1500), 'the globe still spins with [still] set').toBeGreaterThan(10);
+    await asksForFrames(page, 'the globe still spins with [still] set');
   });
 
   test('a [still] attribute on <home-light> is ignored: the stars of the page keep twinkling and drifting at night', async ({ page }) => {
