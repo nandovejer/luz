@@ -9,7 +9,7 @@
  * SECURITY.md and the quick reference are in the same boat: the version in their snippets is the one of the
  * package it names (a package README ships in its tarball, so it says its own version).
  */
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,6 +19,14 @@ import { releaseDrift, syncVersions } from "../scripts/release-sync.js";
 
 const repo = fileURLToPath(new URL("../", import.meta.url));
 const CDN = "https://cdn.jsdelivr.net/npm/@luz-ds";
+
+/** The `.html` files under `dir`, as absolute paths. */
+const htmlFiles = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) return htmlFiles(path);
+    return entry.name.endsWith(".html") ? [path] : [];
+  });
 
 let root;
 const put = (path, text) => {
@@ -138,6 +146,42 @@ describe("syncVersions: the markdown that shows a snippet", () => {
   });
 });
 
+describe("syncVersions: the commands an agent is told to run (npx)", () => {
+  beforeEach(() => {
+    manifest("check", "0.2.0");
+    put("README.md", "Run `npx @luz-ds/check@0.1.0 <files>` and `npx @luz-ds/tokens@0.1.0 check-contrast my.css`.\n");
+    put("apps/docs/pages/get-started/ai.html", page("title: AI", "<pre><code>npx @luz-ds/check@0.1.0 src --json</code></pre>\n<p>Say <code>npx @luz-ds/check@0.1.0</code>.</p>"));
+  });
+
+  it("writes the version of check and of tokens in `npx @luz-ds/<name>@<version>` of the markdown and of the pages", () => {
+    syncVersions(root);
+
+    expect(get("README.md")).toContain("`npx @luz-ds/check@0.2.0 <files>`");
+    expect(get("README.md")).toContain("`npx @luz-ds/tokens@0.2.0 check-contrast my.css`");
+    expect(get("apps/docs/pages/get-started/ai.html")).toContain("npx @luz-ds/check@0.2.0 src --json");
+    expect(get("apps/docs/pages/get-started/ai.html")).toContain("<code>npx @luz-ds/check@0.2.0</code>");
+  });
+
+  it("moves the `source` of the translation of a page whose command changed", () => {
+    const body = get("apps/docs/pages/get-started/ai.html").replace(/^<!-- luz:page\n[\s\S]*?\n-->\n/, "");
+    put("apps/docs/i18n/es/pages/get-started/ai.html", page(`title: IA\nsource: ${sourceHash(body)}\nreviewed: false`, body));
+
+    syncVersions(root);
+
+    const after = get("apps/docs/pages/get-started/ai.html").replace(/^<!-- luz:page\n[\s\S]*?\n-->\n/, "");
+    expect(get("apps/docs/i18n/es/pages/get-started/ai.html")).toContain(`source: ${sourceHash(after)}`);
+    expect(get("apps/docs/i18n/es/pages/get-started/ai.html")).toContain("npx @luz-ds/check@0.2.0 src --json");
+  });
+
+  it("is listed by releaseDrift while it says another version, and gone once synced", () => {
+    expect(releaseDrift(root)).toContain("README.md:1: @luz-ds/check is at 0.2.0, the URL says 0.1.0");
+
+    syncVersions(root);
+
+    expect(releaseDrift(root)).toEqual([]);
+  });
+});
+
 describe("releaseDrift", () => {
   it("lists the file and line of a CDN URL that does not say the version of its package", () => {
     const drift = releaseDrift(root).filter((line) => line.startsWith("apps/"));
@@ -168,6 +212,24 @@ describe("releaseDrift", () => {
 describe("this repository", () => {
   it("has no CDN URL in a page, a README or SECURITY.md that says another version than its package", () => {
     expect(releaseDrift(repo)).toEqual([]);
+  });
+
+  it("names the version in every `npx @luz-ds/check` and `npx @luz-ds/tokens` an agent can read: a README, a docs page, llms.txt (security audit 2026-10-24)", () => {
+    const BARE = /npx @luz-ds\/(check|tokens)(?!@|\$\{)/g;
+    const files = [
+      "README.md",
+      ...readdirSync(join(repo, "packages")).map((name) => `packages/${name}/README.md`),
+      "scripts/ai-readme.js",
+      "scripts/docs-site/ai.js",
+      ...["apps/docs/pages", "apps/docs/i18n/es/pages"].flatMap((dir) => htmlFiles(join(repo, dir)).map((f) => f.slice(repo.length))),
+    ].filter((file) => existsSync(join(repo, file)));
+    const bare = files.flatMap((file) =>
+      readFileSync(join(repo, file), "utf-8")
+        .split("\n")
+        .flatMap((line, i) => (line.match(BARE) ? [`${file}:${i + 1}`] : [])),
+    );
+
+    expect(bare).toEqual([]);
   });
 
   it("runs the sync between `changeset version` and the README blocks in `pnpm release:version`", () => {
