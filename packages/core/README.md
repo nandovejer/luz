@@ -31,11 +31,11 @@ import '@luz-ds/core'   // optional: the JavaScript, starts every behavior
 
 ```html
 <!-- Tokens first -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.css">
 
 <!-- Then core -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.js"></script>
 
 <!-- A theme of your own (optional): start from themes/_template.css -->
 <link rel="stylesheet" href="/my-brand.css">
@@ -47,10 +47,10 @@ import '@luz-ds/core'   // optional: the JavaScript, starts every behavior
 Every component also ships as its own file in `dist/components/` — load only what you need. Tokens come first, then `base.css` (core settings such as z-index and layout widths, reset, bare elements):
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.0/dist/luz-tokens.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/base.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/components/button.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/components/card.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/base.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/components/button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/components/card.css">
 ```
 
 Available: `accordion`, `alert`, `avatar`, `breadcrumb`, `button`, `card`, `code`, `copy-btn`, `dropdown`, `figure`, `form`, `icon-grid`, `modal`, `mode-switcher`, `pagination`, `player`, `progress`, `select`, `sidebar`, `table`, `tabs`, `tag`, `toast`, `tooltip` (+ `_animations` for the shared keyframes). Each has a `.min.css` twin.
@@ -102,11 +102,11 @@ To check the language file, put an import map with an `integrity` section before
 <script type="importmap">
 {
   "integrity": {
-    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/i18n-es.min.js": "sha384-…"
+    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/i18n-es.min.js": "sha384-…"
   }
 }
 </script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.0/dist/luz.min.js" integrity="sha384-…" crossorigin></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js" integrity="sha384-…" crossorigin></script>
 ```
 
 A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari and Firefox do not block a file with a wrong hash. Use it as a performance hint only.
@@ -149,7 +149,7 @@ Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.t
 
 LUZ ships one look, Vejer, in three color modes (`light`, `dark`, `high-contrast`): ET Book for running text, whitewash and sandstone surfaces, iron-black text, sky-blue links and actions, every link underlined.
 
-A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, with `data-mode` for its light, dark and high-contrast variants. Copy `@luz-ds/core/themes/_template.css`, and check it with `npx @luz-ds/tokens@0.2.0 check-contrast my-brand.css`. List its name in `<html data-luz-themes="my-brand">` so the mode switcher remembers the choice.
+A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, with `data-mode` for its light, dark and high-contrast variants. Copy `@luz-ds/core/themes/_template.css`, and check it with `npx @luz-ds/tokens@0.2.1 check-contrast my-brand.css`. List its name in `<html data-luz-themes="my-brand">` so the mode switcher remembers the choice.
 
 ## Vanilla JS behaviors
 
@@ -164,15 +164,11 @@ The core JS (`luz.js`) provides no-dependency implementations of:
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/core` 0.2.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/core` 0.2.1 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-#### English stays in the entry; every other language LUZ ships is a lazy file, fetched only for the pages that declare it. `loadLocales()` is new, and `luz.js` calls it at boot, so a page with `<html lang="es">` makes one request for `i18n-es.min.js` and a page in English makes none. A language is a JSON file, `packages/core/src/i18n/<code>.json`, that the build validates and writes as `dist/i18n-<code>.js`; it is published as `@luz-ds/core/i18n/<code>`. The dictionary has two more keys, `previous` and `next`. `initTabs()`, `initCopyButtons()`, `initThemeSystem()` and `initThemeCycle()` take a `defer` flag that leaves `data-luz-js` and the strings to a later call.
-
-Breaking: `@luz-ds/core/i18n` and the standalone modules (`/highlight`, `/player`, `/theme`, `/clipboard`) no longer carry Spanish. Before `initHighlight()`, `initPlayers()` and `initThemeCycle()` on a page that is not in English, call `await loadLocales()` from `@luz-ds/core/i18n`, or `registerLocale("es", …)` with your own strings. The `luz.js` entry does it for you.
-
-#### Breaking: `@luz-ds/site` is now `@luz-ds/catalog`, the name the home and the docs already gave to level 3. Install `@luz-ds/catalog` and load `catalog.css` / `catalog.min.css` and `catalog.js` / `catalog.min.js` where you loaded the `site.*` files; its subpaths (`/search`, `/consent`, `/mode`, `/css`, `/css/min`, `/print.css`, `/components/*`, `/classes.json`, `/custom-elements.json`) keep their names. The cascade layer is `luz.catalog` instead of `luz.site`, in the order statement every stylesheet repeats (so tokens and core change too). The landing, cms, app and docs packages take `@luz-ds/catalog` as their optional peer. `luz-check` reads the new names and its `load/order` rule says tokens, core, catalog. The docs of the package are at `/docs/catalog/` (was `/docs/site/`). The tags (`<luz-search>`, `<luz-consent>`, `<luz-mode>`, `<luz-lang-switch>`, `<luz-submenu>`, `<luz-banner>`) and their classes do not change.
+No breaking changes in 0.2.1.
 
 Older versions: https://github.com/nandovejer/luz/blob/main/packages/core/CHANGELOG.md
 
@@ -190,7 +186,7 @@ This package needs `@luz-ds/tokens` loaded first.
 
 ### Check what you write
 
-Run `npx @luz-ds/check@0.2.0 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.2.0 agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.2.1 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.2.1 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 
