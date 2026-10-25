@@ -25,7 +25,8 @@
  *   llms.txt (spec 1.2). `# LUZ`, a `> ` summary, one details paragraph, then
  *   one `##` per area of site.json that has pages, in its order, in the
  *   reading order of Previous / Next (the area index first), then `##
- *   Documentation` (the hub's home) and, last, `## Optional`. Each item is
+ *   Documentation` (the hub's home), then `## Prompts` (the five prompts for AI,
+ *   `/prompts/<kind>.txt`, tests/prompts.test.js) and, last, `## Optional`. Each item is
  *   `- [<title>](<url>): <description>`, the page's front matter verbatim. The
  *   pages are exactly those of indexData() (the A-Z page has `search: false`
  *   and is out, whatever the spec's sample shows; the spec contradicts
@@ -119,6 +120,11 @@ const full = (siteUrl = SITE_URL) => once(`full:${siteUrl}`, () => renderLlmsFul
 const bytes = (text) => Buffer.byteLength(text, "utf-8");
 
 const ITEM = /^- \[(.*)\]\(([^)\s]+)\): (.*)$/;
+
+/** The files the build writes for the prompts for AI, which llms.txt lists under `## Prompts`. */
+const PROMPT_ROUTES = ["start", "landing", "blog", "app", "docs"].map((id) => `/prompts/${id}.txt`);
+/** The sections of llms.txt that list pages of the docs: not the prompts, not the optional files. */
+const pageSections = (sections) => sections.filter((s) => s.title !== "Prompts" && s.title !== "Optional");
 
 /** llms.txt as { h1, quote (first line), quoteText, intro: [lines], sections: [{ title, lines, items }] }. */
 function parseTxt(text) {
@@ -448,7 +454,7 @@ describe("llms.txt: the index of the site for an agent", () => {
   it("lists the areas in site.json order, each page in the reading order, then Documentation and Optional last", () => {
     const expected = expectedSections();
     const titles = parsed.sections.map((s) => s.title);
-    expect(titles).toEqual([...expected.map((s) => s.title), "Optional"]);
+    expect(titles).toEqual([...expected.map((s) => s.title), "Prompts", "Optional"]);
     for (const [i, section] of expected.entries()) {
       expect(parsed.sections[i].items.map((item) => item.url), section.title).toEqual(section.pages.map((p) => urlOf(p.route)));
     }
@@ -465,7 +471,7 @@ describe("llms.txt: the index of the site for an agent", () => {
   });
 
   it("lists the pages of indexData() and no others: once each, not the A-Z page, not the 404", () => {
-    const urls = parsed.sections.filter((s) => s.title !== "Optional").flatMap((s) => s.items.map((i) => i.url));
+    const urls = pageSections(parsed.sections).flatMap((s) => s.items.map((i) => i.url));
     expect(urls.length).toBe(new Set(urls).size);
     expect([...urls].sort()).toEqual(listed.map((e) => urlOf(e.route)).sort());
     expect(urls).not.toContain(urlOf("/docs/a-z/"));
@@ -479,7 +485,7 @@ describe("llms.txt: the index of the site for an agent", () => {
 
   it("has absolute URLs under the Pages base, each a route of the generator or a file the build emits", () => {
     const routes = new Set(site.pages.map((p) => p.route));
-    const emitted = [member("AI_ROUTES").llmsFull, member("AI_ROUTES").llms];
+    const emitted = [member("AI_ROUTES").llmsFull, member("AI_ROUTES").llms, ...PROMPT_ROUTES];
     for (const section of parsed.sections) {
       for (const item of section.items) {
         expect(item.url.startsWith(SITE_URL), item.url).toBe(true);
@@ -493,9 +499,10 @@ describe("llms.txt: the index of the site for an agent", () => {
   it("has root-absolute URLs with no site URL, as the dev server serves it", () => {
     const dev = parseTxt(txt(""));
     const routes = new Set(site.pages.map((p) => p.route));
-    for (const section of dev.sections.filter((s) => s.title !== "Optional")) {
+    for (const section of pageSections(dev.sections)) {
       for (const item of section.items) expect(routes.has(item.url), item.url).toBe(true);
     }
+    expect(dev.sections.find((s) => s.title === "Prompts").items.map((i) => i.url)).toEqual(PROMPT_ROUTES);
     expect(dev.sections.at(-1).items.map((i) => i.url)).toContain("/llms-full.txt");
   });
 
@@ -510,7 +517,7 @@ describe("llms.txt: the index of the site for an agent", () => {
 
   it("names nothing that is not on a human page: no private path, no secret, a route behind every title", () => {
     for (const pattern of PRIVATE) expect(txt(), String(pattern)).not.toMatch(pattern);
-    for (const section of parsed.sections.filter((s) => s.title !== "Optional")) {
+    for (const section of pageSections(parsed.sections)) {
       for (const item of section.items) {
         const page = site.byRoute.get(`/${item.url.slice(SITE_URL.length)}`);
         expect(page, item.url).toBeTruthy();
@@ -746,7 +753,7 @@ describe("llms-full.txt: what a page contributes, on a fixture", () => {
   it("lists the fixture's areas in order, the hub under Documentation, and each description in llms.txt", () => {
     const { scan } = fixtureSite(fixtureFiles());
     const parsed = parseTxt(renderLlmsTxt(scan(), options));
-    expect(parsed.sections.map((s) => s.title)).toEqual(["Components", "Tokens", "Documentation", "Optional"]);
+    expect(parsed.sections.map((s) => s.title)).toEqual(["Components", "Tokens", "Documentation", "Prompts", "Optional"]);
     expect(parsed.sections[0].items.map((i) => i.title)).toEqual(["Components", "Widget"]);
     expect(parsed.sections[2].items.map((i) => i.url)).toEqual([`${FIXTURE_URL}docs/`]);
   });

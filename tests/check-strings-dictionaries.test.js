@@ -53,7 +53,7 @@ function files(path) {
 
 beforeAll(() => {
   dir = mkdtempSync(join(tmpdir(), "luz-check-strings-"));
-  const sources = [...files("apps"), ...files("scripts"), ...files("packages/check/src"), ...files("packages/core/src/i18n"), ...files("packages/core/src/components"), ...files("packages/catalog/src/components"), ...files("packages/tokens/lib"), ...files("packages/core/src/themes"), "packages/core/src/objects/_objects.css", "packages/tokens/tokens.json", "packages/tokens/src/semantic.css", EN_FILE, "package.json", "budgets.json"];
+  const sources = [...files("apps"), ...files("scripts"), "scripts/docs-site/prompts.js", ...files("packages/check/src"), ...files("packages/core/src/i18n"), ...files("packages/core/src/components"), ...files("packages/catalog/src/components"), ...files("packages/tokens/lib"), ...files("packages/core/src/themes"), "packages/core/src/objects/_objects.css", "packages/tokens/tokens.json", "packages/tokens/src/semantic.css", EN_FILE, "package.json", "budgets.json"];
   for (const name of readdirSync(join(repo, "packages"))) sources.push(`packages/${name}/package.json`);
   for (const rel of new Set(sources)) {
     try {
