@@ -64,7 +64,7 @@
   "why.light.sub": "شيفرة قليلة، وبلا خطوة بناء.",
   "why.weight.unit": "ك.ب",
   "why.weight.list": "الحزم حسب الحجم",
-  "why.weight.total": "LUZ كلها: {total}.",
+  "why.weight.total": "الحزم الأساسية الثلاث: {total}.",
   "why.weight.caption": "الحجم المضغوط لما تنشره كل حزمة، مقيسًا في dist عند بناء هذه الصفحة.",
   "why.usable.word": "Usable",
   "why.usable.sub": "متاح افتراضيًا، لا بإضافات لاحقة.",

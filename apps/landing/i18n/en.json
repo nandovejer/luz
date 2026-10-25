@@ -72,7 +72,7 @@
   "why.light.sub": "Little code, no build step.",
   "why.weight.unit": "KB",
   "why.weight.list": "Packages by size",
-  "why.weight.total": "All of LUZ: {total}.",
+  "why.weight.total": "The three base packages: {total}.",
   "why.weight.caption": "The gzipped weight each package publishes, measured in dist when this page is built.",
   "why.usable.word": "Usable",
   "why.usable.sub": "Accessible by default, not by add-on.",
