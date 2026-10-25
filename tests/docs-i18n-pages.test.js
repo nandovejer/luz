@@ -405,7 +405,7 @@ describe("parity: a translation keeps the structure, the code and the figures of
   /* ---- Attributes a translator may rewrite: compared by presence only ---- */
 
   describe("attributes compared by presence only", () => {
-    const TRANSLATABLE = ["data-error", "data-file", "data-pass", "data-fail", "data-item", "data-set", "data-unreadable", "data-warning", "data-ignored"];
+    const TRANSLATABLE = ["data-error", "data-file", "data-pass", "data-fail", "data-item", "data-set", "data-unreadable", "data-warning", "data-ignored", "data-prompt-title"];
     /** The problems when the translation changes the value of `name` on an element. */
     const attribute = (name, englishValue, translatedValue, { drop = false, tag = "div", extra = "" } = {}) =>
       parityProblems(

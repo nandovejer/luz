@@ -96,9 +96,10 @@ import { columnOf, linksOf, preOf, readPage, repo, sectionsOf, sentencesOf, tabl
 
 const ROUTE = "/docs/get-started/ai/";
 const PAGE_FILE = "apps/docs/pages/get-started/ai.html";
-const IDS = ["start", "files", "check", "rules", "agent", "limits"];
+const IDS = ["start", "start-site", "files", "check", "rules", "agent", "limits"];
 const TITLES = {
   start: "Give your agent LUZ",
+  "start-site": "Start a site",
   files: "What an agent can read",
   check: "Check what an agent wrote",
   rules: "What check blocks and what it warns about",
@@ -147,7 +148,8 @@ function contentOf(route = ROUTE) {
   return renderedCache.get(route);
 }
 
-const sections = () => sectionsOf(contentOf());
+// A <template> (the prompt dialog's) is not rendered: its h2 is not a heading of the page
+const sections = () => sectionsOf(contentOf().replace(/<template\b[\s\S]*?<\/template>/g, ""));
 
 /** How many scrollable labelled regions (focusable), luz-tables, captions and column headers a piece of markup has. */
 function tableParts(html) {
@@ -225,10 +227,10 @@ describe("the page: front matter and its place", () => {
   });
 });
 
-/* ---- The six sections ----------------------------------------------------------- */
+/* ---- The seven sections ----------------------------------------------------------- */
 
-describe("the page: six h2, in the order and with the titles of the ux answer", () => {
-  it("has the h2 ids start, files, check, rules, agent and limits, in that order", () => {
+describe("the page: seven h2, in the order and with the titles of the ux answer", () => {
+  it("has the h2 ids start, start-site, files, check, rules, agent and limits, in that order", () => {
     expect([...sections().keys()]).toEqual(IDS);
   });
 
@@ -643,7 +645,9 @@ describe("the page: wording", () => {
 
   it("links only to routes of the site, to files the build emits, or to other hosts", async () => {
     const { AI_ROUTES, manifestAssets, exampleDocuments } = await import("../scripts/docs-site/ai.js");
+    const { PROMPT_KINDS, promptRoute } = await import("../scripts/docs-site/prompts.js");
     const emitted = new Set([
+      ...PROMPT_KINDS.map((kind) => promptRoute(kind.id)),
       AI_ROUTES.llms,
       AI_ROUTES.llmsFull,
       ...manifestAssets(repo).map((a) => a.route),
