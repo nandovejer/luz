@@ -807,6 +807,28 @@ test.describe('Landing page', () => {
       await expect(card.locator('figcaption')).toContainText(EN['why.weight.caption']);
     });
 
+    // The total adds only the three bars, so it says so (it used to say "All of LUZ"); literals, not the catalog
+    for (const [route, words] of [
+      ['/', 'The three base packages:'],
+      ['/es/', 'Los tres paquetes base:'],
+      ['/ar/', 'الحزم الأساسية الثلاث:'],
+    ]) {
+      test(`Light: the total of the weight chart names the three base packages, and is their sum (${route})`, async ({ page }) => {
+        await open(page, route);
+
+        const card = page.locator('#why .landing-why__card--light');
+        const total = card.locator('figcaption strong');
+        expect((await total.innerText()).trim().startsWith(words), `"${await total.innerText()}" starts with "${words}"`).toBe(true);
+        const figures = await card.locator('li.landing-bar .landing-bar__figure').allInnerTexts();
+        expect(figures).toHaveLength(3);
+        // The decimal separator is the language's (a comma in Spanish)
+        const first = (text) => Number((/(\d+(?:[.,]\d+)?)/.exec(text)?.[1] ?? '').replace(',', '.'));
+        const sum = figures.reduce((acc, figure) => acc + first(figure), 0);
+        const shown = first(await total.innerText());
+        expect(Math.abs(shown - sum)).toBeLessThanOrEqual(0.5);
+      });
+    }
+
     test('Usable: seven shares of 100% or less, in the order the catalog names them, and what is short of 100% is in the statement', async ({ page }) => {
       await open(page);
 
