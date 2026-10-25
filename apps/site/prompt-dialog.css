@@ -9,6 +9,14 @@
    Rules: semantic tokens only; no literal colors.
    ========================================================================== */
 
+/* The button that opens a prompt: its words wrap at 320 px and 400 % text
+   (a .luz-btn keeps them on one line) */
+.site-prompt-open {
+  max-inline-size: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
 /* As wide as reading allows, as tall as the window: the region scrolls.
    The dialog keeps core's overflow-y: auto, so in a short window (400 %
    zoom, a phone held sideways) it scrolls too and Copy is never cut off
