@@ -251,6 +251,60 @@ describe("each prompt says its canonical copy is its URL", () => {
   });
 });
 
+/* ---- the other prompts, and the commands, in the body --------------------------------- */
+
+describe("the general prompt lists the other four, for the person and not for the LLM", () => {
+  const PHRASE = "for the person to paste instead of this one (do not follow them from here)";
+
+  it("says so on a line, and lists the URLs of landing, blog, app and docs under it", () => {
+    const lines = prompt("start").split("\n");
+    const at = lines.findIndex((l) => l.includes(PHRASE));
+    expect(at, `a line that says "${PHRASE}"`).toBeGreaterThan(-1);
+    // the list under the line, up to the first blank line or the next heading
+    const under = [];
+    for (const line of lines.slice(at + 1)) {
+      if (!line.trim() || line.startsWith("#")) break;
+      under.push(line);
+    }
+    const listed = under.join("\n");
+    for (const id of IDS.filter((i) => i !== "start")) expect(listed, `${id} under the line`).toContain(`${SITE_URL}prompts/${id}.txt`);
+    expect(listed, "not the general prompt itself").not.toContain(`${SITE_URL}prompts/start.txt`);
+  });
+
+  it("lists the four URLs only there: none of them stands as a link to follow", () => {
+    const lines = prompt("start").split("\n");
+    const at = lines.findIndex((l) => l.includes(PHRASE));
+    for (const id of IDS.filter((i) => i !== "start")) {
+      const holders = lines.map((l, i) => [l, i]).filter(([l]) => l.includes(`${SITE_URL}prompts/${id}.txt`));
+      expect(holders.length, `${id}: one line`).toBe(1);
+      expect(holders[0][1], `${id} comes after the line that says not to follow it`).toBeGreaterThan(at);
+    }
+  });
+});
+
+describe("every prompt asks, in How we work, for the commands in the summary", () => {
+  const section = (id) => {
+    const text = prompt(id);
+    const start = text.indexOf("## How we work");
+    expect(start, `${id}: a "## How we work" section`).toBeGreaterThan(-1);
+    const next = text.indexOf("\n## ", start + 1);
+    return text.slice(start, next === -1 ? undefined : next);
+  };
+
+  it.each(IDS)("%s: the summary includes the commands it will run, the install and the check after each step, before the go", (id) => {
+    const lines = section(id).split("\n");
+    const item = lines.findIndex((l) => /\bsummary\b/i.test(l));
+    expect(item, `${id}: a line about the summary`).toBeGreaterThan(-1);
+    const text = lines.slice(item).join("\n");
+    expect(text).toMatch(/\bcommands\b/i);
+    expect(text).toMatch(/\binstall\b/i);
+    expect(text).toContain("npx @luz-ds/check");
+    expect(text).toMatch(/after each step/i);
+    // they are asked for before the go
+    expect(text.search(/\bcommands\b/i)).toBeLessThan(text.indexOf('"go"'));
+  });
+});
+
 /* ---- the ceiling ----------------------------------------------------------------- */
 
 describe("the ceiling of a prompt", () => {
