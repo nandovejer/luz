@@ -284,16 +284,16 @@ describe("the localized site", () => {
       await ready();
       const known = new Set(["/", "/es/", "/ar/", "/docs/", "/es/docs/", "/ar/docs/", "/es/docs/components/", "/ar/docs/tokens/color/", "/docs/components/"]);
       const dialog = (code) => `<dialog data-luz-search-src="/${code}/docs/search-index.json"></dialog>`;
-      // /es/docs/get-started/ is three folders deep, /ar/docs/tokens/color/ four
+      // The shortest path from /es/docs/get-started/ (three folders deep) and from /ar/docs/tokens/color/ (four)
       expect(relativizeLinks(`<a href="/es/docs/components/#x">c</a><a href="/es/">h</a>${dialog("es")}`, "/es/docs/get-started/", known)).toBe(
-        '<a href="../../../es/docs/components/#x">c</a><a href="../../../es/">h</a><dialog data-luz-search-src="../../../es/docs/search-index.json"></dialog>',
+        '<a href="../components/#x">c</a><a href="../../">h</a><dialog data-luz-search-src="../search-index.json"></dialog>',
       );
       expect(relativizeLinks(`<a href="/ar/docs/">d</a>${dialog("ar")}`, "/ar/docs/tokens/color/", known)).toBe(
-        '<a href="../../../../ar/docs/">d</a><dialog data-luz-search-src="../../../../ar/docs/search-index.json"></dialog>',
+        '<a href="../../">d</a><dialog data-luz-search-src="../../search-index.json"></dialog>',
       );
       // The English index is still the English page's
       expect(relativizeLinks('<dialog data-luz-search-src="/docs/search-index.json"></dialog>', "/docs/components/", known)).toBe(
-        '<dialog data-luz-search-src="../../docs/search-index.json"></dialog>',
+        '<dialog data-luz-search-src="../search-index.json"></dialog>',
       );
       // The 404 keeps the site's path, and links to the homes of the other languages
       expect(
