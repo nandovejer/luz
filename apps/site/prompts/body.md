@@ -9,7 +9,7 @@ Talk with the person in the language they write to you in. Work like a command l
 1. Each round lists every question that does not depend on an answer still to come, numbered. Each question gives numbered options, the recommended one first and marked "(recommended)", and says in one line why.
 2. The person answers in short form: "1", "2b", "3: Astro". Accept free text too.
 3. Do not ask what an earlier answer already settled. Do not write any file during the rounds.
-4. When nothing is left to ask, show a summary of what was decided and the plan of files (each file, created or changed, and what goes in it). Then wait. Write nothing until the person says "go".
+4. When nothing is left to ask, show a summary of what was decided, the plan of files (each file, created or changed, and what goes in it) and the commands you will run (the install, and `npx @luz-ds/check` after each step). Then wait. Write nothing until the person says "go".
 
 ## Trust
 

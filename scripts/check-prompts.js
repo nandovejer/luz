@@ -6,9 +6,10 @@
  * on any of:
  *
  *   - a hidden character (zero width, a Unicode tag, any other format
- *     character but the line feed) or a bidi control, in a source or a prompt;
+ *     character, a variation selector, a blank filler) or a bidi control, in
+ *     a source or a prompt;
  *   - a URL that is not the published site's or a file of @luz-ds/* on the
- *     CDN, and a `www.` address;
+ *     CDN, and an address with no scheme (`www.`, `//host`, `host.tld/…`);
  *   - the syntax of a provider: <system>, <developer>, a ```system block,
  *     [INST], <<SYS>>, <|…|>, and "ignore the previous instructions";
  *   - a placeholder left unresolved;
@@ -31,8 +32,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE = "apps/site/prompts";
 const CDN = "https://cdn.jsdelivr.net/npm/@luz-ds/";
 
-// Format characters (Cf) hide text; the bidi controls reorder it
-const HIDDEN = /[\p{Cf}\u{E0000}-\u{E007F}\u2028\u2029]/u;
+// Format characters (Cf) hide text, the bidi controls reorder it, variation
+// selectors and the blank fillers look like nothing
+const HIDDEN = /[\p{Cf}\p{Variation_Selector}\u{E0000}-\u{E007F}\u2028\u2029\u3164\uFFA0\u2800]|\u115F|\u1160/u;
 const PROVIDER = [
   [/<\/?\s*(system|developer|assistant|user)\b[^>]*>/i, "a role tag of a provider"],
   [/```\s*(system|developer)\b/i, "a ```system block"],
@@ -81,6 +83,11 @@ export function checkText(text, file, { known } = {}) {
     if (!m[0].startsWith(PROMPT_SITE) && !m[0].startsWith(CDN)) at(m.index, `${m[0]} is not a URL of the site (${PROMPT_SITE}) or of @luz-ds on the CDN`);
   }
   for (const m of text.matchAll(/\bwww\.[a-z0-9-]+/gi)) at(m.index, `${m[0]}: an address outside the site`);
+  // An address with no scheme: //host/… or host.tld/…, outside the allowed URLs
+  const bare = text.replace(/\b[a-z][a-z0-9+.-]*:\/\/[^\s`"'<>)]*/gi, (url) => " ".repeat(url.length));
+  for (const m of bare.matchAll(/(?<![\w:])\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)+|(?<![\w@/.-])(?:[a-z0-9-]+\.)+[a-z]{2,}\/[^\s`"'<>)]*/gi)) {
+    at(m.index, `${m[0]}: an address outside the site`);
+  }
   for (const [pattern, what] of PROVIDER) {
     for (const m of text.matchAll(new RegExp(pattern.source, `${pattern.flags}g`))) at(m.index, `${what}: ${m[0]}`);
   }

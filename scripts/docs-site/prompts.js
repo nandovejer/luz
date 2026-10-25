@@ -127,7 +127,10 @@ export function assemblePrompt(id, { root }) {
     elements: ["core", "catalog"].flatMap((pkg) => elementLines(root, pkg)).join("\n"),
     "kind-links": kind.docs
       ? `- ${PROMPT_SITE}${kind.docs}: the patterns of ${kind.title}, each with its markup.`
-      : PROMPT_KINDS.filter((k) => k.preset).map((k) => `- ${PROMPT_SITE}${promptRoute(k.id).slice(1)}: this prompt for ${k.title}.`).join("\n"),
+      : [
+          "- The prompts for one kind of site, for the person to paste instead of this one (do not follow them from here):",
+          ...PROMPT_KINDS.filter((k) => k.preset).map((k) => `  - ${PROMPT_SITE}${promptRoute(k.id).slice(1)}: ${k.title}.`),
+        ].join("\n"),
   };
 
   // Each file resolves its own placeholders, so an unknown one is named at
