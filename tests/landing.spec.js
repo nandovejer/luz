@@ -792,7 +792,7 @@ test.describe('Landing page', () => {
           };
         }),
       );
-      expect(bars.map((bar) => bar.name)).toEqual(['tokens', 'core', 'catalog', 'landing', 'cms', 'app', 'docs']);
+      expect(bars.map((bar) => bar.name)).toEqual(['tokens', 'core', 'catalog']);
       // The figure is the text; the meter beside it is the picture, out of the accessibility tree
       expect(bars.every((bar) => bar.hidden === 'true')).toBe(true);
       for (const bar of bars) {
