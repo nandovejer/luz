@@ -41,6 +41,8 @@ const VB = 600,
   CX = 300,
   CY = 300,
   R = 272;
+// The idle spin draws at 15 a second: this many ms of spin per draw, less a millisecond so a 60 Hz frame's jitter never skips a step
+const SPIN_STEP = 1000 / 15 - 1;
 // eslint-disable-next-line no-restricted-syntax -- RL-12: the SVG namespace name, an identifier that is never fetched
 const SVG = "http://www.w3.org/2000/svg";
 const ALPHABET =
@@ -783,8 +785,14 @@ class LuzGlobe extends HTMLElement {
         this._vpitch *= 0.94;
         this._dirty = true;
       } else if (this._spinning()) {
-        this._yaw += ((1.6 * DEG) / 1000) * dt;
-        this._dirty = true;
+        // The idle spin turns 1.6 degrees a second, half a pixel a step at 15 draws a second:
+        // drawing every frame cost the main thread most of its time for a change nobody sees
+        this._acc = (this._acc || 0) + dt;
+        if (this._acc >= SPIN_STEP) {
+          this._yaw += ((1.6 * DEG) / 1000) * this._acc;
+          this._acc = 0;
+          this._dirty = true;
+        }
       }
     }
     this._pitch = Math.max(-75 * DEG, Math.min(75 * DEG, this._pitch));

@@ -379,10 +379,12 @@ home-light .home-light__sr {
 }
 
 /* A desktop with a pointer that hovers: the bar is always there (light.js),
-   resting at half strength, and comes up whole under the pointer or the focus */
+   resting at 70%, the lowest strength at which its text keeps 4.5:1 over the
+   sky and the globe in all six lights, and comes up whole under the pointer
+   or the focus */
 @media (min-width: 1024px) and (hover: hover) {
   home-light .home-light__bar {
-    opacity: 0.25;
+    opacity: 0.7;
     transition: opacity var(--luz-duration-slower) var(--_ease);
   }
 
