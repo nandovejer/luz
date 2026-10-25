@@ -649,9 +649,8 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 /* The four kinds of site, in the place the other levels give their panel: a
-   card each, two by two, with its icon, the package's name in the mono and
-   what it is for; under it a small terminal with its install (npm, CDN) and,
-   at its foot, the way to its documentation */
+   card each, two by two, with its icon, its name and what it gets you; at its
+   foot the button that opens its prompt and the way to its recipes */
 .landing-inside__kinds {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -661,14 +660,14 @@ home-light:defined ~ .landing-light__nojs {
   list-style: none;
 }
 
-/* The terminal and the button start where the title does: past the icon
-   (its size, its padding) and the gap after it */
+/* The actions start where the title does: past the icon (its size, its
+   padding) and the gap after it */
 .landing-kind {
   --landing-kind-icon: 1.5rem;
   --landing-kind-indent: calc(var(--landing-kind-icon) + var(--luz-space-xs) * 2 + var(--luz-space-sm));
 
   display: grid;
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: 1fr auto;
   gap: var(--luz-space-md);
   min-inline-size: 0;
   padding: var(--luz-space-lg);
@@ -741,16 +740,26 @@ home-light:defined ~ .landing-light__nojs {
   color: var(--luz-text-secondary);
 }
 
-/* The command and the link to its docs line up under the package's name */
-.landing-kind .luz-terminal,
-.landing-kind__docs {
+/* The prompt first, the way to the recipes after it, quieter: on one line
+   when they fit, the second under the first when they do not. They line up
+   under the kind's name */
+.landing-kind__actions {
+  align-self: end;
+  column-gap: var(--luz-space-sm);
   margin-inline-start: var(--landing-kind-indent);
 }
 
+/* A link, not a second button: the prompt is the card's one action. In the
+   sans of the button beside it, as tall as the button on one line with it,
+   underlined as every link (core's a) */
 .landing-kind__docs {
-  align-self: end;
-  justify-self: start;
+  display: inline-flex;
+  align-items: center;
   gap: var(--luz-space-xs);
+  /* A target of its own when it wraps under the button (WCAG 2.5.8) */
+  min-block-size: var(--luz-control-sm);
+  font-family: var(--luz-font-sans);
+  font-size: var(--luz-text-md);
 }
 
 .landing-kind__docs svg {
@@ -1484,11 +1493,12 @@ home-light:defined ~ .landing-light__nojs {
    sits on the row of the column titles, so the top of the footer reads
    straight across. The brand takes a little
    more than a column, not twice one, and the columns have air between
-   them. Nine rows: a title, the packages' label and their seven links */
+   them. Ten rows: a title, then the second docs column's nine (the
+   packages' label and their three links, the kinds' label and their four) */
 @media (min-width: 768px) {
   .luz-landing-footer > .o-grid {
     grid-template-columns: minmax(0, 1.3fr);
-    grid-template-rows: repeat(9, auto);
+    grid-template-rows: repeat(10, auto);
     gap: var(--luz-space-xs) var(--luz-space-2xl);
   }
 
@@ -1516,8 +1526,9 @@ home-light:defined ~ .landing-light__nojs {
     grid-column: 1 / -1;
   }
 
-  /* The guides from the first row of links; the packages' label on that
-     row in the second column, their links from the row after */
+  /* The guides from the first row of links. In the second column, each
+     list under its label, on rows of their own: the packages' label on that
+     first row and their three links, then the kinds' label and their four */
   .landing-foot-docs > ul:first-of-type {
     grid-column: 1;
     grid-row: 2 / -1;
@@ -1528,9 +1539,19 @@ home-light:defined ~ .landing-light__nojs {
     grid-row: 2;
   }
 
+  .landing-foot-docs > ul:nth-of-type(2) {
+    grid-column: 2;
+    grid-row: 3 / span 3;
+    margin-block-start: 0;
+  }
+
+  .landing-foot-docs > .landing-foot-label ~ .landing-foot-label {
+    grid-row: 6;
+  }
+
   .landing-foot-docs > ul:last-of-type {
     grid-column: 2;
-    grid-row: 3 / -1;
+    grid-row: 7 / -1;
     margin-block-start: 0;
   }
 }
@@ -1576,7 +1597,6 @@ home-light:defined ~ .landing-light__nojs {
    them in capitals, in the mono) takes none of that in Arabic, and the sans */
 .landing-eyebrow:lang(ar),
 .landing-bar__name:lang(ar),
-.luz-terminal__tabs .luz-tab:lang(ar),
 .landing-install__label:lang(ar),
 .landing-cut__label:lang(ar),
 .landing-foot-label:lang(ar),
@@ -1696,7 +1716,7 @@ home-light:defined ~ .landing-light__nojs {
   }
 }
 
-/* On a phone the cards go one under the other: a terminal needs the width */
+/* On a phone the cards go one under the other: two buttons need the width */
 @media (max-width: 640px) {
   .landing-inside__kinds {
     grid-template-columns: minmax(0, 1fr);
@@ -1847,6 +1867,12 @@ home-light:defined ~ .landing-light__nojs {
     text-align: start;
   }
 
+  /* The level's rows have no gap from a tablet up: the general prompt keeps
+     the distance the words keep from the cards */
+  #inside-4 .landing-scratch {
+    margin-block-start: var(--luz-space-xl);
+  }
+
   #inside-4 .landing-inside__kinds {
     --landing-node-gap: var(--luz-space-3xl);
     --landing-node-x: 50%;
@@ -1910,7 +1936,7 @@ home-light:defined ~ .landing-light__nojs {
 
 /* 400 % text at 320 px (WCAG 1.4.4, 1.4.10): the sizes of the timeline, the
    cards and their icons are in rem, so as the text grows they take the whole
-   width and the terminals are pushed out of the window. Measured in the
+   width and the buttons are pushed out of the window. Measured in the
    level's own em, not in px, the query holds when the text is large for the
    width, whatever the window: the spine, the branches and the circles go,
    the icon sits in the card as it does in a card of any level, the card's
@@ -1947,6 +1973,26 @@ home-light:defined ~ .landing-light__nojs {
   .landing-inside__title {
     font-size: var(--luz-text-3xl);
   }
+}
+
+
+/* Under the four kinds, the general prompt: a line that says who it is for
+   and its button, centred under the tree; one under the other when the line
+   is long for the width */
+.landing-scratch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--luz-space-sm) var(--luz-space-md);
+  text-align: center;
+}
+
+.landing-scratch__text {
+  margin: 0;
+  font-size: var(--luz-text-lg);
+  text-wrap: balance;
+  color: var(--luz-text-secondary);
 }
 
 
