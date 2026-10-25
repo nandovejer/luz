@@ -20,6 +20,7 @@ pnpm test:ui      # UI, axe, no-JS, reduced motion, forced colors (Chromium; Fir
 pnpm build        # Full build
 pnpm check:size   # Size budgets (PRINCIPLES.md section 8), including 80 kB per docs page
 pnpm check:strings # Shipped strings (sentence case, no "OK" / "click here")
+pnpm check:prompts # The prompts for AI: hidden text, URLs, provider syntax, classes, ceiling
 pnpm pages:build  # Build the GitHub Pages site in docs/ to look at it (git-ignored: nothing to commit)
 pnpm check:all    # Every check above and more, in one command
 ```

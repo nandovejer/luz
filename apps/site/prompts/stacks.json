@@ -1,0 +1,11 @@
+{
+  "$comment": "The stacks the prompts offer, in the order they are offered: where each loads LUZ, and the extensions npx @luz-ds/check reads as HTML (--ext). Read by scripts/docs-site/prompts.js.",
+  "stacks": [
+    { "id": "vanilla", "name": "Plain HTML", "load": "the `<link>` and `<script type=\"module\">` tags in the `<head>` of every page", "ext": "" },
+    { "id": "astro", "name": "Astro", "load": "the `<head>` of the base layout, `src/layouts/*.astro`, or `import \"@luz-ds/core/css\"` in its frontmatter", "ext": ".astro" },
+    { "id": "react", "name": "React (Vite, Next.js)", "load": "`import \"@luz-ds/tokens/css\"`, then core and catalog, in the entry or the root layout; `class` is `className`", "ext": ".jsx,.tsx" },
+    { "id": "vue", "name": "Vue (Vite, Nuxt)", "load": "the imports of `main.js`, or `css` in `nuxt.config`, in the load order", "ext": ".vue" },
+    { "id": "angular", "name": "Angular", "load": "`styles` in `angular.json`, in the load order", "ext": "" },
+    { "id": "other", "name": "Other", "load": "wherever the stack puts global stylesheets, in the load order", "ext": "" }
+  ]
+}

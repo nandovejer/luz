@@ -121,6 +121,11 @@ jobs:
       - name: Check shipped strings
         run: pnpm check:strings
 
+      # The prompts for AI: no hidden text, only the site's URLs, no provider
+      # syntax, every class known, each under its ceiling
+      - name: Check the prompts
+        run: pnpm check:prompts
+
       # Red line 7: text 4.5:1, focus ring and borders 3:1, three themes
       - name: Check token contrast
         run: pnpm check:contrast
