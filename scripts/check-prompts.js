@@ -16,7 +16,10 @@
  *   - a prompt that does not hold every line of the body that has no
  *     placeholder (the five come from the same body);
  *   - a class or a custom element that no package's manifest has;
- *   - a prompt over its ceiling, the row "prompts" of budgets.json.
+ *   - a prompt over its ceiling, the row "prompts" of budgets.json;
+ *   - a prompt whose sources (body, preset, stacks.json) changed since the
+ *     sentinel's case for it was confirmed: its `source` in
+ *     .claude/evals/prompt-injection/cases.json is not their hash.
  *
  * Each problem is printed as "file:line: message". Exit 1 on a problem.
  * The prompt-injection sentinel reads every change to apps/site/prompts/ as
@@ -25,12 +28,13 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PROMPT_KINDS, PROMPT_SITE, assemblePrompt, promptRoute } from "./docs-site/prompts.js";
+import { PROMPT_KINDS, PROMPT_SITE, assemblePrompt, promptRoute, promptSourceHash } from "./docs-site/prompts.js";
 import { PUBLISHED } from "./luz-packages.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE = "apps/site/prompts";
 const CDN = "https://cdn.jsdelivr.net/npm/@luz-ds/";
+const CASES = ".claude/evals/prompt-injection/cases.json";
 
 // Format characters (Cf) hide text, the bidi controls reorder it, variation
 // selectors and the blank fillers look like nothing
@@ -131,7 +135,14 @@ export function checkPrompts(root = ROOT) {
   const known = knownNames(root);
   const fixed = fixedLines(readFileSync(join(root, SOURCE, "body.md"), "utf-8"));
   const ceiling = promptCeiling(root);
+  const cases = JSON.parse(readFileSync(join(root, CASES), "utf-8")).cases;
   for (const kind of PROMPT_KINDS) {
+    const sentinelCase = cases.find((c) => c.assemble === kind.id);
+    const source = promptSourceHash(kind.id, { root });
+    if (!sentinelCase) problems.push(`${CASES}: no case with "assemble": "${kind.id}": the sentinel has no SAFE case for prompts/${kind.id}.txt`);
+    else if (sentinelCase.source !== source) {
+      problems.push(`${CASES}: the case ${sentinelCase.id} was confirmed for other sources of prompts/${kind.id}.txt: run prompt-injection-auditor on the prompt, and only on its SAFE set "source": "${source}" (the owner reads that change)`);
+    }
     const file = promptRoute(kind.id).slice(1);
     let text;
     try {

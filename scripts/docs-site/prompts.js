@@ -9,6 +9,9 @@
  *   assemblePrompt(id, { root })    the text of one prompt: the body, its
  *                                   preset, and every {{placeholder}} resolved
  *   promptFiles({ root })           Map route → () => text, for the plugin
+ *   promptSourceHash(id, { root })  SHA-256 of the text a person reviews for
+ *                                   that prompt: the body, its preset and
+ *                                   stacks.json (not what the packages add)
  *
  * Nothing in a prompt that names the system is typed by hand: the versions
  * come from each package.json, the classes and elements from the
@@ -19,6 +22,7 @@
  * a prompt is pasted somewhere else, so a relative link would lead nowhere.
  * The gate on what a prompt may say is scripts/check-prompts.js.
  */
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SITE_URL } from "../../packages/check/src/messages.js";
@@ -148,6 +152,23 @@ export function assemblePrompt(id, { root }) {
   if (left !== -1) throw new Error(`${bodyFile}: a placeholder is left in prompt ${id}, line ${lineOf(text, left)}`);
   // One blank line at most between blocks, one newline at the end
   return `${text.replace(/\n{3,}/g, "\n\n").trim()}\n`;
+}
+
+/**
+ * The SHA-256, in hex, of what a person reviews for one prompt: body.md, its
+ * preset (none for start) and stacks.json, each followed by a NUL. The
+ * sentinel's case for the prompt holds it (`source`), so an edit of any of
+ * them voids its SAFE until the sentinel reads the prompt again. The versions
+ * and the lists the packages write in are left out: they change with every
+ * release and every class, and no one types them.
+ */
+export function promptSourceHash(id, { root }) {
+  const kind = PROMPT_KINDS.find((k) => k.id === id);
+  if (!kind) throw new Error(`${id} is not a prompt (${PROMPT_KINDS.map((k) => k.id).join(", ")})`);
+  const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`];
+  const hash = createHash("sha256");
+  for (const file of files) hash.update(readFileSync(join(root, file))).update("\0");
+  return hash.digest("hex");
 }
 
 /** The five prompts by route, each made when it is asked for. */
