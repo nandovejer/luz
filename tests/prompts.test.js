@@ -24,6 +24,7 @@
  *
  * The gate (scripts/check-prompts.js) has its own tests: check-prompts.test.js.
  */
+import { createHash } from "node:crypto";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -466,5 +467,65 @@ describe("the five are emitted by the build, served in dev and listed in llms.tx
       const listed = sections(render("")).find((s) => s.title === "Prompts");
       expect(listed.items.map((i) => i.url)).toEqual(IDS.map((id) => `/prompts/${id}.txt`));
     });
+  });
+});
+
+/* ---- the hash of what a person reviews for a prompt ---------------------------------- */
+
+describe("promptSourceHash: the body, the preset and stacks.json, and nothing the packages add", () => {
+  const SRC = "apps/site/prompts";
+  const sha = (dir, files) => {
+    const hash = createHash("sha256");
+    for (const file of files) hash.update(readFileSync(join(dir, file))).update("\0");
+    return hash.digest("hex");
+  };
+  const filesOf = (id) => [`${SRC}/body.md`, ...(PRESET_OF[id] ? [`${SRC}/presets/${PRESET_OF[id]}.md`] : []), `${SRC}/stacks.json`];
+  const hashes = (dir) => Object.fromEntries(IDS.map((id) => [id, member("promptSourceHash")(id, { root: dir })]));
+  const append = (dir, path, text) => writeFileSync(join(dir, path), readFileSync(join(dir, path), "utf-8") + text);
+
+  it("is the hex SHA-256 of body.md, then the preset (none for start), then stacks.json, each followed by a NUL byte", () => {
+    for (const id of IDS) {
+      const hash = member("promptSourceHash")(id, { root });
+      expect(hash, id).toMatch(/^[0-9a-f]{64}$/);
+      expect(hash, id).toBe(sha(root, filesOf(id)));
+    }
+    expect(new Set(IDS.map((id) => member("promptSourceHash")(id, { root }))).size, "five different hashes").toBe(5);
+  });
+
+  it("throws for a kind that is not a prompt", () => {
+    expect(() => member("promptSourceHash")("nope", { root })).toThrow(/nope/);
+  });
+
+  it("ignores what the packages add: another version or another classes.json gives the same hash", () => {
+    const dir = copyOfSources();
+    const before = hashes(dir);
+    const packagesCopy = join(dir, "packages-copy");
+    mkdirSync(join(packagesCopy, "core/dist"), { recursive: true });
+    writeFileSync(join(packagesCopy, "core/package.json"), JSON.stringify({ name: "@luz-ds/core", version: "9.9.9" }));
+    writeFileSync(join(packagesCopy, "core/dist/classes.json"), JSON.stringify({ classes: [{ name: "luz-new" }] }));
+    rmSync(join(dir, "packages"));
+    cpSync(packagesCopy, join(dir, "packages"), { recursive: true });
+    expect(hashes(dir)).toEqual(before);
+  });
+
+  it("changes only the hash of the kind whose preset changed by one byte", () => {
+    const dir = copyOfSources();
+    const before = hashes(dir);
+    append(dir, `${SRC}/presets/app.md`, "x");
+    const after = hashes(dir);
+    for (const id of IDS) {
+      if (id === "app") expect(after[id], "app changed").not.toBe(before[id]);
+      else expect(after[id], `${id} did not change`).toBe(before[id]);
+    }
+  });
+
+  it("changes all five when body.md changes, and all five when stacks.json changes", () => {
+    for (const file of ["body.md", "stacks.json"]) {
+      const dir = copyOfSources();
+      const before = hashes(dir);
+      append(dir, `${SRC}/${file}`, " ");
+      const after = hashes(dir);
+      for (const id of IDS) expect(after[id], `${id} after a change of ${file}`).not.toBe(before[id]);
+    }
   });
 });

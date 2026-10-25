@@ -209,6 +209,17 @@ describe("the cases file", () => {
     expect(cases.filter((c) => c.assemble !== undefined)).toHaveLength(5);
   });
 
+  it("gives each assembled case the hash of the sources its SAFE was confirmed for, and says the SAFE holds only for it", () => {
+    const hashOf = (id) => {
+      if (!prompts.promptSourceHash) throw new Error("scripts/docs-site/prompts.js does not export promptSourceHash");
+      return prompts.promptSourceHash(id, { root });
+    };
+    for (const c of data().cases.filter((x) => x.assemble !== undefined)) {
+      expect(c.source, `${c.id}: source is the hash of the body, the preset and stacks.json`).toBe(hashOf(c.assemble));
+    }
+    expect(data()._use).toMatch(/\bSAFE\b[^.]*\bonly\b[^.]*`source`/);
+  });
+
   it("uses only categories of the agent's threat_type enum", () => {
     const allowed = threats();
     for (const c of data().cases) {

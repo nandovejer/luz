@@ -18,7 +18,7 @@
  * The fixtures are inline: a text with one bad thing on a known line.
  */
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -33,6 +33,7 @@ const member = (name) => {
 };
 const checkText = (...args) => member("checkText")(...args);
 
+const CASES = ".claude/evals/prompt-injection/cases.json";
 const IDS = ["start", "landing", "blog", "app", "docs"];
 const SITE = "https://nandovejer.github.io/luz/";
 const known = { classes: new Set(["luz-btn", "luz-btn--primary", "luz-alert", "luz-alert__title", "o-stack"]), elements: new Set(["luz-mode", "luz-search"]) };
@@ -238,6 +239,8 @@ function copyOfRepo({ withScripts = false } = {}) {
   temps.push(dir);
   cpSync(join(root, "apps/site/prompts"), join(dir, "apps/site/prompts"), { recursive: true });
   cpSync(join(root, "budgets.json"), join(dir, "budgets.json"));
+  mkdirSync(join(dir, ".claude/evals/prompt-injection"), { recursive: true });
+  cpSync(join(root, CASES), join(dir, CASES));
   symlinkSync(join(root, "packages"), join(dir, "packages"));
   if (withScripts) {
     cpSync(join(root, "scripts"), join(dir, "scripts"), { recursive: true });
@@ -255,6 +258,30 @@ const run = (cwd, script) => spawnSync(process.execPath, [script], { cwd, encodi
 describe("checkPrompts: the sources and the five prompts of the repository", () => {
   it("has no problem on the repository", () => {
     expect(member("checkPrompts")(root)).toEqual([]);
+  });
+
+  it("reports a prompt whose preset changed since the sentinel's case was confirmed, naming the file, the case and the new hash", async () => {
+    const dir = copyOfRepo();
+    edit(dir, "apps/site/prompts/presets/app.md", (text) => `${text.trimEnd()}\n\nOne more sentence.\n`);
+    const { promptSourceHash } = await import(/* @vite-ignore */ join(root, "scripts/docs-site/prompts.js"));
+    const hash = promptSourceHash("app", { root: dir });
+    const problems = member("checkPrompts")(dir);
+    const found = problems.filter((p) => p.startsWith(`${CASES}`));
+    expect(found.length, problems.join("\n")).toBe(1);
+    expect(found[0]).toContain("prompt-app");
+    expect(found[0]).toContain(hash);
+  });
+
+  it("reports a kind that has no assemble case in the sentinel's cases", () => {
+    const dir = copyOfRepo();
+    edit(dir, CASES, (text) => {
+      const data = JSON.parse(text);
+      data.cases = data.cases.filter((c) => c.assemble !== "blog");
+      return JSON.stringify(data, null, 2);
+    });
+    const found = member("checkPrompts")(dir).filter((p) => p.startsWith(`${CASES}`));
+    expect(found.length).toBe(1);
+    expect(found[0]).toContain("blog");
   });
 
   it("reports a prompt over its ceiling, naming the prompt and the ceiling (a tiny budget in a copy)", () => {
@@ -321,6 +348,15 @@ describe("node scripts/check-prompts.js", () => {
     expect(result.status).toBe(0);
     expect(result.stdout).toMatch(/✓/);
   });
+
+  it("exits 1 and names the sentinel's case on a copy whose preset changed after the case was confirmed", () => {
+    const dir = copyOfRepo({ withScripts: true });
+    edit(dir, "apps/site/prompts/presets/app.md", (text) => `${text.trimEnd()}\n\nOne more sentence.\n`);
+    const result = run(dir, join(dir, "scripts/check-prompts.js"));
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(CASES);
+    expect(result.stderr).toContain("prompt-app");
+  }, 60_000);
 
   it("exits 1 and prints file:line messages on a copy whose body has a hidden character", () => {
     const dir = copyOfRepo({ withScripts: true });
