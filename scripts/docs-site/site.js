@@ -794,6 +794,7 @@ export function renderRail(page, toc, t = englishT()) {
     ...(toc ? [toc] : []),
     '    <div class="luz-docs-rail__actions">',
     `      ${link(`${page.route}index.md`, t("rail.copy"), ` data-docs-copy-page data-docs-copied="${say(t, "rail.copied")}" data-docs-not-copied="${say(t, "rail.not-copied")}"`)}`,
+    `      ${link(page.route, t("rail.copy-link"), ` data-docs-copy-link data-docs-copied="${say(t, "rail.link-copied")}" data-docs-not-copied="${say(t, "rail.link-not-copied")}"`)}`,
     `      ${link(edit, t("rail.edit"))}`,
     `      ${link(report, t("rail.report"))}`,
     "    </div>",

@@ -2,8 +2,8 @@
  * LUZ documentation site — page glue, loaded by every page.
  * Wires the core behaviors the examples demonstrate, one module at a time,
  * the few HTML element demos that need a line of script (canvas,
- * template, custom element), "On this page" and "Copy page as Markdown" in
- * the rail, the Code / Design tab the
+ * template, custom element), "On this page", "Copy page as Markdown" and
+ * "Copy link to this page" in the rail, the Code / Design tab the
  * reader chose last (view.js), and the site search and the cookie consent
  * example (@luz-ds/catalog).
  *
@@ -92,6 +92,27 @@ async function loadStrings() {
   await Promise.allSettled(jobs);
 }
 
+/* ---- The rail's status -------------------------------------------------- */
+
+// One region for both copies of the rail, created once, empty, before
+// anything is said in it; what it says is cleared after 5 s
+let railStatus = null;
+let railClear;
+function sayInRail(actions, message) {
+  if (!railStatus) {
+    railStatus = document.createElement("p");
+    railStatus.className = "docs-rail-status";
+    railStatus.setAttribute("role", "status");
+    actions.append(railStatus);
+  }
+  if (message === undefined) return;
+  railStatus.textContent = message;
+  clearTimeout(railClear);
+  railClear = setTimeout(() => {
+    railStatus.textContent = "";
+  }, 5000);
+}
+
 /* ---- Copy page as Markdown --------------------------------------------- */
 
 // The rail's link carries what it says after a copy, in the page's language
@@ -122,11 +143,9 @@ function initCopyPage() {
   if (link.className) button.className = link.className;
   button.textContent = link.textContent;
   link.replaceWith(button);
-  // The status exists, empty, before anything is said in it
-  const status = document.createElement("p");
-  status.className = "docs-rail-status";
-  status.setAttribute("role", "status");
-  button.closest(".luz-docs-rail__actions").append(status);
+  const actions = button.closest(".luz-docs-rail__actions");
+  const say = (message) => sayInRail(actions, message);
+  say();
   let text = null;
   let loading = null;
   const load = () =>
@@ -142,14 +161,6 @@ function initCopyPage() {
       ));
   button.addEventListener("pointerenter", () => load().catch(() => {}));
   button.addEventListener("focus", () => load().catch(() => {}));
-  let clear;
-  const say = (message) => {
-    status.textContent = message;
-    clearTimeout(clear);
-    clear = setTimeout(() => {
-      status.textContent = "";
-    }, 5000);
-  };
   button.addEventListener("click", () => {
     const read = text !== null ? Promise.resolve(text) : load();
     read.then(
@@ -159,6 +170,38 @@ function initCopyPage() {
           () => window.location.assign(href),
         ),
       () => say(notCopied),
+    );
+  });
+}
+
+/* ---- Copy link to this page -------------------------------------------- */
+
+// The fallback for a link without data-docs-copied, data-docs-not-copied
+// (written by the generator from rail.link-copied and rail.link-not-copied)
+const LINK_COPIED = "Copied the link to this page.";
+const LINK_NOT_COPIED = "Could not copy the link.";
+
+function initCopyLink() {
+  // A plain link to the page itself: without a script the reader copies it
+  // with the browser's menu. With the clipboard API it becomes a button with
+  // the same text (WCAG 4.1.2: it no longer navigates), which copies the
+  // address of the page without its # or ?, so a translated page copies the
+  // route of its language. No request leaves; the rail says what happened.
+  const link = document.querySelector("aside.luz-docs-rail a[data-docs-copy-link]");
+  if (!link || !navigator.clipboard) return;
+  const copied = link.dataset.docsCopied || LINK_COPIED;
+  const notCopied = link.dataset.docsNotCopied || LINK_NOT_COPIED;
+  const button = document.createElement("button");
+  button.type = "button";
+  if (link.className) button.className = link.className;
+  button.textContent = link.textContent;
+  link.replaceWith(button);
+  const actions = button.closest(".luz-docs-rail__actions");
+  sayInRail(actions);
+  button.addEventListener("click", () => {
+    navigator.clipboard.writeText(location.origin + location.pathname).then(
+      () => sayInRail(actions, copied),
+      () => sayInRail(actions, notCopied),
     );
   });
 }
@@ -478,6 +521,7 @@ initCanvas();
 initFolds();
 initOnThisPage();
 initCopyPage();
+initCopyLink();
 revealCurrentPage();
 initAssets();
 // The copy buttons and the code blocks write strings (their names, "Copied"):

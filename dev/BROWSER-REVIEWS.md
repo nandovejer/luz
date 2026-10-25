@@ -13,6 +13,7 @@ One row is one `needs-browser-review` issue: the issue repeats the Scope, the Fi
 | Scope | Files | What to look at | Browser |
 |---|---|---|---|
 | The brand word of the home on a narrow phone (2026-10-24) | `apps/landing/landing.css` (`.landing-hero__brand`, `font-size: min(3.75em, 15svh, 30vi)`) | At 320, 340, 360 and 375 px wide the word "LUZ" is on one line and inside the window, LTR and RTL, with the halo of its `text-shadow`; the first screen keeps its composition. Found by the Firefox review of the same day; checked in Chromium only. | Safari, Firefox |
+| Copy link to this page in the docs rail (2026-10-25) | `scripts/docs-site/site.js` (`renderRail`), `apps/docs/reference.js` (`initCopyLink`, one status region for both copies) | The link becomes a button; a click puts the page address without `#` or `?` on the clipboard (`navigator.clipboard.writeText` inside the click, as the Markdown copy) and the rail says so; the button in forced colors and its focus. Checked in Chromium only. | Safari, Firefox |
 
 ## Closed
 
