@@ -9,9 +9,10 @@
  *   assemblePrompt(id, { root })    the text of one prompt: the body, its
  *                                   preset, and every {{placeholder}} resolved
  *   promptFiles({ root })           Map route → () => text, for the plugin
- *   promptSourceHash(id, { root })  SHA-256 of the text a person reviews for
- *                                   that prompt: the body, its preset and
- *                                   stacks.json (not what the packages add)
+ *   promptSourceHash(id, { root })  SHA-256 of all the prose of that prompt:
+ *                                   the body, its preset, stacks.json, this
+ *                                   module and the elements' descriptions
+ *                                   (not the versions or the class names)
  *
  * Nothing in a prompt that names the system is typed by hand: the versions
  * come from each package.json, the classes and elements from the
@@ -34,6 +35,10 @@ export const PROMPT_SITE = SITE_URL;
 
 const CDN = "https://cdn.jsdelivr.net/npm";
 const SOURCE = "apps/site/prompts";
+/** This module, as the hash of a prompt reads it. */
+const MODULE = "scripts/docs-site/prompts.js";
+/** The packages whose elements a prompt lists. */
+const ELEMENT_PACKAGES = ["core", "catalog"];
 /** The packages every prompt installs, in load order. */
 const BASE = ["tokens", "core", "catalog"];
 
@@ -128,7 +133,7 @@ export function assemblePrompt(id, { root }) {
         .map(([pkg, lines]) => [`From \`@luz-ds/${pkg}\`:`, "", ...lines].join("\n"))
         .join("\n\n");
     })(),
-    elements: ["core", "catalog"].flatMap((pkg) => elementLines(root, pkg)).join("\n"),
+    elements: ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n"),
     "kind-links": kind.docs
       ? `- ${PROMPT_SITE}${kind.docs}: the patterns of ${kind.title}, each with its markup.`
       : [
@@ -155,19 +160,23 @@ export function assemblePrompt(id, { root }) {
 }
 
 /**
- * The SHA-256, in hex, of what a person reviews for one prompt: body.md, its
- * preset (none for start) and stacks.json, each followed by a NUL. The
- * sentinel's case for the prompt holds it (`source`), so an edit of any of
- * them voids its SAFE until the sentinel reads the prompt again. The versions
- * and the lists the packages write in are left out: they change with every
- * release and every class, and no one types them.
+ * The SHA-256, in hex, of every piece of prose that reaches one prompt:
+ * body.md, its preset (none for start), stacks.json, this module (the titles
+ * and the sentences it writes) and the lines of the elements as the prompt
+ * has them (their names, attributes and descriptions, from the packages'
+ * custom-elements.json), each followed by a NUL. The sentinel's case for the
+ * prompt holds it (`source`), so an edit of any of them voids its SAFE until
+ * the sentinel reads the prompt again. The versions and the class names are
+ * left out: they change with every release and every class, carry no prose,
+ * and check:prompts holds each name against the manifests.
  */
 export function promptSourceHash(id, { root }) {
   const kind = PROMPT_KINDS.find((k) => k.id === id);
   if (!kind) throw new Error(`${id} is not a prompt (${PROMPT_KINDS.map((k) => k.id).join(", ")})`);
-  const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`];
+  const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`, MODULE];
   const hash = createHash("sha256");
   for (const file of files) hash.update(readFileSync(join(root, file))).update("\0");
+  hash.update(ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n")).update("\0");
   return hash.digest("hex");
 }
 
