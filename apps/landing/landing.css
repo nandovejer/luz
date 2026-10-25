@@ -338,22 +338,9 @@
   }
 }
 
-/* The halo breathes between faint and bright, slowly and by a small step, like
-   a lamp that is never quite steady; still under reduced motion */
-@media (prefers-reduced-motion: no-preference) {
-  :root:not([data-theme="high-contrast"]) .landing-hero__brand {
-    animation: landing-glow calc(var(--luz-duration-lazy) * 4) ease-in-out infinite alternate;
-  }
-}
-
-@keyframes landing-glow {
-  to {
-    text-shadow:
-      0 0 0.3em color-mix(in oklab, var(--luz-brand-primary) 60%, transparent),
-      0 0 1em color-mix(in oklab, var(--luz-brand-primary) 40%, transparent);
-  }
-}
-
+/* The halo is still: a text-shadow cannot be animated on the compositor, so
+   breathing it repainted the brand's whole halo every frame and kept the main
+   thread near 70% busy in software rendering */
 :root[data-theme="high-contrast"] .landing-hero__brand {
   text-shadow: none;
 }
