@@ -42,26 +42,116 @@
   margin-block-end: 0;
 }
 
+/* Core's × (.luz-modal__close) with an icon: a flex item here, not a float;
+   its name is the aria-label, the SVG is hidden from the tree. currentColor
+   keeps it visible in forced colours. */
+.site-prompt__close {
+  float: none;
+  flex-shrink: 0;
+}
+
+.site-prompt__close svg {
+  display: block;
+}
+
+/* The line of help, and how much is read at its end */
+.site-prompt__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--luz-space-2xs) var(--luz-space-md);
+}
+
 .site-prompt__help {
   margin: 0;
   color: var(--luz-text-secondary);
 }
 
-/* The prompt: its own scroller, text that wraps (no sideways scroll) */
+.site-prompt__read {
+  color: var(--luz-text-secondary);
+  font-size: var(--luz-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Core's bar (.luz-progress), sitting on the prompt it measures: no gap,
+   square where the two meet, the bar's lower edge is the box's top edge */
+.site-prompt__progress {
+  flex-shrink: 0;
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.site-prompt__progress::-webkit-progress-bar {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+/* The fill too, where the track meets the box. One rule per engine, as in
+   core's progress.css */
+.site-prompt__progress::-webkit-progress-value {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.site-prompt__progress::-moz-progress-bar {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+/* The bar and the prompt, one piece: the rings go round both (DESIGN.md
+   DR-15, along the edge of the thing). Its minimum is set, not automatic:
+   an automatic one would grow it to the whole prompt and nothing would
+   scroll. Core's bar is 8px; the region keeps its 8rem. */
+.site-prompt__reader {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-block-size: calc(8rem + 8px);
+  border-radius: var(--luz-radius-sm);
+}
+
+/* The prompt: its own scroller, text that wraps (no sideways scroll); its
+   top edge is the bar's */
 .site-prompt__text {
   flex: 1;
   /* A few lines to read, however short the window */
   min-block-size: 8rem;
   overflow-y: auto;
-  padding: var(--luz-space-md);
+  /* No padding at the end: the end sentence carries it, so the sentence
+     wholly in view is the region scrolled to 100 % (prompt-dialog.js) */
+  padding: var(--luz-space-md) var(--luz-space-md) 0;
   border: 1px solid var(--luz-divider);
-  border-radius: var(--luz-radius-sm);
+  border-block-start: 0;
+  border-radius: 0 0 var(--luz-radius-sm) var(--luz-radius-sm);
   background: var(--luz-surface-muted);
   overflow-wrap: anywhere;
 }
 
+/* Focus in the prompt: the ring is the piece's. Without :has() the region
+   draws its own. Two rules: a browser without :has() would drop a list. */
 .site-prompt__text:focus-visible {
   outline: 2px solid var(--luz-focus-ring);
+  outline-offset: 2px;
+}
+
+.site-prompt__reader:has(> .site-prompt__text:focus-visible) {
+  outline: 2px solid var(--luz-focus-ring);
+  outline-offset: 2px;
+}
+
+@supports selector(:has(*)) {
+  /* Transparent, not removed: forced colours still paint it */
+  .site-prompt__text:focus-visible {
+    outline-color: transparent;
+  }
+}
+
+/* Just copied (prompt-dialog.js, 1.2 s): the focus ring's shape in the
+   button's green. Never over focus: the focus ring is never recoloured
+   (DR-15) */
+.site-prompt__reader.is-copied:not(:has(> .site-prompt__text:focus-visible)) {
+  outline: 2px solid var(--luz-color-success);
   outline-offset: 2px;
 }
 
@@ -88,25 +178,45 @@
   font-size: var(--luz-text-sm);
 }
 
-.site-prompt__end {
+.site-prompt__text .site-prompt__end {
+  margin: 0;
+  padding-block-end: var(--luz-space-md);
   color: var(--luz-text-secondary);
   font-style: italic;
 }
 
+/* The link to the text, then Copy at the end, as the actions of a dialog
+   sit; the order of the markup is the order on screen and of Tab */
 .site-prompt__foot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--luz-space-sm) var(--luz-space-md);
 }
 
-.site-prompt__progress {
-  flex: 1 1 8rem;
+/* The check of a copy (prompt-dialog.js): only while the label says
+   "Copied"; the button keeps its look */
+.site-prompt__copy {
+  justify-content: center;
 }
 
-.site-prompt__read {
-  color: var(--luz-text-secondary);
-  font-variant-numeric: tabular-nums;
+.site-prompt__check {
+  display: none;
+}
+
+.site-prompt__copy.is-copied .site-prompt__check {
+  display: block;
+}
+
+/* Green while it says "Copied", then back to the brand fill: the success
+   pair of core's alert and tag (text and edge on its own background), which
+   keeps 4.5:1 in every mode; white on a green fill would not in dark */
+.site-prompt__copy.is-copied,
+.site-prompt__copy.is-copied:hover {
+  background: var(--luz-color-success-bg);
+  color: var(--luz-color-success);
+  border-color: var(--luz-color-success);
 }
 
 /* Copy before the end: still a button in the tab order (aria-disabled, not
