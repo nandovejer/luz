@@ -2,7 +2,7 @@
  * What the home page's build reads besides its template and its catalogs.
  *
  * The generator writes the home's weights, packages, checks and lists
- * ({{weights}}, {{packages}}, {{checks}}, {{weight1}}...{{weight4}},
+ * ({{weights}}, {{packages}}, {{checks}}, {{weight1}}...{{weight3}},
  * {{list1}}...{{list3}}) from the repository itself for every language it
  * renders, whether the template uses them or not (scripts/docs-site/site.js,
  * languageValues): budgets.json against packages/*\/dist, the packages'
