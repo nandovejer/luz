@@ -24,7 +24,7 @@
  * phrase (closing the bar brings the light back to now), and <home-globe> for the drawing.
  *
  * The bar opens from the line on a narrow window or a touch screen; from 1024px
- * with a pointer that hovers it is always open (resting faint until the pointer
+ * with a pointer that hovers it is always open (resting at 70% until the pointer
  * or the focus comes), so the tests of opening and closing run at NARROW.
  *
  * Without JavaScript the element is empty and light.css reserves its height.
@@ -305,7 +305,7 @@ test.describe('with JavaScript', () => {
     await expect(line).toHaveAttribute('aria-expanded', 'false');
   });
 
-  test('from 1024px with a pointer that hovers the bar is always open: after load, Escape and a click on the line, resting faint and whole under the pointer', async ({ page }) => {
+  test('from 1024px with a pointer that hovers the bar is always open: after load, Escape and a click on the line, resting at 70% and whole under the pointer', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await open(page);
     const line = page.locator('home-light .home-light__line');
@@ -319,14 +319,14 @@ test.describe('with JavaScript', () => {
     await page.mouse.click(5, 400);
     await expect(bar).toBeVisible();
     await expect(line).toHaveAttribute('aria-expanded', 'true');
-    // At rest it is faint, and the pointer or the focus brings it up whole
+    // At rest it is at 70% (the least that keeps its text readable over the sky and the globe), and the pointer or the focus brings it up whole
     await page.mouse.move(5, 5);
-    await expect.poll(opacity).toBeLessThan(0.5);
+    await expect.poll(opacity).toBe(0.7);
     const box = /** @type {{ x: number, y: number, width: number, height: number }} */ (await bar.boundingBox());
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await expect.poll(opacity).toBe(1);
     await page.mouse.move(5, 5);
-    await expect.poll(opacity).toBeLessThan(0.5);
+    await expect.poll(opacity).toBe(0.7);
     await slider(page).focus();
     await expect.poll(opacity).toBe(1);
   });
@@ -1138,6 +1138,217 @@ test.describe('review fixes', () => {
         expect(worst, `the worst contrast of the line's text over its background: ${worst.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
       });
     }
+  }
+});
+
+/* ---- Light on the main thread: no breathing halo, an idle spin at 15 a second ---- */
+
+/**
+ * The landing was near 70% busy on the main thread in software rendering with
+ * nothing happening: the brand's halo breathed forever (an animated text-shadow
+ * repaints on the main thread) and the globe drew every animation frame for a
+ * spin of 1.6 degrees a second. The halo is still, and the idle spin draws at
+ * most 15 times a second. Motion is allowed in these tests: that is where the
+ * cost was.
+ */
+test.describe('the page at rest costs little', () => {
+  test.beforeEach(() => {
+    test.skip(jsOff(), 'needs JavaScript');
+  });
+
+  test('with motion allowed, no CSS animation runs on the brand, and its halo is still there', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await open(page);
+    await expect(page.locator('home-globe[land]')).toHaveCount(1, { timeout: 15000 });
+    await page.waitForLoadState('networkidle');
+    expect(await page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches), 'control: motion is allowed').toBe(false);
+    // An entrance may still be playing: only what never ends would cost anything, so give a finite one the time to end
+    await expect
+      .poll(
+        () =>
+          page.evaluate(() =>
+            document
+              .getAnimations()
+              .filter((a) => (a.playState === 'running' || a.playState === 'pending') && /** @type {Element | null | undefined} */ (a.effect?.target)?.closest?.('.landing-hero__brand'))
+              .map((a) => /** @type {any} */ (a).animationName ?? /** @type {any} */ (a).transitionProperty ?? 'unnamed'),
+          ),
+        { message: 'animations running on .landing-hero__brand', timeout: FRAMES_WITHIN },
+      )
+      .toEqual([]);
+    const halo = await page.locator('.landing-hero__brand').evaluate((el) => getComputedStyle(el).textShadow);
+    expect(halo, 'the still halo is the base text-shadow').not.toBe('none');
+  });
+
+  /** What the globe shows: the outlines of its pieces of land. */
+  const shape = (page) => page.locator('home-globe').evaluate((el) => [...el.querySelectorAll('path.home-globe__piece')].map((p) => p.getAttribute('d')).join('|'));
+  /**
+   * Hook `_draw` and `_frame` of <home-globe> when the class is defined, before
+   * any script runs: window.__draws counts the draws and window.__frames the
+   * animation frames the globe was given. A software renderer paints a draw so
+   * slowly that it caps the frames itself (~18 a second whatever the globe
+   * asks for), so a count of draws alone cannot tell a globe that draws on
+   * every frame from one that draws on every fourth: the share of the frames
+   * it draws in can.
+   * @param {import('@playwright/test').Page} page
+   */
+  const countDraws = (page) =>
+    page.addInitScript(() => {
+      const w = /** @type {any} */ (window);
+      w.__draws = 0;
+      w.__frames = 0;
+      const define = customElements.define.bind(customElements);
+      customElements.define = (name, constructor, options) => {
+        if (name === 'home-globe') {
+          for (const [method, counter] of [['_draw', '__draws'], ['_frame', '__frames']]) {
+            const original = constructor.prototype[method];
+            if (!original) continue;
+            constructor.prototype[method] = function () {
+              w[counter]++;
+              return original.apply(this, arguments);
+            };
+          }
+        }
+        return define(name, constructor, options);
+      };
+    });
+  const counts = (page) => page.evaluate(() => ({ draws: /** @type {any} */ (window).__draws, frames: /** @type {any} */ (window).__frames }));
+
+  test('the idle spin of the globe draws on a fraction of its frames, about 15 times a second at most, and it does turn', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await countDraws(page);
+    await open(page);
+    await expect(page.locator('home-globe[land]')).toHaveCount(1, { timeout: 15000 });
+    await page.locator('home-light').scrollIntoViewIfNeeded();
+    await page.waitForLoadState('networkidle');
+    // It spins once it has been seen: wait for frames to come, then let the land and the first draws pass
+    await expect.poll(async () => (await counts(page)).frames, { message: 'the globe is given animation frames', timeout: FRAMES_WITHIN }).toBeGreaterThan(10);
+    await page.waitForTimeout(1000);
+    const before = await shape(page);
+    const from = await counts(page);
+    const SECONDS = 3;
+    await page.waitForTimeout(SECONDS * 1000);
+    const to = await counts(page);
+    const after = await shape(page);
+    const draws = to.draws - from.draws;
+    const frames = to.frames - from.frames;
+    const rate = draws / SECONDS;
+    // A step of the spin waits for 66 ms of frames: at 60 a second one frame in four draws, and where the frames come slower still no more than one in two. The old loop drew on every frame.
+    expect(frames, 'the globe was given frames').toBeGreaterThan(5);
+    expect(draws / frames, `draws per frame: ${draws} in ${frames}`).toBeLessThanOrEqual(0.6);
+    // And the draws a second: the upper bound is firm, the lower loose (a loaded runner may draw fewer)
+    expect(rate, `draws a second: ${rate.toFixed(1)}`).toBeLessThanOrEqual(20);
+    expect(rate, `draws a second: ${rate.toFixed(1)}`).toBeGreaterThan(2);
+    expect(after, 'the globe turns: its pieces are drawn elsewhere').not.toBe(before);
+  });
+});
+
+/* ---- The bar at rest keeps its text readable ------------------------------------- */
+
+/**
+ * From 1024px with a pointer that hovers, the bar rests faint over the sky and
+ * the globe. Its hour is large text (3:1) and its place is small (4.5:1), and
+ * the ink is blended into what is behind it by the bar's opacity. Measured on
+ * the pixels actually drawn: the text is made transparent, the rectangle of the
+ * text is photographed, and each pixel is measured against the ink as the
+ * opacity lets it through. The 5th percentile counts, not the worst pixel: a
+ * few stars or a bright coast do not decide it. The globe is held still
+ * (reduced motion) so the picture is the same on every run.
+ */
+test.describe('the bar at rest: its hour and its place have their contrast over the sky and the globe', () => {
+  test.beforeEach(() => {
+    test.skip(jsOff(), 'needs JavaScript');
+  });
+  test.use({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
+
+  /**
+   * The ratios, per pixel behind the text of `selector`, sorted ascending, with the bar's opacity blended into the ink.
+   * @param {import('@playwright/test').Page} page
+   * @param {string} selector
+   */
+  async function behindTheText(page, selector) {
+    const target = page.locator(selector).first();
+    await target.scrollIntoViewIfNeeded();
+    const prepared = await target.evaluate(async (el) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 1;
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      context.fillStyle = getComputedStyle(el).color;
+      context.fillRect(0, 0, 1, 1);
+      const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
+      const opacity = parseFloat(getComputedStyle(el.closest('.home-light__bar')).opacity);
+      const style = document.createElement('style');
+      style.id = 'probe-hide-text';
+      style.textContent = 'home-light .home-light__bar, home-light .home-light__bar * { transition: none !important; } home-light .home-light__time, home-light .home-light__where { color: transparent !important; text-shadow: none !important; }';
+      document.head.append(style);
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const box = range.getBoundingClientRect();
+      return { ink: [r, g, b], alpha: (a / 255) * opacity, clip: { x: Math.max(0, Math.floor(box.left)), y: Math.max(0, Math.floor(box.top)), width: Math.ceil(box.width) + 1, height: Math.ceil(box.height) + 1 } };
+    });
+    let png;
+    try {
+      png = await page.screenshot({ clip: prepared.clip, animations: 'disabled' });
+    } finally {
+      await page.evaluate(() => document.getElementById('probe-hide-text')?.remove());
+    }
+    const reader = await page.context().newPage();
+    try {
+      await reader.goto('about:blank');
+      return await reader.evaluate(
+        async ({ data, ink, alpha }) => {
+          const image = new Image();
+          image.src = `data:image/png;base64,${data}`;
+          await image.decode();
+          const canvas = document.createElement('canvas');
+          canvas.width = image.width;
+          canvas.height = image.height;
+          const context = canvas.getContext('2d', { willReadFrequently: true });
+          context.drawImage(image, 0, 0);
+          const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+          const lum = (r, g, b) => {
+            const c = (v) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+            return 0.2126 * c(r) + 0.7152 * c(g) + 0.0722 * c(b);
+          };
+          const ratios = [];
+          for (let i = 0; i < pixels.length; i += 4) {
+            const back = [pixels[i], pixels[i + 1], pixels[i + 2]];
+            const [r, g, b] = back.map((v, k) => ink[k] * alpha + v * (1 - alpha));
+            const a = lum(r, g, b);
+            const bg = lum(back[0], back[1], back[2]);
+            ratios.push((Math.max(a, bg) + 0.05) / (Math.min(a, bg) + 0.05));
+          }
+          return ratios.sort((x, y) => x - y);
+        },
+        { data: png.toString('base64'), ink: prepared.ink, alpha: prepared.alpha },
+      );
+    } finally {
+      await reader.close();
+    }
+  }
+
+  for (const [light, time] of LIGHTS) {
+    test(`${light} light: at rest the hour has 3:1 and the place 4.5:1 over what is behind them (5th percentile)`, async ({ page }) => {
+      await open(page, '/', { time });
+      await expect(page.locator('home-globe[land]')).toHaveCount(1, { timeout: 15000 });
+      await expect.poll(() => page.evaluate(() => document.documentElement.dataset.light)).toBe(light);
+      await page.waitForLoadState('networkidle');
+      await faded(page);
+      const bar = page.locator('home-light .home-light__bar');
+      await expect(bar).toBeVisible();
+      await page.mouse.move(5, 5);
+      // At rest: the opacity has come down from 1 and its transition has ended
+      await expect.poll(() => bar.evaluate((el) => parseFloat(getComputedStyle(el).opacity))).toBeLessThan(1);
+      await expect.poll(() => bar.evaluate((el) => el.getAnimations().filter((a) => a.playState === 'running').length)).toBe(0);
+      await page.waitForTimeout(500); // the glow of the visual settles
+      const p5 = (ratios) => ratios[Math.floor(ratios.length * 0.05)];
+      const hour = await behindTheText(page, 'home-light .home-light__time');
+      const place = await behindTheText(page, 'home-light .home-light__where');
+      expect(hour.length, 'pixels behind the hour').toBeGreaterThan(50);
+      expect(place.length, 'pixels behind the place').toBeGreaterThan(50);
+      expect(p5(hour), `the hour (large text) over its background, 5th percentile: ${p5(hour).toFixed(2)}:1`).toBeGreaterThanOrEqual(3);
+      expect(p5(place), `the place over its background, 5th percentile: ${p5(place).toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+    });
   }
 });
 
