@@ -5,6 +5,11 @@
       { "href": "/docs/tokens/modes/" },
       { "href": "/docs/tokens/color/", "label": "Color tokens" }
     ] },
+    { "id": "kinds", "label": "Kinds of site", "slug": "kinds", "essentials": [
+      { "href": "/docs/get-started/ai/" },
+      { "href": "/docs/components/" },
+      { "href": "/docs/catalog/" }
+    ] },
     { "id": "tokens", "label": "Tokens", "slug": "tokens", "package": "@luz-ds/tokens", "groups": [
       { "id": "families", "label": "Token families" }
     ], "essentials": [

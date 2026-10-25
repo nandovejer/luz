@@ -1,0 +1,273 @@
+<!-- luz:page
+title: Blog or newspaper
+description: A blog or a newspaper, on any CMS: a prompt for an LLM, and recipes for its header, page header, post cards, article header, table of contents and footer.
+area: kinds
+order: 2
+keywords: blog, newspaper, magazine, articles, posts, static site
+-->
+    <div class="docs-block" id="k-blog">
+      <p>Paste the prompt into any LLM. It asks about your blog and your CMS in short rounds, shows you the plan and writes nothing until you say "go".</p>
+      <p><a class="luz-btn luz-btn--primary site-prompt-open" href="/prompts/blog.txt" data-prompt-open data-prompt-title="The prompt for a blog">Open the prompt</a></p>
+      <!-- luz:include prompt-dialog -->
+      <p>Or build it yourself from the recipes below. It works with any CMS or static site generator: each recipe is HTML for one of its templates, and the CMS fills in the text. They use the classes of core, the catalog and cms only; <a href="/docs/get-started/#site-kinds">Install LUZ</a> lists the files to load.</p>
+      <div class="docs-block">
+        <h2 id="header">Header</h2>
+        <p>The skip link, the <a href="/docs/cms/header/">header</a> with the name of the blog and its sections, the <code>&lt;main&gt;</code> and the footer. For a newspaper, the pattern has a masthead that does not stick. The search and the language switch are the catalog's elements: leave them out if you do not load it.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <header class="luz-cms-header">
+              <div class="o-container o-container--inline o-row">
+                <button class="luz-nav-toggle" type="button" popovertarget="k-blog-nav" aria-label="Sections of the example blog">
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
+                </button>
+                <a class="luz-cms-header__brand" href="#header">The Vejer Review</a>
+                <nav class="luz-navbar" id="k-blog-nav" aria-label="Example blog" popover>
+                  <ul class="luz-navbar__list">
+                    <li><a class="luz-navbar__link" href="#header" aria-current="true">News</a></li>
+                    <li><a class="luz-navbar__link" href="#header">Culture</a></li>
+                    <li><a class="luz-navbar__link" href="#header">Opinion</a></li>
+                  </ul>
+                </nav>
+                <div class="o-row luz-cms-header__actions">
+                  <a class="luz-btn luz-btn--ghost" href="#header">Subscribe</a>
+                </div>
+              </div>
+            </header>
+          </div>
+          <p class="docs-demo__note">At 768 px of window and below, the sections fold into core's <a href="/docs/components/navbar/">navbar</a> menu. The example does not stick: on a page, <code class="luz-code-inline">.o-sticky</code> keeps it at the top.</p>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-header" aria-label="Copy the page and header markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page and header markup"><code id="code-k-blog-header">&lt;body class=&quot;o-page&quot;&gt;
+  &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to content&lt;/a&gt;
+
+  &lt;header class=&quot;luz-cms-header o-sticky&quot;&gt;
+    &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
+      &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;cms-nav&quot; aria-label=&quot;Sections&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z&quot;/&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;a class=&quot;luz-cms-header__brand&quot; href=&quot;/&quot;&gt;The Vejer Review&lt;/a&gt;
+      &lt;nav class=&quot;luz-navbar&quot; id=&quot;cms-nav&quot; aria-label=&quot;Sections&quot; popover&gt;
+        &lt;ul class=&quot;luz-navbar__list&quot;&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/news/&quot; aria-current=&quot;true&quot;&gt;News&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/culture/&quot;&gt;Culture&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/opinion/&quot;&gt;Opinion&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+      &lt;div class=&quot;o-row luz-cms-header__actions&quot;&gt;
+        &lt;luz-search&gt;…&lt;/luz-search&gt;
+        &lt;luz-lang-switch&gt;…&lt;/luz-lang-switch&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;main id=&quot;main-content&quot; class=&quot;o-container o-stack&quot; tabindex=&quot;-1&quot;&gt;
+    &lt;!-- a page header and a list of posts, or an article --&gt;
+  &lt;/main&gt;
+
+  &lt;!-- the footer --&gt;
+&lt;/body&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="page-header">Page header</h2>
+        <p>The title of a page that is not a story: a section, an archive, the About page. The <a href="/docs/cms/page-header/">page header</a> holds its <code>&lt;h1&gt;</code> and one sentence.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-cms-page-header u-mb-0">
+              <p class="luz-cms-page-header__title">Coast</p>
+              <p class="luz-cms-page-header__lead">The sea, the port and the beaches of Vejer, and the people who work on them.</p>
+            </div>
+          </div>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-page-header" aria-label="Copy the page header markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page header markup"><code id="code-k-blog-page-header">&lt;div class=&quot;luz-cms-page-header&quot;&gt;
+  &lt;h1 class=&quot;luz-cms-page-header__title&quot;&gt;Coast&lt;/h1&gt;
+  &lt;p class=&quot;luz-cms-page-header__lead&quot;&gt;The sea, the port and the beaches of Vejer, and the people who work on them.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="post-card">Post card</h2>
+        <p>One post in a list: a picture, its section, the title, a line of summary and the date. It is core's <a href="/docs/components/card/">card</a>, with no CSS of its own. The link on the title makes the whole card one link, with one tab stop; the section is a <a href="/docs/components/tag/">tag</a>, not a second link.</p>
+        <p>A list of posts is a <code>&lt;ul&gt;</code> on <code>.o-grid--auto</code>, which fits columns of 16rem or more. More cards, the related posts and the author box are in <a href="/docs/cms/templates/">CMS templates</a>.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <ul class="o-grid o-grid--auto">
+              <li class="luz-card">
+                <div class="luz-image luz-image--3x2 u-mb-sm"></div>
+                <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+                <h3 class="luz-card__title"><a href="#post-card">What ten years of tide records say about the bay</a></h3>
+                <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+                <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+              </li>
+              <li class="luz-card">
+                <div class="luz-image luz-image--3x2 u-mb-sm"></div>
+                <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+                <h3 class="luz-card__title"><a href="#post-card">The last tuna nets of the strait</a></h3>
+                <p class="luz-card__body">Three families still set the almadraba each spring.</p>
+                <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-post-card" aria-label="Copy the post listing markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Post listing markup"><code id="code-k-blog-post-card">&lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
+  &lt;li class=&quot;luz-card&quot;&gt;
+    &lt;div class=&quot;luz-image luz-image--3x2 u-mb-sm&quot;&gt;
+      &lt;img src=&quot;/img/tide-gauge-640.jpg&quot; width=&quot;640&quot; height=&quot;427&quot; alt=&quot;&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot;&gt;
+    &lt;/div&gt;
+    &lt;p class=&quot;luz-tag luz-tag--gray u-mb-sm&quot;&gt;Coast&lt;/p&gt;
+    &lt;h2 class=&quot;luz-card__title&quot;&gt;&lt;a href=&quot;/2026/10/tide-records/&quot;&gt;What ten years of tide records say about the bay&lt;/a&gt;&lt;/h2&gt;
+    &lt;p class=&quot;luz-card__body&quot;&gt;Volunteers have read the gauge in the port twice a day since 2016.&lt;/p&gt;
+    &lt;p class=&quot;luz-meta&quot;&gt;&lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt; &lt;span&gt;6 min read&lt;/span&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;!-- one li for each post --&gt;
+&lt;/ul&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="article-header">Article header</h2>
+        <p>The top of a story: its section, the title, a standfirst, the byline with the date and the reading time, and the lead picture. The <a href="/docs/cms/article-header/">article header</a> holds the story's <code>&lt;h1&gt;</code>; the date and the reading time are core's <a href="/docs/components/meta/">meta line</a>.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <header class="luz-cms-article-header u-mb-0">
+              <p class="luz-cms-article-header__kicker"><a href="#article-header">Coast</a></p>
+              <p class="luz-cms-article-header__title">What ten years of tide records say about the bay</p>
+              <p class="luz-cms-article-header__standfirst">Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.</p>
+              <div class="luz-cms-article-header__byline">
+                <span class="luz-avatar luz-avatar--lg" aria-hidden="true">AR</span>
+                <div>
+                  <p>By <a href="#article-header">Ana Ruiz</a></p>
+                  <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+                </div>
+              </div>
+              <figure class="luz-cms-article-header__media">
+                <div class="luz-image"></div>
+                <figcaption>The tide gauge in the port, at low tide.</figcaption>
+              </figure>
+            </header>
+          </div>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-article-header" aria-label="Copy the article header markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article header markup"><code id="code-k-blog-article-header">&lt;header class=&quot;luz-cms-article-header&quot;&gt;
+  &lt;p class=&quot;luz-cms-article-header__kicker&quot;&gt;&lt;a href=&quot;/coast/&quot;&gt;Coast&lt;/a&gt;&lt;/p&gt;
+  &lt;h1 class=&quot;luz-cms-article-header__title&quot;&gt;What ten years of tide records say about the bay&lt;/h1&gt;
+  &lt;p class=&quot;luz-cms-article-header__standfirst&quot;&gt;Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.&lt;/p&gt;
+  &lt;div class=&quot;luz-cms-article-header__byline&quot;&gt;
+    &lt;span class=&quot;luz-avatar luz-avatar--lg&quot;&gt;&lt;img src=&quot;/authors/ana-ruiz-96.jpg&quot; width=&quot;48&quot; height=&quot;48&quot; alt=&quot;&quot;&gt;&lt;/span&gt;
+    &lt;div&gt;
+      &lt;p&gt;By &lt;a href=&quot;/authors/ana-ruiz/&quot;&gt;Ana Ruiz&lt;/a&gt;&lt;/p&gt;
+      &lt;p class=&quot;luz-meta&quot;&gt;&lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt; &lt;span&gt;6 min read&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;figure class=&quot;luz-cms-article-header__media&quot;&gt;
+    &lt;div class=&quot;luz-image&quot;&gt;
+      &lt;img src=&quot;/img/tide-gauge-1280.jpg&quot; width=&quot;1280&quot; height=&quot;720&quot; alt=&quot;A green gauge post marked in centimetres, in shallow water by a stone quay&quot; fetchpriority=&quot;high&quot; decoding=&quot;async&quot;&gt;
+    &lt;/div&gt;
+    &lt;figcaption&gt;The tide gauge in the port, at low tide. Photo: Ana Ruiz.&lt;/figcaption&gt;
+  &lt;/figure&gt;
+&lt;/header&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="toc">Table of contents</h2>
+        <p>The sections of a long story, beside its text: the <a href="/docs/cms/toc/">table of contents</a>, in an <code>&lt;article&gt;</code> with the text as core's <a href="/docs/components/prose/">prose</a>. Leave it out of a short post, and the layout is the text alone.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <article class="luz-cms-article">
+              <div class="luz-cms-article__layout">
+                <nav class="luz-cms-toc" aria-labelledby="k-blog-toc-title" data-luz-spy>
+                  <h3 class="luz-cms-toc__title" id="k-blog-toc-title">Contents</h3>
+                  <ol class="luz-cms-toc__list">
+                    <li><a href="#k-blog-toc-method">How the readings were taken</a></li>
+                    <li><a href="#k-blog-toc-level">Four centimetres in ten years</a></li>
+                  </ol>
+                </nav>
+                <div class="luz-prose">
+                  <p>Since March 2016, a group of volunteers has read the tide gauge in the port at six in the morning and six in the evening.</p>
+                  <h3 id="k-blog-toc-method">How the readings were taken</h3>
+                  <p>Each reading is the height of the water against the gauge, to the nearest centimetre, with the time and the wind.</p>
+                  <h3 id="k-blog-toc-level">Four centimetres in ten years</h3>
+                  <p>The average height at high tide was 4 cm higher in 2025 than in 2016.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <p class="docs-demo__note">Beside the text when the article is 46rem wide or more, above it below that. With core's script, the section in view is marked as you scroll.</p>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-toc" aria-label="Copy the article with a table of contents markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article with a table of contents markup"><code id="code-k-blog-toc">&lt;article class=&quot;luz-cms-article&quot;&gt;
+  &lt;header class=&quot;luz-cms-article-header&quot;&gt;…&lt;/header&gt;
+  &lt;div class=&quot;luz-cms-article__layout&quot;&gt;
+    &lt;nav class=&quot;luz-cms-toc&quot; aria-labelledby=&quot;toc-title&quot; data-luz-spy&gt;
+      &lt;h2 class=&quot;luz-cms-toc__title&quot; id=&quot;toc-title&quot;&gt;Contents&lt;/h2&gt;
+      &lt;ol class=&quot;luz-cms-toc__list&quot;&gt;
+        &lt;li&gt;&lt;a href=&quot;#method&quot;&gt;How the readings were taken&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#level&quot;&gt;Four centimetres in ten years&lt;/a&gt;&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/nav&gt;
+    &lt;div class=&quot;luz-prose&quot;&gt;
+      &lt;p&gt;Since March 2016, a group of volunteers has read the tide gauge…&lt;/p&gt;
+      &lt;h2 id=&quot;method&quot;&gt;How the readings were taken&lt;/h2&gt;
+      &lt;p&gt;…&lt;/p&gt;
+      &lt;h2 id=&quot;level&quot;&gt;Four centimetres in ten years&lt;/h2&gt;
+      &lt;p&gt;…&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="footer">Footer</h2>
+        <p>Who publishes the blog and the links a reader looks for last, in one row: the <a href="/docs/cms/footer/">footer</a>.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-cms-footer">
+              <div class="o-container o-container--inline o-row">
+                <p class="u-text-muted">The Vejer Review · Published by a cooperative</p>
+                <div class="o-actions">
+                  <a class="luz-btn luz-btn--ghost luz-btn--sm" href="#footer">Corrections</a>
+                  <a class="luz-btn luz-btn--ghost luz-btn--sm" href="#footer">Accessibility statement</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="docs-demo__note">A <code class="luz-code-inline">&lt;div&gt;</code> here: a page has one footer landmark, and this page has its own.</p>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-footer" aria-label="Copy the footer markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-k-blog-footer">&lt;footer class=&quot;luz-cms-footer&quot;&gt;
+  &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
+    &lt;p&gt;The Vejer Review is published by a cooperative.&lt;/p&gt;
+    &lt;nav class=&quot;o-actions&quot; aria-label=&quot;Links&quot;&gt;
+      &lt;a class=&quot;luz-btn luz-btn--ghost luz-btn--sm&quot; href=&quot;/corrections/&quot;&gt;Corrections&lt;/a&gt;
+      &lt;a class=&quot;luz-btn luz-btn--ghost luz-btn--sm&quot; href=&quot;/accessibility/&quot;&gt;Accessibility statement&lt;/a&gt;
+    &lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;</code></pre>
+        </div>
+      </div>
+    </div>

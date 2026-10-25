@@ -149,6 +149,7 @@ const PACKAGE_AREAS = new Set(["catalog", ...SITE_KINDS.map((name) => AREA_OF_PA
  */
 const AREA_KIND = {
   "get-started": "Get started",
+  kinds: "Kind of site",
   components: "Component",
   tokens: "Token page",
   catalog: "Catalog pattern",
