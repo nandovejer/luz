@@ -285,6 +285,9 @@ export function initPromptDialogs(root = document) {
     button.className = link.className;
     button.textContent = link.textContent;
     if (link.dataset.promptTitle) button.dataset.promptTitle = link.dataset.promptTitle;
+    // A page with several openers names each one by its words and its
+    // context (aria-labelledby the opener and a heading): the button keeps it
+    for (const name of ["id", "aria-labelledby"]) if (link.hasAttribute(name)) button.setAttribute(name, link.getAttribute(name));
     link.replaceWith(button);
     const warm = () => load(href).catch(() => {});
     button.addEventListener("pointerenter", warm, { once: true });

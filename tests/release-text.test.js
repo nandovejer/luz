@@ -169,7 +169,9 @@ describe("the home page's `inside.kind.*` strings (the kinds of site of the four
     const keys = (lang) => next(lang).map(([key]) => key).sort();
     expect(keys("es")).toEqual(keys("en"));
     expect(keys("ar")).toEqual(keys("en"));
-    expect(keys("en")).toEqual(expect.arrayContaining(["landing", "cms", "app", "docs"].flatMap((kind) => [`inside.kind.${kind}.title`, `inside.kind.${kind}.text`])));
+    expect(keys("en")).toEqual(expect.arrayContaining(["landing", "blog", "app", "docs"].flatMap((kind) => [`inside.kind.${kind}.title`, `inside.kind.${kind}.text`, `inside.kind.${kind}.prompt`])));
+    expect(keys("en")).toEqual(expect.arrayContaining(["inside.kind.open", "inside.kind.recipes"]));
+    expect(keys("en").filter((key) => key.includes(".cms.")), "the blog kind is named blog").toEqual([]);
   });
 
   it("do not sell a feature grid: it is a template on core's split grid, not a landing component", () => {

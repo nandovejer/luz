@@ -438,9 +438,9 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
       const html = rendered.get(doc.route);
       const footer = html.slice(html.indexOf("<footer"), html.indexOf("</footer>"));
       expect(footer, doc.route).toContain("luz-landing-footer__brand");
-      // Two columns (the docs, the project), and the packages as a label inside the first
+      // Two columns (the docs, the project), and inside the first two labels: the packages and the kinds of site
       expect(footer.match(/class="luz-landing-footer__col-title"/g), doc.route).toHaveLength(2);
-      expect(footer.match(/class="landing-foot-label"/g), doc.route).toHaveLength(1);
+      expect(footer.match(/class="landing-foot-label"/g), doc.route).toHaveLength(2);
       expect(footer, doc.route).toMatch(/<luz-mode\b[^>]*\sremember\b[^>]*\sby="clock"/);
       // The languages are the header's switch (not a list in the footer), with a link to each
       const header = html.slice(html.indexOf("<header"), html.indexOf("</header>"));

@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="/apps/site/header.css">
   <link rel="stylesheet" href="/apps/site/theme-light.css">
   <link rel="stylesheet" href="/apps/site/sky.css">
+  <link rel="stylesheet" href="/apps/site/prompt-dialog.css">
   <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
   <script src="/apps/site/boot.js"></script>
   <link rel="stylesheet" href="/apps/landing/landing.css">
@@ -273,91 +274,57 @@ a {
         </div>
       </div>
       </section>
+    <!-- The fourth level: a prompt per kind of site, a card each with the
+         button that opens it (a link to its text without JavaScript,
+         apps/site/prompt-dialog.js) and the way to its recipes; under the
+         four, the general prompt. Each button and link is named by its words
+         and the card's title, so five "Open the prompt" are told apart -->
     <section class="landing-inside landing-inside--flip" id="inside-4" aria-labelledby="inside-4-title">
         <div class="landing-inside__copy">
           <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>{{t:inside.l4.eyebrow}}</span></p>
           <h2 class="landing-inside__title" id="inside-4-title">{{html:inside.l4.title}}</h2>
           <p class="landing-inside__lead">{{t:inside.l4.lead}}</p>
           <ul class="landing-inside__points">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>{{t:inside.l4.p1.name}}</strong> {{t:inside.l4.p1.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>{{t:inside.l4.p2.name}}</strong> {{t:inside.l4.p2.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>{{t:inside.weight}}</strong> {{weight4}} {{t:inside.gzip}}</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M4.5 5h15v10.5H10L6 19v-3.5H4.5Z"/></svg><span><strong>{{t:inside.l4.p1.name}}</strong> {{t:inside.l4.p1.text}}</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M4 7h9m4 0h3M4 17h3m4 0h9M15 5v4M9 15v4"/></svg><span><strong>{{t:inside.l4.p2.name}}</strong> {{t:inside.l4.p2.text}}</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12 2.5 2.5 4.5-5"/></g></svg><span><strong>{{t:inside.l4.p3.name}}</strong> {{t:inside.l4.p3.text}}</span></li>
           </ul>
         </div>
       <ul class="landing-inside__kinds" aria-label="{{t:inside.l4.panel}}">
           <li class="landing-kind landing-kind--landing">
-            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M7 8.5h10M8.5 11.5h7"/><rect x="9" y="14.5" width="6" height="2.5" rx="1.25"/></g></svg><hgroup class="landing-kind__name"><h3>{{t:inside.kind.landing.title}}</h3><p>{{t:inside.kind.landing.text}}</p></hgroup></div>
-            <div class="luz-terminal">
-              <nav class="luz-tabs luz-terminal__tabs" aria-label="{{t:inside.tab.install}} landing">
-                <a class="luz-tab" href="#in4-landing-npm-pane">{{t:inside.install.npm}}</a>
-                <a class="luz-tab" href="#in4-landing-cdn-pane">{{t:inside.install.cdn}}</a>
-              </nav>
-              <div class="luz-tabpanel luz-terminal__pane" id="in4-landing-npm-pane">
-                <button class="luz-copy-btn" type="button" data-copy-from="in4-landing-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
-                <pre class="luz-terminal__code" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in4-landing-npm">npm install @luz-ds/landing</code></pre>
-              </div>
-              <div class="luz-tabpanel luz-terminal__pane" id="in4-landing-cdn-pane">
-                <button class="luz-copy-btn" type="button" data-copy-from="in4-landing-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
-                <pre class="luz-terminal__code" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in4-landing-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/landing@{{version}}/dist/landing.min.css&quot;&gt;</code></pre>
-              </div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M7 8.5h10M8.5 11.5h7"/><rect x="9" y="14.5" width="6" height="2.5" rx="1.25"/></g></svg><hgroup class="landing-kind__name"><h3 id="in4-landing">{{t:inside.kind.landing.title}}</h3><p>{{t:inside.kind.landing.text}}</p></hgroup></div>
+            <div class="o-actions landing-kind__actions">
+              <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-landing-prompt" href="/prompts/landing.txt" data-prompt-open data-prompt-title="{{t:inside.kind.landing.prompt}}" aria-labelledby="in4-landing-prompt in4-landing">{{t:inside.kind.open}}</a>
+              <a class="landing-kind__docs" id="in4-landing-recipes" href="/docs/kinds/landing/" aria-labelledby="in4-landing-recipes in4-landing">{{t:inside.kind.recipes}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
             </div>
-            <a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="/docs/landing/">{{t:inside.kind.docs}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
           </li>
-          <li class="landing-kind landing-kind--cms">
-            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11"/><path d="M7.5 9h4M7.5 12.5h7M7.5 16h7"/><path d="m17.5 3.5 3 3-6 6H11.5v-3l6-6Z"/></g></svg><hgroup class="landing-kind__name"><h3>{{t:inside.kind.cms.title}}</h3><p>{{t:inside.kind.cms.text}}</p></hgroup></div>
-            <div class="luz-terminal">
-              <nav class="luz-tabs luz-terminal__tabs" aria-label="{{t:inside.tab.install}} cms">
-                <a class="luz-tab" href="#in4-cms-npm-pane">{{t:inside.install.npm}}</a>
-                <a class="luz-tab" href="#in4-cms-cdn-pane">{{t:inside.install.cdn}}</a>
-              </nav>
-              <div class="luz-tabpanel luz-terminal__pane" id="in4-cms-npm-pane">
-                <button class="luz-copy-btn" type="button" data-copy-from="in4-cms-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
-                <pre class="luz-terminal__code" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in4-cms-npm">npm install @luz-ds/cms</code></pre>
-              </div>
-              <div class="luz-tabpanel luz-terminal__pane" id="in4-cms-cdn-pane">
-                <button class="luz-copy-btn" type="button" data-copy-from="in4-cms-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
-                <pre class="luz-terminal__code" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in4-cms-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/cms@{{version}}/dist/cms.min.css&quot;&gt;</code></pre>
-              </div>
+          <li class="landing-kind landing-kind--blog">
+            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11"/><path d="M7.5 9h4M7.5 12.5h7M7.5 16h7"/><path d="m17.5 3.5 3 3-6 6H11.5v-3l6-6Z"/></g></svg><hgroup class="landing-kind__name"><h3 id="in4-blog">{{t:inside.kind.blog.title}}</h3><p>{{t:inside.kind.blog.text}}</p></hgroup></div>
+            <div class="o-actions landing-kind__actions">
+              <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-blog-prompt" href="/prompts/blog.txt" data-prompt-open data-prompt-title="{{t:inside.kind.blog.prompt}}" aria-labelledby="in4-blog-prompt in4-blog">{{t:inside.kind.open}}</a>
+              <a class="landing-kind__docs" id="in4-blog-recipes" href="/docs/kinds/blog/" aria-labelledby="in4-blog-recipes in4-blog">{{t:inside.kind.recipes}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
             </div>
-            <a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="/docs/cms/">{{t:inside.kind.docs}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
           </li>
           <li class="landing-kind landing-kind--app">
-            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 9h17M9 9v10"/></g></svg><hgroup class="landing-kind__name"><h3>{{t:inside.kind.app.title}}</h3><p>{{t:inside.kind.app.text}}</p></hgroup></div>
-            <div class="luz-terminal">
-              <nav class="luz-tabs luz-terminal__tabs" aria-label="{{t:inside.tab.install}} app">
-                <a class="luz-tab" href="#in4-app-npm-pane">{{t:inside.install.npm}}</a>
-                <a class="luz-tab" href="#in4-app-cdn-pane">{{t:inside.install.cdn}}</a>
-              </nav>
-              <div class="luz-tabpanel luz-terminal__pane" id="in4-app-npm-pane">
-                <button class="luz-copy-btn" type="button" data-copy-from="in4-app-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
-                <pre class="luz-terminal__code" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in4-app-npm">npm install @luz-ds/app</code></pre>
-              </div>
-              <div class="luz-tabpanel luz-terminal__pane" id="in4-app-cdn-pane">
-                <button class="luz-copy-btn" type="button" data-copy-from="in4-app-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
-                <pre class="luz-terminal__code" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in4-app-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/app@{{version}}/dist/app.min.css&quot;&gt;</code></pre>
-              </div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 9h17M9 9v10"/></g></svg><hgroup class="landing-kind__name"><h3 id="in4-app">{{t:inside.kind.app.title}}</h3><p>{{t:inside.kind.app.text}}</p></hgroup></div>
+            <div class="o-actions landing-kind__actions">
+              <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-app-prompt" href="/prompts/app.txt" data-prompt-open data-prompt-title="{{t:inside.kind.app.prompt}}" aria-labelledby="in4-app-prompt in4-app">{{t:inside.kind.open}}</a>
+              <a class="landing-kind__docs" id="in4-app-recipes" href="/docs/kinds/app/" aria-labelledby="in4-app-recipes in4-app">{{t:inside.kind.recipes}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
             </div>
-            <a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="/docs/app/">{{t:inside.kind.docs}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
           </li>
           <li class="landing-kind landing-kind--docs">
-            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></g></svg><hgroup class="landing-kind__name"><h3>{{t:inside.kind.docs.title}}</h3><p>{{t:inside.kind.docs.text}}</p></hgroup></div>
-            <div class="luz-terminal">
-              <nav class="luz-tabs luz-terminal__tabs" aria-label="{{t:inside.tab.install}} docs">
-                <a class="luz-tab" href="#in4-docs-npm-pane">{{t:inside.install.npm}}</a>
-                <a class="luz-tab" href="#in4-docs-cdn-pane">{{t:inside.install.cdn}}</a>
-              </nav>
-              <div class="luz-tabpanel luz-terminal__pane" id="in4-docs-npm-pane">
-                <button class="luz-copy-btn" type="button" data-copy-from="in4-docs-npm" aria-label="{{t:inside.copy.npm}}" hidden>{{t:see.copy}}</button>
-                <pre class="luz-terminal__code" data-lang="bash" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.npm}}"><code id="in4-docs-npm">npm install @luz-ds/docs</code></pre>
-              </div>
-              <div class="luz-tabpanel luz-terminal__pane" id="in4-docs-cdn-pane">
-                <button class="luz-copy-btn" type="button" data-copy-from="in4-docs-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
-                <pre class="luz-terminal__code" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in4-docs-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/docs@{{version}}/dist/docs.min.css&quot;&gt;</code></pre>
-              </div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></g></svg><hgroup class="landing-kind__name"><h3 id="in4-docs">{{t:inside.kind.docs.title}}</h3><p>{{t:inside.kind.docs.text}}</p></hgroup></div>
+            <div class="o-actions landing-kind__actions">
+              <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-docs-prompt" href="/prompts/docs.txt" data-prompt-open data-prompt-title="{{t:inside.kind.docs.prompt}}" aria-labelledby="in4-docs-prompt in4-docs">{{t:inside.kind.open}}</a>
+              <a class="landing-kind__docs" id="in4-docs-recipes" href="/docs/kinds/docs/" aria-labelledby="in4-docs-recipes in4-docs">{{t:inside.kind.recipes}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
             </div>
-            <a class="luz-btn luz-btn--outline luz-btn--sm landing-kind__docs" href="/docs/documentation/">{{t:inside.kind.docs}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
           </li>
         </ul>
+      <div class="landing-scratch">
+        <p class="landing-scratch__text">{{t:inside.start.text}}</p>
+        <a class="luz-btn luz-btn--outline site-prompt-open" href="/prompts/start.txt" data-prompt-open data-prompt-title="{{t:inside.start.prompt}}">{{t:inside.start.open}}</a>
+      </div>
+      <!-- luz:include prompt-dialog -->
       </section>
 
     <!-- ====================== 4b. WHY ====================== -->
@@ -560,8 +527,9 @@ a {
       <div class="luz-landing-footer__brand">
         <p class="landing-brand"><svg viewBox="8 8 32 32" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 8h4v28h4v4H8Zm10 0h4v26.5a1.5 1.5 0 0 0 3 0V8h4v26.5a5.5 5.5 0 0 1-11 0Zm13 0h9v4l-5 24h5v4h-9v-4l5-24h-5Z"/></svg><strong class="u-sr-only">LUZ</strong> <a class="landing-brand__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v{{version}}<span class="u-sr-only">, {{t:footer.changelog}}</span></a> <span class="landing-brand__beta">{{t:footer.beta}}</span></p>
       </div>
-      <!-- The docs: one title over two lists, the guides, and under a small label the docs of
-           each package (in the order they stack: the base, then the templates) -->
+      <!-- The docs: one title over three lists, the guides, under a small label
+           the docs of each package (in the order they stack), and under another
+           the page of each kind of site, with its prompt and its recipes -->
       <nav class="luz-landing-footer__col landing-foot-docs" aria-labelledby="footer-docs">
         <h2 class="luz-landing-footer__col-title" id="footer-docs">{{t:site.docs}}</h2>
         <ul>
@@ -574,10 +542,13 @@ a {
           <li><a href="/docs/tokens/">{{t:footer.pkg.tokens}}</a></li>
           <li><a href="/docs/components/">{{t:footer.pkg.core}}</a></li>
           <li><a href="/docs/catalog/">{{t:footer.pkg.catalog}}</a></li>
-          <li><a href="/docs/landing/">{{t:footer.pkg.landing}}</a></li>
-          <li><a href="/docs/cms/">{{t:footer.pkg.cms}}</a></li>
-          <li><a href="/docs/app/">{{t:footer.pkg.app}}</a></li>
-          <li><a href="/docs/documentation/">{{t:footer.pkg.docs}}</a></li>
+        </ul>
+        <h3 class="landing-foot-label" id="footer-kinds">{{t:footer.kinds}}</h3>
+        <ul aria-labelledby="footer-kinds">
+          <li><a href="/docs/kinds/landing/">{{t:inside.kind.landing.title}}</a></li>
+          <li><a href="/docs/kinds/blog/">{{t:inside.kind.blog.title}}</a></li>
+          <li><a href="/docs/kinds/app/">{{t:inside.kind.app.title}}</a></li>
+          <li><a href="/docs/kinds/docs/">{{t:inside.kind.docs.title}}</a></li>
         </ul>
       </nav>
       <nav class="luz-landing-footer__col" aria-labelledby="footer-project">

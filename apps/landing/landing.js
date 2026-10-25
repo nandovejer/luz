@@ -17,6 +17,9 @@ import { initTabs } from "/packages/core/dist/tabs.js";
 // search button wires itself when it connects
 import "/packages/catalog/dist/search.js";
 import { initSiteHeader } from "/apps/site/header.js";
+// The prompts of the fourth level: each link to a prompt's text becomes the
+// button that opens it in a dialog
+import { initPromptDialogs } from "/apps/site/prompt-dialog.js";
 // <home-light>, the visitor's sky under the hero: defines the element, which
 // loads its one visual
 import "/apps/landing/light/light.js";
@@ -78,8 +81,9 @@ function initModes() {
 initSiteHeader();
 initCopy();
 initModes();
+initPromptDialogs();
 // The panels of "What's inside": install, code and result
-for (const panel of document.querySelectorAll(".landing-panel, .luz-terminal")) initTabs(panel);
+for (const panel of document.querySelectorAll(".landing-panel")) initTabs(panel);
 // highlightBlock() only: initHighlight() also injects a copy button into each
 // block, and core ships no position for it.
 // Not the typed scene: its lines are spans the scroll reveals, coloured in the markup

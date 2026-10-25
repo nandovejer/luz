@@ -108,7 +108,7 @@ const PLACEHOLDERS = new Set([
   // The home's checks: the test files of tests/ by what they check
   "checks",
   // The weight of each of the home's levels of adoption (budgets.json against dist)
-  "weight1", "weight2", "weight3", "weight4",
+  "weight1", "weight2", "weight3",
   // What each level of the home brings, as a list of names read from the packages
   "list1", "list2", "list3",
 ]);
@@ -1801,10 +1801,9 @@ function levelLists(site, locale, used) {
 /**
  * The weights of the home's "Inside" levels, measured when the page is built
  * and never typed: the min+gzip size of the budgeted files of each package
- * in dist, summed level by level (tokens; + core; + catalog), and for the fourth
- * level the third plus the heaviest package for one kind of site, said as
- * "up to". Returned as {{weight1}}…{{weight4}}, in the language's number
- * format. Fails when a file is missing: run `pnpm build`.
+ * in dist, summed level by level (tokens; + core; + catalog). The fourth
+ * level is a prompt, which adds nothing to the page. Returned as
+ * {{weight1}}…{{weight3}}, in the language's number format. Fails when a file is missing: run `pnpm build`.
  */
 function levelWeights(site, locale, used) {
   const file = `${I18N_DIR}/${locale.code}.json`;
@@ -1823,8 +1822,7 @@ function levelWeights(site, locale, used) {
   const one = weigh("tokens");
   const two = one + weigh("core");
   const three = two + weigh("catalog");
-  const four = three + Math.max(...SITE_KINDS.map(weigh));
-  return { weight1: kb(one), weight2: kb(two), weight3: kb(three), weight4: say("inside.upto").replace("{total}", kb(four)) };
+  return { weight1: kb(one), weight2: kb(two), weight3: kb(three) };
 }
 
 /**
