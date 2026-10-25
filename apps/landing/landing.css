@@ -1095,7 +1095,10 @@ home-light:defined ~ .landing-light__nojs {
    6. Modes: the same note three times, one box per mode
    -------------------------------------------------------------------------- */
 
+/* A container of the same name as a level, so its title steps down with the
+   others when the column is narrow (400% text at 320px) */
 .landing-modes {
+  container: inside / inline-size;
   display: grid;
   gap: var(--luz-space-2xl);
 }

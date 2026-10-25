@@ -64,7 +64,7 @@
   "why.light.sub": "Poco código y ningún paso de compilación.",
   "why.weight.unit": "KB",
   "why.weight.list": "Paquetes por tamaño",
-  "why.weight.total": "Todo LUZ: {total}.",
+  "why.weight.total": "Los tres paquetes base: {total}.",
   "why.weight.caption": "El peso gzip de lo que publica cada paquete, medido en dist al construir esta página.",
   "why.usable.word": "Usable",
   "why.usable.sub": "Accesible de serie, no con parches.",
