@@ -1915,15 +1915,33 @@ export function landingDocuments(site, file, html) {
 /**
  * Pages build: make every root-absolute link to a known route relative to
  * `route`, so the site works under any sub-path (https://<user>.github.io/<repo>/).
- * `href="/docs/#x"` on /docs/a/ becomes `href="../../docs/#x"`. On the
- * not-found page `root` is the site's path: "/docs/" becomes "/luz/docs/".
+ * The path is the shortest one: `href="/docs/#x"` on /docs/a/ becomes
+ * `href="../#x"`, `href="/docs/a/b/"` becomes `href="b/"` and the page itself
+ * `href="./"`. On the not-found page `root` is the site's path: "/docs/"
+ * becomes "/luz/docs/".
  */
-export function relativizeLinks(html, route, routes, root = rootOf(route)) {
+export function relativizeLinks(html, route, routes, root) {
+  const to = (path) => (root === undefined ? relativePath(route, path) : `${root}${path}`);
   return html
     .replace(/href="\/([^"#?]*)(#[^"]*)?"/g, (whole, path, hash = "") =>
-      routes.has(`/${path}`) ? `href="${root}${path}${hash}"` : whole,
+      routes.has(`/${path}`) ? `href="${to(path)}${hash}"` : whole,
     )
-    .replace(/data-luz-search-src="\/((?:[a-z]{2,3}(?:-[a-z0-9]+)*\/)?docs\/search-index\.json)"/g, (whole, path) => `data-luz-search-src="${root}${path}"`);
+    .replace(/data-luz-search-src="\/((?:[a-z]{2,3}(?:-[a-z0-9]+)*\/)?docs\/search-index\.json)"/g, (whole, path) => `data-luz-search-src="${to(path)}"`);
+}
+
+/**
+ * The shortest relative path from the directory of `route` to `path` (a path
+ * from the site root, without its leading slash): up to the folder both
+ * share, then down. "./" when it is that directory itself.
+ */
+function relativePath(route, path) {
+  const from = route.split("/").filter((part) => part && !part.endsWith(".html"));
+  const parts = path.split("/");
+  const file = parts.pop();
+  let shared = 0;
+  while (shared < from.length && shared < parts.length && from[shared] === parts[shared]) shared += 1;
+  const down = [...parts.slice(shared), file].join("/");
+  return "../".repeat(from.length - shared) + down || "./";
 }
 
 /* ---- Checking ---------------------------------------------------------- */

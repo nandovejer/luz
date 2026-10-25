@@ -501,7 +501,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
           // The languages' alternates point at pages, not assets: Vite must not resolve them
           out = out.replaceAll('<link rel="alternate" ', '<link rel="alternate" vite-ignore ').replaceAll('<link rel="canonical" ', '<link rel="canonical" vite-ignore ');
         }
-        return relativeUrls ? relativizeLinks(out, doc.route, routes(), rootFor(doc.route)) : out;
+        return relativeUrls ? relativizeLinks(out, doc.route, routes(), doc.route === NOT_FOUND_ROUTE ? pagesBase : undefined) : out;
       },
     },
 
