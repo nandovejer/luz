@@ -238,5 +238,18 @@
   "footer.mode-change": "Change color mode",
   "footer.light": "Light",
   "footer.dark": "Dark",
-  "footer.contrast": "High contrast"
+  "footer.contrast": "High contrast",
+  "prompt.close": "Close",
+  "prompt.help": "Read the prompt to the end: Copy turns on there.",
+  "prompt.region": "The prompt",
+  "prompt.read": "Read {n}%",
+  "prompt.copy": "Copy the prompt",
+  "prompt.file": "Open it as text",
+  "prompt.locked": "Read to the end of the prompt first.",
+  "prompt.unlocked": "You've read it all. Copy is on.",
+  "prompt.copied": "Copied the prompt.",
+  "prompt.not-copied": "Could not copy the prompt: open it as text and copy it from there.",
+  "prompt.failed": "Could not load the prompt: open it as text.",
+  "prompt.loading": "Loading the prompt…",
+  "prompt.end": "End of the prompt."
 }

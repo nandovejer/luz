@@ -1,0 +1,114 @@
+/* ==========================================================================
+   LUZ — THE DIALOG OF A PROMPT FOR AI
+   Core's modal (.luz-modal) around a prompt the reader reads to the end
+   before Copy turns on (prompt-dialog.js). The head, a line of help, the
+   prompt in its own scrolling region, then the progress, Copy and the link
+   to the text. Without JavaScript there is no dialog: the opener is a link
+   to /prompts/<id>.txt.
+   Consumer-side styles on top of tokens + core.
+   Rules: semantic tokens only; no literal colors.
+   ========================================================================== */
+
+/* As wide as reading allows, as tall as the window: the region scrolls.
+   The dialog keeps core's overflow-y: auto, so in a short window (400 %
+   zoom, a phone held sideways) it scrolls too and Copy is never cut off
+   (WCAG 1.4.10, 2.4.11) */
+.site-prompt {
+  inline-size: min(48rem, 100% - 2 * var(--luz-space-md));
+  max-inline-size: none;
+  block-size: min(48rem, 100dvh - 2 * var(--luz-space-md));
+  padding: var(--luz-space-lg);
+}
+
+.site-prompt[open] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--luz-space-sm);
+}
+
+.site-prompt__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--luz-space-sm);
+  margin-block-end: 0;
+}
+
+.site-prompt__help {
+  margin: 0;
+  color: var(--luz-text-secondary);
+}
+
+/* The prompt: its own scroller, text that wraps (no sideways scroll) */
+.site-prompt__text {
+  flex: 1;
+  /* A few lines to read, however short the window */
+  min-block-size: 8rem;
+  overflow-y: auto;
+  padding: var(--luz-space-md);
+  border: 1px solid var(--luz-divider);
+  border-radius: var(--luz-radius-sm);
+  background: var(--luz-surface-muted);
+  overflow-wrap: anywhere;
+}
+
+.site-prompt__text:focus-visible {
+  outline: 2px solid var(--luz-focus-ring);
+  outline-offset: 2px;
+}
+
+.site-prompt__text h3 {
+  margin-block: var(--luz-space-lg) var(--luz-space-xs);
+  font-size: var(--luz-text-lg);
+}
+
+.site-prompt__text h3:first-child {
+  margin-block-start: 0;
+}
+
+.site-prompt__text :is(p, ul, ol) {
+  margin-block: 0 var(--luz-space-sm);
+}
+
+.site-prompt__text pre {
+  margin-block: 0 var(--luz-space-sm);
+  padding: var(--luz-space-sm);
+  border-radius: var(--luz-radius-sm);
+  background: var(--luz-surface);
+  white-space: pre-wrap;
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-sm);
+}
+
+.site-prompt__end {
+  color: var(--luz-text-secondary);
+  font-style: italic;
+}
+
+.site-prompt__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--luz-space-sm) var(--luz-space-md);
+}
+
+.site-prompt__progress {
+  flex: 1 1 8rem;
+}
+
+.site-prompt__read {
+  color: var(--luz-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Copy before the end: still a button in the tab order (aria-disabled, not
+   disabled), drawn as core draws a disabled one: text that keeps 3:1, and a
+   dashed border that tells the state apart without colour. It still takes
+   the press, which says why it is not on yet. */
+.site-prompt .luz-btn[data-prompt-copy][aria-disabled="true"] {
+  background: transparent;
+  color: var(--luz-text-disabled);
+  border-color: var(--luz-text-disabled);
+  border-style: dashed;
+  cursor: not-allowed;
+}
