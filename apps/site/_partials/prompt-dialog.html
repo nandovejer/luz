@@ -1,16 +1,25 @@
-<template id="site-prompt-dialog" data-read="{{t:prompt.read}}" data-locked="{{t:prompt.locked}}" data-unlocked="{{t:prompt.unlocked}}" data-copied="{{t:prompt.copied}}" data-not-copied="{{t:prompt.not-copied}}" data-failed="{{t:prompt.failed}}" data-loading="{{t:prompt.loading}}" data-end="{{t:prompt.end}}">
+<template id="site-prompt-dialog" data-read="{{t:prompt.read}}" data-locked="{{t:prompt.locked}}" data-unlocked="{{t:prompt.unlocked}}" data-copied="{{t:prompt.copied}}" data-done="{{t:js.copied}}" data-not-copied="{{t:prompt.not-copied}}" data-failed="{{t:prompt.failed}}" data-loading="{{t:prompt.loading}}" data-end="{{t:prompt.end}}">
   <dialog class="luz-modal site-prompt" aria-labelledby="site-prompt-title">
     <div class="luz-modal__header site-prompt__head">
       <h2 class="luz-modal__title" id="site-prompt-title"></h2>
-      <button class="luz-btn luz-btn--ghost luz-btn--sm" type="button" data-prompt-close>{{t:prompt.close}}</button>
+      <button class="luz-modal__close site-prompt__close" type="button" aria-label="{{t:prompt.close}}" data-prompt-close>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
     </div>
-    <p class="site-prompt__help" id="site-prompt-help">{{t:prompt.help}}</p>
-    <div class="site-prompt__text" tabindex="0" role="region" aria-label="{{t:prompt.region}}"></div>
-    <div class="site-prompt__foot">
-      <progress class="luz-progress site-prompt__progress" max="100" value="0" aria-labelledby="site-prompt-read"></progress>
+    <div class="site-prompt__meta">
+      <p class="site-prompt__help" id="site-prompt-help">{{t:prompt.help}}</p>
       <span class="site-prompt__read" id="site-prompt-read"></span>
-      <button class="luz-btn luz-btn--primary" type="button" aria-disabled="true" aria-describedby="site-prompt-help" data-prompt-copy>{{t:prompt.copy}}</button>
+    </div>
+    <div class="site-prompt__reader">
+      <progress class="luz-progress site-prompt__progress" max="100" value="0" aria-labelledby="site-prompt-read"></progress>
+      <div class="site-prompt__text" tabindex="0" role="region" aria-label="{{t:prompt.region}}"></div>
+    </div>
+    <div class="site-prompt__foot">
       <a class="site-prompt__file" href="" data-prompt-file>{{t:prompt.file}}</a>
+      <button class="luz-btn luz-btn--primary site-prompt__copy" type="button" aria-disabled="true" aria-describedby="site-prompt-help" data-prompt-copy>
+        <svg class="site-prompt__check" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-prompt-copy-label>{{t:prompt.copy}}</span>
+      </button>
     </div>
     <p class="u-sr-only" role="status" data-prompt-status></p>
   </dialog>

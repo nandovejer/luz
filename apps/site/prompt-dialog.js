@@ -16,8 +16,9 @@
  *   section (# and ##), lists, paragraphs and code blocks, all with
  *   textContent: no HTML of the text is ever parsed (SEC-IDX-2). Its last
  *   element is the sentence "End of the prompt.".
- * - Copy stays aria-disabled (and in the tab order) until that sentence is
- *   in view in the scrolling region, or at once when the prompt fits. A
+ * - Copy stays aria-disabled (and in the tab order) until the region is
+ *   scrolled to its end (100 %, that sentence wholly in view), or at once
+ *   when the prompt fits. A
  *   press before that says so in the live region and moves the focus to the
  *   region; reaching the end says that Copy is on, without moving the focus.
  *   The progress bar and its text follow the scroll. A prompt read to the end
@@ -172,7 +173,8 @@ function wire(dialog) {
   };
   const isLocked = () => copy.getAttribute("aria-disabled") === "true";
   const setRead = (share) => {
-    const n = Math.round(Math.min(Math.max(share, 0), 1) * 100);
+    // Down, never up: 100 is shown only at the very end, where Copy turns on
+    const n = Math.floor(Math.min(Math.max(share, 0), 1) * 100);
     progress.value = n;
     read.textContent = strings.read.replace("{n}", String(n));
   };
@@ -185,10 +187,16 @@ function wire(dialog) {
   };
 
   region.addEventListener("scroll", () => {
+    if (!isLocked()) return;
     const max = region.scrollHeight - region.clientHeight;
-    if (isLocked()) setRead(max > 0 ? region.scrollTop / max : 1);
+    // Within a pixel of the end (zoom leaves fractions): read to 100 %
+    if (max - region.scrollTop <= 1) unlock(true);
+    else setRead(region.scrollTop / max);
   });
-  // The end sentence in view, inside the region, unlocks Copy
+  // The end sentence wholly in view unlocks Copy too (a screen reader's
+  // cursor brings it in without a scroll the page may see first). It is the
+  // last thing in the region, its padding included (prompt-dialog.css), so
+  // wholly in view means scrolled to the end: 100 %.
   const observer =
     typeof IntersectionObserver === "function"
       ? new IntersectionObserver((entries) => entries.some((e) => e.isIntersecting) && unlock(true), { root: region, threshold: 1 })
@@ -197,6 +205,28 @@ function wire(dialog) {
     observer?.disconnect();
     if (observer) observer.observe(end);
     else unlock(false);
+  };
+
+  // After a copy, as core's copy button (clipboard.js): the label says
+  // "Copied", with a check, for 1.2 s, then goes back. The button keeps its
+  // width, so nothing beside it moves; the prompt it copied, with its bar,
+  // wears a green ring for the same time.
+  const label = copy.querySelector("[data-prompt-copy-label]");
+  const reader = dialog.querySelector(".site-prompt__reader");
+  const original = label.textContent;
+  let restore;
+  const done = () => {
+    clearTimeout(restore);
+    copy.style.minInlineSize = `${copy.offsetWidth}px`;
+    label.textContent = strings.done;
+    copy.classList.add("is-copied");
+    reader.classList.add("is-copied");
+    restore = setTimeout(() => {
+      label.textContent = original;
+      copy.classList.remove("is-copied");
+      reader.classList.remove("is-copied");
+      copy.style.minInlineSize = "";
+    }, 1200);
   };
 
   copy.addEventListener("click", () => {
@@ -210,7 +240,10 @@ function wire(dialog) {
     const text = dialog.text;
     if (typeof text !== "string" || !navigator.clipboard) return say(strings.notCopied);
     navigator.clipboard.writeText(text).then(
-      () => say(strings.copied),
+      () => {
+        say(strings.copied);
+        done();
+      },
       () => say(strings.notCopied),
     );
   });

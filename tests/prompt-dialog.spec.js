@@ -36,6 +36,8 @@ const PAGES = {
     copied: 'Copied the prompt.',
     failed: 'Could not load the prompt: open it as text.',
     end: 'End of the prompt.',
+    close: 'Close',
+    copiedLabel: 'Copied',
   },
   es: {
     path: '/es/docs/get-started/ai/',
@@ -45,6 +47,9 @@ const PAGES = {
     copy: 'Copiar el prompt',
     read0: 'Leído 0 %',
     end: 'Fin del prompt.',
+    close: 'Cerrar',
+    copiedLabel: 'Copiado',
+    copied: 'Prompt copiado.',
   },
 };
 
@@ -363,6 +368,210 @@ test.describe('with JavaScript', () => {
     );
     // The motion tokens are 0s under reduced motion (tokens-motion-roles.spec.js)
     expect(durations.filter((ms) => ms > 0)).toEqual([]);
+  });
+
+  /* ---- The look of the dialog (batch of 2026-10-25) ---- */
+
+  for (const code of ['en', 'es']) {
+    test(`${code}: the close control is an icon button named "${PAGES[code].close}" with no visible text, an aria-hidden svg and a 24 px box; it closes and gives the focus back`, async ({ page }) => {
+      const p = PAGES[code];
+      await page.goto(p.path);
+      const dialog = await openByKeyboard(page, p);
+      const close = dialog.getByRole('button', { name: p.close, exact: true });
+      await expect(close).toHaveCount(1);
+      await expect(close).toHaveClass(/(^|\s)luz-modal__close(\s|$)/);
+      expect((await close.innerText()).trim(), 'visible text of the close button').toBe('');
+      expect(await close.evaluate((el) => (el.textContent ?? '').trim()), 'text content of the close button').toBe('');
+      const svg = close.locator('svg');
+      await expect(svg).toHaveCount(1);
+      await expect(svg).toHaveAttribute('aria-hidden', 'true');
+      const box = await close.boundingBox();
+      expect(box?.width ?? 0).toBeGreaterThanOrEqual(24);
+      expect(box?.height ?? 0).toBeGreaterThanOrEqual(24);
+      await close.focus();
+      await page.keyboard.press('Enter');
+      await expect(dialog).toBeHidden();
+      await expect(opener(page, p)).toBeFocused();
+    });
+  }
+
+  test('the progress bar sits right above the scrolling region, as wide as it, 8 px high, and the read text is outside the footer', async ({ page }) => {
+    const p = PAGES.en;
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(p.path);
+    const dialog = await openByKeyboard(page, p);
+    const m = await dialog.evaluate((d) => {
+      const bar = d.querySelector('progress.luz-progress');
+      const region = d.querySelector('.site-prompt__text[role="region"]');
+      const foot = d.querySelector('.site-prompt__foot');
+      const help = d.querySelector('#site-prompt-help');
+      const read = [...d.querySelectorAll('*')].find((el) => el.children.length === 0 && /^Read \d+%$/.test(el.textContent?.trim() ?? ''));
+      if (!bar || !region || !foot || !help || !read) return null;
+      const b = bar.getBoundingClientRect();
+      const r = region.getBoundingClientRect();
+      const h = help.getBoundingClientRect();
+      const t = read.getBoundingClientRect();
+      const reader = region.parentElement;
+      return {
+        wrapped: !!reader?.classList.contains('site-prompt__reader') && reader.children[0] === bar && reader.children[1] === region && reader.children.length === 2,
+        precedes: !!(bar.compareDocumentPosition(region) & Node.DOCUMENT_POSITION_FOLLOWING),
+        gap: r.top - b.bottom,
+        dx: Math.abs(b.left - r.left),
+        dw: Math.abs(b.width - r.width),
+        height: b.height,
+        readInFoot: foot.contains(read),
+        readBeforeBar: !!(read.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING),
+        readOnHelpLine: t.top < h.bottom && t.bottom > h.top,
+      };
+    });
+    expect(m, 'the progress, region, footer, help line and read text exist').not.toBeNull();
+    expect(m.wrapped, 'the bar then the region are the two children of .site-prompt__reader').toBe(true);
+    expect(m.precedes, 'the progress precedes the region in the DOM').toBe(true);
+    expect(Math.abs(m.gap), 'gap between the bar and the region').toBeLessThanOrEqual(0.5);
+    expect(m.dx, 'left offset').toBeLessThanOrEqual(0.5);
+    expect(m.dw, 'width difference').toBeLessThanOrEqual(0.5);
+    expect(m.height, 'core height of a progress bar').toBeCloseTo(8, 0);
+    expect(m.readInFoot, 'the read text is in the footer').toBe(false);
+    expect(m.readBeforeBar, 'the read text comes before the bar').toBe(true);
+    expect(m.readOnHelpLine, 'the read text is on the line of the help text').toBe(true);
+  });
+
+  test('a few pixels before the end Copy stays locked and the read text is below 100; at the end it unlocks and shows 100%', async ({ page }) => {
+    const p = PAGES.en;
+    await page.goto(p.path);
+    const dialog = await openByKeyboard(page, p);
+    const region = regionOf(dialog, p);
+    const readNow = () => dialog.getByText(/^Read \d+%$/).first().innerText().then((t) => Number(/(\d+)/.exec(t)?.[1]));
+    for (const px of [10, 2]) {
+      await region.evaluate((el, gap) => { el.scrollTop = el.scrollHeight - el.clientHeight - gap; }, px);
+      await expect.poll(readNow, { message: `read text ${px} px before the end` }).toBeGreaterThan(0);
+      expect(await readNow(), `read text ${px} px before the end`).toBeLessThan(100);
+      await expect(copyOf(dialog, p), `Copy ${px} px before the end`).toHaveAttribute('aria-disabled', 'true');
+    }
+    await scrollToEnd(region);
+    await expect(copyOf(dialog, p)).toHaveAttribute('aria-disabled', 'false');
+    await expect(dialog.getByText(p.read100, { exact: true })).toBeVisible();
+  });
+
+  test('in the footer the link to the text comes before Copy, and Copy is at the end edge with the link to its left', async ({ page }) => {
+    const p = PAGES.en;
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(p.path);
+    const dialog = await openByKeyboard(page, p);
+    const m = await dialog.evaluate((d) => {
+      const foot = d.querySelector('.site-prompt__foot');
+      const link = foot?.querySelector('a[href$="/prompts/start.txt"]');
+      const copy = foot?.querySelector('[data-prompt-copy]');
+      if (!foot || !link || !copy) return null;
+      const f = foot.getBoundingClientRect();
+      const l = link.getBoundingClientRect();
+      const c = copy.getBoundingClientRect();
+      const pad = parseFloat(getComputedStyle(foot).paddingRight);
+      return {
+        linkFirst: !!(link.compareDocumentPosition(copy) & Node.DOCUMENT_POSITION_FOLLOWING),
+        copyRightGap: f.right - pad - c.right,
+        linkLeftOfCopy: l.right <= c.left + 0.5,
+      };
+    });
+    expect(m, 'the footer holds the link and Copy').not.toBeNull();
+    expect(m.linkFirst, 'the link precedes Copy in the DOM').toBe(true);
+    expect(Math.abs(m.copyRightGap), 'distance of Copy from the footer end edge').toBeLessThanOrEqual(1);
+    expect(m.linkLeftOfCopy, 'the link is to the left of Copy').toBe(true);
+    // Tab reaches the link first
+    await dialog.getByRole('link', { name: 'Open it as text' }).focus();
+    await page.keyboard.press('Tab');
+    await expect(copyOf(dialog, p)).toBeFocused();
+  });
+
+  for (const code of ['en', 'es']) {
+    test(`${code}: after Copy the button says "${PAGES[code].copiedLabel}" with a check, turns green, keeps its width and outlines the reader, then goes back after about a second`, async ({ page }) => {
+      const p = PAGES[code];
+      await page.goto(p.path);
+      const dialog = await openByKeyboard(page, p);
+      const region = regionOf(dialog, p);
+      await scrollToEnd(region);
+      // Not by name: the accessible name of the button changes while it says it copied
+      const copy = dialog.locator('[data-prompt-copy]');
+      await expect(copy).toHaveAttribute('aria-disabled', 'false');
+      const label = (await copy.innerText()).trim();
+      const before = await copy.evaluate((el) => ({ color: getComputedStyle(el).color, width: el.getBoundingClientRect().width }));
+      const success = await dialog.evaluate((d) => {
+        const probe = document.createElement('span');
+        probe.style.color = 'var(--luz-color-success)';
+        d.append(probe);
+        const color = getComputedStyle(probe).color;
+        probe.remove();
+        return color;
+      });
+      expect(success, 'resolved --luz-color-success').toMatch(/^rgb/);
+      expect(before.color, 'the button is not green before').not.toBe(success);
+      await copy.focus();
+      await page.keyboard.press('Enter');
+      await expect(copy).toHaveText(p.copiedLabel);
+      await expect(copy).toHaveClass(/(^|\s)is-copied(\s|$)/);
+      const check = copy.locator('svg');
+      await expect(check).toHaveCount(1);
+      await expect(check).toBeVisible();
+      await expect(check).toHaveAttribute('aria-hidden', 'true');
+      await expect(statusOf(dialog)).toHaveText(p.copied);
+      // The colour may be eased in: wait for it to settle on the success colour
+      await expect.poll(() => copy.evaluate((el) => getComputedStyle(el).color), { message: 'colour of the copied button' }).toBe(success);
+      expect(before.color).not.toBe(success);
+      const after = await copy.evaluate((el) => el.getBoundingClientRect().width);
+      expect(Math.abs(after - before.width), 'width change of the button').toBeLessThanOrEqual(1);
+      const reader = dialog.locator('.site-prompt__reader');
+      await expect(reader).toHaveClass(/(^|\s)is-copied(\s|$)/);
+      const outline = await reader.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { style: s.outlineStyle, width: s.outlineWidth, color: s.outlineColor, offset: s.outlineOffset };
+      });
+      expect(outline).toEqual({ style: 'solid', width: '2px', color: success, offset: '2px' });
+      // About 1.2 s later everything is back
+      await page.waitForTimeout(1500);
+      expect((await copy.innerText()).trim()).toBe(label);
+      await expect(copy).not.toHaveClass(/(^|\s)is-copied(\s|$)/);
+      await expect(reader).not.toHaveClass(/(^|\s)is-copied(\s|$)/);
+      const outlineAfter = await reader.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { style: s.outlineStyle, width: s.outlineWidth };
+      });
+      expect(outlineAfter.style === 'none' || outlineAfter.width === '0px', `reader outline after: ${JSON.stringify(outlineAfter)}`).toBe(true);
+    });
+  }
+
+
+  test('while Copy says it copied, a reader whose region has the focus ring keeps the focus ring, not the green one', async ({ page }) => {
+    const p = PAGES.en;
+    await page.goto(p.path);
+    const dialog = await openByKeyboard(page, p);
+    const region = regionOf(dialog, p);
+    await scrollToEnd(region);
+    const copy = dialog.locator('[data-prompt-copy]');
+    await expect(copy).toHaveAttribute('aria-disabled', 'false');
+    const colorOf = (token) => dialog.evaluate((d, t) => {
+      const probe = document.createElement('span');
+      probe.style.color = `var(${t})`;
+      d.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }, token);
+    const ring = await colorOf('--luz-focus-ring');
+    const success = await colorOf('--luz-color-success');
+    expect(ring, 'the focus ring is not the success colour').not.toBe(success);
+    await copy.focus();
+    await page.keyboard.press('Enter');
+    await expect(copy).toHaveClass(/(^|\s)is-copied(\s|$)/);
+    // The last input was the keyboard, so focusing the region shows its focus ring
+    await region.focus();
+    await expect(region).toBeFocused();
+    expect(await region.evaluate((el) => el.matches(':focus-visible'))).toBe(true);
+    // The ring is on the wrapper of the bar and the region
+    const outline = await dialog.locator('.site-prompt__reader').evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { style: s.outlineStyle, width: s.outlineWidth, color: s.outlineColor, offset: s.outlineOffset };
+    });
+    expect(outline).toEqual({ style: 'solid', width: '2px', color: ring, offset: '2px' });
   });
 
   test('es: the chrome is Spanish; the prompt is English and left to right, the end sentence is Spanish', async ({ page }) => {
