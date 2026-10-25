@@ -1108,6 +1108,52 @@
         ]
       },
       "note": "proposed: in the Arabic docs chrome «component» is written WITHOUT the shadda («مكون», «المكونات»), in navigation labels and everywhere in the catalog. Keep «حزمة» for the area labels (packages) and «نمط» for pattern pages"
+    },
+    {
+      "en": "Kinds of site",
+      "es": "Tipos de sitio",
+      "ar": "أنواع المواقع",
+      "forms": {
+        "es": [
+          "tipo de sitio",
+          "tipos de sitio"
+        ],
+        "ar": [
+          "نوع من المواقع",
+          "أنواع المواقع"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "clases de sitio",
+          "tipos de web"
+        ],
+        "ar": []
+      },
+      "note": "proposed: the docs area for a landing page, a blog, an app or a documentation site. The home page says «un tipo de sitio» (existing); «clase» is reserved for a CSS class"
+    },
+    {
+      "en": "recipe",
+      "es": "receta",
+      "ar": "وصفة",
+      "forms": {
+        "es": [
+          "receta",
+          "recetas"
+        ],
+        "ar": [
+          "وصفة",
+          "وصفات"
+        ]
+      },
+      "avoid": {
+        "es": [
+          "fórmula",
+          "plantilla"
+        ],
+        "ar": []
+      },
+      "note": "proposed: the markup of one part of a page, to copy, on a Kinds of site page. A template (plantilla) is a whole page; a recipe is one part"
     }
   ]
 }

@@ -37,6 +37,9 @@
  *   - the accessibility statement: its summary, the outline of its headings
  *     and a pointer to it (llms.txt lists it too).
  *   - a page of templates (`/templates/`): its summary and a pointer to it.
+ *   - a page of a kind of site (`/docs/kinds/<kind>/`): its summary, its
+ *     recipes by h2 and a pointer to it; the area index, its summary and
+ *     a pointer.
  *   - a tokens page: its prose; the tables of values are `tokens.json`'s
  *     (the Figma import page, a workflow outside markup: summary and pointer).
  *   - an HTML elements page: its summary and the outline of its headings.
@@ -526,6 +529,13 @@ const filesOf = (page, packageName) => {
 const TEMPLATES_ROUTE = /\/templates\/$/;
 const TEMPLATES_POINTER = "This page is a library of whole-page templates: open its URL for the markup of each.";
 
+// A page of a kind of site (/docs/kinds/<kind>/): the h2 of its recipes and a pointer; the area index, a pointer.
+// Its prompt is in llms.txt, and the markup of each recipe is on the pattern page the recipe links to.
+const KIND_PAGE = /^\/docs\/kinds\/[a-z-]+\/$/;
+const KINDS_POINTER = "Its prompt is in llms.txt; open its URL for the markup of each recipe.";
+// The area index: llms.txt lists its pages and the general prompt
+const KINDS_INDEX_POINTER = "Each kind of site has a page of this area; llms.txt lists them, and the general prompt.";
+
 // A page about a workflow outside the markup (importing the tokens file into a design tool), whose steps
 // an agent that writes HTML does not need: its summary, its files and a pointer, so the file keeps its ideal.
 const SUMMARY_POINTERS = new Map([
@@ -605,6 +615,13 @@ function bodyOf(page, options) {
     return text.startsWith(page.meta.description) ? text.slice(page.meta.description.length).replace(/^\s+/, "") : text;
   }
 
+  // A page of a kind of site: its recipes by h2 and a pointer, as a page of templates (the markup is on each pattern page)
+  if (area === "kinds") {
+    if (!KIND_PAGE.test(canonical)) return KINDS_INDEX_POINTER;
+    const items = headings.filter((h) => h.level === 2 && h.text).map((h) => `- ${h.text}`);
+    return [items.join("\n"), KINDS_POINTER].filter(Boolean).join("\n\n");
+  }
+
   if (area === "html" || OUTLINE_POINTERS.has(canonical)) {
     const items = headings.filter((h) => h.level === 2 && h.text).map((h) => `- ${/[<>]/.test(h.text) ? codeSpan(h.text) : h.text}`);
     return [items.join("\n"), OUTLINE_POINTERS.get(canonical)].filter(Boolean).join("\n\n");
@@ -625,10 +642,15 @@ function bodyOf(page, options) {
   }
 
   const tokens = area === "tokens";
-  const { text } = convert(page.body, { file, line: lineOf(0), shift: 1, siteUrl, base, values: !tokens });
-  // the lead of a page that brings its own is its description: once is enough
-  const rest = text.startsWith(page.meta.description) ? text.slice(page.meta.description.length).replace(/^\s+/, "") : text;
+  const rest = wholeBody(page, { ...options, values: !tokens });
   return tokens ? [rest, TOKENS_POINTER].filter(Boolean).join("\n\n") : rest;
+}
+
+/** All of a page's body as text, outside the demos, without a lead that repeats its description. */
+function wholeBody(page, { siteUrl, base, values = true }) {
+  const { text } = convert(page.body, { file: page.file, line: page.bodyLine, shift: 1, siteUrl, base, values });
+  // the lead of a page that brings its own is its description: once is enough
+  return text.startsWith(page.meta.description) ? text.slice(page.meta.description.length).replace(/^\s+/, "") : text;
 }
 
 /**
@@ -854,13 +876,13 @@ const WHAT = {
   "custom-elements.json": "ai.what-elements",
 };
 
-const MADE_BY = { pages: "ai.made-pages", manifests: "ai.made-manifests" };
+const MADE_BY = { pages: "ai.made-pages", prompts: "ai.made-prompts", manifests: "ai.made-manifests" };
 
 const tOf = (site) => site.t ?? englishT();
 
 /**
  * The AI files of the Pages site as table rows, in this order: `llms.txt`,
- * `llms-full.txt`, the example of Button (a file name that is a pattern:
+ * `llms-full.txt`, the five prompts (`prompts/<id>.txt`), the example of Button (a file name that is a pattern:
  * `examples/<area>/<slug>.html`), then the manifests of every package as
  * `manifestAssets()` copies them. `url` is the route, or `siteUrl` + the route
  * without its first slash. Pure: it reads the manifests' routes, not the files.
@@ -870,6 +892,11 @@ export function aiArtifacts(site, { siteUrl = "" } = {}) {
   const rows = [
     { file: "llms.txt", url: urlOf(AI_ROUTES.llms, siteUrl), what: t(WHAT["llms.txt"]), madeBy: t(MADE_BY.pages) },
     { file: "llms-full.txt", url: urlOf(AI_ROUTES.llmsFull, siteUrl), what: t(WHAT["llms-full.txt"]), madeBy: t(MADE_BY.pages) },
+    // The five prompts, in the order llms.txt lists them
+    ...PROMPT_KINDS.map((kind) => {
+      const route = promptRoute(kind.id);
+      return { file: route.slice(1), url: urlOf(route, siteUrl), what: t(`ai.what-prompt-${kind.id}`), madeBy: t(MADE_BY.prompts) };
+    }),
   ];
   // The files are the English site's, whatever the language the table is read in
   const english = site.base ?? site;

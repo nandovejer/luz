@@ -1,0 +1,218 @@
+<!-- luz:page
+title: Documentation site
+description: A documentation site: a prompt for an LLM, and recipes for its shell, page head, rail, example, do and don't, pager and page foot.
+area: kinds
+order: 4
+keywords: docs, guides, manual, reference, handbook, knowledge base
+-->
+    <div class="docs-block" id="k-docs">
+      <p>Paste the prompt into any LLM. It asks about your documentation in short rounds, shows you the plan and writes nothing until you say "go".</p>
+      <p><a class="luz-btn luz-btn--primary site-prompt-open" href="/prompts/docs.txt" data-prompt-open data-prompt-title="The prompt for a documentation site">Open the prompt</a></p>
+      <!-- luz:include prompt-dialog -->
+      <p>Or build it yourself from the recipes below. They use the classes of core, the catalog and docs only; <a href="/docs/get-started/#site-kinds">Install LUZ</a> lists the files to load. The page you are reading is made of them.</p>
+      <div class="docs-block">
+        <h2 id="shell">Shell</h2>
+        <p>The whole page: the header, the sidebar, the rail, the content and the footer, in the order a keyboard reaches them. The skip link goes to the content, past the sidebar and the rail. The <a href="/docs/documentation/shell/">shell</a> is three columns from 80rem, two from 60rem and one below, with the rail above the content when there is no third column.</p>
+        <p>It has no example inside this page, as it is the whole page: this one is built on it. Resize the window to see its columns.</p>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-docs-shell" aria-label="Copy the shell markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Shell markup"><code id="code-k-docs-shell">&lt;body class=&quot;o-shell luz-docs-shell&quot;&gt;
+  &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to content&lt;/a&gt;
+  &lt;header&gt;
+    &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;docs-nav&quot; aria-label=&quot;Menu&quot;&gt;…&lt;/button&gt;
+    &lt;p&gt;&lt;a href=&quot;/&quot;&gt;Acme docs&lt;/a&gt;&lt;/p&gt;
+  &lt;/header&gt;
+  &lt;nav class=&quot;luz-sidebar luz-docs-nav&quot; id=&quot;docs-nav&quot; aria-label=&quot;Acme docs&quot; popover&gt;…&lt;/nav&gt;
+  &lt;aside class=&quot;luz-docs-rail&quot; aria-label=&quot;About this page&quot;&gt;…&lt;/aside&gt;
+  &lt;main class=&quot;o-main luz-docs-main&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;
+    &lt;header class=&quot;luz-docs-page-head&quot;&gt;…&lt;/header&gt;
+    …
+  &lt;/main&gt;
+  &lt;footer&gt;…&lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="page-head">Page head</h2>
+        <p>The first child of the content: where the page sits, its <code>&lt;h1&gt;</code>, one sentence on what it lets the reader do, and a few facts as chips. It is the <a href="/docs/documentation/page-head/">page head</a>.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage" inert aria-hidden="true">
+            <header class="luz-docs-page-head">
+              <p class="luz-docs-page-head__eyebrow">Guides · Setup</p>
+              <h1>Install the command line tool</h1>
+              <p class="luz-docs-page-head__lead">Add the tool to a project and check that it runs, in about two minutes.</p>
+              <ul class="luz-docs-page-head__meta">
+                <li>Version 2</li>
+                <li>macOS, Linux and Windows</li>
+              </ul>
+            </header>
+          </div>
+          <p class="docs-demo__note">A picture of the head, hidden from assistive technology: it holds a title of its own, and this page has one. The head of this page is a live one.</p>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-docs-page-head" aria-label="Copy the page head markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page head markup"><code id="code-k-docs-page-head">&lt;header class=&quot;luz-docs-page-head&quot;&gt;
+  &lt;p class=&quot;luz-docs-page-head__eyebrow&quot;&gt;Guides · Setup&lt;/p&gt;
+  &lt;h1&gt;Install the command line tool&lt;/h1&gt;
+  &lt;p class=&quot;luz-docs-page-head__lead&quot;&gt;Add the tool to a project and check that it runs, in about two minutes.&lt;/p&gt;
+  &lt;ul class=&quot;luz-docs-page-head__meta&quot;&gt;
+    &lt;li&gt;Version 2&lt;/li&gt;
+    &lt;li&gt;macOS, Linux and Windows&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;#known-issues&quot;&gt;No known issues&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/header&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="rail">Rail</h2>
+        <p>"On this page" and the actions on the page, beside the content from 80rem and above it below: the <a href="/docs/documentation/rail/">rail</a>, a direct child of the shell, between the sidebar and the content. The rail of this page is a live one. A link of the list also carries core's <code>.luz-sidebar__link</code>, so core's script marks the section in view as you scroll.</p>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-docs-rail" aria-label="Copy the rail markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Rail markup"><code id="code-k-docs-rail">&lt;aside class=&quot;luz-docs-rail&quot; aria-label=&quot;About this page&quot;&gt;
+  &lt;div class=&quot;luz-docs-rail__inner&quot;&gt;
+    &lt;nav class=&quot;luz-docs-rail__onpage&quot; aria-labelledby=&quot;onpage-title&quot;&gt;
+      &lt;details class=&quot;luz-docs-rail__fold&quot; open&gt;
+        &lt;summary class=&quot;luz-docs-rail__title&quot; id=&quot;onpage-title&quot;&gt;On this page&lt;/summary&gt;
+        &lt;ul class=&quot;luz-docs-rail__list&quot;&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-sidebar__link luz-docs-rail__link&quot; href=&quot;#install&quot;&gt;Install&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-sidebar__link luz-docs-rail__link&quot; href=&quot;#configure&quot;&gt;Configure&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/details&gt;
+    &lt;/nav&gt;
+    &lt;div class=&quot;luz-docs-rail__actions&quot;&gt;
+      &lt;a href=&quot;https://example.com/edit/install.md&quot;&gt;Edit this page&lt;/a&gt;
+      &lt;a href=&quot;https://example.com/issues/new&quot;&gt;Report a problem&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/aside&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="example">Example</h2>
+        <p>A live preview with the markup that makes it under it: the <a href="/docs/documentation/example/">example</a>. The code is optional.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-docs-example">
+              <div class="luz-docs-example__preview">
+                <div class="luz-docs-example__frame">
+                  <button class="luz-btn luz-btn--primary" type="button">Save changes</button>
+                </div>
+              </div>
+              <div class="luz-docs-example__code">
+                <pre class="luz-code-block" data-lang="html" tabindex="0" aria-label="Markup of the example"><code>&lt;button class="luz-btn luz-btn--primary" type="button"&gt;Save changes&lt;/button&gt;</code></pre>
+              </div>
+            </figure>
+          </div>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-docs-example" aria-label="Copy the example markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Example markup"><code id="code-k-docs-example">&lt;figure class=&quot;luz-docs-example&quot;&gt;
+  &lt;div class=&quot;luz-docs-example__preview&quot;&gt;
+    &lt;div class=&quot;luz-docs-example__frame&quot;&gt;
+      &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot;&gt;Save changes&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-docs-example__code&quot;&gt;
+    &lt;pre class=&quot;luz-code-block&quot; data-lang=&quot;html&quot; tabindex=&quot;0&quot; aria-label=&quot;Markup of the example&quot;&gt;&lt;code&gt;&amp;lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot;&amp;gt;Save changes&amp;lt;/button&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/figure&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="do-dont">Do and don't</h2>
+        <p>A pair that shows the right way and the wrong one, the Do first: the <a href="/docs/documentation/dodont/">do and don't</a>. Each is a figure whose caption says why. The word, the mark before it and the frame say which is which, so the colour is never the only cue.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Title a page for what it lets the reader do.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <h3>Install the command line tool</h3>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Use a title that fits any page: "Introduction" tells the reader nothing.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <h3>Introduction</h3>
+                </div>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-docs-do-dont" aria-label="Copy the do and don't markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Do and don't markup"><code id="code-k-docs-do-dont">&lt;div class=&quot;luz-docs-dodont&quot;&gt;
+  &lt;figure class=&quot;luz-docs-dodont__item luz-docs-dodont__item--do&quot;&gt;
+    &lt;figcaption&gt;&lt;strong class=&quot;luz-docs-dodont__verdict&quot;&gt;Do&lt;/strong&gt; Title a page for what it lets the reader do.&lt;/figcaption&gt;
+    &lt;div class=&quot;luz-docs-dodont__stage&quot; inert aria-hidden=&quot;true&quot;&gt;
+      &lt;h3&gt;Install the command line tool&lt;/h3&gt;
+    &lt;/div&gt;
+  &lt;/figure&gt;
+  &lt;figure class=&quot;luz-docs-dodont__item luz-docs-dodont__item--dont&quot;&gt;
+    &lt;figcaption&gt;&lt;strong class=&quot;luz-docs-dodont__verdict&quot;&gt;Don't&lt;/strong&gt; Use a title that fits any page: &quot;Introduction&quot; tells the reader nothing.&lt;/figcaption&gt;
+    &lt;div class=&quot;luz-docs-dodont__stage&quot; inert aria-hidden=&quot;true&quot;&gt;
+      &lt;h3&gt;Introduction&lt;/h3&gt;
+    &lt;/div&gt;
+  &lt;/figure&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="pager">Pager</h2>
+        <p>The links to the previous page and the next, at the end of the content: the <a href="/docs/documentation/pager/">pager</a>. On the first page of a sequence, leave Previous out; on the last, Next.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <nav aria-label="Previous and next page, example">
+              <ul class="luz-docs-pager">
+                <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="#pager"><span class="luz-docs-pager__label">Previous</span> <span class="luz-docs-pager__title">Install the tool</span></a></li>
+                <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="#pager"><span class="luz-docs-pager__label">Next</span> <span class="luz-docs-pager__title">Deploy to production</span></a></li>
+              </ul>
+            </nav>
+          </div>
+          <p class="docs-demo__note">Side by side, Next at the end; stacked at 640 px and below. The whole block is the link.</p>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-docs-pager" aria-label="Copy the pager markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Pager markup"><code id="code-k-docs-pager">&lt;nav aria-label=&quot;Previous and next page&quot;&gt;
+  &lt;ul class=&quot;luz-docs-pager&quot;&gt;
+    &lt;li class=&quot;luz-docs-pager__prev&quot;&gt;&lt;a class=&quot;luz-docs-pager__link&quot; rel=&quot;prev&quot; href=&quot;/install/&quot;&gt;&lt;span class=&quot;luz-docs-pager__label&quot;&gt;Previous&lt;/span&gt; &lt;span class=&quot;luz-docs-pager__title&quot;&gt;Install the tool&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-docs-pager__next&quot;&gt;&lt;a class=&quot;luz-docs-pager__link&quot; rel=&quot;next&quot; href=&quot;/deploy/&quot;&gt;&lt;span class=&quot;luz-docs-pager__label&quot;&gt;Next&lt;/span&gt; &lt;span class=&quot;luz-docs-pager__title&quot;&gt;Deploy to production&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="page-foot">Page foot</h2>
+        <p>When the page was last changed, and where to edit it or report a problem, in small print after the pager: the <a href="/docs/documentation/page-foot/">page foot</a>.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <p class="luz-docs-page-foot">Last updated <time datetime="2026-10-17">17 October 2026</time> · <a href="#page-foot">Edit this page</a> · <a href="#page-foot">Report a problem</a></p>
+          </div>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-docs-page-foot" aria-label="Copy the page foot markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page foot markup"><code id="code-k-docs-page-foot">&lt;p class=&quot;luz-docs-page-foot&quot;&gt;Last updated &lt;time datetime=&quot;2026-10-17&quot;&gt;17 October 2026&lt;/time&gt; · &lt;a href=&quot;https://example.com/edit/install.md&quot;&gt;Edit this page&lt;/a&gt; · &lt;a href=&quot;https://example.com/issues/new&quot;&gt;Report a problem&lt;/a&gt;&lt;/p&gt;</code></pre>
+        </div>
+      </div>
+    </div>

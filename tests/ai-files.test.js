@@ -700,6 +700,99 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
   });
 });
 
+/* ---- the area Kinds of site: a summary, never the whole page ---------------------- */
+
+describe("llms-full.txt and index.md: a page of Kinds of site is a summary, the hub a pointer", () => {
+  const KINDS = ["landing", "blog", "app", "docs"];
+  const entry = (route) => entriesOf(full()).find((e) => e.url === urlOf(route));
+  /** The recipes of a kind page: the text of its h2 outside the demos, as the page says them. */
+  const recipesOf = (route) => {
+    const page = site.byRoute.get(route);
+    return readHtml("\n".repeat(page.bodyLine - 1) + page.body, page.file)
+      .headings.filter((h) => h.level === 2 && !h.specimen)
+      .map((h) => h.text);
+  };
+  /** The lines of an entry after its URL line and its description: the part the page adds. */
+  const afterDescription = (text, route) => text.split(site.byRoute.get(route).meta.description)[1] ?? "";
+
+  it("has an entry for each kind page, in the order of the area, with its description and its URL", () => {
+    const urls = entriesOf(full())
+      .map((e) => e.url)
+      .filter((url) => url?.startsWith(urlOf("/docs/kinds/")));
+    expect(urls).toEqual(["/docs/kinds/", ...KINDS.map((id) => `/docs/kinds/${id}/`)].map((route) => urlOf(route)));
+    for (const id of KINDS) {
+      const route = `/docs/kinds/${id}/`;
+      const page = site.byRoute.get(route);
+      const e = entry(route);
+      expect(e.title, route).toBe(page.meta.title);
+      expect(e.text, route).toContain(page.meta.description);
+    }
+  });
+
+  it("lists the recipes of a kind page by their h2, one line each and in order, and nothing of their markup or demos", () => {
+    for (const id of KINDS) {
+      const route = `/docs/kinds/${id}/`;
+      const recipes = recipesOf(route);
+      expect(recipes.length, route).toBeGreaterThanOrEqual(1);
+      const e = entry(route);
+      expect(e, `an entry for ${route}`).toBeTruthy();
+      const items = afterDescription(e.text, route)
+        .split("\n")
+        .filter((l) => l.startsWith("- "))
+        .map((l) => l.slice(2));
+      expect(items, route).toEqual(recipes);
+      // No markup: no fenced block, no tag, not the text of a demo
+      expect(e.text, route).not.toMatch(/^```/m);
+      expect(proseOf(e.text), route).not.toMatch(TAG);
+      expect(e.text, route).not.toMatch(/\bclass=|luz-[a-z]+(?:__|--)/);
+      // A pointer after the list: a summary, not the page
+      const last = e.text.trimEnd().split("\n").at(-1);
+      expect(last.startsWith("- "), `${route}: ends with a pointer line, not with the list`).toBe(false);
+      expect(last.length, route).toBeGreaterThan(20);
+      expect(Buffer.byteLength(e.text, "utf8"), `${route}: a summary`).toBeLessThan(1500);
+    }
+  });
+
+  it("gives the hub of the area a description and a pointer, with no list of recipes and no markup", () => {
+    const route = "/docs/kinds/";
+    const e = entry(route);
+    expect(e, "an entry for the hub of the area").toBeTruthy();
+    expect(e.title).toBe(site.byRoute.get(route).meta.title);
+    expect(e.text).toContain(site.byRoute.get(route).meta.description);
+    expect(e.text).not.toMatch(/^```/m);
+    expect(e.text.split("\n").filter((l) => l.startsWith("- "))).toEqual([]);
+    expect(afterDescription(e.text, route).trim().length, "a pointer line").toBeGreaterThan(20);
+    expect(Buffer.byteLength(e.text, "utf8")).toBeLessThan(1000);
+  });
+
+  it("writes the same text to the index.md of each page of the area", () => {
+    const renderPageMarkdown = member("renderPageMarkdown");
+    for (const route of ["/docs/kinds/", ...KINDS.map((id) => `/docs/kinds/${id}/`)]) {
+      const page = site.byRoute.get(route);
+      const md = renderPageMarkdown(site, page, { siteUrl: SITE_URL });
+      const e = entry(route);
+      expect(e, `an entry for ${route}`).toBeTruthy();
+      expect(md.startsWith(`# ${page.meta.title}\n\n${page.meta.description}\n`), route).toBe(true);
+      // what the entry says after its description is what index.md says after its own
+      expect(md.trim().endsWith(afterDescription(e.text, route).trim()), route).toBe(true);
+      expect(md, route).not.toMatch(/^```/m);
+    }
+  });
+
+  it("keeps llms-full.txt under its ideal with the area in", () => {
+    expect(bytes(full())).toBeLessThanOrEqual(LLMS_FULL_IDEAL);
+  });
+
+  it("lists the area in llms.txt: the hub and the four kinds, in order, and the five prompts after", () => {
+    const parsed = parseTxt(txt());
+    const area = parsed.sections.find((s) => s.title === site.areas.find((a) => a.id === "kinds").label);
+    expect(area, "a section for the area in llms.txt").toBeTruthy();
+    const pages = ["/docs/kinds/", ...KINDS.map((id) => `/docs/kinds/${id}/`)].map((route) => urlOf(route));
+    expect(area.items.map((i) => i.url).slice(0, 5)).toEqual(pages);
+    expect(parsed.sections.find((s) => s.title === "Prompts").items.map((i) => i.url)).toEqual(PROMPT_ROUTES.map((r) => urlOf(r)));
+  });
+});
+
 /* ---- the converter's policy, on a fixture ------------------------------------ */
 
 describe("llms-full.txt: what a page contributes, on a fixture", () => {

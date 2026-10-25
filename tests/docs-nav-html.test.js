@@ -33,7 +33,7 @@ import { findAll, hasClass, parse, query, queryAll, queryAllLive, queryLive, tex
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** The top-level areas of the sidebar, in order (the owner's list). */
-const AREA_ORDER = ["get-started", "tokens", "components", "catalog", "landing", "cms", "app", "documentation", "html", "accessibility"];
+const AREA_ORDER = ["get-started", "kinds", "tokens", "components", "catalog", "landing", "cms", "app", "documentation", "html", "accessibility"];
 
 /* ---- site.json: "parent" is gone ----------------------------------------------------------------- */
 
@@ -66,7 +66,7 @@ describe("site.json: no area is nested", () => {
     expect(site.areas.filter((a) => a.parent !== undefined).map((a) => a.id)).toEqual([]);
   });
 
-  it("lists the areas in the sidebar order, HTML elements right after Documentation and before Accessibility", () => {
+  it("lists the areas in the sidebar order, Kinds of site right after Get started, HTML elements right after Documentation and before Accessibility", () => {
     const site = scanSite(join(repo, "apps/docs"), repo);
     expect(site.areas.map((a) => a.id)).toEqual(AREA_ORDER);
   });
@@ -117,7 +117,7 @@ describe("the sidebar lists HTML elements as an area of its own", () => {
     expect(htmlListed).toHaveLength(14);
   });
 
-  it("lists the ten areas as a.docs-nav__area, in the owner's order, with HTML elements between Documentation and Accessibility, on every page", () => {
+  it("lists the eleven areas as a.docs-nav__area, in the owner's order, with HTML elements between Documentation and Accessibility, on every page", () => {
     for (const p of site.pages) {
       const hrefs = queryAll(listOf(p.route), "a.docs-nav__area").map((a) => a.attrs.get("href"));
       expect(hrefs, p.route).toEqual(AREA_ORDER.map((id) => `/docs/${site.areas.find((a) => a.id === id).slug}/`));
@@ -254,7 +254,7 @@ describe("the reading order (Previous / Next)", () => {
   const areaRuns = (routes, areaOf) => routes.map(areaOf).filter((id, i, all) => id !== all[i - 1]);
   const areaOfRoute = (route) => site.byRoute.get(route).meta.area;
 
-  it("lists the areas in runs, in the sidebar's order, with HTML elements after Documentation and before Accessibility", () => {
+  it("lists the areas in runs, in the sidebar's order, with Kinds of site after Get started and HTML elements after Documentation and before Accessibility", () => {
     expect(areaRuns(orderRoutes, areaOfRoute)).toEqual(AREA_ORDER);
     expect(orderRoutes.at(-1)).toBe(ACCESSIBILITY);
   });
@@ -349,7 +349,7 @@ describe("the sidebar in Spanish (real) and Arabic (a stand-in copy of the docs)
         expect(strings(code)["area.documentation"]).toBeTruthy();
       });
 
-      it("lists the ten areas, HTML elements labelled in the language between Documentation and Accessibility, linking to its index", () => {
+      it("lists the eleven areas, HTML elements labelled in the language between Documentation and Accessibility, linking to its index", () => {
         for (const route of ["/docs/html/forms/", HTML_INDEX, DOCS_INDEX, "/docs/components/button/"]) {
           const areas = queryAll(list(route), "a.docs-nav__area");
           expect(

@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Cómo se organiza LUZ
 description: Paquetes con dependencias en una sola dirección, CSS en capas de cascada dentro de una llamada luz y un script opcional.
-source: 576c02cacf9d
+source: de6a985f1c9c
 reviewed: false
 -->
     <section class="docs-block" id="packages" aria-labelledby="packages-title">
@@ -24,6 +24,7 @@ Each of these needs tokens and core, and takes catalog as an optional peer:
         <li>Tokens, core y catalog comparten versión. Un paquete para un tipo de sitio, como landing, cms, app o docs, tiene su propia versión y especifica la versión principal de los otros paquetes que necesita.</li>
         <li>Los paquetes lo declaran como dependencias peer: obligatorias para tokens y core, y opcionales para catalog en landing, cms, app y docs. Los scripts de core y catalog avisan en la consola si falta una capa.</li>
       </ul>
+      <p>La documentación sigue a los paquetes, con un área más: <a href="/docs/kinds/">Tipos de sitio</a> reúne, para cada tipo, el prompt para un LLM y las recetas de sus partes, hechas con los paquetes de arriba.</p>
     </section>
 
     <section class="docs-block" id="needs" aria-labelledby="needs-title">

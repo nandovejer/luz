@@ -268,11 +268,11 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('navigation', () => {
-    test('the sidebar shows the ten areas, an accordion with only the current one open, every page listed, and HTML elements as an area of its own', async ({ page }) => {
+    test('the sidebar shows the eleven areas, an accordion with only the current one open, every page listed, and HTML elements as an area of its own', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await gotoId(page, 'c-button');
       const areas = page.locator('.docs-nav a.docs-nav__area');
-      await expect(areas).toHaveText(['Get started', 'Tokens', 'Core', 'Catalog', 'Landing', 'CMS', 'App', 'Documentation', 'HTML elements', 'Accessibility']);
+      await expect(areas).toHaveText(['Get started', 'Kinds of site', 'Tokens', 'Core', 'Catalog', 'Landing', 'CMS', 'App', 'Documentation', 'HTML elements', 'Accessibility']);
       // HTML elements is an area like the others, not nested in Documentation
       await expect(page.locator('.docs-nav > li > a.docs-nav__area[href="/docs/html/"]')).toHaveText('HTML elements');
       await expect(page.locator('.docs-nav .docs-nav__sub')).toHaveCount(0);
@@ -313,7 +313,7 @@ test.describe('Documentation site', () => {
       await page.goto('/docs/tokens/');
       const end = page.getByRole('navigation', { name: 'Keep going' });
       const pager = page.locator('.luz-docs-pager');
-      await expect(pager.getByRole('link', { name: 'Previous How LUZ is built', exact: true })).toHaveAttribute('href', /\/docs\/get-started\/how-luz-is-built\/$/);
+      await expect(pager.getByRole('link', { name: 'Previous Documentation site', exact: true })).toHaveAttribute('href', /\/docs\/kinds\/docs\/$/);
       await expect(pager.getByRole('link', { name: 'Next Color', exact: true })).toHaveAttribute('href', /\/docs\/tokens\/color\/$/);
       await expect(end.locator('.docs-end__links a')).toHaveText(['Color modes and themes', 'Core', 'Tokens in Figma']);
     });

@@ -56,7 +56,7 @@
  *
  *   scripts/docs-site/ai.js
  *     aiArtifacts(site, { siteUrl = "" } = {}) -> [{ file, url, what, madeBy }]
- *       in this order: `llms.txt`, `llms-full.txt`, `examples/<area>/<slug>.html`
+ *       in this order: `llms.txt`, `llms-full.txt`, the five `prompts/<id>.txt`, `examples/<area>/<slug>.html`
  *       (the url of the Button example, a real one), then
  *       `manifests/<pkg>/<file>` for each route of manifestAssets(root), in its
  *       order. `url` is the route, or siteUrl + route.slice(1); `what` is one
@@ -86,6 +86,7 @@ import { decodeEntities, readHtml, tags } from "../scripts/docs-site/html.js";
 import { renderPage, scanSite } from "../scripts/docs-site/site.js";
 import { TOOLS } from "../scripts/luz-packages.js";
 import { SITE_URL } from "../vite.config.js";
+import { PROMPT_KINDS, promptRoute } from "../scripts/docs-site/prompts.js";
 import { USAGE } from "../packages/check/src/cli.js";
 import { MESSAGES, docsUrl } from "../packages/check/src/messages.js";
 import { buildReport, finding } from "../packages/check/src/report.js";
@@ -297,6 +298,15 @@ describe("start: Give your agent LUZ", () => {
   });
 });
 
+describe("start-site: Start a site", () => {
+  it("links the page of each kind of site, in the order of the area", () => {
+    const hrefs = linksOf(section("start-site")).map((l) => l.href);
+    const kinds = PROMPT_KINDS.filter((kind) => kind.preset).map((kind) => `/docs/kinds/${kind.id}/`);
+    expect(kinds).toHaveLength(4);
+    expect(hrefs.filter((h) => h.startsWith("/docs/kinds/"))).toEqual(kinds);
+  });
+});
+
 /* ---- files: the generated table ------------------------------------------------- */
 
 describe("files: What an agent can read", () => {
@@ -360,13 +370,28 @@ describe("aiArtifacts(site): the rows of that table", () => {
     }
   });
 
-  it("lists llms.txt, llms-full.txt, one example and the manifests of every package, in this order", async () => {
+  it("lists llms.txt, llms-full.txt, the five prompts, one example and the manifests of every package, in this order", async () => {
     const { aiArtifacts, manifestAssets } = await load();
     const rows = aiArtifacts(siteOf());
-    const head = rows.slice(0, 3).map((r) => r.file);
-    expect(head).toEqual(["llms.txt", "llms-full.txt", "examples/<area>/<slug>.html"]);
+    const prompts = PROMPT_KINDS.map((kind) => promptRoute(kind.id).slice(1));
+    expect(prompts).toHaveLength(5);
+    const head = rows.slice(0, 3 + prompts.length).map((r) => r.file);
+    expect(head).toEqual(["llms.txt", "llms-full.txt", ...prompts, "examples/<area>/<slug>.html"]);
     const manifests = manifestAssets(repo).map((a) => a.route.slice(1));
-    expect(rows.slice(3).map((r) => r.file)).toEqual(manifests);
+    expect(rows.slice(3 + prompts.length).map((r) => r.file)).toEqual(manifests);
+  });
+
+  it("gives each prompt the route the build serves it at, in the order llms.txt lists them, and says what it is", async () => {
+    const { aiArtifacts } = await load();
+    const dev = aiArtifacts(siteOf());
+    const live = aiArtifacts(siteOf(), { siteUrl: SITE_URL });
+    PROMPT_KINDS.forEach((kind, i) => {
+      expect(dev[2 + i].url, kind.id).toBe(promptRoute(kind.id));
+      expect(live[2 + i].url, kind.id).toBe(`${SITE_URL}${promptRoute(kind.id).slice(1)}`);
+      expect(dev[2 + i].what.length, kind.id).toBeGreaterThan(10);
+    });
+    // Two prompts never share a description: the table tells them apart
+    expect(new Set(dev.slice(2, 7).map((r) => r.what)).size).toBe(5);
   });
 
   it("gives the route with no site URL, and the absolute URL with one", async () => {
@@ -382,7 +407,7 @@ describe("aiArtifacts(site): the rows of that table", () => {
 
   it("points the example row at a real example: the page of Button", async () => {
     const { aiArtifacts, exampleDocuments } = await load();
-    const example = aiArtifacts(siteOf())[2];
+    const example = aiArtifacts(siteOf()).find((r) => r.file.startsWith("examples/"));
     expect(example.url).toBe("/examples/components/button.html");
     const documents = exampleDocuments(siteOf(), { csp: "default-src 'self'", versions: { core: "0.0.0" } });
     expect(documents.map((d) => d.route)).toContain(example.url);

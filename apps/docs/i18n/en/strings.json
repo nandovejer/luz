@@ -39,6 +39,7 @@
   "az.gallery": "The components are also grouped by what they do in the {link}.",
   "az.gallery-link": "components gallery",
   "kind.get-started": "Get started",
+  "kind.kinds": "Kind of site",
   "kind.components": "Component",
   "kind.tokens": "Token page",
   "kind.catalog": "Catalog pattern",
@@ -128,7 +129,13 @@
   "ai.what-example": "The markup of one component or pattern page, styled by LUZ; every page that has a markup section has its own under /examples/.",
   "ai.what-classes": "Every class, custom property and attribute hook of the package: the names an agent may use.",
   "ai.what-elements": "The custom elements the package defines or declares, with the attributes each one reads.",
+  "ai.what-prompt-start": "The general prompt: paste it into any LLM to start a site or move one to LUZ; it asks about the project in rounds before it writes anything.",
+  "ai.what-prompt-landing": "The prompt for a landing page: the general one, with the parts and classes of a landing page.",
+  "ai.what-prompt-blog": "The prompt for a blog or a newspaper, on any CMS: the general one, with the parts and classes of a blog.",
+  "ai.what-prompt-app": "The prompt for a web application: the general one, with the parts and classes of an app.",
+  "ai.what-prompt-docs": "The prompt for a documentation site: the general one, with the parts and classes of a documentation site.",
   "ai.package": "Package: {package}.",
   "ai.made-pages": "scripts/docs-site/ai.js, in the pages build",
+  "ai.made-prompts": "scripts/docs-site/prompts.js, in the pages build",
   "ai.made-manifests": "scripts/ai-manifests.js, in the build of each package"
 }
