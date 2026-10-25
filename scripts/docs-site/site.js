@@ -40,7 +40,7 @@ import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync, statSyn
 import { gzipSync } from "node:zlib";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { HtmlError, compactHtml, readHtml, tags } from "./html.js";
-import { PACKAGES, SITE_KINDS } from "../luz-packages.js";
+import { BASE, PACKAGES, SITE_KINDS } from "../luz-packages.js";
 import { fillAiMarkers } from "./ai.js";
 import { renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
@@ -1532,7 +1532,8 @@ function gzipBytes(path) {
 
 /**
  * What the home's "Light" card shows about weight, measured when the page is
- * built and never typed: a bar per CSS library (PACKAGES) with the min+gzip
+ * built and never typed: a bar per base package (BASE: tokens, core, catalog;
+ * the packages for one kind of site are not on the home) with the min+gzip
  * size of everything it publishes (every `file` budget of budgets.json under
  * its dist), the longest bar the heaviest package, and under them the sum.
  * Fails when a file is missing: run `pnpm build` first.
@@ -1543,7 +1544,7 @@ function renderWeights(site, locale, used) {
   const budgets = JSON.parse(readFileSync(resolve(site.repoRoot, "budgets.json"), "utf-8")).budgets;
   const number = new Intl.NumberFormat(`${locale.code}-u-nu-latn`, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const kb = (bytes) => `${number.format(bytes / 1024)} ${say("why.weight.unit")}`;
-  const packages = PACKAGES.map((name) => {
+  const packages = BASE.map((name) => {
     const size = budgets
       .filter((b) => b.file?.startsWith(`packages/${name}/dist/`))
       .reduce((sum, b) => {

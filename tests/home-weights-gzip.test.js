@@ -16,7 +16,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { PACKAGES } from "../scripts/luz-packages.js";
+import { BASE } from "../scripts/luz-packages.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(join(repo, path), "utf-8");
@@ -54,14 +54,14 @@ function hasGzip() {
 
 const budgets = JSON.parse(read("budgets.json")).budgets;
 const files = (name) => budgets.filter((b) => b.file?.startsWith(`packages/${name}/dist/`)).map((b) => b.file);
-const built = PACKAGES.every((name) => files(name).every((f) => existsSync(join(repo, f))));
+const built = BASE.every((name) => files(name).every((f) => existsSync(join(repo, f))));
 
 describe.skipIf(!built || !hasGzip() || !existsSync(join(repo, "docs/index.html")))("docs/index.html: the weights equal gzip -9 -n", () => {
   const gz = (file) => execFileSync("gzip", ["-9", "-n", "-c"], { input: readFileSync(join(repo, file)), maxBuffer: 64 * 1024 * 1024 }).length;
   const html = read("docs/index.html");
   const list = html.match(/<ul class="landing-bars" aria-label="Packages by size">[\s\S]*?<\/ul>/)?.[0] ?? "";
 
-  for (const name of PACKAGES) {
+  for (const name of BASE) {
     it(`${name} weighs what gzip -9 -n says`, () => {
       const row = list.match(new RegExp(`landing-bar__name">${name}</span>[\\s\\S]*?<meter[^>]*value="(\\d+)"`));
       expect(row, `no bar for ${name} in the weights of docs/index.html`).not.toBeNull();
