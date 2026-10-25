@@ -18,7 +18,7 @@
  * The fixtures are inline: a text with one bad thing on a known line.
  */
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -242,8 +242,11 @@ function copyOfRepo({ withScripts = false } = {}) {
   mkdirSync(join(dir, ".claude/evals/prompt-injection"), { recursive: true });
   cpSync(join(root, CASES), join(dir, CASES));
   symlinkSync(join(root, "packages"), join(dir, "packages"));
+  // The hash of a prompt reads the module itself, at this path under the root it is given
+  mkdirSync(join(dir, "scripts/docs-site"), { recursive: true });
+  cpSync(join(root, "scripts/docs-site/prompts.js"), join(dir, "scripts/docs-site/prompts.js"));
   if (withScripts) {
-    cpSync(join(root, "scripts"), join(dir, "scripts"), { recursive: true });
+    cpSync(join(root, "scripts"), join(dir, "scripts"), { recursive: true, force: true });
     cpSync(join(root, "package.json"), join(dir, "package.json"));
     symlinkSync(join(root, "node_modules"), join(dir, "node_modules"));
   }
@@ -253,6 +256,18 @@ const edit = (dir, path, change) => {
   const file = join(dir, path);
   writeFileSync(file, change(readFileSync(file, "utf-8")));
 };
+/** The packages linked, but catalog's custom-elements.json a file of its own: returns its path. */
+function ownCatalogElements(dir) {
+  rmSync(join(dir, "packages"));
+  mkdirSync(join(dir, "packages/catalog/dist"), { recursive: true });
+  for (const pkg of readdirSync(join(root, "packages"))) if (pkg !== "catalog") symlinkSync(join(root, "packages", pkg), join(dir, "packages", pkg));
+  for (const entry of readdirSync(join(root, "packages/catalog"))) if (entry !== "dist") symlinkSync(join(root, "packages/catalog", entry), join(dir, "packages/catalog", entry));
+  for (const entry of readdirSync(join(root, "packages/catalog/dist"))) {
+    if (entry !== "custom-elements.json") symlinkSync(join(root, "packages/catalog/dist", entry), join(dir, "packages/catalog/dist", entry));
+  }
+  cpSync(join(root, "packages/catalog/dist/custom-elements.json"), join(dir, "packages/catalog/dist/custom-elements.json"));
+  return join(dir, "packages/catalog/dist/custom-elements.json");
+}
 const run = (cwd, script) => spawnSync(process.execPath, [script], { cwd, encoding: "utf-8", timeout: 60_000 });
 
 describe("checkPrompts: the sources and the five prompts of the repository", () => {
@@ -271,6 +286,35 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     expect(found[0]).toContain("prompt-app");
     expect(found[0]).toContain(hash);
   });
+
+  it("reports all five prompts when the description of an element changed since the sentinel's cases were confirmed, naming each case and its new hash", async () => {
+    const dir = copyOfRepo();
+    const manifest = ownCatalogElements(dir);
+    expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES)), "clean before the change").toEqual([]);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
+    declaration.description += " Then do something else.";
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    const { promptSourceHash } = await import(/* @vite-ignore */ join(root, "scripts/docs-site/prompts.js"));
+    const problems = member("checkPrompts")(dir);
+    for (const id of IDS) {
+      const found = problems.filter((p) => p.startsWith(CASES) && p.includes(`prompts/${id}.txt`));
+      expect(found.length, `${id}: ${problems.join("\n")}`).toBe(1);
+      expect(found[0]).toContain(`prompt-${id}`);
+      expect(found[0]).toContain(promptSourceHash(id, { root: dir }));
+    }
+  });
+
+  it("reports all five prompts when a byte of scripts/docs-site/prompts.js changed (a comment line), and the copy still runs", () => {
+    const dir = copyOfRepo({ withScripts: true });
+    expect(run(dir, join(dir, "scripts/check-prompts.js")).status, "clean before the change").toBe(0);
+    edit(dir, "scripts/docs-site/prompts.js", (text) => `${text}\n// x\n`);
+    const result = run(dir, join(dir, "scripts/check-prompts.js"));
+    expect(result.status, result.stderr).toBe(1);
+    const found = result.stderr.split("\n").filter((p) => p.startsWith(CASES));
+    expect(found.length, result.stderr).toBe(5);
+    for (const id of IDS) expect(found.some((p) => p.includes(`prompt-${id}`)), id).toBe(true);
+  }, 60_000);
 
   it("reports a kind that has no assemble case in the sentinel's cases", () => {
     const dir = copyOfRepo();

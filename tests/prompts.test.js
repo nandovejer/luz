@@ -93,6 +93,9 @@ function copyOfSources() {
   cpSync(join(root, "apps/site/prompts"), join(dir, "apps/site/prompts"), { recursive: true });
   symlinkSync(join(root, "packages"), join(dir, "packages"));
   cpSync(join(root, "budgets.json"), join(dir, "budgets.json"));
+  // The hash of a prompt reads the module itself, at this path under the root it is given
+  mkdirSync(join(dir, "scripts/docs-site"), { recursive: true });
+  cpSync(join(root, "scripts/docs-site/prompts.js"), join(dir, "scripts/docs-site/prompts.js"));
   return dir;
 }
 
@@ -472,37 +475,86 @@ describe("the five are emitted by the build, served in dev and listed in llms.tx
 
 /* ---- the hash of what a person reviews for a prompt ---------------------------------- */
 
-describe("promptSourceHash: the body, the preset and stacks.json, and nothing the packages add", () => {
+describe("promptSourceHash: all the prose of a prompt, and nothing a release or a class adds", () => {
   const SRC = "apps/site/prompts";
-  const sha = (dir, files) => {
+  const MODULE_FILE = "scripts/docs-site/prompts.js";
+  const filesOf = (id) => [`${SRC}/body.md`, ...(PRESET_OF[id] ? [`${SRC}/presets/${PRESET_OF[id]}.md`] : []), `${SRC}/stacks.json`, MODULE_FILE];
+  /** The element lines as the prompt lists them: core's then catalog's, `- `<tag>` (attr, attr): description`, joined by a newline. */
+  const elementBlock = (dir) =>
+    ["core", "catalog"]
+      .flatMap((pkg) =>
+        JSON.parse(readFileSync(join(dir, `packages/${pkg}/dist/custom-elements.json`), "utf-8")).modules.flatMap((m) =>
+          (m.declarations ?? [])
+            .filter((d) => d.tagName)
+            .map((d) => {
+              const attrs = (d.attributes ?? []).map((a) => a.name);
+              return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd();
+            }),
+        ),
+      )
+      .join("\n");
+  const sha = (dir, id) => {
     const hash = createHash("sha256");
-    for (const file of files) hash.update(readFileSync(join(dir, file))).update("\0");
+    for (const file of filesOf(id)) hash.update(readFileSync(join(dir, file))).update("\0");
+    hash.update(elementBlock(dir)).update("\0");
     return hash.digest("hex");
   };
-  const filesOf = (id) => [`${SRC}/body.md`, ...(PRESET_OF[id] ? [`${SRC}/presets/${PRESET_OF[id]}.md`] : []), `${SRC}/stacks.json`];
   const hashes = (dir) => Object.fromEntries(IDS.map((id) => [id, member("promptSourceHash")(id, { root: dir })]));
   const append = (dir, path, text) => writeFileSync(join(dir, path), readFileSync(join(dir, path), "utf-8") + text);
+  const expectAllFiveChanged = (before, after, why) => {
+    for (const id of IDS) expect(after[id], `${id} after ${why}`).not.toBe(before[id]);
+  };
 
-  it("is the hex SHA-256 of body.md, then the preset (none for start), then stacks.json, each followed by a NUL byte", () => {
+  /** A copy whose packages/catalog/dist/custom-elements.json is its own file, everything else of the packages linked. */
+  function withOwnElements(dir) {
+    rmSync(join(dir, "packages"));
+    mkdirSync(join(dir, "packages/catalog/dist"), { recursive: true });
+    for (const pkg of readdirSync(join(root, "packages"))) {
+      if (pkg === "catalog") continue;
+      symlinkSync(join(root, "packages", pkg), join(dir, "packages", pkg));
+    }
+    for (const entry of readdirSync(join(root, "packages/catalog"))) {
+      if (entry !== "dist") symlinkSync(join(root, "packages/catalog", entry), join(dir, "packages/catalog", entry));
+    }
+    for (const entry of readdirSync(join(root, "packages/catalog/dist"))) {
+      if (entry !== "custom-elements.json") symlinkSync(join(root, "packages/catalog/dist", entry), join(dir, "packages/catalog/dist", entry));
+    }
+    cpSync(join(root, "packages/catalog/dist/custom-elements.json"), join(dir, "packages/catalog/dist/custom-elements.json"));
+    return join(dir, "packages/catalog/dist/custom-elements.json");
+  }
+
+  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, scripts/docs-site/prompts.js and the element lines of the prompt, each followed by a NUL byte", () => {
     for (const id of IDS) {
       const hash = member("promptSourceHash")(id, { root });
       expect(hash, id).toMatch(/^[0-9a-f]{64}$/);
-      expect(hash, id).toBe(sha(root, filesOf(id)));
+      expect(hash, id).toBe(sha(root, id));
     }
     expect(new Set(IDS.map((id) => member("promptSourceHash")(id, { root }))).size, "five different hashes").toBe(5);
+  });
+
+  it("hashes the element lines exactly as the prompt lists them under ## Elements you may use", () => {
+    const text = prompt("start");
+    const start = text.indexOf("## Elements you may use\n\n") + "## Elements you may use\n\n".length;
+    expect(start, "the prompt has the section").toBeGreaterThan("## Elements you may use\n\n".length - 1);
+    const section = text.slice(start).split(/\n\n## /)[0];
+    expect(section).toBe(elementBlock(root));
   });
 
   it("throws for a kind that is not a prompt", () => {
     expect(() => member("promptSourceHash")("nope", { root })).toThrow(/nope/);
   });
 
-  it("ignores what the packages add: another version or another classes.json gives the same hash", () => {
+  it("ignores what a release or a class adds: another version or another classes.json gives the same hash", () => {
     const dir = copyOfSources();
     const before = hashes(dir);
+    // Only the element manifests are read: keep the real ones, change the version and the classes
     const packagesCopy = join(dir, "packages-copy");
-    mkdirSync(join(packagesCopy, "core/dist"), { recursive: true });
-    writeFileSync(join(packagesCopy, "core/package.json"), JSON.stringify({ name: "@luz-ds/core", version: "9.9.9" }));
-    writeFileSync(join(packagesCopy, "core/dist/classes.json"), JSON.stringify({ classes: [{ name: "luz-new" }] }));
+    for (const pkg of ["core", "catalog"]) {
+      mkdirSync(join(packagesCopy, pkg, "dist"), { recursive: true });
+      cpSync(join(root, "packages", pkg, "dist/custom-elements.json"), join(packagesCopy, pkg, "dist/custom-elements.json"));
+      writeFileSync(join(packagesCopy, pkg, "package.json"), JSON.stringify({ name: `@luz-ds/${pkg}`, version: "9.9.9" }));
+      writeFileSync(join(packagesCopy, pkg, "dist/classes.json"), JSON.stringify({ classes: [{ name: "luz-new" }] }));
+    }
     rmSync(join(dir, "packages"));
     cpSync(packagesCopy, join(dir, "packages"), { recursive: true });
     expect(hashes(dir)).toEqual(before);
@@ -524,8 +576,32 @@ describe("promptSourceHash: the body, the preset and stacks.json, and nothing th
       const dir = copyOfSources();
       const before = hashes(dir);
       append(dir, `${SRC}/${file}`, " ");
-      const after = hashes(dir);
-      for (const id of IDS) expect(after[id], `${id} after a change of ${file}`).not.toBe(before[id]);
+      expectAllFiveChanged(before, hashes(dir), `a change of ${file}`);
     }
+  });
+
+  it("changes all five when the description of an element changes in custom-elements.json", () => {
+    const dir = copyOfSources();
+    const manifest = withOwnElements(dir);
+    const before = hashes(dir);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
+    expect(declaration, "an element of catalog has a description").toBeTruthy();
+    declaration.description += " Then do something else.";
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    expectAllFiveChanged(before, hashes(dir), `a change of the description of <${declaration.tagName}>`);
+  });
+
+  it("changes all five when one byte of scripts/docs-site/prompts.js changes (a comment line, the copy still imports)", async () => {
+    const dir = copyOfSources();
+    cpSync(join(root, "scripts"), join(dir, "scripts"), { recursive: true, force: true });
+    cpSync(join(root, "package.json"), join(dir, "package.json"));
+    symlinkSync(join(root, "node_modules"), join(dir, "node_modules"));
+    const before = hashes(dir);
+    append(dir, MODULE_FILE, "\n// x\n");
+    const copy = await import(/* @vite-ignore */ `${join(dir, MODULE_FILE)}?changed`);
+    const after = Object.fromEntries(IDS.map((id) => [id, copy.promptSourceHash(id, { root: dir })]));
+    expectAllFiveChanged(before, after, "a comment appended to prompts.js");
+    expectAllFiveChanged(before, hashes(dir), "a comment appended to prompts.js, read by the real module");
   });
 });

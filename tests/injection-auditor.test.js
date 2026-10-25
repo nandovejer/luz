@@ -215,9 +215,11 @@ describe("the cases file", () => {
       return prompts.promptSourceHash(id, { root });
     };
     for (const c of data().cases.filter((x) => x.assemble !== undefined)) {
-      expect(c.source, `${c.id}: source is the hash of the body, the preset and stacks.json`).toBe(hashOf(c.assemble));
+      expect(c.source, `${c.id}: source is the hash of all the prose of the prompt`).toBe(hashOf(c.assemble));
     }
     expect(data()._use).toMatch(/\bSAFE\b[^.]*\bonly\b[^.]*`source`/);
+    expect(data()._use, "_use names the descriptions of the elements").toMatch(/descriptions of the elements/);
+    expect(data()._use, "_use names the module").toContain("scripts/docs-site/prompts.js");
   });
 
   it("uses only categories of the agent's threat_type enum", () => {
