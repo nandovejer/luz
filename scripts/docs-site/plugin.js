@@ -37,6 +37,9 @@
  *   curated text for an AI agent, from the same scan; written at the root of
  *   the build, served as plain text in dev (root-absolute links there,
  *   absolute under the site URL in the pages build).
+ * - /prompts/<kind>.txt (prompts.js): the five prompts for AI, assembled from
+ *   apps/site/prompts/; written at the root of the build, served as plain
+ *   text in dev; their links are always the published site's.
  * - examples/ and manifests/ (ai.js): a standalone page per docs page with a
  *   "Copy the markup" section, the CSS and JS they load from relative files
  *   beside them, and the manifests of every package. Written by the build
@@ -71,6 +74,7 @@ import {
 } from "./site.js";
 import { localize } from "./docs-i18n.js";
 import { PACKAGES } from "../luz-packages.js";
+import { promptFiles } from "./prompts.js";
 import { AI_ROUTES, exampleAssets, exampleDocuments, manifestAssets, renderLlmsFull, renderLlmsTxt, renderPageMarkdown } from "./ai.js";
 import { SITE_URL } from "./i18n.js";
 
@@ -240,6 +244,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
     return new Map([
       [AI_ROUTES.llms, () => renderLlmsTxt(scan(), options)],
       [AI_ROUTES.llmsFull, () => renderLlmsFull(scan(), options)],
+      ...promptFiles({ root: repoRoot }),
     ]);
   };
 
@@ -382,7 +387,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
             return next();
           }
         }
-        // llms.txt and llms-full.txt: generated from the pages, never a file (SEC-PLG-6)
+        // llms.txt, llms-full.txt and the prompts: generated, never a file (SEC-PLG-6)
         const ai = aiFiles().get(path);
         if (ai) {
           try {

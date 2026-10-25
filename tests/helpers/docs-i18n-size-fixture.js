@@ -6,7 +6,7 @@
  * The copy is a small repository in a temporary folder:
  *
  *   apps/docs/          a copy of the real one (not assets/ or node_modules/)
- *   apps/site/          _partials/ and boot.js, copied
+ *   apps/site/          _partials/, boot.js and prompts/ (the prompts for AI the build writes), copied
  *   apps/landing/       i18n/ (the home's registry and catalogs) and index.html, copied
  *   packages/, tests/, scripts/   symbolic links to the real ones (read, never written)
  *   budgets.json        copied (the home's weights are measured against it; run `pnpm build` first)
@@ -157,6 +157,8 @@ export function makeSite({ languages = ["es", "ar"], probe = false } = {}) {
   mkdirSync(join(repoRoot, "apps/site"), { recursive: true });
   cpSync(join(REAL_REPO, "apps/site/_partials"), join(repoRoot, "apps/site/_partials"), { recursive: true });
   cpSync(join(REAL_REPO, "apps/site/boot.js"), join(repoRoot, "apps/site/boot.js"));
+  // The build also writes the five prompts for AI (/prompts/<kind>.txt) from these
+  if (existsSync(join(REAL_REPO, "apps/site/prompts"))) cpSync(join(REAL_REPO, "apps/site/prompts"), join(repoRoot, "apps/site/prompts"), { recursive: true });
   mkdirSync(join(repoRoot, "apps/landing"), { recursive: true });
   cpSync(join(REAL_REPO, "apps/landing/i18n"), join(repoRoot, "apps/landing/i18n"), { recursive: true });
   cpSync(join(REAL_REPO, "apps/landing/index.html"), join(repoRoot, "apps/landing/index.html"));
@@ -241,6 +243,8 @@ export function makeScriptRepo() {
   const sources = [
     ...tracked("apps"),
     ...tracked("scripts"),
+    // ai.js imports it (the prompts for AI); a new file is not tracked until it is committed
+    "scripts/docs-site/prompts.js",
     ...tracked("packages/check/src"),
     ...tracked("packages/core/src/i18n"),
     ...tracked("packages/core/src/components"),

@@ -52,6 +52,7 @@ import { BASE, PACKAGES, SITE_KINDS } from "../luz-packages.js";
 import { HtmlError, VOID, decodeEntities, tags } from "./html.js";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { ruleRows } from "./ai-rules.js";
+import { PROMPT_KINDS, promptRoute } from "./prompts.js";
 import { readingOrder } from "./site.js";
 import { FILES } from "./snippets.js";
 import { englishT } from "./strings.js";
@@ -115,7 +116,7 @@ function sectionsOfSite(site) {
  * llms.txt: `# LUZ`, a summary, one details paragraph, one `##` per area in
  * site.json order (each page, in the reading order of Previous / Next, as
  * `- [title](url): description`), the hub's home under `## Documentation`,
- * and `## Optional`.
+ * the five prompts under `## Prompts`, and `## Optional`.
  */
 export function renderLlmsTxt(site, { siteUrl = "" } = {}) {
   const out = ["# LUZ", "", summaryOf(site), "", DETAILS, ""];
@@ -124,6 +125,11 @@ export function renderLlmsTxt(site, { siteUrl = "" } = {}) {
     for (const page of pages) out.push(`- [${page.meta.title}](${urlOf(page.route, siteUrl)}): ${page.meta.description}`);
     out.push("");
   }
+  out.push("## Prompts");
+  for (const kind of PROMPT_KINDS) {
+    out.push(`- [Build ${kind.title}](${urlOf(promptRoute(kind.id), siteUrl)}): ${kind.preset ? `The prompt for ${kind.title}` : "The general prompt"}: paste it into any LLM; it asks in rounds, then builds or migrates the site with LUZ.`);
+  }
+  out.push("");
   out.push("## Optional");
   out.push(`- [Full documentation for agents](${urlOf(AI_ROUTES.llmsFull, siteUrl)}): The same pages, as text: markup, variants, when to use, keyboard.`);
   const sample = site.byRoute.get("/docs/components/button/") ?? site.pages.find(hasMarkup);

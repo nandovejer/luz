@@ -131,8 +131,8 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(budgets.slice(0, BEFORE.length).map((b) => [b.name, b.max])).toEqual(BEFORE);
   });
 
-  it("appends the three AI-ready rows after the docs page row, then the docs package row (F6a), the language chunk row (F6), the mode chunk row (F1), the three rows of the home's light (F3) and nothing else", () => {
-    expect(budgets).toHaveLength(BEFORE.length + 9);
+  it("appends the three AI-ready rows after the docs page row, then the docs package row (F6a), the language chunk row (F6), the mode chunk row (F1), the three rows of the home's light (F3), then the prompts row (F1 of the kinds plan) and nothing else", () => {
+    expect(budgets).toHaveLength(BEFORE.length + 10);
     expect(budgets.at(BEFORE.length - 1).name).toBe(last);
     expect(budgets.slice(BEFORE.length + 3).map((b) => b.name)).toEqual([
       "docs CSS",
@@ -141,6 +141,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
       "home light controller JS",
       "home light visual: globe",
       "home light data: globe",
+      "prompts (each, uncompressed)",
     ]);
   });
 
@@ -191,7 +192,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
   });
 
   it("repeats the rows in the PRINCIPLES.md table, in the same order, after \"Each docs page\"", () => {
-    expect(table).toHaveLength(BEFORE.length + 9);
+    expect(table).toHaveLength(BEFORE.length + 10);
     expect(table[BEFORE.length - 1][0]).toMatch(/^Each docs page/);
     const [cli, text, manifests] = table.slice(BEFORE.length);
     expect(cli[0]).toMatch(/check/);

@@ -24,6 +24,7 @@
     { "name": "catalog JS lazy chunk: mode", "file": "packages/catalog/dist/mode.min.js", "ideal": 1024, "max": 1536 },
     { "name": "home light controller JS", "file": "apps/landing/light/light.js", "ideal": 7424, "max": 7680 },
     { "name": "home light visual: globe", "file": "apps/landing/light/globe.js", "ideal": 9472, "max": 9728 },
-    { "name": "home light data: globe", "file": "apps/landing/light/globe-data.js", "ideal": 9728, "max": 9984 }
+    { "name": "home light data: globe", "file": "apps/landing/light/globe-data.js", "ideal": 9728, "max": 9984 },
+    { "name": "prompts (each, uncompressed)", "glob": "docs/prompts/**/*.txt", "compression": "none", "ideal": 14336, "max": 16384 }
   ]
 }

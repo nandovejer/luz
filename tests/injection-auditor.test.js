@@ -12,6 +12,13 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+// The generator of the prompts for AI, loaded here so a file that is missing fails the cases that need it, not the whole file
+const promptsFile = resolve(root, "scripts/docs-site/prompts.js");
+const prompts = existsSync(promptsFile) ? await import(/* @vite-ignore */ promptsFile) : {};
+const assemblePrompt = (...args) => {
+  if (!prompts.assemblePrompt) throw new Error("scripts/docs-site/prompts.js does not exist or does not export assemblePrompt");
+  return prompts.assemblePrompt(...args);
+};
 const hook = resolve(root, ".claude/hooks/injection-auditor-bash.js");
 const agentFile = resolve(root, ".claude/agents/prompt-injection-auditor.md");
 const securityFile = resolve(root, ".claude/agents/security-auditor.md");
@@ -173,7 +180,10 @@ describe("the cases file", () => {
     expect(data()._warning.length).toBeGreaterThan(0);
   });
 
-  it("gives every case a unique id, a verdict, a category and a text", () => {
+  // A case is its `text`, or, with `assemble`, the prompt for AI of that id as the build writes it
+  const textOf = (c) => (c.assemble === undefined ? c.text : assemblePrompt(c.assemble, { root }));
+
+  it("gives every case a unique id, a verdict, a category and a text (or the id of a prompt for AI to assemble)", () => {
     const { cases } = data();
     expect(Array.isArray(cases)).toBe(true);
     expect(cases.length).toBeGreaterThan(0);
@@ -183,9 +193,33 @@ describe("the cases file", () => {
       expect(typeof c.id, "id").toBe("string");
       expect(["SAFE", "SUSPICIOUS", "MALICIOUS"], `${c.id}: expected`).toContain(c.expected);
       expect(typeof c.category, `${c.id}: category`).toBe("string");
-      expect(typeof c.text, `${c.id}: text`).toBe("string");
-      expect(c.text.trim().length, `${c.id}: text is not empty`).toBeGreaterThan(0);
+      expect(typeof textOf(c), `${c.id}: text`).toBe("string");
+      expect(textOf(c).trim().length, `${c.id}: text is not empty`).toBeGreaterThan(0);
     }
+  });
+
+  it("has a SAFE case for each of the five prompts for AI LUZ ships, assembled by the build and not typed", () => {
+    const { cases } = data();
+    for (const id of ["start", "landing", "blog", "app", "docs"]) {
+      const found = cases.filter((c) => c.assemble === id);
+      expect(found.length, `one case assembles the prompt ${id}`).toBe(1);
+      expect(found[0].expected, `${found[0].id}: a prompt LUZ ships is SAFE`).toBe("SAFE");
+      expect(found[0].text, `${found[0].id}: the text is the build's, never a copy`).toBeUndefined();
+    }
+    expect(cases.filter((c) => c.assemble !== undefined)).toHaveLength(5);
+  });
+
+  it("gives each assembled case the hash of the sources its SAFE was confirmed for, and says the SAFE holds only for it", () => {
+    const hashOf = (id) => {
+      if (!prompts.promptSourceHash) throw new Error("scripts/docs-site/prompts.js does not export promptSourceHash");
+      return prompts.promptSourceHash(id, { root });
+    };
+    for (const c of data().cases.filter((x) => x.assemble !== undefined)) {
+      expect(c.source, `${c.id}: source is the hash of all the prose of the prompt`).toBe(hashOf(c.assemble));
+    }
+    expect(data()._use).toMatch(/\bSAFE\b[^.]*\bonly\b[^.]*`source`/);
+    expect(data()._use, "_use names the descriptions of the elements").toMatch(/descriptions of the elements/);
+    expect(data()._use, "_use names the module").toContain("scripts/docs-site/prompts.js");
   });
 
   it("uses only categories of the agent's threat_type enum", () => {
@@ -208,13 +242,13 @@ describe("the cases file", () => {
   });
 
   it("has no real-looking URL other than the host example.invalid", () => {
+    // A prompt for AI that LUZ ships links the published site and the CDN of @luz-ds, nothing else
+    const shipped = ["nandovejer.github.io", "cdn.jsdelivr.net"];
     for (const c of data().cases) {
-      for (const m of c.text.matchAll(/\b[a-z][a-z0-9+.-]*:\/\/([^\s/:"'?#)>\]\\]+)/gi)) {
+      for (const m of textOf(c).matchAll(/\b[a-z][a-z0-9+.-]*:\/\/([^\s/:"'?#)>\]\\]+)/gi)) {
         const host = m[1].toLowerCase();
-        expect(
-          host === "example.invalid" || host.endsWith(".example.invalid"),
-          `${c.id}: ${m[0]}`,
-        ).toBe(true);
+        const ok = c.assemble === undefined ? host === "example.invalid" || host.endsWith(".example.invalid") : shipped.includes(host);
+        expect(ok, `${c.id}: ${m[0]}`).toBe(true);
       }
     }
   });
