@@ -28,6 +28,7 @@ import "/packages/catalog/dist/search.js";
 // (its answer is stored under its own key, luz-consent-demo)
 import "/packages/catalog/dist/consent.js";
 import { initSiteChrome } from "/apps/site/header.js";
+import { initPromptDialogs } from "/apps/site/prompt-dialog.js";
 import { initDocsView } from "./view.js";
 
 /* ---- Small enhancements ----------------------------------------------- */
@@ -522,6 +523,7 @@ initFolds();
 initOnThisPage();
 initCopyPage();
 initCopyLink();
+initPromptDialogs();
 revealCurrentPage();
 initAssets();
 // The copy buttons and the code blocks write strings (their names, "Copied"):

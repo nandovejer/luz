@@ -414,7 +414,7 @@ export function localize(site, language) {
 
 /** Attributes whose text a translator changes: compared by presence only. */
 const BY_PRESENCE = (name) =>
-  ["alt", "title", "aria-label", "placeholder", "data-label", "lang", "data-error", "data-file", "data-pass", "data-fail", "data-item", "data-set", "data-unreadable", "data-warning", "data-ignored"].includes(name) ||
+  ["alt", "title", "aria-label", "placeholder", "data-label", "lang", "data-error", "data-file", "data-pass", "data-fail", "data-item", "data-set", "data-unreadable", "data-warning", "data-ignored", "data-prompt-title"].includes(name) ||
   name.startsWith("data-luz-label-");
 /** The containers of a demo: they stay English in a translation, which may give them a `lang` or a `dir` of their own. */
 const DEMO_CLASSES = new Set(["luz-docs-dodont__stage", "docs-snippet", "elements-stage", "elements-snippet"]);
