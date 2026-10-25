@@ -64,11 +64,11 @@ test.describe('docs shell, with JavaScript', () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 
-  test('the rail ends with Copy page as Markdown, Edit this page and Report a problem, in this order', async ({ page }) => {
+  test('the rail ends with Copy page as Markdown, Copy link to this page, Edit this page and Report a problem, in this order', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
-    const actions = rail(page).locator('.luz-docs-rail__actions').getByText(/^(Copy page as Markdown|Edit this page|Report a problem)$/);
-    await expect(actions).toHaveText(['Copy page as Markdown', 'Edit this page', 'Report a problem']);
+    const actions = rail(page).locator('.luz-docs-rail__actions').getByText(/^(Copy page as Markdown|Copy link to this page|Edit this page|Report a problem)$/);
+    await expect(actions).toHaveText(['Copy page as Markdown', 'Copy link to this page', 'Edit this page', 'Report a problem']);
     await expect(rail(page).getByRole('link', { name: 'Edit this page', exact: true })).toHaveAttribute('href', 'https://github.com/nandovejer/luz/edit/main/apps/docs/pages/components/button.html');
     await expect(rail(page).getByRole('link', { name: 'Report a problem', exact: true })).toHaveAttribute('href', 'https://github.com/nandovejer/luz/issues/new?title=Button');
   });
@@ -295,10 +295,10 @@ test.describe('docs shell, without JavaScript', () => {
     expect((await response.text()).startsWith('# Button\n')).toBe(true);
   });
 
-  test('the rail has the three actions as links, and "On this page" is a native <details>', async ({ page }) => {
+  test('the rail has the four actions as links, and "On this page" is a native <details>', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
-    await expect(rail(page).locator('.luz-docs-rail__actions a')).toHaveText(['Copy page as Markdown', 'Edit this page', 'Report a problem']);
+    await expect(rail(page).locator('.luz-docs-rail__actions a')).toHaveText(['Copy page as Markdown', 'Copy link to this page', 'Edit this page', 'Report a problem']);
     const summary = rail(page).locator('nav.luz-docs-rail__onpage details > summary');
     await expect(summary).toHaveText('On this page');
     await expect(summary).toBeVisible();
@@ -608,3 +608,130 @@ for (const javaScriptEnabled of [true, false]) {
     }
   });
 }
+
+/* ---- Copy link to this page (FL, decisions 46 to 50) ----------------------------------------------- */
+
+const COPY_LINK = {
+  en: { route: BUTTON, name: 'Copy link to this page', copied: 'Copied the link to this page.', notCopied: 'Could not copy the link.', actions: ['Copy page as Markdown', 'Copy link to this page', 'Edit this page', 'Report a problem'] },
+  es: { route: '/es/docs/components/button/', name: 'Copiar el enlace a esta página', copied: 'Enlace copiado.', notCopied: 'No se pudo copiar el enlace.', actions: ['Copiar la página en Markdown', 'Copiar el enlace a esta página', 'Editar esta página', 'Avisar de un problema'] },
+};
+// The rail's name is in the language of the page
+const railOf = (page) => page.locator('aside.luz-docs-rail');
+/** Click the button the script made (an assertion first, so a missing one fails at once, not at the click's timeout). */
+async function clickCopyLink(page, name) {
+  const button = railOf(page).getByRole('button', { name, exact: true });
+  await expect(button, 'the script made it a button').toBeVisible();
+  await button.click();
+}
+const railStatus = (page) => railOf(page).locator('[role="status"]');
+
+for (const [code, words] of Object.entries(COPY_LINK)) {
+  test.describe(`Copy link to this page, ${code}, with JavaScript`, () => {
+    test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript: the no-JS link is tested below');
+    test.use({ viewport: { width: 1440, height: 900 } });
+    // Only Chromium knows these permission names; the copy runs inside a click everywhere
+    test.beforeEach(async ({ context, browserName }) => {
+      if (browserName === 'chromium') await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    });
+
+    test('the rail has four actions in this order, and the second is a button, not a link', async ({ page }) => {
+      await page.goto(words.route);
+      await idle(page);
+      await expect(railOf(page).locator('.luz-docs-rail__actions').locator('a, button')).toHaveText(words.actions);
+      const button = railOf(page).getByRole('button', { name: words.name, exact: true });
+      await expect(button).toBeVisible();
+      expect(await button.evaluate((el) => el.tagName)).toBe('BUTTON');
+      await expect(button).toHaveAttribute('type', 'button');
+      await expect(railOf(page).getByRole('link', { name: words.name })).toHaveCount(0);
+    });
+
+    test('a click copies the address of the page without ? or #, even when it was opened with both, says so, and sends no request', async ({ page }) => {
+      await recordCopies(page);
+      await page.goto(`${words.route}?utm=1#example`);
+      await idle(page);
+      const { origin, pathname } = new URL(page.url());
+      expect(pathname, 'the page is the one asked for').toBe(words.route);
+      const expected = `${origin}${pathname}`;
+      await expect(railStatus(page), 'one status region, empty before the click').toHaveCount(1);
+      await expect(railStatus(page)).toHaveText('');
+      const requests = [];
+      page.on('request', (request) => requests.push(request.url()));
+      const navigations = [];
+      page.on('framenavigated', (frame) => { if (frame === page.mainFrame()) navigations.push(frame.url()); });
+      await clickCopyLink(page, words.name);
+      await expect.poll(() => copiedText(page)).toBe(expected);
+      expect(expected).not.toMatch(/[?#]/);
+      await expect(railStatus(page)).toHaveText(words.copied);
+      await expect(railStatus(page), 'still one region').toHaveCount(1);
+      expect(requests, 'the click made no request').toEqual([]);
+      expect(navigations, 'the page did not navigate').toEqual([]);
+    });
+
+    test('if the clipboard refuses, the status says the link could not be copied, and the page stays', async ({ page }) => {
+      await page.addInitScript(() => {
+        Object.defineProperty(navigator, 'clipboard', {
+          configurable: true,
+          value: { writeText: () => Promise.reject(new DOMException('denied', 'NotAllowedError')), readText: () => Promise.resolve('') },
+        });
+      });
+      await page.goto(words.route);
+      await idle(page);
+      const button = railOf(page).getByRole('button', { name: words.name, exact: true });
+      await expect(button, 'the script made it a button').toBeVisible();
+      await button.click();
+      await expect(railStatus(page)).toHaveText(words.notCopied);
+      await expect(railStatus(page)).toHaveCount(1);
+      await expect(page).toHaveURL(new RegExp(`${words.route}$`));
+      await expect(button, 'the focus stays on the button').toBeFocused();
+    });
+
+    test('Copy page as Markdown and Copy link to this page speak in the same status region', async ({ page }) => {
+      await page.goto(words.route);
+      await idle(page);
+      await expect(railStatus(page)).toHaveCount(1);
+      await expect(railOf(page).locator('.luz-docs-rail__actions button').first()).toBeVisible();
+      await railOf(page).locator('.luz-docs-rail__actions button').first().click();
+      await expect(railStatus(page)).not.toHaveText('');
+      const first = await railStatus(page).textContent();
+      await clickCopyLink(page, words.name);
+      await expect(railStatus(page)).toHaveText(words.copied);
+      expect(first, 'the Markdown copy said something else').not.toBe(words.copied);
+      await expect(railStatus(page), 'there is one region, not two').toHaveCount(1);
+    });
+
+    test('axe: the rail has no violation', async ({ page }) => {
+      await page.goto(words.route);
+      await idle(page);
+      await clickCopyLink(page, words.name);
+      await expect(railStatus(page)).toHaveText(words.copied);
+      const { violations } = await new AxeBuilder({ page }).include('aside.luz-docs-rail').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(violations.map((v) => `${v.id}: ${v.nodes[0]?.target?.join(' ')}`)).toEqual([]);
+    });
+  });
+}
+
+for (const [code, words] of Object.entries(COPY_LINK)) {
+  test.describe(`Copy link to this page, ${code}, without JavaScript`, () => {
+    test.use({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
+
+    test('the second action is a link to the page itself, and nothing is a button', async ({ page }) => {
+      await page.goto(words.route);
+      await expect(railOf(page).locator('.luz-docs-rail__actions a')).toHaveText(words.actions);
+      const own = railOf(page).getByRole('link', { name: words.name, exact: true });
+      await expect(own).toBeVisible();
+      expect(new URL(await own.evaluate((a) => /** @type {HTMLAnchorElement} */ (a).href)).pathname, 'its own route').toBe(words.route);
+      await expect(railOf(page).getByRole('button')).toHaveCount(0);
+    });
+  });
+}
+
+test.describe('Copy link to this page on a page with toc: false', () => {
+  test.use({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
+  test('the rail still has the four actions', async ({ page }) => {
+    const noToc = site.pages.find((p) => p.meta.toc === 'false');
+    expect(noToc, 'the site has a page with toc: false').toBeTruthy();
+    await page.goto(noToc.route);
+    await expect(railOf(page).locator('nav.luz-docs-rail__onpage')).toHaveCount(0);
+    await expect(railOf(page).locator('.luz-docs-rail__actions a')).toHaveText(COPY_LINK.en.actions);
+  });
+});

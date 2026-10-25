@@ -127,19 +127,28 @@ describe("routes", () => {
     expect(marks("/404.html")).toEqual({});
   });
 
-  it("makes root-absolute links to known routes relative, and leaves the rest", () => {
-    const routes = new Set(["/", "/docs/", "/docs/components/button/"]);
+  it("makes root-absolute links to known routes relative, the shortest way, and leaves the rest", () => {
+    const routes = new Set(["/", "/docs/", "/docs/a/", "/docs/a/b/", "/docs/components/button/", "/es/docs/html/", "/es/docs/html/inline/"]);
+    const rel = (html, route, root) => relativizeLinks(html, route, routes, root);
+    // Up to the folder both share, then down
+    expect(rel('<a href="/docs/#x">b</a>', "/docs/a/")).toBe('<a href="../#x">b</a>');
+    expect(rel('<a href="/docs/a/b/">b</a>', "/docs/a/")).toBe('<a href="b/">b</a>');
+    expect(rel('<a href="/docs/a/">a</a>', "/docs/a/")).toBe('<a href="./">a</a>');
+    expect(rel('<a href="/docs/#x">b</a><a href="/">h</a>', "/")).toBe('<a href="docs/#x">b</a><a href="./">h</a>');
+    expect(rel('<a href="/es/docs/html/inline/#el-a">a</a>', "/es/docs/html/")).toBe('<a href="inline/#el-a">a</a>');
+    expect(rel('<a href="/docs/a/">a</a>', "/es/docs/html/")).toBe('<a href="../../../docs/a/">a</a>');
+    expect(rel('<a href="/">a</a>', "/docs/components/button/")).toBe('<a href="../../../">a</a>');
+    // Unknown routes, assets, other origins and a missing slash are left alone
     const html = '<a href="/">a</a><a href="/docs/#x">b</a><a href="/docs/components/button/">c</a><a href="/packages/x.css">d</a><a href="/docs">e</a><a href="https://x.org/docs/">f</a>';
-    expect(relativizeLinks(html, "/docs/components/button/", routes)).toBe(
-      '<a href="../../../">a</a><a href="../../../docs/#x">b</a><a href="../../../docs/components/button/">c</a><a href="/packages/x.css">d</a><a href="/docs">e</a><a href="https://x.org/docs/">f</a>',
+    expect(rel(html, "/docs/components/button/")).toBe(
+      '<a href="../../../">a</a><a href="../../#x">b</a><a href="./">c</a><a href="/packages/x.css">d</a><a href="/docs">e</a><a href="https://x.org/docs/">f</a>',
     );
-    expect(relativizeLinks('<a href="/docs/#x">b</a>', "/", routes)).toBe('<a href="./docs/#x">b</a>');
     // The not-found page: from the site's path
-    expect(relativizeLinks('<a href="/">a</a><a href="/docs/#x">b</a>', "/404.html", routes, "/luz/")).toBe('<a href="/luz/">a</a><a href="/luz/docs/#x">b</a>');
-    // The search index URL of the dialog, from any depth
+    expect(rel('<a href="/">a</a><a href="/docs/#x">b</a>', "/404.html", "/luz/")).toBe('<a href="/luz/">a</a><a href="/luz/docs/#x">b</a>');
+    // The search index URL of the dialog, the shortest way too
     const dialog = '<dialog class="luz-search" data-luz-search-src="/docs/search-index.json"></dialog>';
-    expect(relativizeLinks(dialog, "/docs/components/button/", routes)).toContain('data-luz-search-src="../../../docs/search-index.json"');
-    expect(relativizeLinks(dialog, "/", routes)).toContain('data-luz-search-src="./docs/search-index.json"');
+    expect(rel(dialog, "/docs/components/button/")).toContain('data-luz-search-src="../../search-index.json"');
+    expect(rel(dialog, "/")).toContain('data-luz-search-src="docs/search-index.json"');
   });
 });
 

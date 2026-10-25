@@ -700,23 +700,48 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
  * 4. The rail
  * =================================================================================== */
 
-describe("the rail: \"On this page\" outside main, then Copy, Edit and Report", () => {
+describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Edit and Report", () => {
+  const ACTIONS = ["Copy page as Markdown", "Copy link to this page", "Edit this page", "Report a problem"];
+  const ACTIONS_ES = ["Copiar la página en Markdown", "Copiar el enlace a esta página", "Editar esta página", "Avisar de un problema"];
   const actionsOf = (aside) => {
     const box = query(aside, ".luz-docs-rail__actions");
     return box ? findAll(box, (n) => n.name === "a") : [];
   };
 
-  it("has three actions in this order, on every page: Copy page as Markdown (index.md of the route), Edit this page, Report a problem", () => {
+  it("has four actions in this order, on every page: Copy page as Markdown (index.md of the route), Copy link to this page (the route), Edit this page, Report a problem", () => {
     for (const p of site.pages) {
       const { aside } = partsOf(treeOf(p.route));
       const links = actionsOf(aside);
-      expect(links.map((a) => textOf(a)), p.route).toEqual(["Copy page as Markdown", "Edit this page", "Report a problem"]);
+      expect(links.map((a) => textOf(a)), p.route).toEqual(ACTIONS);
       expect(links[0].attrs.get("href"), `${p.route} copy`).toBe(`${p.route}index.md`);
-      expect(links[1].attrs.get("href"), `${p.route} edit`).toBe(`${EDIT}${p.file}`);
-      expect(links[1].attrs.get("href"), `${p.route} edit`).toMatch(/^https:\/\/github\.com\/nandovejer\/luz\/edit\/main\/apps\/docs\/pages\/.+\.html$/);
-      expect(links[2].attrs.get("href"), `${p.route} report`).toBe(`${ISSUES}${encodeURIComponent(p.meta.title)}`);
+      expect(links[1].attrs.get("href"), `${p.route} copy link: the page itself`).toBe(p.route);
+      expect(links[2].attrs.get("href"), `${p.route} edit`).toBe(`${EDIT}${p.file}`);
+      expect(links[2].attrs.get("href"), `${p.route} edit`).toMatch(/^https:\/\/github\.com\/nandovejer\/luz\/edit\/main\/apps\/docs\/pages\/.+\.html$/);
+      expect(links[3].attrs.get("href"), `${p.route} report`).toBe(`${ISSUES}${encodeURIComponent(p.meta.title)}`);
     }
   });
+
+  it("writes the two messages of Copy link to this page in data-docs-copied and data-docs-not-copied, in English", () => {
+    for (const p of site.pages) {
+      const { aside } = partsOf(treeOf(p.route));
+      const link = actionsOf(aside)[1];
+      expect(link.attrs.get("data-docs-copied"), `${p.route} copied`).toBe("Copied the link to this page.");
+      expect(link.attrs.get("data-docs-not-copied"), `${p.route} not copied`).toBe("Could not copy the link.");
+    }
+  });
+
+  it("writes the four actions and the two messages in Spanish on a page of /es/docs/", () => {
+    const real = scanSite(join(repo, "apps/docs"), repo);
+    const { rendered: all } = buildSite(real, { languages: true, unchecked: ["/", "/es/", "/ar/"] });
+    const route = "/es/docs/components/button/";
+    expect(all.has(route), route).toBe(true);
+    const { aside } = partsOf(parse(all.get(route), route));
+    const links = actionsOf(aside);
+    expect(links.map((a) => textOf(a))).toEqual(ACTIONS_ES);
+    expect(links[1].attrs.get("href"), "the link is to the page of its language").toBe(route);
+    expect(links[1].attrs.get("data-docs-copied")).toBe("Enlace copiado.");
+    expect(links[1].attrs.get("data-docs-not-copied")).toBe("No se pudo copiar el enlace.");
+  }, 120_000);
 
   it("holds the rail's content in one div.luz-docs-rail__inner (the sticky box, WCAG 2.4.11): aside > div.__inner > the list nav and the actions", () => {
     for (const p of site.pages) {
@@ -777,7 +802,7 @@ describe("the rail: \"On this page\" outside main, then Copy, Edit and Report", 
       const { aside } = partsOf(treeOf(p.route));
       expect(aside, p.route).toBeTruthy();
       expect(queryAll(aside, "nav.luz-docs-rail__onpage"), p.route).toEqual([]);
-      expect(actionsOf(aside), p.route).toHaveLength(3);
+      expect(actionsOf(aside), p.route).toHaveLength(4);
     }
   });
 
@@ -797,20 +822,21 @@ describe("the rail: \"On this page\" outside main, then Copy, Edit and Report", 
       expect(find(owner, (n) => n.name === "a").attrs.get("href")).toBe("#code");
     });
 
-    it("toc: false leaves only the actions, with the same three links", () => {
+    it("toc: false leaves only the actions, with the same four links", () => {
       const fixture = fixtureSite();
       const { aside } = partsOf(renderedOf(fixture, "/docs/get-started/short/"));
       expect(queryAll(aside, "nav.luz-docs-rail__onpage")).toEqual([]);
-      expect(actionsOf(aside).map((a) => textOf(a))).toEqual(["Copy page as Markdown", "Edit this page", "Report a problem"]);
+      expect(actionsOf(aside).map((a) => textOf(a))).toEqual(ACTIONS);
     });
 
     it("writes the Edit URL from the file and the Report URL from the title, URL-encoded", () => {
       const fixture = fixtureSite();
       const { aside } = partsOf(renderedOf(fixture, "/docs/get-started/fish/"));
       const links = actionsOf(aside);
-      expect(links, "three actions").toHaveLength(3);
-      const [copy, edit, report] = links;
+      expect(links, "four actions").toHaveLength(4);
+      const [copy, copyLink, edit, report] = links;
       expect(copy.attrs.get("href")).toBe("/docs/get-started/fish/index.md");
+      expect(copyLink.attrs.get("href")).toBe("/docs/get-started/fish/");
       expect(edit.attrs.get("href")).toBe("https://github.com/nandovejer/luz/edit/main/apps/docs/pages/get-started/fish.html");
       expect(report.attrs.get("href")).toBe(`${ISSUES}Fish%20%26%20Chips%3A%20a%2Fb%3F%20Don't`);
     });
@@ -826,6 +852,11 @@ describe("the rail: \"On this page\" outside main, then Copy, Edit and Report", 
     const href = copy.attrs.get("href");
     expect(href, "not root-absolute").not.toMatch(/^\//);
     expect(new URL(href, "https://example.org/luz/docs/components/button/").pathname).toBe("/luz/docs/components/button/index.md");
+    const own = actionsOf(aside)[1];
+    expect(textOf(own), "the second action").toBe("Copy link to this page");
+    const ownHref = own.attrs.get("href");
+    expect(ownHref, "the link to the page itself is not root-absolute either").not.toMatch(/^\//);
+    expect(new URL(ownHref, "https://example.org/luz/docs/components/button/").pathname).toBe("/luz/docs/components/button/");
   });
 });
 
@@ -954,7 +985,7 @@ describe("the page foot: Last updated <time>, then Edit and Report", () => {
     for (const p of site.pages) {
       const root = treeOf(p.route);
       const foot = footOf(root)[0];
-      const [, edit, report] = findAll(queryLive(root, ".luz-docs-rail__actions"), (n) => n.name === "a");
+      const [, , edit, report] = findAll(queryLive(root, ".luz-docs-rail__actions"), (n) => n.name === "a");
       const links = findAll(foot, (n) => n.name === "a");
       expect(links.map((a) => textOf(a)), p.route).toEqual(["Edit this page", "Report a problem"]);
       expect(links[0].attrs.get("href"), p.route).toBe(edit.attrs.get("href"));
