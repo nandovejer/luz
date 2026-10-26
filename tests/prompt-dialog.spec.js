@@ -343,6 +343,51 @@ test.describe('with JavaScript', () => {
     expect(m.region).toBeGreaterThanOrEqual(8 * m.rem - 0.5);
   });
 
+  for (const [width, height] of [[375, 667], [320, 568]]) {
+    test(`${width}x${height}: the dialog is the screen, Copy stays in view, and the prompt is the one thing that scrolls`, async ({ page }) => {
+      const p = PAGES.en;
+      await page.setViewportSize({ width, height });
+      await page.goto(p.path);
+      const dialog = await openByKeyboard(page, p);
+      const box = await dialog.boundingBox();
+      expect(box?.x, 'left edge').toBeCloseTo(0, 0);
+      expect(box?.y, 'top edge').toBeCloseTo(0, 0);
+      expect(box?.width, 'width').toBeCloseTo(width, 0);
+      expect(box?.height, 'height').toBeCloseTo(height, 0);
+      await expect(dialog).toHaveCSS('border-top-left-radius', '0px');
+      await expect(dialog).toHaveCSS('box-shadow', 'none');
+      await expect(dialog).toHaveCSS('margin-top', '0px');
+
+      // Copy is whole on screen before the prompt is read, and after it was read to the end
+      const region = regionOf(dialog, p);
+      const copy = copyOf(dialog, p);
+      await expect(copy).toBeInViewport({ ratio: 1 });
+      await scrollToEnd(region);
+      await expect(copy).toBeInViewport({ ratio: 1 });
+      const copyBox = await copy.boundingBox();
+      expect(copyBox?.height, 'Copy is a large target').toBeGreaterThanOrEqual(44 - 0.5);
+
+      // One scroller: the prompt (or, in a window too short for both, the dialog), never a scroll inside a scroll
+      const scrollers = await page.evaluate(() => {
+        const d = /** @type {HTMLElement} */ (document.querySelector('dialog[open]'));
+        return [d, ...d.querySelectorAll('*')]
+          .filter((el) => ['auto', 'scroll'].includes(getComputedStyle(el).overflowY) && el.scrollHeight > el.clientHeight + 1)
+          .map((el) => `${el.localName}.${String(el.className).split(' ')[0]}`);
+      });
+      expect(scrollers, 'elements that scroll vertically').toHaveLength(1);
+
+      // The prompt is reachable: the focusable region is whole on screen, between the head and the foot, with its 8rem
+      await region.focus();
+      await expect(region).toBeFocused();
+      await expect(region).toBeInViewport({ ratio: 1 });
+      const regionBox = await region.boundingBox();
+      const rem = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
+      expect(regionBox?.height).toBeGreaterThanOrEqual(8 * rem - 0.5);
+      expect(regionBox?.y).toBeGreaterThanOrEqual(0);
+      expect((regionBox?.y ?? 0) + (regionBox?.height ?? 0)).toBeLessThanOrEqual((copyBox?.y ?? 0) + 0.5);
+    });
+  }
+
   test('axe finds no serious or critical violation with the dialog open', async ({ page }) => {
     const p = PAGES.en;
     await page.goto(p.path);

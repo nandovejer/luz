@@ -97,3 +97,123 @@
     opacity: 1;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Small screens: the dialog is the screen, at 640px wide or less (core's
+   mobile break) and in a window under 30rem tall (a phone held sideways).
+   Full width and height (dvh, with a vh fallback), no float radius, shadow,
+   border or margin, the safe areas inside the paddings. The dialog is the one
+   scroller: the header sticks to its top and the footer to its bottom (in a
+   short window the footer scrolls with the content), so the close and the
+   actions are always in reach. In a larger window nothing here applies.
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px), (max-height: 30rem) {
+  .luz-modal {
+    /* The side padding of every part, and the notch of a phone held sideways */
+    --luz-modal-pad-inline: max(var(--luz-space-md), env(safe-area-inset-left), env(safe-area-inset-right));
+    /* The height of the pinned header and footer (a 44px close or action, their
+       padding, the safe area and the line), which a focused control scrolls
+       clear of (WCAG 2.4.11) */
+    --luz-modal-head-size: calc(max(var(--luz-space-xs), env(safe-area-inset-top)) + var(--luz-space-xs) + var(--luz-control-lg) + 1px);
+    --luz-modal-foot-size: calc(var(--luz-space-sm) + max(var(--luz-space-sm), env(safe-area-inset-bottom)) + var(--luz-control-lg) + 1px);
+
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: none;
+    block-size: 100vh;
+    block-size: 100dvh;
+    max-block-size: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overscroll-behavior: contain;
+    scroll-padding-block: var(--luz-modal-head-size) var(--luz-modal-foot-size);
+  }
+
+  .luz-modal[open] {
+    display: flex;
+    flex-direction: column;
+    animation: luz-fade-in var(--luz-duration-base) var(--luz-easing-enter);
+  }
+
+  /* A form around the body and the footer is part of the column */
+  .luz-modal > :where(form) {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+  }
+
+  .luz-modal__header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--luz-space-xs);
+    margin: 0;
+    padding-block: max(var(--luz-space-xs), env(safe-area-inset-top)) var(--luz-space-xs);
+    padding-inline: var(--luz-modal-pad-inline) max(var(--luz-space-xs), env(safe-area-inset-right));
+    background: var(--luz-surface);
+    border-bottom: 1px solid var(--luz-divider);
+  }
+
+  .luz-modal__title {
+    flex: 1;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* The close: at the end of the row whatever its place in the markup, a
+     44px target (2.5.8 asks 24) with its glyph a step larger */
+  .luz-modal__close {
+    flex: none;
+    order: 1;
+    min-inline-size: var(--luz-control-lg);
+    min-block-size: var(--luz-control-lg);
+    border-radius: var(--luz-radius-md);
+    font-size: var(--luz-text-2xl);
+    line-height: 1;
+  }
+
+  .luz-modal__close:hover {
+    background: var(--luz-surface-hover);
+  }
+
+  .luz-modal__body {
+    flex: 1 0 auto;
+    margin: 0;
+    padding: var(--luz-space-md) var(--luz-modal-pad-inline);
+  }
+
+  .luz-modal__footer {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 1;
+    flex: none;
+    flex-wrap: wrap;
+    padding-block: var(--luz-space-sm) max(var(--luz-space-sm), env(safe-area-inset-bottom));
+    padding-inline: var(--luz-modal-pad-inline);
+    background: var(--luz-surface);
+  }
+
+  /* A short window (a phone held sideways, 400 % zoom): the footer scrolls
+     with the content, so it does not take a third of the screen */
+  @media (max-height: 30rem) {
+    .luz-modal {
+      scroll-padding-block-end: var(--luz-space-xs);
+    }
+
+    .luz-modal__footer {
+      position: static;
+    }
+  }
+
+  /* Thumb-wide actions that share the row, or each take one when it wraps */
+  .luz-modal__footer > * {
+    flex: 1 1 auto;
+  }
+}

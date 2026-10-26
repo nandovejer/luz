@@ -316,14 +316,51 @@
 	border-block-start: 1px solid var(--luz-divider);
 }
 
-@media (max-width: 768px), (max-height: 30rem) {
+/* Small screens (core's 640px, or a window under 30rem tall): the screen itself, as every .luz-modal is
+   there (core's modal.css gives the height, the safe areas and the sticky
+   header). The head sticks to the top, the field follows it, and the list of
+   results is the one scroller below; the dialog scrolls only when the window
+   is too short for all of it (400 % zoom, a phone held sideways), and the
+   head stays while the overflow is short. */
+@media (max-width: 640px), (max-height: 30rem) {
 	.luz-search {
+		/* The side padding of the parts, and the notch of a phone held sideways */
+		--luz-search-pad-inline: max(var(--luz-space-md), env(safe-area-inset-left), env(safe-area-inset-right));
+
 		inline-size: 100%;
-		max-block-size: 100dvb;
-		block-size: 100dvb;
+		max-block-size: none;
 		margin: 0;
-		border-radius: 0;
-		padding: var(--luz-space-md);
+		padding: 0;
+		/* A field or a link brought into view by Tab stops below the pinned head (WCAG 2.4.11) */
+		scroll-padding-block-start: calc(max(var(--luz-space-xs), env(safe-area-inset-top)) + var(--luz-space-xs) + var(--luz-control-lg) + 1px);
+	}
+
+	.luz-search__body {
+		flex: 1 1 0;
+		min-block-size: 0;
+		padding-block-end: max(var(--luz-space-md), env(safe-area-inset-bottom));
+		padding-inline: var(--luz-search-pad-inline);
+	}
+
+	.luz-search__head {
+		position: sticky;
+		inset-block-start: 0;
+		z-index: 1;
+		flex-wrap: nowrap;
+		margin-inline: calc(-1 * var(--luz-search-pad-inline));
+		padding-block: max(var(--luz-space-xs), env(safe-area-inset-top)) var(--luz-space-xs);
+		padding-inline: var(--luz-search-pad-inline) max(var(--luz-space-xs), env(safe-area-inset-right));
+		background: var(--luz-surface);
+		border-bottom: 1px solid var(--luz-divider);
+		/* The field below does not touch the line */
+		margin-block-end: var(--luz-space-xs);
+	}
+
+	.luz-search__results {
+		flex: 1 1 auto;
+		/* The list is the box of its clipped, absolutely placed words, so they
+		   do not stretch the dialog's own scroll */
+		position: relative;
 	}
 }
 

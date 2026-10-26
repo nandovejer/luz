@@ -2,7 +2,7 @@
 title: Diálogo modal
 description: Pide tomar una decisión antes de continuar, mediante un elemento dialog nativo.
 keywords: diálogo, ventana emergente
-source: eb5129143b95
+source: db18a610b11a
 reviewed: false
 -->
     <div class="docs-component" id="c-modal">
@@ -76,7 +76,7 @@ reviewed: false
 initModals();</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
-            <p>Un tamaño y ningún modificador: hasta 600 px de ancho y el 90 % de la altura de la ventana gráfica, con desplazamiento interno si el contenido es más largo.</p>
+            <p>Un tamaño y ningún modificador: hasta 600 px de ancho y el 90 % de la altura de la ventana gráfica, con desplazamiento interno si el contenido es más largo. Hasta 640 px de ancho, o con menos de 30 rem de alto, ocupa toda la pantalla.</p>
             <div class="luz-table-wrap" role="region" aria-label="Elementos del diálogo modal" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -85,7 +85,7 @@ initModals();</code></pre>
                 <tbody>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-modal</code></div></td><td data-label="Qué hace"><div>La superficie del diálogo, con un fondo atenuado y ligeramente difuminado</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-modal__header</code>, <code>__title</code></div></td><td data-label="Qué hace"><div>La fila del título, con una línea debajo</div></td></tr>
-                  <tr><td data-label="Clase o atributo"><div><code>.luz-modal__close</code></div></td><td data-label="Qué hace"><div>El botón ×, al final de la fila del título, de al menos 28 px</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-modal__close</code></div></td><td data-label="Qué hace"><div>El botón ×, al final de la fila del título, de al menos 28 px (44 px cuando el diálogo ocupa toda la pantalla)</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-modal__body</code></div></td><td data-label="Qué hace"><div>El contenido</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-modal__footer</code></div></td><td data-label="Qué hace"><div>Los botones, al final de la fila, con una línea por encima</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>command="show-modal"</code>, <code>command="close"</code></div></td><td data-label="Qué hace"><div>Abre y cierra el diálogo indicado en <code>commandfor</code></div></td></tr>
@@ -99,6 +99,8 @@ initModals();</code></pre>
               <li>Los botones lo abren y lo cierran con <code>command</code> y <code>commandfor</code>, sin scripts.</li>
               <li><code>initModals()</code> de <code>modal.js</code> gestiona los mismos dos comandos en los navegadores que aún no los admiten, y no hace nada en los demás. <code>luz.js</code> lo ejecuta.</li>
               <li>Al enviar un <code>&lt;form method="dialog"&gt;</code> que esté dentro, el diálogo se cierra y su <code>returnValue</code> toma el valor del botón pulsado.</li>
+              <li>Hasta 640 px de ancho, o con menos de 30 rem de alto (un teléfono en horizontal), ocupa toda la pantalla: sin margen, radio ni sombra.</li>
+              <li>Entonces es lo único que se desplaza: la cabecera con el cierre queda arriba y el pie abajo (en una ventana baja se desplaza). El relleno respeta los márgenes de las áreas seguras.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>Todo funciona en los navegadores que admiten <code>command</code>. En los demás, el botón de apertura no hace nada: consulta «Problemas conocidos».</p>
@@ -167,17 +169,17 @@ initModals();</code></pre>
             <ul>
               <li><strong>Foco:</strong> al abrirse, pasa al diálogo y, al cerrarse, vuelve al botón que lo abrió. El botón de cierre tiene un contorno <code>--luz-focus-ring</code> de 2 px, a 2 px de distancia.</li>
               <li><strong>Bordes:</strong> el diálogo tiene un borde y una sombra, así que también queda separado de la página con colores forzados.</li>
-              <li><strong>Área interactiva:</strong> el botón de cierre mide al menos 28 px cuadrados.</li>
+              <li><strong>Área interactiva:</strong> el botón de cierre mide al menos 28 px cuadrados, y 44 px cuando el diálogo ocupa toda la pantalla.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 15 tokens que lee <code>components/modal.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 22 tokens que lee <code>components/modal.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code></dd></div>
-              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-lg</code></dd></div>
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-2xl</code>, <code>--luz-text-lg</code></dd></div>
               <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
               <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-lg</code></dd></div>
-              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code>, <code>--luz-easing-enter</code></dd></div>
             </dl>
             <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
           </div>
