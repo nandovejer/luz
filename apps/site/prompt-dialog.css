@@ -28,6 +28,51 @@
   padding: var(--luz-space-lg);
 }
 
+/* Small screens (core's 640px, or a window under 30rem tall): core's modal is the whole screen there, so
+   the sizes above stand down and each part takes the side padding the dialog
+   no longer has. The head sticks to the top (core), the foot to the bottom,
+   so Copy is always in reach; the reader takes what is left and scrolls. */
+@media (max-width: 640px), (max-height: 30rem) {
+  .site-prompt {
+    inline-size: 100%;
+    block-size: 100vh;
+    block-size: 100dvh;
+    padding: 0;
+  }
+
+  .site-prompt__meta,
+  .site-prompt__foot {
+    padding-inline: var(--luz-modal-pad-inline);
+  }
+
+  .site-prompt__reader {
+    margin-inline: var(--luz-modal-pad-inline);
+  }
+
+  .site-prompt__foot {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 1;
+    padding-block: var(--luz-space-sm) max(var(--luz-space-sm), env(safe-area-inset-bottom));
+    background: var(--luz-surface);
+    border-block-start: 1px solid var(--luz-divider);
+  }
+
+  /* In a short window (a phone held sideways, 400 % zoom) the foot scrolls
+     with the rest: pinned, it would leave a strip of the prompt */
+  @media (max-height: 30rem) {
+    .site-prompt__foot {
+      position: static;
+    }
+  }
+
+  /* Copy shares the row with the link, as wide as it can be */
+  .site-prompt__copy {
+    flex: 1 1 auto;
+    min-block-size: var(--luz-control-lg);
+  }
+}
+
 .site-prompt[open] {
   display: flex;
   flex-direction: column;

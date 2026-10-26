@@ -79,7 +79,7 @@ keywords: dialog, popup
 initModals();</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
-            <p>One size and no modifiers: up to 600 px wide and 90 % of the viewport high, scrolling inside when the content is longer.</p>
+            <p>One size and no modifiers: up to 600 px wide and 90 % of the viewport high, scrolling inside when the content is longer. Up to 640 px wide, or under 30 rem tall, it fills the screen.</p>
             <div class="luz-table-wrap" role="region" aria-label="Modal parts" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -88,7 +88,7 @@ initModals();</code></pre>
                 <tbody>
                   <tr><td data-label="Class or attribute"><div><code>.luz-modal</code></div></td><td data-label="What it does"><div>The dialog surface, with a dimmed and slightly blurred backdrop</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-modal__header</code>, <code>__title</code></div></td><td data-label="What it does"><div>The title row, with a rule under it</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-modal__close</code></div></td><td data-label="What it does"><div>The × button, at the end of the title row, 28 px at least</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-modal__close</code></div></td><td data-label="What it does"><div>The × button, at the end of the title row, 28 px at least (44 px when the modal fills the screen)</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-modal__body</code></div></td><td data-label="What it does"><div>The content</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-modal__footer</code></div></td><td data-label="What it does"><div>The buttons, at the end of the row, with a rule above them</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>command="show-modal"</code>, <code>command="close"</code></div></td><td data-label="What it does"><div>Open and close the dialog named in <code>commandfor</code></div></td></tr>
@@ -102,6 +102,8 @@ initModals();</code></pre>
               <li>Buttons open and close it with <code>command</code> and <code>commandfor</code>, with no script.</li>
               <li><code>initModals()</code> from <code>modal.js</code> handles the same two commands in browsers that do not support them yet, and does nothing in the others. <code>luz.js</code> runs it.</li>
               <li>A <code>&lt;form method="dialog"&gt;</code> inside closes the dialog when it is sent, and its <code>returnValue</code> is the value of the button pressed.</li>
+              <li>Up to 640 px wide, or under 30 rem tall (a phone held sideways), it fills the screen: no margin, radius or shadow.</li>
+              <li>Then it is the one thing that scrolls: the header with the close stays on top, the footer at the bottom (it scrolls in a short window). The padding keeps clear of the safe-area insets.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>In browsers that support <code>command</code>, everything works. In the others the open button does nothing: see Known issues.</p>
@@ -170,17 +172,17 @@ initModals();</code></pre>
             <ul>
               <li><strong>Focus:</strong> it moves into the dialog when it opens and back to the button that opened it when it closes. The close button has a 2 px <code>--luz-focus-ring</code> outline, 2 px outside.</li>
               <li><strong>Edges:</strong> the dialog has a border and a shadow, so it stays apart from the page in forced colors too.</li>
-              <li><strong>Target:</strong> the close button is at least 28 px square.</li>
+              <li><strong>Target:</strong> the close button is at least 28 px square, and 44 px when the modal fills the screen.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 15 tokens that <code>components/modal.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 22 tokens that <code>components/modal.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code></dd></div>
-              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-lg</code></dd></div>
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-2xl</code>, <code>--luz-text-lg</code></dd></div>
               <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
               <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-lg</code></dd></div>
-              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code>, <code>--luz-easing-enter</code></dd></div>
             </dl>
             <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
           </div>
