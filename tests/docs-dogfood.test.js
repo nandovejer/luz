@@ -6,7 +6,10 @@
  * no hook LUZ does not read.
  *
  * What is read: apps/docs/pages/**.html (page fragments), apps/docs/_partials,
- * apps/docs/_layouts, apps/docs/404.html and apps/landing/**.html. The
+ * apps/docs/_layouts, apps/docs/404.html and apps/landing/**.html, and
+ * apps/docs/catalog-patterns.css: the layout links that one stylesheet, which
+ * `@import`s the 21 patterns of the kinds of site (F5b), and a link to a file
+ * of the run counts as what the file imports. The
  * templates carry the generator's markers (`{{t:key}}`, `{{content}}`,
  * `<!-- luz:include header -->`, the `<!-- luz:page -->` front matter); the
  * tool must read them as text, never as a mistake: that is asserted here on
@@ -33,6 +36,7 @@ const GLOBS = [
   "apps/docs/_layouts/*.html",
   "apps/docs/404.html",
   "apps/landing/**/*.html",
+  "apps/docs/catalog-patterns.css",
 ];
 
 /** Every .html under `dir` (relative to the repo, with `/`), sorted; node_modules left out. */
@@ -53,6 +57,7 @@ const EXPECTED_FILES = [
   ...htmlUnder("apps/docs/_layouts"),
   "apps/docs/404.html",
   ...htmlUnder("apps/landing"),
+  "apps/docs/catalog-patterns.css",
 ].sort();
 
 const say = (f) => `${f.file}:${f.line}:${f.column} ${f.rule} ${f.message}`;

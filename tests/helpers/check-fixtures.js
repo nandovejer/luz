@@ -33,8 +33,8 @@ import { builtOnce } from "./check-build.js";
 export const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 export const FIXTURES = join(ROOT, "tests/fixtures/check");
 export const VERSION = "9.9.9";
-/** The seven libraries, in dependency order: the order `manifests` is written in. */
-export const LIBRARIES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
+/** The three libraries, in dependency order: the order `manifests` is written in. (landing, cms, app and docs are files of catalog since F5b.) */
+export const LIBRARIES = ["tokens", "core", "catalog"];
 
 /* ---- The `expect:` comments ----------------------------------------------------------------- */
 
@@ -208,6 +208,17 @@ export const MINI = {
       { name: "luz-search__results", file: "components/search.css" },
       "luz-sidebar",
       "luz-catalog-hero",
+      // The patterns of the four kinds of site are components of catalog, one file each (`<kind>-<name>.css`)
+      { name: "luz-landing-hero", file: "components/landing-hero.css" },
+      { name: "luz-landing-hero__title", file: "components/landing-hero.css" },
+      { name: "luz-landing-main", file: "components/landing-main.css" },
+      { name: "luz-cms-header", file: "components/cms-header.css" },
+      { name: "luz-cms-header__brand", file: "components/cms-header.css" },
+      { name: "luz-app-header", file: "components/app-header.css" },
+      { name: "luz-app-header__product", file: "components/app-header.css" },
+      { name: "luz-docs-pager", file: "components/docs-pager.css" },
+      { name: "luz-docs-pager__link", file: "components/docs-pager.css" },
+      { name: "luz-docs-shell", file: "components/docs-shell.css" },
     ],
     properties: [],
     elements: [
@@ -217,10 +228,6 @@ export const MINI = {
     ],
     hooks: [],
   },
-  landing: { classes: ["luz-landing-hero", "luz-landing-hero__title", "luz-landing-main"], properties: [], elements: [], hooks: [] },
-  cms: { classes: ["luz-cms-post", "luz-cms-post__title"], properties: [], elements: [], hooks: [] },
-  app: { classes: ["luz-app-shell", "luz-app-shell__nav"], properties: [], elements: [], hooks: [] },
-  docs: { classes: ["luz-docs-pager", "luz-docs-pager__link", "luz-docs-shell"], properties: [], elements: [], hooks: [] },
 };
 
 /**

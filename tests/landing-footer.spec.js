@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * `.luz-landing-footer` (@luz-ds/landing; .claude/plans/specs/f3-package-model.md,
+ * `.luz-landing-footer` (`components/landing-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
  * §1.5, §3.3 and §9 step 10): the footer of a landing page, no longer
  * `.luz-site-footer` of site. It is a native <footer> with a row of core's
  * inside: `footer.luz-landing-footer > div.o-container.o-container--inline.o-row`.
@@ -139,7 +139,7 @@ test.describe('the pages that use the landing footer', () => {
   });
 });
 
-// F4 of the identity plan (@luz-ds/landing 0.2): a brand block and columns of links.
+// F4 of the identity plan (`landing-footer.css` of catalog): a brand block and columns of links.
 // The page is tests/fixtures/landing-f4.html (`div.o-container.o-container--inline.o-grid` inside the footer);
 // the old `> .o-row` footer is tests/fixtures/landing-page.html, tested above and unchanged.
 const F4 = '/tests/fixtures/landing-f4.html';

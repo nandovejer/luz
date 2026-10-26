@@ -149,14 +149,14 @@ test.describe('which fold is open', () => {
       await expect(tokens).toHaveAttribute('href', `${prefix}/docs/tokens/`);
       await tokens.click();
       await expect(page).toHaveURL(new RegExp(`${prefix}/docs/tokens/$`));
-      expect(await openAreas(page)).toEqual(['tokens']);
+      await expect.poll(() => openAreas(page)).toEqual(['tokens']);
       await expect(nav(page).locator('a[aria-current="page"]:not(.page-nav__site a)')).toHaveAttribute('href', `${prefix}/docs/tokens/`);
       // ... and the area link of the open fold still goes there when it is the one clicked
       await page.goto(`${prefix}${BUTTON}`);
       const core = areaLink(page, 'components');
       await core.click();
       await expect(page).toHaveURL(new RegExp(`${prefix}/docs/components/$`));
-      expect(await openAreas(page)).toEqual(['components']);
+      await expect.poll(() => openAreas(page)).toEqual(['components']);
     });
   }
 });
@@ -249,9 +249,9 @@ test.describe('the button of a fold', () => {
     test(`${where}: a click on another area's button opens it and closes the current one; a click on the open one closes it`, async ({ page }) => {
       await page.goto(`${prefix}${FORMS}`);
       expect(await openAreas(page)).toEqual(['html']);
-      await button(page, 'landing').click();
-      expect(await openAreas(page)).toEqual(['landing']);
-      await expect(nav(page).locator(`a[href="${prefix}/docs/landing/hero/"]`).first()).toBeVisible();
+      await button(page, 'catalog').click();
+      expect(await openAreas(page)).toEqual(['catalog']);
+      await expect(nav(page).locator(`a[href="${prefix}/docs/catalog/landing-hero/"]`).first()).toBeVisible();
       await expect(nav(page).locator(`a[href="${prefix}${FORMS}"]`)).toBeHidden();
       await button(page, 'components').click();
       expect(await openAreas(page)).toEqual(['components']);
@@ -477,13 +477,13 @@ test.describe('the drawer at 375 px', () => {
       await page.keyboard.press('Enter');
       await expect(drawer).toBeVisible();
       expect(await openAreas(page)).toEqual(['html']);
-      const landing = button(page, 'landing');
-      await landing.scrollIntoViewIfNeeded();
-      await expect(landing).toBeVisible();
+      const catalogFold = button(page, 'catalog');
+      await catalogFold.scrollIntoViewIfNeeded();
+      await expect(catalogFold).toBeVisible();
       await expect(drawer.locator(`a[href="${prefix}${FORMS}"]`)).toBeVisible();
-      await landing.focus();
+      await catalogFold.focus();
       await page.keyboard.press('Enter');
-      expect(await openAreas(page)).toEqual(['landing']);
+      expect(await openAreas(page)).toEqual(['catalog']);
       await expect(drawer, 'the drawer stays open while a fold opens').toBeVisible();
       await expect(drawer.locator(`a[href="${prefix}${FORMS}"]`)).toBeHidden();
       await page.keyboard.press('Escape');

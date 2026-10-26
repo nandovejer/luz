@@ -14,6 +14,8 @@
  *                                      it the names are not checked
  *   knownNames(root)                   { classes, elements } from the manifests
  *   checkPrompts(root)                 problems of the sources and of the five
+ *   presetProblems(root)               F5b, decision 71: a pattern a preset names for a kind
+ *                                      whose page does not say it fits that kind (`fits-kinds`)
  *
  * The fixtures are inline: a text with one bad thing on a known line.
  */
@@ -206,8 +208,9 @@ describe("knownNames: the classes and elements of the manifests of the packages"
     for (const name of ["luz-btn", "o-stack", "luz-landing-hero"]) {
       const exists = [...classes].includes(name);
       const inCore = JSON.parse(readFileSync(join(root, "packages/core/dist/classes.json"), "utf-8")).classes.some((c) => c.name === name);
-      const inLanding = JSON.parse(readFileSync(join(root, "packages/landing/dist/classes.json"), "utf-8")).classes.some((c) => c.name === name);
-      expect(exists, name).toBe(inCore || inLanding);
+      // luz-landing-hero is a class of catalog since F5b
+      const inCatalog = JSON.parse(readFileSync(join(root, "packages/catalog/dist/classes.json"), "utf-8")).classes.some((c) => c.name === name);
+      expect(exists, name).toBe(inCore || inCatalog);
     }
     expect(elements.has("luz-mode")).toBe(true);
     expect(elements.has("luz-search")).toBe(true);
@@ -239,6 +242,8 @@ function copyOfRepo({ withScripts = false } = {}) {
   temps.push(dir);
   cpSync(join(root, "apps/site/prompts"), join(dir, "apps/site/prompts"), { recursive: true });
   cpSync(join(root, "budgets.json"), join(dir, "budgets.json"));
+  // The pages of catalog say which kind each pattern fits best: the check of the presets reads them
+  cpSync(join(root, "apps/docs/pages/catalog"), join(dir, "apps/docs/pages/catalog"), { recursive: true });
   mkdirSync(join(dir, ".claude/evals/prompt-injection"), { recursive: true });
   cpSync(join(root, CASES), join(dir, CASES));
   symlinkSync(join(root, "packages"), join(dir, "packages"));
@@ -382,6 +387,74 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     const problems = member("checkPrompts")(dir);
     expect(problems.some((p) => p.startsWith("apps/site/prompts/body.md:")), problems.join("\n")).toBe(true);
     for (const id of IDS) expect(problems.some((p) => p.startsWith(`prompts/${id}.txt:`)), id).toBe(true);
+  });
+});
+
+describe("presetProblems: a preset names only the patterns that fit its kind (F5b, decision 71)", () => {
+  const appended = (dir, kind, line) => {
+    edit(dir, `apps/site/prompts/presets/${kind}.md`, (text) => `${text.trimEnd()}\n\n${line}\n`);
+    return readFileSync(join(dir, `apps/site/prompts/presets/${kind}.md`), "utf-8").split("\n").findIndex((l) => l === line) + 1;
+  };
+
+  it("has no problem on the presets of the repository: every pattern a preset names fits its kind", () => {
+    expect(member("presetProblems")(root)).toEqual([]);
+  });
+
+  it("reports a pattern of another kind in a preset, with the file and line, the pattern, its page and the kinds it fits", () => {
+    const dir = copyOfRepo();
+    const line = appended(dir, "landing", "Also use `luz-docs-shell` for the page.");
+    const found = member("presetProblems")(dir);
+    expect(found).toHaveLength(1);
+    expect(found[0].startsWith(`apps/site/prompts/presets/landing.md:${line}:`), found[0]).toBe(true);
+    expect(found[0]).toContain("luz-docs-shell");
+    expect(found[0]).toContain("landing");
+    expect(found[0]).toContain("apps/docs/pages/catalog/docs-shell.html");
+    expect(found[0]).toContain("fits-kinds");
+  });
+
+  it("names the page by the class, the file or the tag: `luz-cms-header` is cms-header.html, and a class in a file of another page is that page's", () => {
+    const dir = copyOfRepo();
+    appended(dir, "app", "Start from `luz-cms-header` too.");
+    appended(dir, "docs", "And `luz-landing-header`.");
+    const found = member("presetProblems")(dir);
+    expect(found.map((p) => p.split(":")[0]).sort()).toEqual(["apps/site/prompts/presets/app.md", "apps/site/prompts/presets/docs.md"]);
+    expect(found.join("\n")).toContain("cms-header.html");
+    expect(found.join("\n")).toContain("landing-header.html");
+  });
+
+  it("accepts a pattern that fits any kind (`<luz-banner>`, `luz-search`), a pattern of its own kind, and a name no catalog page documents", () => {
+    const dir = copyOfRepo();
+    appended(dir, "landing", "Add `<luz-banner>` and `luz-search` if you want them, with core's `luz-sidebar` and `o-stack`.");
+    appended(dir, "blog", "A banner is `<luz-banner>`, and the contents are `luz-cms-toc`.");
+    expect(member("presetProblems")(dir)).toEqual([]);
+  });
+
+  it("follows the front matter: when a page adds the kind to its fits-kinds, the preset may name it", () => {
+    const dir = copyOfRepo();
+    appended(dir, "landing", "Also `luz-docs-pager`.");
+    expect(member("presetProblems")(dir)).toHaveLength(1);
+    edit(dir, "apps/docs/pages/catalog/docs-pager.html", (text) => text.replace(/^fits-kinds: .*$/m, "fits-kinds: landing, docs"));
+    expect(member("presetProblems")(dir)).toEqual([]);
+    edit(dir, "apps/docs/pages/catalog/docs-pager.html", (text) => text.replace(/^fits-kinds: .*$/m, "fits-kinds: any"));
+    expect(member("presetProblems")(dir)).toEqual([]);
+  });
+
+  it("is part of checkPrompts, and node scripts/check-prompts.js exits 1 and prints it as file:line on a copy", () => {
+    const dir = copyOfRepo({ withScripts: true });
+    const line = appended(dir, "app", "Also use `luz-landing-hero`.");
+    expect(member("checkPrompts")(dir).some((p) => p.startsWith(`apps/site/prompts/presets/app.md:${line}:`))).toBe(true);
+    const result = run(dir, join(dir, "scripts/check-prompts.js"));
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(`apps/site/prompts/presets/app.md:${line}:`);
+    expect(result.stderr).toContain("luz-landing-hero");
+  }, 60_000);
+
+  it("the pages the presets are read from are the catalog pages with a fits-kinds, and each kind's pages say it", () => {
+    const patterns = member("catalogPatterns")(root);
+    expect(patterns.length).toBe(25);
+    expect(patterns.find((p) => p.slug === "landing-hero")).toMatchObject({ kinds: ["landing"], files: ["components/landing-hero.css"] });
+    expect(patterns.find((p) => p.slug === "banner").kinds).toEqual(["any"]);
+    expect(patterns.some((p) => p.slug === "classes" || p.slug === "index"), "the gallery and the class reference have no fits-kinds").toBe(false);
   });
 });
 

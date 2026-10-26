@@ -1,9 +1,9 @@
 // @ts-check
 /**
- * @luz-ds/landing works without @luz-ds/catalog (.claude/plans/specs/f3-package-model.md,
- * §5 and §9 step 10): site is an optional peer of a kind of site. A page that
- * loads tokens, core and landing and nothing else (tests/fixtures/landing-page.html:
- * no site stylesheet, no site script) still renders its header, hero, main,
+ * The landing patterns work without the site-wide parts of @luz-ds/catalog (.claude/plans/specs/f3-package-model.md,
+ * §5 and §9 step 10; since F5b they are files of catalog, one per block, and a page links only the ones it uses).
+ * A page that loads tokens, core and the six landing files and nothing else (tests/fixtures/landing-page.html:
+ * no search, consent or language switch file, no script) still renders its header, hero, main,
  * sections, band and footer, and axe finds nothing serious in the three modes.
  * The rules of landing that refine site's tags (`.luz-landing-header luz-lang-switch`)
  * simply match nothing there.
@@ -46,13 +46,15 @@ test.describe('landing without site', () => {
     await page.setViewportSize({ width: 1280, height: 900 });
   });
 
-  test('the page asks for no file of site', async ({ page }) => {
+  test('the page asks for its six landing files and no other file or script of catalog', async ({ page }) => {
     const requests = [];
-    page.on('request', (req) => requests.push(req.url()));
+    page.on('request', (req) => requests.push(new URL(req.url()).pathname));
     await page.goto(FIXTURE);
     await page.waitForLoadState('networkidle');
-    expect(requests.filter((url) => url.includes('/packages/catalog/'))).toEqual([]);
-    expect(requests.some((url) => url.includes('/packages/landing/dist/landing.css'))).toBe(true);
+    expect(requests.filter((path) => path.includes('/packages/catalog/')).sort()).toEqual(
+      ['footer', 'glow', 'header', 'hero', 'main', 'section'].map((name) => `/packages/catalog/dist/components/landing-${name}.css`),
+    );
+    expect(requests.some((path) => /\/packages\/landing\/|landing\.css|catalog\.css/.test(path))).toBe(false);
     // And nothing on it is a site tag
     expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-consent, luz-lang-switch, luz-submenu, luz-banner').length)).toBe(0);
   });

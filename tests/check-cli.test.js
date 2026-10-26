@@ -1146,9 +1146,9 @@ describe("tests/fixtures/check: the folder", () => {
     expect(JSON.parse(unreadable.stdout).unreadable.length).toBeGreaterThan(0);
   });
 
-  it("uses a class of LUZ only where its manifest has it, so a pass file is a valid LUZ page", () => {
+  it("uses a class of LUZ only where its manifest has it (core's or catalog's, patterns of the four kinds of site included, F5b), so a pass file is a valid LUZ page", () => {
     const known = new Set();
-    for (const pkg of ["core", "catalog", "landing", "cms", "app", "docs"]) {
+    for (const pkg of ["core", "catalog"]) {
       const file = join(root, "packages", pkg, "dist", "classes.json");
       if (existsSync(file)) for (const c of JSON.parse(readFileSync(file, "utf-8")).classes) known.add(c.name);
     }

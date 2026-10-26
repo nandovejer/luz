@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * F4 of .claude/plans/luz-home-docs-identity.md, @luz-ds/landing 0.2: what any landing
+ * F4 of .claude/plans/luz-home-docs-identity.md, the files of landing in @luz-ds/catalog: what any landing
  * wants and nothing of LUZ. Four additions, on tests/fixtures/landing-f4.html (tokens, core
  * and landing only):
  *
@@ -154,7 +154,7 @@ test.describe('landing glow: --luz-landing-glow-x', () => {
 <title>Glow</title>
 <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
 <link rel="stylesheet" href="/packages/core/dist/luz.css">
-<link rel="stylesheet" href="/packages/landing/dist/landing.css">
+<link rel="stylesheet" href="/packages/catalog/dist/components/landing-glow.css">
 </head>
 <body class="o-page luz-landing-glow">
 <main id="main-content" class="o-container"><p>Decoration only.</p></main>

@@ -27,7 +27,7 @@ import { join, relative, resolve } from "node:path";
 import { execFileSync } from "node:child_process";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { ESLint } from "eslint";
-import { BASE, PACKAGES, PUBLISHED, SITE_KINDS, TOOLS } from "../scripts/luz-packages.js";
+import { BASE, PACKAGES, PUBLISHED, TOOLS } from "../scripts/luz-packages.js";
 import { BUNDLE, buildCheckTo, builtOnce, removeBuilds, root } from "./helpers/check-build.js";
 import { releaseNotes } from "./helpers/release-notes.js";
 import { isNpmOrReleased } from "./helpers/versions.js";
@@ -40,7 +40,8 @@ const json = (path) => JSON.parse(readOr(path) || "{}");
 /** The text without comments, so a word in one is not a use of it. */
 const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
 
-const LIBRARIES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
+// Landing, cms, app and docs are files of catalog since F5b: three libraries, and the data of the kinds is catalog's
+const LIBRARIES = ["tokens", "core", "catalog"];
 const distOfRepo = `${root}packages/check/dist/${BUNDLE}`;
 const distBefore = existsSync(distOfRepo) ? statSync(distOfRepo).mtimeMs : null;
 
@@ -94,12 +95,12 @@ describe("@luz-ds/check: package.json", () => {
     expect(Object.keys(manifest.scripts ?? {})).toEqual([]);
   });
 
-  it("names the seven libraries as workspace dev dependencies, for the build that reads their dist", () => {
+  it("names the three libraries as workspace dev dependencies, for the build that reads their dist", () => {
     expect(manifest.devDependencies).toEqual(Object.fromEntries(LIBRARIES.map((name) => [`@luz-ds/${name}`, "workspace:*"])));
   });
 
   it("has the repository, homepage, bugs and publish config of its siblings, with its own directory", () => {
-    const sibling = json("packages/landing/package.json");
+    const sibling = json("packages/catalog/package.json");
     expect(manifest.repository).toEqual({ ...sibling.repository, directory: "packages/check" });
     expect(manifest.homepage).toBe(sibling.homepage);
     expect(manifest.bugs).toEqual(sibling.bugs);
@@ -168,8 +169,8 @@ describe("scripts/build-check.js: the build", () => {
     expect(source).toMatch(/export (?:async )?function buildCheck\b|export const buildCheck\b/);
   });
 
-  it("snapshots the facts of the seven libraries, docs last, so luz-check knows every luz-docs-* class", () => {
-    expect(/const PACKAGES = \["tokens", "core", "catalog", "landing", "cms", "app", "docs"\];/.test(source), "PACKAGES in scripts/build-check.js").toBe(true);
+  it("snapshots the facts of the three libraries, catalog last, so luz-check knows every class of a pattern (luz-docs-*, luz-landing-*…) as catalog's", () => {
+    expect(/const PACKAGES = \["tokens", "core", "catalog"\];/.test(source), "PACKAGES in scripts/build-check.js").toBe(true);
   });
 
   it("bundles packages/check/src/main.js with esbuild, as build-package.js does: node, ESM, node20, builtins external", () => {
@@ -264,11 +265,10 @@ describe("scripts/build-check.js: the build", () => {
 /* ---- The lists the scripts read -------------------------------------------------- */
 
 describe("scripts/luz-packages.js: tools are published and have no CSS", () => {
-  it("TOOLS is [check]: after the libraries, not a kind of site, not a base package", () => {
+  it("TOOLS is [check]: after the libraries, not a base package", () => {
     expect(TOOLS).toEqual(["check"]);
-    expect(SITE_KINDS).not.toContain("check");
     expect(BASE).not.toContain("check");
-    expect(PACKAGES, "PACKAGES stays the CSS libraries: the docs tests and the CSS probes read it").toEqual([...BASE, ...SITE_KINDS]);
+    expect(PACKAGES, "PACKAGES stays the CSS libraries: the docs tests and the CSS probes read it; there is no kind of site left (F5b)").toEqual(BASE);
     expect(PACKAGES).not.toContain("check");
   });
 
@@ -313,13 +313,13 @@ describe("the release scripts read PUBLISHED, and the CSS probes keep PACKAGES",
   it("scripts/qa-release.js counts packages/check/src among the sources it reports", () => {
     const line = readOr("scripts/qa-release.js").split("\n").find((l) => l.startsWith("const uiFiles")) ?? "";
     const group = line.match(/\^packages\\\/\(([^)]*)\)\\\/src\\\//)?.[1] ?? "";
-    expect(group.split("|").sort()).toEqual(["app", "catalog", "check", "cms", "core", "docs", "landing", "tokens"]);
+    expect(group.split("|").sort()).toEqual(["catalog", "check", "core", "tokens"]);
   });
 
-  it("the root build ends with the bundle of check, after docs: root script luzcheck:build (spec 7.1)", () => {
+  it("the root build ends with the bundle of check, after catalog: root script luzcheck:build (spec 7.1)", () => {
     const pkg = json("package.json");
     expect(pkg.scripts?.["luzcheck:build"]).toBe("node scripts/build-check.js");
-    expect(pkg.scripts?.build).toMatch(/pnpm app:build && pnpm docs:build && pnpm luzcheck:build$/);
+    expect(pkg.scripts?.build).toMatch(/pnpm catalog:build && pnpm luzcheck:build$/);
   });
 
   it("the root has no script that npm runs on its own for check (no pre or post hook of the release scripts)", () => {

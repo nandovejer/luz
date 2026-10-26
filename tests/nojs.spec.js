@@ -215,7 +215,7 @@ for (const app of APPS) {
     await expect(drawer).toBeVisible();
     // the site links are in the drawer, first; none stays in the header row
     await expect(page.locator('.site-header__nav a:visible')).toHaveCount(0);
-    await expect(drawer.getByRole('list', { name: names.site }).getByRole('link')).toHaveText(names.links);
+    await expect(drawer.getByRole('list', { name: names.site, exact: true }).getByRole('link')).toHaveText(names.links);
     // With no script to measure it, the header's height is the CSS value:
     // the drawer opens right below the header, never over its button
     // (polled: the panel slides in from a few pixels above, and ends right below the header)

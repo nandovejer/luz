@@ -11,6 +11,7 @@
  * ../budgets.json, ../PRINCIPLES.md and ../packages from its own location),
  * and the real built files are checked against the same rules.
  */
+import { randomBytes } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -95,6 +96,8 @@ describe("budgets.json and PRINCIPLES.md section 8", () => {
     expect(budgets.find((b) => b.name === "catalog component CSS (each)")).toEqual({
       name: "catalog component CSS (each)",
       glob: "packages/catalog/dist/components/*.min.css",
+      // F5b: the 21 patterns of the four kinds of site are files of catalog with a row of their own, so this row leaves them out
+      except: "packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css",
       ideal: 1280,
       max: 1536,
     });
@@ -146,9 +149,9 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     ["catalog JS", 2 * KiB],
     ["catalog JS lazy chunk: search", 2.5 * KiB],
     ["catalog JS lazy chunk: consent", 1.5 * KiB],
-    ["landing CSS", 2 * KiB],
-    ["cms CSS", 4 * KiB],
-    ["app CSS", 2 * KiB],
+    // F5b: the rows `landing CSS` (2 KiB), `cms CSS` (4 KiB), `app CSS` (2 KiB) and `docs CSS` (4 KiB) went with their
+    // packages; each of the 21 patterns has a ceiling of 1 KiB, below the smallest of them (a ceiling that goes down, never up)
+    ["catalog kind patterns CSS (each)", 1 * KiB],
     [last, 80 * KiB],
   ];
 
@@ -156,11 +159,10 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(budgets.slice(0, BEFORE.length).map((b) => [b.name, b.max])).toEqual(BEFORE);
   });
 
-  it("appends the three AI-ready rows after the docs page row, then the docs package row (F6a), the language chunk row (F6), the mode chunk row (F1), the three rows of the home's light (F3), then the prompts row (F1 of the kinds plan) and nothing else", () => {
-    expect(budgets).toHaveLength(BEFORE.length + 10);
+  it("appends the three AI-ready rows after the docs page row, then the language chunk row (F6), the mode chunk row (F1), the three rows of the home's light (F3), then the prompts row (F1 of the kinds plan) and nothing else (no docs CSS row since F5b)", () => {
+    expect(budgets).toHaveLength(BEFORE.length + 9);
     expect(budgets.at(BEFORE.length - 1).name).toBe(last);
     expect(budgets.slice(BEFORE.length + 3).map((b) => b.name)).toEqual([
-      "docs CSS",
       "core JS lazy chunk: i18n-es",
       "catalog JS lazy chunk: mode",
       "home light controller JS",
@@ -202,22 +204,23 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     });
   });
 
-  it("budgets the docs package CSS after the manifests row and before the language and light rows: ideal 2 KiB, ceiling 4 KiB, a new row and no other ceiling raised (F6a)", () => {
-    // The light rows stay last (tests/home-light.test.js) and i18n-es stays right before the mode chunk, so this is the first free place.
-    expect(budgets[BEFORE.length + 3]).toEqual({ name: "docs CSS", file: "packages/docs/dist/docs.min.css", ideal: 2 * KiB, max: 4 * KiB });
+  it("has no row of the docs package, and no row of landing, cms or app: their packages are gone, and the patterns share one row", () => {
+    for (const name of ["docs CSS", "landing CSS", "cms CSS", "app CSS"]) expect(budgets.find((b) => b.name === name), name).toBeUndefined();
+    expect(budgets[BEFORE.length - 2]).toEqual({ name: "catalog kind patterns CSS (each)", glob: "packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css", ideal: 768, max: 1024 });
   });
 
-  it("has the docs row in the PRINCIPLES.md table right after the manifests row, with the same ideal and ceiling", () => {
-    expect(table[BEFORE.length + 2][0], "the row before it").toMatch(/manifests|Each manifest/i);
-    const [name, floor, ideal, , ceiling] = table[BEFORE.length + 3];
-    expect(name).toMatch(/^`docs` CSS/);
+  it("has the row of the patterns in the PRINCIPLES.md table right after the consent chunk, with the same ideal and ceiling, and no row of the four packages", () => {
+    expect(table[BEFORE.length - 3][0], "the row before it").toMatch(/^`catalog` JS lazy chunk: `consent`/);
+    const [name, floor, ideal, , ceiling] = table[BEFORE.length - 2];
+    expect(name).toMatch(/^Each pattern of a kind of site in `catalog`/);
     expect(floor).toBe("\u2014");
-    expect(ideal).toBe("\u2264 2 kB");
-    expect(ceiling).toBe("4 kB");
+    expect(ideal).toBe("\u2264 0.75 kB");
+    expect(ceiling).toBe("1 kB");
+    expect(table.filter(([cell]) => /^`(?:landing|cms|app|docs)` CSS/.test(cell))).toEqual([]);
   });
 
   it("repeats the rows in the PRINCIPLES.md table, in the same order, after \"Each docs page\"", () => {
-    expect(table).toHaveLength(BEFORE.length + 10);
+    expect(table).toHaveLength(BEFORE.length + 9);
     expect(table[BEFORE.length - 1][0]).toMatch(/^Each docs page/);
     const [cli, text, manifests] = table.slice(BEFORE.length);
     expect(cli[0]).toMatch(/check/);
@@ -413,6 +416,68 @@ describe("scripts/check-size.js on a copy of the repository", () => {
   it("the copy reads its own files, not the repository's", () => {
     build();
     expect(existsSync(join(dir, "packages/catalog/dist/catalog.min.js"))).toBe(true);
+  });
+});
+
+/* ---- F5b: a row for the patterns of the kinds of site, and `except` on the general one ----------------- */
+
+describe("scripts/check-size.js on a copy of the repository, with the patterns of the kinds of site in catalog", () => {
+  let dir;
+  /** `n` random bytes: they do not compress, so the gzip size of a file is about `n` whatever the zlib. */
+  const noise = (n) => randomBytes(n);
+  const COMPONENTS = "packages/catalog/dist/components";
+  const ROWS = [
+    { name: "catalog component CSS (each)", glob: `${COMPONENTS}/*.min.css`, except: `${COMPONENTS}/{landing,cms,app,docs}-*.min.css`, ideal: 1280, max: 1536 },
+    { name: "catalog kind patterns CSS (each)", glob: `${COMPONENTS}/{landing,cms,app,docs}-*.min.css`, ideal: 768, max: 1024 },
+  ];
+
+  /** A repository with the two rows and the given files (name -> size of its noise); returns the exit status and the output. */
+  function build(files) {
+    mkdirSync(join(dir, "scripts"), { recursive: true });
+    mkdirSync(join(dir, COMPONENTS), { recursive: true });
+    cpSync(join(repo, "scripts/check-size.js"), join(dir, "scripts/check-size.js"));
+    writeFileSync(join(dir, "budgets.json"), JSON.stringify({ budgets: ROWS }));
+    writeFileSync(
+      join(dir, "PRINCIPLES.md"),
+      ["| Artifact | Warns below | Ideal | Warns above | Ceiling |", "| --- | --- | --- | --- | --- |", "| Each component | - | \u2264 1.25 kB | 1.25 kB | 1.5 kB |", "| Each pattern | - | \u2264 0.75 kB | 0.75 kB | 1 kB |"].join("\n") + "\n",
+    );
+    for (const [name, size] of Object.entries(files)) writeFileSync(join(dir, COMPONENTS, name), noise(size));
+    const run = spawnSync(process.execPath, [join(dir, "scripts/check-size.js")], { encoding: "utf-8" });
+    return { status: run.status, output: run.stdout + run.stderr };
+  }
+
+  beforeEach(() => {
+    dir = mkdtempSync(join(tmpdir(), "luz-size-guard-kinds-"));
+  });
+  afterEach(() => {
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it("passes a component under the general ceiling and patterns under theirs", () => {
+    const { status, output } = build({ "search.min.css": 1200, "landing-hero.min.css": 700, "docs-shell.min.css": 600 });
+    expect(output).not.toMatch(/\u2717/);
+    expect(status).toBe(0);
+  });
+
+  it("holds a pattern to the ceiling of its own row: a file of 1.2 kB fits the general row (1.5 kB) and fails the 1 kB of the patterns, and names the file", () => {
+    const { status, output } = build({ "search.min.css": 1200, "cms-header.min.css": 1200 });
+    expect(status).toBe(1);
+    expect(output).toMatch(/catalog kind patterns CSS \(each\): [^\n]*cms-header\.min\.css[^\n]*over the ceiling/);
+    expect(output).not.toMatch(/search\.min\.css[^\n]*\u2717|\u2717[^\n]*search\.min\.css/);
+  });
+
+  it("leaves a pattern out of the general row (`except`): one file is in one row only", () => {
+    // 1.3 kB of gzip fits the general row and not the patterns' row; if the general row counted it, the output would hold its name twice
+    const { output } = build({ "app-header.min.css": 1200, "search.min.css": 300 });
+    expect(output.match(/app-header\.min\.css/g)?.length ?? 0).toBeGreaterThan(0);
+    const generalRow = output.split("\n").filter((line) => line.includes("catalog component CSS (each)"));
+    expect(generalRow.join("\n")).not.toContain("app-header.min.css");
+  });
+
+  it("reads the prefix list as `<kind>-`: landing.min.css and a component of another name stay in the general row", () => {
+    const { status, output } = build({ "landing.min.css": 1200, "docs.min.css": 1200, "mode.min.css": 300, "docs-shell.min.css": 300 });
+    expect(output).not.toMatch(/\u2717/);
+    expect(status).toBe(0);
   });
 });
 

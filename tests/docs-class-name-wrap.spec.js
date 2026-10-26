@@ -1,7 +1,7 @@
 // @ts-check
 /**
  * A class name in a "Variants and options" table does not break inside a word
- * (F7, accessibility review): on /docs/documentation/dodont/ at 1440 px the
+ * (F7, accessibility review): on /docs/catalog/docs-dodont/ at 1440 px the
  * cell showed `dodont__verdic` / `t` and `.luz-docs-` / `dodont`, which reads
  * as two names. A `code` that holds a class name wraps only at a `__` or `--`
  * boundary (the break stands right before or right after the delimiter), or
@@ -21,7 +21,7 @@
  */
 import { test, expect } from '@playwright/test';
 
-const PAGE = '/docs/documentation/dodont/';
+const PAGE = '/docs/catalog/docs-dodont/';
 
 /** The lines of every class-name `code` of the Variants table, each as the text on that line. */
 async function classNameLines(page) {

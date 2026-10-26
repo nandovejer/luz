@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * `.luz-cms-page-header` (@luz-ds/cms; .claude/plans/specs/f3-package-model.md,
+ * `.luz-cms-page-header` (`components/cms-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
  * §1.6, D11 and §9 step 11): the title of a page that is not an article (about,
  * contact), no longer `.luz-site-page-header` of site. A wrapper with the page's
  * `h1` (`__title`) and one sentence about what the page is for (`__lead`),
@@ -8,8 +8,8 @@
  * 32px of room below, a light 3xl title in the heading font (2xl at 640px and
  * below), and a lead in the secondary text colour, 600px wide at most.
  *
- * The page is tests/fixtures/cms-page.html: tokens, core and cms, no site
- * (@luz-ds/catalog is an optional peer). No script: runs in `chromium` and
+ * The page is tests/fixtures/cms-page.html: tokens, core and the cms files, no site-wide
+ * file of catalog. No script: runs in `chromium` and
  * `chromium-nojs`.
  */
 import { test, expect } from '@playwright/test';

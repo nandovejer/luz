@@ -32,7 +32,7 @@ import { site } from './helpers/docs-site.js';
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const THEMES = ['light', 'dark', 'high-contrast'];
 const BLOCKING = ['serious', 'critical'];
-const PACKAGE_NAMES = ['tokens', 'core', 'catalog', 'landing', 'cms', 'app'];
+const PACKAGE_NAMES = ['tokens', 'core', 'catalog'];
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8' };
 
 /** The pages that have a #markup section, as the generator reads them; their example route. */
@@ -167,7 +167,7 @@ test.describe('the examples with JavaScript', () => {
   test('a chunk an entry imports by name is found beside it: <luz-timeline> and <luz-search> are defined', async ({ page }) => {
     await page.goto(`${served.origin}/examples/components/timeline.html`);
     await expect.poll(() => page.evaluate(() => !!customElements.get('luz-timeline')), { timeout: 10_000 }).toBe(true);
-    await page.goto(`${served.origin}/examples/cms/header.html`);
+    await page.goto(`${served.origin}/examples/catalog/cms-header.html`);
     await expect.poll(() => page.evaluate(() => !!customElements.get('luz-search')), { timeout: 10_000 }).toBe(true);
   });
 });

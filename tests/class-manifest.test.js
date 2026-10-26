@@ -411,20 +411,20 @@ describe("the generator, from a built dist/ (a fixture root)", () => {
     expect(names.every((n) => NAMESPACE.test(n))).toBe(true);
   });
 
-  it("calls a class of a package for one kind of site a pattern, and keeps core's class it sits beside known", () => {
+  it("calls a class of a pattern of a kind of site (a file of catalog) a pattern, and keeps core's class it sits beside known", () => {
     const hero = ".luz-landing-hero { display: grid; }\n.luz-landing-hero__title { margin: 0; }\n";
-    const dir = fixtureRoot("landing", { name: "@luz-ds/landing", version: "0.4.0", exports: { "./css": "./dist/landing.css" } }, {
-      "landing.css": `${ORDER}@layer luz.landing {\n${hero}.luz-landing-header .o-row { gap: 0; }\n}\n`,
-      "components/hero.css": `${ORDER}@layer luz.landing {\n${hero}}\n`,
+    const dir = fixtureRoot("catalog", { name: "@luz-ds/catalog", version: "0.4.0", exports: { "./components/*": "./dist/components/*" } }, {
+      "components/landing-header.css": `${ORDER}@layer luz.catalog {\n.luz-landing-header .o-row { gap: 0; }\n}\n`,
+      "components/landing-hero.css": `${ORDER}@layer luz.catalog {\n${hero}}\n`,
     });
-    const { classes, properties, version } = buildClassManifest("landing", { root: dir });
+    const { classes, properties, version } = buildClassManifest("catalog", { root: dir });
     expect(version).toBe("0.4.0");
     expect(properties).toEqual([]);
     expect(classes).toStrictEqual([
-      { name: "luz-landing-header", kind: "pattern", layer: "luz.landing", files: ["landing.css"], defined: false, block: "luz-landing-header" },
-      { name: "luz-landing-hero", kind: "pattern", layer: "luz.landing", files: ["components/hero.css"], defined: true, block: "luz-landing-hero" },
-      { name: "luz-landing-hero__title", kind: "pattern", layer: "luz.landing", files: ["components/hero.css"], defined: true, block: "luz-landing-hero", part: "title" },
-      { name: "o-row", kind: "object", layer: "luz.landing", files: ["landing.css"], defined: false, block: "o-row" },
+      { name: "luz-landing-header", kind: "pattern", layer: "luz.catalog", files: ["components/landing-header.css"], defined: false, block: "luz-landing-header" },
+      { name: "luz-landing-hero", kind: "pattern", layer: "luz.catalog", files: ["components/landing-hero.css"], defined: true, block: "luz-landing-hero" },
+      { name: "luz-landing-hero__title", kind: "pattern", layer: "luz.catalog", files: ["components/landing-hero.css"], defined: true, block: "luz-landing-hero", part: "title" },
+      { name: "o-row", kind: "object", layer: "luz.catalog", files: ["components/landing-header.css"], defined: false, block: "o-row" },
     ]);
   });
 
@@ -666,22 +666,17 @@ describe("the generator: classes the unminified scripts name (RL-19)", () => {
   });
 });
 
-describe("the seven built packages", () => {
+describe("the three built packages", () => {
   const manifests = Object.fromEntries(PACKAGES.map((name) => [name, buildClassManifest(name)]));
   const byName = (pkg) => new Map(manifests[pkg].classes.map((c) => [c.name, c]));
-  const SITE_KIND_PREFIX = { landing: "luz-landing-", cms: "luz-cms-", app: "luz-app-", docs: "luz-docs-" };
   const OWN_LAYERS = {
     tokens: ["tokens"],
     core: ["themes", "settings", "generic", "elements", "objects", "components", "utilities", "print"],
     catalog: ["catalog", "print"],
-    landing: ["landing", "print"],
-    cms: ["cms", "print"],
-    app: ["app", "print"],
-    docs: ["docs", "print"],
   };
 
-  it("covers exactly tokens, core, catalog, landing, cms, app and docs", () => {
-    expect(PACKAGES).toEqual(["tokens", "core", "catalog", "landing", "cms", "app", "docs"]);
+  it("covers exactly tokens, core and catalog: landing, cms, app and docs are files of catalog since F5b", () => {
+    expect(PACKAGES).toEqual(["tokens", "core", "catalog"]);
   });
 
   it.each(PACKAGES)("%s: schema, package name and version come from its package.json", (name) => {
@@ -757,23 +752,44 @@ describe("the seven built packages", () => {
     for (const c of manifests[name].classes) {
       expect(OWN_LAYERS[name].map((l) => `luz.${l}`), `${c.name} is in ${c.layer}`).toContain(c.layer);
       if (!c.defined) continue;
-      if (name === "core") expect(c.name, c.name).not.toMatch(/^luz-(?:catalog|landing|cms|app)-/);
+      if (name === "core") expect(c.name, c.name).not.toMatch(/^luz-(?:catalog|landing|cms|app|docs)-/);
       else if (name === "catalog") expect(c.name, c.name).toMatch(/^luz-/);
-      else if (SITE_KIND_PREFIX[name]) expect(c.name.startsWith(SITE_KIND_PREFIX[name]), `${name} defines ${c.name}`).toBe(true);
     }
   });
 
-  it("catalog: each class it defines maps to the component file that declares it, and to no bundle (F5a)", () => {
+  it("catalog: each class it defines maps to the component files that declare it, and to no bundle (F5a, F5b)", () => {
     const defined = manifests.catalog.classes.filter((c) => c.defined);
     expect(defined.length).toBeGreaterThan(0);
     for (const c of defined) {
-      expect(c.files, c.name).toHaveLength(1);
-      expect(c.files[0], c.name).toMatch(/^components\/[a-z0-9-]+\.css$/);
-      expect(existsSync(`${root}packages/catalog/dist/${c.files[0].replace(/\.css$/, ".min.css")}`), `${c.name}: the .min.css of ${c.files[0]}`).toBe(true);
-      const css = readFileSync(`${root}packages/catalog/dist/${c.files[0]}`, "utf-8");
-      expect(css, `${c.name} is declared in ${c.files[0]}`).toContain(`.${c.name}`);
+      expect(c.files.length, c.name).toBeGreaterThan(0);
+      for (const file of c.files) {
+        expect(file, c.name).toMatch(/^components\/[a-z0-9-]+\.css$/);
+        expect(existsSync(`${root}packages/catalog/dist/${file.replace(/\.css$/, ".min.css")}`), `${c.name}: the .min.css of ${file}`).toBe(true);
+        expect(readFileSync(`${root}packages/catalog/dist/${file}`, "utf-8"), `${c.name} is declared in ${file}`).toContain(`.${c.name}`);
+      }
     }
     for (const c of manifests.catalog.classes) expect(c.files, c.name).not.toContain("catalog.css");
+  });
+
+  it("catalog: a class of an element (a tag's own) is declared in one file; only a pattern shares rules with another file of its kind", () => {
+    const KIND_FILE = /^components\/(landing|cms|app|docs)-[a-z0-9-]+\.css$/;
+    for (const c of manifests.catalog.classes.filter((c) => c.defined && c.files.length > 1)) {
+      const kind = /^luz-(landing|cms|app|docs)-/.exec(c.name)?.[1];
+      expect(kind, `${c.name} is declared in ${c.files.join(", ")} but is not the class of a pattern`).toBeTruthy();
+      for (const file of c.files) expect(KIND_FILE.exec(file)?.[1], `${c.name} in ${file}`).toBe(kind);
+    }
+  });
+
+  it("catalog: the classes of a kind of site are patterns of luz.catalog, defined in the files of their kind, and in no other file", () => {
+    const FILE_OF_KIND = { landing: /^components\/landing-/, cms: /^components\/cms-/, app: /^components\/app-/, docs: /^components\/docs-/ };
+    for (const [kind, filePattern] of Object.entries(FILE_OF_KIND)) {
+      const own = manifests.catalog.classes.filter((c) => c.name.startsWith(`luz-${kind}-`));
+      expect(own.length, `luz-${kind}-* classes`).toBeGreaterThan(5);
+      for (const c of own) {
+        expect(c, c.name).toMatchObject({ kind: "pattern", layer: "luz.catalog" });
+        if (c.defined) for (const file of c.files) expect(file, c.name).toMatch(filePattern);
+      }
+    }
   });
 
   it("core: a class only its scripts name is listed, defined: false, in the script that names it", () => {
@@ -837,10 +853,14 @@ describe("the seven built packages", () => {
     }
   });
 
-  it("landing: a core object it sits beside is known, not defined, and its own classes are patterns", () => {
-    const landing = byName("landing");
-    expect(landing.get("luz-landing-hero")).toMatchObject({ kind: "pattern", layer: "luz.landing", defined: true });
-    expect(landing.get("o-row")).toMatchObject({ kind: "object", defined: false });
+  it("catalog: a core object a pattern sits beside is known, not defined, and the pattern's own classes are patterns", () => {
+    const catalog = byName("catalog");
+    expect(catalog.get("luz-landing-hero")).toMatchObject({ kind: "pattern", layer: "luz.catalog", defined: true, files: ["components/landing-hero.css"] });
+    expect(catalog.get("luz-docs-shell")).toMatchObject({ kind: "pattern", layer: "luz.catalog", defined: true, files: ["components/docs-shell.css"] });
+    expect(catalog.get("luz-app-dashboard__panel--wide")).toMatchObject({ kind: "pattern", layer: "luz.catalog", defined: true, files: ["components/app-dashboard.css"] });
+    expect(catalog.get("luz-cms-toc")).toMatchObject({ kind: "pattern", defined: true, files: ["components/cms-article.css"] });
+    expect(catalog.get("o-row")).toMatchObject({ kind: "object", defined: false });
+    expect(catalog.get("o-row").files, "o-row is named in the headers and the footers that sit on it").toContain("components/landing-header.css");
   });
 
   it("two builds give the same manifests", () => {

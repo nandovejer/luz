@@ -4,20 +4,32 @@
  *
  *   (a) layering: a lower package never names a higher one
  *   (b) names: no block is shipped by two packages
- *   (c) peers: a kind of site takes catalog as an optional peer
- *   (d) catalog after F3 and F1: six components, the exports of spec §1.3, no placeholders
+ *   (c) peers: catalog takes tokens and core, and nothing else; the packages for one kind of site are gone
+ *   (d) catalog after F3, F1 and F5b: six elements and the 21 patterns of the four kinds of site, the exports
+ *       of spec §1.3, no placeholders
+ *
+ * F5b (.claude/plans/ai-and-catalog-only.md, decisions 1, 2, 51 to 58): landing, cms, app and docs are not
+ * packages any more, their patterns are files of catalog (`<kind>-<name>.css`), so "a kind of site" is a
+ * prefix of the files of catalog now (the list is in tests/catalog-patterns.test.js).
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { SITE_KINDS } from "../scripts/luz-packages.js";
 import { JPEG_LONG_SIDES, LONG_SIDES, RATIOS, VARIANTS, sizeOf } from "../scripts/build-placeholders.js";
 import { LAYER_ORDER } from "../scripts/luz-layers.js";
 import { blocksOfCss } from "./helpers/css-blocks.js";
 import { isNpmOrReleased } from "./helpers/versions.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
+const KINDS = ["landing", "cms", "app", "docs"];
+/** The 21 stylesheets of catalog that came from the four packages (`<kind>-<name>`), in the order of their kinds. */
+const PATTERNS = [
+  ...["header", "hero", "main", "section", "stat", "footer", "glow"].map((n) => `landing-${n}`),
+  ...["header", "page-header", "article-header", "article", "footer"].map((n) => `cms-${n}`),
+  ...["header", "dashboard"].map((n) => `app-${n}`),
+  ...["shell", "page-head", "rail", "example", "dodont", "pager", "page-foot"].map((n) => `docs-${n}`),
+];
 const SITE_TAGS = ["search", "consent", "lang-switch", "submenu", "banner"];
 // F1 of the identity plan adds <luz-mode> to catalog. It is not in SITE_TAGS: core's theme.js has a
 // storage key spelled "luz-mode" (the mode of a custom theme), which the layering check would take for the tag
@@ -38,10 +50,10 @@ function sources(name, extensions = [".css", ".js"]) {
   return out;
 }
 
-/** "path:line: text" for each line of the package's sources that matches. */
-function offenders(names, pattern) {
+/** "path:line: text" for each line of the package's sources that matches (`keep`: which files of the package to read). */
+function offenders(names, pattern, keep = () => true) {
   return names.flatMap((name) =>
-    sources(name).flatMap(({ path, text }) =>
+    sources(name).filter(({ path }) => keep(path)).flatMap(({ path, text }) =>
       text.split("\n").flatMap((line, i) => (pattern.test(line) ? [`${path}:${i + 1}: ${line.trim()}`] : [])),
     ),
   );
@@ -49,24 +61,29 @@ function offenders(names, pattern) {
 
 /* ---- (a) A lower package never names a higher one ------------------------ */
 
-describe("layering: tokens < core < catalog < a kind of site", () => {
-  it("tokens and core name no catalog block, no kind of site and none of catalog's five tags", () => {
+/** A source file of catalog that is a pattern of a kind of site (`components/<kind>-<name>.css`). */
+const isPatternFile = (path) => new RegExp(`/components/(?:${KINDS.join("|")})-[\\w-]+\\.css$`).test(path);
+
+describe("layering: tokens < core < catalog", () => {
+  it("tokens and core name no catalog block, no pattern of a kind of site and none of catalog's five tags", () => {
     const tags = new RegExp(`luz-(?:${SITE_TAGS.join("|")})(?:__|--|(?![\\w-]))`);
     expect(offenders(["tokens", "core"], /luz-(?:site|catalog|landing|cms|app|docs)-/)).toEqual([]);
     expect(offenders(["tokens", "core"], tags)).toEqual([]);
   });
 
-  it("catalog names no kind of site", () => {
-    expect(offenders(["catalog"], /luz-(?:landing|cms|app|docs)-/)).toEqual([]);
+  it("the elements of catalog (search, consent, mode, lang-switch, submenu, banner) name no pattern of a kind of site", () => {
+    expect(offenders(["catalog"], /luz-(?:landing|cms|app|docs)-/, (path) => !isPatternFile(path))).toEqual([]);
   });
 
-  // A kind may refine catalog's tags (`.luz-landing-header luz-lang-switch`),
-  // but catalog's old `luz-site-*` classes go away in F3, and two kinds never
-  // meet: no shared class (spec §1.8)
-  const other = (kind) => SITE_KINDS.filter((k) => k !== kind).join("|");
-  for (const kind of SITE_KINDS) {
-    it(`${kind} names no \`luz-catalog-*\` class or property and no other kind of site`, () => {
-      expect(offenders([kind], new RegExp(`luz-(?:site|catalog)-|luz-(?:${other(kind)})-`))).toEqual([]);
+  // A pattern may refine catalog's tags (`.luz-landing-header luz-lang-switch`), but catalog's old
+  // `luz-site-*` classes went away in F3, and two kinds never meet: no shared class (spec §1.8)
+  const other = (kind) => KINDS.filter((k) => k !== kind).join("|");
+  for (const kind of KINDS) {
+    it(`the ${kind} patterns name no \`luz-catalog-*\` class or property and no other kind of site`, () => {
+      const own = new RegExp(`/components/${kind}-[\\w-]+\\.css$`);
+      const files = sources("catalog").filter(({ path }) => own.test(path));
+      expect(files.length, `packages/catalog/src/components/${kind}-*.css`).toBeGreaterThan(0);
+      expect(offenders(["catalog"], new RegExp(`luz-(?:site|catalog)-|luz-(?:${other(kind)})-`), (path) => own.test(path))).toEqual([]);
     });
   }
 });
@@ -74,7 +91,7 @@ describe("layering: tokens < core < catalog < a kind of site", () => {
 /* ---- (b) No block is shipped by two packages ------------------------------ */
 
 describe("names: one package per block", () => {
-  const packages = ["core", "catalog", ...SITE_KINDS];
+  const packages = ["core", "catalog"];
   const owners = new Map();
   for (const name of packages) {
     for (const { path, text } of sources(name, [".css"])) {
@@ -112,41 +129,44 @@ describe("names: one package per block", () => {
   });
 });
 
-/* ---- (c) A kind of site takes site as an optional peer -------------------- */
+/* ---- (c) The packages for one kind of site are gone (F5b) ---------------- */
 
-describe("peers: a kind of site works without catalog", () => {
-  for (const kind of SITE_KINDS) {
-    const manifest = JSON.parse(readFileSync(`${root}packages/${kind}/package.json`, "utf-8"));
+describe("peers: catalog needs tokens and core, and the four packages for one kind of site do not exist", () => {
+  const manifest = JSON.parse(readFileSync(`${root}packages/catalog/package.json`, "utf-8"));
 
-    it(`${kind} requires tokens and core and lists catalog as an optional peer`, () => {
-      expect(manifest.peerDependencies["@luz-ds/tokens"]).toBe("^0.1.0 || ^0.2.0");
-      expect(manifest.peerDependencies["@luz-ds/core"]).toBe("^0.1.0 || ^0.2.0");
-      expect(manifest.peerDependencies["@luz-ds/catalog"], "catalog stays a peer, with the literal range").toBe("^0.1.0 || ^0.2.0");
-      expect(manifest.peerDependenciesMeta?.["@luz-ds/catalog"]).toEqual({ optional: true });
-    });
+  it("catalog requires tokens and core with literal ranges, as its only peers", () => {
+    expect(manifest.peerDependencies).toEqual({ "@luz-ds/core": "^0.1.0 || ^0.2.0", "@luz-ds/tokens": "^0.1.0 || ^0.2.0" });
+    expect(manifest.peerDependenciesMeta).toBeUndefined();
+  });
 
-    it(`${kind} makes tokens and core required, never optional`, () => {
-      expect(manifest.peerDependenciesMeta?.["@luz-ds/tokens"]).toBeUndefined();
-      expect(manifest.peerDependenciesMeta?.["@luz-ds/core"]).toBeUndefined();
-    });
-
-    it(`${kind} keeps catalog as a workspace dev dependency (for the docs and the tests)`, () => {
-      expect(manifest.devDependencies["@luz-ds/catalog"]).toBe("workspace:*");
+  for (const kind of KINDS) {
+    it(`packages/${kind} is not there: no package.json, no source, no dist`, () => {
+      expect(existsSync(`${root}packages/${kind}`), `packages/${kind}`).toBe(false);
     });
   }
+
+  it("no package, app or script depends on the four old packages", () => {
+    const manifests = ["package.json", "apps/docs/package.json", "apps/landing/package.json", ...readdirSync(`${root}packages`).map((n) => `packages/${n}/package.json`)];
+    const offenders = manifests.flatMap((file) => {
+      const json = JSON.parse(readFileSync(`${root}${file}`, "utf-8"));
+      const deps = { ...json.dependencies, ...json.devDependencies, ...json.peerDependencies, ...json.optionalDependencies };
+      return Object.keys(deps).filter((name) => KINDS.some((k) => name === `@luz-ds/${k}`)).map((name) => `${file}: ${name}`);
+    });
+    expect(offenders).toEqual([]);
+  });
 });
 
 /* ---- (d) catalog after F3 and F1: six components and nothing else (step 12) -------- */
 
-describe("catalog after F1: six `<luz-*>` components", () => {
+describe("catalog after F5b: six `<luz-*>` elements and the 21 patterns of the four kinds of site", () => {
   const read = (path) => readFileSync(`${root}${path}`, "utf-8");
   const manifest = JSON.parse(read("packages/catalog/package.json"));
-  const components = SITE_COMPONENTS.map((name) => `${name}.css`).sort();
+  const components = [...SITE_COMPONENTS, ...PATTERNS].map((name) => `${name}.css`).sort();
   const minified = components.map((f) => f.replace(/\.css$/, ".min.css"));
   const list = (dir, keep) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(keep).sort() : []);
   const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");
 
-  it("src/components holds the six components, nothing else: no `_print.css`, the print rules are in each component", () => {
+  it("src/components holds the six elements and the 21 patterns, nothing else: no `_print.css`, the print rules are in each component", () => {
     expect(list("packages/catalog/src/components", (f) => f.endsWith(".css"))).toEqual(components);
   });
 
@@ -160,7 +180,7 @@ describe("catalog after F1: six `<luz-*>` components", () => {
     for (const f of ["catalog.css", "catalog.min.css", "print.css"]) expect(existsSync(`${root}packages/catalog/dist/${f}`), f).toBe(false);
   });
 
-  it.skipIf(!built)("dist/components is exactly {search, consent, mode, lang-switch, submenu, banner}.css, plain and minified", () => {
+  it.skipIf(!built)("dist/components is exactly the six elements and the 21 patterns, plain and minified", () => {
     expect(list("packages/catalog/dist/components", isCss)).toEqual(components);
     expect(list("packages/catalog/dist/components", (f) => f.endsWith(".min.css"))).toEqual(minified);
   });
@@ -195,16 +215,16 @@ describe("catalog after F1: six `<luz-*>` components", () => {
   it("ships `dist` and the licence only, and describes its components", () => {
     expect(manifest.files).toEqual(["dist", "LICENSE"]);
     for (const word of ["search", "consent", "language", "submenu", "banner"]) expect(manifest.description.toLowerCase(), word).toContain(word);
-    for (const word of ["shell", "header", "footer", "hero", "placeholder"]) expect(manifest.description.toLowerCase(), word).not.toContain(word);
+    expect(manifest.description.toLowerCase(), "no placeholder in the package").not.toContain("placeholder");
   });
 
-  it("pack-files.txt lists the six components, plain and minified, and no placeholder", () => {
+  it("pack-files.txt lists the six elements and the 21 patterns, plain and minified, and no placeholder", () => {
     const packed = read("packages/catalog/pack-files.txt").split("\n").filter(Boolean);
     expect(packed.filter((f) => f.startsWith("dist/components/")).sort()).toEqual([...components, ...minified].sort().map((f) => `dist/components/${f}`));
     expect(packed.filter((f) => /placeholder/.test(f))).toEqual([]);
   });
 
-  it("no source of catalog names a `luz-catalog-*` class or property: the page structure left in steps 4 to 11", () => {
+  it("no source of catalog names a `luz-catalog-*` class or property", () => {
     expect(offenders(["catalog"], /luz-(?:site|catalog)-/)).toEqual([]);
   });
 
@@ -261,7 +281,7 @@ describe("the image placeholders are docs-only", () => {
 
   it("no published stylesheet or package list points at them: no `url()` to a placeholder, no export", () => {
     const bad = [];
-    for (const name of ["tokens", "core", "catalog", ...SITE_KINDS]) {
+    for (const name of ["tokens", "core", "catalog"]) {
       for (const { path, text } of sources(name, [".css"])) if (/url\([^)]*placeholder/.test(text)) bad.push(path);
       const manifest = JSON.parse(read(`packages/${name}/package.json`));
       if (JSON.stringify(manifest.exports ?? {}).includes("placeholder")) bad.push(`packages/${name}/package.json exports`);
@@ -300,11 +320,11 @@ describe("core after F6: the languages are published as a pattern export and the
 
 
 describe("versions: the repository matches npm", () => {
-  // On 2026-10-19 the owner published 0.1.0 of these seven by hand. The repo must say the same, or the
+  // On 2026-10-19 the owner published 0.1.0 of these (and of landing, cms, app and docs, which are not packages any more) by hand. The repo must say the same, or the
   // Version Packages PR of changesets proposes 0.1.0 again: a version npm already has, with other content.
   // `catalog` (formerly `site`) was never published: it stays at 0.0.0, and a minor changeset makes it 0.2.0
   // with tokens and core (the `fixed` group)
-  const PUBLISHED_BY_HAND = ["tokens", "core", "check", "landing", "cms", "app", "docs"];
+  const PUBLISHED_BY_HAND = ["tokens", "core", "check"];
   const version = (name) => JSON.parse(readFileSync(`${root}packages/${name}/package.json`, "utf-8")).version;
 
   // Until the Version Packages PR is merged. On it, and after it, a package is at the version its CHANGELOG lists

@@ -192,10 +192,12 @@ describe("the budget of the mode chunk", () => {
   it("leaves the other catalog rows as they were (a new row, never a raised ceiling)", () => {
     const rows = budgets.filter((b) => /^catalog /.test(b.name) && b.name !== "catalog JS lazy chunk: mode");
     expect(rows).toEqual([
-      { name: "catalog component CSS (each)", glob: "packages/catalog/dist/components/*.min.css", ideal: 1280, max: 1536 },
+      // F5b: the 21 patterns of the four kinds of site have the last row, and this one leaves them out
+      { name: "catalog component CSS (each)", glob: "packages/catalog/dist/components/*.min.css", except: "packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css", ideal: 1280, max: 1536 },
       { name: "catalog JS", file: "packages/catalog/dist/catalog.min.js", ideal: 1024, max: 2048 },
       { name: "catalog JS lazy chunk: search", file: "packages/catalog/dist/search.min.js", ideal: 2048, max: 2560 },
       { name: "catalog JS lazy chunk: consent", file: "packages/catalog/dist/consent.min.js", ideal: 1024, max: 1536 },
+      { name: "catalog kind patterns CSS (each)", glob: "packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css", ideal: 768, max: 1024 },
     ]);
   });
 

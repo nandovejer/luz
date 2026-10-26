@@ -1,6 +1,7 @@
 // @ts-check
 /**
- * @luz-ds/app 0.1 (.claude/plans/specs/f3-package-model.md, section 6 and
+ * The app patterns, files of @luz-ds/catalog since F5b (`components/app-header.css` and `components/app-dashboard.css`, layer
+ * luz.catalog; formerly @luz-ds/app 0.1) (.claude/plans/specs/f3-package-model.md, section 6 and
  * section 9 step 14; .claude/plans/specs/f3-ux.md, section 2 and the
  * accessibility answers A1 to A13; accessibility requirements O5, O6): the
  * header of an application and its dashboard, composed from core's `.o-shell`
@@ -18,8 +19,8 @@
  *     ul.o-grid.o-grid--auto of li.luz-card.__panel (an h2 each), `__panel--wide`
  *     two columns from a 40rem container.
  *
- * Pages: tests/fixtures/app.html (tokens, core and app; site NOT loaded) and
- * tests/fixtures/app-site.html (the same, with site and a <luz-search>). The
+ * Pages: tests/fixtures/app.html (tokens, core and the two app files; no site-wide catalog file or script) and
+ * tests/fixtures/app-site.html (the same, with the search file and a <luz-search>). The
  * collapse of the sidebar is tested once, in core (tests/ui.spec.js); the
  * stickiness of `.o-sticky` by tests/objects.spec.js. Here: that app wires
  * them together and adds only its own skin and rhythm.
@@ -600,18 +601,22 @@ for (const [label, url] of [['without site', PLAIN], ['with site', WITH_SITE]]) 
 }
 
 test.describe('app without site: nothing of site is asked for', () => {
-  test('the page asks for no file of site and for the stylesheet of app, which it gets', async ({ page }) => {
+  test('the page asks for the two files of the app patterns, which it gets, and for no other file of catalog, and no script of it', async ({ page }) => {
     const requests = [];
     const responses = [];
     page.on('request', (req) => requests.push(req.url()));
     page.on('response', (res) => responses.push({ url: res.url(), status: res.status(), type: res.headers()['content-type'] ?? '' }));
     await page.goto(PLAIN);
     await page.waitForLoadState('networkidle');
-    expect(requests.filter((url) => url.includes('/packages/catalog/'))).toEqual([]);
-    const app = responses.find((r) => r.url.includes('/packages/app/dist/app.css'));
-    expect(app, 'a request for packages/app/dist/app.css').toBeTruthy();
-    expect(app?.status).toBe(200);
-    expect(app?.type).toContain('css');
+    const catalog = requests.map((url) => new URL(url).pathname).filter((path) => path.includes('/packages/catalog/'));
+    expect(catalog.sort()).toEqual(['/packages/catalog/dist/components/app-dashboard.css', '/packages/catalog/dist/components/app-header.css']);
+    // No bundle and no package of app any more
+    expect(requests.some((url) => /\/packages\/app\/|app\.css|catalog\.css/.test(new URL(url).pathname))).toBe(false);
+    for (const file of catalog) {
+      const response = responses.find((r) => r.url.endsWith(file));
+      expect(response?.status, file).toBe(200);
+      expect(response?.type, file).toContain('css');
+    }
     expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-consent, luz-lang-switch, luz-submenu, luz-banner').length)).toBe(0);
   });
 });

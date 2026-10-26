@@ -211,7 +211,7 @@ describe("class/unknown", () => {
       [
         '  <div class="luz-search__field luz-sidebar luz-consent">site</div>',
         '  <section class="luz-landing-hero"><h1 class="luz-landing-hero__title">Landing</h1></section>',
-        '  <article class="luz-cms-post luz-cms-post__title luz-app-shell luz-app-shell__nav">Kinds</article>',
+        '  <article class="luz-cms-header luz-cms-header__brand luz-app-header luz-app-header__product luz-docs-pager luz-docs-shell">Kinds</article>',
       ].join("\n"),
     );
     expect(ofRule(check({ "index.html": html }), "class/")).toEqual([]);
@@ -259,22 +259,24 @@ describe("class/unknown", () => {
     expect(text.stdout).not.toMatch(UNSAFE);
   });
 
-  it("says where to look when nothing is close, by the package its prefix names: classes.json of that package", () => {
+  it("says where to look when nothing is close, by the package its prefix names: classes.json of that package, and catalog's for the four kinds of site (F5b)", () => {
     const html = page(
       [
         '  <p class="luz-completely-unrelated-thing">core</p>',
         '  <p class="luz-landing-qqqqqqqqqq">landing</p>',
         '  <p class="luz-cms-qqqqqqqqqq">cms</p>',
         '  <p class="luz-app-qqqqqqqqqq">app</p>',
+        '  <p class="luz-docs-qqqqqqqqqq">docs</p>',
       ].join("\n"),
     );
     const result = check({ "index.html": html });
-    expect(result.findings.map((f) => f.suggestion)).toEqual([null, null, null, null]);
+    expect(result.findings.map((f) => f.suggestion)).toEqual([null, null, null, null, null]);
     const expected = [
       ["luz-completely-unrelated-thing", "core"],
-      ["luz-landing-qqqqqqqqqq", "landing"],
-      ["luz-cms-qqqqqqqqqq", "cms"],
-      ["luz-app-qqqqqqqqqq", "app"],
+      ["luz-landing-qqqqqqqqqq", "catalog"],
+      ["luz-cms-qqqqqqqqqq", "catalog"],
+      ["luz-app-qqqqqqqqqq", "catalog"],
+      ["luz-docs-qqqqqqqqqq", "catalog"],
     ];
     expected.forEach(([name, pkg], i) => expect(result.findings[i].message).toBe(messages.message("class/unknown:none", { name, package: pkg })));
   });
@@ -640,7 +642,7 @@ describe("class/unknown-in-css and class/reserved-prefix", () => {
 describe("the manifests: node_modules first, then the snapshot", () => {
   const LUZ_PAGE = page('  <button class="luz-btn luz-newthing">x</button>');
 
-  it("lists the seven packages in dependency order, from the snapshot when there is no node_modules", () => {
+  it("lists the three packages in dependency order, from the snapshot when there is no node_modules", () => {
     const result = check({ "index.html": LUZ_PAGE }, { snapshot: { version: "0.1.0" } });
     expect(result.data.manifests).toEqual(LIBRARIES.map((name) => ({ package: `@luz-ds/${name}`, version: "0.1.0", source: "bundled" })));
     expect(run(["."], { version: VERSION, cwd: result.dir, data: miniSnapshot() }).stdout).toMatch(/\(manifests: @luz-ds\/tokens 0\.1\.0 from bundled, @luz-ds\/core 0\.1\.0 from bundled,/);
@@ -654,10 +656,6 @@ describe("the manifests: node_modules first, then the snapshot", () => {
       ["@luz-ds/tokens", "0.1.0", "bundled"],
       ["@luz-ds/core", "9.9.0", "node_modules"],
       ["@luz-ds/catalog", "0.1.0", "bundled"],
-      ["@luz-ds/landing", "0.1.0", "bundled"],
-      ["@luz-ds/cms", "0.1.0", "bundled"],
-      ["@luz-ds/app", "0.1.0", "bundled"],
-      ["@luz-ds/docs", "0.1.0", "bundled"],
     ]);
     expect(run(["."], { version: VERSION, cwd: result.dir, data: miniSnapshot() }).stdout).toContain("@luz-ds/core 9.9.0 from node_modules");
   });
@@ -749,15 +747,23 @@ describe("a page that loads a LUZ release newer than the snapshot", () => {
     expect(JSON.stringify(result.findings[0].details)).toContain("0.1.0");
   });
 
-  it("counts @luz-ds/docs among the packages whose release it reads from a CDN URL", () => {
-    const head = CDN("0.1.0") + '  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.2.0/dist/docs.min.css">\n';
+  it("reads the release of catalog from a CDN URL of a file of a pattern too: a class of the documentation patterns is catalog's", () => {
+    const head = CDN("0.1.0") + '  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/components/docs-pager.min.css">\n';
     const result = check({ "index.html": page('  <p class="luz-docs-shiny-new-thing">x</p>', head) }, { snapshot: { version: "0.1.0" } });
     expect(result.code).toBe(0);
     expect(result.findings.map((f) => [f.rule, f.severity])).toEqual([["class/unknown", "warn"]]);
     expect(JSON.stringify(result.findings[0].details)).toContain("0.2.0");
-    // The same page with docs at the release the snapshot is: the class is unknown, and blocks
-    const same = check({ "index.html": page('  <p class="luz-docs-shiny-new-thing">x</p>', head.replace("docs@0.2.0", "docs@0.1.0")) }, { snapshot: { version: "0.1.0" } });
+    // The same page with catalog at the release the snapshot is: the class is unknown, and blocks
+    const same = check({ "index.html": page('  <p class="luz-docs-shiny-new-thing">x</p>', head.replace("catalog@0.2.0", "catalog@0.1.0")) }, { snapshot: { version: "0.1.0" } });
     expect(same.findings.map((f) => [f.rule, f.severity])).toEqual([["class/unknown", "block"]]);
+  });
+
+  it("does not read a release from a link to @luz-ds/docs, landing, cms or app: they are not packages any more", () => {
+    for (const pkg of ["landing", "cms", "app", "docs"]) {
+      const head = CDN("0.1.0") + `  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/${pkg}@0.9.0/dist/${pkg}.min.css">\n`;
+      const result = check({ "index.html": page(`  <p class="luz-${pkg}-shiny-new-thing">x</p>`, head) }, { snapshot: { version: "0.1.0" } });
+      expect(result.findings.map((f) => [f.rule, f.severity]), pkg).toEqual([["class/unknown", "block"]]);
+    }
   });
 
   it("blocks when the page loads the release the snapshot is, or an older one, or none", () => {

@@ -18,8 +18,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { gotoId, routeOf, routes, routesOf, routesWith, site } from './helpers/docs-site.js';
 import { indexEntries, readingOrder } from '../scripts/docs-site/site.js';
-import { SITE_KINDS } from '../scripts/luz-packages.js';
-import { areaOfPackage } from './helpers/package-areas.js';
+import { PATTERN_AREAS, areaOfPackage } from './helpers/package-areas.js';
 import { KEY as MODE_KEY, seedMode } from './helpers/site-lights.js';
 import { faded } from './helpers/settle.js';
 import { over, parseColor, ratio } from '../packages/tokens/lib/contrast.js';
@@ -61,19 +60,20 @@ const settingNames = (prefix) =>
 const motionNames = [...Object.keys(tokens.duration).map((k) => `--luz-duration-${k}`), ...Object.keys(tokens.easing).map((k) => `--luz-easing-${k}`)];
 const breakpointNames = Object.keys(tokens.breakpoint).map((k) => `--luz-mq-${k}`);
 
-// Every CSS file of a package of patterns (site: the five `<luz-*>` components,
-// whose classes are `.luz-<tag>__<part>` (F3, D5); landing: the patterns of a
-// landing page; cms: the patterns of a blog or a newspaper), and its classes
-const SITE_CLASS = /\.luz-(?:search|consent|lang-switch)(?:__[a-z_-]+|--[a-z_-]+)?/g;
+// Every CSS file of catalog, and its classes: the five `<luz-*>` components (whose classes are
+// `.luz-<tag>__<part>`, F3, D5) and, since F5b, the 21 patterns of a landing page, a blog, an app and a documentation
+// site (`components/<kind>-<name>.css`, classes `.luz-<kind>-<name>`), all of them on the pages of /docs/catalog/
+const CATALOG_CLASS = /\.luz-(?:search|consent|lang-switch|banner|submenu|mode|landing-|cms-|app-|docs-)[a-z_-]*(?:__[a-z_-]+|--[a-z_-]+)?/g;
 const classesOf = (name) => {
   const dir = fromRepo(`packages/${name}/src/components`);
   const css = readdirSync(dir)
     .filter((file) => file.endsWith('.css'))
     .map((file) => readFileSync(`${dir}/${file}`, 'utf-8'))
     .join('\n');
-  return [...new Set(css.match(name === 'catalog' ? SITE_CLASS : new RegExp(`\\.luz-${name}-[a-z_-]+`, 'g')))];
+  return [...new Set(css.match(CATALOG_CLASS))];
 };
-const PATTERN_PACKAGES = ['catalog', ...SITE_KINDS];
+// The areas of patterns are one now: catalog (the four packages for a kind of site are gone)
+const PATTERN_PACKAGES = PATTERN_AREAS;
 
 const MODES = ['light', 'dark', 'high-contrast'];
 
@@ -268,12 +268,12 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('navigation', () => {
-    test('the sidebar shows the eleven areas, an accordion with only the current one open, every page listed, and HTML elements as an area of its own', async ({ page }) => {
+    test('the sidebar shows the seven areas, an accordion with only the current one open, every page listed, and HTML elements as an area of its own', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await gotoId(page, 'c-button');
       const areas = page.locator('.docs-nav a.docs-nav__area');
-      await expect(areas).toHaveText(['Get started', 'Kinds of site', 'Tokens', 'Core', 'Catalog', 'Landing', 'CMS', 'App', 'Documentation', 'HTML elements', 'Accessibility']);
-      // HTML elements is an area like the others, not nested in Documentation
+      await expect(areas).toHaveText(['Get started', 'Kinds of site', 'Tokens', 'Core', 'Catalog', 'HTML elements', 'Accessibility']);
+      // HTML elements is an area like the others, not nested in Catalog
       await expect(page.locator('.docs-nav > li > a.docs-nav__area[href="/docs/html/"]')).toHaveText('HTML elements');
       await expect(page.locator('.docs-nav .docs-nav__sub')).toHaveCount(0);
       await expect(page.locator('.docs-nav a.docs-nav__subarea')).toHaveCount(0);

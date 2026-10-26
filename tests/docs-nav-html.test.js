@@ -9,8 +9,8 @@
  *   site.json     no area carries "parent"; scanSite does not read it (no check, no field).
  *   sidebar       `html` is a top-level item of `ul.docs-nav`: `a.docs-nav__area` (the area label, linking
  *                 to the area index) and the list of the 14 other pages in its fold, as Documentation and
- *                 Accessibility. Order: Get started, Tokens, Core, Catalog, Landing, CMS, App, Documentation,
- *                 HTML elements, Accessibility. `.docs-nav__sub` and `a.docs-nav__subarea` are gone.
+ *                 Accessibility. Order: Get started, Kinds of site, Tokens, Core, Catalog (since F5b it holds the
+ *                 patterns of the kinds of site), HTML elements, Accessibility. `.docs-nav__sub` and `a.docs-nav__subarea` are gone.
  *   aria-current  on an HTML page: "page" on its own link and "true" on the HTML elements area link (and not
  *                 on Documentation); on the HTML index the area link is "page".
  *   breadcrumb    Docs > HTML elements > Title; on the index, Docs > HTML elements.
@@ -33,7 +33,8 @@ import { findAll, hasClass, parse, query, queryAll, queryAllLive, queryLive, tex
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** The top-level areas of the sidebar, in order (the owner's list). */
-const AREA_ORDER = ["get-started", "kinds", "tokens", "components", "catalog", "landing", "cms", "app", "documentation", "html", "accessibility"];
+// F5b: landing, cms, app and documentation are not areas any more, their pages are catalog's (groups of Catalog)
+const AREA_ORDER = ["get-started", "kinds", "tokens", "components", "catalog", "html", "accessibility"];
 
 /* ---- site.json: "parent" is gone ----------------------------------------------------------------- */
 
@@ -66,7 +67,7 @@ describe("site.json: no area is nested", () => {
     expect(site.areas.filter((a) => a.parent !== undefined).map((a) => a.id)).toEqual([]);
   });
 
-  it("lists the areas in the sidebar order, Kinds of site right after Get started, HTML elements right after Documentation and before Accessibility", () => {
+  it("lists the areas in the sidebar order, Kinds of site right after Get started, HTML elements right after Catalog and before Accessibility", () => {
     const site = scanSite(join(repo, "apps/docs"), repo);
     expect(site.areas.map((a) => a.id)).toEqual(AREA_ORDER);
   });
@@ -98,7 +99,8 @@ const order = readingOrder(site);
 const orderRoutes = order.map((p) => p.route);
 
 const HTML_INDEX = "/docs/html/";
-const DOCS_INDEX = "/docs/documentation/";
+/** The area before HTML elements (Documentation, until the patterns of the kinds of site went to the Catalog). */
+const DOCS_INDEX = "/docs/catalog/";
 const ACCESSIBILITY = "/docs/accessibility/";
 const htmlPages = site.pages.filter((p) => p.meta.area === "html");
 /** The pages listed under the area link: the area's pages but its index, in reading order. */
@@ -117,14 +119,14 @@ describe("the sidebar lists HTML elements as an area of its own", () => {
     expect(htmlListed).toHaveLength(14);
   });
 
-  it("lists the eleven areas as a.docs-nav__area, in the owner's order, with HTML elements between Documentation and Accessibility, on every page", () => {
+  it("lists the seven areas as a.docs-nav__area, in the owner's order, with HTML elements between Catalog and Accessibility, on every page", () => {
     for (const p of site.pages) {
       const hrefs = queryAll(listOf(p.route), "a.docs-nav__area").map((a) => a.attrs.get("href"));
       expect(hrefs, p.route).toEqual(AREA_ORDER.map((id) => `/docs/${site.areas.find((a) => a.id === id).slug}/`));
     }
   });
 
-  it("holds HTML elements in its own item of ul.docs-nav: the area link, then the list in its fold with the 14 pages, like Documentation", () => {
+  it("holds HTML elements in its own item of ul.docs-nav: the area link, then the list in its fold with the 14 pages, like Catalog", () => {
     const label = site.areas.find((a) => a.id === "html").label;
     expect(label).toBe("HTML elements");
     for (const p of site.pages) {
@@ -144,7 +146,7 @@ describe("the sidebar lists HTML elements as an area of its own", () => {
       ).toEqual(htmlListed);
       // Nothing of the area is inside the Documentation item, nor the other way round
       const documentation = areaItem(list, DOCS_INDEX);
-      expect(findAll(documentation, (n) => n.name === "a" && n.attrs.get("href").startsWith("/docs/html/")), `${p.route}: no HTML link inside Documentation`).toEqual([]);
+      expect(findAll(documentation, (n) => n.name === "a" && n.attrs.get("href").startsWith("/docs/html/")), `${p.route}: no HTML link inside Catalog`).toEqual([]);
     }
   });
 
@@ -254,7 +256,7 @@ describe("the reading order (Previous / Next)", () => {
   const areaRuns = (routes, areaOf) => routes.map(areaOf).filter((id, i, all) => id !== all[i - 1]);
   const areaOfRoute = (route) => site.byRoute.get(route).meta.area;
 
-  it("lists the areas in runs, in the sidebar's order, with Kinds of site after Get started and HTML elements after Documentation and before Accessibility", () => {
+  it("lists the areas in runs, in the sidebar's order, with Kinds of site after Get started and HTML elements after Catalog and before Accessibility", () => {
     expect(areaRuns(orderRoutes, areaOfRoute)).toEqual(AREA_ORDER);
     expect(orderRoutes.at(-1)).toBe(ACCESSIBILITY);
   });
@@ -266,8 +268,8 @@ describe("the reading order (Previous / Next)", () => {
     expect(orderRoutes.slice(start, start + run.length)).toEqual(run);
   });
 
-  it("goes from the last Documentation page to the HTML index, and from the last HTML page to Accessibility", () => {
-    const lastDocumentation = orderRoutes.filter((r) => areaOfRoute(r) === "documentation").at(-1);
+  it("goes from the last Catalog page to the HTML index, and from the last HTML page to Accessibility", () => {
+    const lastDocumentation = orderRoutes.filter((r) => areaOfRoute(r) === "catalog").at(-1);
     const lastHtml = htmlListed.at(-1);
     expect(end(lastDocumentation).next).toBe(HTML_INDEX);
     expect(end(HTML_INDEX).prev).toBe(lastDocumentation);
@@ -346,10 +348,11 @@ describe("the sidebar in Spanish (real) and Arabic (a stand-in copy of the docs)
       it("builds with no problem (no key missing or unused: the label is area.html, no new key)", () => {
         expect(langs.problems).toEqual([]);
         expect(strings(code)["area.html"]).toBeTruthy();
-        expect(strings(code)["area.documentation"]).toBeTruthy();
+        expect(strings(code)["area.catalog"]).toBeTruthy();
+        for (const gone of ["landing", "cms", "app", "documentation"]) expect(strings(code)[`area.${gone}`], `area.${gone} is gone with its area`).toBeUndefined();
       });
 
-      it("lists the eleven areas, HTML elements labelled in the language between Documentation and Accessibility, linking to its index", () => {
+      it("lists the seven areas, HTML elements labelled in the language between Catalog and Accessibility, linking to its index", () => {
         for (const route of ["/docs/html/forms/", HTML_INDEX, DOCS_INDEX, "/docs/components/button/"]) {
           const areas = queryAll(list(route), "a.docs-nav__area");
           expect(
@@ -399,9 +402,9 @@ describe("the sidebar in Spanish (real) and Arabic (a stand-in copy of the docs)
         expect(items.map((a) => a.attrs.get("href") ?? null)).toEqual([`${root}/docs/`, `${root}${HTML_INDEX}`, null]);
       });
 
-      it("reads in the same order: Documentation, HTML elements, its pages, Accessibility", () => {
+      it("reads in the same order: Catalog, HTML elements, its pages, Accessibility", () => {
         const rel = (route, kind) => queryAllLive(tree(`${root}${route}`), "a.luz-docs-pager__link").find((n) => n.attrs.get("rel") === kind)?.attrs.get("href");
-        const lastDocumentation = orderRoutes.filter((r) => langSite.byRoute.get(r).meta.area === "documentation").at(-1);
+        const lastDocumentation = orderRoutes.filter((r) => langSite.byRoute.get(r).meta.area === "catalog").at(-1);
         expect(rel(lastDocumentation, "next")).toBe(`${root}${HTML_INDEX}`);
         expect(rel(HTML_INDEX, "prev")).toBe(`${root}${lastDocumentation}`);
         expect(rel(htmlListed.at(-1), "next")).toBe(`${root}${ACCESSIBILITY}`);

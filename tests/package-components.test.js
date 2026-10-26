@@ -5,18 +5,18 @@
  *
  * buildPackage() writes dist/components/<name>.css and <name>.min.css for
  * every src/components/<name>.css whose name does not start with `_`, each
- * in the package's own layer. Core already does this; catalog and the kinds of
- * site follow. Catalog has no bundle and no print.css (F5a, decisions 59 and 62):
- * a component that prints carries its own `@layer luz.print` block.
+ * in the package's own layer. Core already does this, and so does catalog, which
+ * holds the patterns of the four kinds of site too since F5b (landing, cms, app and
+ * docs are not packages any more). Catalog has no bundle and no print.css (F5a,
+ * decisions 59 and 62): a component that prints carries its own `@layer luz.print` block.
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { LAYER_ORDER } from "../scripts/luz-layers.js";
-import { SITE_KINDS } from "../scripts/luz-packages.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const PACKAGES = ["catalog", ...SITE_KINDS];
+const PACKAGES = ["catalog"];
 
 const list = (dir, filter) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(filter).sort() : []);
 const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");
@@ -30,7 +30,6 @@ for (const name of PACKAGES) {
   const manifest = JSON.parse(readFileSync(`${root}packages/${name}/package.json`, "utf-8"));
   const wanted = list(src, (f) => isCss(f) && !f.startsWith("_"));
   const built = existsSync(`${root}${dist}/components`);
-  const hasBundle = name !== "catalog";
 
   describe(`@luz-ds/${name}: one stylesheet per component`, () => {
     it("has components to ship", () => {
@@ -66,23 +65,6 @@ for (const name of PACKAGES) {
       }
       expect(bad).toEqual([]);
     });
-
-    it.skipIf(!built || !hasBundle)("each component is the part of the bundle that its source adds", () => {
-      const bundle = readFileSync(`${root}${dist}/${name}.css`, "utf-8");
-      const missing = [];
-      for (const f of wanted) {
-        const file = `${root}${dist}/components/${f}`;
-        const rules = existsSync(file)
-          ? readFileSync(file, "utf-8")
-              .replace(LAYER_ORDER, "")
-              .replace(new RegExp(`^@layer luz\\.${name} \\{\\n`), "")
-              .replace(/\n\}\n$/, "")
-              .trim()
-          : "";
-        if (!rules || !bundle.includes(rules)) missing.push(f);
-      }
-      expect(missing).toEqual([]);
-    });
   });
 }
 
@@ -102,8 +84,8 @@ describe("@luz-ds/catalog: no bundle, print rules in each component", () => {
     for (const f of ["catalog.css", "catalog.min.css", "print.css"]) expect(existsSync(`${root}packages/catalog/dist/${f}`), f).toBe(false);
   });
 
-  it.skipIf(!built)("search and consent carry one `@layer luz.print` block with `@media print`, plain and minified", () => {
-    for (const name of ["search", "consent"]) {
+  it.skipIf(!built)("search, consent, docs-shell and landing-glow carry one `@layer luz.print` block with `@media print`, plain and minified", () => {
+    for (const name of ["search", "consent", "docs-shell", "landing-glow"]) {
       for (const file of [`${name}.css`, `${name}.min.css`]) {
         const css = readFileSync(`${root}packages/catalog/dist/components/${file}`, "utf-8");
         expect(css.match(/@layer luz\.print\s*\{/g), file).toHaveLength(1);

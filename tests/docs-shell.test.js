@@ -69,7 +69,7 @@ const gitDate = (file) => {
 
 /** A component or a pattern page: the pages that have the chips (docs-site.test.js defines them the same way). */
 const isView = (p) =>
-  (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group === "patterns");
+  (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group && p.meta.group !== "reference");
 
 /**
  * The number of known issues a page's "Known issues" section declares: its list items; without a list,
@@ -464,11 +464,18 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     }
   });
 
-  it("a comma-separated list of classes is one chip: the files of a pattern page are what the front matter says between semicolons", () => {
-    const hero = site.byRoute.get("/docs/landing/hero/");
-    expect(hero.meta.files).toContain(",");
-    const meta = query(partsOf(treeOf(hero.route)).head, "ul.luz-docs-page-head__meta");
-    expect(textOf(meta?.children[0])).toBe(hero.meta.files);
+  it("a comma-separated list is one chip: the files of a page are what the front matter says between semicolons (the tag and the attribute of the banner)", () => {
+    const banner = site.byRoute.get("/docs/catalog/banner/");
+    expect(banner.meta.files).toContain(",");
+    const meta = query(partsOf(treeOf(banner.route)).head, "ul.luz-docs-page-head__meta");
+    expect(textOf(meta?.children[0])).toBe(banner.meta.files);
+  });
+
+  it("the file of a pattern of a kind of site is a chip of its own: components/<kind>-<name>.css, in code", () => {
+    const hero = site.byRoute.get("/docs/catalog/landing-hero/");
+    const first = query(partsOf(treeOf(hero.route)).head, "ul.luz-docs-page-head__meta").children[0];
+    expect(textOf(first)).toBe("components/landing-hero.css");
+    expect(query(first, "code.docs-demo__file")).toBeTruthy();
   });
 
   it("the chips are for component and pattern pages only: every other page has the eyebrow, the h1 and the lead, and no list of chips", () => {
@@ -478,15 +485,11 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     }
   });
 
-  it("names the package of an area on its index: Components · @luz-ds/core, Tokens · @luz-ds/tokens, and each pattern area its own package", () => {
+  it("names the package of an area on its index: Components · @luz-ds/core, Tokens · @luz-ds/tokens, Catalog · @luz-ds/catalog, and no other (the packages of the kinds of site are gone)", () => {
     const expected = {
       components: "@luz-ds/core",
       tokens: "@luz-ds/tokens",
       catalog: "@luz-ds/catalog",
-      landing: "@luz-ds/landing",
-      cms: "@luz-ds/cms",
-      app: "@luz-ds/app",
-      documentation: "@luz-ds/docs",
     };
     for (const [id, pkg] of Object.entries(expected)) {
       const area = site.areas.find((a) => a.id === id);
@@ -500,7 +503,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
   });
 
   it("the package is the area's, not the page's: a page of the area keeps \"Area · Group\" or the area alone", () => {
-    for (const route of ["/docs/components/button/", "/docs/components/keyframes/", "/docs/tokens/color/", "/docs/landing/hero/"]) {
+    for (const route of ["/docs/components/button/", "/docs/components/keyframes/", "/docs/tokens/color/", "/docs/catalog/landing-hero/"]) {
       const p = site.byRoute.get(route);
       const eyebrow = textOf(query(partsOf(treeOf(route)).head, "p.luz-docs-page-head__eyebrow"));
       expect(eyebrow, route).not.toContain("@luz-ds/");
@@ -1112,18 +1115,6 @@ describe("<!-- luz:generated --> puts the gallery of an area index where the mar
     const three = find(main, (n) => n.attrs.get("id") === "three").open.index;
     const card = find(main, (n) => n.name === "a" && n.attrs.get("href") === "/docs/get-started/short/");
     expect(card.open.index).toBeGreaterThan(three);
-  });
-
-  it("on the documentation index, \"Install and load\" comes after the pattern gallery", () => {
-    const p = site.byRoute.get("/docs/documentation/");
-    const root = treeOf(p.route);
-    const main = query(root, "main");
-    const at = (id) => find(main, (n) => n.attrs.get("id") === id)?.open.index ?? null;
-    expect(at("group-patterns"), "the patterns gallery").not.toBeNull();
-    expect(at("install-and-load"), "Install and load").not.toBeNull();
-    expect(at("group-patterns")).toBeLessThan(at("install-and-load"));
-    expect(at("group-reference")).toBeLessThan(at("install-and-load"));
-    expect(rendered.get(p.route)).not.toContain("luz:generated");
   });
 });
 
