@@ -1,5 +1,6 @@
 /* ==========================================================================
-	 LUZ CMS: article and its table of contents.
+	 LUZ Catalog: cms article and its table of contents.
+	 Layer: catalog · Prefix: .luz-cms-
 	 .luz-cms-article is the room the story has (a size container). Its
 	 __layout puts the contents beside the text, at the inline end, when that
 	 room is 46rem or more, and above the text below that; beside it, the

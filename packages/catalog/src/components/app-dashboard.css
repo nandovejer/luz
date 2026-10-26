@@ -1,5 +1,6 @@
 /* ==========================================================================
-	 LUZ APP: dashboard.
+	 LUZ Catalog: app dashboard.
+	 Layer: catalog · Prefix: .luz-app-
 	 main.luz-app-dashboard: the view. It holds a __head (a div with the
 	 view's h1, the __title, and core's .o-actions) and a ul.o-grid.o-grid--auto
 	 of li.luz-card.__panel, each starting with its h2. Core gives the grid

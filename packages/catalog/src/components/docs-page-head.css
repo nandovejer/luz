@@ -1,5 +1,6 @@
 /* ==========================================================================
-   LUZ DOCS: page head.
+   LUZ Catalog: docs page head.
+   Layer: catalog · Prefix: .luz-docs-
    header.luz-docs-page-head > p.__eyebrow (the area · the group), h1,
    p.__lead (one sentence), ul.__meta (chips: the files, the script or "No
    JavaScript", the modes, whether it is tested, its known issues). A chip

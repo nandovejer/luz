@@ -1,8 +1,9 @@
 <!-- luz:page
 title: Navegación entre páginas
 description: Dos bloques de enlaces al final de una página, uno a la página anterior y otro a la siguiente, cada uno con el título de la página a la que lleva.
+fits: el final de una página que forma parte de una secuencia
 keywords: anterior, siguiente, enlaces de página, secuencia
-source: 95d37b282e75
+source: b2399619d170
 reviewed: false
 -->
     <div class="docs-component" id="p-docs-pager">
@@ -59,7 +60,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/docs</code>. Define los bloques; tú decides el orden de las páginas.</p>
+            <p>CSS de <code>components/docs-pager.css</code> de <code>@luz-ds/catalog</code>. Define los bloques; tú decides el orden de las páginas.</p>
             <ul>
               <li>Los dos bloques tienen el mismo tamaño y todo el bloque es el área de activación, así que resulta fácil hacer clic o tocarlo.</li>
               <li>La primera página solo tiene «Siguiente» y la última solo «Anterior»: omite el otro <code>&lt;li&gt;</code>. Si solo hay «Siguiente», permanece al final de la segunda columna.</li>
@@ -139,7 +140,7 @@ reviewed: false
               <li><strong>Bordes:</strong> el borde en reposo (<code>--luz-divider</code>) es decorativo y no tiene un mínimo.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 10 tokens que leen las reglas de <code>.luz-docs-pager</code> de <code>components/pager.css</code> de docs, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 10 tokens que leen las reglas de <code>.luz-docs-pager</code> de <code>components/docs-pager.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>

@@ -17,7 +17,7 @@
    Layout
    -------------------------------------------------------------------------- */
 
-/* The shell is @luz-ds/docs's (.luz-docs-shell: the header, the sidebar,
+/* The shell is catalog's (.luz-docs-shell: the header, the sidebar,
    main, the rail and the footer in its tracks). The app gives it the site
    frame (--site-max, --site-edge: apps/site/header.css), the same as the
    header's and the home page's: from 80rem the sidebar's dark column still
@@ -411,7 +411,7 @@
   color: var(--luz-text-secondary);
 }
 
-/* Do and don't (Design tab): the pattern is @luz-ds/docs' .luz-docs-dodont.
+/* Do and don't (Design tab): the pattern is catalog's .luz-docs-dodont.
    What follows holds a component still for a picture in its stage: the
    component's own classes, drawn in place (what the docs teach, not the
    pattern). */
@@ -629,6 +629,23 @@
    (HUB-4). Here only its layout, and the sans title of the gallery. */
 .docs-card__title {
   font-size: var(--luz-text-lg);
+}
+
+/* "Fits best: landing, blog — …" (a catalog pattern): one quiet line under the
+   lead of its page, and on its gallery card. The links to the kinds of site keep
+   core's link style and a 24 px target. */
+.docs-fits,
+.docs-card__fits {
+  margin: 0;
+  font-family: var(--luz-font-sans);
+  font-size: var(--luz-text-sm);
+  color: var(--luz-text-secondary);
+}
+
+.docs-fits a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--luz-control-sm);
 }
 
 .docs-az__letters ul {

@@ -1,5 +1,6 @@
 /* ==========================================================================
-	 LUZ Landing: stat.
+	 LUZ Catalog: landing stat.
+	 Layer: catalog · Prefix: .luz-landing-
 	 A figure and what it counts: div.luz-landing-stat > p.__value + p.__label,
 	 alone or inside core's .luz-card. Tabular figures, so a row of stats
 	 lines up digit under digit.

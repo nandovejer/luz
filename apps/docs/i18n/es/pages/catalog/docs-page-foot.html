@@ -1,8 +1,9 @@
 <!-- luz:page
 title: Pie de página
 description: La información breve al pie de una página: cuándo se actualizó por última vez y enlaces para editarla o informar de un problema.
+fits: la parte inferior de una página de documentación
 keywords: última actualización, editar esta página, informar de un problema, información breve
-source: fa308c1f8e80
+source: c755c90e6959
 reviewed: false
 -->
     <div class="docs-component" id="p-docs-page-foot">
@@ -44,7 +45,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/docs</code>. Define la línea, el tamaño y el color; los datos los pones tú.</p>
+            <p>CSS de <code>components/docs-page-foot.css</code> de <code>@luz-ds/catalog</code>. Define la línea, el tamaño y el color; los datos los pones tú.</p>
             <ul>
               <li>El pie es un párrafo. Se ajusta al texto, así que en una pantalla estrecha los enlaces pasan a la línea siguiente.</li>
               <li>Los puntos medios son texto del marcado, entre la fecha y los enlaces.</li>
@@ -72,7 +73,7 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No uses el pie de página para el pie del sitio: pertenece a una página concreta.</p>
             <ul>
-              <li>El pie del sitio es un <code>&lt;footer&gt;</code>, hijo de la <a href="/docs/documentation/shell/">estructura</a>.</li>
+              <li>El pie del sitio es un <code>&lt;footer&gt;</code>, hijo de la <a href="/docs/catalog/docs-shell/">estructura</a>.</li>
               <li>No muestres una fecha que no se mantenga actualizada: una fecha incorrecta es peor que no poner ninguna.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
@@ -117,7 +118,7 @@ reviewed: false
               <li><strong>Bordes:</strong> la línea sobre el pie (<code>--luz-divider</code>) es decorativa y no tiene un mínimo.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 6 tokens que leen las reglas de <code>.luz-docs-page-foot</code> de <code>components/page-foot.css</code> de docs, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 6 tokens que leen las reglas de <code>.luz-docs-page-foot</code> de <code>components/docs-page-foot.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-md</code></dd></div>

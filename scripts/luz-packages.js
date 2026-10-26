@@ -6,11 +6,10 @@
  * publish.js never uploads one before its peers exist.
  *
  *   BASE       share one version (changesets `fixed`): tokens → core → catalog
- *   SITE_KINDS packages for one kind of site, built on catalog, each with its
- *              own version (0.x while it grows) and literal peer ranges on
- *              the base's major: landing, cms, app, docs
- *   PACKAGES   BASE and SITE_KINDS: the CSS libraries. The docs tests and the
- *              CSS probes read this one.
+ *   PACKAGES   the CSS libraries: BASE. The docs tests and the CSS probes read
+ *              this one. (The patterns of a kind of site, landing, cms, app and
+ *              docs, were four packages of their own until plan
+ *              ai-and-catalog-only, F5b; they are components of catalog now.)
  *   TOOLS      published and with no CSS of their own: dev tools with a bin
  *              (check). Own version, out of the `fixed` group, no layer.
  *   PUBLISHED  PACKAGES then TOOLS: what check-pack, publish and
@@ -18,7 +17,6 @@
  *              tarball is built from the others' dist and nothing depends on it.
  */
 export const BASE = ["tokens", "core", "catalog"];
-export const SITE_KINDS = ["landing", "cms", "app", "docs"];
-export const PACKAGES = [...BASE, ...SITE_KINDS];
+export const PACKAGES = [...BASE];
 export const TOOLS = ["check"];
 export const PUBLISHED = [...PACKAGES, ...TOOLS];

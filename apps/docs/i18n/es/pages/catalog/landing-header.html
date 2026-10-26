@@ -1,8 +1,9 @@
 <!-- luz:page
-title: Cabecera
+title: Cabecera de landing
 description: Inicia cada página de un sitio de landing con su nombre, sus enlaces principales y algunos controles, en una fila que permanece arriba.
+fits: la parte superior de una landing page
 keywords: barra superior, cabecera
-source: ef62a5c9f0cf
+source: e9733b33c639
 reviewed: false
 -->
     <div class="docs-component" id="p-landing-header">
@@ -38,7 +39,7 @@ reviewed: false
             <li><strong>El panel del menú.</strong> Si sigues pulsando Tab después del último enlace del menú abierto, el foco pasa a la página y el menú permanece abierto por encima; Esc lo cierra. Sin posicionamiento mediante anclas CSS, el panel y la lista de idiomas se abren desde la parte superior de la ventana, a la altura de una cabecera de una sola fila, así que con el texto ampliado pueden cubrir parte de la cabecera. Consulta los <a href="/docs/components/navbar/#known-issues">problemas conocidos de la barra de navegación</a>.</li>
             <li><strong>Cabecera fija y texto ampliado.</strong> El relleno de desplazamiento de <code>.o-sticky</code> es un mínimo: con el texto al 300 % y la cabecera repartida en varias filas, Safari puede dejar oculto un campo al que se llega con Tab. Define <code>scroll-padding-block-start</code> en <code>html</code> con la altura real de la cabecera o prescinde de <code>.o-sticky</code>.</li>
           </ul>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera de landing">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
           </nav>
@@ -87,7 +88,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/landing</code> sobre los objetos y la barra de navegación de core. No usa JavaScript y <code>@luz-ds/catalog</code> es opcional.</p>
+            <p>CSS de <code>components/landing-header.css</code> de <code>@luz-ds/catalog</code> sobre los objetos y la barra de navegación de core. No usa JavaScript.</p>
             <ul>
               <li>Landing solo añade la apariencia: la superficie de la página, la línea inferior, la marca y los espacios de la fila (8 px entre filas, 16 px entre elementos y 24 px a partir de 769 px). Core aporta el resto: <code>.o-sticky</code>, la posición fija y el relleno de desplazamiento; <code>.o-container--inline</code>, los márgenes interiores; <code>.o-row</code>, la fila adaptable; y la barra de navegación, los enlaces y su panel.</li>
               <li>Una cabecera de una fila mide lo que <code>--luz-bar-h</code> de core: controles de 44 px, 4 px arriba y abajo y una línea de 1 px. Con el texto ampliado, la fila se ajusta y la cabecera crece.</li>
@@ -157,7 +158,7 @@ reviewed: false
               <li><strong>Bordes:</strong> la línea bajo la cabecera (<code>--luz-divider</code>) es decorativa y no tiene un mínimo; se conserva con colores forzados.</li>
             </ul>
             <h3 id="tokens">Tokens que utiliza</h3>
-            <p>Los 11 tokens que leen, por familia, las reglas de <code>.luz-landing-header</code> de landing en <code>components/header.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 11 tokens que leen, por familia, las reglas de <code>.luz-landing-header</code> en <code>components/landing-header.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>

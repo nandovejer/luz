@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Example
 description: A live preview with its code under it, in one frame, as wide as the width you give it.
-area: documentation
-order: 4
-group: patterns
-files: .luz-docs-example, __preview, __frame, __code
+area: catalog
+order: 20
+group: documentation
+fits-kinds: docs
+fits: a page that shows a live example with its code
+files: components/docs-example.css
 keywords: preview, code sample, demo, specimen, frame, width
 toc: h2,h3
 -->
@@ -69,7 +71,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/docs</code> on core's code block and highlight.</p>
+            <p>CSS from <code>components/docs-example.css</code> of <code>@luz-ds/catalog</code> on core's code block and highlight.</p>
             <ul>
               <li>The preview and the code are one frame, so they read as one example. A long line scrolls inside the code block and never widens the figure.</li>
               <li>The frame's width is <code>min(100%, var(--luz-docs-example-w, 100%))</code>: a width larger than the room does not widen the figure.</li>
@@ -82,7 +84,7 @@ toc: h2,h3
             <ul>
               <li><strong>Order:</strong> the controls of the preview, then the code block.</li>
               <li><strong>Code block:</strong> keep <code>tabindex="0"</code> and an <code>aria-label</code> on the <code>&lt;pre&gt;</code>: it scrolls, and without them a keyboard user cannot reach it or tell what it is.</li>
-              <li><strong>Preview:</strong> it is live, so what is in it works as it does anywhere. A picture that must not be used goes in <a href="/docs/documentation/dodont/">Do and don't</a>, whose stage is inert.</li>
+              <li><strong>Preview:</strong> it is live, so what is in it works as it does anywhere. A picture that must not be used goes in <a href="/docs/catalog/docs-dodont/">Do and don't</a>, whose stage is inert.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
@@ -97,7 +99,7 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not use the example to show a mistake or code with nothing to preview.</p>
             <ul>
-              <li>A picture of a mistake goes in <a href="/docs/documentation/dodont/">Do and don't</a>, which is inert.</li>
+              <li>A picture of a mistake goes in <a href="/docs/catalog/docs-dodont/">Do and don't</a>, which is inert.</li>
               <li>Code with nothing to show, such as a command, is a plain <a href="/docs/components/code/">code block</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
@@ -157,7 +159,7 @@ toc: h2,h3
               <li><strong>Width:</strong> the frame never passes the room it has, so the page does not scroll sideways at 320px.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 4 tokens that the <code>.luz-docs-example</code> rules of docs' <code>components/example.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 4 tokens that the <code>.luz-docs-example</code> rules of catalog’s <code>components/docs-example.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code></dd></div>

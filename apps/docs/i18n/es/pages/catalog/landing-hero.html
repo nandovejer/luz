@@ -1,8 +1,9 @@
 <!-- luz:page
 title: Hero
 description: Abre una página de inicio o landing con un título, una frase, las acciones principales y una imagen opcional.
+fits: la parte superior de una landing page, bajo la cabecera
 keywords: jumbotron, pantalla de bienvenida, introducción
-source: 1d60b1b08651
+source: adfb2ee3aff1
 reviewed: false
 -->
     <div class="docs-component" id="p-landing-hero">
@@ -73,7 +74,7 @@ reviewed: false
 &lt;/section&gt;</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
-            <p>Dos modificadores, <code>--centered</code> y <code>__media--bleed</code>, como en la <a href="/docs/landing/templates/#product-page">plantilla de página de producto</a>. La etiqueta superior, la entradilla y la imagen son opcionales; sin imagen, el texto ocupa todo el ancho.</p>
+            <p>Dos modificadores, <code>--centered</code> y <code>__media--bleed</code>, como en la <a href="/docs/kinds/landing/">plantilla de página de producto</a>. La etiqueta superior, la entradilla y la imagen son opcionales; sin imagen, el texto ocupa todo el ancho.</p>
             <p>El bloque es una clase de landing sobre la cuadrícula dividida de core.</p>
             <div class="luz-table-wrap" role="region" aria-label="Partes del hero" tabindex="0">
               <table class="luz-table">
@@ -93,7 +94,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Un <code>&lt;section&gt;</code> con el nombre de su título, maquetado con la cuadrícula dividida de core y con estilos de <code>@luz-ds/landing</code>. No usa JavaScript y <code>@luz-ds/catalog</code> es opcional.</p>
+            <p>Un <code>&lt;section&gt;</code> con el nombre de su título, maquetado con la cuadrícula dividida de core y con estilos de <code>components/landing-hero.css</code> de <code>@luz-ds/catalog</code>. No usa JavaScript.</p>
             <ul>
               <li>Las columnas son la <a href="/docs/components/layout/#objects-actions">cuadrícula dividida</a> intrínseca de core: dependen del espacio disponible para el hero, no del ancho de la ventana. Un hero tan ancho como la página se divide a partir de unos 900 px de ventana; en una columna estrecha o con texto más grande permanece en una sola columna.</li>
               <li>El orden es el del código fuente: el texto va primero, a la izquierda en una página de izquierda a derecha y a la derecha en una de derecha a izquierda.</li>
@@ -120,7 +121,7 @@ reviewed: false
             <p>No lo uses en una página a la que se llega para leer o completar una tarea: utiliza un <code>&lt;h1&gt;</code> sencillo y una entradilla, que ocupan menos espacio.</p>
             <ul>
               <li>Un hero por página y solo al principio.</li>
-              <li>No lo uses para un mensaje en medio de la página: utiliza una <a href="/docs/landing/section/">sección</a> y, si tiene que destacar, una <a href="/docs/components/band/">banda</a> de core.</li>
+              <li>No lo uses para un mensaje en medio de la página: utiliza una <a href="/docs/catalog/landing-section/">sección</a> y, si tiene que destacar, una <a href="/docs/components/band/">banda</a> de core.</li>
             </ul>
             <h3 id="do-dont">Buenas y malas prácticas</h3>
             <div class="luz-docs-dodont">
@@ -190,7 +191,7 @@ reviewed: false
               <li>No pongas el texto sobre la imagen: el contraste dependería de ella y no hay ningún token que lo controle.</li>
             </ul>
             <h3 id="tokens">Tokens que utiliza</h3>
-            <p>Los 19 tokens que leen, por familia, las reglas de <code>.luz-landing-hero</code> de landing en <code>components/hero.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 19 tokens que leen, por familia, las reglas de <code>.luz-landing-hero</code> en <code>components/landing-hero.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-3xl</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

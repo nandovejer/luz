@@ -1,7 +1,8 @@
 <!-- luz:page
 title: Índice
 description: Enumera las secciones de un artículo largo, junto al texto cuando hay espacio y encima cuando no lo hay.
-source: f0345377d2c2
+fits: un artículo largo, junto al texto o encima de él
+source: 8519ae5b5d37
 reviewed: false
 -->
     <div class="docs-component" id="p-toc">
@@ -88,12 +89,12 @@ reviewed: false
                   <tr><td data-label="Clase o propiedad"><div><code>data-luz-spy</code> en <code>.luz-cms-toc</code></div></td><td data-label="Qué hace"><div>El seguimiento de desplazamiento de core marca el enlace de la sección visible. Opcional</div></td></tr>
                   <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc__title</code></div></td><td data-label="Qué hace"><div>El encabezado del índice, en sans y seminegrita</div></td></tr>
                   <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc__list</code></div></td><td data-label="Qué hace"><div>La lista, sin marcadores y con una línea en el inicio en línea; un enlace por línea</div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>--luz-cms-toc-top</code></div></td><td data-label="Qué hace"><div>El espacio sobre el índice mientras permanece visible: 24 px, o 24 px por debajo de una barra fija (el <code>.o-sticky</code> de core, una fila de <code>--luz-bar-h</code>, como la <a href="/docs/cms/header/">cabecera</a>). Si la cabecera tiene otra altura, asígnalo a <code>.luz-cms-toc</code></div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>--luz-cms-toc-top</code></div></td><td data-label="Qué hace"><div>El espacio sobre el índice mientras permanece visible: 24 px, o 24 px por debajo de una barra fija (el <code>.o-sticky</code> de core, una fila de <code>--luz-bar-h</code>, como la <a href="/docs/catalog/cms-header/">cabecera</a>). Si la cabecera tiene otra altura, asígnalo a <code>.luz-cms-toc</code></div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Una cuadrícula CSS dentro de un contenedor de tamaño, de <code>@luz-ds/cms</code>. No necesita JavaScript propio.</p>
+            <p>Una cuadrícula CSS dentro de un contenedor de tamaño, de <code>components/cms-article.css</code> de <code>@luz-ds/catalog</code>. No necesita JavaScript propio.</p>
             <ul>
               <li>La maquetación se adapta al espacio del artículo: en una página con barra lateral o con texto más grande, el índice pasa antes encima del texto. Por debajo de 46rem es una lista normal encima del texto y no permanece visible, porque lo taparía.</li>
               <li>El índice aparece primero en el código fuente, así que se lee primero y Tab llega a él antes en ambas maquetaciones. El texto es un elemento único, segundo hijo de <code>__layout</code>; en un CMS, es el elemento que contiene el artículo.</li>
@@ -118,7 +119,7 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No lo uses en una entrada corta: tres párrafos no necesitan un mapa.</p>
             <ul>
-              <li>No sirve para enlazar a otras páginas: eso es navegación y va en la <a href="/docs/cms/header/">cabecera</a> o en una <a href="/docs/components/sidebar/">barra lateral</a>.</li>
+              <li>No sirve para enlazar a otras páginas: eso es navegación y va en la <a href="/docs/catalog/cms-header/">cabecera</a> o en una <a href="/docs/components/sidebar/">barra lateral</a>.</li>
               <li>Tampoco sirve para los pasos ordenados de una tarea: numéralos en el texto.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
@@ -163,7 +164,7 @@ reviewed: false
               <li>El enlace actual se indica con la barra y el peso, no solo con el color. Los enlaces no están subrayados: dentro de <code>&lt;nav&gt;</code>, su ubicación ya indica que son enlaces, como en todos los elementos de navegación de LUZ.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 15 tokens que usan las reglas de <code>.luz-cms-article</code> y <code>.luz-cms-toc</code> de <code>components/article.css</code> de cms, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 15 tokens que usan las reglas de <code>.luz-cms-article</code> y <code>.luz-cms-toc</code> de <code>components/cms-article.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

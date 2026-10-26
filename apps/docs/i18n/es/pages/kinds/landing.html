@@ -2,7 +2,7 @@
 title: Landing page
 description: La página de un producto o de un evento: un prompt para un LLM y recetas para su cabecera, hero, secciones, datos destacados y pie de página.
 keywords: página de producto, página de evento, marketing, página de inicio
-source: f296d4a15f60
+source: 56036916ec94
 reviewed: false
 -->
     <div class="docs-block" id="k-landing">
@@ -12,7 +12,7 @@ reviewed: false
       <p>O construye tú la página con las recetas de abajo, en el orden en que las lee quien la visita. Usan solo las clases de core, del catálogo y de landing; <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> indica los archivos que debes cargar.</p>
       <div class="docs-block">
         <h2 id="header">Cabecera</h2>
-        <p>El enlace para saltar al contenido, una <a href="/docs/landing/header/">cabecera</a> que permanece arriba, el <code>&lt;main&gt;</code> que contiene los bloques de abajo y el pie de página. <code>.o-page</code> hace que el cuerpo de la página sea una columna al menos tan alta como la ventana, de modo que el pie de página quede abajo incluso en una página corta.</p>
+        <p>El enlace para saltar al contenido, una <a href="/docs/catalog/landing-header/">cabecera</a> que permanece arriba, el <code>&lt;main&gt;</code> que contiene los bloques de abajo y el pie de página. <code>.o-page</code> hace que el cuerpo de la página sea una columna al menos tan alta como la ventana, de modo que el pie de página quede abajo incluso en una página corta.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <header class="luz-landing-header">
@@ -73,7 +73,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="hero">Hero</h2>
-        <p>El título de la página, una frase, la acción principal y una imagen: el <a href="/docs/landing/hero/">hero</a>. El único <code>&lt;h1&gt;</code> de la página está aquí. El texto va primero en el código fuente, así que es lo primero para un lector de pantalla y cuando las columnas se apilan.</p>
+        <p>El título de la página, una frase, la acción principal y una imagen: el <a href="/docs/catalog/landing-hero/">hero</a>. El único <code>&lt;h1&gt;</code> de la página está aquí. El texto va primero en el código fuente, así que es lo primero para un lector de pantalla y cuando las columnas se apilan.</p>
         <p>Dale a la imagen su <code>width</code> y su <code>height</code> reales, y un <code>alt</code> que diga lo que muestra. No la cargues de forma diferida: es lo primero que aparece en la página.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
@@ -119,7 +119,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="section">Sección</h2>
-        <p>Un bloque de la página con su propio <code>&lt;h2&gt;</code>: una <a href="/docs/landing/section/">sección</a> con una cabecera (etiqueta superior, título y entradilla) y características del mismo peso como <a href="/docs/components/card/">tarjetas</a> en una lista. Al ser una lista, indica a un lector de pantalla cuántas hay. <code>.o-grid--split</code> da dos columnas cuando cada una dispone de 16rem, y una si no.</p>
+        <p>Un bloque de la página con su propio <code>&lt;h2&gt;</code>: una <a href="/docs/catalog/landing-section/">sección</a> con una cabecera (etiqueta superior, título y entradilla) y características del mismo peso como <a href="/docs/components/card/">tarjetas</a> en una lista. Al ser una lista, indica a un lector de pantalla cuántas hay. <code>.o-grid--split</code> da dos columnas cuando cada una dispone de 16rem, y una si no.</p>
         <p>Para una llamada a la acción cerca del final de la página, añade <code>.luz-band</code> de core a la sección: el color de fondo va de un borde al otro y el texto conserva su columna.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
@@ -164,7 +164,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="stats">Datos destacados</h2>
-        <p>Tres cifras que respaldan la promesa de la página, cada una un <a href="/docs/landing/stat/">dato destacado</a> con una etiqueta breve debajo, en una lista sobre la cuadrícula de core. Indica en la etiqueta o en la entradilla de dónde sale la cifra, y que sea una cifra que quien visita la página pueda comprobar.</p>
+        <p>Tres cifras que respaldan la promesa de la página, cada una un <a href="/docs/catalog/landing-stat/">dato destacado</a> con una etiqueta breve debajo, en una lista sobre la cuadrícula de core. Indica en la etiqueta o en la entradilla de dónde sale la cifra, y que sea una cifra que quien visita la página pueda comprobar.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <ul class="o-grid o-grid--3">
@@ -222,7 +222,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="footer">Pie de página</h2>
-        <p>La marca y los enlaces que se buscan al final, en columnas: el <a href="/docs/landing/footer/">pie de página</a>. Cada columna es un <code>&lt;nav&gt;</code> que toma su nombre de su título. El patrón tiene también un pie de una sola línea.</p>
+        <p>La marca y los enlaces que se buscan al final, en columnas: el <a href="/docs/catalog/landing-footer/">pie de página</a>. Cada columna es un <code>&lt;nav&gt;</code> que toma su nombre de su título. El patrón tiene también un pie de una sola línea.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-landing-footer">

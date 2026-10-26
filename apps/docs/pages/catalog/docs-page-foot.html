@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Page foot
 description: The small print under a page: when it was last updated, and links to edit it or report a problem.
-area: documentation
-order: 7
-group: patterns
-files: .luz-docs-page-foot
+area: catalog
+order: 21
+group: documentation
+fits-kinds: docs
+fits: the bottom of a documentation page
+files: components/docs-page-foot.css
 keywords: last updated, edit this page, report a problem, small print
 toc: h2,h3
 -->
@@ -47,7 +49,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/docs</code>. It sets the rule, the size and the colour; the facts are yours.</p>
+            <p>CSS from <code>components/docs-page-foot.css</code> of <code>@luz-ds/catalog</code>. It sets the rule, the size and the colour; the facts are yours.</p>
             <ul>
               <li>The foot is one paragraph. It wraps with its text, so on a narrow screen the links go to the next line.</li>
               <li>The middle dots are text in the markup, between the date and the links.</li>
@@ -75,7 +77,7 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not use the page foot for the footer of the site: it belongs to one page.</p>
             <ul>
-              <li>The footer of the site is a <code>&lt;footer&gt;</code>, a child of the <a href="/docs/documentation/shell/">shell</a>.</li>
+              <li>The footer of the site is a <code>&lt;footer&gt;</code>, a child of the <a href="/docs/catalog/docs-shell/">shell</a>.</li>
               <li>Do not show a date that is not kept up to date: a wrong date is worse than none.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
@@ -120,7 +122,7 @@ toc: h2,h3
               <li><strong>Edges:</strong> the rule above the foot (<code>--luz-divider</code>) is decorative and has no minimum.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 6 tokens that the <code>.luz-docs-page-foot</code> rules of docs' <code>components/page-foot.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 6 tokens that the <code>.luz-docs-page-foot</code> rules of catalog’s <code>components/docs-page-foot.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-md</code></dd></div>

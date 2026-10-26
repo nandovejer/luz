@@ -1,10 +1,12 @@
 <!-- luz:page
-title: Footer
+title: Landing footer
 description: Ends every page of a landing site with who made it, its licence and a few secondary links, under a rule, in a row or as columns.
-area: landing
-order: 4
-group: patterns
-files: .luz-landing-footer, __brand, __col, __col-title
+area: catalog
+order: 10
+group: page-structure
+fits-kinds: landing
+fits: the bottom of every page of a landing site
+files: components/landing-footer.css
 toc: h2,h3
 -->
     <div class="docs-component" id="p-landing-footer">
@@ -53,7 +55,7 @@ toc: h2,h3
           </div>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Footer documentation">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Landing footer documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
           </nav>
@@ -120,7 +122,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/landing</code> on core's objects. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
+            <p>CSS from <code>components/landing-footer.css</code> of <code>@luz-ds/catalog</code> on core's objects. No JavaScript.</p>
             <ul>
               <li>The landing adds the rule, the room around the row and how the row spreads its children; <code>.o-container--inline</code> lines the row up with the page's content.</li>
               <li>On an <code>.o-page</code> the main grows, so the footer rests on the bottom of a page shorter than the window.</li>
@@ -145,7 +147,7 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not put the main navigation, or anything needed to finish a task, in the footer.</p>
             <ul>
-              <li>Main navigation goes in the <a href="/docs/landing/header/">header</a>.</li>
+              <li>Main navigation goes in the <a href="/docs/catalog/landing-header/">header</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-docs-dodont">
@@ -199,7 +201,7 @@ toc: h2,h3
               <li><strong>Forced colors:</strong> the rule is a border, so it stays.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 9 tokens that the <code>.luz-landing-footer</code> rules of landing's <code>components/footer.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 9 tokens that the <code>.luz-landing-footer</code> rules of catalog’s <code>components/landing-footer.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

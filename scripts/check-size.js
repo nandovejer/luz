@@ -8,6 +8,10 @@
  * each measured as raw bytes (`"compression": "none"`) in docs/, the Pages
  * build (`pnpm pages:build`; git-ignored output), and each component of
  * catalog, which has no bundle (packages/catalog/dist/components/*.min.css).
+ * The file part of a glob may start with a list of prefixes
+ * ("dir/{landing,cms,app,docs}-*.min.css": the patterns of a kind of site),
+ * and a row may have an `except` glob, so a file is in one row only: the
+ * general row of catalog leaves those patterns to the stricter row of theirs.
  *
  * A `file` budget of a package that does not exist yet (no
  * packages/<name>/package.json) passes vacuously with a note; once the package
@@ -169,10 +173,15 @@ for (const [file, code] of published) {
   }
 }
 
-/** Files matched by "dir/**\/*.ext" (any depth) or "dir/*.ext" (that folder only; `ext` may be `.min.css`), repo-relative, sorted. */
+/**
+ * Files matched by "dir/**\/*.ext" (any depth) or "dir/*.ext" (that folder only; `ext` may be `.min.css`),
+ * repo-relative, sorted. The file part may start with a list of prefixes, "dir/{a,b}-*.ext": the files
+ * named "a-…" or "b-…" (the patterns of a kind of site in catalog, `{landing,cms,app,docs}-*`).
+ */
 function globFiles(glob) {
-  const [dir, deep, ext] = /^(.*?)\/(\*\*\/)?\*(\.[a-z.]+)$/.exec(glob)?.slice(1) ?? [];
-  if (!dir) throw new Error(`unsupported glob ${glob}: use "dir/**/*.ext" or "dir/*.ext"`);
+  const [dir, deep, prefixes, ext] = /^(.*?)\/(\*\*\/)?(?:\{([a-z,]+)\}-)?\*(\.[a-z.]+)$/.exec(glob)?.slice(1) ?? [];
+  if (!dir) throw new Error(`unsupported glob ${glob}: use "dir/**/*.ext", "dir/*.ext" or "dir/{a,b}-*.ext"`);
+  const starts = prefixes?.split(",").map((p) => `${p}-`);
   const out = [];
   const walk = (d) => {
     if (!existsSync(resolve(root, d))) return;
@@ -180,17 +189,23 @@ function globFiles(glob) {
       const p = `${d}/${entry.name}`;
       if (entry.isDirectory()) {
         if (deep) walk(p);
-      } else if (entry.name.endsWith(ext)) out.push(p);
+      } else if (entry.name.endsWith(ext) && (!starts || starts.some((start) => entry.name.startsWith(start)))) out.push(p);
     }
   };
   walk(dir);
   return out.sort();
 }
 
+/** The files a budget row measures: its glob, less its `except` glob (one file is in one row). */
+const rowFiles = ({ glob, except }) => {
+  const skip = new Set(except ? globFiles(except) : []);
+  return globFiles(glob).filter((f) => !skip.has(f));
+};
+
 const sizeOf = (path, compression) => (compression === "none" ? readFileSync(path).length : gzipSync(readFileSync(path), { level: 9 }).length);
 
-for (const { name, glob, compression, floor, ideal, max } of budgets.filter((b) => b.glob)) {
-  const sizes = globFiles(glob).map((f) => [f, sizeOf(resolve(root, f), compression)]).sort((a, b) => b[1] - a[1]);
+for (const { name, glob, except, compression, floor, ideal, max } of budgets.filter((b) => b.glob)) {
+  const sizes = rowFiles({ glob, except }).map((f) => [f, sizeOf(resolve(root, f), compression)]).sort((a, b) => b[1] - a[1]);
   if (!sizes.length) {
     console.error(`✗ ${name}: nothing matches ${glob} — run ${glob.startsWith("packages/") ? "pnpm build" : "pnpm pages:build"} first`);
     failed = true;

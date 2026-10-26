@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Pager
 description: Two link blocks at the end of a page, to the previous page and to the next, each with the title it leads to.
-area: documentation
-order: 6
-group: patterns
-files: .luz-docs-pager, __prev, __next, __link, __label, __title
+area: catalog
+order: 23
+group: documentation
+fits-kinds: docs
+fits: the end of a page that belongs to a sequence
+files: components/docs-pager.css
 keywords: previous, next, page links, sequence
 toc: h2,h3
 -->
@@ -62,7 +64,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/docs</code>. It sets the blocks; the order of the pages is yours.</p>
+            <p>CSS from <code>components/docs-pager.css</code> of <code>@luz-ds/catalog</code>. It sets the blocks; the order of the pages is yours.</p>
             <ul>
               <li>The two blocks are equal and the whole block is the target, so the click or tap area is large.</li>
               <li>The first page has only a Next and the last only a Previous: leave the other <code>&lt;li&gt;</code> out. A lone Next stays in the second column, at the end.</li>
@@ -142,7 +144,7 @@ toc: h2,h3
               <li><strong>Edges:</strong> the border at rest (<code>--luz-divider</code>) is decorative and has no minimum.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 10 tokens that the <code>.luz-docs-pager</code> rules of docs' <code>components/pager.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 10 tokens that the <code>.luz-docs-pager</code> rules of catalog’s <code>components/docs-pager.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>

@@ -27,47 +27,19 @@
     ], "essentials": [
       { "href": "/docs/get-started/" },
       { "href": "/docs/tokens/color/", "label": "Color tokens" },
-      { "href": "/docs/landing/templates/" }
+      { "href": "/docs/kinds/landing/" }
     ] },
     { "id": "catalog", "label": "Catalog", "slug": "catalog", "package": "@luz-ds/catalog", "groups": [
-      { "id": "patterns", "label": "Patterns" },
-      { "id": "reference", "label": "Reference", "list": true }
+      { "id": "navigation", "label": "Navigation", "sidebar": true },
+      { "id": "page-structure", "label": "Page structure", "sidebar": true },
+      { "id": "content", "label": "Content", "sidebar": true },
+      { "id": "site-wide", "label": "Site-wide", "sidebar": true },
+      { "id": "documentation", "label": "Documentation", "sidebar": true },
+      { "id": "reference", "label": "Reference", "list": true, "sidebar": true }
     ], "essentials": [
       { "href": "/docs/catalog/classes/" },
       { "href": "/docs/components/" },
       { "href": "/docs/get-started/" }
-    ] },
-    { "id": "landing", "label": "Landing", "slug": "landing", "package": "@luz-ds/landing", "groups": [
-      { "id": "patterns", "label": "Patterns" },
-      { "id": "reference", "label": "Reference", "list": true }
-    ], "essentials": [
-      { "href": "/docs/landing/templates/" },
-      { "href": "/docs/components/" },
-      { "href": "/docs/catalog/" }
-    ] },
-    { "id": "cms", "label": "CMS", "slug": "cms", "package": "@luz-ds/cms", "groups": [
-      { "id": "patterns", "label": "Patterns" },
-      { "id": "reference", "label": "Reference", "list": true }
-    ], "essentials": [
-      { "href": "/docs/cms/templates/" },
-      { "href": "/docs/components/" },
-      { "href": "/docs/catalog/" }
-    ] },
-    { "id": "app", "label": "App", "slug": "app", "package": "@luz-ds/app", "groups": [
-      { "id": "patterns", "label": "Patterns" },
-      { "id": "reference", "label": "Reference", "list": true }
-    ], "essentials": [
-      { "href": "/docs/app/templates/" },
-      { "href": "/docs/components/" },
-      { "href": "/docs/catalog/" }
-    ] },
-    { "id": "documentation", "label": "Documentation", "slug": "documentation", "package": "@luz-ds/docs", "groups": [
-      { "id": "patterns", "label": "Patterns" },
-      { "id": "reference", "label": "Reference", "list": true }
-    ], "essentials": [
-      { "href": "/docs/documentation/templates/" },
-      { "href": "/docs/components/" },
-      { "href": "/docs/catalog/" }
     ] },
     { "id": "html", "label": "HTML elements", "slug": "html", "package": "@luz-ds/core", "essentials": [
       { "href": "/docs/a-z/" },

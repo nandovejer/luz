@@ -16,29 +16,23 @@
  *   luz.objects     layout (.o-*)
  *   luz.components  .luz-* components
  *   luz.utilities   .u-* helpers: they win over components by order
- *   luz.catalog     .luz-catalog-* patterns of @luz-ds/catalog
- *   luz.landing     .luz-landing-* patterns of @luz-ds/landing (one kind of
- *                   site, built on catalog: after it, so it can refine it)
- *   luz.cms         .luz-cms-* patterns of @luz-ds/cms (a blog, a newspaper,
- *                   any CMS). Landing and cms never meet (no shared class),
- *                   so their order decides nothing; cms comes after landing
- *                   so adding it moved no existing layer
- *   luz.app         .luz-app-* patterns of @luz-ds/app (the header and the
- *                   dashboard of a web application). It shares no class
- *                   with landing or cms either; it comes after cms so
- *                   adding it moved no existing layer
- *   luz.docs        .luz-docs-* patterns of @luz-ds/docs (the shell, the page
- *                   head, the rail, the example, the do and don't, the pager
- *                   and the page foot of a documentation site). It
- *                   shares no class with any other package, so its place
- *                   moves no other layer: after app, before luz.print
+ *   luz.catalog     the components of @luz-ds/catalog, one stylesheet each:
+ *                   the self-contained `<luz-*>` elements and the patterns of
+ *                   a kind of site (.luz-landing-*, .luz-cms-*, .luz-app-*,
+ *                   .luz-docs-*). Those had a layer of their own per kind
+ *                   (luz.landing, luz.cms, luz.app, luz.docs, one package
+ *                   each, built on catalog); the packages are gone, so the
+ *                   layers are too, and a pattern that refines a catalog or
+ *                   a core piece wins by the order its stylesheet is linked
+ *                   in (after the piece it refines), as any catalog
+ *                   component does
  *   luz.print       what changes on paper (@media print): last, so it wins over
  *                   the screen styles of every package by order
  *
  * Every file repeats the statement first, so the order is the same whichever
  * file a page loads first.
  */
-export const LAYERS = ["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "catalog", "landing", "cms", "app", "docs", "print"];
+export const LAYERS = ["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "catalog", "print"];
 
 export const LAYER_ORDER = `@layer ${LAYERS.map((l) => `luz.${l}`).join(", ")};\n`;
 

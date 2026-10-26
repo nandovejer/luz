@@ -1,7 +1,8 @@
 <!-- luz:page
-title: Pie
+title: Pie de blog
 description: Cierra cada página de un blog o periódico con quién lo publica y algunos enlaces secundarios, bajo una línea.
-source: f1c0b92e6e5a
+fits: la parte inferior de cada página de un blog o de un periódico
+source: d1f4b30e0a5f
 reviewed: false
 -->
     <div class="docs-component" id="p-cms-footer">
@@ -23,7 +24,7 @@ reviewed: false
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
           <p>No se conocen problemas.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del pie">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del pie de blog">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
           </nav>
@@ -60,7 +61,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/cms</code> aplicado a los objetos de core. Sin JavaScript; <code>@luz-ds/catalog</code> es opcional.</p>
+            <p>CSS de <code>components/cms-footer.css</code> de <code>@luz-ds/catalog</code> aplicado a los objetos de core. Sin JavaScript.</p>
             <ul>
               <li>cms añade la línea, el espacio alrededor de la fila y la distribución de sus elementos; <code>.o-container--inline</code> alinea la fila con el contenido de la página.</li>
               <li>Con <code>.o-page</code>, el contenido principal crece y el pie queda abajo aunque la página sea más corta que la ventana.</li>
@@ -83,8 +84,8 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No pongas la navegación principal ni nada necesario para completar una tarea en el pie.</p>
             <ul>
-              <li>Las secciones van en la <a href="/docs/cms/header/">cabecera</a>.</li>
-              <li>La página de aterrizaje tiene su propio <a href="/docs/landing/footer/">pie</a>.</li>
+              <li>Las secciones van en la <a href="/docs/catalog/cms-header/">cabecera</a>.</li>
+              <li>La página de aterrizaje tiene su propio <a href="/docs/catalog/landing-footer/">pie</a>.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
             <div class="luz-docs-dodont">
@@ -113,7 +114,7 @@ reviewed: false
               <li><strong>Colores forzados:</strong> la línea es un borde, así que se mantiene.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 4 tokens que usan las reglas de <code>.luz-cms-footer</code> de <code>components/footer.css</code> de cms, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 4 tokens que usan las reglas de <code>.luz-cms-footer</code> de <code>components/cms-footer.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code></dd></div>

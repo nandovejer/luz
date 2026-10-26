@@ -21,15 +21,7 @@ packages/core/src/i18n* @nandovejer
 packages/catalog/      @nandovejer
 scripts/build-catalog.js @nandovejer
 
-# Packages for one kind of site (build on catalog; own version)
-packages/landing/        @nandovejer
-scripts/build-landing.js @nandovejer
-packages/cms/            @nandovejer
-scripts/build-cms.js     @nandovejer
-packages/app/            @nandovejer
-scripts/build-app.js     @nandovejer
-packages/docs/           @nandovejer
-scripts/build-docs.js    @nandovejer
+# The shared builder of catalog
 scripts/build-package.js @nandovejer
 
 # Dev tools (published, no CSS; own version, out of the fixed group)

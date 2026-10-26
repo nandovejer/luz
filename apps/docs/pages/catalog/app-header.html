@@ -1,10 +1,12 @@
 <!-- luz:page
-title: Header
+title: App header
 description: The quiet bar at the top of an application's main area: the menu button, the product name on a phone, the search and the account.
-area: app
+area: catalog
 order: 1
-group: patterns
-files: .luz-app-header, __product, __actions, __account, __account-name
+group: navigation
+fits-kinds: app
+fits: the top of an application's main area, beside the sidebar
+files: components/app-header.css
 keywords: top bar, app bar, account menu, user menu
 toc: h2,h3
 -->
@@ -42,7 +44,7 @@ toc: h2,h3
             <li><strong>The account list without anchor positioning.</strong> In browsers without CSS anchor positioning, the list opens as a sheet at the bottom of the window instead of under the button. Escape, or a click outside it, closes it.</li>
             <li><strong>Sticky bar and enlarged text.</strong> The scroll padding of <code>.o-sticky</code> is a minimum: at 300% text, with the bar wrapped to several rows, Safari can leave a field reached with Tab under it. Set <code>scroll-padding-block-start</code> on <code>html</code> to your header's real height, or leave out <code>.o-sticky</code>.</li>
           </ul>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Header documentation">
+          <nav class="luz-tabs docs-view-tabs" aria-label="App header documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
           </nav>
@@ -101,14 +103,14 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/app</code> on core's shell, sticky bar, drawer and dropdown. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
+            <p>CSS from <code>components/app-header.css</code> of <code>@luz-ds/catalog</code> on core's shell, sticky bar, drawer and dropdown. No JavaScript.</p>
             <ul>
               <li>App adds the skin only: the page surface, the rule underneath and the gaps of the row (8 px between rows, 16 px between items). Core gives the rest: <code>.o-sticky</code> the stickiness and the scroll padding, <code>.o-row</code> the row, the nav toggle and the sidebar the drawer, and the dropdown the account list.</li>
               <li>A one-row bar is core's <code>--luz-bar-h</code> tall: 44 px controls, 4 px above and below, and the 1 px rule. With enlarged text the row wraps and the bar grows.</li>
               <li>The page is what scrolls, not <code>.o-main</code>, so the sticky bar stays at the window's top. If you give <code>.o-main</code> a height of its own and make it scroll, what it focuses stays clear of the bar through its scroll padding.</li>
               <li>The account list opens under its button and ends where the button ends, so it never leaves the window at the inline end of the bar.</li>
               <li>Without the catalog there is no search: leave <code>&lt;luz-search&gt;</code> out. Nothing else changes.</li>
-              <li>The view's <code>h1</code> and its main action are not here: they are the first row of the <a href="/docs/app/dashboard/">dashboard</a>. The bar holds only what is the same in every view.</li>
+              <li>The view's <code>h1</code> and its main action are not here: they are the first row of the <a href="/docs/catalog/app-dashboard/">dashboard</a>. The bar holds only what is the same in every view.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>Nothing changes.</p>
@@ -136,7 +138,7 @@ toc: h2,h3
             <ul>
               <li>One header per page, in <code>.o-main</code>: it is the page's banner.</li>
               <li>Do not put a primary button in the bar: the view's main action would be lost among the chrome.</li>
-              <li>For a bar with the site's own sections, use the <a href="/docs/components/navbar/">navbar</a> in the header of <a href="/docs/landing/header/">landing</a> or <a href="/docs/cms/header/">CMS</a>.</li>
+              <li>For a bar with the site's own sections, use the <a href="/docs/components/navbar/">navbar</a> in the header of <a href="/docs/catalog/landing-header/">landing</a> or <a href="/docs/catalog/cms-header/">CMS</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-docs-dodont">
@@ -183,7 +185,7 @@ toc: h2,h3
               <li><strong>Target:</strong> the account button is at least 44 by 44 px at every width, with its name clipped.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 10 tokens that the <code>.luz-app-header</code> rules of app's <code>components/header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 10 tokens that the <code>.luz-app-header</code> rules of catalog’s <code>components/app-header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

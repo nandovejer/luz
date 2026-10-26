@@ -1,5 +1,6 @@
 /* ==========================================================================
-   LUZ DOCS: pager.
+   LUZ Catalog: docs pager.
+   Layer: catalog · Prefix: .luz-docs-
    nav[aria-label] > ul.luz-docs-pager > li.__prev / li.__next >
    a.__link[rel] > span.__label ("Previous", "Next") + span.__title (the
    page). Two link blocks side by side, Next at the end, the whole block the

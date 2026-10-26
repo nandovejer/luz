@@ -39,13 +39,14 @@ Demos stay English in a translation: the live markup of `[data-docs-specimen]`, 
    <!-- luz:page
    title: …
    description: …
+   fits: …
    keywords: …
    source: <12 hex>
    reviewed: false
    -->
    ```
 
-   `title` and `description` are required. `keywords` is optional (other names for the page, for the search and the A–Z index). `source` is the first 12 hex of the SHA-256 of the English body, with white space collapsed and trimmed; `pnpm check:i18n` prints the one a page should have. Every other key (`area`, `order`, `group`, `files`, `module`, `toc`, `lead`, `generate`) is inherited and forbidden here.
+   `title` and `description` are required. `fits` is required on a pattern page of the catalog (the sentence after "Fits best") and forbidden on any other. `keywords` is optional (other names for the page, for the search and the A–Z index). `source` is the first 12 hex of the SHA-256 of the English body, with white space collapsed and trimmed; `pnpm check:i18n` prints the one a page should have. Every other key (`area`, `order`, `group`, `fits-kinds`, `files`, `module`, `toc`, `lead`, `generate`) is inherited and forbidden here.
 3. Translate the text between the tags. Keep every tag, attribute, `id`, `class` and `href`, in the same order. Keep entities (`&amp;`, `&lt;`) as written and never write a bare `&` or `<`.
 4. Run `pnpm vitest run tests/docs-i18n-pages.test.js`. It fails with `file:line` on any difference of structure: tags, ids and heading levels, link targets, the text of code, the figures, the generated markers.
 5. Run `pnpm check:strings` (the file is read in its language: Title Case in Spanish and vague links in both are caught) and `pnpm check:i18n`.

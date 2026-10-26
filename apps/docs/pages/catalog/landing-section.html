@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Main and sections
 description: Gives a landing page its rhythm: wide room between the blocks of the main, a closer one inside each section, with its head, and an optional glow behind the page.
-area: landing
-order: 3
-group: patterns
-files: .luz-landing-main, .luz-landing-section, __eyebrow, __title, __lead, .luz-landing-glow
+area: catalog
+order: 11
+group: page-structure
+fits-kinds: landing
+fits: the body of a landing page, between the header and the footer
+files: components/landing-main.css, components/landing-section.css, components/landing-glow.css
 keywords: rhythm, page background, gradient
 toc: h2,h3
 -->
@@ -100,11 +102,11 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/landing</code> on core's objects. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
+            <p>CSS from <code>components/landing-main.css</code>, <code>landing-section.css</code> and <code>landing-glow.css</code> of <code>@luz-ds/catalog</code> on core's objects. No JavaScript.</p>
             <ul>
-              <li>Core's <code>.o-container</code> gives the main its width and gutters, and <code>.o-stack</code> the column; the landing's layer comes after core's objects, so its gaps win over the stack's.</li>
+              <li>Core's <code>.o-container</code> gives the main its width and gutters, and <code>.o-stack</code> the column; the catalog layer comes after core's objects, so its gaps win over the stack's.</li>
               <li>The glow's tint sits at the start edge: top left in a left-to-right page and top right in a right-to-left one. <code>--luz-landing-glow-x</code> moves it: <code>50%</code> centres it in both directions.</li>
-              <li>The head shares its rules, and the <code>em</code> knob, with the <a href="/docs/landing/hero/">hero</a>.</li>
+              <li>The head shares its rules, and the <code>em</code> knob, with the <a href="/docs/catalog/landing-hero/">hero</a>.</li>
               <li>Use a section on a <code>&lt;section&gt;</code> when the group has its own heading, or on a <code>&lt;div&gt;</code> when it does not.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
@@ -187,7 +189,7 @@ toc: h2,h3
               <li><strong>Forced colors:</strong> the glow is removed, and the page is the system's background.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 18 tokens that the <code>.luz-landing-main</code>, <code>.luz-landing-section</code> and <code>.luz-landing-glow</code> rules of landing's <code>components/main.css</code>, <code>section.css</code> and <code>glow.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 18 tokens that the <code>.luz-landing-main</code>, <code>.luz-landing-section</code> and <code>.luz-landing-glow</code> rules of catalog’s <code>components/landing-main.css</code>, <code>landing-section.css</code> and <code>landing-glow.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xl</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>

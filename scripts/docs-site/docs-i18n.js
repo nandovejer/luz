@@ -46,9 +46,9 @@ export function sourceHash(body) {
 
 /* ---- Front matter of a translation ------------------------------------------------ */
 
-const TRANSLATED_KEYS = ["title", "description", "keywords", "source", "reviewed", "reviewer"];
+const TRANSLATED_KEYS = ["title", "description", "fits", "keywords", "source", "reviewed", "reviewer"];
 /** What a translation never says: it comes from the English page, so the structure cannot drift. */
-const INHERITED_KEYS = ["area", "order", "group", "files", "module", "toc", "lead", "generate", "search", "nav", "layout"];
+const INHERITED_KEYS = ["area", "order", "group", "fits-kinds", "files", "module", "toc", "lead", "generate", "search", "nav", "layout"];
 const HANDLE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/;
 
 /** Read a translation file: { meta, body, bodyLine }. Throws "file:line: …". */
@@ -60,7 +60,7 @@ export function parseTranslation(source, file) {
   match[1].split("\n").forEach((line, i) => {
     const where = `${file}:${i + 2}`;
     if (!line.trim()) return;
-    const kv = /^([a-z]+):\s*(.*)$/.exec(line);
+    const kv = /^([a-z]+(?:-[a-z]+)*):\s*(.*)$/.exec(line);
     if (!kv) throw new Error(`${where}: front matter lines are "key: value"`);
     const [, key, value] = kv;
     if (INHERITED_KEYS.includes(key)) throw new Error(`${where}: "${key}" comes from the English page: a translation does not set it`);
@@ -86,6 +86,7 @@ export function parseTranslation(source, file) {
   const meta = {
     title: raw.title,
     description: raw.description,
+    fits: raw.fits ?? "",
     keywords: raw.keywords ?? "",
     source: raw.source,
     reviewed,
@@ -297,6 +298,9 @@ function readTranslations({ language, docsDir, dir, byRoute, rel }) {
         const { meta, body, bodyLine } = parseTranslation(readInside(abs, roots), file);
         const english = byRoute.get(route);
         if (!english) throw new Error(`${file}: orphan translation: there is no English page at apps/docs/pages/${path}`);
+        // "Fits best": a catalog pattern's sentence is translated too, and only a page that has one in English has one
+        if (english.meta.fits && !meta.fits) throw new Error(`${file}: the English page says "fits" (Fits best): translate it (fits: …)`);
+        if (!english.meta.fits && meta.fits) throw new Error(`${file}: "fits" only goes with a page whose English page has it`);
         language.pages.set(route, { file, abs, route, path, meta, body, bodyLine, stale: meta.source !== sourceHash(english.body) });
       } else {
         throw new Error(`${rel(abs)}: only .html files and folders belong in pages/`);
@@ -339,7 +343,7 @@ const views = new WeakMap();
 /**
  * The English `site` seen in `language` (an entry of site.docsI18n.languages):
  * the same pages, in the same order, at /<code>/docs/…, with the translation's
- * title, description, keywords and body where there is one and the English
+ * title, description, fits, keywords and body where there is one and the English
  * page where there is not (`fallback`, D3). `areas` carry the language's names.
  * Memoized. A page of the view is { ...englishPage, route, canonicalRoute,
  * english, file, abs, meta, body (its links in the language), rawBody (as
@@ -366,7 +370,7 @@ export function localize(site, language) {
       english,
       file: tr ? tr.file : english.file,
       abs: tr ? tr.abs : english.abs,
-      meta: tr ? { ...english.meta, title: tr.meta.title, description: tr.meta.description, keywords: tr.meta.keywords } : english.meta,
+      meta: tr ? { ...english.meta, title: tr.meta.title, description: tr.meta.description, fits: tr.meta.fits || english.meta.fits, keywords: tr.meta.keywords } : english.meta,
       body: localizeLinks(body, language),
       rawBody: body,
       bodyLine: tr ? tr.bodyLine : english.bodyLine,

@@ -1,5 +1,6 @@
 /* ==========================================================================
-   LUZ DOCS: shell.
+   LUZ Catalog: docs shell.
+   Layer: catalog · Prefix: .luz-docs-
    body.o-shell.luz-docs-shell > header, nav.luz-sidebar.luz-docs-nav,
    aside.luz-docs-rail, main.o-main.luz-docs-main, footer. "On this page"
    comes before the content, in the markup and on screen: three columns
@@ -10,7 +11,7 @@
    sidebar and the rail. The header and the footer span the shell. The
    content's children keep to the measure, --luz-docs-measure.
    Core gives the grid, the sidebar and its drawer (a popover nav at 768px
-   and below); docs gives the tracks and the measure.
+   and below); this file gives the tracks and the measure.
    ========================================================================== */
 
 .luz-docs-shell {

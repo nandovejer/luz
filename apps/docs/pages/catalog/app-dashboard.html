@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Dashboard
 description: The view of an application at a glance: its title and main action, then a grid of panels that fills the room the view has.
-area: app
-order: 2
-group: patterns
-files: .luz-app-dashboard, __head, __title, __panel, __panel--wide
+area: catalog
+order: 12
+group: content
+fits-kinds: app
+fits: the first view of an application
+files: components/app-dashboard.css
 keywords: panels, widgets, overview, cards grid
 toc: h2,h3
 -->
@@ -97,7 +99,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/app</code> on core's grid and card. No JavaScript.</p>
+            <p>CSS from <code>components/app-dashboard.css</code> of <code>@luz-ds/catalog</code> on core's grid and card. No JavaScript.</p>
             <ul>
               <li>The dashboard sets <code>--luz-grid-min: 18rem</code> for core's <code>.o-grid--auto</code>, so a column is never narrower than 18 rem and the number of columns follows the room: one at 320 px, two at 768 px, and three at 1280 px beside a sidebar.</li>
               <li>The dashboard is a size container. The wide panel asks how wide the dashboard is, not the window, so it fits with a sidebar and without one. From 40 rem two columns always exist (two of 18 rem and a gap), and at 200% text both are in rem, so it never overflows.</li>
@@ -113,7 +115,7 @@ toc: h2,h3
               <li><strong>Headings:</strong> the view has one <code>&lt;h1&gt;</code>, in the title row, and each panel starts with an <code>&lt;h2&gt;</code>. The title row is a <code>&lt;div&gt;</code>, not a <code>&lt;header&gt;</code>.</li>
               <li><strong>List:</strong> the panels are a <code>&lt;ul&gt;</code> of <code>&lt;li&gt;</code>: a screen reader says how many there are. Safari can drop the list role from a list without markers; the headings still lead through the panels.</li>
               <li><strong>Actions:</strong> an action that goes somewhere is a link (<code>&lt;a href&gt;</code>); one that does something on this page is a <code>&lt;button type="button"&gt;</code>. Never an <code>&lt;a&gt;</code> without <code>href</code>.</li>
-              <li><strong>Landmarks:</strong> the dashboard is the page's <code>&lt;main&gt;</code>, the sibling of the <a href="/docs/app/header/">header</a>. It takes the skip link's target, with <code>tabindex="-1"</code>.</li>
+              <li><strong>Landmarks:</strong> the dashboard is the page's <code>&lt;main&gt;</code>, the sibling of the <a href="/docs/catalog/app-header/">header</a>. It takes the skip link's target, with <code>tabindex="-1"</code>.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
@@ -176,7 +178,7 @@ toc: h2,h3
               <li><strong>Edges:</strong> a card's border (<code>--luz-divider</code>) is decorative; its text carries the meaning. Forced colours keep the border.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 7 tokens that the <code>.luz-app-dashboard</code> rules of app's <code>components/dashboard.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 7 tokens that the <code>.luz-app-dashboard</code> rules of catalog’s <code>components/app-dashboard.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code></dd></div>

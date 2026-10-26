@@ -1,7 +1,8 @@
 <!-- luz:page
 title: Cabecera de artículo
 description: Presenta un artículo con su sección, título, entradilla, autor y fecha, y una imagen opcional al principio.
-source: cdaa7263ee86
+fits: la parte superior de un artículo, bajo la cabecera del sitio
+source: 41145e565556
 reviewed: false
 -->
     <div class="docs-component" id="p-article-header">
@@ -69,7 +70,7 @@ reviewed: false
                 </thead>
                 <tbody>
                   <tr><td data-label="Clase"><div><code>.luz-cms-article-header</code></div></td><td data-label="Qué hace"><div>El bloque: sus partes, separadas 12 px entre sí y con 32 px de espacio debajo</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-cms-article-header__kicker</code></div></td><td data-label="Qué hace"><div>La sección, encima del título, en versalitas con la tipografía monoespaciada, como el antetítulo del <a href="/docs/landing/hero/">hero</a>. Opcional</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-cms-article-header__kicker</code></div></td><td data-label="Qué hace"><div>La sección, encima del título, en versalitas con la tipografía monoespaciada, como el antetítulo del <a href="/docs/catalog/landing-hero/">hero</a>. Opcional</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-cms-article-header__title</code></div></td><td data-label="Qué hace"><div>El título: tipografía de encabezado, tamaño 3xl, peso ligero y líneas equilibradas; 2xl a 640 px o menos</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-cms-article-header__standfirst</code></div></td><td data-label="Qué hace"><div>Una o dos frases en el color de texto secundario, un tamaño mayor que el texto del cuerpo y un máximo de 70 caracteres de ancho. Opcional</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-cms-article-header__byline</code></div></td><td data-label="Qué hace"><div>Una fila con la tipografía sans que puede saltar de línea: un <a href="/docs/components/avatar/">avatar</a>, el autor y una <a href="/docs/components/meta/">línea de metadatos</a> con la fecha. Opcional</div></td></tr>
@@ -78,7 +79,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Una cuadrícula de una columna, con estilos de <code>@luz-ds/cms</code> en <code>cms.css</code>, que se carga después de core y de los componentes del catálogo que use la página. Sin JavaScript.</p>
+            <p>Una cuadrícula de una columna, con estilos de <code>components/cms-article-header.css</code> de <code>@luz-ds/catalog</code>, que se carga después de core y de los componentes del catálogo que use la página. Sin JavaScript.</p>
             <ul>
               <li>Cada parte aplica sus estilos al texto mediante la herencia, así que puedes poner la clase en el elemento que contiene el texto o en un contenedor. Una plantilla de CMS que envuelve la entradilla en un <code>&lt;div&gt;</code> funciona igual que un <code>&lt;p&gt;</code> sin contenedor. En una plantilla de bloques de WordPress, asigna a cada bloque su clase en <code>className</code>.</li>
               <li>El antetítulo es un enlace si las secciones tienen página propia; si no, es texto sin enlace. El título debe ser el <code>&lt;h1&gt;</code> de la página; las clases solo cambian su aspecto.</li>
@@ -101,10 +102,10 @@ reviewed: false
             <h3 id="when">Cuándo usarlo</h3>
             <p>Usa una cabecera de artículo al principio de una noticia, una entrada o un reportaje: una página con autor y fecha que se lee de principio a fin.</p>
             <h3 id="when-not">Cuándo no usarlo</h3>
-            <p>No la uses en una página sin autor ni fecha, como una página de contacto o de sección: usa la <a href="/docs/cms/page-header/">cabecera de página</a>.</p>
+            <p>No la uses en una página sin autor ni fecha, como una página de contacto o de sección: usa la <a href="/docs/catalog/cms-page-header/">cabecera de página</a>.</p>
             <ul>
-              <li>Para el primer bloque de una página de inicio o de aterrizaje, usa el <a href="/docs/landing/hero/">hero</a>.</li>
-              <li>Para un artículo de una lista, usa una <a href="/docs/cms/templates/#post-card">tarjeta de artículo</a>: la cabecera es para la página del artículo.</li>
+              <li>Para el primer bloque de una página de inicio o de aterrizaje, usa el <a href="/docs/catalog/landing-hero/">hero</a>.</li>
+              <li>Para un artículo de una lista, usa una <a href="/docs/kinds/blog/">tarjeta de artículo</a>: la cabecera es para la página del artículo.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
             <div class="luz-docs-dodont">
@@ -161,7 +162,7 @@ reviewed: false
               <li>Los enlaces están subrayados, así que el color no es la única indicación (WCAG 1.4.1).</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 14 tokens que usan las reglas de <code>.luz-cms-article-header</code> de <code>components/article-header.css</code> de cms, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 14 tokens que usan las reglas de <code>.luz-cms-article-header</code> de <code>components/cms-article-header.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

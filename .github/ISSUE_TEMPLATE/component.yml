@@ -1,5 +1,5 @@
 name: Component or pattern proposal
-description: Propose something new for core, catalog, landing, cms, app or docs.
+description: Propose something new for core or catalog.
 labels: ["component"]
 body:
   - type: markdown
@@ -35,14 +35,14 @@ body:
     id: layer
     attributes:
       label: Where it belongs
-      description: Core is a piece useful on any website. Catalog is what every site needs, above the components. Landing is what only a landing page uses. CMS is what only a blog, a newspaper or another CMS site uses. App is what only a web application uses (its header, its dashboard). Docs is what only a documentation site uses (its shell, its page head, its rail).
+      description: Core is a piece useful on any website. Catalog has two kinds of piece, each one file of the package. One acts for the whole site, above the components (the search, the cookie question). The other is a pattern that only one kind of site uses, and its docs page says which kind it fits.
       options:
         - Core component
-        - Catalog pattern
-        - Landing pattern
-        - CMS pattern
-        - App pattern
-        - Docs pattern
+        - Catalog component for the whole site
+        - Catalog pattern for a landing page
+        - Catalog pattern for a blog, a newspaper or any CMS
+        - Catalog pattern for a web application
+        - Catalog pattern for a documentation site
         - Not sure
     validations:
       required: true

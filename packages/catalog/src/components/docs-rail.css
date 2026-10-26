@@ -1,5 +1,6 @@
 /* ==========================================================================
-   LUZ DOCS: rail.
+   LUZ Catalog: docs rail.
+   Layer: catalog · Prefix: .luz-docs-
    aside.luz-docs-rail > div.luz-docs-rail__inner > nav.luz-docs-rail__onpage
    ("On this page": a details.__fold, its summary.__title, ul.__list of
    a.__link, an h3 in a nested ul.__sub) + .luz-docs-rail__actions (Copy

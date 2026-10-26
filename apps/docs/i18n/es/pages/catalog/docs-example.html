@@ -1,8 +1,9 @@
 <!-- luz:page
 title: Ejemplo
 description: Una vista previa en vivo con el código debajo, en un mismo marco y con la anchura que le asignes.
+fits: una página que muestra un ejemplo en vivo con su código
 keywords: vista previa, muestra de código, demostración, ejemplo en vivo, marco, anchura
-source: 4bda8a621144
+source: 522072f47f37
 reviewed: false
 -->
     <div class="docs-component" id="p-docs-example">
@@ -66,7 +67,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/docs</code> sobre el bloque de código y el resaltado de core.</p>
+            <p>CSS de <code>components/docs-example.css</code> de <code>@luz-ds/catalog</code> sobre el bloque de código y el resaltado de core.</p>
             <ul>
               <li>La vista previa y el código comparten un marco, así que se entienden como un único ejemplo. Las líneas largas se desplazan dentro del bloque de código y nunca ensanchan la figura.</li>
               <li>La anchura del marco es <code>min(100%, var(--luz-docs-example-w, 100%))</code>: si supera el espacio disponible, la figura no se ensancha.</li>
@@ -79,7 +80,7 @@ reviewed: false
             <ul>
               <li><strong>Orden:</strong> primero los controles de la vista previa y después el bloque de código.</li>
               <li><strong>Bloque de código:</strong> conserva <code>tabindex="0"</code> y un <code>aria-label</code> en <code>&lt;pre&gt;</code>: el bloque se desplaza y, sin esos atributos, quien usa el teclado no puede llegar hasta él ni saber qué es.</li>
-              <li><strong>Vista previa:</strong> es interactiva, así que su contenido funciona como en cualquier otro sitio. Incluye las imágenes que no deban usarse en <a href="/docs/documentation/dodont/">Qué hacer y qué no</a>, cuya zona de ejemplo es inerte.</li>
+              <li><strong>Vista previa:</strong> es interactiva, así que su contenido funciona como en cualquier otro sitio. Incluye las imágenes que no deban usarse en <a href="/docs/catalog/docs-dodont/">Qué hacer y qué no</a>, cuya zona de ejemplo es inerte.</li>
             </ul>
             <p class="docs-view__xref">La pestaña Diseño incluye <a href="#contrast">Contraste y foco</a>.</p>
           </div>
@@ -94,7 +95,7 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No uses el ejemplo para mostrar un error ni código que no tenga una vista previa.</p>
             <ul>
-              <li>Las imágenes de errores van en <a href="/docs/documentation/dodont/">Qué hacer y qué no</a>, que es inerte.</li>
+              <li>Las imágenes de errores van en <a href="/docs/catalog/docs-dodont/">Qué hacer y qué no</a>, que es inerte.</li>
               <li>El código que no tenga nada que mostrar, como un comando, va en un <a href="/docs/components/code/">bloque de código</a> normal.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
@@ -154,7 +155,7 @@ reviewed: false
               <li><strong>Anchura:</strong> el marco nunca supera el espacio disponible, así que la página no se desplaza horizontalmente a 320px.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 4 tokens que leen las reglas de <code>.luz-docs-example</code> de <code>components/example.css</code> de docs, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 4 tokens que leen las reglas de <code>.luz-docs-example</code> de <code>components/docs-example.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code></dd></div>

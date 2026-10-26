@@ -1,7 +1,8 @@
 <!-- luz:page
-title: Cabecera de página
+title: Cabecera de página de blog
 description: Da título y una frase explicativa a una página que no sea un artículo, como «Acerca de» o «Contacto».
-source: 109371799fd3
+fits: una página que no es un artículo, como «Acerca de» o «Contacto»
+source: 156f5c64f51f
 reviewed: false
 -->
     <div class="docs-component" id="p-cms-page-header">
@@ -17,7 +18,7 @@ reviewed: false
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
           <p>No se conocen problemas.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera de página">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera de página de blog">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
           </nav>
@@ -49,11 +50,11 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Un contenedor con título y entradilla, con estilos de <code>@luz-ds/cms</code>. Sin JavaScript; <code>@luz-ds/catalog</code> es opcional.</p>
+            <p>Un contenedor con título y entradilla, con estilos de <code>components/cms-page-header.css</code> de <code>@luz-ds/catalog</code>. Sin JavaScript.</p>
             <ul>
               <li>Las clases solo cambian el aspecto. El título debe ser el <code>&lt;h1&gt;</code> de la página.</li>
               <li>En árabe, el título no tiene espaciado entre letras, ya que separaría los caracteres unidos de la escritura.</li>
-              <li>Los artículos usan la <a href="/docs/cms/article-header/">cabecera de artículo</a>, con su sección, entradilla y firma.</li>
+              <li>Los artículos usan la <a href="/docs/catalog/cms-article-header/">cabecera de artículo</a>, con su sección, entradilla y firma.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>No cambia nada: la cabecera de página usa HTML y CSS.</p>
@@ -73,7 +74,7 @@ reviewed: false
             <p>No la uses para una sección dentro de la página: usa un encabezado normal del nivel adecuado.</p>
             <ul>
               <li>Una cabecera de página por página.</li>
-              <li>Los artículos usan la <a href="/docs/cms/article-header/">cabecera de artículo</a>, que incluye autor y fecha.</li>
+              <li>Los artículos usan la <a href="/docs/catalog/cms-article-header/">cabecera de artículo</a>, que incluye autor y fecha.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
             <div class="luz-docs-dodont">
@@ -114,7 +115,7 @@ reviewed: false
               <li><strong>Foco:</strong> la cabecera no recibe el foco.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 8 tokens que usan las reglas de <code>.luz-cms-page-header</code> de <code>components/page-header.css</code> de cms, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 8 tokens que usan las reglas de <code>.luz-cms-page-header</code> de <code>components/cms-page-header.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-xl</code></dd></div>

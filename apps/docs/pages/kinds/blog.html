@@ -12,7 +12,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       <p>Or build it yourself from the recipes below. It works with any CMS or static site generator: each recipe is HTML for one of its templates, and the CMS fills in the text. They use the classes of core, the catalog and cms only; <a href="/docs/get-started/#site-kinds">Install LUZ</a> lists the files to load.</p>
       <div class="docs-block">
         <h2 id="header">Header</h2>
-        <p>The skip link, the <a href="/docs/cms/header/">header</a> with the name of the blog and its sections, the <code>&lt;main&gt;</code> and the footer. For a newspaper, the pattern has a masthead that does not stick. The search and the language switch are the catalog's elements: leave them out if you do not load it.</p>
+        <p>The skip link, the <a href="/docs/catalog/cms-header/">header</a> with the name of the blog and its sections, the <code>&lt;main&gt;</code> and the footer. For a newspaper, the pattern has a masthead that does not stick. The search and the language switch are the catalog's elements: leave them out if you do not load it.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <header class="luz-cms-header">
@@ -74,7 +74,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       </div>
       <div class="docs-block">
         <h2 id="page-header">Page header</h2>
-        <p>The title of a page that is not a story: a section, an archive, the About page. The <a href="/docs/cms/page-header/">page header</a> holds its <code>&lt;h1&gt;</code> and one sentence.</p>
+        <p>The title of a page that is not a story: a section, an archive, the About page. The <a href="/docs/catalog/cms-page-header/">page header</a> holds its <code>&lt;h1&gt;</code> and one sentence.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-cms-page-header u-mb-0">
@@ -97,7 +97,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       <div class="docs-block">
         <h2 id="post-card">Post card</h2>
         <p>One post in a list: a picture, its section, the title, a line of summary and the date. It is core's <a href="/docs/components/card/">card</a>, with no CSS of its own. The link on the title makes the whole card one link, with one tab stop; the section is a <a href="/docs/components/tag/">tag</a>, not a second link.</p>
-        <p>A list of posts is a <code>&lt;ul&gt;</code> on <code>.o-grid--auto</code>, which fits columns of 16rem or more. More cards, the related posts and the author box are in <a href="/docs/cms/templates/">CMS templates</a>.</p>
+        <p>A list of posts is a <code>&lt;ul&gt;</code> on <code>.o-grid--auto</code>, which fits columns of 16rem or more. More cards, the related posts and the author box are in <a href="/docs/kinds/blog/">CMS templates</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <ul class="o-grid o-grid--auto">
@@ -139,7 +139,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       </div>
       <div class="docs-block">
         <h2 id="article-header">Article header</h2>
-        <p>The top of a story: its section, the title, a standfirst, the byline with the date and the reading time, and the lead picture. The <a href="/docs/cms/article-header/">article header</a> holds the story's <code>&lt;h1&gt;</code>; the date and the reading time are core's <a href="/docs/components/meta/">meta line</a>.</p>
+        <p>The top of a story: its section, the title, a standfirst, the byline with the date and the reading time, and the lead picture. The <a href="/docs/catalog/cms-article-header/">article header</a> holds the story's <code>&lt;h1&gt;</code>; the date and the reading time are core's <a href="/docs/components/meta/">meta line</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <header class="luz-cms-article-header u-mb-0">
@@ -187,7 +187,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       </div>
       <div class="docs-block">
         <h2 id="toc">Table of contents</h2>
-        <p>The sections of a long story, beside its text: the <a href="/docs/cms/toc/">table of contents</a>, in an <code>&lt;article&gt;</code> with the text as core's <a href="/docs/components/prose/">prose</a>. Leave it out of a short post, and the layout is the text alone.</p>
+        <p>The sections of a long story, beside its text: the <a href="/docs/catalog/cms-toc/">table of contents</a>, in an <code>&lt;article&gt;</code> with the text as core's <a href="/docs/components/prose/">prose</a>. Leave it out of a short post, and the layout is the text alone.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <article class="luz-cms-article">
@@ -239,7 +239,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       </div>
       <div class="docs-block">
         <h2 id="footer">Footer</h2>
-        <p>Who publishes the blog and the links a reader looks for last, in one row: the <a href="/docs/cms/footer/">footer</a>.</p>
+        <p>Who publishes the blog and the links a reader looks for last, in one row: the <a href="/docs/catalog/cms-footer/">footer</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-cms-footer">

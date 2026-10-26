@@ -1,8 +1,9 @@
 <!-- luz:page
 title: Contenido principal y secciones
 description: Da ritmo a una página de landing: espacio amplio entre los bloques del contenido principal, menos espacio dentro de cada sección, con su encabezado, y un resplandor opcional detrás de la página.
+fits: el cuerpo de una landing page, entre la cabecera y el pie
 keywords: ritmo, fondo de página, degradado
-source: eff8b4fb152b
+source: af7a5ea8be65
 reviewed: false
 -->
     <div class="docs-component" id="p-landing-section">
@@ -97,11 +98,11 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/landing</code> sobre los objetos de core. No usa JavaScript y <code>@luz-ds/catalog</code> es opcional.</p>
+            <p>CSS de <code>components/landing-main.css</code>, <code>landing-section.css</code> y <code>landing-glow.css</code> de <code>@luz-ds/catalog</code> sobre los objetos de core. No usa JavaScript.</p>
             <ul>
-              <li><code>.o-container</code> de core da al contenido principal su ancho y sus márgenes interiores, y <code>.o-stack</code> dispone los elementos en columna; la capa de landing va después de los objetos de core, así que prevalecen sus separaciones.</li>
+              <li><code>.o-container</code> de core da al contenido principal su ancho y sus márgenes interiores, y <code>.o-stack</code> dispone los elementos en columna; la capa del catálogo va después de los objetos de core, así que prevalecen sus separaciones.</li>
               <li>El tinte del resplandor va en el borde inicial: arriba a la izquierda en una página de izquierda a derecha y arriba a la derecha en una de derecha a izquierda. <code>--luz-landing-glow-x</code> lo desplaza; <code>50%</code> lo centra en ambas direcciones.</li>
-              <li>El encabezado comparte sus reglas y la propiedad ajustable <code>em</code> con el <a href="/docs/landing/hero/">hero</a>.</li>
+              <li>El encabezado comparte sus reglas y la propiedad ajustable <code>em</code> con el <a href="/docs/catalog/landing-hero/">hero</a>.</li>
               <li>Usa una sección en un <code>&lt;section&gt;</code> cuando el grupo tenga su propio encabezado, o en un <code>&lt;div&gt;</code> cuando no lo tenga.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
@@ -184,7 +185,7 @@ reviewed: false
               <li><strong>Colores forzados:</strong> se elimina el resplandor y la página usa el fondo del sistema.</li>
             </ul>
             <h3 id="tokens">Tokens que utiliza</h3>
-            <p>Los 18 tokens que leen, por familia, las reglas de landing para <code>.luz-landing-main</code>, <code>.luz-landing-section</code> y <code>.luz-landing-glow</code>, definidas en <code>components/main.css</code>, <code>section.css</code> y <code>glow.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 18 tokens que leen, por familia, las reglas de <code>.luz-landing-main</code>, <code>.luz-landing-section</code> y <code>.luz-landing-glow</code> del catálogo, definidas en <code>components/landing-main.css</code>, <code>landing-section.css</code> y <code>landing-glow.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xl</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>

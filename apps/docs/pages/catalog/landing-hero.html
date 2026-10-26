@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Hero
 description: Opens a home or landing page with its title, one sentence, the main actions and an optional picture.
-area: landing
-order: 2
-group: patterns
-files: .luz-landing-hero, --centered, __copy, __eyebrow, __title, __lead, __media, __media--bleed
+area: catalog
+order: 9
+group: page-structure
+fits-kinds: landing
+fits: the top of a landing page, under the header
+files: components/landing-hero.css
 keywords: jumbotron, splash, intro
 toc: h2,h3
 -->
@@ -76,7 +78,7 @@ toc: h2,h3
 &lt;/section&gt;</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
-            <p>Two modifiers, <code>--centered</code> and <code>__media--bleed</code>, as in the <a href="/docs/landing/templates/#product-page">product page template</a>. The eyebrow, the lead and the picture are optional; with no picture the copy takes the whole width.</p>
+            <p>Two modifiers, <code>--centered</code> and <code>__media--bleed</code>, as in the <a href="/docs/kinds/landing/">product page template</a>. The eyebrow, the lead and the picture are optional; with no picture the copy takes the whole width.</p>
             <p>The block is a class of the landing on core's split grid.</p>
             <div class="luz-table-wrap" role="region" aria-label="Hero parts" tabindex="0">
               <table class="luz-table">
@@ -96,7 +98,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>A <code>&lt;section&gt;</code> named by its title, laid out by core's split grid and styled by <code>@luz-ds/landing</code>. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
+            <p>A <code>&lt;section&gt;</code> named by its title, laid out by core's split grid and styled by <code>components/landing-hero.css</code> of <code>@luz-ds/catalog</code>. No JavaScript.</p>
             <ul>
               <li>The columns are core's <a href="/docs/components/layout/#objects-actions">split grid</a>, intrinsic: they follow the room the hero has, not the window. A hero as wide as the page splits from about 900 px of window; in a narrow column, or with larger text, it stays one column.</li>
               <li>The order is the source order: the copy comes first, on the left in a left-to-right page and on the right in a right-to-left one.</li>
@@ -123,7 +125,7 @@ toc: h2,h3
             <p>Do not use it on a page whose reader came to read or to do a task: use a plain <code>&lt;h1&gt;</code> and a lead paragraph, which are smaller.</p>
             <ul>
               <li>One hero per page, and only at the top.</li>
-              <li>Not for a message in the middle of a page: use a <a href="/docs/landing/section/">section</a>, with core's <a href="/docs/components/band/">band</a> if it must stand out.</li>
+              <li>Not for a message in the middle of a page: use a <a href="/docs/catalog/landing-section/">section</a>, with core's <a href="/docs/components/band/">band</a> if it must stand out.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-docs-dodont">
@@ -193,7 +195,7 @@ toc: h2,h3
               <li>Do not put the text over the picture: its contrast would depend on the picture, which no token controls.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 19 tokens that the <code>.luz-landing-hero</code> rules of landing's <code>components/hero.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 19 tokens that the <code>.luz-landing-hero</code> rules of catalog’s <code>components/landing-hero.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-3xl</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

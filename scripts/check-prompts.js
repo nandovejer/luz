@@ -16,6 +16,9 @@
  *   - a prompt that does not hold every line of the body that has no
  *     placeholder (the five come from the same body);
  *   - a class or a custom element that no package's manifest has;
+ *   - a pattern of the catalog that a preset names (`luz-landing-hero`,
+ *     `<luz-search>`) whose page does not say it fits that kind (`fits-kinds`
+ *     in apps/docs/pages/catalog/, or `any`);
  *   - a prompt over its ceiling, the row "prompts" of budgets.json;
  *   - a prompt whose sources (body, preset, stacks.json) changed since the
  *     sentinel's case for it was confirmed: its `source` in
@@ -28,6 +31,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { fitsKindsOf } from "./docs-site/kinds.js";
 import { PROMPT_KINDS, PROMPT_SITE, assemblePrompt, promptRoute, promptSourceHash } from "./docs-site/prompts.js";
 import { PUBLISHED } from "./luz-packages.js";
 
@@ -35,6 +39,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE = "apps/site/prompts";
 const CDN = "https://cdn.jsdelivr.net/npm/@luz-ds/";
 const CASES = ".claude/evals/prompt-injection/cases.json";
+const CATALOG_PAGES = "apps/docs/pages/catalog";
 
 // Format characters (Cf) hide text, the bidi controls reorder it, variation
 // selectors and the blank fillers look like nothing
@@ -127,11 +132,50 @@ export function promptCeiling(root = ROOT) {
   return row.max;
 }
 
+/**
+ * The catalog pages by what they document: { slug, kinds (fits-kinds), files }
+ * for each page of apps/docs/pages/catalog/ that has `fits-kinds`.
+ */
+export function catalogPatterns(root = ROOT) {
+  const pages = [];
+  for (const name of readdirSync(join(root, CATALOG_PAGES)).filter((f) => f.endsWith(".html") && !f.startsWith("_"))) {
+    const head = /^<!-- luz:page\n([\s\S]*?)\n-->/.exec(readFileSync(join(root, CATALOG_PAGES, name), "utf-8"))?.[1] ?? "";
+    const key = (k) => new RegExp(`^${k}: (.*)$`, "m").exec(head)?.[1].trim();
+    if (!key("fits-kinds")) continue;
+    const files = (key("files") ?? "").split(/[;,]/).map((f) => f.trim());
+    pages.push({ slug: name.slice(0, -5), kinds: fitsKindsOf(key("fits-kinds")), files, file: `${CATALOG_PAGES}/${name}` });
+  }
+  return pages;
+}
+
+/**
+ * The patterns a preset names that its kind is not among the `fits-kinds` of
+ * (or `any`): "file:line: …". A name no catalog page documents (core's
+ * `luz-sidebar`, a file with no page of its own) is not a pattern here.
+ */
+export function presetProblems(root = ROOT) {
+  const problems = [];
+  const patterns = catalogPatterns(root);
+  for (const kind of PROMPT_KINDS.filter((k) => k.preset)) {
+    const file = `${SOURCE}/presets/${kind.preset}.md`;
+    const text = readFileSync(join(root, file), "utf-8");
+    for (const m of text.matchAll(/`<?(luz-[a-z0-9-]+)>?`/g)) {
+      const name = m[1];
+      const page = patterns.find((p) => p.slug === name.slice(4) || p.files.includes(`components/${name.slice(4)}.css`));
+      if (page && !page.kinds.includes("any") && !page.kinds.includes(kind.id)) {
+        problems.push(`${file}:${lineOf(text, m.index)}: \`${name}\` is named for ${kind.id}, but its page (${page.file}) fits best ${page.kinds.join(", ")}: add ${kind.id} to its fits-kinds, or leave it out of the preset`);
+      }
+    }
+  }
+  return problems;
+}
+
 /** Every problem of the sources and of the five prompts. */
 export function checkPrompts(root = ROOT) {
   const problems = [];
   const sources = [`${SOURCE}/body.md`, `${SOURCE}/stacks.json`, ...readdirSync(join(root, SOURCE, "presets")).map((f) => `${SOURCE}/presets/${f}`)];
   for (const file of sources) problems.push(...checkText(readFileSync(join(root, file), "utf-8"), file));
+  problems.push(...presetProblems(root));
   const known = knownNames(root);
   const fixed = fixedLines(readFileSync(join(root, SOURCE, "body.md"), "utf-8"));
   const ceiling = promptCeiling(root);

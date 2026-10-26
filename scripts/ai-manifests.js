@@ -32,8 +32,9 @@
  *               what is in no stylesheet of its own.
  * No time, no absolute path and no file system order is in the output.
  *
- * `kind` follows the name (`pattern` is the `luz-<package>-*` classes of site
- * and the kinds of site); `block`, `modifier` and `part` are its BEM split.
+ * `kind` follows the name (`pattern` is the `luz-catalog-*` classes and the
+ * patterns of a kind of site, `luz-landing-*`, `luz-cms-*`, `luz-app-*` and
+ * `luz-docs-*`, which are catalog's files since F5b); `block`, `modifier` and `part` are its BEM split.
  *
  * A class no stylesheet lists but an unminified script of dist/ names (a
  * selector it queries, a class it adds; RL-19) is listed too, `defined: false`,

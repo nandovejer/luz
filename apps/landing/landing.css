@@ -1,8 +1,8 @@
 /* ==========================================================================
    LUZ — LANDING PAGE
    Consumer-side styles for apps/landing, written the way any level-3 consumer
-   would: on top of tokens + core + catalog + landing. The hero, the head of each
-   section, the stat and the footer's columns are @luz-ds/landing's; what is
+   would: on top of tokens + core + catalog (its landing patterns). The hero, the head of each
+   section, the stat and the footer's columns are catalog's landing patterns; what is
    here is the home's own layout and the few pieces only it has.
    Rules:
      - semantic tokens only (no primitive color tokens, no literal colors);

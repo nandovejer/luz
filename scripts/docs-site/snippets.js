@@ -35,21 +35,20 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { KIND_PATTERNS, kindFiles } from "./kinds.js";
 import { englishT } from "./strings.js";
 
 /**
  * The files of each package that a snippet or the chunks table names (spec 3.4.1).
  * Catalog's `css` is null: it has a file per component (catalogComponents), and
- * EXAMPLE_COMPONENT is the one the snippets of a kind of site show.
+ * EXAMPLE_COMPONENT is the one the snippets of a kind of site show, before the
+ * patterns of the kind (kinds.js; the packages landing, cms, app and docs are
+ * gone, their patterns are files of catalog).
  */
 export const FILES = {
   tokens: { css: "luz-tokens.min.css", js: null, chunks: [] },
   core: { css: "luz.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js"] },
   catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
-  landing: { css: "landing.min.css", js: null, chunks: [] },
-  cms: { css: "cms.min.css", js: null, chunks: [] },
-  app: { css: "app.min.css", js: null, chunks: [] },
-  docs: { css: "docs.min.css", js: null, chunks: [] },
 };
 
 /** The catalog component the snippet of a kind of site links, as the example of one link per component. */
@@ -95,13 +94,16 @@ export function catalogFilesIn(text, components) {
     .map(({ file }) => file);
 }
 
-/** What the reader is building: its id and the package that is its kind (null: none); its words are `snippets.kind.<id>`. */
+/**
+ * What the reader is building: its id and the kind in kinds.js whose patterns
+ * it links (null: none); its words are `snippets.kind.<id>`.
+ */
 export const KINDS = [
-  { id: "atoms", pkg: null },
-  { id: "landing", pkg: "landing" },
-  { id: "blog", pkg: "cms" },
-  { id: "app", pkg: "app" },
-  { id: "docs", pkg: "docs" },
+  { id: "atoms", patterns: null },
+  { id: "landing", patterns: "landing" },
+  { id: "blog", patterns: "cms" },
+  { id: "app", patterns: "app" },
+  { id: "docs", patterns: "docs" },
 ];
 
 /** How it is loaded; its words are `snippets.way.<id>` and `snippets.way-heading.<id>`. */
@@ -125,17 +127,22 @@ const PLACEHOLDER = "sha384-(run pnpm build)";
  * Read every file of FILES.
  * `root`: the repository; `readFile(path, encoding?)`: the bytes (a Buffer without an
  * encoding); `dev`: warn about a missing dist file instead of throwing; `warn`: where.
- * Returns { entries }: "<pkg>/<file>" → { pkg, version, file, url, integrity }.
+ * Returns { entries, kindFiles }: "<pkg>/<file>" → { pkg, version, file, url, integrity };
+ * the files of each kind of site's patterns, by kind (kinds.js), in order.
  */
 export function snippetData({ root, readFile, dev = false, warn = console.warn }) {
   const entries = {};
   let components = [];
+  let patterns = {};
   try {
-    components = catalogComponents({ root, readFile }).map(({ file }) => minified(file));
+    const built = catalogComponents({ root, readFile });
+    components = built.map(({ file }) => minified(file));
+    patterns = Object.fromEntries(Object.keys(KIND_PATTERNS).map((kind) => [kind, kindFiles(kind, built)]));
   } catch (error) {
     if (!dev) throw error;
     warn(`[docs] ${error.message}`);
-    components = [minified(EXAMPLE_COMPONENT)];
+    patterns = Object.fromEntries(Object.entries(KIND_PATTERNS).map(([kind, { files }]) => [kind, files.map((name) => `components/${kind}-${name}.css`)]));
+    components = [minified(EXAMPLE_COMPONENT), ...Object.values(patterns).flat().map(minified)];
   }
   for (const [pkg, spec] of Object.entries(FILES)) {
     const manifest = join(root, "packages", pkg, "package.json");
@@ -160,7 +167,7 @@ export function snippetData({ root, readFile, dev = false, warn = console.warn }
       entries[`${pkg}/${file}`] = { pkg, version, file, url: `${CDN}/@luz-ds/${pkg}@${version}/dist/${file}`, integrity };
     }
   }
-  return { entries };
+  return { entries, kindFiles: patterns };
 }
 
 /* ---- Markup -------------------------------------------------------------- */
@@ -172,7 +179,7 @@ const esc = (s) =>
 const text = (lines) => lines.map((l) => (l === null ? "" : esc(l))).join("\n");
 
 // The comments inside a snippet are code: English in every language (D7)
-const OPTIONAL_SITE = "Optional: one line per catalog component the page uses (here the search), then the kind of site. Delete the ones the page does not use.";
+const OPTIONAL_SITE = "Optional: one line per catalog component the page uses (here the search), then the patterns of the kind of site. Delete the ones the page does not use.";
 const OPTIONAL_SITE_SCRIPT = "Optional, with the search, the cookie banner or the color mode: the script that loads each one";
 
 const linkTag = (e) => `<link rel="stylesheet" href="${e.url}" integrity="${e.integrity}" crossorigin="anonymous">`;
@@ -182,25 +189,25 @@ function cdnCode(data, kind) {
   const at = (pkg, file) => data.entries[`${pkg}/${file}`];
   const script = (e) => `<script type="module" src="${e.url}" integrity="${e.integrity}" crossorigin="anonymous"></script>`;
   const lines = [linkTag(at("tokens", FILES.tokens.css)), linkTag(at("core", FILES.core.css))];
-  if (kind.pkg) {
-    lines.push(`<!-- ${OPTIONAL_SITE} -->`, linkTag(at("catalog", minified(EXAMPLE_COMPONENT))), linkTag(at(kind.pkg, FILES[kind.pkg].css)));
+  if (kind.patterns) {
+    lines.push(`<!-- ${OPTIONAL_SITE} -->`, linkTag(at("catalog", minified(EXAMPLE_COMPONENT))), ...data.kindFiles[kind.patterns].map((file) => linkTag(at("catalog", minified(file)))));
   }
   lines.push(null, "<!-- Optional: copy buttons, tabs, players, the color mode -->", script(at("core", FILES.core.js)));
-  if (kind.pkg) lines.push(`<!-- ${OPTIONAL_SITE_SCRIPT} -->`, script(at("catalog", FILES.catalog.js)));
+  if (kind.patterns) lines.push(`<!-- ${OPTIONAL_SITE_SCRIPT} -->`, script(at("catalog", FILES.catalog.js)));
   return text(lines);
 }
 
-function npmCode(kind) {
+function npmCode(data, kind) {
   const lines = ['import "@luz-ds/tokens/css";', 'import "@luz-ds/core/css";'];
-  if (kind.pkg) {
-    lines.push(`// ${OPTIONAL_SITE}`, importLine("catalog", EXAMPLE_COMPONENT), `import "@luz-ds/${kind.pkg}/css";`);
+  if (kind.patterns) {
+    lines.push(`// ${OPTIONAL_SITE}`, importLine("catalog", EXAMPLE_COMPONENT), ...data.kindFiles[kind.patterns].map((file) => importLine("catalog", file)));
   }
   lines.push(null, "// Optional: copy buttons, tabs, players, the color mode", 'import "@luz-ds/core";');
-  if (kind.pkg) lines.push(`// ${OPTIONAL_SITE_SCRIPT}`, 'import "@luz-ds/catalog";');
+  if (kind.patterns) lines.push(`// ${OPTIONAL_SITE_SCRIPT}`, 'import "@luz-ds/catalog";');
   return text(lines);
 }
 
-const installCommand = (kind) => `pnpm add ${["@luz-ds/tokens", "@luz-ds/core", ...(kind.pkg ? ["@luz-ds/catalog", `@luz-ds/${kind.pkg}`] : [])].join(" ")}`;
+const installCommand = (kind) => `pnpm add ${["@luz-ds/tokens", "@luz-ds/core", ...(kind.patterns ? ["@luz-ds/catalog"] : [])].join(" ")}`;
 
 /**
  * The start of "Copy the markup" on the page of a catalog component: the
@@ -239,7 +246,6 @@ function renderSnippet(data, kind, way, t) {
   const lower = label.toLowerCase();
   if (way.id === "npm") {
     const command = installCommand(kind);
-    const note = kind.pkg ? `\n        <p>${t("snippets.site-note")}</p>` : "";
     return `${open}
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
@@ -247,8 +253,8 @@ function renderSnippet(data, kind, way, t) {
             ${esc(command)}
           </code>
           <button class="luz-copy-btn" type="button" data-copy="${esc(command)}" aria-label="${esc(t("snippets.copy-install", { kind: lower }))}">${esc(t("snippets.copy"))}</button>
-        </div>${note}
-${codeBlock({ id, lang: "js", label: t("snippets.label-bundler"), copy: t("snippets.copy-bundler", { kind: lower }), name: t("snippets.name-bundler", { kind: lower }), code: npmCode(kind) }, t)}
+        </div>
+${codeBlock({ id, lang: "js", label: t("snippets.label-bundler"), copy: t("snippets.copy-bundler", { kind: lower }), name: t("snippets.name-bundler", { kind: lower }), code: npmCode(data, kind) }, t)}
       </div>`;
   }
   return `${open}

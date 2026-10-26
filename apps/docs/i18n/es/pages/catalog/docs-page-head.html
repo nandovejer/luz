@@ -1,8 +1,9 @@
 <!-- luz:page
 title: Cabecera de página
 description: La parte superior de una página de documentación: el epígrafe, el título, una frase y las etiquetas que indican de qué trata.
+fits: la parte superior de una página de documentación
 keywords: título, entradilla, epígrafe, etiquetas, parte superior de la página
-source: 00dfd8f582a7
+source: efbed61c33ce
 reviewed: false
 -->
     <div class="docs-component" id="p-docs-page-head">
@@ -67,7 +68,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/docs</code>. Define el ritmo y los tamaños; las palabras las eliges tú.</p>
+            <p>CSS de <code>components/docs-page-head.css</code> de <code>@luz-ds/catalog</code>. Define el ritmo y los tamaños; las palabras las eliges tú.</p>
             <ul>
               <li>La cabecera es una cuadrícula de una columna. La separación entre las partes es <code>--luz-space-sm</code> y el espacio debajo de la cabecera es <code>--luz-space-xl</code>.</li>
               <li>El <code>h1</code> es un elemento sin clase dentro de la cabecera; esta le aplica estilos según su posición.</li>
@@ -96,8 +97,8 @@ reviewed: false
             <p>No uses la cabecera para el banner del sitio: contiene el <code>h1</code> de la página.</p>
             <ul>
               <li>Usa una sola cabecera por página. Una sección de una página larga lleva un <code>h2</code>, no otra cabecera.</li>
-              <li>Para la cabecera de un artículo de blog, usa la <a href="/docs/cms/article-header/">cabecera de artículo de CMS</a>.</li>
-              <li>Una página de landing empieza con el <a href="/docs/landing/hero/">hero</a>.</li>
+              <li>Para la cabecera de un artículo de blog, usa la <a href="/docs/catalog/cms-article-header/">cabecera de artículo de CMS</a>.</li>
+              <li>Una página de landing empieza con el <a href="/docs/catalog/landing-hero/">hero</a>.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
             <div class="luz-docs-dodont">
@@ -153,7 +154,7 @@ reviewed: false
               <li><strong>Bordes:</strong> el contorno de las etiquetas (<code>--luz-divider</code>) es decorativo y no tiene un mínimo.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 12 tokens que leen las reglas de <code>.luz-docs-page-head</code> de <code>components/page-head.css</code> de docs, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 12 tokens que leen las reglas de <code>.luz-docs-page-head</code> de <code>components/docs-page-head.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>

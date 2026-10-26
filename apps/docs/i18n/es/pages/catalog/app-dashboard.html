@@ -1,8 +1,9 @@
 <!-- luz:page
 title: Panel de control
 description: La vista general de una aplicación: el título y la acción principal, seguidos de una cuadrícula de paneles que aprovecha el espacio disponible.
+fits: la primera vista de una aplicación
 keywords: paneles, widgets, resumen, cuadrícula de tarjetas
-source: b8880c66781d
+source: b44d84f7f8b8
 reviewed: false
 -->
     <div class="docs-component" id="p-app-dashboard">
@@ -94,7 +95,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/app</code> aplicado a la cuadrícula y la tarjeta de core. Sin JavaScript.</p>
+            <p>CSS de <code>components/app-dashboard.css</code> de <code>@luz-ds/catalog</code> aplicado a la cuadrícula y la tarjeta de core. Sin JavaScript.</p>
             <ul>
               <li>El panel de control asigna <code>--luz-grid-min: 18rem</code> a <code>.o-grid--auto</code> de core, así que las columnas nunca miden menos de 18 rem y su número depende del espacio: una a 320 px, dos a 768 px y tres a 1280 px junto a una barra lateral.</li>
               <li>El panel de control es un contenedor de tamaño. El panel ancho consulta el ancho del panel de control, no el de la ventana, así que cabe tanto con barra lateral como sin ella. A partir de 40 rem siempre caben dos columnas (dos de 18 rem y un espacio); al ampliar el texto al 200 %, ambas siguen medidas en rem y no se desbordan.</li>
@@ -110,7 +111,7 @@ reviewed: false
               <li><strong>Encabezados:</strong> la vista tiene un <code>&lt;h1&gt;</code> en la fila del título y cada panel empieza con un <code>&lt;h2&gt;</code>. La fila del título es un <code>&lt;div&gt;</code>, no un <code>&lt;header&gt;</code>.</li>
               <li><strong>Lista:</strong> los paneles son un <code>&lt;ul&gt;</code> de elementos <code>&lt;li&gt;</code>; el lector de pantalla indica cuántos hay. Safari puede quitar el rol de lista si no hay marcadores; los encabezados permiten recorrer los paneles.</li>
               <li><strong>Acciones:</strong> una acción que lleva a otro sitio es un enlace (<code>&lt;a href&gt;</code>); una que hace algo en esta página es un <code>&lt;button type="button"&gt;</code>. Nunca uses <code>&lt;a&gt;</code> sin <code>href</code>.</li>
-              <li><strong>Puntos de referencia:</strong> el panel de control es el <code>&lt;main&gt;</code> de la página, hermano de la <a href="/docs/app/header/">cabecera</a>. Es el destino del enlace para saltar al contenido y lleva <code>tabindex="-1"</code>.</li>
+              <li><strong>Puntos de referencia:</strong> el panel de control es el <code>&lt;main&gt;</code> de la página, hermano de la <a href="/docs/catalog/app-header/">cabecera</a>. Es el destino del enlace para saltar al contenido y lleva <code>tabindex="-1"</code>.</li>
             </ul>
             <p class="docs-view__xref">La pestaña Diseño contiene <a href="#contrast">el contraste y el foco</a>.</p>
           </div>
@@ -173,7 +174,7 @@ reviewed: false
               <li><strong>Bordes:</strong> el borde de la tarjeta (<code>--luz-divider</code>) es decorativo; el texto transmite el significado. El borde se conserva con colores forzados.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 7 tokens que usan las reglas de <code>.luz-app-dashboard</code> de <code>components/dashboard.css</code> de app, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 7 tokens que usan las reglas de <code>.luz-app-dashboard</code> de <code>components/app-dashboard.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code></dd></div>

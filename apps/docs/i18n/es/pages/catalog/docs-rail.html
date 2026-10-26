@@ -1,8 +1,9 @@
 <!-- luz:page
 title: Índice lateral
 description: La lista de secciones de una página que permanece visible junto al contenido, con las acciones de la página debajo.
+fits: el lateral de una página de documentación larga
 keywords: en esta página, fijo, seguimiento del desplazamiento, índice, lista de secciones
-source: 48bc6d92ad42
+source: 2922c3751f88
 reviewed: false
 -->
     <div class="docs-component" id="p-docs-rail">
@@ -93,7 +94,7 @@ reviewed: false
                   <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail</code></div></td><td data-label="Efecto"><div>En un <code>&lt;aside&gt;</code>: la tercera columna de la <a href="/docs/documentation/shell/">estructura</a> a partir de 80rem, tan alta como el contenido; por debajo de ese ancho, aparece encima del contenido</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-docs-rail</code></div></td><td data-label="Efecto"><div>En un <code>&lt;aside&gt;</code>: la tercera columna de la <a href="/docs/catalog/docs-shell/">estructura</a> a partir de 80rem, tan alta como el contenido; por debajo de ese ancho, aparece encima del contenido</div></td></tr>
                 <tr><td data-label="Clase"><div><code>.luz-docs-rail__inner</code></div></td><td data-label="Efecto"><div>En un <code>&lt;div&gt;</code>, único hijo del índice lateral, que contiene la lista y las acciones: a partir de 80rem es una caja fija dentro del índice, así nunca tapa el pie y se desplaza por sí sola, con espacio al principio para el anillo de foco</div></td></tr>
                 <tr><td data-label="Clase"><div><code>.luz-docs-rail__onpage</code></div></td><td data-label="Efecto"><div>En el <code>&lt;nav&gt;</code> de la lista, hijo directo de <code>__inner</code>: limita el reinicio del plegado y su título, y sirve de anclaje para un script</div></td></tr>
                 <tr><td data-label="Clase"><div><code>.luz-docs-rail__fold</code></div></td><td data-label="Efecto"><div>En un <code>&lt;details&gt;</code> nativo. Escribe <code>open</code> para que la lista se muestre sin script. Cuando el índice lateral está encima del contenido, un script puede cerrarlo al cargar la página</div></td></tr>
@@ -106,7 +107,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/docs</code> sobre el enlace de la barra lateral y su seguimiento del desplazamiento de core.</p>
+            <p>CSS de <code>components/docs-rail.css</code> de <code>@luz-ds/catalog</code> sobre el enlace de la barra lateral y su seguimiento del desplazamiento de core.</p>
             <ul>
               <li>Por debajo de 80rem, el índice lateral aparece encima del contenido, bajo la cabecera. A partir de 80rem ocupa una columna tan alta como el contenido, y su caja interior queda fija a <code>--luz-docs-rail-top</code> desde la parte superior de la ventana: se detiene al final del índice y nunca tapa el pie. La caja interior no supera la altura de la ventana y se desplaza por sí sola si la lista es más larga.</li>
               <li>Los enlaces usan <code>.luz-sidebar__link</code> de core, así que su script marca la sección visible con <code>aria-current="true"</code>. El índice lateral representa el enlace como texto de la página: la marca combina el grosor y un borde al principio, nunca depende solo del color.</li>
@@ -135,7 +136,7 @@ reviewed: false
             <p>No uses el índice lateral en una página corta: leer dos enlaces lleva más que leer la propia página.</p>
             <ul>
               <li>Incluye las secciones de una sola página. Las páginas del sitio van en la barra lateral.</li>
-              <li>No anides más allá de un <code>h3</code>. Para mostrar el índice junto a un artículo, usa la <a href="/docs/cms/toc/">tabla de contenidos de CMS</a>.</li>
+              <li>No anides más allá de un <code>h3</code>. Para mostrar el índice junto a un artículo, usa la <a href="/docs/catalog/cms-toc/">tabla de contenidos de CMS</a>.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
             <div class="luz-docs-dodont">
@@ -191,7 +192,7 @@ reviewed: false
               <li><strong>Área de activación:</strong> cada enlace, el resumen y cada acción miden al menos 28px de alto.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 14 tokens que leen las reglas de <code>.luz-docs-rail</code> de <code>components/rail.css</code> de docs, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 14 tokens que leen las reglas de <code>.luz-docs-rail</code> de <code>components/docs-rail.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

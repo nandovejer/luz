@@ -1,8 +1,9 @@
 <!-- luz:page
-title: Cabecera
+title: Cabecera de blog
 description: Abre cada página de un blog o periódico con el nombre de la publicación, sus secciones y una búsqueda: una fila fija arriba o una cabecera de tres filas.
-keywords: barra superior, cabecera, periódico, cabecera de blog
-source: 64c84050397f
+fits: la parte superior de cada página de un blog o de un periódico
+keywords: barra superior, cabecera, periódico
+source: 32faef159c26
 reviewed: false
 -->
     <div class="docs-component" id="p-cms-header">
@@ -65,7 +66,7 @@ reviewed: false
             <li><strong>El panel del menú.</strong> Si sigues pulsando Tab después del último enlace del menú abierto, el foco avanza por la página y el menú permanece abierto encima; Escape lo cierra. Consulta los <a href="/docs/components/navbar/#known-issues">problemas conocidos de la barra de navegación</a>.</li>
             <li><strong>Barra fija y texto ampliado.</strong> El relleno de desplazamiento de <code>.o-sticky</code> es un mínimo: con el texto al 300 % y la barra en varias filas, Safari puede dejar debajo de ella un campo al que se llega con Tab. Asigna a <code>scroll-padding-block-start</code> en <code>html</code> la altura real de la cabecera o prescinde de <code>.o-sticky</code>.</li>
           </ul>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera de blog">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
           </nav>
@@ -142,14 +143,14 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/cms</code> aplicado a los objetos y la barra de navegación de core. Sin JavaScript; <code>@luz-ds/catalog</code> es opcional.</p>
+            <p>CSS de <code>components/cms-header.css</code> de <code>@luz-ds/catalog</code> aplicado a los objetos y la barra de navegación de core. Sin JavaScript.</p>
             <ul>
               <li>cms solo aporta la apariencia: la superficie de la página, la línea inferior, la marca y los espacios de la fila (8 px entre filas, 16 px entre elementos y 24 px a partir de 769 px). Core se ocupa del resto: <code>.o-sticky</code> aporta la fijación y el relleno de desplazamiento, <code>.o-container--inline</code> los márgenes internos, <code>.o-row</code> y <code>.o-stack</code> las filas, y la barra de navegación los enlaces y su panel.</li>
               <li>Una barra de una fila tiene la altura <code>--luz-bar-h</code> de core: controles de 44 px, 4 px arriba y abajo y una línea de 1 px. A 768 px o menos, la marca ocupa el espacio entre el botón de menú y las acciones, y salta de línea ahí para mantener los controles en una sola fila; al ampliar el texto, la fila se parte y la barra crece.</li>
               <li>La cabecera destacada no es fija: tres filas pegadas arriba ocuparían un tercio de la pantalla del móvil. La marca mide 49 px a partir de 1024 px, 39 px por debajo y 31 px a 640 px o menos (<code>--luz-text-4xl</code>, <code>-3xl</code> y <code>-2xl</code>, los tamaños del hero de landing).</li>
               <li>La barra, y la fila de secciones de la cabecera destacada, se identifican como el ancla <code>--luz-bar</code>, dentro de su propio ámbito. En los navegadores compatibles con el posicionamiento de anclas CSS, el panel de navegación se abre debajo. En los demás, se abre a <code>--luz-bar-h</code> desde la parte superior de la ventana (consulta Problemas conocidos).</li>
               <li>Con <code>@luz-ds/catalog</code>, la lista de <code>&lt;luz-lang-switch&gt;</code> se abre debajo de la barra. Sin él, no cambia nada: las reglas que amplían los elementos del catálogo no coinciden con ninguno.</li>
-              <li>El <a href="/docs/cms/toc/">índice</a> de un artículo se queda fijo debajo de una barra con <code>.o-sticky</code>.</li>
+              <li>El <a href="/docs/catalog/cms-toc/">índice</a> de un artículo se queda fijo debajo de una barra con <code>.o-sticky</code>.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>No cambia nada: el menú es una ventana emergente que abre <code>popovertarget</code> del botón, sin scripts; los enlaces son enlaces normales y la búsqueda del catálogo muestra un enlace al índice alfabético.</p>
@@ -220,7 +221,7 @@ reviewed: false
               <li><strong>Bordes:</strong> la línea bajo la barra y las dos líneas de la fila de secciones de la cabecera destacada (<code>--luz-divider</code>) son decorativas y no tienen un mínimo; se conservan con colores forzados.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 18 tokens que usan las reglas de <code>.luz-cms-header</code> de <code>components/header.css</code> de cms, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 18 tokens que usan las reglas de <code>.luz-cms-header</code> de <code>components/cms-header.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>

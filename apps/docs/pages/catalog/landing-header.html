@@ -1,10 +1,12 @@
 <!-- luz:page
-title: Header
+title: Landing header
 description: Starts every page of a landing site with its name, its main links and a few controls, in one row that stays at the top.
-area: landing
-order: 1
-group: patterns
-files: .luz-landing-header, __brand, __actions
+area: catalog
+order: 3
+group: navigation
+fits-kinds: landing
+fits: the top of a landing page
+files: components/landing-header.css
 keywords: top bar, masthead
 toc: h2,h3
 -->
@@ -41,7 +43,7 @@ toc: h2,h3
             <li><strong>The menu panel.</strong> If you keep pressing Tab after the last link of the open menu, focus moves on into the page and the menu stays open over it; Escape closes it. Without CSS anchor positioning the panel and the language list open at the height of a one-row header from the top of the window, so with enlarged text they can cover part of the header. See the <a href="/docs/components/navbar/#known-issues">navbar's known issues</a>.</li>
             <li><strong>Sticky header and enlarged text.</strong> The scroll padding of <code>.o-sticky</code> is a minimum: at 300% text, with the header wrapped to several rows, Safari can leave a field reached with Tab under it. Set <code>scroll-padding-block-start</code> on <code>html</code> to your header's real height, or leave out <code>.o-sticky</code>.</li>
           </ul>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Header documentation">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Landing header documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
           </nav>
@@ -90,7 +92,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/landing</code> on core's objects and navbar. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
+            <p>CSS from <code>components/landing-header.css</code> of <code>@luz-ds/catalog</code> on core's objects and navbar. No JavaScript.</p>
             <ul>
               <li>The landing adds the skin only: the page surface, the rule underneath, the brand, and the gaps of the row (8 px between rows, 16 px between items, 24 px from 769 px). Core gives the rest: <code>.o-sticky</code> the stickiness and the scroll padding, <code>.o-container--inline</code> the gutters, <code>.o-row</code> the wrapping row, and the navbar the links and their panel.</li>
               <li>A one-row header is core's <code>--luz-bar-h</code> tall: 44 px controls, 4 px above and below, and the 1 px rule. With enlarged text the row wraps and the header grows.</li>
@@ -160,7 +162,7 @@ toc: h2,h3
               <li><strong>Edges:</strong> the rule under the header (<code>--luz-divider</code>) is decorative and has no minimum; forced colours keep it.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 11 tokens that the <code>.luz-landing-header</code> rules of landing's <code>components/header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 11 tokens that the <code>.luz-landing-header</code> rules of catalog’s <code>components/landing-header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>

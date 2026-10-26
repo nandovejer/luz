@@ -1,5 +1,6 @@
 /* ==========================================================================
-   LUZ DOCS: example.
+   LUZ Catalog: docs example.
+   Layer: catalog · Prefix: .luz-docs-
    figure.luz-docs-example > div.__preview (the live markup, in a
    div.__frame) + an optional div.__code (core's pre.luz-code-block). One
    frame for both: the code sits under the preview, across its width, and a

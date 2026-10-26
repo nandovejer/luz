@@ -1,10 +1,12 @@
 <!-- luz:page
-title: Footer
+title: Blog footer
 description: Ends every page of a blog or a newspaper with who publishes it and a few secondary links, under a rule.
-area: cms
-order: 5
-group: patterns
-files: .luz-cms-footer
+area: catalog
+order: 7
+group: page-structure
+fits-kinds: blog
+fits: the bottom of every page of a blog or a newspaper
+files: components/cms-footer.css
 toc: h2,h3
 -->
     <div class="docs-component" id="p-cms-footer">
@@ -26,7 +28,7 @@ toc: h2,h3
           </div>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Footer documentation">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Blog footer documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
           </nav>
@@ -63,7 +65,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/cms</code> on core's objects. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
+            <p>CSS from <code>components/cms-footer.css</code> of <code>@luz-ds/catalog</code> on core's objects. No JavaScript.</p>
             <ul>
               <li>cms adds the rule, the room around the row and how the row spreads its children; <code>.o-container--inline</code> lines the row up with the page's content.</li>
               <li>On an <code>.o-page</code> the main grows, so the footer rests on the bottom of a page shorter than the window.</li>
@@ -86,8 +88,8 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not put the main navigation, or anything needed to finish a task, in the footer.</p>
             <ul>
-              <li>The sections go in the <a href="/docs/cms/header/">header</a>.</li>
-              <li>A landing page has a <a href="/docs/landing/footer/">footer</a> of its own.</li>
+              <li>The sections go in the <a href="/docs/catalog/cms-header/">header</a>.</li>
+              <li>A landing page has a <a href="/docs/catalog/landing-footer/">footer</a> of its own.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-docs-dodont">
@@ -116,7 +118,7 @@ toc: h2,h3
               <li><strong>Forced colors:</strong> the rule is a border, so it stays.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 4 tokens that the <code>.luz-cms-footer</code> rules of cms's <code>components/footer.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 4 tokens that the <code>.luz-cms-footer</code> rules of catalog’s <code>components/cms-footer.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code></dd></div>

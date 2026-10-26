@@ -1,5 +1,6 @@
 /* ==========================================================================
-	 LUZ Landing: hero.
+	 LUZ Catalog: landing hero.
+	 Layer: catalog · Prefix: .luz-landing-
 	 The first block of a home or a landing page:
 	 section.luz-landing-hero.o-grid.o-grid--split > __copy (+ __media). Core's
 	 split grid gives two equal columns when each gets 24rem and one below:
@@ -8,7 +9,7 @@
 	 --centered: one column, the copy centred above the media. __media--bleed,
 	 in a centred hero: the media runs from edge to edge of the window.
 	 The eyebrow, the title and the lead share their rules with the head of a
-	 section (section.css).
+	 section (landing-section.css).
 	 ========================================================================== */
 
 .luz-landing-hero {

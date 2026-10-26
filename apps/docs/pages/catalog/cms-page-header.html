@@ -1,10 +1,12 @@
 <!-- luz:page
-title: Page header
+title: Blog page header
 description: Gives a page that is not an article, such as About or Contact, its title and one sentence about what it is for.
-area: cms
-order: 2
-group: patterns
-files: .luz-cms-page-header, __title, __lead
+area: catalog
+order: 8
+group: page-structure
+fits-kinds: blog
+fits: a page that is not an article, such as About or Contact
+files: components/cms-page-header.css
 toc: h2,h3
 -->
     <div class="docs-component" id="p-cms-page-header">
@@ -20,7 +22,7 @@ toc: h2,h3
           </div>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Page header documentation">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Blog page header documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
           </nav>
@@ -52,11 +54,11 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>A wrapper with a title and a lead, styled by <code>@luz-ds/cms</code>. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
+            <p>A wrapper with a title and a lead, styled by <code>components/cms-page-header.css</code> of <code>@luz-ds/catalog</code>. No JavaScript.</p>
             <ul>
               <li>The classes change the look only. The title must be the page's <code>&lt;h1&gt;</code>.</li>
               <li>In Arabic the title has no letter-spacing, which would break the joins of the script.</li>
-              <li>A story has the <a href="/docs/cms/article-header/">article header</a> instead, with its section, standfirst and byline.</li>
+              <li>A story has the <a href="/docs/catalog/cms-article-header/">article header</a> instead, with its section, standfirst and byline.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>Nothing changes: the page header is HTML and CSS.</p>
@@ -76,7 +78,7 @@ toc: h2,h3
             <p>Do not use it for a section inside the page: use a plain heading of the right level.</p>
             <ul>
               <li>One page header per page.</li>
-              <li>A story takes the <a href="/docs/cms/article-header/">article header</a>, which has its author and date.</li>
+              <li>A story takes the <a href="/docs/catalog/cms-article-header/">article header</a>, which has its author and date.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-docs-dodont">
@@ -117,7 +119,7 @@ toc: h2,h3
               <li><strong>Focus:</strong> the header takes none.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 8 tokens that the <code>.luz-cms-page-header</code> rules of cms's <code>components/page-header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 8 tokens that the <code>.luz-cms-page-header</code> rules of catalog’s <code>components/cms-page-header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-xl</code></dd></div>

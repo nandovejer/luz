@@ -1,9 +1,10 @@
 /* ==========================================================================
-	 LUZ Landing: section.
+	 LUZ Catalog: landing section.
+	 Layer: catalog · Prefix: .luz-landing-
 	 A block of the page after the hero: section.o-stack.luz-landing-section,
 	 its heading first. Add core's .luz-band for a tint from edge to edge.
 	 The head: __eyebrow, __title and __lead share the rules of the hero's
-	 (one selector list, in hero.css, so load it with this file); the title
+	 (one selector list, in landing-hero.css, so load it with this file); the title
 	 is one step smaller.
 	 ========================================================================== */
 

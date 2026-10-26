@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Rail
 description: The list of the sections of the page that stays in view beside the content, with the actions of the page under it.
-area: documentation
-order: 3
-group: patterns
-files: .luz-docs-rail, __inner, __onpage, __fold, __title, __list, __sub, __link, __actions
+area: catalog
+order: 24
+group: documentation
+fits-kinds: docs
+fits: the side of a long documentation page
+files: components/docs-rail.css
 keywords: on this page, sticky, scroll spy, toc, section list
 toc: h2,h3
 -->
@@ -96,7 +98,7 @@ toc: h2,h3
                   <tr><th scope="col">Class</th><th scope="col">Effect</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Class"><div><code>.luz-docs-rail</code></div></td><td data-label="Effect"><div>On an <code>&lt;aside&gt;</code>: the third column of the <a href="/docs/documentation/shell/">shell</a> from 80rem, as tall as the content; below it, above the content</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-docs-rail</code></div></td><td data-label="Effect"><div>On an <code>&lt;aside&gt;</code>: the third column of the <a href="/docs/catalog/docs-shell/">shell</a> from 80rem, as tall as the content; below it, above the content</div></td></tr>
                 <tr><td data-label="Class"><div><code>.luz-docs-rail__inner</code></div></td><td data-label="Effect"><div>On a <code>&lt;div&gt;</code>, the one child of the rail, around the list and the actions: from 80rem it is the sticky box, inside the rail, so it never covers the footer, and it scrolls by itself, with room at its start for a focus ring</div></td></tr>
                 <tr><td data-label="Class"><div><code>.luz-docs-rail__onpage</code></div></td><td data-label="Effect"><div>On the <code>&lt;nav&gt;</code> of the list, a direct child of <code>__inner</code>: it scopes the reset of the fold and its title, and is the hook for a script</div></td></tr>
                 <tr><td data-label="Class"><div><code>.luz-docs-rail__fold</code></div></td><td data-label="Effect"><div>On a native <code>&lt;details&gt;</code>. Write <code>open</code>, so the list shows without a script. Where the rail is above the content, a script may close it when the page loads</div></td></tr>
@@ -109,7 +111,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/docs</code>, on core's sidebar link and its scroll spy.</p>
+            <p>CSS from <code>components/docs-rail.css</code> of <code>@luz-ds/catalog</code>, on core's sidebar link and its scroll spy.</p>
             <ul>
               <li>Below 80rem the rail is drawn above the content, under the header. From 80rem it is a column as tall as the content, and its inner box is sticky, at <code>--luz-docs-rail-top</code> from the top of the window: it stops at the end of the rail, so it never covers the footer under it. The inner box is as tall as the window at most, and scrolls by itself when the list is longer.</li>
               <li>A link carries core's <code>.luz-sidebar__link</code>, so core's script marks the section in view with <code>aria-current="true"</code>. The rail redraws the link as text on the page: the mark is the weight and a start border, never the colour alone.</li>
@@ -138,7 +140,7 @@ toc: h2,h3
             <p>Do not use the rail on a short page: a list of two links is more to read than the page.</p>
             <ul>
               <li>It lists the sections of one page. The pages of the site go in the sidebar.</li>
-              <li>Nest no deeper than an <code>h3</code>. For the contents beside an article, use <a href="/docs/cms/toc/">the CMS table of contents</a>.</li>
+              <li>Nest no deeper than an <code>h3</code>. For the contents beside an article, use <a href="/docs/catalog/cms-toc/">the CMS table of contents</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-docs-dodont">
@@ -194,7 +196,7 @@ toc: h2,h3
               <li><strong>Target:</strong> each link, the summary and each action are at least 28px tall.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 14 tokens that the <code>.luz-docs-rail</code> rules of docs' <code>components/rail.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 14 tokens that the <code>.luz-docs-rail</code> rules of catalog’s <code>components/docs-rail.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

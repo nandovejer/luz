@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Stat
 description: Shows one figure big, with a short label under it.
-area: landing
-order: 5
-group: patterns
-files: .luz-landing-stat, __value, __label
+area: catalog
+order: 13
+group: content
+fits-kinds: landing
+fits: a row of figures on a landing page
+files: components/landing-stat.css
 toc: h2,h3
 -->
     <div class="docs-component" id="p-landing-stat">
@@ -74,7 +76,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/landing</code>. No JavaScript, and <code>@luz-ds/catalog</code> is optional.</p>
+            <p>CSS from <code>components/landing-stat.css</code> of <code>@luz-ds/catalog</code>. No JavaScript.</p>
             <ul>
               <li>The stat lays out nothing: put several in a core grid list, <code>ul.o-grid.o-grid--3</code>. In a <a href="/docs/components/card/">card</a> it uses the card's padding and surface.</li>
             </ul>
@@ -150,7 +152,7 @@ toc: h2,h3
               <li><strong>Focus:</strong> the stat takes none; it is not interactive.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 8 tokens that the <code>.luz-landing-stat</code> rules of landing's <code>components/stat.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 8 tokens that the <code>.luz-landing-stat</code> rules of catalog’s <code>components/landing-stat.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code></dd></div>

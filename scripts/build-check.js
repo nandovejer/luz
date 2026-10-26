@@ -20,7 +20,7 @@
  * never inlined in the bundle (f5-ai-ready.md 5.4, 5.1):
  *
  *   packages/check/dist/data/index.json                    the seven packages and their versions
- *   packages/check/dist/data/<pkg>/classes.json            tokens, core, catalog, landing, cms, app, docs
+ *   packages/check/dist/data/<pkg>/classes.json            tokens, core, catalog
  *   packages/check/dist/data/<core|catalog>/custom-elements.json
  *   packages/check/dist/data/tokens/tokens.css             LUZ's colour tokens, for the theme rules
  *
@@ -67,20 +67,32 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const entry = resolve(repoRoot, "packages", "check", "src", "main.js");
 const defaultOutdir = resolve(repoRoot, "packages", "check", "dist");
 // In dependency order: the order the facts are listed in
-const PACKAGES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
+const PACKAGES = ["tokens", "core", "catalog"];
 
 const readJson = (path) => {
   if (!existsSync(path)) throw new Error(`${path} does not exist; build the packages first (pnpm build)`);
   return JSON.parse(readFileSync(path, "utf-8"));
 };
 
-/** classes.json reduced to what a rule reads; `unbundled` keeps the files of each class (a package with no bundle). */
+/**
+ * The file a defined class of a package with no bundle is in, when it is the
+ * one its block names: `luz-docs-pager__label` is in components/docs-pager.css.
+ * The snapshot leaves `files` out then, and packages/check/src/manifests.js
+ * puts it back; it writes `files` only where the class is somewhere else (the
+ * rail's block is also in docs-shell.css) or nowhere (`files: []`).
+ */
+const ownFile = (entry) => `components/${(entry.block ?? entry.name).replace(/^luz-/, "")}.css`;
+
+/** classes.json reduced to what a rule reads; `unbundled` keeps the files of each class (a package with no bundle), but not the one its block names. */
 function reduceClasses(manifest, unbundled) {
   const out = { schema: manifest.schema, package: manifest.package, version: manifest.version };
   out.classes = manifest.classes.map((entry) => {
     const kept = { name: entry.name, kind: entry.kind, defined: entry.defined };
     for (const key of ["block", "modifier", "part", "hosts"]) if (entry[key] !== undefined) kept[key] = entry[key];
-    if (unbundled && entry.defined && entry.files?.length) kept.files = entry.files;
+    if (unbundled && entry.defined) {
+      const files = entry.files ?? [];
+      if (files.length !== 1 || files[0] !== ownFile(entry)) kept.files = files;
+    }
     return kept;
   });
   out.properties = manifest.properties.map(({ name, scope }) => ({ name, scope }));

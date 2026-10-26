@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Shell
 description: The page of a documentation site in three columns: the sidebar, the content and a rail, down to one column on a phone.
-area: documentation
-order: 1
-group: patterns
-files: .luz-docs-shell, .luz-docs-nav, .luz-docs-main
+area: catalog
+order: 25
+group: documentation
+fits-kinds: docs
+fits: the layout of every page of a documentation site
+files: components/docs-shell.css
 keywords: three columns, documentation page, page grid, measure, line length
 toc: h2,h3
 -->
@@ -18,7 +20,7 @@ toc: h2,h3
             </div>
           </div>
           <p>The shell is the whole page, so it has no live example inside another page. The markup below is a complete page: copy it, add your own content and resize the window.</p>
-          <p>It is three columns from 80rem, two from 60rem and one below, with the rail above the content when there is no third column. <a href="/docs/documentation/templates/#docs-page">Documentation templates</a> has the same page filled in.</p>
+          <p>It is three columns from 80rem, two from 60rem and one below, with the rail above the content when there is no third column. <a href="/docs/kinds/docs/">Documentation templates</a> has the same page filled in.</p>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Shell documentation">
@@ -60,7 +62,7 @@ toc: h2,h3
                 <tr><td data-label="Class or property"><div><code>.luz-docs-shell</code></div></td><td data-label="Effect"><div>On <code>&lt;body&gt;</code>, with core's <code>.o-shell</code>: the tracks and where each part goes</div></td></tr>
                 <tr><td data-label="Class or property"><div><code>.luz-docs-nav</code></div></td><td data-label="Effect"><div>With core's <code>.luz-sidebar</code>, on the <code>&lt;nav&gt;</code>: the sidebar's column</div></td></tr>
                 <tr><td data-label="Class or property"><div><code>.luz-docs-main</code></div></td><td data-label="Effect"><div>With <code>.o-main</code>, on the <code>&lt;main&gt;</code>: the content's column. Its children keep to the measure</div></td></tr>
-                <tr><td data-label="Class or property"><div><code>.luz-docs-rail</code></div></td><td data-label="Effect"><div>On an <code>&lt;aside&gt;</code>: the third column from 80rem, above the content below it. See <a href="/docs/documentation/rail/">Rail</a></div></td></tr>
+                <tr><td data-label="Class or property"><div><code>.luz-docs-rail</code></div></td><td data-label="Effect"><div>On an <code>&lt;aside&gt;</code>: the third column from 80rem, above the content below it. See <a href="/docs/catalog/docs-rail/">Rail</a></div></td></tr>
                 <tr><td data-label="Class or property"><div><code>--luz-docs-measure</code></div></td><td data-label="Effect"><div>A line of text: <code>46rem</code>. Set it on the shell in your own CSS to change it</div></td></tr>
                 <tr><td data-label="Class or property"><div><code>--luz-docs-nav-w</code>, <code>--luz-docs-rail-w</code></div></td><td data-label="Effect"><div>The sidebar and the rail: <code>16.5rem</code> and <code>14rem</code></div></td></tr>
                 <tr><td data-label="Class or property"><div><code>--luz-docs-rail-top</code></div></td><td data-label="Effect"><div>How far from the top the rail sticks. Raise it under a sticky header</div></td></tr>
@@ -68,7 +70,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/docs</code> on core's shell and sidebar. Docs gives the tracks and the measure; core gives the grid and the drawer.</p>
+            <p>CSS from <code>components/docs-shell.css</code> of <code>@luz-ds/catalog</code> on core's shell and sidebar. The file gives the tracks and the measure; core gives the grid and the drawer.</p>
             <ul>
               <li>From 80rem there are three tracks: sidebar, content, rail. From 60rem there are two, with the rail drawn above the content. Below, one, in the order of the markup: sidebar, rail, content, footer.</li>
               <li>A plain <code>&lt;header&gt;</code> goes across every track. The footer sits under the content, and the sidebar runs down beside it.</li>
@@ -99,7 +101,7 @@ toc: h2,h3
             <p>Do not use the shell for a page that is not documentation: it assumes a sidebar and a content column.</p>
             <ul>
               <li>A page with no sidebar uses core's <code>.o-page</code>: see <a href="/docs/components/layout/#objects-page">the page and its bars</a>.</li>
-              <li>A web application has <a href="/docs/app/">App</a>; a blog has <a href="/docs/cms/">CMS</a>.</li>
+              <li>A web application has <a href="/docs/kinds/app/">App</a>; a blog has <a href="/docs/kinds/blog/">CMS</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-docs-dodont">
@@ -146,7 +148,7 @@ toc: h2,h3
               <li><strong>Reflow:</strong> at 320px the page is one column and does not scroll sideways. It is checked in the tests.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 4 tokens that the <code>.luz-docs-shell</code> rules of docs' <code>components/shell.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 4 tokens that the <code>.luz-docs-shell</code> rules of catalog’s <code>components/docs-shell.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xl</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code></dd></div>
             </dl>

@@ -1,10 +1,12 @@
 <!-- luz:page
 title: Do and don't
 description: A Do and a Don't, one example to follow and one to avoid, each with its reason, side by side when there is room.
-area: documentation
-order: 5
-group: patterns
-files: .luz-docs-dodont, __item, __verdict, __stage
+area: catalog
+order: 19
+group: documentation
+fits-kinds: docs
+fits: a page that teaches by showing what to do and what to avoid
+files: components/docs-dodont.css
 keywords: dos and donts, good and bad, guidance, guideline, comparison
 toc: h2,h3
 -->
@@ -80,7 +82,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/docs</code>. It draws the verdict three ways; the words are yours.</p>
+            <p>CSS from <code>components/docs-dodont.css</code> of <code>@luz-ds/catalog</code>. It draws the verdict three ways; the words are yours.</p>
             <ul>
               <li>The verdict is a word first. The tick or the cross before it, the solid or dashed frame and the colour are extra cues, and none is the only one.</li>
               <li>The tick and the cross are generated content with an empty alternative, so a screen reader does not read them.</li>
@@ -109,7 +111,7 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not use it for a rule with nothing to compare, or to show a piece that works.</p>
             <ul>
-              <li>To show how a piece looks and is built, use <a href="/docs/documentation/example/">the example</a>.</li>
+              <li>To show how a piece looks and is built, use <a href="/docs/catalog/docs-example/">the example</a>.</li>
               <li>Do not invent a mistake nobody makes to fill the Don't.</li>
               <li>Do not show a live failure. A contrast or semantics failure goes in code.</li>
             </ul>
@@ -164,7 +166,7 @@ toc: h2,h3
               <li><strong>Edges:</strong> the border of the stage (<code>--luz-divider</code>) is decorative and has no minimum.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 11 tokens that the <code>.luz-docs-dodont</code> rules of docs' <code>components/dodont.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 11 tokens that the <code>.luz-docs-dodont</code> rules of catalog’s <code>components/docs-dodont.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-color-success"><code>--luz-color-success</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>

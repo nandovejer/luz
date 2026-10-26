@@ -285,7 +285,7 @@ Visual snapshots (`tests/visual.spec.js`) are Chromium on Linux only. Look at ea
 ```bash
 pnpm lint:css     # stylelint: packages/ and apps/
 pnpm lint:js      # ESLint: packages/, apps/, scripts/ and tests/
-pnpm build        # tokens, core, catalog, landing, cms, app, docs and check
+pnpm build        # tokens, core, catalog and check
 pnpm pages:build  # build, then the Pages site into docs/
 ```
 
