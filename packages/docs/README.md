@@ -29,7 +29,7 @@ npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs
 ```js
 import '@luz-ds/tokens/css'
 import '@luz-ds/core/css'
-import '@luz-ds/catalog/css'
+import '@luz-ds/catalog/components/search.css' // optional: one per catalog component the page uses
 import '@luz-ds/docs/css'
 ```
 
@@ -38,7 +38,8 @@ import '@luz-ds/docs/css'
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css">
+<!-- Optional: one link per catalog component the page uses, here the search -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/docs@0.2.1/dist/docs.min.css">
 ```
 

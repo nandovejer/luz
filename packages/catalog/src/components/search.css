@@ -334,3 +334,14 @@
 		border-color: CanvasText;
 	}
 }
+
+/* On paper: <luz-search> takes its fallback link, its trigger and its
+   dialog with it. The build puts this block in luz.print, after the screen
+   rules of every layer. A trigger outside the element still prints, as it
+   did when this rule was in luz.catalog, where .luz-search__trigger lost to
+   .luz-search__trigger:not([hidden]) by specificity. */
+@media print {
+	:where(luz-search) {
+		display: none;
+	}
+}

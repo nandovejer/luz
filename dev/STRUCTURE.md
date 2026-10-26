@@ -84,12 +84,11 @@ luz-design-system/
 │   │
 │   ├── catalog/                   ← @luz-ds/catalog (publishable)
 │   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/{search,consent,lang-switch,submenu,banner}.css, _print.css
-│   │   │   ├── index.css
+│   │   │   ├── components/{search,consent,mode,lang-switch,submenu,banner}.css  ← each with its print rules; no bundle
 │   │   │   ├── catalog.js                ← the presence loader
-│   │   │   └── search.js, consent.js  ← lazy chunks
+│   │   │   └── search.js, consent.js, mode.js  ← lazy chunks
 │   │   └── dist/                      ← GENERATED (do not edit)
-│   │       ├── catalog.css (+ .min), print.css, components/*.css
+│   │       ├── components/*.css (+ .min)  ← the only CSS: one file per component
 │   │       └── catalog.js, search.js, consent.js (+ .min)
 │   │
 │   ├── landing/                   ← @luz-ds/landing (publishable, its own version, 0.x)

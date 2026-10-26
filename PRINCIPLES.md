@@ -127,7 +127,7 @@ Words are a component. A button with the wrong label is a broken button. These r
 | `core` JS lazy chunk: `midi` | — | ≤ 3 kB | 3 kB | 4 kB |
 | `core` JS lazy chunk: `table-sort` | — | ≤ 1 kB | 1 kB | 2 kB |
 | `core` JS lazy chunk: `timeline` | — | ≤ 2 kB | 2 kB | 3 kB |
-| `catalog` CSS | — | ≤ 2 kB | 2 kB | 4 kB |
+| Each `catalog` component CSS (`packages/catalog/dist/components/*.min.css`; catalog has no bundle) | — | ≤ 1.25 kB | 1.25 kB | 1.5 kB |
 | `catalog` JS entry (the loader; lazy chunks excluded) | — | ≤ 1 kB | 1 kB | 2 kB |
 | `catalog` JS lazy chunk: `search` (loaded by `catalog.js` when the page has a `<luz-search>`) | — | ≤ 2 kB | 2 kB | 2.5 kB |
 | `catalog` JS lazy chunk: `consent` (loaded by `catalog.js` when the page has a `<luz-consent>`) | — | ≤ 1 kB | 1 kB | 1.5 kB |
@@ -147,6 +147,8 @@ Words are a component. A button with the wrong label is a broken button. These r
 | Each prompt for AI on Pages (`docs/prompts/**/*.txt`), uncompressed | — | ≤ 14 kB | 14 kB | 16 kB |
 
 Docs pages are measured as the raw bytes of each built `docs/**/*.html`, without compression and without CSS or JS. A page that reaches the ceiling is split into two pages; the ceiling is never raised (red line 17).
+
+The catalog row is per file. Catalog had one bundle, `catalog.css`, with a ceiling of 4 kB on the whole; since 2026-10-25 it has none: each component is a file of its own, and a site links only the ones it uses, so there is no total left to hold, and each site pays only for what it links. The row that limited the total went, and in its place each file has a ceiling, fixed once from the largest then (`search`, 1.32 kB) rounded up to the next 256 bytes, 1.5 kB, with the ideal 256 bytes below it. No ceiling went up: 1.5 kB is below the 4 kB the bundle had, and a component that does not fit is made smaller, never given a higher ceiling.
 
 The three rows after the docs pages are the AI-ready artifacts. The CLI bundle is measured gzipped but not minified, because a tool that reads your files should be readable; it is a command you run, no page downloads it. Its row was fixed once, on 2026-10-15, from the measured 33.9 kB of the first complete version (it had been an estimate before anything shipped) and is never raised afterwards. `llms-full.txt` and each manifest are measured as the raw bytes of the built `docs/**/*.txt` and `docs/manifests/**/*.json`. The row after them is the CSS of `@luz-ds/docs`, the package for a documentation site, with the ideal and the ceiling of site's and cms' CSS. Then comes a language file of core: one row per language, 0.75 kB ideal and 1 kB ceiling, fixed once from the first one (`es`) and never raised; a language that does not fit shortens its strings. The row after that is the catalog's color mode chunk, the size of the consent one. The last four are the home page's `<home-light>` (`apps/landing/light/`, the website, not a package), measured as the gzip of each source file because it is served as written: each ceiling was fixed once, on 2026-10-16, as the first measured size rounded up to the next 256 bytes, the ideal 256 bytes below it, and is never raised. A visitor downloads the controller and one visual. The last row is each of the five prompts for AI (`/prompts/<kind>.txt`, assembled from `apps/site/prompts/`), measured as the raw bytes of the built file: a prompt is pasted whole into a conversation, so it stays short. Its ceiling was fixed once, on 2026-10-25, and is never raised; a prompt that does not fit says less.
 

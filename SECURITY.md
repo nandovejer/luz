@@ -55,7 +55,7 @@ Thank you for helping keep LUZ secure!
 
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css"
+  href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css"
   integrity="sha384-<hash>"
   crossorigin="anonymous"
 />

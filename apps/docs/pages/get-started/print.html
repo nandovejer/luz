@@ -24,7 +24,7 @@ order: 9
       <ul>
         <li><code>luz.css</code> includes it. Nothing to add, and nothing to remove: the block is inside the file.</li>
         <li>If you load <code>base.css</code> and components one by one, print is not there. Add <code>@luz-ds/core/print.css</code> (<code>dist/print.css</code>) if you want it. It declares the layer order itself, as every file does.</li>
-        <li>The catalog also adds its own print rules, in <code>luz.catalog</code>.</li>
+        <li>Each catalog component has its print rules in its own file, in <code>luz.print</code>.</li>
         <li>On a screen nothing changes: the whole block is inside <code>@media print</code>.</li>
       </ul>
     </section>

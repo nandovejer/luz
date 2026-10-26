@@ -57,7 +57,7 @@ import { SITE_URL } from "../../packages/check/src/messages.js";
 import { ruleRows } from "./ai-rules.js";
 import { PROMPT_KINDS, promptRoute } from "./prompts.js";
 import { readingOrder } from "./site.js";
-import { FILES } from "./snippets.js";
+import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 import { englishT } from "./strings.js";
 
 /** The routes of the AI files at the Pages root. */
@@ -703,11 +703,15 @@ const REPO_ROOT = fileURLToPath(new URL("../../", import.meta.url));
 /**
  * What an example loads from each package: the stylesheet (the tokens one is
  * `tokens.min.css`, which has no @font-face, so no font is copied and none
- * needs its licence beside it), the entry script and the chunks it imports by
- * name, beside it.
+ * needs its licence beside it; catalog has one per component, each copied
+ * under components/), the entry script and the chunks it imports by name,
+ * beside it.
  */
-const exampleFilesOf = (pkg) => [pkg === "tokens" ? "tokens.min.css" : FILES[pkg].css, FILES[pkg].js, ...FILES[pkg].chunks].filter(Boolean);
-const exampleCssOf = (pkg) => exampleFilesOf(pkg)[0];
+const exampleFilesOf = (pkg, root) => [
+  ...(pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? catalogComponents({ root }).map(({ file }) => minified(file)) : [FILES[pkg].css]),
+  FILES[pkg].js,
+  ...FILES[pkg].chunks,
+].filter(Boolean);
 const exampleJsOf = (pkg) => FILES[pkg].js;
 
 const missing = (from) => new Error(`${from} is missing: run pnpm build`);
@@ -721,7 +725,7 @@ const missing = (from) => new Error(`${from} is missing: run pnpm build`);
 export function exampleAssets(root) {
   const assets = [];
   for (const pkg of PACKAGES) {
-    for (const file of exampleFilesOf(pkg)) {
+    for (const file of exampleFilesOf(pkg, root)) {
       const from = `packages/${pkg}/dist/${file}`;
       if (!existsSync(join(root, from))) throw missing(from);
       assets.push({ route: `${AI_ROUTES.examples}dist/${pkg}/${file}`, from });
@@ -776,17 +780,6 @@ function markupBlocks(page) {
 /** The areas of the packages for one kind of site: the package's name, but `documentation` for docs (/docs/docs/ would read as a typo). */
 const KIND_AREAS = new Set(Object.keys(PACKAGE_OF_AREA).filter((area) => SITE_KINDS.includes(PACKAGE_OF_AREA[area])));
 
-/** The tags of the elements `@luz-ds/catalog` declares, from the manifest it ships. */
-function siteElements(root) {
-  const file = join(root, "packages/catalog/dist/custom-elements.json");
-  if (!existsSync(file)) throw missing("packages/catalog/dist/custom-elements.json");
-  const modules = JSON.parse(readFileSync(file, "utf-8")).modules ?? [];
-  return modules
-    .flatMap((m) => m.declarations ?? [])
-    .map((d) => d.tagName)
-    .filter((tag) => typeof tag === "string" && /^[a-z][a-z0-9-]*$/.test(tag));
-}
-
 const escText = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const escAttr = (text) => escText(text).replace(/"/g, "&quot;");
 /** Text for a comment: `--` would end it. */
@@ -794,16 +787,18 @@ const inComment = (text) => text.replace(/-{2,}/g, "-");
 
 /**
  * One document: the shell of f5-ai-ready.md 1.4 around the kept blocks.
- * `packages` are the stylesheets to link (load order); `site` adds its script.
+ * `packages` are the packages to link (load order), `catalog` the files of
+ * catalog's components among them (it has no bundle); catalog adds its script.
  */
-function exampleDocument(page, { csp, versions, packages }) {
+function exampleDocument(page, { csp, versions, packages, catalog = [] }) {
   const { kept, skipped } = markupBlocks(page);
   const title = page.meta.title;
   const route = exampleRouteOf(page);
   // `../dist/` and `../../docs/`: the document is at /examples/<area>/<slug>.html
   const docsUrl = `../..${page.route}#markup`;
   const snippetUrl = "../../docs/get-started/snippet/";
-  const links = packages.map((pkg) => `  <link rel="stylesheet" href="../dist/${pkg}/${exampleCssOf(pkg)}">`);
+  const css = (pkg) => (pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? catalog.map(minified) : [FILES[pkg].css]);
+  const links = packages.flatMap((pkg) => css(pkg).map((file) => `  <link rel="stylesheet" href="../dist/${pkg}/${file}">`));
   const scripts = ["core", ...packages.filter((pkg) => pkg === "catalog")].map((pkg) => `  <script type="module" src="../dist/${pkg}/${exampleJsOf(pkg)}"></script>`);
   const sections = kept.map(
     (block, i) =>
@@ -845,22 +840,25 @@ function exampleDocument(page, { csp, versions, packages }) {
  * area (48 today), at `/examples/<area>/<slug>.html`. `csp` is the string of
  * its CSP <meta>; `versions` maps each package to its version.
  *
- * The packages an example links, in load order: tokens, core, site when the
- * page's area is site or a kept block names a <luz-*> element that site's
- * custom-elements.json declares, then the kind's when the area is one.
+ * The packages an example links, in load order: tokens, core, catalog when a
+ * kept block, or the `files` of a page of the catalog area, names an element
+ * or a class of catalog (one link per component it names: catalog has no
+ * bundle), then the kind's when the area is one.
  */
 export function exampleDocuments(site, { csp, versions, root = REPO_ROOT }) {
   if (typeof csp !== "string" || !csp) throw new Error("exampleDocuments needs the csp of the pages build");
   if (typeof versions?.core !== "string") throw new Error("exampleDocuments needs versions.core");
-  const tags = siteElements(root).map((tag) => new RegExp(`<${tag}[\\s>/]`));
+  const components = catalogComponents({ root });
   const documents = [];
   for (const page of site.pages) {
     if (!hasMarkup(page)) continue;
     const area = page.route.split("/")[2];
     const { kept } = markupBlocks(page);
-    const withSite = area === "catalog" || kept.some((b) => tags.some((tag) => tag.test(b.code)));
-    const packages = ["tokens", "core", ...(withSite ? ["catalog"] : []), ...(KIND_AREAS.has(area) ? [PACKAGE_OF_AREA[area]] : [])];
-    documents.push(exampleDocument(page, { csp, versions, packages }));
+    // A page of the catalog area links its own component too (its `files`), even when no block is kept
+    const named = `${kept.map((b) => b.code).join("\n")}\n${area === "catalog" ? (page.meta.files ?? "") : ""}`;
+    const catalog = catalogFilesIn(named, components);
+    const packages = ["tokens", "core", ...(catalog.length ? ["catalog"] : []), ...(KIND_AREAS.has(area) ? [PACKAGE_OF_AREA[area]] : [])];
+    documents.push(exampleDocument(page, { csp, versions, packages, catalog }));
   }
   return documents;
 }

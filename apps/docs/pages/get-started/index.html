@@ -100,6 +100,7 @@ import &quot;@luz-ds/core&quot;;</code></pre>
         <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Level 3, the Catalog: tokens, core and catalog</h2>
         <p>Six components that need data of the site: search, cookie consent, color mode, language switch, submenu and banner. The catalog needs core and tokens.</p>
         <p>The page structure, from the header to the footer, is in landing and cms, which work without the catalog.</p>
+        <p>The catalog has a stylesheet per component: link the ones the page uses, after core.</p>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
@@ -114,7 +115,7 @@ import &quot;@luz-ds/core&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, level 3"><code id="code-cdn-level-3">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css&quot;&gt;
 
 &lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
 &lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;
@@ -127,7 +128,7 @@ import &quot;@luz-ds/core&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Bundler imports, level 3"><code id="code-bundler-level-3">import &quot;@luz-ds/tokens/css&quot;;
 import &quot;@luz-ds/core/css&quot;;
-import &quot;@luz-ds/catalog/css&quot;;
+import &quot;@luz-ds/catalog/components/search.css&quot;;
 
 // Optional: core behaviours, and the site search
 import &quot;@luz-ds/core&quot;;
@@ -161,7 +162,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, landing"><code id="code-cdn-landing">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.2.1/dist/landing.min.css&quot;&gt;
 
 &lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
@@ -182,7 +183,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, cms"><code id="code-cdn-cms">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.2.1/dist/cms.min.css&quot;&gt;
 
 &lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
@@ -203,7 +204,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, app"><code id="code-cdn-app">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/app@0.2.1/dist/app.min.css&quot;&gt;
 
 &lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;

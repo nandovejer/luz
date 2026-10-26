@@ -151,9 +151,9 @@ const kindOf = (name) => (/^luz-(?:catalog|landing|cms|app|docs)-/.test(name) ? 
 
 /** A class as a manifest lists it: name, kind, layer, files, defined, then block, modifier, part. */
 function fullClass(pkg, spec) {
-  const { name, defined = true, hosts } = typeof spec === "string" ? { name: spec } : spec;
+  const { name, defined = true, hosts, file } = typeof spec === "string" ? { name: spec } : spec;
   const [, block, part, modifier] = BEM.exec(name);
-  const entry = { name, kind: kindOf(name), layer: pkg === "core" ? "luz.components" : `luz.${pkg}`, files: ["luz.css"], defined };
+  const entry = { name, kind: kindOf(name), layer: pkg === "core" ? "luz.components" : `luz.${pkg}`, files: [file ?? "luz.css"], defined };
   if (!name.startsWith("is-") && !name.startsWith("u-")) entry.block = block;
   if (modifier !== undefined) entry.modifier = modifier;
   if (part !== undefined) entry.part = part;
@@ -200,12 +200,20 @@ export const MINI = {
     hooks: ["data-luz-classless", "data-luz-sort", "data-luz-spy"],
   },
   catalog: {
-    classes: ["luz-consent", "luz-search", "luz-search__field", "luz-search__results", "luz-sidebar", "luz-catalog-hero"],
+    // Catalog has no bundle (F5a): a class says the component file that defines it, a tag the file that styles it
+    classes: [
+      { name: "luz-consent", file: "components/consent.css" },
+      { name: "luz-search", file: "components/search.css" },
+      { name: "luz-search__field", file: "components/search.css" },
+      { name: "luz-search__results", file: "components/search.css" },
+      "luz-sidebar",
+      "luz-catalog-hero",
+    ],
     properties: [],
     elements: [
-      { tag: "luz-banner", attributes: ["tone"] },
-      { tag: "luz-lang-switch", attributes: [] },
-      { tag: "luz-search", attributes: ["data-luz-search-src", "data-luz-search-show"] },
+      { tag: "luz-banner", attributes: ["tone"], stylesheet: "components/banner.css" },
+      { tag: "luz-lang-switch", attributes: [], stylesheet: "components/lang-switch.css" },
+      { tag: "luz-search", attributes: ["data-luz-search-src", "data-luz-search-show"], stylesheet: "components/search.css" },
     ],
     hooks: [],
   },
@@ -238,7 +246,7 @@ function worldOf(version, overrides = {}) {
 const cem = (pkg, elements, withText) => ({
   schemaVersion: "2.1.0",
   readme: "README.md",
-  modules: elements.map(({ tag, attributes }) => ({
+  modules: elements.map(({ tag, attributes, stylesheet }) => ({
     kind: "javascript-module",
     path: `${tag}.js`,
     declarations: [
@@ -247,6 +255,7 @@ const cem = (pkg, elements, withText) => ({
         name: tag.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(""),
         customElement: true,
         tagName: tag,
+        ...(stylesheet ? { stylesheet } : {}),
         ...(withText ? { description: `The ${tag} element of ${pkg}, with its documentation text.` } : {}),
         attributes: attributes.map((name) => (withText ? { name, type: { text: "string" }, description: `The ${name} attribute of ${tag}, with its documentation text.` } : { name })),
       },
@@ -265,7 +274,9 @@ export function installPackages(dir, { version = "0.1.0", overrides = {}, only =
   for (const name of only) {
     const pkg = world[name];
     const base = `node_modules/@luz-ds/${name}`;
-    put(dir, `${base}/package.json`, JSON.stringify({ name: `@luz-ds/${name}`, version: pkg.version }));
+    // Catalog has no `./css` export (F5a): a project links the file of each component
+    const exports = name === "catalog" ? { exports: { "./components/*": "./dist/components/*", "./classes.json": "./dist/classes.json", "./custom-elements.json": "./dist/custom-elements.json" } } : {};
+    put(dir, `${base}/package.json`, JSON.stringify({ name: `@luz-ds/${name}`, version: pkg.version, ...exports }));
     const manifest = {
       schema: 1,
       package: `@luz-ds/${name}`,
@@ -293,7 +304,9 @@ export function miniSnapshot({ version = "0.1.0", overrides = {}, only = LIBRARI
     const pkg = world[name];
     const classes = pkg.classes.map((spec) => {
       const { name: n, defined, block, modifier, part, hosts } = fullClass(name, spec);
-      return { name: n, kind: kindOf(n), defined, ...(block === undefined ? {} : { block }), ...(modifier === undefined ? {} : { modifier }), ...(part === undefined ? {} : { part }), ...(hosts ? { hosts } : {}) };
+      // A package with no bundle (catalog) keeps the file of a class in the snapshot (scripts/build-check.js)
+      const files = typeof spec === "object" && spec.file ? { files: [spec.file] } : {};
+      return { name: n, kind: kindOf(n), defined, ...files, ...(block === undefined ? {} : { block }), ...(modifier === undefined ? {} : { modifier }), ...(part === undefined ? {} : { part }), ...(hosts ? { hosts } : {}) };
     });
     const manifest = { schema: 1, package: `@luz-ds/${name}`, version: pkg.version, classes, properties: pkg.properties.map((p) => (typeof p === "string" ? { name: p, scope: "root" } : { name: p.name, scope: p.scope })) };
     if (pkg.hooks.length > 0) manifest.hooks = pkg.hooks;

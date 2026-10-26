@@ -18,13 +18,14 @@ const files = [
   "packages/tokens/dist/tokens.css",
   "packages/core/dist/luz.css",
   "packages/core/dist/base.css",
-  "packages/catalog/dist/catalog.css",
   "packages/landing/dist/landing.css",
   "packages/cms/dist/cms.css",
   "packages/app/dist/app.css",
   "packages/docs/dist/docs.css",
   "packages/core/dist/print.css",
   "packages/core/dist/classless.css",
+  // catalog has no bundle (F5a): each component is a file of its own
+  ...listed("packages/catalog/dist/components").filter((f) => !f.endsWith(".min.css")),
   ...listed("packages/core/dist/components").filter((f) => !f.endsWith(".min.css")),
   ...listed("packages/core/dist/themes").filter((f) => !f.endsWith(".min.css")),
 ].filter((f) => existsSync(dist(f)));
@@ -55,7 +56,8 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
   it("covers every package's CSS", () => {
     expect(files.some((f) => f.includes("tokens/dist"))).toBe(true);
     expect(files.some((f) => f.endsWith("luz.css"))).toBe(true);
-    expect(files.some((f) => f.endsWith("catalog.css"))).toBe(true);
+    expect(files.some((f) => f.startsWith("packages/catalog/dist/components/") && f.endsWith("search.css")), "packages/catalog/dist/components/search.css").toBe(true);
+    expect(files.some((f) => f.endsWith("catalog.css")), "catalog has no bundle").toBe(false);
     expect(files.some((f) => f.endsWith("landing.css"))).toBe(true);
     expect(files.some((f) => f.endsWith("cms.css"))).toBe(true);
     expect(files.some((f) => f.endsWith("app.css")), "packages/app/dist/app.css (pnpm app:build)").toBe(true);
@@ -79,6 +81,14 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
       expect(stray).toEqual([]);
     });
   }
+
+  it("a catalog component that prints puts those rules in `luz.print`, after its `luz.catalog` block", () => {
+    for (const name of ["search", "consent"]) {
+      const items = topLevel(readFileSync(dist(`packages/catalog/dist/components/${name}.css`), "utf-8"));
+      const layers = items.filter((it) => it.body !== null).map((it) => it.prelude);
+      expect(layers, name).toEqual(["@layer luz.catalog", "@layer luz.print"]);
+    }
+  });
 
   it("the full bundle has the layers in the documented order", () => {
     const css = readFileSync(dist("packages/core/dist/luz.css"), "utf-8");

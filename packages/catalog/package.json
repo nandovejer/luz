@@ -11,9 +11,6 @@
     "./search": "./dist/search.js",
     "./consent": "./dist/consent.js",
     "./mode": "./dist/mode.js",
-    "./css": "./dist/catalog.css",
-    "./css/min": "./dist/catalog.min.css",
-    "./print.css": "./dist/print.css",
     "./components/*": "./dist/components/*",
     "./classes.json": "./dist/classes.json",
     "./custom-elements.json": "./dist/custom-elements.json",
@@ -42,7 +39,7 @@
     "vanilla"
   ],
   "sideEffects": [
-    "*.css",
+    "./dist/components/*.css",
     "./dist/catalog.js",
     "./dist/catalog.min.js",
     "./dist/search.js",

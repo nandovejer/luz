@@ -3,7 +3,8 @@
  * links, and in which order.
  *
  *   load/tokens-missing   core, catalog or a kind is linked and tokens is not
- *   load/package-missing  a class or tag of a package whose stylesheet is not linked
+ *   load/package-missing  a class or tag of a package whose stylesheet is not linked; in a
+ *                         package with no bundle (catalog), of a component whose file is not
  *   load/layer-statement  a <style> declares the layers, luz among them, after the first LUZ link
  *   load/order            the LUZ stylesheets are linked out of order (a warning)
  *   load/no-stylesheet    the run links or imports no LUZ stylesheet at all (a warning; see cli.js)
@@ -17,6 +18,13 @@
  * never a reason to block. A URL a template computes may be anything: while a
  * page has one, load/tokens-missing and load/package-missing are silent. A
  * stylesheet of the run that a <link> names counts as the imports it makes.
+ *
+ * Catalog has no bundle (plan ai-and-catalog-only, decisions 59 and 64): a page
+ * links `components/<name>.css` (or `.min.css`) for each component it uses, and
+ * the manifests say the file of each class (`files`) and tag (`stylesheet`). A
+ * class or tag with a file asks for that file: a link to another component of
+ * the same package does not count, and a link to the package that names no
+ * component file (the bundle of an older release, a folder) counts as all of it.
  */
 import { posix } from "node:path";
 import { finding } from "../report.js";
@@ -34,11 +42,17 @@ const REMOTE = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
 // tokens, then core, then catalog, then the kinds in any order
 const ORDER = ["tokens", "core", "catalog"];
 
-/** What a URL names: { pkg, copy } for LUZ's, "template" for a computed one, null for anything else. */
+// The file of one component in a URL of a package: …/components/search.min.css is components/search.css
+const COMPONENT = /\/components\/([a-z0-9]+(?:-[a-z0-9]+)*)(?:\.min)?\.css$/;
+
+/** What a URL names: { pkg, copy, file } for LUZ's (`file`: a components/<name>.css, or null for the whole package), "template" for a computed one, null for anything else. */
 function classify(url) {
   if (TEMPLATE.test(url)) return "template";
   const named = IN_URL.exec(url) ?? IN_DEV.exec(url);
-  if (named !== null) return { pkg: named[1], copy: false };
+  if (named !== null) {
+    const component = COMPONENT.exec(url.split(/[?#]/)[0]);
+    return { pkg: named[1], copy: false, file: component === null ? null : `components/${component[1]}.css` };
+  }
   const file = FILE.exec(url.split(/[?#]/)[0].split("/").pop().toLowerCase());
   if (file === null) return null;
   return { pkg: file[2] ?? (file[1] ? "tokens" : "core"), copy: file[2] !== undefined };
@@ -103,7 +117,7 @@ export function reachesLuz(path, imports) {
 
 /**
  * What a markup file links, from its records:
- *   entries  [{ pkg, copy, record, n }] in document order, one per LUZ
+ *   entries  [{ pkg, copy, file, record, n }] in document order, one per LUZ
  *            stylesheet: a <link>, an @import of a <style>, or an @import of a
  *            stylesheet of the run that a <link> names (`record` is the tag)
  *   styles   [{ record, n }] the <style> elements that declare layers with luz
@@ -121,7 +135,7 @@ export function documentOf(records, path, imports) {
       const known = classify(current);
       if (known === null) return false;
       if (known === "template") doc.dynamic = true;
-      else doc.entries.push({ pkg: known.pkg, copy: known.copy, record, n });
+      else doc.entries.push({ pkg: known.pkg, copy: known.copy, file: known.file ?? null, record, n });
       return true;
     });
   records.forEach((record, n) => {
@@ -157,20 +171,38 @@ export function loadRules(ctx) {
       if (first !== undefined) found.push(finding("load/tokens-missing", { ...at(first.record), vars: { package: first.pkg } }));
     }
 
-    // The first use of each package that is not linked: a tag, then a class of its element
+    // The first use of each package that is not linked, or, in a package with no bundle, of each
+    // component file: a tag, then a class of its element. A copy of a package counts as all of it
     const loaded = new Set(entries.map((entry) => entry.pkg));
+    const whole = new Set(entries.filter((entry) => entry.copy || entry.file === null).map((entry) => entry.pkg));
+    const linkedFiles = new Set(entries.filter((entry) => entry.file !== null).map((entry) => `${entry.pkg}/${entry.file}`));
     const missing = new Set();
+    // The file that is missing for a class or a tag of `pkg` that has `files`, or null when none is
+    const fileMissing = (pkg, files) => (whole.has(pkg) || files.some((file) => linkedFiles.has(`${pkg}/${file}`)) ? null : files[0]);
     for (const record of records) {
-      const owner = record.name.startsWith("luz-") ? world.tags.get(record.name)?.package : undefined;
-      if (owner !== undefined && !loaded.has(owner) && !missing.has(owner)) {
-        missing.add(owner);
-        found.push(finding("load/package-missing:tag", { ...at(record), vars: { tag: record.name, package: owner } }));
+      const tag = record.name.startsWith("luz-") ? world.tags.get(record.name) : undefined;
+      if (tag?.stylesheet !== undefined) {
+        const file = fileMissing(tag.package, [tag.stylesheet]);
+        if (file !== null && !missing.has(`${tag.package}/${file}`)) {
+          missing.add(`${tag.package}/${file}`);
+          found.push(finding("load/package-missing:tag-file", { ...at(record), vars: { tag: record.name, package: tag.package, file } }));
+        }
+      } else if (tag !== undefined && !loaded.has(tag.package) && !missing.has(tag.package)) {
+        missing.add(tag.package);
+        found.push(finding("load/package-missing:tag", { ...at(record), vars: { tag: record.name, package: tag.package } }));
       }
       const attribute = classAttribute(record, template);
       if (attribute === undefined) continue;
       for (const token of classTokens(attribute.value, template)) {
         const entry = world.info.get(token);
         if (entry === undefined || entry.kind === "state" || entry.defined === false || token.startsWith("is-")) continue;
+        if (entry.files !== undefined) {
+          const file = fileMissing(entry.package, entry.files);
+          if (file === null || missing.has(`${entry.package}/${file}`)) continue;
+          missing.add(`${entry.package}/${file}`);
+          found.push(finding("load/package-missing:file", { ...at(attribute), vars: { name: token, package: entry.package, file } }));
+          continue;
+        }
         if (loaded.has(entry.package) || missing.has(entry.package)) continue;
         missing.add(entry.package);
         found.push(finding("load/package-missing", { ...at(attribute), vars: { name: token, package: entry.package } }));

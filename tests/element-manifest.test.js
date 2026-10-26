@@ -607,7 +607,7 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
 });
 
 describe("the built packages: custom-elements.json", () => {
-  const ALLOWED_DECLARATION = ["kind", "name", "customElement", "tagName", "superclass", "description", "attributes", "events", "demos"];
+  const ALLOWED_DECLARATION = ["kind", "name", "customElement", "tagName", "superclass", "stylesheet", "description", "attributes", "events", "demos"];
   const manifestOf = (pkg) => readJson(`packages/${pkg}/dist/custom-elements.json`);
   const declarationsOf = (pkg) => manifestOf(pkg).modules.flatMap((m) => m.declarations.map((d) => ({ module: m, declaration: d })));
 
@@ -657,6 +657,19 @@ describe("the built packages: custom-elements.json", () => {
     // The parts are classes, in classes.json; the light DOM has no slots
     expect(declaration).not.toHaveProperty("slots");
     expect(declaration).not.toHaveProperty("cssParts");
+  });
+
+  // F5a: catalog has no bundle, so a page links one file per element and the manifest says which
+  it.each(TAGS.filter((t) => t.pkg === "catalog"))("$tag: names the stylesheet a page links for it, a file of the package that exists in dist/", ({ tag, pkg }) => {
+    const { declaration } = declarationsOf(pkg).find((d) => d.declaration.tagName === tag);
+    expect(declaration.stylesheet).toBe(`components/${tag.slice("luz-".length)}.css`);
+    expect(existsSync(`${root}packages/${pkg}/dist/${declaration.stylesheet}`), declaration.stylesheet).toBe(true);
+    expect(existsSync(`${root}packages/${pkg}/dist/${declaration.stylesheet.replace(/\.css$/, ".min.css")}`), "its .min.css").toBe(true);
+  });
+
+  it.each(TAGS.filter((t) => t.pkg === "core"))("$tag: a package that keeps its bundle names no stylesheet per element", ({ tag, pkg }) => {
+    const { declaration } = declarationsOf(pkg).find((d) => d.declaration.tagName === tag);
+    expect(declaration).not.toHaveProperty("stylesheet");
   });
 
   it.each(TAGS)("$tag: attributes and events are the ones its header tags declare, in that order, with the code's types", (entry) => {

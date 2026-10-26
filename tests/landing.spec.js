@@ -64,7 +64,7 @@ const LEVELS = [
     id: 'inside-3',
     n: 3,
     npm: 'npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog',
-    files: [cdn('tokens', 'luz-tokens.min.css'), cdn('core', 'luz.min.css'), cdn('catalog', 'catalog.min.css'), cdn('core', 'luz.min.js'), cdn('catalog', 'catalog.min.js')],
+    files: [cdn('tokens', 'luz-tokens.min.css'), cdn('core', 'luz.min.css'), cdn('catalog', 'components/search.min.css'), cdn('core', 'luz.min.js'), cdn('catalog', 'catalog.min.js')],
     absent: [],
     list: ['inside.list.catalog'],
   },
@@ -1468,7 +1468,7 @@ test.describe('Landing page', () => {
         files: [
           cdn('tokens', 'luz-tokens.min.css'),
           cdn('core', 'luz.min.css'),
-          cdn('catalog', 'catalog.min.css'),
+          cdn('catalog', 'components/search.min.css'),
           cdn('core', 'luz.min.js'),
           cdn('catalog', 'catalog.min.js'),
         ],

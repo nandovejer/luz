@@ -42,7 +42,7 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 import { HtmlError, compactHtml, readHtml, tags } from "./html.js";
 import { BASE, PACKAGES, SITE_KINDS } from "../luz-packages.js";
 import { fillAiMarkers } from "./ai.js";
-import { renderSnippets, snippetData } from "./snippets.js";
+import { catalogComponents, catalogFilesIn, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
 import { isDemo, loadDocsLocales, localizeLinks, localize } from "./docs-i18n.js";
 import { bundledEnglish, englishT, makeT } from "./strings.js";
@@ -1286,6 +1286,35 @@ export function sourceReader(site) {
   return { partial, layout };
 }
 
+/**
+ * The page of a catalog component starts its "Copy the markup" with the lines
+ * that load the component's file (plan ai-and-catalog-only, decision 63):
+ * catalog has no bundle, so each page says which file it needs, from the
+ * manifests, never typed. The files are those its `files` names (a tag, a
+ * class or a `components/<name>.css`); a page of the catalog area with no
+ * `#markup` (the gallery, the class list) is left as it is. The block goes
+ * right after the heading, at its indentation, in English like every snippet
+ * (a translation marks it lang="en").
+ */
+function withComponentLinks(html, page, site, options) {
+  if (page.meta.area !== "catalog" || !page.meta.files) return html;
+  const heading = /^([ \t]*)<h3 id="markup"[^>]*>[\s\S]*?<\/h3>\n/m.exec(html);
+  if (!heading) return html;
+  const components = catalogComponents({ root: site.repoRoot, readFile: readFileSync });
+  const known = new Set(components.map(({ file }) => file));
+  const named = [...page.meta.files.matchAll(/components\/[a-z0-9-]+\.css/g)].map((m) => m[0]);
+  const unknown = named.filter((file) => !known.has(file));
+  if (unknown.length) throw new Error(`${page.file}: files names ${unknown.join(", ")}, which is not a stylesheet of @luz-ds/catalog`);
+  const files = [...new Set([...named, ...catalogFilesIn(page.meta.files, components)])].sort();
+  if (!files.length) return html;
+  const data = snippetData({ root: site.repoRoot, readFile: readFileSync, dev: options.dev === true });
+  // Code, as every snippet of a page: English in every language, which marks it lang="en" (markDemos)
+  const block = files.map((file) => renderComponentLinks(data, file, englishT())).join("\n");
+  const indent = heading[1];
+  const at = heading.index + heading[0].length;
+  return `${html.slice(0, at)}${block.replace(/^ +/gm, (spaces) => indent + spaces.slice(8))}\n${html.slice(at)}`;
+}
+
 /** Where an area index wants its generated block (the gallery), when not after the content. */
 export const GENERATED_MARKER = "<!-- luz:generated -->";
 
@@ -1399,7 +1428,7 @@ function renderPageIn(page, site, options) {
   const strings = { locale, used: options.used };
   const expanded = expand(page.body, { file: page.file, firstLine: page.bodyLine, partial: reader.partial, current, placeholders: false, ...strings });
   // "ai" is written inside the content, at its two markers, so it is known to the table of contents
-  const filled = page.meta.generate === "ai" ? fillAiMarkers(expanded, site, { file: page.file }) : expanded;
+  const filled = withComponentLinks(page.meta.generate === "ai" ? fillAiMarkers(expanded, site, { file: page.file }) : expanded, page, site, options);
   // `<!-- luz:generated -->` in the content puts the generated block where it stands, once
   const block = renderGenerated(page, site, options);
   const marked = filled.includes(GENERATED_MARKER);
@@ -1533,11 +1562,40 @@ function gzipBytes(path) {
 }
 
 /**
+ * The min+gzip size of everything a package publishes that budgets.json
+ * holds: every `file` budget under packages/<name>/dist/, and every file a
+ * `glob` budget under it matches (`dir/*.ext` or `dir/**\/*.ext`: catalog's
+ * components, which have no bundle, so a site that links them all pays each).
+ * `what` names the figure in the error of a missing file (run `pnpm build`).
+ */
+function packageBytes(root, budgets, name, what) {
+  const under = `packages/${name}/dist/`;
+  const files = [];
+  for (const b of budgets) {
+    if (b.file?.startsWith(under)) {
+      if (!existsSync(resolve(root, b.file))) throw new Error(`${b.file} is missing: run pnpm build before ${what} can be read`);
+      files.push(b.file);
+    } else if (b.glob?.startsWith(under)) {
+      const [, dir, deep, ext] = /^(.*?)\/(\*\*\/)?\*(\.[a-z.]+)$/.exec(b.glob) ?? [];
+      if (!dir) throw new Error(`budgets.json: unsupported glob ${b.glob}`);
+      const walk = (d) =>
+        existsSync(resolve(root, d))
+          ? readdirSync(resolve(root, d), { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? (deep ? walk(`${d}/${e.name}`) : []) : e.name.endsWith(ext) ? [`${d}/${e.name}`] : []))
+          : [];
+      const matched = walk(dir);
+      if (!matched.length) throw new Error(`${b.glob} matches nothing: run pnpm build before ${what} can be read`);
+      files.push(...matched);
+    }
+  }
+  return files.reduce((sum, file) => sum + gzipBytes(resolve(root, file)), 0);
+}
+
+/**
  * What the home's "Light" card shows about weight, measured when the page is
  * built and never typed: a bar per base package (BASE: tokens, core, catalog;
  * the packages for one kind of site are not on the home) with the min+gzip
- * size of everything it publishes (every `file` budget of budgets.json under
- * its dist), the longest bar the heaviest package, and under them the sum.
+ * size of everything it publishes (packageBytes), the longest bar the
+ * heaviest package, and under them the sum.
  * Fails when a file is missing: run `pnpm build` first.
  */
 function renderWeights(site, locale, used) {
@@ -1546,16 +1604,7 @@ function renderWeights(site, locale, used) {
   const budgets = JSON.parse(readFileSync(resolve(site.repoRoot, "budgets.json"), "utf-8")).budgets;
   const number = new Intl.NumberFormat(`${locale.code}-u-nu-latn`, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const kb = (bytes) => `${number.format(bytes / 1024)} ${say("why.weight.unit")}`;
-  const packages = BASE.map((name) => {
-    const size = budgets
-      .filter((b) => b.file?.startsWith(`packages/${name}/dist/`))
-      .reduce((sum, b) => {
-        const path = resolve(site.repoRoot, b.file);
-        if (!existsSync(path)) throw new Error(`${b.file} is missing: run pnpm build before the home page's weights can be read`);
-        return sum + gzipBytes(path);
-      }, 0);
-    return { name, size };
-  });
+  const packages = BASE.map((name) => ({ name, size: packageBytes(site.repoRoot, budgets, name, "the home page's weights") }));
   const total = packages.reduce((sum, p) => sum + p.size, 0);
   const max = Math.max(...packages.map((p) => p.size));
   return [
@@ -1801,7 +1850,7 @@ function levelLists(site, locale, used) {
 /**
  * The weights of the home's "Inside" levels, measured when the page is built
  * and never typed: the min+gzip size of the budgeted files of each package
- * in dist, summed level by level (tokens; + core; + catalog). The fourth
+ * in dist (packageBytes), summed level by level (tokens; + core; + catalog). The fourth
  * level is a prompt, which adds nothing to the page. Returned as
  * {{weight1}}…{{weight3}}, in the language's number format. Fails when a file is missing: run `pnpm build`.
  */
@@ -1811,14 +1860,7 @@ function levelWeights(site, locale, used) {
   const budgets = JSON.parse(readFileSync(resolve(site.repoRoot, "budgets.json"), "utf-8")).budgets;
   const number = new Intl.NumberFormat(`${locale.code}-u-nu-latn`, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const kb = (bytes) => `${number.format(bytes / 1024)} ${say("why.weight.unit")}`;
-  const weigh = (name) =>
-    budgets
-      .filter((b) => b.file?.startsWith(`packages/${name}/dist/`))
-      .reduce((sum, b) => {
-        const path = resolve(site.repoRoot, b.file);
-        if (!existsSync(path)) throw new Error(`${b.file} is missing: run pnpm build before the home page's levels can be read`);
-        return sum + gzipBytes(path);
-      }, 0);
+  const weigh = (name) => packageBytes(site.repoRoot, budgets, name, "the home page's levels");
   const one = weigh("tokens");
   const two = one + weigh("core");
   const three = two + weigh("catalog");

@@ -187,6 +187,31 @@ describe("what a prompt says about the system comes from the packages", () => {
     }
   });
 
+  it.each(IDS)("%s: catalog is linked a file at a time: components/<name>.min.css of the package, never catalog.min.css", (id) => {
+    const text = prompt(id);
+    const links = [...text.matchAll(/<link rel="stylesheet" href="https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/catalog@[^/"]+\/dist\/([^"]+)">/g)].map((m) => m[1]);
+    expect(links.length, `${id}: at least one catalog component to link`).toBeGreaterThan(0);
+    for (const file of links) {
+      expect(file, id).toMatch(/^components\/[a-z0-9-]+\.min\.css$/);
+      expect(existsSync(join(root, "packages/catalog/dist", file)), `${id}: ${file} is a file of catalog`).toBe(true);
+    }
+    expect(text, id).not.toMatch(/catalog(?:\.min)?\.css|@luz-ds\/catalog\/css/);
+  });
+
+  it.each(IDS)("%s: every catalog element it lists says its stylesheet, a file of the package", (id) => {
+    const text = prompt(id);
+    const start = text.indexOf("## Elements you may use\n\n") + "## Elements you may use\n\n".length;
+    const lines = text.slice(start).split(/\n\n## /)[0].split("\n");
+    const tags = json("packages/catalog/dist/custom-elements.json").modules.flatMap((m) => m.declarations ?? []).filter((d) => d.tagName);
+    expect(tags.length).toBeGreaterThanOrEqual(6);
+    for (const d of tags) {
+      const line = lines.find((l) => l.startsWith(`- \`<${d.tagName}>\``));
+      expect(line, `${d.tagName} is listed`).toBeTruthy();
+      expect(line.endsWith(` Its stylesheet: \`@luz-ds/catalog/${d.stylesheet}\`.`), line).toBe(true);
+      expect(existsSync(join(root, "packages/catalog/dist", d.stylesheet)), `${d.stylesheet} exists`).toBe(true);
+    }
+  });
+
   it("the install lines of the kinds name the package of their patterns too, and start does not", () => {
     expect(prompt("start")).not.toMatch(/@luz-ds\/(landing|cms|app|docs)@/);
     for (const [id, name] of [["landing", "landing"], ["blog", "cms"], ["app", "app"], ["docs", "docs"]]) {
@@ -488,7 +513,9 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
             .filter((d) => d.tagName)
             .map((d) => {
               const attrs = (d.attributes ?? []).map((a) => a.name);
-              return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd();
+              // Catalog has no bundle (F5a): an element of catalog says the file of its stylesheet
+              const sheet = pkg === "catalog" && d.stylesheet ? ` Its stylesheet: \`@luz-ds/catalog/${d.stylesheet}\`.` : "";
+              return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}${sheet}`.trimEnd();
             }),
         ),
       )

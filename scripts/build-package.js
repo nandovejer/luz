@@ -17,6 +17,12 @@
  *      same layer and with the same rebased url()s, so a page can load one
  *      component (as core's dist/components/); a src/components/_print.css
  *      becomes dist/print.css (+ min);
+ *      with `bundle: false` (catalog: a catalog, not a bundle; plan
+ *      ai-and-catalog-only, decisions 59 and 62) steps 2, 3 and 5 are
+ *      skipped and there is no src/index.css: the component files are the
+ *      package's only CSS, and the top-level `@media print` blocks of each
+ *      one go after its screen rules, in luz.print, so a page that links a
+ *      component also gets what it does on paper;
  *   7. copies each JS module as it is and bundles each one with esbuild
  *      into <module>.min.js (its own relative imports inlined, nothing else);
  *   8. copies each lazy chunk as it is and bundles it alone into
@@ -36,9 +42,57 @@ import { dirname, relative, resolve } from "path";
 import { fileURLToPath } from "url";
 import * as esbuild from "esbuild";
 import { writeManifests } from "./ai-manifests.js";
-import { inLuzLayer } from "./luz-layers.js";
+import { inLayer, inLuzLayer } from "./luz-layers.js";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+/**
+ * A stylesheet split into its screen rules and its top-level
+ * `@media print { … }` blocks, each with the comment right before it (null
+ * when it has none), read with comments and strings skipped, so a brace in
+ * either never counts. Throws, `file`, on a block that does not close.
+ */
+export function splitPrint(css, file) {
+  let screen = "";
+  const print = [];
+  let from = 0;
+  let depth = 0;
+  for (let i = 0; i < css.length; i++) {
+    const c = css[i];
+    if (c === "/" && css[i + 1] === "*") {
+      const end = css.indexOf("*/", i + 2);
+      i = end === -1 ? css.length : end + 1;
+    } else if (c === '"' || c === "'") {
+      let j = i + 1;
+      while (j < css.length && css[j] !== c) j += css[j] === "\\" ? 2 : 1;
+      i = j;
+    } else if (c === "{") depth++;
+    else if (c === "}") depth--;
+    else if (depth === 0 && c === "@" && /^@media\s+print\s*\{/.test(css.slice(i, i + 40))) {
+      const open = css.indexOf("{", i);
+      let level = 1;
+      let j = open + 1;
+      for (; j < css.length && level > 0; j++) {
+        if (css[j] === "/" && css[j + 1] === "*") {
+          const end = css.indexOf("*/", j + 2);
+          j = end === -1 ? css.length : end + 1;
+        } else if (css[j] === "{") level++;
+        else if (css[j] === "}") level--;
+      }
+      if (level !== 0) throw new Error(`${file}: @media print does not close`);
+      // The comment right before the block says what it does: it goes with it
+      const before = css.slice(from, i);
+      const lead = /\/\*(?:(?!\*\/)[\s\S])*\*\/\s*$/.exec(before);
+      const start = lead ? lead.index : before.length;
+      screen += before.slice(0, start);
+      print.push(`${before.slice(start)}${css.slice(i, j)}`);
+      from = j;
+      i = j - 1;
+    }
+  }
+  screen += css.slice(from);
+  return { screen: screen.replace(/\n{3,}/g, "\n\n").trimEnd(), print: print.length ? print.join("\n\n") : null };
+}
 
 /**
  * Build packages/<name>/dist from packages/<name>/src.
@@ -50,8 +104,10 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * @param {string[]} [options.chunks] JS modules in src/ that an entry loads lazily, each
  *   copied and bundled alone; the entries' dynamic imports of them stay imports (default: none)
  * @param {string[]} [options.assets] folders of src/ copied to dist/ as they are (default: none)
+ * @param {boolean} [options.bundle] false: no dist/<name>.css, only the component files, each with
+ *   its print rules in luz.print (default: true)
  */
-export async function buildPackage({ name, layer = name, label = name[0].toUpperCase() + name.slice(1), js = [], chunks = [], assets = [] }) {
+export async function buildPackage({ name, layer = name, label = name[0].toUpperCase() + name.slice(1), js = [], chunks = [], assets = [], bundle = true }) {
   const pkgRoot = resolve(repoRoot, "packages", name);
   const srcRoot = resolve(pkgRoot, "src");
   const distRoot = resolve(pkgRoot, "dist");
@@ -76,18 +132,33 @@ export async function buildPackage({ name, layer = name, label = name[0].toUpper
       );
   }
 
-  const css = inLuzLayer(layer, inlineCssImports(resolve(srcRoot, "index.css")));
+  const css = bundle ? inLuzLayer(layer, inlineCssImports(resolve(srcRoot, "index.css"))) : null;
 
   // One stylesheet per component, and the print rules on their own: each
-  // file is the text the bundle inlines for it, in the same layer
+  // file is the text the bundle inlines for it, in the same layer. Without a
+  // bundle, a component's own print rules follow it, in luz.print
   const componentsSrc = resolve(srcRoot, "components");
   const sheets = new Map();
   if (existsSync(componentsSrc)) {
     for (const file of readdirSync(componentsSrc).sort()) {
       if (!file.endsWith(".css")) continue;
+      if (!bundle && file.startsWith("_")) {
+        console.error(`✗ ${name}: src/components/${file} has no file of its own in dist/ without a bundle; put its rules in the component they belong to`);
+        process.exit(1);
+      }
       const out = file === "_print.css" ? "print.css" : file.startsWith("_") ? null : `components/${file}`;
-      if (out) sheets.set(out, inLuzLayer(layer, inlineCssImports(resolve(componentsSrc, file))));
+      if (!out) continue;
+      const text = inlineCssImports(resolve(componentsSrc, file));
+      if (bundle) sheets.set(out, inLuzLayer(layer, text));
+      else {
+        const { screen, print } = splitPrint(text, `packages/${name}/src/components/${file}`);
+        sheets.set(out, print ? `${inLuzLayer(layer, screen)}${inLayer("print", print)}` : inLuzLayer(layer, screen));
+      }
     }
+  }
+  if (!bundle && sheets.size === 0) {
+    console.error(`✗ ${name}: no src/components/*.css to build`);
+    process.exit(1);
   }
 
   // Assets are committed in src/, so the build only copies them
@@ -101,16 +172,20 @@ export async function buildPackage({ name, layer = name, label = name[0].toUpper
     process.exit(1);
   }
 
-  writeFileSync(resolve(distRoot, `${name}.css`), css, "utf-8");
-  console.log(`✓ ${label} CSS built → ${resolve(distRoot, `${name}.css`)}`);
+  if (bundle) {
+    writeFileSync(resolve(distRoot, `${name}.css`), css, "utf-8");
+    console.log(`✓ ${label} CSS built → ${resolve(distRoot, `${name}.css`)}`);
+  }
   // Unminified modules are copied as they are: they import each other by relative path
   const modules = [...js, ...chunks];
   for (const file of modules) cpSync(resolve(srcRoot, file), resolve(distRoot, file));
   if (modules.length) console.log(`✓ ${label} JS synced → ${modules.join(", ")}`);
 
-  const { code: minCss } = await esbuild.transform(css, { loader: "css", minify: true });
-  writeFileSync(resolve(distRoot, `${name}.min.css`), minCss, "utf-8");
-  console.log(`✓ ${label} CSS minified → ${resolve(distRoot, `${name}.min.css`)}`);
+  if (bundle) {
+    const { code: minCss } = await esbuild.transform(css, { loader: "css", minify: true });
+    writeFileSync(resolve(distRoot, `${name}.min.css`), minCss, "utf-8");
+    console.log(`✓ ${label} CSS minified → ${resolve(distRoot, `${name}.min.css`)}`);
+  }
 
   if (sheets.size) mkdirSync(resolve(distRoot, "components"), { recursive: true });
   for (const [out, text] of sheets) {
@@ -118,7 +193,7 @@ export async function buildPackage({ name, layer = name, label = name[0].toUpper
     const { code } = await esbuild.transform(text, { loader: "css", minify: true });
     writeFileSync(resolve(distRoot, out.replace(/\.css$/, ".min.css")), code, "utf-8");
   }
-  if (sheets.size) console.log(`✓ ${label} ${sheets.size} stylesheets on their own → ${[...sheets.keys()].join(", ")} (+ min)`);
+  if (sheets.size) console.log(`✓ ${label} ${sheets.size} stylesheets ${bundle ? "on their own" : "(no bundle)"} → ${[...sheets.keys()].join(", ")} (+ min)`);
 
   // A dynamic import of a chunk stays an import, of the chunk's .min.js
   const lazyChunks = {

@@ -61,14 +61,20 @@ After editing `packages/catalog/src/`:
 pnpm catalog:build
 ```
 
-This inlines the `@import` graph of `src/index.css` →
-`dist/catalog.css` (+ `.min`), syncs `catalog.js`, `search.js` and `consent.js` and bundles
-each into a `.min.js`. It runs the shared
-builder, `scripts/build-package.js`, which also emits every
-`src/components/*.css` whose name does not start with `_` as
+Catalog has no bundle (`buildPackage({ bundle: false })`): there is no
+`src/index.css`, no `dist/catalog.css` and no `dist/print.css`. The shared
+builder, `scripts/build-package.js`, emits every `src/components/*.css` as
+`dist/components/<name>.css` (+ `.min`), its screen rules in `luz.catalog` and
+its top-level `@media print` blocks, with the comment before each, in
+`luz.print`; a `src/components/_*.css` fails the build. It syncs `catalog.js`,
+`search.js`, `consent.js` and `mode.js` and bundles each into a `.min.js`.
+
+Landing, cms, app and docs still have a bundle: the builder inlines the
+`@import` graph of `src/index.css` into `dist/<name>.css` (+ `.min`), and also
+emits every `src/components/*.css` whose name does not start with `_` as
 `dist/components/<name>.css` (+ `.min`), in the package's layer with the same
-rebased `url()`s as the bundle, and `src/components/_print.css` as
-`dist/print.css` (+ `.min`). The same holds for landing, cms, app and docs.
+rebased `url()`s as the bundle, and a `src/components/_print.css` as
+`dist/print.css` (+ `.min`).
 
 ## @luz-ds/landing
 

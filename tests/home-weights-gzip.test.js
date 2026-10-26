@@ -12,7 +12,7 @@
  *    without dist/ or without a gzip program).
  */
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -38,8 +38,11 @@ describe("scripts/docs-site/site.js: the weights are measured with the system gz
   it("measures every weight of the home through that one function", () => {
     const calls = js.match(/\bgzipSync\(/g) ?? [];
     expect(calls).toHaveLength(1);
-    expect(js).toMatch(/function renderWeights[\s\S]*?\bgzipBytes\(/);
-    expect(js).toMatch(/function levelWeights[\s\S]*?\bgzipBytes\(/);
+    // a package weighs the sum of its budgeted files, and of the files a glob row matches (catalog has no
+    // bundle: it weighs its components), both measured by gzipBytes
+    expect(js).toMatch(/function renderWeights[\s\S]*?\b(?:gzipBytes|packageBytes)\(/);
+    expect(js).toMatch(/function levelWeights[\s\S]*?\b(?:gzipBytes|packageBytes)\(/);
+    expect(js).toMatch(/function packageBytes[\s\S]*?\bgzipBytes\(/);
   });
 });
 
@@ -53,13 +56,28 @@ function hasGzip() {
 }
 
 const budgets = JSON.parse(read("budgets.json")).budgets;
-const files = (name) => budgets.filter((b) => b.file?.startsWith(`packages/${name}/dist/`)).map((b) => b.file);
-const built = BASE.every((name) => files(name).every((f) => existsSync(join(repo, f))));
+// The budgeted files of a package: the rows with a `file`, and the files a `glob` row of its dist matches
+// (`dir/*.ext`): catalog has no bundle, so its weight is the sum of its components
+const globbed = (glob) => {
+  const [, dir, ext] = /^(.*)\/\*(\.[a-z.]+)$/.exec(glob) ?? [];
+  return dir && existsSync(join(repo, dir)) ? readdirSync(join(repo, dir)).filter((f) => f.endsWith(ext)).sort().map((f) => `${dir}/${f}`) : [];
+};
+const files = (name) => [
+  ...budgets.filter((b) => b.file?.startsWith(`packages/${name}/dist/`)).map((b) => b.file),
+  ...budgets.filter((b) => b.glob?.startsWith(`packages/${name}/dist/`)).flatMap((b) => globbed(b.glob)),
+];
+const built = BASE.every((name) => files(name).length > 0 && files(name).every((f) => existsSync(join(repo, f))));
 
 describe.skipIf(!built || !hasGzip() || !existsSync(join(repo, "docs/index.html")))("docs/index.html: the weights equal gzip -9 -n", () => {
   const gz = (file) => execFileSync("gzip", ["-9", "-n", "-c"], { input: readFileSync(join(repo, file)), maxBuffer: 64 * 1024 * 1024 }).length;
   const html = read("docs/index.html");
   const list = html.match(/<ul class="landing-bars" aria-label="Packages by size">[\s\S]*?<\/ul>/)?.[0] ?? "";
+
+  it("catalog weighs the sum of its component files, not a bundle", () => {
+    const parts = files("catalog").filter((f) => f.startsWith("packages/catalog/dist/components/"));
+    expect(parts.length, "the components are budgeted by the glob row").toBeGreaterThanOrEqual(6);
+    expect(files("catalog").some((f) => /catalog\.min\.css$/.test(f))).toBe(false);
+  });
 
   for (const name of BASE) {
     it(`${name} weighs what gzip -9 -n says`, () => {

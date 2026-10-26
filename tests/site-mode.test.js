@@ -156,10 +156,10 @@ describe("catalog.js, the build and the size guard know the chunk", () => {
     expect(manifest.sideEffects).toEqual(expect.arrayContaining(["./dist/mode.js", "./dist/mode.min.js"]));
   });
 
-  it("has a stylesheet of its own, imported by the package index, in the luz.catalog layer's component list", () => {
+  it("has a stylesheet of its own, a file of components/ that the package no longer bundles, in the luz.catalog layer", () => {
     expect(existsSync(join(repo, "packages/catalog/src/components/mode.css")), "components/mode.css").toBe(true);
     expect(read("packages/catalog/src/components/mode.css")).toMatch(/(?<![.\w#-])luz-mode(?![\w-])/);
-    expect(read("packages/catalog/src/index.css")).toMatch(/@import url\("\.\/components\/mode\.css"\)/);
+    expect(existsSync(join(repo, "packages/catalog/src/index.css")), "catalog has no src/index.css").toBe(false);
   });
 
   it("scripts/smoke-consumer.js probes dist/mode.js for its phaseOf() export, as it does for consent's getConsent()", () => {
@@ -192,7 +192,7 @@ describe("the budget of the mode chunk", () => {
   it("leaves the other catalog rows as they were (a new row, never a raised ceiling)", () => {
     const rows = budgets.filter((b) => /^catalog /.test(b.name) && b.name !== "catalog JS lazy chunk: mode");
     expect(rows).toEqual([
-      { name: "catalog CSS", file: "packages/catalog/dist/catalog.min.css", ideal: 2048, max: 4096 },
+      { name: "catalog component CSS (each)", glob: "packages/catalog/dist/components/*.min.css", ideal: 1280, max: 1536 },
       { name: "catalog JS", file: "packages/catalog/dist/catalog.min.js", ideal: 1024, max: 2048 },
       { name: "catalog JS lazy chunk: search", file: "packages/catalog/dist/search.min.js", ideal: 2048, max: 2560 },
       { name: "catalog JS lazy chunk: consent", file: "packages/catalog/dist/consent.min.js", ideal: 1024, max: 1536 },

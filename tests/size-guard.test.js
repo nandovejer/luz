@@ -89,6 +89,30 @@ describe("budgets.json and PRINCIPLES.md section 8", () => {
     expect(budgets.find((b) => b.name === "catalog JS")).toMatchObject({ file: "packages/catalog/dist/catalog.min.js", ideal: 1024, max: 2048 });
   });
 
+  it("has no `catalog CSS` row: catalog has no bundle, each component file has its own row by glob (F5a)", () => {
+    expect(budgets.find((b) => b.name === "catalog CSS")).toBeUndefined();
+    expect(budgets.some((b) => /catalog\.min\.css/.test(b.file ?? ""))).toBe(false);
+    expect(budgets.find((b) => b.name === "catalog component CSS (each)")).toEqual({
+      name: "catalog component CSS (each)",
+      glob: "packages/catalog/dist/components/*.min.css",
+      ideal: 1280,
+      max: 1536,
+    });
+    expect(principles).toMatch(/^\| Each `catalog` component CSS[^\n]*\| 1\.5 kB \|$/m);
+    expect(principles).not.toMatch(/^\| `catalog` CSS \|/m);
+  });
+
+  it("the ceiling of a catalog component is below the 4 KiB the bundle had: no ceiling went up (RL-17)", () => {
+    expect(budgets.find((b) => b.name === "catalog component CSS (each)").max).toBeLessThan(4096);
+  });
+
+  it("every built catalog component fits its ceiling, gzipped and minified", () => {
+    const dir = join(repo, "packages/catalog/dist/components");
+    const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".min.css")) : [];
+    expect(files.length).toBeGreaterThan(0);
+    for (const f of files) expect(sizeOf(`packages/catalog/dist/components/${f}`), f).toBeLessThanOrEqual(1536);
+  });
+
   it("keeps the budgets and the PRINCIPLES table in step, as check-size does", () => {
     const run = spawnSync(process.execPath, [join(repo, "scripts/check-size.js")], { encoding: "utf-8" });
     expect(run.stderr).not.toMatch(/PRINCIPLES\.md budget table/);
@@ -117,7 +141,8 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     ["core JS lazy chunk: midi", 4 * KiB],
     ["core JS lazy chunk: table-sort", 2 * KiB],
     ["core JS lazy chunk: timeline", 3 * KiB],
-    ["catalog CSS", 4 * KiB],
+    // F5a: catalog has no bundle, so the 4 KiB row that limited its total goes and each file gets a ceiling below it
+    ["catalog component CSS (each)", 1.5 * KiB],
     ["catalog JS", 2 * KiB],
     ["catalog JS lazy chunk: search", 2.5 * KiB],
     ["catalog JS lazy chunk: consent", 1.5 * KiB],

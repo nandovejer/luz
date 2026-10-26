@@ -42,8 +42,11 @@ export const LAYERS = ["tokens", "themes", "settings", "generic", "elements", "o
 
 export const LAYER_ORDER = `@layer ${LAYERS.map((l) => `luz.${l}`).join(", ")};\n`;
 
-/** CSS `css` inside the public layer `name` (without the `luz.` prefix), with the order statement first. */
-export const inLuzLayer = (name, css) => {
+/** CSS `css` inside the public layer `name` (without the `luz.` prefix), without the order statement: what follows an inLuzLayer() in the same file. */
+export const inLayer = (name, css) => {
   if (!LAYERS.includes(name)) throw new Error(`unknown LUZ layer "${name}"`);
-  return `${LAYER_ORDER}@layer luz.${name} {\n${css}\n}\n`;
+  return `@layer luz.${name} {\n${css}\n}\n`;
 };
+
+/** CSS `css` inside the public layer `name` (without the `luz.` prefix), with the order statement first. */
+export const inLuzLayer = (name, css) => `${LAYER_ORDER}${inLayer(name, css)}`;

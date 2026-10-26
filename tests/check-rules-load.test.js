@@ -68,7 +68,8 @@ const PREFIXES = ["load/"];
 
 const TOKENS = linkTo("tokens", "luz-tokens.min.css");
 const CORE = linkTo("core", "luz.min.css");
-const SITE = linkTo("catalog", "catalog.min.css");
+// Catalog has no bundle (F5a): a page links the file of each component it uses, after core
+const SITE = linkTo("catalog", "components/search.min.css");
 const LANDING = linkTo("landing", "landing.min.css");
 const style = (css) => `  <style>\n    ${css.split("\n").join("\n    ")}\n  </style>\n`;
 
@@ -185,7 +186,7 @@ describe("load/tokens-missing", () => {
     for (const head of [
       "",
       links(TOKENS),
-      links('  <link rel="stylesheet" href="css/catalog.css">', '  <link rel="stylesheet" href="css/app.css">', '  <link rel="stylesheet" href="/apps/site/header.css">'),
+      links('  <link rel="stylesheet" href="css/search.css">', '  <link rel="stylesheet" href="css/app.css">', '  <link rel="stylesheet" href="/apps/site/header.css">'),
     ]) {
       const result = check({ "index.html": page('  <p class="o-stack">x</p>', head) });
       expect(rulesOf(result, "load/tokens-missing"), head).toEqual([]);
@@ -246,15 +247,16 @@ describe("load/package-missing", () => {
   it("is satisfied by the package's stylesheet, a component file of it, or an @import", () => {
     const body = '  <main class="o-container"><section class="luz-landing-hero"><luz-banner tone="warning">x</luz-banner></section></main>';
     const ways = {
-      "the bundles": links(TOKENS, CORE, SITE, LANDING),
+      "the bundles and the catalog components": links(TOKENS, CORE, SITE, linkTo("catalog", "components/banner.min.css"), LANDING),
       "one component file each": links(TOKENS, linkTo("core", "components/button.css"), linkTo("catalog", "components/banner.css"), linkTo("landing", "components/hero.css")),
       "the dev server's paths": links(
         '  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">',
         '  <link rel="stylesheet" href="/packages/core/dist/luz.css">',
-        '  <link rel="stylesheet" href="/packages/catalog/dist/catalog.css">',
+        '  <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">',
+        '  <link rel="stylesheet" href="/packages/catalog/dist/components/banner.css">',
         '  <link rel="stylesheet" href="/packages/landing/dist/landing.css">',
       ),
-      "@import in a <style>": style('@import "@luz-ds/tokens/css";\n@import "@luz-ds/core/css";\n@import url("@luz-ds/catalog/css");\n@import "@luz-ds/landing/css";'),
+      "@import in a <style>": style('@import "@luz-ds/tokens/css";\n@import "@luz-ds/core/css";\n@import url("@luz-ds/catalog/components/search.css");\n@import "@luz-ds/catalog/components/banner.css";\n@import "@luz-ds/landing/css";'),
     };
     for (const [label, head] of Object.entries(ways)) {
       const result = check({ "index.html": page(body, head) });
@@ -524,5 +526,91 @@ describe("load/no-stylesheet", () => {
   it("gives fail/broken.html the one finding it always had", () => {
     const result = run(["fail/broken.html", "--json"], { version: VERSION, cwd: FIXTURES, data: miniSnapshot() });
     expect(JSON.parse(result.stdout).findings.map((f) => f.rule)).toEqual(["parse/error"]);
+  });
+});
+
+/* ---- load/package-missing in a package with no bundle (F5a) --------------------------------------- */
+
+// Catalog has no catalog.css (plan ai-and-catalog-only, decisions 59 and 64): a page links
+// components/<name>.css for each class or element it uses, and the rule asks for that file,
+// not for the package. The facts come from the manifests: `files` of a class, `stylesheet` of a tag.
+describe("load/package-missing asks for the component file of catalog, not for catalog.css", () => {
+  const SEARCH = linkTo("catalog", "components/search.min.css");
+  const BANNER = linkTo("catalog", "components/banner.min.css");
+  const CONSENT = linkTo("catalog", "components/consent.min.css");
+
+  it("blocks a class whose file is not linked, even if another component of catalog is, and names the file", () => {
+    const html = page('  <div class="luz-consent">x</div>', links(TOKENS, CORE, BANNER));
+    const result = check({ "index.html": html });
+    const found = ofRule(result, "load/");
+    const at = where(html, 'class="luz-consent"');
+    expect(found).toHaveLength(1);
+    expect(found[0]).toMatchObject({ rule: "load/package-missing", severity: "block", line: at.line, column: at.column });
+    expect(wordsOf("load/package-missing", found[0].message)).toBe(true);
+    expect(found[0].message).toContain("luz-consent");
+    expect(found[0].message).toContain("@luz-ds/catalog");
+    expect(found[0].message).toContain("components/consent.css");
+    expect(found[0].message).not.toContain("catalog.css");
+    expect(result.code).toBe(1);
+  });
+
+  it("blocks a tag whose file is not linked, at its <, and names the file", () => {
+    const html = page('  <luz-banner tone="warning">x</luz-banner>', links(TOKENS, CORE, SEARCH));
+    const found = ofRule(check({ "index.html": html }), "load/");
+    const at = where(html, "<luz-banner");
+    expect(found).toHaveLength(1);
+    expect(found[0]).toMatchObject({ rule: "load/package-missing", severity: "block", line: at.line, column: at.column });
+    expect(wordsOf("load/package-missing", found[0].message)).toBe(true);
+    expect(found[0].message).toContain("<luz-banner>");
+    expect(found[0].message).toContain("components/banner.css");
+    expect(found[0].message).not.toContain("catalog.css");
+  });
+
+  it("is satisfied by the component file, plain or minified, from node_modules, a CDN, the dev server or an @import", () => {
+    const body = '  <luz-search><div class="luz-search__field">x</div></luz-search>';
+    const ways = {
+      "node_modules .min.css": links(TOKENS, CORE, linkTo("catalog", "components/search.min.css")),
+      "node_modules .css": links(TOKENS, CORE, linkTo("catalog", "components/search.css")),
+      "a CDN": links(TOKENS, CORE, '  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/search.min.css">'),
+      "the dev server": links(TOKENS, CORE, '  <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">'),
+      "an @import in a <style>": style('@import "@luz-ds/tokens/css";\n@import "@luz-ds/core/css";\n@import "@luz-ds/catalog/components/search.css";'),
+    };
+    for (const [label, head] of Object.entries(ways)) {
+      expect(rulesOf(check({ "index.html": page(body, head) }), "load/"), label).toEqual([]);
+    }
+  });
+
+  it("says each missing file once, at its first use, and one finding per file", () => {
+    const html = page(
+      ['  <div class="luz-consent">a</div>', '  <luz-search><div class="luz-search__field">x</div></luz-search>', '  <div class="luz-consent">again</div>', '  <luz-search>again</luz-search>'].join("\n"),
+      links(TOKENS, CORE, BANNER),
+    );
+    const found = ofRule(check({ "index.html": html }), "load/");
+    expect(found.map((f) => f.rule)).toEqual(["load/package-missing", "load/package-missing"]);
+    expect(found.map((f) => /components\/[a-z-]+\.css/.exec(f.message)?.[0]).sort()).toEqual(["components/consent.css", "components/search.css"]);
+  });
+
+  it("takes a copy of catalog in the project as all of it: it cannot be told which component it holds", () => {
+    const head = links(TOKENS, CORE, '  <link rel="stylesheet" href="vendor/catalog.min.css">');
+    expect(rulesOf(check({ "index.html": page('  <div class="luz-consent">x</div><luz-banner>y</luz-banner>', head) }), "load/")).toEqual([]);
+  });
+
+  it("reads the same from the manifests of an installed catalog that has no `./css` export", () => {
+    const html = page('  <div class="luz-consent">x</div>', links(TOKENS, CORE, BANNER));
+    const result = check({ "index.html": html }, { installed: {}, snapshot: "" });
+    const found = ofRule(result, "load/");
+    expect(found.map((f) => /components\/[a-z-]+\.css/.exec(f.message)?.[0])).toEqual(["components/consent.css"]);
+    const linked = page('  <div class="luz-consent">x</div>', links(TOKENS, CORE, CONSENT));
+    expect(rulesOf(check({ "index.html": linked }, { installed: {}, snapshot: "" }), "load/")).toEqual([]);
+  });
+
+  it("asks for the real files of the build: .luz-search needs components/search.css and nothing needs catalog.css", async () => {
+    const built = await builtData();
+    expect(built.error, "the build writes dist/data").toBeNull();
+    const html = page('  <luz-search><div class="luz-search__field">x</div></luz-search><div class="luz-consent">y</div>', links(TOKENS, CORE, BANNER));
+    const found = ofRule(check({ "index.html": html }, { snapshot: built.data }), "load/");
+    const files = found.map((f) => /components\/[a-z-]+\.css/.exec(f.message)?.[0]).sort();
+    expect(files).toEqual(["components/consent.css", "components/search.css"]);
+    for (const f of found) expect(f.message, f.message).not.toMatch(/catalog\.(?:min\.)?css/);
   });
 });

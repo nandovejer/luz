@@ -102,6 +102,17 @@ export const MESSAGES = {
     template: "<{tag}> is in @luz-ds/{package}, which this page does not load; add its stylesheet after core",
     sample: { tag: "luz-banner", package: "catalog" },
   },
+  // A package with no bundle (catalog): the page links the file of each component it uses
+  "load/package-missing:file": {
+    severity: "block",
+    template: ".{name} is in @luz-ds/{package}/{file}, which this page does not load; add it after core",
+    sample: { name: "luz-search", package: "catalog", file: "components/search.css" },
+  },
+  "load/package-missing:tag-file": {
+    severity: "block",
+    template: "<{tag}> is in @luz-ds/{package}/{file}, which this page does not load; add it after core",
+    sample: { tag: "luz-banner", package: "catalog", file: "components/banner.css" },
+  },
   "load/layer-statement": {
     severity: "block",
     template: "<{tag}> declares the layers after the LUZ link; move it before the first LUZ stylesheet",

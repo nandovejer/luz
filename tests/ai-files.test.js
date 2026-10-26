@@ -50,7 +50,7 @@
  *   pointer to its URL (under 2,000 B), not its full text.
  *   An internal link (`href="/docs/..."`) is absolute under siteUrl.
  */
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -987,10 +987,18 @@ const readJson = (relative) => JSON.parse(readFileSync(join(root, relative), "ut
 /** Distinct, so a document that writes another package's version is caught. */
 const VERSIONS = Object.fromEntries(PACKAGES.map((name, i) => [name, `${i + 11}.7.3`]));
 const REAL_VERSIONS = Object.fromEntries(PACKAGES.map((name) => [name, readJson(`packages/${name}/package.json`).version]));
-const SITE_ELEMENTS = readJson("packages/catalog/dist/custom-elements.json")
-  .modules.flatMap((m) => m.declarations ?? [])
-  .map((d) => d.tagName)
-  .filter(Boolean);
+// Catalog has no bundle (F5a): an example links the file of each catalog component its markup uses,
+// read here from the manifests the build writes (a tag's `stylesheet`, a class's `files`)
+const CATALOG_STYLESHEETS = [
+  ...readJson("packages/catalog/dist/custom-elements.json")
+    .modules.flatMap((m) => m.declarations ?? [])
+    .filter((d) => d.tagName && d.stylesheet)
+    .map((d) => ({ file: d.stylesheet, test: new RegExp(`<${d.tagName}[\\s>/]`) })),
+  ...readJson("packages/catalog/dist/classes.json")
+    .classes.filter((c) => c.defined)
+    .flatMap((c) => c.files.map((file) => ({ file, test: new RegExp(`(?<![\\w-])${c.name}(?![\\w-])`) }))),
+];
+const minifiedOf = (file) => file.replace(/\.css$/, ".min.css");
 const KIND_AREAS = ["landing", "cms", "app", "documentation"];
 /** The package an area documents (the documentation area documents @luz-ds/docs). */
 const PACKAGE_OF_AREA = { documentation: "docs" };
@@ -1023,12 +1031,19 @@ const exampleRouteOf = (page) => page.route.replace(/^\/docs\//, "/examples/").r
 const areaOf = (route) => route.split("/")[2];
 const markupPages = (from = site) => from.pages.filter((p) => markupSection(p) !== null);
 
-/** The packages an example of this page loads, in load order. */
-function packagesFor(page) {
+/**
+ * The stylesheets an example of this page loads, in load order, as [package, file]: tokens, core, one file
+ * per catalog component the markup uses (and, on a page of the catalog area, the one that page documents,
+ * named like its slug), by file name, then the kind's.
+ */
+function stylesheetsFor(page) {
   const area = areaOf(page.route);
   const { kept } = blocksOf(page);
-  const useSite = area === "catalog" || kept.some((b) => SITE_ELEMENTS.some((tag) => new RegExp(`<${tag}[\\s>/]`).test(b.code)));
-  return ["tokens", "core", ...(useSite ? ["catalog"] : []), ...(KIND_AREAS.includes(area) ? [PACKAGE_OF_AREA[area] ?? area] : [])];
+  const code = kept.map((b) => b.code).join("\n");
+  const files = new Set(CATALOG_STYLESHEETS.filter(({ test }) => test.test(code)).map(({ file }) => file));
+  if (area === "catalog") files.add(`components/${page.route.split("/").filter(Boolean).at(-1)}.css`);
+  const catalog = [...files].sort().map((file) => ["catalog", minifiedOf(file)]);
+  return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...catalog, ...(KIND_AREAS.includes(area) ? [[PACKAGE_OF_AREA[area] ?? area, cssOf(PACKAGE_OF_AREA[area] ?? area)]] : [])];
 }
 
 /* ---- reading a generated document ------------------------------------------- */
@@ -1139,10 +1154,12 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
   it("links the packages the page needs in load order, and its scripts at the end, all relative to ../dist/", () => {
     for (const e of examples()) {
       const doc = inspect(e.html, e.route);
-      const pkgs = packagesFor(e.page);
-      expect(doc.links.map((l) => l.rel), e.route).toEqual(pkgs.map(() => "stylesheet"));
-      expect(doc.links.map((l) => l.href), e.route).toEqual(pkgs.map((pkg) => `../dist/${pkg}/${cssOf(pkg)}`));
-      const js = ["core", ...pkgs.filter((p) => p === "catalog")];
+      const sheets = stylesheetsFor(e.page);
+      expect(doc.links.map((l) => l.rel), e.route).toEqual(sheets.map(() => "stylesheet"));
+      expect(doc.links.map((l) => l.href), e.route).toEqual(sheets.map(([pkg, file]) => `../dist/${pkg}/${file}`));
+      // the markup of a catalog page is for catalog's elements, which catalog.js loads
+      expect(doc.links.map((l) => l.href).filter((h) => /catalog\/(?:catalog|print)(?:\.min)?\.css$/.test(h)), `${e.route}: catalog has no bundle`).toEqual([]);
+      const js = ["core", ...(sheets.some(([pkg]) => pkg === "catalog") ? ["catalog"] : [])];
       expect(doc.scripts.map((s) => s.src), e.route).toEqual(js.map((pkg) => `../dist/${pkg}/${FILES[pkg].js}`));
       const bodyAt = e.html.search(/<body\b/i);
       for (const script of doc.scripts) expect(script.index, e.route).toBeGreaterThan(bodyAt);
@@ -1333,11 +1350,12 @@ describe("exampleDocuments: the rules on a small site", () => {
     expect(hrefs("/examples/components/widget.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css"]);
     // <luz-timeline> is core's tag
     expect(hrefs("/examples/components/timeline.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css"]);
-    expect(hrefs("/examples/catalog/banner.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/catalog.min.css"]);
+    // catalog has no bundle: one link per component, the file of the element or class the markup uses
+    expect(hrefs("/examples/catalog/banner.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/banner.min.css"]);
     expect(hrefs("/examples/landing/header.html")).toEqual([
       "../dist/tokens/tokens.min.css",
       "../dist/core/luz.min.css",
-      "../dist/catalog/catalog.min.css",
+      "../dist/catalog/components/search.min.css",
       "../dist/landing/landing.min.css",
     ]);
     const scripts = (route) => inspect(byRoute(docs, route).html, route).scripts.map((s) => s.src);
@@ -1370,7 +1388,7 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
   it("names each as { route, from }: a file of the package's dist at /examples/dist/<pkg>/<file>", () => {
     expect(assets().length).toBeGreaterThan(10);
     for (const asset of assets()) {
-      const m = /^\/examples\/dist\/(tokens|core|catalog|landing|cms|app|docs)\/([A-Za-z0-9._-]+\.(?:css|js))$/.exec(asset.route);
+      const m = /^\/examples\/dist\/(tokens|core|catalog|landing|cms|app|docs)\/((?:components\/)?[A-Za-z0-9._-]+\.(?:css|js))$/.exec(asset.route);
       expect(m, asset.route).toBeTruthy();
       expect(asset.from, asset.route).toBe(`packages/${m[1]}/dist/${m[2]}`);
       expect(existsSync(join(root, asset.from)), `${asset.from} exists (run pnpm build)`).toBe(true);
@@ -1379,7 +1397,10 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
   });
 
   it("is exactly the css, the js and the chunks of each package, with the font-less tokens file", () => {
-    const expected = PACKAGES.flatMap((pkg) => [cssOf(pkg), FILES[pkg].js, ...FILES[pkg].chunks].filter(Boolean).map((file) => `/examples/dist/${pkg}/${file}`));
+    // catalog has a stylesheet per component and no bundle: every components/<name>.min.css of its dist
+    const catalogSheets = readdirSync(join(root, "packages/catalog/dist/components")).filter((f) => f.endsWith(".min.css")).map((f) => `components/${f}`);
+    expect(catalogSheets.length).toBeGreaterThan(0);
+    const expected = PACKAGES.flatMap((pkg) => [...(pkg === "catalog" ? catalogSheets : [cssOf(pkg)]), FILES[pkg].js, ...FILES[pkg].chunks].filter(Boolean).map((file) => `/examples/dist/${pkg}/${file}`));
     expect(assets().map((a) => a.route).sort()).toEqual(expected.sort());
     const routes = assets().map((a) => a.route);
     expect(routes).toContain("/examples/dist/tokens/tokens.min.css");

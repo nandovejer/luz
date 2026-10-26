@@ -18,7 +18,10 @@
  * come from each package.json, the classes and elements from the
  * classes.json and custom-elements.json of each package's dist/, the install
  * lines from the dist files the snippets name (snippets.js), the counts from
- * siteNumbers(). A placeholder the body does not resolve, or one left in the
+ * siteNumbers(). Catalog has no bundle: the CDN lines link the catalog files
+ * of the elements and classes the body and the kind's preset name (the
+ * manifests say which file each needs), and each catalog element in the list
+ * says its stylesheet, so a site links only what it uses. A placeholder the body does not resolve, or one left in the
  * text, fails with its file:line. The links are always the published site's:
  * a prompt is pasted somewhere else, so a relative link would lead nowhere.
  * The gate on what a prompt may say is scripts/check-prompts.js.
@@ -28,7 +31,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { expandNumbers, siteNumbers } from "./i18n.js";
-import { FILES } from "./snippets.js";
+import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 
 /** The published site: every link of a prompt starts here. */
 export const PROMPT_SITE = SITE_URL;
@@ -83,14 +86,18 @@ function classLines(root, pkg, seen) {
   );
 }
 
-/** `<luz-mode>` (remember, by…): its description, from each custom-elements.json. */
+/**
+ * `<luz-mode>` (remember, by…): its description, from each custom-elements.json,
+ * and, for an element of a package with no bundle (catalog), the stylesheet it needs.
+ */
 function elementLines(root, pkg) {
   const lines = [];
   for (const module of readJson(root, `packages/${pkg}/dist/custom-elements.json`).modules) {
     for (const d of module.declarations ?? []) {
       if (!d.tagName) continue;
       const attributes = (d.attributes ?? []).map((a) => a.name);
-      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd());
+      const stylesheet = d.stylesheet ? ` Its stylesheet: \`@luz-ds/${pkg}/${d.stylesheet}\`.` : "";
+      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}${stylesheet}`.trimEnd());
     }
   }
   return lines;
@@ -109,6 +116,11 @@ export function assemblePrompt(id, { root }) {
   const packages = [...BASE, ...(kind.pkg ? [kind.pkg] : [])];
   const at = (pkg) => `@luz-ds/${pkg}@${versionOf(root, pkg)}`;
 
+  // The catalog files of what the body and the preset name, by file (catalog has no bundle)
+  const named = readFileSync(join(root, bodyFile), "utf-8") + (presetFile ? readFileSync(join(root, presetFile), "utf-8") : "");
+  const catalogFiles = catalogFilesIn(named, catalogComponents({ root }));
+  const stylesheets = (pkg) => (pkg === "catalog" ? catalogFiles.map(minified) : [FILES[pkg].css]);
+
   const values = {
     "a-site": kind.title,
     version,
@@ -120,7 +132,7 @@ export function assemblePrompt(id, { root }) {
     "kind-css": kind.pkg ? `, then @luz-ds/${kind.pkg}` : "",
     "npm-packages": packages.map(at).join(" "),
     "cdn-links": [
-      ...packages.map((pkg) => `<link rel="stylesheet" href="${CDN}/${at(pkg)}/dist/${FILES[pkg].css}">`),
+      ...packages.flatMap((pkg) => stylesheets(pkg).map((file) => `<link rel="stylesheet" href="${CDN}/${at(pkg)}/dist/${file}">`)),
       ...packages.filter((pkg) => FILES[pkg].js).map((pkg) => `<script type="module" src="${CDN}/${at(pkg)}/dist/${FILES[pkg].js}"></script>`),
     ].join("\n"),
     "stack-table": stacks.map((s) => `- ${s.name}: ${s.load}.`).join("\n"),

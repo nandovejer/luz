@@ -17,21 +17,83 @@
  * and `run pnpm build`; with `dev: true` it warns and writes a placeholder, so
  * the page is never silently unsafe. This module reads nothing else: not
  * pack-files.txt, not budgets.json (tests check those against it).
+ *
+ * Catalog has no bundle (plan ai-and-catalog-only, decisions 59 and 63): a
+ * page links each component it uses, `dist/components/<name>.min.css`. Its
+ * files are read from its manifests (catalogComponents), never listed here:
+ *
+ *   catalogComponents({ root, readFile })  [{ file, tags, classes }] by file:
+ *                                          the stylesheet of each element and
+ *                                          class of catalog's custom-elements.json
+ *                                          and classes.json
+ *   catalogFilesIn(text, components)       the files of the ones a text names
+ *                                          (`<luz-x` or a class), by file
+ *   renderComponentLinks(data, file, t)    the two lines that load one
+ *                                          component (npm, then CDN), the start
+ *                                          of "Copy the markup" on its page
  */
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { englishT } from "./strings.js";
 
-/** The files of each package that a snippet or the chunks table names (spec 3.4.1). */
+/**
+ * The files of each package that a snippet or the chunks table names (spec 3.4.1).
+ * Catalog's `css` is null: it has a file per component (catalogComponents), and
+ * EXAMPLE_COMPONENT is the one the snippets of a kind of site show.
+ */
 export const FILES = {
   tokens: { css: "luz-tokens.min.css", js: null, chunks: [] },
   core: { css: "luz.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js"] },
-  catalog: { css: "catalog.min.css", js: "catalog.min.js", chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
+  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
   landing: { css: "landing.min.css", js: null, chunks: [] },
   cms: { css: "cms.min.css", js: null, chunks: [] },
   app: { css: "app.min.css", js: null, chunks: [] },
   docs: { css: "docs.min.css", js: null, chunks: [] },
 };
+
+/** The catalog component the snippet of a kind of site links, as the example of one link per component. */
+export const EXAMPLE_COMPONENT = "components/search.css";
+
+/** `components/x.css` → `components/x.min.css`, the file a CDN link names. */
+export const minified = (file) => file.replace(/\.css$/, ".min.css");
+
+/**
+ * The stylesheets of catalog, from the manifests its build writes: the
+ * `stylesheet` of each element of custom-elements.json and the `files` of each
+ * class of classes.json. [{ file, tags, classes }], sorted by file; the files
+ * share no selector, so a page links them in any order, after core.
+ */
+export function catalogComponents({ root, readFile = readFileSync }) {
+  const read = (name) => {
+    const path = join(root, "packages", "catalog", "dist", name);
+    try {
+      return JSON.parse(readFile(path, "utf-8"));
+    } catch (error) {
+      throw new Error(`packages/catalog/dist/${name} is missing or unreadable (${error.message}): run pnpm build`);
+    }
+  };
+  const byFile = new Map();
+  const entry = (file) => {
+    if (!/^components\/[a-z0-9-]+\.css$/.test(file)) throw new Error(`packages/catalog/dist: "${file}" is not a components/<name>.css`);
+    if (!byFile.has(file)) byFile.set(file, { file, tags: [], classes: [] });
+    return byFile.get(file);
+  };
+  for (const module of read("custom-elements.json").modules ?? []) {
+    for (const d of module.declarations ?? []) if (d.tagName && d.stylesheet) entry(d.stylesheet).tags.push(d.tagName);
+  }
+  for (const c of read("classes.json").classes ?? []) if (c.defined) for (const file of c.files ?? []) entry(file).classes.push(c.name);
+  return [...byFile.values()].sort((a, b) => (a.file < b.file ? -1 : 1));
+}
+
+/** The files of the components a text names: a tag `<luz-x` (space, `>` or `/` after it) or a class, by file. */
+export function catalogFilesIn(text, components) {
+  const names = (list, pattern) => list.some((name) => pattern(name).test(text));
+  const esc = (name) => name.replace(/[-]/g, "\\-");
+  return components
+    .filter(({ tags, classes }) => names(tags, (tag) => new RegExp(`<${esc(tag)}[\\s>/]`)) || names(classes, (c) => new RegExp(`(?<![\\w-])${esc(c)}(?![\\w-])`)))
+    .map(({ file }) => file);
+}
 
 /** What the reader is building: its id and the package that is its kind (null: none); its words are `snippets.kind.<id>`. */
 export const KINDS = [
@@ -67,6 +129,14 @@ const PLACEHOLDER = "sha384-(run pnpm build)";
  */
 export function snippetData({ root, readFile, dev = false, warn = console.warn }) {
   const entries = {};
+  let components = [];
+  try {
+    components = catalogComponents({ root, readFile }).map(({ file }) => minified(file));
+  } catch (error) {
+    if (!dev) throw error;
+    warn(`[docs] ${error.message}`);
+    components = [minified(EXAMPLE_COMPONENT)];
+  }
   for (const [pkg, spec] of Object.entries(FILES)) {
     const manifest = join(root, "packages", pkg, "package.json");
     let version;
@@ -76,7 +146,7 @@ export function snippetData({ root, readFile, dev = false, warn = console.warn }
       throw new Error(`the snippets need ${manifest}: ${error.message}`);
     }
     if (typeof version !== "string" || !/^[0-9A-Za-z.+-]+$/.test(version)) throw new Error(`${manifest}: "version" is not a version`);
-    for (const file of [spec.css, spec.js, ...spec.chunks].filter(Boolean)) {
+    for (const file of [spec.css, ...(pkg === "catalog" ? components : []), spec.js, ...spec.chunks].filter(Boolean)) {
       const path = join(root, "packages", pkg, "dist", file);
       let integrity;
       try {
@@ -102,16 +172,18 @@ const esc = (s) =>
 const text = (lines) => lines.map((l) => (l === null ? "" : esc(l))).join("\n");
 
 // The comments inside a snippet are code: English in every language (D7)
-const OPTIONAL_SITE = "Optional: site adds the search, the cookie banner and the language switch. Delete the site lines if the page has none of them.";
-const OPTIONAL_SITE_SCRIPT = "Optional, with the site stylesheet: the search and the cookie banner";
+const OPTIONAL_SITE = "Optional: one line per catalog component the page uses (here the search), then the kind of site. Delete the ones the page does not use.";
+const OPTIONAL_SITE_SCRIPT = "Optional, with the search, the cookie banner or the color mode: the script that loads each one";
+
+const linkTag = (e) => `<link rel="stylesheet" href="${e.url}" integrity="${e.integrity}" crossorigin="anonymous">`;
+const importLine = (pkg, file) => `import "@luz-ds/${pkg}/${file}";`;
 
 function cdnCode(data, kind) {
   const at = (pkg, file) => data.entries[`${pkg}/${file}`];
-  const link = (e) => `<link rel="stylesheet" href="${e.url}" integrity="${e.integrity}" crossorigin="anonymous">`;
   const script = (e) => `<script type="module" src="${e.url}" integrity="${e.integrity}" crossorigin="anonymous"></script>`;
-  const lines = [link(at("tokens", FILES.tokens.css)), link(at("core", FILES.core.css))];
+  const lines = [linkTag(at("tokens", FILES.tokens.css)), linkTag(at("core", FILES.core.css))];
   if (kind.pkg) {
-    lines.push(`<!-- ${OPTIONAL_SITE} -->`, link(at("catalog", FILES.catalog.css)), link(at(kind.pkg, FILES[kind.pkg].css)));
+    lines.push(`<!-- ${OPTIONAL_SITE} -->`, linkTag(at("catalog", minified(EXAMPLE_COMPONENT))), linkTag(at(kind.pkg, FILES[kind.pkg].css)));
   }
   lines.push(null, "<!-- Optional: copy buttons, tabs, players, the color mode -->", script(at("core", FILES.core.js)));
   if (kind.pkg) lines.push(`<!-- ${OPTIONAL_SITE_SCRIPT} -->`, script(at("catalog", FILES.catalog.js)));
@@ -121,7 +193,7 @@ function cdnCode(data, kind) {
 function npmCode(kind) {
   const lines = ['import "@luz-ds/tokens/css";', 'import "@luz-ds/core/css";'];
   if (kind.pkg) {
-    lines.push(`// ${OPTIONAL_SITE}`, 'import "@luz-ds/catalog/css";', `import "@luz-ds/${kind.pkg}/css";`);
+    lines.push(`// ${OPTIONAL_SITE}`, importLine("catalog", EXAMPLE_COMPONENT), `import "@luz-ds/${kind.pkg}/css";`);
   }
   lines.push(null, "// Optional: copy buttons, tabs, players, the color mode", 'import "@luz-ds/core";');
   if (kind.pkg) lines.push(`// ${OPTIONAL_SITE_SCRIPT}`, 'import "@luz-ds/catalog";');
@@ -129,6 +201,24 @@ function npmCode(kind) {
 }
 
 const installCommand = (kind) => `pnpm add ${["@luz-ds/tokens", "@luz-ds/core", ...(kind.pkg ? ["@luz-ds/catalog", `@luz-ds/${kind.pkg}`] : [])].join(" ")}`;
+
+/**
+ * The start of "Copy the markup" on the page of a catalog component: the
+ * import of its file for a bundler, then its <link> from the CDN with the
+ * hash, each a code block with its copy button. `file` is `components/x.css`;
+ * the ids name the component, so a page that needs two files has no id twice.
+ */
+export function renderComponentLinks(data, file, t = englishT()) {
+  const cdn = data.entries[`catalog/${minified(file)}`];
+  if (!cdn) throw new Error(`the snippets have no catalog/${minified(file)}: run pnpm build`);
+  const npm = importLine("catalog", file);
+  const name = file.slice("components/".length, -".css".length);
+  const block = (id, label, shown, code) => codeBlock({ id, lang: id.endsWith("npm") ? "js" : "html", label, copy: t("snippets.copy-chunk", { file: shown }), name: t("snippets.name-chunk", { file: shown }), code: esc(code) }, t);
+  return [
+    block(`load-${name}-npm`, t("snippets.label-bundler"), `@luz-ds/catalog/${file}`, npm),
+    block(`load-${name}-cdn`, t("snippets.label-html"), `dist/${minified(file)}`, linkTag(cdn)),
+  ].join("\n");
+}
 
 /** A code block with its copy button, in the markup of the Install page. */
 function codeBlock({ id, lang, label, copy, name, code }, t) {
