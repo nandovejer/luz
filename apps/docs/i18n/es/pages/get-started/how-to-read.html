@@ -2,7 +2,7 @@
 title: Cómo leer LUZ
 description: Qué indican los nombres del CSS, el marcado y los tokens de LUZ, y en cuáles puedes confiar.
 keywords: nombres, prefijo, bem, atributos de datos, elementos personalizados, api pública
-source: 1655cbe9e000
+source: dc950edfbd12
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="classes">
@@ -132,7 +132,7 @@ reviewed: false
             <tr><td data-label="Archivo"><div><code>components/&lt;name&gt;.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Después de <code>base.css</code>, para cada componente que uses</div></td></tr>
             <tr><td data-label="Archivo"><div><code>classless.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Para el marcado al que no puedes añadir clases, dentro de <code>data-luz-classless</code>. Es un archivo independiente, no está en <code>luz.css</code></div></td></tr>
             <tr><td data-label="Archivo"><div><code>themes/_template.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Nunca lo uses tal cual: cópialo como punto de partida para crear tu propio aspecto</div></td></tr>
-            <tr><td data-label="Archivo"><div><code>catalog.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Cuándo cargarlo"><div>Cuando la página use un elemento del catálogo, como <code>&lt;luz-search&gt;</code></div></td></tr>
+            <tr><td data-label="Archivo"><div><code>components/&lt;name&gt;.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Cuándo cargarlo"><div>Después de core, una por cada elemento del catálogo que use la página, como <code>&lt;luz-search&gt;</code></div></td></tr>
           </tbody>
         </table>
       </div>

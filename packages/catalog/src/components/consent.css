@@ -84,3 +84,11 @@
 	display: inline-flex;
 	visibility: hidden;
 }
+
+/* On paper: the banner only works on a screen. The build puts this block
+   in luz.print, after the screen rules of every layer. */
+@media print {
+	.luz-consent {
+		display: none;
+	}
+}

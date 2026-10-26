@@ -8,7 +8,7 @@ A command line that reads the HTML and CSS of a project that uses LUZ and says w
 
 ```bash
 npx @luz-ds/check@0.2.1 --help
-npx @luz-ds/check@0.2.1 index.html css/catalog.css
+npx @luz-ds/check@0.2.1 index.html css/site.css
 npx @luz-ds/check@0.2.1 src --json
 ```
 

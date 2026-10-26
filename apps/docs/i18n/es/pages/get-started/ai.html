@@ -2,7 +2,7 @@
 title: Trabajar con IA
 description: Qué puede leer un agente de programación con IA, cómo comprobar lo que ha escrito y qué revisor de accesibilidad puedes darle.
 keywords: llms.txt, agente, Claude, Copilot, Cursor, manifiesto, comprobación
-source: 684eac4a1cef
+source: 8883aa0dc548
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="start">
@@ -42,7 +42,7 @@ reviewed: false
           <button class="luz-copy-btn" type="button" data-copy-from="code-check-run" aria-label="Copy the commands">Copy</button>
         </div>
         <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The commands"><code id="code-check-run">npx @luz-ds/check@0.2.1
-npx @luz-ds/check@0.2.1 index.html css/catalog.css
+npx @luz-ds/check@0.2.1 index.html css/site.css
 npx @luz-ds/check@0.2.1 src --json</code></pre>
       </div>
       <p>Indica <code>npx @luz-ds/check@0.2.1</code> y el ámbito. Una ruta puede ser un archivo, una carpeta (la lectura es recursiva: <code>.html</code>, <code>.htm</code> y <code>.css</code>) o un patrón glob entre comillas, como <code>"src/**/*.html"</code>.</p>
@@ -88,7 +88,7 @@ npx @luz-ds/check@0.2.1 src --json</code></pre>
           <button class="luz-copy-btn" type="button" data-copy-from="code-check-out" aria-label="Copy the example output">Copy</button>
         </div>
         <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Example output"><code id="code-check-out">✗ index.html:14:8 class/unknown  .luz-btn-primary is not a LUZ class; the closest is .luz-btn--primary
-✗ index.html:22:5 load/package-missing  .luz-banner is in @luz-ds/catalog, which this page does not load; add its stylesheet after core
+✗ index.html:22:5 load/package-missing  &lt;luz-banner&gt; is in @luz-ds/catalog/components/banner.css, which this page does not load; add it after core
 ! site.css:8:3 css/literal-colour  color is set to #1a5fb4; use a token, such as var(--luz-brand-fill)
 ✗ theme.css:3:3 theme/contrast  light: --luz-text-secondary on surface-page is 2.8:1, needs 4.5:1 (text); change one of the two
     --luz-text-secondary: #999999 is set in theme.css:3

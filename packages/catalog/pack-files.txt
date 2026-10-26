@@ -1,8 +1,6 @@
 LICENSE
 README.md
-dist/catalog.css
 dist/catalog.js
-dist/catalog.min.css
 dist/catalog.min.js
 dist/classes.json
 dist/components/banner.css
@@ -22,8 +20,6 @@ dist/consent.min.js
 dist/custom-elements.json
 dist/mode.js
 dist/mode.min.js
-dist/print.css
-dist/print.min.css
 dist/search.js
 dist/search.min.js
 package.json

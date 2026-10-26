@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Estilos de impresión
 description: Qué cambia LUZ al imprimir y cómo conservarlo o modificarlo, con una sola capa y sin archivos adicionales si cargas luz.css.
-source: a231ef4f4eb9
+source: cd61205b1a47
 reviewed: false
 -->
     <section class="docs-block" id="what" aria-labelledby="what-title">
@@ -24,7 +24,7 @@ reviewed: false
       <ul>
         <li><code>luz.css</code> ya lo incluye. No tienes que añadir ni quitar nada: el bloque está dentro del archivo.</li>
         <li>Si cargas <code>base.css</code> y cada componente por separado, no se incluyen los estilos de impresión. Añade <code>@luz-ds/core/print.css</code> (<code>dist/print.css</code>) si los quieres. Declara el orden de capas, como hacen todos los archivos.</li>
-        <li>El catálogo también incluye sus propias reglas de impresión, en <code>luz.catalog</code>.</li>
+        <li>Cada componente del catálogo tiene sus reglas de impresión en su propio archivo, en <code>luz.print</code>.</li>
         <li>En pantalla no cambia nada: todo el bloque está dentro de <code>@media print</code>.</li>
       </ul>
     </section>

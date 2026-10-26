@@ -63,7 +63,7 @@ Each package needs the ones below it and nothing above it. Adopt one level and s
 | --- | --- | --- |
 | Tokens only | `@luz-ds/tokens` | `luz-tokens.css` |
 | Tokens + components | `@luz-ds/tokens` `@luz-ds/core` | `luz-tokens.css`, `luz.css`, optionally `luz.js` |
-| Tokens + components + page patterns | `@luz-ds/tokens` `@luz-ds/core` `@luz-ds/catalog` | `luz-tokens.css`, `luz.css`, `catalog.css`, optionally `luz.js` and `catalog.js` |
+| Tokens + components + page patterns | `@luz-ds/tokens` `@luz-ds/core` `@luz-ds/catalog` | `luz-tokens.css`, `luz.css`, then catalog's `components/<name>.css` for each component the page uses, optionally `luz.js` and `catalog.js` |
 | A landing page | the three above and `@luz-ds/landing` | the files of the row above, then `landing.css` |
 | A blog or a newspaper | the three above and `@luz-ds/cms` | the files of level 3, then `cms.css` |
 | A web application | the three above and `@luz-ds/app` | the files of level 3, then `app.css` |
@@ -86,7 +86,7 @@ npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs      # a do
 ```js
 import "@luz-ds/tokens/css";
 import "@luz-ds/core/css";
-import "@luz-ds/catalog/css"; // level 3 only
+import "@luz-ds/catalog/components/search.css"; // level 3 only: one per catalog component the page uses
 import "@luz-ds/landing/css"; // a landing page only
 import "@luz-ds/cms/css"; // a blog or a newspaper only
 import "@luz-ds/app/css"; // a web application only
@@ -105,7 +105,8 @@ Drop the lines for the levels you do not use:
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css">
+<!-- Level 3: one link per catalog component the page uses, here the search -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.2.1/dist/landing.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.2.1/dist/cms.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/app@0.2.1/dist/app.min.css">
@@ -291,7 +292,7 @@ pnpm dev
 
 Edits to files under `apps/` reload on save. Edits to package sources (`packages/*/src`) need a rebuild (`pnpm build`, or `pnpm tokens:build` / `pnpm core:build` / `pnpm catalog:build` / `pnpm landing:build` / `pnpm cms:build` / `pnpm app:build` / `pnpm docs:build`), and then a restart of `pnpm dev`: Vite does not pick up regenerated `dist/` files and keeps serving the old CSS until it restarts. To use a different port, pass it through: `pnpm dev --port 3000`.
 
-To load the packages from this repository in a page of your own, point at `dist/`: `/packages/tokens/dist/luz-tokens.css`, `/packages/core/dist/luz.css`, `/packages/catalog/dist/catalog.css`, `/packages/landing/dist/landing.css`, `/packages/cms/dist/cms.css`, `/packages/app/dist/app.css`, `/packages/docs/dist/docs.css` and `/packages/core/dist/luz.js`.
+To load the packages from this repository in a page of your own, point at `dist/`: `/packages/tokens/dist/luz-tokens.css`, `/packages/core/dist/luz.css`, `/packages/catalog/dist/components/<name>.css` (one per catalog component), `/packages/landing/dist/landing.css`, `/packages/cms/dist/cms.css`, `/packages/app/dist/app.css`, `/packages/docs/dist/docs.css` and `/packages/core/dist/luz.js`.
 
 ### Commands
 

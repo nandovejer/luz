@@ -4,8 +4,10 @@
  * is above `ideal` or below `floor`. Run after `pnpm build`.
  *
  * A budget with a `glob` instead of a `file` applies to each file it
- * matches ("dir/**\/*.ext"): the docs pages, each measured as raw bytes
- * (`"compression": "none"`) in docs/, the Pages build (`pnpm pages:build`; git-ignored output).
+ * matches ("dir/**\/*.ext", or "dir/*.ext" for one folder): the docs pages,
+ * each measured as raw bytes (`"compression": "none"`) in docs/, the Pages
+ * build (`pnpm pages:build`; git-ignored output), and each component of
+ * catalog, which has no bundle (packages/catalog/dist/components/*.min.css).
  *
  * A `file` budget of a package that does not exist yet (no
  * packages/<name>/package.json) passes vacuously with a note; once the package
@@ -167,17 +169,18 @@ for (const [file, code] of published) {
   }
 }
 
-/** Files matched by "dir/**\/*.ext", repo-relative, sorted. */
+/** Files matched by "dir/**\/*.ext" (any depth) or "dir/*.ext" (that folder only; `ext` may be `.min.css`), repo-relative, sorted. */
 function globFiles(glob) {
-  const [dir, ext] = /^(.*?)\/\*\*\/\*(\.[a-z]+)$/.exec(glob)?.slice(1) ?? [];
-  if (!dir) throw new Error(`unsupported glob ${glob}: use "dir/**/*.ext"`);
+  const [dir, deep, ext] = /^(.*?)\/(\*\*\/)?\*(\.[a-z.]+)$/.exec(glob)?.slice(1) ?? [];
+  if (!dir) throw new Error(`unsupported glob ${glob}: use "dir/**/*.ext" or "dir/*.ext"`);
   const out = [];
   const walk = (d) => {
     if (!existsSync(resolve(root, d))) return;
     for (const entry of readdirSync(resolve(root, d), { withFileTypes: true })) {
       const p = `${d}/${entry.name}`;
-      if (entry.isDirectory()) walk(p);
-      else if (entry.name.endsWith(ext)) out.push(p);
+      if (entry.isDirectory()) {
+        if (deep) walk(p);
+      } else if (entry.name.endsWith(ext)) out.push(p);
     }
   };
   walk(dir);
@@ -189,13 +192,13 @@ const sizeOf = (path, compression) => (compression === "none" ? readFileSync(pat
 for (const { name, glob, compression, floor, ideal, max } of budgets.filter((b) => b.glob)) {
   const sizes = globFiles(glob).map((f) => [f, sizeOf(resolve(root, f), compression)]).sort((a, b) => b[1] - a[1]);
   if (!sizes.length) {
-    console.error(`✗ ${name}: nothing matches ${glob} — run pnpm pages:build first`);
+    console.error(`✗ ${name}: nothing matches ${glob} — run ${glob.startsWith("packages/") ? "pnpm build" : "pnpm pages:build"} first`);
     failed = true;
     continue;
   }
   const over = sizes.filter(([, size]) => size > max);
   for (const [f, size] of over) {
-    console.error(`✗ ${name}: ${f} ${kB(size)} (max ${kB(max)}) — over the ceiling: split the page, never raise it`);
+    console.error(`✗ ${name}: ${f} ${kB(size)} (max ${kB(max)}) — over the ceiling: ${f.endsWith(".html") ? "split the page" : "make it smaller"}, never raise it`);
     failed = true;
   }
   const [largest, size] = sizes[0];

@@ -26,7 +26,9 @@
  *
  * Each is what the package's own dist/ says, reduced to what a rule reads
  * (names, kinds, definitions, the BEM split, hooks; tags and attribute names):
- * no layer, no file, no text. tokens.css is dist/tokens.css of @luz-ds/tokens
+ * no layer, no text, and no file except, for a package with no bundle (no
+ * `./css` export: catalog), the components/<name>.css of each class
+ * (`files`) and tag (`stylesheet`), which the load rule asks a page to link. tokens.css is dist/tokens.css of @luz-ds/tokens
  * reduced to the declarations the contrast engine can read (the colours, whose
  * var() chains end in one), under the selectors it understands, with no
  * comment: the verdicts are those of the whole file. The same bytes on every
@@ -72,12 +74,13 @@ const readJson = (path) => {
   return JSON.parse(readFileSync(path, "utf-8"));
 };
 
-/** classes.json reduced to what a rule reads. */
-function reduceClasses(manifest) {
+/** classes.json reduced to what a rule reads; `unbundled` keeps the files of each class (a package with no bundle). */
+function reduceClasses(manifest, unbundled) {
   const out = { schema: manifest.schema, package: manifest.package, version: manifest.version };
   out.classes = manifest.classes.map((entry) => {
     const kept = { name: entry.name, kind: entry.kind, defined: entry.defined };
     for (const key of ["block", "modifier", "part", "hosts"]) if (entry[key] !== undefined) kept[key] = entry[key];
+    if (unbundled && entry.defined && entry.files?.length) kept.files = entry.files;
     return kept;
   });
   out.properties = manifest.properties.map(({ name, scope }) => ({ name, scope }));
@@ -97,6 +100,7 @@ function reduceElements(manifest) {
         name: declaration.name,
         customElement: declaration.customElement,
         tagName: declaration.tagName,
+        ...(declaration.stylesheet ? { stylesheet: declaration.stylesheet } : {}),
         attributes: (declaration.attributes ?? []).map(({ name }) => ({ name })),
       })),
     })),
@@ -155,8 +159,9 @@ function writeData(folder) {
   const packages = [];
   for (const name of PACKAGES) {
     const dist = resolve(repoRoot, "packages", name, "dist");
-    const classes = reduceClasses(readJson(resolve(dist, "classes.json")));
-    packages.push({ package: `@luz-ds/${name}`, version: readJson(resolve(repoRoot, "packages", name, "package.json")).version });
+    const pkg = readJson(resolve(repoRoot, "packages", name, "package.json"));
+    const classes = reduceClasses(readJson(resolve(dist, "classes.json")), pkg.exports?.["./css"] === undefined);
+    packages.push({ package: `@luz-ds/${name}`, version: pkg.version });
     mkdirSync(resolve(data, name), { recursive: true });
     writeFileSync(resolve(data, name, "classes.json"), format(classes), "utf-8");
     const elements = resolve(dist, "custom-elements.json");

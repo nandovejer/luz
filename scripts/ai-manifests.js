@@ -43,7 +43,11 @@
  *
  * custom-elements.json (Custom Elements Manifest, schema 2.1.0; f5 2.3): one
  * module per tag, from the source tags of the header comment of the file that
- * defines it (a script) or styles it (a CSS-only tag, components/<tag>.css):
+ * defines it (a script) or styles it (a CSS-only tag, components/<tag>.css).
+ * In a package with no bundle (no `./css` export: catalog), each declaration
+ * also says `stylesheet`, the components/<tag>.css a page links for the tag
+ * (plan ai-and-catalog-only, decision 64), which the load rule of
+ * @luz-ds/check asks for:
  *
  *   @element <tag> - <description>
  *   @attr {<type>} <name> - <description>
@@ -628,6 +632,15 @@ export function buildElementManifest(name, { root = repoRoot } = {}) {
   const docsDir = join(root, "apps", "docs");
   const pages = existsSync(docsDir) ? scanSite(docsDir, root).pages : [];
 
+  // A package with no bundle (no `./css` export: catalog) is linked one
+  // component at a time, so each tag names the stylesheet a page links for it
+  const pkg = JSON.parse(readFileSync(join(root, "packages", name, "package.json"), "utf-8"));
+  const unbundled = pkg.exports?.["./css"] === undefined;
+  const stylesheetOf = (tag) => {
+    const file = `components/${tag.slice("luz-".length)}.css`;
+    return unbundled && existsSync(join(src, file)) ? file : null;
+  };
+
   const modules = entries
     .sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))
     .map(({ path, tag, script, text }) => {
@@ -654,6 +667,8 @@ export function buildElementManifest(name, { root = repoRoot } = {}) {
 
       const className = pascal(tag);
       const declaration = { kind: "class", name: className, customElement: true, tagName: tag };
+      const stylesheet = stylesheetOf(tag);
+      if (stylesheet !== null) declaration.stylesheet = stylesheet;
       if (script) declaration.superclass = { name: "HTMLElement" };
       declaration.description = description;
       if (header.attrs.length) declaration.attributes = header.attrs;

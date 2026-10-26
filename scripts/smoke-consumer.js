@@ -10,7 +10,8 @@
  *      (patterns such as ./components/* are expanded);
  *   2. a minimal page that links the installed files loads in Chromium with
  *      no failed request, no console error or warning, the tokens defined,
- *      core, site, landing, cms, app and docs CSS applied, and the JS exports importable;
+ *      core, catalog (two of its components, linked one by one: catalog has
+ *      no bundle), landing, cms, app and docs CSS applied, and the JS exports importable;
  *   3. the same page with jsDelivr-style URLs (/npm/@luz-ds/<pkg>@<version>/…),
  *      served from the same tarballs by a local server: no network is used;
  *   4. the `luz-tokens` command runs from the installed package;
@@ -164,7 +165,9 @@ const PAGE = (base, label) => `<!doctype html>
   <title>LUZ smoke test: ${label}</title>
   <link rel="stylesheet" href="${base.tokens}/dist/luz-tokens.css">
   <link rel="stylesheet" href="${base.core}/dist/luz.css">
-  <link rel="stylesheet" href="${base.site}/dist/catalog.css">
+  <!-- Catalog has no bundle: a consumer links each component it uses, here two -->
+  <link rel="stylesheet" href="${base.site}/dist/components/banner.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/search.css">
   <link rel="stylesheet" href="${base.landing}/dist/landing.css">
   <link rel="stylesheet" href="${base.cms}/dist/cms.css">
   <link rel="stylesheet" href="${base.app}/dist/app.css">
@@ -175,6 +178,7 @@ const PAGE = (base, label) => `<!doctype html>
   <button class="luz-btn luz-btn--primary" type="button" id="probe-button">Save changes</button>
   <div id="probe-fill" style="background: var(--luz-brand-fill)"></div>
   <luz-banner id="probe-section"></luz-banner>
+  <a class="luz-search__fallback" href="#probe-button" id="probe-search">Index</a>
   <footer class="luz-landing-footer" id="probe-landing"></footer>
   <div class="luz-cms-article-header" id="probe-article"></div>
   <main class="luz-app-dashboard" id="probe-dashboard"></main>
@@ -265,6 +269,8 @@ const local = {
   docs: "/node_modules/@luz-ds/docs",
 };
 const cdn = Object.fromEntries(PACKAGES.map((n) => [n, `/npm/@luz-ds/${n}@${versions[n]}`]));
+// The pages name catalog `site`, as the local map does
+cdn.site = cdn.catalog;
 
 const server = createServer((req, res) => {
   const url = new URL(req.url, "http://127.0.0.1");
@@ -334,6 +340,7 @@ if (browser) {
         tokenBackground: fill.backgroundColor,
         buttonHeight: parseFloat(button.height),
         sectionDisplay: section.display,
+        searchDisplay: getComputedStyle(document.getElementById("probe-search")).display,
         landingBorder: landing.borderTopStyle,
         articleDisplay: article.display,
         dashboardType: getComputedStyle(document.getElementById("probe-dashboard")).containerType,
@@ -346,12 +353,14 @@ if (browser) {
     check(`${label2} no failed request, console message or request off the machine`, problems.length === 0, problems.join("\n"));
     check(`${label2} tokens loaded (--luz-brand-fill is defined)`, state.token !== "", "the custom property is empty");
     check(`${label2} core CSS applied (.luz-btn--primary uses the token)`, state.buttonBackground === state.tokenBackground && state.buttonBackground !== "rgba(0, 0, 0, 0)", `${state.buttonBackground} vs ${state.tokenBackground}`);
-    check(`${label2} catalog CSS applied (<luz-banner> is a block)`, state.sectionDisplay === "block", state.sectionDisplay);
+    check(`${label2} catalog components/banner.css applied (<luz-banner> is a block)`, state.sectionDisplay === "block", state.sectionDisplay);
+    check(`${label2} catalog components/search.css applied (.luz-search__fallback is inline-flex)`, state.searchDisplay === "inline-flex", state.searchDisplay);
     check(`${label2} landing CSS applied (.luz-landing-footer has its rule)`, state.landingBorder === "solid", state.landingBorder);
     check(`${label2} cms CSS applied (.luz-cms-article-header is a grid)`, state.articleDisplay === "grid", state.articleDisplay);
     check(`${label2} app CSS applied (.luz-app-dashboard is a size container)`, state.dashboardType === "inline-size", state.dashboardType);
     check(`${label2} docs CSS applied (.luz-docs-example has its frame)`, state.docsBorder === "solid", state.docsBorder);
-    check(`${label2} ${PACKAGES.length} stylesheets with rules`, state.sheets.length === PACKAGES.length && state.sheets.every((n) => n > 0), JSON.stringify(state.sheets));
+    // One per package, and catalog's two components: catalog has no bundle
+    check(`${label2} ${PACKAGES.length + 1} stylesheets with rules`, state.sheets.length === PACKAGES.length + 1 && state.sheets.every((n) => n > 0), JSON.stringify(state.sheets));
     check(`${label2} JS entries import and export what the docs name`, state.missing.length === 0, state.missing.join("\n"));
     await page.close();
   }

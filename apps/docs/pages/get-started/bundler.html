@@ -17,8 +17,8 @@ keywords: vite, astro, bundler, framework, import
 import "@luz-ds/core/css";
 import "@luz-ds/core";
 
-// Only if the page uses a catalog element: search, consent, language switch
-import "@luz-ds/catalog/css";
+// Only if the page uses a catalog element: one import each (here the search)
+import "@luz-ds/catalog/components/search.css";
 import "@luz-ds/catalog";
 
 // Only for one kind of site: landing, cms or app
@@ -76,10 +76,7 @@ import "@luz-ds/landing/css";</code></pre>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./search</code></div></td><td data-label="What it is"><div>The <code>&lt;luz-search&gt;</code> element</div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./consent</code></div></td><td data-label="What it is"><div>The <code>&lt;luz-consent&gt;</code> element, and <code>getConsent</code></div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./mode</code></div></td><td data-label="What it is"><div>The <code>&lt;luz-mode&gt;</code> element</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./css</code></div></td><td data-label="What it is"><div><code>catalog.css</code>: the styles of the catalog elements</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./css/min</code></div></td><td data-label="What it is"><div><code>catalog.min.css</code>: the same, minified</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./print.css</code></div></td><td data-label="What it is"><div>The print rules of the catalog elements, alone</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./components/*</code></div></td><td data-label="What it is"><div>One stylesheet per catalog element: banner, consent, language switch, mode, search and submenu</div></td></tr>
+            <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./components/*</code></div></td><td data-label="What it is"><div>One stylesheet per catalog element, and its only CSS: banner, consent, language switch, mode, search and submenu</div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./classes.json</code></div></td><td data-label="What it is"><div>Every class and custom property the package defines, with its kind and layer, as JSON for tools and AI agents</div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./custom-elements.json</code></div></td><td data-label="What it is"><div>Every custom element the package defines or styles, with its attributes and events, in the Custom Elements Manifest format, for editors and AI agents</div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/landing</code></div></td><td data-label="Export"><div><code>./css</code></div></td><td data-label="What it is"><div><code>landing.css</code>: the pieces of a landing page</div></td></tr>

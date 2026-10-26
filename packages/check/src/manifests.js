@@ -21,10 +21,15 @@
  *              dependency order, one per package that has a manifest
  *   classes    Set of every class name; `byPrefix` the sorted names of
  *              `luz-`, `o-` and `u-`; `blocks` the BEM blocks; `info` Map
- *              name -> { kind, defined, block, modifier, part, hosts, package }
+ *              name -> { kind, defined, block, modifier, part, hosts, files, package }
  *              (what the manifest says; `hosts` is an array of selectors, a
- *              tag with at most one attribute test, or undefined)
- *   tags       Map tag -> { attributes: Set, package }; `tagNames` the tags, sorted
+ *              tag with at most one attribute test, or undefined; `files`
+ *              the components/<name>.css that define it, only for a package
+ *              with no bundle, catalog, whose page links one file per
+ *              component, else undefined)
+ *   tags       Map tag -> { attributes: Set, package, stylesheet }; `tagNames` the tags,
+ *              sorted; `stylesheet` the components/<name>.css a page links for
+ *              the tag, only in a package with no bundle, else undefined
  *   properties Map --luz-* name -> "root" | "component" (root wins when two
  *              packages say both); `publicNames` the root ones, sorted
  *   hooks      Set of the data-luz-* names LUZ reads (manifest hooks plus
@@ -57,6 +62,9 @@ const HOOK = /^data-luz-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const HOST = /^[a-z][a-z0-9]{0,31}(?:\[[a-z][a-z-]{0,31}(?:=[A-Za-z0-9_-]{1,32})?\])?$/;
 const MAX_HOSTS = 16;
 const VERSION = /^[0-9A-Za-z.+_-]{1,40}$/;
+// The stylesheet of one component, as a package with no bundle names it
+const FILE = /^components\/[a-z0-9]+(?:-[a-z0-9]+)*\.css$/;
+const MAX_FILES = 8;
 const FORBIDDEN = new Set(["__proto__", "constructor", "prototype"]);
 
 const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
@@ -72,8 +80,11 @@ function readJson(path, max) {
   }
 }
 
-/** classes.json of schema 1 -> { version, classes: [{ name, block, kind, defined, modifier, part, hosts }], hooks } or null. */
-function parseClasses(data, pkg) {
+/**
+ * classes.json of schema 1 -> { version, classes: [{ name, block, kind, defined, modifier, part, hosts, files }], hooks } or null.
+ * `files` is kept only when `unbundled` (a package whose page links one file per component), and only the components/<name>.css ones.
+ */
+function parseClasses(data, pkg, unbundled) {
   if (!isObject(data) || data.schema !== 1 || data.package !== `@luz-ds/${pkg}`) return null;
   if (typeof data.version !== "string" || !VERSION.test(data.version)) return null;
   if (!Array.isArray(data.classes) || data.classes.length > MAX_CLASSES) return null;
@@ -83,7 +94,8 @@ function parseClasses(data, pkg) {
     for (const key of ["block", "modifier", "part"]) if (entry[key] !== undefined && !isName(entry[key])) return null;
     const { hosts } = entry;
     if (hosts !== undefined && !(Array.isArray(hosts) && hosts.length > 0 && hosts.length <= MAX_HOSTS && hosts.every((host) => typeof host === "string" && HOST.test(host)))) return null;
-    classes.push({ name: entry.name, block: entry.block, kind: entry.kind, defined: entry.defined, modifier: entry.modifier, part: entry.part, hosts });
+    const files = unbundled && Array.isArray(entry.files) ? entry.files.filter((file) => typeof file === "string" && FILE.test(file)).slice(0, MAX_FILES) : [];
+    classes.push({ name: entry.name, block: entry.block, kind: entry.kind, defined: entry.defined, modifier: entry.modifier, part: entry.part, hosts, files: files.length ? files : undefined });
   }
   if (data.properties !== undefined && !Array.isArray(data.properties)) return null;
   // An entry that is not a name with a scope is left out; the rest of the manifest stands
@@ -96,7 +108,7 @@ function parseClasses(data, pkg) {
   return { version: data.version, classes, properties, hooks };
 }
 
-/** A Custom Elements Manifest (or its reduction) -> [{ tag, attributes: string[] }] or null. */
+/** A Custom Elements Manifest (or its reduction) -> [{ tag, attributes: string[], stylesheet }] or null (`stylesheet`: a components/<name>.css, or undefined). */
 function parseElements(data) {
   if (!isObject(data) || !Array.isArray(data.modules) || data.modules.length > MAX_ELEMENTS) return null;
   const elements = [];
@@ -116,17 +128,21 @@ function parseElements(data) {
           attributes.push(attribute.name);
         }
       }
-      elements.push({ tag: declaration.tagName, attributes });
+      const stylesheet = typeof declaration.stylesheet === "string" && FILE.test(declaration.stylesheet) ? declaration.stylesheet : undefined;
+      elements.push({ tag: declaration.tagName, attributes, stylesheet });
     }
   }
   return elements;
 }
 
-/** The two files of a package in one folder layout -> { version, classes, hooks, elements } or null. */
-function readPackage(classesPath, elementsPath, pkg) {
+/**
+ * The two files of a package in one folder layout -> { version, classes, hooks, elements } or null.
+ * `unbundled`: the package has no bundle, so a class keeps the files that define it.
+ */
+function readPackage(classesPath, elementsPath, pkg, unbundled) {
   const data = readJson(classesPath, MAX_MANIFEST_BYTES);
   if (data === null) return null;
-  const classes = parseClasses(data, pkg);
+  const classes = parseClasses(data, pkg, unbundled);
   if (classes === null) return null;
   let elements = [];
   const present = readLimited(elementsPath, MAX_MANIFEST_BYTES);
@@ -176,10 +192,10 @@ function buildWorld(parts) {
     }
     for (const hook of part.hooks) hooks.add(hook);
     for (const { name, scope } of part.properties) if (scope === "root" || !properties.has(name)) properties.set(name, scope);
-    for (const { tag, attributes } of part.elements) {
+    for (const { tag, attributes, stylesheet } of part.elements) {
       let known = tags.get(tag);
       if (known === undefined) {
-        known = { attributes: new Set(), package: part.name };
+        known = { attributes: new Set(), package: part.name, stylesheet };
         tags.set(tag, known);
       }
       for (const attribute of attributes) {
@@ -208,7 +224,8 @@ export function createFacts({ data }) {
     let part = null;
     if (typeof data === "string" && data !== "") {
       const folder = join(data, pkg);
-      const read = readPackage(join(folder, "classes.json"), join(folder, "custom-elements.json"), pkg);
+      // The snapshot keeps the files of a class only for a package with no bundle (scripts/build-check.js)
+      const read = readPackage(join(folder, "classes.json"), join(folder, "custom-elements.json"), pkg, true);
       if (read !== null) part = { name: pkg, source: "bundled", ...read };
     }
     bundled.set(pkg, part);
@@ -220,7 +237,9 @@ export function createFacts({ data }) {
     let part = null;
     const named = readJson(join(folder, "package.json"), MAX_PACKAGE_JSON_BYTES);
     if (isObject(named) && named.name === `@luz-ds/${pkg}`) {
-      const read = readPackage(join(folder, "dist", "classes.json"), join(folder, "dist", "custom-elements.json"), pkg);
+      // A package with no `./css` export has no bundle: a page links the file of each component (catalog from 0.3)
+      const unbundled = isObject(named.exports) && !Object.hasOwn(named.exports, "./css");
+      const read = readPackage(join(folder, "dist", "classes.json"), join(folder, "dist", "custom-elements.json"), pkg, unbundled);
       if (read !== null) part = { name: pkg, source: "node_modules", ...read };
     }
     installed.set(folder, part);

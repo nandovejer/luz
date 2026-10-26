@@ -16,12 +16,16 @@ npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog
 
 ## Usage
 
+Tokens and core are one stylesheet each. Catalog has no bundle: each component is a file of its own, `components/<name>.css` (and `.min.css`), and a page links only the ones it uses, after core, in any order (no two of them style the same element). Each file carries its own print rules. The page of each component in the docs starts its markup with its two lines.
+
 ### Via npm/bundler
 
 ```js
 import '@luz-ds/tokens/css'
 import '@luz-ds/core/css'
-import '@luz-ds/catalog/css'
+// One import per component the page uses: here the search and the color mode
+import '@luz-ds/catalog/components/search.css'
+import '@luz-ds/catalog/components/mode.css'
 
 import '@luz-ds/core'        // optional: the core behaviors
 import '@luz-ds/catalog'    // the loader: the search, the cookie banner and the color mode, when the page has them
@@ -34,7 +38,9 @@ import '@luz-ds/catalog'    // the loader: the search, the cookie banner and the
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.css">
+<!-- One link per component the page uses: here the search and the color mode -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/mode.min.css">
 <script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js"></script>
 <!-- The loader: it loads search.min.js on a page with a <luz-search>,
      consent.min.js on a page with a <luz-consent> and mode.min.js on a
@@ -65,9 +71,9 @@ A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari
 - **`./search`** → `search.js` — defines `<luz-search>`, a custom element (light DOM) that holds the fallback link, the trigger and the search `<dialog>`, and wires them when it connects; importing it in a page defines the element (once, however many copies), importing it in Node does nothing. Import it by hand for a `<luz-search>` added after the page has loaded
 - **`./consent`** → `consent.js` — defines `<luz-consent>`, the cookie banner (light DOM), and exports `getConsent(key?)`. Importing it in Node does nothing but give `getConsent`
 - **`./mode`** → `mode.js` — defines `<luz-mode>`, the color mode switcher with an Auto state (light DOM), and exports `phaseOf(hour)`, the phase of the day at a local hour. Importing it in Node does nothing but give `phaseOf`
-- **`./css`** → `catalog.css` — The six components' styles (`./css/min` for the minified twin)
-- **`./components/*`** → `dist/components/` — one stylesheet per component, `<name>.css` and `<name>.min.css`, each in `luz.catalog`, for a page that loads only what it uses
-- **`./print.css`** → `print.css` — what catalog's pieces do on paper, in `luz.catalog`, for a page that loads components one by one (`catalog.css` already has it)
+- **`./components/*`** → `dist/components/` — the package's only CSS: one stylesheet per component, `<name>.css` and `<name>.min.css`, its screen rules in `luz.catalog` and what it does on paper in `luz.print`: `banner`, `consent`, `lang-switch`, `mode`, `search` and `submenu`. `classes.json` says the file of each class (`files`) and `custom-elements.json` the file of each tag (`stylesheet`)
+
+There is no `./css`, `./css/min` or `./print.css` since 0.3: link the components instead.
 
 ## Tags and classes included
 
