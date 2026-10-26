@@ -12,10 +12,11 @@
  *   no longer goes). The text is fetched, from the site only, when the
  *   pointer or the focus reaches it, so the dialog opens with it.
  * - The button opens a native <dialog> (showModal: the top layer, the inert
- *   page, Escape, the focus inside). The prompt is laid out with an h3 per
- *   section (# and ##), lists, paragraphs and code blocks, all with
- *   textContent: no HTML of the text is ever parsed (SEC-IDX-2). Its last
- *   element is the sentence "End of the prompt.".
+ *   page, Escape, the focus inside). The prompt is shown as its own source,
+ *   a Markdown file open in an editor: every character, in order, with the
+ *   marks of # and ##, lists, `code`, fences and "phrases" in spans by role,
+ *   all with textContent: no HTML of the text is ever parsed (SEC-IDX-2).
+ *   Its last element is the sentence "End of the prompt.".
  * - Copy stays aria-disabled (and in the tab order) until the region is
  *   scrolled to its end (100 %, that sentence wholly in view), or at once
  *   when the prompt fits. A
@@ -59,86 +60,122 @@ function load(href) {
   return texts.get(href);
 }
 
-/** Append `text` to `parent`, with every `code` span as a <code>. */
-function inline(parent, text) {
+/**
+ * An address the dialog links: a page of the published site or a file of
+ * @luz-ds on the CDN. Any other URL stays text (a prompt is text addressed to
+ * a model; the reader follows only what the site itself published).
+ */
+const ADDRESS = /https:\/\/(?:nandovejer\.github\.io\/luz\/|cdn\.jsdelivr\.net\/npm\/@luz-ds\/)[^\s<>"`]*/;
+/** A phrase in straight quotes, like a string in a source file. */
+const SAID = /"[^"\n]{1,60}"/;
+const TOKENS = new RegExp(`(${ADDRESS.source})|(${SAID.source})`, "g");
+
+/** <span class="site-prompt__tok-<role>"> (or another element) with `text` (textContent only). */
+function tok(role, text = "", name = "span") {
+  const span = document.createElement(name);
+  span.className = `site-prompt__tok-${role}`;
+  span.textContent = text;
+  return span;
+}
+
+/**
+ * A link to `raw`, in a new tab. Its name is its text and then the hint, in
+ * the page's language, as an aria-label: the text of the link stays the
+ * file's, so a selection or a count of the text gets nothing more (WCAG 2.4.4,
+ * 2.5.3: the name starts with the visible text).
+ */
+function address(raw, newTab) {
+  const link = document.createElement("a");
+  link.className = "site-prompt__tok-link";
+  link.href = raw;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = raw;
+  if (newTab) {
+    link.setAttribute("aria-label", `${raw} ${newTab}`);
+    // The hint is in the page's language and the prompt around it is English:
+    // an aria-label is spoken in the language of its element, so the link
+    // takes the page's (an address has no language of its own; WCAG 3.1.2)
+    const page = document.documentElement.lang;
+    if (page && !/^en\b/i.test(page)) link.lang = page;
+  }
+  return link;
+}
+
+/** Append `text` to `parent`: `code` spans, "phrases" and addresses are tokens, the rest stays text. */
+function inline(parent, text, newTab) {
   text.split(/(`[^`]+`)/).forEach((part, i) => {
     if (!part) return;
     if (i % 2) {
-      const code = document.createElement("code");
-      code.textContent = part.slice(1, -1);
-      parent.append(code);
-    } else parent.append(part);
+      parent.append(tok("code", part));
+      return;
+    }
+    let from = 0;
+    for (const hit of part.matchAll(TOKENS)) {
+      if (hit.index > from) parent.append(part.slice(from, hit.index));
+      if (hit[2]) {
+        parent.append(tok("quote", hit[2]));
+        from = hit.index + hit[0].length;
+      } else {
+        // A full stop, comma or bracket after the address is the sentence's
+        const url = hit[1].replace(/[.,:;!?)]+$/, "");
+        parent.append(address(url, newTab));
+        from = hit.index + url.length;
+      }
+    }
+    if (from < part.length) parent.append(part.slice(from));
   });
 }
 
 /**
- * The prompt as elements: # and ## are h3, a fenced block a pre, lines that
- * start "- " or "1. " the items of a list (two spaces more: a nested list),
- * any other run of lines a paragraph.
+ * The prompt as its own source, like a Markdown file open in an editor: every
+ * character of the text is on screen, in order, with the marks of the syntax
+ * in spans by role. One row per line of the text: a "#" or "##" line is an h3,
+ * the lines between ``` fences are framed as a block, "- " and "1. " start a
+ * list item. The row's cell holds the line and its line end; the number of the
+ * line is drawn by CSS (a counter, hidden from assistive technology), so the
+ * text of the region is the text of the file and nothing else.
  */
-function layout(text) {
+function layout(text, newTab) {
   const out = document.createDocumentFragment();
-  const lines = text.replace(/\r\n?/g, "\n").split("\n");
-  let paragraph = null;
-  let lists = [];
-  const close = () => {
-    paragraph = null;
-    lists = [];
-  };
-  for (let i = 0; i < lines.length; i += 1) {
-    const line = lines[i];
-    if (/^```/.test(line)) {
-      close();
-      const pre = document.createElement("pre");
-      const code = document.createElement("code");
-      const body = [];
-      for (i += 1; i < lines.length && !/^```/.test(lines[i]); i += 1) body.push(lines[i]);
-      code.textContent = body.join("\n");
-      pre.append(code);
-      out.append(pre);
-      continue;
+  const lines = text.split("\n");
+  let fence = false;
+  lines.forEach((raw, i) => {
+    // A text that ends with a line end has no last, empty line to number
+    if (i === lines.length - 1 && !raw) return;
+    // The line end belongs to its line, so the cells add up to the text
+    const eol = i < lines.length - 1 ? "\n" : "";
+    const cell = document.createElement("span");
+    cell.className = "site-prompt__cell";
+    let row = document.createElement("div");
+    const heading = fence ? null : /^(#{1,2} )(.*)$/.exec(raw);
+    const item = fence ? null : /^( *)(-|\d+\.)( )(.*)$/.exec(raw);
+    if (/^```/.test(raw)) {
+      // The first fence line opens the block, the next one closes it
+      cell.className += ` site-prompt__tok-fence site-prompt__tok-fence--${fence ? "close" : "open"}`;
+      cell.append(tok("marker", raw + eol));
+      fence = !fence;
+    } else if (fence) {
+      cell.className += " site-prompt__tok-fence";
+      cell.append(raw + eol);
+    } else if (heading) {
+      // A real h3, so a screen reader's heading keys find it; its content is
+      // the source line
+      row = tok(`heading site-prompt__tok-heading--${heading[1].length - 1}`, "", "h3");
+      cell.append(tok("marker", heading[1]));
+      inline(cell, heading[2], newTab);
+      cell.append(eol);
+    } else {
+      if (item) {
+        cell.append(item[1], tok("marker", item[2] + item[3]));
+        inline(cell, item[4], newTab);
+      } else inline(cell, raw, newTab);
+      cell.append(eol);
     }
-    const heading = /^#{1,2} (.*)$/.exec(line);
-    if (heading) {
-      close();
-      const h3 = document.createElement("h3");
-      inline(h3, heading[1]);
-      out.append(h3);
-      continue;
-    }
-    const item = /^( *)(-|\d+\.) (.*)$/.exec(line);
-    if (item) {
-      paragraph = null;
-      const depth = Math.min(Math.floor(item[1].length / 2), 1);
-      const tag = item[2] === "-" ? "ul" : "ol";
-      lists.length = Math.min(lists.length, depth + 1);
-      if (!lists[depth] || lists[depth].localName !== tag) {
-        const list = document.createElement(tag);
-        if (depth && lists[depth - 1]?.lastElementChild) lists[depth - 1].lastElementChild.append(list);
-        else out.append(list);
-        lists[depth] = list;
-        lists.length = depth + 1;
-      }
-      const li = document.createElement("li");
-      inline(li, item[3]);
-      lists[depth].append(li);
-      continue;
-    }
-    if (!line.trim()) {
-      close();
-      continue;
-    }
-    // A line that goes on a list item or a paragraph
-    if (lists.length && !paragraph) {
-      inline(lists[lists.length - 1].lastElementChild, ` ${line.trim()}`);
-      continue;
-    }
-    if (!paragraph) {
-      paragraph = document.createElement("p");
-      out.append(paragraph);
-    } else paragraph.append(" ");
-    inline(paragraph, line.trim());
-  }
+    row.classList.add("site-prompt__line");
+    row.append(cell);
+    out.append(row);
+  });
   return out;
 }
 
@@ -287,7 +324,8 @@ function open(dialog, opener, href) {
       const prompt = document.createElement("div");
       prompt.lang = "en";
       prompt.dir = "ltr";
-      prompt.append(layout(text));
+      prompt.className = "site-prompt__source";
+      prompt.append(layout(text, dialog.dataset.newTab));
       region.replaceChildren(prompt, end);
       if (unlocked.has(href)) return;
       // A prompt that fits needs no scroll: Copy is on from the start
