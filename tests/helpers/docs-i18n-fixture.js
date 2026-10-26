@@ -160,6 +160,8 @@ export function pseudoCatalog(code, enStrings, siteJson) {
 export const SITE_JSON = {
   areas: [
     { id: "get-started", label: "Get started", slug: "get-started", essentials: [{ href: "/docs/components/" }, { href: "/docs/tokens/color/", label: "Color tokens" }] },
+    // The pages of the kinds of site: "Fits best" links each kind to /docs/kinds/<kind>/
+    { id: "kinds", label: "Kinds of site", slug: "kinds" },
     { id: "tokens", label: "Tokens", slug: "tokens", package: "@luz-ds/tokens", groups: [{ id: "families", label: "Token families" }] },
     {
       id: "components",
@@ -169,6 +171,18 @@ export const SITE_JSON = {
       groups: [
         { id: "actions", label: "Actions and input" },
         { id: "helpers", label: "Helpers", sidebar: true, list: true },
+      ],
+      essentials: [{ href: "/docs/get-started/" }],
+    },
+    // The area of the patterns of catalog: its pages say which kind of site they fit best ("Fits best", F5b)
+    {
+      id: "catalog",
+      label: "Catalog",
+      slug: "catalog",
+      package: "@luz-ds/catalog",
+      groups: [
+        { id: "navigation", label: "Navigation" },
+        { id: "reference", label: "Reference", list: true },
       ],
       essentials: [{ href: "/docs/get-started/" }],
     },
@@ -260,6 +274,28 @@ export const PAGES = {
         `<h3 id="markup">${t("Copy the markup")}</h3>`,
         `<p>${t("Copy it.")}</p>`,
       ].join("\n"),
+  },
+  "kinds/index.html": {
+    meta: { title: "Kinds of site", description: "The four kinds of site.", area: "kinds", generate: "gallery" },
+    body: (t) => `<p>${t("The kinds.")}</p>\n<!-- luz:generated -->`,
+  },
+  ...Object.fromEntries(
+    ["landing", "blog", "app", "docs"].map((kind, i) => [
+      `kinds/${kind}.html`,
+      { meta: { title: `Kind ${kind}`, description: `A ${kind} site.`, area: "kinds", order: String(i + 1) }, body: (t) => `<p>${t("A kind of site.")}</p>` },
+    ]),
+  ),
+  "catalog/index.html": {
+    meta: { title: "Catalog", description: "The pieces that are not core's.", area: "catalog", generate: "gallery" },
+    body: (t) => `<p>${t("The catalog.")}</p>\n<!-- luz:generated -->`,
+  },
+  "catalog/header.html": {
+    meta: { title: "Page header", description: "The top of a page.", area: "catalog", group: "navigation", order: "1", "fits-kinds": "landing, blog, app, docs", fits: "the top of every page" },
+    body: (t) => `<h2 id="example">${t("Example")}</h2>\n<h2 id="known-issues">${t("Known issues")}</h2>\n<p>${t("None known.")}</p>`,
+  },
+  "catalog/switch.html": {
+    meta: { title: "Switch", description: "A switch for the whole site.", area: "catalog", group: "navigation", order: "2", "fits-kinds": "any", fits: "when the site has a switch" },
+    body: (t) => `<h2 id="example">${t("Example")}</h2>\n<h2 id="known-issues">${t("Known issues")}</h2>\n<p>${t("None known.")}</p>`,
   },
   "components/button.html": {
     meta: { title: "Button", description: "A button.", area: "components", group: "actions", toc: "h2,h3" },

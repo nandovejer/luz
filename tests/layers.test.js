@@ -13,15 +13,14 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const dist = (path) => `${root}${path}`;
 const listed = (dir) => (existsSync(dist(dir)) ? readdirSync(dist(dir)).filter((f) => f.endsWith(".css")).map((f) => `${dir}/${f}`) : []);
 
+const KINDS = ["landing", "cms", "app", "docs"];
+const KIND_SAMPLE = { landing: "hero", cms: "header", app: "dashboard", docs: "shell" };
+
 const files = [
   "packages/tokens/dist/luz-tokens.css",
   "packages/tokens/dist/tokens.css",
   "packages/core/dist/luz.css",
   "packages/core/dist/base.css",
-  "packages/landing/dist/landing.css",
-  "packages/cms/dist/cms.css",
-  "packages/app/dist/app.css",
-  "packages/docs/dist/docs.css",
   "packages/core/dist/print.css",
   "packages/core/dist/classless.css",
   // catalog has no bundle (F5a): each component is a file of its own
@@ -58,10 +57,11 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
     expect(files.some((f) => f.endsWith("luz.css"))).toBe(true);
     expect(files.some((f) => f.startsWith("packages/catalog/dist/components/") && f.endsWith("search.css")), "packages/catalog/dist/components/search.css").toBe(true);
     expect(files.some((f) => f.endsWith("catalog.css")), "catalog has no bundle").toBe(false);
-    expect(files.some((f) => f.endsWith("landing.css"))).toBe(true);
-    expect(files.some((f) => f.endsWith("cms.css"))).toBe(true);
-    expect(files.some((f) => f.endsWith("app.css")), "packages/app/dist/app.css (pnpm app:build)").toBe(true);
-    expect(files.some((f) => f.endsWith("docs.css")), "packages/docs/dist/docs.css (pnpm docs:build)").toBe(true);
+    // The patterns of a landing page, a blog, an app and a documentation site are files of catalog since F5b
+    for (const kind of KINDS) {
+      expect(files.some((f) => f.startsWith("packages/catalog/dist/components/") && f.endsWith(`/${kind}-${KIND_SAMPLE[kind]}.css`)), `packages/catalog/dist/components/${kind}-${KIND_SAMPLE[kind]}.css`).toBe(true);
+      expect(files.some((f) => f.endsWith(`/${kind}.css`)), `${kind} has no bundle: its package is gone`).toBe(false);
+    }
   });
 
   for (const file of files) {
@@ -82,11 +82,19 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
     });
   }
 
-  it("a catalog component that prints puts those rules in `luz.print`, after its `luz.catalog` block", () => {
-    for (const name of ["search", "consent"]) {
+  it("a catalog component that prints puts those rules in `luz.print`, after its `luz.catalog` block, and one that does not has `luz.catalog` only", () => {
+    // Print rules are the top-level `@media print` blocks of the source; docs-shell and landing-glow are patterns that print
+    const printing = readdirSync(dist("packages/catalog/src/components"))
+      .filter((f) => f.endsWith(".css") && !f.startsWith("_"))
+      .filter((f) => /^@media\s+print\b/m.test(readFileSync(dist(`packages/catalog/src/components/${f}`), "utf-8")))
+      .map((f) => f.replace(/\.css$/, ""))
+      .sort();
+    expect(printing).toEqual(["consent", "docs-shell", "landing-glow", "search"]);
+    const all = readdirSync(dist("packages/catalog/dist/components")).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, ""));
+    for (const name of all) {
       const items = topLevel(readFileSync(dist(`packages/catalog/dist/components/${name}.css`), "utf-8"));
       const layers = items.filter((it) => it.body !== null).map((it) => it.prelude);
-      expect(layers, name).toEqual(["@layer luz.catalog", "@layer luz.print"]);
+      expect(layers, name).toEqual(printing.includes(name) ? ["@layer luz.catalog", "@layer luz.print"] : ["@layer luz.catalog"]);
     }
   });
 
@@ -97,35 +105,15 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
   });
 });
 
-/* F3 step 14: @luz-ds/app joins the container as `luz.app`, after `luz.cms`, so adding it moves
-   no existing layer (.claude/plans/specs/f3-package-model.md, §1.8). Landing, cms and app never
-   share a class: their order among themselves decides nothing. */
-describe("the luz.app layer", () => {
-  it("comes right after luz.cms, and the layers before it did not move", () => {
-    expect(LAYERS.slice(0, 12)).toEqual(["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "catalog", "landing", "cms", "app"]);
-    expect(LAYER_ORDER).toContain("luz.landing, luz.cms, luz.app, luz.docs, luz.print;");
-  });
+/* F5b of .claude/plans/ai-and-catalog-only.md: the patterns of a kind of site are components of catalog, so
+   luz.landing, luz.cms, luz.app and luz.docs are gone: one layer, `luz.catalog`, then `luz.print`. A pattern that
+   refines a catalog or a core piece wins by the order of the links, as any catalog component does. */
+describe("the layers of the kinds of site are gone", () => {
+  const STATEMENT = "@layer luz.tokens, luz.themes, luz.settings, luz.generic, luz.elements, luz.objects, luz.components, luz.utilities, luz.catalog, luz.print;";
 
-  it.skipIf(!existsSync(dist("packages/app/dist/app.css")))("app.css has its rules in luz.app and repeats the order statement first", () => {
-    const css = readFileSync(dist("packages/app/dist/app.css"), "utf-8");
-    expect(css.startsWith(LAYER_ORDER)).toBe(true);
-    expect(css).toMatch(/^@layer luz\.app \{$/m);
-  });
-});
-
-/* F6a: @luz-ds/docs joins the container as `luz.docs`, after `luz.app` and before `luz.print`. It
-   shares no class with any other package (`.luz-docs-*`), so its place moves no other layer
-   (.claude/plans/luz-home-docs-identity.md, section 3.2). */
-describe("the luz.docs layer", () => {
-  const STATEMENT = "@layer luz.tokens, luz.themes, luz.settings, luz.generic, luz.elements, luz.objects, luz.components, luz.utilities, luz.catalog, luz.landing, luz.cms, luz.app, luz.docs, luz.print;";
-
-  it("comes right after luz.app and right before luz.print, and no other layer moved", () => {
-    expect(LAYERS).toEqual(["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "catalog", "landing", "cms", "app", "docs", "print"]);
+  it("the order is tokens, themes, settings, generic, elements, objects, components, utilities, catalog, print", () => {
+    expect(LAYERS).toEqual(["tokens", "themes", "settings", "generic", "elements", "objects", "components", "utilities", "catalog", "print"]);
     expect(LAYER_ORDER).toBe(`${STATEMENT}\n`);
-  });
-
-  it("is explained in scripts/luz-layers.js: its public name, its class prefix and why its place moves no layer", () => {
-    expect(/luz\.docs\s+\.luz-docs-\*/.test(readFileSync(dist("scripts/luz-layers.js"), "utf-8")), "scripts/luz-layers.js").toBe(true);
   });
 
   it("is repeated, in the same order, by core's index.css and by the brand fixture", () => {
@@ -133,16 +121,29 @@ describe("the luz.docs layer", () => {
     expect(readFileSync(dist("tests/fixtures/theme-brand.css"), "utf-8").includes(STATEMENT), "tests/fixtures/theme-brand.css").toBe(true);
   });
 
-  it("is named in the guides that list the layers: VERSIONING.md, core's README, AGENTS.md and the layers page", () => {
-    for (const file of ["VERSIONING.md", "packages/core/README.md", "AGENTS.md", "apps/docs/pages/get-started/layers.html"]) {
-      expect(readFileSync(dist(file), "utf-8").includes("luz.docs"), file).toBe(true);
-    }
+  it("is explained in scripts/luz-layers.js: luz.catalog holds the patterns of the four kinds, and the four old layers are gone", () => {
+    const text = readFileSync(dist("scripts/luz-layers.js"), "utf-8");
+    expect(/luz\.catalog\s+the components of @luz-ds\/catalog/.test(text), "luz.catalog says what it holds").toBe(true);
+    expect(/luz\.(?:landing|cms|app|docs)\s+\.luz-/.test(text), "no line that still defines luz.landing, luz.cms, luz.app or luz.docs").toBe(false);
   });
 
-  it("docs.css has its rules in luz.docs and repeats the order statement first", () => {
-    expect(existsSync(dist("packages/docs/dist/docs.css")), "packages/docs/dist/docs.css (pnpm docs:build)").toBe(true);
-    const css = readFileSync(dist("packages/docs/dist/docs.css"), "utf-8");
-    expect(css.startsWith(LAYER_ORDER)).toBe(true);
-    expect(css).toMatch(/^@layer luz\.docs \{$/m);
+  it("no layer of a kind of site is named in a stylesheet of dist (an @layer statement or block)", () => {
+    const named = [];
+    for (const dir of ["packages/tokens/dist", "packages/core/dist", "packages/core/dist/components", "packages/core/dist/themes", "packages/catalog/dist/components"]) {
+      if (!existsSync(dist(dir))) continue;
+      for (const f of readdirSync(dist(dir)).filter((f) => f.endsWith(".css"))) {
+        if (/@layer[^{;]*\bluz\.(?:landing|cms|app|docs)\b/.test(readFileSync(dist(`${dir}/${f}`), "utf-8"))) named.push(`${dir}/${f}`);
+      }
+    }
+    expect(named).toEqual([]);
+  });
+
+  it("is named in the guides that list the layers, without the four old names: VERSIONING.md, core's README, AGENTS.md and the layers page", () => {
+    for (const file of ["VERSIONING.md", "packages/core/README.md", "AGENTS.md", "apps/docs/pages/get-started/layers.html", "apps/docs/i18n/es/pages/get-started/layers.html"]) {
+      const text = readFileSync(dist(file), "utf-8");
+      expect(text.includes("luz.catalog"), `${file} lists luz.catalog`).toBe(true);
+      // The layers page may say they are gone (the migration); a list or a statement of the layers must not hold them
+      expect(/luz\.(?:landing|cms|app|docs)\s*[,;]|[,;]\s*luz\.(?:landing|cms|app|docs)\b|luz\.(?:landing|cms|app|docs)\s+\.luz-/.test(text), `${file} still lists luz.landing, luz.cms, luz.app or luz.docs as a layer`).toBe(false);
+    }
   });
 });

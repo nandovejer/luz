@@ -38,7 +38,7 @@
  *   area but the hub, in the same order, opening with `## <title>` then a
  *   header block that starts `URL: <url>` and, for a page with `files`, has
  *   `Files: <files> · Package: @luz-ds/<package>` (the package of the area:
- *   components is core; catalog, landing, cms and app are their own), a blank line, the page's description,
+ *   components is core and catalog is catalog: landing, cms, app and docs are not packages since F5b), a blank line, the page's description,
  *   then `### <heading>` sections taken by id: the known issues, `#markup`
  *   (each `pre[data-lang=html]` as a fenced block, its `aria-label` as the
  *   caption line before the fence), `#variants` (a table row is
@@ -530,7 +530,8 @@ describe("llms.txt: the index of the site for an agent", () => {
 
 /* ---- llms-full.txt, the real pages ------------------------------------------ */
 
-const markupAreas = ["components", "catalog", "landing", "cms", "app", "documentation"];
+// The patterns of the kinds of site are pages of the catalog area since F5b
+const markupAreas = ["components", "catalog"];
 // Pages that print "&lt;tag" as plain text on purpose (counted in apps/docs/pages)
 const PLAIN_TAGS = new Set(["/docs/components/copy-button/", "/docs/components/icon-grid/", "/docs/catalog/classes/"]);
 
@@ -956,8 +957,8 @@ describe("the Vite plugin emits and serves the two files", () => {
  *     "Do not edit", MIT and the version of core from `versions`), one
  *     <link rel=stylesheet> per package the page needs in load order (tokens,
  *     core, then catalog when the page's area is `catalog` or a kept block names a
- *     <luz-*> tag catalog's custom-elements.json declares, then the kind's when
- *     the area is landing, cms or app), each `../dist/<pkg>/<file>`; `<h1>`
+ *     <luz-*> tag or a class catalog's manifests declare: the file of each, so the
+ *     pattern of a kind of site is the file of its class, F5b), each `../dist/<pkg>/<file>`; `<h1>`
  *     the page's title; the first link is to its docs page (relative, ending
  *     `#markup`); then, for each `html` block of `#markup` that has no
  *     <script> and no on*= attribute, `<h2 id="ex-<n>">` with the block's
@@ -999,9 +1000,6 @@ const CATALOG_STYLESHEETS = [
     .flatMap((c) => c.files.map((file) => ({ file, test: new RegExp(`(?<![\\w-])${c.name}(?![\\w-])`) }))),
 ];
 const minifiedOf = (file) => file.replace(/\.css$/, ".min.css");
-const KIND_AREAS = ["landing", "cms", "app", "documentation"];
-/** The package an area documents (the documentation area documents @luz-ds/docs). */
-const PACKAGE_OF_AREA = { documentation: "docs" };
 const EXAMPLE_ENTRY = { tokens: "tokens.min.css" };
 /** The css file of each package an example links (the tokens one is the font-less file). */
 const cssOf = (pkg) => EXAMPLE_ENTRY[pkg] ?? FILES[pkg].css;
@@ -1031,19 +1029,26 @@ const exampleRouteOf = (page) => page.route.replace(/^\/docs\//, "/examples/").r
 const areaOf = (route) => route.split("/")[2];
 const markupPages = (from = site) => from.pages.filter((p) => markupSection(p) !== null);
 
+/** The css files of catalog, plain: the ones a page of the area may name as its own (a slug or a `files:` entry). */
+const CATALOG_FILES = new Set(CATALOG_STYLESHEETS.map(({ file }) => file));
+
 /**
  * The stylesheets an example of this page loads, in load order, as [package, file]: tokens, core, one file
- * per catalog component the markup uses (and, on a page of the catalog area, the one that page documents,
- * named like its slug), by file name, then the kind's.
+ * per catalog component the markup uses (and, on a page of the catalog area, the file named like its slug when
+ * there is one: `cms-toc` has none, its table of contents is a class of cms-article.css), by file name. A kind
+ * of site has no stylesheet of its own: its patterns are the catalog files.
  */
 function stylesheetsFor(page) {
   const area = areaOf(page.route);
   const { kept } = blocksOf(page);
   const code = kept.map((b) => b.code).join("\n");
   const files = new Set(CATALOG_STYLESHEETS.filter(({ test }) => test.test(code)).map(({ file }) => file));
-  if (area === "catalog") files.add(`components/${page.route.split("/").filter(Boolean).at(-1)}.css`);
+  if (area === "catalog") {
+    const own = `components/${page.route.split("/").filter(Boolean).at(-1)}.css`;
+    if (CATALOG_FILES.has(own)) files.add(own);
+  }
   const catalog = [...files].sort().map((file) => ["catalog", minifiedOf(file)]);
-  return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...catalog, ...(KIND_AREAS.includes(area) ? [[PACKAGE_OF_AREA[area] ?? area, cssOf(PACKAGE_OF_AREA[area] ?? area)]] : [])];
+  return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...catalog];
 }
 
 /* ---- reading a generated document ------------------------------------------- */
@@ -1283,7 +1288,6 @@ describe("exampleDocuments: the rules on a small site", () => {
       areas: [
         { id: "components", label: "Components", slug: "components" },
         { id: "catalog", label: "Catalog", slug: "catalog" },
-        { id: "landing", label: "Landing", slug: "landing" },
         { id: "tokens", label: "Tokens", slug: "tokens" },
       ],
     }),
@@ -1303,8 +1307,8 @@ describe("exampleDocuments: the rules on a small site", () => {
     "pages/components/timeline.html": page("Timeline", "components", [["Timeline markup", "html", '<luz-timeline role="group" aria-label="Releases"><ol class="luz-timeline"></ol></luz-timeline>']]),
     "pages/components/plain.html": FRONT("Plain", "A page with no markup section.", "components") + "<h2 id=\"how\">How</h2><p>PLAIN-TEXT</p>\n",
     "pages/catalog/banner.html": page("Banner", "catalog", [["Banner markup", "html", '<luz-banner tone="warning">Closed on Monday</luz-banner>']]),
-    "pages/landing/index.html": FRONT("Landing", "The landing patterns, for the tests.", "landing", "generate: gallery\nlead: false\n") + "<p>LANDING</p>\n",
-    "pages/landing/header.html": page("Header", "landing", [["Header markup", "html", '<header class="luz-landing-header"><luz-search>…</luz-search></header>']]),
+    // A pattern of a kind of site is a page of the catalog area, its CSS a file of catalog (F5b)
+    "pages/catalog/landing-header.html": page("Landing header", "catalog", [["Header markup", "html", '<header class="luz-landing-header"><luz-search>…</luz-search></header>']]),
     "pages/tokens/color.html": TOKENS_PAGE,
   };
   const build = () => {
@@ -1318,7 +1322,7 @@ describe("exampleDocuments: the rules on a small site", () => {
       build()
         .map((d) => d.route)
         .sort(),
-    ).toEqual(["/examples/catalog/banner.html", "/examples/components/timeline.html", "/examples/components/widget.html", "/examples/landing/header.html"]);
+    ).toEqual(["/examples/catalog/banner.html", "/examples/components/timeline.html", "/examples/components/widget.html", "/examples/catalog/landing-header.html"].sort());
   });
 
   it("writes the kept html blocks as markup, decoded once, and leaves out the js block, the handler, the script and other sections", () => {
@@ -1352,22 +1356,23 @@ describe("exampleDocuments: the rules on a small site", () => {
     expect(hrefs("/examples/components/timeline.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css"]);
     // catalog has no bundle: one link per component, the file of the element or class the markup uses
     expect(hrefs("/examples/catalog/banner.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/banner.min.css"]);
-    expect(hrefs("/examples/landing/header.html")).toEqual([
+    // a pattern of a kind of site is a file of catalog: the file of its class, then the file of the tag it holds (by file name)
+    expect(hrefs("/examples/catalog/landing-header.html")).toEqual([
       "../dist/tokens/tokens.min.css",
       "../dist/core/luz.min.css",
+      "../dist/catalog/components/landing-header.min.css",
       "../dist/catalog/components/search.min.css",
-      "../dist/landing/landing.min.css",
     ]);
     const scripts = (route) => inspect(byRoute(docs, route).html, route).scripts.map((s) => s.src);
     expect(scripts("/examples/components/widget.html")).toEqual(["../dist/core/luz.min.js"]);
-    expect(scripts("/examples/landing/header.html")).toEqual(["../dist/core/luz.min.js", "../dist/catalog/catalog.min.js"]);
+    expect(scripts("/examples/catalog/landing-header.html")).toEqual(["../dist/core/luz.min.js", "../dist/catalog/catalog.min.js"]);
   });
 
-  it("takes the kind's stylesheet from the area even when no tag of catalog is named", () => {
-    const plainLanding = { ...files, "pages/landing/header.html": page("Header", "landing", [["Header markup", "html", '<header class="luz-landing-header">Name</header>']]) };
+  it("links the file of a pattern of a kind of site by its class, even when no tag of catalog is named, and no stylesheet of a package of the kind", () => {
+    const plainLanding = { ...files, "pages/catalog/landing-header.html": page("Landing header", "catalog", [["Header markup", "html", '<header class="luz-landing-header">Name</header>']]) };
     const docs = exampleDocuments(fixtureSite(plainLanding).scan(), { csp: "default-src 'self'", versions: VERSIONS });
-    const links = inspect(byRoute(docs, "/examples/landing/header.html").html, "header").links.map((l) => l.href);
-    expect(links).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/landing/landing.min.css"]);
+    const links = inspect(byRoute(docs, "/examples/catalog/landing-header.html").html, "header").links.map((l) => l.href);
+    expect(links).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/landing-header.min.css"]);
   });
 
   it("follows the page: change a block and the example changes, nothing else holds the old text", () => {
@@ -1388,7 +1393,7 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
   it("names each as { route, from }: a file of the package's dist at /examples/dist/<pkg>/<file>", () => {
     expect(assets().length).toBeGreaterThan(10);
     for (const asset of assets()) {
-      const m = /^\/examples\/dist\/(tokens|core|catalog|landing|cms|app|docs)\/((?:components\/)?[A-Za-z0-9._-]+\.(?:css|js))$/.exec(asset.route);
+      const m = /^\/examples\/dist\/(tokens|core|catalog)\/((?:components\/)?[A-Za-z0-9._-]+\.(?:css|js))$/.exec(asset.route);
       expect(m, asset.route).toBeTruthy();
       expect(asset.from, asset.route).toBe(`packages/${m[1]}/dist/${m[2]}`);
       expect(existsSync(join(root, asset.from)), `${asset.from} exists (run pnpm build)`).toBe(true);
@@ -1435,7 +1440,8 @@ describe("manifestAssets: the manifests of every package, served from /manifests
     const expected = PACKAGES.flatMap((pkg) =>
       ["classes.json", "custom-elements.json"].filter((file) => existsSync(join(root, "packages", pkg, "dist", file))).map((file) => ({ route: `/manifests/${pkg}/${file}`, from: `packages/${pkg}/dist/${file}` })),
     );
-    expect(expected.map((e) => e.route)).toEqual(expect.arrayContaining(["/manifests/core/classes.json", "/manifests/core/custom-elements.json", "/manifests/catalog/custom-elements.json", "/manifests/landing/classes.json"]));
+    expect(expected.map((e) => e.route)).toEqual(expect.arrayContaining(["/manifests/core/classes.json", "/manifests/core/custom-elements.json", "/manifests/catalog/custom-elements.json", "/manifests/catalog/classes.json"]));
+    expect(expected.filter((e) => /\/manifests\/(?:landing|cms|app|docs)\//.test(e.route)), "no manifest of a package that is gone").toEqual([]);
     expect([...manifests()].sort((a, b) => a.route.localeCompare(b.route))).toEqual(expected.sort((a, b) => a.route.localeCompare(b.route)));
     for (const asset of manifests()) expect(existsSync(join(root, asset.from)), asset.from).toBe(true);
   });

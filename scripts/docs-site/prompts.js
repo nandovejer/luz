@@ -20,7 +20,9 @@
  * lines from the dist files the snippets name (snippets.js), the counts from
  * siteNumbers(). Catalog has no bundle: the CDN lines link the catalog files
  * of the elements and classes the body and the kind's preset name (the
- * manifests say which file each needs), and each catalog element in the list
+ * manifests say which file each needs), then every pattern of the kind
+ * (kinds.js: the patterns of a kind of site are catalog's files, after the
+ * rest, in the order of the cascade), and each catalog element in the list
  * says its stylesheet, so a site links only what it uses. A placeholder the body does not resolve, or one left in the
  * text, fails with its file:line. The links are always the published site's:
  * a prompt is pasted somewhere else, so a relative link would lead nowhere.
@@ -31,6 +33,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { expandNumbers, siteNumbers } from "./i18n.js";
+import { KIND_PATTERNS, isKindFile, kindFiles } from "./kinds.js";
 import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 
 /** The published site: every link of a prompt starts here. */
@@ -47,15 +50,17 @@ const BASE = ["tokens", "core", "catalog"];
 
 /**
  * The five prompts. `preset` is the file of presets/ (none for start, the
- * general one); `pkg` the package of the kind's patterns and `docs` the area
- * of their pages (until the patterns move to catalog, F5b).
+ * general one); `pkg` the package of the kind's patterns and `docs` the
+ * folder of their pages, `<docs><kind>-<name>/` (both catalog's since F5b);
+ * `patterns` the kind in kinds.js whose files the prompt links (cms for a
+ * blog: the classes keep their name until F8).
  */
 export const PROMPT_KINDS = [
-  { id: "start", title: "a site", preset: null, pkg: null, docs: null },
-  { id: "landing", title: "a landing page", preset: "landing", pkg: "landing", docs: "docs/landing/" },
-  { id: "blog", title: "a blog", preset: "blog", pkg: "cms", docs: "docs/cms/" },
-  { id: "app", title: "an app", preset: "app", pkg: "app", docs: "docs/app/" },
-  { id: "docs", title: "a documentation site", preset: "docs", pkg: "docs", docs: "docs/documentation/" },
+  { id: "start", title: "a site", preset: null, pkg: null, docs: null, patterns: null },
+  { id: "landing", title: "a landing page", preset: "landing", pkg: "catalog", docs: "docs/catalog/", patterns: "landing" },
+  { id: "blog", title: "a blog", preset: "blog", pkg: "catalog", docs: "docs/catalog/", patterns: "cms" },
+  { id: "app", title: "an app", preset: "app", pkg: "catalog", docs: "docs/catalog/", patterns: "app" },
+  { id: "docs", title: "a documentation site", preset: "docs", pkg: "catalog", docs: "docs/catalog/", patterns: "docs" },
 ];
 
 export const promptRoute = (id) => `/prompts/${id}.txt`;
@@ -65,13 +70,14 @@ const versionOf = (root, pkg) => readJson(root, `packages/${pkg}/package.json`).
 
 /**
  * `luz-alert`: `--error`, `__title`…, one line per block, in the manifest's
- * order; a class an earlier package already listed (`seen`) is left out.
+ * order; a class an earlier package already listed (`seen`) is left out, and
+ * so is one `keep` says no to (the patterns of the other kinds of site).
  */
-function classLines(root, pkg, seen) {
+function classLines(root, pkg, seen, keep = () => true) {
   const { classes } = readJson(root, `packages/${pkg}/dist/classes.json`);
   const blocks = new Map();
   for (const c of classes) {
-    if (seen.has(c.name)) continue;
+    if (seen.has(c.name) || !keep(c)) continue;
     seen.add(c.name);
     const block = c.block ?? c.name;
     if (!blocks.has(block)) blocks.set(block, []);
@@ -113,12 +119,16 @@ export function assemblePrompt(id, { root }) {
   const presetFile = kind.preset && `${SOURCE}/presets/${kind.preset}.md`;
   const { stacks } = readJson(root, `${SOURCE}/stacks.json`);
   const version = versionOf(root, "core");
-  const packages = [...BASE, ...(kind.pkg ? [kind.pkg] : [])];
+  const packages = BASE;
   const at = (pkg) => `@luz-ds/${pkg}@${versionOf(root, pkg)}`;
 
-  // The catalog files of what the body and the preset name, by file (catalog has no bundle)
+  // The catalog files of what the body and the preset name, by file (catalog
+  // has no bundle), then the patterns of the kind, in the order of the cascade:
+  // the pieces they refine are linked before them
   const named = readFileSync(join(root, bodyFile), "utf-8") + (presetFile ? readFileSync(join(root, presetFile), "utf-8") : "");
-  const catalogFiles = catalogFilesIn(named, catalogComponents({ root }));
+  const components = catalogComponents({ root });
+  const own = kind.patterns ? kindFiles(kind.patterns, components) : [];
+  const catalogFiles = [...catalogFilesIn(named, components).filter((file) => !isKindFile(file)), ...own];
   const stylesheets = (pkg) => (pkg === "catalog" ? catalogFiles.map(minified) : [FILES[pkg].css]);
 
   const values = {
@@ -129,7 +139,8 @@ export function assemblePrompt(id, { root }) {
     url: `${PROMPT_SITE}${promptRoute(id).slice(1)}`,
     "stack-list": stacks.map((s, i) => `${i + 1} ${s.name}`).join(", "),
     preset: presetFile ? readFileSync(join(root, presetFile), "utf-8").trim() : "",
-    "kind-css": kind.pkg ? `, then @luz-ds/${kind.pkg}` : "",
+    // The patterns of the kind are catalog's files, linked in its place
+    "kind-css": "",
     "npm-packages": packages.map(at).join(" "),
     "cdn-links": [
       ...packages.flatMap((pkg) => stylesheets(pkg).map((file) => `<link rel="stylesheet" href="${CDN}/${at(pkg)}/dist/${file}">`)),
@@ -140,14 +151,17 @@ export function assemblePrompt(id, { root }) {
     classes: (() => {
       const seen = new Set();
       return packages
-        .map((pkg) => [pkg, classLines(root, pkg, seen)])
+        // Catalog lists its own classes and the patterns of the kind, not those of the other kinds of site
+        .map((pkg) => [pkg, classLines(root, pkg, seen, (c) => !(c.files ?? []).some((f) => isKindFile(f) && !own.includes(f)))])
         .filter(([, lines]) => lines.length)
         .map(([pkg, lines]) => [`From \`@luz-ds/${pkg}\`:`, "", ...lines].join("\n"))
         .join("\n\n");
     })(),
     elements: ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n"),
     "kind-links": kind.docs
-      ? `- ${PROMPT_SITE}${kind.docs}: the patterns of ${kind.title}, each with its markup.`
+      ? KIND_PATTERNS[kind.patterns].pages
+          .map((page) => `- ${PROMPT_SITE}${kind.docs}${kind.patterns}-${page}/: the ${page.replace(/-/g, " ")} pattern of ${kind.title}, with its markup.`)
+          .join("\n")
       : [
           "- The prompts for one kind of site, for the person to paste instead of this one (do not follow them from here):",
           ...PROMPT_KINDS.filter((k) => k.preset).map((k) => `  - ${PROMPT_SITE}${promptRoute(k.id).slice(1)}: ${k.title}.`),

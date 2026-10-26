@@ -395,7 +395,7 @@ const WIDTHS = { phone: "375px", tablet: "768px" };
 
 /**
  * The width selector of an example: Phone and Tablet set the frame's
- * --luz-docs-example-w (@luz-ds/docs caps it at the room it has), Full
+ * --luz-docs-example-w (catalog's docs-example caps it at the room it has), Full
  * removes it. Hidden in the markup, shown here.
  */
 function initExampleWidth() {

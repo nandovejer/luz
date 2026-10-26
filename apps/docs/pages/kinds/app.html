@@ -12,7 +12,7 @@ keywords: web app, admin, back office, saas
       <p>Or build it yourself from the recipes below. They use the classes of core, the catalog and app only; <a href="/docs/get-started/#site-kinds">Install LUZ</a> lists the files to load. The view's <code>&lt;h1&gt;</code> and its main action are in the dashboard, never in the bar: the bar holds what is the same in every view.</p>
       <div class="docs-block">
         <h2 id="shell">Shell with a sidebar</h2>
-        <p>The whole page: the skip link, then core's <a href="/docs/components/sidebar/">sidebar</a> beside <code>.o-main</code>, which holds the header and the view. <code>.o-shell</code> puts the sidebar in a column from 769 px of window, and makes it a drawer that the menu button opens below that, with no script. The <a href="/docs/app/">App</a> patterns go inside it.</p>
+        <p>The whole page: the skip link, then core's <a href="/docs/components/sidebar/">sidebar</a> beside <code>.o-main</code>, which holds the header and the view. <code>.o-shell</code> puts the sidebar in a column from 769 px of window, and makes it a drawer that the menu button opens below that, with no script. The <a href="/docs/kinds/app/">App</a> patterns go inside it.</p>
         <p>The shell is the whole page, so it has no example inside this one: this page is built on it. Make the window narrower than 769 px and the sidebar becomes a drawer behind the menu button.</p>
         <p>Core's script, if you load it, marks the current link of the sidebar and closes the drawer when a link is followed.</p>
         <div class="docs-snippet">
@@ -41,7 +41,7 @@ keywords: web app, admin, back office, saas
       </div>
       <div class="docs-block">
         <h2 id="header">Header</h2>
-        <p>The bar at the top of every view: the menu button, the name of the product and the account. It is the <a href="/docs/app/header/">app header</a>, in <code>.o-main</code> beside the sidebar. The search is the catalog's <code>&lt;luz-search&gt;</code>: leave it out if you do not load the catalog.</p>
+        <p>The bar at the top of every view: the menu button, the name of the product and the account. It is the <a href="/docs/catalog/app-header/">app header</a>, in <code>.o-main</code> beside the sidebar. The search is the catalog's <code>&lt;luz-search&gt;</code>: leave it out if you do not load the catalog.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <header class="luz-app-header">
@@ -92,7 +92,7 @@ keywords: web app, admin, back office, saas
       </div>
       <div class="docs-block">
         <h2 id="dashboard">Dashboard</h2>
-        <p>A view: a title row with the view's <code>&lt;h1&gt;</code> and its actions, then panels in a grid that answers to the room of the view, not the window's. It is the <a href="/docs/app/dashboard/">dashboard</a>, on the <code>&lt;main&gt;</code>. Each panel is a card that starts with its heading; the most important one can take the room of two columns.</p>
+        <p>A view: a title row with the view's <code>&lt;h1&gt;</code> and its actions, then panels in a grid that answers to the room of the view, not the window's. It is the <a href="/docs/catalog/app-dashboard/">dashboard</a>, on the <code>&lt;main&gt;</code>. Each panel is a card that starts with its heading; the most important one can take the room of two columns.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-app-dashboard">
@@ -149,7 +149,7 @@ keywords: web app, admin, back office, saas
       </div>
       <div class="docs-block">
         <h2 id="empty">Empty view</h2>
-        <p>A view with nothing in it yet, on the <a href="/docs/app/dashboard/">dashboard</a>: one wide panel that says what is missing and what to do, with the action. The title row keeps its place, so the view does not jump when the first panel arrives. The action in the panel is the view's one primary action: leave it out of the title row while the panel holds it.</p>
+        <p>A view with nothing in it yet, on the <a href="/docs/catalog/app-dashboard/">dashboard</a>: one wide panel that says what is missing and what to do, with the action. The title row keeps its place, so the view does not jump when the first panel arrives. The action in the panel is the view's one primary action: leave it out of the title row while the panel holds it.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-app-dashboard">

@@ -3,8 +3,10 @@
  * §7 the AGENTS.md rule, §8 the migration notes, §9 step 15). The files are read
  * as text; no browser, no build.
  *
- *   - AGENTS.md and PRINCIPLES.md §6 say the same thing: site is what can go in
- *     any section; page structure is never site; the kinds take site as optional
+ *   - AGENTS.md and PRINCIPLES.md §6 say the same thing: catalog is what can go in
+ *     any section; since F5b (plan ai-and-catalog-only) the patterns of a kind of
+ *     site (page structure included) are catalog's too, one file each, and there is
+ *     no package for a kind of site
  *   - site's README says it too, and says the consent band is fixed at the bottom
  *   - VERSIONING.md does not list a class family that no longer ships
  *   - the changesets of F3 together carry the old -> new table of §8
@@ -47,13 +49,27 @@ describe("the core / site rule (spec §7)", () => {
     expect(layering).not.toMatch(/page structure that holds other pieces/);
   });
 
-  it("AGENTS.md says page structure (header, footer, hero) is never site", () => {
-    expect(layering).toMatch(/page structure[^.]*is never `?catalog`?/i);
+  it("AGENTS.md says there are no packages for one kind of site: landing, cms, app and docs were four, and their patterns are catalog components", () => {
+    expect(layering).toMatch(/There are no packages for one kind of site/);
+    for (const kind of ["landing", "cms", "app", "docs"]) expect(layering, kind).toContain(kind);
+    expect(layering).toMatch(/catalog components now/i);
   });
 
-  it('AGENTS.md\'s "Adding one" says a kind takes site as an optional peer, with `peerDependenciesMeta`', () => {
-    expect(layering).toMatch(/literal peers[^\n]*on tokens and core[^\n]*catalog[^\n]*`peerDependenciesMeta`[^\n]*optional/);
-    expect(layering).not.toMatch(/on tokens, core and catalog, catalog optional/);
+  it("AGENTS.md says the patterns of a kind of site are catalog too, one file each, `components/<kind>-<name>.css` and the class `.luz-<kind>-<name>`, composed from core's objects", () => {
+    expect(layering).toMatch(/patterns of a kind of site are catalog too, one file each/i);
+    expect(layering).toContain("`components/<kind>-<name>.css`");
+    expect(layering).toContain("`.luz-<kind>-<name>`");
+    expect(layering).toMatch(/composed in the markup from core's objects/);
+    expect(layering).toMatch(/page says which kind of site it fits/i);
+  });
+
+  it('AGENTS.md says how to add a pattern: one file of catalog, its page, its line in KIND_PATTERNS of kinds.js; and no recipe of a package for a kind', () => {
+    expect(layering).toMatch(/To add a pattern of a kind of site: one file in `packages\/catalog\/src\/components\/<kind>-<name>\.css`/);
+    expect(layering).toContain("apps/docs/pages/catalog/<kind>-<name>.html");
+    expect(layering).toContain("`KIND_PATTERNS` of `scripts/docs-site/kinds.js`");
+    expect(layering).not.toMatch(/peerDependenciesMeta[^\n]*optional/);
+    expect(layering).not.toMatch(/SITE_KINDS|`<name>:build`|scripts\/build-<name>\.js/);
+    expect(layering).not.toMatch(/luz\.(?:landing|cms|app|docs)\b/);
   });
 
   describe("PRINCIPLES.md §6 \"Core or site\"", () => {
@@ -61,18 +77,21 @@ describe("the core / site rule (spec §7)", () => {
       .split("\n")
       .find((line) => line.startsWith("- **Core or catalog.**"));
 
-    it("says the same: catalog is what can go in any section, and page structure is not catalog's", () => {
+    it("says the same: catalog is what can go in any section, and the patterns of a kind of site are catalog too, one file each", () => {
       expect(bullet, "the bullet exists").toBeTruthy();
       expect(bullet).toMatch(/can go in any section/i);
-      expect(bullet).toMatch(/page structure[^.]*(never|not)[^.]*`?catalog`?/i);
+      expect(bullet).toMatch(/patterns of a kind of site[^.]*are catalog too, one file each/i);
       expect(bullet).not.toMatch(/needs data of the site/i);
+      expect(bullet).not.toMatch(/page structure[^.]*(never|not)[^.]*`?catalog`?/i);
     });
 
-    it("names the four kinds, as optional users of catalog, with no chain that puts a kind after catalog", () => {
-      for (const kind of ["landing", "cms", "app", "docs"]) expect(bullet, kind).toContain(`\`${kind}\``);
-      expect(bullet).toMatch(/optional/i);
+    it("names the four kinds by their pieces (a landing page, a blog, an application, a documentation page), makes no package of them and puts no kind after catalog", () => {
+      for (const word of ["landing page", "blog", "application", "documentation page"]) expect(bullet, word).toContain(word);
+      expect(bullet).not.toMatch(/optional/i);
+      expect(bullet).not.toMatch(/@luz-ds\/(?:landing|cms|app|docs)\b/);
       expect(bullet).not.toMatch(/catalog\s*→\s*(cms|landing|app)/);
       expect(bullet).not.toMatch(/wordpress/i);
+      expect(bullet).toMatch(/template on its docs page/i);
     });
   });
 });
@@ -87,10 +106,10 @@ describe("@luz-ds/catalog's README says what site is now", () => {
     expect(readme).not.toMatch(/needs data of the site/i);
   });
 
-  it("points to the three kinds that hold the page structure, app included", () => {
-    expect(readme).toContain("@luz-ds/landing");
-    expect(readme).toContain("@luz-ds/cms");
-    expect(readme).toContain("@luz-ds/app");
+  it("says where the page structure of the four kinds went: the packages are not published any more, and a pattern is a file of catalog", () => {
+    expect(readme).toMatch(/`@luz-ds\/landing`, `@luz-ds\/cms`, `@luz-ds\/app` and `@luz-ds\/docs` are not published any more/);
+    expect(readme).toMatch(/## Patterns of a kind of site/);
+    for (const name of ["landing-header", "cms-header", "app-header", "docs-shell"]) expect(readme, name).toContain(name);
   });
 
   it("describes the cookie banner as a band fixed at the bottom of the window, not above the header", () => {

@@ -13,8 +13,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { formatRatio as format, over, parseColor as parse, ratio } from "../../packages/tokens/lib/contrast.js";
-import { SITE_KINDS } from "../../scripts/luz-packages.js";
-import { KIND_AREAS, packageOfArea } from "./package-areas.js";
 
 const repo = fileURLToPath(new URL("../../", import.meta.url));
 const read = (path) => readFileSync(`${repo}${path}`, "utf-8");
@@ -80,7 +78,7 @@ export const formatRatio = format;
 
 /* ---- The tokens a component reads ---------------------------------------- */
 
-/** The CSS of a page and, for a pattern of site or of a package for one kind of site, the classes that are its own. */
+/** The CSS of a page and, for a pattern of catalog, the classes that are its own. */
 function sourceOf(page) {
   if (page.meta.area === "components") {
     return { css: page.meta.files.split(";").map((f) => read(`packages/core/src/${f.trim()}`)).join("\n"), classes: null, tags: [] };
@@ -90,10 +88,22 @@ function sourceOf(page) {
   const classes = entries.filter((f) => f.startsWith(".")).map((f) => f.slice(1));
   // A CSS-only tag (<luz-banner>) is styled by :where(luz-banner …) selectors, not by a class
   const tags = entries.map((f) => f.match(/^<(luz-[\w-]+)>$/)?.[1]).filter(Boolean);
-  // A package for one kind of site: every file of its components folder
-  if (KIND_AREAS.includes(page.meta.area)) {
-    const dir = `packages/${packageOfArea(page.meta.area)}/src/components`;
-    return { css: readdirSync(`${repo}${dir}`).filter((f) => f.endsWith(".css")).sort().map((f) => read(`${dir}/${f}`)).join("\n"), classes, tags };
+  // A pattern of a kind of site (a landing page, a blog, an app, a documentation site) is a stylesheet of catalog,
+  // `files: components/<kind>-<name>.css`: the page documents every rule of its files (`whole`). A rule of the page's
+  // block in another file of the kind is the page's too (the stat's value is set in landing-section.css), so the
+  // others of the kind are read, and kept by block (the file's name, and the page's: `.luz-cms-toc` is in cms-article.css).
+  const sheets = entries.filter((f) => /^components\/(landing|cms|app|docs)-[\w-]+\.css$/.test(f));
+  if (sheets.length) {
+    const kind = sheets[0].match(/^components\/(\w+)-/)[1];
+    const dir = "packages/catalog/src/components";
+    const others = readdirSync(`${repo}${dir}`).filter((f) => f.startsWith(`${kind}-`) && f.endsWith(".css") && !sheets.includes(`components/${f}`)).sort();
+    const blocks = new Set([...sheets.map((f) => `luz-${f.slice("components/".length, -".css".length)}`), `luz-${page.route.split("/").filter(Boolean).at(-1)}`]);
+    return {
+      whole: sheets.map((f) => read(`packages/catalog/src/${f}`)).join("\n"),
+      css: others.map((f) => read(`${dir}/${f}`)).join("\n"),
+      classes: [...blocks],
+      tags: [],
+    };
   }
   // The shell patterns, and the patterns with a file of their own (the language switcher, the site header, the submenu, the notice and the cookie banner)
   // (renamed in F3: lang-switcher.css to lang-switch.css, banners.css split into banner.css and consent.css; whichever exist)
@@ -105,7 +115,7 @@ function sourceOf(page) {
 
 /** The --luz-* tokens the component's CSS reads with var(), minus the ones it declares itself. */
 export function tokensUsedBy(page) {
-  const { css, classes, tags = [] } = sourceOf(page);
+  const { css, whole = "", classes, tags = [] } = sourceOf(page);
   const byClass = classes?.length ? `\\.(?:${classes.join("|")})(?:(?:--|__)[\\w-]+)?(?![\\w-])` : null;
   // The tag as a type selector: not after a dot, a dash or a word character (.luz-banner__x, [data-luz-banner])
   const byTag = tags.length ? `(?<![\\w.-])(?:${tags.join("|")})(?![\\w-])` : null;
@@ -115,13 +125,15 @@ export function tokensUsedBy(page) {
   const ownProperty = names.length ? new RegExp(`^--luz-(?:${names.join("|")})-`) : null;
   const used = new Set();
   const local = new Set();
-  for (const { selector, body } of rules(css)) {
-    if (own && !own.test(selector)) continue;
+  const wholeRules = new Set(rules(whole));
+  for (const rule of [...wholeRules, ...rules(css)]) {
+    const { selector, body } = rule;
+    if (!wholeRules.has(rule) && own && !own.test(selector)) continue;
     for (const [, name] of body.matchAll(/(--luz-[\w-]+)\s*:/g)) local.add(name);
     for (const [, name] of body.matchAll(/var\(\s*(--luz-[\w-]+)/g)) used.add(name);
   }
-  // --luz-site-* and --luz-<kind>-* (landing, cms…) are properties a pattern sets for its own parts, not design tokens
-  const patternProperty = new RegExp(`^--luz-(?:${["catalog", ...SITE_KINDS].join("|")})-`);
+  // --luz-site-* and --luz-<kind>-* (landing, cms, app, docs) are properties a pattern sets for its own parts, not design tokens
+  const patternProperty = /^--luz-(?:catalog|landing|cms|app|docs)-/;
   return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !ownProperty?.test(t)).sort();
 }
 

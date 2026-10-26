@@ -1,6 +1,8 @@
 # @luz-ds/catalog
 
-Six self-contained catalog components, each a light-DOM `<luz-*>` tag: search, cookie consent, color mode, language switch, submenu and banner. A piece is here when it can go in any section of a page of any kind of site and acts for the site as a whole; everything else is in `@luz-ds/core`. The page structure (header, hero, page header, footer) is never here: it is in the packages for one kind of site, which work without this one. [`@luz-ds/landing`](../landing) is for a landing page, [`@luz-ds/cms`](../cms) for a blog, a newspaper or any CMS, and [`@luz-ds/app`](../app) for a web application.
+Components that are not core's, each one stylesheet: six light-DOM `<luz-*>` tags (search, cookie consent, color mode, language switch, submenu and banner) and the patterns of a landing page, a blog, an app and a documentation site. A tag is here when it can go in any section of a page of any kind of site and acts for the site as a whole; everything else that knows nothing about the site is in `@luz-ds/core`.
+
+The rest are the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. They are catalog components too, one file each, `<kind>-<name>.css`. The name says what the piece is, and its docs page says which kind of site it fits. See [Patterns of a kind of site](#patterns-of-a-kind-of-site).
 
 > **Beta.** The tokens, components and patterns work and are tested, but names, classes and behavior can still change before the stable release. Pin an exact version and read the changelog before you upgrade.
 
@@ -71,9 +73,11 @@ A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari
 - **`./search`** → `search.js` — defines `<luz-search>`, a custom element (light DOM) that holds the fallback link, the trigger and the search `<dialog>`, and wires them when it connects; importing it in a page defines the element (once, however many copies), importing it in Node does nothing. Import it by hand for a `<luz-search>` added after the page has loaded
 - **`./consent`** → `consent.js` — defines `<luz-consent>`, the cookie banner (light DOM), and exports `getConsent(key?)`. Importing it in Node does nothing but give `getConsent`
 - **`./mode`** → `mode.js` — defines `<luz-mode>`, the color mode switcher with an Auto state (light DOM), and exports `phaseOf(hour)`, the phase of the day at a local hour. Importing it in Node does nothing but give `phaseOf`
-- **`./components/*`** → `dist/components/` — the package's only CSS: one stylesheet per component, `<name>.css` and `<name>.min.css`, its screen rules in `luz.catalog` and what it does on paper in `luz.print`: `banner`, `consent`, `lang-switch`, `mode`, `search` and `submenu`. `classes.json` says the file of each class (`files`) and `custom-elements.json` the file of each tag (`stylesheet`)
+- **`./components/*`** → `dist/components/` — the package's only CSS: one stylesheet per component, `<name>.css` and `<name>.min.css`, its screen rules in `luz.catalog` and what it does on paper in `luz.print`: `banner`, `consent`, `lang-switch`, `mode`, `search`, `submenu` and the patterns of a kind of site (`landing-*`, `cms-*`, `app-*` and `docs-*`). `classes.json` says the file of each class (`files`) and `custom-elements.json` the file of each tag (`stylesheet`)
 
 There is no `./css`, `./css/min` or `./print.css` since 0.3: link the components instead.
+
+The four packages `@luz-ds/landing`, `@luz-ds/cms`, `@luz-ds/app` and `@luz-ds/docs` are not published any more; see [Patterns of a kind of site](#patterns-of-a-kind-of-site).
 
 ## Tags and classes included
 
@@ -132,9 +136,48 @@ document.addEventListener("luz:consent", (e) => (granted(e.detail) ? startMeasur
 
 The element has `mode` (`"auto"`, `"light"`, `"dark"` or `"high-contrast"`), `light` (the phase, or `null` without the clock) and `preview(phase | hour | null)`, which shows another hour of the day with the clock (and returns `false` without it). It dispatches `luz-mode:change`, bubbling, after it starts and on every change, with `{ mode, theme, light, remembered, simulated }`. Full markup, the boot snippet for `<head>` and a theme with a day and a night light on the [Color mode page of the docs](https://nandovejer.github.io/luz/docs/catalog/mode/).
 
+## Patterns of a kind of site
+
+Each pattern is CSS only, in `luz.catalog`, with no script and no tag of its own: the classes go on the markup the docs page shows. A landing page, a blog, an application and a documentation site were four packages; they are files of this one. Link the ones your page uses, after core, in the order of the table, which is the order the stylesheet of the kind had them.
+
+```js
+import '@luz-ds/catalog/components/landing-header.css'
+import '@luz-ds/catalog/components/landing-hero.css'
+```
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-hero.min.css">
+```
+
+| Kind | File in `components/` | Block | Docs page |
+| --- | --- | --- | --- |
+| Landing page | `landing-header.css` | `.luz-landing-header` | [landing-header](https://nandovejer.github.io/luz/docs/catalog/landing-header/) |
+| Landing page | `landing-hero.css` | `.luz-landing-hero` | [landing-hero](https://nandovejer.github.io/luz/docs/catalog/landing-hero/) |
+| Landing page | `landing-main.css` | `.luz-landing-main` | none |
+| Landing page | `landing-section.css` | `.luz-landing-section` | [landing-section](https://nandovejer.github.io/luz/docs/catalog/landing-section/) |
+| Landing page | `landing-stat.css` | `.luz-landing-stat` | [landing-stat](https://nandovejer.github.io/luz/docs/catalog/landing-stat/) |
+| Landing page | `landing-footer.css` | `.luz-landing-footer` | [landing-footer](https://nandovejer.github.io/luz/docs/catalog/landing-footer/) |
+| Landing page | `landing-glow.css` | `.luz-landing-glow` | none |
+| Blog or newspaper | `cms-header.css` | `.luz-cms-header` | [cms-header](https://nandovejer.github.io/luz/docs/catalog/cms-header/) |
+| Blog or newspaper | `cms-page-header.css` | `.luz-cms-page-header` | [cms-page-header](https://nandovejer.github.io/luz/docs/catalog/cms-page-header/) |
+| Blog or newspaper | `cms-article-header.css` | `.luz-cms-article-header` | [cms-article-header](https://nandovejer.github.io/luz/docs/catalog/cms-article-header/) |
+| Blog or newspaper | `cms-article.css` | `.luz-cms-article`, `.luz-cms-toc` | [cms-toc](https://nandovejer.github.io/luz/docs/catalog/cms-toc/) |
+| Blog or newspaper | `cms-footer.css` | `.luz-cms-footer` | [cms-footer](https://nandovejer.github.io/luz/docs/catalog/cms-footer/) |
+| Web application | `app-header.css` | `.luz-app-header` | [app-header](https://nandovejer.github.io/luz/docs/catalog/app-header/) |
+| Web application | `app-dashboard.css` | `.luz-app-dashboard` | [app-dashboard](https://nandovejer.github.io/luz/docs/catalog/app-dashboard/) |
+| Documentation site | `docs-shell.css` | `.luz-docs-shell` | [docs-shell](https://nandovejer.github.io/luz/docs/catalog/docs-shell/) |
+| Documentation site | `docs-page-head.css` | `.luz-docs-page-head` | [docs-page-head](https://nandovejer.github.io/luz/docs/catalog/docs-page-head/) |
+| Documentation site | `docs-rail.css` | `.luz-docs-rail` | [docs-rail](https://nandovejer.github.io/luz/docs/catalog/docs-rail/) |
+| Documentation site | `docs-example.css` | `.luz-docs-example` | [docs-example](https://nandovejer.github.io/luz/docs/catalog/docs-example/) |
+| Documentation site | `docs-dodont.css` | `.luz-docs-dodont` | [docs-dodont](https://nandovejer.github.io/luz/docs/catalog/docs-dodont/) |
+| Documentation site | `docs-pager.css` | `.luz-docs-pager` | [docs-pager](https://nandovejer.github.io/luz/docs/catalog/docs-pager/) |
+| Documentation site | `docs-page-foot.css` | `.luz-docs-page-foot` | [docs-page-foot](https://nandovejer.github.io/luz/docs/catalog/docs-page-foot/) |
+
+Load `landing-hero.css` with `landing-section.css`: the head of a section shares its rules. The classes of the blog are `cms`, whatever CMS you use.
+
 ## What moved out
 
-Before 0.1, this package also held the page structure. The skip link, the image frame (`.luz-image`, a flat surface with no placeholder), the band, the action group (`.o-actions`), the sticky bar (`.o-sticky`), the page column (`.o-page`) and the header's links (`.luz-navbar`) are in `@luz-ds/core`; the header, hero, sections and footer of a landing page in `@luz-ds/landing`; the header, page header and footer of a blog in `@luz-ds/cms`. The image placeholders are no longer published.
+Before 0.1, this package also held the page structure. The skip link, the image frame (`.luz-image`, a flat surface with no placeholder), the band, the action group (`.o-actions`), the sticky bar (`.o-sticky`), the page column (`.o-page`) and the header's links (`.luz-navbar`) are in `@luz-ds/core`. The header, hero, sections and footer of a landing page, the pieces of a blog, an application and a documentation site were in four packages and are now the files above. The image placeholders are no longer published.
 
 <!-- luz:ai-agents:start -->
 ## For AI agents

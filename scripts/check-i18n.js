@@ -56,7 +56,7 @@ function read(source) {
   const meta = {};
   for (const line of match[1].split("\n")) {
     if (!line.trim()) continue;
-    const kv = /^([a-z]+):\s*(.*)$/.exec(line);
+    const kv = /^([a-z]+(?:-[a-z]+)*):\s*(.*)$/.exec(line);
     if (!kv) throw new Error(`front matter lines are "key: value", not "${line.trim()}"`);
     meta[kv[1]] = kv[2].trim();
   }

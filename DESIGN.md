@@ -56,13 +56,13 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 ### DR-4 Text takes a step of the scale
 
-**Rule:** the size of any text is a step of the text scale, never a size derived on the spot. Running text is the base step. The dense parts of an interface (labels, table cells, meta lines) are the small and medium steps, chips and captions the extra small, and a title inside a component the large or the extra large. A text field takes the control step, so a phone does not zoom into it.
+**Rule:** the size of any text is a step of the text scale, never a size derived on the spot. Running text is the base step. The dense parts of an interface (labels, table cells, meta lines) are the small and medium steps, chips and captions the extra small, and a title inside a component the large or the extra large. A text field takes the control step, so a phone does not zoom into it. A component may also say `font-size: inherit`: it keeps the step of its parent, so the scale still holds.
 
 **Why:** one scale is what makes the sizes relate to each other, and a size outside it is the one that looks wrong next to its neighbours.
 
 **Tokens:** `--luz-text-xs`, `--luz-text-sm`, `--luz-text-md`, `--luz-text-base`, `--luz-text-lg`, `--luz-text-xl`, `--luz-text-control`.
 
-**Look at:** is every font size a token? Is a text field at the control step?
+**Look at:** is every font size a token (or `inherit`)? Is a text field at the control step?
 
 **Exceptions:** the caption of a figure is sized from the text it captions, a little under it, and not from the scale (decided 2026-10-24: a step of the scale would change its look by a pixel; `tests/css-tokens-defined.test.js` names it).
 

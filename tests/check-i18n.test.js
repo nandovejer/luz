@@ -96,6 +96,28 @@ describe("a clean tree", () => {
   });
 });
 
+describe("a catalog pattern page: its `fits-kinds` and `fits` (F5b, decision 71)", () => {
+  /** The English probe as a pattern page of catalog: front matter keys with a dash, and a sentence of its own. */
+  const patternPage = () =>
+    `<!-- luz:page\ntitle: ${PROBE.english.title}\ndescription: ${PROBE.english.description}\narea: catalog\ngroup: navigation\norder: 9999\nfits-kinds: landing, app\nfits: the top of a page\ntoc: false\n-->\n${PROBE.english.body}\n`;
+  const translation = (extra) => translationFile({ source: HASH, reviewed: true, reviewer: "nandovejer" }).replace("source:", `${extra}source:`);
+
+  it("reads the English front matter with a key that has a dash, and a translation that has its own `fits`: exit 0 with --strict", () => {
+    copy.write(`apps/docs/pages/${PROBE.file}`, patternPage());
+    copy.write(probePath("es"), translation("fits: la parte superior de una página\n"));
+    const result = run(["--strict"]);
+    expect(result.status, result.output).toBe(0);
+    expect(about(result, PROBE.file), result.output).toEqual([]);
+  });
+
+  it("is not confused by a dash in the front matter of a translation: `fits-kinds` there is not a line it cannot read", () => {
+    copy.write(`apps/docs/pages/${PROBE.file}`, patternPage());
+    copy.write(probePath("es"), translation("fits: la parte superior de una página\nfits-kinds: app\n"));
+    const result = run();
+    expect(result.output).not.toMatch(/front matter lines are "key: value"/);
+  });
+});
+
 describe("a stale source", () => {
   it("is listed with the hash the page has and the hash it should have; exit 0 without --strict", () => {
     copy.write(probePath("es"), translationFile({ source: NOT_THE_HASH, reviewed: true, reviewer: "nandovejer" }));

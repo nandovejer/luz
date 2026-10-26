@@ -1,13 +1,13 @@
 <!-- luz:page
 title: Catálogo
-description: Seis componentes independientes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner; y cómo saber si los necesitas.
-source: a3f9793de72d
+description: Las piezas que no son de core, una hoja de estilos cada una: las etiquetas que necesitan datos del sitio, como la búsqueda y el consentimiento de cookies, y los patrones de una landing page, un blog, una app y un sitio de documentación.
+source: a10cac0f55d8
 reviewed: false
 -->
-    <p class="docs-lead">Seis componentes independientes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner; y cómo saber si los necesitas.</p>
-    <p>Una pieza pertenece aquí cuando necesita datos del sitio: su índice de búsqueda, su política de cookies, sus idiomas, su menú o un aviso. Cada una es una etiqueta <code class="luz-code-inline">&lt;luz-*&gt;</code> independiente, que funciona en cualquier cabecera o página.</p>
+    <p class="docs-lead">Las piezas que no son de core, una hoja de estilos cada una: las etiquetas que necesitan datos del sitio, como la búsqueda y el consentimiento de cookies, y los patrones de una landing page, un blog, una app y un sitio de documentación, agrupados por lo que hacen.</p>
+    <p>Un sitio enlaza solo los archivos que usa, después de los de core. Cada página dice en qué tipo de sitio <strong>encaja mejor</strong> su pieza; <em>cualquier sitio</em> significa que no tiene un tipo propio.</p>
+    <p>Seis piezas necesitan datos del sitio: su índice de búsqueda, su política de cookies, sus idiomas, su menú o un aviso. Cada una es una etiqueta <code class="luz-code-inline">&lt;luz-*&gt;</code> independiente, que funciona en cualquier cabecera o página. Los patrones son clases: la estructura de página de una <a href="/docs/kinds/landing/">landing page</a>, un <a href="/docs/kinds/blog/">blog</a>, una <a href="/docs/kinds/app/">app</a> o un <a href="/docs/kinds/docs/">sitio de documentación</a>, compuesta en el marcado con los objetos de core.</p>
     <p>Todo lo demás es un <strong>componente</strong> de core: una pieza reutilizable que encaja en cualquier sitio; los componentes están en <a href="/docs/components/">Core</a>.</p>
-    <p>La estructura de la página (la cabecera, el hero, el pie y la cabecera de página) está en los paquetes para cada tipo de sitio: <a href="/docs/landing/">landing</a> para una landing page y <a href="/docs/cms/">CMS</a> para un blog, un periódico o cualquier CMS. Funcionan sin este paquete y usan sus componentes cuando necesitan una búsqueda o un selector de idioma.</p>
     <ul>
       <li>Cada etiqueta es el bloque y sus partes siguen el patrón <code class="luz-code-inline">.luz-&lt;tag&gt;__&lt;part&gt;</code>; todas las reglas usan solo tokens semánticos.</li>
       <li>La <a href="/">página de inicio de LUZ</a> y esta documentación están hechas con ellos.</li>

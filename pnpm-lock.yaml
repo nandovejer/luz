@@ -51,24 +51,12 @@ importers:
 
   apps/docs:
     dependencies:
-      '@luz-ds/app':
-        specifier: workspace:*
-        version: link:../../packages/app
       '@luz-ds/catalog':
         specifier: workspace:*
         version: link:../../packages/catalog
-      '@luz-ds/cms':
-        specifier: workspace:*
-        version: link:../../packages/cms
       '@luz-ds/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@luz-ds/docs':
-        specifier: workspace:*
-        version: link:../../packages/docs
-      '@luz-ds/landing':
-        specifier: workspace:*
-        version: link:../../packages/landing
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
@@ -81,9 +69,6 @@ importers:
       '@luz-ds/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@luz-ds/landing':
-        specifier: workspace:*
-        version: link:../../packages/landing
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
@@ -100,18 +85,6 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tokens
 
-  packages/app:
-    devDependencies:
-      '@luz-ds/catalog':
-        specifier: workspace:*
-        version: link:../catalog
-      '@luz-ds/core':
-        specifier: workspace:*
-        version: link:../core
-      '@luz-ds/tokens':
-        specifier: workspace:*
-        version: link:../tokens
-
   packages/catalog:
     devDependencies:
       '@luz-ds/core':
@@ -122,30 +95,6 @@ importers:
         version: link:../tokens
 
   packages/check:
-    devDependencies:
-      '@luz-ds/app':
-        specifier: workspace:*
-        version: link:../app
-      '@luz-ds/catalog':
-        specifier: workspace:*
-        version: link:../catalog
-      '@luz-ds/cms':
-        specifier: workspace:*
-        version: link:../cms
-      '@luz-ds/core':
-        specifier: workspace:*
-        version: link:../core
-      '@luz-ds/docs':
-        specifier: workspace:*
-        version: link:../docs
-      '@luz-ds/landing':
-        specifier: workspace:*
-        version: link:../landing
-      '@luz-ds/tokens':
-        specifier: workspace:*
-        version: link:../tokens
-
-  packages/cms:
     devDependencies:
       '@luz-ds/catalog':
         specifier: workspace:*
@@ -159,30 +108,6 @@ importers:
 
   packages/core:
     devDependencies:
-      '@luz-ds/tokens':
-        specifier: workspace:*
-        version: link:../tokens
-
-  packages/docs:
-    devDependencies:
-      '@luz-ds/catalog':
-        specifier: workspace:*
-        version: link:../catalog
-      '@luz-ds/core':
-        specifier: workspace:*
-        version: link:../core
-      '@luz-ds/tokens':
-        specifier: workspace:*
-        version: link:../tokens
-
-  packages/landing:
-    devDependencies:
-      '@luz-ds/catalog':
-        specifier: workspace:*
-        version: link:../catalog
-      '@luz-ds/core':
-        specifier: workspace:*
-        version: link:../core
       '@luz-ds/tokens':
         specifier: workspace:*
         version: link:../tokens

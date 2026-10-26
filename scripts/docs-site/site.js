@@ -40,7 +40,8 @@ import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync, statSyn
 import { gzipSync } from "node:zlib";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { HtmlError, compactHtml, readHtml, tags } from "./html.js";
-import { BASE, PACKAGES, SITE_KINDS } from "../luz-packages.js";
+import { BASE, PACKAGES } from "../luz-packages.js";
+import { fitsKindsOf, isKindFile } from "./kinds.js";
 import { fillAiMarkers } from "./ai.js";
 import { catalogComponents, catalogFilesIn, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
@@ -77,6 +78,11 @@ const FRONT_MATTER = {
   // A group of the area (site.json): a heading of its gallery, or a labelled
   // sub-list of the sidebar
   group: { default: "" },
+  // Catalog pages only (the pattern pages): the kinds of site the piece fits best, `landing`,
+  // `blog`, `app` and `docs` (or `any`, alone), and one sentence that says why; the generator writes
+  // them as "Fits best: …" under the lead and on the card of the gallery. `fits` is translatable
+  "fits-kinds": { default: "" },
+  fits: { default: "" },
   // Shown next to the h1: the CSS files and the JS module of a component
   files: { default: "" },
   module: { default: "" },
@@ -135,12 +141,21 @@ const TEMPLATE_HEADINGS = new Set([
 ]);
 
 /**
- * The areas that document a package of patterns built on core: one per
- * package, named as the package, except docs, whose area is `documentation`
- * (/docs/docs/ would read as a typo).
+ * The areas whose pages document patterns of catalog: the six that need data
+ * of the site and the patterns of a kind of site (landing, blog, app and docs
+ * since plan ai-and-catalog-only, F5b), in the groups of site.json.
  */
-const AREA_OF_PACKAGE = { docs: "documentation" };
-const PACKAGE_AREAS = new Set(["catalog", ...SITE_KINDS.map((name) => AREA_OF_PACKAGE[name] ?? name)]);
+const PACKAGE_AREAS = new Set(["catalog"]);
+
+/** What the error of a missing `fits-kinds` or `fits` tells the author. */
+const FITS_KEYS_HELP = "fits-kinds: landing, blog, app, docs or any; fits: one sentence";
+
+/**
+ * A pattern page of catalog: a page of the area `catalog` in one of its
+ * groups other than `reference` (the gallery and the class reference have no
+ * group of the kind).
+ */
+const isCatalogPattern = ({ area, group }) => PACKAGE_AREAS.has(area) && group !== "" && group !== "reference";
 
 /**
  * What an A–Z entry is, by the area of its page: the English index's own words.
@@ -153,10 +168,6 @@ const AREA_KIND = {
   components: "Component",
   tokens: "Token page",
   catalog: "Catalog pattern",
-  landing: "Landing pattern",
-  cms: "CMS pattern",
-  app: "App pattern",
-  documentation: "Documentation pattern",
   html: "HTML elements",
   accessibility: "Accessibility",
   hub: "Documentation",
@@ -249,7 +260,7 @@ export function parseFrontMatter(source, file, areas = null) {
   match[1].split("\n").forEach((line, i) => {
     const where = `${file}:${i + 2}`;
     if (!line.trim()) return;
-    const kv = /^([a-z]+):\s*(.*)$/.exec(line);
+    const kv = /^([a-z]+(?:-[a-z]+)*):\s*(.*)$/.exec(line);
     if (!kv) throw new Error(`${where}: front matter lines are "key: value"`);
     const [, key, value] = kv;
     if (!(key in FRONT_MATTER)) throw new Error(`${where}: unknown front matter key "${key}"`);
@@ -270,6 +281,19 @@ export function parseFrontMatter(source, file, areas = null) {
   if (!["h2", "h2,h3", "false"].includes(meta.toc)) throw new Error(`${file}: toc is "h2", "h2,h3" or "false"`);
   if (!["", "gallery", "a-z", "snippets", "ai", "notfound"].includes(meta.generate)) throw new Error(`${file}: generate is "gallery", "a-z", "snippets", "ai" or "notfound"`);
   if (meta.group && !NAME.test(meta.group)) throw new Error(`${file}: group "${meta.group}" is not a valid name`);
+  // "Fits best" (decision 71): both keys on a pattern page of catalog, on no other page
+  const fitsPage = isCatalogPattern(meta);
+  for (const key of ["fits-kinds", "fits"]) {
+    if (fitsPage && !meta[key]) throw new Error(`${file}: a pattern page of catalog needs "${key}" (the kinds of site it fits best: ${FITS_KEYS_HELP})`);
+    if (!fitsPage && meta[key]) throw new Error(`${file}: "${key}" belongs to the pattern pages of catalog, not to this page`);
+  }
+  if (fitsPage) {
+    try {
+      fitsKindsOf(meta["fits-kinds"]);
+    } catch (error) {
+      throw new Error(`${file}: ${error.message}`);
+    }
+  }
   if (areas && meta.area !== HUB_AREA) {
     const area = areas.find((a) => a.id === meta.area);
     if (!area) throw new Error(`${file}: unknown area "${meta.area}" (site.json has ${areas.map((a) => a.id).join(", ")})`);
@@ -624,11 +648,11 @@ export const REPO_URL = "https://github.com/nandovejer/luz";
 
 /**
  * A component or a pattern page: the pages whose head ends with the chips.
- * A component of a gallery group (not a helper), or a pattern of a package's area.
+ * A component of a gallery group (not a helper), or a pattern of catalog (a page of one of its groups but the reference).
  */
 export function isViewPage(page) {
   const { area, group } = page.meta;
-  return (area === "components" && group !== "" && group !== "helpers") || (PACKAGE_AREAS.has(area) && group === "patterns");
+  return (area === "components" && group !== "" && group !== "helpers") || isCatalogPattern(page.meta);
 }
 
 /**
@@ -674,6 +698,29 @@ function chipsOf(site, page) {
 }
 
 /**
+ * "Fits best: landing, blog — the top of the page" (decision 71): the kinds
+ * of site a catalog pattern fits best, then one sentence. The kinds are
+ * written as the reader says them (`kind.<id>` of the strings: blog, not
+ * cms), `any` as "any site". On the page each kind links to its page of
+ * /docs/kinds/<kind>/ in the language of the view; on the card of the
+ * gallery, whose link is the whole card, they are plain words. The kinds come
+ * from the English page in every language; the sentence from the page's own,
+ * which is English on a page that is not translated yet (`lang="en"`).
+ */
+export function renderFits(site, page, { links = true } = {}) {
+  const english = englishOf(page);
+  if (!english.meta["fits-kinds"]) return "";
+  // The card of a page that is not translated is an island of English (its `li` says lang="en")
+  const t = !links && page.fallback ? englishT() : tOf(site);
+  const root = docsRootOf(site);
+  const kinds = fitsKindsOf(english.meta["fits-kinds"]).map((kind) =>
+    kind === "any" ? say(t, "fits.any") : links ? link(`${root}kinds/${kind}/`, t(`kind.${kind}`)) : say(t, `kind.${kind}`),
+  );
+  const sentence = links ? `<span${enAttr(site, page)}>${escapeHtml(page.meta.fits)}</span>` : escapeHtml(page.meta.fits);
+  return `${say(t, "fits.label")} ${kinds.join(", ")} — ${sentence}`;
+}
+
+/**
  * The breadcrumb, then the page head: the eyebrow ("Area · Group", or the
  * area alone; "Area · package" on an area index whose site.json entry has a
  * `package`; none on the hub), the h1, the lead (unless the content brings
@@ -696,6 +743,7 @@ export function renderPageHead(site, page) {
   const second = pkg ?? (group ? escapeHtml(group.label) : null);
   const eyebrow = area ? [`    <p class="luz-docs-page-head__eyebrow">${escapeHtml(area.label)}${second ? ` · ${second}` : ""}</p>`] : [];
   const files = page.meta.files.split(";").map((f) => f.trim()).filter(Boolean);
+  const fits = renderFits(site, page);
   // A component or pattern page ends with the chips; any other page with files says them in a line
   const chips = isViewPage(page)
     ? [`    <ul class="luz-docs-page-head__meta">${chipsOf(site, page).map((c) => `<li>${c}</li>`).join("")}</ul>`]
@@ -703,7 +751,7 @@ export function renderPageHead(site, page) {
       ? [`    <p class="luz-docs-page-head__files">${say(t, "page.files")} ${files.map((f) => `<code class="docs-demo__file">${escapeHtml(f)}</code>`).join(", ")}</p>`]
       : [];
   const crumb = renderBreadcrumb(site, page);
-  return [...(crumb ? [crumb] : []), '  <header class="luz-docs-page-head">', ...eyebrow, h1, ...lead, ...chips, "  </header>"].join("\n");
+  return [...(crumb ? [crumb] : []), '  <header class="luz-docs-page-head">', ...eyebrow, h1, ...lead, ...(fits ? [`    <p class="docs-fits">${fits}</p>`] : []), ...chips, "  </header>"].join("\n");
 }
 
 /**
@@ -869,8 +917,10 @@ export function renderGallery(site, page) {
     .filter((p) => p.meta.area === area.id && p.route !== areaRoute(area, docsRootOf(site)) && p.meta.nav !== "false")
     .sort(byOrder);
   const groups = [...(area.groups ?? []), { id: "", label: "" }];
+  // The "Fits best" line of a catalog pattern, in the chrome's language and without links (the card is one link)
+  const fitsOf = (p) => (p.meta["fits-kinds"] ? `\n        <p class="luz-card__body docs-card__fits">${renderFits(site, p, { links: false })}</p>` : "");
   const card = (p) =>
-    `      <li class="luz-card docs-card"${enAttr(site, p)}>\n        <h3 class="luz-card__title docs-card__title">${link(p.route, p.meta.title)}</h3>\n        <p class="luz-card__body docs-card__desc">${escapeHtml(p.meta.description)}</p>\n      </li>`;
+    `      <li class="luz-card docs-card"${enAttr(site, p)}>\n        <h3 class="luz-card__title docs-card__title">${link(p.route, p.meta.title)}</h3>\n        <p class="luz-card__body docs-card__desc">${escapeHtml(p.meta.description)}</p>${fitsOf(p)}\n      </li>`;
   const row = (p) => `      <li${enAttr(site, p)}>${link(p.route, p.meta.title)} <span class="docs-gallery__desc">${escapeHtml(p.meta.description)}</span></li>`;
   return groups
     .map((group) => {
@@ -1564,27 +1614,38 @@ function gzipBytes(path) {
 /**
  * The min+gzip size of everything a package publishes that budgets.json
  * holds: every `file` budget under packages/<name>/dist/, and every file a
- * `glob` budget under it matches (`dir/*.ext` or `dir/**\/*.ext`: catalog's
- * components, which have no bundle, so a site that links them all pays each).
+ * `glob` budget under it matches (`dir/*.ext`, `dir/**\/*.ext` or
+ * `dir/{a,b}-*.ext`, less the row's `except` glob: catalog's components,
+ * which have no bundle, so a site that links them all pays each). The
+ * patterns of a kind of site (landing, cms, app and docs, files of catalog
+ * since F5b) are not in the figure, as they never were when each kind was a
+ * package of its own: the home speaks of the pieces every site can use.
  * `what` names the figure in the error of a missing file (run `pnpm build`).
  */
 function packageBytes(root, budgets, name, what) {
   const under = `packages/${name}/dist/`;
   const files = [];
+  const matches = (glob) => {
+    const [, dir, deep, prefixes, ext] = /^(.*?)\/(\*\*\/)?(?:\{([a-z,]+)\}-)?\*(\.[a-z.]+)$/.exec(glob) ?? [];
+    if (!dir) throw new Error(`budgets.json: unsupported glob ${glob}`);
+    const starts = prefixes?.split(",").map((p) => `${p}-`);
+    const walk = (d) =>
+      existsSync(resolve(root, d))
+        ? readdirSync(resolve(root, d), { withFileTypes: true }).flatMap((e) =>
+            e.isDirectory() ? (deep ? walk(`${d}/${e.name}`) : []) : e.name.endsWith(ext) && (!starts || starts.some((start) => e.name.startsWith(start))) ? [`${d}/${e.name}`] : [],
+          )
+        : [];
+    return walk(dir);
+  };
   for (const b of budgets) {
     if (b.file?.startsWith(under)) {
       if (!existsSync(resolve(root, b.file))) throw new Error(`${b.file} is missing: run pnpm build before ${what} can be read`);
       files.push(b.file);
     } else if (b.glob?.startsWith(under)) {
-      const [, dir, deep, ext] = /^(.*?)\/(\*\*\/)?\*(\.[a-z.]+)$/.exec(b.glob) ?? [];
-      if (!dir) throw new Error(`budgets.json: unsupported glob ${b.glob}`);
-      const walk = (d) =>
-        existsSync(resolve(root, d))
-          ? readdirSync(resolve(root, d), { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? (deep ? walk(`${d}/${e.name}`) : []) : e.name.endsWith(ext) ? [`${d}/${e.name}`] : []))
-          : [];
-      const matched = walk(dir);
-      if (!matched.length) throw new Error(`${b.glob} matches nothing: run pnpm build before ${what} can be read`);
-      files.push(...matched);
+      const skip = new Set(b.except ? matches(b.except) : []);
+      const found = matches(b.glob).filter((file) => !skip.has(file));
+      if (!found.length) throw new Error(`${b.glob} matches nothing: run pnpm build before ${what} can be read`);
+      files.push(...found.filter((file) => !isKindFile(file.slice(under.length))));
     }
   }
   return files.reduce((sum, file) => sum + gzipBytes(resolve(root, file)), 0);
@@ -1758,6 +1819,8 @@ function levelLists(site, locale, used) {
   const sheets = (dir) =>
     readdirSync(resolve(root, dir))
       .filter((name) => name.endsWith(".css") && name !== "index.css" && !name.startsWith("_"))
+      // The patterns of a kind of site are catalog's files since F5b; the home lists the pieces every site can use
+      .filter((name) => !isKindFile(`components/${name}`))
       .map((name) => name.slice(0, -4));
   const pages = "apps/docs/pages";
   const ids = (path) => new Set([...read(`${pages}/${path}`).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));

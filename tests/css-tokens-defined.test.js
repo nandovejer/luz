@@ -51,6 +51,12 @@ describe("the tokens the packages' CSS reads", () => {
   });
 });
 
+/**
+ * `font-size: inherit` keeps the step of the parent, so the scale still holds (DESIGN.md, DR-4, the rule says it since F5b:
+ * the sizes of the pager and the rail of the documentation patterns, and of the page foot, are their parent's).
+ */
+const KEEPS_THE_PARENTS_STEP = /^\s*font-size:\s*inherit;\s*$/;
+
 /** The sizes that are relative on purpose (DESIGN.md, DR-4, Exceptions), by file: the caption is sized from the text it captions. */
 const RELATIVE_ON_PURPOSE = { "packages/core/src/components/figure.css": /font-size:\s*0\.875em;/ };
 
@@ -62,11 +68,19 @@ describe("the text sizes of the components (DESIGN.md, DR-4)", () => {
         strip(readFileSync(file, "utf-8"))
           .split("\n")
           .forEach((line, i) => {
-            if (/^\s*font-size:/.test(line) && !/var\(--luz-text-[a-z0-9]+\)/.test(line) && !RELATIVE_ON_PURPOSE[file.slice(root.length + 1)]?.test(line)) derived.push(`${file.slice(root.length + 1)}:${i + 1}: ${line.trim()}`);
+            if (/^\s*font-size:/.test(line) && !/var\(--luz-text-[a-z0-9]+\)/.test(line) && !KEEPS_THE_PARENTS_STEP.test(line) && !RELATIVE_ON_PURPOSE[file.slice(root.length + 1)]?.test(line)) derived.push(`${file.slice(root.length + 1)}:${i + 1}: ${line.trim()}`);
           });
       }
     }
 
     expect(derived).toEqual([]);
+  });
+
+  it("DESIGN.md DR-4 says a component may keep the step of its parent with `font-size: inherit`, so this test and the rule agree", () => {
+    const design = readFileSync(join(root, "DESIGN.md"), "utf-8");
+    const dr4 = design.slice(design.indexOf("### DR-4"), design.indexOf("### DR-5"));
+    expect(dr4.length).toBeGreaterThan(0);
+    expect(dr4).toContain("`font-size: inherit`");
+    expect(dr4).toMatch(/keeps the step of its parent/);
   });
 });

@@ -72,8 +72,9 @@ describe("the English catalog of the real docs is the reference", () => {
       "LUZ documentation", "Copied the page as Markdown.", "Could not copy the page.",
       // the A–Z index and what an entry is
       "Parts of the index", "This index has two pages:", "Letters", "Other",
-      "Get started", "Component", "Token page", "Catalog pattern", "Landing pattern", "CMS pattern", "App pattern",
-      "Documentation pattern", "HTML elements", "Accessibility",
+      "Get started", "Component", "Token page", "Catalog pattern", "HTML elements", "Accessibility",
+      // the line "Fits best" of a pattern of catalog (F5b): the four patterns of a kind of site are Catalog patterns now
+      "Fits best:", "any site",
     ];
     expect(real.docsI18n, "scanSite(...).docsI18n").toBeTruthy();
     expect(literals.filter((literal) => !values.has(literal)), "literals of the generator that no English string says").toEqual([]);

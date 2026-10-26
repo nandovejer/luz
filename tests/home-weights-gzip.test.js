@@ -57,10 +57,14 @@ function hasGzip() {
 
 const budgets = JSON.parse(read("budgets.json")).budgets;
 // The budgeted files of a package: the rows with a `file`, and the files a `glob` row of its dist matches
-// (`dir/*.ext`): catalog has no bundle, so its weight is the sum of its components
+// (`dir/*.ext`): catalog has no bundle, so its weight is the sum of its components. The patterns of the
+// kinds of site (`components/{landing,cms,app,docs}-*.min.css`, F5b) are catalog files too, but the home
+// weighs the pieces every site can use: they are left out, as they were when each kind was a package of its own
+const KIND_PATTERN = /\/components\/(?:landing|cms|app|docs)-[^/]+$/;
 const globbed = (glob) => {
+  // A row of the patterns of the kinds (`{landing,cms,app,docs}-*.min.css`) matches nothing the home weighs
   const [, dir, ext] = /^(.*)\/\*(\.[a-z.]+)$/.exec(glob) ?? [];
-  return dir && existsSync(join(repo, dir)) ? readdirSync(join(repo, dir)).filter((f) => f.endsWith(ext)).sort().map((f) => `${dir}/${f}`) : [];
+  return dir && existsSync(join(repo, dir)) ? readdirSync(join(repo, dir)).filter((f) => f.endsWith(ext)).sort().map((f) => `${dir}/${f}`).filter((f) => !KIND_PATTERN.test(f)) : [];
 };
 const files = (name) => [
   ...budgets.filter((b) => b.file?.startsWith(`packages/${name}/dist/`)).map((b) => b.file),
@@ -73,9 +77,10 @@ describe.skipIf(!built || !hasGzip() || !existsSync(join(repo, "docs/index.html"
   const html = read("docs/index.html");
   const list = html.match(/<ul class="landing-bars" aria-label="Packages by size">[\s\S]*?<\/ul>/)?.[0] ?? "";
 
-  it("catalog weighs the sum of its component files, not a bundle", () => {
+  it("catalog weighs the sum of its component files, not a bundle, and not the 21 patterns of the kinds of site", () => {
     const parts = files("catalog").filter((f) => f.startsWith("packages/catalog/dist/components/"));
     expect(parts.length, "the components are budgeted by the glob row").toBeGreaterThanOrEqual(6);
+    expect(parts.filter((f) => KIND_PATTERN.test(f)), "the patterns of the kinds are not in the figure").toEqual([]);
     expect(files("catalog").some((f) => /catalog\.min\.css$/.test(f))).toBe(false);
   });
 

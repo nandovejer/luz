@@ -5,14 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Docs patterns: shell, page head, rail, example, do and don't, pager, page foot</title>
   <!-- tests/docs-patterns.spec.js: tokens + core + docs ONLY. No site stylesheet, no script at all: every
-       pattern of @luz-ds/docs is CSS (f6-docs-spec.md, F6a). The page is the shape of a docs page:
+       pattern of the docs files of @luz-ds/catalog is CSS (f6-docs-spec.md, F6a). The page is the shape of a docs page:
        body.o-shell.luz-docs-shell > header, nav.luz-docs-nav, aside.luz-docs-rail, main.luz-docs-main.
        The rail is before main in the markup and the grid places it: the third column from 80rem, above the
        content below it (the order of the markup is the order of the screen). The page has no script, so
        "On this page" is a details that is open at every width; on the docs site a script folds it below 80rem. -->
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/docs/dist/docs.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-shell.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-rail.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-page-head.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-example.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-dodont.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-pager.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-page-foot.css">
 </head>
 <body class="o-shell luz-docs-shell" id="shell">
   <a class="luz-skip-link" href="#main-content">Skip to content</a>

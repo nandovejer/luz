@@ -1,0 +1,174 @@
+<!-- luz:page
+title: Qué hacer y qué no
+description: Un ejemplo que seguir y otro que evitar, cada uno con su motivo, colocados uno al lado del otro cuando hay espacio.
+fits: una página que enseña mostrando qué hacer y qué evitar
+keywords: qué hacer y qué no, bien y mal, orientación, directriz, comparación
+source: d0f26abdff08
+reviewed: false
+-->
+    <div class="docs-component" id="p-docs-dodont">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un ejemplo de qué hacer y qué no con el título de una página.</p>
+          <div class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage">
+              <div class="luz-docs-dodont">
+                <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                  <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Title a page for what it lets the reader do.</figcaption>
+                  <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                    <h3>Install the command line tool</h3>
+                  </div>
+                </figure>
+                <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                  <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Use a title that fits any page: "Introduction" tells the reader nothing.</figcaption>
+                  <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                    <h3>Introduction</h3>
+                  </div>
+                </figure>
+              </div>
+              <p class="docs-demo__note">A Do and a Don't.</p>
+              <p class="docs-demo__note">The word, the mark before it and the frame (solid or dashed) say which is which, so the colour is never the only cue. The two stack on a narrow screen.</p>
+            </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>En los navegadores sin texto alternativo para el contenido generado (Safari anterior a 17.4, Firefox anterior a 128), un lector de pantalla puede leer la marca de verificación o la cruz antes de «Hazlo» o «No lo hagas». La palabra siguiente siempre se lee.</p>
+          <p>No se ha probado con un lector de pantalla.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de qué hacer y qué no">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Una pareja: primero lo que hay que hacer y después lo que no. Cada ejemplo es una figura cuyo pie explica el motivo:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-dodont" aria-label="Copy the do and don't markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Do and don't markup"><code id="code-docs-dodont">&lt;div class=&quot;luz-docs-dodont&quot;&gt;
+  &lt;figure class=&quot;luz-docs-dodont__item luz-docs-dodont__item--do&quot;&gt;
+    &lt;figcaption&gt;&lt;strong class=&quot;luz-docs-dodont__verdict&quot;&gt;Do&lt;/strong&gt; Title a page for what it lets the reader do.&lt;/figcaption&gt;
+    &lt;div class=&quot;luz-docs-dodont__stage&quot; inert aria-hidden=&quot;true&quot;&gt;
+      &lt;h3&gt;Install the command line tool&lt;/h3&gt;
+    &lt;/div&gt;
+  &lt;/figure&gt;
+  &lt;figure class=&quot;luz-docs-dodont__item luz-docs-dodont__item--dont&quot;&gt;
+    &lt;figcaption&gt;&lt;strong class=&quot;luz-docs-dodont__verdict&quot;&gt;Don't&lt;/strong&gt; Use a title that fits any page: &quot;Introduction&quot; tells the reader nothing.&lt;/figcaption&gt;
+    &lt;div class=&quot;luz-docs-dodont__stage&quot; inert aria-hidden=&quot;true&quot;&gt;
+      &lt;h3&gt;Introduction&lt;/h3&gt;
+    &lt;/div&gt;
+  &lt;/figure&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Un bloque, sus partes y dos modificadores para los dos veredictos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases de qué hacer y qué no" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                <tr><td data-label="Clase"><div><code>.luz-docs-dodont</code></div></td><td data-label="Efecto"><div>En un <code>&lt;div&gt;</code>: la pareja, en columnas de al menos 17.5rem. Una al lado de la otra si hay espacio; apiladas por debajo</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-docs-dodont__item</code></div></td><td data-label="Efecto"><div>En cada <code>&lt;figure&gt;</code>: un recuadro con marco, pie y ejemplo visual</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-docs-dodont__item--do</code></div></td><td data-label="Efecto"><div>Un marco continuo en el color de éxito</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-docs-dodont__item--dont</code></div></td><td data-label="Efecto"><div>Un marco discontinuo en el color de peligro</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-docs-dodont__verdict</code></div></td><td data-label="Efecto"><div>En un <code>&lt;strong&gt;</code> al principio del pie: «Hazlo» o «No lo hagas», del color del marco y con una marca de verificación o una cruz delante</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-docs-dodont__stage</code></div></td><td data-label="Efecto"><div>El ejemplo visual: un recuadro con borde sobre la superficie de la página. Asígnale <code>inert</code> y <code>aria-hidden="true"</code>. Si el error supondría una barrera, usa un <code>pre.luz-code-block</code> en su lugar</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>components/docs-dodont.css</code> de <code>@luz-ds/catalog</code>. Muestra el veredicto de tres maneras; el texto lo escribes tú.</p>
+            <ul>
+              <li>El veredicto se expresa primero con una palabra. La marca de verificación o la cruz, el marco continuo o discontinuo y el color son indicaciones adicionales; ninguna se usa por sí sola.</li>
+              <li>La marca de verificación y la cruz son contenido generado con alternativa vacía, así que el lector de pantalla no las lee.</li>
+              <li>El ejemplo visual es inerte y está oculto para las tecnologías de asistencia: es una imagen y el pie explica qué muestra. Nada de lo que contiene recibe el foco ni se anuncia.</li>
+              <li>Un error que supondría una barrera si se mostrara en vivo, como un contraste bajo o una semántica incorrecta, se presenta como código en un <code>pre.luz-code-block</code>, nunca como ejemplo visual activo.</li>
+              <li>Escribe primero qué hacer y después qué no. Una página puede tener varias parejas, una tras otra.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada. El atributo del ejemplo visual lo hace inerte y la pareja usa CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Orden:</strong> primero lo que hay que hacer y después lo que no. Cada ejemplo es un <code>&lt;figure&gt;</code> con un <code>&lt;figcaption&gt;</code>, que se lee como pie de la imagen.</li>
+              <li><strong>Ejemplo visual:</strong> <code>inert</code> impide que reciba el foco o los clics, y <code>aria-hidden="true"</code> lo oculta del árbol de accesibilidad. No pongas dentro enlaces ni campos que quien lee deba usar.</li>
+              <li><strong>Ejemplo de código:</strong> un <code>pre.luz-code-block</code> conserva <code>tabindex="0"</code> y <code>aria-label</code> cuando se desplaza.</li>
+            </ul>
+            <p class="docs-view__xref">La pestaña Diseño contiene <a href="#contrast">el contraste y el foco</a>.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa ejemplos de qué hacer y qué no para enseñar una regla mediante el contraste: quien lee ve la forma correcta junto a la incorrecta.</p>
+            <ul>
+              <li>Una lección más fácil de mostrar que de explicar, como un título, una etiqueta o un espaciado.</li>
+              <li>Una pareja por lección, y el ejemplo de lo que no hay que hacer refleja un error real.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses para una regla sin nada con lo que compararla ni para mostrar un elemento que funciona.</p>
+            <ul>
+              <li>Para mostrar el aspecto y la estructura de un elemento, usa <a href="/docs/catalog/docs-example/">el ejemplo</a>.</li>
+              <li>No inventes un error que nadie comete para rellenar el ejemplo de lo que no hay que hacer.</li>
+              <li>No muestres un fallo activo. Los fallos de contraste o semántica se presentan como código.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Muestra en el ejemplo visual una sola cosa, la que describe el pie.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <h3>Install the command line tool</h3>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Mostrar varias cosas en el ejemplo visual: no se sabrá cuál describe el pie.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <h3>Introduction</h3>
+                  <p>Welcome to the documentation.</p>
+                  <ul>
+                    <li>Install the tool</li>
+                    <li>Configure the cache</li>
+                  </ul>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <ul>
+              <li>El veredicto es «Hazlo» o «No lo hagas», seguido de un espacio.</li>
+              <li>El motivo se explica en una frase, como máximo dos. El ejemplo de lo que hay que hacer empieza con un verbo; el de lo que no, explica qué problema causa.</li>
+              <li>Los dos ejemplos visuales muestran lo mismo con un solo cambio. Si difieren en tres aspectos, no se sabrá cuál es importante.</li>
+              <li>El ejemplo usa palabras reales: el nombre de una tarea, no «Lorem ipsum».</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El pie se apoya en la superficie del marco y el ejemplo visual, en la de la página. El veredicto y el marco comparten color.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de qué hacer y qué no en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Hazlo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-success</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.5:1</div></td><td data-label="Oscuro"><div>11.6:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>No lo hagas</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.5:1</div></td><td data-label="Oscuro"><div>10.8:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Pie</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto del ejemplo visual</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Marco de «Hazlo»</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-success</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.5:1</div></td><td data-label="Oscuro"><div>11.6:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Marco de «No lo hagas»</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.5:1</div></td><td data-label="Oscuro"><div>10.8:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido corresponde a WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> nada de un ejemplo visual activo recibe el foco. El ejemplo de código conserva el anillo de core, de 2 px y color <code>--luz-focus-ring</code>.</li>
+              <li><strong>No solo con el color:</strong> la palabra, el símbolo que la precede y el marco continuo o discontinuo indican cuál es cuál (WCAG 1.4.1).</li>
+              <li><strong>Bordes:</strong> el borde del ejemplo visual (<code>--luz-divider</code>) es decorativo y no tiene un mínimo.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 11 tokens que usan las reglas de <code>.luz-docs-dodont</code> de <code>components/docs-dodont.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-color-success"><code>--luz-color-success</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">La pestaña Código contiene <a href="#keyboard">el teclado y ARIA</a>.</p>
+          </div>
+    </div>

@@ -6,7 +6,7 @@
  * lists of who it fits), "Semantic HTML, styled" (native), "Three color modes",
  * and the footer (a brand and two columns).
  *
- * It is a level-3 consumer on top of @luz-ds/landing, with the base color
+ * It is a level-3 consumer on top of catalog's landing files, with the base color
  * modes and the six lights of the hour. What other files own is not repeated
  * here: the fit lists, the boxes of the modes and the panel of native HTML are
  * in tests/landing-home.spec.js; their sources in tests/landing-home.test.js;
@@ -222,7 +222,7 @@ test.describe('Landing page', () => {
         // textContent: the eyebrows are set in capitals by CSS, which innerText would return
         const text = async (selector) => plain((await page.locator(selector).first().textContent()) ?? '');
 
-        // Why LUZ is headed by @luz-ds/landing's section head
+        // Why LUZ is headed by the section head of catalog's landing-section.css
         await expect(page.locator('section#why')).toHaveClass(/\bluz-landing-section\b/);
         expect(await text('#why .luz-landing-section__eyebrow')).toBe(plain(words['why.eyebrow']));
         expect(await text('#why h2.luz-landing-section__title')).toBe(plain(words['why.title']));

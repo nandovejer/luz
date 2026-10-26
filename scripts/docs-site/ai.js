@@ -51,7 +51,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BASE, PACKAGES, SITE_KINDS } from "../luz-packages.js";
+import { BASE, PACKAGES } from "../luz-packages.js";
 import { HtmlError, VOID, decodeEntities, tags } from "./html.js";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { ruleRows } from "./ai-rules.js";
@@ -74,14 +74,13 @@ const SUMMARY_FALLBACK = "LUZ is a vanilla CSS and JavaScript design system for 
 /** The version of the tool an agent is told to run: pinned, so a release nobody read does not run by itself (security audit 2026-10-24). */
 const CHECK = JSON.parse(readFileSync(fileURLToPath(new URL("../../packages/check/package.json", import.meta.url)), "utf-8")).version;
 const SUMMARY_TAIL = "MIT licence. In beta: any release may break anything, and the changelog says how to migrate.";
-const list = (names) => `${names.slice(0, -1).join(", ")} or ${names.at(-1)}`;
 const DETAILS =
-  `Packages, in load order: ${BASE.map((n) => `@luz-ds/${n}`).join(", ")}, then one for your kind of site ` +
-  `(${list(SITE_KINDS.map((n) => `@luz-ds/${n}`))}). Use only the classes listed in each package's classes.json. ` +
+  `Packages, in load order: ${BASE.map((n) => `@luz-ds/${n}`).join(", ")}; of catalog a page links only the components it uses, ` +
+  "the patterns of your kind of site (landing, blog, app, documentation) among them. Use only the classes listed in each package's classes.json. " +
   "After you write HTML or CSS, run `npx @luz-ds/check@" + CHECK + "` on the files and fix what it reports; it reads source, so it does not replace testing in a browser.";
 
 /** The package a page of these areas documents; the other areas name none. */
-const PACKAGE_OF_AREA = { components: "core", catalog: "catalog", landing: "landing", cms: "cms", app: "app", documentation: "docs" };
+const PACKAGE_OF_AREA = { components: "core", catalog: "catalog" };
 
 /** The pages the A-Z index lists (indexData() keeps exactly these). */
 const listed = (page) => page.meta.search !== "false";
@@ -777,9 +776,6 @@ function markupBlocks(page) {
   return { kept, skipped };
 }
 
-/** The areas of the packages for one kind of site: the package's name, but `documentation` for docs (/docs/docs/ would read as a typo). */
-const KIND_AREAS = new Set(Object.keys(PACKAGE_OF_AREA).filter((area) => SITE_KINDS.includes(PACKAGE_OF_AREA[area])));
-
 const escText = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const escAttr = (text) => escText(text).replace(/"/g, "&quot;");
 /** Text for a comment: `--` would end it. */
@@ -843,7 +839,7 @@ function exampleDocument(page, { csp, versions, packages, catalog = [] }) {
  * The packages an example links, in load order: tokens, core, catalog when a
  * kept block, or the `files` of a page of the catalog area, names an element
  * or a class of catalog (one link per component it names: catalog has no
- * bundle), then the kind's when the area is one.
+ * bundle).
  */
 export function exampleDocuments(site, { csp, versions, root = REPO_ROOT }) {
   if (typeof csp !== "string" || !csp) throw new Error("exampleDocuments needs the csp of the pages build");
@@ -854,10 +850,10 @@ export function exampleDocuments(site, { csp, versions, root = REPO_ROOT }) {
     if (!hasMarkup(page)) continue;
     const area = page.route.split("/")[2];
     const { kept } = markupBlocks(page);
-    // A page of the catalog area links its own component too (its `files`), even when no block is kept
-    const named = `${kept.map((b) => b.code).join("\n")}\n${area === "catalog" ? (page.meta.files ?? "") : ""}`;
+    // A page whose area is catalog's (the patterns of a kind of site are too, until their pages move) links its own component too (its `files`), even when no block is kept
+    const named = `${kept.map((b) => b.code).join("\n")}\n${PACKAGE_OF_AREA[area] === "catalog" ? (page.meta.files ?? "") : ""}`;
     const catalog = catalogFilesIn(named, components);
-    const packages = ["tokens", "core", ...(catalog.length ? ["catalog"] : []), ...(KIND_AREAS.has(area) ? [PACKAGE_OF_AREA[area]] : [])];
+    const packages = ["tokens", "core", ...(catalog.length ? ["catalog"] : [])];
     documents.push(exampleDocument(page, { csp, versions, packages, catalog }));
   }
   return documents;

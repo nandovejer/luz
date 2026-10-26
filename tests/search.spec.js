@@ -12,7 +12,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { routeOf, site } from './helpers/docs-site.js';
 import { faded } from './helpers/settle.js';
-import { KIND_AREAS, PATTERN_AREAS } from './helpers/package-areas.js';
+import { PATTERN_AREAS } from './helpers/package-areas.js';
 
 const BUTTON = routeOf('c-button');
 const THEMES = ['light', 'dark', 'high-contrast'];
@@ -197,10 +197,9 @@ test.describe('search: results', () => {
     await page.keyboard.press('Control+k');
     for (const p of titles) {
       await field(page).fill(p.meta.title);
-      // Every title is one page's own (tests/docs-site.test.js): the first result is that page. The one
-      // name two pages share by design is a landing's and a cms' Header or Footer: either page will do
-      const routes = site.pages.filter((q) => q.meta.search !== 'false' && q.meta.title === p.meta.title && (q === p || (KIND_AREAS.includes(q.meta.area) && KIND_AREAS.includes(p.meta.area)))).map((q) => q.route);
-      await expect(results(page).first(), p.meta.title).toHaveAttribute('href', new RegExp(`(${routes.join('|')})$`));
+      // Every title is one page's own (tests/docs-site.test.js): the first result is that page
+      // (since F5b the landing's and the blog's Header and Footer have names of their own)
+      await expect(results(page).first(), p.meta.title).toHaveAttribute('href', new RegExp(`${p.route}$`));
     }
   });
 });

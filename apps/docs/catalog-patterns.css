@@ -1,0 +1,31 @@
+/* ==========================================================================
+   The patterns of every kind of site, for the docs app.
+   Catalog has no bundle: each pattern (landing, cms, app and docs) is a
+   stylesheet of its own, and a site links the ones it uses. The docs show
+   every pattern live, so the app links them all, here, in the order each
+   kind's stylesheet had them (the one thing that is not a file of catalog,
+   so Vite joins them into one request in the build). Nothing else: no rule,
+   no skin (apps add layout, not component skins).
+   ========================================================================== */
+
+@import url("/packages/catalog/dist/components/landing-header.css");
+@import url("/packages/catalog/dist/components/landing-hero.css");
+@import url("/packages/catalog/dist/components/landing-main.css");
+@import url("/packages/catalog/dist/components/landing-section.css");
+@import url("/packages/catalog/dist/components/landing-stat.css");
+@import url("/packages/catalog/dist/components/landing-footer.css");
+@import url("/packages/catalog/dist/components/landing-glow.css");
+@import url("/packages/catalog/dist/components/cms-header.css");
+@import url("/packages/catalog/dist/components/cms-page-header.css");
+@import url("/packages/catalog/dist/components/cms-article-header.css");
+@import url("/packages/catalog/dist/components/cms-article.css");
+@import url("/packages/catalog/dist/components/cms-footer.css");
+@import url("/packages/catalog/dist/components/app-header.css");
+@import url("/packages/catalog/dist/components/app-dashboard.css");
+@import url("/packages/catalog/dist/components/docs-shell.css");
+@import url("/packages/catalog/dist/components/docs-page-head.css");
+@import url("/packages/catalog/dist/components/docs-rail.css");
+@import url("/packages/catalog/dist/components/docs-example.css");
+@import url("/packages/catalog/dist/components/docs-dodont.css");
+@import url("/packages/catalog/dist/components/docs-pager.css");
+@import url("/packages/catalog/dist/components/docs-page-foot.css");

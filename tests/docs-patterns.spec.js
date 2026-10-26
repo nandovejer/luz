@@ -1,8 +1,9 @@
 // @ts-check
 /**
- * @luz-ds/docs (F6a of .claude/plans/luz-home-docs-identity.md, section 3.2; the brief is
+ * The docs patterns (F6a of .claude/plans/luz-home-docs-identity.md, section 3.2; the brief is
  * f6-docs-spec.md): the seven patterns of a documentation page, CSS only, from tokens, core and
- * docs, with no script.
+ * seven files of @luz-ds/catalog (`components/docs-*.css`, layer luz.catalog; the package @luz-ds/docs is gone
+ * since F5b), with no script.
  *
  *   shell      body.o-shell.luz-docs-shell > header, nav.luz-sidebar.luz-docs-nav, main.o-main.luz-docs-main,
  *              aside.luz-docs-rail: sidebar 16.5rem | content | rail 14rem from 80rem, two columns from
@@ -14,8 +15,8 @@
  *   pager      ul.luz-docs-pager > li.__prev / li.__next > a.__link > span.__label + span.__title
  *   page-foot  p.luz-docs-page-foot (Last updated, Edit, Report)
  *
- * Page: tests/fixtures/docs-patterns.html (tokens, core and docs only). The stylesheet is
- * packages/docs/dist/docs.css, built by `pnpm docs:build`.
+ * Page: tests/fixtures/docs-patterns.html (tokens, core and the docs files of catalog only), built by
+ * `pnpm catalog:build`.
  * Runs in `chromium` and, once playwright.config.js lists it in the `chromium-nojs` testMatch, in
  * `chromium-nojs`: nothing here needs a script.
  */
@@ -26,7 +27,9 @@ import { focusAndHitTest, ringBeyondInlineStart } from './helpers/obscured.js';
 import { readingOrder } from './helpers/reading-order.js';
 
 const PAGE = '/tests/fixtures/docs-patterns.html';
-const STYLESHEET = '/packages/docs/dist/docs.css';
+/** The docs patterns are seven files of catalog since F5b (no package, no bundle): the page links each one. */
+const FILES = ['docs-shell', 'docs-rail', 'docs-page-head', 'docs-example', 'docs-dodont', 'docs-pager', 'docs-page-foot'];
+const DIR = '/packages/catalog/dist/components';
 
 /** Measured against a root font size of 16px: 1rem. */
 const REM = 16;
@@ -72,31 +75,32 @@ async function axeIn(page, mode) {
   return violations.filter((v) => ['serious', 'critical'].includes(v.impact)).map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
 }
 
-/* ---- The stylesheet is built and has no script behind it ------------------------------------- */
+/* ---- The stylesheets are built and have no script behind them ------------------------------- */
 
-test.describe('the package', () => {
-  test('docs.css is served: the layer order statement first, its rules in luz.docs', async ({ request }) => {
-    // `?direct`: Vite serves a bare .css request as a JS module, the way it does for an import
-    const response = await request.get(`${STYLESHEET}?direct`);
-    expect(response.status(), `${STYLESHEET} (pnpm docs:build)`).toBe(200);
-    const css = await response.text();
-    expect(css.startsWith('@layer luz.tokens,')).toBe(true);
-    expect(css).toMatch(/^@layer luz\.docs \{$/m);
-  });
+test.describe('the files', () => {
+  for (const name of FILES) {
+    test(`${name}.css is served: the layer order statement first, its rules in luz.catalog`, async ({ request }) => {
+      // `?direct`: Vite serves a bare .css request as a JS module, the way it does for an import
+      const response = await request.get(`${DIR}/${name}.css?direct`);
+      expect(response.status(), `${DIR}/${name}.css (pnpm catalog:build)`).toBe(200);
+      const css = await response.text();
+      expect(css.startsWith('@layer luz.tokens,')).toBe(true);
+      expect(css).toMatch(/^@layer luz\.catalog \{$/m);
+    });
+  }
 
-  test('the page loads tokens, core and docs, and no script', async ({ page }) => {
+  test('the page loads tokens, core and the seven docs files of catalog, in this order, and no script', async ({ page }) => {
     await page.goto(PAGE);
     expect(await page.evaluate(() => [...document.styleSheets].map((s) => new URL(s.href).pathname))).toEqual([
       '/packages/tokens/dist/luz-tokens.css',
       '/packages/core/dist/luz.css',
-      STYLESHEET,
+      ...FILES.map((name) => `${DIR}/${name}.css`),
     ]);
-    // ... and the last one really is the package's: it holds the luz.docs layer
+    // ... and each of them really is the package's: it holds the luz.catalog layer, and none holds the layer of a package that is gone
     expect(
-      await page.evaluate(() => [...document.styleSheets].at(-1).cssRules.length > 0 && [...document.styleSheets].at(-1).cssRules.length),
-      'docs.css has rules',
-    ).toBeTruthy();
-    expect(await page.evaluate(() => [...[...document.styleSheets].at(-1).cssRules].some((rule) => rule instanceof CSSLayerBlockRule && rule.name === 'luz.docs'))).toBe(true);
+      await page.evaluate(() => [...document.styleSheets].slice(2).map((sheet) => [...sheet.cssRules].some((rule) => rule instanceof CSSLayerBlockRule && rule.name === 'luz.catalog'))),
+    ).toEqual(FILES.map(() => true));
+    expect(await page.evaluate(() => [...document.styleSheets].some((sheet) => [...sheet.cssRules].some((rule) => rule instanceof CSSLayerBlockRule && rule.name === 'luz.docs')))).toBe(false);
     // Vite's dev server adds its own client to every page it serves: the fixture itself has none
     expect(await page.locator('script:not([src^="/@vite"])').count()).toBe(0);
   });

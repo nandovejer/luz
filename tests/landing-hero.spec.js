@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * `.luz-landing-hero` (@luz-ds/landing; .claude/plans/specs/f3-package-model.md,
+ * `.luz-landing-hero` (`components/landing-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
  * §1.5 and §9 step 10): the first block of a home or landing page, no longer a
  * block of site (the port of tests/site-hero.spec.js, which stays until site's
  * old CSS goes at step 12). It is a native <section> on core's `.o-grid.o-grid--split`:
@@ -27,7 +27,9 @@ const page = (dir = 'ltr', lang = 'en') => `<!doctype html>
 <title>Hero</title>
 <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
 <link rel="stylesheet" href="/packages/core/dist/luz.css">
-<link rel="stylesheet" href="/packages/landing/dist/landing.css">
+<link rel="stylesheet" href="/packages/catalog/dist/components/landing-main.css">
+<link rel="stylesheet" href="/packages/catalog/dist/components/landing-hero.css">
+<link rel="stylesheet" href="/packages/catalog/dist/components/landing-section.css">
 </head>
 <body class="o-page">
 <main id="main-content" class="o-container o-stack luz-landing-main">
@@ -257,8 +259,8 @@ test.describe('home page hero', () => {
   });
 });
 
-// F4 of the identity plan (@luz-ds/landing 0.2): the centred hero and the picture that bleeds.
-// The page is tests/fixtures/landing-f4.html: tokens, core and landing only.
+// F4 of the identity plan (`landing-hero.css` of catalog): the centred hero and the picture that bleeds.
+// The page is tests/fixtures/landing-f4.html: tokens, core and the landing files of catalog only.
 const F4 = '/tests/fixtures/landing-f4.html';
 
 /** Open the F4 fixture at `width`, in `dir` (`rtl` also sets lang="ar"). */

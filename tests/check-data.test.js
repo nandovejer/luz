@@ -19,15 +19,15 @@
  *    (that family is accepted by prefix), never from a .min file; sorted, once.
  *
  * 2. The snapshot: scripts/build-check.js writes, beside luz-check.js, the
- *    facts of the seven packages of this release, for a project that has no
+ *    facts of the three packages of this release, for a project that has no
  *    node_modules/@luz-ds (it uses a CDN). It is DATA, read at run time, never
  *    inlined in the bundle, so the bundle stays under the `check CLI` row of
  *    budgets.json (40,960 B gzip) however many classes LUZ has:
  *
  *      dist/data/index.json
  *          { "schema": 1, "packages": [{ "package": "@luz-ds/tokens", "version": "0.0.0" }, ...] }
- *          the seven, in dependency order, the version of each package.json
- *      dist/data/<pkg>/classes.json          for each of tokens, core, catalog, landing, cms, app, docs
+ *          the three, in dependency order, the version of each package.json
+ *      dist/data/<pkg>/classes.json          for each of tokens, core, catalog
  *          { schema, package, version, classes, properties, hooks? }
  *          the package's dist/classes.json with only what a rule reads:
  *          classes [{ name, kind, defined, block?, modifier?, part?, hosts? }],
@@ -57,10 +57,16 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { buildClassManifest, formatClassManifest, writeManifests } from "../scripts/ai-manifests.js";
 import { LAYERS } from "../scripts/luz-layers.js";
 import { buildCheckTo, builtOnce, removeBuilds, root } from "./helpers/check-build.js";
+import { builtData, checkJson, removeWorkspaces, workspace } from "./helpers/check-fixtures.js";
 
 afterAll(removeBuilds);
+afterAll(removeWorkspaces);
 
-const LIBRARIES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
+/** The file a class is in when the snapshot leaves `files` out: the one its block names (F5b: the shape that keeps the data under its cap). */
+const ownFile = (entry) => `components/${(entry.block ?? entry.name).replace(/^luz-/, "")}.css`;
+
+// landing, cms, app and docs are files of catalog since F5b (their classes are in catalog's classes.json)
+const LIBRARIES = ["tokens", "core", "catalog"];
 const readJson = (path) => JSON.parse(readFileSync(path, "utf-8"));
 
 /* ---- hooks in classes.json ------------------------------------------------------------------- */
@@ -132,7 +138,7 @@ describe("classes.json: the hooks a package reads", () => {
     expect(Object.keys(manifest)).toEqual(["schema", "package", "version", "classes", "properties"]);
   });
 
-  it("is in the seven real manifests: core reads classless, sort, spy and themes; tokens reads none", () => {
+  it("is in the three real manifests: core reads classless, sort, spy and themes; tokens reads none", () => {
     const core = buildClassManifest("core");
     expect(core.hooks, "hooks in the manifest of core").toBeDefined();
     for (const name of ["data-luz-classless", "data-luz-sort", "data-luz-spy", "data-luz-themes"]) expect(core.hooks, name).toContain(name);
@@ -183,24 +189,20 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(existsSync(join(dataDir(), "index.json")), "data/index.json").toBe(true);
   });
 
-  it("holds exactly index.json, the seven classes.json, the custom-elements.json of core and catalog, and LUZ's tokens for the theme rules", () => {
+  it("holds exactly index.json, the three classes.json, the custom-elements.json of core and catalog, and LUZ's tokens for the theme rules", () => {
     expect(built.error).toBeNull();
     expect(filesUnder(dataDir())).toEqual([
-      "app/classes.json",
       "catalog/classes.json",
       "catalog/custom-elements.json",
-      "cms/classes.json",
       "core/classes.json",
       "core/custom-elements.json",
-      "docs/classes.json",
       "index.json",
-      "landing/classes.json",
       "tokens/classes.json",
       "tokens/tokens.css",
     ]);
   });
 
-  it("says which release it is: the seven packages in dependency order, with their versions", () => {
+  it("says which release it is: the three packages in dependency order, with their versions", () => {
     expect(built.error).toBeNull();
     const index = snapshot("index.json");
     expect(Object.keys(index)).toEqual(["schema", "packages"]);
@@ -221,12 +223,42 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
       const from = source.classes[i];
       expect(Object.keys(entry).every((k) => ["name", "kind", "defined", "block", "modifier", "part", "hosts", "files"].includes(k)), entry.name).toBe(true);
       for (const field of ["kind", "defined", "block", "modifier", "part", "hosts"]) expect(entry[field], `${entry.name}.${field}`).toEqual(from[field]);
-      // F5a: only catalog has no bundle, so only its classes say the component file that defines them
-      if (name === "catalog" && from.defined) expect(entry.files, `${entry.name}.files`).toEqual(from.files);
-      else expect(entry, `${entry.name} (${name} keeps its bundle)`).not.toHaveProperty("files");
+      // F5a: only catalog has no bundle, so only its classes say the component file that defines them.
+      // F5b: the snapshot writes `files` only where it is not the file the class's block names (components/<block>.css),
+      // or where it is more than one, or none; an absent `files` on a defined class of catalog means that default
+      if (name === "catalog" && from.defined) {
+        const isDefault = from.files.length === 1 && from.files[0] === ownFile(from);
+        if (isDefault) expect(entry, `${entry.name} is in its own file: no files`).not.toHaveProperty("files");
+        else expect(entry.files, `${entry.name}.files`).toEqual(from.files);
+        expect(entry.files ?? [ownFile(from)], `${entry.name}: the file a reader derives`).toEqual(from.files);
+      } else expect(entry, `${entry.name} (${name} keeps its bundle)`).not.toHaveProperty("files");
     });
     expect(copy.properties).toEqual(source.properties.map(({ name: property, scope }) => ({ name: property, scope })));
     expect(copy.hooks).toEqual(source.hooks);
+  });
+
+  it("keeps the file of every catalog class where the data is read: the default is the file of the block, the rest is written (cms-toc is in cms-article.css)", async () => {
+    expect(built.error).toBeNull();
+    const source = manifestOf("catalog").classes;
+    // One class in its own file, and one that is not: the snapshot says so in its own way
+    const own = source.find((c) => c.name === "luz-landing-hero");
+    const other = source.find((c) => c.name === "luz-cms-toc");
+    expect(own.files, "the default case").toEqual([ownFile(own)]);
+    expect(other.files, "the case that is not the default").toEqual(["components/cms-article.css"]);
+    expect(ownFile(other), "cms-toc has no file named for its block").toBe("components/cms-toc.css");
+    const copy = snapshot("catalog", "classes.json").classes;
+    expect(copy.find((c) => c.name === own.name)).not.toHaveProperty("files");
+    expect(copy.find((c) => c.name === other.name).files).toEqual(["components/cms-article.css"]);
+    // What luz-check reads from it, the load rule and its message: the right file for each, from the snapshot alone
+    const data = (await builtData()).data;
+    for (const [name, file] of [["luz-landing-hero", "components/landing-hero.css"], ["luz-cms-toc", "components/cms-article.css"], ["luz-docs-rail", "components/docs-rail.css"]]) {
+      const dir = workspace({
+        "index.html": `<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="utf-8">\n  <title>P</title>\n  <link rel="stylesheet" href="node_modules/@luz-ds/tokens/dist/luz-tokens.min.css">\n  <link rel="stylesheet" href="node_modules/@luz-ds/core/dist/luz.min.css">\n</head>\n<body>\n  <p class="${name}">x</p>\n</body>\n</html>\n`,
+      });
+      const result = checkJson(["."], dir, { data });
+      const found = result.data.findings.filter((f) => f.rule === "load/package-missing");
+      expect(found.map((f) => f.message), name).toEqual([`.${name} is in @luz-ds/catalog/${file}, which this page does not load; add it after core`]);
+    }
   });
 
   it("carries `hosts` where the manifest has them: luz-btn's list in core, so the misuse rules work for a project that has no node_modules", () => {

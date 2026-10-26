@@ -2,7 +2,7 @@
  * LUZ check: the rules of loading (f5-ai-ready.md 5.5 and 5.6): what a page
  * links, and in which order.
  *
- *   load/tokens-missing   core, catalog or a kind is linked and tokens is not
+ *   load/tokens-missing   core or catalog is linked and tokens is not
  *   load/package-missing  a class or tag of a package whose stylesheet is not linked; in a
  *                         package with no bundle (catalog), of a component whose file is not
  *   load/layer-statement  a <style> declares the layers, luz among them, after the first LUZ link
@@ -13,7 +13,7 @@
  * or by an `@import` in a <style>, and its package is read from the URL:
  * `@luz-ds/<pkg>` or `/packages/<pkg>/` anywhere in it, else a file name of
  * luz.css, luz.min.css (core) or luz-tokens(.min).css (tokens). `catalog`,
- * `landing`, `cms`, `app` and `docs` as a bare file name may be the project's own: a
+ * `catalog` as a bare file name may be the project's own: a
  * `copy`, which keeps load/package-missing silent for that package and is
  * never a reason to block. A URL a template computes may be anything: while a
  * page has one, load/tokens-missing and load/package-missing are silent. A
@@ -31,15 +31,15 @@ import { finding } from "../report.js";
 import { classAttribute, classTokens } from "./shared.js";
 
 const TEMPLATE = /\{\{|<%|\$\{/;
-const IN_URL = /@luz-ds\/(tokens|core|catalog|landing|cms|app|docs)(?![\w-])/;
-const IN_DEV = /\/packages\/(tokens|core|catalog|landing|cms|app|docs)\//;
-// luz.css and luz-tokens.css are LUZ's; a bare catalog.css, landing.css, cms.css, app.css or docs.css may be the project's own
-const FILE = /^(?:luz(-tokens)?|(catalog|landing|cms|app|docs))(?:\.min)?\.css$/;
+const IN_URL = /@luz-ds\/(tokens|core|catalog)(?![\w-])/;
+const IN_DEV = /\/packages\/(tokens|core|catalog)\//;
+// luz.css and luz-tokens.css are LUZ's; a bare catalog.css may be the project's own
+const FILE = /^(?:luz(-tokens)?|(catalog))(?:\.min)?\.css$/;
 const IMPORT = /@import\s+(?:url\(\s*)?["']?([^"')\s;]+)/g;
 const LAYER = /@layer\s+([^;{}@]{0,512})([;{}])/g;
 export const STYLESHEET = /(?:^|\s)stylesheet(?:\s|$)/i;
 const REMOTE = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
-// tokens, then core, then catalog, then the kinds in any order
+// tokens, then core, then catalog (the patterns of a kind of site are catalog's)
 const ORDER = ["tokens", "core", "catalog"];
 
 // The file of one component in a URL of a package: …/components/search.min.css is components/search.css
