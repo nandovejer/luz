@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The modal: a short dialog and a tall one with a form, opened by command and commandfor, with no script</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+</head>
+<body>
+  <main id="main">
+    <h1>Modal</h1>
+    <p>Two dialogs, opened by a button each. This page has no script: the browser opens and closes them.</p>
+    <div class="o-row">
+      <button class="luz-btn luz-btn--primary" id="open-short" type="button" commandfor="short" command="show-modal">Open the short dialog</button>
+      <button class="luz-btn luz-btn--primary" id="open-tall" type="button" commandfor="tall" command="show-modal">Open the tall dialog</button>
+    </div>
+  </main>
+
+  <!-- The close comes first in the markup, as on the docs page -->
+  <dialog class="luz-modal" id="short" aria-labelledby="short-title">
+    <div class="luz-modal__header">
+      <button class="luz-modal__close" id="short-close" type="button" commandfor="short" command="close" aria-label="Close dialog">×</button>
+      <h2 class="luz-modal__title" id="short-title">Delete this draft?</h2>
+    </div>
+    <div class="luz-modal__body">
+      <p>You cannot undo this. The draft and its comments are deleted.</p>
+    </div>
+    <div class="luz-modal__footer">
+      <button class="luz-btn luz-btn--ghost" type="button" commandfor="short" command="close">Cancel</button>
+      <button class="luz-btn luz-btn--danger" id="short-last" type="button" commandfor="short" command="close">Delete draft</button>
+    </div>
+  </dialog>
+
+  <dialog class="luz-modal" id="tall" aria-labelledby="tall-title">
+    <div class="luz-modal__header">
+      <button class="luz-modal__close" id="tall-close" type="button" commandfor="tall" command="close" aria-label="Close dialog">×</button>
+      <h2 class="luz-modal__title" id="tall-title">Rename project</h2>
+    </div>
+    <form method="dialog">
+      <div class="luz-modal__body">
+        <p>Every field below is tall enough that the list is longer than any phone screen. Read the <a href="#terms">terms</a> and the <a href="#privacy">privacy notice</a> first.</p>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f1">Field 1</label>
+          <input class="luz-input" id="f1" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f2">Field 2</label>
+          <input class="luz-input" id="f2" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f3">Field 3</label>
+          <input class="luz-input" id="f3" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f4">Field 4</label>
+          <input class="luz-input" id="f4" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f5">Field 5</label>
+          <input class="luz-input" id="f5" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f6">Field 6</label>
+          <input class="luz-input" id="f6" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f7">Field 7</label>
+          <input class="luz-input" id="f7" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f8">Field 8</label>
+          <input class="luz-input" id="f8" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f9">Field 9</label>
+          <input class="luz-input" id="f9" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f10">Field 10</label>
+          <input class="luz-input" id="f10" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f11">Field 11</label>
+          <input class="luz-input" id="f11" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f12">Field 12</label>
+          <input class="luz-input" id="f12" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f13">Field 13</label>
+          <input class="luz-input" id="f13" type="text">
+        </div>
+        <div class="luz-field">
+          <label class="luz-field__label" for="f14">Field 14</label>
+          <input class="luz-input" id="f14" type="text">
+        </div>
+      </div>
+      <div class="luz-modal__footer">
+        <button class="luz-btn luz-btn--ghost" type="button" commandfor="tall" command="close">Cancel</button>
+        <button class="luz-btn luz-btn--primary" id="tall-last" value="rename">Save</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
