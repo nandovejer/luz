@@ -495,6 +495,83 @@ test.describe('search: rendering', () => {
   });
 });
 
+test.describe('search: small screens (core\'s 640 px, or a window 30rem tall or less)', () => {
+  /** Open the dialog at a window size and type a query that has results. */
+  async function openAt(page, width, height) {
+    await page.setViewportSize({ width, height });
+    await open(page);
+    await searchFor(page, 'tab');
+    await expect(results(page).first()).toBeVisible();
+    return dialog(page);
+  }
+  const head = (page) => dialog(page).locator('.luz-search__head');
+
+  test('640 px wide: the dialog is the screen, at 0,0, with no radius, shadow or margin', async ({ page }) => {
+    const d = await openAt(page, 640, 800);
+    const box = await d.boundingBox();
+    expect(box?.x).toBeCloseTo(0, 0);
+    expect(box?.y).toBeCloseTo(0, 0);
+    expect(box?.width).toBeCloseTo(640, 0);
+    expect(box?.height).toBeCloseTo(800, 0);
+    await expect(d).toHaveCSS('border-top-left-radius', '0px');
+    await expect(d).toHaveCSS('box-shadow', 'none');
+    await expect(d).toHaveCSS('margin-top', '0px');
+  });
+
+  test('641 px wide: the dialog floats again, below the top edge, with its radius', async ({ page }) => {
+    const d = await openAt(page, 641, 800);
+    const box = await d.boundingBox();
+    expect(box?.y, 'a margin above the dialog').toBeGreaterThan(0);
+    expect(box?.height, 'less than the window').toBeLessThan(800);
+    await expect(d).not.toHaveCSS('border-top-left-radius', '0px');
+  });
+
+  test('375x667: the dialog is the screen and its scroll padding at the start is the height of the head it pins', async ({ page }) => {
+    const d = await openAt(page, 375, 667);
+    const box = await d.boundingBox();
+    expect(box?.x).toBeCloseTo(0, 0);
+    expect(box?.y).toBeCloseTo(0, 0);
+    expect(box?.width).toBeCloseTo(375, 0);
+    expect(box?.height).toBeCloseTo(667, 0);
+    const m = await d.evaluate((el) => ({
+      padding: parseFloat(getComputedStyle(el).scrollPaddingBlockStart) || 0,
+      head: el.querySelector('.luz-search__head').getBoundingClientRect().height,
+    }));
+    expect(Math.abs(m.padding - m.head), `scroll-padding-block-start ${m.padding}px against a head of ${m.head}px`).toBeLessThanOrEqual(1);
+  });
+
+  test('375x500: the list of results is the scroller, the dialog does not scroll and the head stays', async ({ page }) => {
+    const d = await openAt(page, 375, 500);
+    const m = await d.evaluate((el) => {
+      const list = el.querySelector('.luz-search__results');
+      return {
+        listOverflow: getComputedStyle(list).overflowY,
+        listScrolls: list.scrollHeight > list.clientHeight + 1,
+        dialogScrolls: el.scrollHeight > el.clientHeight + 1,
+      };
+    });
+    expect(m.listOverflow).toBe('auto');
+    expect(m.listScrolls, 'the list has more rows than its box').toBe(true);
+    expect(m.dialogScrolls, 'the dialog scrolls too').toBe(false);
+    const top = await head(page).evaluate((h) => h.getBoundingClientRect().top);
+    await dialog(page).locator('.luz-search__results').evaluate((l) => { l.scrollTop = l.scrollHeight; });
+    expect(await head(page).evaluate((h) => h.getBoundingClientRect().top)).toBeCloseTo(top, 0);
+    expect(top).toBeCloseTo(0, 0);
+  });
+
+  test('320x256 (400 % zoom): the dialog scrolls and the head stays pinned at the top', async ({ page }) => {
+    const d = await openAt(page, 320, 256);
+    const box = await d.boundingBox();
+    expect(box?.width).toBeCloseTo(320, 0);
+    expect(box?.height).toBeCloseTo(256, 0);
+    const scrolls = await d.evaluate((el) => { el.scrollTop = el.scrollHeight; return el.scrollHeight > el.clientHeight + 1 && el.scrollTop > 0; });
+    expect(scrolls, 'the dialog scrolls when the window is too short for all of it').toBe(true);
+    const headBox = await head(page).boundingBox();
+    expect(headBox?.y, 'the head is at the top after scrolling to the end').toBeCloseTo(0, 0);
+    await expect(dialog(page).getByRole('button', { name: 'Close search' })).toBeInViewport({ ratio: 1 });
+  });
+});
+
 test.describe('search: <luz-search> in the header (F3, D5)', () => {
   test('the trigger, the fallback link and the dialog are inside one <luz-search>, under the new names', async ({ page }) => {
     await open(page);
