@@ -522,7 +522,7 @@ describe("element/unknown-attribute", () => {
   });
 
   it("blocks every non-global attribute of an element that declares none", () => {
-    const withSite = links(linkTo("tokens", "luz-tokens.min.css"), linkTo("core", "luz.min.css"), linkTo("catalog", "catalog.min.css"));
+    const withSite = links(linkTo("tokens", "luz-tokens.min.css"), linkTo("core", "luz.min.css"), linkTo("catalog", "components/lang-switch.min.css"));
     const result = check({ "index.html": page('  <luz-lang-switch foo="1" class="x"></luz-lang-switch>', withSite) });
     expect(result.findings.map((f) => f.message.split(" ")[0])).toEqual(["foo"]);
   });

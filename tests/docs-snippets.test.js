@@ -28,7 +28,8 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const FILES = {
   tokens: ["luz-tokens.min.css"],
   core: ["luz.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js"],
-  catalog: ["catalog.min.css", "catalog.min.js", "search.min.js", "consent.min.js", "mode.min.js"],
+  // Catalog has no bundle (F5a): one stylesheet per component, plain and minified, and the scripts
+  catalog: ["components/search.css", "components/search.min.css", "components/consent.css", "components/consent.min.css", "components/banner.css", "components/banner.min.css", "catalog.min.js", "search.min.js", "consent.min.js", "mode.min.js"],
   landing: ["landing.min.css"],
   cms: ["cms.min.css"],
   app: ["app.min.css"],
@@ -38,12 +39,38 @@ const KIND_PACKAGE = { atoms: null, landing: "landing", blog: "cms", app: "app",
 const KINDS = Object.keys(KIND_PACKAGE);
 const IDS = KINDS.flatMap((k) => [`${k}-npm`, `${k}-cdn`]);
 
+/** The manifests of catalog's dist: the stylesheet of each element and the files of each class. */
+const CATALOG_MANIFESTS = {
+  "classes.json": {
+    schema: 1,
+    package: "@luz-ds/catalog",
+    version: "1.0.0",
+    classes: [
+      { name: "luz-search", kind: "component", layer: "luz.catalog", files: ["components/search.css"], defined: true, block: "luz-search" },
+      { name: "luz-consent", kind: "component", layer: "luz.catalog", files: ["components/consent.css"], defined: true, block: "luz-consent" },
+    ],
+    properties: [],
+  },
+  "custom-elements.json": {
+    schemaVersion: "2.1.0",
+    modules: [
+      { kind: "javascript-module", path: "components/banner.css", declarations: [{ kind: "class", name: "LuzBanner", customElement: true, tagName: "luz-banner", stylesheet: "components/banner.css" }] },
+      { kind: "javascript-module", path: "search.js", declarations: [{ kind: "class", name: "LuzSearch", customElement: true, tagName: "luz-search", stylesheet: "components/search.css" }] },
+    ],
+  },
+};
+
+/** Catalog is linked a component at a time: any `components/<name>.min.css` of the package is the example. */
+const CATALOG_SHEET = /^components\/[a-z0-9-]+\.min\.css$/;
+/** A catalog stylesheet is `catalog/components/*`: which component the snippet shows is the generator's choice. */
+const shape = (pkg, file) => (pkg === "catalog" && (CATALOG_SHEET.test(file) || file === "components/*.min.css") ? "catalog/components/*.min.css" : `${pkg}/${file}`);
+
 /** What each CDN snippet loads, in order: stylesheets then scripts. */
 const cdnFor = (kind) => {
   const pkg = KIND_PACKAGE[kind];
   const withSite = pkg !== null;
   return {
-    css: [["tokens", "luz-tokens.min.css"], ["core", "luz.min.css"], ...(withSite ? [["catalog", "catalog.min.css"], [pkg, `${pkg}.min.css`]] : [])],
+    css: [["tokens", "luz-tokens.min.css"], ["core", "luz.min.css"], ...(withSite ? [["catalog", "components/*.min.css"], [pkg, `${pkg}.min.css`]] : [])],
     js: [["core", "luz.min.js"], ...(withSite ? [["catalog", "catalog.min.js"]] : [])],
   };
 };
@@ -65,9 +92,11 @@ function fixtureRoot({ without = [] } = {}) {
     writeFileSync(join(dir, "package.json"), JSON.stringify({ name: `@luz-ds/${pkg}`, version: `${i + 3}.${i + 7}.${i + 11}` }));
     for (const file of files) {
       if (without.includes(file)) continue;
+      mkdirSync(dirname(join(dir, "dist", file)), { recursive: true });
       writeFileSync(join(dir, "dist", file), `/* ${pkg}/${file}: ${"x".repeat(i + 5)} */\n`);
     }
   });
+  for (const [name, manifest] of Object.entries(CATALOG_MANIFESTS)) writeFileSync(join(root, "packages/catalog/dist", name), JSON.stringify(manifest));
   return root;
 }
 
@@ -105,7 +134,7 @@ const tagsOf = (text) =>
     return { tag, ...a, url: a.href ?? a.src };
   });
 
-const URL_RE = /^https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/([a-z]+)@([^/]+)\/dist\/([^/]+)$/;
+const URL_RE = /^https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/([a-z]+)@([^/]+)\/dist\/((?:components\/)?[^/]+)$/;
 const parts = (url) => {
   const m = URL_RE.exec(url ?? "");
   expect(m, `${url} is https://cdn.jsdelivr.net/npm/@luz-ds/<pkg>@<version>/dist/<file>`).not.toBeNull();
@@ -174,7 +203,7 @@ describe("the snippet generator", () => {
           const want = cdnFor(kind);
           const sheets = tags.filter((t) => t.tag === "link");
           const scripts = tags.filter((t) => t.tag === "script");
-          expect(sheets.map((t) => `${parts(t.url).pkg}/${parts(t.url).file}`)).toEqual(want.css.map(([p, f]) => `${p}/${f}`));
+          expect(sheets.map((t) => shape(parts(t.url).pkg, parts(t.url).file))).toEqual(want.css.map(([p, f]) => shape(p, f)));
           expect(scripts.map((t) => `${parts(t.url).pkg}/${parts(t.url).file}`)).toEqual(want.js.map(([p, f]) => `${p}/${f}`));
           for (const t of sheets) expect(t.rel, t.url).toBe("stylesheet");
           for (const t of scripts) expect(t.type, t.url).toBe("module");
@@ -193,9 +222,12 @@ describe("the snippet generator", () => {
           expect(el).toContain(`data-copy="pnpm add ${add.join(" ")}"`);
           const code = codeOf(html, `${kind}-npm`);
           const imports = [...code.matchAll(/\bimport\s+["']([^"']+)["']/g)].map((m) => m[1]);
-          const css = imports.filter((s) => s.endsWith("/css"));
-          expect(css).toEqual(add.map((p) => `${p}/css`));
-          const js = imports.filter((s) => !s.endsWith("/css")).sort();
+          const css = imports.filter((s) => s.endsWith(".css") || s.endsWith("/css"));
+          // catalog has no `/css`: its line is one component's file, between core and the kind
+          const want = add.map((p) => (p === "@luz-ds/catalog" ? "@luz-ds/catalog/components/*.css" : `${p}/css`));
+          expect(css.map((s) => (/^@luz-ds\/catalog\/components\/[a-z0-9-]+\.css$/.test(s) ? "@luz-ds/catalog/components/*.css" : s))).toEqual(want);
+          expect(css, "no import of a catalog bundle").not.toContain("@luz-ds/catalog/css");
+          const js = imports.filter((s) => !s.endsWith("/css") && !s.endsWith(".css")).sort();
           expect(js).toEqual(pkg ? ["@luz-ds/catalog", "@luz-ds/core"] : ["@luz-ds/core"]);
         });
       }
@@ -285,6 +317,20 @@ describe("the snippet generator", () => {
     });
   }
 
+  it("links one file of a catalog component, one that its manifests list, never catalog.min.css", () => {
+    const html = build(fixture);
+    const known = new Set(CATALOG_MANIFESTS["custom-elements.json"].modules.flatMap((m) => m.declarations.map((d) => d.stylesheet)).concat(CATALOG_MANIFESTS["classes.json"].classes.flatMap((c) => c.files)));
+    for (const kind of KINDS.filter((k) => KIND_PACKAGE[k])) {
+      const catalog = tagsOf(codeOf(html, `${kind}-cdn`)).filter((t) => t.tag === "link" && parts(t.url).pkg === "catalog");
+      expect(catalog, `${kind}: one catalog link`).toHaveLength(1);
+      const { file } = parts(catalog[0].url);
+      expect(CATALOG_SHEET.test(file), file).toBe(true);
+      expect(known.has(file.replace(".min.css", ".css")), `${file} is a stylesheet the manifests of catalog list`).toBe(true);
+      expect(codeOf(html, `${kind}-npm`), `${kind}-npm`).not.toMatch(/@luz-ds\/catalog\/(?:css|print\.css)/);
+      expect(codeOf(html, `${kind}-cdn`), `${kind}-cdn`).not.toMatch(/catalog\.min\.css|print\.css/);
+    }
+  });
+
   it("takes each version from its own package.json: the seven fixture versions are all different", () => {
     const html = build(fixture);
     const versions = new Set(tagsOf(codeOf(html, "app-cdn")).map((t) => parts(t.url).version));
@@ -367,7 +413,7 @@ describe("the hashes and URLs of the docs are never typed", () => {
       };
       const generated = (kind) => {
         const { css, js } = cdnFor(kind);
-        return urlsOf(codeOf(html, `${kind}-cdn`)).filter((u) => [...css, ...js].some(([p, f]) => parts(u).pkg === p && parts(u).file === f));
+        return urlsOf(codeOf(html, `${kind}-cdn`)).filter((u) => [...css, ...js].some(([p, f]) => shape(parts(u).pkg, parts(u).file) === shape(p, f)));
       };
       // the same lines in the same order, for the one block that is a whole kind
       expect(block("cdn-level-2")).toEqual(generated("atoms"));

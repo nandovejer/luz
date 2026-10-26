@@ -219,8 +219,11 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(copy.classes.map((c) => c.name)).toEqual(source.classes.map((c) => c.name));
     copy.classes.forEach((entry, i) => {
       const from = source.classes[i];
-      expect(Object.keys(entry).every((k) => ["name", "kind", "defined", "block", "modifier", "part", "hosts"].includes(k)), entry.name).toBe(true);
+      expect(Object.keys(entry).every((k) => ["name", "kind", "defined", "block", "modifier", "part", "hosts", "files"].includes(k)), entry.name).toBe(true);
       for (const field of ["kind", "defined", "block", "modifier", "part", "hosts"]) expect(entry[field], `${entry.name}.${field}`).toEqual(from[field]);
+      // F5a: only catalog has no bundle, so only its classes say the component file that defines them
+      if (name === "catalog" && from.defined) expect(entry.files, `${entry.name}.files`).toEqual(from.files);
+      else expect(entry, `${entry.name} (${name} keeps its bundle)`).not.toHaveProperty("files");
     });
     expect(copy.properties).toEqual(source.properties.map(({ name: property, scope }) => ({ name: property, scope })));
     expect(copy.hooks).toEqual(source.hooks);
@@ -248,7 +251,10 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     const declarations = (manifest) => manifest.modules.flatMap((m) => m.declarations ?? []);
     expect(declarations(copy).map((d) => d.tagName)).toEqual(declarations(source).map((d) => d.tagName));
     declarations(copy).forEach((declaration, i) => {
-      expect(Object.keys(declaration).every((k) => ["kind", "name", "customElement", "tagName", "attributes"].includes(k)), declaration.tagName).toBe(true);
+      expect(Object.keys(declaration).every((k) => ["kind", "name", "customElement", "tagName", "stylesheet", "attributes"].includes(k)), declaration.tagName).toBe(true);
+      // F5a: catalog has no bundle, so each of its tags says the file a page links for it; core's do not
+      if (name === "catalog") expect(declaration.stylesheet, declaration.tagName).toBe(declarations(source)[i].stylesheet);
+      else expect(declaration, declaration.tagName).not.toHaveProperty("stylesheet");
       expect(declaration.attributes).toEqual((declarations(source)[i].attributes ?? []).map(({ name: attribute }) => ({ name: attribute })));
     });
     expect(JSON.stringify(copy)).not.toMatch(/"(?:description|demos|type|default|exports|readme|superclass)"/);

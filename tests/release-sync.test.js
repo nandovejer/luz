@@ -111,12 +111,12 @@ describe("syncVersions", () => {
   });
 
   it("takes catalog to the version it has, not to the one of core", () => {
-    put("apps/docs/pages/get-started/catalog.html", page("title: Catalog", `<code>${CDN}/catalog@0.1.0/dist/catalog.min.css</code>`));
+    put("apps/docs/pages/get-started/catalog.html", page("title: Catalog", `<code>${CDN}/catalog@0.1.0/dist/components/search.min.css</code>`));
     manifest("catalog", "0.2.1");
 
     syncVersions(root);
 
-    expect(get("apps/docs/pages/get-started/catalog.html")).toContain(`${CDN}/catalog@0.2.1/dist/catalog.min.css`);
+    expect(get("apps/docs/pages/get-started/catalog.html")).toContain(`${CDN}/catalog@0.2.1/dist/components/search.min.css`);
   });
 });
 

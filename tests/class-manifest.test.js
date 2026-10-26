@@ -763,6 +763,19 @@ describe("the seven built packages", () => {
     }
   });
 
+  it("catalog: each class it defines maps to the component file that declares it, and to no bundle (F5a)", () => {
+    const defined = manifests.catalog.classes.filter((c) => c.defined);
+    expect(defined.length).toBeGreaterThan(0);
+    for (const c of defined) {
+      expect(c.files, c.name).toHaveLength(1);
+      expect(c.files[0], c.name).toMatch(/^components\/[a-z0-9-]+\.css$/);
+      expect(existsSync(`${root}packages/catalog/dist/${c.files[0].replace(/\.css$/, ".min.css")}`), `${c.name}: the .min.css of ${c.files[0]}`).toBe(true);
+      const css = readFileSync(`${root}packages/catalog/dist/${c.files[0]}`, "utf-8");
+      expect(css, `${c.name} is declared in ${c.files[0]}`).toContain(`.${c.name}`);
+    }
+    for (const c of manifests.catalog.classes) expect(c.files, c.name).not.toContain("catalog.css");
+  });
+
   it("core: a class only its scripts name is listed, defined: false, in the script that names it", () => {
     const core = byName("core");
     const ONLY_IN_SCRIPTS = {

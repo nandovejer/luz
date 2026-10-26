@@ -5,8 +5,9 @@
  *
  * buildPackage() writes dist/components/<name>.css and <name>.min.css for
  * every src/components/<name>.css whose name does not start with `_`, each
- * in the package's own layer; `_print.css` is emitted as dist/print.css.
- * Core already does this; catalog and the kinds of site follow.
+ * in the package's own layer. Core already does this; catalog and the kinds of
+ * site follow. Catalog has no bundle and no print.css (F5a, decisions 59 and 62):
+ * a component that prints carries its own `@layer luz.print` block.
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -20,13 +21,16 @@ const PACKAGES = ["catalog", ...SITE_KINDS];
 const list = (dir, filter) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(filter).sort() : []);
 const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");
 const blocks = (css, layer) => css.match(new RegExp(`^@layer luz\\.${layer} \\{$`, "gm")) ?? [];
+const printAt = (css) => css.search(/@layer luz\.print\s*\{/);
+const layerBlocks = (css) => css.match(/@layer luz\.[\w-]+\s*\{/g) ?? [];
 
 for (const name of PACKAGES) {
   const src = `packages/${name}/src/components`;
   const dist = `packages/${name}/dist`;
   const manifest = JSON.parse(readFileSync(`${root}packages/${name}/package.json`, "utf-8"));
   const wanted = list(src, (f) => isCss(f) && !f.startsWith("_"));
-  const built = existsSync(`${root}${dist}/${name}.css`);
+  const built = existsSync(`${root}${dist}/components`);
+  const hasBundle = name !== "catalog";
 
   describe(`@luz-ds/${name}: one stylesheet per component`, () => {
     it("has components to ship", () => {
@@ -63,7 +67,7 @@ for (const name of PACKAGES) {
       expect(bad).toEqual([]);
     });
 
-    it.skipIf(!built)("each component is the part of the bundle that its source adds", () => {
+    it.skipIf(!built || !hasBundle)("each component is the part of the bundle that its source adds", () => {
       const bundle = readFileSync(`${root}${dist}/${name}.css`, "utf-8");
       const missing = [];
       for (const f of wanted) {
@@ -82,20 +86,39 @@ for (const name of PACKAGES) {
   });
 }
 
-describe("@luz-ds/catalog: the print stylesheet", () => {
-  const built = existsSync(`${root}packages/catalog/dist/catalog.css`);
+describe("@luz-ds/catalog: no bundle, print rules in each component", () => {
+  const built = existsSync(`${root}packages/catalog/dist/components`);
+  const wanted = list("packages/catalog/src/components", (f) => isCss(f) && !f.startsWith("_"));
+  const manifest = JSON.parse(readFileSync(`${root}packages/catalog/package.json`, "utf-8"));
 
-  it("is emitted as dist/print.css, not as a component", () => {
-    expect(existsSync(`${root}packages/catalog/src/components/_print.css`)).toBe(true);
+  it("has no `_print.css` source, no `dist/print.css` in pack-files.txt and no bundle export", () => {
+    expect(existsSync(`${root}packages/catalog/src/components/_print.css`)).toBe(false);
     const packed = readFileSync(`${root}packages/catalog/pack-files.txt`, "utf-8").split("\n");
-    expect(packed).toContain("dist/print.css");
+    expect(packed.filter((p) => /^dist\/(?:catalog(?:\.min)?|print)\.css$/.test(p))).toEqual([]);
+    expect(Object.keys(manifest.exports).filter((k) => ["./css", "./css/min", "./print.css"].includes(k))).toEqual([]);
   });
 
-  it.skipIf(!built)("dist/print.css starts with the layer order and is in luz.catalog", () => {
-    expect(existsSync(`${root}packages/catalog/dist/print.css`), "dist/print.css exists").toBe(true);
-    const css = readFileSync(`${root}packages/catalog/dist/print.css`, "utf-8");
-    expect(css.startsWith(LAYER_ORDER)).toBe(true);
-    expect(blocks(css, "catalog")).toHaveLength(1);
-    expect(css).toContain("@media print");
+  it.skipIf(!built)("dist has no catalog.css, catalog.min.css or print.css", () => {
+    for (const f of ["catalog.css", "catalog.min.css", "print.css"]) expect(existsSync(`${root}packages/catalog/dist/${f}`), f).toBe(false);
+  });
+
+  it.skipIf(!built)("search and consent carry one `@layer luz.print` block with `@media print`, plain and minified", () => {
+    for (const name of ["search", "consent"]) {
+      for (const file of [`${name}.css`, `${name}.min.css`]) {
+        const css = readFileSync(`${root}packages/catalog/dist/components/${file}`, "utf-8");
+        expect(css.match(/@layer luz\.print\s*\{/g), file).toHaveLength(1);
+        expect(css.slice(printAt(css)), file).toContain("@media print");
+      }
+    }
+  });
+
+  it.skipIf(!built)("a print block, where a component has one, sits after its luz.catalog block and holds nothing else in a layer", () => {
+    for (const f of wanted) {
+      const css = readFileSync(`${root}packages/catalog/dist/components/${f}`, "utf-8");
+      const print = printAt(css);
+      if (print === -1) continue;
+      expect(css.search(/@layer luz\.catalog\s*\{/), f).toBeLessThan(print);
+      expect(layerBlocks(css.slice(print)), f).toHaveLength(1);
+    }
   });
 });

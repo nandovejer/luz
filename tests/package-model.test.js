@@ -146,16 +146,19 @@ describe("catalog after F1: six `<luz-*>` components", () => {
   const list = (dir, keep) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(keep).sort() : []);
   const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");
 
-  it("src/components holds the six components and `_print.css`, nothing else", () => {
-    expect(list("packages/catalog/src/components", (f) => f.endsWith(".css"))).toEqual([...components, "_print.css"].sort());
+  it("src/components holds the six components, nothing else: no `_print.css`, the print rules are in each component", () => {
+    expect(list("packages/catalog/src/components", (f) => f.endsWith(".css"))).toEqual(components);
   });
 
-  it("index.css imports exactly those six files", () => {
-    const imports = [...read("packages/catalog/src/index.css").matchAll(/@import url\("\.\/components\/([^"]+)"\)/g)].map((m) => m[1]);
-    expect(imports.sort()).toEqual([...components, "_print.css"].sort());
+  it("catalog has no bundle: no `src/index.css` to bundle the components", () => {
+    expect(existsSync(`${root}packages/catalog/src/index.css`)).toBe(false);
   });
 
-  const built = existsSync(`${root}packages/catalog/dist/catalog.css`);
+  const built = existsSync(`${root}packages/catalog/dist/components`);
+
+  it.skipIf(!built)("dist has no `catalog.css`, `catalog.min.css` or `print.css`", () => {
+    for (const f of ["catalog.css", "catalog.min.css", "print.css"]) expect(existsSync(`${root}packages/catalog/dist/${f}`), f).toBe(false);
+  });
 
   it.skipIf(!built)("dist/components is exactly {search, consent, mode, lang-switch, submenu, banner}.css, plain and minified", () => {
     expect(list("packages/catalog/dist/components", isCss)).toEqual(components);
@@ -170,15 +173,12 @@ describe("catalog after F1: six `<luz-*>` components", () => {
     }
   });
 
-  it("`exports` is exactly the list of spec 1.3, with no `./placeholders/*`", () => {
+  it("`exports` is the scripts, the components and the manifests: no `./css`, `./css/min` or `./print.css`, no `./placeholders/*`", () => {
     expect(manifest.exports).toEqual({
       ".": "./dist/catalog.js",
       "./search": "./dist/search.js",
       "./consent": "./dist/consent.js",
       "./mode": "./dist/mode.js",
-      "./css": "./dist/catalog.css",
-      "./css/min": "./dist/catalog.min.css",
-      "./print.css": "./dist/print.css",
       "./classes.json": "./dist/classes.json",
       "./custom-elements.json": "./dist/custom-elements.json",
       "./components/*": "./dist/components/*",
@@ -186,9 +186,9 @@ describe("catalog after F1: six `<luz-*>` components", () => {
     });
   });
 
-  it("`sideEffects` is the stylesheets and the files that define or load an element", () => {
+  it("`sideEffects` is the component stylesheets and the files that define or load an element", () => {
     expect([...manifest.sideEffects].sort()).toEqual(
-      ["*.css", "./dist/catalog.js", "./dist/catalog.min.js", "./dist/search.js", "./dist/search.min.js", "./dist/consent.js", "./dist/consent.min.js", "./dist/mode.js", "./dist/mode.min.js"].sort(),
+      ["./dist/components/*.css", "./dist/catalog.js", "./dist/catalog.min.js", "./dist/search.js", "./dist/search.min.js", "./dist/consent.js", "./dist/consent.min.js", "./dist/mode.js", "./dist/mode.min.js"].sort(),
     );
   });
 
@@ -208,9 +208,12 @@ describe("catalog after F1: six `<luz-*>` components", () => {
     expect(offenders(["catalog"], /luz-(?:site|catalog)-/)).toEqual([]);
   });
 
-  it("the print stylesheet hides what only works on a screen: the search, the consent band and the fallback link", () => {
-    const css = read("packages/catalog/src/components/_print.css");
-    for (const hidden of ["luz-search", "luz-consent", ".luz-search__trigger"]) expect(css, hidden).toContain(hidden);
+  it("search and consent hide on paper what only works on a screen, each in its own file, inside `@layer luz.print`", () => {
+    for (const [name, hidden] of [["search", "luz-search"], ["consent", "luz-consent"]]) {
+      const css = read(`packages/catalog/src/components/${name}.css`);
+      expect(css, `${name}.css has a print block`).toMatch(/@media print/);
+      expect(css.slice(css.indexOf("@media print")), `${name}.css hides ${hidden} on paper`).toContain(hidden);
+    }
   });
 });
 

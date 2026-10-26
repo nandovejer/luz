@@ -74,9 +74,17 @@ describe("the page is the seven sections of the spec", () => {
 describe("every import the page writes exists", () => {
   it("names the imports the spec shows", () => {
     const names = specifiers();
-    for (const spec of ["@luz-ds/tokens/css", "@luz-ds/core/css", "@luz-ds/core", "@luz-ds/catalog/css", "@luz-ds/tokens/tokens.css"]) {
+    for (const spec of ["@luz-ds/tokens/css", "@luz-ds/core/css", "@luz-ds/core", "@luz-ds/catalog/components/search.css", "@luz-ds/tokens/tokens.css"]) {
       expect(resolveSpecifier(spec), `${spec} is not an export: the spec's list is stale`).not.toBeNull();
       expect(names, `the page never writes ${spec}`).toContain(spec);
+    }
+  });
+
+  it("never writes a catalog bundle: `@luz-ds/catalog/css` and `/css/min` do not exist (F5a)", () => {
+    const names = specifiers();
+    for (const spec of ["@luz-ds/catalog/css", "@luz-ds/catalog/css/min", "@luz-ds/catalog/print.css"]) {
+      expect(resolveSpecifier(spec), `${spec} is still an export`).toBeNull();
+      expect(names, `the page still writes ${spec}`).not.toContain(spec);
     }
   });
 
