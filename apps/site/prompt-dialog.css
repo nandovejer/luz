@@ -118,14 +118,36 @@
   /* A few lines to read, however short the window */
   min-block-size: 8rem;
   overflow-y: auto;
+  /* A link brought into view by Tab stops short of the edge, so its ring
+     (2px and 2px of offset) is not cut by the scroller (WCAG 2.4.7, 2.4.11) */
+  scroll-padding-block: var(--luz-space-sm);
   /* No padding at the end: the end sentence carries it, so the sentence
      wholly in view is the region scrolled to 100 % (prompt-dialog.js) */
-  padding: var(--luz-space-md) var(--luz-space-md) 0;
+  padding: var(--luz-space-md) 0 0;
   border: 1px solid var(--luz-divider);
   border-block-start: 0;
   border-radius: 0 0 var(--luz-radius-sm) var(--luz-radius-sm);
-  background: var(--luz-surface-muted);
+  /* The ground of a prompt: a step of the ink over the muted surface (as
+     .luz-terminal tints its own), so it is not the dialog's surface and not
+     a plain page either. The gutter and the text share it. */
+  --site-prompt-tint: 3%;
+  background: color-mix(in oklab, var(--luz-text-primary) var(--site-prompt-tint), var(--luz-surface-muted));
+  /* The gutter of the line numbers: three digits of the text and their air */
+  --site-prompt-gutter: calc(var(--luz-text-sm) * 2.2 + var(--luz-space-xs) * 2);
   overflow-wrap: anywhere;
+  /* A prompt, not prose: the face and the ground of core's code block
+     (--luz-font-mono, --luz-surface-muted, --luz-divider), whatever the
+     reading style below */
+  color: var(--luz-text-primary);
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-sm);
+}
+
+/* In dark the muted surface is darker than the dialog by almost nothing, and
+   the ink lightens it: the step is wider so the ground still reads as another
+   one, and every colour of the syntax still passes on it */
+:root[data-theme="dark"] .site-prompt__text {
+  --site-prompt-tint: 9%;
 }
 
 /* Focus in the prompt: the ring is the piece's. Without :has() the region
@@ -155,33 +177,150 @@
   outline-offset: 2px;
 }
 
-.site-prompt__text h3 {
-  margin-block: var(--luz-space-lg) var(--luz-space-xs);
+/* The text locked: while Copy is aria-disabled (before 100 % is read) the
+   prompt cannot be selected, so a drag, a double or triple click, Ctrl+A and
+   the context menu copy nothing from it. Only CSS: Copy, the link to the
+   text and a screen reader's cursor are as ever (reading to the end is what
+   turns Copy on, and it does not need a selection). Safari still wants the
+   prefixed property. */
+.site-prompt:has([data-prompt-copy][aria-disabled="true"]) .site-prompt__text {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ==========================================================================
+   Reading: the prompt as its own source, a Markdown file open in an editor.
+   prompt-dialog.js (layout()) writes every character of the .txt, in order,
+   line ends included; these are the spans by role. The text copied and the
+   file are the same text, and none of this changes it.
+
+   The palette is core's code palette (--luz-code-*, measured on
+   --luz-surface-muted, 4.5:1 in every mode, 7:1 in high contrast), the
+   region's own ground. Colour never tells a heading from text alone: its
+   "#" stays, and its size and weight step up. In forced colours the colours
+   go and the marks, the steps and the underline of a link stay.
+   ========================================================================== */
+
+.site-prompt__source {
+  /* Lines as written; long ones wrap at the box, never sideways */
+  white-space: pre-wrap;
+  tab-size: 2;
+  line-height: 1.65;
+  counter-reset: site-prompt-line;
+}
+
+/* A row per line of the text: the number in a gutter, the line beside it.
+   The number is generated content with an empty alternative, so it is not in
+   the text of the region, not in a selection or a copy, and not read. A
+   wrapped line goes on under its own text, not under the number. */
+.site-prompt__line {
+  display: grid;
+  grid-template-columns: var(--site-prompt-gutter) minmax(0, 1fr);
+  align-items: baseline;
+  counter-increment: site-prompt-line;
+  margin: 0;
+  /* The line between gutter and text, one piece down the rows (the source is
+     always left to right, so "right" is its physical side) */
+  background: linear-gradient(to right, transparent calc(var(--site-prompt-gutter) - 1px), var(--luz-divider) 0 var(--site-prompt-gutter), transparent 0);
+}
+
+.site-prompt__line::before {
+  content: counter(site-prompt-line);
+  content: counter(site-prompt-line) / "";
+  box-sizing: border-box;
+  padding-inline: var(--luz-space-xs);
+  color: var(--luz-text-secondary);
+  font-size: var(--luz-text-sm);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.site-prompt__cell {
+  padding-inline: var(--luz-space-sm) var(--luz-space-md);
+}
+
+/* # and ##: the marks and the text, a step each (DR-4, DR-6) */
+.site-prompt__tok-heading {
+  /* An h3 that is a line of the source: no face or leading of its own */
+  font-family: inherit;
+  letter-spacing: normal;
+  line-height: inherit;
+  color: var(--luz-code-name);
+  font-size: var(--luz-text-base);
+  font-weight: 600;
+}
+
+.site-prompt__tok-heading--1 {
   font-size: var(--luz-text-lg);
 }
 
-.site-prompt__text h3:first-child {
-  margin-block-start: 0;
+/* The marks of the syntax: #, - and 1., backticks of a fence */
+.site-prompt__tok-marker {
+  color: var(--luz-code-comment);
+  font-weight: 400;
 }
 
-.site-prompt__text :is(p, ul, ol) {
-  margin-block: 0 var(--luz-space-sm);
+.site-prompt__tok-code {
+  color: var(--luz-code-string);
 }
 
-.site-prompt__text pre {
-  margin-block: 0 var(--luz-space-sm);
-  padding: var(--luz-space-sm);
-  border-radius: var(--luz-radius-sm);
+.site-prompt__tok-quote {
+  color: var(--luz-code-literal);
+}
+
+/* A fenced block: its lines framed as one box on the raised surface, inside a
+   hairline, as core's code block is (DR-1, DR-2): the open line has the top
+   edge and the corners, the close line the bottom. */
+.site-prompt__tok-fence {
+  margin-inline: var(--luz-space-2xs) var(--luz-space-md);
+  padding-inline: calc(var(--luz-space-sm) - var(--luz-space-2xs) - 1px) var(--luz-space-sm);
+  border-inline: 1px solid var(--luz-divider);
   background: var(--luz-surface);
-  white-space: pre-wrap;
-  font-family: var(--luz-font-mono);
-  font-size: var(--luz-text-sm);
+}
+
+.site-prompt__tok-fence--open {
+  border-block-start: 1px solid var(--luz-divider);
+  border-start-start-radius: var(--luz-radius-sm);
+  border-start-end-radius: var(--luz-radius-sm);
+}
+
+.site-prompt__tok-fence--close {
+  border-block-end: 1px solid var(--luz-divider);
+  border-end-start-radius: var(--luz-radius-sm);
+  border-end-end-radius: var(--luz-radius-sm);
+}
+
+/* An address of the site or the CDN: core's link colour and underline, with a
+   mark that it leaves for another tab (its name says so too) */
+.site-prompt__tok-link {
+  color: var(--luz-brand-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.site-prompt__tok-link::after,
+.site-prompt__file::after {
+  content: "\2197";
+  content: "\2197" / "";
+  /* Inline-block: the underline stops at the address */
+  display: inline-block;
+  margin-inline-start: 0.2em;
+  font-size: 0.85em;
+}
+
+/* The sentences the dialog writes (loading, failed, end) start at the text */
+.site-prompt__text > p {
+  padding-inline: calc(var(--site-prompt-gutter) + var(--luz-space-sm)) var(--luz-space-md);
 }
 
 .site-prompt__text .site-prompt__end {
   margin: 0;
   padding-block-end: var(--luz-space-md);
   color: var(--luz-text-secondary);
+  font-family: var(--luz-font-body);
   font-style: italic;
 }
 

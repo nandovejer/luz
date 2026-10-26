@@ -235,12 +235,13 @@
   "prompt.region": "الموجّه",
   "prompt.read": "قُرئ {n}٪",
   "prompt.copy": "انسخ الموجّه",
-  "prompt.file": "افتحه نصًا",
+  "prompt.file": "افتح النص الخام",
   "prompt.locked": "اقرأ الموجّه حتى نهايته أولًا.",
   "prompt.unlocked": "قرأته كله. صار النسخ متاحًا.",
   "prompt.copied": "نُسخ الموجّه.",
   "prompt.not-copied": "تعذّر نسخ الموجّه: افتحه نصًا وانسخه من هناك.",
   "prompt.failed": "تعذّر تحميل الموجّه: افتحه نصًا.",
   "prompt.loading": "جارٍ تحميل الموجّه…",
-  "prompt.end": "نهاية الموجّه."
+  "prompt.end": "نهاية الموجّه.",
+  "prompt.new-tab": "(يفتح في علامة تبويب جديدة)"
 }

@@ -235,12 +235,13 @@
   "prompt.region": "El prompt",
   "prompt.read": "Leído {n} %",
   "prompt.copy": "Copiar el prompt",
-  "prompt.file": "Abrirlo como texto",
+  "prompt.file": "Abrir el texto sin formato",
   "prompt.locked": "Lee primero el prompt hasta el final.",
   "prompt.unlocked": "Lo has leído entero. Ya puedes copiarlo.",
   "prompt.copied": "Prompt copiado.",
   "prompt.not-copied": "No se pudo copiar el prompt: ábrelo como texto y cópialo desde ahí.",
   "prompt.failed": "No se pudo cargar el prompt: ábrelo como texto.",
   "prompt.loading": "Cargando el prompt…",
-  "prompt.end": "Fin del prompt."
+  "prompt.end": "Fin del prompt.",
+  "prompt.new-tab": "(se abre en una pestaña nueva)"
 }

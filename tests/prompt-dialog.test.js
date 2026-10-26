@@ -19,7 +19,7 @@ const placeholders = (value) => [...value.matchAll(/\{[^}]+\}/g)].map((m) => m[0
 
 // The text the dialog speaks, by key (the keys a brief names: the label of the region, of Copy, the progress,
 // the three live-region messages and the end sentence)
-const NAMED = ["prompt.region", "prompt.copy", "prompt.read", "prompt.locked", "prompt.unlocked", "prompt.copied", "prompt.failed", "prompt.end"];
+const NAMED = ["prompt.region", "prompt.copy", "prompt.read", "prompt.file", "prompt.new-tab", "prompt.locked", "prompt.unlocked", "prompt.copied", "prompt.failed", "prompt.end"];
 
 describe("the strings of the prompt dialog", () => {
   for (const code of LANGUAGES) {
@@ -57,6 +57,31 @@ describe("the strings of the prompt dialog", () => {
     expect(catalogs.en["prompt.end"]).toBe("End of the prompt.");
     expect(catalogs.es["prompt.copy"]).toBe("Copiar el prompt");
     expect(catalogs.es["prompt.read"]).toBe("Leído {n} %");
+  });
+
+  it("the link to the raw text opens in a new tab and says so, in every language", () => {
+    expect(catalogs.en["prompt.file"]).toBe("Open raw text");
+    expect(catalogs.en["prompt.new-tab"]).toBe("(opens in a new tab)");
+    expect(catalogs.es["prompt.file"]).toBe("Abrir el texto sin formato");
+    expect(catalogs.es["prompt.new-tab"]).toBe("(se abre en una pestaña nueva)");
+    // Arabic: its own words (not the English, not the old "open it as text")
+    expect(catalogs.ar["prompt.file"]).toMatch(/\p{Script=Arabic}/u);
+    expect(catalogs.ar["prompt.file"]).not.toBe("افتحه نصًا");
+    expect(catalogs.ar["prompt.new-tab"]).toMatch(/\p{Script=Arabic}/u);
+    // The hint is added to a name that starts with the visible text: it has no placeholder and no text of the label
+    for (const code of LANGUAGES) {
+      expect(placeholders(catalogs[code]["prompt.new-tab"]), code).toEqual([]);
+      expect(catalogs[code]["prompt.new-tab"].includes(catalogs[code]["prompt.file"]), code).toBe(false);
+    }
+  });
+
+  it("the dialog has no reading switch: no query parameter or variant of how the prompt is laid out", () => {
+    const source = readFileSync(resolve(root, "apps/site/prompt-dialog.js"), "utf8");
+    const partial = readFileSync(resolve(root, "apps/site/_partials/prompt-dialog.html"), "utf8");
+    for (const text of [source, partial]) {
+      expect(text).not.toMatch(/searchParams|URLSearchParams|location\.search|[?&]reading/);
+      expect(text).not.toMatch(/data-reading|dataset\.reading|["']reading["']/);
+    }
   });
 
   it("pnpm check:strings passes", () => {

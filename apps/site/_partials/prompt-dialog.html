@@ -1,4 +1,4 @@
-<template id="site-prompt-dialog" data-read="{{t:prompt.read}}" data-locked="{{t:prompt.locked}}" data-unlocked="{{t:prompt.unlocked}}" data-copied="{{t:prompt.copied}}" data-done="{{t:js.copied}}" data-not-copied="{{t:prompt.not-copied}}" data-failed="{{t:prompt.failed}}" data-loading="{{t:prompt.loading}}" data-end="{{t:prompt.end}}">
+<template id="site-prompt-dialog" data-read="{{t:prompt.read}}" data-locked="{{t:prompt.locked}}" data-unlocked="{{t:prompt.unlocked}}" data-copied="{{t:prompt.copied}}" data-done="{{t:js.copied}}" data-not-copied="{{t:prompt.not-copied}}" data-failed="{{t:prompt.failed}}" data-loading="{{t:prompt.loading}}" data-end="{{t:prompt.end}}" data-new-tab="{{t:prompt.new-tab}}">
   <dialog class="luz-modal site-prompt" aria-labelledby="site-prompt-title">
     <div class="luz-modal__header site-prompt__head">
       <h2 class="luz-modal__title" id="site-prompt-title"></h2>
@@ -15,7 +15,7 @@
       <div class="site-prompt__text" tabindex="0" role="region" aria-label="{{t:prompt.region}}"></div>
     </div>
     <div class="site-prompt__foot">
-      <a class="site-prompt__file" href="" data-prompt-file>{{t:prompt.file}}</a>
+      <a class="site-prompt__file" href="" target="_blank" rel="noopener noreferrer" aria-label="{{t:prompt.file}} {{t:prompt.new-tab}}" data-prompt-file>{{t:prompt.file}}</a>
       <button class="luz-btn luz-btn--primary site-prompt__copy" type="button" aria-disabled="true" aria-describedby="site-prompt-help" data-prompt-copy>
         <svg class="site-prompt__check" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span data-prompt-copy-label>{{t:prompt.copy}}</span>

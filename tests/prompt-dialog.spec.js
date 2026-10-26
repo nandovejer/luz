@@ -6,8 +6,9 @@
  *   - without JavaScript the opener is a link to /prompts/start.txt, there is no dialog and the file answers
  *     200 as text/plain (these tests switch JavaScript off themselves, so they run in the chromium project too);
  *   - with JavaScript the opener is a button with the same name; Enter opens a modal dialog named by the
- *     opener's data-prompt-title; the prompt is fetched (same origin) when the dialog opens, laid out with an
- *     h3 per "#"/"##" heading of the .txt in a focusable, named region that ends with "End of the prompt.";
+ *     opener's data-prompt-title; the prompt is fetched (same origin) when the dialog opens, shown as its own
+ *     source (an h3 per "#"/"##" line of the .txt; tests/prompt-dialog-source.spec.js) in a focusable, named
+ *     region that ends with "End of the prompt.";
  *   - Copy is locked (aria-disabled, in the tab order, described by the help line) until the end of the prompt
  *     was read: pressed early it says so and moves the focus to the region; reaching the end unlocks it
  *     without moving the focus; then it copies exactly the .txt text. Escape closes and gives the focus back.
@@ -144,7 +145,8 @@ test.describe('with JavaScript', () => {
     const dialog = dialogOf(page, p);
     await expect(dialog).toBeVisible();
     expect(await dialog.evaluate((d) => /** @type {HTMLDialogElement} */ (d).matches(':modal'))).toBe(true);
-    await expect(dialog.locator(`a[href$="${TXT}"]`)).toHaveCount(1);
+    // The footer has one; the prompt itself names its own address and links it too
+    await expect(dialog.locator(`.site-prompt__foot a[href$="${TXT}"]`)).toHaveCount(1);
   });
 
   test('the prompt has an h3 per heading of the text, in a named focusable region that ends with the end sentence', async ({ page, request }) => {
@@ -478,7 +480,7 @@ test.describe('with JavaScript', () => {
     expect(Math.abs(m.copyRightGap), 'distance of Copy from the footer end edge').toBeLessThanOrEqual(1);
     expect(m.linkLeftOfCopy, 'the link is to the left of Copy').toBe(true);
     // Tab reaches the link first
-    await dialog.getByRole('link', { name: 'Open it as text' }).focus();
+    await dialog.getByRole('link', { name: 'Open raw text (opens in a new tab)', exact: true }).focus();
     await page.keyboard.press('Tab');
     await expect(copyOf(dialog, p)).toBeFocused();
   });
