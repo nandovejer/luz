@@ -165,7 +165,7 @@ test.describe('the examples with JavaScript', () => {
   }
 
   test('a chunk an entry imports by name is found beside it: <luz-timeline> and <luz-search> are defined', async ({ page }) => {
-    await page.goto(`${served.origin}/examples/components/timeline.html`);
+    await page.goto(`${served.origin}/examples/catalog/timeline.html`);
     await expect.poll(() => page.evaluate(() => !!customElements.get('luz-timeline')), { timeout: 10_000 }).toBe(true);
     await page.goto(`${served.origin}/examples/catalog/cms-header.html`);
     await expect.poll(() => page.evaluate(() => !!customElements.get('luz-search')), { timeout: 10_000 }).toBe(true);
@@ -188,7 +188,7 @@ test.describe('the examples without JavaScript', () => {
   });
 
   test('the timeline example is an ordered list with every item visible', async ({ page }) => {
-    await page.goto(`${served.origin}/examples/components/timeline.html`);
+    await page.goto(`${served.origin}/examples/catalog/timeline.html`);
     const items = page.locator('luz-timeline').first().locator('.luz-timeline__item');
     expect(await items.count()).toBeGreaterThan(1);
     for (let i = 0; i < (await items.count()); i++) await expect(items.nth(i)).toBeVisible();

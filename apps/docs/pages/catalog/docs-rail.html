@@ -2,7 +2,7 @@
 title: Rail
 description: The list of the sections of the page that stays in view beside the content, with the actions of the page under it.
 area: catalog
-order: 24
+order: 28
 group: documentation
 fits-kinds: docs
 fits: the side of a long documentation page
@@ -49,11 +49,11 @@ toc: h2,h3
                   <p>Name it <code>acme.config.json</code>.</p>
                 </div>
               </div>
-              <p class="docs-demo__note">The rail beside the text it lists, shown at any width: in a page it is a third column from 80rem and sits above the content below it. With core's script, the section in view is marked as you scroll.</p>
+              <p class="docs-demo__note">The rail beside the text it lists, shown at any width: in a page it is a third column from 80rem and sits above the content below it. With the catalog's script, the section in view is marked as you scroll.</p>
             </div>
           </div>
           <h2 id="known-issues">Known issues</h2>
-          <p>Without core's script no link is marked as current, and the links still work. Not tested with a screen reader.</p>
+          <p>Without the catalog's script no link is marked as current, and the links still work. Not tested with a screen reader.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Rail documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
@@ -111,15 +111,15 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>components/docs-rail.css</code> of <code>@luz-ds/catalog</code>, on core's sidebar link and its scroll spy.</p>
+            <p>CSS from <code>components/docs-rail.css</code> of <code>@luz-ds/catalog</code>, on the catalog's sidebar link and its scroll spy.</p>
             <ul>
               <li>Below 80rem the rail is drawn above the content, under the header. From 80rem it is a column as tall as the content, and its inner box is sticky, at <code>--luz-docs-rail-top</code> from the top of the window: it stops at the end of the rail, so it never covers the footer under it. The inner box is as tall as the window at most, and scrolls by itself when the list is longer.</li>
-              <li>A link carries core's <code>.luz-sidebar__link</code>, so core's script marks the section in view with <code>aria-current="true"</code>. The rail redraws the link as text on the page: the mark is the weight and a start border, never the colour alone.</li>
+              <li>A link carries the catalog's <code>.luz-sidebar__link</code>, so the catalog's script marks the section in view with <code>aria-current="true"</code>. The rail redraws the link as text on the page: the mark is the weight and a start border, never the colour alone.</li>
               <li>The list names each <code>h2</code> of the page and, nested under it, each <code>h3</code>. Nothing is nested deeper.</li>
               <li>"Copy page as Markdown" is a link to the page's Markdown file; copying it with a script is yours. The rail is left out of print.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
-            <p>The list and the actions are links and a native <code>&lt;details&gt;</code>, so they work. No link is marked as current: the mark comes from core's script.</p>
+            <p>The list and the actions are links and a native <code>&lt;details&gt;</code>, so they work. No link is marked as current: the mark comes from the catalog's script.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <ul>
               <li><strong>Order:</strong> the rail is between the sidebar and the content in the source, so Tab reaches it before the text: the list, then the actions. The skip link goes to the content, past the rail.</li>

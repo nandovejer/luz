@@ -6,7 +6,9 @@ Reusable CSS components and vanilla JS behaviors for the LUZ Design System.
 
 ## Prerequisites
 
-Requires `@luz-ds/tokens` (declared as a peer dependency), loaded first. `@luz-ds/catalog` is optional and builds on this package.
+Requires `@luz-ds/tokens` (declared as a peer dependency), loaded first. `@luz-ds/catalog` is optional and builds on this package. Core names nothing of it.
+
+The navbar, the sidebar (with its brand and the drawer toggle), the terminal and the timeline are not in this package: they are in `@luz-ds/catalog`, one stylesheet each. `luz.css` does not include them, and `@luz-ds/core/sidebar` and `@luz-ds/core/timeline` are `@luz-ds/catalog/sidebar` and `@luz-ds/catalog/timeline`. A page that loads only core has no scroll spy; the sidebar drawer is a native popover and works without a script.
 
 ## Installation
 
@@ -53,7 +55,7 @@ Every component also ships as its own file in `dist/components/` — load only w
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/components/card.css">
 ```
 
-Available: `accordion`, `alert`, `avatar`, `breadcrumb`, `button`, `card`, `code`, `copy-btn`, `dropdown`, `figure`, `form`, `icon-grid`, `modal`, `mode-switcher`, `pagination`, `player`, `progress`, `select`, `sidebar`, `table`, `tabs`, `tag`, `toast`, `tooltip` (+ `_animations` for the shared keyframes). Each has a `.min.css` twin.
+Available: `accordion`, `alert`, `avatar`, `breadcrumb`, `button`, `card`, `code`, `copy-btn`, `dropdown`, `figure`, `form`, `icon-grid`, `modal`, `mode-switcher`, `pagination`, `player`, `progress`, `select`, `table`, `tabs`, `tag`, `toast`, `tooltip` (+ `_animations` for the shared keyframes). Each has a `.min.css` twin.
 
 ### Using a single JS behavior
 
@@ -127,11 +129,10 @@ Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.t
 - **`./components/*`** → Per-component CSS files (standalone use)
 - **`./print.css`** → Print styles alone, for pages that load components one by one (`luz.css` already includes them)
 - **`./classless.css`** → The look of a bare button, field, select and table inside `[data-luz-classless]`; not part of `luz.css`
-- **`./theme`**, **`./sidebar`**, **`./clipboard`**, **`./modal`**, **`./highlight`**, **`./player`**, **`./tabs`** → Individual JS behavior modules (no side effects on import)
+- **`./theme`**, **`./clipboard`**, **`./modal`**, **`./highlight`**, **`./player`**, **`./tabs`** → Individual JS behavior modules (no side effects on import)
 - **`./i18n`** → Strings for the JS-generated text (`t`, `getLang`, `registerLocale`, `loadLocales`); **`./i18n/*`** → one language LUZ ships, as a dictionary (`@luz-ds/core/i18n/es`)
 - **`./midi`** → `midi.js` — MIDI player (lazy-loaded)
 - **`./table-sort`** → `table-sort.js` — `initTableSort(root, t)`: sorts a table whose headings carry `data-luz-sort` (lazy-loaded by `luz.js`; no imports, so pass the `t` of `./i18n` when you load it on its own)
-- **`./timeline`** → `timeline.js` — defines `<luz-timeline>`, the timeline with a rail of dates (lazy-loaded by `luz.js` on a page that has one; import it yourself for a timeline added later, with or without the entry; it loads nothing else and carries its own four strings, in English and Spanish. `initTimeline(root, translate)` is what `luz.js` calls to hand it core's `t`)
 - **`./utils`** → Pure helper functions (`formatTime`, `escapeHtml`, …)
 - **`./themes/*`** → `_template.css`, the starting point for a theme of your own
 
@@ -141,7 +142,6 @@ Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.t
 - Forms (inputs, selects, checkboxes, toggles, file upload)
 - Cards, tables, tabs, breadcrumbs, pagination, dropdowns, code blocks
 - Players (video, audio, MIDI)
-- Sidebar navigation
 - Alerts, toasts, badges, avatars
 - And more...
 
@@ -156,7 +156,6 @@ A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, w
 The core JS (`luz.js`) provides no-dependency implementations of:
 
 - Theme switching and persistence
-- Sidebar toggle and mobile overlay
 - Seekbar and media player controls
 - Syntax highlighting for code blocks
 - And more...
@@ -175,10 +174,9 @@ Older versions: https://github.com/nandovejer/luz/blob/main/packages/core/CHANGE
 ### Read first
 
 1. `dist/classes.json` in this package: the classes and custom properties its CSS defines. Write only those.
-2. `dist/custom-elements.json` in this package: the `<luz-*>` elements it defines, with their attributes.
-3. https://nandovejer.github.io/luz/llms.txt: the index of the documentation, short enough for a small context.
-4. https://nandovejer.github.io/luz/llms-full.txt: the same pages in full.
-5. https://nandovejer.github.io/luz/examples/: one standalone page of markup for each component and pattern.
+2. https://nandovejer.github.io/luz/llms.txt: the index of the documentation, short enough for a small context.
+3. https://nandovejer.github.io/luz/llms-full.txt: the same pages in full.
+4. https://nandovejer.github.io/luz/examples/: one standalone page of markup for each component and pattern.
 
 ### Load order
 

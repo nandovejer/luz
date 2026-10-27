@@ -1038,6 +1038,7 @@ const CATALOG_FILES = new Set(CATALOG_STYLESHEETS.map(({ file }) => file));
  * there is one: `cms-toc` has none, its table of contents is a class of cms-article.css), by file name. A kind
  * of site has no stylesheet of its own: its patterns are the catalog files.
  */
+const LAYOUT_FIRST = ["sidebar", "navbar", "terminal", "timeline"].map((name) => `components/${name}.css`);
 function stylesheetsFor(page) {
   const area = areaOf(page.route);
   const { kept } = blocksOf(page);
@@ -1047,7 +1048,10 @@ function stylesheetsFor(page) {
     const own = `components/${page.route.split("/").filter(Boolean).at(-1)}.css`;
     if (CATALOG_FILES.has(own)) files.add(own);
   }
-  const catalog = [...files].sort().map((file) => ["catalog", minifiedOf(file)]);
+  // The four that moved from core in F7 keep their old cascade order (sidebar, navbar, terminal, timeline), ahead of the other
+  // catalog files (which follow by name): all are in luz.catalog, so source order decides, and a pattern or the search must
+  // never be overridden by the sidebar's link colours
+  const catalog = [...LAYOUT_FIRST.filter((f) => files.has(f)), ...[...files].filter((f) => !LAYOUT_FIRST.includes(f)).sort()].map((file) => ["catalog", minifiedOf(file)]);
   return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...catalog];
 }
 
@@ -1169,6 +1173,19 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
       const bodyAt = e.html.search(/<body\b/i);
       for (const script of doc.scripts) expect(script.index, e.route).toBeGreaterThan(bodyAt);
     }
+  });
+
+  it("links the four components that moved from core first among catalog's files, in the order sidebar, navbar, terminal, timeline", () => {
+    let seen = 0;
+    for (const e of examples()) {
+      const files = inspect(e.html, e.route).links.map((l) => l.href).filter((h) => h.includes("/catalog/components/")).map((h) => h.split("/").at(-1).replace(/\.min\.css$/, ""));
+      const moved = files.filter((f) => LAYOUT_FIRST.includes(`components/${f}.css`));
+      if (!moved.length) continue;
+      seen++;
+      expect(moved, e.route).toEqual(["sidebar", "navbar", "terminal", "timeline"].filter((f) => moved.includes(f)));
+      expect(files.slice(0, moved.length), `${e.route}: they come first`).toEqual(moved);
+    }
+    expect(seen, "pages that link any of the four").toBeGreaterThan(3);
   });
 
   it("loads only files that exampleAssets copies: every <link> and <script> resolves to one of its routes", () => {
@@ -1304,7 +1321,8 @@ describe("exampleDocuments: the rules on a small site", () => {
       ],
       { how: snippet("code-how", "How only block", "html", '<span class="how-only">HOW-ONLY-BLOCK</span>') },
     ),
-    "pages/components/timeline.html": page("Timeline", "components", [["Timeline markup", "html", '<luz-timeline role="group" aria-label="Releases"><ol class="luz-timeline"></ol></luz-timeline>']]),
+    // F7: <luz-timeline> is catalog's tag since the timeline left core, so its page is in the catalog area
+    "pages/catalog/timeline.html": page("Timeline", "catalog", [["Timeline markup", "html", '<luz-timeline role="group" aria-label="Releases"><ol class="luz-timeline"></ol></luz-timeline>']]),
     "pages/components/plain.html": FRONT("Plain", "A page with no markup section.", "components") + "<h2 id=\"how\">How</h2><p>PLAIN-TEXT</p>\n",
     "pages/catalog/banner.html": page("Banner", "catalog", [["Banner markup", "html", '<luz-banner tone="warning">Closed on Monday</luz-banner>']]),
     // A pattern of a kind of site is a page of the catalog area, its CSS a file of catalog (F5b)
@@ -1322,7 +1340,7 @@ describe("exampleDocuments: the rules on a small site", () => {
       build()
         .map((d) => d.route)
         .sort(),
-    ).toEqual(["/examples/catalog/banner.html", "/examples/components/timeline.html", "/examples/components/widget.html", "/examples/catalog/landing-header.html"].sort());
+    ).toEqual(["/examples/catalog/banner.html", "/examples/catalog/timeline.html", "/examples/components/widget.html", "/examples/catalog/landing-header.html"].sort());
   });
 
   it("writes the kept html blocks as markup, decoded once, and leaves out the js block, the handler, the script and other sections", () => {
@@ -1352,8 +1370,8 @@ describe("exampleDocuments: the rules on a small site", () => {
     const docs = build();
     const hrefs = (route) => inspect(byRoute(docs, route).html, route).links.map((l) => l.href);
     expect(hrefs("/examples/components/widget.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css"]);
-    // <luz-timeline> is core's tag
-    expect(hrefs("/examples/components/timeline.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css"]);
+    // <luz-timeline> is catalog's tag since F7 (core defines none): a page that uses it links its file after core
+    expect(hrefs("/examples/catalog/timeline.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/timeline.min.css"]);
     // catalog has no bundle: one link per component, the file of the element or class the markup uses
     expect(hrefs("/examples/catalog/banner.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/banner.min.css"]);
     // a pattern of a kind of site is a file of catalog: the file of its class, then the file of the tag it holds (by file name)
@@ -1366,6 +1384,7 @@ describe("exampleDocuments: the rules on a small site", () => {
     const scripts = (route) => inspect(byRoute(docs, route).html, route).scripts.map((s) => s.src);
     expect(scripts("/examples/components/widget.html")).toEqual(["../dist/core/luz.min.js"]);
     expect(scripts("/examples/catalog/landing-header.html")).toEqual(["../dist/core/luz.min.js", "../dist/catalog/catalog.min.js"]);
+    expect(scripts("/examples/catalog/timeline.html")).toEqual(["../dist/core/luz.min.js", "../dist/catalog/catalog.min.js"]);
   });
 
   it("links the file of a pattern of a kind of site by its class, even when no tag of catalog is named, and no stylesheet of a package of the kind", () => {
@@ -1436,11 +1455,12 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
 });
 
 describe("manifestAssets: the manifests of every package, served from /manifests/<pkg>/", () => {
-  it("lists classes.json of every package and custom-elements.json of the packages that have one", () => {
+  it("lists classes.json of every package and custom-elements.json of the packages that have one (catalog only: core defines no tag since F7)", () => {
     const expected = PACKAGES.flatMap((pkg) =>
       ["classes.json", "custom-elements.json"].filter((file) => existsSync(join(root, "packages", pkg, "dist", file))).map((file) => ({ route: `/manifests/${pkg}/${file}`, from: `packages/${pkg}/dist/${file}` })),
     );
-    expect(expected.map((e) => e.route)).toEqual(expect.arrayContaining(["/manifests/core/classes.json", "/manifests/core/custom-elements.json", "/manifests/catalog/custom-elements.json", "/manifests/catalog/classes.json"]));
+    expect(expected.map((e) => e.route)).toEqual(expect.arrayContaining(["/manifests/core/classes.json", "/manifests/catalog/custom-elements.json", "/manifests/catalog/classes.json"]));
+    expect(expected.map((e) => e.route), "core has no custom-elements.json").not.toContain("/manifests/core/custom-elements.json");
     expect(expected.filter((e) => /\/manifests\/(?:landing|cms|app|docs)\//.test(e.route)), "no manifest of a package that is gone").toEqual([]);
     expect([...manifests()].sort((a, b) => a.route.localeCompare(b.route))).toEqual(expected.sort((a, b) => a.route.localeCompare(b.route)));
     for (const asset of manifests()) expect(existsSync(join(root, asset.from)), asset.from).toBe(true);

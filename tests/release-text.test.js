@@ -3,8 +3,10 @@
  * §7 the AGENTS.md rule, §8 the migration notes, §9 step 15). The files are read
  * as text; no browser, no build.
  *
- *   - AGENTS.md and PRINCIPLES.md §6 say the same thing: catalog is what can go in
- *     any section; since F5b (plan ai-and-catalog-only) the patterns of a kind of
+ *   - AGENTS.md and PRINCIPLES.md §6 say the same thing: since F7 (plan ai-and-catalog-only,
+ *     decision 35) catalog is the navigation of the site and the pieces with JS or an
+ *     identity of their own, and core is everything else (it was "what can go in any
+ *     section"); since F5b (plan ai-and-catalog-only) the patterns of a kind of
  *     site (page structure included) are catalog's too, one file each, and there is
  *     no package for a kind of site
  *   - site's README says it too, and says the consent band is fixed at the bottom
@@ -40,8 +42,16 @@ const between = (text, from, until) => {
 describe("the core / site rule (spec §7)", () => {
   const layering = between(read("AGENTS.md"), "## Package layering", /\n---\n/);
 
-  it("AGENTS.md's package layering says site is what can go in any section", () => {
-    expect(layering).toMatch(/catalog is what can go in any section/i);
+  it("AGENTS.md's package layering says catalog is the navigation of the site and the pieces with JS or an identity of their own, and core everything else (F7)", () => {
+    expect(layering).toMatch(/catalog is the navigation of the site and the pieces with JS or an identity of their own; core, everything else/i);
+    expect(layering).not.toMatch(/catalog is what can go in any section/i);
+  });
+
+  it("AGENTS.md puts the navbar, the sidebar, the terminal and the timeline in catalog, and says core names nothing of catalog (F7)", () => {
+    for (const name of ["navbar", "sidebar", "terminal", "timeline"]) expect(layering, name).toContain(name);
+    expect(layering).toMatch(/core names nothing of catalog/i);
+    // the layout of core no longer lists the navbar
+    expect(layering).not.toMatch(/including the layout every page needs \([^)]*navbar/);
   });
 
   it("AGENTS.md no longer sorts site by the data it needs or the page structure it holds", () => {
@@ -79,7 +89,10 @@ describe("the core / site rule (spec §7)", () => {
 
     it("says the same: catalog is what can go in any section, and the patterns of a kind of site are catalog too, one file each", () => {
       expect(bullet, "the bullet exists").toBeTruthy();
-      expect(bullet).toMatch(/can go in any section/i);
+      expect(bullet).toMatch(/`catalog` is the navigation of the site and the pieces with JS or an identity of their own/i);
+      expect(bullet).toMatch(/`core` is everything else/i);
+      expect(bullet).toMatch(/core names nothing of catalog/i);
+      expect(bullet).not.toMatch(/can go in any section/i);
       expect(bullet).toMatch(/patterns of a kind of site[^.]*are catalog too, one file each/i);
       expect(bullet).not.toMatch(/needs data of the site/i);
       expect(bullet).not.toMatch(/page structure[^.]*(never|not)[^.]*`?catalog`?/i);
@@ -102,7 +115,8 @@ describe("@luz-ds/catalog's README says what site is now", () => {
   const readme = read("packages/catalog/README.md");
 
   it("sorts its pieces by the new rule, not by the data they need", () => {
-    expect(readme).toMatch(/any section/i);
+    expect(readme).toMatch(/catalog is the navigation of the site and the pieces with JS or an identity of their own/i);
+    expect(readme).not.toMatch(/any section/i);
     expect(readme).not.toMatch(/needs data of the site/i);
   });
 

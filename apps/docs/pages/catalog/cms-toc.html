@@ -2,7 +2,7 @@
 title: Table of contents
 description: Lists the sections of a long article, beside the text when there is room and above it when there is not.
 area: catalog
-order: 14
+order: 16
 group: content
 fits-kinds: blog
 fits: a long article, beside the text or above it
@@ -38,11 +38,11 @@ toc: h2,h3
                 </div>
               </div>
             </article>
-            <p class="docs-demo__note">Beside the text, at the end, when the article is 46rem wide or more; above it below that. With core's script, the section in view is marked as you scroll.</p>
+            <p class="docs-demo__note">Beside the text, at the end, when the article is 46rem wide or more; above it below that. With the catalog's script, the section in view is marked as you scroll.</p>
           </div>
           </div>
           <h2 id="known-issues">Known issues</h2>
-          <p>The mark on the section in view needs core's script; without it, no link is marked. Beside the text, the contents sit at the inline end but come first in the source, so Tab reaches them before the text.</p>
+          <p>The mark on the section in view needs the catalog's script; without it, no link is marked. Beside the text, the contents sit at the inline end but come first in the source, so Tab reaches them before the text.</p>
           <p>Not yet tested with a screen reader.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Table of contents documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
@@ -90,7 +90,7 @@ toc: h2,h3
                   <tr><td data-label="Class or property"><div><code>.luz-cms-article</code></div></td><td data-label="What it does"><div>The story: its width decides the layout, not the window's (a size container)</div></td></tr>
                   <tr><td data-label="Class or property"><div><code>.luz-cms-article__layout</code></div></td><td data-label="What it does"><div>The contents, then the text. When the article is 46rem wide or more: the text in the first column, the contents in a 13rem column at the inline end, 48 px apart; one column below that</div></td></tr>
                   <tr><td data-label="Class or property"><div><code>.luz-cms-toc</code></div></td><td data-label="What it does"><div>The <code>&lt;nav&gt;</code>. Beside the text it stays in view while the text scrolls, and a list taller than the window scrolls inside it</div></td></tr>
-                  <tr><td data-label="Class or property"><div><code>data-luz-spy</code> on <code>.luz-cms-toc</code></div></td><td data-label="What it does"><div>Core's scroll spy marks the link of the section in view. Optional</div></td></tr>
+                  <tr><td data-label="Class or property"><div><code>data-luz-spy</code> on <code>.luz-cms-toc</code></div></td><td data-label="What it does"><div>The catalog's scroll spy marks the link of the section in view. Optional</div></td></tr>
                   <tr><td data-label="Class or property"><div><code>.luz-cms-toc__title</code></div></td><td data-label="What it does"><div>The heading of the contents, in the sans, semibold</div></td></tr>
                   <tr><td data-label="Class or property"><div><code>.luz-cms-toc__list</code></div></td><td data-label="What it does"><div>The list, with no markers and a rule along its inline start; one link a line</div></td></tr>
                   <tr><td data-label="Class or property"><div><code>--luz-cms-toc-top</code></div></td><td data-label="What it does"><div>The space above the contents while they stay in view: 24 px, or 24 px under a sticky bar (core's <code>.o-sticky</code>, one row of <code>--luz-bar-h</code>, such as the <a href="/docs/catalog/cms-header/">header</a>). Set it on <code>.luz-cms-toc</code> for a header of another height</div></td></tr>
@@ -103,7 +103,7 @@ toc: h2,h3
               <li>The layout follows the room the article has: in a page with a sidebar, or with larger text, the contents go above the text sooner. Below 46rem they are a plain list above the text, and do not stay in view: they would cover it.</li>
               <li>The contents come first in the source, so they are read first and Tab reaches them first, in both layouts. The text is one element, the second child of <code>__layout</code>; in a CMS, the element that holds the post's content.</li>
               <li>Each link points at the <code>id</code> of a section heading. Most CMSs can write those ids: in WordPress, the HTML anchor of each heading block.</li>
-              <li>With core's script (<code>luz.js</code>, or <code>initSidebar()</code> from <code>@luz-ds/core/sidebar</code>), the link of the section in view gets <code>aria-current="true"</code>, which draws a bar and makes it semibold. The script finds the links by the <code>data-luz-spy</code> attribute on the <code>&lt;nav&gt;</code>: every link to a section of the page inside it.</li>
+              <li>With the catalog's script (<code>catalog.js</code>, or <code>initSidebar()</code> from <code>@luz-ds/catalog/sidebar</code>), the link of the section in view gets <code>aria-current="true"</code>, which draws a bar and makes it semibold. The script finds the links by the <code>data-luz-spy</code> attribute on the <code>&lt;nav&gt;</code>: every link to a section of the page inside it.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>The contents are a list of links to the sections, which the browser scrolls to. Only the mark on the section in view needs the script; without it, no link is marked.</p>
@@ -123,7 +123,7 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not use it in a short post: three paragraphs need no map.</p>
             <ul>
-              <li>Not for links to other pages: that is navigation, in the <a href="/docs/catalog/cms-header/">header</a> or a <a href="/docs/components/sidebar/">sidebar</a>.</li>
+              <li>Not for links to other pages: that is navigation, in the <a href="/docs/catalog/cms-header/">header</a> or a <a href="/docs/catalog/sidebar/">sidebar</a>.</li>
               <li>Not for the steps of a task done in order: number the steps in the text.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>

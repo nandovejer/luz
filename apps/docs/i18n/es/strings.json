@@ -116,6 +116,7 @@
   "snippets.when.luz-search": "un <code>&lt;luz-search&gt;</code>",
   "snippets.when.luz-consent": "un <code>&lt;luz-consent&gt;</code>",
   "snippets.when.luz-mode": "un <code>&lt;luz-mode&gt;</code>",
+  "snippets.when.luz-sidebar": "un <code>.luz-sidebar</code>, o una lista marcada con <code>data-luz-spy</code>",
   "ai.files-label": "Archivos que puede leer un agente",
   "ai.col-file": "Archivo",
   "ai.col-url": "URL",

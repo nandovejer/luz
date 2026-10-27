@@ -47,8 +47,8 @@ import { englishT } from "./strings.js";
  */
 export const FILES = {
   tokens: { css: "luz-tokens.min.css", js: null, chunks: [] },
-  core: { css: "luz.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js"] },
-  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
+  core: { css: "luz.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "i18n-es.min.js"] },
+  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "consent.min.js", "mode.min.js", "timeline.min.js", "sidebar.min.js"] },
 };
 
 /** The catalog component the snippet of a kind of site links, as the example of one link per component. */
@@ -113,11 +113,12 @@ export const WAYS = [{ id: "npm" }, { id: "cdn" }];
 const CHUNK_WHEN = {
   "midi.min.js": ["core", "snippets.when.midi"],
   "table-sort.min.js": ["core", "snippets.when.table-sort"],
-  "timeline.min.js": ["core", "snippets.when.luz-timeline"],
   "i18n-es.min.js": ["core", "snippets.when.i18n-es"],
   "search.min.js": ["catalog", "snippets.when.luz-search"],
   "consent.min.js": ["catalog", "snippets.when.luz-consent"],
   "mode.min.js": ["catalog", "snippets.when.luz-mode"],
+  "timeline.min.js": ["catalog", "snippets.when.luz-timeline"],
+  "sidebar.min.js": ["catalog", "snippets.when.luz-sidebar"],
 };
 
 const CDN = "https://cdn.jsdelivr.net/npm";

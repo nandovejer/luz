@@ -2,9 +2,9 @@
  * F5 step 3, `custom-elements.json` (.claude/plans/specs/f5-ai-ready.md §2.3,
  * §2.2, §10 row 3; decisions D5 and D6, and "Review answers"). One manifest in
  * each package that ships a tag, in the Custom Elements Manifest format, schema
- * version 2.1.0: core ships `<luz-timeline>`; catalog ships `<luz-search>`,
- * `<luz-consent>` and the CSS-only `<luz-lang-switch>`, `<luz-submenu>`,
- * `<luz-banner>`. Tokens, landing, cms and app ship none.
+ * version 2.1.0: catalog ships `<luz-search>`, `<luz-consent>`, `<luz-mode>`,
+ * `<luz-timeline>` (it was core's until F7) and the CSS-only `<luz-lang-switch>`,
+ * `<luz-submenu>`, `<luz-banner>`. Tokens and core ship none: core defines no tag.
  *
  * The facts come from the code, not from this file: the expected sets are read
  * from the JS and CSS sources by a scan of their own (`readsOf`, `eventsOf`,
@@ -117,7 +117,8 @@ function walk(dir, out = []) {
 
 // [tag, package, file as the package exports it, a script defines it]
 const TAGS = [
-  { tag: "luz-timeline", pkg: "core", file: "timeline.js", script: true },
+  // F7: the timeline moved from core to catalog; core defines no tag now
+  { tag: "luz-timeline", pkg: "catalog", file: "timeline.js", script: true },
   { tag: "luz-search", pkg: "catalog", file: "search.js", script: true },
   { tag: "luz-consent", pkg: "catalog", file: "consent.js", script: true },
   // F1 of the identity plan. The generator's grammar applies: attributes are the literal names of
@@ -290,7 +291,7 @@ function firstColumnCodes(html) {
 /* ---- tests ------------------------------------------------------------------ */
 
 describe("which tags exist (the scan of the sources agrees with the spec)", () => {
-  it("the tags a script defines are timeline in core, and search, consent and mode in catalog", () => {
+  it("the tags a script defines are timeline, search, consent and mode, all in catalog (core defines none)", () => {
     const defined = definedTags();
     expect([...defined].sort()).toEqual(TAGS.filter((t) => t.script).map((t) => [t.tag, t.pkg]).sort());
   });
@@ -667,9 +668,13 @@ describe("the built packages: custom-elements.json", () => {
     expect(existsSync(`${root}packages/${pkg}/dist/${declaration.stylesheet.replace(/\.css$/, ".min.css")}`), "its .min.css").toBe(true);
   });
 
-  it.each(TAGS.filter((t) => t.pkg === "core"))("$tag: a package that keeps its bundle names no stylesheet per element", ({ tag, pkg }) => {
-    const { declaration } = declarationsOf(pkg).find((d) => d.declaration.tagName === tag);
-    expect(declaration).not.toHaveProperty("stylesheet");
+  it("core ships no tag: no custom-elements.json in its dist, and no module of its sources defines an element", () => {
+    expect(SHIPPING).toEqual(["catalog"]);
+    expect(existsSync(`${root}packages/core/dist/custom-elements.json`)).toBe(false);
+    expect(buildElementManifest("core")).toBeNull();
+    for (const file of walk(`${root}packages/core/src`).filter((f) => f.endsWith(".js"))) {
+      expect(readFileSync(file, "utf-8"), file).not.toMatch(/customElements\.define\(/);
+    }
   });
 
   it.each(TAGS)("$tag: attributes and events are the ones its header tags declare, in that order, with the code's types", (entry) => {

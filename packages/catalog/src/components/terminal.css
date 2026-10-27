@@ -1,9 +1,9 @@
 /* --------------------------------------------------------------------------
-   LUZ Component: terminal
+   LUZ Catalog: terminal
    A command in a framed block: tabs as its title bar, a copy button at the
    end of the line it copies
-   Layer: components (ITCSS 5) · Prefix: .luz-
-   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Layer: catalog · Prefix: .luz-
+   Requires: @luz-ds/tokens and @luz-ds/core (luz.css), loaded first.
    -------------------------------------------------------------------------- */
 
 

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalog layer: the navbar, the sidebar, the terminal and the timeline</title>
+  <!-- tests/catalog-moved.spec.js: the four came from core's components layer to luz.catalog (F7, decision 29), which is
+       declared after luz.utilities, so a `.u-*` utility on the same element no longer wins over them. Each probe carries
+       a utility that sets what its component sets. No script. -->
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/navbar.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/terminal.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/timeline.css">
+</head>
+<body>
+  <main>
+    <h1>Layers</h1>
+    <nav class="luz-navbar" aria-label="Main">
+      <ul class="luz-navbar__list">
+        <li><a class="luz-navbar__link u-text-primary" id="navbar-link" href="#main">Home</a></li>
+      </ul>
+    </nav>
+    <nav class="luz-sidebar u-text-primary" id="sidebar" aria-label="Side">
+      <div class="luz-sidebar__section"><a class="luz-sidebar__link" href="#main">Start</a></div>
+    </nav>
+    <div class="luz-terminal u-flex" id="terminal"><div class="luz-terminal__tabs"></div></div>
+    <ol class="luz-timeline u-mb-lg" id="timeline">
+      <li class="luz-timeline__item"><time class="luz-timeline__date" datetime="2020">2020</time><p class="luz-timeline__title">One</p></li>
+    </ol>
+  </main>
+</body>
+</html>

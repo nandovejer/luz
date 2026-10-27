@@ -2,7 +2,8 @@
 title: Barra de navegación
 description: Coloca los enlaces principales de un sitio en una fila de la cabecera y, en pantallas estrechas, en un panel debajo.
 keywords: barra de navegación, barra de navegación
-source: 5e0147e33024
+fits: la barra de las secciones principales de un sitio, en la parte superior de la página
+source: 506dac75e6cb
 reviewed: false
 -->
     <div class="docs-component" id="c-navbar">
@@ -43,7 +44,7 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
-            <p>La barra de navegación va en la fila de una barra, después del botón de menú de core y del nombre del sitio. La barra es tuya o es una cabecera del <a href="/docs/catalog/">catálogo</a>, como la <a href="/docs/catalog/landing-header/">cabecera de landing</a>, que también establece el ancla bajo la que se abre el panel.</p>
+            <p>La barra de navegación va en la fila de una barra, después del botón de menú y del nombre del sitio. La barra es tuya o es una cabecera del <a href="/docs/catalog/">catálogo</a>, como la <a href="/docs/catalog/landing-header/">cabecera de landing</a>, que también establece el ancla bajo la que se abre el panel.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -80,7 +81,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Un <code>popover</code> nativo en <code>&lt;nav&gt;</code>, abierto con <code>.luz-nav-toggle</code> de core mediante <code>popovertarget</code>. Sin JavaScript, el navegador gestiona Escape, el cierre al pulsar fuera, la posición del panel abierto en el orden de tabulación y el estado expandido del botón.</p>
+            <p>Un <code>popover</code> nativo en <code>&lt;nav&gt;</code>, abierto con un <code>.luz-nav-toggle</code> mediante <code>popovertarget</code>. Sin JavaScript, el navegador gestiona Escape, el cierre al pulsar fuera, la posición del panel abierto en el orden de tabulación y el estado expandido del botón.</p>
             <ul>
               <li>A partir de 769 px, el popover cerrado aparece como una fila de la barra y el botón de menú queda oculto.</li>
               <li>A 768 px o menos, el panel queda fijo debajo de la barra, ocupa todo el ancho de la ventana y tiene una sombra y una capa atenuada que empieza debajo de la barra, para que esta nunca se atenúe.</li>
@@ -107,7 +108,7 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No la uses en una aplicación con muchas secciones ni para los enlaces de una página.</p>
             <ul>
-              <li>Para muchas secciones o una jerarquía, usa la <a href="/docs/components/sidebar/">barra lateral</a>.</li>
+              <li>Para muchas secciones o una jerarquía, usa la <a href="/docs/catalog/sidebar/">barra lateral</a>.</li>
               <li>Para indicar dónde está una página dentro de una jerarquía, usa las <a href="/docs/components/breadcrumb/">migas de pan</a>.</li>
               <li>Para las secciones de una página, usa <a href="/docs/components/tabs/">pestañas</a> o una lista de enlaces internos.</li>
             </ul>

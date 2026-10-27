@@ -19,7 +19,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { RTL, coreSrc, enDictionary, languageFiles, languageProblems, languagesDir, objectAfter, placeholdersOf, readCore, repo } from "./helpers/i18n-source.js";
+import { RTL, coreSrc, enDictionary, languageFiles, languageProblems, languagesDir, objectAfter, placeholdersOf, readCatalog, readCore, repo } from "./helpers/i18n-source.js";
 
 const entry = readCore("i18n.js");
 const en = enDictionary(entry);
@@ -144,7 +144,7 @@ describe("the checker that the build and this file use", () => {
 });
 
 describe("the timeline's own four strings (EX-010) cannot drift from the dictionary", () => {
-  const timeline = readCore("timeline.js");
+  const timeline = readCatalog("timeline.js"); // catalog's since F7
   const own = (lang) => objectAfter(timeline.slice(timeline.indexOf("const strings")), new RegExp(`\\b${lang}\\s*:\\s*\\{`));
 
   it("English: play, pause, previous and next equal en", () => {

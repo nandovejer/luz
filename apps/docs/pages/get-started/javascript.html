@@ -5,7 +5,7 @@ area: get-started
 order: 7
 -->
     <div class="docs-block" id="c-js">
-          <p>Every LUZ page works without JavaScript. The scripts add behaviour on top: copying, highlighting, a cycling color mode button, scroll spy, players, tabs, sorting a table and a timeline.</p>
+          <p>Every LUZ page works without JavaScript. The scripts add behaviour on top: copying, highlighting, a cycling color mode button, players, tabs and sorting a table. The catalog adds its own: search, the cookie banner, the Auto color mode, a timeline and the scroll spy of the sidebar.</p>
           <h2 id="js-load">Load all of it, or one module</h2>
           <div class="docs-snippet">
             <div class="docs-snippet__bar">
@@ -25,12 +25,15 @@ initTabs();</code></pre>
           <ul>
             <li><code>luz.js</code> starts every module when the page loads.</li>
             <li>Importing a single module does nothing until you call its <code>init</code> function.</li>
-            <li><code>midi.js</code>, <code>table-sort.js</code> and <code>timeline.js</code> are chunks of their own: <code>luz.js</code> loads each one on demand, and only on a page that needs it.</li>
+            <li><code>midi.js</code> and <code>table-sort.js</code> are chunks of their own: <code>luz.js</code> loads each one on demand, and only on a page that needs it.</li>
             <li>The site search is in <code>@luz-ds/catalog</code>: see <a href="/docs/catalog/search/">Search</a>. So is the cookie banner, a module of its own that <code>catalog.js</code> does not include: see <a href="/docs/catalog/consent/">Cookie consent</a>. The Auto color mode is a third module of the same kind, <code>mode.js</code>, loaded by <code>catalog.js</code> only on a page with a <code>&lt;luz-mode&gt;</code>: see <a href="/docs/catalog/mode/">Auto color mode</a>.</li>
+            <li>The timeline and the sidebar's scroll spy are in <code>@luz-ds/catalog</code> too, as <code>timeline.js</code> and <code>sidebar.js</code>. <code>catalog.js</code> loads the first on a page with a <code>&lt;luz-timeline&gt;</code> and the second on a page with a <code>.luz-sidebar</code>, or a list marked <code>data-luz-spy</code>. Import them by name for a timeline or a sidebar added later: <code>@luz-ds/catalog/timeline</code> and <code>@luz-ds/catalog/sidebar</code>.</li>
+            <li>A page that loads only core has no scroll spy. The sidebar drawer is a native popover and works without a script.</li>
+            <li>The timeline has a small dictionary of its own for its four buttons (<code>en</code> and <code>es</code> only), then <code>data-luz-label-*</code> and the nearest <code>lang</code>. A language added with <code>registerLocale()</code> does not reach it: call <code>initTimeline(document, t)</code> with the <code>t</code> of core.</li>
           </ul>
           <h2 id="js-modules">The modules</h2>
           <details class="docs-fold" open data-fold-narrow>
-            <summary>All <span data-count="modules">13</span> JavaScript modules</summary>
+            <summary>All <span data-count="modules">11</span> JavaScript modules of core</summary>
             <div class="docs-demo__stage">
             <div class="luz-table-wrap" role="region" aria-label="JavaScript modules" tabindex="0">
               <table class="luz-table">
@@ -40,7 +43,6 @@ initTabs();</code></pre>
                 <tbody>
                   <tr><td data-label="Module"><div><code>luz.js</code></div></td><td data-label="What it does"><div>Entry: re-exports every module and initializes them all on load</div></td><td data-label="Key exports"><div>Everything below</div></td></tr>
                   <tr><td data-label="Module"><div><code>theme.js</code></div></td><td data-label="What it does"><div>Color mode switching</div></td><td data-label="Key exports"><div><code>applyTheme</code></div></td></tr>
-                  <tr><td data-label="Module"><div><code>sidebar.js</code></div></td><td data-label="What it does"><div>Active link while scrolling (the links of <code>.luz-sidebar__link</code>, and the in-page links inside an element with <code>data-luz-spy</code>), and closing the popover drawer after a link is followed</div></td><td data-label="Key exports"><div><code>initSidebar</code></div></td></tr>
                   <tr><td data-label="Module"><div><code>clipboard.js</code></div></td><td data-label="What it does"><div>Copy with visual feedback</div></td><td data-label="Key exports"><div><code>copyToClipboard</code>, <code>initCopyButtons</code></div></td></tr>
                   <tr><td data-label="Module"><div><code>modal.js</code></div></td><td data-label="What it does"><div>Fallback for the <code>command</code> and <code>commandfor</code> attributes in browsers without them</div></td><td data-label="Key exports"><div><code>initModals</code>, <code>supportsCommands</code></div></td></tr>
                   <tr><td data-label="Module"><div><code>highlight.js</code></div></td><td data-label="What it does"><div>Dependency-free syntax highlight for code blocks</div></td><td data-label="Key exports"><div><code>highlightBlock</code>, <code>initHighlight</code></div></td></tr>
@@ -49,7 +51,6 @@ initTabs();</code></pre>
                   <tr><td data-label="Module"><div><code>i18n.js</code></div></td><td data-label="What it does"><div>Text the scripts write, in the language of the nearest <code>lang</code>: English in the entry, other languages fetched when a page uses them</div></td><td data-label="Key exports"><div><code>t</code>, <code>getLang</code>, <code>registerLocale</code>, <code>loadLocales</code></div></td></tr>
                   <tr><td data-label="Module"><div><code>utils.js</code></div></td><td data-label="What it does"><div>Pure helpers</div></td><td data-label="Key exports"><div><code>formatTime</code>, <code>escapeHtml</code>, <code>calculateProgress</code></div></td></tr>
                   <tr><td data-label="Module"><div><code>table-sort.js</code></div></td><td data-label="What it does"><div>Sorts a table in the browser: a heading marked <code>data-luz-sort</code> becomes a button. Loaded on demand, only on a page that has one</div></td><td data-label="Key exports"><div><code>initTableSort(root, t)</code></div></td></tr>
-                  <tr><td data-label="Module"><div><code>timeline.js</code></div></td><td data-label="What it does"><div>Defines <code>&lt;luz-timeline&gt;</code>: a rail of dates, Previous and Next, opt-in autoplay with a Pause button, and a vertical layout. Loaded on demand, only on a page that has one</div></td><td data-label="Key exports"><div>Importing it defines the element; <code>initTimeline(root, translate)</code> hands it another <code>t</code></div></td></tr>
                   <tr><td data-label="Module"><div><code>midi.js</code></div></td><td data-label="What it does"><div>MIDI parser and Web Audio scheduler, loaded on demand</div></td><td data-label="Key exports"><div><code>MidiPlayer</code></div></td></tr>
                 </tbody>
               </table>
@@ -78,8 +79,8 @@ initTabs();</code></pre>
                 <tr><td data-label="Component"><div><a href="/docs/components/modal/">Modal</a></div></td><td data-label="Without JavaScript"><div>Opens where the browser supports <code>command</code>; elsewhere the open button does nothing</div></td></tr>
                 <tr><td data-label="Component"><div><a href="/docs/components/code/">Code</a></div></td><td data-label="Without JavaScript"><div>Plain text, no colours</div></td></tr>
                 <tr><td data-label="Component"><div><a href="/docs/components/table/">Table</a></div></td><td data-label="Without JavaScript"><div>A heading with a link sorts on the server; a plain heading is not sortable. Rows are never hidden</div></td></tr>
-                <tr><td data-label="Component"><div><a href="/docs/components/timeline/">Timeline</a></div></td><td data-label="Without JavaScript"><div>An ordered list with a line and a dot per item; every item is visible</div></td></tr>
-                <tr><td data-label="Component"><div><a href="/docs/components/sidebar/">Sidebar</a></div></td><td data-label="Without JavaScript"><div>Works, drawer included; the current link does not follow the scroll</div></td></tr>
+                <tr><td data-label="Component"><div><a href="/docs/catalog/timeline/">Timeline</a></div></td><td data-label="Without JavaScript"><div>An ordered list with a line and a dot per item; every item is visible</div></td></tr>
+                <tr><td data-label="Component"><div><a href="/docs/catalog/sidebar/">Sidebar</a></div></td><td data-label="Without JavaScript"><div>Works, drawer included; the current link does not follow the scroll</div></td></tr>
                 <tr><td data-label="Component"><div><a href="/docs/catalog/cms-toc/">Table of contents</a> and other <code>data-luz-spy</code> lists</div></td><td data-label="Without JavaScript"><div>Links to the sections; no link is marked as the one in view</div></td></tr>
               </tbody>
             </table>

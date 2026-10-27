@@ -2,7 +2,7 @@
 	 LUZ Catalog: landing header.
 	 Layer: catalog · Prefix: .luz-landing-
 	 header.luz-landing-header.o-sticky > div.o-container.o-container--inline.o-row
-	 holding core's .luz-nav-toggle, the __brand link, core's
+	 holding catalog's .luz-nav-toggle, the __brand link, catalog's
 	 nav.luz-navbar[popover] and a div.o-row.__actions (search, language,
 	 a login link). Core gives the stickiness, the width and the row; the
 	 landing adds the surface, the divider, the brand and the gaps.
@@ -53,7 +53,7 @@
 	}
 }
 
-/* With anchor positioning the panels opened inside the bar (core's navbar,
+/* With anchor positioning the panels opened inside the bar (catalog's navbar,
    the language list) open at its block end, on two rows as on one. Scoped,
    so with two bars on a page each panel finds its own */
 @supports (anchor-name: --luz-bar) {

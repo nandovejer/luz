@@ -206,7 +206,6 @@ describe.skipIf(!distBuilt)("dist build artifacts (BUG-02)", () => {
     for (const f of [
       "utils.js",
       "theme.js",
-      "sidebar.js",
       "clipboard.js",
       "modal.js",
       "highlight.js",
@@ -214,6 +213,14 @@ describe.skipIf(!distBuilt)("dist build artifacts (BUG-02)", () => {
       "tabs.js",
     ]) {
       expect(existsSync(resolve(coreDist, f))).toBe(true);
+    }
+  });
+
+  it("the sidebar and the timeline modules are catalog's (F7), not core's", () => {
+    const catalogDist = resolve(process.cwd(), "packages/catalog/dist");
+    for (const f of ["sidebar.js", "sidebar.min.js", "timeline.js", "timeline.min.js"]) {
+      expect(existsSync(resolve(catalogDist, f)), `catalog dist/${f}`).toBe(true);
+      expect(existsSync(resolve(coreDist, f)), `core dist/${f}`).toBe(false);
     }
   });
 

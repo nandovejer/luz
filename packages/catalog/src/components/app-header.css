@@ -2,7 +2,7 @@
 	 LUZ Catalog: app header.
 	 Layer: catalog · Prefix: .luz-app-
 	 The bar at the top of the main area: header.luz-app-header.o-sticky >
-	 div.o-row, inside .o-main beside the sidebar. It holds core's
+	 div.o-row, inside .o-main beside the sidebar. It holds catalog's
 	 .luz-nav-toggle (it opens the sidebar drawer), the __product name, and
 	 div.o-row.__actions: site's <luz-search> if it is loaded, then a
 	 .luz-dropdown whose button is the __account (initials in a .luz-avatar,

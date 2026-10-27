@@ -1,9 +1,9 @@
 // @ts-check
 /**
- * Core's `.luz-navbar` (.claude/plans/specs/f3-package-model.md, §3.2 and §9
+ * Catalog's `.luz-navbar` (it was core's until F7; .claude/plans/specs/f3-package-model.md, §3.2 and §9
  * step 5; accessibility requirement O4): the links of a header, in a row from
  * 769px and in a native popover panel under the bar at 768px and below,
- * opened by core's `.luz-nav-toggle`. These are the cases of the old site
+ * opened by catalog's `.luz-nav-toggle`. These are the cases of the old site
  * header (tests/site-header.spec.js, H1 to H6 of
  * .claude/plans/specs/platform-site-header.md; H1 and H2 moved to
  * tests/objects.spec.js with `.o-sticky`), on a page of their own
@@ -226,10 +226,10 @@ test.describe('navbar', () => {
 });
 
 test.describe('navbar: the docs', () => {
-  test('core has a Navbar component page with a live example and the Code and Design tabs', async ({ page }, testInfo) => {
-    // Needs apps/docs/pages/components/navbar.html (§1.9: the collapse mechanics)
-    expect(routes()).toContain('/docs/components/navbar/');
-    await page.goto('/docs/components/navbar/');
+  test('catalog has a Navbar page with a live example and the Code and Design tabs', async ({ page }, testInfo) => {
+    // Needs apps/docs/pages/catalog/navbar.html (§1.9: the collapse mechanics)
+    expect(routes()).toContain('/docs/catalog/navbar/');
+    await page.goto('/docs/catalog/navbar/');
     await expect(page.locator('h1.docs-title')).toHaveText(/navbar/i);
     await expect(page.locator('.docs-example .luz-navbar')).toHaveCount(1);
     if (testInfo.project.name === 'chromium-nojs') {
@@ -242,8 +242,8 @@ test.describe('navbar: the docs', () => {
   });
 
   test('the page documents its class, the popover panel and the forced colors', () => {
-    const file = fromRepo('apps/docs/pages/components/navbar.html');
-    expect(existsSync(file), 'apps/docs/pages/components/navbar.html').toBe(true);
+    const file = fromRepo('apps/docs/pages/catalog/navbar.html');
+    expect(existsSync(file), 'apps/docs/pages/catalog/navbar.html').toBe(true);
     const text = readFileSync(file, 'utf-8');
     expect(text).toContain('luz-navbar__link');
     expect(text).toContain('popover');

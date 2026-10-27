@@ -1,7 +1,7 @@
 /* --------------------------------------------------------------------------
-   LUZ Component: navbar
+   LUZ Catalog: navbar
    The links of a header: nav.luz-navbar[popover] > ul.luz-navbar__list >
-   li > a.luz-navbar__link, after core's .luz-nav-toggle
+   li > a.luz-navbar__link, after catalog's .luz-nav-toggle (sidebar.css)
    (popovertarget = the nav's id) in a bar's row. From 769px the links are a
    row of the bar. At 768px and below they collapse into a native popover
    panel under the bar, the width of the window: the browser gives Escape,
@@ -11,8 +11,8 @@
    site's header sets it, with anchor-scope) where anchor positioning is
    supported, and at --luz-bar-h from the top of the window elsewhere.
    What it makes obsolete: the nav of site's header, and a copy per header.
-   Layer: components (ITCSS 5) · Prefix: .luz-
-   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Layer: catalog · Prefix: .luz-
+   Requires: @luz-ds/tokens and @luz-ds/core (luz.css), loaded first.
    -------------------------------------------------------------------------- */
 
 /* The row wraps rather than overflow when text is enlarged (WCAG 1.4.4, 1.4.10) */

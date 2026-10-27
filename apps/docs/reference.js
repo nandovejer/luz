@@ -15,11 +15,11 @@
 
 import { initCopyButtons } from "/packages/core/dist/clipboard.js";
 import { highlightBlock } from "/packages/core/dist/highlight.js";
-import { loadLocales, registerLocale } from "/packages/core/dist/i18n.js";
+import { loadLocales, registerLocale, t } from "/packages/core/dist/i18n.js";
 import { initTabs } from "/packages/core/dist/tabs.js";
 import { initModals } from "/packages/core/dist/modal.js";
 import { initPlayers } from "/packages/core/dist/player.js";
-import { initSidebar } from "/packages/core/dist/sidebar.js";
+import { initSidebar } from "/packages/catalog/dist/sidebar.js";
 import { initThemeCycle } from "/packages/core/dist/theme.js";
 // Defines <luz-search> at once, not on idle as catalog.js would: the header's
 // search button is on every page, and wires itself when it connects
@@ -213,7 +213,7 @@ function initCopyLink() {
  * Every page is in the sidebar, so the current one can be far down its
  * list: on load, scroll the sidebar (its own scroller, never the page) so
  * that the link marked aria-current="page" is in view. The focus stays where
- * it is. The same in-list scroll as core's sidebar.js uses for the scroll spy.
+ * it is. The same in-list scroll as catalog's sidebar.js uses for the scroll spy.
  */
 function revealCurrentPage() {
   const nav = document.getElementById("page-nav");
@@ -528,7 +528,8 @@ revealCurrentPage();
 initAssets();
 // The copy buttons and the code blocks write strings (their names, "Copied"):
 // they wait for the language of the page to be loaded; the rest does not
-loadStrings().then(() => {
+const language = loadStrings();
+language.then(() => {
   initThemeCycle();
   initCopy();
   // highlightBlock() only: initHighlight() also injects a copy button into each
@@ -559,6 +560,10 @@ if (document.querySelector("th[data-luz-sort]")) {
     sort.initTableSort(document, i18n.t),
   );
 }
-// The Timeline page defines <luz-timeline> with the chunk on its own, as a
-// consumer who imports @luz-ds/core/timeline does (its strings travel with it)
-if (document.querySelector("luz-timeline")) import("/packages/core/dist/timeline.js");
+// The Timeline page defines <luz-timeline> with catalog's chunk, imported by
+// name as a consumer would, and gives it core's t once the language of the page
+// is loaded (EX-010): the chunk has English and Spanish of its own, and a
+// language the docs register with registerLocale() (Arabic) reaches it this way
+if (document.querySelector("luz-timeline")) {
+  Promise.all([import("/packages/catalog/dist/timeline.js"), language]).then(([timeline]) => timeline.initTimeline(document, t));
+}

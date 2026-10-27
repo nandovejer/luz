@@ -10,7 +10,7 @@
  *      (patterns such as ./components/* are expanded);
  *   2. a minimal page that links the installed files loads in Chromium with
  *      no failed request, no console error or warning, the tokens defined,
- *      core, catalog (two of its components and one pattern of each kind of
+ *      core, catalog (four of its components and one pattern of each kind of
  *      site, landing, cms, app and docs, linked one by one: catalog has no
  *      bundle) CSS applied, and the JS exports importable;
  *   3. the same page with jsDelivr-style URLs (/npm/@luz-ds/<pkg>@<version>/…),
@@ -169,6 +169,9 @@ const PAGE = (base, label) => `<!doctype html>
   <!-- Catalog has no bundle: a consumer links each component it uses, here two -->
   <link rel="stylesheet" href="${base.site}/dist/components/banner.css">
   <link rel="stylesheet" href="${base.site}/dist/components/search.css">
+  <!-- two of the four that moved from core (F7): the sidebar and the timeline -->
+  <link rel="stylesheet" href="${base.site}/dist/components/sidebar.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/timeline.css">
   <!-- and one pattern of each kind of site: landing, cms, app and docs are catalog's files -->
   <link rel="stylesheet" href="${base.site}/dist/components/landing-footer.css">
   <link rel="stylesheet" href="${base.site}/dist/components/cms-article-header.css">
@@ -181,6 +184,8 @@ const PAGE = (base, label) => `<!doctype html>
   <div id="probe-fill" style="background: var(--luz-brand-fill)"></div>
   <luz-banner id="probe-section"></luz-banner>
   <a class="luz-search__fallback" href="#probe-button" id="probe-search">Index</a>
+  <nav class="luz-sidebar" id="probe-sidebar" aria-label="Probe"></nav>
+  <luz-timeline id="probe-timeline"></luz-timeline>
   <footer class="luz-landing-footer" id="probe-landing"></footer>
   <div class="luz-cms-article-header" id="probe-article"></div>
   <main class="luz-app-dashboard" id="probe-dashboard"></main>
@@ -198,6 +203,8 @@ const PAGE = (base, label) => `<!doctype html>
       [site + "/dist/search.js"]: ["search"],
       [site + "/dist/consent.js"]: ["getConsent"],
       [site + "/dist/mode.js"]: ["phaseOf"],
+      [site + "/dist/sidebar.js"]: ["initSidebar"],
+      [site + "/dist/timeline.js"]: ["initTimeline"],
       [site + "/dist/catalog.js"]: [],
     };
     const missing = [];
@@ -273,7 +280,7 @@ const cdn = Object.fromEntries(PACKAGES.map((n) => [n, `/npm/@luz-ds/${n}@${vers
 // The pages name catalog `site`, as the local map does
 cdn.site = cdn.catalog;
 
-const SHEETS = 8;
+const SHEETS = 10;
 
 const server = createServer((req, res) => {
   const url = new URL(req.url, "http://127.0.0.1");
@@ -344,6 +351,8 @@ if (browser) {
         buttonHeight: parseFloat(button.height),
         sectionDisplay: section.display,
         searchDisplay: getComputedStyle(document.getElementById("probe-search")).display,
+        sidebarPosition: getComputedStyle(document.getElementById("probe-sidebar")).position,
+        timelineDisplay: getComputedStyle(document.getElementById("probe-timeline")).display,
         landingBorder: landing.borderTopStyle,
         articleDisplay: article.display,
         dashboardType: getComputedStyle(document.getElementById("probe-dashboard")).containerType,
@@ -358,11 +367,13 @@ if (browser) {
     check(`${label2} core CSS applied (.luz-btn--primary uses the token)`, state.buttonBackground === state.tokenBackground && state.buttonBackground !== "rgba(0, 0, 0, 0)", `${state.buttonBackground} vs ${state.tokenBackground}`);
     check(`${label2} catalog components/banner.css applied (<luz-banner> is a block)`, state.sectionDisplay === "block", state.sectionDisplay);
     check(`${label2} catalog components/search.css applied (.luz-search__fallback is inline-flex)`, state.searchDisplay === "inline-flex", state.searchDisplay);
+    check(`${label2} catalog components/sidebar.css applied (.luz-sidebar is sticky)`, state.sidebarPosition === "sticky", state.sidebarPosition);
+    check(`${label2} catalog components/timeline.css applied (<luz-timeline> is a block)`, state.timelineDisplay === "block", state.timelineDisplay);
     check(`${label2} catalog components/landing-footer.css applied (.luz-landing-footer has its rule)`, state.landingBorder === "solid", state.landingBorder);
     check(`${label2} catalog components/cms-article-header.css applied (.luz-cms-article-header is a grid)`, state.articleDisplay === "grid", state.articleDisplay);
     check(`${label2} catalog components/app-dashboard.css applied (.luz-app-dashboard is a size container)`, state.dashboardType === "inline-size", state.dashboardType);
     check(`${label2} catalog components/docs-example.css applied (.luz-docs-example has its frame)`, state.docsBorder === "solid", state.docsBorder);
-    // Tokens, core, and catalog's two components and four patterns: catalog has no bundle
+    // Tokens, core, and catalog's four components and four patterns: catalog has no bundle
     check(`${label2} ${SHEETS} stylesheets with rules`, state.sheets.length === SHEETS && state.sheets.every((n) => n > 0), JSON.stringify(state.sheets));
     check(`${label2} JS entries import and export what the docs name`, state.missing.length === 0, state.missing.join("\n"));
     await page.close();

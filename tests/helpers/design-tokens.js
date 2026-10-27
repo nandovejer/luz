@@ -92,6 +92,10 @@ function sourceOf(page) {
   // `files: components/<kind>-<name>.css`: the page documents every rule of its files (`whole`). A rule of the page's
   // block in another file of the kind is the page's too (the stat's value is set in landing-section.css), so the
   // others of the kind are read, and kept by block (the file's name, and the page's: `.luz-cms-toc` is in cms-article.css).
+  // The navbar, the sidebar, the terminal and the timeline came from core in F7 and keep their own page shape: `files:
+  // components/<name>.css`, a stylesheet of catalog read whole, whatever classes it sets (the old core pages did the same)
+  const layout = page.meta.files.split(";").map((f) => f.trim()).filter((f) => /^components\/(navbar|sidebar|terminal|timeline)\.css$/.test(f));
+  if (layout.length) return { css: layout.map((f) => read(`packages/catalog/src/${f}`)).join("\n"), classes: null, tags: [] };
   const sheets = entries.filter((f) => /^components\/(landing|cms|app|docs)-[\w-]+\.css$/.test(f));
   if (sheets.length) {
     const kind = sheets[0].match(/^components\/(\w+)-/)[1];

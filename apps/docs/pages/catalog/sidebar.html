@@ -1,8 +1,11 @@
 <!-- luz:page
 title: Sidebar
 description: Holds the main navigation of a site or an app, and becomes a drawer on small screens.
-area: components
+area: catalog
+order: 6
 group: navigation
+fits-kinds: docs, app
+fits: the navigation of a site with many pages or sections, beside the content, with a drawer on a phone
 files: components/sidebar.css
 module: sidebar.js
 toc: h2,h3
@@ -84,7 +87,7 @@ keywords: drawer, side navigation
                 <span class="docs-snippet__lang">JS</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-sidebar-js" aria-label="Copy the sidebar script code">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Sidebar script code"><code id="code-sidebar-js">import { initSidebar } from &quot;@luz-ds/core/sidebar&quot;;
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Sidebar script code"><code id="code-sidebar-js">import { initSidebar } from &quot;@luz-ds/catalog/sidebar&quot;;
 initSidebar();</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
@@ -111,7 +114,7 @@ initSidebar();</code></pre>
             <p>A <code>&lt;nav&gt;</code> landmark, styled by <code>components/sidebar.css</code>. On small screens it is a native popover drawer.</p>
             <ul>
               <li>The menu button opens it with <code>popovertarget</code>, with no script. The browser gives Escape, a click outside to close, the top layer and the expanded state.</li>
-              <li><code>initSidebar()</code> from <code>sidebar.js</code> is optional: it marks the link of the section in view on a long page (<code>aria-current="true"</code>) and closes the drawer when a link is followed. <code>luz.js</code> runs it.</li>
+              <li><code>initSidebar()</code> from <code>sidebar.js</code> is optional: it marks the link of the section in view on a long page (<code>aria-current="true"</code>) and closes the drawer when a link is followed. <code>catalog.js</code> runs it on a page that has a sidebar. A page that loads only core has no scroll spy, and the drawer works without it.</li>
               <li>The scroll spy finds its links by <code>.luz-sidebar__link</code>, and by <code>data-luz-spy</code>: on any element (a <code>&lt;nav&gt;</code> of contents), it spies every link inside that points at a section of the page (<code>href="#…"</code>). The attribute is the hook; the look of those links is yours.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>

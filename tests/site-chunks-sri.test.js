@@ -35,10 +35,10 @@ const fenced = (text) => [...text.matchAll(/```[\w-]*\n([\s\S]*?)```/g)].map((m)
 const preBlocks = (html) => [...html.matchAll(/<pre\b[^>]*>\s*<code\b[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/g)].map((m) => unescape(m[1].replace(/<[^>]+>/g, "")));
 
 const DOCS = [
-  { name: "SECURITY.md", text: () => read("SECURITY.md"), blocks: (t) => fenced(t), chunks: ["midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js", "search.min.js", "consent.min.js", "mode.min.js"] },
-  { name: "packages/catalog/README.md", text: () => read("packages/catalog/README.md"), blocks: (t) => fenced(t), chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
-  { name: "packages/core/README.md", text: () => read("packages/core/README.md"), blocks: (t) => fenced(t), chunks: ["i18n-es.min.js"] },
-  { name: "apps/docs/pages/get-started/index.html", text: () => read("apps/docs/pages/get-started/index.html"), blocks: (t) => preBlocks(t), chunks: ["search.min.js", "consent.min.js", "mode.min.js"] },
+  { name: "SECURITY.md", text: () => read("SECURITY.md"), blocks: (t) => fenced(t), chunks: ["core/midi.min.js", "core/table-sort.min.js", "core/i18n-es.min.js", "catalog/search.min.js", "catalog/consent.min.js", "catalog/mode.min.js", "catalog/timeline.min.js", "catalog/sidebar.min.js"] }, // F7: the timeline is catalog's, with the sidebar's
+  { name: "packages/catalog/README.md", text: () => read("packages/catalog/README.md"), blocks: (t) => fenced(t), chunks: ["catalog/search.min.js", "catalog/consent.min.js", "catalog/mode.min.js", "catalog/timeline.min.js", "catalog/sidebar.min.js"] },
+  { name: "packages/core/README.md", text: () => read("packages/core/README.md"), blocks: (t) => fenced(t), chunks: ["core/i18n-es.min.js"] },
+  { name: "apps/docs/pages/get-started/index.html", text: () => read("apps/docs/pages/get-started/index.html"), blocks: (t) => preBlocks(t), chunks: ["catalog/search.min.js", "catalog/consent.min.js", "catalog/mode.min.js"] },
 ];
 
 /** The block that holds the import map: its text and the parsed map. */
@@ -65,11 +65,17 @@ describe.each(DOCS)("$name documents the import map as the way to check a lazy c
 
   it("lists the chunk URLs of this file, each with a sha384 hash", () => {
     const { map } = importMapOf(blocks(text())) ?? { map: { integrity: {} } };
-    for (const file of chunks) {
-      const url = Object.keys(map.integrity ?? {}).find((u) => new RegExp(`^https://cdn\\.jsdelivr\\.net/npm/@luz-ds/(core|catalog)@[^/]+/dist/${file.replace(".", "\\.")}$`).test(u));
+    for (const entry of chunks) {
+      const [pkg, file] = entry.split("/");
+      const url = Object.keys(map.integrity ?? {}).find((u) => new RegExp(`^https://cdn\\.jsdelivr\\.net/npm/@luz-ds/${pkg}@[^/]+/dist/${file.replace(".", "\\.")}$`).test(u));
       expect(url, `${file} in the integrity section`).toBeTruthy();
       expect(map.integrity[url], file).toMatch(/^sha384-/);
     }
+  });
+
+  it("names no chunk of core that core no longer serves: the timeline and the sidebar are catalog's (F7)", () => {
+    const { map } = importMapOf(blocks(text())) ?? { map: { integrity: {} } };
+    expect(Object.keys(map.integrity ?? {}).filter((u) => /@luz-ds\/core@[^/]+\/dist\/(?:timeline|sidebar)\./.test(u))).toEqual([]);
   });
 
   it("puts the import map before the first module script of its block (an import map after one is ignored)", () => {

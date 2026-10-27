@@ -44,7 +44,7 @@ const SOURCE = "apps/site/prompts";
 /** This module, as the hash of a prompt reads it. */
 const MODULE = "scripts/docs-site/prompts.js";
 /** The packages whose elements a prompt lists. */
-const ELEMENT_PACKAGES = ["core", "catalog"];
+const ELEMENT_PACKAGES = ["catalog"];
 /** The packages every prompt installs, in load order. */
 const BASE = ["tokens", "core", "catalog"];
 

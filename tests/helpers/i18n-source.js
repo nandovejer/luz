@@ -134,3 +134,6 @@ export function languageProblems(dict, en, { code = "xx" } = {}) {
 
 /** The text of a file of packages/core/src. */
 export const readCore = (name) => readFileSync(join(coreSrc, name), "utf-8");
+
+/** The text of a file of packages/catalog/src (the timeline's module came from core in F7). */
+export const readCatalog = (name) => readFileSync(join(repo, "packages/catalog/src", name), "utf-8");

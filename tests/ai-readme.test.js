@@ -287,7 +287,8 @@ describe("renderAiSection({ name, manifest, changelog, siteUrl })", () => {
   });
 
   it("names what to read first, with its path in the package or on the site", () => {
-    const block = render("core", CORE, FIRST_RELEASE);
+    // catalog is the package that defines tags (core defines none since F7), so it is the one that names custom-elements.json
+    const block = render("catalog", manifest("catalog", "0.1.0", { "@luz-ds/core": "^0.1.0" }), FIRST_RELEASE);
     expect(block).toMatch(/`dist\/classes\.json`/);
     expect(block).toMatch(/`dist\/custom-elements\.json`/);
     expect(block).toContain(`${SITE}llms.txt`);
@@ -299,7 +300,8 @@ describe("renderAiSection({ name, manifest, changelog, siteUrl })", () => {
     expect(block.indexOf("llms-full.txt")).toBeLessThan(block.indexOf("examples/"));
   });
 
-  it("names custom-elements.json only for the packages that define a tag (core and catalog)", () => {
+  it("names custom-elements.json only for the package that defines a tag (catalog: core defines none since F7)", () => {
+    expect(render("core", CORE, FIRST_RELEASE)).not.toMatch(/custom-elements\.json/);
     expect(render("catalog", manifest("catalog", "0.1.0", { "@luz-ds/core": "^0.1.0" }), FIRST_RELEASE)).toMatch(/custom-elements\.json/);
     expect(render("landing", LANDING, FIRST_RELEASE)).not.toMatch(/custom-elements\.json/);
     expect(render("tokens", manifest("tokens", "0.1.0"), FIRST_RELEASE)).not.toMatch(/custom-elements\.json/);

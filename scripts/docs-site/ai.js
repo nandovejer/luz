@@ -139,7 +139,7 @@ export function renderLlmsTxt(site, { siteUrl = "" } = {}) {
     out.push(`- [Markup example: ${sample.meta.title}](${urlOf(exampleRouteOf(sample), siteUrl)}): A page of the markup of ${sample.meta.title}, styled by LUZ; every component and pattern page has one under /examples/.`);
   }
   out.push(`- [Classes of @luz-ds/core](${urlOf(`${AI_ROUTES.manifests}core/classes.json`, siteUrl)}): Every class, element and custom property of the package; each package has its own folder under /manifests/.`);
-  out.push(`- [Elements of @luz-ds/catalog](${urlOf(`${AI_ROUTES.manifests}catalog/custom-elements.json`, siteUrl)}): The custom elements the package defines or declares, with their attributes; core has one too, in its own folder.`);
+  out.push(`- [Elements of @luz-ds/catalog](${urlOf(`${AI_ROUTES.manifests}catalog/custom-elements.json`, siteUrl)}): The custom elements the package defines or declares, with their attributes.`);
   out.push("");
   return out.join("\n");
 }
@@ -776,6 +776,14 @@ function markupBlocks(page) {
   return { kept, skipped };
 }
 
+/**
+ * The four components that came from core (sidebar, navbar, terminal, timeline) go first, in that
+ * order, right after core: they shared its layer before, so the patterns of catalog, which style the
+ * sidebar's own classes, must come after them, as the layouts of the docs link them.
+ */
+const LAYOUT_FIRST = ["sidebar", "navbar", "terminal", "timeline"].map((name) => `components/${name}.css`);
+const inCascadeOrder = (files) => [...LAYOUT_FIRST.filter((f) => files.includes(f)), ...files.filter((f) => !LAYOUT_FIRST.includes(f))];
+
 const escText = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const escAttr = (text) => escText(text).replace(/"/g, "&quot;");
 /** Text for a comment: `--` would end it. */
@@ -793,7 +801,7 @@ function exampleDocument(page, { csp, versions, packages, catalog = [] }) {
   // `../dist/` and `../../docs/`: the document is at /examples/<area>/<slug>.html
   const docsUrl = `../..${page.route}#markup`;
   const snippetUrl = "../../docs/get-started/snippet/";
-  const css = (pkg) => (pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? catalog.map(minified) : [FILES[pkg].css]);
+  const css = (pkg) => (pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? inCascadeOrder(catalog).map(minified) : [FILES[pkg].css]);
   const links = packages.flatMap((pkg) => css(pkg).map((file) => `  <link rel="stylesheet" href="../dist/${pkg}/${file}">`));
   const scripts = ["core", ...packages.filter((pkg) => pkg === "catalog")].map((pkg) => `  <script type="module" src="../dist/${pkg}/${exampleJsOf(pkg)}"></script>`);
   const sections = kept.map(

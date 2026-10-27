@@ -3,8 +3,9 @@
  * <luz-timeline> (.claude/plans/specs/timeline.md): an ordered list that works
  * without JavaScript; with it, a rail of date buttons under the cards
  * (horizontal) or a scroll-driven state on the items (vertical). The chunk
- * `timeline.js` is loaded by presence. Fixture: tests/fixtures/timeline.html
- * (`?none` removes every timeline).
+ * `timeline.js` is a chunk of @luz-ds/catalog (it was core's until F7), loaded
+ * by presence by `catalog.js`. Fixture: tests/fixtures/timeline.html (`?none`
+ * removes every timeline; `?core` loads core's entry only).
  *
  * The no-JS describe turns JavaScript off itself, so it runs in `chromium`
  * too; the rest skips in `chromium-nojs`.
@@ -499,11 +500,11 @@ test.describe('timeline imported on its own', () => {
   test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript');
 
   for (const [mode, file] of [['', 'timeline.js'], ['min', 'timeline.min.js']]) {
-    test(`${file} alone defines the element and builds the rail, without loading luz.js, with English names`, async ({ page }) => {
+    test(`${file} alone defines the element and builds the rail, without loading luz.js or catalog.js, with English names`, async ({ page }) => {
       const requested = [];
-      page.on('request', (r) => { if (/\/luz(\.min)?\.js/.test(new URL(r.url()).pathname)) requested.push(r.url()); });
+      page.on('request', (r) => { if (/\/(?:luz|catalog)(\.min)?\.js/.test(new URL(r.url()).pathname)) requested.push(r.url()); });
       await ready(page, mode ? `?standalone=${mode}` : '?standalone');
-      expect(requested, 'the entry is not loaded').toEqual([]);
+      expect(requested, 'neither entry is loaded').toEqual([]);
       const host = tl(page, 'horizontal');
       expect((await state(host)).rail).toEqual(DATES);
       await expect(host.getByRole('button', { name: 'Previous', exact: true })).toHaveCount(1);
@@ -526,6 +527,29 @@ test.describe('timeline loading', () => {
     await page.goto(FIXTURE);
     await page.waitForLoadState('networkidle');
     expect(requested.length).toBeGreaterThan(0);
+  });
+});
+
+test.describe('timeline: which package defines it', () => {
+  test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript');
+
+  test('catalog.js alone, after core\'s stylesheet, requests the chunk from catalog and defines the element', async ({ page }) => {
+    const requested = [];
+    page.on('request', (r) => { if (/\/timeline(\.min)?\.js/.test(r.url())) requested.push(new URL(r.url()).pathname); });
+    await ready(page);
+    expect(requested.length).toBeGreaterThan(0);
+    for (const path of requested) expect(path, 'the chunk is catalog\'s').toMatch(/^\/packages\/catalog\/dist\/timeline(\.min)?\.js$/);
+  });
+
+  test('core\'s entry alone does not define <luz-timeline>, requests no chunk of it, and the list stays a list', async ({ page }) => {
+    const requested = [];
+    page.on('request', (r) => { if (/\/timeline(\.min)?\.js/.test(r.url())) requested.push(r.url()); });
+    await page.goto(`${FIXTURE}?core`);
+    await page.waitForLoadState('networkidle');
+    expect(await page.evaluate(() => !!customElements.get('luz-timeline'))).toBe(false);
+    expect(requested).toEqual([]);
+    await expect(tl(page, 'horizontal').locator('button')).toHaveCount(0);
+    await expect(tl(page, 'horizontal').locator('.luz-timeline__item')).toHaveCount(4);
   });
 });
 

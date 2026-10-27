@@ -753,7 +753,8 @@ describe("the three built packages", () => {
       expect(OWN_LAYERS[name].map((l) => `luz.${l}`), `${c.name} is in ${c.layer}`).toContain(c.layer);
       if (!c.defined) continue;
       if (name === "core") expect(c.name, c.name).not.toMatch(/^luz-(?:catalog|landing|cms|app|docs)-/);
-      else if (name === "catalog") expect(c.name, c.name).toMatch(/^luz-/);
+      // F7: `.luz-sidebar__link.is-active` brings the state class `is-active` to catalog, as `.luz-tab.is-active` has it in core: a state hook scoped by its block, not a block
+      else if (name === "catalog") expect(c.name, c.name).toMatch(/^(?:luz-|is-[a-z-]+$)/);
     }
   });
 

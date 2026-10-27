@@ -6,6 +6,8 @@
   <title>Navbar</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/navbar.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
   <!-- A kind of site's skin on the bare objects (what .luz-landing-header adds): a surface, one row of padding, a divider.
        Its height is --luz-bar-h (a 44px row, 2 x 4px, 1px) -->
   <style>
@@ -14,7 +16,7 @@
   </style>
 </head>
 <body>
-  <!-- tests/navbar.spec.js: core's .luz-navbar between a toggle and a bare brand link, in an .o-sticky bar -->
+  <!-- tests/navbar.spec.js: catalog's .luz-navbar between a toggle and a bare brand link, in an .o-sticky bar -->
   <header class="o-sticky skin" id="hdr">
     <div class="o-container o-container--inline o-row">
       <button class="luz-nav-toggle" id="toggle" type="button" popovertarget="site-nav" aria-label="Menu">
@@ -39,7 +41,7 @@
   <main id="top">
     <h1>Page</h1>
     <p>Something under the bar for the scrim to dim.</p>
-    <!-- The core toggle with its bars, for the forced-colors rule -->
+    <!-- The toggle (catalog's, in sidebar.css) with its bars, for the forced-colors rule -->
     <button class="luz-nav-toggle" id="bars" type="button" aria-label="Menu"><span class="luz-nav-toggle__bar"></span><span class="luz-nav-toggle__bar"></span><span class="luz-nav-toggle__bar"></span></button>
   </main>
   <footer>

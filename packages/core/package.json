@@ -5,7 +5,6 @@
   "license": "MIT",
   "type": "module",
   "main": "dist/luz.js",
-  "customElements": "dist/custom-elements.json",
   "exports": {
     ".": "./dist/luz.js",
     "./css": "./dist/luz.css",
@@ -16,7 +15,6 @@
     "./components/*": "./dist/components/*",
     "./themes/*": "./dist/themes/*",
     "./theme": "./dist/theme.js",
-    "./sidebar": "./dist/sidebar.js",
     "./clipboard": "./dist/clipboard.js",
     "./modal": "./dist/modal.js",
     "./highlight": "./dist/highlight.js",
@@ -24,12 +22,10 @@
     "./tabs": "./dist/tabs.js",
     "./midi": "./dist/midi.js",
     "./table-sort": "./dist/table-sort.js",
-    "./timeline": "./dist/timeline.js",
     "./utils": "./dist/utils.js",
     "./i18n": "./dist/i18n.js",
     "./i18n/*": "./dist/i18n-*.js",
     "./classes.json": "./dist/classes.json",
-    "./custom-elements.json": "./dist/custom-elements.json",
     "./package.json": "./package.json"
   },
   "files": [
@@ -57,9 +53,7 @@
   "sideEffects": [
     "*.css",
     "./dist/luz.js",
-    "./dist/luz.min.js",
-    "./dist/timeline.js",
-    "./dist/timeline.min.js"
+    "./dist/luz.min.js"
   ],
   "publishConfig": {
     "access": "public"

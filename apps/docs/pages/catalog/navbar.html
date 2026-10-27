@@ -1,8 +1,11 @@
 <!-- luz:page
 title: Navbar
 description: Puts the main links of a site in a header's row, and in a panel under it on a narrow screen.
-area: components
+area: catalog
+order: 5
 group: navigation
+fits-kinds: any
+fits: the bar of a site's main sections, at the top of the page
 files: components/navbar.css
 toc: h2,h3
 keywords: nav bar, navigation bar
@@ -45,7 +48,7 @@ keywords: nav bar, navigation bar
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>The navbar goes in a bar's row, after core's menu button and the site's name. The bar is yours, or a header of the <a href="/docs/catalog/">catalog</a>, such as the <a href="/docs/catalog/landing-header/">landing header</a>, which also sets the anchor the panel opens under.</p>
+            <p>The navbar goes in a bar's row, after the menu button and the site's name. The bar is yours, or a header of the <a href="/docs/catalog/">catalog</a>, such as the <a href="/docs/catalog/landing-header/">landing header</a>, which also sets the anchor the panel opens under.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -82,7 +85,7 @@ keywords: nav bar, navigation bar
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>A native <code>popover</code> on the <code>&lt;nav&gt;</code>, opened by core's <code>.luz-nav-toggle</code> with <code>popovertarget</code>. No JavaScript: the browser gives Escape, light dismiss, the place of the open panel in the Tab order and the expanded state of the button.</p>
+            <p>A native <code>popover</code> on the <code>&lt;nav&gt;</code>, opened by a <code>.luz-nav-toggle</code> with <code>popovertarget</code>. No JavaScript: the browser gives Escape, light dismiss, the place of the open panel in the Tab order and the expanded state of the button.</p>
             <ul>
               <li>From 769 px the closed popover is shown as a row of the bar, and the menu button is hidden.</li>
               <li>At 768 px and below the panel is fixed under the bar, the width of the window, with a shadow, and a dim layer that starts under the bar so the bar is never dimmed.</li>
@@ -109,7 +112,7 @@ keywords: nav bar, navigation bar
             <h3 id="when-not">When not to use</h3>
             <p>Do not use it for an app with many sections, or for links in the page.</p>
             <ul>
-              <li>For many sections, or a hierarchy, use the <a href="/docs/components/sidebar/">sidebar</a>.</li>
+              <li>For many sections, or a hierarchy, use the <a href="/docs/catalog/sidebar/">sidebar</a>.</li>
               <li>For the place of a page in a hierarchy, use a <a href="/docs/components/breadcrumb/">breadcrumb</a>.</li>
               <li>For the sections of one page, use <a href="/docs/components/tabs/">tabs</a> or a list of in-page links.</li>
             </ul>

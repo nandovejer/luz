@@ -37,9 +37,9 @@
  * Strings: Previous, Next, Pause and Play, in the language of the nearest
  * `lang` (en, es), each overridden by data-luz-label-<key> on the element or
  * an ancestor. The chunk carries that small dictionary so that importing it
- * alone (@luz-ds/core/timeline) loads nothing else (EX-010). luz.js passes
- * its own `t` to initTimeline(), so with the entry on the page a language
- * added with registerLocale() reaches the timeline too.
+ * alone (@luz-ds/catalog/timeline) loads nothing else (EX-010), as search and
+ * consent do (EX-005). A page that adds a language with registerLocale() calls
+ * initTimeline(document, t) with core's `t` to reach the timeline with it.
  *
  * Importing this module defines the element (once).
  *
@@ -329,16 +329,18 @@ class LuzTimeline extends HTMLElement {
 if (!customElements.get("luz-timeline")) customElements.define("luz-timeline", LuzTimeline);
 
 /**
- * Write the labels of the timelines under `root` with `translate` (luz.js
- * passes core's `t`, as it does to initTableSort); a key it has no string
- * for keeps this chunk's own.
+ * Write the labels of the timelines under `root` with `translate` (core's
+ * `t`, as initTableSort takes it); a key it has no string for keeps this
+ * chunk's own. Without `translate` the labels stay this chunk's own.
  * @param {ParentNode} root
- * @param {(key: string, el: Element) => string} translate
+ * @param {(key: string, el: Element) => string} [translate]
  */
 export function initTimeline(root, translate) {
-  t = (key, el) => {
-    const text = translate(key, el);
-    return text === key ? own(key, el) : text;
-  };
+  if (translate) {
+    t = (key, el) => {
+      const text = translate(key, el);
+      return text === key ? own(key, el) : text;
+    };
+  }
   root.querySelectorAll("luz-timeline").forEach((el) => labels.get(el)?.());
 }

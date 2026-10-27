@@ -2,7 +2,8 @@
 title: Barra lateral
 description: Contiene la navegación principal de un sitio o una aplicación y se convierte en un panel lateral en pantallas pequeñas.
 keywords: panel lateral, navegación lateral
-source: 4f87ef05bea1
+fits: la navegación de un sitio con muchas páginas o secciones, junto al contenido, con un panel lateral en el móvil
+source: 1af1266b96f7
 reviewed: false
 -->
     <div class="docs-component" id="c-sidebar">
@@ -81,7 +82,7 @@ reviewed: false
                 <span class="docs-snippet__lang">JS</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-sidebar-js" aria-label="Copy the sidebar script code">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Sidebar script code"><code id="code-sidebar-js">import { initSidebar } from &quot;@luz-ds/core/sidebar&quot;;
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Sidebar script code"><code id="code-sidebar-js">import { initSidebar } from &quot;@luz-ds/catalog/sidebar&quot;;
 initSidebar();</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
@@ -108,7 +109,7 @@ initSidebar();</code></pre>
             <p>Punto de referencia <code>&lt;nav&gt;</code>, con estilos de <code>components/sidebar.css</code>. En pantallas pequeñas es un panel lateral nativo de tipo popover.</p>
             <ul>
               <li>El botón de menú lo abre mediante <code>popovertarget</code>, sin scripts. El navegador se encarga de Escape, de cerrarlo al hacer clic fuera, de la capa superior y del estado expandido.</li>
-              <li><code>initSidebar()</code> de <code>sidebar.js</code> es opcional: marca el enlace de la sección visible en páginas largas (<code>aria-current="true"</code>) y cierra el panel al seguir un enlace. <code>luz.js</code> lo ejecuta.</li>
+              <li><code>initSidebar()</code> de <code>sidebar.js</code> es opcional: marca el enlace de la sección visible en páginas largas (<code>aria-current="true"</code>) y cierra el panel al seguir un enlace. <code>catalog.js</code> lo ejecuta en las páginas que tienen una barra lateral. Una página que solo carga core no tiene seguimiento del desplazamiento, y el cajón funciona sin él.</li>
               <li>El indicador de desplazamiento localiza los enlaces mediante <code>.luz-sidebar__link</code> y <code>data-luz-spy</code>: en cualquier elemento (como un <code>&lt;nav&gt;</code> de contenidos), sigue todos los enlaces internos que apuntan a una sección de la página (<code>href="#…"</code>). El atributo es el punto de conexión; el diseño de esos enlaces es cosa tuya.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>

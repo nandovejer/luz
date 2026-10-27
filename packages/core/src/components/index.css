@@ -6,8 +6,6 @@
    ========================================================================== */
 
 @import url("./skip-link.css");
-@import url("./sidebar.css");
-@import url("./navbar.css");
 @import url("./mode-switcher.css");
 @import url("./button.css");
 @import url("./form.css");
@@ -28,7 +26,6 @@
 @import url("./tooltip.css");
 @import url("./code.css");
 @import url("./copy-btn.css");
-@import url("./terminal.css");
 @import url("./icon-grid.css");
 @import url("./player.css");
 @import url("./figure.css");
@@ -37,5 +34,4 @@
 @import url("./prose.css");
 @import url("./meta.css");
 @import url("./modal.css");
-@import url("./timeline.css");
 @import url("./_animations.css");

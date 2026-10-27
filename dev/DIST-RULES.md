@@ -48,7 +48,7 @@ This:
    (+ `.min`) for standalone consumption.
 3. Bundles `src/luz.js` with Rollup → `dist/luz.js` (`midi.js` stays a
    separate lazy chunk).
-4. Copies the individual ESM modules (`theme.js`, `sidebar.js`,
+4. Copies the individual ESM modules (`theme.js`,
    `clipboard.js`, `modal.js`, `highlight.js`, `player.js`, `utils.js`)
    verbatim to `dist/` — the source IS the artifact (vanilla-first).
 5. Copies + minifies `src/themes/*.css` → `dist/themes/`.
@@ -67,7 +67,7 @@ builder, `scripts/build-package.js`, emits every `src/components/*.css` as
 `dist/components/<name>.css` (+ `.min`), its screen rules in `luz.catalog` and
 its top-level `@media print` blocks, with the comment before each, in
 `luz.print`; a `src/components/_*.css` fails the build. It syncs `catalog.js`,
-`search.js`, `consent.js` and `mode.js` and bundles each into a `.min.js`.
+`search.js`, `consent.js`, `mode.js`, `timeline.js` and `sidebar.js` and bundles each into a `.min.js`. The navbar, the sidebar, the terminal and the timeline are catalog components, built like the others (`src/components/<name>.css`, in `luz.catalog`), and core's `luz.css` does not include them.
 
 The patterns of a kind of site (landing, cms, app and docs) are catalog
 components, `src/components/<kind>-<name>.css`: they build like the others, in

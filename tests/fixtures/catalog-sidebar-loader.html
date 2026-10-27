@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalog loader: the sidebar's scroll spy</title>
+  <!-- tests/catalog-moved.spec.js: the sidebar is a chunk of @luz-ds/catalog (F7). catalog.js finds `.luz-sidebar` or a
+       `[data-luz-spy]` list in the page and loads sidebar.js, which starts the scroll spy; no chunk is imported by hand here.
+       Query: ?sidebar keeps only the sidebar, ?spy only the list of in-page links, ?none neither; ?core loads core's entry
+       and not catalog.js. Without a script the drawer is a native popover opened by its button. -->
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
+  <style>
+    /* Fixture only: sections taller than the window, so the document scrolls */
+    .spacer { min-height: 70vh; }
+  </style>
+</head>
+<body>
+  <button class="luz-nav-toggle" id="toggle" type="button" popovertarget="drawer" aria-label="Open navigation"><span class="luz-nav-toggle__bar"></span><span class="luz-nav-toggle__bar"></span><span class="luz-nav-toggle__bar"></span></button>
+  <nav class="luz-sidebar" id="drawer" popover aria-label="Main">
+    <div class="luz-sidebar__section">
+      <a class="luz-sidebar__link" id="side-1" href="#s1">One</a>
+      <a class="luz-sidebar__link" id="side-2" href="#s2">Two</a>
+      <a class="luz-sidebar__link" id="side-3" href="#s3">Three</a>
+    </div>
+  </nav>
+  <main id="main">
+    <nav id="toc" data-luz-spy aria-label="On this page">
+      <ul>
+        <li><a id="toc-1" href="#s1">One</a></li>
+        <li><a id="toc-2" href="#s2">Two</a></li>
+        <li><a id="toc-3" href="#s3">Three</a></li>
+      </ul>
+    </nav>
+      <section id="s1" class="spacer" aria-labelledby="h1"><h2 id="h1">Section 1</h2><p>Text of section 1.</p></section>
+      <section id="s2" class="spacer" aria-labelledby="h2"><h2 id="h2">Section 2</h2><p>Text of section 2.</p></section>
+      <section id="s3" class="spacer" aria-labelledby="h3"><h2 id="h3">Section 3</h2><p>Text of section 3.</p></section>
+      <section id="s4" class="spacer" aria-labelledby="h4"><h2 id="h4">Section 4</h2><p>Text of section 4.</p></section>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    if (params.has("spy") || params.has("none")) document.querySelectorAll("#drawer, #toggle").forEach((el) => el.remove());
+    if (params.has("sidebar") || params.has("none")) document.getElementById("toc").removeAttribute("data-luz-spy");
+  </script>
+  <script type="module">
+    // core's entry alone does not know the sidebar's script: ?core
+    if (new URLSearchParams(location.search).has("core")) await import("/packages/core/dist/luz.js");
+    else await import("/packages/catalog/dist/catalog.js");
+  </script>
+</body>
+</html>

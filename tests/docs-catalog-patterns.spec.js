@@ -5,7 +5,8 @@
  * (F5b of .claude/plans/ai-and-catalog-only.md, decisions 55, 71 to 73), what a reader sees of it in a browser:
  *
  *   1  the sidebar and the gallery of Catalog have six groups, in this order: Navigation, Page structure, Content,
- *      Site-wide, Documentation and Reference, each with its pages (in English and in Spanish)
+ *      Site-wide, Documentation and Reference, each with its pages (in English and in Spanish); since F7 the navbar and
+ *      the sidebar are in Navigation, and the terminal and the timeline in Content (they came from core)
  *   2  a pattern page says where it fits best, "Fits best: <kinds> - <sentence>", under the lead and above the
  *      chips, each kind a link to /docs/kinds/<kind>/ and "any site" no link; the card of the gallery says it too;
  *      in Spanish, in the words of the language; a page of core has no such line
@@ -19,7 +20,7 @@
  * they check. Everything is static markup: it runs in `chromium` and in `chromium-nojs` alike.
  */
 import { test, expect } from '@playwright/test';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const fromRepo = (/** @type {string} */ path) => fileURLToPath(new URL(`../${path}`, import.meta.url));
@@ -27,9 +28,9 @@ const read = (/** @type {string} */ path) => readFileSync(fromRepo(path), 'utf-8
 
 /** The groups of Catalog, in order, with their label in each language (the strings of the docs) and their pages. */
 const GROUPS = [
-  { id: 'navigation', en: 'Navigation', pages: ['app-header', 'cms-header', 'landing-header', 'lang-switch', 'submenu'] },
+  { id: 'navigation', en: 'Navigation', pages: ['app-header', 'cms-header', 'landing-header', 'lang-switch', 'navbar', 'sidebar', 'submenu'] },
   { id: 'page-structure', en: 'Page structure', pages: ['cms-article-header', 'cms-footer', 'cms-page-header', 'landing-footer', 'landing-hero', 'landing-section'] },
-  { id: 'content', en: 'Content', pages: ['app-dashboard', 'cms-toc', 'landing-stat'] },
+  { id: 'content', en: 'Content', pages: ['app-dashboard', 'cms-toc', 'landing-stat', 'terminal', 'timeline'] },
   { id: 'site-wide', en: 'Site-wide', pages: ['banner', 'consent', 'mode', 'search'] },
   { id: 'documentation', en: 'Documentation', pages: ['docs-dodont', 'docs-example', 'docs-page-foot', 'docs-page-head', 'docs-pager', 'docs-rail', 'docs-shell'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
@@ -37,7 +38,12 @@ const GROUPS = [
 const PATTERNS = GROUPS.filter((g) => g.id !== 'reference').flatMap((g) => g.pages);
 
 /** The kind of site each pattern fits best (the names a reader says: a blog, not cms), or `any`. */
-const KIND = (/** @type {string} */ slug) => (slug.startsWith('landing-') ? 'landing' : slug.startsWith('cms-') ? 'blog' : slug.startsWith('app-') ? 'app' : slug.startsWith('docs-') ? 'docs' : 'any');
+const KINDS = (/** @type {string} */ slug) => {
+  // F7: the four that came from core (the owner's, decision 35 and the pages they had): a sidebar and a timeline fit two kinds
+  const MOVED = { navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'] };
+  if (slug in MOVED) return MOVED[slug];
+  return [slug.startsWith('landing-') ? 'landing' : slug.startsWith('cms-') ? 'blog' : slug.startsWith('app-') ? 'app' : slug.startsWith('docs-') ? 'docs' : 'any'];
+};
 
 const LANGUAGES = [
   { code: 'en', prefix: '' },
@@ -48,9 +54,11 @@ const groupLabel = (/** @type {string} */ code, /** @type {{ id: string, en: str
 /** What a language calls a kind of site on a "Fits best" line. */
 const kindWord = (/** @type {string} */ code, /** @type {string} */ kind) => (kind === 'any' ? (code === 'en' ? 'any site' : strings(code)['fits.any']) : code === 'en' ? kind : strings(code)[`kind.${kind}`]);
 const fitsLabel = (/** @type {string} */ code) => (code === 'en' ? 'Fits best:' : strings(code)['fits.label']);
+const isTranslated = (/** @type {string} */ code, /** @type {string} */ slug) => code === 'en' || existsSync(fromRepo(`apps/docs/i18n/${code}/pages/catalog/${slug}.html`));
 /** The sentence of the author, from the front matter of the page in that language. */
 const sentenceOf = (/** @type {string} */ code, /** @type {string} */ slug) => {
-  const file = code === 'en' ? `apps/docs/pages/catalog/${slug}.html` : `apps/docs/i18n/${code}/pages/catalog/${slug}.html`;
+  // A page with no translation (the terminal's) is shown in English inside the translated chrome: its sentence is the English one
+  const file = isTranslated(code, slug) && code !== 'en' ? `apps/docs/i18n/${code}/pages/catalog/${slug}.html` : `apps/docs/pages/catalog/${slug}.html`;
   const match = read(file).match(/^fits:\s*(.+)$/m);
   if (!match) throw new Error(`${file} has no "fits:"`);
   return match[1].trim();
@@ -110,21 +118,23 @@ test.describe('every pattern page says where it fits best', () => {
   for (const { code, prefix } of LANGUAGES) {
     for (const slug of PATTERNS) {
       test(`${code}: ${slug} has its line under the lead, and its card on the gallery has it too`, async ({ page }) => {
-        const kind = KIND(slug);
+        const kinds = KINDS(slug);
         const sentence = sentenceOf(code, slug);
         await page.goto(`${prefix}/docs/catalog/${slug}/`);
         const head = page.locator('main > header.luz-docs-page-head');
         const line = head.locator('p.docs-fits');
         await expect(line).toHaveCount(1);
         await expect(line).toBeVisible();
-        expect(norm(await line.textContent())).toBe(`${fitsLabel(code)} ${kindWord(code, kind)} — ${sentence}`);
+        expect(norm(await line.textContent())).toBe(`${fitsLabel(code)} ${kinds.map((kind) => kindWord(code, kind)).join(', ')} — ${sentence}`);
         // A kind is a link to its page; "any site" is not a link
         const links = line.locator('a');
-        if (kind === 'any') await expect(links).toHaveCount(0);
+        if (kinds[0] === 'any') await expect(links).toHaveCount(0);
         else {
-          await expect(links).toHaveCount(1);
-          await expect(links).toHaveAttribute('href', `${prefix}/docs/kinds/${kind}/`);
-          await expect(links).toHaveText(kindWord(code, kind));
+          await expect(links).toHaveCount(kinds.length);
+          for (const [i, kind] of kinds.entries()) {
+            await expect(links.nth(i)).toHaveAttribute('href', `${prefix}/docs/kinds/${kind}/`);
+            await expect(links.nth(i)).toHaveText(kindWord(code, kind));
+          }
         }
         // Between the lead and the chips, in the head (not in the body, not under the demo)
         const order = await head.evaluate((el) => [...el.children].map((c) => c.className));
@@ -136,7 +146,9 @@ test.describe('every pattern page says where it fits best', () => {
         const card = page.locator('main section.docs-gallery li', { has: page.locator(`a[href="${prefix}/docs/catalog/${slug}/"]`) }).first();
         const fits = card.locator('.docs-card__fits');
         await expect(fits).toHaveCount(1);
-        expect(norm(await fits.textContent())).toBe(`${fitsLabel(code)} ${kindWord(code, kind)} — ${sentence}`);
+        // The card of a page that is not translated (the terminal's) is in English, as the other entries of a gallery for it are (lang="en")
+        const cardCode = isTranslated(code, slug) ? code : 'en';
+        expect(norm(await fits.textContent())).toBe(`${fitsLabel(cardCode)} ${kinds.map((kind) => kindWord(cardCode, kind)).join(', ')} — ${sentence}`);
       });
     }
   }
@@ -181,7 +193,7 @@ test.describe('the four areas of the packages that are gone are not served', () 
     });
   }
 
-  test('the search index lists the 25 pages and the class reference of Catalog, and no page of a gone area', async ({ request }) => {
+  test('the search index lists the 29 pages and the class reference of Catalog, and no page of a gone area', async ({ request }) => {
     const index = await (await request.get('/docs/search-index.json')).json();
     const paths = /** @type {string[]} */ (index.pages.map((/** @type {string[]} */ row) => row[1]));
     for (const slug of [...PATTERNS, 'classes']) expect(paths, slug).toContain(`catalog/${slug}/`);

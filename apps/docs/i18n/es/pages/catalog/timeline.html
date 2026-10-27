@@ -1,7 +1,8 @@
 <!-- luz:page
 title: Línea de tiempo
 description: Muestra eventos fechados en orden, una tarjeta cada vez sobre una línea de fechas o todos a la vez en una línea vertical; sin JavaScript, es una lista.
-source: e89bd206ae96
+fits: eventos o pasos en orden cronológico, como una historia o una hoja de ruta
+source: e89cc5837cd8
 reviewed: false
 -->
     <div class="docs-component" id="c-timeline">
@@ -174,7 +175,7 @@ reviewed: false
                 <span class="docs-snippet__lang">JS</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-timeline-js" aria-label="Copy the timeline script code">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Timeline script code"><code id="code-timeline-js">import &quot;@luz-ds/core/timeline&quot;;</code></pre>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Timeline script code"><code id="code-timeline-js">import &quot;@luz-ds/catalog/timeline&quot;;</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
             <p>Las opciones son atributos de <code>&lt;luz-timeline&gt;</code>. Cada elemento tiene una fecha, un título y un texto.</p>
@@ -198,7 +199,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Un elemento personalizado alrededor de una lista ordenada nativa, con los estilos de <code>components/timeline.css</code> y un script, <code>timeline.js</code>. <code>luz.js</code> solo carga el script en páginas que contienen <code>&lt;luz-timeline&gt;</code>.</p>
+            <p>Un elemento personalizado alrededor de una lista ordenada nativa, con los estilos de <code>components/timeline.css</code> y un script, <code>timeline.js</code>. <code>catalog.js</code> solo carga el script en páginas que contienen <code>&lt;luz-timeline&gt;</code>.</p>
             <p>El elemento busca dentro de sí el primer <code>.luz-timeline</code>; si no lo encuentra, no hace nada.</p>
             <ul>
               <li><strong>Horizontal.</strong> El script crea, solo con métodos del DOM, los botones Anterior y Siguiente a los lados de la tarjeta y un carril de fechas debajo: un botón por elemento, con el texto de su fecha. Las tarjetas comparten una celda de cuadrícula, así que la banda tiene la altura de la tarjeta más larga y no salta al cambiar de elemento. Las tarjetas que no están activas son <code>inert</code> y están ocultas. En la tarjeta activa, la fecha se oculta visualmente porque el carril ya la muestra.</li>
@@ -206,7 +207,7 @@ reviewed: false
               <li><strong>El carril.</strong> La fecha activa se desplaza hasta el centro con desplazamiento suave, salvo que la persona haya pedido reducir el movimiento. Al moverse con el teclado, el foco permanece en la nueva fecha activa; también lo hace si el cambio oculta la tarjeta que tenía el foco.</li>
               <li><strong>Vertical.</strong> El script marca como <code>data-luz-state="active"</code> el elemento que cruza el centro de la pantalla y como <code>past</code> los anteriores. La línea detrás de un elemento pasado adopta el color de marca y el punto activo se rellena y aumenta de tamaño. También funciona con el movimiento reducido, sin transición.</li>
               <li><strong>Reproducción automática.</strong> Con <code>autoplay</code>, el elemento cambia en bucle cada <code>interval</code> milisegundos. El botón Pausa bajo el carril lo detiene; entonces pasa a llamarse Reproducir y lo vuelve a iniciar. La línea de tiempo también espera sin cambiar el botón mientras el puntero está encima (reanuda tras 4 segundos o al apartarlo), mientras el foco del teclado esté dentro, mientras menos de la mitad esté en pantalla y mientras la pestaña esté oculta. Con movimiento reducido, nunca se inicia y el botón no se muestra.</li>
-              <li><strong>Texto.</strong> «Anterior», «Siguiente», «Pausa» y «Reproducir» aparecen en el idioma de la página que incluye LUZ (inglés o español), según el <code>lang</code> más cercano, o el tuyo mediante <code>registerLocale()</code> y <code>data-luz-label-*</code>. Se incluyen con el script, así que <code>@luz-ds/core/timeline</code> funciona por sí solo. Si la página carga <code>luz.js</code>, también reciben cualquier idioma que añadas con <code>registerLocale()</code>. Consulta los <a href="/docs/get-started/javascript/">módulos de JavaScript</a>.</li>
+              <li><strong>Texto.</strong> «Anterior», «Siguiente», «Pausa» y «Reproducir» aparecen en el idioma de la página que incluye LUZ (inglés o español), según el <code>lang</code> más cercano, o el tuyo mediante <code>data-luz-label-*</code>. Se incluyen con el script, así que <code>@luz-ds/catalog/timeline</code> funciona por sí solo. Un idioma que añadas con <code>registerLocale()</code> no les llega: llama a <code>initTimeline(document, t)</code> con la <code>t</code> de core. Consulta los <a href="/docs/get-started/javascript/">módulos de JavaScript</a>.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>Una lista ordenada con todos los elementos visibles: una línea en el lado inicial en línea, con un punto en cada elemento; después, la fecha, el título y el texto. La lista tiene el mismo aspecto antes de que el script defina el elemento, así que no hay saltos cuando lo hace.</p>

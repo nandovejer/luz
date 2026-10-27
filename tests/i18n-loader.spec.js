@@ -11,9 +11,12 @@
  * scroll spy, copy handlers, dialogs, tabs, and the click of the color-mode
  * cycle button; `data-luz-js` is NOT set yet, so no control is revealed
  * unbound. Wave 2 (code block names and copy buttons, players, the cycle
- * button's name, the timeline, sortable tables) runs when the language
- * arrives or after 2 s, then sets `data-luz-js`. A late arrival registers the
- * dictionary for the strings written afterwards and moves no focus.
+ * button's name, sortable tables) runs when the language arrives or after
+ * 2 s, then sets `data-luz-js`. A late arrival registers the dictionary for
+ * the strings written afterwards and moves no focus. The timeline is catalog's
+ * since F7 and is in neither wave: its chunk has English and Spanish of its
+ * own and builds at once; a language added with registerLocale() reaches it
+ * when the page calls initTimeline(document, t) with core's t (EX-010).
  *
  * The fixture (tests/fixtures/i18n-languages.html) names Spanish in a link and
  * an option on every page, and carries authored English names, so what is
@@ -49,6 +52,11 @@ const ES = {
   previous: 'Anterior',
   next: 'Siguiente',
 };
+/**
+ * A Spanish page whose language file did not arrive: core's strings are English, but the timeline (catalog's since F7)
+ * carries Spanish in its chunk and does not wait for the file, so its two buttons are in the language of the page.
+ */
+const EN_CORE_ES_TIMELINE = { ...EN, previous: ES.previous, next: ES.next };
 /** What the markup says before any script has run. */
 const AUTHORED = { play: 'Authored play', mute: 'Authored mute', cycle: 'Authored mode name' };
 
@@ -292,7 +300,7 @@ test.describe('a language file that fails', () => {
     await page.route(LANGUAGE_FILE, (route) => route.abort());
     await open(page);
     await done(page, 2500);
-    expect(await labels(page)).toEqual(EN);
+    expect(await labels(page)).toEqual(EN_CORE_ES_TIMELINE);
     expect(seen.warnings).toHaveLength(1);
     expect(seen.warnings[0]).toMatch(/^\[luz\]/);
     expect(seen.warnings[0]).toMatch(/\bes\b/);
@@ -305,7 +313,10 @@ test.describe('a language file that fails', () => {
     await page.route('**/tests/fixtures/i18n-languages.html*', async (route) => {
       const response = await route.fetch();
       const origin = new URL(route.request().url()).origin;
-      const allowed = ['luz.js', 'table-sort.js', 'timeline.js', 'midi.js'].map((f) => `${origin}/packages/core/dist/${f}`);
+      const allowed = [
+        ...['luz.js', 'table-sort.js', 'midi.js'].map((f) => `${origin}/packages/core/dist/${f}`),
+        ...['catalog.js', 'timeline.js'].map((f) => `${origin}/packages/catalog/dist/${f}`),
+      ];
       await route.fulfill({
         response,
         headers: { ...response.headers(), 'content-security-policy': `script-src 'unsafe-inline' ${origin}/tests/fixtures/i18n-languages.html ${origin}/@vite/client ${allowed.join(' ')}` },
@@ -313,7 +324,7 @@ test.describe('a language file that fails', () => {
     });
     await open(page);
     await done(page, 2500);
-    expect(await labels(page)).toEqual(EN);
+    expect(await labels(page)).toEqual(EN_CORE_ES_TIMELINE);
     expect(seen.warnings).toHaveLength(1);
     expect(seen.errors).toEqual([]);
     await theWholePageStillWorks(page);
@@ -328,7 +339,6 @@ test.describe('a language file that fails', () => {
     // Wave 1 ran, wave 2 has not, and no control has been revealed unbound
     expect(await page.evaluate(() => document.documentElement.hasAttribute('data-luz-js'))).toBe(false);
     expect(await page.locator('.luz-code-block__copy').count()).toBe(0);
-    expect(await page.locator('.luz-timeline__arrow').count()).toBe(0);
     expect(await page.locator('#table-main th > button').count()).toBe(0);
     await expect(page.locator('#player-main audio')).toHaveAttribute('controls', /.*/);
     await expect(page.locator('#player-main .luz-player-controls')).toBeHidden();
@@ -336,6 +346,9 @@ test.describe('a language file that fails', () => {
     expect(pending.play).toBe(AUTHORED.play);
     expect(pending.cycle).toBe(AUTHORED.cycle);
     expect(pending.code).toBeNull();
+    // The timeline does not wait for core's language file: catalog's chunk carries Spanish, so it is built and named at once
+    await expect(page.locator('#timeline .luz-timeline__arrow--previous')).toHaveAttribute('aria-label', ES.previous);
+    await expect(page.locator('#timeline .luz-timeline__arrow--next')).toHaveAttribute('aria-label', ES.next);
 
     await theWholePageStillWorks(page);
     expect(await wave2(page), 'wave 2 does not wait for nothing, nor start before its time').toBe(false);
@@ -346,7 +359,7 @@ test.describe('a language file that fails', () => {
     expect(elapsed).toBeLessThan(4000);
     expect(await page.evaluate(() => document.documentElement.hasAttribute('data-luz-js'))).toBe(true);
     const after = await labels(page);
-    expect({ ...after, cycle: undefined }).toEqual({ ...EN, cycle: undefined });
+    expect({ ...after, cycle: undefined }).toEqual({ ...EN_CORE_ES_TIMELINE, cycle: undefined });
     expect(after.cycle).toMatch(/^Change color mode\. Current: /);
     expect(seen.errors).toEqual([]);
     await file.release();
@@ -427,6 +440,29 @@ test.describe('loadLocales()', () => {
     });
     expect(copy).toBe('Copiar');
     expect(seen.requests).toHaveLength(1);
+  });
+});
+
+test.describe('the timeline, which is catalog\'s', () => {
+  needsJavaScript();
+  test('data-luz-label-previous on the element wins over the language', async ({ page }) => {
+    await open(page);
+    await done(page);
+    await page.locator('#timeline').evaluate((el) => el.setAttribute('data-luz-label-previous', 'Atrás'));
+    await page.evaluate(async () => (await import('/packages/catalog/dist/timeline.js')).initTimeline(document));
+    await expect(page.locator('#timeline .luz-timeline__arrow--previous')).toHaveAttribute('aria-label', 'Atrás');
+    await expect(page.locator('#timeline .luz-timeline__arrow--next')).toHaveAttribute('aria-label', ES.next);
+  });
+
+  test('registerLocale("fr", …) reaches it only when the page calls initTimeline(document, t) with core\'s t', async ({ page }) => {
+    await open(page, '?lang=fr');
+    await done(page);
+    await page.evaluate(() => window.luz.registerLocale('fr', { previous: 'Précédent', next: 'Suivant' }));
+    // registered, but the chunk does not know core: still English
+    expect((await labels(page)).previous).toBe(EN.previous);
+    await page.evaluate(async () => (await import('/packages/catalog/dist/timeline.js')).initTimeline(document, window.luz.t));
+    expect((await labels(page)).previous).toBe('Précédent');
+    expect((await labels(page)).next).toBe('Suivant');
   });
 });
 

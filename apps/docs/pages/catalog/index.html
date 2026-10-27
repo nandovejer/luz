@@ -1,14 +1,14 @@
 <!-- luz:page
 title: Catalog
-description: The pieces that are not core's, one stylesheet each: the tags that need data of the site, such as search and cookie consent, and the patterns of a landing page, a blog, an app and a documentation site.
+description: The pieces that are not core's, one stylesheet each: the navigation of the site, the tags with a script or an identity of their own, such as search and cookie consent, and the patterns of a landing page, a blog, an app and a documentation site.
 area: catalog
 order: 0
 lead: false
 generate: gallery
 -->
-    <p class="docs-lead">The pieces that are not core's, one stylesheet each: the tags that need data of the site, such as search and cookie consent, and the patterns of a landing page, a blog, an app and a documentation site, grouped by what they do.</p>
+    <p class="docs-lead">The pieces that are not core's, one stylesheet each: the navigation of the site, the tags with a script or an identity of their own, such as search and cookie consent, and the patterns of a landing page, a blog, an app and a documentation site, grouped by what they do.</p>
     <p>A site links only the files it uses, after core's. Each page says which kind of site its piece <strong>fits best</strong>; <em>any site</em> means it has no kind of its own.</p>
-    <p>Six pieces need data of the site: its search index, its cookie policy, its languages, its menu, an announcement. Each is a <code class="luz-code-inline">&lt;luz-*&gt;</code> tag that works on its own, in any header or page. The patterns are classes: the page structure of a <a href="/docs/kinds/landing/">landing page</a>, a <a href="/docs/kinds/blog/">blog</a>, an <a href="/docs/kinds/app/">app</a> or a <a href="/docs/kinds/docs/">documentation site</a>, composed in the markup from core's objects.</p>
+    <p>The tags are <code class="luz-code-inline">&lt;luz-search&gt;</code>, <code class="luz-code-inline">&lt;luz-consent&gt;</code>, <code class="luz-code-inline">&lt;luz-mode&gt;</code>, <code class="luz-code-inline">&lt;luz-lang-switch&gt;</code>, <code class="luz-code-inline">&lt;luz-submenu&gt;</code>, <code class="luz-code-inline">&lt;luz-banner&gt;</code> and <code class="luz-code-inline">&lt;luz-timeline&gt;</code>: each works on its own, in any header or page. The navbar, the sidebar and the terminal are classes, with no tag of their own. The patterns are classes: the page structure of a <a href="/docs/kinds/landing/">landing page</a>, a <a href="/docs/kinds/blog/">blog</a>, an <a href="/docs/kinds/app/">app</a> or a <a href="/docs/kinds/docs/">documentation site</a>, composed in the markup from core's objects.</p>
     <p>Everything else is a <strong>component</strong> of core, one reusable piece that fits inside anything; components are in <a href="/docs/components/">Core</a>.</p>
     <ul>
       <li>Each tag is the block, and its parts are <code class="luz-code-inline">.luz-&lt;tag&gt;__&lt;part&gt;</code>; every rule uses semantic tokens only.</li>

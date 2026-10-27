@@ -60,14 +60,14 @@ toc: h2,h3
               </div>
             </header>
           </div>
-          <p class="docs-demo__note">The blog bar, then the masthead. At 768 px of window width and below the sections collapse into a menu, core's <a href="/docs/components/navbar/">navbar</a>.</p>
+          <p class="docs-demo__note">The blog bar, then the masthead. At 768 px of window width and below the sections collapse into a menu, the catalog's <a href="/docs/catalog/navbar/">navbar</a>.</p>
           <p class="docs-demo__note">The examples are not sticky: in a page, <code class="luz-code-inline">.o-sticky</code> keeps the blog bar at the top; the masthead never sticks.</p>
           </div>
           <h2 id="known-issues">Known issues</h2>
           <p>The header's own issues are those of the pieces of core it is made of, and one of the masthead.</p>
           <ul>
             <li><strong>The masthead's menu without anchor positioning.</strong> In browsers without CSS anchor positioning, the sections menu of the masthead header opens near the top of the window and covers the publication name and the menu button while it is open. Escape, or a click outside the menu, closes it and returns to the page.</li>
-            <li><strong>The menu panel.</strong> If you keep pressing Tab after the last link of the open menu, focus moves on into the page and the menu stays open over it; Escape closes it. See the <a href="/docs/components/navbar/#known-issues">navbar's known issues</a>.</li>
+            <li><strong>The menu panel.</strong> If you keep pressing Tab after the last link of the open menu, focus moves on into the page and the menu stays open over it; Escape closes it. See the <a href="/docs/catalog/navbar/#known-issues">navbar's known issues</a>.</li>
             <li><strong>Sticky bar and enlarged text.</strong> The scroll padding of <code>.o-sticky</code> is a minimum: at 300% text, with the bar wrapped to several rows, Safari can leave a field reached with Tab under it. Set <code>scroll-padding-block-start</code> on <code>html</code> to your header's real height, or leave out <code>.o-sticky</code>.</li>
           </ul>
           <nav class="luz-tabs docs-view-tabs" aria-label="Blog header documentation">
@@ -142,12 +142,12 @@ toc: h2,h3
                   <tr><td data-label="Class"><div><code>.luz-cms-header__sections</code></div></td><td data-label="Effect"><div>Masthead only, on a <code>.o-row</code>: the menu button and the navbar between two rules, centred from 769 px; its panel opens under this row</div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-sticky</code> (core)</div></td><td data-label="Effect"><div>Keeps the blog bar at the top while the page scrolls, in a window at least 30 rem tall; see <a href="/docs/components/layout/#objects-page">the page and its bars</a>. Never on the masthead</div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-container.o-container--inline</code> (core)</div></td><td data-label="Effect"><div>The width and gutters of the page, so the header starts where the content starts</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (core)</div></td><td data-label="Effect"><div>The menu button and the sections: see the <a href="/docs/components/navbar/">navbar</a></div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (catalog)</div></td><td data-label="Effect"><div>The menu button and the sections: see the <a href="/docs/catalog/navbar/">navbar</a></div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>components/cms-header.css</code> of <code>@luz-ds/catalog</code> on core's objects and navbar. No JavaScript.</p>
+            <p>CSS from <code>components/cms-header.css</code> of <code>@luz-ds/catalog</code> on core's objects and the catalog's navbar. No JavaScript.</p>
             <ul>
               <li>cms adds the skin only: the page surface, the rule underneath, the brand, and the gaps of the row (8 px between rows, 16 px between items, 24 px from 769 px). Core gives the rest: <code>.o-sticky</code> the stickiness and the scroll padding, <code>.o-container--inline</code> the gutters, <code>.o-row</code> and <code>.o-stack</code> the rows, and the navbar the links and their panel.</li>
               <li>A one-row bar is core's <code>--luz-bar-h</code> tall: 44 px controls, 4 px above and below, and the 1 px rule. At 768 px and below the brand fills the room between the menu button and the actions and wraps there, so the controls stay on one row; with enlarged text the row wraps and the bar grows.</li>

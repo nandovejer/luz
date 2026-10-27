@@ -12,7 +12,7 @@
  *   - VERSIONING.md: loadLocales() and @luz-ds/core/i18n/<code> are public
  *   - get-started/javascript.html: an h3 #js-languages (an h3 is not a row of
  *     the A-Z index of a `toc: h2` page) and no "English and Spanish"
- *   - components/timeline.html, PRINCIPLES.md, EXCEPTIONS.md (EX-010)
+ *   - catalog/timeline.html (it was components/timeline.html until F7), PRINCIPLES.md, EXCEPTIONS.md (EX-010)
  *   - accessibility.html: the known issues the accessibility review asked for
  *   - SECURITY.md: a CSP without 'strict-dynamic' blocks the language chunk
  *   - the A-Z page stays under the page ceiling of budgets.json, from the
@@ -329,16 +329,19 @@ describe("get-started/javascript.html", () => {
 
 /* ---- components/timeline.html ----------------------------------------------- */
 
-describe("components/timeline.html", () => {
-  const text = flat(readPage("components/timeline.html").body);
+describe("catalog/timeline.html", () => {
+  const text = flat(readPage("catalog/timeline.html").body);
 
   it("no longer says English and Spanish are what the buttons come in", () => {
     expect(text).not.toMatch(/English (and|or) Spanish/);
   });
 
-  it("says the language of the page when LUZ ships it, or yours through registerLocale() and data-luz-label-*", () => {
+  it("says the language of the page when LUZ ships it, or yours through data-luz-label-*; a language added with registerLocale() reaches it only through initTimeline(document, t) (EX-010, F7)", () => {
     expect(text).toContain("the language of the page when LUZ ships it (English, Spanish)");
-    expect(text).toMatch(/registerLocale\(\)[^.]*data-luz-label-\*/);
+    expect(text).toMatch(/data-luz-label-\*/);
+    expect(text).toContain("@luz-ds/catalog/timeline");
+    expect(text).toMatch(/registerLocale\(\)[^.]*does not reach/);
+    expect(text).toContain("initTimeline(document, t)");
   });
 });
 

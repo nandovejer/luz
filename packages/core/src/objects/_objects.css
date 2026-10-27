@@ -4,18 +4,13 @@
    Prefix: .o-
    ========================================================================== */
 
-/* Shell: root app layout (sidebar + main + footer) */
+/* Shell: root app layout (sidebar + main + footer). A sidebar's own place in
+   its grid is the catalog sidebar's (sidebar.css) */
 .o-shell {
   display: grid;
   grid-template-columns: var(--luz-sidebar-width) 1fr;
   grid-template-rows: 1fr auto;
   min-height: 100vh;
-}
-
-/* Sidebar positioned in first column, spans all rows */
-.o-shell > .luz-sidebar {
-  grid-column: 1;
-  grid-row: 1 / -1;
 }
 
 /* Main content area fills second column. The page scrolls, not this box (the
@@ -38,14 +33,6 @@
   .o-shell {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
-  }
-
-  /* A sidebar that is not a popover (or a browser without the popover API)
-     is just the first block of the page, not a full-height column: its size
-     and position are in components/sidebar.css, the layer that sets them */
-  .o-shell > .luz-sidebar:not([popover]) {
-    grid-column: 1;
-    grid-row: 1;
   }
 
   .o-main {

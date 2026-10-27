@@ -6,6 +6,7 @@
   <title>Timeline</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/timeline.css">
   <style>
     /* Fixture only: the vertical timeline must be taller than the viewport to scroll. */
     #vertical .luz-timeline__item { min-height: 70vh; }
@@ -110,15 +111,17 @@
     <div class="spacer"></div>
   </main>
   <script type="module">
-    // ?none: the page has no timeline, so luz.js must not load the chunk.
+    // ?none: the page has no timeline, so catalog.js must not load the chunk.
     const params = new URLSearchParams(location.search);
     if (params.has("none")) document.querySelectorAll("luz-timeline").forEach((el) => el.remove());
-    // ?standalone: only the chunk, as a consumer who imports @luz-ds/core/timeline
-    // (?standalone=min: the minified one); no luz.js on the page.
+    // ?standalone: only the chunk, as a consumer who imports @luz-ds/catalog/timeline
+    // (?standalone=min: the minified one); neither luz.js nor catalog.js on the page.
     const standalone = params.get("standalone");
-    if (standalone === null) await import("/packages/core/dist/luz.js");
-    else if (standalone === "min") await import("/packages/core/dist/timeline.min.js");
-    else await import("/packages/core/dist/timeline.js");
+    // ?core: core's entry alone, which does not know the timeline
+    if (params.has("core")) await import("/packages/core/dist/luz.js");
+    else if (standalone === null) await import("/packages/catalog/dist/catalog.js");
+    else if (standalone === "min") await import("/packages/catalog/dist/timeline.min.js");
+    else await import("/packages/catalog/dist/timeline.js");
   </script>
 </body>
 </html>

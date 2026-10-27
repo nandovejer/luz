@@ -11,8 +11,8 @@
    taller than the window, with room at its start for a focus ring. Below
    80rem the rail is drawn above the content (it comes before main in the
    markup), in its column, and does not stick; a script may fold the list
-   there (its details is written open, so without one it reads in full). A link of the list also carries core's .luz-sidebar__link,
-   so core's scroll spy marks the section in view (aria-current="true"):
+   there (its details is written open, so without one it reads in full). A link of the list also carries catalog's .luz-sidebar__link,
+   so catalog's scroll spy marks the section in view (aria-current="true"):
    the mark is the weight and a start border, never the colour alone.
    While <luz-consent> shows, from 80rem the inner box keeps the banner's
    height (--luz-consent-h) as end padding and scroll padding.
@@ -90,7 +90,7 @@
 	border-inline-start: 1px solid var(--luz-divider);
 }
 
-/* Core's sidebar link is drawn for the sidebar's own surface: here it is
+/* Catalog's sidebar link is drawn for the sidebar's own surface: here it is
    text on the page */
 .luz-docs-rail__link {
 	display: flex;

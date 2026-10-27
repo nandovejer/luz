@@ -34,12 +34,15 @@ const KIND_FILES = {
 };
 const FILES = {
   tokens: ["luz-tokens.min.css"],
-  core: ["luz.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "timeline.min.js", "i18n-es.min.js"],
+  // F7: the timeline chunk is catalog's, with the sidebar's
+  core: ["luz.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "i18n-es.min.js"],
   // Catalog has no bundle (F5a): one stylesheet per component, plain and minified, and the scripts
   catalog: [
     "components/search.css", "components/search.min.css", "components/consent.css", "components/consent.min.css", "components/banner.css", "components/banner.min.css",
     ...Object.values(KIND_FILES).flat().flatMap((name) => [`components/${name}.css`, `components/${name}.min.css`]),
-    "catalog.min.js", "search.min.js", "consent.min.js", "mode.min.js",
+    // F7: the four layout components that came from core are files of components/ like any other
+    ...["navbar", "sidebar", "terminal", "timeline"].flatMap((name) => [`components/${name}.css`, `components/${name}.min.css`]),
+    "catalog.min.js", "search.min.js", "consent.min.js", "mode.min.js", "timeline.min.js", "sidebar.min.js",
   ],
 };
 /** The kind a snippet is for, and the prefix of its patterns' files (a blog's are the cms-* ones): null for the one with none. */
@@ -268,7 +271,10 @@ describe("the snippet generator", () => {
 
       it("gives, in the chunks section, one import map whose integrity lists exactly the lazy chunks that budgets.json budgets, each with its version and sha384", () => {
         const budgeted = budgetedChunks();
-        expect(budgeted.length).toBe(7); // midi, table-sort, timeline, i18n-es, search, consent, mode
+        expect(budgeted.length).toBe(8); // core: midi, table-sort, i18n-es; catalog: search, consent, mode, timeline, sidebar (the last two came from core in F7)
+        expect(budgeted).toContain("catalog/dist/timeline.min.js");
+        expect(budgeted).toContain("catalog/dist/sidebar.min.js");
+        expect(budgeted).not.toContain("core/dist/timeline.min.js");
         const block = codeOf(html, "chunks-importmap");
         expect(block, "a code block #code-chunks-importmap in the chunks section").not.toBeNull();
         expect(chunkSection()).toContain('id="code-chunks-importmap"');
@@ -303,7 +309,7 @@ describe("the snippet generator", () => {
           expect(hash, rel).toBe(sri(root, pkg, file));
         }
         // each row says when to add the line
-        for (const element of ["luz-timeline", "luz-search", "luz-consent", "luz-mode"]) expect(section, element).toContain(element);
+        for (const element of ["luz-timeline", "luz-search", "luz-consent", "luz-mode", "luz-sidebar"]) expect(section, element).toContain(element);
       });
 
       it("calls the import map the way to check a chunk, and modulepreload only a performance hint (it does not block a bad file in Safari and Firefox)", () => {

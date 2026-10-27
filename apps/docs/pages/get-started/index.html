@@ -59,7 +59,7 @@ keywords: npm, cdn
 
       <div class="docs-prose">
         <h2 id="level-2-tokens-and-core" class="docs-prose__title">Level 2: tokens and core</h2>
-        <p>The <span data-count="components">33</span> components, the styles of bare HTML elements, and optional JavaScript. Load tokens first.</p>
+        <p>The <span data-count="components">29</span> components, the styles of bare HTML elements, and optional JavaScript. Load tokens first.</p>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
@@ -98,7 +98,7 @@ import &quot;@luz-ds/core&quot;;</code></pre>
 
       <div class="docs-prose">
         <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Level 3, the Catalog: tokens, core and catalog</h2>
-        <p>Six components that need data of the site: search, cookie consent, color mode, language switch, submenu and banner. The catalog needs core and tokens.</p>
+        <p>The site's navigation and the pieces with a script or an identity of their own: navbar, sidebar, terminal, timeline, search, cookie consent, color mode, language switch, submenu and banner, and the patterns of a kind of site. The catalog needs core and tokens.</p>
         <p>The page structure of each kind of site, from the header to the footer, is in the catalog too, one stylesheet per pattern: see <a href="#site-kinds">Kinds of site</a>.</p>
         <p>The catalog has a stylesheet per component: link the ones the page uses, after core.</p>
         <div class="docs-command-block">
@@ -170,7 +170,7 @@ import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
         <ul>
           <li>Link the files of a kind in the order of the list above.</li>
           <li>Link <code class="luz-code-inline">landing-hero</code> with <code class="luz-code-inline">landing-section</code>: the head of a section shares its rules with the hero.</li>
-          <li>None has a script. Core's script is optional: with the table of contents of a blog, it marks the section in view; with the sidebar of an app, it marks the current link and closes the drawer when a link is followed.</li>
+          <li>None has a script. The catalog's script is optional: with the table of contents of a blog, it marks the section in view; with the sidebar of an app, it marks the current link and closes the drawer when a link is followed. Core's script does not do this.</li>
         </ul>
       </div>
 

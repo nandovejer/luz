@@ -762,7 +762,7 @@ export function renderPageHead(site, page) {
  * opens the tab of a section a link points at). An open <details> in the
  * rail, so it reads without JS; with it, the docs script folds it below
  * 80rem (the rail is above the content there) and, from 80rem, marks the
- * section in view (core's initSidebar).
+ * section in view (catalog's initSidebar).
  */
 export function renderToc(page, html, t = englishT(), site = {}) {
   if (page.meta.toc === "false") return "";
@@ -1626,6 +1626,17 @@ function packageBytes(root, budgets, name, what) {
   const under = `packages/${name}/dist/`;
   const files = [];
   const matches = (glob) => {
+    // "dir/{a-*,b}.ext": files named "a-…" or exactly "b.ext" (as scripts/check-size.js reads it)
+    const list = /^(.*?)\/\{([a-z*,-]+)\}(\.[a-z.]+)$/.exec(glob);
+    if (list) {
+      const [, folder, names, suffix] = list;
+      const items = names.split(",");
+      return existsSync(resolve(root, folder))
+        ? readdirSync(resolve(root, folder))
+            .filter((f) => f.endsWith(suffix) && items.some((i) => (i.endsWith("-*") ? f.startsWith(i.slice(0, -1)) : f === `${i}${suffix}`)))
+            .map((f) => `${folder}/${f}`)
+        : [];
+    }
     const [, dir, deep, prefixes, ext] = /^(.*?)\/(\*\*\/)?(?:\{([a-z,]+)\}-)?\*(\.[a-z.]+)$/.exec(glob) ?? [];
     if (!dir) throw new Error(`budgets.json: unsupported glob ${glob}`);
     const starts = prefixes?.split(",").map((p) => `${p}-`);

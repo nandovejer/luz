@@ -2,8 +2,8 @@
 	 LUZ Catalog: cms header.
 	 Layer: catalog · Prefix: .luz-cms-
 	 The blog bar: header.luz-cms-header.o-sticky >
-	 div.o-container.o-container--inline.o-row holding core's .luz-nav-toggle,
-	 the __brand link, core's nav.luz-navbar[popover] and a div.o-row.__actions
+	 div.o-container.o-container--inline.o-row holding catalog's .luz-nav-toggle,
+	 the __brand link, catalog's nav.luz-navbar[popover] and a div.o-row.__actions
 	 (site's <luz-search>, then an optional <luz-lang-switch>). Core gives the
 	 stickiness, the width, the row and the collapsing links; cms adds the
 	 surface, the divider, the masthead brand and the gaps.
@@ -135,7 +135,7 @@
 	}
 }
 
-/* With anchor positioning the panels opened inside the bar (core's navbar,
+/* With anchor positioning the panels opened inside the bar (catalog's navbar,
    the language list) open at its block end, on two rows as on one; in the
    masthead, the navbar's panel opens under the sections row. Scoped, so
    with two bars on a page each panel finds its own */

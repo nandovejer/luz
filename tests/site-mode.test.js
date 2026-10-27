@@ -133,21 +133,23 @@ describe("catalog.js, the build and the size guard know the chunk", () => {
     const loader = read("packages/catalog/src/catalog.js");
     expect([...loader.matchAll(LITERAL_IMPORT)].map((m) => m[2]).sort()).toContain("./mode.js");
     expect(loader).toMatch(/["']luz-mode["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/mode\.js["']\s*\)/);
-    expect(code(loader).match(IMPORT_CALL)).toHaveLength(3);
+    expect(code(loader).match(IMPORT_CALL)).toHaveLength(5);
   });
 
   it("scripts/build-catalog.js lists mode.js among the chunks", () => {
     const build = read("scripts/build-catalog.js");
     const chunks = /chunks:\s*\[([^\]]*)\]/.exec(build)?.[1] ?? "";
-    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "consent.js", "mode.js"]);
+    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "consent.js", "mode.js", "timeline.js", "sidebar.js"]); // timeline and sidebar came from core in F7
   });
 
-  it("scripts/check-size.js expects the third chunk of the loader", () => {
+  it("scripts/check-size.js expects the mode chunk of the loader, with the other four", () => {
     const guard = read("scripts/check-size.js");
     const loaders = /const LOADERS = \{([^;]*)\};/.exec(guard)?.[1] ?? "";
     expect(loaders).toContain("./mode.min.js");
     expect(loaders).toContain("./search.min.js");
     expect(loaders).toContain("./consent.min.js");
+    expect(loaders).toContain("./timeline.min.js");
+    expect(loaders).toContain("./sidebar.min.js");
   });
 
   it("package.json exports it as ./mode and lists its files as side effects", () => {
@@ -191,14 +193,20 @@ describe("the budget of the mode chunk", () => {
 
   it("leaves the other catalog rows as they were (a new row, never a raised ceiling)", () => {
     const rows = budgets.filter((b) => /^catalog /.test(b.name) && b.name !== "catalog JS lazy chunk: mode");
-    expect(rows).toEqual([
-      // F5b: the 21 patterns of the four kinds of site have the last row, and this one leaves them out
-      { name: "catalog component CSS (each)", glob: "packages/catalog/dist/components/*.min.css", except: "packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css", ideal: 1280, max: 1536 },
-      { name: "catalog JS", file: "packages/catalog/dist/catalog.min.js", ideal: 1024, max: 2048 },
-      { name: "catalog JS lazy chunk: search", file: "packages/catalog/dist/search.min.js", ideal: 2048, max: 2560 },
-      { name: "catalog JS lazy chunk: consent", file: "packages/catalog/dist/consent.min.js", ideal: 1024, max: 1536 },
-      { name: "catalog kind patterns CSS (each)", glob: "packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css", ideal: 768, max: 1024 },
+    // F5b: the 21 patterns of the four kinds of site have a row, and the general one leaves them out; F7: the four layout
+    // components (and the timeline and sidebar chunks) came from core with a row of their own, and the general row leaves the CSS out
+    expect(rows.map(({ name, ideal, max }) => ({ name, ideal, max }))).toEqual([
+      { name: "catalog component CSS (each)", ideal: 1280, max: 1536 },
+      { name: "catalog JS", ideal: 1024, max: 2048 },
+      { name: "catalog JS lazy chunk: search", ideal: 2048, max: 2560 },
+      { name: "catalog JS lazy chunk: consent", ideal: 1024, max: 1536 },
+      { name: "catalog JS lazy chunk: timeline", ideal: 2048, max: 3072 },
+      { name: "catalog JS lazy chunk: sidebar", ideal: 768, max: 1024 },
+      { name: "catalog layout CSS (each)", ideal: 1792, max: 2048 },
+      { name: "catalog kind patterns CSS (each)", ideal: 768, max: 1024 },
     ]);
+    expect(rows.find((b) => b.name === "catalog component CSS (each)").glob).toBe("packages/catalog/dist/components/*.min.css");
+    expect(rows.find((b) => b.name === "catalog JS").file).toBe("packages/catalog/dist/catalog.min.js");
   });
 
   it("repeats the row in the table of PRINCIPLES.md section 8, with the ceiling of 1.5 kB", () => {

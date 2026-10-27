@@ -424,9 +424,22 @@ describe("presetProblems: a preset names only the patterns that fit its kind (F5
 
   it("accepts a pattern that fits any kind (`<luz-banner>`, `luz-search`), a pattern of its own kind, and a name no catalog page documents", () => {
     const dir = copyOfRepo();
-    appended(dir, "landing", "Add `<luz-banner>` and `luz-search` if you want them, with core's `luz-sidebar` and `o-stack`.");
+    appended(dir, "landing", "Add `<luz-banner>` and `luz-search` if you want them, with core's `luz-card` and `o-stack`.");
     appended(dir, "blog", "A banner is `<luz-banner>`, and the contents are `luz-cms-toc`.");
     expect(member("presetProblems")(dir)).toEqual([]);
+  });
+
+  it("names the four components that came from core (F7) as catalog pages that fit a kind: the sidebar fits docs and app, so a landing preset that names it is reported", () => {
+    const dir = copyOfRepo();
+    const line = appended(dir, "landing", "Put a `luz-sidebar` beside the page.");
+    const found = member("presetProblems")(dir);
+    expect(found).toHaveLength(1);
+    expect(found.join("\n")).toContain(`landing.md:${line}`);
+    expect(found.join("\n")).toContain("luz-sidebar");
+    const ok = copyOfRepo();
+    appended(ok, "landing", "Add a `luz-navbar` and, for the history, a `<luz-timeline>`.");
+    appended(ok, "docs", "Beside the text a `luz-sidebar`, and a `luz-terminal` for each command.");
+    expect(member("presetProblems")(ok)).toEqual([]);
   });
 
   it("follows the front matter: when a page adds the kind to its fits-kinds, the preset may name it", () => {
@@ -451,7 +464,11 @@ describe("presetProblems: a preset names only the patterns that fit its kind (F5
 
   it("the pages the presets are read from are the catalog pages with a fits-kinds, and each kind's pages say it", () => {
     const patterns = member("catalogPatterns")(root);
-    expect(patterns.length).toBe(25);
+    // the 19 pages of patterns, the six elements and (F7) the navbar, the sidebar, the terminal and the timeline; the gallery and the class reference have no fits-kinds
+    expect(patterns.length).toBe(29);
+    for (const [slug, kinds] of [["navbar", ["any"]], ["sidebar", ["docs", "app"]], ["terminal", ["docs"]], ["timeline", ["blog", "landing"]]]) {
+      expect(patterns.find((p) => p.slug === slug), slug).toMatchObject({ kinds, files: [`components/${slug}.css`] });
+    }
     expect(patterns.find((p) => p.slug === "landing-hero")).toMatchObject({ kinds: ["landing"], files: ["components/landing-hero.css"] });
     expect(patterns.find((p) => p.slug === "banner").kinds).toEqual(["any"]);
     expect(patterns.some((p) => p.slug === "classes" || p.slug === "index"), "the gallery and the class reference have no fits-kinds").toBe(false);
