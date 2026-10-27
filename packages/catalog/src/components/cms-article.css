@@ -6,8 +6,8 @@
 	 room is 46rem or more, and above the text below that; beside it, the
 	 contents stay in view while the text scrolls. The contents come first in
 	 the source, so they are read and reached first in both layouts.
-	 No JavaScript of its own: with data-luz-spy on the contents, core's
-	 scroll spy (initSidebar, run by luz.js) marks the link of the section in
+	 No JavaScript of its own: with data-luz-spy on the contents, catalog's
+	 scroll spy (initSidebar, run by catalog.js) marks the link of the section in
 	 view with aria-current="true".
 	 ========================================================================== */
 

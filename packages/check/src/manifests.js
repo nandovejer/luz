@@ -83,7 +83,8 @@ function readJson(path, max) {
 /**
  * classes.json of schema 1 -> { version, classes: [{ name, block, kind, defined, modifier, part, hosts, files }], hooks } or null.
  * `files` is kept only when `unbundled` (a package whose page links one file per component), and only the components/<name>.css ones.
- * `derive`: the data is the snapshot beside the bundle, which leaves `files` out of a defined class that is in the file its block names.
+ * `derive`: the data is the snapshot beside the bundle, which leaves `files` out of a defined class that is in the file its block names,
+ * and `defined` out of a class that is defined (it is written only as false).
  */
 function parseClasses(data, pkg, unbundled, derive = false) {
   if (!isObject(data) || data.schema !== 1 || data.package !== `@luz-ds/${pkg}`) return null;
@@ -96,9 +97,11 @@ function parseClasses(data, pkg, unbundled, derive = false) {
     const { hosts } = entry;
     if (hosts !== undefined && !(Array.isArray(hosts) && hosts.length > 0 && hosts.length <= MAX_HOSTS && hosts.every((host) => typeof host === "string" && HOST.test(host)))) return null;
     // The snapshot of a package with no bundle (`derive`) leaves out the file a defined class has when it is the one its block names
-    const own = derive && entry.defined === true && entry.files === undefined ? [`components/${(entry.block ?? entry.name).replace(/^luz-/, "")}.css`] : entry.files;
+    // `defined` is absent in the snapshot where it is true (scripts/build-check.js writes it only where it is false)
+    const defined = derive && entry.defined === undefined ? true : entry.defined;
+    const own = derive && defined === true && entry.files === undefined ? [`components/${(entry.block ?? entry.name).replace(/^luz-/, "")}.css`] : entry.files;
     const files = unbundled && Array.isArray(own) ? own.filter((file) => typeof file === "string" && FILE.test(file)).slice(0, MAX_FILES) : [];
-    classes.push({ name: entry.name, block: entry.block, kind: entry.kind, defined: entry.defined, modifier: entry.modifier, part: entry.part, hosts, files: files.length ? files : undefined });
+    classes.push({ name: entry.name, block: entry.block, kind: entry.kind, defined, modifier: entry.modifier, part: entry.part, hosts, files: files.length ? files : undefined });
   }
   if (data.properties !== undefined && !Array.isArray(data.properties)) return null;
   // An entry that is not a name with a scope is left out; the rest of the manifest stands

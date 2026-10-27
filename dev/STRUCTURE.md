@@ -60,7 +60,6 @@ luz-design-system/
 │   │   │   ├── index.css              ← entry with ITCSS imports (source of truth for layer order)
 │   │   │   ├── luz.js                 ← entry: re-exports API + auto-init
 │   │   │   ├── theme.js               ← theme system (applyTheme, applyMode, …)
-│   │   │   ├── sidebar.js             ← sidebar nav + mobile drawer
 │   │   │   ├── clipboard.js           ← copy-to-clipboard behaviors
 │   │   │   ├── modal.js               ← modals + focus trap
 │   │   │   ├── highlight.js           ← dependency-free syntax highlight
@@ -74,20 +73,20 @@ luz-design-system/
 │   │       ├── base.css (+ .min)      ← settings + reset + elements (needed by per-component files)
 │   │       ├── components/*.css       ← per-component files (standalone use)
 │   │       ├── luz.js                 ← bundled entry (rollup)
-│   │       ├── theme.js, sidebar.js, … ← individual ESM modules
+│   │       ├── theme.js, clipboard.js, … ← individual ESM modules
 │   │       ├── midi.js                ← lazy chunk
 │   │       ├── fonts/custom-faces/    ← copied for the themes
 │   │       └── themes/*.css
 │   │
 │   ├── catalog/                   ← @luz-ds/catalog (publishable)
 │   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/{search,consent,mode,lang-switch,submenu,banner}.css  ← each with its print rules; no bundle
+│   │   │   ├── components/{search,consent,mode,lang-switch,submenu,banner,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
 │   │   │   ├── components/<kind>-<name>.css  ← the patterns of a kind of site (kind: landing, cms, app, docs), one file each
 │   │   │   ├── catalog.js                ← the presence loader
-│   │   │   └── search.js, consent.js, mode.js  ← lazy chunks
+│   │   │   └── search.js, consent.js, mode.js, timeline.js, sidebar.js  ← lazy chunks (the last two were core's)
 │   │   └── dist/                      ← GENERATED (do not edit)
 │   │       ├── components/*.css (+ .min)  ← the only CSS: one file per component
-│   │       └── catalog.js, search.js, consent.js (+ .min)
+│   │       └── catalog.js, search.js, consent.js, mode.js, timeline.js, sidebar.js (+ .min)
 │   │
 │   └── check/                     ← @luz-ds/check (publishable tool: a bin, no CSS, no layer; own version, 0.x)
 │       ├── src/                       ← EDIT HERE (Node ESM: main.js is the bin's glue, cli.js is run(argv, env))

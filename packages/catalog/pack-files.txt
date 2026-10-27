@@ -53,10 +53,18 @@ dist/components/lang-switch.css
 dist/components/lang-switch.min.css
 dist/components/mode.css
 dist/components/mode.min.css
+dist/components/navbar.css
+dist/components/navbar.min.css
 dist/components/search.css
 dist/components/search.min.css
+dist/components/sidebar.css
+dist/components/sidebar.min.css
 dist/components/submenu.css
 dist/components/submenu.min.css
+dist/components/terminal.css
+dist/components/terminal.min.css
+dist/components/timeline.css
+dist/components/timeline.min.css
 dist/consent.js
 dist/consent.min.js
 dist/custom-elements.json
@@ -64,4 +72,8 @@ dist/mode.js
 dist/mode.min.js
 dist/search.js
 dist/search.min.js
+dist/sidebar.js
+dist/sidebar.min.js
+dist/timeline.js
+dist/timeline.min.js
 package.json

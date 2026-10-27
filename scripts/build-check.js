@@ -87,7 +87,8 @@ const ownFile = (entry) => `components/${(entry.block ?? entry.name).replace(/^l
 function reduceClasses(manifest, unbundled) {
   const out = { schema: manifest.schema, package: manifest.package, version: manifest.version };
   out.classes = manifest.classes.map((entry) => {
-    const kept = { name: entry.name, kind: entry.kind, defined: entry.defined };
+    // `defined` is written only where it is false: a class no stylesheet defines (a script names it). Absent means true (the reader of packages/check/src/manifests.js)
+    const kept = { name: entry.name, kind: entry.kind, ...(entry.defined === true ? {} : { defined: entry.defined }) };
     for (const key of ["block", "modifier", "part", "hosts"]) if (entry[key] !== undefined) kept[key] = entry[key];
     if (unbundled && entry.defined) {
       const files = entry.files ?? [];

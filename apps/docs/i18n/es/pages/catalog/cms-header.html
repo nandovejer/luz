@@ -3,7 +3,7 @@ title: Cabecera de blog
 description: Abre cada página de un blog o periódico con el nombre de la publicación, sus secciones y una búsqueda: una fila fija arriba o una cabecera de tres filas.
 fits: la parte superior de cada página de un blog o de un periódico
 keywords: barra superior, cabecera, periódico
-source: 32faef159c26
+source: 6741419c2387
 reviewed: false
 -->
     <div class="docs-component" id="p-cms-header">
@@ -56,14 +56,14 @@ reviewed: false
               </div>
             </header>
           </div>
-          <p class="docs-demo__note">The blog bar, then the masthead. At 768 px of window width and below the sections collapse into a menu, core's <a href="/docs/components/navbar/">navbar</a>.</p>
+          <p class="docs-demo__note">The blog bar, then the masthead. At 768 px of window width and below the sections collapse into a menu, the catalog's <a href="/docs/catalog/navbar/">navbar</a>.</p>
           <p class="docs-demo__note">The examples are not sticky: in a page, <code class="luz-code-inline">.o-sticky</code> keeps the blog bar at the top; the masthead never sticks.</p>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
           <p>Los problemas propios de la cabecera son los de los componentes de core que la forman y otro específico de la cabecera destacada.</p>
           <ul>
             <li><strong>El menú de la cabecera destacada sin posicionamiento de anclas.</strong> En los navegadores sin posicionamiento de anclas CSS, el menú de secciones se abre cerca de la parte superior de la ventana y, mientras está abierto, cubre el nombre de la publicación y el botón de menú. Pulsa Escape o haz clic fuera del menú para cerrarlo y volver a la página.</li>
-            <li><strong>El panel del menú.</strong> Si sigues pulsando Tab después del último enlace del menú abierto, el foco avanza por la página y el menú permanece abierto encima; Escape lo cierra. Consulta los <a href="/docs/components/navbar/#known-issues">problemas conocidos de la barra de navegación</a>.</li>
+            <li><strong>El panel del menú.</strong> Si sigues pulsando Tab después del último enlace del menú abierto, el foco avanza por la página y el menú permanece abierto encima; Escape lo cierra. Consulta los <a href="/docs/catalog/navbar/#known-issues">problemas conocidos de la barra de navegación</a>.</li>
             <li><strong>Barra fija y texto ampliado.</strong> El relleno de desplazamiento de <code>.o-sticky</code> es un mínimo: con el texto al 300 % y la barra en varias filas, Safari puede dejar debajo de ella un campo al que se llega con Tab. Asigna a <code>scroll-padding-block-start</code> en <code>html</code> la altura real de la cabecera o prescinde de <code>.o-sticky</code>.</li>
           </ul>
           <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera de blog">
@@ -138,12 +138,12 @@ reviewed: false
                   <tr><td data-label="Clase"><div><code>.luz-cms-header__sections</code></div></td><td data-label="Efecto"><div>Solo en la cabecera destacada, en un <code>.o-row</code>: el botón de menú y la barra de navegación entre dos líneas, centrados a partir de 769 px; el panel se abre debajo de esta fila</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.o-sticky</code> (core)</div></td><td data-label="Efecto"><div>Mantiene la barra de blog arriba mientras se desplaza la página, en ventanas de al menos 30 rem de alto; consulta <a href="/docs/components/layout/#objects-page">la página y sus barras</a>. Nunca se usa en la cabecera destacada</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.o-container.o-container--inline</code> (core)</div></td><td data-label="Efecto"><div>El ancho y los márgenes internos de la página, para que la cabecera empiece donde empieza el contenido</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (core)</div></td><td data-label="Efecto"><div>El botón de menú y las secciones: consulta la <a href="/docs/components/navbar/">barra de navegación</a></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (catalog)</div></td><td data-label="Efecto"><div>El botón de menú y las secciones: consulta la <a href="/docs/catalog/navbar/">barra de navegación</a></div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/cms-header.css</code> de <code>@luz-ds/catalog</code> aplicado a los objetos y la barra de navegación de core. Sin JavaScript.</p>
+            <p>CSS de <code>components/cms-header.css</code> de <code>@luz-ds/catalog</code> aplicado a los objetos de core y a la barra de navegación de catalog. Sin JavaScript.</p>
             <ul>
               <li>cms solo aporta la apariencia: la superficie de la página, la línea inferior, la marca y los espacios de la fila (8 px entre filas, 16 px entre elementos y 24 px a partir de 769 px). Core se ocupa del resto: <code>.o-sticky</code> aporta la fijación y el relleno de desplazamiento, <code>.o-container--inline</code> los márgenes internos, <code>.o-row</code> y <code>.o-stack</code> las filas, y la barra de navegación los enlaces y su panel.</li>
               <li>Una barra de una fila tiene la altura <code>--luz-bar-h</code> de core: controles de 44 px, 4 px arriba y abajo y una línea de 1 px. A 768 px o menos, la marca ocupa el espacio entre el botón de menú y las acciones, y salta de línea ahí para mantener los controles en una sola fila; al ampliar el texto, la fila se parte y la barra crece.</li>

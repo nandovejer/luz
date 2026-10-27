@@ -1,8 +1,11 @@
 <!-- luz:page
 title: Timeline
 description: Shows dated events in order, one card at a time on a rail of dates or all at once down a line; without JavaScript it is a list.
-area: components
+area: catalog
+order: 18
 group: content
+fits-kinds: blog, landing
+fits: events or steps in order of time, such as a history or a roadmap
 files: components/timeline.css
 module: timeline.js
 toc: h2,h3
@@ -177,7 +180,7 @@ toc: h2,h3
                 <span class="docs-snippet__lang">JS</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-timeline-js" aria-label="Copy the timeline script code">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Timeline script code"><code id="code-timeline-js">import &quot;@luz-ds/core/timeline&quot;;</code></pre>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Timeline script code"><code id="code-timeline-js">import &quot;@luz-ds/catalog/timeline&quot;;</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
             <p>The options are attributes of <code>&lt;luz-timeline&gt;</code>. Each item has a date, a title and a text.</p>
@@ -201,7 +204,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>A custom element around a native ordered list, with styles from <code>components/timeline.css</code> and a script, <code>timeline.js</code>. <code>luz.js</code> loads the script only on a page that has a <code>&lt;luz-timeline&gt;</code>.</p>
+            <p>A custom element around a native ordered list, with styles from <code>components/timeline.css</code> and a script, <code>timeline.js</code>. <code>catalog.js</code> loads the script only on a page that has a <code>&lt;luz-timeline&gt;</code>.</p>
             <p>The element looks for the first <code>.luz-timeline</code> inside it; with none, it does nothing.</p>
             <ul>
               <li><strong>Horizontal.</strong> The script builds, with DOM methods only, Previous and Next at the sides of the card and a rail of dates under it: one button per item, with the text of its date. The cards share one grid cell, so the band is as tall as the longest card and nothing jumps when you change the item. The cards that are not current are <code>inert</code> and hidden. In the current card the date is hidden from sight, because the rail shows it.</li>
@@ -209,7 +212,7 @@ toc: h2,h3
               <li><strong>The rail.</strong> The current date is scrolled to the middle, with a smooth scroll only if the visitor has not asked for reduced motion. A keyboard move keeps the focus on the new current date, and so does a change that hides the card the focus was in.</li>
               <li><strong>Vertical.</strong> The script marks the item crossing the middle of the screen <code>data-luz-state="active"</code> and the ones before it <code>past</code>. The line behind a past item takes the brand colour, and the active dot is filled and larger. It runs with reduced motion too, without the transition.</li>
               <li><strong>Autoplay.</strong> With <code>autoplay</code>, the item changes every <code>interval</code> milliseconds, in a loop. The Pause button under the rail stops it; it then reads Play and starts it again. The timeline also waits, without a change to the button, while the pointer moves over it (it goes on after 4 seconds still, or when the pointer leaves), while the keyboard focus is inside it, while less than half of it is on screen and while the tab is hidden. With reduced motion it never starts and the button is not shown.</li>
-              <li><strong>Text.</strong> "Previous", "Next", "Pause" and "Play" are in the language of the page when LUZ ships it (English, Spanish), chosen by the nearest <code>lang</code>, or yours through <code>registerLocale()</code> and <code>data-luz-label-*</code>. They travel with the script, so <code>@luz-ds/core/timeline</code> works on its own. With <code>luz.js</code> on the page, a language you add with <code>registerLocale()</code> reaches them too. See <a href="/docs/get-started/javascript/">the JavaScript modules</a>.</li>
+              <li><strong>Text.</strong> "Previous", "Next", "Pause" and "Play" are in the language of the page when LUZ ships it (English, Spanish), chosen by the nearest <code>lang</code>, or yours through <code>data-luz-label-*</code>. They travel with the script, so <code>@luz-ds/catalog/timeline</code> works on its own. A language you add with <code>registerLocale()</code> does not reach them: call <code>initTimeline(document, t)</code> with the <code>t</code> of core. See <a href="/docs/get-started/javascript/">the JavaScript modules</a>.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>An ordered list, with every item visible: a line down the inline-start side with a dot at each item, then the date, the title and the text. The list looks the same before the script has defined the element, so nothing jumps when it does.</p>

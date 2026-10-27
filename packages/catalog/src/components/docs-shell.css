@@ -69,7 +69,7 @@
 	margin-block-start: var(--luz-space-xl);
 }
 
-/* Between core's drawer (768px and below) and two columns, the sidebar is
+/* Between catalog's drawer (768px and below) and two columns, the sidebar is
    the first block above the content, popover or not */
 @media (769px <= width < 60rem) {
 	.luz-docs-nav {

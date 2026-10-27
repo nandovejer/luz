@@ -2,7 +2,7 @@
 title: Aplicación web
 description: Una aplicación web: un prompt para un LLM y recetas para su estructura con barra lateral, su cabecera y su panel de control.
 keywords: aplicación web, app, administración, backoffice, saas
-source: fe09f582b9f3
+source: 30ab15585982
 reviewed: false
 -->
     <div class="docs-block" id="k-app">
@@ -12,9 +12,9 @@ reviewed: false
       <p>O constrúyela tú con las recetas de abajo. Usan solo las clases de core, del catálogo y de app; <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> indica los archivos que debes cargar. El <code>&lt;h1&gt;</code> de la vista y su acción principal están en el panel de control, nunca en la barra: la barra contiene lo que es igual en todas las vistas.</p>
       <div class="docs-block">
         <h2 id="shell">Estructura con barra lateral</h2>
-        <p>La página entera: el enlace para saltar al contenido y, después, la <a href="/docs/components/sidebar/">barra lateral</a> de core junto a <code>.o-main</code>, que contiene la cabecera y la vista. <code>.o-shell</code> coloca la barra lateral en una columna a partir de 769 px de ventana y, por debajo, la convierte en un cajón que abre el botón de menú, sin script. Los patrones de <a href="/docs/kinds/app/">App</a> van dentro.</p>
+        <p>La página entera: el enlace para saltar al contenido y, después, la <a href="/docs/catalog/sidebar/">barra lateral</a> de catalog junto a <code>.o-main</code>, que contiene la cabecera y la vista. <code>.o-shell</code> coloca la barra lateral en una columna a partir de 769 px de ventana y, por debajo, la convierte en un cajón que abre el botón de menú, sin script. Los patrones de <a href="/docs/kinds/app/">App</a> van dentro.</p>
         <p>La estructura es la página entera, así que no tiene un ejemplo dentro de esta: esta página está construida sobre ella. Estrecha la ventana por debajo de 769 px y la barra lateral pasa a ser un cajón tras el botón de menú.</p>
-        <p>El script de core, si lo cargas, marca el enlace actual de la barra lateral y cierra el cajón cuando se sigue un enlace.</p>
+        <p>El script de catalog, si lo cargas, marca el enlace actual de la barra lateral y cierra el cajón cuando se sigue un enlace.</p>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
             <span class="docs-snippet__lang">HTML</span>

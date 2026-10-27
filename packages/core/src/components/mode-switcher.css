@@ -13,7 +13,7 @@
    :root:has(), so it works without JavaScript. */
 .luz-mode-switcher {
   /* Colours come from the surface the switcher sits on: the page by
-     default, the sidebar inside .luz-sidebar (below). Declared here, so
+     default, a dark surface (catalog's sidebar) by its own rule. Declared here, so
      each button's own data-theme does not re-scope them. */
   --luz-switcher-label: var(--luz-text-secondary);
   --luz-switcher-border: var(--luz-outline);
@@ -236,21 +236,6 @@
   .luz-mode-cycle {
     border-color: ButtonText;
   }
-}
-
-/* On the sidebar surface. --luz-focus-ring would be black on a
-   black sidebar in high contrast. */
-.luz-sidebar .luz-mode-switcher {
-  --luz-switcher-label: var(--luz-sidebar-label);
-  --luz-switcher-border: var(--luz-sidebar-border);
-  --luz-switcher-hover-bg: var(--luz-sidebar-hover);
-  --luz-switcher-hover-text: var(--luz-sidebar-text-hover);
-  --luz-switcher-focus: var(--luz-sidebar-text-hover);
-  --luz-switcher-on-bg: var(--luz-sidebar-active-bg);
-  --luz-switcher-on-text: var(--luz-sidebar-active-text);
-  --luz-switcher-cycle-bg: transparent;
-  --luz-switcher-cycle-border: var(--luz-sidebar-border);
-  --luz-switcher-cycle-text: var(--luz-sidebar-label);
 }
 
 /* Forced colors drop the backgrounds: the checked mode keeps a system

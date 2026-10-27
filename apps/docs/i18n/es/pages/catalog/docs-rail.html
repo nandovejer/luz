@@ -3,7 +3,7 @@ title: Índice lateral
 description: La lista de secciones de una página que permanece visible junto al contenido, con las acciones de la página debajo.
 fits: el lateral de una página de documentación larga
 keywords: en esta página, fijo, seguimiento del desplazamiento, índice, lista de secciones
-source: 2922c3751f88
+source: 0092c2603fde
 reviewed: false
 -->
     <div class="docs-component" id="p-docs-rail">
@@ -45,11 +45,11 @@ reviewed: false
                   <p>Name it <code>acme.config.json</code>.</p>
                 </div>
               </div>
-              <p class="docs-demo__note">The rail beside the text it lists, shown at any width: in a page it is a third column from 80rem and sits above the content below it. With core's script, the section in view is marked as you scroll.</p>
+              <p class="docs-demo__note">The rail beside the text it lists, shown at any width: in a page it is a third column from 80rem and sits above the content below it. With the catalog's script, the section in view is marked as you scroll.</p>
             </div>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
-          <p>Sin el script de core, ningún enlace aparece marcado como actual, aunque los enlaces siguen funcionando. No se ha probado con un lector de pantalla.</p>
+          <p>Sin el script de catalog, ningún enlace aparece marcado como actual, aunque los enlaces siguen funcionando. No se ha probado con un lector de pantalla.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del índice lateral">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
@@ -107,15 +107,15 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/docs-rail.css</code> de <code>@luz-ds/catalog</code> sobre el enlace de la barra lateral y su seguimiento del desplazamiento de core.</p>
+            <p>CSS de <code>components/docs-rail.css</code> de <code>@luz-ds/catalog</code> sobre el enlace de la barra lateral y su seguimiento del desplazamiento de catalog.</p>
             <ul>
               <li>Por debajo de 80rem, el índice lateral aparece encima del contenido, bajo la cabecera. A partir de 80rem ocupa una columna tan alta como el contenido, y su caja interior queda fija a <code>--luz-docs-rail-top</code> desde la parte superior de la ventana: se detiene al final del índice y nunca tapa el pie. La caja interior no supera la altura de la ventana y se desplaza por sí sola si la lista es más larga.</li>
-              <li>Los enlaces usan <code>.luz-sidebar__link</code> de core, así que su script marca la sección visible con <code>aria-current="true"</code>. El índice lateral representa el enlace como texto de la página: la marca combina el grosor y un borde al principio, nunca depende solo del color.</li>
+              <li>Los enlaces usan <code>.luz-sidebar__link</code> de catalog, así que su script marca la sección visible con <code>aria-current="true"</code>. El índice lateral representa el enlace como texto de la página: la marca combina el grosor y un borde al principio, nunca depende solo del color.</li>
               <li>La lista incluye cada <code>h2</code> de la página y, debajo, cada <code>h3</code>. No hay más niveles de anidación.</li>
               <li>«Copiar la página como Markdown» es un enlace al archivo Markdown de la página; te corresponde implementar su copia con un script. El índice lateral no se imprime.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
-            <p>La lista y las acciones son enlaces, y el elemento <code>&lt;details&gt;</code> nativo funciona sin JavaScript. Ningún enlace aparece marcado como actual: esa marca la añade el script de core.</p>
+            <p>La lista y las acciones son enlaces, y el elemento <code>&lt;details&gt;</code> nativo funciona sin JavaScript. Ningún enlace aparece marcado como actual: esa marca la añade el script de catalog.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
             <ul>
               <li><strong>Orden:</strong> el índice lateral aparece entre la barra lateral y el contenido en el código fuente, así que con Tab llegas a él antes que al texto: primero la lista y después las acciones. El enlace para saltar va al contenido, pasando por encima del índice.</li>

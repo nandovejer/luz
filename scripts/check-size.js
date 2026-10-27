@@ -27,10 +27,10 @@
  *     inlined or missing dependency would escape its budget);
  *   - the lazy chunks (SEC-CHUNK-1, SEC-CHUNK-2): every import() of a
  *     published .min.js names a string literal; every chunk (a file another
- *     one imports lazily, in any package, and site's search, consent and
- *     mode) imports nothing, static or dynamic; catalog.min.js, the presence
+ *     one imports lazily, in any package, and catalog's search, consent,
+ *     mode, timeline and sidebar) imports nothing, static or dynamic; catalog.min.js, the presence
  *     loader, has no static import, and its dynamic imports are exactly its
- *     three chunks. The same holds for the home's light, which no build
+ *     five chunks. The same holds for the home's light, which no build
  *     touches: apps/landing/light/light.js loads exactly globe.js, globe.js
  *     loads exactly globe-data.js, and globe-data.js imports nothing (a file
  *     that is a loader may import its own chunks, lazily, and nothing else).
@@ -109,7 +109,7 @@ const IMPORT_CALL = /\bimport\s*\(/g;
 const LITERAL_IMPORT = /\bimport\s*\(\s*(["'])([^"'`]+)\1\s*\)/g;
 const STATIC_IMPORT = /(?:^|[;}\s])(?:import\b(?!\s*[(.])|export\b[^"'();]*?\bfrom\b)/;
 const LOADERS = {
-  "packages/catalog/dist/catalog.min.js": ["./consent.min.js", "./mode.min.js", "./search.min.js"],
+  "packages/catalog/dist/catalog.min.js": ["./consent.min.js", "./mode.min.js", "./search.min.js", "./sidebar.min.js", "./timeline.min.js"],
   // The home's light (apps/landing/light/): served as written, no build, so the same rules hold for its sources
   "apps/landing/light/light.js": ["./globe.js"],
   "apps/landing/light/globe.js": ["./globe-data.js"],
@@ -176,9 +176,21 @@ for (const [file, code] of published) {
 /**
  * Files matched by "dir/**\/*.ext" (any depth) or "dir/*.ext" (that folder only; `ext` may be `.min.css`),
  * repo-relative, sorted. The file part may start with a list of prefixes, "dir/{a,b}-*.ext": the files
- * named "a-…" or "b-…" (the patterns of a kind of site in catalog, `{landing,cms,app,docs}-*`).
+ * named "a-…" or "b-…" (the patterns of a kind of site in catalog, `{landing,cms,app,docs}-*`), or
+ * `dir/{a-*,b}.ext`: named "a-…" or exactly "b.ext".
  */
 function globFiles(glob) {
+  // "dir/{a-*,b,c}.ext": files named "a-…", "b.ext" or "c.ext" (catalog's layout components and kind patterns in one list)
+  const list = /^(.*?)\/\{([a-z*,-]+)\}(\.[a-z.]+)$/.exec(glob);
+  if (list) {
+    const [, folder, names, suffix] = list;
+    const items = names.split(",");
+    if (!existsSync(resolve(root, folder))) return [];
+    return readdirSync(resolve(root, folder))
+      .filter((f) => f.endsWith(suffix) && items.some((i) => (i.endsWith("-*") ? f.startsWith(i.slice(0, -1)) : f === `${i}${suffix}`)))
+      .map((f) => `${folder}/${f}`)
+      .sort();
+  }
   const [dir, deep, prefixes, ext] = /^(.*?)\/(\*\*\/)?(?:\{([a-z,]+)\}-)?\*(\.[a-z.]+)$/.exec(glob)?.slice(1) ?? [];
   if (!dir) throw new Error(`unsupported glob ${glob}: use "dir/**/*.ext", "dir/*.ext" or "dir/{a,b}-*.ext"`);
   const starts = prefixes?.split(",").map((p) => `${p}-`);

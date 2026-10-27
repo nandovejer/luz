@@ -2,7 +2,7 @@
 title: Instala LUZ
 description: Elige un nivel y copia un comando de instalación o las etiquetas de CDN. Cada nivel necesita los que están por debajo, pero ninguno de los que están por encima.
 keywords: npm, CDN
-source: 815df9cc9f9a
+source: db919063b3c1
 reviewed: false
 -->
     <div class="docs-block" id="installation">
@@ -58,7 +58,7 @@ reviewed: false
 
       <div class="docs-prose">
         <h2 id="level-2-tokens-and-core" class="docs-prose__title">Nivel 2: tokens y core</h2>
-        <p>Los <span data-count="components">33</span> componentes, los estilos de los elementos HTML sin clases y JavaScript opcional. Carga primero los tokens.</p>
+        <p>Los <span data-count="components">29</span> componentes, los estilos de los elementos HTML sin clases y JavaScript opcional. Carga primero los tokens.</p>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
             <span class="docs-command-block__prefix" aria-hidden="true">$</span>
@@ -97,7 +97,7 @@ import &quot;@luz-ds/core&quot;;</code></pre>
 
       <div class="docs-prose">
         <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Nivel 3, el Catálogo: tokens, core y catalog</h2>
-        <p>Seis componentes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner. El catálogo necesita core y tokens.</p>
+        <p>La navegación del sitio y las piezas con un script o una identidad propios: barra de navegación, barra lateral, terminal, línea de tiempo, búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner, y los patrones de un tipo de sitio. El catálogo necesita core y tokens.</p>
         <p>La estructura de la página de cada tipo de sitio, desde la cabecera hasta el pie, también está en el catálogo, una hoja de estilos por patrón: consulta <a href="#site-kinds">Tipos de sitio</a>.</p>
         <p>El catálogo tiene una hoja de estilos por componente: enlaza las que use la página, después de core.</p>
         <div class="docs-command-block">
@@ -169,7 +169,7 @@ import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
         <ul>
           <li>Enlaza los archivos de un tipo en el orden de la lista de arriba.</li>
           <li>Enlaza <code class="luz-code-inline">landing-hero</code> junto con <code class="luz-code-inline">landing-section</code>: el encabezado de una sección comparte sus reglas con el hero.</li>
-          <li>Ninguno tiene un script. El de core es opcional: con el índice de un blog, marca la sección visible; con la barra lateral de una app, marca el enlace actual y cierra el panel al seguir un enlace.</li>
+          <li>Ninguno tiene un script. El de catalog es opcional: con el índice de un blog, marca la sección visible; con la barra lateral de una app, marca el enlace actual y cierra el panel al seguir un enlace. El de core no lo hace.</li>
         </ul>
       </div>
 

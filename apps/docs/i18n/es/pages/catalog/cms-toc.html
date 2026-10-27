@@ -2,7 +2,7 @@
 title: Índice
 description: Enumera las secciones de un artículo largo, junto al texto cuando hay espacio y encima cuando no lo hay.
 fits: un artículo largo, junto al texto o encima de él
-source: 8519ae5b5d37
+source: eda2f42c8680
 reviewed: false
 -->
     <div class="docs-component" id="p-toc">
@@ -34,11 +34,11 @@ reviewed: false
                 </div>
               </div>
             </article>
-            <p class="docs-demo__note">Beside the text, at the end, when the article is 46rem wide or more; above it below that. With core's script, the section in view is marked as you scroll.</p>
+            <p class="docs-demo__note">Beside the text, at the end, when the article is 46rem wide or more; above it below that. With the catalog's script, the section in view is marked as you scroll.</p>
           </div>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
-          <p>La marca de la sección visible necesita el script de core; sin él, no se marca ningún enlace. Junto al texto, el índice queda en el extremo en línea, pero aparece primero en el código fuente, así que Tab llega a él antes que al texto.</p>
+          <p>La marca de la sección visible necesita el script de catalog; sin él, no se marca ningún enlace. Junto al texto, el índice queda en el extremo en línea, pero aparece primero en el código fuente, así que Tab llega a él antes que al texto.</p>
           <p>Aún no se ha probado con un lector de pantalla.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del índice">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
@@ -86,7 +86,7 @@ reviewed: false
                   <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-article</code></div></td><td data-label="Qué hace"><div>El artículo: su ancho determina la maquetación, no el de la ventana (contenedor de tamaño)</div></td></tr>
                   <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-article__layout</code></div></td><td data-label="Qué hace"><div>El índice y, después, el texto. Cuando el artículo mide al menos 46rem: el texto va en la primera columna y el índice en una columna de 13rem al extremo en línea, con 48 px de separación; por debajo, se usa una columna</div></td></tr>
                   <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc</code></div></td><td data-label="Qué hace"><div>El <code>&lt;nav&gt;</code>. Junto al texto permanece visible mientras este se desplaza, y una lista más alta que la ventana se desplaza por dentro</div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>data-luz-spy</code> en <code>.luz-cms-toc</code></div></td><td data-label="Qué hace"><div>El seguimiento de desplazamiento de core marca el enlace de la sección visible. Opcional</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>data-luz-spy</code> en <code>.luz-cms-toc</code></div></td><td data-label="Qué hace"><div>El seguimiento de desplazamiento de catalog marca el enlace de la sección visible. Opcional</div></td></tr>
                   <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc__title</code></div></td><td data-label="Qué hace"><div>El encabezado del índice, en sans y seminegrita</div></td></tr>
                   <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc__list</code></div></td><td data-label="Qué hace"><div>La lista, sin marcadores y con una línea en el inicio en línea; un enlace por línea</div></td></tr>
                   <tr><td data-label="Clase o propiedad"><div><code>--luz-cms-toc-top</code></div></td><td data-label="Qué hace"><div>El espacio sobre el índice mientras permanece visible: 24 px, o 24 px por debajo de una barra fija (el <code>.o-sticky</code> de core, una fila de <code>--luz-bar-h</code>, como la <a href="/docs/catalog/cms-header/">cabecera</a>). Si la cabecera tiene otra altura, asígnalo a <code>.luz-cms-toc</code></div></td></tr>
@@ -99,7 +99,7 @@ reviewed: false
               <li>La maquetación se adapta al espacio del artículo: en una página con barra lateral o con texto más grande, el índice pasa antes encima del texto. Por debajo de 46rem es una lista normal encima del texto y no permanece visible, porque lo taparía.</li>
               <li>El índice aparece primero en el código fuente, así que se lee primero y Tab llega a él antes en ambas maquetaciones. El texto es un elemento único, segundo hijo de <code>__layout</code>; en un CMS, es el elemento que contiene el artículo.</li>
               <li>Cada enlace apunta al <code>id</code> del encabezado de una sección. La mayoría de CMS pueden generar esos ids; en WordPress, usa el ancla HTML de cada bloque de encabezado.</li>
-              <li>Con el script de core (<code>luz.js</code> o <code>initSidebar()</code> de <code>@luz-ds/core/sidebar</code>), el enlace de la sección visible recibe <code>aria-current="true"</code>, que dibuja una barra y lo muestra en seminegrita. El script localiza los enlaces mediante el atributo <code>data-luz-spy</code> en <code>&lt;nav&gt;</code>: todos los enlaces internos a secciones de la página.</li>
+              <li>Con el script de catalog (<code>catalog.js</code> o <code>initSidebar()</code> de <code>@luz-ds/catalog/sidebar</code>), el enlace de la sección visible recibe <code>aria-current="true"</code>, que dibuja una barra y lo muestra en seminegrita. El script localiza los enlaces mediante el atributo <code>data-luz-spy</code> en <code>&lt;nav&gt;</code>: todos los enlaces internos a secciones de la página.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>El índice es una lista de enlaces a las secciones a las que se desplaza el navegador. El script solo hace falta para marcar la sección visible; sin él, no se marca ningún enlace.</p>
@@ -119,7 +119,7 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No lo uses en una entrada corta: tres párrafos no necesitan un mapa.</p>
             <ul>
-              <li>No sirve para enlazar a otras páginas: eso es navegación y va en la <a href="/docs/catalog/cms-header/">cabecera</a> o en una <a href="/docs/components/sidebar/">barra lateral</a>.</li>
+              <li>No sirve para enlazar a otras páginas: eso es navegación y va en la <a href="/docs/catalog/cms-header/">cabecera</a> o en una <a href="/docs/catalog/sidebar/">barra lateral</a>.</li>
               <li>Tampoco sirve para los pasos ordenados de una tarea: numéralos en el texto.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>

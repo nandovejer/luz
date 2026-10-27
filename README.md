@@ -121,6 +121,8 @@ There are no packages for one kind of site. The patterns of a landing page, a bl
 | `tokens.css`, `fonts.css` | tokens | The tokens without `@font-face`, or the `@font-face` only |
 | `search.js` | catalog | The search element on its own (`@luz-ds/catalog/search`) |
 | `consent.js` | catalog | The cookie banner (`@luz-ds/catalog/consent`): `catalog.js` does not include it |
+| `sidebar.js`, `timeline.js` | catalog | The scroll spy of the sidebar and the timeline element (`@luz-ds/catalog/sidebar`, `@luz-ds/catalog/timeline`): `catalog.js` loads each on a page that has one |
+| `components/{navbar,sidebar,terminal,timeline}.css` | catalog | The navbar, the sidebar, the terminal and the timeline: `luz.css` does not include them, so link each one you use after core |
 
 ### JavaScript modules
 
@@ -131,7 +133,7 @@ import { initTabs } from "@luz-ds/core/tabs";
 import { copyToClipboard } from "@luz-ds/core/clipboard";
 ```
 
-Published modules: `theme`, `sidebar`, `clipboard`, `modal`, `highlight`, `player`, `tabs`, `utils`, `i18n`, `midi`, `table-sort`. Importing one has no side effects until you call its `init*()`. Every page works without JavaScript.
+Published modules of core: `theme`, `clipboard`, `modal`, `highlight`, `player`, `tabs`, `utils`, `i18n`, `midi`, `table-sort`. Those of catalog are `search`, `consent`, `mode`, `sidebar` and `timeline`. Importing one has no side effects until you call its `init*()`. Every page works without JavaScript.
 
 ## What each package needs
 
@@ -167,7 +169,7 @@ Every component has a page in the documentation with a live example, the markup 
 - **Actions and input:** buttons, copy button, dropdown, form fields (text, date and time, range, color, file, checkbox and radio groups, switches), select
 - **Show content:** accordion, avatar, card, code block, figure, icon grid, table, tag and badge
 - **Feedback and status:** alert, modal, progress and meter, toast, tooltip
-- **Navigation:** breadcrumb, pagination, sidebar, tabs, color mode switcher
+- **Navigation:** breadcrumb, pagination, tabs, color mode switcher, and, in catalog, the navbar and the sidebar
 - **Media:** video, audio and MIDI player
 - **Helpers:** layout objects (`.o-*`), utility classes (`.u-*`) and keyframes
 

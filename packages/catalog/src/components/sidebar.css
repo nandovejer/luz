@@ -1,10 +1,17 @@
 /* --------------------------------------------------------------------------
-   LUZ Component: sidebar
+   LUZ Catalog: sidebar
    Sidebar navigation + mobile drawer (nav-toggle, popover)
-   Layer: components (ITCSS 5) · Prefix: .luz-
-   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Layer: catalog · Prefix: .luz-
+   Requires: @luz-ds/tokens and @luz-ds/core (luz.css), loaded first.
    -------------------------------------------------------------------------- */
 
+/* In an .o-shell (core's grid) the sidebar takes the first column and spans
+   every row. In :where(), so the sidebar's own rules below win, as they did
+   when core's objects layer sat under the components. */
+:where(.o-shell) > .luz-sidebar {
+  grid-column: 1;
+  grid-row: 1 / -1;
+}
 
 .luz-sidebar {
   font-family: var(--luz-font-sans); /* UI text: never the body serif */
@@ -224,8 +231,15 @@
 
 /* In an .o-shell on a phone, a sidebar that is not a popover (or a browser
    without the popover API) is the first block of the page, not a full-height
-   column. It lives here because this layer sets position, size and width. */
+   column. Its place in the shell's one column is as weak as the one above (a
+   grid-area of the page's own wins); its position, size and width are this
+   layer's own. */
 @media (max-width: 768px) {
+  :where(.o-shell) > .luz-sidebar:where(:not([popover])) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
   .o-shell > .luz-sidebar:not([popover]) {
     position: static;
     height: auto;
@@ -260,5 +274,27 @@
     .luz-sidebar[popover]::backdrop {
       background: var(--luz-scrim);
     }
+  }
+}
+
+/* On the sidebar surface. --luz-focus-ring would be black on a
+   black sidebar in high contrast. */
+.luz-sidebar .luz-mode-switcher {
+  --luz-switcher-label: var(--luz-sidebar-label);
+  --luz-switcher-border: var(--luz-sidebar-border);
+  --luz-switcher-hover-bg: var(--luz-sidebar-hover);
+  --luz-switcher-hover-text: var(--luz-sidebar-text-hover);
+  --luz-switcher-focus: var(--luz-sidebar-text-hover);
+  --luz-switcher-on-bg: var(--luz-sidebar-active-bg);
+  --luz-switcher-on-text: var(--luz-sidebar-active-text);
+  --luz-switcher-cycle-bg: transparent;
+  --luz-switcher-cycle-border: var(--luz-sidebar-border);
+  --luz-switcher-cycle-text: var(--luz-sidebar-label);
+}
+
+/* On paper the sidebar is navigation, which does not print */
+@media print {
+  .luz-sidebar {
+    display: none;
   }
 }

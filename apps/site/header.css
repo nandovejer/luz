@@ -417,8 +417,8 @@
 
 
 /* --------------------------------------------------------------------------
-   Menu button and drawer. The button is core's .luz-nav-toggle, last in
-   the row, and opens #page-nav, core's .luz-sidebar as a native popover.
+   Menu button and drawer. The button is catalog's .luz-nav-toggle, last in
+   the row, and opens #page-nav, catalog's .luz-sidebar as a native popover.
    At 768px and below (--luz-mq-md, where core shows the button) it is a
    panel that drops from under the header, the full width of the window,
    over a dimmed page; the header stays above the backdrop, so the X that
@@ -563,7 +563,7 @@
     border-block-end-color: CanvasText;
   }
 
-  /* The languages line up with core's sidebar links, which take a 3px
+  /* The languages line up with catalog's sidebar links, which take a 3px
      start border here */
   .page-nav__langs a {
     border-inline-start: 3px solid Canvas;

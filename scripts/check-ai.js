@@ -8,8 +8,7 @@
  * regenerates each in memory, with the repository's own generators, and
  * compares bytes with what is on disk:
  *
- *   1. `classes.json` of every package, and `custom-elements.json` of core
- *      and site: regenerated from the CSS and JS of `packages/<p>/dist`
+ *   1. `classes.json` of every package, and `custom-elements.json` of catalog: regenerated from the CSS and JS of `packages/<p>/dist`
  *      (scripts/ai-manifests.js), against the files beside them;
  *   2. `docs/llms.txt`, `docs/llms-full.txt`, every `docs/examples/<area>/
  *      <slug>.html` and every `docs/manifests/<pkg>/*.json`: rendered by
@@ -45,7 +44,7 @@ import { PAGES_CSP, SITE_URL } from "../vite.config.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SNAPSHOT = "tests/fixtures/check/agent.md";
-const ELEMENT_PACKAGES = ["core", "catalog"];
+const ELEMENT_PACKAGES = ["catalog"];
 
 /** `✗ <path>: <why>` per stale file, in the order found. */
 const problems = [];

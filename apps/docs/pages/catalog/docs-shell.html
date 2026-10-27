@@ -2,7 +2,7 @@
 title: Shell
 description: The page of a documentation site in three columns: the sidebar, the content and a rail, down to one column on a phone.
 area: catalog
-order: 25
+order: 29
 group: documentation
 fits-kinds: docs
 fits: the layout of every page of a documentation site
@@ -60,7 +60,7 @@ toc: h2,h3
                 </thead>
                 <tbody>
                 <tr><td data-label="Class or property"><div><code>.luz-docs-shell</code></div></td><td data-label="Effect"><div>On <code>&lt;body&gt;</code>, with core's <code>.o-shell</code>: the tracks and where each part goes</div></td></tr>
-                <tr><td data-label="Class or property"><div><code>.luz-docs-nav</code></div></td><td data-label="Effect"><div>With core's <code>.luz-sidebar</code>, on the <code>&lt;nav&gt;</code>: the sidebar's column</div></td></tr>
+                <tr><td data-label="Class or property"><div><code>.luz-docs-nav</code></div></td><td data-label="Effect"><div>With the catalog's <code>.luz-sidebar</code>, on the <code>&lt;nav&gt;</code>: the sidebar's column</div></td></tr>
                 <tr><td data-label="Class or property"><div><code>.luz-docs-main</code></div></td><td data-label="Effect"><div>With <code>.o-main</code>, on the <code>&lt;main&gt;</code>: the content's column. Its children keep to the measure</div></td></tr>
                 <tr><td data-label="Class or property"><div><code>.luz-docs-rail</code></div></td><td data-label="Effect"><div>On an <code>&lt;aside&gt;</code>: the third column from 80rem, above the content below it. See <a href="/docs/catalog/docs-rail/">Rail</a></div></td></tr>
                 <tr><td data-label="Class or property"><div><code>--luz-docs-measure</code></div></td><td data-label="Effect"><div>A line of text: <code>46rem</code>. Set it on the shell in your own CSS to change it</div></td></tr>
@@ -70,11 +70,11 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>components/docs-shell.css</code> of <code>@luz-ds/catalog</code> on core's shell and sidebar. The file gives the tracks and the measure; core gives the grid and the drawer.</p>
+            <p>CSS from <code>components/docs-shell.css</code> of <code>@luz-ds/catalog</code> on core's shell and the catalog's sidebar. The file gives the tracks and the measure; core gives the grid, and the sidebar the drawer.</p>
             <ul>
               <li>From 80rem there are three tracks: sidebar, content, rail. From 60rem there are two, with the rail drawn above the content. Below, one, in the order of the markup: sidebar, rail, content, footer.</li>
               <li>A plain <code>&lt;header&gt;</code> goes across every track. The footer sits under the content, and the sidebar runs down beside it.</li>
-              <li>Between 769px and 60rem the sidebar is the first block above the content. At 768px and below it is core's drawer, a popover the menu button opens.</li>
+              <li>Between 769px and 60rem the sidebar is the first block above the content. At 768px and below it is the sidebar's drawer, a popover the menu button opens.</li>
               <li>Every child of the content keeps to <code>--luz-docs-measure</code>, so an example is as wide as a line of text. In print the rail is left out.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
@@ -128,7 +128,7 @@ toc: h2,h3
               <li>Menu button: "Menu".</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
-            <p>The shell sets no colour of its own. The text sits on the page surface, and the sidebar keeps core's colours.</p>
+            <p>The shell sets no colour of its own. The text sits on the page surface, and the sidebar keeps its own colours.</p>
             <div class="luz-table-wrap" role="region" aria-label="Shell contrast in each mode" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>

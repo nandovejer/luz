@@ -62,7 +62,7 @@ pnpm lint:js        # ESLint
 
 ## Core Components
 
-**Sidebar:** `.luz-sidebar`, `.luz-theme-switcher`, `.luz-nav-toggle`
+**Mode switcher:** `.luz-mode-switcher`, `.luz-mode-btn`
 
 **Forms:** `.luz-field`, `.luz-input`, `.luz-select-wrap`, `.luz-check-group`, `.luz-toggle`
 
@@ -94,12 +94,11 @@ pnpm lint:js        # ESLint
 
 ## JS Modules (`packages/core/src/`)
 
-`luz.js` is the entry: it re-exports everything below and auto-initializes on load. Each module is also published individually (`@luz-ds/core/theme`, `/sidebar`, `/clipboard`, `/modal`, `/highlight`, `/player`, `/tabs`, `/utils`, `/midi`, `/table-sort`) and importing it has no side effects until you call its `init*()`.
+`luz.js` is the entry: it re-exports everything below and auto-initializes on load. Each module is also published individually (`@luz-ds/core/theme`, `/clipboard`, `/modal`, `/highlight`, `/player`, `/tabs`, `/utils`, `/midi`, `/table-sort`) and importing it has no side effects until you call its `init*()`.
 
 | Module         | Exports                                                        |
 | -------------- | -------------------------------------------------------------- |
 | `theme.js`     | `applyTheme`, `applyMode`, `getInitialTheme`, `getStoredTheme`, `getStoredMode`, `initThemeSystem`, `MODES`, `CUSTOM_THEMES` |
-| `sidebar.js`   | `initSidebar`                                                  |
 | `clipboard.js` | `copyToClipboard`, `initCopyButtons`                           |
 | `modal.js`     | `initModals`, `supportsCommands`                               |
 | `highlight.js` | `highlightBlock`, `initHighlight`                              |

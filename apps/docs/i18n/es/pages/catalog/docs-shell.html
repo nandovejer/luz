@@ -3,7 +3,7 @@ title: Armazón de página
 description: La página de un sitio de documentación en tres columnas: la barra lateral, el contenido y el índice lateral; en el móvil se reduce a una columna.
 fits: la estructura de cada página de un sitio de documentación
 keywords: tres columnas, página de documentación, cuadrícula de página, ancho de lectura, longitud de línea
-source: babb9581b485
+source: cd1517694bd1
 reviewed: false
 -->
     <div class="docs-component" id="p-docs-shell">
@@ -56,7 +56,7 @@ reviewed: false
                 </thead>
                 <tbody>
                 <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-shell</code></div></td><td data-label="Efecto"><div>En <code>&lt;body&gt;</code>, con <code>.o-shell</code> de core: las columnas y la posición de cada parte</div></td></tr>
-                <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-nav</code></div></td><td data-label="Efecto"><div>Con <code>.luz-sidebar</code> de core, en <code>&lt;nav&gt;</code>: la columna de la barra lateral</div></td></tr>
+                <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-nav</code></div></td><td data-label="Efecto"><div>Con <code>.luz-sidebar</code> de catalog, en <code>&lt;nav&gt;</code>: la columna de la barra lateral</div></td></tr>
                 <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-main</code></div></td><td data-label="Efecto"><div>Con <code>.o-main</code>, en <code>&lt;main&gt;</code>: la columna del contenido. Sus elementos se ajustan al ancho de lectura</div></td></tr>
                 <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-rail</code></div></td><td data-label="Efecto"><div>En un <code>&lt;aside&gt;</code>: la tercera columna a partir de 80rem, por encima del contenido. Consulta <a href="/docs/catalog/docs-rail/">Índice lateral</a></div></td></tr>
                 <tr><td data-label="Clase o propiedad"><div><code>--luz-docs-measure</code></div></td><td data-label="Efecto"><div>Una línea de texto: <code>46rem</code>. Asígnala a la estructura en tu CSS para cambiarla</div></td></tr>
@@ -66,11 +66,11 @@ reviewed: false
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/docs-shell.css</code> de <code>@luz-ds/catalog</code> sobre la estructura y la barra lateral de core. Docs define las columnas y el ancho de lectura; core aporta la cuadrícula y el cajón.</p>
+            <p>CSS de <code>components/docs-shell.css</code> de <code>@luz-ds/catalog</code> sobre la estructura de core y la barra lateral de catalog. Docs define las columnas y el ancho de lectura; core aporta la cuadrícula y la barra lateral, el cajón.</p>
             <ul>
               <li>A partir de 80rem hay tres columnas: barra lateral, contenido e índice lateral. A partir de 60rem hay dos, y el índice lateral se muestra encima del contenido. Por debajo, hay una, en el orden del marcado: barra lateral, índice lateral, contenido y pie.</li>
               <li>Un <code>&lt;header&gt;</code> sin estilos ocupa todas las columnas. El pie queda debajo del contenido y la barra lateral se extiende a su lado.</li>
-              <li>Entre 769px y 60rem, la barra lateral es el primer bloque, por encima del contenido. A 768px o menos, pasa a ser el cajón de core: un popover que abre el botón de menú.</li>
+              <li>Entre 769px y 60rem, la barra lateral es el primer bloque, por encima del contenido. A 768px o menos, pasa a ser el cajón de la barra lateral: un popover que abre el botón de menú.</li>
               <li>Todos los elementos del contenido respetan <code>--luz-docs-measure</code>, así que un ejemplo tiene el ancho de una línea de texto. Al imprimir, se omite el índice lateral.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
@@ -124,7 +124,7 @@ reviewed: false
               <li>Botón de menú: «Menú».</li>
             </ul>
             <h3 id="contrast">Contraste y foco</h3>
-            <p>La estructura no define sus propios colores. El texto se muestra sobre la superficie de la página y la barra lateral conserva los colores de core.</p>
+            <p>La estructura no define sus propios colores. El texto se muestra sobre la superficie de la página y la barra lateral conserva sus propios colores.</p>
             <div class="luz-table-wrap" role="region" aria-label="Contraste de la estructura en cada modo" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>

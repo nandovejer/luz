@@ -10,7 +10,6 @@
  */
 
 import { initThemeSystem, initThemeCycle } from "./theme.js";
-import { initSidebar } from "./sidebar.js";
 import { initCopyButtons } from "./clipboard.js";
 import { initModals } from "./modal.js";
 import { initHighlight } from "./highlight.js";
@@ -29,7 +28,6 @@ export {
   initThemeSystem,
   initThemeCycle,
 } from "./theme.js";
-export { initSidebar } from "./sidebar.js";
 export { copyToClipboard, initCopyButtons } from "./clipboard.js";
 export { initModals, supportsCommands } from "./modal.js";
 export { highlightBlock, initHighlight } from "./highlight.js";
@@ -74,12 +72,12 @@ if (typeof document !== "undefined") {
 
   /**
    * Two waves. Wave 1 writes no string and never waits: it is what a visitor
-   * uses at once (theme, scroll spy, copy handlers, dialogs, tabs, the click
-   * of the color-mode button), and it does not set data-luz-js, so no control
-   * is revealed before it works. Wave 2 writes the strings of its scripts
-   * (code block names, players, the cycle button's name, sortable tables,
-   * timelines): it runs when the language has arrived, or after two seconds,
-   * and then the page is marked as enhanced. On a page in English both waves
+   * uses at once (theme, copy handlers, dialogs, tabs, the click of the
+   * color-mode button), and it does not set data-luz-js, so no control is
+   * revealed before it works. Wave 2 writes the strings of its scripts (code
+   * block names, players, the cycle button's name, sortable tables): it runs
+   * when the language has arrived, or after two seconds, and then the page
+   * is marked as enhanced. On a page in English both waves
    * run in the same task.
    */
   const boot = () => {
@@ -87,7 +85,6 @@ if (typeof document !== "undefined") {
     const defer = true;
     initThemeSystem(defer);
     initThemeCycle(document, defer);
-    initSidebar();
     initCopyButtons(defer);
     initModals();
     initTabs(document, defer);
@@ -99,8 +96,6 @@ if (typeof document !== "undefined") {
       if (document.querySelector("th[data-luz-sort]")) {
         import("./table-sort.js").then((m) => m.initTableSort(document, t));
       }
-      // So does a timeline: the chunk defines <luz-timeline>; t gives it the strings of registerLocale()
-      if (document.querySelector("luz-timeline")) import("./timeline.js").then((m) => m.initTimeline(document, t));
     };
     // A lang that arrived with the rest of the document (a script that ran early)
     language ||= loadLocales();

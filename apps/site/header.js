@@ -10,7 +10,7 @@
  *   this module defines the element and turns the radios into core's cycle
  *   button. With scripting on, that button is fixed at the bottom right of
  *   the window (header.css); without it the radios stay in the footer.
- * - Menu drawer: core's initSidebar() on #page-nav, so a link closes the
+ * - Menu drawer: catalog's initSidebar() on #page-nav, so a link closes the
  *   drawer and the current section is marked.
  * - Publishes the sticky header's height as --site-header-h on <html>, so
  *   anchored targets, the docs sidebar and the drawer sit below the header.
@@ -20,7 +20,7 @@
  */
 
 import { initThemeCycle } from "/packages/core/dist/theme.js";
-import { initSidebar } from "/packages/core/dist/sidebar.js";
+import { initSidebar } from "/packages/catalog/dist/sidebar.js";
 // Defines <luz-mode>: the footer's switcher on every page, which owns the mode
 import "/packages/catalog/dist/mode.js";
 

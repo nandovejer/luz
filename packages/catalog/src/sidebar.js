@@ -4,7 +4,8 @@
  * popover (<nav class="luz-sidebar" popover> + <button popovertarget>) and
  * needs no script; this module only enhances it.
  *
- * Importing this module has no side effects; call initSidebar() to enable it.
+ * Importing this module has no side effects; call initSidebar() to enable it
+ * (catalog.js does, right after its scan, on a page with a .luz-sidebar).
  */
 
 function focusSidebarTarget(targetEl) {
@@ -46,7 +47,7 @@ function isOpenPopover(el) {
   }
 }
 
-/** The links it spies: core's sidebar links, and every in-page link inside
+/** The links it spies: the sidebar's links, and every in-page link inside
  * an element with data-luz-spy (a table of contents styled your own way). */
 const SPY = '.luz-sidebar__link,[data-luz-spy] a[href^="#"]';
 

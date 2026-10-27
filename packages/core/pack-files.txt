@@ -45,8 +45,6 @@ dist/components/modal.css
 dist/components/modal.min.css
 dist/components/mode-switcher.css
 dist/components/mode-switcher.min.css
-dist/components/navbar.css
-dist/components/navbar.min.css
 dist/components/pagination.css
 dist/components/pagination.min.css
 dist/components/player.css
@@ -57,8 +55,6 @@ dist/components/prose.css
 dist/components/prose.min.css
 dist/components/select.css
 dist/components/select.min.css
-dist/components/sidebar.css
-dist/components/sidebar.min.css
 dist/components/skip-link.css
 dist/components/skip-link.min.css
 dist/components/table.css
@@ -67,15 +63,10 @@ dist/components/tabs.css
 dist/components/tabs.min.css
 dist/components/tag.css
 dist/components/tag.min.css
-dist/components/terminal.css
-dist/components/terminal.min.css
-dist/components/timeline.css
-dist/components/timeline.min.css
 dist/components/toast.css
 dist/components/toast.min.css
 dist/components/tooltip.css
 dist/components/tooltip.min.css
-dist/custom-elements.json
 dist/highlight.js
 dist/highlight.min.js
 dist/i18n-es.js
@@ -94,8 +85,6 @@ dist/player.js
 dist/player.min.js
 dist/print.css
 dist/print.min.css
-dist/sidebar.js
-dist/sidebar.min.js
 dist/table-sort.js
 dist/table-sort.min.js
 dist/tabs.js
@@ -104,8 +93,6 @@ dist/theme.js
 dist/theme.min.js
 dist/themes/_template.css
 dist/themes/_template.min.css
-dist/timeline.js
-dist/timeline.min.js
 dist/utils.js
 dist/utils.min.js
 package.json
