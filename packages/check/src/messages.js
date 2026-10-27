@@ -67,6 +67,31 @@ export const MESSAGES = {
     template: ".{name} is not in LUZ {known}, and the page loads {linked}; see classes.json of @luz-ds/{package}",
     sample: { name: "luz-shiny-new-thing", known: "0.1.0", linked: "0.2.0", package: "core" },
   },
+  "names/renamed": {
+    severity: "block",
+    template: ".{name} is now .{current}; replace the old name with the new one",
+    sample: { name: "luz-landing-hero", current: "luz-hero" },
+  },
+  "names/renamed:publication": {
+    severity: "block",
+    template: ".{name} is now .{current}; add --publication to it for a blog bar",
+    sample: { name: "luz-cms-header", current: "luz-site-header" },
+  },
+  "names/renamed:css": {
+    severity: "warn",
+    template: ".{name} is now .{current}; replace the old name with the new one",
+    sample: { name: "luz-landing-hero", current: "luz-hero" },
+  },
+  "names/renamed:element": {
+    severity: "block",
+    template: "<{tag}> is now <{current}>; replace the old tag with the new one",
+    sample: { tag: "luz-mode", current: "luz-color-mode" },
+  },
+  "names/renamed:file": {
+    severity: "block",
+    template: "{name} is now {current} in catalog 0.3; use the new file name",
+    sample: { name: "landing-hero.css", current: "hero.css" },
+  },
   "element/unknown": {
     severity: "block",
     template: "<{tag}> is not a LUZ element; the closest is <{closest}>",
@@ -281,6 +306,7 @@ const AI = "docs/get-started/ai/#rules";
 const READ = "docs/get-started/how-to-read/";
 const DOCS = {
   "parse/error": AI,
+  "names/renamed": `${READ}#classes`,
   "class/unknown": `${READ}#classes`,
   "class/unknown-in-css": `${READ}#classes`,
   "class/reserved-prefix": `${READ}#classes`,

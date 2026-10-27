@@ -1,16 +1,16 @@
 <!-- luz:page
-title: Pie de landing
-description: Cierra cada página de un sitio de landing con quién lo ha creado, su licencia y algunos enlaces secundarios, separados por una línea, en una fila o en columnas.
-fits: la parte inferior de cada página de un sitio de landing
-source: 1de7880e3793
+title: Pie del sitio
+description: Cierra cada página de un sitio con quién lo ha creado, su licencia y algunos enlaces secundarios, separados por una línea, en una fila o en columnas.
+fits: la parte inferior de cada página de un sitio de landing, de un blog o de un periódico
+source: a22d0ca12f76
 reviewed: false
 -->
-    <div class="docs-component" id="p-landing-footer">
+    <div class="docs-component" id="p-site-footer">
           <h2 id="example">Ejemplo</h2>
-          <p>Dos pies de página: uno en una sola fila con un estado y dos enlaces, y otro con la marca y dos columnas.</p>
+          <p>Dos pies de página: uno en una sola fila con un estado y dos enlaces, que es también el pie de un blog, y otro con la marca y dos columnas.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="luz-landing-footer">
+            <div class="luz-site-footer">
               <div class="o-container o-container--inline o-row">
                 <p class="u-text-muted">Acme Inc. · All systems normal</p>
                 <div class="o-actions">
@@ -22,22 +22,22 @@ reviewed: false
           </div>
           <p class="docs-demo__note">A <code class="luz-code-inline">&lt;div&gt;</code> here: a page has one footer landmark, and this one has its own.</p>
           <div class="docs-demo__stage" id="demo-footer-columns">
-            <div class="luz-landing-footer">
+            <div class="luz-site-footer">
               <div class="o-container o-container--inline o-grid">
-                <div class="luz-landing-footer__brand">
+                <div class="luz-site-footer__brand">
                   <p><strong>Acme Stock</strong> <span>v2.0</span></p>
                   <p>Stock counts that keep up with the shop.</p>
                 </div>
-                <nav class="luz-landing-footer__col" aria-labelledby="demo-footer-product">
-                  <p class="luz-landing-footer__col-title" id="demo-footer-product">Product</p>
+                <nav class="luz-site-footer__col" aria-labelledby="demo-footer-product">
+                  <p class="luz-site-footer__col-title" id="demo-footer-product">Product</p>
                   <ul>
                     <li><a href="#markup">Pricing</a></li>
                     <li><a href="#markup">Integrations</a></li>
                     <li><a href="#markup">Start free trial</a></li>
                   </ul>
                 </nav>
-                <nav class="luz-landing-footer__col" aria-labelledby="demo-footer-company">
-                  <p class="luz-landing-footer__col-title" id="demo-footer-company">Company</p>
+                <nav class="luz-site-footer__col" aria-labelledby="demo-footer-company">
+                  <p class="luz-site-footer__col-title" id="demo-footer-company">Company</p>
                   <ul>
                     <li><a href="#markup">About</a></li>
                     <li><a href="#markup">Contact sales</a></li>
@@ -51,7 +51,7 @@ reviewed: false
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
           <p>No se conocen problemas.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del pie de landing">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del pie del sitio">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
           </nav>
@@ -61,9 +61,9 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-landing-footer" aria-label="Copy the footer markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-site-footer" aria-label="Copy the footer markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-landing-footer">&lt;footer class=&quot;luz-landing-footer&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-site-footer">&lt;footer class=&quot;luz-site-footer&quot;&gt;
   &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
     &lt;p&gt;Acme Inc. · MIT licence&lt;/p&gt;
     &lt;nav class=&quot;o-actions&quot; aria-label=&quot;Links&quot;&gt;
@@ -76,23 +76,23 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-landing-footer-columns" aria-label="Copy the footer with columns markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-site-footer-columns" aria-label="Copy the footer with columns markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer with columns markup"><code id="code-landing-footer-columns">&lt;footer class=&quot;luz-landing-footer&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer with columns markup"><code id="code-site-footer-columns">&lt;footer class=&quot;luz-site-footer&quot;&gt;
   &lt;div class=&quot;o-container o-container--inline o-grid&quot;&gt;
-    &lt;div class=&quot;luz-landing-footer__brand&quot;&gt;
+    &lt;div class=&quot;luz-site-footer__brand&quot;&gt;
       &lt;p&gt;&lt;strong&gt;Acme Stock&lt;/strong&gt; &lt;span&gt;v2.0&lt;/span&gt;&lt;/p&gt;
       &lt;p&gt;Stock counts that keep up with the shop.&lt;/p&gt;
     &lt;/div&gt;
-    &lt;nav class=&quot;luz-landing-footer__col&quot; aria-labelledby=&quot;footer-product&quot;&gt;
-      &lt;h2 class=&quot;luz-landing-footer__col-title&quot; id=&quot;footer-product&quot;&gt;Product&lt;/h2&gt;
+    &lt;nav class=&quot;luz-site-footer__col&quot; aria-labelledby=&quot;footer-product&quot;&gt;
+      &lt;h2 class=&quot;luz-site-footer__col-title&quot; id=&quot;footer-product&quot;&gt;Product&lt;/h2&gt;
       &lt;ul&gt;
         &lt;li&gt;&lt;a href=&quot;/pricing/&quot;&gt;Pricing&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href=&quot;/trial/&quot;&gt;Start free trial&lt;/a&gt;&lt;/li&gt;
       &lt;/ul&gt;
     &lt;/nav&gt;
-    &lt;nav class=&quot;luz-landing-footer__col&quot; aria-labelledby=&quot;footer-company&quot;&gt;
-      &lt;h2 class=&quot;luz-landing-footer__col-title&quot; id=&quot;footer-company&quot;&gt;Company&lt;/h2&gt;
+    &lt;nav class=&quot;luz-site-footer__col&quot; aria-labelledby=&quot;footer-company&quot;&gt;
+      &lt;h2 class=&quot;luz-site-footer__col-title&quot; id=&quot;footer-company&quot;&gt;Company&lt;/h2&gt;
       &lt;ul&gt;
         &lt;li&gt;&lt;a href=&quot;/about/&quot;&gt;About&lt;/a&gt;&lt;/li&gt;
       &lt;/ul&gt;
@@ -101,26 +101,26 @@ reviewed: false
 &lt;/footer&gt;</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
-            <p>Sin modificadores. El pie de página es una clase de landing aplicada a un <code>&lt;footer&gt;</code> nativo, con una fila de core o una cuadrícula para la marca y las columnas.</p>
+            <p>Sin modificadores. El pie de página es una clase de catalog aplicada a un <code>&lt;footer&gt;</code> nativo, con una fila de core o una cuadrícula para la marca y las columnas.</p>
             <div class="luz-table-wrap" role="region" aria-label="Clases del pie de página" tabindex="0">
               <table class="luz-table">
                 <thead>
                   <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-footer</code></div></td><td data-label="Efecto"><div>En <code>&lt;footer&gt;</code>: una línea arriba, 24 px hasta la fila y 32 px debajo; la fila separa a sus hijos hacia los dos extremos y, a 768 px o menos, se convierte en una columna alineada al inicio.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-site-footer</code></div></td><td data-label="Efecto"><div>En <code>&lt;footer&gt;</code>: una línea arriba, 24 px hasta la fila y 32 px debajo; la fila separa a sus hijos hacia los dos extremos y, a 768 px o menos, se convierte en una columna alineada al inicio.</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.o-container.o-container--inline.o-row</code> (core)</div></td><td data-label="Efecto"><div>La fila: el ancho y los márgenes interiores de la página, para que el contenido empiece donde empieza el área principal.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-footer__brand</code></div></td><td data-label="Efecto"><div>La primera celda de <code>.o-container.o-container--inline.o-grid</code> (core), con una separación de 24 px (<code>--luz-space-lg</code>): un nombre, una versión y una línea. A partir de 768 px ocupa dos columnas.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-footer__col</code></div></td><td data-label="Efecto"><div>Una columna en un <code>&lt;nav&gt;</code>: un título sobre una lista de enlaces sin marcadores, separados 8 px (<code>--luz-space-xs</code>); cada enlace es un cuadro de 28 px (<code>--luz-control-sm</code>) de alto, con un área de activación de 24 px o más.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-footer__col-title</code></div></td><td data-label="Efecto"><div>El título de una columna: tipografía sans, pequeño, seminegrita y en color de texto principal.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-site-footer__brand</code></div></td><td data-label="Efecto"><div>La primera celda de <code>.o-container.o-container--inline.o-grid</code> (core), con una separación de 24 px (<code>--luz-space-lg</code>): un nombre, una versión y una línea. A partir de 768 px ocupa dos columnas.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-site-footer__col</code></div></td><td data-label="Efecto"><div>Una columna en un <code>&lt;nav&gt;</code>: un título sobre una lista de enlaces sin marcadores, separados 8 px (<code>--luz-space-xs</code>); cada enlace es un cuadro de 28 px (<code>--luz-control-sm</code>) de alto, con un área de activación de 24 px o más.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-site-footer__col-title</code></div></td><td data-label="Efecto"><div>El título de una columna: tipografía sans, pequeño, seminegrita y en color de texto principal.</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.o-actions</code> (core)</div></td><td data-label="Efecto"><div>Los enlaces, como un <a href="/docs/components/layout/#objects-actions">grupo de acciones</a>.</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/landing-footer.css</code> de <code>@luz-ds/catalog</code> sobre los objetos de core. No usa JavaScript.</p>
+            <p>CSS de <code>components/site-footer.css</code> de <code>@luz-ds/catalog</code> sobre los objetos de core. No usa JavaScript.</p>
             <ul>
-              <li>Landing añade la línea, el espacio alrededor de la fila y la distribución de sus elementos; <code>.o-container--inline</code> alinea la fila con el contenido de la página.</li>
+              <li>El pie de página añade la línea, el espacio alrededor de la fila y la distribución de sus elementos; <code>.o-container--inline</code> alinea la fila con el contenido de la página.</li>
               <li>En un <code>.o-page</code>, el área principal crece, así que el pie de página queda abajo cuando la página es más corta que la ventana.</li>
               <li>Con una marca y columnas, las celdas se apilan; a partir de 768 px se colocan en fila: la marca ocupa dos partes y cada columna, una.</li>
               <li>A 768 px o menos, la columna no se ajusta y sus elementos permanecen uno debajo del otro.</li>
@@ -139,36 +139,36 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="design-panel">
             <h2 class="docs-view__title" id="design">Diseño</h2>
             <h3 id="when">Cuándo usarlo</h3>
-            <p>Usa el pie de página al final de cada página de un sitio de landing para indicar quién lo ha creado, su licencia y algunos enlaces secundarios.</p>
+            <p>Usa el pie de página al final de cada página de un sitio de landing, de un blog o de un periódico para indicar quién lo ha creado, su licencia y algunos enlaces secundarios.</p>
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No pongas en el pie de página la navegación principal ni nada que haga falta para completar una tarea.</p>
             <ul>
-              <li>La navegación principal va en la <a href="/docs/catalog/landing-header/">cabecera</a>.</li>
+              <li>La navegación principal va en la <a href="/docs/catalog/site-header/">cabecera del sitio</a>.</li>
             </ul>
             <h3 id="do-dont">Buenas y malas prácticas</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Sí</strong> Incluye entre dos y cuatro enlaces que indiquen adónde llevan.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-footer"><div class="o-container o-container--inline o-row"><p class="u-text-muted">Acme Inc.</p><div class="o-actions"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Accessibility statement</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Status</button></div></div></div>
+                  <div class="luz-site-footer"><div class="o-container o-container--inline o-row"><p class="u-text-muted">Acme Inc.</p><div class="o-actions"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Accessibility statement</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Status</button></div></div></div>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
                 <figcaption><strong class="luz-do-dont__verdict">No</strong> Pongas la navegación principal en el pie de página: quien lo lee tiene que llegar al final para poder moverse.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-footer"><div class="o-container o-container--inline o-row"><p class="u-text-muted">Acme Inc.</p><div class="o-actions"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Programme</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Speakers</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Tickets</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Venue</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Contact</button></div></div></div>
+                  <div class="luz-site-footer"><div class="o-container o-container--inline o-row"><p class="u-text-muted">Acme Inc.</p><div class="o-actions"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Programme</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Speakers</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Tickets</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Venue</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Contact</button></div></div></div>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Sí</strong> Pon un título breve sobre cada columna para que sus enlaces tengan algo en común.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-footer"><div class="luz-landing-footer__col"><p class="luz-landing-footer__col-title">Product</p><ul><li><a href="#do-dont">Pricing</a></li><li><a href="#do-dont">Integrations</a></li></ul></div></div>
+                  <div class="luz-site-footer"><div class="luz-site-footer__col"><p class="luz-site-footer__col-title">Product</p><ul><li><a href="#do-dont">Pricing</a></li><li><a href="#do-dont">Integrations</a></li></ul></div></div>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
                 <figcaption><strong class="luz-do-dont__verdict">No</strong> Dejes una columna sin título: nada explica por qué están agrupados esos enlaces.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-footer"><div class="luz-landing-footer__col"><ul><li><a href="#do-dont">Pricing</a></li><li><a href="#do-dont">Careers</a></li><li><a href="#do-dont">Privacy</a></li></ul></div></div>
+                  <div class="luz-site-footer"><div class="luz-site-footer__col"><ul><li><a href="#do-dont">Pricing</a></li><li><a href="#do-dont">Careers</a></li><li><a href="#do-dont">Privacy</a></li></ul></div></div>
                 </div>
               </figure>
             </div>
@@ -197,7 +197,7 @@ reviewed: false
               <li><strong>Colores forzados:</strong> la línea es un borde, así que se mantiene.</li>
             </ul>
             <h3 id="tokens">Tokens que utiliza</h3>
-            <p>Los 9 tokens que leen, por familia, las reglas de <code>.luz-landing-footer</code> en <code>components/landing-footer.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 9 tokens que leen, por familia, las reglas de <code>.luz-site-footer</code> en <code>components/site-footer.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

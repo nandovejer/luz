@@ -7,6 +7,7 @@
  *                         package with no bundle (catalog), of a component whose file is not
  *   load/layer-statement  a <style> declares the layers, luz among them, after the first LUZ link
  *   load/order            the LUZ stylesheets are linked out of order (a warning)
+ *   names/renamed:file    a link or script to a file of catalog that 0.3 renamed (rules/renamed.js)
  *   load/no-stylesheet    the run links or imports no LUZ stylesheet at all (a warning; see cli.js)
  *
  * A LUZ stylesheet is something a document names, by `<link rel="stylesheet">`
@@ -28,6 +29,7 @@
  */
 import { posix } from "node:path";
 import { finding } from "../report.js";
+import { pinsOldRelease, renamedFile } from "./renamed.js";
 import { classAttribute, classTokens } from "./shared.js";
 
 const TEMPLATE = /\{\{|<%|\$\{/;
@@ -207,6 +209,18 @@ export function loadRules(ctx) {
         missing.add(entry.package);
         found.push(finding("load/package-missing", { ...at(attribute), vars: { name: token, package: entry.package } }));
       }
+    }
+  }
+
+  // A link or a script to a file catalog 0.3 renamed (names/renamed:file), once for each
+  if (!pinsOldRelease(records)) {
+    const said = new Set();
+    for (const record of records) {
+      const url = record.name === "link" ? record.attrs.get("href") : record.name === "script" ? record.attrs.get("src") : undefined;
+      const renamed = url === undefined ? null : renamedFile(url.value);
+      if (renamed === null || said.has(renamed.name)) continue;
+      said.add(renamed.name);
+      found.push(finding("names/renamed:file", { ...at(record), vars: renamed }));
     }
   }
 

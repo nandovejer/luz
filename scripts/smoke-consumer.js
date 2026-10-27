@@ -173,7 +173,7 @@ const PAGE = (base, label) => `<!doctype html>
   <link rel="stylesheet" href="${base.site}/dist/components/sidebar.css">
   <link rel="stylesheet" href="${base.site}/dist/components/timeline.css">
   <!-- and one pattern of each kind of site: landing, cms, app and docs are catalog's files -->
-  <link rel="stylesheet" href="${base.site}/dist/components/landing-footer.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/site-footer.css">
   <link rel="stylesheet" href="${base.site}/dist/components/article-header.css">
   <link rel="stylesheet" href="${base.site}/dist/components/dashboard.css">
   <link rel="stylesheet" href="${base.site}/dist/components/example.css">
@@ -186,7 +186,7 @@ const PAGE = (base, label) => `<!doctype html>
   <a class="luz-search__fallback" href="#probe-button" id="probe-search">Index</a>
   <nav class="luz-sidebar" id="probe-sidebar" aria-label="Probe"></nav>
   <luz-timeline id="probe-timeline"></luz-timeline>
-  <footer class="luz-landing-footer" id="probe-landing"></footer>
+  <footer class="luz-site-footer" id="probe-landing"></footer>
   <div class="luz-article-header" id="probe-article"></div>
   <main class="luz-dashboard" id="probe-dashboard"></main>
   <figure class="luz-example" id="probe-docs"></figure>
@@ -238,13 +238,13 @@ const ALONE = (base) => `<!doctype html>
   <link rel="stylesheet" href="${base.core}/dist/luz.css">
   <link rel="stylesheet" href="${base.site}/dist/components/main.css">
   <link rel="stylesheet" href="${base.site}/dist/components/hero.css">
-  <link rel="stylesheet" href="${base.site}/dist/components/landing-footer.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/site-footer.css">
 </head>
 <body class="o-page">
   <main class="o-container o-stack luz-main">
     <section class="luz-hero o-grid o-grid--split" id="probe-hero" aria-labelledby="probe-title"><div class="luz-hero__copy"><h1 class="luz-hero__title" id="probe-title">Smoke test</h1></div></section>
   </main>
-  <footer class="luz-landing-footer" id="probe-landing"><div class="o-container o-container--inline o-row"><p>Footer</p></div></footer>
+  <footer class="luz-site-footer" id="probe-landing"><div class="o-container o-container--inline o-row"><p>Footer</p></div></footer>
 </body>
 </html>
 `;
@@ -369,7 +369,7 @@ if (browser) {
     check(`${label2} catalog components/search.css applied (.luz-search__fallback is inline-flex)`, state.searchDisplay === "inline-flex", state.searchDisplay);
     check(`${label2} catalog components/sidebar.css applied (.luz-sidebar is sticky)`, state.sidebarPosition === "sticky", state.sidebarPosition);
     check(`${label2} catalog components/timeline.css applied (<luz-timeline> is a block)`, state.timelineDisplay === "block", state.timelineDisplay);
-    check(`${label2} catalog components/landing-footer.css applied (.luz-landing-footer has its rule)`, state.landingBorder === "solid", state.landingBorder);
+    check(`${label2} catalog components/site-footer.css applied (.luz-site-footer has its rule)`, state.landingBorder === "solid", state.landingBorder);
     check(`${label2} catalog components/article-header.css applied (.luz-article-header is a grid)`, state.articleDisplay === "grid", state.articleDisplay);
     check(`${label2} catalog components/dashboard.css applied (.luz-dashboard is a size container)`, state.dashboardType === "inline-size", state.dashboardType);
     check(`${label2} catalog components/example.css applied (.luz-example has its frame)`, state.docsBorder === "solid", state.docsBorder);

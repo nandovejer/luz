@@ -1955,7 +1955,7 @@ h2.docs-demo__title {
 
 /* Not in a header specimen: there the toggle shows only where the
    header collapses its links, as it does in a page */
-.docs-demo__stage .luz-nav-toggle:not(.luz-landing-header *, .luz-cms-header *, .luz-app-bar *, .docs-bar *) {
+.docs-demo__stage .luz-nav-toggle:not(.luz-site-header *, .luz-masthead *, .luz-app-bar *, .docs-bar *) {
   position: static;
   display: flex;
 }

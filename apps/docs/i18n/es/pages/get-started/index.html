@@ -2,7 +2,7 @@
 title: Instala LUZ
 description: Elige un nivel y copia un comando de instalación o las etiquetas de CDN. Cada nivel necesita los que están por debajo, pero ninguno de los que están por encima.
 keywords: npm, CDN
-source: 399f08dcd2ac
+source: 177ac630ef4b
 reviewed: false
 -->
     <div class="docs-block" id="installation">
@@ -97,7 +97,7 @@ import &quot;@luz-ds/core&quot;;</code></pre>
 
       <div class="docs-prose">
         <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Nivel 3, el Catálogo: tokens, core y catalog</h2>
-        <p>La navegación del sitio y las piezas con un script o una identidad propios: barra de navegación, barra lateral, terminal, línea de tiempo, búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner, y los patrones de un tipo de sitio. El catálogo necesita core y tokens.</p>
+        <p>La navegación del sitio y las piezas con un script o una identidad propios: barra de navegación, barra lateral, terminal, línea de tiempo, búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y anuncio, y los patrones de un tipo de sitio. El catálogo necesita core y tokens.</p>
         <p>La estructura de la página de cada tipo de sitio, desde la cabecera hasta el pie, también está en el catálogo, una hoja de estilos por patrón: consulta <a href="#site-kinds">Tipos de sitio</a>.</p>
         <p>El catálogo tiene una hoja de estilos por componente: enlaza las que use la página, después de core.</p>
         <div class="docs-command-block">
@@ -138,14 +138,14 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
       <div class="docs-prose">
         <h2 id="site-kinds" class="docs-prose__title">Tipos de sitio</h2>
         <p>Para empezar una landing page, un blog, una app o un sitio de documentación, ve a <a href="/docs/kinds/">Tipos de sitio</a>: un prompt para cualquier LLM y las recetas de cada parte para copiar.</p>
-        <p>No hay un paquete para cada tipo de sitio. Sus patrones son componentes del catálogo, una hoja de estilos cada uno, con el nombre <code class="luz-code-inline">&lt;kind&gt;-&lt;name&gt;.css</code>. Instala el nivel 3 y enlaza, después de core, los archivos que use tu página:</p>
+        <p>No hay un paquete para cada tipo de sitio. Sus patrones son componentes del catálogo, una hoja de estilos cada uno, con el nombre de lo que es la pieza, <code class="luz-code-inline">&lt;block&gt;.css</code>. Instala el nivel 3 y enlaza, después de core, los archivos que use tu página:</p>
         <ul>
-          <li><strong>Landing page:</strong> <code class="luz-code-inline">landing-header</code>, <code class="luz-code-inline">hero</code>, <code class="luz-code-inline">main</code>, <code class="luz-code-inline">section</code>, <code class="luz-code-inline">stat</code>, <code class="luz-code-inline">landing-footer</code> y <code class="luz-code-inline">glow</code>: la cabecera, el hero, las secciones y el pie de página.</li>
-          <li><strong>Blog o periódico, con cualquier CMS:</strong> <code class="luz-code-inline">cms-header</code>, <code class="luz-code-inline">page-header</code>, <code class="luz-code-inline">article-header</code>, <code class="luz-code-inline">article</code> y <code class="luz-code-inline">cms-footer</code>: la cabecera, la cabecera de página y de artículo, el índice y el pie.</li>
+          <li><strong>Landing page:</strong> <code class="luz-code-inline">site-header</code>, <code class="luz-code-inline">hero</code>, <code class="luz-code-inline">main</code>, <code class="luz-code-inline">section</code>, <code class="luz-code-inline">stat</code>, <code class="luz-code-inline">site-footer</code> y <code class="luz-code-inline">glow</code>: la cabecera, el hero, las secciones y el pie de página.</li>
+          <li><strong>Blog o periódico, con cualquier CMS:</strong> <code class="luz-code-inline">site-header</code> (o <code class="luz-code-inline">masthead</code> para un periódico), <code class="luz-code-inline">page-header</code>, <code class="luz-code-inline">article-header</code>, <code class="luz-code-inline">article</code> y <code class="luz-code-inline">site-footer</code>: la cabecera, la cabecera de página y de artículo, el índice y el pie.</li>
           <li><strong>Aplicación web:</strong> <code class="luz-code-inline">app-bar</code> y <code class="luz-code-inline">dashboard</code>.</li>
           <li><strong>Sitio de documentación:</strong> <code class="luz-code-inline">docs-layout</code>, <code class="luz-code-inline">doc-header</code>, <code class="luz-code-inline">page-rail</code>, <code class="luz-code-inline">example</code>, <code class="luz-code-inline">do-dont</code>, <code class="luz-code-inline">pager</code> y <code class="luz-code-inline">page-footer</code>.</li>
         </ul>
-        <p>El <a href="/docs/catalog/">catálogo</a> tiene una página para cada patrón e indica a qué tipo de sitio le encaja.</p>
+        <p>El <a href="/docs/catalog/">catálogo</a> tiene una página para cada patrón e indica a qué tipos de sitio les encaja mejor.</p>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
             <span class="docs-snippet__lang">HTML</span>
@@ -153,7 +153,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, a landing page"><code id="code-cdn-kinds">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-header.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/site-header.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/hero.min.css&quot;&gt;</code></pre>
         </div>
         <div class="docs-snippet">
@@ -163,7 +163,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Bundler imports, a landing page"><code id="code-bundler-kinds">import &quot;@luz-ds/tokens/css&quot;;
 import &quot;@luz-ds/core/css&quot;;
-import &quot;@luz-ds/catalog/components/landing-header.css&quot;;
+import &quot;@luz-ds/catalog/components/site-header.css&quot;;
 import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
         </div>
         <ul>

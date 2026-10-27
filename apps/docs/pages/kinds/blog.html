@@ -12,15 +12,15 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       <p>Or build it yourself from the recipes below. It works with any CMS or static site generator: each recipe is HTML for one of its templates, and the CMS fills in the text. They use the classes of core, the catalog and cms only; <a href="/docs/get-started/#site-kinds">Install LUZ</a> lists the files to load.</p>
       <div class="docs-block">
         <h2 id="header">Header</h2>
-        <p>The skip link, the <a href="/docs/catalog/cms-header/">header</a> with the name of the blog and its sections, the <code>&lt;main&gt;</code> and the footer. For a newspaper, the pattern has a masthead that does not stick. The search and the language switch are the catalog's elements: leave them out if you do not load it.</p>
+        <p>The skip link, the <a href="/docs/catalog/site-header/">site header</a> with the name of the blog and its sections, the <code>&lt;main&gt;</code> and the footer. For a newspaper, the <a href="/docs/catalog/masthead/">masthead</a> does not stick. The search and the language switch are the catalog's elements: leave them out if you do not load it.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <header class="luz-cms-header">
+            <header class="luz-site-header luz-site-header--publication">
               <div class="o-container o-container--inline o-row">
                 <button class="luz-nav-toggle" type="button" popovertarget="k-blog-nav" aria-label="Sections of the example blog">
                   <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
                 </button>
-                <a class="luz-cms-header__brand" href="#header">The Vejer Review</a>
+                <a class="luz-site-header__brand" href="#header">The Vejer Review</a>
                 <nav class="luz-navbar" id="k-blog-nav" aria-label="Example blog" popover>
                   <ul class="luz-navbar__list">
                     <li><a class="luz-navbar__link" href="#header" aria-current="true">News</a></li>
@@ -28,7 +28,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
                     <li><a class="luz-navbar__link" href="#header">Opinion</a></li>
                   </ul>
                 </nav>
-                <div class="o-row luz-cms-header__actions">
+                <div class="o-row luz-site-header__actions">
                   <a class="luz-btn luz-btn--ghost" href="#header">Subscribe</a>
                 </div>
               </div>
@@ -44,12 +44,12 @@ keywords: blog, newspaper, magazine, articles, posts, static site
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page and header markup"><code id="code-k-blog-header">&lt;body class=&quot;o-page&quot;&gt;
   &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to content&lt;/a&gt;
 
-  &lt;header class=&quot;luz-cms-header o-sticky&quot;&gt;
+  &lt;header class=&quot;luz-site-header luz-site-header--publication o-sticky&quot;&gt;
     &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
       &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;cms-nav&quot; aria-label=&quot;Sections&quot;&gt;
         &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z&quot;/&gt;&lt;/svg&gt;
       &lt;/button&gt;
-      &lt;a class=&quot;luz-cms-header__brand&quot; href=&quot;/&quot;&gt;The Vejer Review&lt;/a&gt;
+      &lt;a class=&quot;luz-site-header__brand&quot; href=&quot;/&quot;&gt;The Vejer Review&lt;/a&gt;
       &lt;nav class=&quot;luz-navbar&quot; id=&quot;cms-nav&quot; aria-label=&quot;Sections&quot; popover&gt;
         &lt;ul class=&quot;luz-navbar__list&quot;&gt;
           &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/news/&quot; aria-current=&quot;true&quot;&gt;News&lt;/a&gt;&lt;/li&gt;
@@ -57,7 +57,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
           &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/opinion/&quot;&gt;Opinion&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/nav&gt;
-      &lt;div class=&quot;o-row luz-cms-header__actions&quot;&gt;
+      &lt;div class=&quot;o-row luz-site-header__actions&quot;&gt;
         &lt;luz-search&gt;…&lt;/luz-search&gt;
         &lt;luz-lang-switch&gt;…&lt;/luz-lang-switch&gt;
       &lt;/div&gt;
@@ -239,10 +239,10 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       </div>
       <div class="docs-block">
         <h2 id="footer">Footer</h2>
-        <p>Who publishes the blog and the links a reader looks for last, in one row: the <a href="/docs/catalog/cms-footer/">footer</a>.</p>
+        <p>Who publishes the blog and the links a reader looks for last, in one row: the <a href="/docs/catalog/site-footer/">site footer</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="luz-cms-footer">
+            <div class="luz-site-footer">
               <div class="o-container o-container--inline o-row">
                 <p class="u-text-muted">The Vejer Review · Published by a cooperative</p>
                 <div class="o-actions">
@@ -259,7 +259,7 @@ keywords: blog, newspaper, magazine, articles, posts, static site
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-footer" aria-label="Copy the footer markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-k-blog-footer">&lt;footer class=&quot;luz-cms-footer&quot;&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-k-blog-footer">&lt;footer class=&quot;luz-site-footer&quot;&gt;
   &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
     &lt;p&gt;The Vejer Review is published by a cooperative.&lt;/p&gt;
     &lt;nav class=&quot;o-actions&quot; aria-label=&quot;Links&quot;&gt;

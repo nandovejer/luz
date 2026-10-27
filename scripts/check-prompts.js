@@ -31,7 +31,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fitsKindsOf } from "./docs-site/kinds.js";
+import { catalogPatterns as pagesOf } from "./docs-site/kinds.js";
 import { PROMPT_KINDS, PROMPT_SITE, assemblePrompt, promptRoute, promptSourceHash } from "./docs-site/prompts.js";
 import { PUBLISHED } from "./luz-packages.js";
 
@@ -39,7 +39,6 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE = "apps/site/prompts";
 const CDN = "https://cdn.jsdelivr.net/npm/@luz-ds/";
 const CASES = ".claude/evals/prompt-injection/cases.json";
-const CATALOG_PAGES = "apps/docs/pages/catalog";
 
 // Format characters (Cf) hide text, the bidi controls reorder it, variation
 // selectors and the blank fillers look like nothing
@@ -132,21 +131,8 @@ export function promptCeiling(root = ROOT) {
   return row.max;
 }
 
-/**
- * The catalog pages by what they document: { slug, kinds (fits-kinds), files }
- * for each page of apps/docs/pages/catalog/ that has `fits-kinds`.
- */
-export function catalogPatterns(root = ROOT) {
-  const pages = [];
-  for (const name of readdirSync(join(root, CATALOG_PAGES)).filter((f) => f.endsWith(".html") && !f.startsWith("_"))) {
-    const head = /^<!-- luz:page\n([\s\S]*?)\n-->/.exec(readFileSync(join(root, CATALOG_PAGES, name), "utf-8"))?.[1] ?? "";
-    const key = (k) => new RegExp(`^${k}: (.*)$`, "m").exec(head)?.[1].trim();
-    if (!key("fits-kinds")) continue;
-    const files = (key("files") ?? "").split(/[;,]/).map((f) => f.trim());
-    pages.push({ slug: name.slice(0, -5), kinds: fitsKindsOf(key("fits-kinds")), files, file: `${CATALOG_PAGES}/${name}` });
-  }
-  return pages;
-}
+/** The catalog pages by what they document (scripts/docs-site/kinds.js), from this repository. */
+export const catalogPatterns = (root = ROOT) => pagesOf(root);
 
 /**
  * The patterns a preset names that its kind is not among the `fits-kinds` of

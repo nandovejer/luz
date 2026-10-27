@@ -1,20 +1,20 @@
 <!-- luz:page
-title: Landing footer
-description: Ends every page of a landing site with who made it, its licence and a few secondary links, under a rule, in a row or as columns.
+title: Site footer
+description: Ends every page of a site with who made it, its licence and a few secondary links, under a rule, in a row or as columns.
 area: catalog
 order: 12
 group: page-structure
-fits-kinds: landing
-fits: the bottom of every page of a landing site
-files: components/landing-footer.css
+fits-kinds: landing, blog
+fits: the bottom of every page of a landing site, a blog or a newspaper
+files: components/site-footer.css
 toc: h2,h3
 -->
-    <div class="docs-component" id="p-landing-footer">
+    <div class="docs-component" id="p-site-footer">
           <h2 id="example">Example</h2>
-          <p>Two footers: a single row with a status and two links, and one with the brand and two columns.</p>
+          <p>Two footers: a single row with a status and two links, which is also the footer of a blog, and one with the brand and two columns.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="luz-landing-footer">
+            <div class="luz-site-footer">
               <div class="o-container o-container--inline o-row">
                 <p class="u-text-muted">Acme Inc. · All systems normal</p>
                 <div class="o-actions">
@@ -26,22 +26,22 @@ toc: h2,h3
           </div>
           <p class="docs-demo__note">A <code class="luz-code-inline">&lt;div&gt;</code> here: a page has one footer landmark, and this one has its own.</p>
           <div class="docs-demo__stage" id="demo-footer-columns">
-            <div class="luz-landing-footer">
+            <div class="luz-site-footer">
               <div class="o-container o-container--inline o-grid">
-                <div class="luz-landing-footer__brand">
+                <div class="luz-site-footer__brand">
                   <p><strong>Acme Stock</strong> <span>v2.0</span></p>
                   <p>Stock counts that keep up with the shop.</p>
                 </div>
-                <nav class="luz-landing-footer__col" aria-labelledby="demo-footer-product">
-                  <p class="luz-landing-footer__col-title" id="demo-footer-product">Product</p>
+                <nav class="luz-site-footer__col" aria-labelledby="demo-footer-product">
+                  <p class="luz-site-footer__col-title" id="demo-footer-product">Product</p>
                   <ul>
                     <li><a href="#markup">Pricing</a></li>
                     <li><a href="#markup">Integrations</a></li>
                     <li><a href="#markup">Start free trial</a></li>
                   </ul>
                 </nav>
-                <nav class="luz-landing-footer__col" aria-labelledby="demo-footer-company">
-                  <p class="luz-landing-footer__col-title" id="demo-footer-company">Company</p>
+                <nav class="luz-site-footer__col" aria-labelledby="demo-footer-company">
+                  <p class="luz-site-footer__col-title" id="demo-footer-company">Company</p>
                   <ul>
                     <li><a href="#markup">About</a></li>
                     <li><a href="#markup">Contact sales</a></li>
@@ -55,7 +55,7 @@ toc: h2,h3
           </div>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Landing footer documentation">
+          <nav class="luz-tabs docs-view-tabs" aria-label="Site footer documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
           </nav>
@@ -65,9 +65,9 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-landing-footer" aria-label="Copy the footer markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-site-footer" aria-label="Copy the footer markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-landing-footer">&lt;footer class=&quot;luz-landing-footer&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-site-footer">&lt;footer class=&quot;luz-site-footer&quot;&gt;
   &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
     &lt;p&gt;Acme Inc. · MIT licence&lt;/p&gt;
     &lt;nav class=&quot;o-actions&quot; aria-label=&quot;Links&quot;&gt;
@@ -80,23 +80,23 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-landing-footer-columns" aria-label="Copy the footer with columns markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-site-footer-columns" aria-label="Copy the footer with columns markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer with columns markup"><code id="code-landing-footer-columns">&lt;footer class=&quot;luz-landing-footer&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer with columns markup"><code id="code-site-footer-columns">&lt;footer class=&quot;luz-site-footer&quot;&gt;
   &lt;div class=&quot;o-container o-container--inline o-grid&quot;&gt;
-    &lt;div class=&quot;luz-landing-footer__brand&quot;&gt;
+    &lt;div class=&quot;luz-site-footer__brand&quot;&gt;
       &lt;p&gt;&lt;strong&gt;Acme Stock&lt;/strong&gt; &lt;span&gt;v2.0&lt;/span&gt;&lt;/p&gt;
       &lt;p&gt;Stock counts that keep up with the shop.&lt;/p&gt;
     &lt;/div&gt;
-    &lt;nav class=&quot;luz-landing-footer__col&quot; aria-labelledby=&quot;footer-product&quot;&gt;
-      &lt;h2 class=&quot;luz-landing-footer__col-title&quot; id=&quot;footer-product&quot;&gt;Product&lt;/h2&gt;
+    &lt;nav class=&quot;luz-site-footer__col&quot; aria-labelledby=&quot;footer-product&quot;&gt;
+      &lt;h2 class=&quot;luz-site-footer__col-title&quot; id=&quot;footer-product&quot;&gt;Product&lt;/h2&gt;
       &lt;ul&gt;
         &lt;li&gt;&lt;a href=&quot;/pricing/&quot;&gt;Pricing&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href=&quot;/trial/&quot;&gt;Start free trial&lt;/a&gt;&lt;/li&gt;
       &lt;/ul&gt;
     &lt;/nav&gt;
-    &lt;nav class=&quot;luz-landing-footer__col&quot; aria-labelledby=&quot;footer-company&quot;&gt;
-      &lt;h2 class=&quot;luz-landing-footer__col-title&quot; id=&quot;footer-company&quot;&gt;Company&lt;/h2&gt;
+    &lt;nav class=&quot;luz-site-footer__col&quot; aria-labelledby=&quot;footer-company&quot;&gt;
+      &lt;h2 class=&quot;luz-site-footer__col-title&quot; id=&quot;footer-company&quot;&gt;Company&lt;/h2&gt;
       &lt;ul&gt;
         &lt;li&gt;&lt;a href=&quot;/about/&quot;&gt;About&lt;/a&gt;&lt;/li&gt;
       &lt;/ul&gt;
@@ -105,26 +105,26 @@ toc: h2,h3
 &lt;/footer&gt;</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
-            <p>No modifiers. The footer is a class of the landing on a native <code>&lt;footer&gt;</code>, with a row of core's or a grid of a brand and columns inside.</p>
+            <p>No modifiers. The footer is a class of catalog on a native <code>&lt;footer&gt;</code>, with a row of core's or a grid of a brand and columns inside.</p>
             <div class="luz-table-wrap" role="region" aria-label="Footer classes" tabindex="0">
               <table class="luz-table">
                 <thead>
                   <tr><th scope="col">Class</th><th scope="col">Effect</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Class"><div><code>.luz-landing-footer</code></div></td><td data-label="Effect"><div>On <code>&lt;footer&gt;</code>: a rule on top, 24 px above its row and 32 px below; its row spreads its children to the two ends, and is a column aligned to the start at 768 px and below</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-site-footer</code></div></td><td data-label="Effect"><div>On <code>&lt;footer&gt;</code>: a rule on top, 24 px above its row and 32 px below; its row spreads its children to the two ends, and is a column aligned to the start at 768 px and below</div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-container.o-container--inline.o-row</code> (core)</div></td><td data-label="Effect"><div>The row: the width and gutters of the page, so its content starts where the main's does</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-footer__brand</code></div></td><td data-label="Effect"><div>The first cell of the <code>.o-container.o-container--inline.o-grid</code> (core), 24 px (<code>--luz-space-lg</code>) apart: a name, a version, one line. From 768 px it is twice a column</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-footer__col</code></div></td><td data-label="Effect"><div>A column, on a <code>&lt;nav&gt;</code>: a title over a list of links with no markers, 8 px (<code>--luz-space-xs</code>) apart; each link is a box 28 px (<code>--luz-control-sm</code>) tall, a target of 24 px or more</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-footer__col-title</code></div></td><td data-label="Effect"><div>A column's title: sans, small, semibold, primary text</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-site-footer__brand</code></div></td><td data-label="Effect"><div>The first cell of the <code>.o-container.o-container--inline.o-grid</code> (core), 24 px (<code>--luz-space-lg</code>) apart: a name, a version, one line. From 768 px it is twice a column</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-site-footer__col</code></div></td><td data-label="Effect"><div>A column, on a <code>&lt;nav&gt;</code>: a title over a list of links with no markers, 8 px (<code>--luz-space-xs</code>) apart; each link is a box 28 px (<code>--luz-control-sm</code>) tall, a target of 24 px or more</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-site-footer__col-title</code></div></td><td data-label="Effect"><div>A column's title: sans, small, semibold, primary text</div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-actions</code> (core)</div></td><td data-label="Effect"><div>The links, as an <a href="/docs/components/layout/#objects-actions">action group</a></div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>components/landing-footer.css</code> of <code>@luz-ds/catalog</code> on core's objects. No JavaScript.</p>
+            <p>CSS from <code>components/site-footer.css</code> of <code>@luz-ds/catalog</code> on core's objects. No JavaScript.</p>
             <ul>
-              <li>The landing adds the rule, the room around the row and how the row spreads its children; <code>.o-container--inline</code> lines the row up with the page's content.</li>
+              <li>The footer adds the rule, the room around the row and how the row spreads its children; <code>.o-container--inline</code> lines the row up with the page's content.</li>
               <li>On an <code>.o-page</code> the main grows, so the footer rests on the bottom of a page shorter than the window.</li>
               <li>With a brand and columns the cells stack, and from 768 px they sit in a row: the brand takes two shares, each column one.</li>
               <li>The column at 768 px and below does not wrap, so its children stay one under the other.</li>
@@ -143,36 +143,36 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="design-panel">
             <h2 class="docs-view__title" id="design">Design</h2>
             <h3 id="when">When to use</h3>
-            <p>Use the footer at the end of every page of a landing site, for who made it, its licence and a few secondary links.</p>
+            <p>Use the footer at the end of every page of a landing site, a blog or a newspaper, for who made it, its licence and a few secondary links.</p>
             <h3 id="when-not">When not to use</h3>
             <p>Do not put the main navigation, or anything needed to finish a task, in the footer.</p>
             <ul>
-              <li>Main navigation goes in the <a href="/docs/catalog/landing-header/">header</a>.</li>
+              <li>Main navigation goes in the <a href="/docs/catalog/site-header/">site header</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Do</strong> Two to four links that say where they go.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-footer"><div class="o-container o-container--inline o-row"><p class="u-text-muted">Acme Inc.</p><div class="o-actions"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Accessibility statement</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Status</button></div></div></div>
+                  <div class="luz-site-footer"><div class="o-container o-container--inline o-row"><p class="u-text-muted">Acme Inc.</p><div class="o-actions"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Accessibility statement</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Status</button></div></div></div>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
                 <figcaption><strong class="luz-do-dont__verdict">Don't</strong> The main navigation in the footer: the reader has to reach the end of the page to move around.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-footer"><div class="o-container o-container--inline o-row"><p class="u-text-muted">Acme Inc.</p><div class="o-actions"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Programme</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Speakers</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Tickets</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Venue</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Contact</button></div></div></div>
+                  <div class="luz-site-footer"><div class="o-container o-container--inline o-row"><p class="u-text-muted">Acme Inc.</p><div class="o-actions"><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Programme</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Speakers</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Tickets</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Venue</button><button class="luz-btn luz-btn--ghost luz-btn--sm" type="button">Contact</button></div></div></div>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Do</strong> A short title over each column, so the links in it have something in common.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-footer"><div class="luz-landing-footer__col"><p class="luz-landing-footer__col-title">Product</p><ul><li><a href="#do-dont">Pricing</a></li><li><a href="#do-dont">Integrations</a></li></ul></div></div>
+                  <div class="luz-site-footer"><div class="luz-site-footer__col"><p class="luz-site-footer__col-title">Product</p><ul><li><a href="#do-dont">Pricing</a></li><li><a href="#do-dont">Integrations</a></li></ul></div></div>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
                 <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A column with no title: nothing says why these links sit together.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-footer"><div class="luz-landing-footer__col"><ul><li><a href="#do-dont">Pricing</a></li><li><a href="#do-dont">Careers</a></li><li><a href="#do-dont">Privacy</a></li></ul></div></div>
+                  <div class="luz-site-footer"><div class="luz-site-footer__col"><ul><li><a href="#do-dont">Pricing</a></li><li><a href="#do-dont">Careers</a></li><li><a href="#do-dont">Privacy</a></li></ul></div></div>
                 </div>
               </figure>
             </div>
@@ -201,7 +201,7 @@ toc: h2,h3
               <li><strong>Forced colors:</strong> the rule is a border, so it stays.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 9 tokens that the <code>.luz-landing-footer</code> rules of catalog’s <code>components/landing-footer.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 9 tokens that the <code>.luz-site-footer</code> rules of catalog’s <code>components/site-footer.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

@@ -7,7 +7,7 @@
 
 The patterns of a landing page, a blog, a web application and a documentation site are components of `@luz-ds/catalog` now, one stylesheet each. `@luz-ds/landing`, `@luz-ds/cms`, `@luz-ds/app` and `@luz-ds/docs` are not published any more, and the layers `luz.landing`, `luz.cms`, `luz.app` and `luz.docs` are gone. **Breaking:** if you use one of the four packages, follow the steps below.
 
-Nothing else changes: the classes, the markup and the look are the same. The name of each file is `<kind>-<name>.css`, where the kind is `landing`, `cms`, `app` or `docs`. The pattern of a blog keeps `cms` in its class names, whatever your CMS is.
+The look is the same. The name of each file is the name of its block, `<block>.css`, with no kind of site in it, and the classes and the elements are renamed in the same release (the table is in the notes on the names of catalog). The page of each pattern says which kinds of site it fits best.
 
 **1. Replace the package.**
 
@@ -19,18 +19,18 @@ There is no `landing.css`, `cms.css`, `app.css` or `docs.css`, and no single fil
 
 | Old file | New file |
 | --- | --- |
-| `@luz-ds/landing/components/header.css` | `@luz-ds/catalog/components/landing-header.css` |
+| `@luz-ds/landing/components/header.css` | `@luz-ds/catalog/components/site-header.css` |
 | `@luz-ds/landing/components/hero.css` | `@luz-ds/catalog/components/hero.css` |
 | `@luz-ds/landing/components/main.css` | `@luz-ds/catalog/components/main.css` |
 | `@luz-ds/landing/components/section.css` | `@luz-ds/catalog/components/section.css` |
 | `@luz-ds/landing/components/stat.css` | `@luz-ds/catalog/components/stat.css` |
-| `@luz-ds/landing/components/footer.css` | `@luz-ds/catalog/components/landing-footer.css` |
+| `@luz-ds/landing/components/footer.css` | `@luz-ds/catalog/components/site-footer.css` |
 | `@luz-ds/landing/components/glow.css` | `@luz-ds/catalog/components/glow.css` |
-| `@luz-ds/cms/components/header.css` | `@luz-ds/catalog/components/cms-header.css` |
+| `@luz-ds/cms/components/header.css` | `@luz-ds/catalog/components/site-header.css`, and `masthead.css` for the masthead |
 | `@luz-ds/cms/components/page-header.css` | `@luz-ds/catalog/components/page-header.css` |
 | `@luz-ds/cms/components/article-header.css` | `@luz-ds/catalog/components/article-header.css` |
 | `@luz-ds/cms/components/article.css` | `@luz-ds/catalog/components/article.css` |
-| `@luz-ds/cms/components/footer.css` | `@luz-ds/catalog/components/cms-footer.css` |
+| `@luz-ds/cms/components/footer.css` | `@luz-ds/catalog/components/site-footer.css` |
 | `@luz-ds/app/components/header.css` | `@luz-ds/catalog/components/app-bar.css` |
 | `@luz-ds/app/components/dashboard.css` | `@luz-ds/catalog/components/dashboard.css` |
 | `@luz-ds/docs/components/shell.css` | `@luz-ds/catalog/components/docs-layout.css` |
@@ -43,15 +43,15 @@ There is no `landing.css`, `cms.css`, `app.css` or `docs.css`, and no single fil
 
 Link `hero.css` with `section.css`: the head of a section shares its rules with the hero. The table of contents of a blog is in `article.css`.
 
-On a CDN, a file is `https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/<kind>-<name>.min.css`. Add the `integrity` hash of the published file, as for any other file.
+On a CDN, a file is `https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/<block>.min.css`. Add the `integrity` hash of the published file, as for any other file.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/landing-header.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/site-header.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/hero.min.css">
 ```
 
 ```js
-import "@luz-ds/catalog/components/landing-header.css";
+import "@luz-ds/catalog/components/site-header.css";
 import "@luz-ds/catalog/components/hero.css";
 ```
 

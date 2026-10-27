@@ -7,4 +7,4 @@ A landing page is one page, or a few, that presents one thing (a product, an eve
 3. The header: the name only, or the name with a few links and the colour mode switcher.
 4. Any form, and where its data goes. LUZ styles the form; it does not send it.
 
-Start from `luz-landing-header`, `luz-hero`, `luz-main`, `luz-section`, `luz-stat` and `luz-landing-footer`, on core's `o-container`, `o-stack` and `o-grid`. The cards, buttons and forms are core's.
+Start from `luz-site-header`, `luz-hero`, `luz-main`, `luz-section`, `luz-stat` and `luz-site-footer`, on core's `o-container`, `o-stack` and `o-grid`. The cards, buttons and forms are core's.

@@ -98,7 +98,7 @@ import &quot;@luz-ds/core&quot;;</code></pre>
 
       <div class="docs-prose">
         <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Level 3, the Catalog: tokens, core and catalog</h2>
-        <p>The site's navigation and the pieces with a script or an identity of their own: navbar, sidebar, terminal, timeline, search, cookie consent, color mode, language switch, submenu and banner, and the patterns of a kind of site. The catalog needs core and tokens.</p>
+        <p>The site's navigation and the pieces with a script or an identity of their own: navbar, sidebar, terminal, timeline, search, cookie consent, color mode, language switch, submenu and announcement, and the patterns of a kind of site. The catalog needs core and tokens.</p>
         <p>The page structure of each kind of site, from the header to the footer, is in the catalog too, one stylesheet per pattern: see <a href="#site-kinds">Kinds of site</a>.</p>
         <p>The catalog has a stylesheet per component: link the ones the page uses, after core.</p>
         <div class="docs-command-block">
@@ -139,14 +139,14 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
       <div class="docs-prose">
         <h2 id="site-kinds" class="docs-prose__title">Kinds of site</h2>
         <p>To start a landing page, a blog, an app or a documentation site, go to <a href="/docs/kinds/">Kinds of site</a>: a prompt for any LLM, and the recipes of each part to copy.</p>
-        <p>There is no package for a kind of site. Its patterns are components of the catalog, one stylesheet each, named <code class="luz-code-inline">&lt;kind&gt;-&lt;name&gt;.css</code>. Install level 3, then link the files your page uses, after core:</p>
+        <p>There is no package for a kind of site. Its patterns are components of the catalog, one stylesheet each, named for what the piece is, <code class="luz-code-inline">&lt;block&gt;.css</code>. Install level 3, then link the files your page uses, after core:</p>
         <ul>
-          <li><strong>Landing page:</strong> <code class="luz-code-inline">landing-header</code>, <code class="luz-code-inline">hero</code>, <code class="luz-code-inline">main</code>, <code class="luz-code-inline">section</code>, <code class="luz-code-inline">stat</code>, <code class="luz-code-inline">landing-footer</code> and <code class="luz-code-inline">glow</code>: the header, hero, sections and footer.</li>
-          <li><strong>Blog or newspaper, with any CMS:</strong> <code class="luz-code-inline">cms-header</code>, <code class="luz-code-inline">page-header</code>, <code class="luz-code-inline">article-header</code>, <code class="luz-code-inline">article</code> and <code class="luz-code-inline">cms-footer</code>: the header, page header, article header, table of contents and footer.</li>
+          <li><strong>Landing page:</strong> <code class="luz-code-inline">site-header</code>, <code class="luz-code-inline">hero</code>, <code class="luz-code-inline">main</code>, <code class="luz-code-inline">section</code>, <code class="luz-code-inline">stat</code>, <code class="luz-code-inline">site-footer</code> and <code class="luz-code-inline">glow</code>: the header, hero, sections and footer.</li>
+          <li><strong>Blog or newspaper, with any CMS:</strong> <code class="luz-code-inline">site-header</code> (or <code class="luz-code-inline">masthead</code> for a newspaper), <code class="luz-code-inline">page-header</code>, <code class="luz-code-inline">article-header</code>, <code class="luz-code-inline">article</code> and <code class="luz-code-inline">site-footer</code>: the header, page header, article header, table of contents and footer.</li>
           <li><strong>Web application:</strong> <code class="luz-code-inline">app-bar</code> and <code class="luz-code-inline">dashboard</code>.</li>
           <li><strong>Documentation site:</strong> <code class="luz-code-inline">docs-layout</code>, <code class="luz-code-inline">doc-header</code>, <code class="luz-code-inline">page-rail</code>, <code class="luz-code-inline">example</code>, <code class="luz-code-inline">do-dont</code>, <code class="luz-code-inline">pager</code> and <code class="luz-code-inline">page-footer</code>.</li>
         </ul>
-        <p>The <a href="/docs/catalog/">catalog</a> has a page for each pattern, and says which kind of site it fits.</p>
+        <p>The <a href="/docs/catalog/">catalog</a> has a page for each pattern, and says which kinds of site it fits best.</p>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
             <span class="docs-snippet__lang">HTML</span>
@@ -154,7 +154,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, a landing page"><code id="code-cdn-kinds">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-header.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/site-header.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/hero.min.css&quot;&gt;</code></pre>
         </div>
         <div class="docs-snippet">
@@ -164,7 +164,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           </div>
           <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Bundler imports, a landing page"><code id="code-bundler-kinds">import &quot;@luz-ds/tokens/css&quot;;
 import &quot;@luz-ds/core/css&quot;;
-import &quot;@luz-ds/catalog/components/landing-header.css&quot;;
+import &quot;@luz-ds/catalog/components/site-header.css&quot;;
 import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
         </div>
         <ul>

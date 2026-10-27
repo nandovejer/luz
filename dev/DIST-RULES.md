@@ -70,8 +70,8 @@ its top-level `@media print` blocks, with the comment before each, in
 `search.js`, `cookie-consent.js`, `color-mode.js`, `timeline.js` and `sidebar.js` and bundles each into a `.min.js`. The navbar, the sidebar, the terminal and the timeline are catalog components, built like the others (`src/components/<name>.css`, in `luz.catalog`), and core's `luz.css` does not include them.
 
 The patterns of a kind of site (landing, cms, app and docs) are catalog
-components, `src/components/<kind>-<name>.css`: they build like the others, in
-`luz.catalog`, to `dist/components/<kind>-<name>.css` (+ `.min`), with no
+components, `src/components/<block>.css`, named by what the piece is: they build
+like the others, in `luz.catalog`, to `dist/components/<block>.css` (+ `.min`), with no
 JavaScript. There is no package for a kind of site, and no `landing:build`,
 `cms:build`, `app:build` or `docs:build`. After adding or removing a published
 file, run `node scripts/check-pack.js --update`. The apps link the files from

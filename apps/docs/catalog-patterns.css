@@ -8,18 +8,17 @@
    no skin (apps add layout, not component skins).
    ========================================================================== */
 
-@import url("/packages/catalog/dist/components/landing-header.css");
+@import url("/packages/catalog/dist/components/site-header.css");
 @import url("/packages/catalog/dist/components/hero.css");
 @import url("/packages/catalog/dist/components/main.css");
 @import url("/packages/catalog/dist/components/section.css");
 @import url("/packages/catalog/dist/components/stat.css");
-@import url("/packages/catalog/dist/components/landing-footer.css");
+@import url("/packages/catalog/dist/components/site-footer.css");
 @import url("/packages/catalog/dist/components/glow.css");
-@import url("/packages/catalog/dist/components/cms-header.css");
+@import url("/packages/catalog/dist/components/masthead.css");
 @import url("/packages/catalog/dist/components/page-header.css");
 @import url("/packages/catalog/dist/components/article-header.css");
 @import url("/packages/catalog/dist/components/article.css");
-@import url("/packages/catalog/dist/components/cms-footer.css");
 @import url("/packages/catalog/dist/components/app-bar.css");
 @import url("/packages/catalog/dist/components/dashboard.css");
 @import url("/packages/catalog/dist/components/docs-layout.css");

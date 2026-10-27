@@ -1,0 +1,105 @@
+/* ==========================================================================
+	 LUZ Catalog: masthead.
+	 Layer: catalog
+	 The newspaper's header, not sticky: header.luz-masthead >
+	 div.o-container.o-container--inline.o-stack with three rows. __top
+	 (a div.o-row) holds the __date and the __actions (catalog's
+	 <luz-search>, then an optional <luz-lang-switch>); then the large,
+	 centred __brand; then __sections (a div.o-row) with catalog's
+	 .luz-nav-toggle and nav.luz-navbar[popover] between two rules.
+	 ========================================================================== */
+
+/* Room around three rows that scroll away with the page */
+.luz-masthead {
+	padding-block: var(--luz-space-md);
+	background: var(--luz-surface-page);
+}
+
+/* The date gives way to the search: it shrinks and wraps, the search keeps
+   its row */
+.luz-masthead__top {
+	flex-wrap: nowrap;
+	justify-content: space-between;
+}
+
+.luz-masthead__date {
+	flex: 1 1 0;
+	min-inline-size: 0;
+	margin: 0;
+	color: var(--luz-text-secondary);
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-sm);
+}
+
+/* The publication's name: a link, never a heading (the story's title is
+   the h1). It wraps, never ellipsised */
+.luz-masthead__brand {
+	display: block;
+	min-block-size: var(--luz-control-lg);
+	margin: 0;
+	color: var(--luz-text-primary);
+	font-family: var(--luz-font-heading);
+	font-size: var(--luz-text-4xl);
+	font-weight: 600;
+	line-height: 1.1;
+	text-align: center;
+	text-decoration: none;
+}
+
+.luz-masthead__brand:hover {
+	text-decoration: underline;
+}
+
+/* A logo: an <img> whose alt is the publication's name */
+.luz-masthead__brand :where(img) {
+	block-size: calc(var(--luz-control-lg) * 2);
+	inline-size: auto;
+}
+
+.luz-masthead__actions {
+	gap: var(--luz-space-xs);
+}
+
+/* The rules keep clear of the menu button's border */
+.luz-masthead__sections {
+	padding-block: var(--luz-space-2xs);
+	border-block: 1px solid var(--luz-divider);
+}
+
+/* The language list of catalog's <luz-lang-switch> opens under this header */
+.luz-masthead :where(luz-lang-switch) {
+	--luz-lang-switch-top: var(--luz-bar-h);
+}
+
+@media (min-width: 769px) {
+	.luz-masthead__sections {
+		justify-content: center;
+	}
+}
+
+@media (max-width: 1023px) {
+	.luz-masthead__brand {
+		font-size: var(--luz-text-3xl);
+	}
+}
+
+@media (max-width: 640px) {
+	.luz-masthead__brand {
+		font-size: var(--luz-text-2xl);
+	}
+}
+
+/* With anchor positioning the panels opened inside the header (the language
+   list) open at its block end; the navbar's panel opens under the sections
+   row. Scoped, so with two bars on a page each panel finds its own */
+@supports (anchor-name: --luz-bar) {
+	.luz-masthead,
+	.luz-masthead__sections {
+		anchor-name: --luz-bar;
+		anchor-scope: --luz-bar;
+	}
+
+	.luz-masthead :where(luz-lang-switch) {
+		--luz-lang-switch-top: anchor(--luz-bar end, var(--luz-bar-h));
+	}
+}

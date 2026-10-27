@@ -35,7 +35,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { KIND_PATTERNS, kindFiles } from "./kinds.js";
+import { FITS_KINDS, kindPatterns } from "./kinds.js";
 import { englishT } from "./strings.js";
 
 /**
@@ -101,7 +101,7 @@ export function catalogFilesIn(text, components) {
 export const KINDS = [
   { id: "atoms", patterns: null },
   { id: "landing", patterns: "landing" },
-  { id: "blog", patterns: "cms" },
+  { id: "blog", patterns: "blog" },
   { id: "app", patterns: "app" },
   { id: "docs", patterns: "docs" },
 ];
@@ -138,11 +138,11 @@ export function snippetData({ root, readFile, dev = false, warn = console.warn }
   try {
     const built = catalogComponents({ root, readFile });
     components = built.map(({ file }) => minified(file));
-    patterns = Object.fromEntries(Object.keys(KIND_PATTERNS).map((kind) => [kind, kindFiles(kind, built)]));
+    patterns = Object.fromEntries(FITS_KINDS.map((kind) => [kind, kindPatterns(kind, root, built).files]));
   } catch (error) {
     if (!dev) throw error;
     warn(`[docs] ${error.message}`);
-    patterns = Object.fromEntries(Object.entries(KIND_PATTERNS).map(([kind, { files }]) => [kind, files.map((name) => `components/${name}.css`)]));
+    patterns = Object.fromEntries(FITS_KINDS.map((kind) => [kind, kindPatterns(kind, root, null).files]));
     components = [minified(EXAMPLE_COMPONENT), ...Object.values(patterns).flat().map(minified)];
   }
   for (const [pkg, spec] of Object.entries(FILES)) {

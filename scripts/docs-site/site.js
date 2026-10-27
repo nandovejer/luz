@@ -41,7 +41,7 @@ import { gzipSync } from "node:zlib";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { HtmlError, compactHtml, readHtml, tags } from "./html.js";
 import { BASE, PACKAGES } from "../luz-packages.js";
-import { fitsKindsOf, isKindFile } from "./kinds.js";
+import { fileKinds, fitsKindsOf, isKindFile } from "./kinds.js";
 import { fillAiMarkers } from "./ai.js";
 import { catalogComponents, catalogFilesIn, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
@@ -1625,6 +1625,7 @@ function gzipBytes(path) {
 function packageBytes(root, budgets, name, what) {
   const under = `packages/${name}/dist/`;
   const files = [];
+  const kindsOf = fileKinds(root);
   const matches = (glob) => {
     // "dir/{a-*,b}.ext": files named "a-…" or exactly "b.ext" (as scripts/check-size.js reads it)
     const list = /^(.*?)\/\{([a-z*,-]+)\}(\.[a-z.]+)$/.exec(glob);
@@ -1656,7 +1657,7 @@ function packageBytes(root, budgets, name, what) {
       const skip = new Set(b.except ? matches(b.except) : []);
       const found = matches(b.glob).filter((file) => !skip.has(file));
       if (!found.length) throw new Error(`${b.glob} matches nothing: run pnpm build before ${what} can be read`);
-      files.push(...found.filter((file) => !isKindFile(file.slice(under.length))));
+      files.push(...found.filter((file) => !isKindFile(file.slice(under.length), kindsOf)));
     }
   }
   return files.reduce((sum, file) => sum + gzipBytes(resolve(root, file)), 0);
@@ -1826,12 +1827,13 @@ function levelLists(site, locale, used) {
   const file = `${I18N_DIR}/${locale.code}.json`;
   const say = (key) => lookup(locale, key, file, used);
   const root = site.repoRoot;
+  const kindsOf = fileKinds(root);
   const read = (path) => readFileSync(resolve(root, path), "utf-8");
   const sheets = (dir) =>
     readdirSync(resolve(root, dir))
       .filter((name) => name.endsWith(".css") && name !== "index.css" && !name.startsWith("_"))
       // The patterns of a kind of site are catalog's files since F5b; the home lists the pieces every site can use
-      .filter((name) => !isKindFile(`components/${name}`))
+      .filter((name) => !isKindFile(`components/${name}`, kindsOf))
       .map((name) => name.slice(0, -4));
   const pages = "apps/docs/pages";
   const ids = (path) => new Set([...read(`${pages}/${path}`).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));

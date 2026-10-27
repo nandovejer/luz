@@ -1,8 +1,8 @@
 # @luz-ds/catalog
 
-Components that are not core's, each one stylesheet: light-DOM `<luz-*>` tags (search, cookie consent, color mode, language switch, submenu, banner and timeline), the navigation of a site (the navbar and the sidebar, which are classes with no tag), the terminal, and the patterns of a landing page, a blog, an app and a documentation site. Catalog is the navigation of the site and the pieces with JS or an identity of their own; everything else is in `@luz-ds/core`, which names nothing of catalog.
+Components that are not core's, each one stylesheet: light-DOM `<luz-*>` tags (search, cookie consent, color mode, language switch, submenu, announcement and timeline), the navigation of a site (the navbar and the sidebar, which are classes with no tag), the terminal, and the patterns of a landing page, a blog, an app and a documentation site. Catalog is the navigation of the site and the pieces with JS or an identity of their own; everything else is in `@luz-ds/core`, which names nothing of catalog.
 
-The rest are the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. They are catalog components too, one file each, `<kind>-<name>.css`. The name says what the piece is, and its docs page says which kind of site it fits. See [Patterns of a kind of site](#patterns-of-a-kind-of-site).
+The rest are the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. They are catalog components too, one file each, `<block>.css`. The name says what the piece is, with no kind of site in it, and its docs page says which kinds of site it fits best. See [Patterns of a kind of site](#patterns-of-a-kind-of-site).
 
 > **Beta.** The tokens, components and patterns work and are tested, but names, classes and behavior can still change before the stable release. Pin an exact version and read the changelog before you upgrade.
 
@@ -79,7 +79,7 @@ A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari
 - **`./color-mode`** → `color-mode.js` — defines `<luz-color-mode>`, the color mode switcher with an Auto state (light DOM), and exports `phaseOf(hour)`, the phase of the day at a local hour. Importing it in Node does nothing but give `phaseOf`
 - **`./timeline`** → `timeline.js` — defines `<luz-timeline>`, a timeline with a rail of dates (light DOM), and exports `initTimeline(root, translate)`. It carries its own four strings, in English and Spanish, and reads `data-luz-label-<key>` on the element or an ancestor, then the nearest `lang`, as the search and the cookie banner do (EX-010). A language added with `registerLocale()` does not reach it by itself: call `initTimeline(document, t)` with core's `t`. Importing it in Node does nothing
 - **`./sidebar`** → `sidebar.js` — exports `initSidebar()`: the scroll spy that marks the link of the section on screen (`.luz-sidebar__link`, and every in-page link inside `[data-luz-spy]`), and closes the drawer when a link is chosen. The loader calls it when the page has a `.luz-sidebar`; call it yourself for a sidebar added later. The drawer itself is a native popover and works without it. Importing it has no side effects
-- **`./components/*`** → `dist/components/` — the package's only CSS: one stylesheet per component, `<name>.css` and `<name>.min.css`, its screen rules in `luz.catalog` and what it does on paper in `luz.print`: `banner`, `consent`, `lang-switch`, `mode`, `navbar`, `search`, `sidebar`, `submenu`, `terminal`, `timeline` and the patterns of a kind of site (`landing-*`, `cms-*`, `app-*` and `docs-*`). `classes.json` says the file of each class (`files`) and `custom-elements.json` the file of each tag (`stylesheet`)
+- **`./components/*`** → `dist/components/` — the package's only CSS: one stylesheet per component, `<name>.css` and `<name>.min.css`, its screen rules in `luz.catalog` and what it does on paper in `luz.print`: `announcement`, `color-mode`, `cookie-consent`, `lang-switch`, `navbar`, `search`, `sidebar`, `submenu`, `terminal`, `timeline` and the patterns of a kind of site, each named by its block (`hero`, `site-header`, `page-rail` and the others of the table below). `classes.json` says the file of each class (`files`) and `custom-elements.json` the file of each tag (`stylesheet`)
 
 There is no `./css`, `./css/min` or `./print.css` since 0.3: link the components instead.
 
@@ -148,10 +148,10 @@ The element has `mode` (`"auto"`, `"light"`, `"dark"` or `"high-contrast"`), `li
 
 ## Patterns of a kind of site
 
-Each pattern is CSS only, in `luz.catalog`, with no script and no tag of its own: the classes go on the markup the docs page shows. A landing page, a blog, an application and a documentation site were four packages; they are files of this one. Link the ones your page uses, after core, in the order of the table, which is the order the stylesheet of the kind had them.
+Each pattern is CSS only, in `luz.catalog`, with no script and no tag of its own: the classes go on the markup the docs page shows. A landing page, a blog, an application and a documentation site were four packages; they are files of this one. Link the ones your page uses, after core, in the order of the table, which is the order the stylesheet of the kind had them. A file that two kinds use is listed once.
 
 ```js
-import '@luz-ds/catalog/components/landing-header.css'
+import '@luz-ds/catalog/components/site-header.css'
 import '@luz-ds/catalog/components/hero.css'
 ```
 
@@ -159,20 +159,19 @@ import '@luz-ds/catalog/components/hero.css'
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/hero.min.css">
 ```
 
-| Kind | File in `components/` | Block | Docs page |
+| Fits best | File in `components/` | Block | Docs page |
 | --- | --- | --- | --- |
-| Landing page | `landing-header.css` | `.luz-landing-header` | [landing-header](https://nandovejer.github.io/luz/docs/catalog/landing-header/) |
+| Landing page, blog or newspaper | `site-header.css` | `.luz-site-header` (`--publication` for a blog) | [site-header](https://nandovejer.github.io/luz/docs/catalog/site-header/) |
 | Landing page | `hero.css` | `.luz-hero` | [hero](https://nandovejer.github.io/luz/docs/catalog/hero/) |
 | Landing page | `main.css` | `.luz-main` | none |
 | Landing page | `section.css` | `.luz-section` | [section](https://nandovejer.github.io/luz/docs/catalog/section/) |
 | Landing page | `stat.css` | `.luz-stat` | [stat](https://nandovejer.github.io/luz/docs/catalog/stat/) |
-| Landing page | `landing-footer.css` | `.luz-landing-footer` | [landing-footer](https://nandovejer.github.io/luz/docs/catalog/landing-footer/) |
+| Landing page, blog or newspaper | `site-footer.css` | `.luz-site-footer` | [site-footer](https://nandovejer.github.io/luz/docs/catalog/site-footer/) |
 | Landing page | `glow.css` | `.luz-glow` | none |
-| Blog or newspaper | `cms-header.css` | `.luz-cms-header` | [cms-header](https://nandovejer.github.io/luz/docs/catalog/cms-header/) |
+| Blog or newspaper | `masthead.css` | `.luz-masthead` | [masthead](https://nandovejer.github.io/luz/docs/catalog/masthead/) |
 | Blog or newspaper | `page-header.css` | `.luz-page-header` | [page-header](https://nandovejer.github.io/luz/docs/catalog/page-header/) |
 | Blog or newspaper | `article-header.css` | `.luz-article-header` | [article-header](https://nandovejer.github.io/luz/docs/catalog/article-header/) |
 | Blog or newspaper | `article.css` | `.luz-article`, `.luz-toc` | [toc](https://nandovejer.github.io/luz/docs/catalog/toc/) |
-| Blog or newspaper | `cms-footer.css` | `.luz-cms-footer` | [cms-footer](https://nandovejer.github.io/luz/docs/catalog/cms-footer/) |
 | Web application | `app-bar.css` | `.luz-app-bar` | [app-bar](https://nandovejer.github.io/luz/docs/catalog/app-bar/) |
 | Web application | `dashboard.css` | `.luz-dashboard` | [dashboard](https://nandovejer.github.io/luz/docs/catalog/dashboard/) |
 | Documentation site | `docs-layout.css` | `.luz-docs-layout` | [docs-layout](https://nandovejer.github.io/luz/docs/catalog/docs-layout/) |
@@ -183,11 +182,11 @@ import '@luz-ds/catalog/components/hero.css'
 | Documentation site | `pager.css` | `.luz-pager` | [pager](https://nandovejer.github.io/luz/docs/catalog/pager/) |
 | Documentation site | `page-footer.css` | `.luz-page-footer` | [page-footer](https://nandovejer.github.io/luz/docs/catalog/page-footer/) |
 
-Load `hero.css` with `section.css`: the head of a section shares its rules. The classes of the blog are `cms`, whatever CMS you use.
+Load `hero.css` with `section.css`: the head of a section shares its rules. The blog and the newspaper work with any CMS.
 
 ## What moved out
 
-Before 0.1, this package also held the page structure. The skip link, the image frame (`.luz-image`, a flat surface with no placeholder), the band, the action group (`.o-actions`), the sticky bar (`.o-sticky`), the page column (`.o-page`) are in `@luz-ds/core`. The header, hero, sections and footer of a landing page, the pieces of a blog, an application and a documentation site were in four packages and are now the files above. The image placeholders are no longer published.
+Before 0.1, this package also held the page structure. The skip link, the image frame (`.luz-image`, a flat surface with no placeholder), the band, the action group (`.o-actions`), the sticky bar (`.o-sticky`), the page column (`.o-page`) are in `@luz-ds/core`. The header, hero, sections and footer of a landing page, the pieces of a blog, an application and a documentation site were in four packages and are now the files above. The image placeholders are no longer published. Their classes lost the kind of site: `.luz-landing-hero` is `.luz-hero`, `.luz-docs-rail` is `.luz-page-rail`, and `<luz-mode>`, `<luz-consent>` and `<luz-banner>` are `<luz-color-mode>`, `<luz-cookie-consent>` and `<luz-announcement>`. The old names do nothing; the changelog has the full table, and `luz-check` names the new one.
 
 This package also holds four components that were core's: the navbar, the sidebar (with its brand and `.luz-nav-toggle`), the terminal and the timeline. The classes, the markup and the look are the same; the package, the layer (`luz.catalog`) and the import path changed. `@luz-ds/core/sidebar` is now `@luz-ds/catalog/sidebar`, `@luz-ds/core/timeline` is `@luz-ds/catalog/timeline`, and `luz.css` no longer includes the four stylesheets: link `@luz-ds/catalog/components/<name>.css` for each one you use.
 

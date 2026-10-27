@@ -43,7 +43,7 @@ The name stands for Light, Usable & Zero-dependency: light in weight (plain CSS 
 
 - [`@luz-ds/tokens`](./packages/tokens): design tokens (CSS custom properties), the three color modes and the font.
 - [`@luz-ds/core`](./packages/core): the components, the layout objects, the styles of bare HTML elements and optional JavaScript.
-- [`@luz-ds/catalog`](./packages/catalog): the components that act for the site as a whole (search, cookie consent, color mode, language switch, submenu, banner) and the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. One stylesheet per component; you link only the ones you use.
+- [`@luz-ds/catalog`](./packages/catalog): the components that act for the site as a whole (search, cookie consent, color mode, language switch, submenu, announcement) and the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. One stylesheet per component; you link only the ones you use.
 - [`@luz-ds/check`](./packages/check): a tool, not a stylesheet. The `luz-check` command reads the HTML and CSS of your project, offline, and says which LUZ classes, elements, load order and theme colors are wrong. It has its own version, 0.x, and needs no other package.
 
 ## Install and load
@@ -97,12 +97,12 @@ Pin an exact version and add an `integrity` hash in production; see [SECURITY.md
 
 ### Kinds of site
 
-There are no packages for one kind of site. The patterns of a landing page, a blog or newspaper, a web application and a documentation site are catalog components, one stylesheet each, `components/<kind>-<name>.css`. The name says what the piece is; its docs page says which kind of site it fits. Link the ones your page uses, after core, in the order below.
+There are no packages for one kind of site. The patterns of a landing page, a blog or newspaper, a web application and a documentation site are catalog components, one stylesheet each, `components/<block>.css` and the class `.luz-<block>`. The name says what the piece is, with no kind of site in it; its docs page says which kinds of site it fits best. Link the ones your page uses, after core, in the order below.
 
 | Kind | Files, in this order |
 | --- | --- |
-| Landing page | `landing-header`, `hero`, `main`, `section`, `stat`, `landing-footer`, `glow` |
-| Blog or newspaper, any CMS | `cms-header`, `page-header`, `article-header`, `article`, `cms-footer` |
+| Landing page | `site-header`, `hero`, `main`, `section`, `stat`, `site-footer`, `glow` |
+| Blog or newspaper, any CMS | `site-header` or `masthead`, `page-header`, `article-header`, `article`, `site-footer` |
 | Web application | `app-bar`, `dashboard` |
 | Documentation site | `docs-layout`, `doc-header`, `page-rail`, `example`, `do-dont`, `pager`, `page-footer` |
 
@@ -133,7 +133,7 @@ import { initTabs } from "@luz-ds/core/tabs";
 import { copyToClipboard } from "@luz-ds/core/clipboard";
 ```
 
-Published modules of core: `theme`, `clipboard`, `modal`, `highlight`, `player`, `tabs`, `utils`, `i18n`, `midi`, `table-sort`. Those of catalog are `search`, `consent`, `mode`, `sidebar` and `timeline`. Importing one has no side effects until you call its `init*()`. Every page works without JavaScript.
+Published modules of core: `theme`, `clipboard`, `modal`, `highlight`, `player`, `tabs`, `utils`, `i18n`, `midi`, `table-sort`. Those of catalog are `search`, `cookie-consent`, `color-mode`, `sidebar` and `timeline`. Importing one has no side effects until you call its `init*()`. Every page works without JavaScript.
 
 ## What each package needs
 

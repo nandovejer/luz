@@ -34,11 +34,11 @@
 
 /* Landing's footer, inset by the same gutters so its divider spans the
    frame, as in the documentation; its rows have no gutters of their own */
-.o-page > .luz-landing-footer {
+.o-page > .luz-site-footer {
   margin-inline: calc(var(--site-edge) + var(--luz-space-xl));
 }
 
-.luz-landing-footer > .o-container {
+.luz-site-footer > .o-container {
   max-inline-size: none;
   padding-inline: 0;
 }
@@ -1095,7 +1095,7 @@ home-light:defined ~ .landing-light__nojs {
    others are never fetched (display: none, loading="lazy") */
 
 /* The current language says so in weight, not only to assistive technology */
-.luz-landing-footer__col [aria-current="page"] {
+.luz-site-footer__col [aria-current="page"] {
   font-weight: 600;
   color: var(--luz-text-primary);
 }
@@ -1496,20 +1496,20 @@ home-light:defined ~ .landing-light__nojs {
    them. Ten rows: a title, then the second docs column's nine (the
    packages' label and their three links, the kinds' label and their four) */
 @media (min-width: 768px) {
-  .luz-landing-footer > .o-grid {
+  .luz-site-footer > .o-grid {
     grid-template-columns: minmax(0, 1.3fr);
     grid-template-rows: repeat(10, auto);
     gap: var(--luz-space-xs) var(--luz-space-2xl);
   }
 
-  .luz-landing-footer__brand,
-  .luz-landing-footer__col {
+  .luz-site-footer__brand,
+  .luz-site-footer__col {
     grid-row: 1 / -1;
     grid-template-rows: subgrid;
     gap: inherit;
   }
 
-  .luz-landing-footer__col > ul {
+  .luz-site-footer__col > ul {
     grid-row: 2 / -1;
     grid-template-rows: subgrid;
     gap: inherit;
@@ -1522,7 +1522,7 @@ home-light:defined ~ .landing-light__nojs {
     grid-template-columns: subgrid;
   }
 
-  .landing-foot-docs > .luz-landing-footer__col-title {
+  .landing-foot-docs > .luz-site-footer__col-title {
     grid-column: 1 / -1;
   }
 
@@ -1658,7 +1658,7 @@ home-light:defined ~ .landing-light__nojs {
    sized to its content (a grid column, a centred block, a link laid out as a
    flex row), so that box narrows and its words break */
 .landing-wrap,
-.o-page > .luz-landing-footer {
+.o-page > .luz-site-footer {
   overflow-wrap: anywhere;
 }
 
@@ -1718,7 +1718,7 @@ home-light:defined ~ .landing-light__nojs {
     padding-inline: var(--luz-space-md);
   }
 
-  .o-page > .luz-landing-footer {
+  .o-page > .luz-site-footer {
     margin-inline: var(--luz-space-md);
   }
 }

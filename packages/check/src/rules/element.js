@@ -3,6 +3,8 @@
  *
  *   element/unknown            a <luz-*> tag that is in no custom-elements
  *                              manifest and is not the block of a class
+ *   names/renamed:element      a <luz-mode>, <luz-consent> or <luz-banner> of catalog before
+ *                              0.3: the new tag (rules/renamed.js)
  *   element/unknown-attribute  an attribute that a <luz-*> element does not
  *                              declare, and that is not global, aria-*,
  *                              data-* (other than data-luz-*), a label
@@ -17,6 +19,7 @@
  */
 import { finding } from "../report.js";
 import { closest } from "../suggest.js";
+import { pinsOldRelease, renamedTag } from "./renamed.js";
 import { isEcho, packageOfName } from "./shared.js";
 
 // The global attributes of HTML, and the few a template language puts on any tag
@@ -52,8 +55,13 @@ export function elementRules(ctx) {
     if (tag.endsWith("-")) continue;
     const declared = tag.startsWith("luz-") ? world.tags.get(tag) : undefined;
     if (tag.startsWith("luz-") && declared === undefined && !world.blocks.has(tag)) {
-      const near = isEcho(tag) && take("element/unknown") ? closest(tag, world.tagNames) : null;
       const where = { file, line: record.line, column: record.column };
+      const renamed = renamedTag(tag);
+      if (renamed !== null && !pinsOldRelease(records)) {
+        found.push(finding("names/renamed:element", { ...where, vars: { tag, current: renamed }, suggestion: `<${renamed}>` }));
+        continue;
+      }
+      const near = isEcho(tag) && take("element/unknown") ? closest(tag, world.tagNames) : null;
       if (near === null) found.push(finding("element/unknown:none", { ...where, vars: { tag, package: packageOfName(tag) } }));
       else found.push(finding("element/unknown", { ...where, vars: { tag, closest: near }, suggestion: `<${near}>` }));
       continue;
