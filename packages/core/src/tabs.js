@@ -88,14 +88,14 @@ export function activateTab(tab, { moveFocus = false } = {}) {
     const isActive = item === tab;
     item.classList.toggle("is-active", isActive);
     item.setAttribute("aria-selected", String(isActive));
-    item.setAttribute("tabindex", isActive ? "0" : "-1");
+    item.tabIndex = isActive ? 0 : -1;
 
     const panel = panelOf(item);
     if (!panel) return;
     // "until-found" keeps the panel's text reachable by find in page; a
     // browser without it reads the string as true, which is plain hidden
     panel.hidden = isActive ? false : "until-found";
-    panel.setAttribute("tabindex", isActive ? "0" : "-1");
+    panel.tabIndex = isActive ? 0 : -1;
   });
 
   if (moveFocus) tab.focus();
