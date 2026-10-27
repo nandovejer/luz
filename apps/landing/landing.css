@@ -1564,6 +1564,13 @@ home-light:defined ~ .landing-light__nojs {
   font-size: var(--luz-text-lg);
 }
 
+/* The mark is wide (1.57:1): sized by its height, the width follows */
+.landing-brand > svg {
+  flex: none;
+  block-size: 1.375rem;
+  inline-size: auto;
+}
+
 /* The version in the footer: the mono, as the number it is, a link to the
    changelog; then "beta" as a small tag, so the two read as one statement
    of where LUZ stands */
