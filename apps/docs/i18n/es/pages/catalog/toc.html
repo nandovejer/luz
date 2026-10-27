@@ -2,7 +2,7 @@
 title: Índice
 description: Enumera las secciones de un artículo largo, junto al texto cuando hay espacio y encima cuando no lo hay.
 fits: un artículo largo, junto al texto o encima de él
-source: eda2f42c8680
+source: 71765bc25609
 reviewed: false
 -->
     <div class="docs-component" id="p-toc">
@@ -10,11 +10,11 @@ reviewed: false
           <p>El índice de un artículo, junto al texto.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <article class="luz-cms-article" id="toc-demo">
-              <div class="luz-cms-article__layout">
-                <nav class="luz-cms-toc" aria-labelledby="toc-demo-title" data-luz-spy>
-                  <h3 class="luz-cms-toc__title" id="toc-demo-title">Contents</h3>
-                  <ol class="luz-cms-toc__list">
+            <article class="luz-article" id="toc-demo">
+              <div class="luz-article__layout">
+                <nav class="luz-toc" aria-labelledby="toc-demo-title" data-luz-spy>
+                  <h3 class="luz-toc__title" id="toc-demo-title">Contents</h3>
+                  <ol class="luz-toc__list">
                     <li><a href="#toc-demo-method">How the readings were taken</a></li>
                     <li><a href="#toc-demo-level">Four centimetres in ten years</a></li>
                     <li><a href="#toc-demo-storms">Storms that reach the walls</a></li>
@@ -52,12 +52,12 @@ reviewed: false
                 <span class="docs-snippet__lang">HTML</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-toc" aria-label="Copy the table of contents markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Table of contents markup"><code id="code-toc">&lt;article class=&quot;luz-cms-article&quot;&gt;
-  &lt;header class=&quot;luz-cms-article-header&quot;&gt;…&lt;/header&gt;
-  &lt;div class=&quot;luz-cms-article__layout&quot;&gt;
-    &lt;nav class=&quot;luz-cms-toc&quot; aria-labelledby=&quot;toc-title&quot; data-luz-spy&gt;
-      &lt;h2 class=&quot;luz-cms-toc__title&quot; id=&quot;toc-title&quot;&gt;Contents&lt;/h2&gt;
-      &lt;ol class=&quot;luz-cms-toc__list&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Table of contents markup"><code id="code-toc">&lt;article class=&quot;luz-article&quot;&gt;
+  &lt;header class=&quot;luz-article-header&quot;&gt;…&lt;/header&gt;
+  &lt;div class=&quot;luz-article__layout&quot;&gt;
+    &lt;nav class=&quot;luz-toc&quot; aria-labelledby=&quot;toc-title&quot; data-luz-spy&gt;
+      &lt;h2 class=&quot;luz-toc__title&quot; id=&quot;toc-title&quot;&gt;Contents&lt;/h2&gt;
+      &lt;ol class=&quot;luz-toc__list&quot;&gt;
         &lt;li&gt;&lt;a href=&quot;#method&quot;&gt;How the readings were taken&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href=&quot;#level&quot;&gt;Four centimetres in ten years&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href=&quot;#storms&quot;&gt;Storms that reach the walls&lt;/a&gt;&lt;/li&gt;
@@ -83,18 +83,18 @@ reviewed: false
                   <tr><th scope="col">Clase o propiedad</th><th scope="col">Qué hace</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-article</code></div></td><td data-label="Qué hace"><div>El artículo: su ancho determina la maquetación, no el de la ventana (contenedor de tamaño)</div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-article__layout</code></div></td><td data-label="Qué hace"><div>El índice y, después, el texto. Cuando el artículo mide al menos 46rem: el texto va en la primera columna y el índice en una columna de 13rem al extremo en línea, con 48 px de separación; por debajo, se usa una columna</div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc</code></div></td><td data-label="Qué hace"><div>El <code>&lt;nav&gt;</code>. Junto al texto permanece visible mientras este se desplaza, y una lista más alta que la ventana se desplaza por dentro</div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>data-luz-spy</code> en <code>.luz-cms-toc</code></div></td><td data-label="Qué hace"><div>El seguimiento de desplazamiento de catalog marca el enlace de la sección visible. Opcional</div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc__title</code></div></td><td data-label="Qué hace"><div>El encabezado del índice, en sans y seminegrita</div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>.luz-cms-toc__list</code></div></td><td data-label="Qué hace"><div>La lista, sin marcadores y con una línea en el inicio en línea; un enlace por línea</div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>--luz-cms-toc-top</code></div></td><td data-label="Qué hace"><div>El espacio sobre el índice mientras permanece visible: 24 px, o 24 px por debajo de una barra fija (el <code>.o-sticky</code> de core, una fila de <code>--luz-bar-h</code>, como la <a href="/docs/catalog/cms-header/">cabecera</a>). Si la cabecera tiene otra altura, asígnalo a <code>.luz-cms-toc</code></div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-article</code></div></td><td data-label="Qué hace"><div>El artículo: su ancho determina la maquetación, no el de la ventana (contenedor de tamaño)</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-article__layout</code></div></td><td data-label="Qué hace"><div>El índice y, después, el texto. Cuando el artículo mide al menos 46rem: el texto va en la primera columna y el índice en una columna de 13rem al extremo en línea, con 48 px de separación; por debajo, se usa una columna</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-toc</code></div></td><td data-label="Qué hace"><div>El <code>&lt;nav&gt;</code>. Junto al texto permanece visible mientras este se desplaza, y una lista más alta que la ventana se desplaza por dentro</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>data-luz-spy</code> en <code>.luz-toc</code></div></td><td data-label="Qué hace"><div>El seguimiento de desplazamiento de catalog marca el enlace de la sección visible. Opcional</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-toc__title</code></div></td><td data-label="Qué hace"><div>El encabezado del índice, en sans y seminegrita</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>.luz-toc__list</code></div></td><td data-label="Qué hace"><div>La lista, sin marcadores y con una línea en el inicio en línea; un enlace por línea</div></td></tr>
+                  <tr><td data-label="Clase o propiedad"><div><code>--luz-toc-top</code></div></td><td data-label="Qué hace"><div>El espacio sobre el índice mientras permanece visible: 24 px, o 24 px por debajo de una barra fija (el <code>.o-sticky</code> de core, una fila de <code>--luz-bar-h</code>, como la <a href="/docs/catalog/cms-header/">cabecera</a>). Si la cabecera tiene otra altura, asígnalo a <code>.luz-toc</code></div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Una cuadrícula CSS dentro de un contenedor de tamaño, de <code>components/cms-article.css</code> de <code>@luz-ds/catalog</code>. No necesita JavaScript propio.</p>
+            <p>Una cuadrícula CSS dentro de un contenedor de tamaño, de <code>components/article.css</code> de <code>@luz-ds/catalog</code>. No necesita JavaScript propio.</p>
             <ul>
               <li>La maquetación se adapta al espacio del artículo: en una página con barra lateral o con texto más grande, el índice pasa antes encima del texto. Por debajo de 46rem es una lista normal encima del texto y no permanece visible, porque lo taparía.</li>
               <li>El índice aparece primero en el código fuente, así que se lee primero y Tab llega a él antes en ambas maquetaciones. El texto es un elemento único, segundo hijo de <code>__layout</code>; en un CMS, es el elemento que contiene el artículo.</li>
@@ -123,17 +123,17 @@ reviewed: false
               <li>Tampoco sirve para los pasos ordenados de una tarea: numéralos en el texto.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa encabezados de sección que expliquen de qué trata cada parte, para que la lista funcione como resumen.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <nav class="luz-cms-toc"><p class="luz-cms-toc__title">Contents</p><ol class="luz-cms-toc__list"><li><a>How the readings were taken</a></li><li><a>Four centimetres in ten years</a></li><li><a>Storms that reach the walls</a></li></ol></nav>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Usa encabezados de sección que expliquen de qué trata cada parte, para que la lista funcione como resumen.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <nav class="luz-toc"><p class="luz-toc__title">Contents</p><ol class="luz-toc__list"><li><a>How the readings were taken</a></li><li><a>Four centimetres in ten years</a></li><li><a>Storms that reach the walls</a></li></ol></nav>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Usa encabezados que podrían aparecer en cualquier artículo: la lista no aporta nada.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <nav class="luz-cms-toc"><p class="luz-cms-toc__title">Contents</p><ol class="luz-cms-toc__list"><li><a>Introduction</a></li><li><a>Background</a></li><li><a>Discussion</a></li></ol></nav>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Usa encabezados que podrían aparecer en cualquier artículo: la lista no aporta nada.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <nav class="luz-toc"><p class="luz-toc__title">Contents</p><ol class="luz-toc__list"><li><a>Introduction</a></li><li><a>Background</a></li><li><a>Discussion</a></li></ol></nav>
                 </div>
               </figure>
             </div>
@@ -164,7 +164,7 @@ reviewed: false
               <li>El enlace actual se indica con la barra y el peso, no solo con el color. Los enlaces no están subrayados: dentro de <code>&lt;nav&gt;</code>, su ubicación ya indica que son enlaces, como en todos los elementos de navegación de LUZ.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 15 tokens que usan las reglas de <code>.luz-cms-article</code> y <code>.luz-cms-toc</code> de <code>components/cms-article.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 15 tokens que usan las reglas de <code>.luz-article</code> y <code>.luz-toc</code> de <code>components/article.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

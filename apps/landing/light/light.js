@@ -5,7 +5,7 @@
  * globe.js). A line under the globe opens a bar (on a desktop it stays
  * open): the place and the light, the hour in large type under them, and a
  * slider to scrub the day. Letting
- * the slider go pins its hour (<luz-mode>.pin()): the page keeps that light,
+ * the slider go pins its hour (<luz-color-mode>.pin()): the page keeps that light,
  * on a reload too, until the footer's Light, Dark or High contrast is
  * chosen; a short "Saved" notice says so. Only the
  * system's prefers-reduced-motion stops the motion (RL-8); the element has no
@@ -16,9 +16,9 @@
  * bleed     the visual runs to the edges of the page's frame (light.css)
  * favicon   the tab's icon follows the sky (a data: URL of an SVG)
  *
- * <luz-mode> is the only writer of data-theme and data-light: this element
- * reads them, follows luz-mode:change and, while the visitor scrubs the day,
- * asks <luz-mode> to preview that hour (closing the bar ends it); without one
+ * <luz-color-mode> is the only writer of data-theme and data-light: this element
+ * reads them, follows luz-color-mode:change and, while the visitor scrubs the day,
+ * asks <luz-color-mode> to preview that hour (closing the bar ends it); without one
  * only the visuals follow. On <html> it writes custom properties only:
  * --sun-alt, --sun-az (degrees), --sun-x (the sun, left to right) and
  * --day-left (the share of today's daylight to come).
@@ -131,9 +131,9 @@ function h(tag, attrs = {}, text = "") {
   return n;
 }
 
-/** The <luz-mode> of the page, once it is upgraded. */
+/** The <luz-color-mode> of the page, once it is upgraded. */
 const mode = () => {
-  const el = document.querySelector("luz-mode");
+  const el = document.querySelector("luz-color-mode");
   return el && typeof el.preview === "function" ? el : null;
 };
 
@@ -147,13 +147,13 @@ class LuzLight extends HTMLElement {
 
   connectedCallback() {
     if (!this._stage) this._build();
-    // <luz-mode> may have upgraded first: its pinned hour, if any
+    // <luz-color-mode> may have upgraded first: its pinned hour, if any
     this._at(mode()?.pinned ?? null);
     this._tick();
     this._abort = new window.AbortController();
     const signal = this._abort.signal;
     // The page's hour: the pinned one, or now once a mode is chosen in the footer (a preview is the slider's own)
-    document.addEventListener("luz-mode:change", (e) => (e.detail?.simulated ? this._tick() : this._hold(e.detail?.pinned ?? null)), { signal });
+    document.addEventListener("luz-color-mode:change", (e) => (e.detail?.simulated ? this._tick() : this._hold(e.detail?.pinned ?? null)), { signal });
     document.addEventListener("pointerdown", (e) => this._bar && !this._bar.contains(e.target) && !this._line.contains(e.target) && this.close(), { signal });
     document.addEventListener(
       "keydown",
@@ -273,14 +273,14 @@ class LuzLight extends HTMLElement {
     });
   }
 
-  /** Scrub to an hour (0 to 24), or back to now (null), and ask <luz-mode> to follow. */
+  /** Scrub to an hour (0 to 24), or back to now (null), and ask <luz-color-mode> to follow. */
   _preview(hour) {
     this._at(hour);
     mode()?.preview(hour);
     this._tick();
   }
 
-  /** Pin the scrubbed hour with <luz-mode>, and say so for a moment. */
+  /** Pin the scrubbed hour with <luz-color-mode>, and say so for a moment. */
   _pin(hour) {
     const el = mode();
     if (!el?.pin?.(hour)) return;
@@ -293,7 +293,7 @@ class LuzLight extends HTMLElement {
     }, 2500);
   }
 
-  /** The hour the page holds, from <luz-mode>: a pinned one, or now (null). */
+  /** The hour the page holds, from <luz-color-mode>: a pinned one, or now (null). */
   _hold(hour) {
     this._at(hour);
     this._tick();

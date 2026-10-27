@@ -1,24 +1,24 @@
 /**
  * LUZ Catalog — cookie consent: a banner that asks once, in a custom element,
- * <luz-consent> (light DOM, no Shadow DOM). A lazy chunk: catalog.js loads
- * this file (dist/consent.min.js, one file with its own budget, which
- * loads nothing else) on idle when the page has a <luz-consent>, so no
+ * <luz-cookie-consent> (light DOM, no Shadow DOM). A lazy chunk: catalog.js loads
+ * this file (dist/cookie-consent.min.js, one file with its own budget, which
+ * loads nothing else) on idle when the page has a <luz-cookie-consent>, so no
  * other page pays for it; a page may also load it on its own
- * ("@luz-ds/catalog/consent").
+ * ("@luz-ds/catalog/cookie-consent").
  *
  * Markup (every text is authored in the HTML: the script writes none; the
- * docs page, /docs/catalog/consent/, has the full example):
+ * docs page, /docs/catalog/cookie-consent/, has the full example):
  *
- *   <luz-consent>
- *     <section class="luz-consent" data-luz-consent aria-labelledby="t" hidden>
+ *   <luz-cookie-consent>
+ *     <section class="luz-cookie-consent" data-luz-consent aria-labelledby="t" hidden>
  *       <div data-luz-consent-ask>
- *         <h2 class="luz-consent__title" id="t">Cookies on …</h2>
+ *         <h2 class="luz-cookie-consent__title" id="t">Cookies on …</h2>
  *         <p>… <a href="/cookies/">Read the cookie policy</a>.</p>
  *         <form class="o-actions">
  *           <button class="luz-btn luz-btn--primary" value="all">Accept …</button>
  *           <button class="luz-btn luz-btn--primary" value="none">Reject …</button>
  *         </form>
- *         <details class="luz-consent__choices"><summary>…</summary>
+ *         <details class="luz-cookie-consent__choices"><summary>…</summary>
  *           <form><fieldset>… <input type="checkbox" value="analytics"> …</fieldset>
  *             <div class="o-actions"><button …>Save my choices</button></div></form>
  *         </details>
@@ -28,7 +28,7 @@
  *         <button class="luz-btn luz-btn--secondary" type="button" data-luz-consent-close>Close</button>
  *       </div>
  *     </section>
- *   </luz-consent>
+ *   </luz-cookie-consent>
  *   <button type="button" data-luz-consent-open hidden>Change cookie settings</button>
  *
  * Without JavaScript the banner stays hidden: none of the site's own
@@ -60,7 +60,7 @@
  * digits or hyphens, 32 at most. A choice lasts data-luz-consent-days days
  * (180 by default, 395 at most: 13 months).
  *
- * @element luz-consent - A cookie banner that asks once, stores the answer on the device and tells the page with an event.
+ * @element luz-cookie-consent - A cookie banner that asks once, stores the answer on the device and tells the page with an event.
  * @attr {boolean} data-luz-consent - On the section inside the element: the banner itself; hidden until a choice is due.
  * @attr {boolean} data-luz-consent-ask - On the block with the question and the buttons; it gives way to the confirmation.
  * @attr {boolean} data-luz-consent-done - On the confirmation block, hidden until a choice is saved; it takes focus.
@@ -177,11 +177,11 @@ const wire = (host) => {
   }
 };
 
-// <luz-consent> wraps the banner. Defined once, whatever the number of
+// <luz-cookie-consent> wraps the banner. Defined once, whatever the number of
 // copies of this file (SEC-CHUNK-5), and only where there is a DOM, so
 // importing this module in Node is harmless.
-if (typeof customElements < "u" && !customElements.get("luz-consent")) {
-  customElements.define("luz-consent", class extends HTMLElement {
+if (typeof customElements < "u" && !customElements.get("luz-cookie-consent")) {
+  customElements.define("luz-cookie-consent", class extends HTMLElement {
     connectedCallback() {
       wire(this);
     }

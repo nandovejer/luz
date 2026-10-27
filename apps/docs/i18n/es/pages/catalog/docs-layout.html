@@ -3,10 +3,10 @@ title: Armazón de página
 description: La página de un sitio de documentación en tres columnas: la barra lateral, el contenido y el índice lateral; en el móvil se reduce a una columna.
 fits: la estructura de cada página de un sitio de documentación
 keywords: tres columnas, página de documentación, cuadrícula de página, ancho de lectura, longitud de línea
-source: cd1517694bd1
+source: a99fbd51deff
 reviewed: false
 -->
-    <div class="docs-component" id="p-docs-shell">
+    <div class="docs-component" id="p-docs-layout">
           <h2 id="example">Ejemplo</h2>
           <div class="docs-example" data-docs-specimen>
             <div class="docs-shell-sketch" aria-hidden="true">
@@ -30,18 +30,18 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-shell" aria-label="Copy the shell markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-layout" aria-label="Copy the shell markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Shell markup"><code id="code-docs-shell">&lt;body class=&quot;o-shell luz-docs-shell&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Shell markup"><code id="code-docs-layout">&lt;body class=&quot;o-shell luz-docs-layout&quot;&gt;
   &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to content&lt;/a&gt;
   &lt;header&gt;
     &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;docs-nav&quot; aria-label=&quot;Menu&quot;&gt;…&lt;/button&gt;
     &lt;p&gt;&lt;a href=&quot;/&quot;&gt;Acme docs&lt;/a&gt;&lt;/p&gt;
   &lt;/header&gt;
   &lt;nav class=&quot;luz-sidebar luz-docs-nav&quot; id=&quot;docs-nav&quot; aria-label=&quot;Acme docs&quot; popover&gt;…&lt;/nav&gt;
-  &lt;aside class=&quot;luz-docs-rail&quot; aria-label=&quot;About this page&quot;&gt;…&lt;/aside&gt;
+  &lt;aside class=&quot;luz-page-rail&quot; aria-label=&quot;About this page&quot;&gt;…&lt;/aside&gt;
   &lt;main class=&quot;o-main luz-docs-main&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;
-    &lt;header class=&quot;luz-docs-page-head&quot;&gt;…&lt;/header&gt;
+    &lt;header class=&quot;luz-doc-header&quot;&gt;…&lt;/header&gt;
     …
   &lt;/main&gt;
   &lt;footer&gt;…&lt;/footer&gt;
@@ -55,18 +55,18 @@ reviewed: false
                   <tr><th scope="col">Clase o propiedad</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-shell</code></div></td><td data-label="Efecto"><div>En <code>&lt;body&gt;</code>, con <code>.o-shell</code> de core: las columnas y la posición de cada parte</div></td></tr>
+                <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-layout</code></div></td><td data-label="Efecto"><div>En <code>&lt;body&gt;</code>, con <code>.o-shell</code> de core: las columnas y la posición de cada parte</div></td></tr>
                 <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-nav</code></div></td><td data-label="Efecto"><div>Con <code>.luz-sidebar</code> de catalog, en <code>&lt;nav&gt;</code>: la columna de la barra lateral</div></td></tr>
                 <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-main</code></div></td><td data-label="Efecto"><div>Con <code>.o-main</code>, en <code>&lt;main&gt;</code>: la columna del contenido. Sus elementos se ajustan al ancho de lectura</div></td></tr>
-                <tr><td data-label="Clase o propiedad"><div><code>.luz-docs-rail</code></div></td><td data-label="Efecto"><div>En un <code>&lt;aside&gt;</code>: la tercera columna a partir de 80rem, por encima del contenido. Consulta <a href="/docs/catalog/docs-rail/">Índice lateral</a></div></td></tr>
+                <tr><td data-label="Clase o propiedad"><div><code>.luz-page-rail</code></div></td><td data-label="Efecto"><div>En un <code>&lt;aside&gt;</code>: la tercera columna a partir de 80rem, por encima del contenido. Consulta <a href="/docs/catalog/page-rail/">Índice lateral</a></div></td></tr>
                 <tr><td data-label="Clase o propiedad"><div><code>--luz-docs-measure</code></div></td><td data-label="Efecto"><div>Una línea de texto: <code>46rem</code>. Asígnala a la estructura en tu CSS para cambiarla</div></td></tr>
-                <tr><td data-label="Clase o propiedad"><div><code>--luz-docs-nav-w</code>, <code>--luz-docs-rail-w</code></div></td><td data-label="Efecto"><div>La barra lateral y el índice lateral: <code>16.5rem</code> y <code>14rem</code></div></td></tr>
-                <tr><td data-label="Clase o propiedad"><div><code>--luz-docs-rail-top</code></div></td><td data-label="Efecto"><div>A qué distancia de la parte superior queda fijado el índice lateral. Auméntala si hay una cabecera fija</div></td></tr>
+                <tr><td data-label="Clase o propiedad"><div><code>--luz-docs-nav-w</code>, <code>--luz-page-rail-w</code></div></td><td data-label="Efecto"><div>La barra lateral y el índice lateral: <code>16.5rem</code> y <code>14rem</code></div></td></tr>
+                <tr><td data-label="Clase o propiedad"><div><code>--luz-page-rail-top</code></div></td><td data-label="Efecto"><div>A qué distancia de la parte superior queda fijado el índice lateral. Auméntala si hay una cabecera fija</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/docs-shell.css</code> de <code>@luz-ds/catalog</code> sobre la estructura de core y la barra lateral de catalog. Docs define las columnas y el ancho de lectura; core aporta la cuadrícula y la barra lateral, el cajón.</p>
+            <p>CSS de <code>components/docs-layout.css</code> de <code>@luz-ds/catalog</code> sobre la estructura de core y la barra lateral de catalog. Docs define las columnas y el ancho de lectura; core aporta la cuadrícula y la barra lateral, el cajón.</p>
             <ul>
               <li>A partir de 80rem hay tres columnas: barra lateral, contenido e índice lateral. A partir de 60rem hay dos, y el índice lateral se muestra encima del contenido. Por debajo, hay una, en el orden del marcado: barra lateral, índice lateral, contenido y pie.</li>
               <li>Un <code>&lt;header&gt;</code> sin estilos ocupa todas las columnas. El pie queda debajo del contenido y la barra lateral se extiende a su lado.</li>
@@ -100,18 +100,18 @@ reviewed: false
               <li>Para una aplicación web, usa <a href="/docs/kinds/app/">App</a>; para un blog, <a href="/docs/kinds/blog/">CMS</a>.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Coloca el índice lateral entre la barra lateral y el contenido. «En esta página» aparece antes del texto y el enlace para saltar al contenido lo omite.</figcaption>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> Coloca el índice lateral entre la barra lateral y el contenido. «En esta página» aparece antes del texto y el enlace para saltar al contenido lo omite.</figcaption>
                 <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Sidebar, rail, content"><code>&lt;nav class=&quot;luz-sidebar luz-docs-nav&quot;&gt;…&lt;/nav&gt;
-&lt;aside class=&quot;luz-docs-rail&quot;&gt;…&lt;/aside&gt;
+&lt;aside class=&quot;luz-page-rail&quot;&gt;…&lt;/aside&gt;
 &lt;main class=&quot;o-main luz-docs-main&quot;&gt;…&lt;/main&gt;</code></pre>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Coloques el índice lateral después del contenido. En el móvil, «En esta página» quedaría al final, después de todo lo que enumera.</figcaption>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> Coloques el índice lateral después del contenido. En el móvil, «En esta página» quedaría al final, después de todo lo que enumera.</figcaption>
                 <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Rail after content"><code>&lt;nav class=&quot;luz-sidebar luz-docs-nav&quot;&gt;…&lt;/nav&gt;
 &lt;main class=&quot;o-main luz-docs-main&quot;&gt;…&lt;/main&gt;
-&lt;aside class=&quot;luz-docs-rail&quot;&gt;…&lt;/aside&gt;</code></pre>
+&lt;aside class=&quot;luz-page-rail&quot;&gt;…&lt;/aside&gt;</code></pre>
               </figure>
             </div>
             <h3 id="content">Cómo escribir el contenido</h3>
@@ -144,7 +144,7 @@ reviewed: false
               <li><strong>Adaptación:</strong> a 320px la página tiene una sola columna y no se desplaza en horizontal. Las pruebas lo comprueban.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 4 tokens que usan las reglas de <code>.luz-docs-shell</code> en <code>components/docs-shell.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde se muestran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 4 tokens que usan las reglas de <code>.luz-docs-layout</code> en <code>components/docs-layout.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde se muestran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xl</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code></dd></div>
             </dl>

@@ -167,29 +167,29 @@ const PAGE = (base, label) => `<!doctype html>
   <link rel="stylesheet" href="${base.tokens}/dist/luz-tokens.css">
   <link rel="stylesheet" href="${base.core}/dist/luz.css">
   <!-- Catalog has no bundle: a consumer links each component it uses, here two -->
-  <link rel="stylesheet" href="${base.site}/dist/components/banner.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/announcement.css">
   <link rel="stylesheet" href="${base.site}/dist/components/search.css">
   <!-- two of the four that moved from core (F7): the sidebar and the timeline -->
   <link rel="stylesheet" href="${base.site}/dist/components/sidebar.css">
   <link rel="stylesheet" href="${base.site}/dist/components/timeline.css">
   <!-- and one pattern of each kind of site: landing, cms, app and docs are catalog's files -->
   <link rel="stylesheet" href="${base.site}/dist/components/landing-footer.css">
-  <link rel="stylesheet" href="${base.site}/dist/components/cms-article-header.css">
-  <link rel="stylesheet" href="${base.site}/dist/components/app-dashboard.css">
-  <link rel="stylesheet" href="${base.site}/dist/components/docs-example.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/article-header.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/dashboard.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/example.css">
 </head>
 <body>
   <h1>Smoke test</h1>
   <button class="luz-btn luz-btn--primary" type="button" id="probe-button">Save changes</button>
   <div id="probe-fill" style="background: var(--luz-brand-fill)"></div>
-  <luz-banner id="probe-section"></luz-banner>
+  <luz-announcement id="probe-section"></luz-announcement>
   <a class="luz-search__fallback" href="#probe-button" id="probe-search">Index</a>
   <nav class="luz-sidebar" id="probe-sidebar" aria-label="Probe"></nav>
   <luz-timeline id="probe-timeline"></luz-timeline>
   <footer class="luz-landing-footer" id="probe-landing"></footer>
-  <div class="luz-cms-article-header" id="probe-article"></div>
-  <main class="luz-app-dashboard" id="probe-dashboard"></main>
-  <figure class="luz-docs-example" id="probe-docs"></figure>
+  <div class="luz-article-header" id="probe-article"></div>
+  <main class="luz-dashboard" id="probe-dashboard"></main>
+  <figure class="luz-example" id="probe-docs"></figure>
   <script type="module">
     const core = ${JSON.stringify(base.core)};
     const site = ${JSON.stringify(base.site)};
@@ -201,8 +201,8 @@ const PAGE = (base, label) => `<!doctype html>
       [core + "/dist/i18n-es.js"]: ["default"],
       [core + "/dist/clipboard.js"]: ["initCopyButtons"],
       [site + "/dist/search.js"]: ["search"],
-      [site + "/dist/consent.js"]: ["getConsent"],
-      [site + "/dist/mode.js"]: ["phaseOf"],
+      [site + "/dist/cookie-consent.js"]: ["getConsent"],
+      [site + "/dist/color-mode.js"]: ["phaseOf"],
       [site + "/dist/sidebar.js"]: ["initSidebar"],
       [site + "/dist/timeline.js"]: ["initTimeline"],
       [site + "/dist/catalog.js"]: [],
@@ -236,13 +236,13 @@ const ALONE = (base) => `<!doctype html>
   <title>LUZ smoke test: landing patterns without catalog.js</title>
   <link rel="stylesheet" href="${base.tokens}/dist/luz-tokens.css">
   <link rel="stylesheet" href="${base.core}/dist/luz.css">
-  <link rel="stylesheet" href="${base.site}/dist/components/landing-main.css">
-  <link rel="stylesheet" href="${base.site}/dist/components/landing-hero.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/main.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/hero.css">
   <link rel="stylesheet" href="${base.site}/dist/components/landing-footer.css">
 </head>
 <body class="o-page">
-  <main class="o-container o-stack luz-landing-main">
-    <section class="luz-landing-hero o-grid o-grid--split" id="probe-hero" aria-labelledby="probe-title"><div class="luz-landing-hero__copy"><h1 class="luz-landing-hero__title" id="probe-title">Smoke test</h1></div></section>
+  <main class="o-container o-stack luz-main">
+    <section class="luz-hero o-grid o-grid--split" id="probe-hero" aria-labelledby="probe-title"><div class="luz-hero__copy"><h1 class="luz-hero__title" id="probe-title">Smoke test</h1></div></section>
   </main>
   <footer class="luz-landing-footer" id="probe-landing"><div class="o-container o-container--inline o-row"><p>Footer</p></div></footer>
 </body>
@@ -257,14 +257,14 @@ const APP_ALONE = (base) => `<!doctype html>
   <title>LUZ smoke test: app patterns without catalog.js</title>
   <link rel="stylesheet" href="${base.tokens}/dist/luz-tokens.css">
   <link rel="stylesheet" href="${base.core}/dist/luz.css">
-  <link rel="stylesheet" href="${base.site}/dist/components/app-header.css">
-  <link rel="stylesheet" href="${base.site}/dist/components/app-dashboard.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/app-bar.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/dashboard.css">
 </head>
 <body>
   <div class="o-shell">
     <div class="o-main">
-      <header class="luz-app-header o-sticky" id="probe-app-header"><div class="o-row"><p class="luz-app-header__product">App</p></div></header>
-      <main class="luz-app-dashboard" id="probe-app-dashboard"><div class="luz-app-dashboard__head"><h1 class="luz-app-dashboard__title">Smoke test</h1></div></main>
+      <header class="luz-app-bar o-sticky" id="probe-app-header"><div class="o-row"><p class="luz-app-bar__product">App</p></div></header>
+      <main class="luz-dashboard" id="probe-app-dashboard"><div class="luz-dashboard__head"><h1 class="luz-dashboard__title">Smoke test</h1></div></main>
     </div>
   </div>
 </body>
@@ -365,14 +365,14 @@ if (browser) {
     check(`${label2} no failed request, console message or request off the machine`, problems.length === 0, problems.join("\n"));
     check(`${label2} tokens loaded (--luz-brand-fill is defined)`, state.token !== "", "the custom property is empty");
     check(`${label2} core CSS applied (.luz-btn--primary uses the token)`, state.buttonBackground === state.tokenBackground && state.buttonBackground !== "rgba(0, 0, 0, 0)", `${state.buttonBackground} vs ${state.tokenBackground}`);
-    check(`${label2} catalog components/banner.css applied (<luz-banner> is a block)`, state.sectionDisplay === "block", state.sectionDisplay);
+    check(`${label2} catalog components/announcement.css applied (<luz-announcement> is a block)`, state.sectionDisplay === "block", state.sectionDisplay);
     check(`${label2} catalog components/search.css applied (.luz-search__fallback is inline-flex)`, state.searchDisplay === "inline-flex", state.searchDisplay);
     check(`${label2} catalog components/sidebar.css applied (.luz-sidebar is sticky)`, state.sidebarPosition === "sticky", state.sidebarPosition);
     check(`${label2} catalog components/timeline.css applied (<luz-timeline> is a block)`, state.timelineDisplay === "block", state.timelineDisplay);
     check(`${label2} catalog components/landing-footer.css applied (.luz-landing-footer has its rule)`, state.landingBorder === "solid", state.landingBorder);
-    check(`${label2} catalog components/cms-article-header.css applied (.luz-cms-article-header is a grid)`, state.articleDisplay === "grid", state.articleDisplay);
-    check(`${label2} catalog components/app-dashboard.css applied (.luz-app-dashboard is a size container)`, state.dashboardType === "inline-size", state.dashboardType);
-    check(`${label2} catalog components/docs-example.css applied (.luz-docs-example has its frame)`, state.docsBorder === "solid", state.docsBorder);
+    check(`${label2} catalog components/article-header.css applied (.luz-article-header is a grid)`, state.articleDisplay === "grid", state.articleDisplay);
+    check(`${label2} catalog components/dashboard.css applied (.luz-dashboard is a size container)`, state.dashboardType === "inline-size", state.dashboardType);
+    check(`${label2} catalog components/example.css applied (.luz-example has its frame)`, state.docsBorder === "solid", state.docsBorder);
     // Tokens, core, and catalog's four components and four patterns: catalog has no bundle
     check(`${label2} ${SHEETS} stylesheets with rules`, state.sheets.length === SHEETS && state.sheets.every((n) => n > 0), JSON.stringify(state.sheets));
     check(`${label2} JS entries import and export what the docs name`, state.missing.length === 0, state.missing.join("\n"));

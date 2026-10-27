@@ -6,38 +6,38 @@ order: 14
 group: content
 fits-kinds: app
 fits: the first view of an application
-files: components/app-dashboard.css
+files: components/dashboard.css
 keywords: panels, widgets, overview, cards grid
 toc: h2,h3
 -->
-    <div class="docs-component" id="p-app-dashboard">
+    <div class="docs-component" id="p-dashboard">
           <h2 id="example">Example</h2>
           <p>A dashboard with a title and two actions, then three panels.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="luz-app-dashboard">
-              <div class="luz-app-dashboard__head">
-                <p class="luz-app-dashboard__title">Overview</p>
+            <div class="luz-dashboard">
+              <div class="luz-dashboard__head">
+                <p class="luz-dashboard__title">Overview</p>
                 <div class="o-actions">
-                  <a class="luz-btn luz-btn--primary" href="#p-app-dashboard">New report</a>
-                  <a class="luz-btn luz-btn--secondary" href="#p-app-dashboard">Export data</a>
+                  <a class="luz-btn luz-btn--primary" href="#p-dashboard">New report</a>
+                  <a class="luz-btn luz-btn--secondary" href="#p-dashboard">Export data</a>
                 </div>
               </div>
               <ul class="o-grid o-grid--auto">
-                <li class="luz-card luz-app-dashboard__panel luz-app-dashboard__panel--wide">
+                <li class="luz-card luz-dashboard__panel luz-dashboard__panel--wide">
                   <h3 class="luz-card__title">Sales this month</h3>
                   <p class="luz-card__body">The most important number gets the room of two columns, when the view has it.</p>
-                  <a href="#p-app-dashboard">Open the sales report</a>
+                  <a href="#p-dashboard">Open the sales report</a>
                 </li>
-                <li class="luz-card luz-app-dashboard__panel">
+                <li class="luz-card luz-dashboard__panel">
                   <h3 class="luz-card__title">Stock alerts</h3>
                   <p class="luz-card__body">Three products are below their minimum.</p>
-                  <a href="#p-app-dashboard">Review stock</a>
+                  <a href="#p-dashboard">Review stock</a>
                 </li>
-                <li class="luz-card luz-app-dashboard__panel">
+                <li class="luz-card luz-dashboard__panel">
                   <h3 class="luz-card__title">Open orders</h3>
                   <p class="luz-card__body">Twelve orders wait for a label.</p>
-                  <a href="#p-app-dashboard">See orders</a>
+                  <a href="#p-dashboard">See orders</a>
                 </li>
               </ul>
             </div>
@@ -58,22 +58,22 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-app-dashboard" aria-label="Copy the dashboard markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-dashboard" aria-label="Copy the dashboard markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Dashboard markup"><code id="code-app-dashboard">&lt;main class=&quot;luz-app-dashboard&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;
-  &lt;div class=&quot;luz-app-dashboard__head&quot;&gt;
-    &lt;h1 class=&quot;luz-app-dashboard__title&quot;&gt;Overview&lt;/h1&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Dashboard markup"><code id="code-dashboard">&lt;main class=&quot;luz-dashboard&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;
+  &lt;div class=&quot;luz-dashboard__head&quot;&gt;
+    &lt;h1 class=&quot;luz-dashboard__title&quot;&gt;Overview&lt;/h1&gt;
     &lt;div class=&quot;o-actions&quot;&gt;
       &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;/reports/new/&quot;&gt;New report&lt;/a&gt;
       &lt;a class=&quot;luz-btn luz-btn--secondary&quot; href=&quot;/export/&quot;&gt;Export data&lt;/a&gt;
     &lt;/div&gt;
   &lt;/div&gt;
   &lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
-    &lt;li class=&quot;luz-card luz-app-dashboard__panel luz-app-dashboard__panel--wide&quot;&gt;
+    &lt;li class=&quot;luz-card luz-dashboard__panel luz-dashboard__panel--wide&quot;&gt;
       &lt;h2 class=&quot;luz-card__title&quot;&gt;Sales this month&lt;/h2&gt;
       &lt;p class=&quot;luz-card__body&quot;&gt;…&lt;/p&gt;
     &lt;/li&gt;
-    &lt;li class=&quot;luz-card luz-app-dashboard__panel&quot;&gt;
+    &lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
       &lt;h2 class=&quot;luz-card__title&quot;&gt;Stock alerts&lt;/h2&gt;
       &lt;p class=&quot;luz-card__body&quot;&gt;…&lt;/p&gt;
     &lt;/li&gt;
@@ -88,18 +88,18 @@ toc: h2,h3
                   <tr><th scope="col">Class</th><th scope="col">Effect</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Class"><div><code>.luz-app-dashboard</code></div></td><td data-label="Effect"><div>On <code>&lt;main&gt;</code>: the view. 32 px of padding (16 px at 640 px and below), 24 px between its rows, and the container of its own size query</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-app-dashboard__head</code></div></td><td data-label="Effect"><div>On a <code>&lt;div&gt;</code>: the title at the start and the actions at the end, on one row that wraps; at 640 px and below, a column</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-app-dashboard__title</code></div></td><td data-label="Effect"><div>The view's one <code>&lt;h1&gt;</code>: 2xl size, semibold, in the text colour; xl at 640 px and below</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-app-dashboard__panel</code></div></td><td data-label="Effect"><div>On a <code>.luz-card</code> in the grid: it can shrink, so a wide child never widens its column</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-app-dashboard__panel--wide</code></div></td><td data-label="Effect"><div>Two columns, when the dashboard is at least 40 rem wide; one column below, so it never asks for a column that is not there</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-dashboard</code></div></td><td data-label="Effect"><div>On <code>&lt;main&gt;</code>: the view. 32 px of padding (16 px at 640 px and below), 24 px between its rows, and the container of its own size query</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-dashboard__head</code></div></td><td data-label="Effect"><div>On a <code>&lt;div&gt;</code>: the title at the start and the actions at the end, on one row that wraps; at 640 px and below, a column</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-dashboard__title</code></div></td><td data-label="Effect"><div>The view's one <code>&lt;h1&gt;</code>: 2xl size, semibold, in the text colour; xl at 640 px and below</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-dashboard__panel</code></div></td><td data-label="Effect"><div>On a <code>.luz-card</code> in the grid: it can shrink, so a wide child never widens its column</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-dashboard__panel--wide</code></div></td><td data-label="Effect"><div>Two columns, when the dashboard is at least 40 rem wide; one column below, so it never asks for a column that is not there</div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-grid.o-grid--auto</code> (core)</div></td><td data-label="Effect"><div>On the <code>&lt;ul&gt;</code>: as many equal columns as fit, none narrower than 18 rem</div></td></tr>
                   <tr><td data-label="Class"><div><code>.o-actions</code> (core)</div></td><td data-label="Effect"><div>Two or three related actions: a row that wraps, a column of full-width actions at 640 px and below</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>components/app-dashboard.css</code> of <code>@luz-ds/catalog</code> on core's grid and card. No JavaScript.</p>
+            <p>CSS from <code>components/dashboard.css</code> of <code>@luz-ds/catalog</code> on core's grid and card. No JavaScript.</p>
             <ul>
               <li>The dashboard sets <code>--luz-grid-min: 18rem</code> for core's <code>.o-grid--auto</code>, so a column is never narrower than 18 rem and the number of columns follows the room: one at 320 px, two at 768 px, and three at 1280 px beside a sidebar.</li>
               <li>The dashboard is a size container. The wide panel asks how wide the dashboard is, not the window, so it fits with a sidebar and without one. From 40 rem two columns always exist (two of 18 rem and a gap), and at 200% text both are in rem, so it never overflows.</li>
@@ -115,7 +115,7 @@ toc: h2,h3
               <li><strong>Headings:</strong> the view has one <code>&lt;h1&gt;</code>, in the title row, and each panel starts with an <code>&lt;h2&gt;</code>. The title row is a <code>&lt;div&gt;</code>, not a <code>&lt;header&gt;</code>.</li>
               <li><strong>List:</strong> the panels are a <code>&lt;ul&gt;</code> of <code>&lt;li&gt;</code>: a screen reader says how many there are. Safari can drop the list role from a list without markers; the headings still lead through the panels.</li>
               <li><strong>Actions:</strong> an action that goes somewhere is a link (<code>&lt;a href&gt;</code>); one that does something on this page is a <code>&lt;button type="button"&gt;</code>. Never an <code>&lt;a&gt;</code> without <code>href</code>.</li>
-              <li><strong>Landmarks:</strong> the dashboard is the page's <code>&lt;main&gt;</code>, the sibling of the <a href="/docs/catalog/app-header/">header</a>. It takes the skip link's target, with <code>tabindex="-1"</code>.</li>
+              <li><strong>Landmarks:</strong> the dashboard is the page's <code>&lt;main&gt;</code>, the sibling of the <a href="/docs/catalog/app-bar/">header</a>. It takes the skip link's target, with <code>tabindex="-1"</code>.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
@@ -135,17 +135,17 @@ toc: h2,h3
               <li>For a plain grid of cards in a page of content, use core's <a href="/docs/components/layout/#objects-grid">grid</a> and <a href="/docs/components/card/">card</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Put the title and the one main action in the first row, and one short thing in each panel, under its own heading.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-app-dashboard"><div class="luz-app-dashboard__head"><p class="luz-app-dashboard__title">Overview</p><div class="o-actions"><a class="luz-btn luz-btn--primary" href="#">New report</a></div></div><ul class="o-grid o-grid--auto"><li class="luz-card luz-app-dashboard__panel"><p class="luz-card__title">Stock alerts</p><p class="luz-card__body">Three products are below their minimum.</p></li></ul></div>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Put the title and the one main action in the first row, and one short thing in each panel, under its own heading.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-dashboard"><div class="luz-dashboard__head"><p class="luz-dashboard__title">Overview</p><div class="o-actions"><a class="luz-btn luz-btn--primary" href="#">New report</a></div></div><ul class="o-grid o-grid--auto"><li class="luz-card luz-dashboard__panel"><p class="luz-card__title">Stock alerts</p><p class="luz-card__body">Three products are below their minimum.</p></li></ul></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Give every panel a primary button: the person cannot tell which thing to do first.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-app-dashboard"><div class="luz-app-dashboard__head"><p class="luz-app-dashboard__title">Overview</p></div><ul class="o-grid o-grid--auto"><li class="luz-card luz-app-dashboard__panel"><p class="luz-card__title">Stock alerts</p><a class="luz-btn luz-btn--primary" href="#">Review stock</a></li><li class="luz-card luz-app-dashboard__panel"><p class="luz-card__title">Open orders</p><a class="luz-btn luz-btn--primary" href="#">See orders</a></li></ul></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Give every panel a primary button: the person cannot tell which thing to do first.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-dashboard"><div class="luz-dashboard__head"><p class="luz-dashboard__title">Overview</p></div><ul class="o-grid o-grid--auto"><li class="luz-card luz-dashboard__panel"><p class="luz-card__title">Stock alerts</p><a class="luz-btn luz-btn--primary" href="#">Review stock</a></li><li class="luz-card luz-dashboard__panel"><p class="luz-card__title">Open orders</p><a class="luz-btn luz-btn--primary" href="#">See orders</a></li></ul></div>
                 </div>
               </figure>
             </div>
@@ -178,7 +178,7 @@ toc: h2,h3
               <li><strong>Edges:</strong> a card's border (<code>--luz-divider</code>) is decorative; its text carries the meaning. Forced colours keep the border.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 7 tokens that the <code>.luz-app-dashboard</code> rules of catalog’s <code>components/app-dashboard.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 7 tokens that the <code>.luz-dashboard</code> rules of catalog’s <code>components/dashboard.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code></dd></div>

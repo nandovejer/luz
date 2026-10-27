@@ -6,11 +6,11 @@ order: 19
 group: site-wide
 fits-kinds: any
 fits: when the site has a color mode switcher
-files: <luz-mode>, remember, by="clock"
-module: mode.js
+files: <luz-color-mode>, remember, by="clock"
+module: color-mode.js
 toc: h2,h3
 -->
-    <div class="docs-component" id="p-mode">
+    <div class="docs-component" id="p-color-mode">
           <h2 id="example">Example</h2>
           <p>The color mode switcher with its Auto choice, disabled so that it does not change this page.</p>
           <div class="docs-example" data-docs-specimen>
@@ -43,16 +43,16 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>Core's <a href="/docs/components/mode-switcher/">color mode switcher</a> with a fourth radio, <code>auto</code>, checked, inside <code>&lt;luz-mode&gt;</code>. <code>catalog.min.js</code> loads the element's file, <code>mode.min.js</code>; a page without it loads that file on its own. With scripting on, <code>--cycle</code> is core's round button (<code>luz-mode-cycle</code>) fixed at the end corner of the window; when it sits in a sidebar or a settings panel, add <code>luz-mode-switcher--inline</code> to the same group to keep it in the flow (see the <a href="/docs/components/mode-switcher/">component page</a>).</p>
+            <p>Core's <a href="/docs/components/mode-switcher/">color mode switcher</a> with a fourth radio, <code>auto</code>, checked, inside <code>&lt;luz-color-mode&gt;</code>. <code>catalog.min.js</code> loads the element's file, <code>color-mode.min.js</code>; a page without it loads that file on its own. With scripting on, <code>--cycle</code> is core's round button (<code>luz-mode-cycle</code>) fixed at the end corner of the window; when it sits in a sidebar or a settings panel, add <code>luz-mode-switcher--inline</code> to the same group to keep it in the flow (see the <a href="/docs/components/mode-switcher/">component page</a>).</p>
             <p>Put the icons in the labels, not <code>data-mode-icon</code> on the cycle button: with <code>luz.js</code> the button copies the checked label's icon, and core has no Auto icon for <code>data-mode-icon</code>.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-mode" aria-label="Copy the auto color mode markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-color-mode" aria-label="Copy the auto color mode markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Auto color mode markup"><code id="code-mode">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.js&quot;&gt;&lt;/script&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Auto color mode markup"><code id="code-color-mode">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.js&quot;&gt;&lt;/script&gt;
 
-&lt;luz-mode remember by=&quot;clock&quot;&gt;
+&lt;luz-color-mode remember by=&quot;clock&quot;&gt;
   &lt;fieldset class=&quot;luz-mode-switcher luz-mode-switcher--cycle&quot;&gt;
     &lt;legend class=&quot;luz-mode-switcher__label&quot;&gt;Color mode&lt;/legend&gt;
     &lt;label class=&quot;luz-mode-btn&quot;&gt;&lt;input class=&quot;luz-mode-btn__input&quot; type=&quot;radio&quot; name=&quot;luz-theme&quot; value=&quot;auto&quot; checked&gt;&lt;svg class=&quot;luz-mode-btn__icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z&quot;/&gt;&lt;path stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; d=&quot;M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0&quot;/&gt;&lt;/svg&gt;Auto&lt;/label&gt;
@@ -60,7 +60,7 @@ toc: h2,h3
     &lt;label class=&quot;luz-mode-btn&quot; data-theme=&quot;dark&quot;&gt;&lt;input class=&quot;luz-mode-btn__input&quot; type=&quot;radio&quot; name=&quot;luz-theme&quot; value=&quot;dark&quot;&gt;&lt;svg class=&quot;luz-mode-btn__icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z&quot;/&gt;&lt;/svg&gt;Dark&lt;/label&gt;
     &lt;label class=&quot;luz-mode-btn&quot; data-theme=&quot;high-contrast&quot;&gt;&lt;input class=&quot;luz-mode-btn__input&quot; type=&quot;radio&quot; name=&quot;luz-theme&quot; value=&quot;high-contrast&quot;&gt;&lt;svg class=&quot;luz-mode-btn__icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;/&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M12 3a9 9 0 0 1 0 18Z&quot;/&gt;&lt;/svg&gt;High contrast&lt;/label&gt;
   &lt;/fieldset&gt;
-&lt;/luz-mode&gt;</code></pre>
+&lt;/luz-color-mode&gt;</code></pre>
             </div>
             <h4 id="boot">Script for the head</h4>
             <p>This script, for <code>by="system"</code>, avoids the flash of the wrong mode: it sets <code>data-theme</code> before the first paint. It is recommended, not required.</p>
@@ -69,9 +69,9 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-mode-boot" aria-label="Copy the script for the head">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-color-mode-boot" aria-label="Copy the script for the head">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Script for the head"><code id="code-mode-boot">&lt;script&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Script for the head"><code id="code-color-mode-boot">&lt;script&gt;
   (function () {
     var m;
     try { m = localStorage.getItem(&quot;luz-theme&quot;); } catch (e) {}
@@ -83,7 +83,7 @@ toc: h2,h3
 &lt;/script&gt;</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
-            <p>There are no variants. The attributes of <code>&lt;luz-mode&gt;</code>:</p>
+            <p>There are no variants. The attributes of <code>&lt;luz-color-mode&gt;</code>:</p>
             <div class="luz-table-wrap" role="region" aria-label="Auto color mode attributes" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -98,7 +98,7 @@ toc: h2,h3
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/catalog</code> for the element's box and <code>@luz-ds/catalog/mode</code>, which defines <code>&lt;luz-mode&gt;</code>. <code>catalog.min.js</code> loads it when idle, on a page with a <code>&lt;luz-mode&gt;</code>.</p>
+            <p>CSS from <code>@luz-ds/catalog</code> for the element's box and <code>@luz-ds/catalog/color-mode</code>, which defines <code>&lt;luz-color-mode&gt;</code>. <code>catalog.min.js</code> loads it when idle, on a page with a <code>&lt;luz-color-mode&gt;</code>.</p>
             <p>The radios and labels are core's: the element writes no text.</p>
             <ul>
               <li><strong>Auto by the system:</strong> <code>prefers-contrast: more</code> gives <code>high-contrast</code>; otherwise <code>prefers-color-scheme: dark</code> gives <code>dark</code>; otherwise <code>light</code>. It follows a change while the page is open.</li>
@@ -135,7 +135,7 @@ toc: h2,h3
                   <tr><td data-label="Name"><div><code>preview(x)</code></div></td><td data-label="What it does"><div>Shows another time of day: <code>x</code> is a phase name or an hour from 0 to 24. With Auto, <code>data-theme</code> follows it; with a mode chosen, only the light does. <code>preview(null)</code> goes back, to the pinned hour if there is one. Unless <code>by="clock"</code> it returns <code>false</code></div></td></tr>
                   <tr><td data-label="Name"><div><code>pin(x)</code></div></td><td data-label="What it does"><div>Keeps another time of day for good: Auto, at <code>x</code> (a phase name or an hour from 0 to 24) instead of now. With <code>remember</code> it is stored under <code>luz-light</code>, in minutes of the day, and the stored mode is removed; choosing a mode, or <code>pin(null)</code>, unpins. Unless <code>by="clock"</code> it returns <code>false</code></div></td></tr>
                   <tr><td data-label="Name"><div><code>el.pinned</code></div></td><td data-label="What it does"><div>The pinned hour, or <code>null</code></div></td></tr>
-                  <tr><td data-label="Name"><div><code>luz-mode:change</code></div></td><td data-label="What it does"><div>Bubbles from the element at every change. Its <code>detail</code>: <code>mode</code> (the choice), <code>theme</code> (the <code>data-theme</code> applied), <code>light</code> (the phase, or <code>null</code>), <code>remembered</code> (<code>true</code> only with <code>remember</code> and a mode stored now) <code>simulated</code> (<code>true</code> while a preview is active) and <code>pinned</code> (the pinned hour, or <code>null</code>)</div></td></tr>
+                  <tr><td data-label="Name"><div><code>luz-color-mode:change</code></div></td><td data-label="What it does"><div>Bubbles from the element at every change. Its <code>detail</code>: <code>mode</code> (the choice), <code>theme</code> (the <code>data-theme</code> applied), <code>light</code> (the phase, or <code>null</code>), <code>remembered</code> (<code>true</code> only with <code>remember</code> and a mode stored now) <code>simulated</code> (<code>true</code> while a preview is active) and <code>pinned</code> (the pinned hour, or <code>null</code>)</div></td></tr>
                 </tbody>
               </table>
             </div>
@@ -144,9 +144,9 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">CSS</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-mode-lights" aria-label="Copy the two looks">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-color-mode-lights" aria-label="Copy the two looks">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A day look and a night look"><code id="code-mode-lights">[data-theme=&quot;light&quot;][data-light=&quot;morning&quot;] {
+              <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A day look and a night look"><code id="code-color-mode-lights">[data-theme=&quot;light&quot;][data-light=&quot;morning&quot;] {
   --luz-surface-page: #fdf3dc;
   --luz-surface-muted: #fdf3dc;
   --luz-surface: #fffaf0;
@@ -182,16 +182,16 @@ toc: h2,h3
               <li>Do not use <code>by="clock"</code> to promise the real sunrise: the hours are fixed.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Call the choice “Auto” and keep the other names as they are: the reader sees the four ways to choose at once.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Call the choice “Auto” and keep the other names as they are: the reader sees the four ways to choose at once.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <fieldset class="luz-mode-switcher"><legend class="luz-mode-switcher__label">Color mode</legend><label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="dd-auto-do" checked>Auto</label><label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="dd-auto-do">Light</label><label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="dd-auto-do">Dark</label><label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="dd-auto-do">High contrast</label></fieldset>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Name it “Smart” or “Magic”: it does not say what the page follows, and a reader cannot tell it from a mode.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Name it “Smart” or “Magic”: it does not say what the page follows, and a reader cannot tell it from a mode.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <fieldset class="luz-mode-switcher"><legend class="luz-mode-switcher__label">Color mode</legend><label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="dd-auto-dont" checked>Smart</label><label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="dd-auto-dont">Light</label><label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="dd-auto-dont">Dark</label><label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="dd-auto-dont">High contrast</label></fieldset>
                 </div>
               </figure>
@@ -225,7 +225,7 @@ toc: h2,h3
               <li><strong>Your lights:</strong> a look for a phase changes the colours under the text, so measure the text and the borders on its surfaces, in the light and in the dark.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 0 tokens that the CSS of <code>&lt;luz-mode&gt;</code> reads: it draws nothing. The radios are core's, and the tokens they read are on the <a href="/docs/components/mode-switcher/#tokens">color mode switcher</a> page. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 0 tokens that the CSS of <code>&lt;luz-color-mode&gt;</code> reads: it draws nothing. The radios are core's, and the tokens they read are on the <a href="/docs/components/mode-switcher/#tokens">color mode switcher</a> page. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
           </div>
     </div>

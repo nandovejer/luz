@@ -14,10 +14,10 @@
   <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/lang-switch.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/mode.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-hero.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-main.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-section.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/hero.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/main.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/section.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/landing-footer.css">
   <link rel="stylesheet" href="/apps/site/header.css">
   <link rel="stylesheet" href="/apps/site/theme-light.css">
@@ -88,16 +88,16 @@
     </div>
   </nav>
 
-  <main id="main-content" class="o-container o-stack luz-landing-main landing-wrap site-sky" tabindex="-1">
+  <main id="main-content" class="o-container o-stack luz-main landing-wrap site-sky" tabindex="-1">
 
     <!-- The first screen: the hero and the light fill the window under the header (landing.css) -->
     <div class="landing-first">
 
     <!-- ====================== 1. HERO ====================== -->
-    <section class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
-      <div class="luz-landing-hero__copy">
-        <h1 class="luz-landing-hero__title" id="hero-title">{{html:hero.title}}</h1>
-        <p class="luz-landing-hero__lead">{{html:hero.lead}}</p>
+    <section class="luz-hero luz-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
+      <div class="luz-hero__copy">
+        <h1 class="luz-hero__title" id="hero-title">{{html:hero.title}}</h1>
+        <p class="luz-hero__lead">{{html:hero.lead}}</p>
         <div class="o-actions">
           <a class="luz-btn luz-btn--primary luz-btn--lg" href="#inside">{{t:hero.start}}</a>
           <a class="luz-btn luz-btn--outline luz-btn--lg" href="/docs/">{{t:hero.docs}}</a>
@@ -110,7 +110,7 @@
          from edge to edge of the window. Without JavaScript the element stays
          empty, light.css keeps its room and the sentence after it says what
          the room is for; once <home-light> is defined the sentence goes -->
-    <section class="luz-landing-hero__media luz-landing-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
+    <section class="luz-hero__media luz-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
       <h2 class="u-sr-only" id="light-title">{{t:light.title}}</h2>
       <home-light bleed favicon></home-light>
       <p class="landing-light__nojs">{{t:light.nojs}}</p>
@@ -336,10 +336,10 @@ a {
       </section>
 
     <!-- ====================== 4b. WHY ====================== -->
-    <section class="o-stack luz-landing-section" id="why" aria-labelledby="why-title">
-      <p class="luz-landing-section__eyebrow">{{t:why.eyebrow}}</p>
-      <h2 class="luz-landing-section__title" id="why-title">{{html:why.title}}</h2>
-      <p class="luz-landing-section__lead">{{t:why.lead}}</p>
+    <section class="o-stack luz-section" id="why" aria-labelledby="why-title">
+      <p class="luz-section__eyebrow">{{t:why.eyebrow}}</p>
+      <h2 class="luz-section__title" id="why-title">{{html:why.title}}</h2>
+      <p class="luz-section__lead">{{t:why.lead}}</p>
 
       <div class="landing-why">
         <article class="luz-card o-stack landing-why__card landing-why__card--light" aria-labelledby="why-light">
@@ -480,7 +480,7 @@ a {
 
       <!-- One box per mode (data-theme), each telling its own mode. The box is a picture of the
            mode: inert and hidden from the accessibility tree. Each box has a button (shown with
-           JavaScript, landing.js) that checks the footer's radio of its mode: <luz-mode> applies
+           JavaScript, landing.js) that checks the footer's radio of its mode: <luz-color-mode> applies
            it, remembers it and moves the cycle button -->
       <div class="landing-modes__figure">
         <div class="landing-cuts">
@@ -570,7 +570,7 @@ a {
       </nav>
     </div>
     <div class="o-stack landing-foot">
-      <luz-mode class="site-modes" remember by="clock">
+      <luz-color-mode class="site-modes" remember by="clock">
         <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
           <legend class="luz-mode-switcher__label">{{t:footer.mode}}</legend>
           <button class="luz-mode-cycle" type="button" aria-label="{{t:footer.mode-change}}"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
@@ -579,7 +579,7 @@ a {
           <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>{{t:footer.dark}}</label>
           <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>{{t:footer.contrast}}</label>
         </fieldset>
-      </luz-mode>
+      </luz-color-mode>
       <p class="u-text-muted landing-legal">{{html:footer.legal}}</p>
     </div>
   </footer>

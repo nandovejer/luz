@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Botón para copiar
 description: Copia un comando o un valor en el portapapeles e indica que lo ha hecho.
-source: 732d28d45f04
+source: 19c16fe7d3b0
 reviewed: false
 -->
     <div class="docs-component" id="c-copy">
@@ -85,16 +85,16 @@ initCopyButtons();</code></pre>
               <li>Para textos largos, usa un <a href="/docs/components/code/">bloque de código</a> que el lector pueda seleccionar.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Ponlo junto al texto que copia, que el lector también puede seleccionar a mano.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Ponlo junto al texto que copia, que el lector también puede seleccionar a mano.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="o-row"><code class="luz-code-inline">var(--luz-brand-primary)</code><button class="luz-copy-btn" type="button">Copy</button></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No pongas un botón para copiar texto que el lector tenga que cambiar primero: pegará «&lt;tu-token&gt;» y el comando fallará.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> No pongas un botón para copiar texto que el lector tenga que cambiar primero: pegará «&lt;tu-token&gt;» y el comando fallará.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="o-row"><code class="luz-code-inline">npm config set _authToken &lt;your-token&gt;</code><button class="luz-copy-btn" type="button">Copy</button></div>
                 </div>
               </figure>

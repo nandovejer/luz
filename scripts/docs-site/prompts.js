@@ -93,7 +93,7 @@ function classLines(root, pkg, seen, keep = () => true) {
 }
 
 /**
- * `<luz-mode>` (remember, by…): its description, from each custom-elements.json,
+ * `<luz-color-mode>` (remember, by…): its description, from each custom-elements.json,
  * and, for an element of a package with no bundle (catalog), the stylesheet it needs.
  */
 function elementLines(root, pkg) {
@@ -160,7 +160,7 @@ export function assemblePrompt(id, { root }) {
     elements: ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n"),
     "kind-links": kind.docs
       ? KIND_PATTERNS[kind.patterns].pages
-          .map((page) => `- ${PROMPT_SITE}${kind.docs}${kind.patterns}-${page}/: the ${page.replace(/-/g, " ")} pattern of ${kind.title}, with its markup.`)
+          .map((page) => `- ${PROMPT_SITE}${kind.docs}${page}/: the ${page.replace(`${kind.patterns}-`, "").replace(/-/g, " ")} pattern of ${kind.title}, with its markup.`)
           .join("\n")
       : [
           "- The prompts for one kind of site, for the person to paste instead of this one (do not follow them from here):",

@@ -3,7 +3,7 @@ title: Cabecera de blog
 description: Abre cada página de un blog o periódico con el nombre de la publicación, sus secciones y una búsqueda: una fila fija arriba o una cabecera de tres filas.
 fits: la parte superior de cada página de un blog o de un periódico
 keywords: barra superior, cabecera, periódico
-source: 6741419c2387
+source: 7786e2a49561
 reviewed: false
 -->
     <div class="docs-component" id="p-cms-header">
@@ -150,7 +150,7 @@ reviewed: false
               <li>La cabecera destacada no es fija: tres filas pegadas arriba ocuparían un tercio de la pantalla del móvil. La marca mide 49 px a partir de 1024 px, 39 px por debajo y 31 px a 640 px o menos (<code>--luz-text-4xl</code>, <code>-3xl</code> y <code>-2xl</code>, los tamaños del hero de landing).</li>
               <li>La barra, y la fila de secciones de la cabecera destacada, se identifican como el ancla <code>--luz-bar</code>, dentro de su propio ámbito. En los navegadores compatibles con el posicionamiento de anclas CSS, el panel de navegación se abre debajo. En los demás, se abre a <code>--luz-bar-h</code> desde la parte superior de la ventana (consulta Problemas conocidos).</li>
               <li>Con <code>@luz-ds/catalog</code>, la lista de <code>&lt;luz-lang-switch&gt;</code> se abre debajo de la barra. Sin él, no cambia nada: las reglas que amplían los elementos del catálogo no coinciden con ninguno.</li>
-              <li>El <a href="/docs/catalog/cms-toc/">índice</a> de un artículo se queda fijo debajo de una barra con <code>.o-sticky</code>.</li>
+              <li>El <a href="/docs/catalog/toc/">índice</a> de un artículo se queda fijo debajo de una barra con <code>.o-sticky</code>.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>No cambia nada: el menú es una ventana emergente que abre <code>popovertarget</code> del botón, sin scripts; los enlaces son enlaces normales y la búsqueda del catálogo muestra un enlace al índice alfabético.</p>
@@ -179,16 +179,16 @@ reviewed: false
               <li>No fijes la cabecera destacada ni pongas la fecha en la barra: en una sola fila competiría con el nombre.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> El nombre de la publicación como texto y unas pocas secciones con los nombres que conoce quien lee.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> El nombre de la publicación como texto y unas pocas secciones con los nombres que conoce quien lee.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <header class="luz-cms-header"><div class="o-container o-container--inline o-row"><a class="luz-cms-header__brand" href="#">The Vejer Review</a><nav class="luz-navbar" aria-label="Sections"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#" aria-current="true">News</a></li><li><a class="luz-navbar__link" href="#">Culture</a></li><li><a class="luz-navbar__link" href="#">Opinion</a></li></ul></nav></div></header>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Recortar el nombre con puntos suspensivos o poner cada etiqueta del sitio como sección: quien lee no sabrá dónde está.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Recortar el nombre con puntos suspensivos o poner cada etiqueta del sitio como sección: quien lee no sabrá dónde está.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <header class="luz-cms-header"><div class="o-container o-container--inline o-row"><a class="luz-cms-header__brand" href="#">The Vejer Re…</a><nav class="luz-navbar" aria-label="Sections"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#">News</a></li><li><a class="luz-navbar__link" href="#">Local</a></li><li><a class="luz-navbar__link" href="#">Tides</a></li><li><a class="luz-navbar__link" href="#">Beaches</a></li><li><a class="luz-navbar__link" href="#">Food</a></li><li><a class="luz-navbar__link" href="#">Wine</a></li><li><a class="luz-navbar__link" href="#">Misc</a></li><li><a class="luz-navbar__link" href="#">Weather</a></li></ul></nav></div></header>
                 </div>
               </figure>

@@ -6,10 +6,10 @@
  * (+ .min.css), in the luz.catalog layer, each with its own print rules in
  * luz.print, and nothing else of CSS (no catalog.css, no print.css): a site
  * links the components it uses; catalog.js, the entry (the presence loader), and its five lazy
- * chunks, search.js (<luz-search>), consent.js (<luz-consent>), mode.js
- * (<luz-mode>), timeline.js (<luz-timeline>) and sidebar.js (the scroll spy of
+ * chunks, search.js (<luz-search>), cookie-consent.js (<luz-cookie-consent>), color-mode.js
+ * (<luz-color-mode>), timeline.js (<luz-timeline>) and sidebar.js (the scroll spy of
  * a .luz-sidebar), each copied and bundled alone (catalog.min.js loads
- * ./search.min.js, ./consent.min.js, ./mode.min.js, ./timeline.min.js and
+ * ./search.min.js, ./cookie-consent.min.js, ./color-mode.min.js, ./timeline.min.js and
  * ./sidebar.min.js, SEC-CHUNK-1/2).
  *
  * Usage: node scripts/build-catalog.js (from the repo root)
@@ -17,4 +17,4 @@
 
 import { buildPackage } from "./build-package.js";
 
-await buildPackage({ name: "catalog", bundle: false, js: ["catalog.js"], chunks: ["search.js", "consent.js", "mode.js", "timeline.js", "sidebar.js"] });
+await buildPackage({ name: "catalog", bundle: false, js: ["catalog.js"], chunks: ["search.js", "cookie-consent.js", "color-mode.js", "timeline.js", "sidebar.js"] });

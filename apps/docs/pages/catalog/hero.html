@@ -6,37 +6,37 @@ order: 11
 group: page-structure
 fits-kinds: landing
 fits: the top of a landing page, under the header
-files: components/landing-hero.css
+files: components/hero.css
 keywords: jumbotron, splash, intro
 toc: h2,h3
 -->
-    <div class="docs-component" id="p-landing-hero">
+    <div class="docs-component" id="p-hero">
           <h2 id="example">Example</h2>
           <p>The hero of an event page, with its date, its title, its lead and two actions.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage" id="demo-hero">
-            <section class="luz-landing-hero o-grid o-grid--split" aria-labelledby="demo-hero-title">
-              <div class="luz-landing-hero__copy">
-                <p class="luz-landing-hero__eyebrow">12 and 13 May 2027 · Seville</p>
-                <p class="luz-landing-hero__title" id="demo-hero-title">Acme Summit 2027</p>
-                <p class="luz-landing-hero__lead">Two days of talks and workshops for retail teams.</p>
+            <section class="luz-hero o-grid o-grid--split" aria-labelledby="demo-hero-title">
+              <div class="luz-hero__copy">
+                <p class="luz-hero__eyebrow">12 and 13 May 2027 · Seville</p>
+                <p class="luz-hero__title" id="demo-hero-title">Acme Summit 2027</p>
+                <p class="luz-hero__lead">Two days of talks and workshops for retail teams.</p>
                 <div class="o-actions">
                   <a class="luz-btn luz-btn--primary" href="#markup">Register</a>
                   <a class="luz-btn luz-btn--outline" href="#variants">See the options</a>
                 </div>
               </div>
-              <div class="luz-landing-hero__media">
+              <div class="luz-hero__media">
                 <div class="luz-image luz-image--4x3"></div>
               </div>
             </section>
           </div>
           <p class="docs-demo__note">This column is narrower than 51rem, so the picture goes under the text; on a page of full width it sits beside it. The frame is empty, so it shows its flat surface, and the title is a paragraph: this page already has its <code class="luz-code-inline">&lt;h1&gt;</code>.</p>
           <div class="docs-demo__stage" id="demo-hero-centered">
-            <section class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split" aria-labelledby="demo-hero-centered-title">
-              <div class="luz-landing-hero__copy">
-                <p class="luz-landing-hero__eyebrow">New in version 2</p>
-                <p class="luz-landing-hero__title" id="demo-hero-centered-title">Stock counts that <em>keep up</em> with the shop</p>
-                <p class="luz-landing-hero__lead">Acme Stock updates every shelf as it sells, so you reorder before it runs out.</p>
+            <section class="luz-hero luz-hero--centered o-grid o-grid--split" aria-labelledby="demo-hero-centered-title">
+              <div class="luz-hero__copy">
+                <p class="luz-hero__eyebrow">New in version 2</p>
+                <p class="luz-hero__title" id="demo-hero-centered-title">Stock counts that <em>keep up</em> with the shop</p>
+                <p class="luz-hero__lead">Acme Stock updates every shelf as it sells, so you reorder before it runs out.</p>
                 <div class="o-actions">
                   <a class="luz-btn luz-btn--primary" href="#markup">Start free trial</a>
                   <a class="luz-btn luz-btn--outline" href="#variants">Book a demo</a>
@@ -44,7 +44,7 @@ toc: h2,h3
               </div>
             </section>
           </div>
-          <p class="docs-demo__note">The same hero with <code class="luz-code-inline">luz-landing-hero--centered</code>: one column at any width, the text centred. A picture that bleeds cannot be shown in this column, as it runs to the edges of the window: see <a href="#variants">Variants and options</a>.</p>
+          <p class="docs-demo__note">The same hero with <code class="luz-code-inline">luz-hero--centered</code>: one column at any width, the text centred. A picture that bleeds cannot be shown in this column, as it runs to the edges of the window: see <a href="#variants">Variants and options</a>.</p>
           </div>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
@@ -60,17 +60,17 @@ toc: h2,h3
                 <span class="docs-snippet__lang">HTML</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-hero" aria-label="Copy the hero markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Hero markup"><code id="code-hero">&lt;section class=&quot;luz-landing-hero o-grid o-grid--split&quot; aria-labelledby=&quot;hero-title&quot;&gt;
-  &lt;div class=&quot;luz-landing-hero__copy&quot;&gt;
-    &lt;p class=&quot;luz-landing-hero__eyebrow&quot;&gt;12 and 13 May 2027 · Seville&lt;/p&gt;
-    &lt;h1 class=&quot;luz-landing-hero__title&quot; id=&quot;hero-title&quot;&gt;Acme Summit 2027&lt;/h1&gt;
-    &lt;p class=&quot;luz-landing-hero__lead&quot;&gt;Two days of talks and workshops for retail teams.&lt;/p&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Hero markup"><code id="code-hero">&lt;section class=&quot;luz-hero o-grid o-grid--split&quot; aria-labelledby=&quot;hero-title&quot;&gt;
+  &lt;div class=&quot;luz-hero__copy&quot;&gt;
+    &lt;p class=&quot;luz-hero__eyebrow&quot;&gt;12 and 13 May 2027 · Seville&lt;/p&gt;
+    &lt;h1 class=&quot;luz-hero__title&quot; id=&quot;hero-title&quot;&gt;Acme Summit 2027&lt;/h1&gt;
+    &lt;p class=&quot;luz-hero__lead&quot;&gt;Two days of talks and workshops for retail teams.&lt;/p&gt;
     &lt;div class=&quot;o-actions&quot;&gt;
       &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;#register&quot;&gt;Register&lt;/a&gt;
       &lt;a class=&quot;luz-btn luz-btn--outline&quot; href=&quot;#programme&quot;&gt;See the programme&lt;/a&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;div class=&quot;luz-landing-hero__media&quot;&gt;
+  &lt;div class=&quot;luz-hero__media&quot;&gt;
     &lt;div class=&quot;luz-image luz-image--4x3&quot;&gt;
       &lt;img src=&quot;/img/venue-1280.jpg&quot; width=&quot;1280&quot; height=&quot;960&quot; alt=&quot;The main hall, full, before the opening talk&quot; fetchpriority=&quot;high&quot; decoding=&quot;async&quot;&gt;
     &lt;/div&gt;
@@ -86,25 +86,25 @@ toc: h2,h3
                   <tr><th scope="col">Class</th><th scope="col">What it does</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Class"><div><code>.luz-landing-hero</code></div></td><td data-label="What it does"><div>On a <code>&lt;section&gt;</code> with core's <code>.o-grid.o-grid--split</code>: space above it, the gaps, and columns of at least 24rem (<code>--luz-grid-min</code>), so two equal columns when each gets 24rem, one below</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-hero--centered</code></div></td><td data-label="What it does"><div>One column at every width: the copy at most 48rem wide, centred, with its text and actions centred, and the picture under it</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-hero__copy</code></div></td><td data-label="What it does"><div>The text and the actions, first in the source</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-hero__eyebrow</code></div></td><td data-label="What it does"><div>A short line above the title, in small capitals of the mono face; the sans in Arabic</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-hero__title</code></div></td><td data-label="What it does"><div>The title: heading font, 4xl size, balanced lines; 3xl below 1024 px and 2xl at 640 px and below</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-hero__lead</code></div></td><td data-label="What it does"><div>One or two sentences in the secondary text colour, 70 characters wide at most; xl, lg below 1024 px and base at 640 px and below</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-hero__media</code></div></td><td data-label="What it does"><div>The second column, holding core's <a href="/docs/components/image/">image frame</a></div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-landing-hero__media--bleed</code></div></td><td data-label="What it does"><div>On the picture of a centred hero: it runs from edge to edge of the window, past the page's gutters, with no sideways scroll. The frame is 16:9 unless you give it a ratio</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-hero</code></div></td><td data-label="What it does"><div>On a <code>&lt;section&gt;</code> with core's <code>.o-grid.o-grid--split</code>: space above it, the gaps, and columns of at least 24rem (<code>--luz-grid-min</code>), so two equal columns when each gets 24rem, one below</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-hero--centered</code></div></td><td data-label="What it does"><div>One column at every width: the copy at most 48rem wide, centred, with its text and actions centred, and the picture under it</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-hero__copy</code></div></td><td data-label="What it does"><div>The text and the actions, first in the source</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-hero__eyebrow</code></div></td><td data-label="What it does"><div>A short line above the title, in small capitals of the mono face; the sans in Arabic</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-hero__title</code></div></td><td data-label="What it does"><div>The title: heading font, 4xl size, balanced lines; 3xl below 1024 px and 2xl at 640 px and below</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-hero__lead</code></div></td><td data-label="What it does"><div>One or two sentences in the secondary text colour, 70 characters wide at most; xl, lg below 1024 px and base at 640 px and below</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-hero__media</code></div></td><td data-label="What it does"><div>The second column, holding core's <a href="/docs/components/image/">image frame</a></div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-hero__media--bleed</code></div></td><td data-label="What it does"><div>On the picture of a centred hero: it runs from edge to edge of the window, past the page's gutters, with no sideways scroll. The frame is 16:9 unless you give it a ratio</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>A <code>&lt;section&gt;</code> named by its title, laid out by core's split grid and styled by <code>components/landing-hero.css</code> of <code>@luz-ds/catalog</code>. No JavaScript.</p>
+            <p>A <code>&lt;section&gt;</code> named by its title, laid out by core's split grid and styled by <code>components/hero.css</code> of <code>@luz-ds/catalog</code>. No JavaScript.</p>
             <ul>
               <li>The columns are core's <a href="/docs/components/layout/#objects-actions">split grid</a>, intrinsic: they follow the room the hero has, not the window. A hero as wide as the page splits from about 900 px of window; in a narrow column, or with larger text, it stays one column.</li>
               <li>The order is the source order: the copy comes first, on the left in a left-to-right page and on the right in a right-to-left one.</li>
               <li>The actions are core's <a href="/docs/components/layout/#objects-actions">action group</a>, <code>.o-actions</code>: at 640 px and below its buttons stack and take the whole width.</li>
               <li>The bleed measures the window without a viewport unit, which counts a scrollbar and scrolls the page sideways: the page's root becomes a size container (<code>container-type: inline-size</code>). The column must be centred in the window, as core's <code>.o-container</code> is.</li>
-              <li>The <code>em</code> in a title takes the colour of <code>--luz-landing-title-accent</code>, the title's own when it is unset.</li>
+              <li>The <code>em</code> in a title takes the colour of <code>--luz-title-accent</code>, the title's own when it is unset.</li>
               <li>The classes change the look only. The title must be the page's <code>&lt;h1&gt;</code>.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
@@ -125,44 +125,44 @@ toc: h2,h3
             <p>Do not use it on a page whose reader came to read or to do a task: use a plain <code>&lt;h1&gt;</code> and a lead paragraph, which are smaller.</p>
             <ul>
               <li>One hero per page, and only at the top.</li>
-              <li>Not for a message in the middle of a page: use a <a href="/docs/catalog/landing-section/">section</a>, with core's <a href="/docs/components/band/">band</a> if it must stand out.</li>
+              <li>Not for a message in the middle of a page: use a <a href="/docs/catalog/section/">section</a>, with core's <a href="/docs/components/band/">band</a> if it must stand out.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> One primary action, and a second one as an outline button.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-hero o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Acme Summit 2027</p><p class="luz-landing-hero__lead">Two days of talks for retail teams.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Register</span><span class="luz-btn luz-btn--outline">See the programme</span></div></div></div>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> One primary action, and a second one as an outline button.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-hero o-grid o-grid--split"><div class="luz-hero__copy"><p class="luz-hero__title">Acme Summit 2027</p><p class="luz-hero__lead">Two days of talks for retail teams.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Register</span><span class="luz-btn luz-btn--outline">See the programme</span></div></div></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Three primary buttons: the reader cannot tell which one comes first.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-hero o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Acme Summit 2027</p><p class="luz-landing-hero__lead">Two days of talks for retail teams.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Register</span><span class="luz-btn luz-btn--primary">Programme</span><span class="luz-btn luz-btn--primary">Venue</span></div></div></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Three primary buttons: the reader cannot tell which one comes first.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-hero o-grid o-grid--split"><div class="luz-hero__copy"><p class="luz-hero__title">Acme Summit 2027</p><p class="luz-hero__lead">Two days of talks for retail teams.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Register</span><span class="luz-btn luz-btn--primary">Programme</span><span class="luz-btn luz-btn--primary">Venue</span></div></div></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> A title that names the thing, and a lead that says what it gives the reader.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-hero o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Acme Summit 2027</p><p class="luz-landing-hero__lead">Two days of talks and workshops for retail teams.</p></div></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> A title that names the thing, and a lead that says what it gives the reader.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-hero o-grid o-grid--split"><div class="luz-hero__copy"><p class="luz-hero__title">Acme Summit 2027</p><p class="luz-hero__lead">Two days of talks and workshops for retail teams.</p></div></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> A slogan for a title, and a lead that repeats it without saying what it is.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-hero o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">The future starts here</p><p class="luz-landing-hero__lead">Be part of the future, starting today.</p></div></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A slogan for a title, and a lead that repeats it without saying what it is.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-hero o-grid o-grid--split"><div class="luz-hero__copy"><p class="luz-hero__title">The future starts here</p><p class="luz-hero__lead">Be part of the future, starting today.</p></div></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Centre a short title and one sentence, with one or two actions.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Stock counts that keep up</p><p class="luz-landing-hero__lead">Reorder before a shelf runs out.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Start free trial</span></div></div></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Centre a short title and one sentence, with one or two actions.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-hero luz-hero--centered o-grid o-grid--split"><div class="luz-hero__copy"><p class="luz-hero__title">Stock counts that keep up</p><p class="luz-hero__lead">Reorder before a shelf runs out.</p><div class="o-actions"><span class="luz-btn luz-btn--primary">Start free trial</span></div></div></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Centre a long paragraph: with no common start edge the eye has to find each line again.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split"><div class="luz-landing-hero__copy"><p class="luz-landing-hero__title">Stock counts that keep up</p><p class="luz-landing-hero__lead">Acme Stock reads every sale as it happens, compares it with what is on the shelf and with what the supplier can deliver this week, and then suggests an order for each shop, which you can change before it is sent.</p></div></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Centre a long paragraph: with no common start edge the eye has to find each line again.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-hero luz-hero--centered o-grid o-grid--split"><div class="luz-hero__copy"><p class="luz-hero__title">Stock counts that keep up</p><p class="luz-hero__lead">Acme Stock reads every sale as it happens, compares it with what is on the shelf and with what the supplier can deliver this week, and then suggests an order for each shop, which you can change before it is sent.</p></div></div>
                 </div>
               </figure>
             </div>
@@ -191,11 +191,11 @@ toc: h2,h3
             <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
             <ul>
               <li><strong>Focus:</strong> the hero takes none; its buttons keep the focus ring of the <a href="/docs/components/button/">button</a>.</li>
-              <li><strong>Accent:</strong> the <code>em</code> of a title has the title's colour unless you set <code>--luz-landing-title-accent</code>. The colour is yours: check it against the page surface in every mode you ship, as text needs 4.5:1.</li>
+              <li><strong>Accent:</strong> the <code>em</code> of a title has the title's colour unless you set <code>--luz-title-accent</code>. The colour is yours: check it against the page surface in every mode you ship, as text needs 4.5:1.</li>
               <li>Do not put the text over the picture: its contrast would depend on the picture, which no token controls.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 19 tokens that the <code>.luz-landing-hero</code> rules of catalog’s <code>components/landing-hero.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 19 tokens that the <code>.luz-hero</code> rules of catalog’s <code>components/hero.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-3xl</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

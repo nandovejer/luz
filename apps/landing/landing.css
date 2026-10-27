@@ -22,7 +22,7 @@
    replaces the width and the gutters of core's .o-container. The stressed
    word of every title takes the colour of the page's actions */
 .landing-wrap {
-  --luz-landing-title-accent: var(--luz-brand-primary);
+  --luz-title-accent: var(--luz-brand-primary);
 
   /* The big sections stand twice as far apart as the package's gap
      (space-3xl), so each one reads as a chapter */
@@ -74,7 +74,7 @@
    system's reduced motion). The docs keep their stars still
    -------------------------------------------------------------------------- */
 
-:root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .luz-landing-main {
+:root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .luz-main {
   --site-sky-twinkle-near: landing-twinkle calc(var(--luz-duration-lazy) * 5) ease-in-out infinite alternate;
   --site-sky-twinkle-far: landing-twinkle calc(var(--luz-duration-lazy) * 7) ease-in-out calc(var(--luz-duration-lazy) * -3) infinite alternate;
 }
@@ -169,7 +169,7 @@
   padding-block-end: var(--luz-space-xl);
 }
 
-.landing-first > .luz-landing-hero {
+.landing-first > .luz-hero {
   flex: none;
 }
 
@@ -211,7 +211,7 @@
   /* A phone's hero with room between its pieces: the brand, the sentence, the
      description and the buttons each a step apart, and a wider margin at the
      sides so the text and the buttons do not touch the edges */
-  .luz-landing-hero__copy {
+  .luz-hero__copy {
     padding-inline: var(--luz-space-md);
   }
 
@@ -219,11 +219,11 @@
     margin-block-end: var(--luz-space-sm);
   }
 
-  .luz-landing-hero__lead {
+  .luz-hero__lead {
     margin-block: var(--luz-space-md) var(--luz-space-xl);
   }
 
-  .luz-landing-hero .o-actions {
+  .luz-hero .o-actions {
     gap: var(--luz-space-sm);
   }
 
@@ -232,7 +232,7 @@
      top, and the buttons, the phrase and the globe behind them move down
      together, closer to the foot of the window. The light keeps only the room
      of its phrase and its open bar */
-  .landing-first > .luz-landing-hero {
+  .landing-first > .luz-hero {
     flex: 1 1 auto;
     align-items: stretch;
   }
@@ -241,12 +241,12 @@
     flex: none;
   }
 
-  .landing-first .luz-landing-hero__copy {
+  .landing-first .luz-hero__copy {
     display: flex;
     flex-direction: column;
   }
 
-  .landing-first .luz-landing-hero .o-actions {
+  .landing-first .luz-hero .o-actions {
     margin-block-start: auto;
   }
 }
@@ -293,7 +293,7 @@
     font-size: min(3.75em, 15svh, 30vi);
   }
 
-  .landing-first > .luz-landing-hero {
+  .landing-first > .luz-hero {
     padding-block-start: clamp(var(--luz-space-xs), 3svh, var(--luz-space-xl));
   }
 }
@@ -301,7 +301,7 @@
 /* A phone under about 760px tall: the sentence one step down and the pieces
    of the hero closer, which is what lets the bar open inside the window */
 @media (max-width: 640px) and (max-height: 760px) {
-  .landing-first .luz-landing-hero__title {
+  .landing-first .luz-hero__title {
     font-size: var(--luz-text-xl);
   }
 
@@ -309,11 +309,11 @@
     margin-block-end: var(--luz-space-2xs);
   }
 
-  .landing-first .luz-landing-hero__lead {
+  .landing-first .luz-hero__lead {
     margin-block: var(--luz-space-xs) var(--luz-space-md);
   }
 
-  .landing-first .luz-landing-hero .o-actions {
+  .landing-first .luz-hero .o-actions {
     gap: var(--luz-space-xs);
   }
 
@@ -333,7 +333,7 @@
     font-size: clamp(calc(var(--luz-text-4xl) * 2.3), 19svh, calc(var(--luz-text-4xl) * 5.6));
   }
 
-  .landing-first > .luz-landing-hero {
+  .landing-first > .luz-hero {
     padding-block-start: clamp(var(--luz-space-lg), 4svh, var(--luz-space-4xl));
   }
 }
@@ -345,7 +345,7 @@
   text-shadow: none;
 }
 
-.landing-first > .luz-landing-hero {
+.landing-first > .luz-hero {
   position: relative;
   z-index: 1;
 }

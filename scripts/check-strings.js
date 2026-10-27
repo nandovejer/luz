@@ -54,7 +54,7 @@ function visibleHtml(html) {
 }
 
 // The containers of a demo or an example: in a translation they are live markup left as written, not prose
-const DEMO_CLASS = /(^|\s)(docs-dodont__stage|luz-docs-dodont__stage|docs-snippet|elements-stage|elements-snippet)(\s|$)/;
+const DEMO_CLASS = /(^|\s)(docs-dodont__stage|luz-do-dont__stage|docs-snippet|elements-stage|elements-snippet)(\s|$)/;
 const VOID_TAG = /^(area|base|br|col|embed|hr|img|input|link|meta|source|track|wbr)$/;
 
 /** `html` with the inside of each demo container blanked, to its closing tag. A source that does not tokenize is left as it is. */

@@ -6,25 +6,25 @@ order: 23
 group: documentation
 fits-kinds: docs
 fits: a page that teaches by showing what to do and what to avoid
-files: components/docs-dodont.css
+files: components/do-dont.css
 keywords: dos and donts, good and bad, guidance, guideline, comparison
 toc: h2,h3
 -->
-    <div class="docs-component" id="p-docs-dodont">
+    <div class="docs-component" id="p-do-dont">
           <h2 id="example">Example</h2>
           <p>A Do and a Don’t about the title of a page.</p>
           <div class="docs-example" data-docs-specimen>
             <div class="docs-demo__stage">
-              <div class="luz-docs-dodont">
-                <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                  <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Title a page for what it lets the reader do.</figcaption>
-                  <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+              <div class="luz-do-dont">
+                <figure class="luz-do-dont__item luz-do-dont__item--do">
+                  <figcaption><strong class="luz-do-dont__verdict">Do</strong> Title a page for what it lets the reader do.</figcaption>
+                  <div class="luz-do-dont__stage" inert aria-hidden="true">
                     <h3>Install the command line tool</h3>
                   </div>
                 </figure>
-                <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                  <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Use a title that fits any page: "Introduction" tells the reader nothing.</figcaption>
-                  <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                  <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Use a title that fits any page: "Introduction" tells the reader nothing.</figcaption>
+                  <div class="luz-do-dont__stage" inert aria-hidden="true">
                     <h3>Introduction</h3>
                   </div>
                 </figure>
@@ -47,18 +47,18 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-dodont" aria-label="Copy the do and don't markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-do-dont" aria-label="Copy the do and don't markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Do and don't markup"><code id="code-docs-dodont">&lt;div class=&quot;luz-docs-dodont&quot;&gt;
-  &lt;figure class=&quot;luz-docs-dodont__item luz-docs-dodont__item--do&quot;&gt;
-    &lt;figcaption&gt;&lt;strong class=&quot;luz-docs-dodont__verdict&quot;&gt;Do&lt;/strong&gt; Title a page for what it lets the reader do.&lt;/figcaption&gt;
-    &lt;div class=&quot;luz-docs-dodont__stage&quot; inert aria-hidden=&quot;true&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Do and don't markup"><code id="code-do-dont">&lt;div class=&quot;luz-do-dont&quot;&gt;
+  &lt;figure class=&quot;luz-do-dont__item luz-do-dont__item--do&quot;&gt;
+    &lt;figcaption&gt;&lt;strong class=&quot;luz-do-dont__verdict&quot;&gt;Do&lt;/strong&gt; Title a page for what it lets the reader do.&lt;/figcaption&gt;
+    &lt;div class=&quot;luz-do-dont__stage&quot; inert aria-hidden=&quot;true&quot;&gt;
       &lt;h3&gt;Install the command line tool&lt;/h3&gt;
     &lt;/div&gt;
   &lt;/figure&gt;
-  &lt;figure class=&quot;luz-docs-dodont__item luz-docs-dodont__item--dont&quot;&gt;
-    &lt;figcaption&gt;&lt;strong class=&quot;luz-docs-dodont__verdict&quot;&gt;Don't&lt;/strong&gt; Use a title that fits any page: &quot;Introduction&quot; tells the reader nothing.&lt;/figcaption&gt;
-    &lt;div class=&quot;luz-docs-dodont__stage&quot; inert aria-hidden=&quot;true&quot;&gt;
+  &lt;figure class=&quot;luz-do-dont__item luz-do-dont__item--dont&quot;&gt;
+    &lt;figcaption&gt;&lt;strong class=&quot;luz-do-dont__verdict&quot;&gt;Don't&lt;/strong&gt; Use a title that fits any page: &quot;Introduction&quot; tells the reader nothing.&lt;/figcaption&gt;
+    &lt;div class=&quot;luz-do-dont__stage&quot; inert aria-hidden=&quot;true&quot;&gt;
       &lt;h3&gt;Introduction&lt;/h3&gt;
     &lt;/div&gt;
   &lt;/figure&gt;
@@ -72,17 +72,17 @@ toc: h2,h3
                   <tr><th scope="col">Class</th><th scope="col">Effect</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Class"><div><code>.luz-docs-dodont</code></div></td><td data-label="Effect"><div>On a <code>&lt;div&gt;</code>: the pair, in columns of at least 17.5rem. Side by side when there is room, stacked below</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-dodont__item</code></div></td><td data-label="Effect"><div>On each <code>&lt;figure&gt;</code>: a framed box with the caption and the stage</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-dodont__item--do</code></div></td><td data-label="Effect"><div>A solid frame in the success colour</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-dodont__item--dont</code></div></td><td data-label="Effect"><div>A dashed frame in the danger colour</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-dodont__verdict</code></div></td><td data-label="Effect"><div>On a <code>&lt;strong&gt;</code> that starts the caption: "Do" or "Don't", in the colour of its frame, with a tick or a cross before it</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-dodont__stage</code></div></td><td data-label="Effect"><div>The picture: a bordered box on the page surface. Make it <code>inert</code> and <code>aria-hidden="true"</code>. For a mistake that would itself be a barrier, use a <code>pre.luz-code-block</code> in its place</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-do-dont</code></div></td><td data-label="Effect"><div>On a <code>&lt;div&gt;</code>: the pair, in columns of at least 17.5rem. Side by side when there is room, stacked below</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-do-dont__item</code></div></td><td data-label="Effect"><div>On each <code>&lt;figure&gt;</code>: a framed box with the caption and the stage</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-do-dont__item--do</code></div></td><td data-label="Effect"><div>A solid frame in the success colour</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-do-dont__item--dont</code></div></td><td data-label="Effect"><div>A dashed frame in the danger colour</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-do-dont__verdict</code></div></td><td data-label="Effect"><div>On a <code>&lt;strong&gt;</code> that starts the caption: "Do" or "Don't", in the colour of its frame, with a tick or a cross before it</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-do-dont__stage</code></div></td><td data-label="Effect"><div>The picture: a bordered box on the page surface. Make it <code>inert</code> and <code>aria-hidden="true"</code>. For a mistake that would itself be a barrier, use a <code>pre.luz-code-block</code> in its place</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>components/docs-dodont.css</code> of <code>@luz-ds/catalog</code>. It draws the verdict three ways; the words are yours.</p>
+            <p>CSS from <code>components/do-dont.css</code> of <code>@luz-ds/catalog</code>. It draws the verdict three ways; the words are yours.</p>
             <ul>
               <li>The verdict is a word first. The tick or the cross before it, the solid or dashed frame and the colour are extra cues, and none is the only one.</li>
               <li>The tick and the cross are generated content with an empty alternative, so a screen reader does not read them.</li>
@@ -111,21 +111,21 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not use it for a rule with nothing to compare, or to show a piece that works.</p>
             <ul>
-              <li>To show how a piece looks and is built, use <a href="/docs/catalog/docs-example/">the example</a>.</li>
+              <li>To show how a piece looks and is built, use <a href="/docs/catalog/example/">the example</a>.</li>
               <li>Do not invent a mistake nobody makes to fill the Don't.</li>
               <li>Do not show a live failure. A contrast or semantics failure goes in code.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Show one thing in the stage, the one the caption is about.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Show one thing in the stage, the one the caption is about.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <h3>Install the command line tool</h3>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Put several things in the stage: the reader cannot tell which one the caption is about.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Put several things in the stage: the reader cannot tell which one the caption is about.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <h3>Introduction</h3>
                   <p>Welcome to the documentation.</p>
                   <ul>
@@ -166,7 +166,7 @@ toc: h2,h3
               <li><strong>Edges:</strong> the border of the stage (<code>--luz-divider</code>) is decorative and has no minimum.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 11 tokens that the <code>.luz-docs-dodont</code> rules of catalog’s <code>components/docs-dodont.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 11 tokens that the <code>.luz-do-dont</code> rules of catalog’s <code>components/do-dont.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-color-success"><code>--luz-color-success</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>

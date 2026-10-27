@@ -1,8 +1,8 @@
 /* ==========================================================================
    LUZ Catalog: docs shell.
    Layer: catalog · Prefix: .luz-docs-
-   body.o-shell.luz-docs-shell > header, nav.luz-sidebar.luz-docs-nav,
-   aside.luz-docs-rail, main.o-main.luz-docs-main, footer. "On this page"
+   body.o-shell.luz-docs-layout > header, nav.luz-sidebar.luz-docs-nav,
+   aside.luz-page-rail, main.o-main.luz-docs-main, footer. "On this page"
    comes before the content, in the markup and on screen: three columns
    from 80rem (the sidebar, the content, the rail, which stretches over the
    content's row), two from 60rem (the rail above the content, in its
@@ -14,11 +14,11 @@
    and below); this file gives the tracks and the measure.
    ========================================================================== */
 
-.luz-docs-shell {
+.luz-docs-layout {
 	--luz-docs-measure: 46rem;
 	--luz-docs-nav-w: 16.5rem;
-	--luz-docs-rail-w: 14rem;
-	--luz-docs-rail-top: var(--luz-space-lg);
+	--luz-page-rail-w: 14rem;
+	--luz-page-rail-top: var(--luz-space-lg);
 
 	/* The content takes the free height: on a short page the header keeps
 	   its own height (core's shell is at least the height of the window) */
@@ -30,7 +30,7 @@
 		"foot" auto / minmax(0, 1fr);
 }
 
-.luz-docs-shell > :where(header) {
+.luz-docs-layout > :where(header) {
 	grid-area: head;
 }
 
@@ -49,12 +49,12 @@
 	padding: var(--luz-space-lg) var(--luz-space-md) var(--luz-space-xl);
 }
 
-.luz-docs-rail {
+.luz-page-rail {
 	grid-area: rail;
 	min-inline-size: 0;
 }
 
-.luz-docs-shell > :where(footer) {
+.luz-docs-layout > :where(footer) {
 	grid-area: foot;
 }
 
@@ -81,7 +81,7 @@
 }
 
 @media (min-width: 60rem) {
-	.luz-docs-shell {
+	.luz-docs-layout {
 		grid-template:
 			"head head" auto
 			"nav rail" auto
@@ -100,11 +100,11 @@
 }
 
 @media (min-width: 80rem) {
-	.luz-docs-shell {
+	.luz-docs-layout {
 		grid-template:
 			"head head head" auto
 			"nav main rail" 1fr
-			"nav foot foot" auto / var(--luz-docs-nav-w) minmax(0, 1fr) var(--luz-docs-rail-w);
+			"nav foot foot" auto / var(--luz-docs-nav-w) minmax(0, 1fr) var(--luz-page-rail-w);
 	}
 
 	.luz-docs-main {
@@ -113,11 +113,11 @@
 }
 
 @media print {
-	.luz-docs-shell {
+	.luz-docs-layout {
 		display: block;
 	}
 
-	.luz-docs-rail {
+	.luz-page-rail {
 		display: none;
 	}
 }

@@ -3,34 +3,34 @@ title: Contenido principal y secciones
 description: Da ritmo a una página de landing: espacio amplio entre los bloques del contenido principal, menos espacio dentro de cada sección, con su encabezado, y un resplandor opcional detrás de la página.
 fits: el cuerpo de una landing page, entre la cabecera y el pie
 keywords: ritmo, fondo de página, degradado
-source: af7a5ea8be65
+source: b55dd181dc72
 reviewed: false
 -->
-    <div class="docs-component" id="p-landing-section">
+    <div class="docs-component" id="p-section">
           <h2 id="example">Ejemplo</h2>
           <p>Un contenido principal con dos secciones: la primera muestra sus bloques como recuadros y la segunda tiene un encabezado real.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="o-stack luz-landing-main">
-              <div class="o-stack luz-landing-section">
+            <div class="o-stack luz-main">
+              <div class="o-stack luz-section">
                 <div class="docs-box">Heading</div>
                 <div class="docs-box">Lead</div>
                 <div class="docs-box">Content</div>
               </div>
-              <div class="o-stack luz-landing-section">
+              <div class="o-stack luz-section">
                 <div class="docs-box">Heading</div>
                 <div class="docs-box">Content</div>
               </div>
             </div>
             <p class="docs-demo__note">Sections are 64 px (<code class="luz-code-inline">--luz-space-3xl</code>) apart in the main; their blocks, 16 px (<code class="luz-code-inline">--luz-space-md</code>).</p>
-            <div class="o-stack luz-landing-section" id="demo-section-head">
-              <p class="luz-landing-section__eyebrow">Why teams switch</p>
-              <p class="luz-landing-section__title">One count for <em>every</em> shelf</p>
-              <p class="luz-landing-section__lead">Acme Stock reads each sale as it happens, in every shop.</p>
+            <div class="o-stack luz-section" id="demo-section-head">
+              <p class="luz-section__eyebrow">Why teams switch</p>
+              <p class="luz-section__title">One count for <em>every</em> shelf</p>
+              <p class="luz-section__lead">Acme Stock reads each sale as it happens, in every shop.</p>
               <div class="docs-box">Content</div>
             </div>
             <p class="docs-demo__note">The head of a section: an eyebrow, a title and a lead. The title is a paragraph here, as this page already has its headings.</p>
-            <div class="luz-landing-glow docs-gradient-sample">.luz-landing-glow</div>
+            <div class="luz-glow docs-gradient-sample">.luz-glow</div>
           </div>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
@@ -45,18 +45,18 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-landing-section" aria-label="Copy the main and sections markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-section" aria-label="Copy the main and sections markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Main and sections markup"><code id="code-landing-section">&lt;body class=&quot;o-page luz-landing-glow&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Main and sections markup"><code id="code-section">&lt;body class=&quot;o-page luz-glow&quot;&gt;
   &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to content&lt;/a&gt;
   &lt;!-- the header --&gt;
-  &lt;main id=&quot;main-content&quot; class=&quot;o-container o-stack luz-landing-main&quot; tabindex=&quot;-1&quot;&gt;
+  &lt;main id=&quot;main-content&quot; class=&quot;o-container o-stack luz-main&quot; tabindex=&quot;-1&quot;&gt;
     &lt;!-- the hero --&gt;
-    &lt;section class=&quot;o-stack luz-landing-section&quot; aria-labelledby=&quot;programme-title&quot;&gt;
+    &lt;section class=&quot;o-stack luz-section&quot; aria-labelledby=&quot;programme-title&quot;&gt;
       &lt;h2 id=&quot;programme-title&quot;&gt;Programme&lt;/h2&gt;
       &lt;p&gt;Twelve talks and six workshops over two days.&lt;/p&gt;
     &lt;/section&gt;
-    &lt;section class=&quot;o-stack luz-landing-section luz-band&quot; aria-labelledby=&quot;last-seats-title&quot;&gt;
+    &lt;section class=&quot;o-stack luz-section luz-band&quot; aria-labelledby=&quot;last-seats-title&quot;&gt;
       &lt;h2 id=&quot;last-seats-title&quot;&gt;Registration closes on 30 April&lt;/h2&gt;
       &lt;div class=&quot;o-actions&quot;&gt;
         &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;#register&quot;&gt;Register now&lt;/a&gt;
@@ -69,12 +69,12 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-landing-section-head" aria-label="Copy the section head markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-section-head" aria-label="Copy the section head markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Section head markup"><code id="code-landing-section-head">&lt;section class=&quot;o-stack luz-landing-section&quot; aria-labelledby=&quot;why-title&quot;&gt;
-  &lt;p class=&quot;luz-landing-section__eyebrow&quot;&gt;Why teams switch&lt;/p&gt;
-  &lt;h2 class=&quot;luz-landing-section__title&quot; id=&quot;why-title&quot;&gt;One count for &lt;em&gt;every&lt;/em&gt; shelf&lt;/h2&gt;
-  &lt;p class=&quot;luz-landing-section__lead&quot;&gt;Acme Stock reads each sale as it happens, in every shop.&lt;/p&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Section head markup"><code id="code-section-head">&lt;section class=&quot;o-stack luz-section&quot; aria-labelledby=&quot;why-title&quot;&gt;
+  &lt;p class=&quot;luz-section__eyebrow&quot;&gt;Why teams switch&lt;/p&gt;
+  &lt;h2 class=&quot;luz-section__title&quot; id=&quot;why-title&quot;&gt;One count for &lt;em&gt;every&lt;/em&gt; shelf&lt;/h2&gt;
+  &lt;p class=&quot;luz-section__lead&quot;&gt;Acme Stock reads each sale as it happens, in every shop.&lt;/p&gt;
   &lt;!-- the content --&gt;
 &lt;/section&gt;</code></pre>
             </div>
@@ -86,23 +86,23 @@ reviewed: false
                   <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-main</code></div></td><td data-label="Efecto"><div>En <code>main.o-container.o-stack</code>: 64 px (<code>--luz-space-3xl</code>) entre los bloques y después del último; ninguno antes del primero, porque el hero ya incluye el suyo.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-section</code></div></td><td data-label="Efecto"><div>En <code>section.o-stack</code>: 16 px (<code>--luz-space-md</code>) entre sus elementos.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-section__eyebrow</code></div></td><td data-label="Efecto"><div>Sobre el título: una etiqueta breve, como la etiqueta superior del hero.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-section__title</code></div></td><td data-label="Efecto"><div>El título, un tamaño menor que el del hero: 3xl; 2xl por debajo de 1024 px y xl a 640 px o menos.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-section__lead</code></div></td><td data-label="Efecto"><div>Una o dos frases de hasta 70 caracteres de ancho, en color de texto secundario; tamaño lg y base a 640 px o menos.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>--luz-landing-title-accent</code></div></td><td data-label="Efecto"><div>Una propiedad ajustable: el color del <code>em</code> del título de un hero o una sección. Si no se define, usa el color del título.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-landing-glow</code></div></td><td data-label="Efecto"><div>En el elemento <code>.o-page</code>: un tinte sutil de la marca arriba, en la esquina donde empieza la lectura, sobre un degradado desde la superficie de la página hasta la superficie atenuada; se elimina al imprimir.</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>--luz-landing-glow-x</code></div></td><td data-label="Efecto"><div>Una propiedad ajustable del elemento con resplandor: indica dónde se sitúa el tinte en el borde superior; <code>0%</code> a la izquierda y <code>100%</code> a la derecha, en ambas direcciones. Si no se define, va al borde inicial.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-main</code></div></td><td data-label="Efecto"><div>En <code>main.o-container.o-stack</code>: 64 px (<code>--luz-space-3xl</code>) entre los bloques y después del último; ninguno antes del primero, porque el hero ya incluye el suyo.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-section</code></div></td><td data-label="Efecto"><div>En <code>section.o-stack</code>: 16 px (<code>--luz-space-md</code>) entre sus elementos.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-section__eyebrow</code></div></td><td data-label="Efecto"><div>Sobre el título: una etiqueta breve, como la etiqueta superior del hero.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-section__title</code></div></td><td data-label="Efecto"><div>El título, un tamaño menor que el del hero: 3xl; 2xl por debajo de 1024 px y xl a 640 px o menos.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-section__lead</code></div></td><td data-label="Efecto"><div>Una o dos frases de hasta 70 caracteres de ancho, en color de texto secundario; tamaño lg y base a 640 px o menos.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>--luz-title-accent</code></div></td><td data-label="Efecto"><div>Una propiedad ajustable: el color del <code>em</code> del título de un hero o una sección. Si no se define, usa el color del título.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-glow</code></div></td><td data-label="Efecto"><div>En el elemento <code>.o-page</code>: un tinte sutil de la marca arriba, en la esquina donde empieza la lectura, sobre un degradado desde la superficie de la página hasta la superficie atenuada; se elimina al imprimir.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>--luz-glow-x</code></div></td><td data-label="Efecto"><div>Una propiedad ajustable del elemento con resplandor: indica dónde se sitúa el tinte en el borde superior; <code>0%</code> a la izquierda y <code>100%</code> a la derecha, en ambas direcciones. Si no se define, va al borde inicial.</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/landing-main.css</code>, <code>landing-section.css</code> y <code>landing-glow.css</code> de <code>@luz-ds/catalog</code> sobre los objetos de core. No usa JavaScript.</p>
+            <p>CSS de <code>components/main.css</code>, <code>section.css</code> y <code>glow.css</code> de <code>@luz-ds/catalog</code> sobre los objetos de core. No usa JavaScript.</p>
             <ul>
               <li><code>.o-container</code> de core da al contenido principal su ancho y sus márgenes interiores, y <code>.o-stack</code> dispone los elementos en columna; la capa del catálogo va después de los objetos de core, así que prevalecen sus separaciones.</li>
-              <li>El tinte del resplandor va en el borde inicial: arriba a la izquierda en una página de izquierda a derecha y arriba a la derecha en una de derecha a izquierda. <code>--luz-landing-glow-x</code> lo desplaza; <code>50%</code> lo centra en ambas direcciones.</li>
-              <li>El encabezado comparte sus reglas y la propiedad ajustable <code>em</code> con el <a href="/docs/catalog/landing-hero/">hero</a>.</li>
+              <li>El tinte del resplandor va en el borde inicial: arriba a la izquierda en una página de izquierda a derecha y arriba a la derecha en una de derecha a izquierda. <code>--luz-glow-x</code> lo desplaza; <code>50%</code> lo centra en ambas direcciones.</li>
+              <li>El encabezado comparte sus reglas y la propiedad ajustable <code>em</code> con el <a href="/docs/catalog/hero/">hero</a>.</li>
               <li>Usa una sección en un <code>&lt;section&gt;</code> cuando el grupo tenga su propio encabezado, o en un <code>&lt;div&gt;</code> cuando no lo tenga.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
@@ -127,29 +127,29 @@ reviewed: false
               <li>No uses el resplandor en páginas largas ni detrás de una banda: el tinte compite con ella.</li>
             </ul>
             <h3 id="do-dont">Buenas y malas prácticas</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Agrupa bloques distintos con el mismo espaciado: un encabezado, una entradilla y el contenido.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="o-stack luz-landing-section"><div class="docs-box">Heading</div><div class="docs-box">Lead</div><div class="docs-box">Content</div></div>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> Agrupa bloques distintos con el mismo espaciado: un encabezado, una entradilla y el contenido.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="o-stack luz-section"><div class="docs-box">Heading</div><div class="docs-box">Lead</div><div class="docs-box">Content</div></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Uses texto seguido dentro de una sección: todos los párrafos reciben el mismo espacio y parecen bloques separados.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="o-stack luz-landing-section"><p class="u-mb-0">The plan renews on the first of the month.</p><p class="u-mb-0">You can cancel before then.</p><p class="u-mb-0">Unused days are not refunded.</p></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> Uses texto seguido dentro de una sección: todos los párrafos reciben el mismo espacio y parecen bloques separados.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="o-stack luz-section"><p class="u-mb-0">The plan renews on the first of the month.</p><p class="u-mb-0">You can cancel before then.</p><p class="u-mb-0">Unused days are not refunded.</p></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Pon una etiqueta superior de pocas palabras que nombre el tema, sobre un título que explique la idea principal.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="o-stack luz-landing-section"><p class="luz-landing-section__eyebrow">Pricing</p><p class="luz-landing-section__title">Pay for the shops you open</p></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> Pon una etiqueta superior de pocas palabras que nombre el tema, sobre un título que explique la idea principal.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="o-stack luz-section"><p class="luz-section__eyebrow">Pricing</p><p class="luz-section__title">Pay for the shops you open</p></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Uses una frase como etiqueta superior: está en versalitas pequeñas y espaciadas, difíciles de leer si es larga.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="o-stack luz-landing-section"><p class="luz-landing-section__eyebrow">Plans for every size of shop, from one till to a chain</p><p class="luz-landing-section__title">Pay for the shops you open</p></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> Uses una frase como etiqueta superior: está en versalitas pequeñas y espaciadas, difíciles de leer si es larga.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="o-stack luz-section"><p class="luz-section__eyebrow">Plans for every size of shop, from one till to a chain</p><p class="luz-section__title">Pay for the shops you open</p></div>
                 </div>
               </figure>
             </div>
@@ -181,11 +181,11 @@ reviewed: false
             <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo, redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para el texto.</p>
             <ul>
               <li><strong>Foco:</strong> ninguno de los tres recibe el foco; los elementos que contienen conservan sus propios anillos.</li>
-              <li><strong>Acento:</strong> <code>--luz-landing-title-accent</code> es tuyo. Comprueba el contraste del color que definas con la superficie de la página en todos los modos que ofrezcas; el texto necesita 4,5:1.</li>
+              <li><strong>Acento:</strong> <code>--luz-title-accent</code> es tuyo. Comprueba el contraste del color que definas con la superficie de la página en todos los modos que ofrezcas; el texto necesita 4,5:1.</li>
               <li><strong>Colores forzados:</strong> se elimina el resplandor y la página usa el fondo del sistema.</li>
             </ul>
             <h3 id="tokens">Tokens que utiliza</h3>
-            <p>Los 18 tokens que leen, por familia, las reglas de <code>.luz-landing-main</code>, <code>.luz-landing-section</code> y <code>.luz-landing-glow</code> del catálogo, definidas en <code>components/landing-main.css</code>, <code>landing-section.css</code> y <code>landing-glow.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 18 tokens que leen, por familia, las reglas de <code>.luz-main</code>, <code>.luz-section</code> y <code>.luz-glow</code> del catálogo, definidas en <code>components/main.css</code>, <code>section.css</code> y <code>glow.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xl</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>

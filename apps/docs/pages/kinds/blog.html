@@ -74,12 +74,12 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       </div>
       <div class="docs-block">
         <h2 id="page-header">Page header</h2>
-        <p>The title of a page that is not a story: a section, an archive, the About page. The <a href="/docs/catalog/cms-page-header/">page header</a> holds its <code>&lt;h1&gt;</code> and one sentence.</p>
+        <p>The title of a page that is not a story: a section, an archive, the About page. The <a href="/docs/catalog/page-header/">page header</a> holds its <code>&lt;h1&gt;</code> and one sentence.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="luz-cms-page-header u-mb-0">
-              <p class="luz-cms-page-header__title">Coast</p>
-              <p class="luz-cms-page-header__lead">The sea, the port and the beaches of Vejer, and the people who work on them.</p>
+            <div class="luz-page-header u-mb-0">
+              <p class="luz-page-header__title">Coast</p>
+              <p class="luz-page-header__lead">The sea, the port and the beaches of Vejer, and the people who work on them.</p>
             </div>
           </div>
         </div>
@@ -88,9 +88,9 @@ keywords: blog, newspaper, magazine, articles, posts, static site
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-page-header" aria-label="Copy the page header markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page header markup"><code id="code-k-blog-page-header">&lt;div class=&quot;luz-cms-page-header&quot;&gt;
-  &lt;h1 class=&quot;luz-cms-page-header__title&quot;&gt;Coast&lt;/h1&gt;
-  &lt;p class=&quot;luz-cms-page-header__lead&quot;&gt;The sea, the port and the beaches of Vejer, and the people who work on them.&lt;/p&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page header markup"><code id="code-k-blog-page-header">&lt;div class=&quot;luz-page-header&quot;&gt;
+  &lt;h1 class=&quot;luz-page-header__title&quot;&gt;Coast&lt;/h1&gt;
+  &lt;p class=&quot;luz-page-header__lead&quot;&gt;The sea, the port and the beaches of Vejer, and the people who work on them.&lt;/p&gt;
 &lt;/div&gt;</code></pre>
         </div>
       </div>
@@ -139,21 +139,21 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       </div>
       <div class="docs-block">
         <h2 id="article-header">Article header</h2>
-        <p>The top of a story: its section, the title, a standfirst, the byline with the date and the reading time, and the lead picture. The <a href="/docs/catalog/cms-article-header/">article header</a> holds the story's <code>&lt;h1&gt;</code>; the date and the reading time are core's <a href="/docs/components/meta/">meta line</a>.</p>
+        <p>The top of a story: its section, the title, a standfirst, the byline with the date and the reading time, and the lead picture. The <a href="/docs/catalog/article-header/">article header</a> holds the story's <code>&lt;h1&gt;</code>; the date and the reading time are core's <a href="/docs/components/meta/">meta line</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <header class="luz-cms-article-header u-mb-0">
-              <p class="luz-cms-article-header__kicker"><a href="#article-header">Coast</a></p>
-              <p class="luz-cms-article-header__title">What ten years of tide records say about the bay</p>
-              <p class="luz-cms-article-header__standfirst">Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.</p>
-              <div class="luz-cms-article-header__byline">
+            <header class="luz-article-header u-mb-0">
+              <p class="luz-article-header__kicker"><a href="#article-header">Coast</a></p>
+              <p class="luz-article-header__title">What ten years of tide records say about the bay</p>
+              <p class="luz-article-header__standfirst">Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.</p>
+              <div class="luz-article-header__byline">
                 <span class="luz-avatar luz-avatar--lg" aria-hidden="true">AR</span>
                 <div>
                   <p>By <a href="#article-header">Ana Ruiz</a></p>
                   <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
                 </div>
               </div>
-              <figure class="luz-cms-article-header__media">
+              <figure class="luz-article-header__media">
                 <div class="luz-image"></div>
                 <figcaption>The tide gauge in the port, at low tide.</figcaption>
               </figure>
@@ -165,18 +165,18 @@ keywords: blog, newspaper, magazine, articles, posts, static site
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-article-header" aria-label="Copy the article header markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article header markup"><code id="code-k-blog-article-header">&lt;header class=&quot;luz-cms-article-header&quot;&gt;
-  &lt;p class=&quot;luz-cms-article-header__kicker&quot;&gt;&lt;a href=&quot;/coast/&quot;&gt;Coast&lt;/a&gt;&lt;/p&gt;
-  &lt;h1 class=&quot;luz-cms-article-header__title&quot;&gt;What ten years of tide records say about the bay&lt;/h1&gt;
-  &lt;p class=&quot;luz-cms-article-header__standfirst&quot;&gt;Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.&lt;/p&gt;
-  &lt;div class=&quot;luz-cms-article-header__byline&quot;&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article header markup"><code id="code-k-blog-article-header">&lt;header class=&quot;luz-article-header&quot;&gt;
+  &lt;p class=&quot;luz-article-header__kicker&quot;&gt;&lt;a href=&quot;/coast/&quot;&gt;Coast&lt;/a&gt;&lt;/p&gt;
+  &lt;h1 class=&quot;luz-article-header__title&quot;&gt;What ten years of tide records say about the bay&lt;/h1&gt;
+  &lt;p class=&quot;luz-article-header__standfirst&quot;&gt;Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.&lt;/p&gt;
+  &lt;div class=&quot;luz-article-header__byline&quot;&gt;
     &lt;span class=&quot;luz-avatar luz-avatar--lg&quot;&gt;&lt;img src=&quot;/authors/ana-ruiz-96.jpg&quot; width=&quot;48&quot; height=&quot;48&quot; alt=&quot;&quot;&gt;&lt;/span&gt;
     &lt;div&gt;
       &lt;p&gt;By &lt;a href=&quot;/authors/ana-ruiz/&quot;&gt;Ana Ruiz&lt;/a&gt;&lt;/p&gt;
       &lt;p class=&quot;luz-meta&quot;&gt;&lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt; &lt;span&gt;6 min read&lt;/span&gt;&lt;/p&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;figure class=&quot;luz-cms-article-header__media&quot;&gt;
+  &lt;figure class=&quot;luz-article-header__media&quot;&gt;
     &lt;div class=&quot;luz-image&quot;&gt;
       &lt;img src=&quot;/img/tide-gauge-1280.jpg&quot; width=&quot;1280&quot; height=&quot;720&quot; alt=&quot;A green gauge post marked in centimetres, in shallow water by a stone quay&quot; fetchpriority=&quot;high&quot; decoding=&quot;async&quot;&gt;
     &lt;/div&gt;
@@ -187,14 +187,14 @@ keywords: blog, newspaper, magazine, articles, posts, static site
       </div>
       <div class="docs-block">
         <h2 id="toc">Table of contents</h2>
-        <p>The sections of a long story, beside its text: the <a href="/docs/catalog/cms-toc/">table of contents</a>, in an <code>&lt;article&gt;</code> with the text as core's <a href="/docs/components/prose/">prose</a>. Leave it out of a short post, and the layout is the text alone.</p>
+        <p>The sections of a long story, beside its text: the <a href="/docs/catalog/toc/">table of contents</a>, in an <code>&lt;article&gt;</code> with the text as core's <a href="/docs/components/prose/">prose</a>. Leave it out of a short post, and the layout is the text alone.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <article class="luz-cms-article">
-              <div class="luz-cms-article__layout">
-                <nav class="luz-cms-toc" aria-labelledby="k-blog-toc-title" data-luz-spy>
-                  <h3 class="luz-cms-toc__title" id="k-blog-toc-title">Contents</h3>
-                  <ol class="luz-cms-toc__list">
+            <article class="luz-article">
+              <div class="luz-article__layout">
+                <nav class="luz-toc" aria-labelledby="k-blog-toc-title" data-luz-spy>
+                  <h3 class="luz-toc__title" id="k-blog-toc-title">Contents</h3>
+                  <ol class="luz-toc__list">
                     <li><a href="#k-blog-toc-method">How the readings were taken</a></li>
                     <li><a href="#k-blog-toc-level">Four centimetres in ten years</a></li>
                   </ol>
@@ -216,12 +216,12 @@ keywords: blog, newspaper, magazine, articles, posts, static site
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-toc" aria-label="Copy the article with a table of contents markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article with a table of contents markup"><code id="code-k-blog-toc">&lt;article class=&quot;luz-cms-article&quot;&gt;
-  &lt;header class=&quot;luz-cms-article-header&quot;&gt;…&lt;/header&gt;
-  &lt;div class=&quot;luz-cms-article__layout&quot;&gt;
-    &lt;nav class=&quot;luz-cms-toc&quot; aria-labelledby=&quot;toc-title&quot; data-luz-spy&gt;
-      &lt;h2 class=&quot;luz-cms-toc__title&quot; id=&quot;toc-title&quot;&gt;Contents&lt;/h2&gt;
-      &lt;ol class=&quot;luz-cms-toc__list&quot;&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article with a table of contents markup"><code id="code-k-blog-toc">&lt;article class=&quot;luz-article&quot;&gt;
+  &lt;header class=&quot;luz-article-header&quot;&gt;…&lt;/header&gt;
+  &lt;div class=&quot;luz-article__layout&quot;&gt;
+    &lt;nav class=&quot;luz-toc&quot; aria-labelledby=&quot;toc-title&quot; data-luz-spy&gt;
+      &lt;h2 class=&quot;luz-toc__title&quot; id=&quot;toc-title&quot;&gt;Contents&lt;/h2&gt;
+      &lt;ol class=&quot;luz-toc__list&quot;&gt;
         &lt;li&gt;&lt;a href=&quot;#method&quot;&gt;How the readings were taken&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href=&quot;#level&quot;&gt;Four centimetres in ten years&lt;/a&gt;&lt;/li&gt;
       &lt;/ol&gt;

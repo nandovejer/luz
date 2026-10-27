@@ -6,20 +6,20 @@ order: 26
 group: documentation
 fits-kinds: docs
 fits: the top of a documentation page
-files: components/docs-page-head.css
+files: components/doc-header.css
 keywords: title, lead, eyebrow, chips, page top
 toc: h2,h3
 -->
-    <div class="docs-component" id="p-docs-page-head">
+    <div class="docs-component" id="p-doc-header">
           <h2 id="example">Example</h2>
           <p>The head of a page about installing a command line tool.</p>
           <div class="docs-example" data-docs-specimen>
             <div class="docs-demo__stage" inert aria-hidden="true">
-              <header class="luz-docs-page-head">
-                <p class="luz-docs-page-head__eyebrow">Guides · Setup</p>
+              <header class="luz-doc-header">
+                <p class="luz-doc-header__eyebrow">Guides · Setup</p>
                 <h1>Install the command line tool</h1>
-                <p class="luz-docs-page-head__lead">Add the tool to a project and check that it runs, in about two minutes.</p>
-                <ul class="luz-docs-page-head__meta">
+                <p class="luz-doc-header__lead">Add the tool to a project and check that it runs, in about two minutes.</p>
+                <ul class="luz-doc-header__meta">
                   <li>Version 2</li>
                   <li>macOS, Linux and Windows</li>
                   <li><a href="#known-issues">No known issues</a></li>
@@ -42,13 +42,13 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-page-head" aria-label="Copy the page head markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-doc-header" aria-label="Copy the page head markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page head markup"><code id="code-docs-page-head">&lt;header class=&quot;luz-docs-page-head&quot;&gt;
-  &lt;p class=&quot;luz-docs-page-head__eyebrow&quot;&gt;Guides · Setup&lt;/p&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page head markup"><code id="code-doc-header">&lt;header class=&quot;luz-doc-header&quot;&gt;
+  &lt;p class=&quot;luz-doc-header__eyebrow&quot;&gt;Guides · Setup&lt;/p&gt;
   &lt;h1&gt;Install the command line tool&lt;/h1&gt;
-  &lt;p class=&quot;luz-docs-page-head__lead&quot;&gt;Add the tool to a project and check that it runs, in about two minutes.&lt;/p&gt;
-  &lt;ul class=&quot;luz-docs-page-head__meta&quot;&gt;
+  &lt;p class=&quot;luz-doc-header__lead&quot;&gt;Add the tool to a project and check that it runs, in about two minutes.&lt;/p&gt;
+  &lt;ul class=&quot;luz-doc-header__meta&quot;&gt;
     &lt;li&gt;Version 2&lt;/li&gt;
     &lt;li&gt;macOS, Linux and Windows&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;#known-issues&quot;&gt;No known issues&lt;/a&gt;&lt;/li&gt;
@@ -63,16 +63,16 @@ toc: h2,h3
                   <tr><th scope="col">Class</th><th scope="col">Effect</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Class"><div><code>.luz-docs-page-head</code></div></td><td data-label="Effect"><div>On a <code>&lt;header&gt;</code> in the content: one column, with a gap between its parts and room under it. Its <code>h1</code> is <code>--luz-text-4xl</code>, and <code>--luz-text-2xl</code> at 640px and below</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-page-head__eyebrow</code></div></td><td data-label="Effect"><div>On a <code>&lt;p&gt;</code>: the area and the group, in small spaced capitals and the secondary colour. A <code>&lt;code&gt;</code> in it, a package name, keeps its own case. In Arabic the spacing between letters is left out</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-page-head__lead</code></div></td><td data-label="Effect"><div>On a <code>&lt;p&gt;</code>: one sentence, larger than the text, in the secondary colour</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-page-head__meta</code></div></td><td data-label="Effect"><div>On a <code>&lt;ul&gt;</code>: the chips. Each <code>&lt;li&gt;</code> is a word or two in a rounded outline, at least <code>--luz-control-sm</code> (28px) tall. A link in one is the same height</div></td></tr>
-                <tr><td data-label="Class"><div><code>.luz-docs-page-head__files</code></div></td><td data-label="Effect"><div>On a <code>&lt;p&gt;</code>, instead of the chips, on a page that is not a component: "Files:" and each file in a <code>&lt;code&gt;</code>, one small line in the secondary colour</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-doc-header</code></div></td><td data-label="Effect"><div>On a <code>&lt;header&gt;</code> in the content: one column, with a gap between its parts and room under it. Its <code>h1</code> is <code>--luz-text-4xl</code>, and <code>--luz-text-2xl</code> at 640px and below</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-doc-header__eyebrow</code></div></td><td data-label="Effect"><div>On a <code>&lt;p&gt;</code>: the area and the group, in small spaced capitals and the secondary colour. A <code>&lt;code&gt;</code> in it, a package name, keeps its own case. In Arabic the spacing between letters is left out</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-doc-header__lead</code></div></td><td data-label="Effect"><div>On a <code>&lt;p&gt;</code>: one sentence, larger than the text, in the secondary colour</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-doc-header__meta</code></div></td><td data-label="Effect"><div>On a <code>&lt;ul&gt;</code>: the chips. Each <code>&lt;li&gt;</code> is a word or two in a rounded outline, at least <code>--luz-control-sm</code> (28px) tall. A link in one is the same height</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-doc-header__files</code></div></td><td data-label="Effect"><div>On a <code>&lt;p&gt;</code>, instead of the chips, on a page that is not a component: "Files:" and each file in a <code>&lt;code&gt;</code>, one small line in the secondary colour</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>components/docs-page-head.css</code> of <code>@luz-ds/catalog</code>. It sets the rhythm and the sizes; the words are yours.</p>
+            <p>CSS from <code>components/doc-header.css</code> of <code>@luz-ds/catalog</code>. It sets the rhythm and the sizes; the words are yours.</p>
             <ul>
               <li>The head is a grid of one column. The gap between the parts is <code>--luz-space-sm</code> and the space under the head is <code>--luz-space-xl</code>.</li>
               <li>The <code>h1</code> is a plain element inside the head, with no class: the head styles it by position.</li>
@@ -101,28 +101,28 @@ toc: h2,h3
             <p>Do not use the head for the banner of the site: it holds the page's <code>h1</code>.</p>
             <ul>
               <li>One head per page. A section of a long page has an <code>h2</code>, not another head.</li>
-              <li>For the header of an article in a blog, use <a href="/docs/catalog/cms-article-header/">the CMS article header</a>.</li>
-              <li>A landing page opens with <a href="/docs/catalog/landing-hero/">the hero</a>.</li>
+              <li>For the header of an article in a blog, use <a href="/docs/catalog/article-header/">the CMS article header</a>.</li>
+              <li>A landing page opens with <a href="/docs/catalog/hero/">the hero</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Keep the lead to one sentence that says what the page lets the reader do.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <header class="luz-docs-page-head">
-                    <p class="luz-docs-page-head__eyebrow">Guides · Setup</p>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Keep the lead to one sentence that says what the page lets the reader do.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <header class="luz-doc-header">
+                    <p class="luz-doc-header__eyebrow">Guides · Setup</p>
                     <h1>Configure the cache</h1>
-                    <p class="luz-docs-page-head__lead">Choose where the tool keeps its files and when it clears them.</p>
+                    <p class="luz-doc-header__lead">Choose where the tool keeps its files and when it clears them.</p>
                   </header>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Repeat the title in the lead, or write a paragraph there: the reader skims the head and gets nothing new.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <header class="luz-docs-page-head">
-                    <p class="luz-docs-page-head__eyebrow">Guides · Setup</p>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Repeat the title in the lead, or write a paragraph there: the reader skims the head and gets nothing new.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <header class="luz-doc-header">
+                    <p class="luz-doc-header__eyebrow">Guides · Setup</p>
                     <h1>Configure the cache</h1>
-                    <p class="luz-docs-page-head__lead">This page is about how to configure the cache. The cache is a place where the tool keeps files, and you can configure it in several ways, described below.</p>
+                    <p class="luz-doc-header__lead">This page is about how to configure the cache. The cache is a place where the tool keeps files, and you can configure it in several ways, described below.</p>
                   </header>
                 </div>
               </figure>
@@ -158,7 +158,7 @@ toc: h2,h3
               <li><strong>Edges:</strong> the outline of a chip (<code>--luz-divider</code>) is decorative and has no minimum.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 12 tokens that the <code>.luz-docs-page-head</code> rules of catalog’s <code>components/docs-page-head.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 12 tokens that the <code>.luz-doc-header</code> rules of catalog’s <code>components/doc-header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>

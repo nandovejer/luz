@@ -4,7 +4,7 @@
  * a native radio group (:root:has() in the tokens) and the menu
  * drawer is a native popover.
  *
- * - Color mode: <luz-mode remember by="clock"> in the footer owns it (it
+ * - Color mode: <luz-color-mode remember by="clock"> in the footer owns it (it
  *   stores the choice under core's "luz-theme" key and, in Auto, follows
  *   the clock: apps/site/boot.js set the same mode before the first paint);
  *   this module defines the element and turns the radios into core's cycle
@@ -21,8 +21,8 @@
 
 import { initThemeCycle } from "/packages/core/dist/theme.js";
 import { initSidebar } from "/packages/catalog/dist/sidebar.js";
-// Defines <luz-mode>: the footer's switcher on every page, which owns the mode
-import "/packages/catalog/dist/mode.js";
+// Defines <luz-color-mode>: the footer's switcher on every page, which owns the mode
+import "/packages/catalog/dist/color-mode.js";
 
 function publishHeight(header) {
   const publish = () =>

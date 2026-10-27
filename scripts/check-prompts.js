@@ -16,7 +16,7 @@
  *   - a prompt that does not hold every line of the body that has no
  *     placeholder (the five come from the same body);
  *   - a class or a custom element that no package's manifest has;
- *   - a pattern of the catalog that a preset names (`luz-landing-hero`,
+ *   - a pattern of the catalog that a preset names (`luz-hero`,
  *     `<luz-search>`) whose page does not say it fits that kind (`fits-kinds`
  *     in apps/docs/pages/catalog/, or `any`);
  *   - a prompt over its ceiling, the row "prompts" of budgets.json;

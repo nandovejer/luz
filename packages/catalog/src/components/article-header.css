@@ -8,7 +8,7 @@
 	 around a paragraph works as well as the paragraph.
 	 ========================================================================== */
 
-.luz-cms-article-header {
+.luz-article-header {
 	display: grid;
 	gap: var(--luz-space-sm);
 	margin-block-end: var(--luz-space-xl);
@@ -16,7 +16,7 @@
 
 /* The section above the title, in the voice of site's hero eyebrow, so a
    story and a home page start alike. A link in it stays a link. */
-.luz-cms-article-header__kicker {
+.luz-article-header__kicker {
 	font-family: var(--luz-font-mono);
 	font-size: var(--luz-text-xs);
 	font-weight: 500;
@@ -27,19 +27,19 @@
 }
 
 /* The mono has no Arabic letters; spacing between letters breaks the joins */
-.luz-cms-article-header__kicker:lang(ar) {
+.luz-article-header__kicker:lang(ar) {
 	font-family: var(--luz-font-sans);
 }
 
-.luz-cms-article-header__kicker:lang(ar),
-.luz-cms-article-header__title:lang(ar) {
+.luz-article-header__kicker:lang(ar),
+.luz-article-header__title:lang(ar) {
 	letter-spacing: 0;
 }
 
 /* The title of a story runs long: balanced lines, a little tighter. The
    heading's look is set here too, so a template that writes the title in
    another element (a link in a <p>, a block's wrapper) keeps it. */
-.luz-cms-article-header__title {
+.luz-article-header__title {
 	font-family: var(--luz-font-heading);
 	font-size: var(--luz-text-3xl);
 	font-weight: 300;
@@ -50,7 +50,7 @@
 }
 
 /* The standfirst: what the story says, in a sentence or two */
-.luz-cms-article-header__standfirst {
+.luz-article-header__standfirst {
 	max-inline-size: 70ch;
 	font-size: var(--luz-text-lg);
 	line-height: 1.4;
@@ -60,7 +60,7 @@
 
 /* Who wrote it and when: an avatar, then its lines. Facts, not prose: the
    sans, as navigation and labels are */
-.luz-cms-article-header__byline {
+.luz-article-header__byline {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -74,7 +74,7 @@
 
 /* The lead picture and its caption, edge to edge: core's bare <figure> is
    a tinted panel, which would frame the photo twice */
-.luz-cms-article-header__media {
+.luz-article-header__media {
 	margin-block: var(--luz-space-sm) 0;
 	margin-inline: 0;
 	padding: 0;
@@ -82,11 +82,11 @@
 }
 
 @media (max-width: 640px) {
-	.luz-cms-article-header__title {
+	.luz-article-header__title {
 		font-size: var(--luz-text-2xl);
 	}
 
-	.luz-cms-article-header__standfirst {
+	.luz-article-header__standfirst {
 		font-size: var(--luz-text-base);
 	}
 }

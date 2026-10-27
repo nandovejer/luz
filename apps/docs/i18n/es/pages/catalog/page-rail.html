@@ -3,32 +3,32 @@ title: Índice lateral
 description: La lista de secciones de una página que permanece visible junto al contenido, con las acciones de la página debajo.
 fits: el lateral de una página de documentación larga
 keywords: en esta página, fijo, seguimiento del desplazamiento, índice, lista de secciones
-source: 0092c2603fde
+source: d15d5d99970b
 reviewed: false
 -->
-    <div class="docs-component" id="p-docs-rail">
+    <div class="docs-component" id="p-page-rail">
           <h2 id="example">Ejemplo</h2>
           <p>Una página con el índice lateral: la lista de secciones y las tres acciones.</p>
           <div class="docs-example" data-docs-specimen>
             <div class="docs-demo__stage">
               <div class="o-grid o-grid--2">
                 <div>
-                  <div class="luz-docs-rail" style="display: block">
-                    <div class="luz-docs-rail__inner">
-                      <nav class="luz-docs-rail__onpage" aria-label="On this page, example">
-                        <details class="luz-docs-rail__fold" open>
-                          <summary class="luz-docs-rail__title">On this page</summary>
-                          <ul class="luz-docs-rail__list">
-                            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#rail-demo-install">Install</a></li>
-                            <li><a class="luz-sidebar__link luz-docs-rail__link" href="#rail-demo-configure">Configure</a>
-                              <ul class="luz-docs-rail__sub">
-                                <li><a class="luz-sidebar__link luz-docs-rail__link" href="#rail-demo-file">The config file</a></li>
+                  <div class="luz-page-rail" style="display: block">
+                    <div class="luz-page-rail__inner">
+                      <nav class="luz-page-rail__onpage" aria-label="On this page, example">
+                        <details class="luz-page-rail__fold" open>
+                          <summary class="luz-page-rail__title">On this page</summary>
+                          <ul class="luz-page-rail__list">
+                            <li><a class="luz-sidebar__link luz-page-rail__link" href="#rail-demo-install">Install</a></li>
+                            <li><a class="luz-sidebar__link luz-page-rail__link" href="#rail-demo-configure">Configure</a>
+                              <ul class="luz-page-rail__sub">
+                                <li><a class="luz-sidebar__link luz-page-rail__link" href="#rail-demo-file">The config file</a></li>
                               </ul>
                             </li>
                           </ul>
                         </details>
                       </nav>
-                      <div class="luz-docs-rail__actions">
+                      <div class="luz-page-rail__actions">
                         <a href="#example">Copy page as Markdown</a>
                         <a href="#example">Edit this page</a>
                         <a href="#example">Report a problem</a>
@@ -61,24 +61,24 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-rail" aria-label="Copy the rail markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-page-rail" aria-label="Copy the rail markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Rail markup"><code id="code-docs-rail">&lt;aside class=&quot;luz-docs-rail&quot; aria-label=&quot;About this page&quot;&gt;
-  &lt;div class=&quot;luz-docs-rail__inner&quot;&gt;
-    &lt;nav class=&quot;luz-docs-rail__onpage&quot; aria-labelledby=&quot;onpage-title&quot;&gt;
-      &lt;details class=&quot;luz-docs-rail__fold&quot; open&gt;
-        &lt;summary class=&quot;luz-docs-rail__title&quot; id=&quot;onpage-title&quot;&gt;On this page&lt;/summary&gt;
-        &lt;ul class=&quot;luz-docs-rail__list&quot;&gt;
-          &lt;li&gt;&lt;a class=&quot;luz-sidebar__link luz-docs-rail__link&quot; href=&quot;#install&quot;&gt;Install&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a class=&quot;luz-sidebar__link luz-docs-rail__link&quot; href=&quot;#configure&quot;&gt;Configure&lt;/a&gt;
-            &lt;ul class=&quot;luz-docs-rail__sub&quot;&gt;
-              &lt;li&gt;&lt;a class=&quot;luz-sidebar__link luz-docs-rail__link&quot; href=&quot;#config-file&quot;&gt;The config file&lt;/a&gt;&lt;/li&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Rail markup"><code id="code-page-rail">&lt;aside class=&quot;luz-page-rail&quot; aria-label=&quot;About this page&quot;&gt;
+  &lt;div class=&quot;luz-page-rail__inner&quot;&gt;
+    &lt;nav class=&quot;luz-page-rail__onpage&quot; aria-labelledby=&quot;onpage-title&quot;&gt;
+      &lt;details class=&quot;luz-page-rail__fold&quot; open&gt;
+        &lt;summary class=&quot;luz-page-rail__title&quot; id=&quot;onpage-title&quot;&gt;On this page&lt;/summary&gt;
+        &lt;ul class=&quot;luz-page-rail__list&quot;&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-sidebar__link luz-page-rail__link&quot; href=&quot;#install&quot;&gt;Install&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class=&quot;luz-sidebar__link luz-page-rail__link&quot; href=&quot;#configure&quot;&gt;Configure&lt;/a&gt;
+            &lt;ul class=&quot;luz-page-rail__sub&quot;&gt;
+              &lt;li&gt;&lt;a class=&quot;luz-sidebar__link luz-page-rail__link&quot; href=&quot;#config-file&quot;&gt;The config file&lt;/a&gt;&lt;/li&gt;
             &lt;/ul&gt;
           &lt;/li&gt;
         &lt;/ul&gt;
       &lt;/details&gt;
     &lt;/nav&gt;
-    &lt;div class=&quot;luz-docs-rail__actions&quot;&gt;
+    &lt;div class=&quot;luz-page-rail__actions&quot;&gt;
       &lt;a href=&quot;https://example.com/docs/install.md&quot;&gt;Copy page as Markdown&lt;/a&gt;
       &lt;a href=&quot;https://example.com/edit/install.md&quot;&gt;Edit this page&lt;/a&gt;
       &lt;a href=&quot;https://example.com/issues/new&quot;&gt;Report a problem&lt;/a&gt;
@@ -94,22 +94,22 @@ reviewed: false
                   <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail</code></div></td><td data-label="Efecto"><div>En un <code>&lt;aside&gt;</code>: la tercera columna de la <a href="/docs/catalog/docs-shell/">estructura</a> a partir de 80rem, tan alta como el contenido; por debajo de ese ancho, aparece encima del contenido</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail__inner</code></div></td><td data-label="Efecto"><div>En un <code>&lt;div&gt;</code>, único hijo del índice lateral, que contiene la lista y las acciones: a partir de 80rem es una caja fija dentro del índice, así nunca tapa el pie y se desplaza por sí sola, con espacio al principio para el anillo de foco</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail__onpage</code></div></td><td data-label="Efecto"><div>En el <code>&lt;nav&gt;</code> de la lista, hijo directo de <code>__inner</code>: limita el reinicio del plegado y su título, y sirve de anclaje para un script</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail__fold</code></div></td><td data-label="Efecto"><div>En un <code>&lt;details&gt;</code> nativo. Escribe <code>open</code> para que la lista se muestre sin script. Cuando el índice lateral está encima del contenido, un script puede cerrarlo al cargar la página</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail__title</code></div></td><td data-label="Efecto"><div>En <code>&lt;summary&gt;</code>: «En esta página», en seminegrita. Es el nombre del <code>&lt;nav&gt;</code></div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail__list</code></div></td><td data-label="Efecto"><div>En el <code>&lt;ul&gt;</code>: sin viñetas y con una línea al principio</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail__link</code> junto con <code>.luz-sidebar__link</code></div></td><td data-label="Efecto"><div>En cada <code>&lt;a&gt;</code>: texto de la página, con 28px de alto. El enlace marcado con <code>aria-current="true"</code> tiene un borde al principio en el color de marca</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail__sub</code></div></td><td data-label="Efecto"><div>En un <code>&lt;ul&gt;</code> anidado: el <code>h3</code> de un <code>h2</code>, con sangría</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-rail__actions</code></div></td><td data-label="Efecto"><div>Una columna de enlaces bajo una línea: copiar, editar e informar</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail</code></div></td><td data-label="Efecto"><div>En un <code>&lt;aside&gt;</code>: la tercera columna de la <a href="/docs/catalog/docs-layout/">estructura</a> a partir de 80rem, tan alta como el contenido; por debajo de ese ancho, aparece encima del contenido</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail__inner</code></div></td><td data-label="Efecto"><div>En un <code>&lt;div&gt;</code>, único hijo del índice lateral, que contiene la lista y las acciones: a partir de 80rem es una caja fija dentro del índice, así nunca tapa el pie y se desplaza por sí sola, con espacio al principio para el anillo de foco</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail__onpage</code></div></td><td data-label="Efecto"><div>En el <code>&lt;nav&gt;</code> de la lista, hijo directo de <code>__inner</code>: limita el reinicio del plegado y su título, y sirve de anclaje para un script</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail__fold</code></div></td><td data-label="Efecto"><div>En un <code>&lt;details&gt;</code> nativo. Escribe <code>open</code> para que la lista se muestre sin script. Cuando el índice lateral está encima del contenido, un script puede cerrarlo al cargar la página</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail__title</code></div></td><td data-label="Efecto"><div>En <code>&lt;summary&gt;</code>: «En esta página», en seminegrita. Es el nombre del <code>&lt;nav&gt;</code></div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail__list</code></div></td><td data-label="Efecto"><div>En el <code>&lt;ul&gt;</code>: sin viñetas y con una línea al principio</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail__link</code> junto con <code>.luz-sidebar__link</code></div></td><td data-label="Efecto"><div>En cada <code>&lt;a&gt;</code>: texto de la página, con 28px de alto. El enlace marcado con <code>aria-current="true"</code> tiene un borde al principio en el color de marca</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail__sub</code></div></td><td data-label="Efecto"><div>En un <code>&lt;ul&gt;</code> anidado: el <code>h3</code> de un <code>h2</code>, con sangría</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-rail__actions</code></div></td><td data-label="Efecto"><div>Una columna de enlaces bajo una línea: copiar, editar e informar</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/docs-rail.css</code> de <code>@luz-ds/catalog</code> sobre el enlace de la barra lateral y su seguimiento del desplazamiento de catalog.</p>
+            <p>CSS de <code>components/page-rail.css</code> de <code>@luz-ds/catalog</code> sobre el enlace de la barra lateral y su seguimiento del desplazamiento de catalog.</p>
             <ul>
-              <li>Por debajo de 80rem, el índice lateral aparece encima del contenido, bajo la cabecera. A partir de 80rem ocupa una columna tan alta como el contenido, y su caja interior queda fija a <code>--luz-docs-rail-top</code> desde la parte superior de la ventana: se detiene al final del índice y nunca tapa el pie. La caja interior no supera la altura de la ventana y se desplaza por sí sola si la lista es más larga.</li>
+              <li>Por debajo de 80rem, el índice lateral aparece encima del contenido, bajo la cabecera. A partir de 80rem ocupa una columna tan alta como el contenido, y su caja interior queda fija a <code>--luz-page-rail-top</code> desde la parte superior de la ventana: se detiene al final del índice y nunca tapa el pie. La caja interior no supera la altura de la ventana y se desplaza por sí sola si la lista es más larga.</li>
               <li>Los enlaces usan <code>.luz-sidebar__link</code> de catalog, así que su script marca la sección visible con <code>aria-current="true"</code>. El índice lateral representa el enlace como texto de la página: la marca combina el grosor y un borde al principio, nunca depende solo del color.</li>
               <li>La lista incluye cada <code>h2</code> de la página y, debajo, cada <code>h3</code>. No hay más niveles de anidación.</li>
               <li>«Copiar la página como Markdown» es un enlace al archivo Markdown de la página; te corresponde implementar su copia con un script. El índice lateral no se imprime.</li>
@@ -136,27 +136,27 @@ reviewed: false
             <p>No uses el índice lateral en una página corta: leer dos enlaces lleva más que leer la propia página.</p>
             <ul>
               <li>Incluye las secciones de una sola página. Las páginas del sitio van en la barra lateral.</li>
-              <li>No anides más allá de un <code>h3</code>. Para mostrar el índice junto a un artículo, usa la <a href="/docs/catalog/cms-toc/">tabla de contenidos de CMS</a>.</li>
+              <li>No anides más allá de un <code>h3</code>. Para mostrar el índice junto a un artículo, usa la <a href="/docs/catalog/toc/">tabla de contenidos de CMS</a>.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Usa en los enlaces las mismas palabras que en los encabezados, para que cada uno indique el nombre de su sección.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <ul class="luz-docs-rail__list">
-                    <li><a class="luz-sidebar__link luz-docs-rail__link" href="#">Install</a></li>
-                    <li><a class="luz-sidebar__link luz-docs-rail__link" href="#">Configure</a></li>
-                    <li><a class="luz-sidebar__link luz-docs-rail__link" href="#">Deploy</a></li>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Usa en los enlaces las mismas palabras que en los encabezados, para que cada uno indique el nombre de su sección.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-page-rail__list">
+                    <li><a class="luz-sidebar__link luz-page-rail__link" href="#">Install</a></li>
+                    <li><a class="luz-sidebar__link luz-page-rail__link" href="#">Configure</a></li>
+                    <li><a class="luz-sidebar__link luz-page-rail__link" href="#">Deploy</a></li>
                   </ul>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No numeres los enlaces con rótulos como «Parte 1» y «Parte 2»: fuera de contexto, esa lista no significa nada.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <ul class="luz-docs-rail__list">
-                    <li><a class="luz-sidebar__link luz-docs-rail__link" href="#">Part 1</a></li>
-                    <li><a class="luz-sidebar__link luz-docs-rail__link" href="#">Part 2</a></li>
-                    <li><a class="luz-sidebar__link luz-docs-rail__link" href="#">Part 3</a></li>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> No numeres los enlaces con rótulos como «Parte 1» y «Parte 2»: fuera de contexto, esa lista no significa nada.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-page-rail__list">
+                    <li><a class="luz-sidebar__link luz-page-rail__link" href="#">Part 1</a></li>
+                    <li><a class="luz-sidebar__link luz-page-rail__link" href="#">Part 2</a></li>
+                    <li><a class="luz-sidebar__link luz-page-rail__link" href="#">Part 3</a></li>
                   </ul>
                 </div>
               </figure>
@@ -192,7 +192,7 @@ reviewed: false
               <li><strong>Área de activación:</strong> cada enlace, el resumen y cada acción miden al menos 28px de alto.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 14 tokens que leen las reglas de <code>.luz-docs-rail</code> de <code>components/docs-rail.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 14 tokens que leen las reglas de <code>.luz-page-rail</code> de <code>components/page-rail.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

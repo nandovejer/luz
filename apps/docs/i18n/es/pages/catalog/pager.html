@@ -3,18 +3,18 @@ title: Navegación entre páginas
 description: Dos bloques de enlaces al final de una página, uno a la página anterior y otro a la siguiente, cada uno con el título de la página a la que lleva.
 fits: el final de una página que forma parte de una secuencia
 keywords: anterior, siguiente, enlaces de página, secuencia
-source: b2399619d170
+source: 62835872c6b8
 reviewed: false
 -->
-    <div class="docs-component" id="p-docs-pager">
+    <div class="docs-component" id="p-pager">
           <h2 id="example">Ejemplo</h2>
           <p>Los dos bloques que enlazan con la página anterior y la siguiente.</p>
           <div class="docs-example" data-docs-specimen>
             <div class="docs-demo__stage">
               <nav aria-label="Previous and next page, example">
-                <ul class="luz-docs-pager">
-                  <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" rel="prev" href="#example"><span class="luz-docs-pager__label">Previous</span> <span class="luz-docs-pager__title">Install the tool</span></a></li>
-                  <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="#example"><span class="luz-docs-pager__label">Next</span> <span class="luz-docs-pager__title">Deploy to production</span></a></li>
+                <ul class="luz-pager">
+                  <li class="luz-pager__prev"><a class="luz-pager__link" rel="prev" href="#example"><span class="luz-pager__label">Previous</span> <span class="luz-pager__title">Install the tool</span></a></li>
+                  <li class="luz-pager__next"><a class="luz-pager__link" rel="next" href="#example"><span class="luz-pager__label">Next</span> <span class="luz-pager__title">Deploy to production</span></a></li>
                 </ul>
               </nav>
               <p class="docs-demo__note">Two blocks side by side, Next at the end; stacked at 640px and below. The whole block is the link.</p>
@@ -33,12 +33,12 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-pager" aria-label="Copy the pager markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-pager" aria-label="Copy the pager markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Pager markup"><code id="code-docs-pager">&lt;nav aria-label=&quot;Previous and next page&quot;&gt;
-  &lt;ul class=&quot;luz-docs-pager&quot;&gt;
-    &lt;li class=&quot;luz-docs-pager__prev&quot;&gt;&lt;a class=&quot;luz-docs-pager__link&quot; rel=&quot;prev&quot; href=&quot;/install/&quot;&gt;&lt;span class=&quot;luz-docs-pager__label&quot;&gt;Previous&lt;/span&gt; &lt;span class=&quot;luz-docs-pager__title&quot;&gt;Install the tool&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-    &lt;li class=&quot;luz-docs-pager__next&quot;&gt;&lt;a class=&quot;luz-docs-pager__link&quot; rel=&quot;next&quot; href=&quot;/deploy/&quot;&gt;&lt;span class=&quot;luz-docs-pager__label&quot;&gt;Next&lt;/span&gt; &lt;span class=&quot;luz-docs-pager__title&quot;&gt;Deploy to production&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Pager markup"><code id="code-pager">&lt;nav aria-label=&quot;Previous and next page&quot;&gt;
+  &lt;ul class=&quot;luz-pager&quot;&gt;
+    &lt;li class=&quot;luz-pager__prev&quot;&gt;&lt;a class=&quot;luz-pager__link&quot; rel=&quot;prev&quot; href=&quot;/install/&quot;&gt;&lt;span class=&quot;luz-pager__label&quot;&gt;Previous&lt;/span&gt; &lt;span class=&quot;luz-pager__title&quot;&gt;Install the tool&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-pager__next&quot;&gt;&lt;a class=&quot;luz-pager__link&quot; rel=&quot;next&quot; href=&quot;/deploy/&quot;&gt;&lt;span class=&quot;luz-pager__label&quot;&gt;Next&lt;/span&gt; &lt;span class=&quot;luz-pager__title&quot;&gt;Deploy to production&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/nav&gt;</code></pre>
             </div>
@@ -50,17 +50,17 @@ reviewed: false
                   <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Clase"><div><code>.luz-docs-pager</code></div></td><td data-label="Efecto"><div>En un <code>&lt;ul&gt;</code>: dos columnas iguales con separación y sin viñetas. Una columna a 640px o menos</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-pager__prev</code></div></td><td data-label="Efecto"><div>En el primer <code>&lt;li&gt;</code>: la primera columna</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-pager__next</code></div></td><td data-label="Efecto"><div>En el segundo <code>&lt;li&gt;</code>: la segunda columna, con el texto al final. Se mantiene ahí cuando no hay una página anterior</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-pager__link</code></div></td><td data-label="Efecto"><div>En el <code>&lt;a&gt;</code>: todo el bloque es un enlace, con borde y relleno. Al pasar el cursor cambian el borde y la superficie, y se subraya el título</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-pager__label</code></div></td><td data-label="Efecto"><div>«Anterior» o «Siguiente», en tamaño pequeño y con el color secundario</div></td></tr>
-                <tr><td data-label="Clase"><div><code>.luz-docs-pager__title</code></div></td><td data-label="Efecto"><div>El título de la página a la que lleva, más grande, en seminegrita y con el color de los enlaces</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-pager</code></div></td><td data-label="Efecto"><div>En un <code>&lt;ul&gt;</code>: dos columnas iguales con separación y sin viñetas. Una columna a 640px o menos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-pager__prev</code></div></td><td data-label="Efecto"><div>En el primer <code>&lt;li&gt;</code>: la primera columna</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-pager__next</code></div></td><td data-label="Efecto"><div>En el segundo <code>&lt;li&gt;</code>: la segunda columna, con el texto al final. Se mantiene ahí cuando no hay una página anterior</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-pager__link</code></div></td><td data-label="Efecto"><div>En el <code>&lt;a&gt;</code>: todo el bloque es un enlace, con borde y relleno. Al pasar el cursor cambian el borde y la superficie, y se subraya el título</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-pager__label</code></div></td><td data-label="Efecto"><div>«Anterior» o «Siguiente», en tamaño pequeño y con el color secundario</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-pager__title</code></div></td><td data-label="Efecto"><div>El título de la página a la que lleva, más grande, en seminegrita y con el color de los enlaces</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/docs-pager.css</code> de <code>@luz-ds/catalog</code>. Define los bloques; tú decides el orden de las páginas.</p>
+            <p>CSS de <code>components/pager.css</code> de <code>@luz-ds/catalog</code>. Define los bloques; tú decides el orden de las páginas.</p>
             <ul>
               <li>Los dos bloques tienen el mismo tamaño y todo el bloque es el área de activación, así que resulta fácil hacer clic o tocarlo.</li>
               <li>La primera página solo tiene «Siguiente» y la última solo «Anterior»: omite el otro <code>&lt;li&gt;</code>. Si solo hay «Siguiente», permanece al final de la segunda columna.</li>
@@ -92,20 +92,20 @@ reviewed: false
               <li>Para las páginas de una lista o tabla, usa la <a href="/docs/components/pagination/">paginación</a>, que incluye números de página.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Pon en cada bloque el título de la página a la que lleva para que se sepa adónde conduce el enlace.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <ul class="luz-docs-pager">
-                    <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="#"><span class="luz-docs-pager__label">Next</span> <span class="luz-docs-pager__title">Deploy to production</span></a></li>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Pon en cada bloque el título de la página a la que lleva para que se sepa adónde conduce el enlace.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-pager">
+                    <li class="luz-pager__next"><a class="luz-pager__link" rel="next" href="#"><span class="luz-pager__label">Next</span> <span class="luz-pager__title">Deploy to production</span></a></li>
                   </ul>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No pongas el título y deja solo «Siguiente»: quien lee no sabrá adónde lleva hasta que siga el enlace.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <ul class="luz-docs-pager">
-                    <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" rel="next" href="#"><span class="luz-docs-pager__title">Next</span></a></li>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> No pongas el título y deja solo «Siguiente»: quien lee no sabrá adónde lleva hasta que siga el enlace.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-pager">
+                    <li class="luz-pager__next"><a class="luz-pager__link" rel="next" href="#"><span class="luz-pager__title">Next</span></a></li>
                   </ul>
                 </div>
               </figure>
@@ -140,7 +140,7 @@ reviewed: false
               <li><strong>Bordes:</strong> el borde en reposo (<code>--luz-divider</code>) es decorativo y no tiene un mínimo.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 10 tokens que leen las reglas de <code>.luz-docs-pager</code> de <code>components/docs-pager.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 10 tokens que leen las reglas de <code>.luz-pager</code> de <code>components/pager.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>

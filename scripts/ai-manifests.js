@@ -543,7 +543,7 @@ function scriptReads(text) {
   return [...names].filter((n) => !isGlobal(n)).sort();
 }
 
-/** The attribute names a stylesheet selects on the tag itself (`:where(luz-banner)[tone="warning"]`), sorted. */
+/** The attribute names a stylesheet selects on the tag itself (`:where(luz-announcement)[tone="warning"]`), sorted. */
 function cssReads(text, tag) {
   const names = new Set();
   const selector = new RegExp(`(?<![.\\w-])${escapeRe(tag)}\\)?\\[([a-z][\\w-]*)(?:=["']?[^"'\\]]*["']?)?\\]`, "g");

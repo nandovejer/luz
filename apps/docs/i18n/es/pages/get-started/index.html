@@ -2,7 +2,7 @@
 title: Instala LUZ
 description: Elige un nivel y copia un comando de instalación o las etiquetas de CDN. Cada nivel necesita los que están por debajo, pero ninguno de los que están por encima.
 keywords: npm, CDN
-source: db919063b3c1
+source: 399f08dcd2ac
 reviewed: false
 -->
     <div class="docs-block" id="installation">
@@ -140,10 +140,10 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
         <p>Para empezar una landing page, un blog, una app o un sitio de documentación, ve a <a href="/docs/kinds/">Tipos de sitio</a>: un prompt para cualquier LLM y las recetas de cada parte para copiar.</p>
         <p>No hay un paquete para cada tipo de sitio. Sus patrones son componentes del catálogo, una hoja de estilos cada uno, con el nombre <code class="luz-code-inline">&lt;kind&gt;-&lt;name&gt;.css</code>. Instala el nivel 3 y enlaza, después de core, los archivos que use tu página:</p>
         <ul>
-          <li><strong>Landing page:</strong> <code class="luz-code-inline">landing-header</code>, <code class="luz-code-inline">landing-hero</code>, <code class="luz-code-inline">landing-main</code>, <code class="luz-code-inline">landing-section</code>, <code class="luz-code-inline">landing-stat</code>, <code class="luz-code-inline">landing-footer</code> y <code class="luz-code-inline">landing-glow</code>: la cabecera, el hero, las secciones y el pie de página.</li>
-          <li><strong>Blog o periódico, con cualquier CMS:</strong> <code class="luz-code-inline">cms-header</code>, <code class="luz-code-inline">cms-page-header</code>, <code class="luz-code-inline">cms-article-header</code>, <code class="luz-code-inline">cms-article</code> y <code class="luz-code-inline">cms-footer</code>: la cabecera, la cabecera de página y de artículo, el índice y el pie.</li>
-          <li><strong>Aplicación web:</strong> <code class="luz-code-inline">app-header</code> y <code class="luz-code-inline">app-dashboard</code>.</li>
-          <li><strong>Sitio de documentación:</strong> <code class="luz-code-inline">docs-shell</code>, <code class="luz-code-inline">docs-page-head</code>, <code class="luz-code-inline">docs-rail</code>, <code class="luz-code-inline">docs-example</code>, <code class="luz-code-inline">docs-dodont</code>, <code class="luz-code-inline">docs-pager</code> y <code class="luz-code-inline">docs-page-foot</code>.</li>
+          <li><strong>Landing page:</strong> <code class="luz-code-inline">landing-header</code>, <code class="luz-code-inline">hero</code>, <code class="luz-code-inline">main</code>, <code class="luz-code-inline">section</code>, <code class="luz-code-inline">stat</code>, <code class="luz-code-inline">landing-footer</code> y <code class="luz-code-inline">glow</code>: la cabecera, el hero, las secciones y el pie de página.</li>
+          <li><strong>Blog o periódico, con cualquier CMS:</strong> <code class="luz-code-inline">cms-header</code>, <code class="luz-code-inline">page-header</code>, <code class="luz-code-inline">article-header</code>, <code class="luz-code-inline">article</code> y <code class="luz-code-inline">cms-footer</code>: la cabecera, la cabecera de página y de artículo, el índice y el pie.</li>
+          <li><strong>Aplicación web:</strong> <code class="luz-code-inline">app-bar</code> y <code class="luz-code-inline">dashboard</code>.</li>
+          <li><strong>Sitio de documentación:</strong> <code class="luz-code-inline">docs-layout</code>, <code class="luz-code-inline">doc-header</code>, <code class="luz-code-inline">page-rail</code>, <code class="luz-code-inline">example</code>, <code class="luz-code-inline">do-dont</code>, <code class="luz-code-inline">pager</code> y <code class="luz-code-inline">page-footer</code>.</li>
         </ul>
         <p>El <a href="/docs/catalog/">catálogo</a> tiene una página para cada patrón e indica a qué tipo de sitio le encaja.</p>
         <div class="docs-snippet">
@@ -154,7 +154,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, a landing page"><code id="code-cdn-kinds">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-header.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-hero.min.css&quot;&gt;</code></pre>
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/hero.min.css&quot;&gt;</code></pre>
         </div>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
@@ -164,11 +164,11 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Bundler imports, a landing page"><code id="code-bundler-kinds">import &quot;@luz-ds/tokens/css&quot;;
 import &quot;@luz-ds/core/css&quot;;
 import &quot;@luz-ds/catalog/components/landing-header.css&quot;;
-import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
+import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
         </div>
         <ul>
           <li>Enlaza los archivos de un tipo en el orden de la lista de arriba.</li>
-          <li>Enlaza <code class="luz-code-inline">landing-hero</code> junto con <code class="luz-code-inline">landing-section</code>: el encabezado de una sección comparte sus reglas con el hero.</li>
+          <li>Enlaza <code class="luz-code-inline">hero</code> junto con <code class="luz-code-inline">section</code>: el encabezado de una sección comparte sus reglas con el hero.</li>
           <li>Ninguno tiene un script. El de catalog es opcional: con el índice de un blog, marca la sección visible; con la barra lateral de una app, marca el enlace actual y cierra el panel al seguir un enlace. El de core no lo hace.</li>
         </ul>
       </div>
@@ -189,7 +189,7 @@ import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Computing the integrity hash"><code id="code-integrity">curl -s https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css | openssl dgst -sha384 -binary | openssl base64 -A</code></pre>
         </div>
         <p>Añade el resultado como <code class="luz-code-inline">integrity="sha384-…"</code> a la etiqueta que carga ese archivo y repite el proceso con cada archivo.</p>
-        <p>El hash de un script solo cubre ese archivo, no los que carga después. <code class="luz-code-inline">catalog.min.js</code> carga <code class="luz-code-inline">search.min.js</code> en páginas con búsqueda, <code class="luz-code-inline">consent.min.js</code> en páginas con un banner de cookies y <code class="luz-code-inline">mode.min.js</code> en páginas con el modo de color automático.</p>
+        <p>El hash de un script solo cubre ese archivo, no los que carga después. <code class="luz-code-inline">catalog.min.js</code> carga <code class="luz-code-inline">search.min.js</code> en páginas con búsqueda, <code class="luz-code-inline">cookie-consent.min.js</code> en páginas con un banner de cookies y <code class="luz-code-inline">color-mode.min.js</code> en páginas con el modo de color automático.</p>
         <p>Asigna a cada uno su propio hash en un mapa de importaciones, antes del primer script de módulo. Funciona en Chrome 127, Safari 18 y Firefox 138 y posteriores; un navegador más antiguo lo ignora y carga los archivos sin comprobarlos.</p>
         <p>Un <code class="luz-code-inline">&lt;link rel="modulepreload"&gt;</code> con un hash no protege en Safari ni en Firefox: úsalo solo como indicación para mejorar el rendimiento.</p>
         <div class="docs-snippet">
@@ -201,8 +201,8 @@ import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
 {
   &quot;integrity&quot;: {
     &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/search.min.js&quot;: &quot;sha384-…&quot;,
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/consent.min.js&quot;: &quot;sha384-…&quot;,
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/mode.min.js&quot;: &quot;sha384-…&quot;
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/cookie-consent.min.js&quot;: &quot;sha384-…&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/color-mode.min.js&quot;: &quot;sha384-…&quot;
   }
 }
 &lt;/script&gt;

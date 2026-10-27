@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Tarjeta
 description: Agrupa unos pocos datos sobre un elemento en una superficie con borde.
-source: b37025ca204c
+source: 5433f8f2a2f6
 reviewed: false
 -->
     <div class="docs-component" id="c-card">
@@ -14,7 +14,7 @@ reviewed: false
             <label class="luz-check-item"><input type="radio" name="docs-width" value="tablet"> Tableta</label>
             <label class="luz-check-item"><input type="radio" name="docs-width" value="full" checked> Completo</label>
           </fieldset>
-          <div class="luz-docs-example__frame">
+          <div class="luz-example__frame">
           <div class="docs-demo__stage o-grid docs-cols-2">
             <div class="luz-card">
               <h3 class="luz-card__title">API gateway</h3>
@@ -266,16 +266,16 @@ reviewed: false
               <li>No destaques varias tarjetas de un grupo ni uses solo el borde como pista: explica también el motivo con palabras.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Pon el enlace en el título: se puede hacer clic en toda la tarjeta y el título identifica el enlace. Añade después la acción como un botón con su propio nombre.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Pon el enlace en el título: se puede hacer clic en toda la tarjeta y el título identifica el enlace. Añade después la acción como un botón con su propio nombre.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="luz-card"><h4 class="luz-card__title"><a href="/docs/components/table/">Table</a></h4><p class="luz-card__body">Rows of records that share the same attributes.</p><button class="luz-btn luz-btn--secondary luz-btn--sm" type="button">Add to the page</button></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No pongas un enlace alrededor de toda la tarjeta ni un segundo enlace como «Leer más»: el primero usa cada palabra de la tarjeta como nombre; el segundo queda debajo del enlace del título y no se entiende fuera de contexto.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> No pongas un enlace alrededor de toda la tarjeta ni un segundo enlace como «Leer más»: el primero usa cada palabra de la tarjeta como nombre; el segundo queda debajo del enlace del título y no se entiende fuera de contexto.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <pre class="luz-code-block" data-lang="html"><code>&lt;a href="/table/"&gt;
   &lt;div class="luz-card"&gt;
     &lt;h4 class="luz-card__title"&gt;Table&lt;/h4&gt;
@@ -291,16 +291,16 @@ reviewed: false
                 </div>
               </figure>
             </div>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Destaca una tarjeta y explica el motivo con palabras: el borde atrae la mirada y la etiqueta informa a todo el mundo.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Destaca una tarjeta y explica el motivo con palabras: el borde atrae la mirada y la etiqueta informa a todo el mundo.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="luz-card luz-card--featured"><h4 class="luz-card__title">Two days</h4><p class="luz-card__body">Both days and lunch. <span class="luz-tag luz-tag--blue">Most chosen</span></p></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> No destaques una tarjeta sin explicarlo con palabras: quien no vea el borde o el color no sabrá que es la opción que debe elegir.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> No destaques una tarjeta sin explicarlo con palabras: quien no vea el borde o el color no sabrá que es la opción que debe elegir.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <pre class="luz-code-block" data-lang="html"><code>&lt;div class="luz-card luz-card--featured"&gt;
   &lt;h4 class="luz-card__title"&gt;Two days&lt;/h4&gt;
   &lt;p class="luz-card__body"&gt;Both days and lunch.&lt;/p&gt;

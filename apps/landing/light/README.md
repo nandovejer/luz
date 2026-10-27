@@ -2,7 +2,7 @@
 
 The section under the home page's hero: the visitor's sky, the sun and the moon where they are, drawn over a globe whose land is a puzzle with one piece per country. A line under the globe opens a bar to scrub the day. It is part of the LUZ website, not of a package: nothing here is published, and only `apps/landing/index.html` links it.
 
-It came from a mockup made outside the repository (`.claude/extra/landing/`, ported on 2026-10-16, F3 of the plan for the site's identity). The mockup was one classic script of 141 KB that also owned the colour mode; here it is three ES modules and one stylesheet, and the mode belongs to `<luz-mode>`. The skyline and the city map it also offered were removed on 2026-10-17, with the look switcher: the light shows the globe only.
+It came from a mockup made outside the repository (`.claude/extra/landing/`, ported on 2026-10-16, F3 of the plan for the site's identity). The mockup was one classic script of 141 KB that also owned the colour mode; here it is three ES modules and one stylesheet, and the mode belongs to `<luz-color-mode>`. The skyline and the city map it also offered were removed on 2026-10-17, with the look switcher: the light shows the globe only.
 
 ## Files
 
@@ -32,7 +32,7 @@ On `<html>` it writes custom properties only: `--sun-alt`, `--sun-az` (degrees),
 
 ## How it works with the rest of the page
 
-- `<luz-mode>` (the footer's) is the only writer of `data-theme` and `data-light` on `<html>`. `<home-light>` reads them, follows `luz-mode:change`, and while the visitor scrubs the day it calls `preview(hour)` on `<luz-mode>`. Letting the slider go calls `pin(hour)`: the whole site keeps that hour's light (`localStorage["luz-light"]`, minutes of the day, read by `apps/site/boot.js` before the first paint) until Light, Dark or High contrast is chosen in the footer, which has no Auto; moving the slider again gives the hour back the lead. The bar then shows "Saved mode" with a check in a status region for 2.5 s. Closing the bar keeps the hour. Without a `<luz-mode>` only the visuals follow the slider.
+- `<luz-color-mode>` (the footer's) is the only writer of `data-theme` and `data-light` on `<html>`. `<home-light>` reads them, follows `luz-color-mode:change`, and while the visitor scrubs the day it calls `preview(hour)` on `<luz-color-mode>`. Letting the slider go calls `pin(hour)`: the whole site keeps that hour's light (`localStorage["luz-light"]`, minutes of the day, read by `apps/site/boot.js` before the first paint) until Light, Dark or High contrast is chosen in the footer, which has no Auto; moving the slider again gives the hour back the lead. The bar then shows "Saved mode" with a check in a status region for 2.5 s. Closing the bar keeps the hour. Without a `<luz-color-mode>` only the visuals follow the slider.
 - On `<html>` it writes four custom properties, no attribute: `--sun-alt`, `--sun-az`, `--sun-x` (where the sun stands, left to right, for the page's glow) and `--day-left`.
 - Its texts are the catalog's (`apps/landing/i18n/<lang>.json`, keys `light.*`), handed over as `data-luz-label-light-*` on `<body>`.
 - The globe draws the sea, the sun, the night and the reader's light at once, and loads its land the first time it is on screen and the browser is idle (`requestIdleCallback`), even when the browser asks to save data: a globe without land says nothing. Once the land is drawn, `<home-globe>` carries the attribute `land`.

@@ -1,22 +1,22 @@
 /* ==========================================================================
 	 LUZ Catalog: landing stat.
 	 Layer: catalog · Prefix: .luz-landing-
-	 A figure and what it counts: div.luz-landing-stat > p.__value + p.__label,
+	 A figure and what it counts: div.luz-stat > p.__value + p.__label,
 	 alone or inside core's .luz-card. Tabular figures, so a row of stats
 	 lines up digit under digit.
 	 ========================================================================== */
 
-.luz-landing-stat {
+.luz-stat {
 	display: grid;
 	gap: var(--luz-space-2xs);
 	min-inline-size: 0;
 }
 
-.luz-landing-stat > * {
+.luz-stat > * {
 	margin: 0;
 }
 
-.luz-landing-stat__value {
+.luz-stat__value {
 	font-family: var(--luz-font-heading);
 	font-weight: 300;
 	font-variant-numeric: tabular-nums;
@@ -25,7 +25,7 @@
 	color: var(--luz-text-primary);
 }
 
-.luz-landing-stat__label {
+.luz-stat__label {
 	font-size: var(--luz-text-base);
 	color: var(--luz-text-secondary);
 }

@@ -6,17 +6,17 @@ order: 10
 group: page-structure
 fits-kinds: blog
 fits: a page that is not an article, such as About or Contact
-files: components/cms-page-header.css
+files: components/page-header.css
 toc: h2,h3
 -->
-    <div class="docs-component" id="p-cms-page-header">
+    <div class="docs-component" id="p-page-header">
           <h2 id="example">Example</h2>
           <p>The header of an About page, with its title and one sentence.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="luz-cms-page-header u-mb-0">
-              <p class="luz-cms-page-header__title">About the Review</p>
-              <p class="luz-cms-page-header__lead">An independent paper for Vejer and the coast, paid for by its readers.</p>
+            <div class="luz-page-header u-mb-0">
+              <p class="luz-page-header__title">About the Review</p>
+              <p class="luz-page-header__lead">An independent paper for Vejer and the coast, paid for by its readers.</p>
             </div>
           </div>
           </div>
@@ -32,11 +32,11 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-cms-page-header" aria-label="Copy the page header markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-page-header" aria-label="Copy the page header markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page header markup"><code id="code-cms-page-header">&lt;div class=&quot;luz-cms-page-header&quot;&gt;
-  &lt;h1 class=&quot;luz-cms-page-header__title&quot;&gt;About the Review&lt;/h1&gt;
-  &lt;p class=&quot;luz-cms-page-header__lead&quot;&gt;An independent paper for Vejer and the coast, paid for by its readers.&lt;/p&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page header markup"><code id="code-page-header">&lt;div class=&quot;luz-page-header&quot;&gt;
+  &lt;h1 class=&quot;luz-page-header__title&quot;&gt;About the Review&lt;/h1&gt;
+  &lt;p class=&quot;luz-page-header__lead&quot;&gt;An independent paper for Vejer and the coast, paid for by its readers.&lt;/p&gt;
 &lt;/div&gt;</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
@@ -47,18 +47,18 @@ toc: h2,h3
                   <tr><th scope="col">Class</th><th scope="col">What it does</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Class"><div><code>.luz-cms-page-header</code></div></td><td data-label="What it does"><div>The block, with 32 px of space below it</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-cms-page-header__title</code></div></td><td data-label="What it does"><div>The title: heading font, 3xl size, light weight; 2xl at 640 px and below</div></td></tr>
-                  <tr><td data-label="Class"><div><code>.luz-cms-page-header__lead</code></div></td><td data-label="What it does"><div>One paragraph in the secondary text colour, 600 px wide at most</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-page-header</code></div></td><td data-label="What it does"><div>The block, with 32 px of space below it</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-page-header__title</code></div></td><td data-label="What it does"><div>The title: heading font, 3xl size, light weight; 2xl at 640 px and below</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-page-header__lead</code></div></td><td data-label="What it does"><div>One paragraph in the secondary text colour, 600 px wide at most</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>A wrapper with a title and a lead, styled by <code>components/cms-page-header.css</code> of <code>@luz-ds/catalog</code>. No JavaScript.</p>
+            <p>A wrapper with a title and a lead, styled by <code>components/page-header.css</code> of <code>@luz-ds/catalog</code>. No JavaScript.</p>
             <ul>
               <li>The classes change the look only. The title must be the page's <code>&lt;h1&gt;</code>.</li>
               <li>In Arabic the title has no letter-spacing, which would break the joins of the script.</li>
-              <li>A story has the <a href="/docs/catalog/cms-article-header/">article header</a> instead, with its section, standfirst and byline.</li>
+              <li>A story has the <a href="/docs/catalog/article-header/">article header</a> instead, with its section, standfirst and byline.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>Nothing changes: the page header is HTML and CSS.</p>
@@ -78,20 +78,20 @@ toc: h2,h3
             <p>Do not use it for a section inside the page: use a plain heading of the right level.</p>
             <ul>
               <li>One page header per page.</li>
-              <li>A story takes the <a href="/docs/catalog/cms-article-header/">article header</a>, which has its author and date.</li>
+              <li>A story takes the <a href="/docs/catalog/article-header/">article header</a>, which has its author and date.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> A title of a few words and a lead that says what the reader can do here.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-cms-page-header u-mb-0"><p class="luz-cms-page-header__title">Contact</p><p class="luz-cms-page-header__lead">How to send us a story, a correction or a letter.</p></div>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> A title of a few words and a lead that says what the reader can do here.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-page-header u-mb-0"><p class="luz-page-header__title">Contact</p><p class="luz-page-header__lead">How to send us a story, a correction or a letter.</p></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> A title padded with words the reader skips, and a lead that says nothing new.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <div class="luz-cms-page-header u-mb-0"><p class="luz-cms-page-header__title">Welcome to our contact page</p><p class="luz-cms-page-header__lead">This is the page where you can find how to contact us.</p></div>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A title padded with words the reader skips, and a lead that says nothing new.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-page-header u-mb-0"><p class="luz-page-header__title">Welcome to our contact page</p><p class="luz-page-header__lead">This is the page where you can find how to contact us.</p></div>
                 </div>
               </figure>
             </div>
@@ -119,7 +119,7 @@ toc: h2,h3
               <li><strong>Focus:</strong> the header takes none.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 8 tokens that the <code>.luz-cms-page-header</code> rules of catalog’s <code>components/cms-page-header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 8 tokens that the <code>.luz-page-header</code> rules of catalog’s <code>components/page-header.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-xl</code></dd></div>

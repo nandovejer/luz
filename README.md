@@ -70,7 +70,7 @@ npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog         # level 3, the C
 import "@luz-ds/tokens/css";
 import "@luz-ds/core/css";
 import "@luz-ds/catalog/components/search.css"; // level 3 only: one per catalog component the page uses
-import "@luz-ds/catalog/components/landing-hero.css"; // a pattern of a kind of site is a component too
+import "@luz-ds/catalog/components/hero.css"; // a pattern of a kind of site is a component too
 
 import "@luz-ds/core";         // optional: the JavaScript, starts every behavior
 import "@luz-ds/catalog";     // level 3, only if you use the search
@@ -101,13 +101,13 @@ There are no packages for one kind of site. The patterns of a landing page, a bl
 
 | Kind | Files, in this order |
 | --- | --- |
-| Landing page | `landing-header`, `landing-hero`, `landing-main`, `landing-section`, `landing-stat`, `landing-footer`, `landing-glow` |
-| Blog or newspaper, any CMS | `cms-header`, `cms-page-header`, `cms-article-header`, `cms-article`, `cms-footer` |
-| Web application | `app-header`, `app-dashboard` |
-| Documentation site | `docs-shell`, `docs-page-head`, `docs-rail`, `docs-example`, `docs-dodont`, `docs-pager`, `docs-page-foot` |
+| Landing page | `landing-header`, `hero`, `main`, `section`, `stat`, `landing-footer`, `glow` |
+| Blog or newspaper, any CMS | `cms-header`, `page-header`, `article-header`, `article`, `cms-footer` |
+| Web application | `app-bar`, `dashboard` |
+| Documentation site | `docs-layout`, `doc-header`, `page-rail`, `example`, `do-dont`, `pager`, `page-footer` |
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-hero.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/hero.min.css">
 ```
 
 ### Other files you can load
@@ -120,7 +120,7 @@ There are no packages for one kind of site. The patterns of a landing page, a bl
 | `themes/_template.css` | core | The starting point of a theme of your own |
 | `tokens.css`, `fonts.css` | tokens | The tokens without `@font-face`, or the `@font-face` only |
 | `search.js` | catalog | The search element on its own (`@luz-ds/catalog/search`) |
-| `consent.js` | catalog | The cookie banner (`@luz-ds/catalog/consent`): `catalog.js` does not include it |
+| `cookie-consent.js` | catalog | The cookie banner (`@luz-ds/catalog/cookie-consent`): `catalog.js` does not include it |
 | `sidebar.js`, `timeline.js` | catalog | The scroll spy of the sidebar and the timeline element (`@luz-ds/catalog/sidebar`, `@luz-ds/catalog/timeline`): `catalog.js` loads each on a page that has one |
 | `components/{navbar,sidebar,terminal,timeline}.css` | catalog | The navbar, the sidebar, the terminal and the timeline: `luz.css` does not include them, so link each one you use after core |
 
@@ -137,7 +137,7 @@ Published modules of core: `theme`, `clipboard`, `modal`, `highlight`, `player`,
 
 ## What each package needs
 
-The page shell of a whole page is catalog; the layout objects of an app with a sidebar are core; the hero of a landing page is catalog (`landing-hero`). The full table, checked against the CSS, is on [How LUZ is organised](https://nandovejer.github.io/luz/docs/get-started/structure/#needs).
+The page shell of a whole page is catalog; the layout objects of an app with a sidebar are core; the hero of a landing page is catalog (`hero`). The full table, checked against the CSS, is on [How LUZ is organised](https://nandovejer.github.io/luz/docs/get-started/structure/#needs).
 
 ## Color modes and themes
 

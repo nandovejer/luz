@@ -3,15 +3,15 @@ title: Pie de página
 description: La información breve al pie de una página: cuándo se actualizó por última vez y enlaces para editarla o informar de un problema.
 fits: la parte inferior de una página de documentación
 keywords: última actualización, editar esta página, informar de un problema, información breve
-source: c755c90e6959
+source: fb707ac02eb3
 reviewed: false
 -->
-    <div class="docs-component" id="p-docs-page-foot">
+    <div class="docs-component" id="p-page-footer">
           <h2 id="example">Ejemplo</h2>
           <p>El pie de una página, con la fecha y dos enlaces.</p>
           <div class="docs-example" data-docs-specimen>
             <div class="docs-demo__stage">
-              <p class="luz-docs-page-foot">Last updated <time datetime="2026-10-17">17 October 2026</time> · <a href="#example">Edit this page</a> · <a href="#example">Report a problem</a></p>
+              <p class="luz-page-footer">Last updated <time datetime="2026-10-17">17 October 2026</time> · <a href="#example">Edit this page</a> · <a href="#example">Report a problem</a></p>
               <p class="docs-demo__note">Small print under a rule. It wraps on a narrow screen.</p>
             </div>
           </div>
@@ -28,9 +28,9 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-page-foot" aria-label="Copy the page foot markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-page-footer" aria-label="Copy the page foot markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page foot markup"><code id="code-docs-page-foot">&lt;p class=&quot;luz-docs-page-foot&quot;&gt;Last updated &lt;time datetime=&quot;2026-10-17&quot;&gt;17 October 2026&lt;/time&gt; · &lt;a href=&quot;https://example.com/edit/install.md&quot;&gt;Edit this page&lt;/a&gt; · &lt;a href=&quot;https://example.com/issues/new&quot;&gt;Report a problem&lt;/a&gt;&lt;/p&gt;</code></pre>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page foot markup"><code id="code-page-footer">&lt;p class=&quot;luz-page-footer&quot;&gt;Last updated &lt;time datetime=&quot;2026-10-17&quot;&gt;17 October 2026&lt;/time&gt; · &lt;a href=&quot;https://example.com/edit/install.md&quot;&gt;Edit this page&lt;/a&gt; · &lt;a href=&quot;https://example.com/issues/new&quot;&gt;Report a problem&lt;/a&gt;&lt;/p&gt;</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
             <p>No hay modificadores. El pie es una clase aplicada a un <code>&lt;p&gt;</code> nativo.</p>
@@ -40,12 +40,12 @@ reviewed: false
                   <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Clase"><div><code>.luz-docs-page-foot</code></div></td><td data-label="Efecto"><div>En un <code>&lt;p&gt;</code> bajo el contenido: una línea encima, espacio sobre ella e información breve en la fuente de interfaz y el color secundario. Sus enlaces miden al menos <code>--luz-control-sm</code> (28px) de alto</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-page-footer</code></div></td><td data-label="Efecto"><div>En un <code>&lt;p&gt;</code> bajo el contenido: una línea encima, espacio sobre ella e información breve en la fuente de interfaz y el color secundario. Sus enlaces miden al menos <code>--luz-control-sm</code> (28px) de alto</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/docs-page-foot.css</code> de <code>@luz-ds/catalog</code>. Define la línea, el tamaño y el color; los datos los pones tú.</p>
+            <p>CSS de <code>components/page-footer.css</code> de <code>@luz-ds/catalog</code>. Define la línea, el tamaño y el color; los datos los pones tú.</p>
             <ul>
               <li>El pie es un párrafo. Se ajusta al texto, así que en una pantalla estrecha los enlaces pasan a la línea siguiente.</li>
               <li>Los puntos medios son texto del marcado, entre la fecha y los enlaces.</li>
@@ -73,21 +73,21 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No uses el pie de página para el pie del sitio: pertenece a una página concreta.</p>
             <ul>
-              <li>El pie del sitio es un <code>&lt;footer&gt;</code>, hijo de la <a href="/docs/catalog/docs-shell/">estructura</a>.</li>
+              <li>El pie del sitio es un <code>&lt;footer&gt;</code>, hijo de la <a href="/docs/catalog/docs-layout/">estructura</a>.</li>
               <li>No muestres una fecha que no se mantenga actualizada: una fecha incorrecta es peor que no poner ninguna.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Escribe la fecha con palabras y conserva el formato legible por máquina en datetime.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <p class="luz-docs-page-foot">Last updated <time datetime="2026-04-03">3 April 2026</time> · <a href="#">Edit this page</a></p>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Escribe la fecha con palabras y conserva el formato legible por máquina en datetime.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <p class="luz-page-footer">Last updated <time datetime="2026-04-03">3 April 2026</time> · <a href="#">Edit this page</a></p>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Evítalo</strong> Escribas la fecha con números: 03/04/26 es el 3 de abril en un país y el 4 de marzo en otro.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <p class="luz-docs-page-foot">Last updated <time datetime="2026-04-03">03/04/26</time> · <a href="#">Edit this page</a></p>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Escribas la fecha con números: 03/04/26 es el 3 de abril en un país y el 4 de marzo en otro.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <p class="luz-page-footer">Last updated <time datetime="2026-04-03">03/04/26</time> · <a href="#">Edit this page</a></p>
                 </div>
               </figure>
             </div>
@@ -118,7 +118,7 @@ reviewed: false
               <li><strong>Bordes:</strong> la línea sobre el pie (<code>--luz-divider</code>) es decorativa y no tiene un mínimo.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 6 tokens que leen las reglas de <code>.luz-docs-page-foot</code> de <code>components/docs-page-foot.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 6 tokens que leen las reglas de <code>.luz-page-footer</code> de <code>components/page-footer.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-md</code></dd></div>

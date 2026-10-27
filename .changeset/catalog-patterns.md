@@ -20,39 +20,39 @@ There is no `landing.css`, `cms.css`, `app.css` or `docs.css`, and no single fil
 | Old file | New file |
 | --- | --- |
 | `@luz-ds/landing/components/header.css` | `@luz-ds/catalog/components/landing-header.css` |
-| `@luz-ds/landing/components/hero.css` | `@luz-ds/catalog/components/landing-hero.css` |
-| `@luz-ds/landing/components/main.css` | `@luz-ds/catalog/components/landing-main.css` |
-| `@luz-ds/landing/components/section.css` | `@luz-ds/catalog/components/landing-section.css` |
-| `@luz-ds/landing/components/stat.css` | `@luz-ds/catalog/components/landing-stat.css` |
+| `@luz-ds/landing/components/hero.css` | `@luz-ds/catalog/components/hero.css` |
+| `@luz-ds/landing/components/main.css` | `@luz-ds/catalog/components/main.css` |
+| `@luz-ds/landing/components/section.css` | `@luz-ds/catalog/components/section.css` |
+| `@luz-ds/landing/components/stat.css` | `@luz-ds/catalog/components/stat.css` |
 | `@luz-ds/landing/components/footer.css` | `@luz-ds/catalog/components/landing-footer.css` |
-| `@luz-ds/landing/components/glow.css` | `@luz-ds/catalog/components/landing-glow.css` |
+| `@luz-ds/landing/components/glow.css` | `@luz-ds/catalog/components/glow.css` |
 | `@luz-ds/cms/components/header.css` | `@luz-ds/catalog/components/cms-header.css` |
-| `@luz-ds/cms/components/page-header.css` | `@luz-ds/catalog/components/cms-page-header.css` |
-| `@luz-ds/cms/components/article-header.css` | `@luz-ds/catalog/components/cms-article-header.css` |
-| `@luz-ds/cms/components/article.css` | `@luz-ds/catalog/components/cms-article.css` |
+| `@luz-ds/cms/components/page-header.css` | `@luz-ds/catalog/components/page-header.css` |
+| `@luz-ds/cms/components/article-header.css` | `@luz-ds/catalog/components/article-header.css` |
+| `@luz-ds/cms/components/article.css` | `@luz-ds/catalog/components/article.css` |
 | `@luz-ds/cms/components/footer.css` | `@luz-ds/catalog/components/cms-footer.css` |
-| `@luz-ds/app/components/header.css` | `@luz-ds/catalog/components/app-header.css` |
-| `@luz-ds/app/components/dashboard.css` | `@luz-ds/catalog/components/app-dashboard.css` |
-| `@luz-ds/docs/components/shell.css` | `@luz-ds/catalog/components/docs-shell.css` |
-| `@luz-ds/docs/components/page-head.css` | `@luz-ds/catalog/components/docs-page-head.css` |
-| `@luz-ds/docs/components/rail.css` | `@luz-ds/catalog/components/docs-rail.css` |
-| `@luz-ds/docs/components/example.css` | `@luz-ds/catalog/components/docs-example.css` |
-| `@luz-ds/docs/components/dodont.css` | `@luz-ds/catalog/components/docs-dodont.css` |
-| `@luz-ds/docs/components/pager.css` | `@luz-ds/catalog/components/docs-pager.css` |
-| `@luz-ds/docs/components/page-foot.css` | `@luz-ds/catalog/components/docs-page-foot.css` |
+| `@luz-ds/app/components/header.css` | `@luz-ds/catalog/components/app-bar.css` |
+| `@luz-ds/app/components/dashboard.css` | `@luz-ds/catalog/components/dashboard.css` |
+| `@luz-ds/docs/components/shell.css` | `@luz-ds/catalog/components/docs-layout.css` |
+| `@luz-ds/docs/components/page-head.css` | `@luz-ds/catalog/components/doc-header.css` |
+| `@luz-ds/docs/components/rail.css` | `@luz-ds/catalog/components/page-rail.css` |
+| `@luz-ds/docs/components/example.css` | `@luz-ds/catalog/components/example.css` |
+| `@luz-ds/docs/components/dodont.css` | `@luz-ds/catalog/components/do-dont.css` |
+| `@luz-ds/docs/components/pager.css` | `@luz-ds/catalog/components/pager.css` |
+| `@luz-ds/docs/components/page-foot.css` | `@luz-ds/catalog/components/page-footer.css` |
 
-Link `landing-hero.css` with `landing-section.css`: the head of a section shares its rules with the hero. The table of contents of a blog is in `cms-article.css`.
+Link `hero.css` with `section.css`: the head of a section shares its rules with the hero. The table of contents of a blog is in `article.css`.
 
 On a CDN, a file is `https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/<kind>-<name>.min.css`. Add the `integrity` hash of the published file, as for any other file.
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/landing-header.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/landing-hero.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/hero.min.css">
 ```
 
 ```js
 import "@luz-ds/catalog/components/landing-header.css";
-import "@luz-ds/catalog/components/landing-hero.css";
+import "@luz-ds/catalog/components/hero.css";
 ```
 
 **3. Drop the old layers.**
@@ -63,6 +63,6 @@ A pattern used to win over the catalog components by the order of the layers. In
 
 **4. Check the page.**
 
-`luz-check` tells you which file a class needs. For a page that uses `.luz-landing-hero` and does not link its file, it says that the class is in `@luz-ds/catalog/components/landing-hero.css` and that the file is added after core. It no longer reads a link to one of the four packages, and the data it bundles now comes from catalog's `classes.json`.
+`luz-check` tells you which file a class needs. For a page that uses `.luz-hero` and does not link its file, it says that the class is in `@luz-ds/catalog/components/hero.css` and that the file is added after core. It no longer reads a link to one of the four packages, and the data it bundles now comes from catalog's `classes.json`.
 
 The size budget changes with it: the rows of the four packages go, and each pattern file has a ceiling of its own (PRINCIPLES.md §8).

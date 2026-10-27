@@ -5,7 +5,7 @@
    element whose ::before and ::after are the sky (the home its <main>, the
    docs their <body>), and includes the partial sky-filter (the SVG filter
    the clouds once used). It follows the light of the hour (data-light, which
-   boot.js and <luz-mode by="clock"> write on <html>):
+   boot.js and <luz-color-mode by="clock"> write on <html>):
 
      dawn, dusk, night            stars
      morning, afternoon, sunset   nothing (over light): the page is the light

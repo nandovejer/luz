@@ -1,16 +1,16 @@
 /**
- * LUZ Catalog — color mode: <luz-mode> (light DOM, no Shadow DOM) wraps core's
+ * LUZ Catalog — color mode: <luz-color-mode> (light DOM, no Shadow DOM) wraps core's
  * color mode radios and gives them an "Auto" state. A lazy chunk: catalog.js
- * loads this file (dist/mode.min.js, one file with its own budget, which
- * loads nothing else) on idle when the page has a <luz-mode>; a page may
- * also load it on its own ("@luz-ds/catalog/mode").
+ * loads this file (dist/color-mode.min.js, one file with its own budget, which
+ * loads nothing else) on idle when the page has a <luz-color-mode>; a page may
+ * also load it on its own ("@luz-ds/catalog/color-mode").
  *
  * Markup (every text is the radios' labels: the script writes none; the
- * docs page, /docs/catalog/mode/, has the full example with the icons' paths).
+ * docs page, /docs/catalog/color-mode/, has the full example with the icons' paths).
  * The icons go in the labels: core's cycle button copies the checked label's
  * icon, and core has no Auto icon for data-mode-icon on the button.
  *
- *   <luz-mode remember by="clock">
+ *   <luz-color-mode remember by="clock">
  *     <fieldset class="luz-mode-switcher luz-mode-switcher--cycle">
  *       <legend class="luz-mode-switcher__label">Color mode</legend>
  *       <label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="auto" checked><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Auto</label>
@@ -18,7 +18,7 @@
  *       <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">…</svg>Dark</label>
  *       <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">…</svg>High contrast</label>
  *     </fieldset>
- *   </luz-mode>
+ *   </luz-color-mode>
  *
  * Without JavaScript the radios change the mode through the tokens'
  * :root:has(), and "Auto" leaves the page light.
@@ -47,12 +47,12 @@
  * minutes of the day, and the chosen mode removed; choosing a mode, or
  * pin(null), unpins) and `pinned` (that hour, or null).
  *
- * @element luz-mode - Core's color mode radios with an Auto state that follows the system or the clock of the day; it stores the choice on request.
+ * @element luz-color-mode - Core's color mode radios with an Auto state that follows the system or the clock of the day; it stores the choice on request.
  * @attr {boolean} remember - Store the chosen mode under core's luz-theme key, and a pinned hour under luz-light; Auto removes them. Without it nothing is stored.
  * @attr {"clock"} by - What Auto follows: the local hour, which also writes the light attribute; without it (or by="system") the system's preferences.
  * @attr {string} for - The id of the element that gets data-theme and the light attribute; the default is <html>.
  * @attr {string} light-attr - The name of the attribute for the phase of the day, a data-* name; the default is data-light.
- * @fires luz-mode:change {CustomEvent} - Bubbles from the element after the upgrade and on every change, with detail { mode, theme, light, remembered, simulated, pinned }.
+ * @fires luz-color-mode:change {CustomEvent} - Bubbles from the element after the upgrade and on every change, with detail { mode, theme, light, remembered, simulated, pinned }.
  */
 
 const KEY = "luz-theme";
@@ -155,13 +155,13 @@ function render(el) {
   const key = JSON.stringify(detail);
   if (key !== el.e) {
     el.e = key;
-    el.dispatchEvent(new CustomEvent("luz-mode:change", { bubbles: true, detail }));
+    el.dispatchEvent(new CustomEvent("luz-color-mode:change", { bubbles: true, detail }));
   }
 }
 
-if (typeof customElements !== "undefined" && !customElements.get("luz-mode")) {
+if (typeof customElements !== "undefined" && !customElements.get("luz-color-mode")) {
   customElements.define(
-    "luz-mode",
+    "luz-color-mode",
     class extends HTMLElement {
       connectedCallback() {
         this.t = document.getElementById(this.getAttribute("for")) || document.documentElement;

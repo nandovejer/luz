@@ -3,27 +3,27 @@ title: Cabecera de app
 description: La barra discreta en la parte superior del área principal de una aplicación: botón de menú, nombre del producto en el móvil, búsqueda y cuenta.
 fits: la parte superior del área principal de una aplicación, junto a la barra lateral
 keywords: barra superior, barra de app, menú de cuenta, menú de usuario
-source: 32423b5e2a15
+source: d566dff99b67
 reviewed: false
 -->
-    <div class="docs-component" id="p-app-header">
+    <div class="docs-component" id="p-app-bar">
           <h2 id="example">Ejemplo</h2>
           <p>La cabecera de una aplicación, con el botón de menú, el nombre del producto y la lista de cuenta.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <header class="luz-app-header">
+            <header class="luz-app-bar">
               <div class="o-row">
                 <button class="luz-nav-toggle" type="button" popovertarget="demo-app-nav" aria-label="Menu of the example application">
                   <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
                 </button>
-                <p class="luz-app-header__product">Bodega</p>
-                <div class="o-row luz-app-header__actions">
+                <p class="luz-app-bar__product">Bodega</p>
+                <div class="o-row luz-app-bar__actions">
                   <div class="luz-dropdown">
-                    <button class="luz-btn luz-btn--ghost luz-app-header__account" type="button" popovertarget="demo-app-account-menu"><span class="luz-avatar luz-avatar--sm">AM</span> <span class="luz-app-header__account-name">Ana Martín</span></button>
+                    <button class="luz-btn luz-btn--ghost luz-app-bar__account" type="button" popovertarget="demo-app-account-menu"><span class="luz-avatar luz-avatar--sm">AM</span> <span class="luz-app-bar__account-name">Ana Martín</span></button>
                     <div class="luz-dropdown__menu" id="demo-app-account-menu" popover>
                       <ul class="luz-dropdown__list">
-                        <li><a class="luz-dropdown__item" href="#p-app-header">Account settings</a></li>
-                        <li><a class="luz-dropdown__item" href="#p-app-header">Sign out</a></li>
+                        <li><a class="luz-dropdown__item" href="#p-app-bar">Account settings</a></li>
+                        <li><a class="luz-dropdown__item" href="#p-app-bar">Sign out</a></li>
                       </ul>
                     </div>
                   </div>
@@ -51,21 +51,21 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-app-header" aria-label="Copy the app header markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-app-bar" aria-label="Copy the app header markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="App header markup"><code id="code-app-header">&lt;div class=&quot;o-shell&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="App header markup"><code id="code-app-bar">&lt;div class=&quot;o-shell&quot;&gt;
   &lt;nav class=&quot;luz-sidebar&quot; id=&quot;app-nav&quot; aria-label=&quot;Main&quot; popover&gt;…&lt;/nav&gt;
   &lt;div class=&quot;o-main&quot;&gt;
-    &lt;header class=&quot;luz-app-header o-sticky&quot;&gt;
+    &lt;header class=&quot;luz-app-bar o-sticky&quot;&gt;
       &lt;div class=&quot;o-row&quot;&gt;
         &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;app-nav&quot; aria-label=&quot;Menu&quot;&gt;
           &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z&quot;/&gt;&lt;/svg&gt;
         &lt;/button&gt;
-        &lt;p class=&quot;luz-app-header__product&quot;&gt;Bodega&lt;/p&gt;
-        &lt;div class=&quot;o-row luz-app-header__actions&quot;&gt;
+        &lt;p class=&quot;luz-app-bar__product&quot;&gt;Bodega&lt;/p&gt;
+        &lt;div class=&quot;o-row luz-app-bar__actions&quot;&gt;
           &lt;luz-search&gt;…&lt;/luz-search&gt;
           &lt;div class=&quot;luz-dropdown&quot;&gt;
-            &lt;button class=&quot;luz-btn luz-btn--ghost luz-app-header__account&quot; type=&quot;button&quot; popovertarget=&quot;account-menu&quot;&gt;&lt;span class=&quot;luz-avatar luz-avatar--sm&quot;&gt;AM&lt;/span&gt; &lt;span class=&quot;luz-app-header__account-name&quot;&gt;Ana Martín&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;luz-btn luz-btn--ghost luz-app-bar__account&quot; type=&quot;button&quot; popovertarget=&quot;account-menu&quot;&gt;&lt;span class=&quot;luz-avatar luz-avatar--sm&quot;&gt;AM&lt;/span&gt; &lt;span class=&quot;luz-app-bar__account-name&quot;&gt;Ana Martín&lt;/span&gt;&lt;/button&gt;
             &lt;div class=&quot;luz-dropdown__menu&quot; id=&quot;account-menu&quot; popover&gt;
               &lt;ul class=&quot;luz-dropdown__list&quot;&gt;
                 &lt;li&gt;&lt;a class=&quot;luz-dropdown__item&quot; href=&quot;/account/&quot;&gt;Account settings&lt;/a&gt;&lt;/li&gt;
@@ -76,7 +76,7 @@ reviewed: false
         &lt;/div&gt;
       &lt;/div&gt;
     &lt;/header&gt;
-    &lt;main class=&quot;luz-app-dashboard&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;…&lt;/main&gt;
+    &lt;main class=&quot;luz-dashboard&quot; id=&quot;main-content&quot; tabindex=&quot;-1&quot;&gt;…&lt;/main&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
             </div>
@@ -88,25 +88,25 @@ reviewed: false
                   <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Clase"><div><code>.luz-app-header</code></div></td><td data-label="Efecto"><div>En <code>&lt;header&gt;</code>, hijo de <code>.o-main</code>: la superficie de la página y una línea debajo. Es una fila de <code>--luz-bar-h</code>; su <code>.o-row</code> usa los márgenes internos del contenido</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-app-header__product</code></div></td><td data-label="Efecto"><div>El nombre del producto en texto mediano y seminegrita. Solo aparece a 768 px o menos, cuando la barra lateral es un panel y su marca queda oculta</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-app-header__actions</code></div></td><td data-label="Efecto"><div>En un <code>.o-row</code>: las herramientas globales al extremo en línea de la barra. Primero la <a href="/docs/catalog/search/">búsqueda</a> del catálogo y después la cuenta</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-app-header__account</code></div></td><td data-label="Efecto"><div>En el <code>.luz-btn.luz-btn--ghost</code> que abre la lista de cuenta: al menos 44 por 44 px, con sus iniciales en un <code>.luz-avatar</code> y después el nombre</div></td></tr>
-                  <tr><td data-label="Clase"><div><code>.luz-app-header__account-name</code></div></td><td data-label="Efecto"><div>El nombre de la cuenta. A 640 px o menos se oculta, pero sigue formando parte del nombre del botón</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-app-bar</code></div></td><td data-label="Efecto"><div>En <code>&lt;header&gt;</code>, hijo de <code>.o-main</code>: la superficie de la página y una línea debajo. Es una fila de <code>--luz-bar-h</code>; su <code>.o-row</code> usa los márgenes internos del contenido</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-app-bar__product</code></div></td><td data-label="Efecto"><div>El nombre del producto en texto mediano y seminegrita. Solo aparece a 768 px o menos, cuando la barra lateral es un panel y su marca queda oculta</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-app-bar__actions</code></div></td><td data-label="Efecto"><div>En un <code>.o-row</code>: las herramientas globales al extremo en línea de la barra. Primero la <a href="/docs/catalog/search/">búsqueda</a> del catálogo y después la cuenta</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-app-bar__account</code></div></td><td data-label="Efecto"><div>En el <code>.luz-btn.luz-btn--ghost</code> que abre la lista de cuenta: al menos 44 por 44 px, con sus iniciales en un <code>.luz-avatar</code> y después el nombre</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-app-bar__account-name</code></div></td><td data-label="Efecto"><div>El nombre de la cuenta. A 640 px o menos se oculta, pero sigue formando parte del nombre del botón</div></td></tr>
                   <tr><td data-label="Clase"><div><code>.o-sticky</code> (core)</div></td><td data-label="Efecto"><div>Mantiene la barra arriba mientras se desplaza la página, en una ventana de al menos 30 rem de alto; consulta <a href="/docs/components/layout/#objects-page">la página y sus barras</a></div></td></tr>
                   <tr><td data-label="Clase"><div><code>.luz-dropdown</code> (core)</div></td><td data-label="Efecto"><div>La lista de cuenta, un desplegable de enlaces: consulta <a href="/docs/components/dropdown/">Desplegable</a></div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>components/app-header.css</code> de <code>@luz-ds/catalog</code> aplicado a la estructura, la barra fija, el panel y el desplegable de core. Sin JavaScript.</p>
+            <p>CSS de <code>components/app-bar.css</code> de <code>@luz-ds/catalog</code> aplicado a la estructura, la barra fija, el panel y el desplegable de core. Sin JavaScript.</p>
             <ul>
               <li>App solo aporta la apariencia: la superficie de la página, la línea inferior y los espacios de la fila (8 px entre filas, 16 px entre elementos). Core se ocupa del resto: <code>.o-sticky</code> aporta la fijación y el relleno de desplazamiento, <code>.o-row</code> la fila, el control de navegación y la barra lateral el panel, y el desplegable la lista de cuenta.</li>
               <li>Una barra de una fila tiene la altura <code>--luz-bar-h</code> de core: controles de 44 px, 4 px arriba y abajo y una línea de 1 px. Al ampliar el texto, la fila se parte y la barra crece.</li>
               <li>Se desplaza la página, no <code>.o-main</code>, así que la barra fija permanece en la parte superior de la ventana. Si asignas una altura propia a <code>.o-main</code> y haces que se desplace, su relleno de desplazamiento evita que los elementos enfocados queden bajo la barra.</li>
               <li>La lista de cuenta se abre debajo del botón y termina donde este termina, así que nunca se sale de la ventana por el extremo en línea de la barra.</li>
               <li>Sin el catálogo no hay búsqueda: omite <code>&lt;luz-search&gt;</code>. No cambia nada más.</li>
-              <li>El <code>h1</code> y la acción principal de la vista no van aquí: son la primera fila del <a href="/docs/catalog/app-dashboard/">panel de control</a>. La barra solo contiene los elementos comunes a todas las vistas.</li>
+              <li>El <code>h1</code> y la acción principal de la vista no van aquí: son la primera fila del <a href="/docs/catalog/dashboard/">panel de control</a>. La barra solo contiene los elementos comunes a todas las vistas.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>No cambia nada.</p>
@@ -137,17 +137,17 @@ reviewed: false
               <li>Para una barra con secciones propias del sitio, usa la <a href="/docs/catalog/navbar/">barra de navegación</a> en la cabecera de <a href="/docs/catalog/landing-header/">landing</a> o <a href="/docs/catalog/cms-header/">CMS</a>.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Limita la barra a las herramientas comunes a todas las vistas: menú, búsqueda y cuenta.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <header class="luz-app-header"><div class="o-row"><div class="o-row luz-app-header__actions"><a class="luz-btn luz-btn--ghost" href="#">Search</a><button class="luz-btn luz-btn--ghost luz-app-header__account" type="button"><span class="luz-avatar luz-avatar--sm">AM</span> <span class="luz-app-header__account-name">Ana Martín</span></button></div></div></header>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Limita la barra a las herramientas comunes a todas las vistas: menú, búsqueda y cuenta.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <header class="luz-app-bar"><div class="o-row"><div class="o-row luz-app-bar__actions"><a class="luz-btn luz-btn--ghost" href="#">Search</a><button class="luz-btn luz-btn--ghost luz-app-bar__account" type="button"><span class="luz-avatar luz-avatar--sm">AM</span> <span class="luz-app-bar__account-name">Ana Martín</span></button></div></div></header>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Poner la acción principal de la vista junto a la cuenta: son dos acciones distintas y la principal se pierde entre los elementos de interfaz.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <header class="luz-app-header"><div class="o-row"><div class="o-row luz-app-header__actions"><a class="luz-btn luz-btn--primary" href="#">New report</a><button class="luz-btn luz-btn--ghost luz-app-header__account" type="button"><span class="luz-avatar luz-avatar--sm">AM</span> <span class="luz-app-header__account-name">Ana Martín</span></button></div></div></header>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Poner la acción principal de la vista junto a la cuenta: son dos acciones distintas y la principal se pierde entre los elementos de interfaz.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <header class="luz-app-bar"><div class="o-row"><div class="o-row luz-app-bar__actions"><a class="luz-btn luz-btn--primary" href="#">New report</a><button class="luz-btn luz-btn--ghost luz-app-bar__account" type="button"><span class="luz-avatar luz-avatar--sm">AM</span> <span class="luz-app-bar__account-name">Ana Martín</span></button></div></div></header>
                 </div>
               </figure>
             </div>
@@ -181,7 +181,7 @@ reviewed: false
               <li><strong>Área de activación:</strong> el botón de cuenta mide al menos 44 por 44 px en cualquier ancho y oculta el nombre.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 10 tokens que usan las reglas de <code>.luz-app-header</code> de <code>components/app-header.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 10 tokens que usan las reglas de <code>.luz-app-bar</code> de <code>components/app-bar.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>

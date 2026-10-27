@@ -83,10 +83,10 @@ luz-design-system/
 │   │   │   ├── components/{search,consent,mode,lang-switch,submenu,banner,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
 │   │   │   ├── components/<kind>-<name>.css  ← the patterns of a kind of site (kind: landing, cms, app, docs), one file each
 │   │   │   ├── catalog.js                ← the presence loader
-│   │   │   └── search.js, consent.js, mode.js, timeline.js, sidebar.js  ← lazy chunks (the last two were core's)
+│   │   │   └── search.js, cookie-consent.js, color-mode.js, timeline.js, sidebar.js  ← lazy chunks (the last two were core's)
 │   │   └── dist/                      ← GENERATED (do not edit)
 │   │       ├── components/*.css (+ .min)  ← the only CSS: one file per component
-│   │       └── catalog.js, search.js, consent.js, mode.js, timeline.js, sidebar.js (+ .min)
+│   │       └── catalog.js, search.js, cookie-consent.js, color-mode.js, timeline.js, sidebar.js (+ .min)
 │   │
 │   └── check/                     ← @luz-ds/check (publishable tool: a bin, no CSS, no layer; own version, 0.x)
 │       ├── src/                       ← EDIT HERE (Node ESM: main.js is the bin's glue, cli.js is run(argv, env))

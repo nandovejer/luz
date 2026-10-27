@@ -6,26 +6,26 @@ order: 24
 group: documentation
 fits-kinds: docs
 fits: a page that shows a live example with its code
-files: components/docs-example.css
+files: components/example.css
 keywords: preview, code sample, demo, specimen, frame, width
 toc: h2,h3
 -->
-    <div class="docs-component" id="p-docs-example">
+    <div class="docs-component" id="p-example">
           <h2 id="example">Example</h2>
           <p>A preview of a button with its markup under it.</p>
           <div class="docs-example" data-docs-specimen>
             <div class="docs-demo__stage">
-              <figure class="luz-docs-example">
-                <div class="luz-docs-example__preview">
-                  <div class="luz-docs-example__frame">
+              <figure class="luz-example">
+                <div class="luz-example__preview">
+                  <div class="luz-example__frame">
                     <button class="luz-btn luz-btn--primary" type="button">Save changes</button>
                   </div>
                 </div>
-                <div class="luz-docs-example__code">
+                <div class="luz-example__code">
                   <pre class="luz-code-block" data-lang="html" tabindex="0" aria-label="Markup of the example"><code>&lt;button class="luz-btn luz-btn--primary" type="button"&gt;Save changes&lt;/button&gt;</code></pre>
                 </div>
               </figure>
-              <p class="docs-demo__note">The preview, and the markup that makes it under it. The width of the frame follows <code>--luz-docs-example-w</code>.</p>
+              <p class="docs-demo__note">The preview, and the markup that makes it under it. The width of the frame follows <code>--luz-example-w</code>.</p>
             </div>
           </div>
           <h2 id="known-issues">Known issues</h2>
@@ -41,15 +41,15 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-docs-example" aria-label="Copy the example markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-example" aria-label="Copy the example markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Example markup"><code id="code-docs-example">&lt;figure class=&quot;luz-docs-example&quot;&gt;
-  &lt;div class=&quot;luz-docs-example__preview&quot;&gt;
-    &lt;div class=&quot;luz-docs-example__frame&quot;&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Example markup"><code id="code-example">&lt;figure class=&quot;luz-example&quot;&gt;
+  &lt;div class=&quot;luz-example__preview&quot;&gt;
+    &lt;div class=&quot;luz-example__frame&quot;&gt;
       &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot;&gt;Save changes&lt;/button&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;div class=&quot;luz-docs-example__code&quot;&gt;
+  &lt;div class=&quot;luz-example__code&quot;&gt;
     &lt;pre class=&quot;luz-code-block&quot; data-lang=&quot;html&quot; tabindex=&quot;0&quot; aria-label=&quot;Markup of the example&quot;&gt;&lt;code&gt;&amp;lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot;&amp;gt;Save changes&amp;lt;/button&amp;gt;&lt;/code&gt;&lt;/pre&gt;
   &lt;/div&gt;
 &lt;/figure&gt;</code></pre>
@@ -62,19 +62,19 @@ toc: h2,h3
                   <tr><th scope="col">Class or property</th><th scope="col">Effect</th></tr>
                 </thead>
                 <tbody>
-                <tr><td data-label="Class or property"><div><code>.luz-docs-example</code></div></td><td data-label="Effect"><div>On a <code>&lt;figure&gt;</code>: one framed box with a rounded border on the surface. The preview and the code share it</div></td></tr>
-                <tr><td data-label="Class or property"><div><code>.luz-docs-example__preview</code></div></td><td data-label="Effect"><div>The live markup, with padding around the frame</div></td></tr>
-                <tr><td data-label="Class or property"><div><code>.luz-docs-example__frame</code></div></td><td data-label="Effect"><div>Inside the preview: as wide as the preview, or as <code>--luz-docs-example-w</code> says (never wider), and centred. It is a size container</div></td></tr>
-                <tr><td data-label="Class or property"><div><code>.luz-docs-example__code</code></div></td><td data-label="Effect"><div>Optional, under the preview, across its width, with a rule above. A <code>pre.luz-code-block</code> in it loses its own border</div></td></tr>
-                <tr><td data-label="Class or property"><div><code>--luz-docs-example-w</code></div></td><td data-label="Effect"><div>The width of the frame. Set it on the frame: <code>style="--luz-docs-example-w: 20rem"</code> is a phone. It defaults to the whole preview</div></td></tr>
+                <tr><td data-label="Class or property"><div><code>.luz-example</code></div></td><td data-label="Effect"><div>On a <code>&lt;figure&gt;</code>: one framed box with a rounded border on the surface. The preview and the code share it</div></td></tr>
+                <tr><td data-label="Class or property"><div><code>.luz-example__preview</code></div></td><td data-label="Effect"><div>The live markup, with padding around the frame</div></td></tr>
+                <tr><td data-label="Class or property"><div><code>.luz-example__frame</code></div></td><td data-label="Effect"><div>Inside the preview: as wide as the preview, or as <code>--luz-example-w</code> says (never wider), and centred. It is a size container</div></td></tr>
+                <tr><td data-label="Class or property"><div><code>.luz-example__code</code></div></td><td data-label="Effect"><div>Optional, under the preview, across its width, with a rule above. A <code>pre.luz-code-block</code> in it loses its own border</div></td></tr>
+                <tr><td data-label="Class or property"><div><code>--luz-example-w</code></div></td><td data-label="Effect"><div>The width of the frame. Set it on the frame: <code>style="--luz-example-w: 20rem"</code> is a phone. It defaults to the whole preview</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>components/docs-example.css</code> of <code>@luz-ds/catalog</code> on core's code block and highlight.</p>
+            <p>CSS from <code>components/example.css</code> of <code>@luz-ds/catalog</code> on core's code block and highlight.</p>
             <ul>
               <li>The preview and the code are one frame, so they read as one example. A long line scrolls inside the code block and never widens the figure.</li>
-              <li>The frame's width is <code>min(100%, var(--luz-docs-example-w, 100%))</code>: a width larger than the room does not widen the figure.</li>
+              <li>The frame's width is <code>min(100%, var(--luz-example-w, 100%))</code>: a width larger than the room does not widen the figure.</li>
               <li>The frame is a size container (<code>container-type: inline-size</code>). A block button fills the frame, not the window, and a rule of your own can answer to the frame with <code>@container</code>.</li>
               <li>Write the markup once and show it twice, as a preview and as escaped code: the reader sees what they copy.</li>
             </ul>
@@ -84,7 +84,7 @@ toc: h2,h3
             <ul>
               <li><strong>Order:</strong> the controls of the preview, then the code block.</li>
               <li><strong>Code block:</strong> keep <code>tabindex="0"</code> and an <code>aria-label</code> on the <code>&lt;pre&gt;</code>: it scrolls, and without them a keyboard user cannot reach it or tell what it is.</li>
-              <li><strong>Preview:</strong> it is live, so what is in it works as it does anywhere. A picture that must not be used goes in <a href="/docs/catalog/docs-dodont/">Do and don't</a>, whose stage is inert.</li>
+              <li><strong>Preview:</strong> it is live, so what is in it works as it does anywhere. A picture that must not be used goes in <a href="/docs/catalog/do-dont/">Do and don't</a>, whose stage is inert.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
@@ -99,32 +99,32 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not use the example to show a mistake or code with nothing to preview.</p>
             <ul>
-              <li>A picture of a mistake goes in <a href="/docs/catalog/docs-dodont/">Do and don't</a>, which is inert.</li>
+              <li>A picture of a mistake goes in <a href="/docs/catalog/do-dont/">Do and don't</a>, which is inert.</li>
               <li>Code with nothing to show, such as a command, is a plain <a href="/docs/components/code/">code block</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> Show the preview and the markup that makes it, and mark the one class the example teaches.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <figure class="luz-docs-example">
-                    <div class="luz-docs-example__preview">
-                      <div class="luz-docs-example__frame">
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Show the preview and the markup that makes it, and mark the one class the example teaches.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-example">
+                    <div class="luz-example__preview">
+                      <div class="luz-example__frame">
                         <button class="luz-btn luz-btn--secondary" type="button">Cancel</button>
                       </div>
                     </div>
-                    <div class="luz-docs-example__code">
+                    <div class="luz-example__code">
                       <pre class="luz-code-block" data-lang="html" tabindex="0" aria-label="Markup of the example"><code>&lt;button class="luz-btn luz-btn--secondary" type="button"&gt;Cancel&lt;/button&gt;</code></pre>
                     </div>
                   </figure>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> Show the preview alone: the reader sees a result and has to guess the classes that made it.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
-                  <figure class="luz-docs-example">
-                    <div class="luz-docs-example__preview">
-                      <div class="luz-docs-example__frame">
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Show the preview alone: the reader sees a result and has to guess the classes that made it.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-example">
+                    <div class="luz-example__preview">
+                      <div class="luz-example__frame">
                         <button class="luz-btn luz-btn--secondary" type="button">Cancel</button>
                       </div>
                     </div>
@@ -159,7 +159,7 @@ toc: h2,h3
               <li><strong>Width:</strong> the frame never passes the room it has, so the page does not scroll sideways at 320px.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 4 tokens that the <code>.luz-docs-example</code> rules of catalog’s <code>components/docs-example.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 4 tokens that the <code>.luz-example</code> rules of catalog’s <code>components/example.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a></dd></div>
               <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-md</code></dd></div>

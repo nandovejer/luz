@@ -1,5 +1,5 @@
 /* ==========================================================================
-	 LUZ Catalog: banner, <luz-banner>.
+	 LUZ Catalog: banner, <luz-announcement>.
 	 A band above the header with one short announcement and an
 	 optional link, around one section[aria-labelledby] (a region named by
 	 its visible label). A CSS-only tag: no script defines it, so it never
@@ -9,11 +9,11 @@
 	 it scrolls away with the page. Its text starts where the header's row
 	 starts.
 
-	 @element luz-banner - CSS-only: no script defines this tag. One announcement above the header, with an optional link.
+	 @element luz-announcement - CSS-only: no script defines this tag. One announcement above the header, with an optional link.
 	 @attr {"warning"} tone - A yellow band and a darker rule; the words say it too.
 	 ========================================================================== */
 
-:where(luz-banner) {
+:where(luz-announcement) {
 	display: block;
 	border-block-end: 1px solid var(--luz-divider);
 	background: var(--luz-surface-muted);
@@ -23,13 +23,13 @@
 }
 
 /* The section is the width of the window, its text in the header's column */
-:where(luz-banner > section) {
+:where(luz-announcement > section) {
 	padding-block: var(--luz-space-xs);
 	padding-inline: max(var(--luz-space-md), (100% - var(--luz-content-max)) / 2 + var(--luz-space-md));
 }
 
 @media (min-width: 641px) {
-	:where(luz-banner > section) {
+	:where(luz-announcement > section) {
 		padding-inline: max(var(--luz-space-xl), (100% - var(--luz-content-max)) / 2 + var(--luz-space-xl));
 	}
 }
@@ -37,7 +37,7 @@
 /* tone="warning", the one tone: a yellow band and a darker rule. The words
    say it too (RL-6), and in forced colours the rule stays (RL-15: no new
    status colour) */
-:where(luz-banner)[tone="warning"] {
+:where(luz-announcement)[tone="warning"] {
 	border-color: var(--luz-color-warning-accent);
 	background: var(--luz-color-warning-bg);
 }

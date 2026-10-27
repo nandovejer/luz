@@ -18,7 +18,7 @@ pnpm lint:js        # ESLint
 | Scope          | Prefix   | Example                        |
 | -------------- | -------- | ------------------------------ |
 | Components     | `.luz-`  | `.luz-btn`, `.luz-card__title` |
-| Patterns of a kind of site (catalog) | `.luz-<kind>-` | `.luz-landing-hero`, `.luz-docs-rail` (file `components/landing-hero.css`) |
+| Patterns of a kind of site (catalog) | `.luz-<kind>-` | `.luz-hero`, `.luz-page-rail` (file `components/hero.css`) |
 | Layout objects | `.o-`    | `.o-shell`, `.o-main`          |
 | Utilities      | `.u-`    | `.u-hidden`, `.u-sr-only`      |
 | Docs           | `.docs-` | `.docs-section`, `.docs-demo`  |

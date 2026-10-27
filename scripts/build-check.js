@@ -76,10 +76,10 @@ const readJson = (path) => {
 
 /**
  * The file a defined class of a package with no bundle is in, when it is the
- * one its block names: `luz-docs-pager__label` is in components/docs-pager.css.
+ * one its block names: `luz-pager__label` is in components/pager.css.
  * The snapshot leaves `files` out then, and packages/check/src/manifests.js
  * puts it back; it writes `files` only where the class is somewhere else (the
- * rail's block is also in docs-shell.css) or nowhere (`files: []`).
+ * rail's block is also in docs-layout.css) or nowhere (`files: []`).
  */
 const ownFile = (entry) => `components/${(entry.block ?? entry.name).replace(/^luz-/, "")}.css`;
 

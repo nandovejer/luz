@@ -24,9 +24,9 @@ import { initThemeCycle } from "/packages/core/dist/theme.js";
 // Defines <luz-search> at once, not on idle as catalog.js would: the header's
 // search button is on every page, and wires itself when it connects
 import "/packages/catalog/dist/search.js";
-// Defines <luz-consent>, for the live example of the Cookie consent page
+// Defines <luz-cookie-consent>, for the live example of the Cookie consent page
 // (its answer is stored under its own key, luz-consent-demo)
-import "/packages/catalog/dist/consent.js";
+import "/packages/catalog/dist/cookie-consent.js";
 import { initSiteChrome } from "/apps/site/header.js";
 import { initPromptDialogs } from "/apps/site/prompt-dialog.js";
 import { initDocsView } from "./view.js";
@@ -49,7 +49,7 @@ function initFolds() {
 }
 
 function initOnThisPage() {
-  // "On this page" is an open <details> in the rail (aside.luz-docs-rail), so
+  // "On this page" is an open <details> in the rail (aside.luz-page-rail), so
   // it reads without JS. Below 80rem the rail is above the content: fold the
   // list when the page loads, so the content starts one line lower, not a
   // screen lower (the summary opens it). From 80rem the rail is a column
@@ -57,10 +57,10 @@ function initOnThisPage() {
   // (aria-current="true", core's scroll spy). Only the page's own list,
   // never the live demo of the rail pattern, which sits inside an example in
   // main.
-  const nav = document.querySelector("aside.luz-docs-rail > .luz-docs-rail__inner > .luz-docs-rail__onpage");
+  const nav = document.querySelector("aside.luz-page-rail > .luz-page-rail__inner > .luz-page-rail__onpage");
   if (!nav) return;
   if (!window.matchMedia("(min-width: 80rem)").matches) {
-    const fold = nav.querySelector(":scope > details.luz-docs-rail__fold");
+    const fold = nav.querySelector(":scope > details.luz-page-rail__fold");
     // eslint-disable-next-line no-restricted-syntax -- RL-3: the initial state only, once on load; the summary opens and closes it natively from then on
     if (fold) fold.open = false;
     return;
@@ -131,7 +131,7 @@ function initCopyPage() {
   // reaches it, so the copy happens inside the click (Safari asks for that).
   // If the file cannot be read, the rail says so and the focus stays; if the
   // clipboard refuses the text, the browser opens the file instead.
-  const link = document.querySelector("aside.luz-docs-rail a[data-docs-copy-page]");
+  const link = document.querySelector("aside.luz-page-rail a[data-docs-copy-page]");
   if (!link || !navigator.clipboard) return;
   const href = link.href;
   const copied = link.dataset.docsCopied || COPIED;
@@ -144,7 +144,7 @@ function initCopyPage() {
   if (link.className) button.className = link.className;
   button.textContent = link.textContent;
   link.replaceWith(button);
-  const actions = button.closest(".luz-docs-rail__actions");
+  const actions = button.closest(".luz-page-rail__actions");
   const say = (message) => sayInRail(actions, message);
   say();
   let text = null;
@@ -188,7 +188,7 @@ function initCopyLink() {
   // the same text (WCAG 4.1.2: it no longer navigates), which copies the
   // address of the page without its # or ?, so a translated page copies the
   // route of its language. No request leaves; the rail says what happened.
-  const link = document.querySelector("aside.luz-docs-rail a[data-docs-copy-link]");
+  const link = document.querySelector("aside.luz-page-rail a[data-docs-copy-link]");
   if (!link || !navigator.clipboard) return;
   const copied = link.dataset.docsCopied || LINK_COPIED;
   const notCopied = link.dataset.docsNotCopied || LINK_NOT_COPIED;
@@ -197,7 +197,7 @@ function initCopyLink() {
   if (link.className) button.className = link.className;
   button.textContent = link.textContent;
   link.replaceWith(button);
-  const actions = button.closest(".luz-docs-rail__actions");
+  const actions = button.closest(".luz-page-rail__actions");
   sayInRail(actions);
   button.addEventListener("click", () => {
     navigator.clipboard.writeText(location.origin + location.pathname).then(
@@ -395,17 +395,17 @@ const WIDTHS = { phone: "375px", tablet: "768px" };
 
 /**
  * The width selector of an example: Phone and Tablet set the frame's
- * --luz-docs-example-w (catalog's docs-example caps it at the room it has), Full
+ * --luz-example-w (catalog's luz-example caps it at the room it has), Full
  * removes it. Hidden in the markup, shown here.
  */
 function initExampleWidth() {
   document.querySelectorAll("fieldset.docs-width").forEach((set) => {
-    const frame = set.parentElement.querySelector(":scope > .luz-docs-example__frame");
+    const frame = set.parentElement.querySelector(":scope > .luz-example__frame");
     if (!frame) return;
     const apply = () => {
       const width = WIDTHS[set.querySelector('input[name="docs-width"]:checked')?.value];
-      if (width) frame.style.setProperty("--luz-docs-example-w", width);
-      else frame.style.removeProperty("--luz-docs-example-w");
+      if (width) frame.style.setProperty("--luz-example-w", width);
+      else frame.style.removeProperty("--luz-example-w");
     };
     set.addEventListener("change", apply);
     apply();
@@ -453,7 +453,7 @@ function drawCanvas() {
 function initCanvas() {
   if (!document.getElementById("d-canvas")) return;
   drawCanvas();
-  document.addEventListener("luz-mode:change", () => {
+  document.addEventListener("luz-color-mode:change", () => {
     drawCanvas();
     const fading = document.documentElement.getAnimations?.() ?? [];
     if (fading.length) Promise.allSettled(fading.map((a) => a.finished)).then(drawCanvas);
@@ -464,7 +464,7 @@ function initCanvas() {
  * Re-anchor every specimen to the colour mode of <html> (plan §3.4): the
  * site's light changes the page, never what is documented. A specimen gets
  * <html>'s data-theme, so its tokens are Vejer's for that mode under any
- * light. It follows luz-mode:change and any other write to <html>'s
+ * light. It follows luz-color-mode:change and any other write to <html>'s
  * data-theme. Nothing is served with it: without JavaScript a specimen
  * inherits the page, and the radios still re-scope it.
  */
@@ -472,13 +472,13 @@ function initSpecimenTheme() {
   const root = document.documentElement;
   const apply = () => {
     const theme = root.getAttribute("data-theme");
-    for (const el of document.querySelectorAll("[data-docs-specimen], .luz-docs-dodont__stage")) {
+    for (const el of document.querySelectorAll("[data-docs-specimen], .luz-do-dont__stage")) {
       if (!theme) el.removeAttribute("data-theme");
       else if (el.getAttribute("data-theme") !== theme) el.setAttribute("data-theme", theme);
     }
   };
   apply();
-  document.addEventListener("luz-mode:change", apply);
+  document.addEventListener("luz-color-mode:change", apply);
   new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
 }
 

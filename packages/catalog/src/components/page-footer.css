@@ -1,13 +1,13 @@
 /* ==========================================================================
    LUZ Catalog: docs page foot.
    Layer: catalog · Prefix: .luz-docs-
-   p.luz-docs-page-foot: "Last updated" and a <time>, then "Edit this page"
+   p.luz-page-footer: "Last updated" and a <time>, then "Edit this page"
    and "Report a problem", separated by a middle dot in the text. Small
    print under the content, after the pager; it wraps on a narrow screen
    and each link is a 28px target.
    ========================================================================== */
 
-.luz-docs-page-foot {
+.luz-page-footer {
 	margin: 0;
 	padding-block-start: var(--luz-space-md);
 	border-block-start: 1px solid var(--luz-divider);
@@ -16,13 +16,13 @@
 	color: var(--luz-text-secondary);
 }
 
-.luz-docs-page-foot > :where(a) {
+.luz-page-footer > :where(a) {
 	display: inline-flex;
 	align-items: center;
 	min-block-size: var(--luz-control-sm);
 }
 
 /* The date in the size of the line, not core's smaller <time> */
-.luz-docs-page-foot > :where(time) {
+.luz-page-footer > :where(time) {
 	font-size: inherit;
 }

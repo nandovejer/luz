@@ -3,20 +3,21 @@
  * ai-and-catalog-only, decisions 51 to 55, phase F5b).
  *
  * landing, cms, app and docs were four packages; their 21 components are
- * `packages/catalog/src/components/<kind>-<name>.css` now, with the same
- * classes (`.luz-<kind>-<name>`). This module is the one place that says
+ * `packages/catalog/src/components/<block>.css` now (F8 named each by its
+ * block, `.luz-<block>`; the unions keep `<kind>-header` and `<kind>-footer`
+ * until they are merged). This module is the one place that says
  * which files and which pages belong to a kind, for the snippets (the
  * "Choose your snippet" page) and the prompts for AI, which write one `<link>`
  * per file. It reads no file: `kindFiles()` checks the list against the
  * manifests catalog's build wrote, so a file added to catalog without a line
  * here (or a line without its file) fails the build.
  *
- *   KIND_PATTERNS        by prefix (`landing`, `cms`, `app`, `docs`): the files
+ *   KIND_PATTERNS        by kind (`landing`, `cms`, `app`, `docs`): the files
  *                        in the order the kind's stylesheet had them (the
- *                        order of the cascade among them), the prefix of the
- *                        classes, and the pages of its patterns (a slug of
- *                        /docs/catalog/<slug>/; glow and main have none)
- *   kindFiles(kind, components)   the `components/<kind>-<name>.css` files, in order
+ *                        order of the cascade among them) and the pages of
+ *                        its patterns (a slug of /docs/catalog/<slug>/; glow
+ *                        and main have none)
+ *   kindFiles(kind, components)   the `components/<name>.css` files, in order
  *   isKindFile(file)     is it one of the 21?
  *   kindOfFile(file)     the kind a file belongs to, or null
  *   FITS_KINDS, fitsKindsOf(value)   the kinds a catalog page says it fits best (`fits-kinds`)
@@ -25,32 +26,32 @@
 /**
  * The order of `files` is the order of the `@import`s of the stylesheet each
  * package had (header first, the pieces after it): the apps link them in it.
+ * A name is the block's: `hero` is `components/hero.css` and `.luz-hero`; the
+ * header and footer of landing and cms keep their kind in the name until they
+ * are merged.
  */
 export const KIND_PATTERNS = {
   landing: {
-    classPrefix: "luz-landing-",
-    files: ["header", "hero", "main", "section", "stat", "footer", "glow"],
-    pages: ["header", "hero", "section", "stat", "footer"],
+    files: ["landing-header", "hero", "main", "section", "stat", "landing-footer", "glow"],
+    pages: ["landing-header", "hero", "section", "stat", "landing-footer"],
   },
   cms: {
-    classPrefix: "luz-cms-",
-    files: ["header", "page-header", "article-header", "article", "footer"],
-    // The contents of an article has a page of its own, `toc`: its CSS is cms-article.css
-    pages: ["header", "page-header", "article-header", "toc", "footer"],
+    files: ["cms-header", "page-header", "article-header", "article", "cms-footer"],
+    // The contents of an article has a page of its own, `toc`: its CSS is article.css
+    pages: ["cms-header", "page-header", "article-header", "toc", "cms-footer"],
   },
   app: {
-    classPrefix: "luz-app-",
-    files: ["header", "dashboard"],
-    pages: ["header", "dashboard"],
+    files: ["app-bar", "dashboard"],
+    pages: ["app-bar", "dashboard"],
   },
   docs: {
-    classPrefix: "luz-docs-",
-    files: ["shell", "page-head", "rail", "example", "dodont", "pager", "page-foot"],
-    pages: ["shell", "page-head", "rail", "example", "dodont", "pager", "page-foot"],
+    files: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
+    pages: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
   },
 };
 
-const FILE = /^components\/(landing|cms|app|docs)-[a-z0-9]+(?:-[a-z0-9]+)*(?:\.min)?\.css$/;
+const KIND_OF = new Map(Object.entries(KIND_PATTERNS).flatMap(([kind, { files }]) => files.map((name) => [name, kind])));
+const FILE = /^components\/([a-z0-9]+(?:-[a-z0-9]+)*)(?:\.min)?\.css$/;
 
 /**
  * The kinds of site a catalog page may name in `fits-kinds` (decision 71), as
@@ -75,10 +76,10 @@ export function fitsKindsOf(value) {
 }
 
 /** Is `file` (`components/x.css`, or its `.min.css`) one of the patterns of a kind of site? */
-export const isKindFile = (file) => FILE.test(file);
+export const isKindFile = (file) => kindOfFile(file) !== null;
 
-/** The kind (`landing`, `cms`, `app`, `docs`) a `components/<kind>-<name>.css` belongs to, or null. */
-export const kindOfFile = (file) => FILE.exec(file)?.[1] ?? null;
+/** The kind (`landing`, `cms`, `app`, `docs`) a `components/<name>.css` belongs to, or null. */
+export const kindOfFile = (file) => KIND_OF.get(FILE.exec(file)?.[1]) ?? null;
 
 /**
  * The files of one kind, in order. `components` is catalogComponents()'s list.
@@ -88,7 +89,7 @@ export function kindFiles(kind, components) {
   const spec = KIND_PATTERNS[kind];
   if (!spec) throw new Error(`${kind} is not a kind of site with patterns (${Object.keys(KIND_PATTERNS).join(", ")})`);
   const built = components.map(({ file }) => file).filter((file) => kindOfFile(file) === kind);
-  const listed = spec.files.map((name) => `components/${kind}-${name}.css`);
+  const listed = spec.files.map((name) => `components/${name}.css`);
   const missing = listed.filter((file) => !built.includes(file));
   const extra = built.filter((file) => !listed.includes(file));
   if (missing.length || extra.length) {

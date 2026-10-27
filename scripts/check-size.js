@@ -9,7 +9,7 @@
  * build (`pnpm pages:build`; git-ignored output), and each component of
  * catalog, which has no bundle (packages/catalog/dist/components/*.min.css).
  * The file part of a glob may start with a list of prefixes
- * ("dir/{landing,cms,app,docs}-*.min.css": the patterns of a kind of site),
+ * ("dir/{hero,section,…}.min.css": a list of names, as the patterns of a kind of site in catalog),
  * and a row may have an `except` glob, so a file is in one row only: the
  * general row of catalog leaves those patterns to the stricter row of theirs.
  *
@@ -109,7 +109,7 @@ const IMPORT_CALL = /\bimport\s*\(/g;
 const LITERAL_IMPORT = /\bimport\s*\(\s*(["'])([^"'`]+)\1\s*\)/g;
 const STATIC_IMPORT = /(?:^|[;}\s])(?:import\b(?!\s*[(.])|export\b[^"'();]*?\bfrom\b)/;
 const LOADERS = {
-  "packages/catalog/dist/catalog.min.js": ["./consent.min.js", "./mode.min.js", "./search.min.js", "./sidebar.min.js", "./timeline.min.js"],
+  "packages/catalog/dist/catalog.min.js": ["./cookie-consent.min.js", "./color-mode.min.js", "./search.min.js", "./sidebar.min.js", "./timeline.min.js"],
   // The home's light (apps/landing/light/): served as written, no build, so the same rules hold for its sources
   "apps/landing/light/light.js": ["./globe.js"],
   "apps/landing/light/globe.js": ["./globe-data.js"],
@@ -176,8 +176,8 @@ for (const [file, code] of published) {
 /**
  * Files matched by "dir/**\/*.ext" (any depth) or "dir/*.ext" (that folder only; `ext` may be `.min.css`),
  * repo-relative, sorted. The file part may start with a list of prefixes, "dir/{a,b}-*.ext": the files
- * named "a-…" or "b-…" (the patterns of a kind of site in catalog, `{landing,cms,app,docs}-*`), or
- * `dir/{a-*,b}.ext`: named "a-…" or exactly "b.ext".
+ * named "a-…" or "b-…" (a family of files), or
+ * `dir/{a-*,b}.ext`: named "a-…" or exactly "b.ext" (the patterns of a kind of site in catalog are a list of exact names).
  */
 function globFiles(glob) {
   // "dir/{a-*,b,c}.ext": files named "a-…", "b.ext" or "c.ext" (catalog's layout components and kind patterns in one list)

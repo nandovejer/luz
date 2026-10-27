@@ -7,4 +7,4 @@ A blog is a site of articles: a newspaper, a magazine, a personal blog, the news
 3. The header: one row with the sections and a search, or a masthead of three rows.
 4. The article: a table of contents for long ones, the author box, related posts, comments (which service, if any).
 
-Start from `luz-cms-header`, `luz-cms-article-header`, `luz-cms-article`, `luz-cms-toc`, `luz-cms-page-header` and `luz-cms-footer`. A post card is core's card; the search is `<luz-search>` from catalog.
+Start from `luz-cms-header`, `luz-article-header`, `luz-article`, `luz-toc`, `luz-page-header` and `luz-cms-footer`. A post card is core's card; the search is `<luz-search>` from catalog.

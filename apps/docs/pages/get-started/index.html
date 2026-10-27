@@ -141,10 +141,10 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
         <p>To start a landing page, a blog, an app or a documentation site, go to <a href="/docs/kinds/">Kinds of site</a>: a prompt for any LLM, and the recipes of each part to copy.</p>
         <p>There is no package for a kind of site. Its patterns are components of the catalog, one stylesheet each, named <code class="luz-code-inline">&lt;kind&gt;-&lt;name&gt;.css</code>. Install level 3, then link the files your page uses, after core:</p>
         <ul>
-          <li><strong>Landing page:</strong> <code class="luz-code-inline">landing-header</code>, <code class="luz-code-inline">landing-hero</code>, <code class="luz-code-inline">landing-main</code>, <code class="luz-code-inline">landing-section</code>, <code class="luz-code-inline">landing-stat</code>, <code class="luz-code-inline">landing-footer</code> and <code class="luz-code-inline">landing-glow</code>: the header, hero, sections and footer.</li>
-          <li><strong>Blog or newspaper, with any CMS:</strong> <code class="luz-code-inline">cms-header</code>, <code class="luz-code-inline">cms-page-header</code>, <code class="luz-code-inline">cms-article-header</code>, <code class="luz-code-inline">cms-article</code> and <code class="luz-code-inline">cms-footer</code>: the header, page header, article header, table of contents and footer.</li>
-          <li><strong>Web application:</strong> <code class="luz-code-inline">app-header</code> and <code class="luz-code-inline">app-dashboard</code>.</li>
-          <li><strong>Documentation site:</strong> <code class="luz-code-inline">docs-shell</code>, <code class="luz-code-inline">docs-page-head</code>, <code class="luz-code-inline">docs-rail</code>, <code class="luz-code-inline">docs-example</code>, <code class="luz-code-inline">docs-dodont</code>, <code class="luz-code-inline">docs-pager</code> and <code class="luz-code-inline">docs-page-foot</code>.</li>
+          <li><strong>Landing page:</strong> <code class="luz-code-inline">landing-header</code>, <code class="luz-code-inline">hero</code>, <code class="luz-code-inline">main</code>, <code class="luz-code-inline">section</code>, <code class="luz-code-inline">stat</code>, <code class="luz-code-inline">landing-footer</code> and <code class="luz-code-inline">glow</code>: the header, hero, sections and footer.</li>
+          <li><strong>Blog or newspaper, with any CMS:</strong> <code class="luz-code-inline">cms-header</code>, <code class="luz-code-inline">page-header</code>, <code class="luz-code-inline">article-header</code>, <code class="luz-code-inline">article</code> and <code class="luz-code-inline">cms-footer</code>: the header, page header, article header, table of contents and footer.</li>
+          <li><strong>Web application:</strong> <code class="luz-code-inline">app-bar</code> and <code class="luz-code-inline">dashboard</code>.</li>
+          <li><strong>Documentation site:</strong> <code class="luz-code-inline">docs-layout</code>, <code class="luz-code-inline">doc-header</code>, <code class="luz-code-inline">page-rail</code>, <code class="luz-code-inline">example</code>, <code class="luz-code-inline">do-dont</code>, <code class="luz-code-inline">pager</code> and <code class="luz-code-inline">page-footer</code>.</li>
         </ul>
         <p>The <a href="/docs/catalog/">catalog</a> has a page for each pattern, and says which kind of site it fits.</p>
         <div class="docs-snippet">
@@ -155,7 +155,7 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, a landing page"><code id="code-cdn-kinds">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-header.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-hero.min.css&quot;&gt;</code></pre>
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/hero.min.css&quot;&gt;</code></pre>
         </div>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
@@ -165,11 +165,11 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Bundler imports, a landing page"><code id="code-bundler-kinds">import &quot;@luz-ds/tokens/css&quot;;
 import &quot;@luz-ds/core/css&quot;;
 import &quot;@luz-ds/catalog/components/landing-header.css&quot;;
-import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
+import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
         </div>
         <ul>
           <li>Link the files of a kind in the order of the list above.</li>
-          <li>Link <code class="luz-code-inline">landing-hero</code> with <code class="luz-code-inline">landing-section</code>: the head of a section shares its rules with the hero.</li>
+          <li>Link <code class="luz-code-inline">hero</code> with <code class="luz-code-inline">section</code>: the head of a section shares its rules with the hero.</li>
           <li>None has a script. The catalog's script is optional: with the table of contents of a blog, it marks the section in view; with the sidebar of an app, it marks the current link and closes the drawer when a link is followed. Core's script does not do this.</li>
         </ul>
       </div>
@@ -190,7 +190,7 @@ import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Computing the integrity hash"><code id="code-integrity">curl -s https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css | openssl dgst -sha384 -binary | openssl base64 -A</code></pre>
         </div>
         <p>Write the result as <code class="luz-code-inline">integrity="sha384-…"</code> on the tag that loads that file, and repeat it for each file.</p>
-        <p>A hash on a script covers that file only, not the files it loads later. <code class="luz-code-inline">catalog.min.js</code> loads <code class="luz-code-inline">search.min.js</code> on a page with a search and <code class="luz-code-inline">consent.min.js</code> on a page with a cookie banner and <code class="luz-code-inline">mode.min.js</code> on a page with an Auto color mode.</p>
+        <p>A hash on a script covers that file only, not the files it loads later. <code class="luz-code-inline">catalog.min.js</code> loads <code class="luz-code-inline">search.min.js</code> on a page with a search and <code class="luz-code-inline">cookie-consent.min.js</code> on a page with a cookie banner and <code class="luz-code-inline">color-mode.min.js</code> on a page with an Auto color mode.</p>
         <p>Give each one its own hash in an import map, before the first module script. It works in Chrome 127, Safari 18 and Firefox 138 and later; an older browser ignores it and loads the files unchecked.</p>
         <p>A <code class="luz-code-inline">&lt;link rel="modulepreload"&gt;</code> with a hash is not a guard in Safari or Firefox: use it as a performance hint only.</p>
         <div class="docs-snippet">
@@ -202,8 +202,8 @@ import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
 {
   &quot;integrity&quot;: {
     &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/search.min.js&quot;: &quot;sha384-…&quot;,
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/consent.min.js&quot;: &quot;sha384-…&quot;,
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/mode.min.js&quot;: &quot;sha384-…&quot;
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/cookie-consent.min.js&quot;: &quot;sha384-…&quot;,
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/color-mode.min.js&quot;: &quot;sha384-…&quot;
   }
 }
 &lt;/script&gt;
