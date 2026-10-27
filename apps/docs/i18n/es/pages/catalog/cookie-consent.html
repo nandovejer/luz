@@ -3,7 +3,7 @@ title: Consentimiento para cookies
 description: Pregunta una vez al visitante si el sitio puede usar cookies opcionales, muestra Aceptar y Rechazar uno junto al otro y recuerda la respuesta.
 fits: cuando el sitio usa cookies opcionales
 keywords: aviso de cookies, RGPD, ePrivacy, privacidad, consentimiento de seguimiento
-source: ffbbe86c39f3
+source: c9c06a6517ad
 reviewed: false
 -->
     <div class="docs-component" id="p-cookie-consent">
@@ -62,7 +62,7 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
-            <p>Justo después del <a href="/docs/components/skip-link/">enlace para saltar al contenido</a>, antes de un <a href="/docs/catalog/announcement/">aviso</a> y de la cabecera de la página (la <a href="/docs/catalog/site-header/">cabecera del sitio</a> o la <a href="/docs/catalog/masthead/">cabecera de periódico</a>, por ejemplo): aparece en la parte inferior de la ventana, pero es lo primero en el orden de lectura y de Tab. Hay una casilla por cada categoría de cookies opcionales; su <code>value</code> es el nombre de la categoría.</p>
+            <p>Justo después del <a href="/docs/components/skip-link/">enlace para saltar al contenido</a>, antes de un <a href="/docs/catalog/announcement/">anuncio</a> y de la cabecera de la página (la <a href="/docs/catalog/site-header/">cabecera del sitio</a> o la <a href="/docs/catalog/masthead/">cabecera de periódico</a>, por ejemplo): aparece en la parte inferior de la ventana, pero es lo primero en el orden de lectura y de Tab. Hay una casilla por cada categoría de cookies opcionales; su <code>value</code> es el nombre de la categoría.</p>
             <p><code>catalog.min.js</code> carga el archivo propio del aviso, <code>cookie-consent.min.js</code>, cuando el navegador está inactivo; una página sin <code>catalog.min.js</code> carga ese archivo por su cuenta.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
@@ -179,7 +179,7 @@ document.addEventListener(&quot;luz:consent&quot;, (event) =&gt; {
             <p>No lo uses si el sitio solo instala las cookies necesarias para funcionar (de sesión, del carrito o para guardar el idioma o el modo de color): no requieren consentimiento. Explícalo en la política de cookies y no muestres ningún aviso.</p>
             <ul>
               <li>No lo uses como una barrera que oculte o bloquee la página hasta que el visitante responda.</li>
-              <li>No lo uses para anunciar noticias u ofertas: para eso tienes el <a href="/docs/catalog/announcement/">banner</a>.</li>
+              <li>No lo uses para anunciar noticias u ofertas: para eso tienes el <a href="/docs/catalog/announcement/">anuncio</a>.</li>
             </ul>
             <p>Sustituye a un script de consentimiento de terceros. No reemplaza nada de LUZ.</p>
             <h3 id="do-dont">Qué hacer y qué no</h3>

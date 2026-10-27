@@ -147,6 +147,7 @@ npx @luz-ds/check@0.2.1 src --json</code></pre>
       <h2 class="docs-chapter__title" id="rules">What check blocks and what it warns about</h2>
       <p class="docs-lead">Each rule has an id such as <code>class/unknown</code>, shown in every finding. A rule that blocks makes the exit code 1.</p>
       <p>A rule that warns does not, unless you pass <code>--strict</code>. The two tables are written from the list of rules the command has.</p>
+      <p>Catalog 0.3 renamed its classes, elements, files and chunks, and the old names do nothing. <code>names/renamed</code> finds an old class, an old tag, a link to an old component file or an old chunk, and gives the new name. It says nothing on a page that links catalog 0.0 to 0.2, where the old names are the right ones.</p>
       <!-- luz:ai rules -->
     </section>
 

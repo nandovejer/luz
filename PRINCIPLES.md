@@ -133,7 +133,7 @@ Words are a component. A button with the wrong label is a broken button. These r
 | `catalog` JS lazy chunk: `timeline` (loaded by `catalog.js` when the page has a `<luz-timeline>`; it was `core`'s) | — | ≤ 2 kB | 2 kB | 3 kB |
 | `catalog` JS lazy chunk: `sidebar` (loaded by `catalog.js` when the page has a `.luz-sidebar`; it was `core`'s `sidebar.js`, which the entry carried) | — | ≤ 0.75 kB | 0.75 kB | 1 kB |
 | Each `catalog` layout component CSS (`packages/catalog/dist/components/{navbar,sidebar,terminal,timeline}.min.css`; the general row excludes them) | — | ≤ 1.75 kB | 1.75 kB | 2 kB |
-| Each pattern of a kind of site in `catalog` (the 21 files of `KIND_PATTERNS` in `scripts/docs-site/kinds.js` (`packages/catalog/dist/components/{hero,section,…}.min.css`)) | — | ≤ 0.75 kB | 0.75 kB | 1 kB |
+| Each pattern of a kind of site in `catalog` (the files that `scripts/docs-site/kinds.js` lists (`packages/catalog/dist/components/{hero,section,…}.min.css`)) | — | ≤ 0.75 kB | 0.75 kB | 1 kB |
 | Each docs page, HTML uncompressed | — | ≤ 60 kB | 60 kB | 80 kB |
 | `check` CLI bundle, `luz-check.js` (gzip, not minified so it can be read) | — | ≤ 36 kB | 36 kB | 40 kB |
 | `llms.txt` and `llms-full.txt`, each uncompressed | — | ≤ 400 kB | 400 kB | 448 kB |

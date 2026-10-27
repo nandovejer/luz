@@ -1,5 +1,5 @@
 <!-- luz:page
-title: Banner
+title: Announcement
 description: Tells every visitor one short thing at the top of the page, such as a sale, an event or planned maintenance.
 area: catalog
 order: 20
@@ -12,26 +12,26 @@ toc: h2,h3
 -->
     <div class="docs-component" id="p-announcement">
           <h2 id="example">Example</h2>
-          <p>Two banners: an invitation to an open day and a notice of planned maintenance.</p>
+          <p>Two announcements: an invitation to an open day and a notice of planned maintenance.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <luz-announcement>
-              <section aria-labelledby="banner-demo-label">
-                <p><strong id="banner-demo-label">Open day.</strong> Visit the winery on Saturday 25 October, from 11:00 to 18:00. <a href="#example">Book a visit</a></p>
+              <section aria-labelledby="announcement-demo-label">
+                <p><strong id="announcement-demo-label">Open day.</strong> Visit the winery on Saturday 25 October, from 11:00 to 18:00. <a href="#example">Book a visit</a></p>
               </section>
             </luz-announcement>
             <luz-announcement tone="warning">
-              <section aria-labelledby="banner-demo-warning">
-                <p><strong id="banner-demo-warning">Planned maintenance.</strong> The shop will be closed on Monday 3 November from 07:00 to 09:00. <a href="#example">See what still works</a></p>
+              <section aria-labelledby="announcement-demo-warning">
+                <p><strong id="announcement-demo-warning">Planned maintenance.</strong> The shop will be closed on Monday 3 November from 07:00 to 09:00. <a href="#example">See what still works</a></p>
               </section>
             </luz-announcement>
           </div>
-          <p class="docs-demo__note">On a site the banner goes above the header, as wide as the window, and its text starts where the header’s row starts. Here it is as wide as the example.</p>
+          <p class="docs-demo__note">On a site the announcement goes above the header, as wide as the window, and its text starts where the header’s row starts. Here it is as wide as the example.</p>
           </div>
           <h2 id="known-issues">Known issues</h2>
-          <p>It cannot be closed: a close button needs a script, and a choice that lasts from page to page needs storage. Keep the banner short and remove it from the markup when it ends.</p>
-          <p>In a browser without CSS anchor positioning (before Chrome and Edge 125, Safari 26, Firefox 147), the header’s menu at 768 px and below opens at the top of the window, so before the page scrolls it covers part of the header under a banner; Escape or a click outside closes it.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Banner documentation">
+          <p>It cannot be closed: a close button needs a script, and a choice that lasts from page to page needs storage. Keep the announcement short and remove it from the markup when it ends.</p>
+          <p>In a browser without CSS anchor positioning (before Chrome and Edge 125, Safari 26, Firefox 147), the header’s menu at 768 px and below opens at the top of the window, so before the page scrolls it covers part of the header under an announcement; Escape or a click outside closes it.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Announcement documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
           </nav>
@@ -42,19 +42,19 @@ toc: h2,h3
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-announcement" aria-label="Copy the banner markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-announcement" aria-label="Copy the announcement markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Banner markup"><code id="code-announcement">&lt;a class=&quot;luz-skip-link&quot; href=&quot;#main&quot;&gt;Skip to main content&lt;/a&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Announcement markup"><code id="code-announcement">&lt;a class=&quot;luz-skip-link&quot; href=&quot;#main&quot;&gt;Skip to main content&lt;/a&gt;
 &lt;luz-announcement&gt;
-  &lt;section aria-labelledby=&quot;banner-label&quot;&gt;
-    &lt;p&gt;&lt;strong id=&quot;banner-label&quot;&gt;Open day.&lt;/strong&gt; Visit the winery on Saturday 25 October,
+  &lt;section aria-labelledby=&quot;announcement-label&quot;&gt;
+    &lt;p&gt;&lt;strong id=&quot;announcement-label&quot;&gt;Open day.&lt;/strong&gt; Visit the winery on Saturday 25 October,
       from 11:00 to 18:00. &lt;a href=&quot;/visits/&quot;&gt;Book a visit&lt;/a&gt;&lt;/p&gt;
   &lt;/section&gt;
 &lt;/luz-announcement&gt;
 &lt;header&gt;…&lt;/header&gt;</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
-            <div class="luz-table-wrap" role="region" aria-label="Banner tag and attribute" tabindex="0">
+            <div class="luz-table-wrap" role="region" aria-label="Announcement tag and attribute" tabindex="0">
               <table class="luz-table">
                 <thead>
                   <tr><th scope="col">Tag or attribute</th><th scope="col">Effect</th></tr>
@@ -70,15 +70,15 @@ toc: h2,h3
             <ul>
               <li>It is a band of the page, in the flow: it scrolls away with the page, and an <code>.o-sticky</code> header stays at the top under it. Nothing covers the page.</li>
               <li>Its inline padding lines its text up with the header’s row, up to <code>--luz-content-max</code> wide, in either direction of text.</li>
-              <li>There is no close button. Closing it for good needs a script and a value stored in the browser, and a button that does nothing without a script is never shown. A banner is short-lived: remove it from the markup when the event is over.</li>
-              <li>There is no success or error tone: a banner is not the answer to something the visitor did. For that use an <a href="/docs/components/alert/">alert</a> in the page.</li>
+              <li>There is no close button. Closing it for good needs a script and a value stored in the browser, and a button that does nothing without a script is never shown. An announcement is short-lived: remove it from the markup when the event is over.</li>
+              <li>There is no success or error tone: an announcement is not the answer to something the visitor did. For that use an <a href="/docs/components/alert/">alert</a> in the page.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>Nothing changes: there is no script.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <ul>
               <li><strong>Order:</strong> its link comes after the skip link and before the header.</li>
-              <li><strong>Landmark:</strong> a <code>&lt;section&gt;</code> with a name is a region, so a screen reader lists it among the landmarks; name it with <code>aria-labelledby</code> pointing at its first words. If it says nothing more than its sentence, a <code>&lt;div&gt;</code> with no name is fine.</li>
+              <li><strong>Landmark:</strong> it is not the <code>banner</code> landmark, which is the page’s <code>&lt;header&gt;</code>; that is why it is called an announcement. A <code>&lt;section&gt;</code> with a name is a region, so a screen reader lists it among the landmarks; name it with <code>aria-labelledby</code> pointing at its first words. If it says nothing more than its sentence, a <code>&lt;div&gt;</code> with no name is fine.</li>
               <li><strong>Not a live region:</strong> it is there when the page loads, so it needs no <code>role="status"</code> or <code>role="alert"</code>; a screen reader reads it with the rest of the page.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -90,7 +90,7 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not use it for something that belongs to one page or to one visitor: put that in the page, or answer with an <a href="/docs/components/alert/">alert</a> or a <a href="/docs/components/toast/">toast</a>.</p>
             <ul>
-              <li>Do not show two banners at once, and do not leave one up for months: a band that never changes is no longer read.</li>
+              <li>Do not show two announcements at once, and do not leave one up for months: a band that never changes is no longer read.</li>
               <li>Do not use it to ask for cookies: use the <a href="/docs/catalog/cookie-consent/">cookie consent</a> banner.</li>
               <li>Do not put a form or more than one link in it.</li>
             </ul>
@@ -127,7 +127,7 @@ toc: h2,h3
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
             <p>The text and its link sit on the band’s surface.</p>
-            <div class="luz-table-wrap" role="region" aria-label="Banner contrast in each mode" tabindex="0">
+            <div class="luz-table-wrap" role="region" aria-label="Announcement contrast in each mode" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>
                   <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>

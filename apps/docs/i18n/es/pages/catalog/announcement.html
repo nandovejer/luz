@@ -1,33 +1,33 @@
 <!-- luz:page
-title: Banner
+title: Anuncio
 description: Comunica una sola cosa breve a todas las personas que visitan el sitio, en la parte superior de la página, como una oferta, un evento o un mantenimiento previsto.
 fits: un aviso breve para todas las personas que visitan el sitio, como una oferta o un mantenimiento previsto
 keywords: aviso, barra de anuncios, barra superior, mensaje de mantenimiento
-source: 93c9c2e46136
+source: a503d21b1070
 reviewed: false
 -->
     <div class="docs-component" id="p-announcement">
           <h2 id="example">Ejemplo</h2>
-          <p>Dos banners: una invitación a una jornada de puertas abiertas y un aviso de mantenimiento previsto.</p>
+          <p>Dos anuncios: una invitación a una jornada de puertas abiertas y un aviso de mantenimiento previsto.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <luz-announcement>
-              <section aria-labelledby="banner-demo-label">
-                <p><strong id="banner-demo-label">Open day.</strong> Visit the winery on Saturday 25 October, from 11:00 to 18:00. <a href="#example">Book a visit</a></p>
+              <section aria-labelledby="announcement-demo-label">
+                <p><strong id="announcement-demo-label">Open day.</strong> Visit the winery on Saturday 25 October, from 11:00 to 18:00. <a href="#example">Book a visit</a></p>
               </section>
             </luz-announcement>
             <luz-announcement tone="warning">
-              <section aria-labelledby="banner-demo-warning">
-                <p><strong id="banner-demo-warning">Planned maintenance.</strong> The shop will be closed on Monday 3 November from 07:00 to 09:00. <a href="#example">See what still works</a></p>
+              <section aria-labelledby="announcement-demo-warning">
+                <p><strong id="announcement-demo-warning">Planned maintenance.</strong> The shop will be closed on Monday 3 November from 07:00 to 09:00. <a href="#example">See what still works</a></p>
               </section>
             </luz-announcement>
           </div>
-          <p class="docs-demo__note">On a site the banner goes above the header, as wide as the window, and its text starts where the header’s row starts. Here it is as wide as the example.</p>
+          <p class="docs-demo__note">On a site the announcement goes above the header, as wide as the window, and its text starts where the header’s row starts. Here it is as wide as the example.</p>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
-          <p>No se puede cerrar: un botón de cierre necesita un script, y para recordar una elección entre páginas hace falta almacenamiento. Mantén el banner breve y elimínalo del marcado cuando ya no haga falta.</p>
-          <p>En los navegadores sin posicionamiento de anclas CSS (anteriores a Chrome y Edge 125, Safari 26 y Firefox 147), el menú de la cabecera, a 768 px o menos, se abre en la parte superior de la ventana; antes de desplazarse por la página, cubre parte de la cabecera bajo el banner. Se cierra con Escape o al hacer clic fuera.</p>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del banner">
+          <p>No se puede cerrar: un botón de cierre necesita un script, y para recordar una elección entre páginas hace falta almacenamiento. Mantén el anuncio breve y elimínalo del marcado cuando ya no haga falta.</p>
+          <p>En los navegadores sin posicionamiento de anclas CSS (anteriores a Chrome y Edge 125, Safari 26 y Firefox 147), el menú de la cabecera, a 768 px o menos, se abre en la parte superior de la ventana; antes de desplazarse por la página, cubre parte de la cabecera bajo el anuncio. Se cierra con Escape o al hacer clic fuera.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del anuncio">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
           </nav>
@@ -38,19 +38,19 @@ reviewed: false
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-announcement" aria-label="Copy the banner markup">Copy</button>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-announcement" aria-label="Copy the announcement markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Banner markup"><code id="code-announcement">&lt;a class=&quot;luz-skip-link&quot; href=&quot;#main&quot;&gt;Skip to main content&lt;/a&gt;
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Announcement markup"><code id="code-announcement">&lt;a class=&quot;luz-skip-link&quot; href=&quot;#main&quot;&gt;Skip to main content&lt;/a&gt;
 &lt;luz-announcement&gt;
-  &lt;section aria-labelledby=&quot;banner-label&quot;&gt;
-    &lt;p&gt;&lt;strong id=&quot;banner-label&quot;&gt;Open day.&lt;/strong&gt; Visit the winery on Saturday 25 October,
+  &lt;section aria-labelledby=&quot;announcement-label&quot;&gt;
+    &lt;p&gt;&lt;strong id=&quot;announcement-label&quot;&gt;Open day.&lt;/strong&gt; Visit the winery on Saturday 25 October,
       from 11:00 to 18:00. &lt;a href=&quot;/visits/&quot;&gt;Book a visit&lt;/a&gt;&lt;/p&gt;
   &lt;/section&gt;
 &lt;/luz-announcement&gt;
 &lt;header&gt;…&lt;/header&gt;</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
-            <div class="luz-table-wrap" role="region" aria-label="Etiqueta y atributo del banner" tabindex="0">
+            <div class="luz-table-wrap" role="region" aria-label="Etiqueta y atributo del anuncio" tabindex="0">
               <table class="luz-table">
                 <thead>
                   <tr><th scope="col">Etiqueta o atributo</th><th scope="col">Efecto</th></tr>
@@ -66,15 +66,15 @@ reviewed: false
             <ul>
               <li>Es una franja de la página, dentro del flujo: se desplaza con la página y una cabecera <code>.o-sticky</code> permanece fija arriba, debajo. No cubre la página.</li>
               <li>Su relleno en línea alinea el texto con la fila de la cabecera, hasta un ancho de <code>--luz-content-max</code>, en ambas direcciones de escritura.</li>
-              <li>No tiene botón de cierre. Para cerrarlo de forma permanente se necesita un script y un valor almacenado en el navegador; nunca se muestra un botón que no hace nada sin un script. Un banner dura poco: elimina su marcado cuando termina el evento.</li>
-              <li>No hay un tono de éxito o error: un banner no responde a algo que haya hecho quien visita la página. Para eso, usa una <a href="/docs/components/alert/">alerta</a> en la página.</li>
+              <li>No tiene botón de cierre. Para cerrarlo de forma permanente se necesita un script y un valor almacenado en el navegador; nunca se muestra un botón que no hace nada sin un script. Un anuncio dura poco: elimina su marcado cuando termina el evento.</li>
+              <li>No hay un tono de éxito o error: un anuncio no responde a algo que haya hecho quien visita la página. Para eso, usa una <a href="/docs/components/alert/">alerta</a> en la página.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>No cambia nada: no hay ningún script.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
             <ul>
               <li><strong>Orden:</strong> su enlace va después del enlace para saltar al contenido y antes de la cabecera.</li>
-              <li><strong>Región:</strong> un <code>&lt;section&gt;</code> con nombre es una región, así que el lector de pantalla la incluye entre las regiones de la página; asígnale un nombre con <code>aria-labelledby</code> que apunte a sus primeras palabras. Si solo contiene esa frase, basta un <code>&lt;div&gt;</code> sin nombre.</li>
+              <li><strong>Región:</strong> no es la región <code>banner</code>, que es el <code>&lt;header&gt;</code> de la página; por eso se llama anuncio. Un <code>&lt;section&gt;</code> con nombre es una región, así que el lector de pantalla la incluye entre las regiones de la página; asígnale un nombre con <code>aria-labelledby</code> que apunte a sus primeras palabras. Si solo contiene esa frase, basta un <code>&lt;div&gt;</code> sin nombre.</li>
               <li><strong>No es una región dinámica:</strong> aparece al cargar la página, así que no necesita <code>role="status"</code> ni <code>role="alert"</code>; el lector de pantalla lo lee junto con el resto de la página.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
@@ -86,7 +86,7 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No lo uses para algo que corresponda a una sola página o a una persona: inclúyelo en la página o responde con una <a href="/docs/components/alert/">alerta</a> o un <a href="/docs/components/toast/">aviso emergente</a>.</p>
             <ul>
-              <li>No muestres dos banners a la vez ni dejes uno durante meses: si una franja nunca cambia, la gente deja de leerla.</li>
+              <li>No muestres dos anuncios a la vez ni dejes uno durante meses: si una franja nunca cambia, la gente deja de leerla.</li>
               <li>No lo uses para pedir consentimiento para las cookies: usa el banner de <a href="/docs/catalog/cookie-consent/">consentimiento de cookies</a>.</li>
               <li>No incluyas un formulario ni más de un enlace.</li>
             </ul>
@@ -123,7 +123,7 @@ reviewed: false
             </ul>
             <h3 id="contrast">Contraste y foco</h3>
             <p>El texto y el enlace aparecen sobre la superficie de la franja.</p>
-            <div class="luz-table-wrap" role="region" aria-label="Contraste del banner en cada modo" tabindex="0">
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del anuncio en cada modo" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>
                   <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
