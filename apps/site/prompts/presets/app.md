@@ -7,4 +7,4 @@ An app is a web application: a dashboard, a back office, a tool the person signs
 3. What the data comes from (an API, a framework's store) and who renders it (the server, the client). LUZ is the markup either way.
 4. The empty, loading and error states of each view: what each says.
 
-Start from `luz-app-header` and `luz-app-dashboard`, on core's `o-shell` and `luz-sidebar`. Tables, forms, dialogs, tabs and alerts are core's.
+Start from `luz-app-header` and `luz-app-dashboard`, on core's `o-shell` and catalog's `luz-sidebar`. Tables, forms, dialogs, tabs and alerts are core's.
