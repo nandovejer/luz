@@ -2743,3 +2743,99 @@ home-light:defined ~ .landing-light__nojs {
   }
 }
 
+
+/* ==========================================================================
+   Prototype (not for merge): the imagotype in the hero, the prism E3 with
+   dots and the word LUZ in ET Book, sized by the brand's own em (3.75em of
+   the title), so every rule above that sizes the brand still sizes it.
+   The numbers are the demo's (.claude/plans/demos/logo-fuentes.html) turned
+   into em: the capitals 0.679em, the triangle's box 0.7835em, the gap
+   0.1306em
+   ========================================================================== */
+.landing-imago {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1306em;
+  color: var(--luz-brand-primary);
+  text-shadow: none;
+  /* the halo of the brand, on the triangle and the word alike */
+  filter: drop-shadow(0 0 0.25em color-mix(in oklab, var(--luz-brand-primary) 35%, transparent))
+    drop-shadow(0 0 0.75em color-mix(in oklab, var(--luz-brand-primary) 22%, transparent));
+}
+
+.landing-imago__mark {
+  display: block;
+  flex: none;
+  inline-size: 0.7835em;
+  block-size: 0.7835em;
+}
+
+/* The word: ET Book, the capitals trimmed to their own height, squeezed to
+   .86 and stretched to 1.04 from the left; the box gives back what the
+   squeeze takes (its natural width is 1.5737em: the letters' advances
+   L .5947, U .8149, Z .7046 at their own widths, less two gaps of .1em) */
+.landing-imago__word {
+  display: inline-block;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-box: trim-both cap alphabetic;
+  transform: scale(0.86, 1.04);
+  transform-origin: left center;
+  margin-inline-end: -0.2203em;
+  /* The box is trimmed to the capitals, but the mask paints only inside it:
+     the U's round bottom, which dips under the baseline as every round
+     letter does, was cut flat. The box grows .08em above and below (the same
+     both ways, so the mask's middle stays), and the margins take it back, so
+     nothing moves */
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+  /* the prism's three tints, faint (.72, .8, .88 of the colour; the triangle
+     uses .25, .45, .65), as a fan from the point where the light enters
+     the triangle, written in the word's own unscaled box */
+  --px: -0.863em;
+  --py: calc(50% + 0.0398em);
+  -webkit-mask-image: conic-gradient(from 0deg at var(--px) var(--py), #000 0deg 82.6deg, rgb(0 0 0 / 0.72) 82.6deg 86.6deg,
+    rgb(0 0 0 / 0.8) 86.6deg 90.6deg, rgb(0 0 0 / 0.88) 90.6deg 94.7deg, #000 94.7deg);
+  mask-image: conic-gradient(from 0deg at var(--px) var(--py), #000 0deg 82.6deg, rgb(0 0 0 / 0.72) 82.6deg 86.6deg,
+    rgb(0 0 0 / 0.8) 86.6deg 90.6deg, rgb(0 0 0 / 0.88) 90.6deg 94.7deg, #000 94.7deg);
+}
+
+/* Each letter its own width, from its middle, its box given back */
+.landing-imago__word .ch {
+  display: inline-block;
+  transform: scaleX(var(--s));
+  margin-inline: calc((var(--s) - 1) * var(--cw) / 2);
+}
+
+.landing-imago__word .ch + .ch {
+  /* the gap -0.1em, plus one screen pixel (1px before the word's .86 squeeze) */
+  margin-inline-start: calc((var(--s) - 1) * var(--cw) / 2 - 0.1em + 1px / 0.86);
+}
+
+.landing-imago__word .ch--l { --s: 0.88; --cw: 0.5947em; }
+.landing-imago__word .ch--u { --s: 0.86; --cw: 0.8149em; }
+.landing-imago__word .ch--z { --s: 0.78; --cw: 0.7046em; }
+
+/* the Z six screen pixels further from the U than the U is from the L */
+.landing-imago__word .ch--u + .ch--z {
+  margin-inline-start: calc((var(--s) - 1) * var(--cw) / 2 - 0.1em + 7px / 0.86);
+}
+
+/* Prototype: from a tablet up the word is larger than the phone's (which
+   stays as it is) and has room under it. Its box is trimmed to the capitals,
+   so the room the line used to give is put back as a margin */
+@media (min-width: 641px) {
+  .landing-imago {
+    font-size: min(5em, 22svh);
+    margin-block-end: 0.22em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-imago {
+    font-size: min(5.5em, 24svh);
+  }
+}

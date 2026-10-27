@@ -54,7 +54,7 @@
   "nav.label": "Página de inicio",
   "nav.on-page": "En esta página",
   "nav.get-started": "Primeros pasos",
-  "hero.title": "<span class=\"landing-hero__brand\">LUZ</span> Sistema de diseño para el <em>humano</em>, listo para la <em>IA</em>",
+  "hero.title": "Sistema de diseño para el <em>humano</em>, listo para la <em>IA</em>",
   "hero.lead": "Tokens, CSS y un poco de JavaScript, sobre lo que el navegador ya hace. Cada componente funciona antes de que cargue JavaScript y cada cambio empieza con una prueba que falla.",
   "hero.docs": "Leer la documentación, en inglés",
   "hero.start": "Primeros pasos",
