@@ -46,7 +46,7 @@
 import { join, dirname } from "node:path";
 import { readLimited } from "./walk.js";
 
-export const PACKAGES = ["tokens", "core", "catalog", "landing", "cms", "app", "docs"];
+export const PACKAGES = ["tokens", "core", "catalog"];
 export const MAX_MANIFEST_BYTES = 8 * 1024 * 1024;
 const MAX_PACKAGE_JSON_BYTES = 256 * 1024;
 const MAX_CLASSES = 50000;
@@ -83,8 +83,9 @@ function readJson(path, max) {
 /**
  * classes.json of schema 1 -> { version, classes: [{ name, block, kind, defined, modifier, part, hosts, files }], hooks } or null.
  * `files` is kept only when `unbundled` (a package whose page links one file per component), and only the components/<name>.css ones.
+ * `derive`: the data is the snapshot beside the bundle, which leaves `files` out of a defined class that is in the file its block names.
  */
-function parseClasses(data, pkg, unbundled) {
+function parseClasses(data, pkg, unbundled, derive = false) {
   if (!isObject(data) || data.schema !== 1 || data.package !== `@luz-ds/${pkg}`) return null;
   if (typeof data.version !== "string" || !VERSION.test(data.version)) return null;
   if (!Array.isArray(data.classes) || data.classes.length > MAX_CLASSES) return null;
@@ -94,7 +95,9 @@ function parseClasses(data, pkg, unbundled) {
     for (const key of ["block", "modifier", "part"]) if (entry[key] !== undefined && !isName(entry[key])) return null;
     const { hosts } = entry;
     if (hosts !== undefined && !(Array.isArray(hosts) && hosts.length > 0 && hosts.length <= MAX_HOSTS && hosts.every((host) => typeof host === "string" && HOST.test(host)))) return null;
-    const files = unbundled && Array.isArray(entry.files) ? entry.files.filter((file) => typeof file === "string" && FILE.test(file)).slice(0, MAX_FILES) : [];
+    // The snapshot of a package with no bundle (`derive`) leaves out the file a defined class has when it is the one its block names
+    const own = derive && entry.defined === true && entry.files === undefined ? [`components/${(entry.block ?? entry.name).replace(/^luz-/, "")}.css`] : entry.files;
+    const files = unbundled && Array.isArray(own) ? own.filter((file) => typeof file === "string" && FILE.test(file)).slice(0, MAX_FILES) : [];
     classes.push({ name: entry.name, block: entry.block, kind: entry.kind, defined: entry.defined, modifier: entry.modifier, part: entry.part, hosts, files: files.length ? files : undefined });
   }
   if (data.properties !== undefined && !Array.isArray(data.properties)) return null;
@@ -139,10 +142,10 @@ function parseElements(data) {
  * The two files of a package in one folder layout -> { version, classes, hooks, elements } or null.
  * `unbundled`: the package has no bundle, so a class keeps the files that define it.
  */
-function readPackage(classesPath, elementsPath, pkg, unbundled) {
+function readPackage(classesPath, elementsPath, pkg, unbundled, derive = false) {
   const data = readJson(classesPath, MAX_MANIFEST_BYTES);
   if (data === null) return null;
-  const classes = parseClasses(data, pkg, unbundled);
+  const classes = parseClasses(data, pkg, unbundled, derive);
   if (classes === null) return null;
   let elements = [];
   const present = readLimited(elementsPath, MAX_MANIFEST_BYTES);
@@ -225,7 +228,7 @@ export function createFacts({ data }) {
     if (typeof data === "string" && data !== "") {
       const folder = join(data, pkg);
       // The snapshot keeps the files of a class only for a package with no bundle (scripts/build-check.js)
-      const read = readPackage(join(folder, "classes.json"), join(folder, "custom-elements.json"), pkg, true);
+      const read = readPackage(join(folder, "classes.json"), join(folder, "custom-elements.json"), pkg, true, pkg === "catalog");
       if (read !== null) part = { name: pkg, source: "bundled", ...read };
     }
     bundled.set(pkg, part);

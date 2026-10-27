@@ -12,7 +12,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { decodeEntities, readHtml } from "../scripts/docs-site/html.js";
 import { PROMPT_KINDS, promptRoute } from "../scripts/docs-site/prompts.js";
 import { classesOf, findAll, hasClass, isInside, isLive, parse, query, queryAllLive, textOf } from "./helpers/html-dom.js";
-import { KIND_AREAS, PATTERN_AREAS } from "./helpers/package-areas.js";
+import { PATTERN_AREAS } from "./helpers/package-areas.js";
 import { readIndex, search } from "../packages/catalog/src/search.js";
 import {
   SEARCH_INDEX_ROUTE,
@@ -628,7 +628,7 @@ describe("the LUZ docs site", () => {
     // ia.md §6 and a11y.md TAB-1/3/16/17. Every section of both tabs is
     // required; tests/docs-design.test.js checks what the Design sections say.
     const viewPages = site.pages.filter(
-      (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group === "patterns"),
+      (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group && p.meta.group !== "reference"),
     );
     expect(viewPages).toHaveLength(58);
     const CODE = ["markup", "variants", "how", "no-js", "keyboard"];
@@ -874,13 +874,13 @@ describe("the LUZ docs site", () => {
         expect(link[2], `${route}: ${kind} has an aria-label`).toBe(false);
       }
     }
-    // Get started → Kinds of site → Tokens → Components → Site → … → Documentation → HTML elements → Accessibility
+    // Get started → Kinds of site → Tokens → Components → Catalog → HTML elements → Accessibility
     expect(endOf(rendered.get("/docs/tokens/")).prev?.[0]).toBe("/docs/kinds/docs/");
     expect(endOf(rendered.get("/docs/kinds/")).prev?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/tokens/")).next?.[0]).toBe("/docs/tokens/color/");
     expect(endOf(rendered.get("/docs/get-started/classless/")).next?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/get-started/how-luz-is-built/")).next?.[0]).toBe("/docs/kinds/");
-    expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/documentation\//);
+    expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/catalog\//);
     expect(endOf(rendered.get("/docs/components/")).prev?.[0]).toMatch(/^\/docs\/tokens\//);
     expect(endOf(rendered.get("/docs/accessibility/")).prev?.[0]).toMatch(/^\/docs\/html\//);
     expect(endOf(rendered.get("/docs/catalog/")).prev?.[0]).toMatch(/^\/docs\/components\//);
@@ -909,20 +909,21 @@ describe("the LUZ docs site", () => {
   });
 
   // F3 step 12: what moved out of catalog leaves its pages behind. Each went to core (shell and
-  // actions to `layout`, section to `band`, image, skip link), to landing (hero, footer, header,
-  // section) or to cms (header, footer, page header); the old URLs fall to the 404 page
+  // actions to `layout`, section to `band`, image, skip link), or to a pattern of a kind of site (hero, footer,
+  // header, section, page header: files of catalog since F5b); the old URLs fall to the 404 page
   const LEFT_SITE = ["actions", "footer", "hero", "image", "lang-switcher", "notice", "page-header", "section", "shell", "site-header", "skip-link", "templates"];
 
-  it("the Catalog area holds its six components and its class reference, and nothing of the page structure that moved out", () => {
+  it("the Catalog area holds its six components, the 19 pages of the patterns of the kinds of site, and its class reference; nothing of what moved to core", () => {
     const routes = site.pages.filter((p) => p.meta.area === "catalog").map((p) => p.route).sort();
-    expect(routes).toEqual(["/docs/catalog/", ...["banner", "classes", "consent", "lang-switch", "mode", "search", "submenu"].map((slug) => `/docs/catalog/${slug}/`)]);
-    const patterns = site.pages.filter((p) => p.meta.area === "catalog" && p.meta.group === "patterns").map((p) => p.route);
-    expect(patterns.sort()).toEqual(["banner", "consent", "lang-switch", "mode", "search", "submenu"].map((slug) => `/docs/catalog/${slug}/`));
+    const patterns = ["landing-header", "landing-hero", "landing-section", "landing-stat", "landing-footer", "cms-header", "cms-page-header", "cms-article-header", "cms-toc", "cms-footer", "app-header", "app-dashboard", "docs-shell", "docs-page-head", "docs-rail", "docs-example", "docs-dodont", "docs-pager", "docs-page-foot"];
+    expect(routes).toEqual(["/docs/catalog/", ...["banner", "classes", "consent", "lang-switch", "mode", "search", "submenu", ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`)]);
+    const groups = site.pages.filter((p) => p.meta.area === "catalog" && p.meta.group && p.meta.group !== "reference").map((p) => p.route);
+    expect(groups.sort()).toEqual(["banner", "consent", "lang-switch", "mode", "search", "submenu", ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`));
   });
 
   // F3 step 15 (.claude/plans/specs/f3-package-model.md, §7 and §9): the structure page says what catalog
   // is now, in its chain of packages, not only in the table of parts below it
-  it("the structure page's package chain lists catalog's six components and the three kinds, with catalog optional for them", () => {
+  it("the structure page's package chain lists catalog's six components and the patterns of the four kinds of site, and no package of a kind", () => {
     const body = site.byRoute.get("/docs/get-started/structure/").body;
     const chain = body
       .match(/<pre[^>]*aria-label="Package dependency chain"[^>]*><code>([\s\S]*?)<\/code><\/pre>/)[1]
@@ -930,10 +931,13 @@ describe("the LUZ docs site", () => {
       .replace(/&lt;/g, "<")
       .replace(/&amp;/g, "&");
     for (const tag of ["search", "consent", "mode", "lang-switch", "submenu", "banner"]) expect(chain, `catalog's ${tag}`).toContain(tag);
-    for (const kind of ["landing", "cms", "app", "docs"]) expect(chain, `the ${kind} kind`).toContain(`@luz-ds/${kind}`);
-    // Catalog no longer holds page structure ("page patterns"), and the kinds take it as an optional peer
-    expect(chain).not.toMatch(/page patterns/i);
-    expect(chain).toMatch(/optional/i);
+    // F5b: the patterns of a landing page, a blog, an app and a documentation site are catalog's; there is no package for a kind
+    for (const kind of ["landing", "cms", "app", "docs"]) expect(chain, `no package ${kind}`).not.toMatch(new RegExp(`@luz-ds/${kind}(?![\\w-])`));
+    expect(chain).toMatch(/landing page/i);
+    expect(chain).toMatch(/documentation site/i);
+    expect(chain).toMatch(/blog/i);
+    expect(chain).toMatch(/application|app\b/i);
+    expect(chain, "catalog is no optional peer of anything now").not.toMatch(/optional peer|catalog optional/i);
   });
 
   describe("the area Kinds of site (the plan ai-and-catalog-only, decisions 7 to 9)", () => {
@@ -1011,7 +1015,7 @@ describe("the LUZ docs site", () => {
         const ids = h2.map((h) => h.attrs.get("id"));
         expect(ids.every(Boolean), `${kind.id}: every recipe has an id`).toBe(true);
         expect(new Set(ids).size, `${kind.id}: ids are unique`).toBe(ids.length);
-        const patterns = kind.docs; // "docs/landing/", "docs/cms/"…
+        const patterns = kind.docs; // "docs/catalog/": a page of a kind is /docs/catalog/<kind.patterns>-<name>/
         h2.forEach((heading, i) => {
           const end = h2[i + 1]?.open.index ?? Infinity;
           const within = (node) => node.open.index > heading.open.index && node.open.index < end;
@@ -1023,10 +1027,22 @@ describe("the LUZ docs site", () => {
             expect(textOf(query(snippet, "pre.luz-code-block")).length, `${where}: markup in it`).toBeGreaterThan(20);
           }
           const links = findAll(tree, (n) => n.name === "a" && within(n) && isLive(n)).map((a) => a.attrs.get("href") ?? "");
-          const pattern = links.filter((href) => href.startsWith(`/${patterns}`));
-          expect(pattern.length, `${where}: a link to a page of /${patterns}`).toBeGreaterThanOrEqual(1);
-          for (const href of pattern) expect(site.byRoute.has(href.split("#")[0]), `${where}: ${href} is a page`).toBe(true);
+          // The pattern of the recipe, a page of /docs/catalog/<prefix>-<name>/, or core's components when the recipe is
+          // made of core alone (the post card is core's card, the shell of an app is core's sidebar: no CSS of their own)
+          const own = links.filter((href) => href.startsWith(`/${patterns}${kind.patterns}-`));
+          const core = links.filter((href) => href.startsWith("/docs/components/"));
+          expect(own.length + core.length, `${where}: a link to a pattern of ${kind.id} or to a component of core`).toBeGreaterThanOrEqual(1);
+          for (const href of [...own, ...core]) expect(site.byRoute.has(href.split("#")[0]), `${where}: ${href} is a page`).toBe(true);
         });
+      }
+    });
+
+    it("links every pattern page of its kind from its page, so a pattern is found from the kind it is for", () => {
+      for (const kind of KINDS) {
+        const links = new Set(queryAllLive(bodyOf(site.byRoute.get(routeOfKind(kind))), "a").map((a) => a.attrs.get("href").split("#")[0]));
+        const own = site.pages.filter((p) => p.meta.area === "catalog" && p.route.startsWith(`/docs/catalog/${kind.patterns}-`)).map((p) => p.route);
+        expect(own.length, `${kind.id}: pattern pages`).toBeGreaterThanOrEqual(2);
+        expect(own.filter((route) => !links.has(route)), `${kind.id}: pattern pages its page does not link`).toEqual([]);
       }
     });
 
@@ -1070,10 +1086,10 @@ describe("the LUZ docs site", () => {
     });
   });
 
-  it("every title of a page is its own: one page per name, except a header or footer of two different kinds of site", () => {
+  it("every title of a page is its own: one page per name (the headers and footers of the kinds of site say which kind in their title)", () => {
     const byTitle = new Map();
     for (const p of site.pages.filter((q) => q.meta.search !== "false")) byTitle.set(p.meta.title, [...(byTitle.get(p.meta.title) ?? []), p.meta.area]);
-    const shared = [...byTitle].filter(([, areas]) => areas.length > 1 && !areas.every((a) => KIND_AREAS.includes(a)));
+    const shared = [...byTitle].filter(([, areas]) => areas.length > 1);
     expect(shared.map(([title, areas]) => `${title}: ${areas.join(" and ")}`)).toEqual([]);
   });
 
@@ -1089,7 +1105,7 @@ describe("the LUZ docs site", () => {
       }
     };
     walk(join(repo, "apps"));
-    for (const dir of ["packages/catalog", "packages/landing", "packages/cms", "packages/core"]) {
+    for (const dir of ["packages/catalog", "packages/core"]) {
       for (const entry of ["README.md"]) if (existsSync(join(repo, dir, entry))) files.push(join(repo, dir, entry));
     }
     files.push(join(repo, "README.md"));

@@ -2,7 +2,7 @@
 title: Sitio de documentación
 description: Un sitio de documentación: un prompt para un LLM y recetas para su estructura, cabecera de página, índice lateral, ejemplo, qué hacer y qué no, navegación entre páginas y pie de página.
 keywords: docs, guías, manual, referencia, documentación, base de conocimiento
-source: 279318d2cd8f
+source: 63e8803b6622
 reviewed: false
 -->
     <div class="docs-block" id="k-docs">
@@ -12,7 +12,7 @@ reviewed: false
       <p>O constrúyelo tú con las recetas de abajo. Usan solo las clases de core, del catálogo y de docs; <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> indica los archivos que debes cargar. La página que estás leyendo está hecha con ellas.</p>
       <div class="docs-block">
         <h2 id="shell">Estructura</h2>
-        <p>La página entera: la cabecera, la barra lateral, el índice lateral, el contenido y el pie de página, en el orden en que los alcanza el teclado. El enlace para saltar al contenido pasa por encima de la barra lateral y del índice lateral. La <a href="/docs/documentation/shell/">estructura de página</a> tiene tres columnas a partir de 80rem, dos a partir de 60rem y una por debajo, con el índice lateral sobre el contenido cuando no hay tercera columna.</p>
+        <p>La página entera: la cabecera, la barra lateral, el índice lateral, el contenido y el pie de página, en el orden en que los alcanza el teclado. El enlace para saltar al contenido pasa por encima de la barra lateral y del índice lateral. La <a href="/docs/catalog/docs-shell/">estructura de página</a> tiene tres columnas a partir de 80rem, dos a partir de 60rem y una por debajo, con el índice lateral sobre el contenido cuando no hay tercera columna.</p>
         <p>No tiene un ejemplo dentro de esta página, porque es la página entera: esta está construida sobre ella. Cambia el tamaño de la ventana para ver sus columnas.</p>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
@@ -37,7 +37,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="page-head">Cabecera de página</h2>
-        <p>Lo primero del contenido: dónde está la página, su <code>&lt;h1&gt;</code>, una frase sobre lo que permite hacer a quien lee y unos datos como etiquetas. Es la <a href="/docs/documentation/page-head/">cabecera de página</a>.</p>
+        <p>Lo primero del contenido: dónde está la página, su <code>&lt;h1&gt;</code>, una frase sobre lo que permite hacer a quien lee y unos datos como etiquetas. Es la <a href="/docs/catalog/docs-page-head/">cabecera de página</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage" inert aria-hidden="true">
             <header class="luz-docs-page-head">
@@ -71,7 +71,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="rail">Índice lateral</h2>
-        <p>«En esta página» y las acciones de la página, junto al contenido a partir de 80rem y sobre él por debajo: el <a href="/docs/documentation/rail/">índice lateral</a>, hijo directo de la estructura de página, entre la barra lateral y el contenido. El índice lateral de esta página es uno real. Un enlace de la lista lleva además <code>.luz-sidebar__link</code> de core, así que el script de core marca la sección visible mientras te desplazas.</p>
+        <p>«En esta página» y las acciones de la página, junto al contenido a partir de 80rem y sobre él por debajo: el <a href="/docs/catalog/docs-rail/">índice lateral</a>, hijo directo de la estructura de página, entre la barra lateral y el contenido. El índice lateral de esta página es uno real. Un enlace de la lista lleva además <code>.luz-sidebar__link</code> de core, así que el script de core marca la sección visible mientras te desplazas.</p>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
             <span class="docs-snippet__lang">HTML</span>
@@ -98,7 +98,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="example">Ejemplo</h2>
-        <p>Una vista previa real con el marcado que la produce debajo: el <a href="/docs/documentation/example/">ejemplo</a>. El código es opcional.</p>
+        <p>Una vista previa real con el marcado que la produce debajo: el <a href="/docs/catalog/docs-example/">ejemplo</a>. El código es opcional.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <figure class="luz-docs-example">
@@ -132,7 +132,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="do-dont">Qué hacer y qué no</h2>
-        <p>Una pareja que muestra la forma correcta y la incorrecta, primero la correcta: <a href="/docs/documentation/dodont/">qué hacer y qué no</a>. Cada una es una figura cuyo pie explica el motivo. La palabra, la marca que la precede y el marco indican cuál es cuál, así que el color nunca es la única señal.</p>
+        <p>Una pareja que muestra la forma correcta y la incorrecta, primero la correcta: <a href="/docs/catalog/docs-dodont/">qué hacer y qué no</a>. Cada una es una figura cuyo pie explica el motivo. La palabra, la marca que la precede y el marco indican cuál es cuál, así que el color nunca es la única señal.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-docs-dodont">
@@ -174,7 +174,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="pager">Navegación entre páginas</h2>
-        <p>Los enlaces a la página anterior y a la siguiente, al final del contenido: la <a href="/docs/documentation/pager/">navegación entre páginas</a>. En la primera página de una secuencia, omite «Anterior»; en la última, «Siguiente».</p>
+        <p>Los enlaces a la página anterior y a la siguiente, al final del contenido: la <a href="/docs/catalog/docs-pager/">navegación entre páginas</a>. En la primera página de una secuencia, omite «Anterior»; en la última, «Siguiente».</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <nav aria-label="Previous and next page, example">
@@ -201,7 +201,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="page-foot">Pie de página</h2>
-        <p>Cuándo se cambió la página por última vez y dónde editarla o informar de un problema, en letra pequeña tras la navegación entre páginas: el <a href="/docs/documentation/page-foot/">pie de página</a>.</p>
+        <p>Cuándo se cambió la página por última vez y dónde editarla o informar de un problema, en letra pequeña tras la navegación entre páginas: el <a href="/docs/catalog/docs-page-foot/">pie de página</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <p class="luz-docs-page-foot">Last updated <time datetime="2026-10-17">17 October 2026</time> · <a href="#page-foot">Edit this page</a> · <a href="#page-foot">Report a problem</a></p>

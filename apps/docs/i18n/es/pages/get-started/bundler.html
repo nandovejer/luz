@@ -2,7 +2,7 @@
 title: Con un empaquetador o framework
 description: Importa el CSS y el script de LUZ en Astro o en cualquier herramienta que resuelva nombres de paquetes, y conserva el orden de las capas y las fuentes.
 keywords: vite, astro, empaquetador, framework, import
-source: a0e83755d8a5
+source: 63bd9130e233
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="imports">
@@ -21,8 +21,8 @@ import "@luz-ds/core";
 import "@luz-ds/catalog/components/search.css";
 import "@luz-ds/catalog";
 
-// Only for one kind of site: landing, cms or app
-import "@luz-ds/landing/css";</code></pre>
+// A pattern of a kind of site is a catalog component too: one import each (here the hero of a landing page)
+import "@luz-ds/catalog/components/landing-hero.css";</code></pre>
       </div>
       <ul>
         <li>Primero van los tokens: todos los demás paquetes los necesitan.</li>
@@ -76,25 +76,9 @@ import "@luz-ds/landing/css";</code></pre>
             <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./search</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-search&gt;</code></div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./consent</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-consent&gt;</code> y <code>getConsent</code></div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./mode</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-mode&gt;</code></div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento del sitio, y su único CSS: banner, consentimiento, selector de idioma, modo, búsqueda y submenú</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por componente del catálogo, y su único CSS: banner, consentimiento, selector de idioma, modo, búsqueda, submenú y los patrones de un tipo de sitio, como <code>landing-hero.css</code></div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./custom-elements.json</code></div></td><td data-label="Qué es"><div>Todos los elementos personalizados que define o estiliza el paquete, con sus atributos y eventos, en formato Custom Elements Manifest para editores y agentes de IA</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>landing.css</code>: los elementos de una landing page</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>landing.min.css</code>: lo mismo, minimizado</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/landing</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/cms</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>cms.css</code>: los elementos de un blog o CMS</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/cms</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>cms.min.css</code>: lo mismo, minimizado</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/cms</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/cms</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/app</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>app.css</code>: los elementos de una aplicación web</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/app</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>app.min.css</code>: lo mismo, minimizado</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/app</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/app</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/docs</code></div></td><td data-label="Exportación"><div><code>./css</code></div></td><td data-label="Qué es"><div><code>docs.css</code>: los elementos de una página de documentación</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/docs</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>docs.min.css</code>: lo mismo, minimizado</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/docs</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por elemento</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/docs</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
           </tbody>
         </table>
       </div>
@@ -192,7 +176,7 @@ import Base from "../layouts/Base.astro";
         <li>Las fuentes se generaron como archivos con hash, y las capas y tu propia regla quedaron en el orden descrito arriba.</li>
       </ul>
       <p>Se examinó el resultado de la compilación, pero no se abrió la página generada en un navegador. No se probó Astro con un enrutador de transiciones de vista (<code>&lt;ClientRouter /&gt;</code>) ni Windows.</p>
-      <p>Los imports de <code>landing</code>, <code>cms</code> y <code>app</code> tienen la misma estructura que los anteriores, pero no se compilaron.</p>
+      <p>El import de un patrón de un tipo de sitio tiene la misma estructura que el de la búsqueda de arriba, pero no se compiló.</p>
     </section>
 
     <section class="docs-block" aria-labelledby="others">

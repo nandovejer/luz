@@ -97,8 +97,8 @@ test.describe('the choice', () => {
       await page.goto(path);
       await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
       const button = page.locator('footer .luz-mode-cycle');
-      // No radio is checked while the hour leads: core names no current mode
-      await expect(button).toHaveAccessibleName('Change color mode. Current: —');
+      // No radio is checked while the hour leads: core names the mode Auto
+      await expect(button).toHaveAccessibleName('Change color mode. Current: Auto');
       for (const [value, label] of [['light', 'Light'], ['dark', 'Dark'], ['high-contrast', 'High contrast'], ['light', 'Light']]) {
         await button.click();
         await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue(value);
@@ -144,6 +144,105 @@ test.describe('the choice', () => {
       await page.keyboard.press('Space');
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe('dark');
       expect(await page.evaluate((k) => localStorage.getItem(k), KEY)).toBe('dark');
+    });
+  }
+});
+
+/* ---- F6 of .claude/plans/ai-and-catalog-only.md (decisions 40, 41 and 43): core draws the corner button ---- */
+
+test.describe('the button in the corner of the window', () => {
+  for (const path of PAGES) {
+    test(`${path}: with scripting it is core's round button, fixed at the end corner, bottom left in Arabic`, async ({ page }) => {
+      await page.goto(path);
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      const button = page.locator('footer .luz-mode-cycle');
+      await expect(page.locator('footer .luz-mode-switcher--cycle')).toHaveCSS('position', 'fixed');
+      const side = await page.evaluate(() => {
+        const probe = document.createElement('div');
+        probe.style.inlineSize = 'var(--luz-control-lg)';
+        document.body.append(probe);
+        const px = probe.getBoundingClientRect().width;
+        probe.remove();
+        return px;
+      });
+      const look = await button.evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        const s = getComputedStyle(el);
+        const view = { w: document.documentElement.clientWidth, h: window.innerHeight };
+        return { width: r.width, height: r.height, bottomGap: view.h - r.bottom, startGap: r.left, endGap: view.w - r.right, radius: s.borderTopLeftRadius, rtl: getComputedStyle(document.documentElement).direction === 'rtl' };
+      });
+      expect([look.width, look.height]).toEqual([side, side]);
+      expect(look.radius.endsWith('%') ? parseFloat(look.radius) >= 50 : parseFloat(look.radius) >= side / 2, `border-radius ${look.radius}`).toBe(true);
+      expect(look.rtl).toBe(path === '/ar/');
+      const margin = await page.evaluate(() => {
+        const probe = document.createElement('div');
+        probe.style.inlineSize = 'var(--luz-space-md)';
+        document.body.append(probe);
+        const px = probe.getBoundingClientRect().width;
+        probe.remove();
+        return px;
+      });
+      expect(look.bottomGap).toBeCloseTo(margin, 0);
+      expect(look.rtl ? look.startGap : look.endGap).toBeCloseTo(margin, 0);
+    });
+  }
+
+  for (const width of [320, 1024, 1280]) {
+    for (const path of ['/', '/ar/', '/docs/']) {
+      test(`${path}: at ${width} px, scrolled to the end, no link of the footer is fully under the button`, async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.setViewportSize({ width, height: 700 });
+        await page.goto(path);
+        await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+        const covered = await page.evaluate(() => {
+          const button = document.querySelector('footer .luz-mode-cycle');
+          const links = [...document.querySelectorAll('footer a[href], footer button')].filter((el) => el !== button && el.getClientRects().length && !el.closest('.luz-mode-switcher'));
+          return links.filter((el) => {
+            const r = el.getBoundingClientRect();
+            const samples = [];
+            for (const fx of [0.1, 0.5, 0.9]) for (const fy of [0.1, 0.5, 0.9]) samples.push([r.left + r.width * fx, r.top + r.height * fy]);
+            // Under the button: the point is in the window, and what is drawn there is the button
+            return samples.every(([x, y]) => {
+              const hit = document.elementFromPoint(x, y);
+              return hit && (button === hit || button.contains(hit));
+            });
+          }).map((el) => (el.textContent || '').trim().slice(0, 30));
+        });
+        expect(covered).toEqual([]);
+        // The last link of the page, focused, is whole in the window and not under the button
+        const last = await page.evaluate(() => {
+          const links = [...document.querySelectorAll('footer a[href]')].filter((el) => el.getClientRects().length && !el.closest('.luz-mode-switcher'));
+          const el = links[links.length - 1];
+          el.focus();
+          const r = el.getBoundingClientRect();
+          const b = document.querySelector('footer .luz-mode-cycle').getBoundingClientRect();
+          const apart = r.right <= b.left || r.left >= b.right || r.bottom <= b.top || r.top >= b.bottom;
+          return { apart, inWindow: r.top >= 0 && r.bottom <= window.innerHeight };
+        });
+        expect(last).toEqual({ apart: true, inWindow: true });
+      });
+    }
+  }
+});
+
+test.describe('the footer without JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+
+  for (const path of ['/', '/es/', '/ar/', '/docs/']) {
+    test(`${path}: the three radios are in the footer, in the flow, and nothing is fixed`, async ({ page }) => {
+      await page.goto(path);
+      const group = page.locator('footer .luz-mode-switcher--cycle');
+      expect(['static', 'relative']).toContain(await group.evaluate((el) => getComputedStyle(el).position));
+      await expect(page.locator('footer .luz-mode-cycle')).toBeHidden();
+      const inside = await page.evaluate(() => {
+        const f = document.querySelector('footer').getBoundingClientRect();
+        return [...document.querySelectorAll('footer .luz-mode-btn')].map((el) => {
+          const r = el.getBoundingClientRect();
+          return r.width > 1 && r.height > 1 && r.top >= f.top && r.bottom <= f.bottom + 1;
+        });
+      });
+      expect(inside).toEqual([true, true, true]);
     });
   }
 });

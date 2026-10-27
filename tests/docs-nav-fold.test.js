@@ -69,7 +69,8 @@ const openFolds = (tree) => foldsOf(tree).filter((d) => d.attrs.has("open"));
 
 describe("the real areas this test relies on", () => {
   it("has areas with pages and at least one area without (Accessibility is its own index)", () => {
-    expect(areasWithPages.length).toBeGreaterThan(6);
+    // Seven areas since F5b: landing, cms, app and documentation are groups of Catalog now
+    expect(areasWithPages.map((a) => a.id)).toEqual(["get-started", "kinds", "tokens", "components", "catalog", "html"]);
     expect(areasWithout.map((a) => a.id)).toContain("accessibility");
   });
 });

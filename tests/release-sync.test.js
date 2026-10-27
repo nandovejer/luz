@@ -36,10 +36,12 @@ const put = (path, text) => {
 const get = (path) => readFileSync(join(root, path), "utf-8");
 const manifest = (name, version) => put(`packages/${name}/package.json`, JSON.stringify({ name: `@luz-ds/${name}`, version }));
 
-const english = (tokens, landing) => `
+// `check` stands for a package with a version of its own (it is out of the `fixed` group of tokens, core and catalog);
+// landing, cms, app and docs were such packages until F5b, and are not any more
+const english = (tokens, check) => `
 <h2>Install</h2>
 <pre><code>&lt;link href="${CDN}/tokens@${tokens}/dist/luz-tokens.min.css"&gt;
-&lt;link href="${CDN}/landing@${landing}/dist/landing.min.css"&gt;</code></pre>
+&lt;script src="${CDN}/check@${check}/dist/luz-check.js"&gt;&lt;/script&gt;</code></pre>
 <p>Since @luz-ds/core@0.1.0 you can pin a version.</p>
 `;
 const page = (front, body) => `<!-- luz:page\n${front}\n-->\n${body}`;
@@ -49,7 +51,7 @@ beforeEach(() => {
   manifest("tokens", "0.2.0");
   manifest("core", "0.2.0");
   manifest("catalog", "0.2.0");
-  manifest("landing", "0.1.4");
+  manifest("check", "0.1.4");
   put("apps/docs/pages/get-started/index.html", page("title: Install", english("0.1.0", "0.1.0")));
   put(
     "apps/docs/i18n/es/pages/get-started/index.html",
@@ -57,7 +59,7 @@ beforeEach(() => {
   );
   put("packages/core/CHANGELOG.md", `## 0.2.0\n\n- abc1234: see ${CDN}/core@0.1.0/dist/luz.min.css\n`);
   put("packages/core/README.md", `# core\n\n\`\`\`html\n<link href="${CDN}/core@0.1.0/dist/luz.css">\n<script src="${CDN}/catalog@0.1.0/dist/catalog.min.js"></script>\n\`\`\`\n\nA range such as \`@luz-ds/core@3\` cannot carry an SRI hash.\n`);
-  put("README.md", `<link href="${CDN}/landing@0.1.0/dist/landing.min.css">\n`);
+  put("README.md", `<script src="${CDN}/check@0.1.0/dist/luz-check.js"></script>\n`);
   put("SECURITY.md", `- Good: \`@luz-ds/core@0.1.0\`\n"${CDN}/core@0.1.0/dist/i18n-es.min.js": "sha384-<hash>"\n`);
   put("dev/QUICK-REFERENCE.md", `<link href=".../@luz-ds/tokens@0.1.0/dist/luz-tokens.css">\n`);
 });
@@ -68,7 +70,7 @@ describe("syncVersions", () => {
     const changed = syncVersions(root);
 
     expect(get("apps/docs/pages/get-started/index.html")).toContain(`${CDN}/tokens@0.2.0/dist/luz-tokens.min.css`);
-    expect(get("apps/docs/pages/get-started/index.html")).toContain(`${CDN}/landing@0.1.4/dist/landing.min.css`);
+    expect(get("apps/docs/pages/get-started/index.html")).toContain(`${CDN}/check@0.1.4/dist/luz-check.js`);
     expect(get("apps/docs/i18n/es/pages/get-started/index.html")).toContain(`${CDN}/tokens@0.2.0/dist/luz-tokens.min.css`);
     expect(changed.filter((file) => file.startsWith("apps/"))).toEqual(["apps/docs/i18n/es/pages/get-started/index.html", "apps/docs/pages/get-started/index.html"]);
   });
@@ -126,7 +128,7 @@ describe("syncVersions: the markdown that shows a snippet", () => {
 
     expect(get("packages/core/README.md")).toContain(`${CDN}/core@0.2.0/dist/luz.css`);
     expect(get("packages/core/README.md")).toContain(`${CDN}/catalog@0.2.0/dist/catalog.min.js`);
-    expect(get("README.md")).toContain(`${CDN}/landing@0.1.4/dist/landing.min.css`);
+    expect(get("README.md")).toContain(`${CDN}/check@0.1.4/dist/luz-check.js`);
     expect(get("SECURITY.md")).toContain(`${CDN}/core@0.2.0/dist/i18n-es.min.js`);
     expect(get("SECURITY.md")).toContain("`@luz-ds/core@0.2.0`");
     expect(get("dev/QUICK-REFERENCE.md")).toContain(".../@luz-ds/tokens@0.2.0/dist/luz-tokens.css");
@@ -188,18 +190,28 @@ describe("releaseDrift", () => {
 
     expect(drift).toEqual([
       "apps/docs/i18n/es/pages/get-started/index.html:8: @luz-ds/tokens is at 0.2.0, the URL says 0.1.0",
-      "apps/docs/i18n/es/pages/get-started/index.html:9: @luz-ds/landing is at 0.1.4, the URL says 0.1.0",
+      "apps/docs/i18n/es/pages/get-started/index.html:9: @luz-ds/check is at 0.1.4, the URL says 0.1.0",
       "apps/docs/pages/get-started/index.html:6: @luz-ds/tokens is at 0.2.0, the URL says 0.1.0",
-      "apps/docs/pages/get-started/index.html:7: @luz-ds/landing is at 0.1.4, the URL says 0.1.0",
+      "apps/docs/pages/get-started/index.html:7: @luz-ds/check is at 0.1.4, the URL says 0.1.0",
     ]);
   });
 
   it("lists the markdown snippets too, with their file and line", () => {
     const drift = releaseDrift(root);
 
-    expect(drift).toContain("README.md:1: @luz-ds/landing is at 0.1.4, the URL says 0.1.0");
+    expect(drift).toContain("README.md:1: @luz-ds/check is at 0.1.4, the URL says 0.1.0");
     expect(drift).toContain("packages/core/README.md:4: @luz-ds/core is at 0.2.0, the URL says 0.1.0");
     expect(drift).toContain("SECURITY.md:1: @luz-ds/core is at 0.2.0, the URL says 0.1.0");
+  });
+
+  it("leaves a URL of a package that is gone alone: @luz-ds/landing, cms, app and docs have no version to say (F5b)", () => {
+    for (const name of ["landing", "cms", "app", "docs"]) {
+      put("apps/docs/pages/old.html", page("title: Old", `<pre><code>${CDN}/${name}@0.1.0/dist/${name}.min.css</code></pre>\n`));
+      const before = get("apps/docs/pages/old.html");
+      syncVersions(root);
+      expect(get("apps/docs/pages/old.html"), name).toBe(before);
+      expect(releaseDrift(root).filter((line) => line.startsWith("apps/docs/pages/old.html")), name).toEqual([]);
+    }
   });
 
   it("is empty once the versions are synced", () => {

@@ -22,6 +22,10 @@
   --luz-switcher-focus: var(--luz-focus-ring);
   --luz-switcher-on-bg: var(--luz-brand-fill);
   --luz-switcher-on-text: var(--luz-text-on-fill);
+  /* The round button of the cycle variant: a surface of its own on the page */
+  --luz-switcher-cycle-bg: var(--luz-surface);
+  --luz-switcher-cycle-border: var(--luz-divider);
+  --luz-switcher-cycle-text: var(--luz-text-secondary);
 
   display: flex;
   flex-wrap: wrap;
@@ -115,8 +119,13 @@
    control and the source of truth. The markup may also carry the button
    (.luz-mode-cycle) with one icon per mode; with scripting on, the button
    shows and the radios hide, so nothing flickers while the script loads.
-   Without scripting the radios show and the button hides. If the markup has
-   no button, initThemeCycle() adds one. */
+   Without scripting the radios show, in the flow where the markup puts
+   them, and the button hides. If the markup has no button, initThemeCycle()
+   adds one.
+
+   With scripting on the group is the button, round, fixed at the end corner
+   of the window: one per page. .luz-mode-switcher--inline keeps it where the
+   markup puts it (a sidebar, a settings panel, a demo). */
 @media (scripting: enabled) {
   .luz-mode-switcher--cycle:has(> .luz-mode-cycle) > .luz-mode-btn {
     display: none;
@@ -130,6 +139,23 @@
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+  }
+
+  /* Fixed at the end corner (logical, so it is bottom left in right-to-left),
+     above the content and below the sidebar, the dialogs and the toasts.
+     The page keeps the corner free at its end: a footer stops before it. */
+  .luz-mode-switcher--cycle:has(> .luz-mode-cycle):not(.luz-mode-switcher--inline) {
+    position: fixed;
+    inset-block-end: var(--luz-space-md);
+    inset-inline-end: var(--luz-space-md);
+    z-index: var(--luz-z-raised);
+    margin: 0;
+  }
+
+  /* A fixed button never hides what Tab reaches (WCAG 2.4.11): the window
+     scrolls the focused element out from under it */
+  :root:has(.luz-mode-switcher--cycle:not(.luz-mode-switcher--inline) > .luz-mode-cycle) {
+    scroll-padding-block-end: calc(var(--luz-control-lg) + var(--luz-space-md) * 2);
   }
 }
 
@@ -159,16 +185,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
+  flex: none;
+  inline-size: var(--luz-control-lg);
+  block-size: var(--luz-control-lg);
   padding: 0;
-  border: 1px solid var(--luz-switcher-border);
-  border-radius: var(--luz-radius-md);
-  background: transparent;
-  color: inherit;
+  border: 1px solid var(--luz-switcher-cycle-border);
+  border-radius: var(--luz-radius-full);
+  background: var(--luz-switcher-cycle-bg);
+  color: var(--luz-switcher-cycle-text);
   cursor: pointer;
   transition: background var(--luz-duration-fast),
     color var(--luz-duration-fast);
+}
+
+/* It floats over the page, so it has the small shadow (none in high contrast) */
+@media (scripting: enabled) {
+  .luz-mode-switcher--cycle:not(.luz-mode-switcher--inline) > .luz-mode-cycle {
+    box-shadow: var(--luz-shadow-sm);
+  }
 }
 
 .luz-mode-cycle .luz-mode-btn__icon {
@@ -176,7 +210,7 @@
   block-size: 1.25rem;
 }
 
-.luz-mode-cycle:hover {
+.luz-mode-cycle:hover:not(:disabled) {
   background: var(--luz-switcher-hover-bg);
   color: var(--luz-switcher-hover-text);
 }
@@ -184,6 +218,12 @@
 .luz-mode-cycle:focus-visible {
   outline: 2px solid var(--luz-switcher-focus);
   outline-offset: 2px;
+}
+
+/* Disabled (a specimen): a dashed border, as the radios have */
+.luz-mode-cycle:disabled {
+  border-style: dashed;
+  cursor: not-allowed;
 }
 
 @media (scripting: none) {
@@ -208,6 +248,9 @@
   --luz-switcher-focus: var(--luz-sidebar-text-hover);
   --luz-switcher-on-bg: var(--luz-sidebar-active-bg);
   --luz-switcher-on-text: var(--luz-sidebar-active-text);
+  --luz-switcher-cycle-bg: transparent;
+  --luz-switcher-cycle-border: var(--luz-sidebar-border);
+  --luz-switcher-cycle-text: var(--luz-sidebar-label);
 }
 
 /* Forced colors drop the backgrounds: the checked mode keeps a system

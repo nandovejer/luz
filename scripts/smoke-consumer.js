@@ -4,14 +4,15 @@
  * would publish it, installs the tarballs into an empty project, and checks
  * what a consumer sees. The versions are the ones the pending changesets
  * will publish: `changeset version` runs on a copy of the manifests, so a
- * package whose peers name the next major of the base (landing's ^0.1.0
+ * package whose peers name the next major of the base (catalog's ^0.1.0
  * while the workspace is still at 0.0.0) installs as it will on npm.
  *   1. every entry of each package's `exports` resolves to a file
  *      (patterns such as ./components/* are expanded);
  *   2. a minimal page that links the installed files loads in Chromium with
  *      no failed request, no console error or warning, the tokens defined,
- *      core, catalog (two of its components, linked one by one: catalog has
- *      no bundle), landing, cms, app and docs CSS applied, and the JS exports importable;
+ *      core, catalog (two of its components and one pattern of each kind of
+ *      site, landing, cms, app and docs, linked one by one: catalog has no
+ *      bundle) CSS applied, and the JS exports importable;
  *   3. the same page with jsDelivr-style URLs (/npm/@luz-ds/<pkg>@<version>/…),
  *      served from the same tarballs by a local server: no network is used;
  *   4. the `luz-tokens` command runs from the installed package;
@@ -168,10 +169,11 @@ const PAGE = (base, label) => `<!doctype html>
   <!-- Catalog has no bundle: a consumer links each component it uses, here two -->
   <link rel="stylesheet" href="${base.site}/dist/components/banner.css">
   <link rel="stylesheet" href="${base.site}/dist/components/search.css">
-  <link rel="stylesheet" href="${base.landing}/dist/landing.css">
-  <link rel="stylesheet" href="${base.cms}/dist/cms.css">
-  <link rel="stylesheet" href="${base.app}/dist/app.css">
-  <link rel="stylesheet" href="${base.docs}/dist/docs.css">
+  <!-- and one pattern of each kind of site: landing, cms, app and docs are catalog's files -->
+  <link rel="stylesheet" href="${base.site}/dist/components/landing-footer.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/cms-article-header.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/app-dashboard.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/docs-example.css">
 </head>
 <body>
   <h1>Smoke test</h1>
@@ -217,17 +219,19 @@ const PAGE = (base, label) => `<!doctype html>
 </html>
 `;
 
-// A package for one kind of site works without site, its optional peer
-// (f3-package-model §5): tokens, core and the kind, nothing else
+// The patterns of a kind of site work with tokens and core and their own
+// files of catalog, without its script (catalog.js): nothing else
 const ALONE = (base) => `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LUZ smoke test: landing without site</title>
+  <title>LUZ smoke test: landing patterns without catalog.js</title>
   <link rel="stylesheet" href="${base.tokens}/dist/luz-tokens.css">
   <link rel="stylesheet" href="${base.core}/dist/luz.css">
-  <link rel="stylesheet" href="${base.landing}/dist/landing.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/landing-main.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/landing-hero.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/landing-footer.css">
 </head>
 <body class="o-page">
   <main class="o-container o-stack luz-landing-main">
@@ -243,10 +247,11 @@ const APP_ALONE = (base) => `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LUZ smoke test: app without site</title>
+  <title>LUZ smoke test: app patterns without catalog.js</title>
   <link rel="stylesheet" href="${base.tokens}/dist/luz-tokens.css">
   <link rel="stylesheet" href="${base.core}/dist/luz.css">
-  <link rel="stylesheet" href="${base.app}/dist/app.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/app-header.css">
+  <link rel="stylesheet" href="${base.site}/dist/components/app-dashboard.css">
 </head>
 <body>
   <div class="o-shell">
@@ -263,14 +268,12 @@ const local = {
   tokens: "/node_modules/@luz-ds/tokens",
   core: "/node_modules/@luz-ds/core",
   site: "/node_modules/@luz-ds/catalog",
-  landing: "/node_modules/@luz-ds/landing",
-  cms: "/node_modules/@luz-ds/cms",
-  app: "/node_modules/@luz-ds/app",
-  docs: "/node_modules/@luz-ds/docs",
 };
 const cdn = Object.fromEntries(PACKAGES.map((n) => [n, `/npm/@luz-ds/${n}@${versions[n]}`]));
 // The pages name catalog `site`, as the local map does
 cdn.site = cdn.catalog;
+
+const SHEETS = 8;
 
 const server = createServer((req, res) => {
   const url = new URL(req.url, "http://127.0.0.1");
@@ -355,22 +358,22 @@ if (browser) {
     check(`${label2} core CSS applied (.luz-btn--primary uses the token)`, state.buttonBackground === state.tokenBackground && state.buttonBackground !== "rgba(0, 0, 0, 0)", `${state.buttonBackground} vs ${state.tokenBackground}`);
     check(`${label2} catalog components/banner.css applied (<luz-banner> is a block)`, state.sectionDisplay === "block", state.sectionDisplay);
     check(`${label2} catalog components/search.css applied (.luz-search__fallback is inline-flex)`, state.searchDisplay === "inline-flex", state.searchDisplay);
-    check(`${label2} landing CSS applied (.luz-landing-footer has its rule)`, state.landingBorder === "solid", state.landingBorder);
-    check(`${label2} cms CSS applied (.luz-cms-article-header is a grid)`, state.articleDisplay === "grid", state.articleDisplay);
-    check(`${label2} app CSS applied (.luz-app-dashboard is a size container)`, state.dashboardType === "inline-size", state.dashboardType);
-    check(`${label2} docs CSS applied (.luz-docs-example has its frame)`, state.docsBorder === "solid", state.docsBorder);
-    // One per package, and catalog's two components: catalog has no bundle
-    check(`${label2} ${PACKAGES.length + 1} stylesheets with rules`, state.sheets.length === PACKAGES.length + 1 && state.sheets.every((n) => n > 0), JSON.stringify(state.sheets));
+    check(`${label2} catalog components/landing-footer.css applied (.luz-landing-footer has its rule)`, state.landingBorder === "solid", state.landingBorder);
+    check(`${label2} catalog components/cms-article-header.css applied (.luz-cms-article-header is a grid)`, state.articleDisplay === "grid", state.articleDisplay);
+    check(`${label2} catalog components/app-dashboard.css applied (.luz-app-dashboard is a size container)`, state.dashboardType === "inline-size", state.dashboardType);
+    check(`${label2} catalog components/docs-example.css applied (.luz-docs-example has its frame)`, state.docsBorder === "solid", state.docsBorder);
+    // Tokens, core, and catalog's two components and four patterns: catalog has no bundle
+    check(`${label2} ${SHEETS} stylesheets with rules`, state.sheets.length === SHEETS && state.sheets.every((n) => n > 0), JSON.stringify(state.sheets));
     check(`${label2} JS entries import and export what the docs name`, state.missing.length === 0, state.missing.join("\n"));
     await page.close();
   }
 
-  // landing with tokens and core only: no request for site, the probes apply
+  // landing patterns with tokens and core only: no request for catalog.js, the probes apply
   {
     const page = await browser.newPage();
     const problems = [];
     page.on("response", (r) => r.status() >= 400 && problems.push(`${r.status()} ${new URL(r.url()).pathname}`));
-    page.on("request", (r) => r.url().includes("/@luz-ds/catalog") && problems.push(`asked for site: ${new URL(r.url()).pathname}`));
+    page.on("request", (r) => /\/catalog(\.min)?\.js$/.test(new URL(r.url()).pathname) && problems.push(`asked for catalog.js: ${new URL(r.url()).pathname}`));
     page.on("console", (m) => ["error", "warning"].includes(m.type()) && problems.push(`console ${m.type()}: ${m.text()}`));
     await page.goto(origin + "/landing-alone.html");
     const state = await page.evaluate(() => ({
@@ -378,17 +381,17 @@ if (browser) {
       gridMin: getComputedStyle(document.getElementById("probe-hero")).getPropertyValue("--luz-grid-min").trim(),
       display: getComputedStyle(document.getElementById("probe-hero")).display,
     }));
-    check("landing without site: no failed request, no request for site, no console message", problems.length === 0, problems.join("\n"));
-    check("landing without site: the footer has its rule and the hero is core's grid with the landing's measure", state.border === "solid" && state.display === "grid" && state.gridMin === "24rem", JSON.stringify(state));
+    check("landing patterns without catalog.js: no failed request, no request for catalog.js, no console message", problems.length === 0, problems.join("\n"));
+    check("landing patterns without catalog.js: the footer has its rule and the hero is core's grid with the landing's measure", state.border === "solid" && state.display === "grid" && state.gridMin === "24rem", JSON.stringify(state));
     await page.close();
   }
 
-  // app with tokens and core only: no request for site, the probes apply
+  // app patterns with tokens and core only: no request for catalog.js, the probes apply
   {
     const page = await browser.newPage();
     const problems = [];
     page.on("response", (r) => r.status() >= 400 && problems.push(`${r.status()} ${new URL(r.url()).pathname}`));
-    page.on("request", (r) => r.url().includes("/@luz-ds/catalog") && problems.push(`asked for site: ${new URL(r.url()).pathname}`));
+    page.on("request", (r) => /\/catalog(\.min)?\.js$/.test(new URL(r.url()).pathname) && problems.push(`asked for catalog.js: ${new URL(r.url()).pathname}`));
     page.on("console", (m) => ["error", "warning"].includes(m.type()) && problems.push(`console ${m.type()}: ${m.text()}`));
     await page.goto(origin + "/app-alone.html");
     const state = await page.evaluate(() => ({
@@ -396,8 +399,8 @@ if (browser) {
       type: getComputedStyle(document.getElementById("probe-app-dashboard")).containerType,
       gridMin: getComputedStyle(document.getElementById("probe-app-dashboard")).getPropertyValue("--luz-grid-min").trim(),
     }));
-    check("app without site: no failed request, no request for site, no console message", problems.length === 0, problems.join("\n"));
-    check("app without site: the header has its rule and the dashboard is a size container with an 18rem column", state.divider === "solid" && state.type === "inline-size" && state.gridMin === "18rem", JSON.stringify(state));
+    check("app patterns without catalog.js: no failed request, no request for catalog.js, no console message", problems.length === 0, problems.join("\n"));
+    check("app patterns without catalog.js: the header has its rule and the dashboard is a size container with an 18rem column", state.divider === "solid" && state.type === "inline-size" && state.gridMin === "18rem", JSON.stringify(state));
     await page.close();
   }
   await browser.close();

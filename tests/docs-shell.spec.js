@@ -127,7 +127,7 @@ test.describe('docs shell, with JavaScript', () => {
   });
 
   test('on an area index the eyebrow is above the h1, and says the area and its package', async ({ page }) => {
-    for (const area of ['components', 'documentation', 'landing']) {
+    for (const area of ['components', 'tokens', 'catalog']) {
       await page.goto(`/docs/${area}/`);
       const eyebrow = await box(page, 'header.luz-docs-page-head p.luz-docs-page-head__eyebrow');
       const h1 = await box(page, 'header.luz-docs-page-head h1');
@@ -147,7 +147,7 @@ test.describe('docs shell, with JavaScript', () => {
     await expect(nav.locator('details[open] a[href="/docs/components/button/"]')).toBeVisible();
     // Every area is a link, open or not; the pages of the closed folds are in the markup, not on the screen
     for (const area of site.areas) await expect(nav.locator(`a.docs-nav__area[href="/docs/${area.slug}/"]`), area.id).toBeVisible();
-    for (const href of ['/docs/tokens/color/', '/docs/get-started/snippet/', '/docs/catalog/search/', '/docs/documentation/rail/']) {
+    for (const href of ['/docs/tokens/color/', '/docs/get-started/snippet/', '/docs/catalog/search/', '/docs/catalog/docs-rail/']) {
       await expect(nav.locator(`a[href="${href}"]`), href).toBeHidden();
     }
     // Every page of the reading order is in it, once (an area index is the area link)
@@ -176,13 +176,15 @@ test.describe('docs shell, with JavaScript', () => {
     await expect(page.locator('.luz-docs-pager').getByRole('link', { name: 'Previous Breadcrumb', exact: true })).toBeVisible();
   });
 
-  test('on the documentation index "Install and load" comes under the pattern gallery', async ({ page }) => {
-    await page.goto('/docs/documentation/');
-    const patterns = await box(page, '#group-patterns');
-    const reference = await box(page, '#group-reference');
-    const install = await box(page, '#install-and-load');
-    expect(install.y, 'under Patterns').toBeGreaterThanOrEqual(patterns.bottom - 1);
-    expect(install.y, 'under Reference').toBeGreaterThanOrEqual(reference.bottom - 1);
+  test('on the catalog index the gallery is the six groups, one under the other in the order of the sidebar, under the lead', async ({ page }) => {
+    await page.goto('/docs/catalog/');
+    const groups = ['navigation', 'page-structure', 'content', 'site-wide', 'documentation', 'reference'];
+    const boxes = [];
+    for (const id of groups) boxes.push(await box(page, `#group-${id}`));
+    for (let i = 1; i < boxes.length; i++) expect(boxes[i].y, `${groups[i]} is under ${groups[i - 1]}`).toBeGreaterThanOrEqual(boxes[i - 1].bottom - 1);
+    const lead = await box(page, '.docs-lead');
+    expect(boxes[0].y, 'the gallery is under the lead').toBeGreaterThanOrEqual(lead.bottom - 1);
+    await expect(page.locator('#group-patterns')).toHaveCount(0);
   });
 
   test('axe: the page with the head, the rail and the pager has no serious or critical violation', async ({ page }) => {

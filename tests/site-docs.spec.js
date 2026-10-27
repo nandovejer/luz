@@ -1,12 +1,13 @@
 /**
- * LUZ Design System — Pattern docs guidance, per package
- * Every block class that a package of patterns ships (@luz-ds/catalog,
- * @luz-ds/landing, @luz-ds/cms, @luz-ds/app, @luz-ds/docs) belongs to a pattern, and every pattern has
- * its page in the documentation, in the area of its package (/docs/catalog/,
- * /docs/landing/, /docs/cms/, /docs/app/, /docs/documentation/), with the same structure as a component page: example,
- * known issues, then the Code and Design tabs (PRINCIPLES.md red line 18 and
- * strong rule SR-5). The class list is read from each package's source, so
- * a new class without a pattern fails.
+ * LUZ Design System — Pattern docs guidance, catalog
+ * Every block class that @luz-ds/catalog ships belongs to a pattern, and every pattern has its page in the
+ * documentation, in the one area of patterns (/docs/catalog/<slug>/), with the same structure as a component page:
+ * example, known issues, then the Code and Design tabs (PRINCIPLES.md red line 18 and strong rule SR-5).
+ * Since F5b of .claude/plans/ai-and-catalog-only.md the 19 patterns of a landing page, a blog, an app and a
+ * documentation site are files of catalog (`components/<kind>-<name>.css`, classes `.luz-<kind>-<name>`) beside the
+ * six components with data of the site, and the areas of @luz-ds/landing, cms, app and docs (/docs/landing/,
+ * /docs/cms/, /docs/app/, /docs/documentation/) are gone. The class list is read from catalog's source, so a new
+ * class without a pattern fails.
  * Run with: pnpm test:ui
  */
 
@@ -15,92 +16,62 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { gotoId, routeOf } from './helpers/docs-site.js';
 import { blocksOfCss } from './helpers/css-blocks.js';
-import { areaOfPackage } from './helpers/package-areas.js';
 
 const fromRepo = (path) => fileURLToPath(new URL(`../${path}`, import.meta.url));
 
-// One entry per package of patterns: its docs area is its name, its
-// classes start with .luz-<name>-, and each block maps to the id of its
-// pattern page (p-<pattern>)
+// One entry: catalog, whose docs area is /docs/catalog/. Each block (a `<luz-*>` tag, or a class of a pattern, read
+// from the leftmost compound of each selector) maps to the id of its pattern page (p-<pattern>)
 const PACKAGES = {
-  // F3 step 12 and F1 of the identity plan: site is six self-contained components, each a `<luz-*>` tag that is the
-  // block (`.luz-<tag>__<part>`, D5). The page structure moved to the kinds and to core
   catalog: {
     label: 'Catalog',
     patternOf: {
+      // The six components with data of the site: each a `<luz-*>` tag that is the block (`.luz-<tag>__<part>`, D5)
       search: 'search',
       consent: 'consent',
       mode: 'mode',
       'lang-switch': 'lang-switch',
       submenu: 'submenu',
       banner: 'banner',
-    },
-  },
-  landing: {
-    label: 'Landing',
-    // F3 step 10: the feature grid is gone (a template on `ul.o-grid.o-grid--split`, D10);
-    // the page structure moved here from site
-    patternOf: {
-      header: 'landing-header',
-      hero: 'landing-hero',
-      footer: 'landing-footer',
-      main: 'landing-section',
-      section: 'landing-section',
-      glow: 'landing-section',
-      stat: 'landing-stat',
-    },
-  },
-  cms: {
-    label: 'CMS',
-    patternOf: {
-      'article-header': 'article-header',
-      article: 'toc',
-      toc: 'toc',
-      header: 'cms-header',
-      footer: 'cms-footer',
-      'page-header': 'cms-page-header',
-    },
-  },
-  app: {
-    label: 'App',
-    // F3 step 14: the bar of an application and its dashboard; the sidebar is core's
-    patternOf: {
-      header: 'app-header',
-      dashboard: 'app-dashboard',
-    },
-  },
-  docs: {
-    label: 'Documentation',
-    // F6a: the pieces of a documentation page. Its docs area is `documentation` (areaOfPackage), its
-    // classes `.luz-docs-*`. The shell is also `.luz-docs-nav` and `.luz-docs-main`; the pattern pages
-    // are /docs/documentation/<name>/ with the ids p-docs-<name>
-    patternOf: {
-      shell: 'docs-shell',
-      nav: 'docs-shell',
-      main: 'docs-shell',
-      'page-head': 'docs-page-head',
-      rail: 'docs-rail',
-      example: 'docs-example',
-      dodont: 'docs-dodont',
-      pager: 'docs-pager',
-      'page-foot': 'docs-page-foot',
+      // A landing page. The glow and the main are the page's own and have no page: they are on the section's
+      'landing-header': 'landing-header',
+      'landing-hero': 'landing-hero',
+      'landing-footer': 'landing-footer',
+      'landing-main': 'landing-section',
+      'landing-section': 'landing-section',
+      'landing-glow': 'landing-section',
+      'landing-stat': 'landing-stat',
+      // A blog or a newspaper. The contents of an article have a page of their own, `toc` (its CSS is in cms-article.css)
+      'cms-article-header': 'article-header',
+      'cms-article': 'toc',
+      'cms-toc': 'toc',
+      'cms-header': 'cms-header',
+      'cms-footer': 'cms-footer',
+      'cms-page-header': 'cms-page-header',
+      // An application: the bar and the dashboard; the sidebar is core's
+      'app-header': 'app-header',
+      'app-dashboard': 'app-dashboard',
+      // A documentation site. The shell is also `.luz-docs-nav` and `.luz-docs-main`
+      'docs-shell': 'docs-shell',
+      'docs-nav': 'docs-shell',
+      'docs-main': 'docs-shell',
+      'docs-page-head': 'docs-page-head',
+      'docs-rail': 'docs-rail',
+      'docs-example': 'docs-example',
+      'docs-dodont': 'docs-dodont',
+      'docs-pager': 'docs-pager',
+      'docs-page-foot': 'docs-page-foot',
     },
   },
 };
 
-/**
- * Block names of the package's classes: elements (__) and modifiers (--) are covered by their block.
- * A kind's blocks are `.luz-<name>-<block>`; site's are its `<luz-*>` tags and the classes of the same
- * name (`luz-search`, `.luz-search__trigger`), read from the leftmost compound of each selector.
- */
+/** Block names of catalog's classes: elements (__) and modifiers (--) are covered by their block, read from the leftmost compound of each selector. */
 function blocksOf(name) {
   const dir = fromRepo(`packages/${name}/src/components`);
   const css = readdirSync(dir)
     .filter((file) => file.endsWith('.css'))
     .map((file) => readFileSync(`${dir}/${file}`, 'utf-8'))
     .join('\n');
-  if (name === 'catalog') return [...blocksOfCss(css)].filter((block) => block.startsWith('luz-')).map((block) => block.slice('luz-'.length));
-  return [...new Set([...css.matchAll(new RegExp(`\\.luz-${name}-([\\w-]+)`, 'g'))].map((m) => m[1].split(/__|--/)[0]))];
+  return [...blocksOfCss(css)].filter((block) => block.startsWith('luz-')).map((block) => block.slice('luz-'.length));
 }
 
 // Code tab, then Design tab; Known issues is above them (ia.md §6)
@@ -108,45 +79,31 @@ const sections = ['known-issues', 'how', 'keyboard', 'when', 'when-not', 'conten
 
 for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
   const patterns = new Set(Object.values(patternOf));
-  const area = areaOfPackage(name);
+  const area = name;
 
   test.describe(`${label} docs`, () => {
     test(`every ${name} class belongs to a pattern`, () => {
       const blocks = blocksOf(name);
-      expect(blocks.length, `packages/${name} has no ${name === 'catalog' ? '<luz-*> block' : `.luz-${name}-* class`}`).toBeGreaterThan(0);
-      for (const block of blocks) {
-        expect(patternOf[block], `${name === 'catalog' ? `luz-${block}` : `.luz-${name}-${block}`} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
-      }
+      expect(blocks.length, `packages/${name} has no <luz-*> block`).toBeGreaterThan(0);
+      for (const block of blocks) expect(patternOf[block], `luz-${block} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
     });
 
-    if (name === 'docs') {
-      test('docs ships exactly seven patterns: shell, page-head, rail, example, dodont, pager and page-foot', () => {
-        expect([...patterns].sort()).toEqual(['docs-dodont', 'docs-example', 'docs-page-foot', 'docs-page-head', 'docs-pager', 'docs-rail', 'docs-shell']);
-      });
+    test('catalog ships exactly its 30 blocks: the six components of the site and the patterns of the four kinds of site', () => {
+      expect(blocksOf('catalog').sort()).toEqual(Object.keys(patternOf).sort());
+    });
 
-      test('the Documentation gallery lists the seven patterns, in /docs/documentation/', async ({ page }) => {
-        await page.goto('/docs/documentation/');
-        const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
-        for (const slug of ['dodont', 'example', 'pager', 'page-foot', 'page-head', 'rail', 'shell']) expect(cards, slug).toContain(`/docs/documentation/${slug}/`);
-      });
-    }
+    test('the Catalog gallery lists the 25 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
+      await page.goto('/docs/catalog/');
+      const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
+      expect(cards.filter((href) => href.startsWith('/docs/catalog/')).sort()).toEqual(
+        [...patterns].map((pattern) => routeOf(`p-${pattern}`)).concat('/docs/catalog/classes/').sort(),
+      );
+      expect(cards.filter((href) => /^\/docs\/(landing|cms|app|documentation)\//.test(href))).toEqual([]);
+    });
 
-    if (name === 'catalog') {
-      test('site ships exactly its six components: search, consent, mode, lang-switch, submenu and banner', () => {
-        expect(blocksOf('catalog').sort()).toEqual(['banner', 'consent', 'lang-switch', 'mode', 'search', 'submenu']);
-      });
-
-      test('the Site gallery lists the six components and the class reference, and nothing of the page structure that moved out', async ({ page }) => {
-        await page.goto('/docs/catalog/');
-        const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
-        expect(cards.filter((href) => href.startsWith('/docs/catalog/')).sort()).toEqual(
-          ['banner', 'classes', 'consent', 'lang-switch', 'mode', 'search', 'submenu'].map((slug) => `/docs/catalog/${slug}/`),
-        );
-      });
-    }
-
-    test(`every ${name} pattern has its page: example, known issues, Code and Design`, async ({ page }) => {
-      for (const pattern of patterns) {
+    // One test per page: each has its own time, and a failure names the page
+    for (const pattern of patterns) {
+      test(`the ${name} pattern ${pattern} has its page: example, known issues, Code and Design`, async ({ page }) => {
         const route = await gotoId(page, `p-${pattern}`);
         expect(route, pattern).toMatch(new RegExp(`^/docs/${area}/[a-z-]+/$`));
         // A pattern is a page: its name is the h1, like a core component
@@ -160,8 +117,8 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
           const text = await heading.evaluate((h) => h.nextElementSibling?.textContent.trim() ?? '');
           expect(text.length, `${pattern} ${section} is empty`).toBeGreaterThan(10);
         }
-      }
-    });
+      });
+    }
 
     test(`the ${label} area lists every pattern, in the sidebar and in its gallery`, async ({ page }) => {
       await page.goto(`/docs/${area}/`);

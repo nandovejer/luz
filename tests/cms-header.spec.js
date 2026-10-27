@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * `.luz-cms-header` (@luz-ds/cms; .claude/plans/specs/f3-package-model.md, §1.6
+ * `.luz-cms-header` (`components/cms-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md, §1.6
  * and §9 step 11; .claude/plans/specs/f3-ux.md, §1 and the accessibility
  * answers A1 to A13): the header of a blog or a newspaper, no longer
  * `.luz-site-header` of site. One block, one modifier.
@@ -15,7 +15,7 @@
  *     `__sections` (the toggle and the navbar) between two rules.
  *
  * Pages: tests/fixtures/cms-header.html and tests/fixtures/cms-masthead.html
- * (tokens, core, site and cms; no script at all). The collapse mechanics are
+ * (tokens, core, catalog's search and cms files; no script at all). The collapse mechanics are
  * tested once, in core, by tests/navbar.spec.js; the stickiness by
  * tests/objects.spec.js; the search slot by tests/search-slot.spec.js.
  * Runs in `chromium` and `chromium-nojs`: the header has no script.

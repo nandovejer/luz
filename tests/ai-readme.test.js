@@ -582,10 +582,15 @@ describe("the READMEs of the packages", () => {
   const packages = readdirSync(join(repo, "packages")).filter((p) => existsSync(join(repo, "packages", p, "package.json")) && existsSync(join(repo, "packages", p, "README.md")));
 
   it("there are packages with a README to check", () => {
-    expect(packages).toEqual(expect.arrayContaining(["tokens", "core", "catalog", "landing", "cms", "app", "docs"]));
+    expect(packages).toEqual(expect.arrayContaining(["tokens", "core", "catalog"]));
   });
 
-  it.each(["tokens", "core", "catalog", "landing", "cms", "app", "docs"])("%s has one block, between the markers, right before '## License'", (name) => {
+  it("there is no README of landing, cms, app or docs: they are not packages any more (F5b), their patterns are in catalog's", () => {
+    expect(packages.filter((name) => ["landing", "cms", "app", "docs"].includes(name))).toEqual([]);
+    expect(readdirSync(join(repo, "packages")).sort()).toEqual(["catalog", "check", "core", "tokens"]);
+  });
+
+  it.each(["tokens", "core", "catalog"])("%s has one block, between the markers, right before '## License'", (name) => {
     const text = read(`packages/${name}/README.md`);
     expect(text.split(START), "start markers").toHaveLength(2);
     expect(text.split(END), "end markers").toHaveLength(2);

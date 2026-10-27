@@ -2,20 +2,21 @@
 /**
  * The docs sidebar with HTML elements as an area of its own, measured in a browser.
  * The owner's decision (2026-10-22): HTML elements is no longer nested in Documentation; it is
- * the ninth area after Documentation and before Accessibility, built like them. The markup, the
+ * an area after Catalog (the last area of patterns since F5b, when Landing, CMS, App and Documentation became pages of Catalog)
+ * and before Accessibility, built like them. The markup, the
  * marks, the breadcrumb and the reading order are held by tests/docs-nav-html.test.js; this file
  * holds what needs a layout, a keyboard or a window:
  *
  *   1  the area link is visible on /docs/html/forms/ and /es/docs/html/forms/, with its pages
- *      (in its open fold) indented under it as the pages of Documentation are under theirs on
- *      /docs/documentation/, and the current page is marked by more than colour
+ *      (in its open fold) indented under it as the pages of Catalog are under theirs on
+ *      /docs/catalog/, and the current page is marked by more than colour
  *   2  the sidebar scrolls to the current page (JavaScript)
- *   3  Tab walks the Documentation fold button, then HTML elements, its fold button, its pages, then
+ *   3  Tab walks the Catalog fold button, then HTML elements, its fold button, its pages, then
  *      Accessibility (the pages of a closed fold are not in the order; the folds are tests/docs-nav-fold.spec.js)
  *   4  nothing sticks out of the window at 320 px, at 100 % and at 400 % text
  *   5  the drawer at 375 px lists the area, closes with Escape and on a link
  *   6  axe: no serious or critical violation in light, dark and high contrast on
- *      /docs/html/forms/ and /docs/documentation/
+ *      /docs/html/forms/ and /docs/catalog/
  *
  * The no-JS projects run 1, 3, 4 and 5 (the drawer is a native popover); 2 and 6 need a script.
  */
@@ -30,14 +31,15 @@ import { idle } from './helpers/settle.js';
 import { seedMode } from './helpers/site-lights.js';
 
 const HTML_INDEX = '/docs/html/';
-const DOCS_INDEX = '/docs/documentation/';
+const CATALOG_INDEX = '/docs/catalog/';
+const TOKENS_INDEX = '/docs/tokens/';
 const FORMS = '/docs/html/forms/';
 const order = readingOrder(site).map((p) => p.route);
 const areaOf = (/** @type {string} */ route) => site.byRoute.get(route)?.meta.area;
 /** The pages listed under the area link: the area's pages but its index, in reading order. */
 const listed = order.filter((r) => areaOf(r) === 'html' && r !== HTML_INDEX);
-/** The pages of Documentation (but its index), in reading order. */
-const ownDocumentation = order.filter((r) => areaOf(r) === 'documentation' && r !== DOCS_INDEX);
+/** The pages of Tokens (but its index), in reading order: a flat fold, as HTML elements' is (Catalog's are under group labels, one step deeper). */
+const ownTokens = order.filter((r) => areaOf(r) === 'tokens' && r !== TOKENS_INDEX);
 const label = (/** @type {string} */ code) => (code ? JSON.parse(readFileSync(fileURLToPath(new URL(`../apps/docs/i18n/${code}/strings.json`, import.meta.url)), 'utf-8'))['area.html'] : 'HTML elements');
 
 const LANGUAGES = [
@@ -51,7 +53,7 @@ test.describe('HTML elements on a wide screen', () => {
   for (const { code, prefix } of LANGUAGES) {
     const where = code || 'en';
 
-    test(`${where}: HTML elements is an area after Documentation, with its pages indented under it like Documentation's`, async ({ page }) => {
+    test(`${where}: HTML elements is an area after Catalog, with its pages indented under it like the pages of a flat area`, async ({ page }) => {
       await page.goto(`${prefix}${FORMS}`);
       const nav = page.locator('nav.luz-docs-nav');
       await expect(nav.locator('.docs-nav__sub')).toHaveCount(0);
@@ -62,39 +64,39 @@ test.describe('HTML elements on a wide screen', () => {
       await expect(pages).toHaveCount(listed.length);
       await expect(pages.first()).toBeVisible();
       await expect(pages.last()).toBeVisible();
-      // Geometry: the area link of HTML elements is at the level of the other areas' links (Documentation's is just above), its pages indented under it...
+      // Geometry: the area link of HTML elements is at the level of the other areas' links (Tokens' is above), its pages indented under it...
       const box = async (/** @type {import('@playwright/test').Locator} */ l) => l.evaluate((el) => { const r = el.getBoundingClientRect(); return { left: r.left + parseFloat(getComputedStyle(el).paddingInlineStart), top: r.top + window.scrollY }; });
-      const docsHead = nav.locator(`a.docs-nav__area[href="${prefix}${DOCS_INDEX}"]`);
-      const [dh, h, p] = [await box(docsHead), await box(head), await box(pages.first())];
-      expect(h.top, 'HTML elements is below Documentation').toBeGreaterThan(dh.top);
-      expect(h.left, 'its link is at the level of the link of Documentation').toBeCloseTo(dh.left, 0);
+      const tokensHead = nav.locator(`a.docs-nav__area[href="${prefix}${TOKENS_INDEX}"]`);
+      const [dh, h, p] = [await box(tokensHead), await box(head), await box(pages.first())];
+      expect(h.top, 'HTML elements is below Tokens').toBeGreaterThan(dh.top);
+      expect(h.left, 'its link is at the level of the link of Tokens').toBeCloseTo(dh.left, 0);
       expect(p.top, 'its pages are below its link').toBeGreaterThan(h.top);
       expect(p.left, 'its pages are indented under its link').toBeGreaterThan(h.left + 4);
-      // ... by as much as the pages of Documentation under theirs, on the page where that fold is the open one
-      await page.goto(`${prefix}${DOCS_INDEX}`);
-      const docsPage = nav.locator(`a[href="${prefix}${ownDocumentation[0]}"]`);
-      await expect(docsPage).toBeVisible();
-      const [dh2, dp2] = [await box(docsHead), await box(docsPage)];
-      expect(p.left - h.left, 'by as much as the pages of Documentation under theirs').toBeCloseTo(dp2.left - dh2.left, 0);
+      // ... by as much as the pages of Tokens under theirs, on the page where that fold is the open one
+      await page.goto(`${prefix}${TOKENS_INDEX}`);
+      const tokensPage = nav.locator(`a[href="${prefix}${ownTokens[0]}"]`);
+      await expect(tokensPage).toBeVisible();
+      const [dh2, dp2] = [await box(tokensHead), await box(tokensPage)];
+      expect(p.left - h.left, 'by as much as the pages of Tokens under theirs').toBeCloseTo(dp2.left - dh2.left, 0);
     });
 
-    test(`${where}: the current page and its area link are marked, the page by more than colour, and Documentation is not`, async ({ page }) => {
+    test(`${where}: the current page and its area link are marked, the page by more than colour, and Catalog is not`, async ({ page }) => {
       await page.goto(`${prefix}${FORMS}`);
       const nav = page.locator('nav.luz-docs-nav');
       await expect(nav.locator('a[aria-current="page"]')).toHaveAttribute('href', `${prefix}${FORMS}`);
       await expect(page.locator('.docs-nav a[aria-current="true"]')).toHaveCount(1);
       await expect(nav.locator(`a.docs-nav__area[href="${prefix}${HTML_INDEX}"]`)).toHaveAttribute('aria-current', 'true');
-      await expect(nav.locator(`a.docs-nav__area[href="${prefix}${DOCS_INDEX}"]`)).not.toHaveAttribute('aria-current', /.*/);
+      await expect(nav.locator(`a.docs-nav__area[href="${prefix}${CATALOG_INDEX}"]`)).not.toHaveAttribute('aria-current', /.*/);
       const style = (/** @type {string} */ sel) => page.locator(sel).first().evaluate((el) => { const s = getComputedStyle(el); return `${s.fontWeight} ${s.borderInlineStartColor} ${s.borderInlineStartWidth}`; });
       expect(await style('.docs-nav a[aria-current="page"]')).not.toBe(await style(`.docs-nav a[href="${prefix}/docs/html/text/"]`));
     });
 
-    test(`${where}: Tab walks Documentation's button, then HTML elements, its button, its pages, then Accessibility`, async ({ page }) => {
+    test(`${where}: Tab walks Catalog's button, then HTML elements, its button, its pages, then Accessibility`, async ({ page }) => {
       // At 1024 px, below the three-column layout: from 80rem "On this page" is a column on the right, before main in the markup, by design
       await page.setViewportSize({ width: 1024, height: 800 });
       await page.goto(`${prefix}${FORMS}`);
       const nav = page.locator('nav.luz-docs-nav');
-      await nav.locator('summary[aria-labelledby="a-documentation"]').focus();
+      await nav.locator('summary[aria-labelledby="a-catalog"]').focus();
       await page.keyboard.press('Tab');
       await expect(nav.locator(`a.docs-nav__area[href="${prefix}${HTML_INDEX}"]`)).toBeFocused();
       await page.keyboard.press('Tab');
@@ -215,7 +217,7 @@ test.describe('axe: the pages around the HTML elements area', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   for (const mode of ['light', 'dark', 'high-contrast']) {
-    for (const route of [FORMS, DOCS_INDEX]) {
+    for (const route of [FORMS, CATALOG_INDEX]) {
       test(`${route} in ${mode}: no serious or critical violation`, async ({ page }) => {
         await seedMode(page, mode);
         await page.goto(route);

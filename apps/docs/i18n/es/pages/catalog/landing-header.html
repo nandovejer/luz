@@ -1,0 +1,170 @@
+<!-- luz:page
+title: Cabecera de landing
+description: Inicia cada página de un sitio de landing con su nombre, sus enlaces principales y algunos controles, en una fila que permanece arriba.
+fits: la parte superior de una landing page
+keywords: barra superior, cabecera
+source: e9733b33c639
+reviewed: false
+-->
+    <div class="docs-component" id="p-landing-header">
+          <h2 id="example">Ejemplo</h2>
+          <p>La cabecera de un sitio de conferencias, con un nombre, tres enlaces y un enlace para iniciar sesión.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <header class="luz-landing-header">
+              <div class="o-container o-container--inline o-row">
+                <button class="luz-nav-toggle" type="button" popovertarget="demo-landing-nav" aria-label="Menu of the example site">
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
+                </button>
+                <a class="luz-landing-header__brand" href="#p-landing-header">Acme Summit</a>
+                <nav class="luz-navbar" id="demo-landing-nav" aria-label="Example site" popover>
+                  <ul class="luz-navbar__list">
+                    <li><a class="luz-navbar__link" href="#p-landing-header" aria-current="page">Programme</a></li>
+                    <li><a class="luz-navbar__link" href="#p-landing-header">Speakers</a></li>
+                    <li><a class="luz-navbar__link" href="#p-landing-header">Tickets</a></li>
+                  </ul>
+                </nav>
+                <div class="o-row luz-landing-header__actions">
+                  <a class="luz-btn luz-btn--ghost" href="#p-landing-header">Log in</a>
+                </div>
+              </div>
+            </header>
+          </div>
+          <p class="docs-demo__note">At 768 px of window width and below the links collapse into a menu, core's <a href="/docs/components/navbar/">navbar</a>. Its panel opens under this example where the browser supports CSS anchor positioning, and under the top of the window, where a header sits, elsewhere.</p>
+          <p class="docs-demo__note">The example is not sticky: in a page, <code class="luz-code-inline">.o-sticky</code> keeps it at the top.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Los problemas propios de la cabecera son los de las piezas de core que la componen.</p>
+          <ul>
+            <li><strong>El panel del menú.</strong> Si sigues pulsando Tab después del último enlace del menú abierto, el foco pasa a la página y el menú permanece abierto por encima; Esc lo cierra. Sin posicionamiento mediante anclas CSS, el panel y la lista de idiomas se abren desde la parte superior de la ventana, a la altura de una cabecera de una sola fila, así que con el texto ampliado pueden cubrir parte de la cabecera. Consulta los <a href="/docs/components/navbar/#known-issues">problemas conocidos de la barra de navegación</a>.</li>
+            <li><strong>Cabecera fija y texto ampliado.</strong> El relleno de desplazamiento de <code>.o-sticky</code> es un mínimo: con el texto al 300 % y la cabecera repartida en varias filas, Safari puede dejar oculto un campo al que se llega con Tab. Define <code>scroll-padding-block-start</code> en <code>html</code> con la altura real de la cabecera o prescinde de <code>.o-sticky</code>.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera de landing">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-landing-header" aria-label="Copy the header markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Header markup"><code id="code-landing-header">&lt;header class=&quot;luz-landing-header o-sticky&quot;&gt;
+  &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
+    &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;site-nav&quot; aria-label=&quot;Menu&quot;&gt;
+      &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z&quot;/&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;a class=&quot;luz-landing-header__brand&quot; href=&quot;/&quot;&gt;Acme Summit&lt;/a&gt;
+    &lt;nav class=&quot;luz-navbar&quot; id=&quot;site-nav&quot; aria-label=&quot;Main&quot; popover&gt;
+      &lt;ul class=&quot;luz-navbar__list&quot;&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/programme/&quot; aria-current=&quot;page&quot;&gt;Programme&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/speakers/&quot;&gt;Speakers&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/tickets/&quot;&gt;Tickets&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+    &lt;div class=&quot;o-row luz-landing-header__actions&quot;&gt;
+      &lt;a class=&quot;luz-btn luz-btn--ghost&quot; href=&quot;/account/&quot;&gt;Log in&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores. La cabecera es una clase de landing aplicada a un <code>&lt;header&gt;</code> nativo, maquetada en el HTML con los objetos de core.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases de la cabecera" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-header</code></div></td><td data-label="Efecto"><div>En <code>&lt;header&gt;</code>: la superficie de la página, una línea debajo, los espacios de la fila y el ancla bajo la que se abren sus paneles.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-header__brand</code></div></td><td data-label="Efecto"><div>El nombre del sitio como enlace a la página de inicio: seminegrita, sin subrayar, de al menos 44 px de alto; ocupa el espacio libre de la fila.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-landing-header__actions</code></div></td><td data-label="Efecto"><div>Al final de una fila <code>.o-row</code>: búsqueda, un <a href="/docs/catalog/lang-switch/">selector de idioma</a> y un botón.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.o-sticky</code> (core)</div></td><td data-label="Efecto"><div>Mantiene la cabecera arriba mientras se desplaza la página, en ventanas de al menos 30 rem de alto; consulta <a href="/docs/components/layout/#objects-page">la página y sus barras</a>.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.o-container.o-container--inline.o-row</code> (core)</div></td><td data-label="Efecto"><div>La fila: el ancho y los márgenes interiores de la página; se ajusta en vez de desbordarse.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (core)</div></td><td data-label="Efecto"><div>El botón del menú y los enlaces: consulta la <a href="/docs/components/navbar/">barra de navegación</a>.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>components/landing-header.css</code> de <code>@luz-ds/catalog</code> sobre los objetos y la barra de navegación de core. No usa JavaScript.</p>
+            <ul>
+              <li>Landing solo añade la apariencia: la superficie de la página, la línea inferior, la marca y los espacios de la fila (8 px entre filas, 16 px entre elementos y 24 px a partir de 769 px). Core aporta el resto: <code>.o-sticky</code>, la posición fija y el relleno de desplazamiento; <code>.o-container--inline</code>, los márgenes interiores; <code>.o-row</code>, la fila adaptable; y la barra de navegación, los enlaces y su panel.</li>
+              <li>Una cabecera de una fila mide lo que <code>--luz-bar-h</code> de core: controles de 44 px, 4 px arriba y abajo y una línea de 1 px. Con el texto ampliado, la fila se ajusta y la cabecera crece.</li>
+              <li>La cabecera se asigna a sí misma el ancla <code>--luz-bar</code>. En los navegadores compatibles con el posicionamiento mediante anclas CSS, el panel de la barra de navegación y la lista del <code>&lt;luz-lang-switch&gt;</code> del sitio se abren debajo, con una o dos filas. En los demás se abren a <code>--luz-bar-h</code> desde la parte superior de la ventana.</li>
+              <li>Sin <code>@luz-ds/catalog</code> no cambia nada: sus reglas adicionales no coinciden con ningún elemento.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el botón abre el menú como popover con <code>popovertarget</code>, sin scripts, y los enlaces son enlaces normales.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Orden:</strong> botón del menú, marca, enlaces y, por último, acciones, en el orden del código fuente. Con el menú abierto, el siguiente Tab después del botón lleva a sus enlaces.</li>
+              <li><strong>Teclas:</strong> Enter o Espacio en el botón abre y cierra el panel; Esc lo cierra y devuelve el foco al botón.</li>
+              <li><strong>Nombres:</strong> el <code>&lt;nav&gt;</code> tiene un <code>aria-label</code> («Principal»). El nombre del botón es «Menú»; el navegador expone si está expandido. El enlace actual tiene <code>aria-current="page"</code> y un subrayado.</li>
+              <li><strong>Puntos de referencia:</strong> un <code>&lt;header&gt;</code> que sea hijo directo de <code>&lt;body&gt;</code> es el banner. Pon el <a href="/docs/components/skip-link/">enlace para saltar al contenido</a> antes.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarla</h3>
+            <p>Usa la cabecera al principio de cada página de un sitio de landing: permite reconocer el sitio y llegar desde cualquier página a sus partes principales.</p>
+            <h3 id="when-not">Cuándo no usarla</h3>
+            <p>No la uses en un blog, un periódico o una aplicación: sus paquetes tienen sus propias cabeceras.</p>
+            <ul>
+              <li>Una cabecera por página, nunca dentro de un componente: es el banner de la página.</li>
+              <li>Una página única que cabe en una pantalla necesita un encabezado y un enlace para saltar al contenido, no una cabecera.</li>
+            </ul>
+            <h3 id="do-dont">Buenas y malas prácticas</h3>
+            <div class="luz-docs-dodont">
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
+                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> Incluye entre tres y seis enlaces; cada uno es un sustantivo que nombra una parte del sitio y marca el actual.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <header class="luz-landing-header"><div class="o-container o-container--inline o-row"><a class="luz-landing-header__brand" href="#">Acme Summit</a><nav class="luz-navbar" aria-label="Main"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#" aria-current="page">Programme</a></li><li><a class="luz-navbar__link" href="#">Speakers</a></li><li><a class="luz-navbar__link" href="#">Tickets</a></li></ul></nav></div></header>
+                </div>
+              </figure>
+              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
+                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Pongas una docena de enlaces, algunos vagos: la fila se convierte en un muro y quien visita la página tiene que leerlo todo para elegir.</figcaption>
+                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+                  <header class="luz-landing-header"><div class="o-container o-container--inline o-row"><a class="luz-landing-header__brand" href="#">Acme Summit</a><nav class="luz-navbar" aria-label="Main"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#" aria-current="page">Programme</a></li><li><a class="luz-navbar__link" href="#">Speakers</a></li><li><a class="luz-navbar__link" href="#">Tickets</a></li><li><a class="luz-navbar__link" href="#">Offers</a></li><li><a class="luz-navbar__link" href="#">Blog</a></li><li><a class="luz-navbar__link" href="#">News</a></li><li><a class="luz-navbar__link" href="#">About us</a></li><li><a class="luz-navbar__link" href="#">Press</a></li><li><a class="luz-navbar__link" href="#">Misc</a></li></ul></nav></div></header>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Redacción del contenido</h3>
+            <p>La marca es el nombre del sitio; los enlaces son los nombres de sus partes principales.</p>
+            <ul>
+              <li>Marca: el nombre tal como lo pronuncia la gente, entre una y tres palabras. El logotipo es decorativo: el enlace mantiene el nombre como texto.</li>
+              <li>Enlaces: entre tres y seis, de una o dos palabras cada uno, con los mismos términos que los títulos de las páginas de destino. No añadas «Inicio» junto a una marca que ya lleva a la página de inicio.</li>
+              <li>Acciones: un verbo que indique qué ocurre, como «Iniciar sesión». Botón del menú: «Menú», traducido como el resto de la página.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto aparece sobre la superficie de la página, tanto en la fila como en el panel abierto. La capa de atenuación empieza debajo de la cabecera, que nunca queda atenuada.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la cabecera en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Marca y enlace actual</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlaces</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo, redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> cada enlace y botón de la cabecera conserva el anillo de core, de 2 px con <code>--luz-focus-ring</code>. El enlace actual también está subrayado, así que la marca no depende solo del color.</li>
+              <li><strong>Bordes:</strong> la línea bajo la cabecera (<code>--luz-divider</code>) es decorativa y no tiene un mínimo; se conserva con colores forzados.</li>
+            </ul>
+            <h3 id="tokens">Tokens que utiliza</h3>
+            <p>Los 11 tokens que leen, por familia, las reglas de <code>.luz-landing-header</code> en <code>components/landing-header.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-base</code></dd></div>
+              <div><dt><a href="/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-bar-h</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

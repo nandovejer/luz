@@ -7,7 +7,7 @@
  * never bytes a contributor wrote. The source is read as text; nothing is
  * built here (tests/i18n-build.test.js builds a copy).
  *
- *   - en: 25 keys, with `previous` and `next` (F-5)
+ *   - en: 26 keys, with `previous` and `next` (F-5) and `modeAuto` (F6 of the ai-and-catalog-only plan: the name of the colour mode button while no mode radio is checked)
  *   - the entry carries no Spanish and no language object but English
  *   - every language file: the schema of the review (keys, strings,
  *     placeholders, length, characters, no address), a $header that names a
@@ -28,7 +28,7 @@ const codes = languageFiles();
 const EN_KEYS = [
   "play", "pause", "mute", "unmute", "fullscreen", "exitFullscreen", "captions", "captionsOff", "loading", "midiError",
   "timeOf", "copy", "copied", "copiedStatus", "copyFailed", "codeExample", "copyCode", "applyTheme", "themeApplied",
-  "changeMode", "modeChanged", "sortedAsc", "sortedDesc", "previous", "next",
+  "changeMode", "modeChanged", "modeAuto", "sortedAsc", "sortedDesc", "previous", "next",
 ];
 
 const readLanguage = (code) => {
@@ -38,7 +38,7 @@ const readLanguage = (code) => {
 };
 
 describe("English, in the entry", () => {
-  it("has the 25 keys of the README, previous and next included (the timeline asks for them)", () => {
+  it("has the 26 keys of the README, previous, next and modeAuto included (the timeline asks for the first two)", () => {
     expect(Object.keys(en).sort()).toEqual([...EN_KEYS].sort());
     expect(en.previous).toBe("Previous");
     expect(en.next).toBe("Next");
@@ -83,13 +83,13 @@ describe.each(codes.length ? codes : ["es"])("packages/core/src/i18n/%s.json", (
     expect(text.trimStart().startsWith("{")).toBe(true);
   });
 
-  it("has a key for each of the 25 keys of English, none empty", () => {
+  it("has a key for each of the 26 keys of English, none empty", () => {
     const own = Object.keys(dict()).filter((k) => k !== "$header");
     expect(own.sort()).toEqual([...EN_KEYS].sort());
     for (const key of own) expect(dict()[key].trim(), key).not.toBe("");
   });
 
-  it("translates every key: none is the English text (the 23 of before and the two new ones)", () => {
+  it("translates every key: none is the English text (the 23 of before and the three new ones)", () => {
     const d = dict();
     const same = EN_KEYS.filter((key) => d[key] === en[key]);
     // a word that is the same in both languages is the contributor's call, never most of the file

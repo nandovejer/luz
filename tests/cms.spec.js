@@ -1,10 +1,10 @@
 // @ts-check
 /**
- * @luz-ds/cms: the article header and the article layout with its table of
+ * The cms patterns, files of @luz-ds/catalog since F5b (`components/cms-*.css`; formerly @luz-ds/cms): the article header and the article layout with its table of
  * contents. The page is tests/fixtures/cms-article.html, a whole story as a
- * consumer builds it with tokens, core and cms only (the sticky `.luz-cms-header`
- * on core's `.o-sticky`, the article, the author box and related posts, which
- * are templates of core classes; @luz-ds/catalog is an optional peer), served at
+ * consumer builds it with tokens, core and the three cms files of catalog it uses (the
+ * sticky `.luz-cms-header` on core's `.o-sticky`, the article, the author box and related posts, which
+ * are templates of core classes), served at
  * /__cms__ with the language and direction each test needs.
  *
  * The table of contents follows the room the article has (a size
@@ -152,12 +152,17 @@ test.describe('cms article page', () => {
     expect(Math.abs((await box(p, 'toc')).top - lg)).toBeLessThanOrEqual(1);
   });
 
-  test('the page asks for no file of site', async ({ page: p }) => {
+  test('the page asks for the three cms files of catalog it uses, and for no other file or script of catalog', async ({ page: p }) => {
     const requests = [];
-    p.on('request', (req) => requests.push(req.url()));
+    p.on('request', (req) => requests.push(new URL(req.url()).pathname));
     await open(p, 1280);
     await p.waitForLoadState('networkidle');
-    expect(requests.filter((url) => url.includes('/packages/catalog/'))).toEqual([]);
+    expect(requests.filter((path) => path.includes('/packages/catalog/')).sort()).toEqual([
+      '/packages/catalog/dist/components/cms-article-header.css',
+      '/packages/catalog/dist/components/cms-article.css',
+      '/packages/catalog/dist/components/cms-header.css',
+    ]);
+    expect(requests.some((path) => /\/packages\/cms\/|cms\.css|catalog\.css/.test(path))).toBe(false);
   });
 
   for (const width of [768, 320]) {

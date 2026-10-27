@@ -2,8 +2,10 @@
 title: Cookie consent
 description: Asks a visitor once whether the site may use optional cookies, with Accept and Reject side by side, and remembers the answer.
 area: catalog
-order: 5
-group: patterns
+order: 17
+group: site-wide
+fits-kinds: any
+fits: when the site uses optional cookies
 files: .luz-consent, __title, __choices
 module: consent.js
 keywords: cookie banner, GDPR, ePrivacy, privacy, tracking consent
@@ -65,7 +67,7 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>Right after the <a href="/docs/components/skip-link/">skip link</a>, before a <a href="/docs/catalog/banner/">banner</a> and the header of the page (a <a href="/docs/landing/header/">landing</a> or <a href="/docs/cms/header/">CMS</a> header): it shows at the bottom of the window, but it comes first in the reading and Tab order. One checkbox per category of optional cookies, its <code>value</code> the category’s name.</p>
+            <p>Right after the <a href="/docs/components/skip-link/">skip link</a>, before a <a href="/docs/catalog/banner/">banner</a> and the header of the page (a <a href="/docs/catalog/landing-header/">landing header</a> or a <a href="/docs/catalog/cms-header/">blog header</a>): it shows at the bottom of the window, but it comes first in the reading and Tab order. One checkbox per category of optional cookies, its <code>value</code> the category’s name.</p>
             <p><code>catalog.min.js</code> loads the banner’s own file, <code>consent.min.js</code>, when the browser is idle; a page without <code>catalog.min.js</code> loads that file on its own.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">

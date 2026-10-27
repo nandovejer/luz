@@ -279,11 +279,11 @@ describe("node scripts/check-ai.js, on a copy of the repository", () => {
 
   it("fails, naming packages/<p>/dist and `pnpm build`, when a package is not built", () => {
     needsScript();
-    const dist = join(ws, "packages/landing/dist");
+    const dist = join(ws, "packages/catalog/dist");
     renameSync(dist, `${dist}.away`);
     try {
       const r = run();
-      failedNaming(r, ["packages/landing/dist"]);
+      failedNaming(r, ["packages/catalog/dist"]);
       expect(r.err).toContain("pnpm build");
     } finally {
       renameSync(`${dist}.away`, dist);

@@ -60,7 +60,8 @@ const DARK = new Set(["dawn", "dusk", "night"]);
 describe("apps/docs/pages/catalog/mode.html", () => {
   it("is a pattern page of the Catalog area: front matter with the module and the files", () => {
     const meta = frontMatter(page(MODE_PAGE));
-    expect(meta).toMatchObject({ area: "catalog", group: "patterns", module: "mode.js", toc: "h2,h3" });
+    // The group is by function since F5b: the mode switch is a piece for the whole site
+    expect(meta).toMatchObject({ area: "catalog", group: "site-wide", module: "mode.js", toc: "h2,h3" });
     expect(meta.title, "title").toBeTruthy();
     expect(meta.description, "description").toBeTruthy();
     expect(meta.files, "files").toMatch(/mode\.css|luz-mode/);

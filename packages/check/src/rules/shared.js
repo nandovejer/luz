@@ -25,11 +25,13 @@ import { echoName } from "../sanitize.js";
 export const SUGGESTIONS_PER_FILE = 200;
 export const SUGGESTIONS_IN_ALL = 5000;
 
+// The patterns of a kind of site (landing, cms, app, docs) are catalog's
+// components since plan ai-and-catalog-only, F5b; F8 renames them
 const PACKAGE_PREFIXES = [
-  ["luz-landing-", "landing"],
-  ["luz-cms-", "cms"],
-  ["luz-app-", "app"],
-  ["luz-docs-", "docs"],
+  ["luz-landing-", "catalog"],
+  ["luz-cms-", "catalog"],
+  ["luz-app-", "catalog"],
+  ["luz-docs-", "catalog"],
   ["luz-catalog-", "catalog"],
 ];
 

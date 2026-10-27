@@ -1,0 +1,85 @@
+/* ==========================================================================
+	 LUZ Catalog: cms article and its table of contents.
+	 Layer: catalog · Prefix: .luz-cms-
+	 .luz-cms-article is the room the story has (a size container). Its
+	 __layout puts the contents beside the text, at the inline end, when that
+	 room is 46rem or more, and above the text below that; beside it, the
+	 contents stay in view while the text scrolls. The contents come first in
+	 the source, so they are read and reached first in both layouts.
+	 No JavaScript of its own: with data-luz-spy on the contents, core's
+	 scroll spy (initSidebar, run by luz.js) marks the link of the section in
+	 view with aria-current="true".
+	 ========================================================================== */
+
+.luz-cms-article {
+	container-type: inline-size;
+}
+
+.luz-cms-article__layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--luz-space-xl) var(--luz-space-2xl);
+}
+
+.luz-cms-toc__title {
+	margin-block-end: var(--luz-space-xs);
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-base);
+	font-weight: 600;
+	letter-spacing: 0;
+}
+
+/* A rule along the list; the current link draws its bar over it */
+.luz-cms-toc__list {
+	list-style: none;
+	border-inline-start: 1px solid var(--luz-divider);
+}
+
+/* One link a line, on the page's colours */
+.luz-cms-toc__list a {
+	display: block;
+	margin-inline-start: -1px;
+	padding: var(--luz-space-2xs) var(--luz-space-sm);
+	border-inline-start: 2px solid transparent;
+	font-size: var(--luz-text-md);
+	color: var(--luz-text-secondary);
+}
+
+.luz-cms-toc__list a:hover {
+	background: var(--luz-surface-muted);
+	color: var(--luz-text-primary);
+}
+
+/* The section in view: a bar and the weight, never colour alone */
+.luz-cms-toc__list a[aria-current="true"] {
+	border-inline-start-color: var(--luz-brand-primary);
+	color: var(--luz-text-primary);
+	font-weight: 600;
+}
+
+/* Beside the text: 13rem, as wide as the docs' "On this page" rail, which
+   keeps 30rem or more for the text. A list longer than the window scrolls
+   inside the contents. */
+@container (min-width: 46rem) {
+	.luz-cms-article__layout {
+		grid-template-columns: minmax(0, 1fr) 13rem;
+	}
+
+	.luz-cms-toc {
+		position: sticky;
+		inset-block-start: var(--luz-cms-toc-top, var(--luz-space-lg));
+		grid-column: 2;
+		grid-row: 1;
+		align-self: start;
+		max-block-size: calc(100dvh - var(--luz-cms-toc-top, var(--luz-space-lg)) - var(--luz-space-lg));
+		overflow-y: auto;
+	}
+}
+
+/* Under a sticky bar (core's .o-sticky, one row of --luz-bar-h), where it
+   sticks (the same query) */
+@media (min-height: 30rem) {
+	:root:has(.o-sticky) .luz-cms-toc {
+		--luz-cms-toc-top: calc(var(--luz-bar-h) + var(--luz-space-lg));
+	}
+}

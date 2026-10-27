@@ -24,6 +24,7 @@
   "themeApplied": "تم التطبيق",
   "changeMode": "تغيير وضع الألوان. الوضع الحالي: ⁨{mode}⁩",
   "modeChanged": "وضع الألوان: ⁨{mode}⁩",
+  "modeAuto": "تلقائي",
   "sortedAsc": "مرتّب حسب ⁨{column}⁩، تصاعديًا",
   "sortedDesc": "مرتّب حسب ⁨{column}⁩، تنازليًا",
   "previous": "السابق",

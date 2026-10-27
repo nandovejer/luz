@@ -6,15 +6,13 @@ import { execSync } from "child_process";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // One sentinel per package: a missing dist in ANY of them triggers a build.
-// Catalog has no bundle: its sentinel is one of its component files
+// Catalog has no bundle: its sentinels are a component file and a pattern of
+// a kind of site (the patterns of landing, cms, app and docs are catalog's)
 const sentinels = [
   "../packages/tokens/dist/luz-tokens.css",
   "../packages/core/dist/luz.css",
   "../packages/catalog/dist/components/search.css",
-  "../packages/landing/dist/landing.css",
-  "../packages/cms/dist/cms.css",
-  "../packages/app/dist/app.css",
-  "../packages/docs/dist/docs.css",
+  "../packages/catalog/dist/components/landing-hero.css",
   "../packages/check/dist/luz-check.js",
 ].map((p) => resolve(__dirname, p));
 

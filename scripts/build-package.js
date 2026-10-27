@@ -1,8 +1,9 @@
 /**
- * LUZ — the shared dist builder of the packages that build on core:
- * `site` and the packages for one kind of site (`landing`, later `cms`).
- * Each has a thin script (scripts/build-<name>.js) that calls
- * buildPackage() with what it ships; tokens and core keep their own.
+ * LUZ — the shared dist builder of the packages that build on core: catalog
+ * (the patterns of a kind of site, landing, cms, app and docs, are its
+ * components since plan ai-and-catalog-only, F5b: no package of their own).
+ * Its thin script (scripts/build-catalog.js) calls buildPackage() with what
+ * it ships; tokens and core keep their own.
  *
  * What it does, in order:
  *   1. empties packages/<name>/dist, so removed sources never linger;
@@ -34,7 +35,7 @@
  *      just written (scripts/ai-manifests.js).
  *
  * Usage: import { buildPackage } from "./build-package.js";
- *        await buildPackage({ name: "landing" });
+ *        await buildPackage({ name: "catalog", bundle: false, js: ["catalog.js"] });
  */
 
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, readFileSync, writeFileSync } from "fs";

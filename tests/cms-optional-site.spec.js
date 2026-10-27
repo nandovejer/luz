@@ -1,9 +1,9 @@
 // @ts-check
 /**
- * @luz-ds/cms works without @luz-ds/catalog (.claude/plans/specs/f3-package-model.md,
- * §5 and §9 step 11): site is an optional peer of a kind of site. A page that
- * loads tokens, core and cms and nothing else (tests/fixtures/cms-page.html: no
- * site stylesheet, no site script) still renders its header, page header and
+ * The cms patterns work without the site-wide parts of @luz-ds/catalog (.claude/plans/specs/f3-package-model.md,
+ * §5 and §9 step 11; since F5b they are files of catalog, one per block, and a page links only the ones it uses).
+ * A page that loads tokens, core and the files `cms-header`, `cms-page-header` and `cms-footer` and nothing else
+ * (tests/fixtures/cms-page.html: no search, consent or language switch file, no script) still renders its header, page header and
  * footer, and axe finds nothing serious in the three modes. The rules of cms
  * that refine site's tags (`.luz-cms-header luz-lang-switch`) simply match
  * nothing there.
@@ -41,13 +41,17 @@ test.describe('cms without site', () => {
     await page.setViewportSize({ width: 1280, height: 900 });
   });
 
-  test('the page asks for no file of site, and has none of its tags', async ({ page }) => {
+  test('the page asks for its three cms files and no other file or script of catalog, and has none of the site-wide tags', async ({ page }) => {
     const requests = [];
-    page.on('request', (req) => requests.push(req.url()));
+    page.on('request', (req) => requests.push(new URL(req.url()).pathname));
     await page.goto(FIXTURE);
     await page.waitForLoadState('networkidle');
-    expect(requests.filter((url) => url.includes('/packages/catalog/'))).toEqual([]);
-    expect(requests.some((url) => url.includes('/packages/cms/dist/cms.css'))).toBe(true);
+    expect(requests.filter((path) => path.includes('/packages/catalog/')).sort()).toEqual([
+      '/packages/catalog/dist/components/cms-footer.css',
+      '/packages/catalog/dist/components/cms-header.css',
+      '/packages/catalog/dist/components/cms-page-header.css',
+    ]);
+    expect(requests.some((path) => /\/packages\/cms\/|cms\.css|catalog\.css/.test(path))).toBe(false);
     expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-consent, luz-lang-switch, luz-submenu, luz-banner').length)).toBe(0);
   });
 

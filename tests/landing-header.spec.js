@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * `.luz-landing-header` (@luz-ds/landing; .claude/plans/specs/f3-package-model.md,
+ * `.luz-landing-header` (`components/landing-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
  * §1.5, §3 and §9 step 10): the header of a landing page, no longer a block of
  * site. It is a native <header> composed in the markup from core's pieces:
  * `.o-sticky` (stays at the top), `.o-container.o-container--inline.o-row`
@@ -11,7 +11,7 @@
  *
  * The cases are the old site header's (tests/site-header.spec.js, H1 to H6 of
  * .claude/plans/specs/platform-site-header.md) on the landing classes, on a
- * page of their own (tests/fixtures/landing-header.html: tokens, core, site and
+ * page of their own (tests/fixtures/landing-header.html: tokens, core, catalog's lang-switch file and
  * landing, no script). The collapse mechanics are tested once, in core, by
  * tests/navbar.spec.js; the stickiness by tests/objects.spec.js.
  * Runs in `chromium` and `chromium-nojs`: the header has no script.

@@ -2,7 +2,7 @@
 title: Instala LUZ
 description: Elige un nivel y copia un comando de instalación o las etiquetas de CDN. Cada nivel necesita los que están por debajo, pero ninguno de los que están por encima.
 keywords: npm, CDN
-source: 50da9de5493c
+source: 815df9cc9f9a
 reviewed: false
 -->
     <div class="docs-block" id="installation">
@@ -21,7 +21,7 @@ reviewed: false
           <li><strong>Tus propios componentes, los colores y el espaciado de LUZ:</strong> nivel 1, solo tokens.</li>
           <li><strong>Botones, formularios, tablas y diálogos listos para usar:</strong> nivel 2, tokens y core.</li>
           <li><strong>Páginas completas: estructura, cabecera, pie de página y búsqueda:</strong> nivel 3, el Catálogo, los tres paquetes.</li>
-          <li><strong>Una landing page, con su cabecera, hero y bloques:</strong> nivel 3 y <a href="#site-kinds">un paquete para ese tipo de sitio</a>.</li>
+          <li><strong>Una landing page, con su cabecera, hero y bloques:</strong> nivel 3 y <a href="#site-kinds">los patrones para ese tipo de sitio</a>, que son componentes del catálogo.</li>
         </ul>
       </div>
       <div class="docs-prose">
@@ -98,7 +98,7 @@ import &quot;@luz-ds/core&quot;;</code></pre>
       <div class="docs-prose">
         <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Nivel 3, el Catálogo: tokens, core y catalog</h2>
         <p>Seis componentes que necesitan datos del sitio: búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú y banner. El catálogo necesita core y tokens.</p>
-        <p>La estructura de la página, desde la cabecera hasta el pie, está en landing y cms, que funcionan sin el catálogo.</p>
+        <p>La estructura de la página de cada tipo de sitio, desde la cabecera hasta el pie, también está en el catálogo, una hoja de estilos por patrón: consulta <a href="#site-kinds">Tipos de sitio</a>.</p>
         <p>El catálogo tiene una hoja de estilos por componente: enlaza las que use la página, después de core.</p>
         <div class="docs-command-block">
           <code class="docs-command-block__cmd">
@@ -138,89 +138,38 @@ import &quot;@luz-ds/catalog&quot;;</code></pre>
       <div class="docs-prose">
         <h2 id="site-kinds" class="docs-prose__title">Tipos de sitio</h2>
         <p>Para empezar una landing page, un blog, una app o un sitio de documentación, ve a <a href="/docs/kinds/">Tipos de sitio</a>: un prompt para cualquier LLM y las recetas de cada parte para copiar.</p>
-        <p>Sobre el nivel 3, un paquete añade los patrones de cada tipo:</p>
+        <p>No hay un paquete para cada tipo de sitio. Sus patrones son componentes del catálogo, una hoja de estilos cada uno, con el nombre <code class="luz-code-inline">&lt;kind&gt;-&lt;name&gt;.css</code>. Instala el nivel 3 y enlaza, después de core, los archivos que use tu página:</p>
         <ul>
-          <li><a href="/docs/landing/">Landing</a>: la cabecera, el hero, las secciones y el pie de página de una landing page, además de bloques listos para copiar.</li>
-          <li><a href="/docs/cms/">CMS</a>: la cabecera, la cabecera de página y de artículo, el índice y el pie de un blog o periódico, con cualquier CMS.</li>
-          <li><a href="/docs/app/">App</a>: la cabecera y el panel de control de una aplicación web.</li>
-          <li><a href="/docs/documentation/">Documentación</a>: la estructura, la cabecera y el pie de página, la barra lateral, el ejemplo, la sección de qué hacer y qué no, y la navegación entre páginas de un sitio de documentación.</li>
+          <li><strong>Landing page:</strong> <code class="luz-code-inline">landing-header</code>, <code class="luz-code-inline">landing-hero</code>, <code class="luz-code-inline">landing-main</code>, <code class="luz-code-inline">landing-section</code>, <code class="luz-code-inline">landing-stat</code>, <code class="luz-code-inline">landing-footer</code> y <code class="luz-code-inline">landing-glow</code>: la cabecera, el hero, las secciones y el pie de página.</li>
+          <li><strong>Blog o periódico, con cualquier CMS:</strong> <code class="luz-code-inline">cms-header</code>, <code class="luz-code-inline">cms-page-header</code>, <code class="luz-code-inline">cms-article-header</code>, <code class="luz-code-inline">cms-article</code> y <code class="luz-code-inline">cms-footer</code>: la cabecera, la cabecera de página y de artículo, el índice y el pie.</li>
+          <li><strong>Aplicación web:</strong> <code class="luz-code-inline">app-header</code> y <code class="luz-code-inline">app-dashboard</code>.</li>
+          <li><strong>Sitio de documentación:</strong> <code class="luz-code-inline">docs-shell</code>, <code class="luz-code-inline">docs-page-head</code>, <code class="luz-code-inline">docs-rail</code>, <code class="luz-code-inline">docs-example</code>, <code class="luz-code-inline">docs-dodont</code>, <code class="luz-code-inline">docs-pager</code> y <code class="luz-code-inline">docs-page-foot</code>.</li>
         </ul>
-        <p>Cada uno necesita primero los paquetes del nivel 2. El catálogo es opcional; los comandos siguientes lo añaden para incluir la búsqueda y el selector de idioma.</p>
-        <p>Instala el que necesites.</p>
-        <div class="docs-command-block">
-          <code class="docs-command-block__cmd">
-            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/landing
-          </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/landing" aria-label="Copia el comando para instalar landing">Copiar</button>
-        </div>
+        <p>El <a href="/docs/catalog/">catálogo</a> tiene una página para cada patrón e indica a qué tipo de sitio le encaja.</p>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
             <span class="docs-snippet__lang">HTML</span>
-            <button class="luz-copy-btn" type="button" data-copy-from="code-cdn-landing" aria-label="Copy the CDN tags for landing">Copy</button>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-cdn-kinds" aria-label="Copy the CDN tags for a landing page">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, landing"><code id="code-cdn-landing">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, a landing page"><code id="code-cdn-kinds">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/landing@0.2.1/dist/landing.min.css&quot;&gt;
-
-&lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
-        </div>
-        <div class="docs-command-block">
-          <code class="docs-command-block__cmd">
-            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/cms
-          </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/cms" aria-label="Copia el comando para instalar cms">Copiar</button>
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-header.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-hero.min.css&quot;&gt;</code></pre>
         </div>
         <div class="docs-snippet">
           <div class="docs-snippet__bar">
-            <span class="docs-snippet__lang">HTML</span>
-            <button class="luz-copy-btn" type="button" data-copy-from="code-cdn-cms" aria-label="Copy the CDN tags for cms">Copy</button>
+            <span class="docs-snippet__lang">Bundler</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-bundler-kinds" aria-label="Copy the bundler imports for a landing page">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, cms"><code id="code-cdn-cms">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/cms@0.2.1/dist/cms.min.css&quot;&gt;
-
-&lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
-        </div>
-        <div class="docs-command-block">
-          <code class="docs-command-block__cmd">
-            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/app
-          </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/app" aria-label="Copia el comando para instalar app">Copiar</button>
-        </div>
-        <div class="docs-snippet">
-          <div class="docs-snippet__bar">
-            <span class="docs-snippet__lang">HTML</span>
-            <button class="luz-copy-btn" type="button" data-copy-from="code-cdn-app" aria-label="Copy the CDN tags for app">Copy</button>
-          </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="CDN tags, app"><code id="code-cdn-app">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/app@0.2.1/dist/app.min.css&quot;&gt;
-
-&lt;!-- Optional: core behaviours, and the site search and cookie banner --&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
-        </div>
-        <div class="docs-command-block">
-          <code class="docs-command-block__cmd">
-            <span class="docs-command-block__prefix" aria-hidden="true">$</span>
-            pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs
-          </code>
-          <button class="luz-copy-btn" type="button" data-copy="pnpm add @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/docs" aria-label="Copia el comando para instalar docs">Copiar</button>
+          <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Bundler imports, a landing page"><code id="code-bundler-kinds">import &quot;@luz-ds/tokens/css&quot;;
+import &quot;@luz-ds/core/css&quot;;
+import &quot;@luz-ds/catalog/components/landing-header.css&quot;;
+import &quot;@luz-ds/catalog/components/landing-hero.css&quot;;</code></pre>
         </div>
         <ul>
-          <li>Landing, cms, app y docs tienen versiones propias y necesitan la versión <code>^0.1.0 || ^0.2.0</code> de los paquetes base. Fija ambas versiones.</li>
-          <li>Con un bundler, añade <code class="luz-code-inline">import "@luz-ds/landing/css";</code>, <code class="luz-code-inline">import "@luz-ds/cms/css";</code>, <code class="luz-code-inline">import "@luz-ds/app/css";</code> o <code class="luz-code-inline">import "@luz-ds/docs/css";</code> después de las importaciones del nivel 3.</li>
-          <li>Ninguno tiene un script. El de core es opcional: con cms, marca la sección visible en el índice; con app, marca el enlace actual de la barra lateral y cierra el panel al seguir un enlace.</li>
+          <li>Enlaza los archivos de un tipo en el orden de la lista de arriba.</li>
+          <li>Enlaza <code class="luz-code-inline">landing-hero</code> junto con <code class="luz-code-inline">landing-section</code>: el encabezado de una sección comparte sus reglas con el hero.</li>
+          <li>Ninguno tiene un script. El de core es opcional: con el índice de un blog, marca la sección visible; con la barra lateral de una app, marca el enlace actual y cierra el panel al seguir un enlace.</li>
         </ul>
       </div>
 

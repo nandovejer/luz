@@ -9,7 +9,7 @@ dist is missing.
 ## Full Build
 
 ```bash
-pnpm build  # Runs tokens:build + core:build + catalog:build + landing:build + cms:build + app:build + docs:build + luzcheck:build
+pnpm build  # Runs tokens:build + core:build + catalog:build + luzcheck:build
 ```
 
 ## @luz-ds/tokens
@@ -69,73 +69,14 @@ its top-level `@media print` blocks, with the comment before each, in
 `luz.print`; a `src/components/_*.css` fails the build. It syncs `catalog.js`,
 `search.js`, `consent.js` and `mode.js` and bundles each into a `.min.js`.
 
-Landing, cms, app and docs still have a bundle: the builder inlines the
-`@import` graph of `src/index.css` into `dist/<name>.css` (+ `.min`), and also
-emits every `src/components/*.css` whose name does not start with `_` as
-`dist/components/<name>.css` (+ `.min`), in the package's layer with the same
-rebased `url()`s as the bundle, and a `src/components/_print.css` as
-`dist/print.css` (+ `.min`).
-
-## @luz-ds/landing
-
-After editing `packages/landing/src/`:
-
-```bash
-pnpm landing:build
-```
-
-This inlines the `@import` graph of `src/index.css` → `dist/landing.css`
-(+ `.min`), in the `luz.landing` layer, through the same shared builder,
-and each component as `dist/components/<name>.css` (+ `.min`).
-No JavaScript. Landing has its own version (0.x): after adding or removing a
-published file, run `node scripts/check-pack.js --update`.
-
-## @luz-ds/cms
-
-After editing `packages/cms/src/`:
-
-```bash
-pnpm cms:build
-```
-
-This inlines the `@import` graph of `src/index.css` → `dist/cms.css`
-(+ `.min`), in the `luz.cms` layer, through the same shared builder,
-and each component as `dist/components/<name>.css` (+ `.min`).
-No JavaScript (the table of contents uses core's scroll spy). CMS has its own
-version (0.x): after adding or removing a published file, run
-`node scripts/check-pack.js --update`.
-
-## @luz-ds/app
-
-After editing `packages/app/src/`:
-
-```bash
-pnpm app:build
-```
-
-This inlines the `@import` graph of `src/index.css` → `dist/app.css`
-(+ `.min`), in the `luz.app` layer, through the same shared builder,
-and each component as `dist/components/<name>.css` (+ `.min`).
-No JavaScript (the sidebar's drawer is a native popover; core's script only
-marks the current link). App has its own version (0.x): after adding or
-removing a published file, run `node scripts/check-pack.js --update`.
-
-## @luz-ds/docs
-
-After editing `packages/docs/src/`:
-
-```bash
-pnpm docs:build
-```
-
-This inlines the `@import` graph of `src/index.css` → `dist/docs.css`
-(+ `.min`), in the `luz.docs` layer, through the same shared builder,
-and each component as `dist/components/<name>.css` (+ `.min`).
-No JavaScript ("On this page" is a native `<details>`, the rail is native
-sticky; core's script only marks the section in view). Docs has its own
-version (0.x): after adding or removing a published file, run
-`node scripts/check-pack.js --update`. The docs app (`apps/docs/`) links
-`/packages/docs/dist/docs.css`, so rebuild before you look at it.
+The patterns of a kind of site (landing, cms, app and docs) are catalog
+components, `src/components/<kind>-<name>.css`: they build like the others, in
+`luz.catalog`, to `dist/components/<kind>-<name>.css` (+ `.min`), with no
+JavaScript. There is no package for a kind of site, and no `landing:build`,
+`cms:build`, `app:build` or `docs:build`. After adding or removing a published
+file, run `node scripts/check-pack.js --update`. The apps link the files from
+`/packages/catalog/dist/components/`, so rebuild catalog before you look at
+them.
 
 ## @luz-ds/check
 

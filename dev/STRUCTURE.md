@@ -3,8 +3,8 @@
 ```
 luz-design-system/
 ├── apps/                              ← internal apps (NOT publishable)
-│   ├── docs/                          ← @luz-ds/docs-site (private): the documentation site, built by scripts/docs-site; consumes @luz-ds/docs
-│   │   ├── site.json                  ← the seven areas of the docs (id, label, slug, groups)
+│   ├── docs/                          ← @luz-ds/docs-site (private): the documentation site, built by scripts/docs-site; consumes catalog's docs-* components
+│   │   ├── site.json                  ← the areas of the docs (id, label, slug, groups)
 │   │   ├── pages/                     ← one HTML fragment per page, front matter in <!-- luz:page -->; route = path
 │   │   │   ├── index.html             ← /docs/ (the hub)
 │   │   │   ├── a-z.html               ← /docs/a-z/ (generated index)
@@ -12,11 +12,8 @@ luz-design-system/
 │   │   │   ├── get-started/           ← install, structure, JavaScript modules
 │   │   │   ├── components/            ← gallery (index.html), one page per component, helpers; _thumbs/ = gallery thumbnails
 │   │   │   ├── tokens/                ← index and one page per family
-│   │   │   ├── catalog/               ← index, one page per pattern, templates, class reference
-│   │   │   ├── landing/               ← index, one page per pattern, landing page templates
-│   │   │   ├── cms/                   ← index, one page per pattern, CMS templates (post card, listing, author box)
-│   │   │   ├── app/                   ← index, header, dashboard, app templates (app page, no sidebar, empty dashboard)
-│   │   │   ├── documentation/         ← index, one page per pattern of @luz-ds/docs, documentation templates
+│   │   │   ├── catalog/               ← index, one page per component (the patterns of a kind of site too: <kind>-<name>), class reference
+│   │   │   ├── kinds/                 ← the kinds of site: an index and one page each (landing, blog, app, docs), with their recipes
 │   │   │   └── html/                  ← overview with the A–Z table, one page per element category
 │   │   ├── 404.html                   ← /404.html (absolute <base>, no script)
 │   │   ├── _layouts/                  ← page.html and not-found.html: head, header, sidebar, <main>, footer
@@ -85,45 +82,12 @@ luz-design-system/
 │   ├── catalog/                   ← @luz-ds/catalog (publishable)
 │   │   ├── src/                       ← EDIT HERE
 │   │   │   ├── components/{search,consent,mode,lang-switch,submenu,banner}.css  ← each with its print rules; no bundle
+│   │   │   ├── components/<kind>-<name>.css  ← the patterns of a kind of site (kind: landing, cms, app, docs), one file each
 │   │   │   ├── catalog.js                ← the presence loader
 │   │   │   └── search.js, consent.js, mode.js  ← lazy chunks
 │   │   └── dist/                      ← GENERATED (do not edit)
 │   │       ├── components/*.css (+ .min)  ← the only CSS: one file per component
 │   │       └── catalog.js, search.js, consent.js (+ .min)
-│   │
-│   ├── landing/                   ← @luz-ds/landing (publishable, its own version, 0.x)
-│   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/{header,hero,main,section,footer,glow}.css
-│   │   │   └── index.css
-│   │   └── dist/                      ← GENERATED (do not edit)
-│   │       ├── landing.css
-│   │       └── landing.min.css
-│   │
-│   ├── cms/                       ← @luz-ds/cms (publishable, its own version, 0.x)
-│   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/article-header.css
-│   │   │   ├── components/article.css   ← article layout and table of contents
-│   │   │   └── index.css
-│   │   └── dist/                      ← GENERATED (do not edit)
-│   │       ├── cms.css
-│   │       └── cms.min.css
-│   │
-│   ├── app/                       ← @luz-ds/app (publishable, its own version, 0.x)
-│   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/header.css    ← the bar of an application (search, account)
-│   │   │   ├── components/dashboard.css ← the view's title row and its grid of panels
-│   │   │   └── index.css
-│   │   └── dist/                      ← GENERATED (do not edit)
-│   │       ├── app.css
-│   │       └── app.min.css
-│   │
-│   ├── docs/                      ← @luz-ds/docs (publishable, its own version, 0.x)
-│   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/*.css         ← shell, page-head, rail, example, dodont, pager, page-foot
-│   │   │   └── index.css
-│   │   └── dist/                      ← GENERATED (do not edit)
-│   │       ├── docs.css
-│   │       └── docs.min.css
 │   │
 │   └── check/                     ← @luz-ds/check (publishable tool: a bin, no CSS, no layer; own version, 0.x)
 │       ├── src/                       ← EDIT HERE (Node ESM: main.js is the bin's glue, cli.js is run(argv, env))
@@ -144,12 +108,8 @@ luz-design-system/
     │   └── plugin.js                  ← Vite glue: build inputs, dev routes (301 without slash), relative URLs, HMR
     ├── build-tokens.js                ← fonts + primitives (tokens.json) + semantic (src/semantic.css)
     ├── build-core.js                  ← inlines src/index.css @imports + per-component dist + JS
-    ├── build-package.js               ← shared builder of catalog, landing, cms, app and docs: @import inlining, layer, min, JS bundle, assets
-    ├── build-catalog.js               ← catalog: calls build-package.js (CSS, the loader and its two chunks)
-    ├── build-landing.js               ← landing: calls build-package.js (CSS only)
-    ├── build-cms.js                   ← cms: calls build-package.js (CSS only)
-    ├── build-app.js                   ← app: calls build-package.js (CSS only)
-    ├── build-docs.js                  ← docs: calls build-package.js (CSS only)
+    ├── build-package.js               ← shared builder of catalog: @import inlining, layer, min, JS bundle, assets
+    ├── build-catalog.js               ← catalog: calls build-package.js (CSS, the loader and its chunks)
     ├── build-check.js                 ← check: esbuild bundle of src/main.js into dist/luz-check.js (a tool, no CSS)
     ├── luz-packages.js                ← the published packages in dependency order: PACKAGES (CSS libraries), TOOLS (check), PUBLISHED
     ├── check-dist.js                  ← predev guard (rebuilds if any dist missing)
@@ -164,20 +124,15 @@ luz-design-system/
     ↓
 @luz-ds/core  (consumes tokens, must never import catalog)
     ↓
-@luz-ds/catalog  (app-level patterns)
-    ↓
-@luz-ds/landing  (patterns of a landing page; own version, 0.x)
-@luz-ds/cms      (patterns of a blog or a newspaper, any CMS; own version, 0.x; never depends on landing)
-@luz-ds/app      (header and dashboard of a web application; own version, 0.x; never depends on landing or cms)
-@luz-ds/docs     (the pieces of a documentation page; own version, 0.x; never depends on landing, cms or app)
+@luz-ds/catalog  (the components of a whole site and the patterns of a kind of site)
 ```
 
-Tokens, core and catalog share one version; landing, cms, app and docs have their own and peer ranges on the base's major. `@luz-ds/check` is a tool, not a layer: it sits outside the chain, has its own version and no peers, and bundles what it needs at build time.
+Tokens, core and catalog share one version. There are no packages for one kind of site: the patterns of a landing page, a blog, an application and a documentation site are catalog components, one file each. `@luz-ds/check` is a tool, not a layer: it sits outside the chain, has its own version and no peers, and bundles what it needs at build time.
 
 ## Key Rules
 
 - **Never edit `dist/`** — it is generated from `src/`
 - **Layer order lives in `src/index.css`** — build scripts inline its `@import` graph; there is no duplicated file list
-- **What gets published** — `packages/tokens/`, `packages/core/`, `packages/catalog/`, `packages/landing/`, `packages/cms/`, `packages/app/`, `packages/docs/`, `packages/check/` (consumers download these)
+- **What gets published** — `packages/tokens/`, `packages/core/`, `packages/catalog/`, `packages/check/` (consumers download these)
 - **Where the guides live** — `dev/` holds the contributor guides. `.claude/` holds the Claude Code agents, hooks, `settings.json` and skills (all versioned) plus the maintainer's private notes (not in git)
 - **What does not** — `apps/docs/`, `apps/landing/`, `apps/site/` (internal apps only)

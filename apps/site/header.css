@@ -339,9 +339,10 @@
   }
 }
 
-/* The color mode switcher, in the page footer: core's cycle variant. It is
-   one icon button; without JavaScript it is the native radio group, with
-   its legend beside the buttons. */
+/* The color mode switcher, in the page footer: core's cycle variant. With
+   scripting it is one round icon button fixed at the end corner of the window
+   (core draws it); without JavaScript it is the native radio group, here in
+   the footer, with its legend beside the buttons. */
 .site-modes {
   flex-shrink: 0;
   align-items: center;
@@ -412,48 +413,6 @@
 
 .site-modes .luz-mode-btn {
   flex-shrink: 1;
-}
-
-/* The cycle button matches the other controls */
-.site-modes .luz-mode-cycle {
-  inline-size: var(--luz-control-lg);
-  block-size: var(--luz-control-lg);
-}
-
-/* With scripting on, the switcher is the cycle button, fixed at the bottom
-   right of the window: a small round button on the page surface, above the
-   content and below the header's drawer and the dialogs. Without scripting
-   the radios stay in the footer */
-@media (scripting: enabled) {
-  .site-modes:where(luz-mode) {
-    position: fixed;
-    inset-block-end: var(--luz-space-md);
-    inset-inline-end: var(--luz-space-md);
-    z-index: var(--luz-z-raised);
-    margin: 0;
-  }
-
-  .site-modes:where(luz-mode) .luz-mode-switcher__label {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .site-modes:where(luz-mode) .luz-mode-cycle {
-    border: 1px solid var(--luz-divider);
-    border-radius: 50%;
-    background: var(--luz-surface);
-    box-shadow: var(--luz-shadow-sm);
-    color: var(--luz-text-secondary);
-  }
-
-  .site-modes:where(luz-mode) .luz-mode-cycle:hover {
-    color: var(--luz-text-primary);
-  }
 }
 
 /* No Auto radio: while the light follows the hour (the clock's, or the one

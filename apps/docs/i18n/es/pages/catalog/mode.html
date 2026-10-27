@@ -1,7 +1,8 @@
 <!-- luz:page
 title: Modo de color automático
 description: Añade la opción Automático al selector de modo de color, para que la página siga los ajustes del sistema o la hora del día hasta que el lector elija un modo.
-source: 317d85e6f80d
+fits: cuando el sitio tiene un selector de modo de color
+source: e400bc8524e8
 reviewed: false
 -->
     <div class="docs-component" id="p-mode">
@@ -18,7 +19,7 @@ reviewed: false
                 </fieldset>
           </div>
           <p class="docs-demo__note">The radio group the element wraps, disabled here because a working one would change the color mode of this whole page. Auto is the fourth radio, checked until the reader chooses.</p>
-          <p class="docs-demo__note">The switcher in this page's footer is this element around <a href="/docs/components/mode-switcher/">core's</a> radios, with Auto first. On this site Auto follows the clock.</p>
+          <p class="docs-demo__note">The working switcher is the button in the corner of this window, the footer's radios without JavaScript: this element around <a href="/docs/components/mode-switcher/">core's</a> radios, with Auto first. On this site Auto follows the clock.</p>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
           <p>Qué puedes esperar:</p>
@@ -37,7 +38,7 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
-            <p>El <a href="/docs/components/mode-switcher/">selector de modo de color</a> de core, con una cuarta opción de radio, <code>auto</code>, marcada dentro de <code>&lt;luz-mode&gt;</code>. <code>catalog.min.js</code> carga el archivo del elemento, <code>mode.min.js</code>; si la página no lo incluye, debe cargarlo por su cuenta.</p>
+            <p>El <a href="/docs/components/mode-switcher/">selector de modo de color</a> de core, con una cuarta opción de radio, <code>auto</code>, marcada dentro de <code>&lt;luz-mode&gt;</code>. <code>catalog.min.js</code> carga el archivo del elemento, <code>mode.min.js</code>; si la página no lo incluye, debe cargarlo por su cuenta. Con scripting, <code>--cycle</code> es el botón redondo de core (<code>luz-mode-cycle</code>), fijo en la esquina final de la ventana; si está en una barra lateral o en un panel de ajustes, añade <code>luz-mode-switcher--inline</code> al mismo grupo para dejarlo en el flujo (véase la <a href="/docs/components/mode-switcher/">página del componente</a>).</p>
             <p>Pon los iconos en las etiquetas, no en <code>data-mode-icon</code> del botón de ciclo: con <code>luz.js</code>, el botón copia el icono de la etiqueta marcada y core no tiene un icono Automático para <code>data-mode-icon</code>.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">

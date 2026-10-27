@@ -304,7 +304,7 @@ test.describe('terminal', () => {
   test('at 320px nothing scrolls sideways: a long command scrolls inside its own block', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 700 });
     await page.locator('#term-npm').evaluate((el) => {
-      el.textContent = 'npm install @luz-ds/core @luz-ds/catalog @luz-ds/landing @luz-ds/cms @luz-ds/app @luz-ds/docs';
+      el.textContent = 'npm install @luz-ds/tokens @luz-ds/core @luz-ds/catalog @luz-ds/check --save-exact --legacy-peer-deps --no-audit';
     });
     const facts = await page.evaluate(() => {
       const pre = document.querySelector('#term-npm-pane pre.luz-terminal__code');

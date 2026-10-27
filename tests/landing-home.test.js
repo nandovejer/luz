@@ -8,7 +8,7 @@
  *    mode and of the light (F2); the page asks it to preview, and listens to it.
  *  - landing.css is the home's own and tokens only: no literal colour, no
  *    primitive colour token, and none of the rules the head of a section,
- *    @luz-ds/landing 0.2, already has.
+ *    the landing patterns of catalog (landing-section.css, landing-stat.css), already have.
  *  - the template links the stylesheets of the packages it builds on, and
  *    writes the sections of the map in order.
  */
@@ -67,13 +67,13 @@ describe("apps/landing/landing.css: the home's own, on tokens", () => {
     for (const family of families) expect(css, family).not.toMatch(new RegExp(`--luz-${family}-\\d`));
   });
 
-  it("does not redo the head of a section or the stat: they are @luz-ds/landing's", () => {
+  it("does not redo the head of a section or the stat: they are catalog's (landing-section.css, landing-stat.css)", () => {
     for (const selector of [".landing-h2", ".landing-lead", ".landing-points", ".landing-point__title", ".luz-landing-section__title", ".luz-landing-section__eyebrow", ".luz-landing-section__lead", ".luz-landing-stat__value"]) {
       expect(css, selector).not.toContain(selector);
     }
   });
 
-  it("only moves the hero's type to fit the first screen: its voice (family, weight, colour, leading) is the package's", () => {
+  it("only moves the hero's type to fit the first screen: its voice (family, weight, colour, leading) is the pattern's", () => {
     const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
     const ofHero = rules.filter((rule) => /\.luz-landing-hero__(title|lead)\b/.test(rule.selector));
     expect(ofHero.length).toBeGreaterThan(0);
@@ -84,7 +84,7 @@ describe("apps/landing/landing.css: the home's own, on tokens", () => {
     }
   });
 
-  it("does not size the links of the footer's columns: the package gives them their block size (24 px)", () => {
+  it("does not size the links of the footer's columns: the pattern gives them their block size (24 px)", () => {
     // Every rule whose selector names a footer column, and what it declares
     const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
     const ofColumn = rules.filter((rule) => rule.selector.includes(".luz-landing-footer__col"));
@@ -103,10 +103,21 @@ describe("apps/landing/landing.css: the home's own, on tokens", () => {
 describe("apps/landing/index.html: the template of the home", () => {
   const html = read("apps/landing/index.html");
 
-  it("links the landing package's stylesheet before the home's own, and keeps the light's", () => {
+  it("links the file of catalog of each landing pattern it uses before the home's own stylesheet, and keeps the light's (F5b: there is no landing.css)", () => {
     const at = (needle) => html.indexOf(needle);
-    expect(at("/packages/landing/dist/landing.css")).toBeGreaterThan(-1);
-    expect(at("/packages/landing/dist/landing.css")).toBeLessThan(at("/apps/landing/landing.css"));
+    expect(at("/packages/landing/"), "the package landing is gone").toBe(-1);
+    // Every landing class the template and the partials it includes use is in a file the page links, and the file comes first
+    const partials = ["header", "site-links", "prompt-dialog", "sky-filter", "footer"].map((name) => read(`apps/site/_partials/${name}.html`)).join("\n");
+    const used = new Set([...(html + partials).matchAll(/\bluz-landing-[a-z0-9_-]+/g)].map((m) => m[0]));
+    const classes = JSON.parse(read("packages/catalog/dist/classes.json")).classes;
+    const files = new Set([...used].map((name) => classes.find((c) => c.name === name)?.files[0]).filter(Boolean));
+    expect(used.size, "the home uses landing patterns").toBeGreaterThan(5);
+    for (const name of used) expect(classes.find((c) => c.name === name), `${name} is a class of catalog`).toBeTruthy();
+    expect(files.size).toBeGreaterThanOrEqual(3);
+    for (const file of files) {
+      expect(at(`/packages/catalog/dist/${file}"`), `${file} is linked`).toBeGreaterThan(-1);
+      expect(at(`/packages/catalog/dist/${file}"`), `${file} comes before the home's own`).toBeLessThan(at("/apps/landing/landing.css"));
+    }
     expect(at("/apps/landing/light/light.css")).toBeGreaterThan(-1);
   });
 

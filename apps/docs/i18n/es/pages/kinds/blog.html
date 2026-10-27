@@ -2,7 +2,7 @@
 title: Blog o periódico
 description: Un blog o un periódico, con cualquier CMS: un prompt para un LLM y recetas para su cabecera, cabecera de página, tarjetas de artículo, cabecera de artículo, índice y pie de página.
 keywords: blog, periódico, revista, artículos, entradas, sitio estático
-source: 4b229619d380
+source: e7da860455fc
 reviewed: false
 -->
     <div class="docs-block" id="k-blog">
@@ -12,7 +12,7 @@ reviewed: false
       <p>O constrúyelo tú con las recetas de abajo. Sirve con cualquier CMS o generador de sitios estáticos: cada receta es el HTML de una de sus plantillas y el CMS pone el texto. Usan solo las clases de core, del catálogo y de cms; <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> indica los archivos que debes cargar.</p>
       <div class="docs-block">
         <h2 id="header">Cabecera</h2>
-        <p>El enlace para saltar al contenido, la <a href="/docs/cms/header/">cabecera</a> con el nombre del blog y sus secciones, el <code>&lt;main&gt;</code> y el pie de página. Para un periódico, el patrón tiene una cabecera de portada que no permanece fija. La búsqueda y el selector de idioma son elementos del catálogo: omítelos si no lo cargas.</p>
+        <p>El enlace para saltar al contenido, la <a href="/docs/catalog/cms-header/">cabecera</a> con el nombre del blog y sus secciones, el <code>&lt;main&gt;</code> y el pie de página. Para un periódico, el patrón tiene una cabecera de portada que no permanece fija. La búsqueda y el selector de idioma son elementos del catálogo: omítelos si no lo cargas.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <header class="luz-cms-header">
@@ -74,7 +74,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="page-header">Cabecera de página</h2>
-        <p>El título de una página que no es un artículo: una sección, un archivo, la página «Acerca de». La <a href="/docs/cms/page-header/">cabecera de página</a> contiene su <code>&lt;h1&gt;</code> y una frase.</p>
+        <p>El título de una página que no es un artículo: una sección, un archivo, la página «Acerca de». La <a href="/docs/catalog/cms-page-header/">cabecera de página</a> contiene su <code>&lt;h1&gt;</code> y una frase.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-cms-page-header u-mb-0">
@@ -97,7 +97,7 @@ reviewed: false
       <div class="docs-block">
         <h2 id="post-card">Tarjeta de artículo</h2>
         <p>Un artículo en una lista: una imagen, su sección, el título, una línea de resumen y la fecha. Es la <a href="/docs/components/card/">tarjeta</a> de core, sin CSS propio. El enlace del título convierte toda la tarjeta en un solo enlace, con una sola parada de tabulación; la sección es una <a href="/docs/components/tag/">etiqueta</a>, no un segundo enlace.</p>
-        <p>Una lista de artículos es un <code>&lt;ul&gt;</code> sobre <code>.o-grid--auto</code>, que ajusta columnas de 16rem o más. Más tarjetas, los artículos relacionados y el recuadro del autor están en las <a href="/docs/cms/templates/">plantillas de CMS</a>.</p>
+        <p>Una lista de artículos es un <code>&lt;ul&gt;</code> sobre <code>.o-grid--auto</code>, que ajusta columnas de 16rem o más. Más tarjetas, los artículos relacionados y el recuadro del autor están en las <a href="/docs/kinds/blog/">plantillas de CMS</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <ul class="o-grid o-grid--auto">
@@ -139,7 +139,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="article-header">Cabecera de artículo</h2>
-        <p>El principio de un artículo: su sección, el título, la entradilla, la firma con la fecha y el tiempo de lectura, y la imagen principal. La <a href="/docs/cms/article-header/">cabecera de artículo</a> contiene el <code>&lt;h1&gt;</code> del artículo; la fecha y el tiempo de lectura son la <a href="/docs/components/meta/">línea de metadatos</a> de core.</p>
+        <p>El principio de un artículo: su sección, el título, la entradilla, la firma con la fecha y el tiempo de lectura, y la imagen principal. La <a href="/docs/catalog/cms-article-header/">cabecera de artículo</a> contiene el <code>&lt;h1&gt;</code> del artículo; la fecha y el tiempo de lectura son la <a href="/docs/components/meta/">línea de metadatos</a> de core.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <header class="luz-cms-article-header u-mb-0">
@@ -187,7 +187,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="toc">Índice</h2>
-        <p>Las secciones de un artículo largo, junto a su texto: el <a href="/docs/cms/toc/">índice</a>, en un <code>&lt;article&gt;</code> con el texto como <a href="/docs/components/prose/">texto corrido</a> de core. Omítelo en un artículo corto y la maquetación es solo el texto.</p>
+        <p>Las secciones de un artículo largo, junto a su texto: el <a href="/docs/catalog/cms-toc/">índice</a>, en un <code>&lt;article&gt;</code> con el texto como <a href="/docs/components/prose/">texto corrido</a> de core. Omítelo en un artículo corto y la maquetación es solo el texto.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <article class="luz-cms-article">
@@ -239,7 +239,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="footer">Pie de página</h2>
-        <p>Quién publica el blog y los enlaces que se buscan al final, en una fila: el <a href="/docs/cms/footer/">pie de página</a>.</p>
+        <p>Quién publica el blog y los enlaces que se buscan al final, en una fila: el <a href="/docs/catalog/cms-footer/">pie de página</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-cms-footer">

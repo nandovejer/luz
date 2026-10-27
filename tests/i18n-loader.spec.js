@@ -188,6 +188,16 @@ test.describe('a page in Spanish', () => {
     await expect(page.locator('.luz-mode-cycle__status')).toHaveText('Modo de color: Dark');
     await expect(page.locator('#cycle')).toHaveAttribute('aria-label', 'Cambiar el modo de color. Actual: Dark');
   });
+
+  test('with no color mode chosen the button is named Auto in Spanish', async ({ page }) => {
+    await open(page);
+    await done(page);
+    await page.locator('#modes').evaluate((group) => {
+      group.querySelectorAll('input').forEach((input) => { input.checked = false; });
+      group.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await expect(page.locator('#cycle')).toHaveAttribute('aria-label', 'Cambiar el modo de color. Actual: Automático');
+  });
 });
 
 test.describe('a Spanish fragment on a page in English', () => {

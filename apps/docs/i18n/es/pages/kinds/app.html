@@ -2,7 +2,7 @@
 title: Aplicación web
 description: Una aplicación web: un prompt para un LLM y recetas para su estructura con barra lateral, su cabecera y su panel de control.
 keywords: aplicación web, app, administración, backoffice, saas
-source: 017d02c0ae40
+source: fe09f582b9f3
 reviewed: false
 -->
     <div class="docs-block" id="k-app">
@@ -12,7 +12,7 @@ reviewed: false
       <p>O constrúyela tú con las recetas de abajo. Usan solo las clases de core, del catálogo y de app; <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> indica los archivos que debes cargar. El <code>&lt;h1&gt;</code> de la vista y su acción principal están en el panel de control, nunca en la barra: la barra contiene lo que es igual en todas las vistas.</p>
       <div class="docs-block">
         <h2 id="shell">Estructura con barra lateral</h2>
-        <p>La página entera: el enlace para saltar al contenido y, después, la <a href="/docs/components/sidebar/">barra lateral</a> de core junto a <code>.o-main</code>, que contiene la cabecera y la vista. <code>.o-shell</code> coloca la barra lateral en una columna a partir de 769 px de ventana y, por debajo, la convierte en un cajón que abre el botón de menú, sin script. Los patrones de <a href="/docs/app/">App</a> van dentro.</p>
+        <p>La página entera: el enlace para saltar al contenido y, después, la <a href="/docs/components/sidebar/">barra lateral</a> de core junto a <code>.o-main</code>, que contiene la cabecera y la vista. <code>.o-shell</code> coloca la barra lateral en una columna a partir de 769 px de ventana y, por debajo, la convierte en un cajón que abre el botón de menú, sin script. Los patrones de <a href="/docs/kinds/app/">App</a> van dentro.</p>
         <p>La estructura es la página entera, así que no tiene un ejemplo dentro de esta: esta página está construida sobre ella. Estrecha la ventana por debajo de 769 px y la barra lateral pasa a ser un cajón tras el botón de menú.</p>
         <p>El script de core, si lo cargas, marca el enlace actual de la barra lateral y cierra el cajón cuando se sigue un enlace.</p>
         <div class="docs-snippet">
@@ -41,7 +41,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="header">Cabecera</h2>
-        <p>La barra de la parte superior de cada vista: el botón de menú, el nombre del producto y la cuenta. Es la <a href="/docs/app/header/">cabecera de app</a>, dentro de <code>.o-main</code>, junto a la barra lateral. La búsqueda es el <code>&lt;luz-search&gt;</code> del catálogo: omítela si no cargas el catálogo.</p>
+        <p>La barra de la parte superior de cada vista: el botón de menú, el nombre del producto y la cuenta. Es la <a href="/docs/catalog/app-header/">cabecera de app</a>, dentro de <code>.o-main</code>, junto a la barra lateral. La búsqueda es el <code>&lt;luz-search&gt;</code> del catálogo: omítela si no cargas el catálogo.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <header class="luz-app-header">
@@ -92,7 +92,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="dashboard">Panel de control</h2>
-        <p>Una vista: una fila de título con el <code>&lt;h1&gt;</code> de la vista y sus acciones, y después paneles en una cuadrícula que responde al espacio de la vista, no al de la ventana. Es el <a href="/docs/app/dashboard/">panel de control</a>, sobre el <code>&lt;main&gt;</code>. Cada panel es una tarjeta que empieza con su encabezado; el más importante puede ocupar el espacio de dos columnas.</p>
+        <p>Una vista: una fila de título con el <code>&lt;h1&gt;</code> de la vista y sus acciones, y después paneles en una cuadrícula que responde al espacio de la vista, no al de la ventana. Es el <a href="/docs/catalog/app-dashboard/">panel de control</a>, sobre el <code>&lt;main&gt;</code>. Cada panel es una tarjeta que empieza con su encabezado; el más importante puede ocupar el espacio de dos columnas.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-app-dashboard">
@@ -149,7 +149,7 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="empty">Vista vacía</h2>
-        <p>Una vista que aún no tiene nada, sobre el <a href="/docs/app/dashboard/">panel de control</a>: un panel ancho que dice qué falta y qué hacer, con la acción. La fila de título conserva su lugar, de modo que la vista no salta cuando llega el primer panel. La acción del panel es la única acción principal de la vista: omítela de la fila de título mientras la tenga el panel.</p>
+        <p>Una vista que aún no tiene nada, sobre el <a href="/docs/catalog/app-dashboard/">panel de control</a>: un panel ancho que dice qué falta y qué hacer, con la acción. La fila de título conserva su lugar, de modo que la vista no salta cuando llega el primer panel. La acción del panel es la única acción principal de la vista: omítela de la fila de título mientras la tenga el panel.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-app-dashboard">

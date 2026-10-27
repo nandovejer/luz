@@ -21,8 +21,8 @@ import "@luz-ds/core";
 import "@luz-ds/catalog/components/search.css";
 import "@luz-ds/catalog";
 
-// Only for one kind of site: landing, cms or app
-import "@luz-ds/landing/css";</code></pre>
+// A pattern of a kind of site is a catalog component too: one import each (here the hero of a landing page)
+import "@luz-ds/catalog/components/landing-hero.css";</code></pre>
       </div>
       <ul>
         <li>The tokens come first: every other package needs them.</li>
@@ -76,25 +76,9 @@ import "@luz-ds/landing/css";</code></pre>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./search</code></div></td><td data-label="What it is"><div>The <code>&lt;luz-search&gt;</code> element</div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./consent</code></div></td><td data-label="What it is"><div>The <code>&lt;luz-consent&gt;</code> element, and <code>getConsent</code></div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./mode</code></div></td><td data-label="What it is"><div>The <code>&lt;luz-mode&gt;</code> element</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./components/*</code></div></td><td data-label="What it is"><div>One stylesheet per catalog element, and its only CSS: banner, consent, language switch, mode, search and submenu</div></td></tr>
+            <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./components/*</code></div></td><td data-label="What it is"><div>One stylesheet per catalog component, and its only CSS: banner, consent, language switch, mode, search, submenu and the patterns of a kind of site, such as <code>landing-hero.css</code></div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./classes.json</code></div></td><td data-label="What it is"><div>Every class and custom property the package defines, with its kind and layer, as JSON for tools and AI agents</div></td></tr>
             <tr><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="Export"><div><code>./custom-elements.json</code></div></td><td data-label="What it is"><div>Every custom element the package defines or styles, with its attributes and events, in the Custom Elements Manifest format, for editors and AI agents</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/landing</code></div></td><td data-label="Export"><div><code>./css</code></div></td><td data-label="What it is"><div><code>landing.css</code>: the pieces of a landing page</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/landing</code></div></td><td data-label="Export"><div><code>./css/min</code></div></td><td data-label="What it is"><div><code>landing.min.css</code>: the same, minified</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/landing</code></div></td><td data-label="Export"><div><code>./components/*</code></div></td><td data-label="What it is"><div>One stylesheet per piece</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/landing</code></div></td><td data-label="Export"><div><code>./classes.json</code></div></td><td data-label="What it is"><div>Every class and custom property the package defines, with its kind and layer, as JSON for tools and AI agents</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/cms</code></div></td><td data-label="Export"><div><code>./css</code></div></td><td data-label="What it is"><div><code>cms.css</code>: the pieces of a blog or CMS</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/cms</code></div></td><td data-label="Export"><div><code>./css/min</code></div></td><td data-label="What it is"><div><code>cms.min.css</code>: the same, minified</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/cms</code></div></td><td data-label="Export"><div><code>./components/*</code></div></td><td data-label="What it is"><div>One stylesheet per piece</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/cms</code></div></td><td data-label="Export"><div><code>./classes.json</code></div></td><td data-label="What it is"><div>Every class and custom property the package defines, with its kind and layer, as JSON for tools and AI agents</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/app</code></div></td><td data-label="Export"><div><code>./css</code></div></td><td data-label="What it is"><div><code>app.css</code>: the pieces of a web application</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/app</code></div></td><td data-label="Export"><div><code>./css/min</code></div></td><td data-label="What it is"><div><code>app.min.css</code>: the same, minified</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/app</code></div></td><td data-label="Export"><div><code>./components/*</code></div></td><td data-label="What it is"><div>One stylesheet per piece</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/app</code></div></td><td data-label="Export"><div><code>./classes.json</code></div></td><td data-label="What it is"><div>Every class and custom property the package defines, with its kind and layer, as JSON for tools and AI agents</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/docs</code></div></td><td data-label="Export"><div><code>./css</code></div></td><td data-label="What it is"><div><code>docs.css</code>: the pieces of a documentation page</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/docs</code></div></td><td data-label="Export"><div><code>./css/min</code></div></td><td data-label="What it is"><div><code>docs.min.css</code>: the same, minified</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/docs</code></div></td><td data-label="Export"><div><code>./components/*</code></div></td><td data-label="What it is"><div>One stylesheet per piece</div></td></tr>
-            <tr><td data-label="Package"><div><code>@luz-ds/docs</code></div></td><td data-label="Export"><div><code>./classes.json</code></div></td><td data-label="What it is"><div>Every class and custom property the package defines, with its kind and layer, as JSON for tools and AI agents</div></td></tr>
           </tbody>
         </table>
       </div>
@@ -192,7 +176,7 @@ import Base from "../layouts/Base.astro";
         <li>The fonts came out as hashed files, and the layers and your own rule came out in the order described above.</li>
       </ul>
       <p>The build output was inspected, and the built page was not opened in a browser. Astro with a view transition router (<code>&lt;ClientRouter /&gt;</code>) was not tried, and neither was Windows.</p>
-      <p>The <code>landing</code>, <code>cms</code> and <code>app</code> imports have the same shape as the ones above, and were not built.</p>
+      <p>The import of a pattern of a kind of site has the same shape as the search one above, and was not built.</p>
     </section>
 
     <section class="docs-block" aria-labelledby="others">
