@@ -448,10 +448,10 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('galleries and the A–Z index', () => {
-    test('a gallery card is one link, named like its heading (HUB-1)', async ({ page }) => {
+    test('a gallery card is one link, named like its heading (HUB-1; 29 since the navbar, sidebar, terminal and timeline went to Catalog)', async ({ page }) => {
       await open(page, '/docs/components/');
       const cards = page.locator('.docs-card');
-      await expect(cards).toHaveCount(33);
+      await expect(cards).toHaveCount(29);
       for (const card of await cards.all()) {
         await expect(card.getByRole('link')).toHaveCount(1);
       }

@@ -11,8 +11,8 @@
  * container): beside the text, at the inline end, when the article is 46rem
  * wide or more, and staying in view under the sticky bar (core's `.o-sticky`,
  * by core's `--luz-bar-h`); above the text
- * below that, and with larger text. Core's scroll spy marks the section in
- * view with JavaScript only. Runs in `chromium` and `chromium-nojs`.
+ * below that, and with larger text. The scroll spy of catalog's sidebar chunk (loaded by
+ * catalog.js for a [data-luz-spy] list) marks the section in view with JavaScript only. Runs in `chromium` and `chromium-nojs`.
  */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
@@ -152,16 +152,21 @@ test.describe('cms article page', () => {
     expect(Math.abs((await box(p, 'toc')).top - lg)).toBeLessThanOrEqual(1);
   });
 
-  test('the page asks for the three cms files of catalog it uses, and for no other file or script of catalog', async ({ page: p }) => {
+  test('the page asks for the three cms files of catalog it uses, its loader and the sidebar chunk that marks the contents, and no other file or script of catalog', async ({ page: p }) => {
     const requests = [];
     p.on('request', (req) => requests.push(new URL(req.url()).pathname));
     await open(p, 1280);
     await p.waitForLoadState('networkidle');
-    expect(requests.filter((path) => path.includes('/packages/catalog/')).sort()).toEqual([
-      '/packages/catalog/dist/components/cms-article-header.css',
-      '/packages/catalog/dist/components/cms-article.css',
-      '/packages/catalog/dist/components/cms-header.css',
-    ]);
+    // chromium-nojs runs no script: no loader, no chunk
+    const scripts = test.info().project.name === 'chromium-nojs' ? [] : ['/packages/catalog/dist/catalog.js', '/packages/catalog/dist/sidebar.js'];
+    expect(requests.filter((path) => path.includes('/packages/catalog/')).sort()).toEqual(
+      [
+        '/packages/catalog/dist/components/cms-article-header.css',
+        '/packages/catalog/dist/components/cms-article.css',
+        '/packages/catalog/dist/components/cms-header.css',
+        ...scripts,
+      ].sort(),
+    );
     expect(requests.some((path) => /\/packages\/cms\/|cms\.css|catalog\.css/.test(path))).toBe(false);
   });
 

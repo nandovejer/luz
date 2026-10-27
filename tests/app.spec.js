@@ -601,7 +601,7 @@ for (const [label, url] of [['without site', PLAIN], ['with site', WITH_SITE]]) 
 }
 
 test.describe('app without site: nothing of site is asked for', () => {
-  test('the page asks for the two files of the app patterns, which it gets, and for no other file of catalog, and no script of it', async ({ page }) => {
+  test('the page asks for the two files of the app patterns and for the sidebar they sit beside, which it gets, and for no other file of catalog, and no script of it', async ({ page }) => {
     const requests = [];
     const responses = [];
     page.on('request', (req) => requests.push(req.url()));
@@ -609,7 +609,8 @@ test.describe('app without site: nothing of site is asked for', () => {
     await page.goto(PLAIN);
     await page.waitForLoadState('networkidle');
     const catalog = requests.map((url) => new URL(url).pathname).filter((path) => path.includes('/packages/catalog/'));
-    expect(catalog.sort()).toEqual(['/packages/catalog/dist/components/app-dashboard.css', '/packages/catalog/dist/components/app-header.css']);
+    // the sidebar is catalog's since F7: the page links its stylesheet (it is CSS, and its drawer is a native popover), never its chunk
+    expect(catalog.sort()).toEqual(['/packages/catalog/dist/components/app-dashboard.css', '/packages/catalog/dist/components/app-header.css', '/packages/catalog/dist/components/sidebar.css']);
     // No bundle and no package of app any more
     expect(requests.some((url) => /\/packages\/app\/|app\.css|catalog\.css/.test(new URL(url).pathname))).toBe(false);
     for (const file of catalog) {

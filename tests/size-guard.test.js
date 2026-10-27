@@ -4,7 +4,8 @@
  * 9 step 7; security requirements R1 and R2, rows SEC-CHUNK-1 and SEC-CHUNK-2):
  *   - every chunk of every package imports nothing, static or dynamic;
  *   - catalog.min.js has no static import, and its dynamic imports are exactly
- *     "./search.min.js", "./consent.min.js" and "./mode.min.js", each a string literal;
+ *     "./search.min.js", "./consent.min.js", "./mode.min.js", "./timeline.min.js" and
+ *     "./sidebar.min.js" (the last two moved from core in F7), each a string literal;
  *   - any import() whose argument is not a literal fails;
  *   - a bare specifier still fails (red line 1).
  * The guard runs on a copy of the repository in a temporary folder (it reads
@@ -34,14 +35,14 @@ const dynamicTargets = (code) => [...code.matchAll(LITERAL_IMPORT)].map((m) => m
 const sizeOf = (path) => gzipSync(readFileSync(join(repo, path)), { level: 9 }).length;
 
 describe("the built catalog files", () => {
-  it("catalog.min.js has no static import and loads exactly the three chunks, each by a literal specifier", () => {
+  it("catalog.min.js has no static import and loads exactly the five chunks, each by a literal specifier", () => {
     const code = read("packages/catalog/dist/catalog.min.js");
     expect(STATIC.test(code), "a static import or export-from").toBe(false);
-    expect(dynamicTargets(code)).toEqual(["./consent.min.js", "./mode.min.js", "./search.min.js"]);
-    expect(code.match(IMPORT_CALL)).toHaveLength(3);
+    expect(dynamicTargets(code)).toEqual(["./consent.min.js", "./mode.min.js", "./search.min.js", "./sidebar.min.js", "./timeline.min.js"]);
+    expect(code.match(IMPORT_CALL)).toHaveLength(5);
   });
 
-  it.each(["search", "consent", "mode"])("%s.min.js imports nothing, static or dynamic", (name) => {
+  it.each(["search", "consent", "mode", "timeline", "sidebar"])("%s.min.js imports nothing, static or dynamic", (name) => {
     const code = read(`packages/catalog/dist/${name}.min.js`);
     expect(STATIC.test(code), "a static import or export-from").toBe(false);
     expect(code.match(IMPORT_CALL)).toBeNull();
@@ -49,10 +50,10 @@ describe("the built catalog files", () => {
 
   it("the sources follow: catalog.js names the chunks as literals, and the chunks import nothing (SEC-CHUNK-1)", () => {
     const loader = read("packages/catalog/src/catalog.js");
-    expect(dynamicTargets(loader)).toEqual(["./consent.js", "./mode.js", "./search.js"]);
-    expect(loader.match(IMPORT_CALL)).toHaveLength(3);
+    expect(dynamicTargets(loader)).toEqual(["./consent.js", "./mode.js", "./search.js", "./sidebar.js", "./timeline.js"]);
+    expect(loader.match(IMPORT_CALL)).toHaveLength(5);
     expect(loader).not.toMatch(/import\.meta/);
-    for (const name of ["search", "consent", "mode"]) {
+    for (const name of ["search", "consent", "mode", "timeline", "sidebar"]) {
       const source = read(`packages/catalog/src/${name}.js`);
       expect(STATIC.test(source), `${name}.js static import`).toBe(false);
       expect(source.match(IMPORT_CALL), `${name}.js dynamic import`).toBeNull();
@@ -93,11 +94,8 @@ describe("budgets.json and PRINCIPLES.md section 8", () => {
   it("has no `catalog CSS` row: catalog has no bundle, each component file has its own row by glob (F5a)", () => {
     expect(budgets.find((b) => b.name === "catalog CSS")).toBeUndefined();
     expect(budgets.some((b) => /catalog\.min\.css/.test(b.file ?? ""))).toBe(false);
-    expect(budgets.find((b) => b.name === "catalog component CSS (each)")).toEqual({
-      name: "catalog component CSS (each)",
+    expect(budgets.find((b) => b.name === "catalog component CSS (each)")).toMatchObject({
       glob: "packages/catalog/dist/components/*.min.css",
-      // F5b: the 21 patterns of the four kinds of site are files of catalog with a row of their own, so this row leaves them out
-      except: "packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css",
       ideal: 1280,
       max: 1536,
     });
@@ -105,15 +103,62 @@ describe("budgets.json and PRINCIPLES.md section 8", () => {
     expect(principles).not.toMatch(/^\| `catalog` CSS \|/m);
   });
 
+  it("has a row of its own for the four layout components that came from core (F7, decision 61): ideal 1.75 kB, ceiling 2 kB, a new row and no other ceiling raised", () => {
+    expect(budgets.find((b) => b.name === "catalog layout CSS (each)")).toMatchObject({ ideal: 1792, max: 2048 });
+    expect(principles).toMatch(/^\| Each `catalog` layout component CSS[^\n]*\| \u2264 1\.75 kB \| 1\.75 kB \| 2 kB \|$/m);
+    // a ceiling that went up is a red line: the largest of the four fits under its own ceiling, which is below the 4 KiB bundle
+    expect(budgets.find((b) => b.name === "catalog layout CSS (each)").max).toBeLessThan(4096);
+  });
+
+  it("has a row for the timeline chunk (it was core's, the same ideal and ceiling) and a new one for the sidebar chunk (decision 32), and none for a timeline chunk of core", () => {
+    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: timeline")).toEqual({ name: "catalog JS lazy chunk: timeline", file: "packages/catalog/dist/timeline.min.js", ideal: 2048, max: 3072 });
+    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: sidebar")).toEqual({ name: "catalog JS lazy chunk: sidebar", file: "packages/catalog/dist/sidebar.min.js", ideal: 768, max: 1024 });
+    expect(budgets.find((b) => /core JS lazy chunk: timeline/.test(b.name))).toBeUndefined();
+    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `timeline`[^\n]*\| 3 kB \|$/m);
+    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `sidebar`[^\n]*\| 1 kB \|$/m);
+    expect(principles).not.toMatch(/^\| `core` JS lazy chunk: `timeline`/m);
+  });
+
+  it("brings the ceiling of core's CSS down with the four components (12 kB and 15 kB to 8.75 kB and 11.5 kB), and the core entry keeps its 8 kB", () => {
+    expect(budgets.find((b) => b.name === "core CSS")).toMatchObject({ ideal: 8960, max: 11776 });
+    expect(principles).toMatch(/^\| `core` CSS \| \u2014 \| \u2264 8\.75 kB \| 8\.75 kB \| 11\.5 kB \|$/m);
+    expect(budgets.find((b) => b.file === "packages/core/dist/luz.min.js").max).toBe(8192);
+  });
+
   it("the ceiling of a catalog component is below the 4 KiB the bundle had: no ceiling went up (RL-17)", () => {
     expect(budgets.find((b) => b.name === "catalog component CSS (each)").max).toBeLessThan(4096);
   });
 
-  it("every built catalog component fits its ceiling, gzipped and minified", () => {
+  /** Whether a repo-relative file is named by a budget glob: `dir/*.ext`, `dir/{a,b}-*.ext` or `dir/{a-*,b}.ext`. */
+  const named = (file, glob) => {
+    const [, dir, list, ext] = /^(.*)\/(?:\{([^}]+)\}|\*)(\.[a-z.]+|-\*\.[a-z.]+)$/.exec(glob) ?? [];
+    if (!dir || file.slice(0, dir.length + 1) !== `${dir}/`) return false;
+    const name = file.slice(dir.length + 1);
+    if (list === undefined) return name.endsWith(ext.replace(/^-\*/, ""));
+    const dashed = ext.startsWith("-*"); // {a,b}-*.ext: a name starting "a-" or "b-"
+    const suffix = ext.replace(/^-\*/, "");
+    return list.split(",").some((item) => (dashed ? name.startsWith(`${item}-`) && name.endsWith(suffix) : item.endsWith("-*") ? name.startsWith(item.slice(0, -1)) && name.endsWith(suffix) : name === `${item}${suffix}`));
+  };
+
+  it("every built catalog component is in exactly one row, and fits that row's ceiling, gzipped and minified", () => {
     const dir = join(repo, "packages/catalog/dist/components");
     const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".min.css")) : [];
     expect(files.length).toBeGreaterThan(0);
-    for (const f of files) expect(sizeOf(`packages/catalog/dist/components/${f}`), f).toBeLessThanOrEqual(1536);
+    const rows = budgets.filter((b) => b.glob?.startsWith("packages/catalog/dist/components/"));
+    for (const f of files) {
+      const path = `packages/catalog/dist/components/${f}`;
+      const mine = rows.filter((row) => named(path, row.glob) && !(row.except && named(path, row.except)));
+      expect(mine.map((row) => row.name), `${f} is in one row only`).toHaveLength(1);
+      expect(sizeOf(path), `${f} against ${mine[0].name}`).toBeLessThanOrEqual(mine[0].max);
+    }
+  });
+
+  it("puts navbar, sidebar, terminal and timeline in the layout row, the 21 patterns in theirs, and the six elements in the general one", () => {
+    const rows = budgets.filter((b) => b.glob?.startsWith("packages/catalog/dist/components/"));
+    const rowOf = (name) => rows.find((row) => named(`packages/catalog/dist/components/${name}.min.css`, row.glob) && !(row.except && named(`packages/catalog/dist/components/${name}.min.css`, row.except)))?.name;
+    for (const name of ["navbar", "sidebar", "terminal", "timeline"]) expect(rowOf(name), name).toBe("catalog layout CSS (each)");
+    for (const name of ["landing-hero", "cms-header", "app-header", "docs-rail"]) expect(rowOf(name), name).toBe("catalog kind patterns CSS (each)");
+    for (const name of ["search", "consent", "mode", "lang-switch", "submenu", "banner"]) expect(rowOf(name), name).toBe("catalog component CSS (each)");
   });
 
   it("keeps the budgets and the PRINCIPLES table in step, as check-size does", () => {
@@ -138,17 +183,21 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
   /** The ceilings committed before F5: RL-17, never raised, never removed. */
   const BEFORE = [
     ["tokens CSS", 5 * KiB],
-    ["core CSS", 15 * KiB],
+    // F7: the four layout components left core, and its ceiling went down with them (15 KiB to 11.5 KiB); a ceiling that only goes down
+    ["core CSS", 11.5 * KiB],
     ["core classless CSS (a file of its own)", 3 * KiB],
     ["core JS (entry, lazy chunks excluded)", 8 * KiB],
     ["core JS lazy chunk: midi", 4 * KiB],
     ["core JS lazy chunk: table-sort", 2 * KiB],
-    ["core JS lazy chunk: timeline", 3 * KiB],
     // F5a: catalog has no bundle, so the 4 KiB row that limited its total goes and each file gets a ceiling below it
     ["catalog component CSS (each)", 1.5 * KiB],
     ["catalog JS", 2 * KiB],
     ["catalog JS lazy chunk: search", 2.5 * KiB],
     ["catalog JS lazy chunk: consent", 1.5 * KiB],
+    // F7: the timeline chunk is catalog's now, with core's ideal and ceiling; the sidebar chunk and the row of the four layout stylesheets are new
+    ["catalog JS lazy chunk: timeline", 3 * KiB],
+    ["catalog JS lazy chunk: sidebar", 1 * KiB],
+    ["catalog layout CSS (each)", 2 * KiB],
     // F5b: the rows `landing CSS` (2 KiB), `cms CSS` (4 KiB), `app CSS` (2 KiB) and `docs CSS` (4 KiB) went with their
     // packages; each of the 21 patterns has a ceiling of 1 KiB, below the smallest of them (a ceiling that goes down, never up)
     ["catalog kind patterns CSS (each)", 1 * KiB],
@@ -209,8 +258,11 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(budgets[BEFORE.length - 2]).toEqual({ name: "catalog kind patterns CSS (each)", glob: "packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css", ideal: 768, max: 1024 });
   });
 
-  it("has the row of the patterns in the PRINCIPLES.md table right after the consent chunk, with the same ideal and ceiling, and no row of the four packages", () => {
-    expect(table[BEFORE.length - 3][0], "the row before it").toMatch(/^`catalog` JS lazy chunk: `consent`/);
+  it("has the row of the patterns in the PRINCIPLES.md table right after the layout row, with the same ideal and ceiling, and no row of the four packages", () => {
+    expect(table[BEFORE.length - 3][0], "the row before it").toMatch(/^Each `catalog` layout component CSS/);
+    expect(table[BEFORE.length - 6][0], "three rows before that").toMatch(/^`catalog` JS lazy chunk: `consent`/);
+    expect(table[BEFORE.length - 5][0]).toMatch(/^`catalog` JS lazy chunk: `timeline`/);
+    expect(table[BEFORE.length - 4][0]).toMatch(/^`catalog` JS lazy chunk: `sidebar`/);
     const [name, floor, ideal, , ceiling] = table[BEFORE.length - 2];
     expect(name).toMatch(/^Each pattern of a kind of site in `catalog`/);
     expect(floor).toBe("\u2014");
@@ -325,15 +377,17 @@ describe("the language chunks of core", () => {
 
 /* ---- The guard on a temporary copy ------------------------------------- */
 
-const LOADER = 'document.querySelector("luz-search")&&import("./search.min.js");document.querySelector("luz-consent")&&import("./consent.min.js");document.querySelector("luz-mode")&&import("./mode.min.js");';
+const LOADER =
+  'document.querySelector("luz-search")&&import("./search.min.js");document.querySelector("luz-consent")&&import("./consent.min.js");document.querySelector("luz-mode")&&import("./mode.min.js");' +
+  'document.querySelector("luz-timeline")&&import("./timeline.min.js");document.querySelector(".luz-sidebar")&&import("./sidebar.min.js");';
 const CHUNK = (tag) => `customElements.get("${tag}")||customElements.define("${tag}",class extends HTMLElement{});`;
 
 describe("scripts/check-size.js on a copy of the repository", () => {
   let dir;
 
-  /** A repository with the four catalog files; `files` overrides the content of any of them. */
+  /** A repository with the six catalog files; `files` overrides the content of any of them. */
   function build(files = {}) {
-    const content = { "catalog.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "consent.min.js": CHUNK("luz-consent"), "mode.min.js": CHUNK("luz-mode"), ...files };
+    const content = { "catalog.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "consent.min.js": CHUNK("luz-consent"), "mode.min.js": CHUNK("luz-mode"), "timeline.min.js": CHUNK("luz-timeline"), "sidebar.min.js": "/* a chunk with no element */", ...files };
     mkdirSync(join(dir, "scripts"), { recursive: true });
     mkdirSync(join(dir, "packages/catalog/dist"), { recursive: true });
     cpSync(join(repo, "scripts/check-size.js"), join(dir, "scripts/check-size.js"));
@@ -355,7 +409,7 @@ describe("scripts/check-size.js on a copy of the repository", () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it("passes a loader that imports only its three chunks by literal specifiers, and chunks that import nothing", () => {
+  it("passes a loader that imports only its five chunks by literal specifiers, and chunks that import nothing", () => {
     const { status, output } = build();
     expect(output).not.toMatch(/✗/);
     expect(status).toBe(0);
@@ -367,13 +421,13 @@ describe("scripts/check-size.js on a copy of the repository", () => {
     expect(output).toMatch(/catalog\.min\.js/);
   });
 
-  it("fails a loader that imports a file other than the three chunks", () => {
+  it("fails a loader that imports a file other than the five chunks", () => {
     const { status, output } = build({ "catalog.min.js": `${LOADER}import("./other.min.js");` });
     expect(status).toBe(1);
     expect(output).toMatch(/other\.min\.js/);
   });
 
-  it.each(["search", "consent", "mode"])("fails a loader that is missing the %s chunk", (missing) => {
+  it.each(["search", "consent", "mode", "timeline", "sidebar"])("fails a loader that is missing the %s chunk", (missing) => {
     const loader = LOADER.split(";").filter((part) => part && !part.includes(`./${missing}.min.js`)).join(";") + ";";
     expect(loader).not.toContain(`./${missing}.min.js`);
     const { status, output } = build({ "catalog.min.js": loader });
@@ -401,10 +455,10 @@ describe("scripts/check-size.js on a copy of the repository", () => {
     expect(output).toMatch(/search\.min\.js/);
   });
 
-  it("fails the mode chunk with an import, as any other chunk", () => {
-    const { status, output } = build({ "mode.min.js": `${CHUNK("luz-mode")}import("./x.min.js");` });
+  it.each(["mode", "timeline", "sidebar"])("fails the %s chunk with an import, as any other chunk", (name) => {
+    const { status, output } = build({ [`${name}.min.js`]: `${CHUNK(`luz-${name}`)}import("./x.min.js");` });
     expect(status).toBe(1);
-    expect(output).toMatch(/mode\.min\.js/);
+    expect(output).toContain(`${name}.min.js`);
   });
 
   it("still fails a bare specifier in a chunk (red line 1)", () => {

@@ -89,12 +89,35 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
       .filter((f) => /^@media\s+print\b/m.test(readFileSync(dist(`packages/catalog/src/components/${f}`), "utf-8")))
       .map((f) => f.replace(/\.css$/, ""))
       .sort();
-    expect(printing).toEqual(["consent", "docs-shell", "landing-glow", "search"]);
+    // F7: the sidebar and the timeline brought their print rules from core's _print.css
+    expect(printing).toEqual(["consent", "docs-shell", "landing-glow", "search", "sidebar", "timeline"]);
     const all = readdirSync(dist("packages/catalog/dist/components")).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, ""));
     for (const name of all) {
       const items = topLevel(readFileSync(dist(`packages/catalog/dist/components/${name}.css`), "utf-8"));
       const layers = items.filter((it) => it.body !== null).map((it) => it.prelude);
       expect(layers, name).toEqual(printing.includes(name) ? ["@layer luz.catalog", "@layer luz.print"] : ["@layer luz.catalog"]);
+    }
+  });
+
+  it("navbar, sidebar, terminal and timeline are in `luz.catalog` (F7, decision 29), and core's luz.css, base.css and print.css hold none of them", () => {
+    for (const name of ["navbar", "sidebar", "terminal", "timeline"]) {
+      const items = topLevel(readFileSync(dist(`packages/catalog/dist/components/${name}.css`), "utf-8"));
+      expect(items.some((it) => it.prelude === "@layer luz.catalog" && it.body !== null && it.body.trim().length > 0), `${name}.css has a luz.catalog block`).toBe(true);
+      expect(items.some((it) => it.prelude === "@layer luz.components"), `${name}.css has no luz.components block`).toBe(false);
+      expect(existsSync(dist(`packages/core/dist/components/${name}.css`)), `core serves components/${name}.css`).toBe(false);
+      expect(existsSync(dist(`packages/core/dist/components/${name}.min.css`)), `core serves components/${name}.min.css`).toBe(false);
+    }
+  });
+
+  it("the sidebar and the timeline print rules are in luz.print of their own files, and core's print.css no longer hides the sidebar (decision 31)", () => {
+    for (const [name, selector] of [["sidebar", ".luz-sidebar"], ["timeline", ".luz-timeline"]]) {
+      const items = topLevel(readFileSync(dist(`packages/catalog/dist/components/${name}.css`), "utf-8"));
+      const print = items.find((it) => it.prelude === "@layer luz.print");
+      expect(print, `${name}.css has a luz.print block`).toBeTruthy();
+      expect(print.body, `${name}.css prints with its own selector`).toContain(selector);
+      for (const file of ["luz.css", "print.css"]) {
+        expect(readFileSync(dist(`packages/core/dist/${file}`), "utf-8").includes(selector), `core ${file} names ${selector}`).toBe(false);
+      }
     }
   });
 

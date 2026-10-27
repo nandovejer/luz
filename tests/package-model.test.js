@@ -5,8 +5,8 @@
  *   (a) layering: a lower package never names a higher one
  *   (b) names: no block is shipped by two packages
  *   (c) peers: catalog takes tokens and core, and nothing else; the packages for one kind of site are gone
- *   (d) catalog after F3, F1 and F5b: six elements and the 21 patterns of the four kinds of site, the exports
- *       of spec §1.3, no placeholders
+ *   (d) catalog after F3, F1, F5b and F7: six elements, the 21 patterns of the four kinds of site and the four
+ *       layout components that came from core (navbar, sidebar, terminal, timeline), the exports of spec §1.3, no placeholders
  *
  * F5b (.claude/plans/ai-and-catalog-only.md, decisions 1, 2, 51 to 58): landing, cms, app and docs are not
  * packages any more, their patterns are files of catalog (`<kind>-<name>.css`), so "a kind of site" is a
@@ -30,6 +30,8 @@ const PATTERNS = [
   ...["header", "dashboard"].map((n) => `app-${n}`),
   ...["shell", "page-head", "rail", "example", "dodont", "pager", "page-foot"].map((n) => `docs-${n}`),
 ];
+/** F7 (decisions 27 and 28): the four components that moved from core to catalog, the same classes, the same element. */
+const LAYOUT = ["navbar", "sidebar", "terminal", "timeline"];
 const SITE_TAGS = ["search", "consent", "lang-switch", "submenu", "banner"];
 // F1 of the identity plan adds <luz-mode> to catalog. It is not in SITE_TAGS: core's theme.js has a
 // storage key spelled "luz-mode" (the mode of a custom theme), which the layering check would take for the tag
@@ -110,8 +112,22 @@ describe("names: one package per block", () => {
   });
 
   it("no tag, component or object name is defined by two packages", () => {
-    const shared = [...owners].filter(([, files]) => files.size > 1).map(([block, files]) => `${block}: ${[...files.keys()].join(" and ")}`);
+    // F7 (decision 31): `:where(.o-shell) > .luz-sidebar` in catalog's sidebar.css names core's object as the context of the
+    // sidebar, which it styles; it does not define the object. That one file is the only exception, and `o-shell` the only block.
+    const CONTEXT = new Map([["o-shell", ["packages/catalog/src/components/sidebar.css"]]]);
+    const shared = [...owners]
+      .filter(([, files]) => files.size > 1)
+      .filter(([block, files]) => !(CONTEXT.has(block) && files.get("core").length > 0 && JSON.stringify(files.get("catalog")) === JSON.stringify(CONTEXT.get(block))))
+      .map(([block, files]) => `${block}: ${[...files.keys()].join(" and ")}`);
     expect(shared).toEqual([]);
+  });
+
+  it("core defines no block that catalog defines, for the four components that moved (F7)", () => {
+    for (const name of LAYOUT) {
+      const classes = { navbar: "luz-navbar", sidebar: "luz-sidebar", terminal: "luz-terminal", timeline: "luz-timeline" };
+      expect(owners.get(classes[name])?.has("core") ?? false, `${classes[name]} in core`).toBe(false);
+      expect(owners.get(classes[name])?.has("catalog") ?? false, `${classes[name]} in catalog`).toBe(true);
+    }
   });
 
   // The reader that (b) stands on: only the leftmost compound of a selector
@@ -158,15 +174,15 @@ describe("peers: catalog needs tokens and core, and the four packages for one ki
 
 /* ---- (d) catalog after F3 and F1: six components and nothing else (step 12) -------- */
 
-describe("catalog after F5b: six `<luz-*>` elements and the 21 patterns of the four kinds of site", () => {
+describe("catalog after F7: six `<luz-*>` elements, the 21 patterns of the four kinds of site and the four layout components of core", () => {
   const read = (path) => readFileSync(`${root}${path}`, "utf-8");
   const manifest = JSON.parse(read("packages/catalog/package.json"));
-  const components = [...SITE_COMPONENTS, ...PATTERNS].map((name) => `${name}.css`).sort();
+  const components = [...SITE_COMPONENTS, ...LAYOUT, ...PATTERNS].map((name) => `${name}.css`).sort();
   const minified = components.map((f) => f.replace(/\.css$/, ".min.css"));
   const list = (dir, keep) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(keep).sort() : []);
   const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");
 
-  it("src/components holds the six elements and the 21 patterns, nothing else: no `_print.css`, the print rules are in each component", () => {
+  it("src/components holds the six elements, the four layout components and the 21 patterns, nothing else: no `_print.css`, the print rules are in each component", () => {
     expect(list("packages/catalog/src/components", (f) => f.endsWith(".css"))).toEqual(components);
   });
 
@@ -180,7 +196,7 @@ describe("catalog after F5b: six `<luz-*>` elements and the 21 patterns of the f
     for (const f of ["catalog.css", "catalog.min.css", "print.css"]) expect(existsSync(`${root}packages/catalog/dist/${f}`), f).toBe(false);
   });
 
-  it.skipIf(!built)("dist/components is exactly the six elements and the 21 patterns, plain and minified", () => {
+  it.skipIf(!built)("dist/components is exactly the six elements, the four layout components and the 21 patterns, plain and minified", () => {
     expect(list("packages/catalog/dist/components", isCss)).toEqual(components);
     expect(list("packages/catalog/dist/components", (f) => f.endsWith(".min.css"))).toEqual(minified);
   });
@@ -199,6 +215,8 @@ describe("catalog after F5b: six `<luz-*>` elements and the 21 patterns of the f
       "./search": "./dist/search.js",
       "./consent": "./dist/consent.js",
       "./mode": "./dist/mode.js",
+      "./sidebar": "./dist/sidebar.js",
+      "./timeline": "./dist/timeline.js",
       "./classes.json": "./dist/classes.json",
       "./custom-elements.json": "./dist/custom-elements.json",
       "./components/*": "./dist/components/*",
@@ -208,7 +226,7 @@ describe("catalog after F5b: six `<luz-*>` elements and the 21 patterns of the f
 
   it("`sideEffects` is the component stylesheets and the files that define or load an element", () => {
     expect([...manifest.sideEffects].sort()).toEqual(
-      ["./dist/components/*.css", "./dist/catalog.js", "./dist/catalog.min.js", "./dist/search.js", "./dist/search.min.js", "./dist/consent.js", "./dist/consent.min.js", "./dist/mode.js", "./dist/mode.min.js"].sort(),
+      ["./dist/components/*.css", "./dist/catalog.js", "./dist/catalog.min.js", "./dist/search.js", "./dist/search.min.js", "./dist/consent.js", "./dist/consent.min.js", "./dist/mode.js", "./dist/mode.min.js", "./dist/timeline.js", "./dist/timeline.min.js"].sort(),
     );
   });
 
@@ -218,7 +236,7 @@ describe("catalog after F5b: six `<luz-*>` elements and the 21 patterns of the f
     expect(manifest.description.toLowerCase(), "no placeholder in the package").not.toContain("placeholder");
   });
 
-  it("pack-files.txt lists the six elements and the 21 patterns, plain and minified, and no placeholder", () => {
+  it("pack-files.txt lists the six elements, the four layout components and the 21 patterns, plain and minified, and no placeholder", () => {
     const packed = read("packages/catalog/pack-files.txt").split("\n").filter(Boolean);
     expect(packed.filter((f) => f.startsWith("dist/components/")).sort()).toEqual([...components, ...minified].sort().map((f) => `dist/components/${f}`));
     expect(packed.filter((f) => /placeholder/.test(f))).toEqual([]);

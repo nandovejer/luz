@@ -41,7 +41,7 @@ test.describe('cms without site', () => {
     await page.setViewportSize({ width: 1280, height: 900 });
   });
 
-  test('the page asks for its three cms files and no other file or script of catalog, and has none of the site-wide tags', async ({ page }) => {
+  test('the page asks for its three cms files, the navbar and the sidebar (from catalog since F7) and no other file or script of catalog, and has none of the site-wide tags', async ({ page }) => {
     const requests = [];
     page.on('request', (req) => requests.push(new URL(req.url()).pathname));
     await page.goto(FIXTURE);
@@ -50,8 +50,13 @@ test.describe('cms without site', () => {
       '/packages/catalog/dist/components/cms-footer.css',
       '/packages/catalog/dist/components/cms-header.css',
       '/packages/catalog/dist/components/cms-page-header.css',
+      // the navbar and the sidebar of the header's panel came from core to catalog in F7: two more stylesheets, never a script
+      '/packages/catalog/dist/components/navbar.css',
+      '/packages/catalog/dist/components/sidebar.css',
     ]);
     expect(requests.some((path) => /\/packages\/cms\/|cms\.css|catalog\.css/.test(path))).toBe(false);
+    // ... and every one of them is a file catalog serves (the navbar and the sidebar are no longer core's)
+    for (const file of ['navbar', 'sidebar']) expect((await page.request.get(`/packages/catalog/dist/components/${file}.css?direct`)).status(), `catalog ${file}.css`).toBe(200);
     expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-consent, luz-lang-switch, luz-submenu, luz-banner').length)).toBe(0);
   });
 

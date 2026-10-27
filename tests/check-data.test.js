@@ -30,10 +30,12 @@
  *      dist/data/<pkg>/classes.json          for each of tokens, core, catalog
  *          { schema, package, version, classes, properties, hooks? }
  *          the package's dist/classes.json with only what a rule reads:
- *          classes [{ name, kind, defined, block?, modifier?, part?, hosts? }],
+ *          classes [{ name, kind, defined?, block?, modifier?, part?, hosts? }]; `defined`
+ *          is written only where it is false: absent means true (F7, to keep the folder
+ *          under its cap with the four components that came from core),
  *          properties [{ name, scope }], hooks as in the manifest. No layer,
  *          no files, no text.
- *      dist/data/<core|catalog>/custom-elements.json    only the packages that have one
+ *      dist/data/catalog/custom-elements.json           only the packages that have one (core defines no tag since F7)
  *          the Custom Elements Manifest reduced to { schemaVersion, modules:
  *          [{ kind, path, declarations: [{ kind, name, customElement, tagName,
  *          attributes: [{ name }] }] }] }: names, no description, type,
@@ -138,10 +140,12 @@ describe("classes.json: the hooks a package reads", () => {
     expect(Object.keys(manifest)).toEqual(["schema", "package", "version", "classes", "properties"]);
   });
 
-  it("is in the three real manifests: core reads classless, sort, spy and themes; tokens reads none", () => {
+  it("is in the three real manifests: core reads classless, sort and themes, catalog reads spy (the sidebar's scroll spy moved there in F7); tokens reads none", () => {
     const core = buildClassManifest("core");
     expect(core.hooks, "hooks in the manifest of core").toBeDefined();
-    for (const name of ["data-luz-classless", "data-luz-sort", "data-luz-spy", "data-luz-themes"]) expect(core.hooks, name).toContain(name);
+    for (const name of ["data-luz-classless", "data-luz-sort", "data-luz-themes"]) expect(core.hooks, name).toContain(name);
+    expect(core.hooks, "core's scripts no longer read data-luz-spy").not.toContain("data-luz-spy");
+    expect(buildClassManifest("catalog").hooks, "hooks in the manifest of catalog").toContain("data-luz-spy");
     expect("hooks" in buildClassManifest("tokens")).toBe(false);
     for (const name of LIBRARIES) {
       const { hooks = [] } = buildClassManifest(name);
@@ -189,13 +193,12 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(existsSync(join(dataDir(), "index.json")), "data/index.json").toBe(true);
   });
 
-  it("holds exactly index.json, the three classes.json, the custom-elements.json of core and catalog, and LUZ's tokens for the theme rules", () => {
+  it("holds exactly index.json, the three classes.json, the custom-elements.json of catalog (core defines no tag), and LUZ's tokens for the theme rules", () => {
     expect(built.error).toBeNull();
     expect(filesUnder(dataDir())).toEqual([
       "catalog/classes.json",
       "catalog/custom-elements.json",
       "core/classes.json",
-      "core/custom-elements.json",
       "index.json",
       "tokens/classes.json",
       "tokens/tokens.css",
@@ -222,7 +225,10 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     copy.classes.forEach((entry, i) => {
       const from = source.classes[i];
       expect(Object.keys(entry).every((k) => ["name", "kind", "defined", "block", "modifier", "part", "hosts", "files"].includes(k)), entry.name).toBe(true);
-      for (const field of ["kind", "defined", "block", "modifier", "part", "hosts"]) expect(entry[field], `${entry.name}.${field}`).toEqual(from[field]);
+      for (const field of ["kind", "block", "modifier", "part", "hosts"]) expect(entry[field], `${entry.name}.${field}`).toEqual(from[field]);
+      // `defined` is written only where it is false: absent means true
+      expect(entry.defined ?? true, `${entry.name}.defined`).toBe(from.defined);
+      if (from.defined) expect(entry, `${entry.name} is defined: no \`defined\` key`).not.toHaveProperty("defined");
       // F5a: only catalog has no bundle, so only its classes say the component file that defines them.
       // F5b: the snapshot writes `files` only where it is not the file the class's block names (components/<block>.css),
       // or where it is more than one, or none; an absent `files` on a defined class of catalog means that default
@@ -274,7 +280,7 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     }
   });
 
-  it.each(["core", "catalog"])("%s/custom-elements.json keeps the tags and the attribute names of the manifest, with no text", (name) => {
+  it.each(["catalog"])("%s/custom-elements.json keeps the tags and the attribute names of the manifest, with no text", (name) => {
     expect(built.error).toBeNull();
     const source = readJson(`${root}packages/${name}/dist/custom-elements.json`);
     const copy = snapshot(name, "custom-elements.json");
@@ -284,12 +290,18 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(declarations(copy).map((d) => d.tagName)).toEqual(declarations(source).map((d) => d.tagName));
     declarations(copy).forEach((declaration, i) => {
       expect(Object.keys(declaration).every((k) => ["kind", "name", "customElement", "tagName", "stylesheet", "attributes"].includes(k)), declaration.tagName).toBe(true);
-      // F5a: catalog has no bundle, so each of its tags says the file a page links for it; core's do not
-      if (name === "catalog") expect(declaration.stylesheet, declaration.tagName).toBe(declarations(source)[i].stylesheet);
-      else expect(declaration, declaration.tagName).not.toHaveProperty("stylesheet");
+      // F5a: catalog has no bundle, so each of its tags says the file a page links for it
+      expect(declaration.stylesheet, declaration.tagName).toBe(declarations(source)[i].stylesheet);
       expect(declaration.attributes).toEqual((declarations(source)[i].attributes ?? []).map(({ name: attribute }) => ({ name: attribute })));
     });
     expect(JSON.stringify(copy)).not.toMatch(/"(?:description|demos|type|default|exports|readme|superclass)"/);
+  });
+
+  it("core has no custom-elements.json in the snapshot, because core defines no tag, and catalog's holds luz-timeline with its stylesheet", () => {
+    expect(built.error).toBeNull();
+    expect(existsSync(join(dataDir(), "core", "custom-elements.json"))).toBe(false);
+    const timeline = snapshot("catalog", "custom-elements.json").modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName === "luz-timeline");
+    expect(timeline?.stylesheet).toBe("components/timeline.css");
   });
 
   it("is small: each classes.json is smaller than its manifest, and the whole folder is under 56 KiB", () => {

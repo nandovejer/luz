@@ -89,17 +89,19 @@ test.describe('the files', () => {
     });
   }
 
-  test('the page loads tokens, core and the seven docs files of catalog, in this order, and no script', async ({ page }) => {
+  test('the page loads tokens, core, the sidebar of catalog and the seven docs files of catalog, in this order, and no script', async ({ page }) => {
     await page.goto(PAGE);
     expect(await page.evaluate(() => [...document.styleSheets].map((s) => new URL(s.href).pathname))).toEqual([
       '/packages/tokens/dist/luz-tokens.css',
       '/packages/core/dist/luz.css',
+      // the nav is a `.luz-sidebar` (F7: catalog's, not core's), linked right after core and before the docs files
+      `${DIR}/sidebar.css`,
       ...FILES.map((name) => `${DIR}/${name}.css`),
     ]);
     // ... and each of them really is the package's: it holds the luz.catalog layer, and none holds the layer of a package that is gone
     expect(
       await page.evaluate(() => [...document.styleSheets].slice(2).map((sheet) => [...sheet.cssRules].some((rule) => rule instanceof CSSLayerBlockRule && rule.name === 'luz.catalog'))),
-    ).toEqual(FILES.map(() => true));
+    ).toEqual([true, ...FILES.map(() => true)]);
     expect(await page.evaluate(() => [...document.styleSheets].some((sheet) => [...sheet.cssRules].some((rule) => rule instanceof CSSLayerBlockRule && rule.name === 'luz.docs')))).toBe(false);
     // Vite's dev server adds its own client to every page it serves: the fixture itself has none
     expect(await page.locator('script:not([src^="/@vite"])').count()).toBe(0);

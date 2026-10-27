@@ -4,12 +4,12 @@
  *
  * Bug: `.o-shell > .luz-sidebar:not([popover])` (objects, layer luz.objects,
  * inside `@media (max-width: 768px)`) lost to `.luz-sidebar` of
- * components/sidebar.css (layer luz.components, declared later), so a sidebar
+ * catalog's components/sidebar.css (layer luz.catalog, declared later; core's luz.components until F7), so a sidebar
  * WITHOUT `popover` stayed `position: sticky; height: 100dvh` on a phone
  * instead of being the static, auto-height first block of the page.
  *
  * Fixtures: tests/fixtures/shell-sidebar.html (no popover) and
- * shell-sidebar-popover.html (the drawer), both core's CSS only.
+ * shell-sidebar-popover.html (the drawer), both core's CSS and catalog's sidebar.css, no script.
  * Runs in `chromium` and `chromium-nojs`: it is CSS only.
  */
 import { test, expect } from '@playwright/test';

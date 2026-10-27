@@ -17,6 +17,7 @@
   <title>Languages</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/timeline.css">
   <style>
     /* Fixture only: the apply buttons are made for the sidebar. Each carries its own data-theme, so its tokens are
        that theme's: give it that theme's surface and text, or the dark one is light text on the light page */
@@ -169,6 +170,8 @@
   <script type="module">
     // window.luz is the entry's namespace: loadLocales, registerLocale and t for the tests
     window.luz = await import("/packages/core/dist/luz.js");
+    // The timeline is catalog's: its loader finds <luz-timeline> and imports the chunk, which has English and Spanish of its own
+    await import("/packages/catalog/dist/catalog.js");
   </script>
 </body>
 </html>

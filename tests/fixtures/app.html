@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>App: header and dashboard without site</title>
-  <!-- tests/app.spec.js: tokens + core + app ONLY. No site stylesheet, no site script: @luz-ds/catalog is an
-       optional peer of a kind of site (f3-package-model.md, section 5), so the bar has no search.
+  <!-- tests/app.spec.js: tokens + core + the app files of catalog and the sidebar's (F7: the sidebar is catalog's). No site stylesheet, no site
+       script: the bar has no search.
        No script at all: the header, the drawer, the account list and the dashboard need none
        (.claude/plans/specs/f3-package-model.md, section 6; f3-ux.md, section 2) -->
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/app-header.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/app-dashboard.css">
 </head>

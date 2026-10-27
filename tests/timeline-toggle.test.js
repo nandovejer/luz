@@ -1,5 +1,5 @@
 /**
- * S1 of the Safari review (2026-10-16): packages/core/src/timeline.js
+ * S1 of the Safari review (2026-10-16): packages/catalog/src/timeline.js
  * `schedule()` sets the Pause / Play button's `textContent` on every call
  * (mousemove start, idle timeout, focusin, tick). WebKit drops the click when
  * the node under the pointer is replaced between mousedown and mouseup, and
@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const source = readFileSync(join(repo, "packages/core/src/timeline.js"), "utf-8");
+const source = readFileSync(join(repo, "packages/catalog/src/timeline.js"), "utf-8");
 
 describe("timeline.js writes the toggle's text only when it changed", () => {
   const writes = [...source.matchAll(/toggle\.textContent\s*=(?!=)/g)];

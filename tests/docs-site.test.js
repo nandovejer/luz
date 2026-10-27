@@ -592,8 +592,9 @@ describe("the LUZ docs site", () => {
     // links are in the closed drawer on a phone, "On this page" is closed).
     // A page in a language (/es/, /es/docs/…) must reach the component's page
     // in that language (/es/docs/components/…): the English one is not its target.
+    // F7: the navbar, the sidebar, the terminal and the timeline are pages of the Catalog area now (33 components became 29 of core)
     const components = site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers");
-    expect(components).toHaveLength(33);
+    expect(components).toHaveLength(29);
     const withLanguages = buildSite(site, { extra: landing, languages: true, unchecked: homes });
     // Every language of the home page is a start page; only Spanish has docs, so a link from the Arabic home goes to the English docs
     const homeCodes = homes.filter((h) => h !== "/").map((h) => h.replaceAll("/", ""));
@@ -726,7 +727,9 @@ describe("the LUZ docs site", () => {
     expect(new Set(names).size).toBe(names.length);
     expect(names.length).toBeGreaterThan(250);
     // Keywords: after the area, not already in the title; the page keeps its place
-    expect(index.pages).toContainEqual(["Navbar", "components/navbar/", "Core · nav bar, navigation bar"]);
+    // F7: the navbar is a page of the Catalog area (/docs/catalog/navbar/), not of core
+    expect(index.pages).toContainEqual(["Navbar", "catalog/navbar/", "Catalog · nav bar, navigation bar"]);
+    expect(index.pages.filter(([, url]) => url === "components/navbar/")).toEqual([]);
     // The page of the language switch is catalog/lang-switch/ (the tag is the block); its title is the page's own
     expect(index.pages.filter(([, url]) => url === "catalog/lang-switch/").map(([, , keywords]) => keywords)).toEqual(["Catalog · translation, locale, i18n, hreflang"]);
     expect(index.pages.filter(([, url]) => url === "catalog/lang-switcher/")).toEqual([]);
@@ -736,7 +739,7 @@ describe("the LUZ docs site", () => {
     const titles = new Set(site.pages.map((p) => p.meta.title.toLowerCase()));
     for (const { keywords, title } of indexData(site)) for (const k of keywords) expect(titles.has(k.toLowerCase()), `${title}: ${k}`).toBe(false);
     // The A–Z index lists them too, as "Another name for"
-    expect(indexEntries(site)).toContainEqual({ name: "nav bar", href: "/docs/components/navbar/", kind: "Another name for Navbar" });
+    expect(indexEntries(site)).toContainEqual({ name: "nav bar", href: "/docs/catalog/navbar/", kind: "Another name for Navbar" });
   });
 
   it("answers what a developer types: class names, tokens, other names, and a part of a title (the search of @luz-ds/catalog)", () => {
@@ -913,12 +916,34 @@ describe("the LUZ docs site", () => {
   // header, section, page header: files of catalog since F5b); the old URLs fall to the 404 page
   const LEFT_SITE = ["actions", "footer", "hero", "image", "lang-switcher", "notice", "page-header", "section", "shell", "site-header", "skip-link", "templates"];
 
-  it("the Catalog area holds its six components, the 19 pages of the patterns of the kinds of site, and its class reference; nothing of what moved to core", () => {
+  it("the Catalog area holds its six components, the navbar, sidebar, terminal and timeline that came from core (F7), the 19 pages of the patterns of the kinds of site, and its class reference", () => {
     const routes = site.pages.filter((p) => p.meta.area === "catalog").map((p) => p.route).sort();
     const patterns = ["landing-header", "landing-hero", "landing-section", "landing-stat", "landing-footer", "cms-header", "cms-page-header", "cms-article-header", "cms-toc", "cms-footer", "app-header", "app-dashboard", "docs-shell", "docs-page-head", "docs-rail", "docs-example", "docs-dodont", "docs-pager", "docs-page-foot"];
-    expect(routes).toEqual(["/docs/catalog/", ...["banner", "classes", "consent", "lang-switch", "mode", "search", "submenu", ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`)]);
+    const layout = ["navbar", "sidebar", "terminal", "timeline"];
+    expect(routes).toEqual(["/docs/catalog/", ...["banner", "classes", "consent", "lang-switch", "mode", "search", "submenu", ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`)]);
     const groups = site.pages.filter((p) => p.meta.area === "catalog" && p.meta.group && p.meta.group !== "reference").map((p) => p.route);
-    expect(groups.sort()).toEqual(["banner", "consent", "lang-switch", "mode", "search", "submenu", ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`));
+    expect(groups.sort()).toEqual(["banner", "consent", "lang-switch", "mode", "search", "submenu", ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`));
+  });
+
+  it("the navbar, the sidebar, the terminal and the timeline are pages of /docs/catalog/<slug>/ and no longer of /docs/components/<slug>/, in English and in Spanish (F7, decision 34)", () => {
+    for (const slug of ["navbar", "sidebar", "terminal", "timeline"]) {
+      expect(site.byRoute.has(`/docs/catalog/${slug}/`), `/docs/catalog/${slug}/`).toBe(true);
+      expect(site.byRoute.has(`/docs/components/${slug}/`), `/docs/components/${slug}/ is gone`).toBe(false);
+      expect(existsSync(join(repo, `apps/docs/pages/catalog/${slug}.html`)), `pages/catalog/${slug}.html`).toBe(true);
+      expect(existsSync(join(repo, `apps/docs/pages/components/${slug}.html`)), `pages/components/${slug}.html`).toBe(false);
+      // The Spanish pages moved with them; the terminal has none
+      const es = join(repo, `apps/docs/i18n/es/pages`);
+      expect(existsSync(join(es, `components/${slug}.html`)), `es components/${slug}.html`).toBe(false);
+      expect(existsSync(join(es, `catalog/${slug}.html`)), `es catalog/${slug}.html`).toBe(slug !== "terminal");
+    }
+  });
+
+  it("each of the four keeps its page shape: a group of the area, the files of its catalog stylesheet, its fits-kinds, and its module for the two with a script", () => {
+    const meta = (slug) => site.byRoute.get(`/docs/catalog/${slug}/`).meta;
+    expect(meta("navbar")).toMatchObject({ area: "catalog", group: "navigation", "fits-kinds": "any", files: "components/navbar.css" });
+    expect(meta("sidebar")).toMatchObject({ area: "catalog", group: "navigation", "fits-kinds": "docs, app", files: "components/sidebar.css", module: "sidebar.js" });
+    expect(meta("terminal")).toMatchObject({ area: "catalog", group: "content", "fits-kinds": "docs", files: "components/terminal.css" });
+    expect(meta("timeline")).toMatchObject({ area: "catalog", group: "content", "fits-kinds": "blog, landing", files: "components/timeline.css", module: "timeline.js" });
   });
 
   // F3 step 15 (.claude/plans/specs/f3-package-model.md, §7 and §9): the structure page says what catalog
@@ -1031,8 +1056,10 @@ describe("the LUZ docs site", () => {
           // made of core alone (the post card is core's card, the shell of an app is core's sidebar: no CSS of their own)
           const own = links.filter((href) => href.startsWith(`/${patterns}${kind.patterns}-`));
           const core = links.filter((href) => href.startsWith("/docs/components/"));
-          expect(own.length + core.length, `${where}: a link to a pattern of ${kind.id} or to a component of core`).toBeGreaterThanOrEqual(1);
-          for (const href of [...own, ...core]) expect(site.byRoute.has(href.split("#")[0]), `${where}: ${href} is a page`).toBe(true);
+          // F7: the shell of an app is the sidebar, and the sidebar is a page of catalog now, as the navbar, the terminal and the timeline
+          const layout = links.filter((href) => /^\/docs\/catalog\/(?:navbar|sidebar|terminal|timeline)\//.test(href));
+          expect(own.length + core.length + layout.length, `${where}: a link to a pattern of ${kind.id} or to a component of core`).toBeGreaterThanOrEqual(1);
+          for (const href of [...own, ...core, ...layout]) expect(site.byRoute.has(href.split("#")[0]), `${where}: ${href} is a page`).toBe(true);
         });
       }
     });

@@ -17,6 +17,10 @@ import { fileURLToPath } from 'node:url';
 import { gotoId, routeOf } from './helpers/docs-site.js';
 import { blocksOfCss } from './helpers/css-blocks.js';
 
+/** The pages that came from core in F7 keep the id of a component page, `c-<name>`; the patterns have `p-<name>`. */
+const MOVED = new Set(['navbar', 'sidebar', 'terminal', 'timeline']);
+const idOf = (pattern) => (MOVED.has(pattern) ? `c-${pattern}` : `p-${pattern}`);
+
 const fromRepo = (path) => fileURLToPath(new URL(`../${path}`, import.meta.url));
 
 // One entry: catalog, whose docs area is /docs/catalog/. Each block (a `<luz-*>` tag, or a class of a pattern, read
@@ -47,7 +51,7 @@ const PACKAGES = {
       'cms-header': 'cms-header',
       'cms-footer': 'cms-footer',
       'cms-page-header': 'cms-page-header',
-      // An application: the bar and the dashboard; the sidebar is core's
+      // An application: the bar and the dashboard; the sidebar is catalog's too since F7 (below)
       'app-header': 'app-header',
       'app-dashboard': 'app-dashboard',
       // A documentation site. The shell is also `.luz-docs-nav` and `.luz-docs-main`
@@ -60,6 +64,12 @@ const PACKAGES = {
       'docs-dodont': 'docs-dodont',
       'docs-pager': 'docs-pager',
       'docs-page-foot': 'docs-page-foot',
+      // F7: the four that came from core, with the pages they had (docs-component id `c-<name>`, not `p-`). The drawer's button is the sidebar's
+      navbar: 'navbar',
+      sidebar: 'sidebar',
+      'nav-toggle': 'sidebar',
+      terminal: 'terminal',
+      timeline: 'timeline',
     },
   },
 };
@@ -88,15 +98,15 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
       for (const block of blocks) expect(patternOf[block], `luz-${block} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
     });
 
-    test('catalog ships exactly its 30 blocks: the six components of the site and the patterns of the four kinds of site', () => {
+    test('catalog ships exactly its 35 blocks: the six components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
       expect(blocksOf('catalog').sort()).toEqual(Object.keys(patternOf).sort());
     });
 
-    test('the Catalog gallery lists the 25 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
+    test('the Catalog gallery lists the 29 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
       await page.goto('/docs/catalog/');
       const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
       expect(cards.filter((href) => href.startsWith('/docs/catalog/')).sort()).toEqual(
-        [...patterns].map((pattern) => routeOf(`p-${pattern}`)).concat('/docs/catalog/classes/').sort(),
+        [...patterns].map((pattern) => routeOf(idOf(pattern))).concat('/docs/catalog/classes/').sort(),
       );
       expect(cards.filter((href) => /^\/docs\/(landing|cms|app|documentation)\//.test(href))).toEqual([]);
     });
@@ -104,7 +114,7 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
     // One test per page: each has its own time, and a failure names the page
     for (const pattern of patterns) {
       test(`the ${name} pattern ${pattern} has its page: example, known issues, Code and Design`, async ({ page }) => {
-        const route = await gotoId(page, `p-${pattern}`);
+        const route = await gotoId(page, idOf(pattern));
         expect(route, pattern).toMatch(new RegExp(`^/docs/${area}/[a-z-]+/$`));
         // A pattern is a page: its name is the h1, like a core component
         await expect(page.locator('h1.docs-title'), pattern).toHaveCount(1);
@@ -125,8 +135,8 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
       const nav = await page.locator('.docs-nav a').evaluateAll((links) => links.map((link) => link.getAttribute('href')));
       const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => link.getAttribute('href')));
       for (const pattern of patterns) {
-        expect(nav, pattern).toContain(routeOf(`p-${pattern}`));
-        expect(cards, pattern).toContain(routeOf(`p-${pattern}`));
+        expect(nav, pattern).toContain(routeOf(idOf(pattern)));
+        expect(cards, pattern).toContain(routeOf(idOf(pattern)));
       }
     });
   });

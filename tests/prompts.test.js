@@ -559,9 +559,9 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
   const SRC = "apps/site/prompts";
   const MODULE_FILE = "scripts/docs-site/prompts.js";
   const filesOf = (id) => [`${SRC}/body.md`, ...(PRESET_OF[id] ? [`${SRC}/presets/${PRESET_OF[id]}.md`] : []), `${SRC}/stacks.json`, MODULE_FILE];
-  /** The element lines as the prompt lists them: core's then catalog's, `- `<tag>` (attr, attr): description`, joined by a newline. */
+  /** The element lines as the prompt lists them: catalog's (core defines no tag since F7), `- `<tag>` (attr, attr): description`, joined by a newline. */
   const elementBlock = (dir) =>
-    ["core", "catalog"]
+    ["catalog"]
       .flatMap((pkg) =>
         JSON.parse(readFileSync(join(dir, `packages/${pkg}/dist/custom-elements.json`), "utf-8")).modules.flatMap((m) =>
           (m.declarations ?? [])
@@ -633,7 +633,8 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     const packagesCopy = join(dir, "packages-copy");
     for (const pkg of ["core", "catalog"]) {
       mkdirSync(join(packagesCopy, pkg, "dist"), { recursive: true });
-      cpSync(join(root, "packages", pkg, "dist/custom-elements.json"), join(packagesCopy, pkg, "dist/custom-elements.json"));
+      // core ships no custom-elements.json since F7: the hash reads catalog's only, and must not need core's
+      if (pkg === "catalog") cpSync(join(root, "packages", pkg, "dist/custom-elements.json"), join(packagesCopy, pkg, "dist/custom-elements.json"));
       writeFileSync(join(packagesCopy, pkg, "package.json"), JSON.stringify({ name: `@luz-ds/${pkg}`, version: "9.9.9" }));
       writeFileSync(join(packagesCopy, pkg, "dist/classes.json"), JSON.stringify({ classes: [{ name: "luz-new" }] }));
     }

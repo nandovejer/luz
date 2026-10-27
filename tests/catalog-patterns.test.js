@@ -119,7 +119,14 @@ describe("the budget rows of catalog: a row for the 21 patterns, and the general
   it("keeps `catalog component CSS (each)` at 1280 and 1536 (never raised), and says with `except` that the patterns are the other row's", () => {
     const row = budgets.find((b) => b.name === "catalog component CSS (each)");
     expect(row).toMatchObject({ glob: "packages/catalog/dist/components/*.min.css", ideal: 1280, max: 1536 });
-    expect(row.except).toBe("packages/catalog/dist/components/{landing,cms,app,docs}-*.min.css");
+    // `except` names the files of the other rows: the 21 patterns, and (F7) the four layout components that came from core
+    // (written `{landing,cms,app,docs}-*` or `{landing-*,…,navbar,…}`: a prefix ends in `-*`, anything else is a whole name)
+    const list = /\{([^}]+)\}(-\*)?\.min\.css$/.exec(row.except);
+    expect(list, row.except).toBeTruthy();
+    const excluded = (name) => list[1].split(",").some((item) => (list[2] ? name.startsWith(`${item}-`) : item.endsWith("-*") ? name.startsWith(item.slice(0, -1)) : name === item));
+    for (const [slug] of PAGES) expect(excluded(slug), `${slug} is the patterns' row`).toBe(true);
+    for (const slug of ["navbar", "sidebar", "terminal", "timeline"]) expect(excluded(slug), `${slug} is the layout row`).toBe(true);
+    for (const slug of ["search", "consent", "mode", "lang-switch", "submenu", "banner"]) expect(excluded(slug), `${slug} stays in the general row`).toBe(false);
   });
 
   it("has no row of the four packages: landing CSS, cms CSS, app CSS, docs CSS", () => {
@@ -325,13 +332,15 @@ const PAGES = [
   ...FILES.docs.map((name) => [`docs-${name}`, [`docs-${name}`], `p-docs-${name}`]),
 ];
 const ELEMENT_PAGES = ["banner", "consent", "lang-switch", "mode", "search", "submenu"];
+/** F7: the pages that came from core, in `pages/components/` until then. */
+const LAYOUT_PAGES = ["navbar", "sidebar", "terminal", "timeline"];
 const catalogPages = () => repoSite.pages.filter((p) => p.meta.area === "catalog");
 
 describe("the pages of the 19 patterns, at /docs/catalog/<kind>-<name>/", () => {
-  it("are 19 pages beside the six elements, the class reference and the gallery: 27 in the area", () => {
+  it("are 19 pages beside the six elements, the four that came from core (F7), the class reference and the gallery: 31 in the area", () => {
     expect(PAGES).toHaveLength(19);
     const routes = catalogPages().map((p) => p.route).sort();
-    expect(routes).toEqual(["/docs/catalog/", "/docs/catalog/classes/", ...[...ELEMENT_PAGES, ...PAGES.map(([slug]) => slug)].map((slug) => `/docs/catalog/${slug}/`)].sort());
+    expect(routes).toEqual(["/docs/catalog/", "/docs/catalog/classes/", ...[...ELEMENT_PAGES, ...LAYOUT_PAGES, ...PAGES.map(([slug]) => slug)].map((slug) => `/docs/catalog/${slug}/`)].sort());
   });
 
   it.each(PAGES)("/docs/catalog/%s/ names its files: %j, and has the docs-component %s", (slug, names, id) => {
@@ -493,9 +502,9 @@ describe("the pages that count the pieces name the patterns as files of catalog"
 describe("the Catalog area groups its pages by what they do", () => {
   const area = repoSite.areas.find((a) => a.id === "catalog");
   const MEMBERS = {
-    navigation: ["app-header", "cms-header", "landing-header", "lang-switch", "submenu"],
+    navigation: ["app-header", "cms-header", "landing-header", "lang-switch", "submenu", "navbar", "sidebar"],
     "page-structure": ["cms-article-header", "cms-footer", "cms-page-header", "landing-hero", "landing-footer", "landing-section"],
-    content: ["app-dashboard", "landing-stat", "cms-toc"],
+    content: ["app-dashboard", "landing-stat", "cms-toc", "terminal", "timeline"],
     "site-wide": ["mode", "banner", "consent", "search"],
     documentation: ["docs-dodont", "docs-example", "docs-page-foot", "docs-page-head", "docs-pager", "docs-rail", "docs-shell"],
     reference: ["classes"],
@@ -519,10 +528,10 @@ describe("the Catalog area groups its pages by what they do", () => {
     for (const g of area.groups) expect(pages.some((p) => p.meta.group === g.id), `group ${g.id}`).toBe(true);
   });
 
-  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 26, no ties", () => {
+  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 30, no ties", () => {
     const orders = catalogPages().map((p) => Number(p.meta.order));
     expect(new Set(orders).size, `orders: ${orders.sort((a, b) => a - b).join(" ")}`).toBe(orders.length);
-    expect(orders.sort((a, b) => a - b)).toEqual(Array.from({ length: 27 }, (_, i) => i));
+    expect(orders.sort((a, b) => a - b)).toEqual(Array.from({ length: 31 }, (_, i) => i));
     expect(repoSite.byRoute.get("/docs/catalog/").meta.order).toBe("0");
   });
 
@@ -599,7 +608,7 @@ describe("Fits best: the real pages", () => {
   const KIND_OF = { landing: "landing", cms: "blog", app: "app", docs: "docs" };
 
   it("every pattern page of catalog has both, and no other page has either", () => {
-    expect(patterns()).toHaveLength(25);
+    expect(patterns()).toHaveLength(29);
     for (const page of patterns()) {
       expect(page.meta["fits-kinds"], page.file).toBeTruthy();
       expect(page.meta.fits.length, page.file).toBeGreaterThan(10);
@@ -616,6 +625,14 @@ describe("Fits best: the real pages", () => {
       expect(repoSite.byRoute.get(`/docs/catalog/${slug}/`).meta["fits-kinds"], slug).toBe(KIND_OF[slug.split("-")[0]]);
     }
     for (const slug of ELEMENT_PAGES) expect(repoSite.byRoute.get(`/docs/catalog/${slug}/`).meta["fits-kinds"], slug).toBe("any");
+  });
+
+  it("the four that came from core say what they fit: the navbar any site, the sidebar docs and app, the terminal docs, the timeline blog and landing (F7)", () => {
+    const fits = (slug) => repoSite.byRoute.get(`/docs/catalog/${slug}/`).meta["fits-kinds"];
+    expect(fitsKindsOf(fits("navbar"))).toEqual(["any"]);
+    expect([...fitsKindsOf(fits("sidebar"))].sort()).toEqual(["app", "docs"]);
+    expect(fitsKindsOf(fits("terminal"))).toEqual(["docs"]);
+    expect([...fitsKindsOf(fits("timeline"))].sort()).toEqual(["blog", "landing"]);
   });
 
   it("is a sentence of its own on each page: no two pages say the same", () => {
@@ -670,7 +687,7 @@ describe("Fits best: what a page, a card and the Spanish page say", () => {
   it("the card of the gallery says it too, in plain words (the card is one link): no link inside the line", () => {
     for (const [route, lang] of [["/docs/catalog/", "en"], ["/es/docs/catalog/", "es"]]) {
       const cards = findAll(parse(rendered.get(route)), (n) => n.name === "li" && hasClass(n, "docs-card"));
-      expect(cards, route).toHaveLength(25);
+      expect(cards, route).toHaveLength(29);
       for (const card of cards) {
         const href = query(card, "h3.docs-card__title").children.find((n) => n.name === "a").attrs.get("href");
         const slug = href.split("/").filter(Boolean).at(-1);
@@ -678,7 +695,9 @@ describe("Fits best: what a page, a card and the Spanish page say", () => {
         expect(fits, `${route} ${slug}`).toBeTruthy();
         expect(findAll(fits, (n) => n.name === "a"), `${route} ${slug}: plain`).toEqual([]);
         const kinds = fitsKindsOf(repoSite.byRoute.get(`/docs/catalog/${slug}/`).meta["fits-kinds"]);
-        expect(textOf(fits).startsWith(`${LABEL[lang]} ${kinds.map((k) => KIND_WORD[lang][k]).join(", ")} — `), `${route} ${slug}: ${textOf(fits)}`).toBe(true);
+        // A page with no translation (the terminal, which came from core in F7 and was never translated) is a card in English inside the Spanish gallery
+        const words = lang === "es" && !existsSync(join(root, `apps/docs/i18n/es/pages/catalog/${slug}.html`)) ? "en" : lang;
+        expect(textOf(fits).startsWith(`${LABEL[words]} ${kinds.map((k) => KIND_WORD[words][k]).join(", ")} — `), `${route} ${slug}: ${textOf(fits)}`).toBe(true);
         // The description comes before the line
         expect(query(card, "p.docs-card__desc").open.index).toBeLessThan(fits.open.index);
       }
