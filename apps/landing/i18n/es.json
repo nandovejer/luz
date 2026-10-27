@@ -3,6 +3,7 @@
   "meta.description": "LUZ (Light, Usable & Zero-dependency) es un sistema de diseño de tokens, CSS y un poco de JavaScript sin frameworks que parte de lo que el navegador ya hace: HTML nativo, tres modos de color, una capa de cascada que siempre puedes sobrescribir y ningún paso de compilación.",
   "js.change-mode": "Cambiar el modo de color. Actual: {mode}",
   "js.mode-changed": "Modo de color: {mode}",
+  "js.mode-auto": "Automático",
   "js.copied": "Copiado",
   "js.copied-status": "Copiado al portapapeles",
   "js.copy-failed": "No se pudo copiar. Selecciona el texto y cópialo a mano.",

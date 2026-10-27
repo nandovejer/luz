@@ -24,7 +24,7 @@ toc: h2,h3
                 </fieldset>
           </div>
           <p class="docs-demo__note">The radio group the element wraps, disabled here because a working one would change the color mode of this whole page. Auto is the fourth radio, checked until the reader chooses.</p>
-          <p class="docs-demo__note">The switcher in this page's footer is this element around <a href="/docs/components/mode-switcher/">core's</a> radios, with Auto first. On this site Auto follows the clock.</p>
+          <p class="docs-demo__note">The working switcher is the button in the corner of this window, the footer's radios without JavaScript: this element around <a href="/docs/components/mode-switcher/">core's</a> radios, with Auto first. On this site Auto follows the clock.</p>
           </div>
           <h2 id="known-issues">Known issues</h2>
           <p>What to expect:</p>
@@ -43,7 +43,7 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>Core's <a href="/docs/components/mode-switcher/">color mode switcher</a> with a fourth radio, <code>auto</code>, checked, inside <code>&lt;luz-mode&gt;</code>. <code>catalog.min.js</code> loads the element's file, <code>mode.min.js</code>; a page without it loads that file on its own.</p>
+            <p>Core's <a href="/docs/components/mode-switcher/">color mode switcher</a> with a fourth radio, <code>auto</code>, checked, inside <code>&lt;luz-mode&gt;</code>. <code>catalog.min.js</code> loads the element's file, <code>mode.min.js</code>; a page without it loads that file on its own. With scripting on, <code>--cycle</code> is core's round button (<code>luz-mode-cycle</code>) fixed at the end corner of the window; when it sits in a sidebar or a settings panel, add <code>luz-mode-switcher--inline</code> to the same group to keep it in the flow (see the <a href="/docs/components/mode-switcher/">component page</a>).</p>
             <p>Put the icons in the labels, not <code>data-mode-icon</code> on the cycle button: with <code>luz.js</code> the button copies the checked label's icon, and core has no Auto icon for <code>data-mode-icon</code>.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">

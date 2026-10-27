@@ -33,33 +33,21 @@ const STORAGE_KEY_LAST_MODE = "luz-last-mode";
 
 // localStorage throws in sandboxed iframes and storage-blocked contexts;
 // theming must keep working there, just without persistence.
-const storage = {
-  get(key) {
-    try {
-      return localStorage.getItem(key);
-    } catch (_) {
-      return null;
-    }
-  },
-  set(key, value) {
-    try {
-      localStorage.setItem(key, value);
-    } catch (_) {}
-  },
-  remove(key) {
-    try {
-      localStorage.removeItem(key);
-    } catch (_) {}
-  },
+const store = (op, key, value) => {
+  try {
+    return localStorage[op + "Item"](key, value);
+  } catch (_) {
+    return null;
+  }
 };
 
 export function getStoredTheme() {
-  const saved = storage.get(STORAGE_KEY);
+  const saved = store("get", STORAGE_KEY);
   return saved && allThemes().includes(saved) ? saved : null;
 }
 
 export function getStoredMode() {
-  const saved = storage.get(STORAGE_KEY_MODE);
+  const saved = store("get", STORAGE_KEY_MODE);
   return saved && MODES.includes(saved) ? saved : null;
 }
 
@@ -103,7 +91,7 @@ function syncButtons(theme) {
 export function applyTheme(theme, { persist = true } = {}) {
   const isCustom = getCustomThemes().includes(theme);
   document.documentElement.dataset.theme = theme;
-  if (persist) storage.set(STORAGE_KEY, theme);
+  if (persist) store("set", STORAGE_KEY, theme);
 
   if (isCustom) {
     // Restore saved mode, or fall back to the theme's default mode
@@ -111,11 +99,11 @@ export function applyTheme(theme, { persist = true } = {}) {
     const mode = savedMode || "light";
     document.documentElement.dataset.mode = mode;
     // Persist the resolved mode so it survives page reload
-    if (persist) storage.set(STORAGE_KEY_MODE, mode);
+    if (persist) store("set", STORAGE_KEY_MODE, mode);
   } else {
     // Base color mode: clear data-mode
     delete document.documentElement.dataset.mode;
-    if (persist) storage.remove(STORAGE_KEY_MODE);
+    if (persist) store("remove", STORAGE_KEY_MODE);
   }
 
   syncButtons(theme);
@@ -124,20 +112,14 @@ export function applyTheme(theme, { persist = true } = {}) {
 // Apply a color mode within an already-active custom theme
 export function applyMode(mode, parentTheme, { persist = true } = {}) {
   // Ensure the parent theme is applied first
-  if (document.documentElement.dataset.theme !== parentTheme) {
-    if (persist) {
-      if (MODES.includes(document.documentElement.dataset.theme)) {
-        storage.set(
-          STORAGE_KEY_LAST_MODE,
-          document.documentElement.dataset.theme,
-        );
-      }
-    }
+  const current = document.documentElement.dataset.theme;
+  if (current !== parentTheme) {
+    if (persist && MODES.includes(current)) store("set", STORAGE_KEY_LAST_MODE, current);
     document.documentElement.dataset.theme = parentTheme;
-    if (persist) storage.set(STORAGE_KEY, parentTheme);
+    if (persist) store("set", STORAGE_KEY, parentTheme);
   }
   document.documentElement.dataset.mode = mode;
-  if (persist) storage.set(STORAGE_KEY_MODE, mode);
+  if (persist) store("set", STORAGE_KEY_MODE, mode);
   syncButtons(parentTheme);
 }
 
@@ -159,7 +141,7 @@ function renderCycle(group) {
     const icon = current?.closest(".luz-mode-btn")?.querySelector(".luz-mode-btn__icon");
     button.replaceChildren(...(icon ? [icon.cloneNode(true)] : []));
   }
-  const name = t("changeMode", button, { mode: labelOf(current) || "—" });
+  const name = t("changeMode", button, { mode: labelOf(current) || t("modeAuto", button) });
   button.setAttribute("aria-label", name);
   button.title = name;
 }
@@ -256,14 +238,14 @@ export function initThemeSystem(defer = false) {
       const current = document.documentElement.dataset.theme;
       // Toggle: clicking again removes the custom theme → restore last mode
       if (current === themeApplyBtn.dataset.theme) {
-        const lastMode = storage.get(STORAGE_KEY_LAST_MODE);
+        const lastMode = store("get", STORAGE_KEY_LAST_MODE);
         const fallback = MODES.includes(lastMode) ? lastMode : "light";
-        storage.remove(STORAGE_KEY_MODE);
+        store("remove", STORAGE_KEY_MODE);
         applyTheme(fallback);
       } else {
         // Store current base mode before switching to a custom theme
         if (MODES.includes(current)) {
-          storage.set(STORAGE_KEY_LAST_MODE, current);
+          store("set", STORAGE_KEY_LAST_MODE, current);
         }
         applyTheme(themeApplyBtn.dataset.theme);
       }

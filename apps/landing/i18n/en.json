@@ -4,6 +4,7 @@
 
   "js.change-mode": "Change color mode. Current: {mode}",
   "js.mode-changed": "Color mode: {mode}",
+  "js.mode-auto": "Auto",
   "js.copied": "Copied",
   "js.copied-status": "Copied to clipboard",
   "js.copy-failed": "Copy failed. Select the text and copy it manually.",

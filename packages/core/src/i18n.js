@@ -40,6 +40,7 @@ const locales = {
     themeApplied: "Applied",
     changeMode: "Change color mode. Current: {mode}",
     modeChanged: "Color mode: {mode}",
+    modeAuto: "Auto",
     sortedAsc: "Sorted by {column}, ascending",
     sortedDesc: "Sorted by {column}, descending",
     previous: "Previous",

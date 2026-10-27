@@ -728,9 +728,26 @@ test.describe('Documentation site', () => {
 
       const guide = page.locator('#c-mode-switcher');
       // The Example's specimen (the Design tab's Do and don't has inert ones of its own)
-      await expect(guide.locator('.docs-example fieldset.luz-mode-switcher')).toHaveAttribute('disabled', '');
-      await expect(guide.locator('a[href="#site-footer"]').first()).toBeVisible();
+      // Three of them since F6: the radios, the round cycle button fixed in its stage, and the same button inline
+      const specimens = guide.locator('.docs-example fieldset.luz-mode-switcher');
+      await expect(specimens).toHaveCount(3);
+      for (const specimen of await specimens.all()) await expect(specimen).toHaveAttribute('disabled', '');
+      // The specimen's fixed button stays in its stage: the corner of the window is the site's own button
+      const fixed = guide.locator('.docs-example .docs-stage__fixed fieldset.luz-mode-switcher--cycle:not(.luz-mode-switcher--inline)');
+      await expect(fixed).toHaveCount(1);
+      await expect(fixed).toHaveCSS('position', 'fixed');
+      const where = await page.evaluate(() => {
+        const stage = document.querySelector('#c-mode-switcher .docs-example .docs-stage__fixed').getBoundingClientRect();
+        const demo = document.querySelector('#c-mode-switcher .docs-example .docs-stage__fixed .luz-mode-cycle').getBoundingClientRect();
+        const site = document.querySelector('footer .luz-mode-cycle').getBoundingClientRect();
+        const inside = demo.left >= stage.left - 1 && demo.right <= stage.right + 1 && demo.top >= stage.top - 1 && demo.bottom <= stage.bottom + 1;
+        const apart = demo.right <= site.left || demo.left >= site.right || demo.bottom <= site.top || demo.top >= site.bottom;
+        return { inside, apart };
+      });
+      expect(where.inside, 'inside its stage').toBe(true);
+      expect(where.apart, 'not over the site\'s own button').toBe(true);
       await expect(guide).toContainText('luz-mode-switcher--cycle');
+      await expect(guide).toContainText('luz-mode-switcher--inline');
       await expect(guide).toContainText('initThemeCycle()');
       await expect(guide.locator('pre')).toContainText(['luz-mode-btn__icon']);
       await expect(page.locator('#keyboard ~ ul').first()).toContainText('Change color mode. Current:');

@@ -38,7 +38,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is each line the token of its job? Is an accent bar the thin width on a box with its own border and the thick one on a block without? Is a control's edge still visible on the surface it sits on, in the three modes?
 
-**Exceptions:** the two widths of the accent bar (decided 2026-10-24); a transparent border that keeps the box the same size when forced colors paints it is not a line.
+**Exceptions:** the two widths of the accent bar (decided 2026-10-24); a transparent border that keeps the box the same size when forced colors paints it is not a line. The round colour-mode button (`.luz-mode-switcher--cycle`) has a hairline edge in `--luz-divider`, about 1.4:1 on the surface, and not `--luz-input-border`: its icon, at 3:1 or more, is what tells the control apart, and the edge only keeps the circle's shape (decided 2026-10-26).
 
 ### DR-3 Elevation has three steps
 
@@ -50,7 +50,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** does a floating thing have a shadow that matches what it covers? Does a flat thing cast one?
 
-**Exceptions:** a shadow used as a technique and not as elevation (a spread that paints a band across the full width of the page) is not a shadow.
+**Exceptions:** a shadow used as a technique and not as elevation (a spread that paints a band across the full width of the page) is not a shadow. The fixed round colour-mode button takes `--luz-shadow-sm`, not the md of a floating control: it is a 40 px button, not a surface, and a larger shadow would outweigh the page it sits on (decided 2026-10-26).
 
 ## Type and hierarchy
 
@@ -188,7 +188,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is a disabled thing readable? Does it change on hover? Is it told by more than its colour?
 
-**Exceptions:** a control that is drawn without text of its own (a checkbox, a radio, a switch) fades as a whole (decided 2026-10-24).
+**Exceptions:** a control that is drawn without text of its own (a checkbox, a radio, a switch) fades as a whole (decided 2026-10-24). A disabled round colour-mode button keeps its icon colour and says it is disabled with a dashed border, no hover and the not-allowed cursor, as the radios of the same control do (decided 2026-10-26).
 
 ### DR-15 One focus ring
 

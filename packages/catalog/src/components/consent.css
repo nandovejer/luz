@@ -47,6 +47,19 @@
 		padding-block-end: var(--luz-consent-h);
 		scroll-padding-block-end: var(--luz-consent-h);
 	}
+
+	/* Core's round colour-mode button is fixed at the same corner, under the
+	   banner's layer: while the banner shows it rides on the banner's top
+	   edge, and what Tab reaches is scrolled out from under both. */
+	@media (scripting: enabled) {
+		:root:has(:where(luz-consent) > :not([hidden])) .luz-mode-switcher--cycle:not(.luz-mode-switcher--inline) {
+			inset-block-end: calc(var(--luz-space-md) + var(--luz-consent-h));
+		}
+
+		:root:has(:where(luz-consent) > :not([hidden])):has(.luz-mode-switcher--cycle:not(.luz-mode-switcher--inline) > .luz-mode-cycle) {
+			scroll-padding-block-end: calc(var(--luz-consent-h) + var(--luz-control-lg) + var(--luz-space-md) * 2);
+		}
+	}
 }
 
 .luz-consent__title {

@@ -96,13 +96,13 @@ export function initSidebar(root = document) {
   const observer = new IntersectionObserver(
     (entries) => {
       const visibleEntries = entries.filter((e) => e.isIntersecting);
-      if (visibleEntries.length === 0) return;
+      if (!visibleEntries.length) return;
 
       // Prefer sections whose top edge has not yet left the top of the viewport
       const candidates = visibleEntries.filter(
         (e) => e.boundingClientRect.top >= 0,
       );
-      const pool = candidates.length > 0 ? candidates : visibleEntries;
+      const pool = candidates.length ? candidates : visibleEntries;
 
       const topEntry = pool.reduce((prev, curr) =>
         curr.boundingClientRect.top < prev.boundingClientRect.top ? curr : prev,
