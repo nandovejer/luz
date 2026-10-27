@@ -1038,6 +1038,7 @@ const CATALOG_FILES = new Set(CATALOG_STYLESHEETS.map(({ file }) => file));
  * there is one: `cms-toc` has none, its table of contents is a class of cms-article.css), by file name. A kind
  * of site has no stylesheet of its own: its patterns are the catalog files.
  */
+const LAYOUT_FIRST = ["sidebar", "navbar", "terminal", "timeline"].map((name) => `components/${name}.css`);
 function stylesheetsFor(page) {
   const area = areaOf(page.route);
   const { kept } = blocksOf(page);
@@ -1047,7 +1048,10 @@ function stylesheetsFor(page) {
     const own = `components/${page.route.split("/").filter(Boolean).at(-1)}.css`;
     if (CATALOG_FILES.has(own)) files.add(own);
   }
-  const catalog = [...files].sort().map((file) => ["catalog", minifiedOf(file)]);
+  // The four that moved from core in F7 keep their old cascade order (sidebar, navbar, terminal, timeline), ahead of the other
+  // catalog files (which follow by name): all are in luz.catalog, so source order decides, and a pattern or the search must
+  // never be overridden by the sidebar's link colours
+  const catalog = [...LAYOUT_FIRST.filter((f) => files.has(f)), ...[...files].filter((f) => !LAYOUT_FIRST.includes(f)).sort()].map((file) => ["catalog", minifiedOf(file)]);
   return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...catalog];
 }
 
@@ -1169,6 +1173,19 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
       const bodyAt = e.html.search(/<body\b/i);
       for (const script of doc.scripts) expect(script.index, e.route).toBeGreaterThan(bodyAt);
     }
+  });
+
+  it("links the four components that moved from core first among catalog's files, in the order sidebar, navbar, terminal, timeline", () => {
+    let seen = 0;
+    for (const e of examples()) {
+      const files = inspect(e.html, e.route).links.map((l) => l.href).filter((h) => h.includes("/catalog/components/")).map((h) => h.split("/").at(-1).replace(/\.min\.css$/, ""));
+      const moved = files.filter((f) => LAYOUT_FIRST.includes(`components/${f}.css`));
+      if (!moved.length) continue;
+      seen++;
+      expect(moved, e.route).toEqual(["sidebar", "navbar", "terminal", "timeline"].filter((f) => moved.includes(f)));
+      expect(files.slice(0, moved.length), `${e.route}: they come first`).toEqual(moved);
+    }
+    expect(seen, "pages that link any of the four").toBeGreaterThan(3);
   });
 
   it("loads only files that exampleAssets copies: every <link> and <script> resolves to one of its routes", () => {
