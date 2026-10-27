@@ -134,7 +134,11 @@ export function tokensUsedBy(page) {
   }
   // --luz-site-* and --luz-<kind>-* (landing, cms, app, docs) are properties a pattern sets for its own parts, not design tokens
   const patternProperty = /^--luz-(?:catalog|landing|cms|app|docs)-/;
-  return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !ownProperty?.test(t)).sort();
+  // --luz-consent-h is the height of the cookie banner, which the <luz-consent> script sets on :root for the parts of
+  // other patterns that must leave room for it (the docs rail): a property a script publishes, not a design token
+  // with a page of its own, so it belongs to no token family
+  const publishedByScript = new Set(["--luz-consent-h"]);
+  return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !ownProperty?.test(t) && !publishedByScript.has(t)).sort();
 }
 
 /* ---- Token families and their pages --------------------------------------- */
