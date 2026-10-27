@@ -14,6 +14,8 @@
    there (its details is written open, so without one it reads in full). A link of the list also carries core's .luz-sidebar__link,
    so core's scroll spy marks the section in view (aria-current="true"):
    the mark is the weight and a start border, never the colour alone.
+   While <luz-consent> shows, from 80rem the inner box keeps the banner's
+   height (--luz-consent-h) as end padding and scroll padding.
    ========================================================================== */
 
 /* Above the content (below 80rem): the content's own top padding is the gap */
@@ -43,6 +45,17 @@
 		overflow-y: auto;
 		/* The box clips: a focus ring (2px, 2px away) keeps its start edge */
 		padding-inline-start: var(--luz-space-xs);
+	}
+}
+
+/* While <luz-consent> shows (a pattern may know the banner, the element knows
+   no pattern): the sticky inner box scrolls on its own from 80rem, so its last
+   links are scrolled out from under the banner too. The banner is fixed only
+   in a window taller than 30rem; consent.css publishes --luz-consent-h. */
+@media screen and (height > 30rem) and (min-width: 80rem) {
+	:root:has(:where(luz-consent) > :not([hidden])) .luz-docs-rail__inner {
+		padding-block-end: var(--luz-consent-h);
+		scroll-padding-block-end: var(--luz-consent-h);
 	}
 }
 

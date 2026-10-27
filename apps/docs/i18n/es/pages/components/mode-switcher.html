@@ -2,7 +2,7 @@
 title: Selector de modo de color
 description: Permite elegir entre los modos claro, oscuro y de alto contraste: con botones de opción que funcionan sin JavaScript o con un único botón que los alterna.
 keywords: modo oscuro
-source: 5b4e8cf33fa4
+source: 957402e09c9d
 reviewed: false
 -->
     <div class="docs-component" id="c-mode-switcher">
@@ -113,7 +113,7 @@ initThemeCycle();</code></pre>
               <li><code>initThemeCycle()</code> convierte cada grupo <code>--cycle</code> en un único botón. Cada pulsación selecciona el siguiente modo y dispara su evento <code>change</code>, para que lo aplique lo que escucha los botones de opción. Añade el botón si no está en el marcado.</li>
               <li>Un estilo propio (<a href="/docs/tokens/themes/">crea uno</a>) se incluye en las opciones si su nombre aparece en <code>data-luz-themes</code> de <code>&lt;html&gt;</code>: solo se aceptan los tres modos y esos nombres como valores guardados.</li>
               <li><code>luz.js</code> ejecuta ambas funciones.</li>
-              <li>Con scripting activado, el grupo de alternancia queda fijo en la esquina final: <code>inset-block-end</code> e <code>inset-inline-end</code> de <code>--luz-space-md</code>, de modo que en una página de derecha a izquierda queda abajo a la izquierda. Es un círculo de <code>--luz-control-lg</code> sobre <code>--luz-surface</code>, con una línea fina de <code>--luz-divider</code> y <code>--luz-shadow-sm</code>, en <code>--luz-z-raised</code>: por encima del contenido y por debajo de la barra lateral, los diálogos y los avisos. La leyenda se oculta visualmente, no se elimina: sigue dando nombre al grupo.</li>
+              <li>Con scripting activado, el grupo de alternancia queda fijo en la esquina final: <code>inset-block-end</code> e <code>inset-inline-end</code> de <code>--luz-space-md</code>, de modo que en una página de derecha a izquierda queda abajo a la izquierda. Es un círculo de <code>--luz-control-lg</code> relleno de <code>--luz-surface</code>, con una línea fina de <code>--luz-divider</code> y <code>--luz-shadow-sm</code>, en <code>--luz-z-raised</code>: por encima del contenido y por debajo de la barra lateral, los diálogos y los avisos. La leyenda se oculta visualmente, no se elimina: sigue dando nombre al grupo.</li>
               <li>Mantén un solo botón fijo por página. <code>--inline</code> es para cualquier otro: no tiene sombra ni posición propia.</li>
               <li>La página deja libre la esquina. Da al pie de página un relleno final de <code>calc(var(--luz-control-lg) + var(--luz-space-md) * 2)</code> bajo <code>@media (scripting: enabled)</code>, para que su último enlace no quede nunca bajo el botón; la hoja de estilos añade <code>scroll-padding-block-end</code> a <code>&lt;html&gt;</code>, así que Tab nunca deja un elemento con foco bajo él.</li>
               <li>Con <a href="/docs/catalog/consent/"><code>&lt;luz-consent&gt;</code></a> visible, el botón se apoya en el borde superior del banner y el relleno de desplazamiento crece con la altura del banner.</li>
