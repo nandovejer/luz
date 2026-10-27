@@ -1,8 +1,10 @@
 // @ts-check
 /**
  * LUZ — visual regression of the component demos.
- * Every `[data-docs-specimen]` of a component page, in light, dark and high
- * contrast, compared with the PNG kept in `visual.spec.js-snapshots/`.
+ * Every `[data-docs-specimen]` of a component page, and of the four pages that
+ * came from core to catalog in F7 (navbar, sidebar, terminal, timeline, at
+ * /docs/catalog/<slug>/; their references keep the names `<slug>-<theme>`), in
+ * light, dark and high contrast, compared with the PNG kept in `visual.spec.js-snapshots/`.
  *
  * Chromium on Linux only: text is drawn by the system's fonts (LUZ ships the
  * system stacks), so a snapshot is valid on the machine image that made it.
@@ -22,8 +24,11 @@ import { site } from './helpers/docs-site.js';
 const THEMES = ['light', 'dark', 'high-contrast'];
 const SKIP = new Set(['/docs/components/player/']);
 
+/** Catalog's pages that were core's components until F7: they stay in the regression, with the same snapshot names. */
+const MOVED = new Set(['/docs/catalog/navbar/', '/docs/catalog/sidebar/', '/docs/catalog/terminal/', '/docs/catalog/timeline/']);
+
 const pages = site.pages
-  .filter((p) => p.meta.area === 'components' && p.body.includes('data-docs-specimen') && !SKIP.has(p.route))
+  .filter((p) => (p.meta.area === 'components' || MOVED.has(p.route)) && p.body.includes('data-docs-specimen') && !SKIP.has(p.route))
   .map((p) => p.route)
   .sort();
 
