@@ -552,3 +552,71 @@ test.describe('accessibility', () => {
     });
   }
 });
+
+test.describe('the logo mark', () => {
+  /** The mark is wide (1.57:1): 35 x 22 px, sized by its height, in every width and direction. */
+  const mark = (page) => page.locator('#site-header .site-header__brand .site-header__mark svg');
+
+  for (const path of [HOME, '/ar/', DOCS]) {
+    for (const width of [1280, 375, 320]) {
+      test(`${path} at ${width}px: the mark is 35 x 22 px and nothing scrolls sideways`, async ({ page, javaScriptEnabled }) => {
+        await page.setViewportSize({ width, height: 700 });
+        await open(page, path, javaScriptEnabled);
+        const m = await box(mark(page));
+        expect(Math.abs(m.width - 35), `width ${m.width}`).toBeLessThanOrEqual(1);
+        expect(Math.abs(m.height - 22), `height ${m.height}`).toBeLessThanOrEqual(1);
+        expect(m.left >= 0 && m.right <= width, JSON.stringify(m)).toBe(true);
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        expect(overflow, 'no horizontal overflow').toBeLessThanOrEqual(0);
+      });
+    }
+  }
+
+  test('the mark is decorative: the link is named LUZ by its hidden text, with no visible text', async ({ page, javaScriptEnabled }) => {
+    await page.setViewportSize({ width: 1280, height: 700 });
+    await open(page, HOME, javaScriptEnabled);
+    await expect(mark(page)).toHaveAttribute('aria-hidden', 'true');
+    const brand = page.locator('#site-header .site-header__brand');
+    await expect(brand).toHaveAccessibleName('LUZ');
+    await expect(brand.locator('.u-sr-only')).toHaveText('LUZ');
+    expect(await visibleText(brand)).toBe('');
+  });
+
+  for (const path of [HOME, '/ar/']) {
+    test(`${path}: in forced colours the mark keeps the link's colour`, async ({ page, javaScriptEnabled }) => {
+      await page.setViewportSize({ width: 1280, height: 700 });
+      await open(page, path, javaScriptEnabled);
+      await page.emulateMedia({ forcedColors: 'active' });
+      const painted = await page.evaluate(() => {
+        const link = document.querySelector('#site-header .site-header__brand');
+        const shape = link?.querySelector('svg path');
+        const probe = document.createElement('span');
+        probe.style.color = 'LinkText';
+        document.body.append(probe);
+        const linkText = getComputedStyle(probe).color;
+        probe.remove();
+        return { fill: shape ? getComputedStyle(shape).fill : null, link: link ? getComputedStyle(link).color : null, linkText };
+      });
+      expect(painted.fill, 'the mark is painted').not.toBe('none');
+      expect(painted.fill, 'with the link\'s colour').toBe(painted.link);
+      expect(painted.link, 'which is the system link colour').toBe(painted.linkText);
+    });
+  }
+
+  for (const [path, rtl] of [[HOME, false], ['/ar/', true]]) {
+    test(`${path}: the mark is at the inline-start edge of the row, before every other control`, async ({ page, javaScriptEnabled }) => {
+      await page.setViewportSize({ width: 1280, height: 700 });
+      await open(page, path, javaScriptEnabled);
+      const m = await box(mark(page));
+      const others = (await drawnControls(page)).filter((c) => c.name !== 'LUZ' && !/^$/.test(c.name));
+      expect(others.length).toBeGreaterThan(0);
+      for (const c of others) {
+        if (rtl) expect(m.right, `to the right of ${c.name}`).toBeGreaterThanOrEqual(c.right - 1);
+        else expect(m.left, `to the left of ${c.name}`).toBeLessThanOrEqual(c.left + 1);
+      }
+      // And near the edge: inside the first half of the window, on the starting side
+      if (rtl) expect(m.left).toBeGreaterThan(640);
+      else expect(m.right).toBeLessThan(640);
+    });
+  }
+});
