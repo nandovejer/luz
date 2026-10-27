@@ -48,6 +48,7 @@ const ES = {
   themeApplied: "Aplicado",
   changeMode: "Cambiar el modo de color. Actual: {mode}",
   modeChanged: "Modo de color: {mode}",
+  modeAuto: "Automático",
   sortedAsc: "Ordenado por {column}, ascendente",
   sortedDesc: "Ordenado por {column}, descendente",
   previous: "Anterior",

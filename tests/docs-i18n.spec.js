@@ -227,6 +227,11 @@ test.describe("the colour-mode button is named in the language of the page at lo
         expect(label, "no English left in the name").not.toMatch(
           /Change color mode|Current/
         );
+      // The footer ships no checked radio: the mode follows the clock, and the name says so in the page's language
+      const auto = catalog(code)["js.mode-auto"];
+      expect(auto, `js.mode-auto in apps/landing/i18n/${code}.json`).toBeTruthy();
+      // In a right-to-left language the mode sits in a bidi isolate, so the word is inside the name, not at its very end
+      expect(label.includes(auto), `aria-label "${label}" has "${auto}"`).toBe(true);
     });
   }
 });

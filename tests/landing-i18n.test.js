@@ -340,7 +340,7 @@ describe("the LUZ home page in every language", () => {
       for (const l of [...site.i18n.locales.map((x) => x.code), "x-default"]) expect(html, `${code} ${l}`).toContain(`hreflang="${l}" href=`);
       expect(html, code).not.toMatch(/\{\{|\}\}/);
       // The strings core's scripts write come from the page, so Arabic needs no dictionary of its own
-      for (const key of ["change-mode", "mode-changed", "copied", "copied-status", "copy-failed"]) expect(html, `${code} ${key}`).toMatch(new RegExp(`data-luz-label-${key}="[^"]+"`));
+      for (const key of ["change-mode", "mode-changed", "mode-auto", "copied", "copied-status", "copy-failed"]) expect(html, `${code} ${key}`).toMatch(new RegExp(`data-luz-label-${key}="[^"]+"`));
       // The search results are English pages
       expect(html.match(/<ul data-luz-search-list="[a-z]+" lang="en">/g), code).toHaveLength(3);
     }
