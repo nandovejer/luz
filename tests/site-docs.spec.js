@@ -101,8 +101,9 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
       expect(cards.filter((href) => /^\/docs\/(landing|cms|app|documentation)\//.test(href))).toEqual([]);
     });
 
-    test(`every ${name} pattern has its page: example, known issues, Code and Design`, async ({ page }) => {
-      for (const pattern of patterns) {
+    // One test per page: each has its own time, and a failure names the page
+    for (const pattern of patterns) {
+      test(`the ${name} pattern ${pattern} has its page: example, known issues, Code and Design`, async ({ page }) => {
         const route = await gotoId(page, `p-${pattern}`);
         expect(route, pattern).toMatch(new RegExp(`^/docs/${area}/[a-z-]+/$`));
         // A pattern is a page: its name is the h1, like a core component
@@ -116,8 +117,8 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
           const text = await heading.evaluate((h) => h.nextElementSibling?.textContent.trim() ?? '');
           expect(text.length, `${pattern} ${section} is empty`).toBeGreaterThan(10);
         }
-      }
-    });
+      });
+    }
 
     test(`the ${label} area lists every pattern, in the sidebar and in its gallery`, async ({ page }) => {
       await page.goto(`/docs/${area}/`);
