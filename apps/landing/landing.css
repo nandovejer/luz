@@ -1614,7 +1614,7 @@ home-light:defined ~ .landing-light__nojs {
 
 /* The licence line: small, across the whole width. With scripting on, the
    mode switcher is a round button fixed at the window's bottom end
-   (header.css: --luz-control-lg wide, --luz-space-md from the edge): the
+   (core's .luz-mode-switcher--cycle: --luz-control-lg wide, --luz-space-md from the edge): the
    line keeps that room free at its end, so its last words never sit under
    the button when the page is scrolled to the bottom */
 .landing-legal {

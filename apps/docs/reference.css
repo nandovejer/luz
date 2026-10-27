@@ -468,6 +468,29 @@
   color: var(--luz-text-secondary);
 }
 
+/* A stage that holds a fixed element (the colour mode button, fixed at the end
+   corner of the window): contain: layout makes the stage its containing block,
+   so the demo is fixed at the stage's corner and never sits over the site's own
+   button. The block size leaves the corner a room to exist in. */
+.docs-stage__fixed {
+  position: relative;
+  contain: layout;
+}
+
+@media (scripting: enabled) {
+  .docs-stage__fixed {
+    min-block-size: calc(var(--luz-control-lg) + var(--luz-space-md) * 3);
+  }
+}
+
+/* The second fixed control of a Don't: a chat button at the same corner, a step
+   inward, over the colour mode button */
+.docs-stage__fab {
+  position: absolute;
+  inset-block-end: var(--luz-space-md);
+  inset-inline-end: var(--luz-space-lg);
+}
+
 /* Contrast tables: the ratios line up */
 .docs-contrast td:nth-child(n + 3) {
   font-variant-numeric: tabular-nums;
@@ -1052,7 +1075,7 @@
 }
 
 /* With scripting on, the colour-mode button is fixed at the bottom end of the
-   window (apps/site/header.css): the footer row stops before it, so the last
+   window (core's .luz-mode-switcher--cycle): the footer row stops before it, so the last
    link is never under the button (WCAG 2.4.11, 2.5.8). Without scripting the
    radios are in the row and need no room. */
 @media (scripting: enabled) {

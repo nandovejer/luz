@@ -159,7 +159,7 @@ function renderCycle(group) {
     const icon = current?.closest(".luz-mode-btn")?.querySelector(".luz-mode-btn__icon");
     button.replaceChildren(...(icon ? [icon.cloneNode(true)] : []));
   }
-  const name = t("changeMode", button, { mode: labelOf(current) || "—" });
+  const name = t("changeMode", button, { mode: labelOf(current) || t("modeAuto", button) });
   button.setAttribute("aria-label", name);
   button.title = name;
 }

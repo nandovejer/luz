@@ -3,6 +3,7 @@
   "meta.description": "LUZ ‏(Light, Usable & Zero-dependency) نظام تصميم من رموز التصميم وCSS وقليل من JavaScript الخالصة، ينطلق مما يفعله المتصفح أصلًا: HTML أصلي، وثلاثة أوضاع للألوان، وطبقة تتالٍ واحدة يمكنك تجاوزها دائمًا، ولا خطوة بناء.",
   "js.change-mode": "تغيير وضع الألوان. الوضع الحالي: {mode}",
   "js.mode-changed": "وضع الألوان: {mode}",
+  "js.mode-auto": "تلقائي",
   "js.copied": "تم النسخ",
   "js.copied-status": "تم النسخ إلى الحافظة",
   "js.copy-failed": "تعذّر النسخ. حدّد النص وانسخه يدويًا.",
