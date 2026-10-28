@@ -202,8 +202,8 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       byFile: new Map(list.map((d) => [d.file, d])),
       virtual: new Map(list.filter((d) => d.virtual).map((d) => [resolve(repoRoot, d.file), d])),
       markdown,
-      // The routes a link may point at: the documents and their Markdown, made relative in the pages build
-      routes: new Set([...list.map((d) => d.route), ...markdown.keys()]),
+      // The routes a link may point at: the documents, their Markdown and the prompts for AI, made relative in the pages build
+      routes: new Set([...list.map((d) => d.route), ...markdown.keys(), ...promptFiles({ root: repoRoot }).keys()]),
     };
     return derived;
   };
