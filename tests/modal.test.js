@@ -88,9 +88,9 @@ describe("--luz-modal-head-size and --luz-modal-foot-size", () => {
     });
   }
 
-  it("the dialog's scroll-padding-block reads the head size, then the foot size", () => {
+  it("the dialog's scroll-padding-block reads the head size, then the foot size, each with one --luz-space-md more (Firefox and WebKit stop a keyboard focus scroll short of the bar)", () => {
     const value = /scroll-padding-block\s*:\s*([^;]+);/.exec(modal)?.[1].replace(/\s+/g, " ").trim();
-    expect(value).toBe("var(--luz-modal-head-size) var(--luz-modal-foot-size)");
+    expect(value).toBe("calc(var(--luz-modal-head-size) + var(--luz-space-md)) calc(var(--luz-modal-foot-size) + var(--luz-space-md))");
   });
 });
 
