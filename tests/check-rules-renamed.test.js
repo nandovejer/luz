@@ -100,7 +100,11 @@ describe("names/renamed: the name echoed is capped like every other name (64 cha
   const OLD = "luz-landing-hero__";
   const named = (length) => OLD + "a1_-".repeat(40).slice(0, length - OLD.length);
   const sheet = (selector) => ({ "index.html": page('  <p class="o-stack">x</p>', links(TOKENS, CORE, '  <link rel="stylesheet" href="own.css">')), "own.css": `.promo ${selector} {\n  margin: 0;\n}\n` });
-  const readable = (text) => !/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/.test(text);
+  // Unreadable: a control character, a zero-width or bidi control, or the BOM
+  const readable = (text) => [...text].every((ch) => {
+    const code = ch.codePointAt(0);
+    return !(code <= 0x1f || (code >= 0x7f && code <= 0x9f) || (code >= 0x200b && code <= 0x200f) || (code >= 0x202a && code <= 0x202e) || (code >= 0x2066 && code <= 0x2069) || code === 0xfeff);
+  });
 
   it("a class that has an old block but is 100 characters longer gets no names/renamed finding in a page: it is an unknown class with the capped echo", () => {
     const name = OLD + "a".repeat(100);
