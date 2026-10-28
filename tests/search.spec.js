@@ -526,7 +526,7 @@ test.describe('search: small screens (core\'s 640 px, or a window 30rem tall or 
     await expect(d).not.toHaveCSS('border-top-left-radius', '0px');
   });
 
-  test('375x667: the dialog is the screen and its scroll padding at the start is the height of the head it pins', async ({ page }) => {
+  test('375x667: the dialog is the screen and its scroll padding at the start is the height of the head it pins plus one --luz-space-md', async ({ page }) => {
     const d = await openAt(page, 375, 667);
     const box = await d.boundingBox();
     expect(box?.x).toBeCloseTo(0, 0);
@@ -537,7 +537,16 @@ test.describe('search: small screens (core\'s 640 px, or a window 30rem tall or 
       padding: parseFloat(getComputedStyle(el).scrollPaddingBlockStart) || 0,
       head: el.querySelector('.luz-search__head').getBoundingClientRect().height,
     }));
-    expect(Math.abs(m.padding - m.head), `scroll-padding-block-start ${m.padding}px against a head of ${m.head}px`).toBeLessThanOrEqual(1);
+    // The step above the head is what lets Firefox and WebKit, which stop a keyboard focus scroll short of the padding, clear it
+    const probe = await page.evaluate(() => {
+      const p = document.createElement('div');
+      p.style.cssText = 'position:absolute;visibility:hidden;inline-size:var(--luz-space-md)';
+      document.body.append(p);
+      const w = p.getBoundingClientRect().width;
+      p.remove();
+      return w;
+    });
+    expect(m.padding, `scroll-padding-block-start ${m.padding}px against a head of ${m.head}px and a step of ${probe}px`).toBeGreaterThanOrEqual(m.head + probe - 1);
   });
 
   test('375x500: the list of results is the scroller, the dialog does not scroll and the head stays', async ({ page }) => {
