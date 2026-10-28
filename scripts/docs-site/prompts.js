@@ -33,7 +33,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { expandNumbers, siteNumbers } from "./i18n.js";
-import { fileKinds, isKindFile, kindPatterns } from "./kinds.js";
+import { catalogPatterns, fileKinds, isKindFile, kindPatterns } from "./kinds.js";
 import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 
 /** The published site: every link of a prompt starts here. */
@@ -43,6 +43,7 @@ const CDN = "https://cdn.jsdelivr.net/npm";
 const SOURCE = "apps/site/prompts";
 /** This module, as the hash of a prompt reads it. */
 const MODULE = "scripts/docs-site/prompts.js";
+const KINDS = "scripts/docs-site/kinds.js";
 /** The packages whose elements a prompt lists. */
 const ELEMENT_PACKAGES = ["catalog"];
 /** The packages every prompt installs, in load order. */
@@ -190,9 +191,11 @@ export function assemblePrompt(id, { root }) {
 /**
  * The SHA-256, in hex, of every piece of prose that reaches one prompt:
  * body.md, its preset (none for start), stacks.json, this module (the titles
- * and the sentences it writes) and the lines of the elements as the prompt
- * has them (their names, attributes and descriptions, from the packages'
- * custom-elements.json), each followed by a NUL. The sentinel's case for the
+ * and the sentences it writes), kinds.js (which patterns a kind lists, and in
+ * what order), the lines of the elements as the prompt has them (their names,
+ * attributes and descriptions, from the packages' custom-elements.json) and
+ * the `fits-kinds`, `files` and `order` of each catalog page (which pages and
+ * files a kind lists; never a page's body), each followed by a NUL. The sentinel's case for the
  * prompt holds it (`source`), so an edit of any of them voids its SAFE until
  * the sentinel reads the prompt again. The versions and the class names are
  * left out: they change with every release and every class, carry no prose,
@@ -201,10 +204,11 @@ export function assemblePrompt(id, { root }) {
 export function promptSourceHash(id, { root }) {
   const kind = PROMPT_KINDS.find((k) => k.id === id);
   if (!kind) throw new Error(`${id} is not a prompt (${PROMPT_KINDS.map((k) => k.id).join(", ")})`);
-  const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`, MODULE];
+  const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`, MODULE, KINDS];
   const hash = createHash("sha256");
   for (const file of files) hash.update(readFileSync(join(root, file))).update("\0");
   hash.update(ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n")).update("\0");
+  hash.update(catalogPatterns(root).map((page) => `${page.slug}|${page.kinds.join(",")}|${page.files.join(",")}|${page.order}`).join("\n")).update("\0");
   return hash.digest("hex");
 }
 
