@@ -587,8 +587,14 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
     const meta = site.byRoute.get("/docs/components/button/").meta;
     expect(button.text).toContain(`\n\n${meta.description}\n`);
     expect(button.text).toContain("### Known issues\nNone known.");
+    // The page starts with a bare button, which needs no class, then the class for what HTML cannot say
     expect(button.text).toContain(
-      '### Copy the markup\nPrimary button markup\n```html\n<button class="luz-btn luz-btn--primary" type="button">Save changes</button>\n```',
+      '### Copy the markup\nA bare `button` needs no class.',
+    );
+    expect(button.text).toContain('Bare button markup\n```html\n<button type="submit">Save changes</button>\n<button type="button">Cancel</button>\n```');
+    expect(button.text.indexOf("Bare button markup")).toBeLessThan(button.text.indexOf("Primary button markup"));
+    expect(button.text).toContain(
+      'Primary button markup\n```html\n<button class="luz-btn luz-btn--primary" type="button">Save changes</button>',
     );
     expect(button.text).toContain("### Variants and options");
     expect(button.text.split("\n")).toContain("- `.luz-btn--primary`: Brand fill: the main action of the view");

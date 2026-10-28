@@ -40,7 +40,7 @@ const KIND_FILES = {
 const FILES = {
   tokens: ["luz-tokens.min.css"],
   // F7: the timeline chunk is catalog's, with the sidebar's
-  core: ["luz.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "i18n-es.min.js"],
+  core: ["luz.min.css", "luz.conditional.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "i18n-es.min.js"],
   // Catalog has no bundle (F5a): one stylesheet per component, plain and minified, and the scripts
   catalog: [
     "components/search.css", "components/search.min.css", "components/cookie-consent.css", "components/cookie-consent.min.css", "components/announcement.css", "components/announcement.min.css",
