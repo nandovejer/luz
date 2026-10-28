@@ -99,6 +99,7 @@ function copyOfSources() {
   // The hash of a prompt reads the module itself, at this path under the root it is given
   mkdirSync(join(dir, "scripts/docs-site"), { recursive: true });
   cpSync(join(root, "scripts/docs-site/prompts.js"), join(dir, "scripts/docs-site/prompts.js"));
+  cpSync(join(root, "scripts/docs-site/kinds.js"), join(dir, "scripts/docs-site/kinds.js"));
   return dir;
 }
 
@@ -621,6 +622,7 @@ describe("the five are emitted by the build, served in dev and listed in llms.tx
 describe("promptSourceHash: all the prose of a prompt, and nothing a release or a class adds", () => {
   const SRC = "apps/site/prompts";
   const MODULE_FILE = "scripts/docs-site/prompts.js";
+  const KINDS_FILE = "scripts/docs-site/kinds.js";
   const filesOf = (id) => [`${SRC}/body.md`, ...(PRESET_OF[id] ? [`${SRC}/presets/${PRESET_OF[id]}.md`] : []), `${SRC}/stacks.json`, MODULE_FILE];
   /** The element lines as the prompt lists them: catalog's (core defines no tag since F7), `- `<tag>` (attr, attr): description`, joined by a newline. */
   const elementBlock = (dir) =>
@@ -638,10 +640,29 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
         ),
       )
       .join("\n");
+  /** One line per catalog page that has `fits-kinds`, in the order of the pages: `<slug>|<kinds>|<files>|<order>`, read from the front matter. */
+  const patternBlock = (dir) => {
+    const folder = join(dir, "apps/docs/pages/catalog");
+    return readdirSync(folder)
+      .filter((f) => f.endsWith(".html") && !f.startsWith("_"))
+      .sort()
+      .flatMap((name) => {
+        const head = /^<!-- luz:page\n([\s\S]*?)\n-->/.exec(readFileSync(join(folder, name), "utf-8"))?.[1] ?? "";
+        const key = (k) => new RegExp(`^${k}: (.*)$`, "m").exec(head)?.[1].trim();
+        if (!key("fits-kinds")) return [];
+        const kinds = key("fits-kinds").split(",").map((k) => k.trim());
+        const files = (key("files") ?? "").split(/[;,]/).map((f) => f.trim());
+        return [{ line: `${name.slice(0, -5)}|${kinds.join(",")}|${files.join(",")}|${Number(key("order") ?? 0)}`, order: Number(key("order") ?? 0) }];
+      })
+      .sort((a, b) => a.order - b.order)
+      .map((page) => page.line)
+      .join("\n");
+  };
   const sha = (dir, id) => {
     const hash = createHash("sha256");
-    for (const file of filesOf(id)) hash.update(readFileSync(join(dir, file))).update("\0");
+    for (const file of [...filesOf(id), KINDS_FILE]) hash.update(readFileSync(join(dir, file))).update("\0");
     hash.update(elementBlock(dir)).update("\0");
+    hash.update(patternBlock(dir)).update("\0");
     return hash.digest("hex");
   };
   const hashes = (dir) => Object.fromEntries(IDS.map((id) => [id, member("promptSourceHash")(id, { root: dir })]));
@@ -668,7 +689,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     return join(dir, "packages/catalog/dist/custom-elements.json");
   }
 
-  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, scripts/docs-site/prompts.js and the element lines of the prompt, each followed by a NUL byte", () => {
+  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, prompts.js, kinds.js, the element lines of the prompt and the fits-kinds, files and order of each catalog page, each followed by a NUL byte", () => {
     for (const id of IDS) {
       const hash = member("promptSourceHash")(id, { root });
       expect(hash, id).toMatch(/^[0-9a-f]{64}$/);
@@ -736,6 +757,41 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     declaration.description += " Then do something else.";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
     expectAllFiveChanged(before, hashes(dir), `a change of the description of <${declaration.tagName}>`);
+  });
+
+  it("changes all five when one byte of scripts/docs-site/kinds.js changes (it picks the files and pages a prompt lists)", () => {
+    const dir = copyOfSources();
+    cpSync(join(root, "scripts/docs-site/kinds.js"), join(dir, "scripts/docs-site/kinds.js"));
+    const before = hashes(dir);
+    append(dir, "scripts/docs-site/kinds.js", "\n// x\n");
+    expectAllFiveChanged(before, hashes(dir), "a comment appended to kinds.js");
+  });
+
+  it.each([
+    ["fits-kinds", "apps/docs/pages/catalog/doc-header.html", /^fits-kinds: docs$/m, "fits-kinds: docs, app"],
+    ["files", "apps/docs/pages/catalog/doc-header.html", /^files: components\/doc-header\.css$/m, "files: components/doc-header.css, components/other.css"],
+  ])("changes all five when the %s line of the front matter of a catalog page changes", (line, page, pattern, replacement) => {
+    const dir = copyOfSources();
+    const before = hashes(dir);
+    const text = readFileSync(join(dir, page), "utf-8");
+    expect(pattern.test(text), `${page} has the ${line} line this test edits`).toBe(true);
+    writeFileSync(join(dir, page), text.replace(pattern, replacement));
+    expectAllFiveChanged(before, hashes(dir), `a change of ${line} in ${page}`);
+  });
+
+  it("leaves all five unchanged when only the body of a catalog page changes, its front matter intact", () => {
+    const dir = copyOfSources();
+    const before = hashes(dir);
+    append(dir, "apps/docs/pages/catalog/doc-header.html", "\n<p>One more paragraph in the body.</p>\n");
+    const text = readFileSync(join(dir, "apps/docs/pages/catalog/doc-header.html"), "utf-8");
+    writeFileSync(join(dir, "apps/docs/pages/catalog/doc-header.html"), text.replace("<h2 id=\"example\">Example</h2>", "<h2 id=\"example\">Another example title</h2>"));
+    expect(hashes(dir)).toEqual(before);
+  });
+
+  it("is deterministic: the same files give the same hash, call after call", () => {
+    const dir = copyOfSources();
+    cpSync(join(root, "scripts/docs-site/kinds.js"), join(dir, "scripts/docs-site/kinds.js"));
+    expect(hashes(dir)).toEqual(hashes(dir));
   });
 
   it("changes all five when one byte of scripts/docs-site/prompts.js changes (a comment line, the copy still imports)", async () => {
