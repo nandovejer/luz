@@ -10,7 +10,17 @@
  *   WIDTHS        the windows measured, in CSS px
  *   MODES_READ    the modes measured
  *   readGeometry(page, spot, width, mode)   { [id]: { prop: value, ... } }
+ *   packGeometry(readings), unpackGeometry(packed)   the file keeps what is the same in every reading once
+ *
+ * The font. A margin of `auto`, a shrink-to-fit width and the left edge of a centred box are worked out from the width of
+ * the text, and the text of a page is drawn with whatever font the machine has for `system-ui`, `sans-serif` or `serif`: the
+ * numbers read on one machine were not the ones of the CI runner. So a reading is made with every font token set to ET Book,
+ * the face the repository ships (packages/tokens/fonts), loaded before anything is measured: the same bytes everywhere.
+ * `fontFamily` is the exception: it is read before that, since it is the token the stylesheet declares (the heading font
+ * of `--publication` against the sans of the landing bar) and does not depend on the machine.
  */
+
+import { readFileSync } from "node:fs";
 
 export const WIDTHS = [1280, 768, 375];
 export const MODES_READ = ["light", "dark"];
@@ -38,14 +48,65 @@ const PROPS = [
   "textAlign", "fontFamily", "fontSize", "fontWeight", "lineHeight", "textDecorationLine", "minHeight",
 ];
 
+/**
+ * The fonts the repository ships (packages/tokens/fonts/fonts.css, whose @font-face rules are used as they are), put in the
+ * page as data: URLs: nothing is requested, so there is no request to wait for, and the same bytes are drawn on every machine.
+ */
+const FONT_DIR = new URL("../../packages/tokens/fonts/", import.meta.url);
+const FONT_LINK = "packages/tokens/fonts/fonts.css";
+const bundledFontCss = () =>
+  readFileSync(new URL("fonts.css", FONT_DIR), "utf-8").replace(/url\("\.\/([^"]+\.woff2)"\)/g, (_, file) => `url("data:font/woff2;base64,${readFileSync(new URL(file, FONT_DIR)).toString("base64")}")`);
+
+/** The tokens every stylesheet of catalog reads its families from. */
+const FONT_TOKENS = ["--luz-font-sans", "--luz-font-mono", "--luz-font-heading", "--luz-font-body", "--luz-font-serif"];
+
+/**
+ * The page again, with every text in the one font that is the same on every machine: ET Book, from the repository. The
+ * font rules and the tokens are put in the HTML on its way to the browser (route), so it works with JavaScript off too, where an
+ * event of the page never runs; the faces the tokens use are loaded before anything is measured.
+ */
+async function loadWithBundledFont(page, url) {
+  const handler = async (route) => {
+    const response = await route.fetch();
+    const html = await response.text();
+    const tokens = `:root:root { ${FONT_TOKENS.map((token) => `${token}: "ET Book";`).join(" ")} }`;
+    // Unlayered, so it beats the layers of tokens, core and catalog whatever the specificity
+    await route.fulfill({ response, body: html.replace("</head>", `<style>${bundledFontCss()}\n${tokens}</style></head>`) });
+  };
+  await page.route(`**${url}`, handler);
+  try {
+    await page.goto(url);
+  } finally {
+    await page.unroute(`**${url}`, handler);
+  }
+  // The faces the page uses are asked for at its first layout. Waiting for them with a promise of the page (document.fonts.load)
+  // can hang with JavaScript off, so the page is asked, again and again, what state they are in, until the same answer comes twice.
+  let before = "";
+  for (let attempt = 0; attempt < 200; attempt++) {
+    const state = await page.evaluate(() => {
+      document.body.getBoundingClientRect();
+      const faces = [...document.fonts];
+      return { total: faces.length, loaded: faces.filter((f) => f.status === "loaded").length, loading: faces.filter((f) => f.status === "loading").length, error: faces.filter((f) => f.status === "error").length };
+    });
+    if (state.error > 0) throw new Error(`a face of ${FONT_LINK} did not load`);
+    const now = JSON.stringify(state);
+    if (state.loaded > 0 && state.loading === 0 && now === before) return;
+    before = now;
+    await page.waitForTimeout(50);
+  }
+  throw new Error(`the faces of ${FONT_LINK} were still not loaded after 10 s: ${before}`);
+}
+
 export async function readGeometry(page, spot, width, mode) {
+  const url = `/tests/fixtures/${spot.fixture}.html`;
   await page.setViewportSize({ width, height: 900 });
-  await page.goto(`/tests/fixtures/${spot.fixture}.html`);
-  await page.evaluate((m) => { document.documentElement.dataset.theme = m; }, mode);
-  // The theme changes a colour with a transition on some parts: take the end of it
-  await page.evaluate(() => document.fonts.ready);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  return page.evaluate(
+  // What the stylesheets declare, before the font is replaced
+  await page.goto(url);
+  const families = await page.evaluate((ids) => Object.fromEntries(ids.map((id) => [id, document.getElementById(id) ? getComputedStyle(document.getElementById(id)).fontFamily : null])), spot.ids);
+  await loadWithBundledFont(page, url);
+  await page.evaluate((m) => { document.documentElement.dataset.theme = m; }, mode);
+  const out = await page.evaluate(
     ({ ids, boxes, heights, props, layout }) => {
       const out = {};
       for (const id of ids) {
@@ -64,4 +125,43 @@ export async function readGeometry(page, spot, width, mode) {
     },
     { ids: spot.ids, boxes: spot.boxes, heights: spot.heights, props: PROPS, layout: LAYOUT },
   );
+  for (const id of spot.ids) if (out[id]) out[id].fontFamily = families[id];
+  return out;
+}
+
+/* ---- The file: what every reading of an element has the same is written once ---------------------------- */
+
+/** { "fixture width mode": { id: props } } to { fixture: { id: { always, by: { "width mode": the props that differ } } } }. */
+export function packGeometry(readings) {
+  const packed = {};
+  for (const [key, ids] of Object.entries(readings)) {
+    const [fixture, ...rest] = key.split(" ");
+    for (const [id, props] of Object.entries(ids)) {
+      ((packed[fixture] ??= {})[id] ??= { readings: {} }).readings[rest.join(" ")] = props;
+    }
+  }
+  for (const ids of Object.values(packed)) {
+    for (const [id, { readings: byKey }] of Object.entries(ids)) {
+      const all = Object.values(byKey);
+      if (all.some((r) => r === null)) { ids[id] = { always: null }; continue; }
+      const names = [...new Set(all.flatMap((r) => Object.keys(r)))];
+      const same = names.filter((n) => all.every((r) => r[n] === all[0][n]));
+      const always = Object.fromEntries(same.map((n) => [n, all[0][n]]));
+      const by = Object.fromEntries(Object.entries(byKey).map(([k, r]) => [k, Object.fromEntries(Object.entries(r).filter(([n]) => !same.includes(n)))]));
+      ids[id] = { always, by };
+    }
+  }
+  return packed;
+}
+
+/** The reverse: { "fixture width mode": { id: props } }. */
+export function unpackGeometry(packed) {
+  const readings = {};
+  for (const [fixture, ids] of Object.entries(packed)) {
+    for (const [id, { always, by }] of Object.entries(ids)) {
+      if (always === null) { for (const w of WIDTHS) for (const m of MODES_READ) (readings[`${fixture} ${w} ${m}`] ??= {})[id] = null; continue; }
+      for (const [key, differing] of Object.entries(by)) (readings[`${fixture} ${key}`] ??= {})[id] = { ...always, ...differing };
+    }
+  }
+  return readings;
 }

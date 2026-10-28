@@ -13,7 +13,8 @@
  *   3  The two unions and the masthead change no look (decision 67): the bar of a landing page and of a blog
  *      (`--publication`), the masthead, the two footers and the blocks beside them are drawn with the numbers the base
  *      (`main` before F8) drew them with, at 1280, 768 and 375 px, in light and dark: tests/fixtures/catalog-names-geometry.json,
- *      read from the fixtures as they were (tests/helpers/catalog-geometry.js).
+ *      read from the fixtures as they were (tests/helpers/catalog-geometry.js), with the one font the repository ships
+ *      (ET Book) in place of every font token, so a machine's own fonts change nothing.
  *   4  The union is one component: the blog bar is the landing bar with `--publication`, and `--publication` is what
  *      keeps the heading font, the larger size, the underline on hover; the masthead is not a modifier of the bar.
  *
@@ -22,7 +23,7 @@
 import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { MODES } from './helpers/design-tokens.js';
-import { SPOTS, WIDTHS, MODES_READ, readGeometry } from './helpers/catalog-geometry.js';
+import { SPOTS, WIDTHS, MODES_READ, readGeometry, unpackGeometry } from './helpers/catalog-geometry.js';
 
 const OLD = '/tests/fixtures/catalog-names-old.html';
 const NEW = '/tests/fixtures/catalog-names-new.html';
@@ -171,7 +172,7 @@ test.describe('the names of catalog after F8 are styled, in light, dark and high
 /* ---- 3. The unions and the masthead change no look ---------------------------------------------------- */
 
 test.describe('the unions and the masthead draw what the base drew (numbers read from main before F8)', () => {
-  const base = JSON.parse(readFileSync(new URL('./fixtures/catalog-names-geometry.json', import.meta.url), 'utf-8'));
+  const base = unpackGeometry(JSON.parse(readFileSync(new URL('./fixtures/catalog-names-geometry.json', import.meta.url), 'utf-8')));
 
   for (const spot of SPOTS) {
     for (const width of WIDTHS) {
