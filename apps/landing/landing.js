@@ -7,7 +7,7 @@
  *
  * luz.js is deliberately not loaded: its auto-init applies the stored or
  * default custom theme to <html>. The mode and the light of the hour belong
- * to the footer's <luz-mode> (defined by apps/site/header.js).
+ * to the footer's <luz-color-mode> (defined by apps/site/header.js).
  */
 
 import { initCopyButtons } from "/packages/core/dist/clipboard.js";
@@ -41,14 +41,14 @@ function initCopy() {
 
 /**
  * The buttons of "Modes" check the footer's radio of their mode, as a click
- * would: <luz-mode> applies it, remembers it and moves its cycle button, and
- * tells the page with luz-mode:change, which presses the box of the mode in
+ * would: <luz-color-mode> applies it, remembers it and moves its cycle button, and
+ * tells the page with luz-color-mode:change, which presses the box of the mode in
  * use. While the page takes the mode, its colours change at the pace of a
  * click (data-mode-preview, landing.css) and the box's icon moves
- * (is-loading). Without <luz-mode> (no site module) the buttons stay hidden.
+ * (is-loading). Without <luz-color-mode> (no site module) the buttons stay hidden.
  */
 function initModes() {
-  const modes = document.querySelector("luz-mode");
+  const modes = document.querySelector("luz-color-mode");
   const buttons = [...document.querySelectorAll("[data-apply-mode]")];
   if (!modes || !buttons.length) return;
   const root = document.documentElement;
@@ -69,9 +69,9 @@ function initModes() {
     });
     button.addEventListener("animationend", () => button.classList.remove("is-loading"));
   }
-  document.addEventListener("luz-mode:change", (event) => press(event.detail?.mode));
+  document.addEventListener("luz-color-mode:change", (event) => press(event.detail?.mode));
   press(modes.querySelector('input[name="luz-theme"]:checked')?.value ?? null);
-  // What needs this script and <luz-mode>: shown only now
+  // What needs this script and <luz-color-mode>: shown only now
   for (const el of document.querySelectorAll("[data-needs-js]")) el.hidden = false;
 }
 

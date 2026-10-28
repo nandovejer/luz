@@ -57,6 +57,8 @@ export async function checkModule(name) {
 export const BLOCKING_RULES = [
   "parse/error",
   "class/unknown",
+  // F8: an old name of catalog (decision 69), with the new one in the message; a stylesheet that writes one only warns (names/renamed:css)
+  "names/renamed",
   "element/unknown",
   "element/unknown-attribute",
   "load/tokens-missing",
@@ -75,7 +77,7 @@ export const BLOCKING_RULES = [
  * not met. The rule id in a finding stays the base id; the severity comes
  * from the key (messages.js).
  */
-export const WARNING_VARIANTS = ["parse/error:template", "class/unknown:newer"];
+export const WARNING_VARIANTS = ["parse/error:template", "class/unknown:newer", "names/renamed:css"];
 
 export const WARNING_RULES = [
   "load/order",

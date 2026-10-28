@@ -491,13 +491,13 @@ describe("the localized site", () => {
           const body = query(root, "div.docs-body");
           expect([body.attrs.get("lang"), body.attrs.get("dir")], `${code} ${route}`).toEqual(["en", "ltr"]);
           expect(languageOf(query(root, "h1.docs-title")), `${code} ${route} h1`).toBe("en");
-          expect(languageOf(query(root, "p.luz-docs-page-head__lead")), `${code} ${route} lead`).toBe("en");
+          expect(languageOf(query(root, "p.luz-doc-header__lead")), `${code} ${route} lead`).toBe("en");
         }
         for (const route of translated(code)) {
           const root = treeOf(code, route);
           expect(query(root, "div.docs-body").attrs.has("lang"), `${code} ${route}`).toBe(false);
           expect(languageOf(query(root, "h1.docs-title")), `${code} ${route} h1`).toBe(code);
-          expect(languageOf(query(root, "p.luz-docs-page-head__lead")), `${code} ${route} lead`).toBe(code);
+          expect(languageOf(query(root, "p.luz-doc-header__lead")), `${code} ${route} lead`).toBe(code);
         }
       }
     });
@@ -523,9 +523,9 @@ describe("the localized site", () => {
             check(`${at} sidebar ${a.attrs.get("href")}`, a, homeOf(target(a.attrs.get("href"))));
           }
           // The pager and Keep going
-          for (const a of findAll(root, (n) => n.name === "a" && hasClass(n, "luz-docs-pager__link"))) {
-            check(`${at} pager title`, query(a, "span.luz-docs-pager__title"), homeOf(target(a.attrs.get("href"))));
-            check(`${at} pager label`, query(a, "span.luz-docs-pager__label"), code);
+          for (const a of findAll(root, (n) => n.name === "a" && hasClass(n, "luz-pager__link"))) {
+            check(`${at} pager title`, query(a, "span.luz-pager__title"), homeOf(target(a.attrs.get("href"))));
+            check(`${at} pager label`, query(a, "span.luz-pager__label"), code);
           }
           for (const a of findAll(query(root, "ul.docs-end__links"), (n) => n.name === "a")) check(`${at} keep going`, a, homeOf(target(a.attrs.get("href"))));
           // The breadcrumb: the last item is the page itself
@@ -544,7 +544,7 @@ describe("the localized site", () => {
           }
           for (const h2 of findAll(root, (n) => n.name === "h2" && n.parent && hasClass(n.parent, "docs-gallery"))) check(`${at} gallery group`, h2, code);
           // On this page: the headings of the content, in the language of the content
-          for (const a of queryAll(root, "a.luz-docs-rail__link")) check(`${at} on this page`, a, homeOf(route));
+          for (const a of queryAll(root, "a.luz-page-rail__link")) check(`${at} on this page`, a, homeOf(route));
         }
       }
       expect(problems).toEqual([]);
@@ -556,7 +556,7 @@ describe("the localized site", () => {
         const root = treeOf(code, "/docs/components/widget/");
         const areaLinks = queryAll(query(root, "ul.docs-nav"), "a").filter((a) => hasClass(a, "docs-nav__area")).map((a) => textOf(a));
         expect(areaLinks, code).toEqual(site.areas.map((a) => strings(code)[`area.${a.id}`]));
-        const eyebrow = textOf(query(root, "p.luz-docs-page-head__eyebrow"));
+        const eyebrow = textOf(query(root, "p.luz-doc-header__eyebrow"));
         expect(eyebrow, code).toBe(`${strings(code)["area.components"]} · ${strings(code)["group.components.actions"]}`);
         expect(textOf(query(query(root, "ul.docs-nav"), "span.luz-sidebar__section-label")), code).toBe(strings(code)["group.components.helpers"]);
       }
@@ -575,7 +575,7 @@ describe("the localized site", () => {
           // Between the page head and the content, inside main
           const siblings = query(root, "main").children;
           const at = (n) => siblings.indexOf(n);
-          expect(at(notice) > at(find(root, (n) => hasClass(n, "luz-docs-page-head"))), `${code} ${route}: after the head`).toBe(true);
+          expect(at(notice) > at(find(root, (n) => hasClass(n, "luz-doc-header"))), `${code} ${route}: after the head`).toBe(true);
           expect(at(notice) < at(query(root, "div.docs-body")), `${code} ${route}: before the content`).toBe(true);
           // It is written in the language of the page and links the English page
           expect(languageOf(notice), `${code} ${route}`).toBe(code);

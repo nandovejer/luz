@@ -1,0 +1,166 @@
+<!-- luz:page
+title: Cabecera de página
+description: La parte superior de una página de documentación: el epígrafe, el título, una frase y las etiquetas que indican de qué trata.
+fits: la parte superior de una página de documentación
+keywords: título, entradilla, epígrafe, etiquetas, parte superior de la página
+source: 2d9dee7a54e4
+reviewed: false
+-->
+    <div class="docs-component" id="p-doc-header">
+          <h2 id="example">Ejemplo</h2>
+          <p>La cabecera de una página sobre cómo instalar una herramienta de línea de comandos.</p>
+          <div class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage" inert aria-hidden="true">
+              <header class="luz-doc-header">
+                <p class="luz-doc-header__eyebrow">Guides · Setup</p>
+                <h1>Install the command line tool</h1>
+                <p class="luz-doc-header__lead">Add the tool to a project and check that it runs, in about two minutes.</p>
+                <ul class="luz-doc-header__meta">
+                  <li>Version 2</li>
+                  <li>macOS, Linux and Windows</li>
+                  <li><a href="#known-issues">No known issues</a></li>
+                </ul>
+              </header>
+            </div>
+            <p class="docs-demo__note">A picture of the head: it holds a title of its own, so it is hidden from assistive technology on this page. Its text is in the markup below.</p>
+            <p class="docs-demo__note">The chips wrap on a narrow screen.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera de página">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>La cabecera, como primer elemento hijo del contenido:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-doc-header" aria-label="Copy the page head markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page head markup"><code id="code-doc-header">&lt;header class=&quot;luz-doc-header&quot;&gt;
+  &lt;p class=&quot;luz-doc-header__eyebrow&quot;&gt;Guides · Setup&lt;/p&gt;
+  &lt;h1&gt;Install the command line tool&lt;/h1&gt;
+  &lt;p class=&quot;luz-doc-header__lead&quot;&gt;Add the tool to a project and check that it runs, in about two minutes.&lt;/p&gt;
+  &lt;ul class=&quot;luz-doc-header__meta&quot;&gt;
+    &lt;li&gt;Version 2&lt;/li&gt;
+    &lt;li&gt;macOS, Linux and Windows&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;#known-issues&quot;&gt;No known issues&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/header&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores. La cabecera es una clase aplicada a un <code>&lt;header&gt;</code> nativo con cuatro partes.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases de la cabecera de página" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                <tr><td data-label="Clase"><div><code>.luz-doc-header</code></div></td><td data-label="Efecto"><div>En un <code>&lt;header&gt;</code> del contenido: una columna, con separación entre sus partes y espacio debajo. Su <code>h1</code> usa <code>--luz-text-4xl</code>, o <code>--luz-text-2xl</code> a 640px o menos</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-doc-header__eyebrow</code></div></td><td data-label="Efecto"><div>En un <code>&lt;p&gt;</code>: el área y el grupo, en mayúsculas pequeñas espaciadas y con el color secundario. Si incluye un <code>&lt;code&gt;</code> con el nombre de un paquete, este conserva sus mayúsculas y minúsculas. En árabe se omite el espaciado entre letras</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-doc-header__lead</code></div></td><td data-label="Efecto"><div>En un <code>&lt;p&gt;</code>: una frase en color secundario y con un tamaño mayor que el del texto</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-doc-header__meta</code></div></td><td data-label="Efecto"><div>En un <code>&lt;ul&gt;</code>: las etiquetas. Cada <code>&lt;li&gt;</code> contiene una o dos palabras dentro de un contorno redondeado y mide al menos <code>--luz-control-sm</code> (28px) de alto. Los enlaces que contienen tienen la misma altura</div></td></tr>
+                <tr><td data-label="Clase"><div><code>.luz-doc-header__files</code></div></td><td data-label="Efecto"><div>En un <code>&lt;p&gt;</code>, en lugar de las etiquetas y solo en páginas que no sean de componentes: «Archivos:» y cada archivo dentro de un <code>&lt;code&gt;</code>, en una línea pequeña de color secundario</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>components/doc-header.css</code> de <code>@luz-ds/catalog</code>. Define el ritmo y los tamaños; las palabras las eliges tú.</p>
+            <ul>
+              <li>La cabecera es una cuadrícula de una columna. La separación entre las partes es <code>--luz-space-sm</code> y el espacio debajo de la cabecera es <code>--luz-space-xl</code>.</li>
+              <li>El <code>h1</code> es un elemento sin clase dentro de la cabecera; esta le aplica estilos según su posición.</li>
+              <li>Las etiquetas enumeran los datos que alguien quiere saber antes de leer: qué archivos y scripts se usan, qué modos hay, si se ha probado y si se conocen problemas. Si una etiqueta lleva a otro sitio, es un enlace.</li>
+              <li>Las palabras largas de las etiquetas se parten en lugar de ensanchar la página, de modo que las etiquetas se ajustan a 320px.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada. La cabecera contiene texto y enlaces; el paquete no incluye ningún script.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Orden:</strong> el del código fuente: epígrafe, título, entradilla y, después, las etiquetas. Con Tab solo llegas a los enlaces de las etiquetas.</li>
+              <li><strong>Encabezados:</strong> el <code>h1</code> es el único <code>h1</code> de la página. Un <code>&lt;header&gt;</code> dentro de <code>&lt;main&gt;</code> no es una zona de referencia de tipo banner.</li>
+              <li><strong>Etiquetas:</strong> una lista de elementos sencillos que se anuncia como lista. Una etiqueta sin enlace es texto y no recibe el foco.</li>
+            </ul>
+            <p class="docs-view__xref">La pestaña Diseño incluye <a href="#contrast">Contraste y foco</a>.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa la cabecera en la parte superior de todas las páginas de un sitio de documentación, para que el título y el tema de la página estén siempre en el mismo sitio.</p>
+            <ul>
+              <li>Una frase que explique qué permite hacer la página.</li>
+              <li>Unas cuantas etiquetas con los datos que ayudan a decidir si seguir leyendo.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses la cabecera para el banner del sitio: contiene el <code>h1</code> de la página.</p>
+            <ul>
+              <li>Usa una sola cabecera por página. Una sección de una página larga lleva un <code>h2</code>, no otra cabecera.</li>
+              <li>Para la cabecera de un artículo de blog, usa la <a href="/docs/catalog/article-header/">cabecera de artículo de CMS</a>.</li>
+              <li>Una página de landing empieza con el <a href="/docs/catalog/hero/">hero</a>.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Limita la entradilla a una frase que explique qué permite hacer la página.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <header class="luz-doc-header">
+                    <p class="luz-doc-header__eyebrow">Guides · Setup</p>
+                    <h1>Configure the cache</h1>
+                    <p class="luz-doc-header__lead">Choose where the tool keeps its files and when it clears them.</p>
+                  </header>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> No repitas el título en la entradilla ni escribas un párrafo: quien lee echa un vistazo a la cabecera y no encuentra nada nuevo.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <header class="luz-doc-header">
+                    <p class="luz-doc-header__eyebrow">Guides · Setup</p>
+                    <h1>Configure the cache</h1>
+                    <p class="luz-doc-header__lead">This page is about how to configure the cache. The cache is a place where the tool keeps files, and you can configure it in several ways, described below.</p>
+                  </header>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <ul>
+              <li>Epígrafe: primero el área y después el grupo, separados por un espacio, un punto medio y otro espacio: «Guías · Configuración». Escribe en estilo de frase; el estilo aplica las mayúsculas.</li>
+              <li>Título: el tema de la página o una tarea que empiece por un verbo: «Instala la herramienta de línea de comandos». Sin punto final.</li>
+              <li>Entradilla: una frase de unas veinte palabras como máximo, que termine en punto.</li>
+              <li>Etiquetas: entre dos y cinco, de una o pocas palabras. Indica un dato («Versión 2»), nunca un eslogan. «Sin problemas conocidos» enlaza a la lista.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Todo el texto aparece sobre la superficie de la página. El contorno de una etiqueta es decorativo: la palabra que contiene transmite el significado.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la cabecera de página en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Elemento</th><th scope="col">Color sobre fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Elemento"><div>Título</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Elemento"><div>Epígrafe</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Elemento"><div>Entradilla</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Elemento"><div>Etiqueta</div></td><td data-label="Color sobre fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Elemento"><div>Enlace en una etiqueta</div></td><td data-label="Color sobre fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Elemento"><div>Anillo de foco</div></td><td data-label="Color sobre fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> los enlaces de las etiquetas conservan el anillo de core, de 2 px, <code>--luz-focus-ring</code>.</li>
+              <li><strong>Área de activación:</strong> las etiquetas y los enlaces que contienen miden al menos 28 por 28 px, por encima del mínimo de 24 px de WCAG 2.2 (2.5.8).</li>
+              <li><strong>Bordes:</strong> el contorno de las etiquetas (<code>--luz-divider</code>) es decorativo y no tiene un mínimo.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 12 tokens que leen las reglas de <code>.luz-doc-header</code> de <code>components/doc-header.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres; consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-sm</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-2xl</code>, <code>--luz-text-4xl</code>, <code>--luz-text-base</code>, <code>--luz-text-lg</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">La pestaña Código incluye <a href="#keyboard">Teclado y ARIA</a>.</p>
+          </div>
+    </div>

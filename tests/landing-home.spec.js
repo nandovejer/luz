@@ -4,7 +4,7 @@
  *
  *  - Why LUZ closes with two lists, who LUZ fits and who it does not, in every language
  *  - Modes: one box per mode, each a button (with JavaScript) that switches the whole page
- *    through the footer's <luz-mode>, which remembers it
+ *    through the footer's <luz-color-mode>, which remembers it
  *  - Native: the panel that shows plain HTML elements with and without LUZ plays on a CSS loop,
  *    so it needs no script; with reduced motion it rests on its last frame
  *
@@ -97,7 +97,7 @@ test.describe('Modes: a box for each mode switches the page', () => {
   test('with JavaScript each box has a button named by what it does, and only the mode of the page is pressed', async ({ page }) => {
     await seedMode(page, 'light');
     await page.goto('/');
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
     for (const [mode, key] of MODES) {
       const button = page.locator(`#modes [data-apply-mode="${mode}"]`);
       await expect(button).toBeVisible();
@@ -109,7 +109,7 @@ test.describe('Modes: a box for each mode switches the page', () => {
   test('a box switches the whole page to its mode, presses only its own button and checks the footer\'s radio', async ({ page }) => {
     await seedMode(page, 'light');
     await page.goto('/');
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
 
     for (const [mode] of [MODES[1], MODES[2], MODES[0]]) {
       await page.locator(`#modes [data-apply-mode="${mode}"]`).click();
@@ -123,7 +123,7 @@ test.describe('Modes: a box for each mode switches the page', () => {
 
   test('the choice is the footer\'s: it is stored under core\'s key and survives a reload', async ({ page }) => {
     await page.goto('/');
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
     await page.locator('#modes [data-apply-mode="dark"]').click();
     await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBe('dark');
     await page.reload();
@@ -134,7 +134,7 @@ test.describe('Modes: a box for each mode switches the page', () => {
   test('the buttons are keyboard controls: Enter and Space press them', async ({ page }) => {
     await seedMode(page, 'light');
     await page.goto('/');
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
     const dark = page.locator('#modes [data-apply-mode="dark"]');
     await dark.focus();
     await page.keyboard.press('Enter');

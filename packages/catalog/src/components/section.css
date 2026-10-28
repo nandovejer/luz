@@ -1,0 +1,51 @@
+/* ==========================================================================
+	 LUZ Catalog: landing section.
+	 Layer: catalog · Prefix: .luz-section
+	 A block of the page after the hero: section.o-stack.luz-section,
+	 its heading first. Add core's .luz-band for a tint from edge to edge.
+	 The head: __eyebrow, __title and __lead share the rules of the hero's
+	 (one selector list, in hero.css, so load it with this file); the title
+	 is one step smaller.
+	 ========================================================================== */
+
+.luz-section {
+	gap: var(--luz-space-md);
+}
+
+.luz-section__eyebrow {
+	margin-block-end: 0;
+}
+
+.luz-section__title,
+.luz-stat__value {
+	font-size: var(--luz-text-3xl);
+}
+
+/* A knob for the stressed word of a hero's or a section's title; unset,
+   the title's colour */
+.luz-hero__title em,
+.luz-section__title em {
+	color: var(--luz-title-accent, inherit);
+}
+
+.luz-section__lead {
+	font-size: var(--luz-text-lg);
+}
+
+@media (max-width: 1023px) {
+	.luz-section__title,
+	.luz-stat__value {
+		font-size: var(--luz-text-2xl);
+	}
+}
+
+@media (max-width: 640px) {
+	.luz-section__title,
+	.luz-stat__value {
+		font-size: var(--luz-text-xl);
+	}
+
+	.luz-section__lead {
+		font-size: var(--luz-text-base);
+	}
+}

@@ -18,7 +18,7 @@
  *   Width     on Button, Card, Form fields and Table, in the first
  *             `.docs-example` of the page: a `fieldset[hidden]` "Width" with the
  *             radios name="docs-width" phone / tablet / full (full checked), then
- *             `div.luz-docs-example__frame` around the demo.
+ *             `div.luz-example__frame` around the demo.
  */
 import { describe, expect, it } from "vitest";
 import { decodeEntities } from "../scripts/docs-site/html.js";
@@ -146,9 +146,9 @@ describe("the width selector", () => {
         expect(radios.filter((r) => r.attrs.has("checked")).map((r) => r.attrs.get("value"))).toEqual(["full"]);
       });
 
-      it("wraps the demo in div.luz-docs-example__frame, after the selector", () => {
+      it("wraps the demo in div.luz-example__frame, after the selector", () => {
         const set = find(example, (n) => n.name === "fieldset");
-        const frame = find(example, (n) => n.name === "div" && hasClass(n, "luz-docs-example__frame"));
+        const frame = find(example, (n) => n.name === "div" && hasClass(n, "luz-example__frame"));
         expect(frame, "the frame").toBeTruthy();
         expect(frame.parent).toBe(example);
         expect(after(frame, set)).toBe(true);

@@ -4,11 +4,11 @@
  * hold. The page itself is tests/landing.spec.js; the numbers in its copy are
  * tests/landing-numbers.test.js; the catalogs are tests/landing-i18n.test.js.
  *
- *  - landing.js has no mode logic: <luz-mode> is the only writer of the colour
+ *  - landing.js has no mode logic: <luz-color-mode> is the only writer of the colour
  *    mode and of the light (F2); the page asks it to preview, and listens to it.
  *  - landing.css is the home's own and tokens only: no literal colour, no
  *    primitive colour token, and none of the rules the head of a section,
- *    the landing patterns of catalog (landing-section.css, landing-stat.css), already have.
+ *    the landing patterns of catalog (section.css, stat.css), already have.
  *  - the template links the stylesheets of the packages it builds on, and
  *    writes the sections of the map in order.
  */
@@ -38,13 +38,13 @@ describe("apps/landing/landing.js: no mode logic", () => {
     }
   });
 
-  it("names the colour mode only as the radio of <luz-mode>, which it checks, and listens to luz-mode:change", () => {
-    // The page never writes the mode: a box checks the footer's radio, and <luz-mode> applies and remembers it
+  it("names the colour mode only as the radio of <luz-color-mode>, which it checks, and listens to luz-color-mode:change", () => {
+    // The page never writes the mode: a box checks the footer's radio, and <luz-color-mode> applies and remembers it
     const names = [...js.matchAll(/\bluz-theme\b/g)].map((m) => js.slice(Math.max(0, m.index - 12), m.index + 12));
     expect(names.length).toBeGreaterThan(0);
     for (const around of names) expect(around, "luz-theme is the radio's name, never a key").toMatch(/input\[name=\\?["']luz-theme/);
     expect(js).toMatch(/\.click\(\)/);
-    expect(js).toContain("luz-mode:change");
+    expect(js).toContain("luz-color-mode:change");
   });
 
   it("has no HTML sink", () => {
@@ -67,15 +67,15 @@ describe("apps/landing/landing.css: the home's own, on tokens", () => {
     for (const family of families) expect(css, family).not.toMatch(new RegExp(`--luz-${family}-\\d`));
   });
 
-  it("does not redo the head of a section or the stat: they are catalog's (landing-section.css, landing-stat.css)", () => {
-    for (const selector of [".landing-h2", ".landing-lead", ".landing-points", ".landing-point__title", ".luz-landing-section__title", ".luz-landing-section__eyebrow", ".luz-landing-section__lead", ".luz-landing-stat__value"]) {
+  it("does not redo the head of a section or the stat: they are catalog's (section.css, stat.css)", () => {
+    for (const selector of [".landing-h2", ".landing-lead", ".landing-points", ".landing-point__title", ".luz-section__title", ".luz-section__eyebrow", ".luz-section__lead", ".luz-stat__value"]) {
       expect(css, selector).not.toContain(selector);
     }
   });
 
   it("only moves the hero's type to fit the first screen: its voice (family, weight, colour, leading) is the pattern's", () => {
     const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
-    const ofHero = rules.filter((rule) => /\.luz-landing-hero__(title|lead)\b/.test(rule.selector));
+    const ofHero = rules.filter((rule) => /\.luz-hero__(title|lead)\b/.test(rule.selector));
     expect(ofHero.length).toBeGreaterThan(0);
     for (const rule of ofHero) {
       expect(rule.body, rule.selector).not.toMatch(/(?<![\w-])(?:font-family|font-weight|font-style|line-height|letter-spacing|color|text-transform)\s*:/);
@@ -87,7 +87,7 @@ describe("apps/landing/landing.css: the home's own, on tokens", () => {
   it("does not size the links of the footer's columns: the pattern gives them their block size (24 px)", () => {
     // Every rule whose selector names a footer column, and what it declares
     const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
-    const ofColumn = rules.filter((rule) => rule.selector.includes(".luz-landing-footer__col"));
+    const ofColumn = rules.filter((rule) => rule.selector.includes(".luz-site-footer__col"));
     expect(ofColumn.length, "the file still styles the current language in the column").toBeGreaterThan(0);
     for (const rule of ofColumn) {
       expect(rule.body, rule.selector).not.toMatch(/(?<![\w-])(?:min-|max-)?(?:block-size|height)\s*:/);
@@ -106,9 +106,9 @@ describe("apps/landing/index.html: the template of the home", () => {
   it("links the file of catalog of each landing pattern it uses before the home's own stylesheet, and keeps the light's (F5b: there is no landing.css)", () => {
     const at = (needle) => html.indexOf(needle);
     expect(at("/packages/landing/"), "the package landing is gone").toBe(-1);
-    // Every landing class the template and the partials it includes use is in a file the page links, and the file comes first
+    // Every class of the landing patterns (F8 names: hero, section, stat, glow, main, site-header, site-footer) the template and the partials it includes use is in a file the page links, and the file comes first
     const partials = ["header", "site-links", "prompt-dialog", "sky-filter", "footer"].map((name) => read(`apps/site/_partials/${name}.html`)).join("\n");
-    const used = new Set([...(html + partials).matchAll(/\bluz-landing-[a-z0-9_-]+/g)].map((m) => m[0]));
+    const used = new Set([...(html + partials).matchAll(/\bluz-(?:hero|section|stat|glow|main|site-header|site-footer)(?:__|--)?[a-z0-9_-]*/g)].map((m) => m[0]));
     const classes = JSON.parse(read("packages/catalog/dist/classes.json")).classes;
     const files = new Set([...used].map((name) => classes.find((c) => c.name === name)?.files[0]).filter(Boolean));
     expect(used.size, "the home uses landing patterns").toBeGreaterThan(5);

@@ -13,7 +13,7 @@
  *
  * What the browser does with them is in tests/home-light.spec.js. This file
  * holds what a file can say about itself: no HTML sink, no injected style, no
- * write of the attributes <luz-mode> owns, one row of budgets.json per file,
+ * write of the attributes <luz-color-mode> owns, one row of budgets.json per file,
  * the licence of the land data and the phrases of the bar in three languages.
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
@@ -147,9 +147,9 @@ describe("apps/landing/light: no HTML sink, no injected style (SEC-IDX-2, plan s
   }
 });
 
-/* ---- The controller leaves the mode to <luz-mode> ----------------------- */
+/* ---- The controller leaves the mode to <luz-color-mode> ----------------------- */
 
-describe("light.js: <luz-mode> is the only writer of data-theme and data-light", () => {
+describe("light.js: <luz-color-mode> is the only writer of data-theme and data-light", () => {
   const source = () => code(`${DIR}/light.js`);
 
   it("does not write data-theme or data-light, by setAttribute, removeAttribute, toggleAttribute or dataset", () => {
@@ -165,17 +165,17 @@ describe("light.js: <luz-mode> is the only writer of data-theme and data-light",
     expect(s).not.toMatch(/observedAttributes[^;]*["']mode["']/);
   });
 
-  it("does not repeat the phase table of <luz-mode> (the phase is <luz-mode>'s)", () => {
+  it("does not repeat the phase table of <luz-color-mode> (the phase is <luz-color-mode>'s)", () => {
     const s = source();
     expect(s).not.toMatch(/\bphaseOf\b/);
     for (const edge of ["7.5", "17.5", "20.5", "22.5", "6.25", "21.25", "23.75"]) expect(s, `the hour ${edge}`).not.toMatch(new RegExp(`(?<![\\d.])${edge.replace(".", "\\.")}(?![\\d])`));
   });
 
-  it("asks <luz-mode> to preview the hour, and listens to luz-mode:change", () => {
+  it("asks <luz-color-mode> to preview the hour, and listens to luz-color-mode:change", () => {
     const s = source();
-    expect(s).toMatch(/["']luz-mode["']/);
+    expect(s).toMatch(/["']luz-color-mode["']/);
     expect(s).toMatch(/\.preview\(/);
-    expect(s).toContain("luz-mode:change");
+    expect(s).toContain("luz-color-mode:change");
   });
 
   it("writes only custom properties on the page: --sun-alt, --sun-az, --sun-x and --day-left", () => {
@@ -292,7 +292,7 @@ describe("apps/landing/index.html: the light section", () => {
 
   it("has a section#light after the hero, with a screen-reader heading and the element, empty", () => {
     expect(section, "a <section id=\"light\">").not.toBeNull();
-    expect(html.indexOf('id="light"')).toBeGreaterThan(html.indexOf("luz-landing-hero"));
+    expect(html.indexOf('id="light"')).toBeGreaterThan(html.indexOf("luz-hero"));
     expect(section[1]).toMatch(/<h2[^>]*class="[^"]*u-sr-only[^"]*"[^>]*>\s*\{\{t:[\w.-]+\}\}\s*<\/h2>/);
     expect(section[1]).toMatch(/<home-light\b[^>]*>\s*<\/home-light>/);
   });
@@ -303,7 +303,7 @@ describe("apps/landing/index.html: the light section", () => {
     expect(tag, "a <home-light> in it").not.toBe("");
     for (const flag of ["bleed", "favicon"]) expect(tag).toMatch(new RegExp(`\\s${flag}(?=[\\s>=])`));
     for (const gone of ["looks", "look", "remember", "still"]) expect(tag, `the ${gone} attribute is gone`).not.toMatch(new RegExp(`\\s${gone}(?=[\\s>=])`));
-    // the modes, the target and the attribute names are gone: <luz-mode> owns them
+    // the modes, the target and the attribute names are gone: <luz-color-mode> owns them
     for (const gone of ["modes=", "mode=", "for=", "light-attr", "mode-attr"]) expect(tag).not.toContain(gone);
   });
 
@@ -400,9 +400,9 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
     expect(budgets.some((b) => /light\/(?:city|map|puzzle)\.js$/.test(b.file ?? ""))).toBe(false);
   });
 
-  it("puts them after the mode chunk row, the last row that existed, with the prompts row appended after them (no other row moved or raised)", () => {
+  it("puts them after the color-mode chunk row, the last row that existed, with the prompts row appended after them (no other row moved or raised)", () => {
     const names = budgets.map((b) => b.name);
-    const mode = names.indexOf("catalog JS lazy chunk: mode");
+    const mode = names.indexOf("catalog JS lazy chunk: color-mode");
     expect(names.slice(mode + 1)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)"]);
   });
 
@@ -413,7 +413,7 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
       .slice(header + 2)
       .filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")))
       .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
-    const at = table.findIndex((cells) => /^`catalog` JS lazy chunk: `mode`/.test(cells[0]));
+    const at = table.findIndex((cells) => /^`catalog` JS lazy chunk: `color-mode`/.test(cells[0]));
     // the prompts row (the kinds plan, F1) comes after them
     const rows = table.slice(at + 1, at + 1 + ROWS.length);
     expect(table.slice(at + 1)).toHaveLength(ROWS.length + 1);

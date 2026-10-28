@@ -14,11 +14,11 @@
   <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/lang-switch.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/mode.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-hero.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-main.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-section.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-footer.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/hero.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/main.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/section.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/site-footer.css">
   <link rel="stylesheet" href="/apps/site/header.css">
   <link rel="stylesheet" href="/apps/site/theme-light.css">
   <link rel="stylesheet" href="/apps/site/sky.css">
@@ -88,16 +88,16 @@
     </div>
   </nav>
 
-  <main id="main-content" class="o-container o-stack luz-landing-main landing-wrap site-sky" tabindex="-1">
+  <main id="main-content" class="o-container o-stack luz-main landing-wrap site-sky" tabindex="-1">
 
     <!-- The first screen: the hero and the light fill the window under the header (landing.css) -->
     <div class="landing-first">
 
     <!-- ====================== 1. HERO ====================== -->
-    <section class="luz-landing-hero luz-landing-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
-      <div class="luz-landing-hero__copy">
-        <h1 class="luz-landing-hero__title" id="hero-title">{{html:hero.title}}</h1>
-        <p class="luz-landing-hero__lead">{{html:hero.lead}}</p>
+    <section class="luz-hero luz-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
+      <div class="luz-hero__copy">
+        <h1 class="luz-hero__title" id="hero-title">{{html:hero.title}}</h1>
+        <p class="luz-hero__lead">{{html:hero.lead}}</p>
         <div class="o-actions">
           <a class="luz-btn luz-btn--primary luz-btn--lg" href="#inside">{{t:hero.start}}</a>
           <a class="luz-btn luz-btn--outline luz-btn--lg" href="/docs/">{{t:hero.docs}}</a>
@@ -110,7 +110,7 @@
          from edge to edge of the window. Without JavaScript the element stays
          empty, light.css keeps its room and the sentence after it says what
          the room is for; once <home-light> is defined the sentence goes -->
-    <section class="luz-landing-hero__media luz-landing-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
+    <section class="luz-hero__media luz-hero__media--bleed landing-light" id="light" aria-labelledby="light-title">
       <h2 class="u-sr-only" id="light-title">{{t:light.title}}</h2>
       <home-light bleed favicon></home-light>
       <p class="landing-light__nojs">{{t:light.nojs}}</p>
@@ -336,10 +336,10 @@ a {
       </section>
 
     <!-- ====================== 4b. WHY ====================== -->
-    <section class="o-stack luz-landing-section" id="why" aria-labelledby="why-title">
-      <p class="luz-landing-section__eyebrow">{{t:why.eyebrow}}</p>
-      <h2 class="luz-landing-section__title" id="why-title">{{html:why.title}}</h2>
-      <p class="luz-landing-section__lead">{{t:why.lead}}</p>
+    <section class="o-stack luz-section" id="why" aria-labelledby="why-title">
+      <p class="luz-section__eyebrow">{{t:why.eyebrow}}</p>
+      <h2 class="luz-section__title" id="why-title">{{html:why.title}}</h2>
+      <p class="luz-section__lead">{{t:why.lead}}</p>
 
       <div class="landing-why">
         <article class="luz-card o-stack landing-why__card landing-why__card--light" aria-labelledby="why-light">
@@ -480,7 +480,7 @@ a {
 
       <!-- One box per mode (data-theme), each telling its own mode. The box is a picture of the
            mode: inert and hidden from the accessibility tree. Each box has a button (shown with
-           JavaScript, landing.js) that checks the footer's radio of its mode: <luz-mode> applies
+           JavaScript, landing.js) that checks the footer's radio of its mode: <luz-color-mode> applies
            it, remembers it and moves the cycle button -->
       <div class="landing-modes__figure">
         <div class="landing-cuts">
@@ -530,16 +530,16 @@ a {
     <!-- luz:include sky-filter -->
   </main>
 
-  <footer class="luz-landing-footer">
+  <footer class="luz-site-footer">
     <div class="o-container o-container--inline o-grid">
-      <div class="luz-landing-footer__brand">
+      <div class="luz-site-footer__brand">
         <p class="landing-brand"><svg viewBox="55.5 67.6 276.8 175.9" width="35" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M55.5 67.6H89.3V204.4L55.5 238.2ZM93 210.1H193.7L160.4 243.4H59.8ZM124.2 67.6H157.4V131.8L124.2 165.1ZM157.3 140.8V153.3A18.1 18.1 0 0 0 193.7 153.3V119.2C204.7 114.2 215.4 110.5 225.9 108.5V153.3A50.4 50.4 0 0 1 128 170.1ZM228.6 67.6H307.4L283 100.4H241.2C225.8 100.4 210 105 193.8 112.5V106.1ZM211.4 208L314.9 69L332.2 101.9L228.7 241ZM261.2 210.1H329.4V243.4H236.5Z"/></svg><strong class="u-sr-only">LUZ</strong> <a class="landing-brand__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v{{version}}<span class="u-sr-only">, {{t:footer.changelog}}</span></a> <span class="landing-brand__beta">{{t:footer.beta}}</span></p>
       </div>
       <!-- The docs: one title over three lists, the guides, under a small label
            the docs of each package (in the order they stack), and under another
            the page of each kind of site, with its prompt and its recipes -->
-      <nav class="luz-landing-footer__col landing-foot-docs" aria-labelledby="footer-docs">
-        <h2 class="luz-landing-footer__col-title" id="footer-docs">{{t:site.docs}}</h2>
+      <nav class="luz-site-footer__col landing-foot-docs" aria-labelledby="footer-docs">
+        <h2 class="luz-site-footer__col-title" id="footer-docs">{{t:site.docs}}</h2>
         <ul>
           <li><a href="/docs/get-started/">{{t:nav.get-started}}</a></li>
           <li><a href="/docs/catalog/">{{t:footer.patterns}}</a></li>
@@ -559,8 +559,8 @@ a {
           <li><a href="/docs/kinds/docs/">{{t:inside.kind.docs.title}}</a></li>
         </ul>
       </nav>
-      <nav class="luz-landing-footer__col" aria-labelledby="footer-project">
-        <h2 class="luz-landing-footer__col-title" id="footer-project">{{t:footer.project}}</h2>
+      <nav class="luz-site-footer__col" aria-labelledby="footer-project">
+        <h2 class="luz-site-footer__col-title" id="footer-project">{{t:footer.project}}</h2>
         <ul>
           <li><a href="https://github.com/nandovejer/luz">GitHub</a></li>
           <li><a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">{{t:footer.changelog}}</a></li>
@@ -570,7 +570,7 @@ a {
       </nav>
     </div>
     <div class="o-stack landing-foot">
-      <luz-mode class="site-modes" remember by="clock">
+      <luz-color-mode class="site-modes" remember by="clock">
         <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
           <legend class="luz-mode-switcher__label">{{t:footer.mode}}</legend>
           <button class="luz-mode-cycle" type="button" aria-label="{{t:footer.mode-change}}"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
@@ -579,7 +579,7 @@ a {
           <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>{{t:footer.dark}}</label>
           <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>{{t:footer.contrast}}</label>
         </fieldset>
-      </luz-mode>
+      </luz-color-mode>
       <p class="u-text-muted landing-legal">{{html:footer.legal}}</p>
     </div>
   </footer>

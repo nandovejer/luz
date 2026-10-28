@@ -1,0 +1,28 @@
+/* ==========================================================================
+	 LUZ Catalog: landing glow.
+	 Layer: catalog · Prefix: .luz-glow
+	 On the .o-page element: the brand's subtle tint at the top of the page,
+	 over a fade from the page surface to the muted one. Decoration only: it
+	 carries no meaning, and paper does not get it.
+	 --luz-glow-x: where along the top edge the tint sits, a physical
+	 position (0% the left, 100% the right). Unset, the edge where reading
+	 starts: the left in left-to-right text, the right in right-to-left.
+	 ========================================================================== */
+
+.luz-glow {
+	--luz-glow-start: 100%;
+
+	background:
+		radial-gradient(circle at var(--luz-glow-x, var(--luz-glow-start)) 0%, var(--luz-brand-subtle), transparent 28%),
+		linear-gradient(180deg, var(--luz-surface-page) 0%, var(--luz-surface-muted) 100%);
+}
+
+.luz-glow:dir(ltr) {
+	--luz-glow-start: 0%;
+}
+
+@media print {
+	.luz-glow {
+		background: none;
+	}
+}

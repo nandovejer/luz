@@ -1,0 +1,159 @@
+<!-- luz:page
+title: Dato destacado
+description: Muestra una cifra en grande, con una etiqueta breve debajo.
+fits: una fila de cifras en una landing page
+source: 5e30a5ec14d0
+reviewed: false
+-->
+    <div class="docs-component" id="p-stat">
+          <h2 id="example">Ejemplo</h2>
+          <p>Tres cifras, cada una con una etiqueta breve debajo.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage" id="demo-stat">
+            <ul class="o-grid o-grid--3">
+              <li>
+                <div class="luz-stat">
+                  <p class="luz-stat__value">4,000+</p>
+                  <p class="luz-stat__label">teams on the platform</p>
+                </div>
+              </li>
+              <li>
+                <div class="luz-stat">
+                  <p class="luz-stat__value">99.95%</p>
+                  <p class="luz-stat__label">uptime in the last year</p>
+                </div>
+              </li>
+              <li class="luz-card">
+                <div class="luz-stat">
+                  <p class="luz-stat__value">12 min</p>
+                  <p class="luz-stat__label">to set up, on average</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <p class="docs-demo__note">The first two stand on the page; the third sits in a <code class="luz-code-inline">luz-card</code>. In a column narrower than 768 px the three stack.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del dato destacado">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-stat" aria-label="Copy the stat markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Stat markup"><code id="code-stat">&lt;ul class=&quot;o-grid o-grid--3&quot;&gt;
+  &lt;li&gt;
+    &lt;div class=&quot;luz-stat&quot;&gt;
+      &lt;p class=&quot;luz-stat__value&quot;&gt;4,000+&lt;/p&gt;
+      &lt;p class=&quot;luz-stat__label&quot;&gt;teams on the platform&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;!-- one li for each stat; a card is a li.luz-card --&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Sin modificadores: dos partes, independientes o dentro de una tarjeta.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Partes del dato destacado" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-stat</code></div></td><td data-label="Qué hace"><div>El bloque: el valor sobre la etiqueta, separados por un espacio pequeño (<code>--luz-space-2xs</code>), sin relleno ni superficie.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-stat__value</code></div></td><td data-label="Qué hace"><div>La cifra: tipografía de encabezado, tamaño 3xl y trazo fino, con cifras del mismo ancho; se ajusta en columnas estrechas.</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-stat__label</code></div></td><td data-label="Qué hace"><div>Lo que cuenta la cifra: tamaño sm y color de texto secundario.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>components/stat.css</code> de <code>@luz-ds/catalog</code>. No usa JavaScript.</p>
+            <ul>
+              <li>El dato destacado no organiza otros elementos: coloca varios en una lista con cuadrícula de core, <code>ul.o-grid.o-grid--3</code>. En una <a href="/docs/components/card/">tarjeta</a> usa el relleno y la superficie de esta.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el dato destacado es HTML y CSS, y la cifra no cuenta hacia arriba.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>El dato destacado no tiene una interacción ni un rol propios.</p>
+            <ul>
+              <li>El valor va antes que la etiqueta en el código fuente, así se lee en ese orden. Pon los datos en un <code>&lt;ul&gt;</code> debajo del encabezado de la sección.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa un dato destacado para respaldar una afirmación con una cifra: cuántas personas usan el producto o lo rápido que es. Entre dos y cuatro cifras juntas se leen de un vistazo.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No uses un dato destacado para una cifra que necesite una frase para entenderse.</p>
+            <ul>
+              <li>Para comparar filas y columnas, usa una <a href="/docs/components/table/">tabla</a>.</li>
+            </ul>
+            <h3 id="do-dont">Buenas y malas prácticas</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> Un valor breve y una etiqueta que indique qué se cuenta.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-stat"><p class="luz-stat__value">4,000+</p><p class="luz-stat__label">teams on the platform</p></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> Uses una palabra como valor y una etiqueta vaga: nadie puede comprobar qué significa «genial».</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-stat"><p class="luz-stat__value">Great</p><p class="luz-stat__label">results</p></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> Incluye la unidad en el valor para que la cifra se entienda por sí sola.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-stat"><p class="luz-stat__value">12 min</p><p class="luz-stat__label">to set up, on average</p></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> Escribas una frase como valor: se muestra en grande y se partiría en muchas líneas.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-stat"><p class="luz-stat__value">More than four thousand teams</p><p class="luz-stat__label">use it</p></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Redacción del contenido</h3>
+            <p>El valor es un número con su unidad, de cinco caracteres o menos si es posible. La etiqueta indica qué cuenta el número.</p>
+            <ul>
+              <li>Escribe la cifra como la dirías: «4.000+», «99,95 %», «12 min».</li>
+              <li>La etiqueta va en minúscula, sin punto final, e indica el periodo o a quién se refiere: «disponibilidad durante el último año».</li>
+              <li>Si alguien podría preguntarse de dónde sale una cifra, indica la fuente en una nota debajo de la sección.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El valor usa el color de texto principal y la etiqueta, el secundario, sobre la página o una tarjeta.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del dato destacado en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Valor</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Valor en una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>16.5:1</div></td><td data-label="Oscuro"><div>14.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta en una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo, redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para el texto.</p>
+            <ul>
+              <li><strong>Foco:</strong> el dato destacado no recibe el foco; no es interactivo.</li>
+            </ul>
+            <h3 id="tokens">Tokens que utiliza</h3>
+            <p>Los 8 tokens que leen, por familia, las reglas de <code>.luz-stat</code> en <code>components/stat.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-text-2xl</code>, <code>--luz-text-3xl</code>, <code>--luz-text-base</code>, <code>--luz-text-xl</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

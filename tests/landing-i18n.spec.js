@@ -276,7 +276,7 @@ test.describe('Arabic typography', () => {
     const style = (selector) =>
       page.locator(selector).first().evaluate((el) => ({ font: getComputedStyle(el).fontFamily, spacing: getComputedStyle(el).letterSpacing }));
     const sans = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--luz-font-sans').trim());
-    for (const selector of ['h1', '.luz-landing-section__title', '.luz-landing-section__eyebrow', '.luz-landing-section__lead', '.landing-install__label', '.landing-cut__label', '.landing-foot-label', '.landing-brand__beta']) {
+    for (const selector of ['h1', '.luz-section__title', '.luz-section__eyebrow', '.luz-section__lead', '.landing-install__label', '.landing-cut__label', '.landing-foot-label', '.landing-brand__beta']) {
       await expect(page.locator(selector).first(), selector).toBeAttached();
       const { font, spacing } = await style(selector);
       expect(font, selector).not.toMatch(/ET Book/i);

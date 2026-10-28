@@ -13,7 +13,7 @@ import { describe, expect, it } from "vitest";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** Set by a script on `:root`, not by a stylesheet: the file that sets it. */
-const SET_BY_SCRIPT = { "--luz-consent-h": "packages/catalog/src/consent.js" };
+const SET_BY_SCRIPT = { "--luz-consent-h": "packages/catalog/src/cookie-consent.js" };
 
 const cssUnder = (dir) =>
   existsSync(dir)

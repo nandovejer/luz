@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Reproductor multimedia
 description: Reproduce un vídeo, un sonido o un archivo MIDI en la página, con los mismos controles para los tres.
-source: c4c244e90704
+source: 01485948ecef
 reviewed: false
 -->
     <div class="docs-component" id="c-player">
@@ -207,13 +207,13 @@ initPlayers();</code></pre>
               <li>Para una ilustración animada breve y sin sonido, usa una imagen o una <a href="/docs/components/figure/">figura</a>.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Hazlo</strong> Deja que quien lee inicie los controles y asigna un nombre que indique qué se reproduce. Versión abreviada: el marcado completo está en «Copiar el marcado».</figcaption>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Deja que quien lee inicie los controles y asigna un nombre que indique qué se reproduce. Versión abreviada: el marcado completo está en «Copiar el marcado».</figcaption>
                 <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Do: player markup"><code>&lt;div class="luz-player" data-type="audio" role="group" aria-label="Episode 12 player"&gt;&#10;  &lt;audio class="luz-player-audio" preload="metadata" controls src="episode-12.mp3"&gt;&lt;/audio&gt;&#10;&lt;/div&gt;</code></pre>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">No lo hagas</strong> Reproduzcas contenido multimedia automáticamente. El sonido que dura más de 3 segundos debe poder detenerse (WCAG 1.4.2), así que aquí solo se muestra como código.</figcaption>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Reproduzcas contenido multimedia automáticamente. El sonido que dura más de 3 segundos debe poder detenerse (WCAG 1.4.2), así que aquí solo se muestra como código.</figcaption>
                 <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Don't: player markup"><code>&lt;video autoplay loop src="intro.mp4"&gt;&lt;/video&gt;</code></pre>
               </figure>
             </div>

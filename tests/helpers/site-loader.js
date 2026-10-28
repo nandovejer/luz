@@ -6,16 +6,16 @@
  * shifts.
  */
 
-/** A page with a <luz-search> and a <luz-consent>, loading catalog.min.js. */
+/** A page with a <luz-search> and a <luz-cookie-consent>, loading catalog.min.js. */
 export const PAGE = '/tests/fixtures/site-loader.html';
 /** The same loader, and neither element. */
 export const EMPTY = '/tests/fixtures/site-loader-empty.html';
-/** The same loader and a <luz-mode>, and neither of the others. */
+/** The same loader and a <luz-color-mode>, and neither of the others. */
 export const MODE_PAGE = '/tests/fixtures/site-loader-mode.html';
 
 export const SEARCH_CHUNK = /\/search\.min\.js(\?.*)?$/;
-export const CONSENT_CHUNK = /\/consent\.min\.js(\?.*)?$/;
-export const MODE_CHUNK = /\/mode\.min\.js(\?.*)?$/;
+export const CONSENT_CHUNK = /\/cookie-consent\.min\.js(\?.*)?$/;
+export const MODE_CHUNK = /\/color-mode\.min\.js(\?.*)?$/;
 
 /**
  * Hold idle: requestIdleCallback only queues. Call before page.goto().
@@ -47,13 +47,13 @@ export async function hold(page, url) {
   return release;
 }
 
-/** The chunks the page requests, in order: "search", "consent", "mode". Filled as the page runs. */
+/** The chunks the page requests, in order: "search", "cookie-consent", "color-mode". Filled as the page runs. */
 export function chunkRequests(page) {
   const seen = [];
   page.on('request', (request) => {
     if (SEARCH_CHUNK.test(request.url())) seen.push('search');
-    if (CONSENT_CHUNK.test(request.url())) seen.push('consent');
-    if (MODE_CHUNK.test(request.url())) seen.push('mode');
+    if (CONSENT_CHUNK.test(request.url())) seen.push('cookie-consent');
+    if (MODE_CHUNK.test(request.url())) seen.push('color-mode');
   });
   return seen;
 }

@@ -7,22 +7,22 @@
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/consent.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/cookie-consent.css">
   <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
 </head>
 <body>
   <a class="luz-skip-link" id="skip" href="#main">Skip to main content</a>
 
-  <luz-consent>
-    <section class="luz-consent" id="consent" data-luz-consent aria-labelledby="consent-title" hidden>
+  <luz-cookie-consent>
+    <section class="luz-cookie-consent" id="consent" data-luz-consent aria-labelledby="consent-title" hidden>
       <div data-luz-consent-ask>
-        <h2 class="luz-consent__title" id="consent-title">Cookies on Bodega Albar</h2>
+        <h2 class="luz-cookie-consent__title" id="consent-title">Cookies on Bodega Albar</h2>
         <p>We use cookies that this site needs to work. We would also like to measure how you use it, to improve it. <a id="policy" href="#cookies">Read the cookie policy</a>.</p>
         <form class="o-actions">
           <button class="luz-btn luz-btn--primary" id="accept" type="submit" value="all">Accept optional cookies</button>
           <button class="luz-btn luz-btn--primary" id="reject" type="submit" value="none">Reject optional cookies</button>
         </form>
-        <details class="luz-consent__choices" id="choices">
+        <details class="luz-cookie-consent__choices" id="choices">
           <summary id="choose">Choose which cookies to allow</summary>
           <form class="o-stack">
             <fieldset class="luz-fieldset">
@@ -43,7 +43,7 @@
         <button class="luz-btn luz-btn--secondary" id="close" type="button" data-luz-consent-close>Close</button>
       </div>
     </section>
-  </luz-consent>
+  </luz-cookie-consent>
 
   <header class="luz-fixture-header">
     <!-- Shown by core at 768px and below, where the sidebar becomes a popover drawer -->

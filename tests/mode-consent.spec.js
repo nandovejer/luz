@@ -2,14 +2,14 @@
 /**
  * F6 of .claude/plans/ai-and-catalog-only.md (decisions 40, 42 and 43): core's
  * round colour mode button is fixed at the end corner of the window, and
- * catalog's cookie band (<luz-consent>) is fixed along the bottom edge, so
+ * catalog's cookie band (<luz-cookie-consent>) is fixed along the bottom edge, so
  * the two meet. While the band shows, the button rides on its top edge (the
  * margin of the corner above the band), the window and the sticky docs rail
  * (from 80rem) keep the room of both for what Tab reaches (WCAG 2.4.11), and
- * <luz-mode> around a fixed button leaves no empty block in the flow.
+ * <luz-color-mode> around a fixed button leaves no empty block in the flow.
  *
  * On tests/fixtures/mode-consent.html: a page with a docs rail, a long main
- * part with links at the end corner, and a footer with <luz-mode>, loaded
+ * part with links at the end corner, and a footer with <luz-color-mode>, loaded
  * through luz.min.js and catalog.min.js, the real path. The button itself is
  * tests/mode-cycle.spec.js; the band alone is tests/consent-band.spec.js.
  *
@@ -65,7 +65,7 @@ async function tabStopsCovered(page, limit = 160) {
     const seen = await page.evaluate(() => {
       const el = document.activeElement;
       if (!el || el === document.body) return null;
-      if (el.closest('luz-consent')) return { band: true };
+      if (el.closest('luz-cookie-consent')) return { band: true };
       const r = el.getBoundingClientRect();
       const samples = [];
       for (const fx of [0.1, 0.5, 0.9]) for (const fy of [0.1, 0.5, 0.9]) samples.push([r.left + r.width * fx, r.top + r.height * fy]);
@@ -143,17 +143,17 @@ test('in a window 30rem tall or less the band is in the flow and the button stay
   expect(440 - button.bottom).toBeCloseTo(margin, 0);
 });
 
-test.describe('<luz-mode> around a fixed button', () => {
+test.describe('<luz-color-mode> around a fixed button', () => {
   test('is display: contents, so it leaves no empty block in the flow', async ({ page }) => {
     await open(page);
-    await expect(page.locator('luz-mode')).toHaveCSS('display', 'contents');
-    expect((await box(page, 'luz-mode')).height).toBe(0);
+    await expect(page.locator('luz-color-mode')).toHaveCSS('display', 'contents');
+    expect((await box(page, 'luz-color-mode')).height).toBe(0);
   });
 
   test('is a block again when the button is .luz-mode-switcher--inline', async ({ page }) => {
     await open(page);
     await page.locator('.luz-mode-switcher--cycle').evaluate((el) => el.classList.add('luz-mode-switcher--inline'));
-    await expect(page.locator('luz-mode')).toHaveCSS('display', 'block');
+    await expect(page.locator('luz-color-mode')).toHaveCSS('display', 'block');
   });
 });
 
@@ -162,20 +162,20 @@ test.describe('the sticky docs rail, from 80rem', () => {
     await open(page, { width: 1280 });
     const h = await consentH(page);
     expect(h).toBeGreaterThan(0);
-    const inner = await page.locator('.luz-docs-rail__inner').evaluate((el) => {
+    const inner = await page.locator('.luz-page-rail__inner').evaluate((el) => {
       const s = getComputedStyle(el);
       return { padding: parseFloat(s.paddingBlockEnd), scroll: parseFloat(s.scrollPaddingBlockEnd) };
     });
     expect(inner.padding).toBeCloseTo(h, 0);
     expect(inner.scroll).toBeCloseTo(h, 0);
     await answer(page);
-    const after = await page.locator('.luz-docs-rail__inner').evaluate((el) => parseFloat(getComputedStyle(el).paddingBlockEnd));
+    const after = await page.locator('.luz-page-rail__inner').evaluate((el) => parseFloat(getComputedStyle(el).paddingBlockEnd));
     expect(after).toBe(0);
   });
 
   test('below 80rem the rail is not a scroller of its own and keeps no padding for the band', async ({ page }) => {
     await open(page, { width: 1024 });
-    const padding = await page.locator('.luz-docs-rail__inner').evaluate((el) => parseFloat(getComputedStyle(el).paddingBlockEnd));
+    const padding = await page.locator('.luz-page-rail__inner').evaluate((el) => parseFloat(getComputedStyle(el).paddingBlockEnd));
     expect(padding).toBe(0);
   });
 

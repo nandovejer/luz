@@ -9,8 +9,10 @@
  *       layout components that came from core (navbar, sidebar, terminal, timeline), the exports of spec §1.3, no placeholders
  *
  * F5b (.claude/plans/ai-and-catalog-only.md, decisions 1, 2, 51 to 58): landing, cms, app and docs are not
- * packages any more, their patterns are files of catalog (`<kind>-<name>.css`), so "a kind of site" is a
- * prefix of the files of catalog now (the list is in tests/catalog-patterns.test.js).
+ * packages any more, their patterns are files of catalog. F8 (decisions 65 to 69) named each file for its block
+ * (`hero.css`, `site-header.css`), with no kind of site in the name, so a file of the patterns is known by the
+ * list in tests/helpers/catalog-names.js, no longer by a prefix; the rule of names of catalog admits no
+ * `luz-<kind>-*` (decision 57).
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -19,23 +21,16 @@ import { describe, expect, it } from "vitest";
 import { JPEG_LONG_SIDES, LONG_SIDES, RATIOS, VARIANTS, sizeOf } from "../scripts/build-placeholders.js";
 import { LAYER_ORDER } from "../scripts/luz-layers.js";
 import { blocksOfCss } from "./helpers/css-blocks.js";
+import { LAYOUT, PATTERNS } from "./helpers/catalog-names.js";
 import { isNpmOrReleased } from "./helpers/versions.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const KINDS = ["landing", "cms", "app", "docs"];
-/** The 21 stylesheets of catalog that came from the four packages (`<kind>-<name>`), in the order of their kinds. */
-const PATTERNS = [
-  ...["header", "hero", "main", "section", "stat", "footer", "glow"].map((n) => `landing-${n}`),
-  ...["header", "page-header", "article-header", "article", "footer"].map((n) => `cms-${n}`),
-  ...["header", "dashboard"].map((n) => `app-${n}`),
-  ...["shell", "page-head", "rail", "example", "dodont", "pager", "page-foot"].map((n) => `docs-${n}`),
-];
-/** F7 (decisions 27 and 28): the four components that moved from core to catalog, the same classes, the same element. */
-const LAYOUT = ["navbar", "sidebar", "terminal", "timeline"];
-const SITE_TAGS = ["search", "consent", "lang-switch", "submenu", "banner"];
-// F1 of the identity plan adds <luz-mode> to catalog. It is not in SITE_TAGS: core's theme.js has a
-// storage key spelled "luz-mode" (the mode of a custom theme), which the layering check would take for the tag
-const SITE_COMPONENTS = [...SITE_TAGS, "mode"];
+/** The tags catalog defines or styles for any site (the four components of F7 are in tests/helpers/catalog-names.js). */
+const SITE_TAGS = ["search", "cookie-consent", "lang-switch", "submenu", "announcement"];
+// <luz-color-mode> is not in SITE_TAGS: core's theme.js has a storage key spelled "luz-mode" (the mode of a custom
+// theme), which the layering check would take for the old tag; the new name has no such twin
+const SITE_COMPONENTS = [...SITE_TAGS, "color-mode"];
 
 /** Source files (.css and .js) of packages/<name>/src, with their text. */
 function sources(name, extensions = [".css", ".js"]) {
@@ -63,31 +58,32 @@ function offenders(names, pattern, keep = () => true) {
 
 /* ---- (a) A lower package never names a higher one ------------------------ */
 
-/** A source file of catalog that is a pattern of a kind of site (`components/<kind>-<name>.css`). */
-const isPatternFile = (path) => new RegExp(`/components/(?:${KINDS.join("|")})-[\\w-]+\\.css$`).test(path);
+/** A source file of catalog that is a pattern of a kind of site (`components/<block>.css`, one of the 20). */
+const isPatternFile = (path) => new RegExp(`/components/(?:${PATTERNS.join("|")})\\.css$`).test(path);
+/** A class of the names before F8, or the tag of an element before it. */
+const OLD_NAME = /luz-(?:landing|cms)-|luz-app-(?:header|dashboard)(?![\w-])|luz-docs-(?:shell|page-|rail|pager|example|dodont)|luz-(?:consent|banner)(?![\w:-])/;
 
 describe("layering: tokens < core < catalog", () => {
-  it("tokens and core name no catalog block, no pattern of a kind of site and none of catalog's five tags", () => {
-    const tags = new RegExp(`luz-(?:${SITE_TAGS.join("|")})(?:__|--|(?![\\w-]))`);
-    expect(offenders(["tokens", "core"], /luz-(?:site|catalog|landing|cms|app|docs)-/)).toEqual([]);
+  it("tokens and core name no catalog block (the 20 patterns, the four layout components) and none of catalog's six tags", () => {
+    const tags = new RegExp(`(?<![\\w-])luz-(?:${SITE_COMPONENTS.join("|")})(?:__|--|(?![\\w-]))`);
+    const blocks = new RegExp(`(?<![\\w-])luz-(?:${[...PATTERNS, ...LAYOUT].join("|")})(?:__|--|(?![\\w-]))`);
+    expect(offenders(["tokens", "core"], /luz-(?:site|catalog|landing|cms)-/)).toEqual([]);
+    expect(offenders(["tokens", "core"], blocks)).toEqual([]);
     expect(offenders(["tokens", "core"], tags)).toEqual([]);
   });
 
-  it("the elements of catalog (search, consent, mode, lang-switch, submenu, banner) name no pattern of a kind of site", () => {
-    expect(offenders(["catalog"], /luz-(?:landing|cms|app|docs)-/, (path) => !isPatternFile(path))).toEqual([]);
+  it("the elements of catalog (search, cookie-consent, color-mode, lang-switch, submenu, announcement) name no pattern of a kind of site, nor a name of before F8", () => {
+    expect(offenders(["catalog"], OLD_NAME, (path) => !isPatternFile(path) && /\/components\//.test(path))).toEqual([]);
   });
 
-  // A pattern may refine catalog's tags (`.luz-landing-header luz-lang-switch`), but catalog's old
-  // `luz-site-*` classes went away in F3, and two kinds never meet: no shared class (spec §1.8)
-  const other = (kind) => KINDS.filter((k) => k !== kind).join("|");
-  for (const kind of KINDS) {
-    it(`the ${kind} patterns name no \`luz-catalog-*\` class or property and no other kind of site`, () => {
-      const own = new RegExp(`/components/${kind}-[\\w-]+\\.css$`);
-      const files = sources("catalog").filter(({ path }) => own.test(path));
-      expect(files.length, `packages/catalog/src/components/${kind}-*.css`).toBeGreaterThan(0);
-      expect(offenders(["catalog"], new RegExp(`luz-(?:site|catalog)-|luz-(?:${other(kind)})-`), (path) => own.test(path))).toEqual([]);
-    });
-  }
+  // A pattern may refine catalog's tags (`.luz-site-header luz-lang-switch`), but catalog's old `luz-catalog-*` classes went
+  // away in F3, `luz-site-*` is only the header and the footer (the unions of F8), and no pattern names a class of before F8
+  it.each(PATTERNS)("the pattern %s names no `luz-catalog-*` class or property, no `luz-site-*` but the header and the footer, and no name of before F8", (name) => {
+    const own = new RegExp(`/components/${name}\\.css$`);
+    expect(sources("catalog").filter(({ path }) => own.test(path)).length, `packages/catalog/src/components/${name}.css`).toBe(1);
+    expect(offenders(["catalog"], /luz-catalog-|luz-site-(?!header|footer)/, (path) => own.test(path))).toEqual([]);
+    expect(offenders(["catalog"], OLD_NAME, (path) => own.test(path))).toEqual([]);
+  });
 });
 
 /* ---- (b) No block is shipped by two packages ------------------------------ */
@@ -135,13 +131,13 @@ describe("names: one package per block", () => {
   it("reads a block from the leftmost compound, through :where() and :is()", () => {
     const css = `
       :where(luz-submenu > details > summary) { color: red }
-      :where(luz-banner)[tone="warning"], .luz-card__title--x { color: red }
+      :where(luz-announcement)[tone="warning"], .luz-card__title--x { color: red }
       .o-stack.o-stack--lg > * { color: red }
-      .luz-landing-header luz-lang-switch { color: red }
-      :root:has(.o-sticky) .luz-cms-toc { color: red }
+      .luz-site-header luz-lang-switch { color: red }
+      :root:has(.o-sticky) .luz-toc { color: red }
       @media (min-height: 30rem) { :is(.o-sticky) { position: sticky } }
     `;
-    expect([...blocksOfCss(css)].sort()).toEqual(["luz-banner", "luz-card", "luz-landing-header", "luz-submenu", "o-stack", "o-sticky"]);
+    expect([...blocksOfCss(css)].sort()).toEqual(["luz-announcement", "luz-card", "luz-site-header", "luz-submenu", "o-stack", "o-sticky"]);
   });
 });
 
@@ -174,7 +170,7 @@ describe("peers: catalog needs tokens and core, and the four packages for one ki
 
 /* ---- (d) catalog after F3 and F1: six components and nothing else (step 12) -------- */
 
-describe("catalog after F7: six `<luz-*>` elements, the 21 patterns of the four kinds of site and the four layout components of core", () => {
+describe("catalog after F8: six `<luz-*>` elements, the 20 patterns of the four kinds of site and the four layout components of core", () => {
   const read = (path) => readFileSync(`${root}${path}`, "utf-8");
   const manifest = JSON.parse(read("packages/catalog/package.json"));
   const components = [...SITE_COMPONENTS, ...LAYOUT, ...PATTERNS].map((name) => `${name}.css`).sort();
@@ -182,7 +178,7 @@ describe("catalog after F7: six `<luz-*>` elements, the 21 patterns of the four 
   const list = (dir, keep) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(keep).sort() : []);
   const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");
 
-  it("src/components holds the six elements, the four layout components and the 21 patterns, nothing else: no `_print.css`, the print rules are in each component", () => {
+  it("src/components holds the six elements, the four layout components and the 20 patterns, nothing else: no `_print.css`, the print rules are in each component", () => {
     expect(list("packages/catalog/src/components", (f) => f.endsWith(".css"))).toEqual(components);
   });
 
@@ -196,7 +192,7 @@ describe("catalog after F7: six `<luz-*>` elements, the 21 patterns of the four 
     for (const f of ["catalog.css", "catalog.min.css", "print.css"]) expect(existsSync(`${root}packages/catalog/dist/${f}`), f).toBe(false);
   });
 
-  it.skipIf(!built)("dist/components is exactly the six elements, the four layout components and the 21 patterns, plain and minified", () => {
+  it.skipIf(!built)("dist/components is exactly the six elements, the four layout components and the 20 patterns, plain and minified", () => {
     expect(list("packages/catalog/dist/components", isCss)).toEqual(components);
     expect(list("packages/catalog/dist/components", (f) => f.endsWith(".min.css"))).toEqual(minified);
   });
@@ -213,8 +209,8 @@ describe("catalog after F7: six `<luz-*>` elements, the 21 patterns of the four 
     expect(manifest.exports).toEqual({
       ".": "./dist/catalog.js",
       "./search": "./dist/search.js",
-      "./consent": "./dist/consent.js",
-      "./mode": "./dist/mode.js",
+      "./cookie-consent": "./dist/cookie-consent.js",
+      "./color-mode": "./dist/color-mode.js",
       "./sidebar": "./dist/sidebar.js",
       "./timeline": "./dist/timeline.js",
       "./classes.json": "./dist/classes.json",
@@ -226,28 +222,28 @@ describe("catalog after F7: six `<luz-*>` elements, the 21 patterns of the four 
 
   it("`sideEffects` is the component stylesheets and the files that define or load an element", () => {
     expect([...manifest.sideEffects].sort()).toEqual(
-      ["./dist/components/*.css", "./dist/catalog.js", "./dist/catalog.min.js", "./dist/search.js", "./dist/search.min.js", "./dist/consent.js", "./dist/consent.min.js", "./dist/mode.js", "./dist/mode.min.js", "./dist/timeline.js", "./dist/timeline.min.js"].sort(),
+      ["./dist/components/*.css", "./dist/catalog.js", "./dist/catalog.min.js", "./dist/search.js", "./dist/search.min.js", "./dist/cookie-consent.js", "./dist/cookie-consent.min.js", "./dist/color-mode.js", "./dist/color-mode.min.js", "./dist/timeline.js", "./dist/timeline.min.js"].sort(),
     );
   });
 
   it("ships `dist` and the licence only, and describes its components", () => {
     expect(manifest.files).toEqual(["dist", "LICENSE"]);
-    for (const word of ["search", "consent", "language", "submenu", "banner"]) expect(manifest.description.toLowerCase(), word).toContain(word);
+    for (const word of ["search", "consent", "language", "submenu", "announcement"]) expect(manifest.description.toLowerCase(), word).toContain(word);
     expect(manifest.description.toLowerCase(), "no placeholder in the package").not.toContain("placeholder");
   });
 
-  it("pack-files.txt lists the six elements, the four layout components and the 21 patterns, plain and minified, and no placeholder", () => {
+  it("pack-files.txt lists the six elements, the four layout components and the 20 patterns, plain and minified, and no placeholder", () => {
     const packed = read("packages/catalog/pack-files.txt").split("\n").filter(Boolean);
     expect(packed.filter((f) => f.startsWith("dist/components/")).sort()).toEqual([...components, ...minified].sort().map((f) => `dist/components/${f}`));
     expect(packed.filter((f) => /placeholder/.test(f))).toEqual([]);
   });
 
-  it("no source of catalog names a `luz-catalog-*` class or property", () => {
-    expect(offenders(["catalog"], /luz-(?:site|catalog)-/)).toEqual([]);
+  it("no source of catalog names a `luz-catalog-*` class or property, and `luz-site-*` is only the header and the footer", () => {
+    expect(offenders(["catalog"], /luz-catalog-|luz-site-(?!header|footer)/)).toEqual([]);
   });
 
-  it("search and consent hide on paper what only works on a screen, each in its own file, inside `@layer luz.print`", () => {
-    for (const [name, hidden] of [["search", "luz-search"], ["consent", "luz-consent"]]) {
+  it("search and cookie consent hide on paper what only works on a screen, each in its own file, inside `@layer luz.print`", () => {
+    for (const [name, hidden] of [["search", "luz-search"], ["cookie-consent", "luz-cookie-consent"]]) {
       const css = read(`packages/catalog/src/components/${name}.css`);
       expect(css, `${name}.css has a print block`).toMatch(/@media print/);
       expect(css.slice(css.indexOf("@media print")), `${name}.css hides ${hidden} on paper`).toContain(hidden);

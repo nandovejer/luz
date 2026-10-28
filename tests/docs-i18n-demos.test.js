@@ -4,7 +4,7 @@
  * English in translated pages (first delivery)").
  *
  * The export of the translation tools skipped the live LUZ markup of a page:
- * `[data-docs-specimen]`, `.luz-docs-dodont__stage` (from @luz-ds/docs) and
+ * `[data-docs-specimen]`, `.luz-do-dont__stage` (from @luz-ds/docs) and
  * `.docs-snippet`. So in a page of a language the generator marks each of
  * those containers `lang="en"`, and `dir="ltr"` when the page is right to
  * left (<html dir="rtl">), unless the translation's own markup gives that
@@ -30,7 +30,7 @@ afterEach(() => made.splice(0).forEach((f) => f.cleanup()));
 /** The three kinds of container, by the class or the attribute that marks them. */
 const KINDS = {
   specimen: (n) => n.attrs.has("data-docs-specimen"),
-  "do and don't stage": (n) => hasClass(n, "luz-docs-dodont__stage"),
+  "do and don't stage": (n) => hasClass(n, "luz-do-dont__stage"),
   snippet: (n) => hasClass(n, "docs-snippet"),
 };
 const containers = (root) => findAll(root, (n) => Object.values(KINDS).some((is) => is(n)));
@@ -49,7 +49,7 @@ const widgetBody = (t = (text) => text, own = "") =>
     `<h3 id="markup">${t("Copy the markup")}</h3>`,
     `<div class="docs-snippet"><pre class="luz-code-block"><code>&lt;button class="luz-btn"&gt;Save&lt;/button&gt;</code></pre></div>`,
     `<h3 id="do-dont">${t("Do and don't")}</h3>`,
-    `<div class="luz-docs-dodont__stage" inert aria-hidden="true"><button type="button" class="luz-btn">${t("Delete")}</button></div>`,
+    `<div class="luz-do-dont__stage" inert aria-hidden="true"><button type="button" class="luz-btn">${t("Delete")}</button></div>`,
   ].join("\n");
 
 const WORDS = { Example: "Ejemplo", Save: "Guardar", "Known issues": "Problemas conocidos", Code: "Código", "Copy the markup": "Copia el marcado", "Do and don't": "Qué hacer y qué no", Cancel: "Cancelar", Delete: "Borrar" };

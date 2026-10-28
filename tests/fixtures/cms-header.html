@@ -4,24 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CMS header: the blog bar</title>
-  <!-- tests/cms-header.spec.js: the default (blog) .luz-cms-header with site loaded (<luz-search> and
+  <!-- tests/cms-header.spec.js: the default (blog) .luz-site-header luz-site-header--publication with site loaded (<luz-search> and
        <luz-lang-switch>). No script at all: the header needs none, and the search shows its A-Z fallback -->
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/navbar.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/site-header.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/lang-switch.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/cms-header.css">
 </head>
 <body class="o-page">
   <a class="luz-skip-link" href="#top">Skip to content</a>
-  <header class="luz-cms-header o-sticky" id="hdr">
+  <header class="luz-site-header luz-site-header--publication o-sticky" id="hdr">
     <div class="o-container o-container--inline o-row" id="row">
       <button class="luz-nav-toggle" id="toggle" type="button" popovertarget="cms-nav" aria-label="Sections">
         <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
       </button>
-      <a class="luz-cms-header__brand" id="brand" href="#top">The Vejer Review</a>
+      <a class="luz-site-header__brand" id="brand" href="#top">The Vejer Review</a>
       <nav class="luz-navbar" id="cms-nav" aria-label="Sections" popover>
         <ul class="luz-navbar__list">
           <li><a class="luz-navbar__link" href="#top" aria-current="true">News</a></li>
@@ -31,7 +31,7 @@
           <li><a class="luz-navbar__link" href="#top">Contact</a></li>
         </ul>
       </nav>
-      <div class="o-row luz-cms-header__actions" id="actions">
+      <div class="o-row luz-site-header__actions" id="actions">
         <luz-search id="search">
           <a class="luz-search__fallback" id="fallback" href="#top" data-luz-search-fallback>
             <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>

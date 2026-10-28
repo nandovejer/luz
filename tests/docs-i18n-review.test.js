@@ -141,16 +141,16 @@ describe("the fixture site, rendered once for the review tests", () => {
       const want = {
         "the h1": (n) => n.name === "h1" && hasClass(n, "docs-title"),
         "the lead": (n) =>
-          n.name === "p" && hasClass(n, "luz-docs-page-head__lead"),
+          n.name === "p" && hasClass(n, "luz-doc-header__lead"),
         "the last item of the breadcrumb": (n) =>
           hasClass(n, "luz-breadcrumb__item") &&
           n.attrs.get("aria-current") === "page",
-        "a title of the pager": (n) => hasClass(n, "luz-docs-pager__title"),
+        "a title of the pager": (n) => hasClass(n, "luz-pager__title"),
         "a list of the sidebar": (n) =>
           n.name === "ul" && (hasClass(n, "docs-nav__pages") || n.parent?.name === "details"),
         "a link of the sidebar": (n) =>
           n.name === "a" && hasClass(n, "luz-sidebar__link"),
-        "the list of 'On this page'": (n) => hasClass(n, "luz-docs-rail__list"),
+        "the list of 'On this page'": (n) => hasClass(n, "luz-page-rail__list"),
         "a card of a gallery": (n) =>
           n.name === "li" && hasClass(n, "docs-card"),
         "a link of 'Keep going'": (n) =>
@@ -282,7 +282,7 @@ describe("the fixture site, rendered once for the review tests", () => {
         const siblings = main.children.filter(
           (n) =>
             n === notice ||
-            hasClass(n, "luz-docs-page-head") ||
+            hasClass(n, "luz-doc-header") ||
             matcher("div.docs-body")(n)
         );
         expect(

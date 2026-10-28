@@ -152,7 +152,7 @@ test('docs: the home shows the A–Z link in place of the big search button', as
 
 test('docs: the color mode switcher is three radios, none checked, that set the mode', async ({ page }) => {
   await page.goto('/docs/');
-  const switcher = page.locator('footer luz-mode .luz-mode-switcher--cycle');
+  const switcher = page.locator('footer luz-color-mode .luz-mode-switcher--cycle');
   await expect(switcher.locator('.luz-mode-btn')).toHaveCount(3);
   await expect(switcher.locator('input[name="luz-theme"]')).toHaveCount(3);
   expect(await switcher.locator('input[name="luz-theme"]').evaluateAll((all) => all.map((r) => r.value))).toEqual(['light', 'dark', 'high-contrast']);
@@ -178,7 +178,7 @@ for (const app of ['/', '/docs/', '/docs/components/button/']) {
 
 test('docs: the specimens carry no data-theme without JavaScript, and the radios still re-scope them', async ({ page }) => {
   await page.goto('/docs/components/button/');
-  const specimens = page.locator('[data-docs-specimen], .luz-docs-dodont__stage');
+  const specimens = page.locator('[data-docs-specimen], .luz-do-dont__stage');
   expect(await specimens.count()).toBeGreaterThan(1);
   expect(await specimens.evaluateAll((all) => all.filter((el) => el.hasAttribute('data-theme')).length)).toBe(0);
   const specimen = page.locator('[data-docs-specimen]').first();
@@ -233,7 +233,7 @@ for (const home of ['/', '/es/', '/ar/']) {
   test(`${home}: the light section is an empty <home-light> under a heading and keeps its height`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(home);
-    await expect(page.locator('.luz-landing-hero h1')).toBeVisible();
+    await expect(page.locator('.luz-hero h1')).toBeVisible();
     await expect(page.locator('section#light h2')).toHaveText(/\S/);
     await expect(page.locator('section#light home-light')).toHaveCount(1);
     expect(await page.locator('home-light').evaluate((el) => ({ children: el.childElementCount, text: (el.textContent ?? '').trim() }))).toEqual({ children: 0, text: '' });
@@ -323,10 +323,10 @@ for (const home of ['/', '/es/', '/ar/']) {
 
   test(`${home}: the footer lists its two columns, the three colour modes and the legal line, and the three languages are in the header`, async ({ page }) => {
     await page.goto(home);
-    const footer = page.locator('footer.luz-landing-footer');
-    await expect(footer.locator('.luz-landing-footer__col')).toHaveCount(2);
-    await expect(footer.locator('.luz-landing-footer__col').nth(1).locator('a')).toHaveCount(4);
-    await expect(footer.locator('luz-mode input[name="luz-theme"]')).toHaveCount(3);
+    const footer = page.locator('footer.luz-site-footer');
+    await expect(footer.locator('.luz-site-footer__col')).toHaveCount(2);
+    await expect(footer.locator('.luz-site-footer__col').nth(1).locator('a')).toHaveCount(4);
+    await expect(footer.locator('luz-color-mode input[name="luz-theme"]')).toHaveCount(3);
     expect((await footer.locator('p').allInnerTexts()).join(' ').length).toBeGreaterThan(40);
     // The languages are links of the header's switch (a popover nav, in the markup without a script)
     await expect(page.locator('.site-header luz-lang-switch a')).toHaveCount(3);

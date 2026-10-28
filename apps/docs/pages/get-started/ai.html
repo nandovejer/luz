@@ -89,7 +89,7 @@ npx @luz-ds/check@0.2.1 src --json</code></pre>
           <button class="luz-copy-btn" type="button" data-copy-from="code-check-out" aria-label="Copy the example output">Copy</button>
         </div>
         <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Example output"><code id="code-check-out">✗ index.html:14:8 class/unknown  .luz-btn-primary is not a LUZ class; the closest is .luz-btn--primary
-✗ index.html:22:5 load/package-missing  &lt;luz-banner&gt; is in @luz-ds/catalog/components/banner.css, which this page does not load; add it after core
+✗ index.html:22:5 load/package-missing  &lt;luz-announcement&gt; is in @luz-ds/catalog/components/announcement.css; add it after core
 ! site.css:8:3 css/literal-colour  color is set to #1a5fb4; use a token, such as var(--luz-brand-fill)
 ✗ theme.css:3:3 theme/contrast  light: --luz-text-secondary on surface-page is 2.8:1, needs 4.5:1 (text); change one of the two
     --luz-text-secondary: #999999 is set in theme.css:3
@@ -147,6 +147,7 @@ npx @luz-ds/check@0.2.1 src --json</code></pre>
       <h2 class="docs-chapter__title" id="rules">What check blocks and what it warns about</h2>
       <p class="docs-lead">Each rule has an id such as <code>class/unknown</code>, shown in every finding. A rule that blocks makes the exit code 1.</p>
       <p>A rule that warns does not, unless you pass <code>--strict</code>. The two tables are written from the list of rules the command has.</p>
+      <p>Catalog 0.3 renamed its classes, elements, files and chunks, and the old names do nothing. <code>names/renamed</code> finds an old class, an old tag, a link to an old component file or an old chunk, and gives the new name. It says nothing on a page that links catalog 0.0 to 0.2, where the old names are the right ones.</p>
       <!-- luz:ai rules -->
     </section>
 

@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Tabla
 description: Compara registros con varios atributos, en filas y columnas que se leen bien a 320 px.
-source: 62f70e282b20
+source: 6c5d2ef4a116
 reviewed: false
 -->
     <div class="docs-component" id="c-table">
@@ -14,7 +14,7 @@ reviewed: false
             <label class="luz-check-item"><input type="radio" name="docs-width" value="tablet"> Tableta</label>
             <label class="luz-check-item"><input type="radio" name="docs-width" value="full" checked> Completo</label>
           </fieldset>
-          <div class="luz-docs-example__frame">
+          <div class="luz-example__frame">
           <div class="docs-demo__stage">
             <div class="luz-table-wrap" role="region" aria-label="Service status" tabindex="0">
               <table class="luz-table luz-table--sticky-col">
@@ -202,16 +202,16 @@ initTableSort(document, t);</code></pre>
               <li>Para mostrar una tendencia temporal, usa una biblioteca de gráficos y conserva la tabla como alternativa textual. Una barra por fila es un <a href="/docs/components/meter/">medidor</a> en la celda de su cifra.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
-            <div class="luz-docs-dodont">
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-                <figcaption><strong class="luz-docs-dodont__verdict">Sí</strong> La unidad en la cabecera, los mismos decimales y la columna alineada al final, incluida la cabecera.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> La unidad en la cabecera, los mismos decimales y la columna alineada al final, incluida la cabecera.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="luz-table-wrap"><table class="luz-table"><thead><tr><th>Service</th><th class="luz-table__numeric">CPU (%)</th></tr></thead><tbody><tr><td data-label="Service">api-gateway</td><td class="luz-table__numeric" data-label="CPU (%)">12.0</td></tr><tr><td data-label="Service">mailer</td><td class="luz-table__numeric" data-label="CPU (%)">0.5</td></tr></tbody></table></div>
                 </div>
               </figure>
-              <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-                <figcaption><strong class="luz-docs-dodont__verdict">No</strong> Una cabecera imprecisa, la unidad en cada celda, decimales mezclados y sin alineación: cuesta comparar la columna.</figcaption>
-                <div class="luz-docs-dodont__stage" inert aria-hidden="true">
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> Una cabecera imprecisa, la unidad en cada celda, decimales mezclados y sin alineación: cuesta comparar la columna.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="luz-table-wrap"><table class="luz-table"><thead><tr><th>Service</th><th>Value</th></tr></thead><tbody><tr><td data-label="Service">api-gateway</td><td data-label="Value">12 %</td></tr><tr><td data-label="Service">mailer</td><td data-label="Value">0.48 %</td></tr></tbody></table></div>
                 </div>
               </figure>

@@ -3,7 +3,7 @@
  * (F2 of .claude/plans/luz-home-docs-identity.md, sections 3.3 and 3.4).
  *
  * With no stored choice the site is in Auto and follows the local hour
- * (apps/site/boot.js before the first paint, <luz-mode by="clock"> after).
+ * (apps/site/boot.js before the first paint, <luz-color-mode by="clock"> after).
  * A test fixes the zone (`test.use({ timezoneId: TIMEZONE })`) and the clock
  * (`atTime`), and names a light by an hour inside its phase.
  */

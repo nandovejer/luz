@@ -240,7 +240,7 @@ for (const route of ROUTES) {
             header: rect('#site-header'),
             brand: rect('.site-header__brand'),
             h1: rect('h1'),
-            pageHead: rect('.luz-docs-page-head'),
+            pageHead: rect('.luz-doc-header'),
             main: rect('main'),
             body: rect('body'),
             scroll: [document.documentElement.scrollWidth, document.documentElement.scrollHeight],
@@ -275,7 +275,7 @@ for (const route of ROUTES) {
         };
         const out = [];
         window.__runParents = [];
-        const roots = [document.querySelector('#site-header'), document.querySelector('.luz-docs-page-head')];
+        const roots = [document.querySelector('#site-header'), document.querySelector('.luz-doc-header')];
         for (const root of roots) {
           if (!root) continue;
           const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -301,7 +301,7 @@ for (const route of ROUTES) {
       // read each run's real text colour before the text is made transparent (no style is toggled back: WebKit applies that late)
       const colours = await page.evaluate(() => window.__runParents.map((parent) => getComputedStyle(parent).color));
       // Paint the page with its text transparent: what is left behind each line of text is the background it is read on.
-      await page.addStyleTag({ content: '#site-header *, .luz-docs-page-head * { color: transparent !important; -webkit-text-fill-color: transparent !important; text-shadow: none !important; }' });
+      await page.addStyleTag({ content: '#site-header *, .luz-doc-header * { color: transparent !important; -webkit-text-fill-color: transparent !important; text-shadow: none !important; }' });
       await nextFrames(page);
       const png = await page.screenshot({ animations: 'disabled' });
       const worst = await page.evaluate(

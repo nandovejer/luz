@@ -6,12 +6,12 @@
   <title>Elements, attributes and hooks</title>
   <link rel="stylesheet" href="node_modules/@luz-ds/tokens/dist/luz-tokens.min.css">
   <link rel="stylesheet" href="node_modules/@luz-ds/core/dist/luz.min.css">
-  <link rel="stylesheet" href="node_modules/@luz-ds/catalog/dist/components/banner.min.css">
   <link rel="stylesheet" href="node_modules/@luz-ds/catalog/dist/components/timeline.min.css">
+  <link rel="stylesheet" href="node_modules/@luz-ds/catalog/dist/components/announcement.min.css">
 </head>
 <body>
   <!-- Every name here is LUZ's or a framework's: the checker has nothing to say about it. -->
-  <luz-banner tone="warning"><p>Maintenance on Sunday.</p></luz-banner>
+  <luz-announcement tone="warning"><p>Maintenance on Sunday.</p></luz-announcement>
   <main class="o-container o-stack">
     <h1>Events</h1>
     <luz-timeline layout="vertical" interval="3000" aria-label="Events" data-luz-label-next="Next" data-testid="events" v-if="visible" :interval="speed" @click="go" x-data hx-get="/events/" onclick="go()" part="rail">

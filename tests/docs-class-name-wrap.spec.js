@@ -1,8 +1,8 @@
 // @ts-check
 /**
  * A class name in a "Variants and options" table does not break inside a word
- * (F7, accessibility review): on /docs/catalog/docs-dodont/ at 1440 px the
- * cell showed `dodont__verdic` / `t` and `.luz-docs-` / `dodont`, which reads
+ * (F7, accessibility review): on /docs/catalog/do-dont/ at 1440 px the
+ * cell showed `do-dont__verdic` / `t` and `.luz-do-` / `dont`, which reads
  * as two names. A `code` that holds a class name wraps only at a `__` or `--`
  * boundary (the break stands right before or right after the delimiter), or
  * does not wrap at all.
@@ -12,7 +12,7 @@
  * lines the break must touch `__` or `--` (the last characters of the line,
  * or the first of the next). This does not care how the page does it (a
  * `<wbr>` before every `__` and `--`, no wrapping, a narrower name), only what
- * the reader sees. A break after a single hyphen (`.luz-docs-` / `dodont`)
+ * the reader sees. A break after a single hyphen (`.luz-do-` / `dont`)
  * is a break inside the name, so it fails too.
  *
  * Which `code` elements: those of the table under "Variants and options" whose
@@ -21,7 +21,7 @@
  */
 import { test, expect } from '@playwright/test';
 
-const PAGE = '/docs/catalog/docs-dodont/';
+const PAGE = '/docs/catalog/do-dont/';
 
 /** The lines of every class-name `code` of the Variants table, each as the text on that line. */
 async function classNameLines(page) {

@@ -86,21 +86,20 @@ function sourceOf(page) {
   if (page.meta.module === "search.js") return { css: read("packages/catalog/src/components/search.css"), classes: null, tags: [] };
   const entries = page.meta.files.split(",").map((f) => f.trim());
   const classes = entries.filter((f) => f.startsWith(".")).map((f) => f.slice(1));
-  // A CSS-only tag (<luz-banner>) is styled by :where(luz-banner …) selectors, not by a class
+  // A CSS-only tag (<luz-announcement>) is styled by :where(luz-announcement …) selectors, not by a class
   const tags = entries.map((f) => f.match(/^<(luz-[\w-]+)>$/)?.[1]).filter(Boolean);
-  // A pattern of a kind of site (a landing page, a blog, an app, a documentation site) is a stylesheet of catalog,
-  // `files: components/<kind>-<name>.css`: the page documents every rule of its files (`whole`). A rule of the page's
-  // block in another file of the kind is the page's too (the stat's value is set in landing-section.css), so the
-  // others of the kind are read, and kept by block (the file's name, and the page's: `.luz-cms-toc` is in cms-article.css).
-  // The navbar, the sidebar, the terminal and the timeline came from core in F7 and keep their own page shape: `files:
-  // components/<name>.css`, a stylesheet of catalog read whole, whatever classes it sets (the old core pages did the same)
+  // A pattern of catalog is a stylesheet named for its block, `files: components/<block>.css` (F8: the kind of site is in
+  // the page's `fits-kinds`, no longer in the file's name): the page documents every rule of its files (`whole`). A
+  // rule of the page's block in another file of catalog is the page's too (the stat's value is set in section.css), so
+  // the others are read, and kept by block (the file's name, and the page's: `.luz-toc` is in article.css).
+  // The navbar, the sidebar, the terminal and the timeline have their own page shape: `files: components/<name>.css`, a
+  // stylesheet of catalog read whole, whatever classes it sets (the old core pages did the same)
   const layout = page.meta.files.split(";").map((f) => f.trim()).filter((f) => /^components\/(navbar|sidebar|terminal|timeline)\.css$/.test(f));
   if (layout.length) return { css: layout.map((f) => read(`packages/catalog/src/${f}`)).join("\n"), classes: null, tags: [] };
-  const sheets = entries.filter((f) => /^components\/(landing|cms|app|docs)-[\w-]+\.css$/.test(f));
+  const sheets = entries.filter((f) => /^components\/[\w-]+\.css$/.test(f));
   if (sheets.length) {
-    const kind = sheets[0].match(/^components\/(\w+)-/)[1];
     const dir = "packages/catalog/src/components";
-    const others = readdirSync(`${repo}${dir}`).filter((f) => f.startsWith(`${kind}-`) && f.endsWith(".css") && !sheets.includes(`components/${f}`)).sort();
+    const others = readdirSync(`${repo}${dir}`).filter((f) => f.endsWith(".css") && !f.startsWith("_") && !sheets.includes(`components/${f}`)).sort();
     const blocks = new Set([...sheets.map((f) => `luz-${f.slice("components/".length, -".css".length)}`), `luz-${page.route.split("/").filter(Boolean).at(-1)}`]);
     return {
       whole: sheets.map((f) => read(`packages/catalog/src/${f}`)).join("\n"),
@@ -109,9 +108,9 @@ function sourceOf(page) {
       tags: [],
     };
   }
-  // The shell patterns, and the patterns with a file of their own (the language switcher, the site header, the submenu, the notice and the cookie banner)
-  // (renamed in F3: lang-switcher.css to lang-switch.css, banners.css split into banner.css and consent.css; whichever exist)
-  const files = ["_components.css", "lang-switcher.css", "lang-switch.css", "site-header.css", "submenu.css", "banners.css", "banner.css", "consent.css"]
+  // The shell patterns, and the patterns with a file of their own (the language switcher, the submenu, the announcement and the cookie consent)
+  // (renamed in F8: banner.css to announcement.css, consent.css to cookie-consent.css; whichever exist)
+  const files = ["_components.css", "lang-switcher.css", "lang-switch.css", "submenu.css", "banners.css", "announcement.css", "cookie-consent.css"]
     .filter((f) => existsSync(`${repo}packages/catalog/src/components/${f}`))
     .map((f) => read(`packages/catalog/src/components/${f}`));
   return { css: files.join("\n"), classes, tags };
@@ -121,7 +120,7 @@ function sourceOf(page) {
 export function tokensUsedBy(page) {
   const { css, whole = "", classes, tags = [] } = sourceOf(page);
   const byClass = classes?.length ? `\\.(?:${classes.join("|")})(?:(?:--|__)[\\w-]+)?(?![\\w-])` : null;
-  // The tag as a type selector: not after a dot, a dash or a word character (.luz-banner__x, [data-luz-banner])
+  // The tag as a type selector: not after a dot, a dash or a word character (.luz-announcement__x, [data-luz-announcement])
   const byTag = tags.length ? `(?<![\\w.-])(?:${tags.join("|")})(?![\\w-])` : null;
   const own = classes && new RegExp([byClass, byTag].filter(Boolean).join("|"));
   // The properties a component sets for its own parts: --luz-<name>-*, from <luz-name> and .luz-name
@@ -136,9 +135,11 @@ export function tokensUsedBy(page) {
     for (const [, name] of body.matchAll(/(--luz-[\w-]+)\s*:/g)) local.add(name);
     for (const [, name] of body.matchAll(/var\(\s*(--luz-[\w-]+)/g)) used.add(name);
   }
-  // --luz-site-* and --luz-<kind>-* (landing, cms, app, docs) are properties a pattern sets for its own parts, not design tokens
-  const patternProperty = /^--luz-(?:catalog|landing|cms|app|docs)-/;
-  // --luz-consent-h is the height of the cookie banner, which the <luz-consent> script sets on :root for the parts of
+  // --luz-catalog-*, the knobs of a pattern a consumer sets (--luz-glow-*, --luz-title-accent, --luz-toc-top,
+  // --luz-page-rail-*, --luz-example-w: the old --luz-<kind>-* of F8's table 4) and the docs layout's own (--luz-docs-measure,
+  // --luz-docs-nav-w) are properties a pattern sets for its own parts, not design tokens
+  const patternProperty = /^--luz-(?:catalog-|docs-|glow-|title-accent$|toc-|page-rail-|example-w$)/;
+  // --luz-consent-h is the height of the cookie banner, which the <luz-cookie-consent> script sets on :root for the parts of
   // other patterns that must leave room for it (the docs rail): a property a script publishes, not a design token
   // with a page of its own, so it belongs to no token family
   const publishedByScript = new Set(["--luz-consent-h"]);

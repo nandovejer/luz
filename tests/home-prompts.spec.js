@@ -138,7 +138,7 @@ for (const [route, lang] of ROUTES) {
     test('the footer lists the four kinds of site, and the packages are tokens, core and catalog', async ({ page }) => {
       await open(page, route);
 
-      const footer = page.locator('footer.luz-landing-footer');
+      const footer = page.locator('footer.luz-site-footer');
       await expect(footer.getByRole('heading', { level: 3, name: words['footer.kinds'] })).toHaveCount(1);
       const kinds = footer.getByRole('list', { name: words['footer.kinds'] }).getByRole('link');
       await expect(kinds).toHaveText(KINDS.map((id) => words[`inside.kind.${id}.title`]));

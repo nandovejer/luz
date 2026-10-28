@@ -25,7 +25,7 @@ Ask these first, in one round:
 1. Is it a new repository, an existing project that gets LUZ, or a refactor of an existing site to LUZ? For an existing project or a refactor, also ask which framework and which CSS it has now (Bootstrap, Tailwind, its own CSS…), what is migrated and what must stay as it is.
 2. The stack: {{stack-list}}.
 3. The brand: Vejer, the default look of LUZ (recommended to start), or its own brand, a theme written from `@luz-ds/core/themes/_template.css` (see {{site}}docs/get-started/make-it-yours/).
-4. The languages of the site, and whether it is right to left. The colour modes: light, dark and high contrast follow the system by default; a switcher is `<luz-mode>` from catalog.
+4. The languages of the site, and whether it is right to left. The colour modes: light, dark and high contrast follow the system by default; a switcher is `<luz-color-mode>` from catalog.
 5. Only when the section "The kind of site" below is missing: what kind of site it is (1 landing page, 2 blog or site from a CMS, 3 app, 4 documentation, 5 other).
 
 Then ask what the kind of site needs, in a second round.

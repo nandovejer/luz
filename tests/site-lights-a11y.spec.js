@@ -3,7 +3,7 @@
  * axe on the home page and the docs under each of the six lights (F2 of
  * .claude/plans/luz-home-docs-identity.md, section 3.4). The light is set the
  * way a visitor gets it: the clock, with no stored choice (apps/site/boot.js,
- * then <luz-mode by="clock">). The four lights that override tokens
+ * then <luz-color-mode by="clock">). The four lights that override tokens
  * (apps/site/theme-light.css) meet the same contrast as the modes under them.
  * Serious and critical violations fail; Chromium only (tests/a11y.spec.js
  * samples the other engines on the base modes).

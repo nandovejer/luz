@@ -17,7 +17,7 @@
    Layout
    -------------------------------------------------------------------------- */
 
-/* The shell is catalog's (.luz-docs-shell: the header, the sidebar,
+/* The shell is catalog's (.luz-docs-layout: the header, the sidebar,
    main, the rail and the footer in its tracks). The app gives it the site
    frame (--site-max, --site-edge: apps/site/header.css), the same as the
    header's and the home page's: from 80rem the sidebar's dark column still
@@ -28,8 +28,8 @@
    sticky site header. */
 .docs-page {
   --luz-docs-nav-w: calc(var(--luz-sidebar-width) + var(--site-edge));
-  --luz-docs-rail-w: calc(13rem + var(--luz-space-xl) + var(--site-edge));
-  --luz-docs-rail-top: calc(var(--site-header-h) + var(--luz-space-lg));
+  --luz-page-rail-w: calc(13rem + var(--luz-space-xl) + var(--site-edge));
+  --luz-page-rail-top: calc(var(--site-header-h) + var(--luz-space-lg));
 }
 
 @media (min-width: 769px) {
@@ -61,7 +61,7 @@
 }
 
 @media (min-width: 80rem) {
-  .docs-page > .luz-docs-rail {
+  .docs-page > .luz-page-rail {
     padding-inline-end: calc(var(--site-edge) + var(--luz-space-xl));
   }
 }
@@ -130,7 +130,7 @@
 }
 
 /* The chips and the Files line name the files as code, in their own size */
-.luz-docs-page-head :is(.luz-docs-page-head__meta, .luz-docs-page-head__files) .docs-demo__file {
+.luz-doc-header :is(.luz-doc-header__meta, .luz-doc-header__files) .docs-demo__file {
   font-size: inherit;
 }
 
@@ -313,7 +313,7 @@
 
 /* A band bleeds to the edge of the frame it is shown in, not of the page */
 .docs-example:has(.luz-band),
-.luz-docs-dodont__stage:has(.luz-band) {
+.luz-do-dont__stage:has(.luz-band) {
   overflow: clip;
 }
 
@@ -411,15 +411,15 @@
   color: var(--luz-text-secondary);
 }
 
-/* Do and don't (Design tab): the pattern is catalog's .luz-docs-dodont.
+/* Do and don't (Design tab): the pattern is catalog's .luz-do-dont.
    What follows holds a component still for a picture in its stage: the
    component's own classes, drawn in place (what the docs teach, not the
    pattern). */
-.luz-docs-dodont__stage > .luz-search__trigger {
+.luz-do-dont__stage > .luz-search__trigger {
   justify-self: start;
 }
 
-.luz-docs-dodont__stage .docs-stage__modal {
+.luz-do-dont__stage .docs-stage__modal {
   max-inline-size: none;
   padding: var(--luz-space-md);
   box-shadow: none;
@@ -455,7 +455,7 @@
   white-space: normal;
 }
 
-.luz-docs-dodont__stage .docs-stage__skip {
+.luz-do-dont__stage .docs-stage__skip {
   position: static;
   display: inline-block;
   justify-self: start;
@@ -1955,14 +1955,14 @@ h2.docs-demo__title {
 
 /* Not in a header specimen: there the toggle shows only where the
    header collapses its links, as it does in a page */
-.docs-demo__stage .luz-nav-toggle:not(.luz-landing-header *, .luz-cms-header *, .luz-app-header *, .docs-bar *) {
+.docs-demo__stage .luz-nav-toggle:not(.luz-site-header *, .luz-masthead *, .luz-app-bar *, .docs-bar *) {
   position: static;
   display: flex;
 }
 
 /* The stage already has its own padding: the dashboard keeps its row and
    panel rhythm, and a demo needs no second gutter */
-.docs-demo__stage > .luz-app-dashboard {
+.docs-demo__stage > .luz-dashboard {
   padding: 0;
 }
 
@@ -2343,6 +2343,6 @@ h2.docs-demo__title {
 }
 
 /* Do and don't of the submenu: the open box is drawn in place, in its frame */
-.luz-docs-dodont__stage luz-submenu > details > ul {
+.luz-do-dont__stage luz-submenu > details > ul {
   position: static;
 }

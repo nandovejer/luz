@@ -37,6 +37,7 @@ export const RULE_FINDS = {
   "misuse/modifier-alone": "A modifier such as luz-btn--primary on an element that does not also have the class it modifies.",
   "misuse/part-orphan": "A part such as luz-card__title with no element of its block around it.",
   "misuse/state-class": "An is-* class that LUZ's own script sets, written in the markup.",
+  "names/renamed": "A class, element or file of catalog that has its old name from before 0.3 (luz-landing-hero, <luz-mode>, landing-hero.css): the finding gives the new name.",
   "parse/error": "A file that ends inside a comment, tag, string or brace, so the rest of it cannot be read.",
   "theme/advisory": "A note on how the colour check ran: the file order it used, a token no colour mode can place, a wide-gamut colour it does not measure, or sets of colour tokens past its limit.",
   "theme/contrast": "A foreground and background pair in your colour token files that is under its WCAG contrast minimum in light, dark or high contrast.",

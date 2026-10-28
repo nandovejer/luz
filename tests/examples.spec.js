@@ -167,7 +167,7 @@ test.describe('the examples with JavaScript', () => {
   test('a chunk an entry imports by name is found beside it: <luz-timeline> and <luz-search> are defined', async ({ page }) => {
     await page.goto(`${served.origin}/examples/catalog/timeline.html`);
     await expect.poll(() => page.evaluate(() => !!customElements.get('luz-timeline')), { timeout: 10_000 }).toBe(true);
-    await page.goto(`${served.origin}/examples/catalog/cms-header.html`);
+    await page.goto(`${served.origin}/examples/catalog/site-header.html`);
     await expect.poll(() => page.evaluate(() => !!customElements.get('luz-search')), { timeout: 10_000 }).toBe(true);
   });
 });

@@ -1,6 +1,6 @@
 /**
  * The CSS-only tags of @luz-ds/catalog: <luz-lang-switch>, <luz-submenu> and
- * <luz-banner> (.claude/plans/specs/f3-package-model.md section 2.2, step 8).
+ * <luz-announcement> (.claude/plans/specs/f3-package-model.md section 2.2, step 8).
  * Their sources are read as text; no browser, no build.
  *
  *   - each lives in the stylesheet that carries its name;
@@ -21,7 +21,7 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const FILES = {
   "luz-lang-switch": "packages/catalog/src/components/lang-switch.css",
   "luz-submenu": "packages/catalog/src/components/submenu.css",
-  "luz-banner": "packages/catalog/src/components/banner.css",
+  "luz-announcement": "packages/catalog/src/components/announcement.css",
 };
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
 
@@ -88,8 +88,8 @@ describe("their selectors", () => {
     expect(css).not.toContain("--luz-site-lang-switcher-top");
   });
 
-  it("<luz-banner> takes its one variant from the attribute: tone=\"warning\"", () => {
-    const css = existsSync(`${root}${FILES["luz-banner"]}`) ? read(FILES["luz-banner"]) : "";
+  it("<luz-announcement> takes its one variant from the attribute: tone=\"warning\"", () => {
+    const css = existsSync(`${root}${FILES["luz-announcement"]}`) ? read(FILES["luz-announcement"]) : "";
     expect(css).toMatch(/\[tone=["']?warning["']?\]/);
     expect(css).not.toMatch(/luz-site-notice/);
   });
@@ -112,14 +112,14 @@ describe("stylelint (luz/no-bare-element) on the selectors of a CSS-only tag", (
   });
 
   it("rejects the tag on its own as a type selector", async () => {
-    expect(await lint("luz-banner { display: block; }")).toHaveLength(1);
+    expect(await lint("luz-announcement { display: block; }")).toHaveLength(1);
     expect(await lint("luz-submenu > details > summary { margin: 0; }")).toHaveLength(1);
   });
 
   it("accepts the whole selector inside one :where(), with a pseudo-element or an attribute outside", async () => {
     expect(await lint(":where(luz-submenu > details > summary) { margin: 0; }")).toEqual([]);
     expect(await lint(":where(luz-submenu > details > summary)::after { content: \"\"; }")).toEqual([]);
-    expect(await lint(":where(luz-banner)[tone=\"warning\"] { margin: 0; }")).toEqual([]);
-    expect(await lint(":where(luz-banner > section) { margin: 0; }")).toEqual([]);
+    expect(await lint(":where(luz-announcement)[tone=\"warning\"] { margin: 0; }")).toEqual([]);
+    expect(await lint(":where(luz-announcement > section) { margin: 0; }")).toEqual([]);
   });
 });

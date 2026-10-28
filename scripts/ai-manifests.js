@@ -32,9 +32,9 @@
  *               what is in no stylesheet of its own.
  * No time, no absolute path and no file system order is in the output.
  *
- * `kind` follows the name (`pattern` is the `luz-catalog-*` classes and the
- * patterns of a kind of site, `luz-landing-*`, `luz-cms-*`, `luz-app-*` and
- * `luz-docs-*`, which are catalog's files since F5b); `block`, `modifier` and `part` are its BEM split.
+ * `kind` follows the name (`pattern` is the `luz-catalog-*` classes only: the
+ * patterns of a kind of site are components of catalog like any other, named
+ * for what they are, F8); `block`, `modifier` and `part` are its BEM split.
  *
  * A class no stylesheet lists but an unminified script of dist/ names (a
  * selector it queries, a class it adds; RL-19) is listed too, `defined: false`,
@@ -74,7 +74,7 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 const CLASS_NAMESPACE = /^(?:luz|o|u|is)-/;
 const PROPERTY_NAMESPACE = /^--luz-/;
-const PATTERN = /^luz-(?:catalog|landing|cms|app|docs)-/;
+const PATTERN = /^luz-catalog-/;
 const BEM = /^(.+?)(?:__(.+?))?(?:--(.+))?$/;
 
 /** The kind of a class, from its name. */
@@ -543,7 +543,7 @@ function scriptReads(text) {
   return [...names].filter((n) => !isGlobal(n)).sort();
 }
 
-/** The attribute names a stylesheet selects on the tag itself (`:where(luz-banner)[tone="warning"]`), sorted. */
+/** The attribute names a stylesheet selects on the tag itself (`:where(luz-announcement)[tone="warning"]`), sorted. */
 function cssReads(text, tag) {
   const names = new Set();
   const selector = new RegExp(`(?<![.\\w-])${escapeRe(tag)}\\)?\\[([a-z][\\w-]*)(?:=["']?[^"'\\]]*["']?)?\\]`, "g");

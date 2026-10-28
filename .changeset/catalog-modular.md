@@ -17,13 +17,13 @@ If you loaded the whole of `catalog.css`, link these six files instead, or only 
 | `<luz-search>` | `@luz-ds/catalog/components/search.css` | `dist/components/search.min.css` |
 | `<luz-lang-switch>` | `@luz-ds/catalog/components/lang-switch.css` | `dist/components/lang-switch.min.css` |
 | `<luz-submenu>` | `@luz-ds/catalog/components/submenu.css` | `dist/components/submenu.min.css` |
-| `<luz-banner>` | `@luz-ds/catalog/components/banner.css` | `dist/components/banner.min.css` |
-| `<luz-consent>` | `@luz-ds/catalog/components/consent.css` | `dist/components/consent.min.css` |
-| `<luz-mode>` | `@luz-ds/catalog/components/mode.css` | `dist/components/mode.min.css` |
+| `<luz-announcement>` | `@luz-ds/catalog/components/announcement.css` | `dist/components/announcement.min.css` |
+| `<luz-cookie-consent>` | `@luz-ds/catalog/components/cookie-consent.css` | `dist/components/cookie-consent.min.css` |
+| `<luz-color-mode>` | `@luz-ds/catalog/components/color-mode.css` | `dist/components/color-mode.min.css` |
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/search.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/mode.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/color-mode.min.css">
 ```
 
 If you loaded `print.css` beside the component files, remove it: each file has its print rules. The scripts do not change: `catalog.js` still loads the chunk of each element the page has.

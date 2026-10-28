@@ -6,17 +6,17 @@
   <title>LUZ site: the CSS-only tags next to the two elements</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/banner.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/consent.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/announcement.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/cookie-consent.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/lang-switch.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/submenu.css">
   <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
 </head>
 <body>
-  <luz-banner tone="warning">
+  <luz-announcement tone="warning">
     <section aria-labelledby="b1"><p><strong id="b1">Planned maintenance.</strong> The shop is closed on Sunday.</p></section>
-  </luz-banner>
+  </luz-announcement>
   <header>
     <luz-search>
       <a class="luz-search__fallback" href="/a-z/" data-luz-search-fallback>A–Z index</a>
@@ -49,10 +49,10 @@
     <h1>CSS-only tags</h1>
     <p>Text of the page.</p>
   </main>
-  <luz-consent>
-    <section class="luz-consent" id="consent" data-luz-consent aria-labelledby="consent-title" hidden>
+  <luz-cookie-consent>
+    <section class="luz-cookie-consent" id="consent" data-luz-consent aria-labelledby="consent-title" hidden>
       <div data-luz-consent-ask>
-        <h2 class="luz-consent__title" id="consent-title">Cookies</h2>
+        <h2 class="luz-cookie-consent__title" id="consent-title">Cookies</h2>
         <p>We use cookies that this site needs to work.</p>
         <form>
           <button class="luz-btn luz-btn--primary" type="submit" value="all">Accept</button>
@@ -61,6 +61,6 @@
       </div>
       <div data-luz-consent-done tabindex="-1" hidden><p>Saved.</p><button type="button" data-luz-consent-close>Close</button></div>
     </section>
-  </luz-consent>
+  </luz-cookie-consent>
 </body>
 </html>

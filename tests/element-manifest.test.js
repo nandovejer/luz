@@ -2,9 +2,9 @@
  * F5 step 3, `custom-elements.json` (.claude/plans/specs/f5-ai-ready.md §2.3,
  * §2.2, §10 row 3; decisions D5 and D6, and "Review answers"). One manifest in
  * each package that ships a tag, in the Custom Elements Manifest format, schema
- * version 2.1.0: catalog ships `<luz-search>`, `<luz-consent>`, `<luz-mode>`,
+ * version 2.1.0: catalog ships `<luz-search>`, `<luz-cookie-consent>`, `<luz-color-mode>`,
  * `<luz-timeline>` (it was core's until F7) and the CSS-only `<luz-lang-switch>`,
- * `<luz-submenu>`, `<luz-banner>`. Tokens and core ship none: core defines no tag.
+ * `<luz-submenu>`, `<luz-announcement>`. Tokens and core ship none: core defines no tag.
  *
  * The facts come from the code, not from this file: the expected sets are read
  * from the JS and CSS sources by a scan of their own (`readsOf`, `eventsOf`,
@@ -45,7 +45,7 @@
  *   getAttribute("x") / hasAttribute("x"), `dataset.luzFooBar` (as
  *   `data-luz-foo-bar`), a `[data-luz-…]` selector in a string, a
  *   `data-luz-label-${key}` template with its keys, and, in a stylesheet, an
- *   attribute selector written on the tag itself (`:where(luz-banner)[tone]`).
+ *   attribute selector written on the tag itself (`:where(luz-announcement)[tone]`).
  *   Not the global attributes (role, tabindex, hidden, lang, aria-*, …), and
  *   not what the script only writes (setAttribute / removeAttribute:
  *   `data-luz-state`, `data-luz-ready`).
@@ -53,7 +53,7 @@
  *   Manifest, keys in this order:
  *     { schemaVersion: "2.1.0", readme: "README.md", modules: [ by path ] }
  *     module  { kind: "javascript-module", path (as the package exports it:
- *               "timeline.js", "components/banner.css"), declarations,
+ *               "timeline.js", "components/announcement.css"), declarations,
  *               exports? }
  *     declaration (one per module) { kind: "class", name (`Luz` + the tag in
  *               PascalCase), customElement: true, tagName, superclass?
@@ -120,14 +120,14 @@ const TAGS = [
   // F7: the timeline moved from core to catalog; core defines no tag now
   { tag: "luz-timeline", pkg: "catalog", file: "timeline.js", script: true },
   { tag: "luz-search", pkg: "catalog", file: "search.js", script: true },
-  { tag: "luz-consent", pkg: "catalog", file: "consent.js", script: true },
+  { tag: "luz-cookie-consent", pkg: "catalog", file: "cookie-consent.js", script: true },
   // F1 of the identity plan. The generator's grammar applies: attributes are the literal names of
   // getAttribute("…") / hasAttribute("…") (remember, by, for, light-attr), a boolean one is only ever
   // read with hasAttribute, and a declared default exists only for a number
-  { tag: "luz-mode", pkg: "catalog", file: "mode.js", script: true },
+  { tag: "luz-color-mode", pkg: "catalog", file: "color-mode.js", script: true },
   { tag: "luz-lang-switch", pkg: "catalog", file: "components/lang-switch.css", script: false },
   { tag: "luz-submenu", pkg: "catalog", file: "components/submenu.css", script: false },
-  { tag: "luz-banner", pkg: "catalog", file: "components/banner.css", script: false },
+  { tag: "luz-announcement", pkg: "catalog", file: "components/announcement.css", script: false },
 ];
 const SHIPPING = [...new Set(TAGS.map((t) => t.pkg))];
 const tagsOf = (pkg) => TAGS.filter((t) => t.pkg === pkg).map((t) => t.tag);
@@ -291,12 +291,12 @@ function firstColumnCodes(html) {
 /* ---- tests ------------------------------------------------------------------ */
 
 describe("which tags exist (the scan of the sources agrees with the spec)", () => {
-  it("the tags a script defines are timeline, search, consent and mode, all in catalog (core defines none)", () => {
+  it("the tags a script defines are timeline, search, cookie consent and color mode, all in catalog (core defines none)", () => {
     const defined = definedTags();
     expect([...defined].sort()).toEqual(TAGS.filter((t) => t.script).map((t) => [t.tag, t.pkg]).sort());
   });
 
-  it("the tags no script defines are lang-switch, submenu and banner, in catalog", () => {
+  it("the tags no script defines are lang-switch, submenu and announcement, in catalog", () => {
     const cssOnly = cssOnlyTags(definedTags());
     expect([...cssOnly].sort()).toEqual(TAGS.filter((t) => !t.script).map((t) => [t.tag, t.pkg]).sort());
   });
@@ -342,17 +342,17 @@ describe("the source tags in the header comment (D5-A), cross-checked with the c
     expect(element[0]?.description).toMatch(/^CSS-only: no script defines this tag\./);
   });
 
-  it("timeline reads layout, autoplay, interval and the four labels, and search and consent what the spec lists", () => {
+  it("timeline reads layout, autoplay, interval and the four labels, and search and cookie consent what the spec lists", () => {
     // The spec's own words, as a sanity check of the scan: the test is not a copy of one list
     const names = (tag) => [...readsOf(TAGS.find((t) => t.tag === tag), sourceOf(TAGS.find((t) => t.tag === tag))).names].sort();
     expect(names("luz-timeline")).toEqual(
       ["autoplay", "data-luz-label-next", "data-luz-label-pause", "data-luz-label-play", "data-luz-label-previous", "interval", "layout"].sort(),
     );
-    expect(names("luz-consent")).toEqual(
+    expect(names("luz-cookie-consent")).toEqual(
       ["data-luz-consent", "data-luz-consent-ask", "data-luz-consent-close", "data-luz-consent-days", "data-luz-consent-done", "data-luz-consent-key", "data-luz-consent-open"].sort(),
     );
-    expect(names("luz-mode")).toEqual(["by", "for", "light-attr", "remember"]);
-    expect(names("luz-banner")).toEqual(["tone"]);
+    expect(names("luz-color-mode")).toEqual(["by", "for", "light-attr", "remember"]);
+    expect(names("luz-announcement")).toEqual(["tone"]);
     expect(names("luz-lang-switch")).toEqual([]);
     expect(names("luz-submenu")).toEqual([]);
   });
@@ -454,20 +454,20 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
 `;
   const SEARCH_CSS = "/* Search. */\n:where(luz-search) {\n\tdisplay: inline-grid;\n}\n";
   const BANNER = `/* ==========================================================================
-	 LUZ Site: banner, <luz-banner>.
-	 @element luz-banner - CSS-only: no script defines this tag. One announcement above the header.
+	 LUZ Catalog: announcement, <luz-announcement>.
+	 @element luz-announcement - CSS-only: no script defines this tag. One announcement above the header.
 	 @attr {"warning"} tone - A yellow band; the words say it too.
 	 ========================================================================== */
 
-:where(luz-banner) {
+:where(luz-announcement) {
 	display: block;
 }
 
-:where(luz-banner > section) {
+:where(luz-announcement > section) {
 	padding: 0;
 }
 
-:where(luz-banner)[tone="warning"] {
+:where(luz-announcement)[tone="warning"] {
 	background: yellow;
 }
 `;
@@ -507,9 +507,9 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
   });
 
   it("names the class of an anonymous definition after the tag, reads dataset.luzFooBar as data-luz-foo-bar, and ignores a stylesheet that only styles a defined tag", () => {
-    const dir = fixtureRoot("catalog", { "search.js": SEARCH, "components/search.css": SEARCH_CSS, "components/banner.css": BANNER });
+    const dir = fixtureRoot("catalog", { "search.js": SEARCH, "components/search.css": SEARCH_CSS, "components/announcement.css": BANNER });
     const manifest = buildElementManifest("catalog", { root: dir });
-    expect(manifest.modules.map((m) => m.path)).toEqual(["components/banner.css", "search.js"]);
+    expect(manifest.modules.map((m) => m.path)).toEqual(["components/announcement.css", "search.js"]);
     const search = manifest.modules[1];
     expect(search.declarations).toStrictEqual([
       {
@@ -526,17 +526,17 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
   });
 
   it("declares a CSS-only tag as a custom element with no definition export, and reads the attribute selector written on the tag", () => {
-    const dir = fixtureRoot("catalog", { "components/banner.css": BANNER });
+    const dir = fixtureRoot("catalog", { "components/announcement.css": BANNER });
     const [module] = buildElementManifest("catalog", { root: dir }).modules;
     expect(module).toStrictEqual({
       kind: "javascript-module",
-      path: "components/banner.css",
+      path: "components/announcement.css",
       declarations: [
         {
           kind: "class",
-          name: "LuzBanner",
+          name: "LuzAnnouncement",
           customElement: true,
-          tagName: "luz-banner",
+          tagName: "luz-announcement",
           description: "CSS-only: no script defines this tag. One announcement above the header.",
           attributes: [{ name: "tone", type: { text: '"warning"' }, description: "A yellow band; the words say it too." }],
         },
@@ -546,7 +546,7 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
   });
 
   it("is null for a package that defines no tag, even when its CSS styles one that another package defines", () => {
-    const dir = fixtureRoot("landing", { "components/header.css": ":where(luz-search) { display: block; }\n.luz-landing-header { color: red; }\n" });
+    const dir = fixtureRoot("landing", { "components/header.css": ":where(luz-search) { display: block; }\n.luz-site-header { color: red; }\n" });
     expect(buildElementManifest("landing", { root: dir })).toBeNull();
   });
 

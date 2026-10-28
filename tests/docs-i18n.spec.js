@@ -83,13 +83,13 @@ test.describe("English in a right-to-left page", () => {
     await page.goto("/ar/docs/components/button/");
     for (const selector of [
       "h1.docs-title",
-      "p.luz-docs-page-head__lead",
+      "p.luz-doc-header__lead",
       '.luz-breadcrumb__item[aria-current="page"]',
       '.docs-nav details > ul[lang="en"]',
       '.docs-nav details > ul[lang="en"] a',
       '.luz-sidebar__link[lang="en"]',
-      ".luz-docs-pager__title",
-      ".luz-docs-rail__list li",
+      ".luz-pager__title",
+      ".luz-page-rail__list li",
       ".docs-end__links a",
     ]) {
       const found = page.locator(selector);
@@ -102,7 +102,7 @@ test.describe("English in a right-to-left page", () => {
       }
     }
     await expect(page.locator("h1.docs-title")).toHaveCount(1);
-    await expect(page.locator("p.luz-docs-page-head__lead")).toHaveCount(1);
+    await expect(page.locator("p.luz-doc-header__lead")).toHaveCount(1);
   });
 
   test("lays out the cards of a gallery of untranslated pages left to right", async ({
@@ -137,7 +137,7 @@ test.describe("English in a right-to-left page", () => {
       };
       return {
         h1: left(document.querySelector("h1.docs-title")),
-        lead: left(document.querySelector("p.luz-docs-page-head__lead")),
+        lead: left(document.querySelector("p.luz-doc-header__lead")),
         body: left(document.querySelector(".docs-body p")),
       };
     });

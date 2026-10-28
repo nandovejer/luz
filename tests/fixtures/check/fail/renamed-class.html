@@ -1,0 +1,28 @@
+<!-- expect: names/renamed 17:14 suggestion=.luz-hero -->
+<!-- expect: names/renamed 18:11 suggestion=.luz-hero__title -->
+<!-- expect: names/renamed 20:13 suggestion=.luz-site-footer -->
+<!-- expect: names/renamed 23:13 suggestion=.luz-masthead -->
+<!-- expect: names/renamed 24:13 suggestion=.luz-masthead__date -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Old classes of catalog, before 0.3</title>
+  <link rel="stylesheet" href="node_modules/@luz-ds/tokens/dist/luz-tokens.min.css">
+  <link rel="stylesheet" href="node_modules/@luz-ds/core/dist/luz.min.css">
+  <link rel="stylesheet" href="node_modules/@luz-ds/catalog/dist/components/hero.min.css">
+</head>
+<body>
+  <main class="o-container o-stack">
+    <section class="luz-landing-hero" aria-labelledby="hero-title">
+      <h1 class="luz-landing-hero__title" id="hero-title">Acme Summit 2027</h1>
+    </section>
+    <footer class="luz-cms-footer">
+      <p>Acme Summit is a retail event.</p>
+    </footer>
+    <header class="luz-cms-header luz-cms-header--masthead">
+      <time class="luz-cms-header__date" datetime="2027-05-12">12 May 2027</time>
+    </header>
+  </main>
+</body>
+</html>

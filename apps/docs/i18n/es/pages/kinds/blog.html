@@ -2,7 +2,7 @@
 title: Blog o periódico
 description: Un blog o un periódico, con cualquier CMS: un prompt para un LLM y recetas para su cabecera, cabecera de página, tarjetas de artículo, cabecera de artículo, índice y pie de página.
 keywords: blog, periódico, revista, artículos, entradas, sitio estático
-source: 9eb75773e153
+source: bac58b54db1f
 reviewed: false
 -->
     <div class="docs-block" id="k-blog">
@@ -12,15 +12,15 @@ reviewed: false
       <p>O constrúyelo tú con las recetas de abajo. Sirve con cualquier CMS o generador de sitios estáticos: cada receta es el HTML de una de sus plantillas y el CMS pone el texto. Usan solo las clases de core, del catálogo y de cms; <a href="/docs/get-started/#site-kinds">Instalar LUZ</a> indica los archivos que debes cargar.</p>
       <div class="docs-block">
         <h2 id="header">Cabecera</h2>
-        <p>El enlace para saltar al contenido, la <a href="/docs/catalog/cms-header/">cabecera</a> con el nombre del blog y sus secciones, el <code>&lt;main&gt;</code> y el pie de página. Para un periódico, el patrón tiene una cabecera de portada que no permanece fija. La búsqueda y el selector de idioma son elementos del catálogo: omítelos si no lo cargas.</p>
+        <p>El enlace para saltar al contenido, la <a href="/docs/catalog/site-header/">cabecera</a> con el nombre del blog y sus secciones, el <code>&lt;main&gt;</code> y el pie de página. Para un periódico, la <a href="/docs/catalog/masthead/">cabecera de portada</a> no permanece fija. La búsqueda y el selector de idioma son elementos del catálogo: omítelos si no lo cargas.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <header class="luz-cms-header">
+            <header class="luz-site-header luz-site-header--publication">
               <div class="o-container o-container--inline o-row">
                 <button class="luz-nav-toggle" type="button" popovertarget="k-blog-nav" aria-label="Sections of the example blog">
                   <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
                 </button>
-                <a class="luz-cms-header__brand" href="#header">The Vejer Review</a>
+                <a class="luz-site-header__brand" href="#header">The Vejer Review</a>
                 <nav class="luz-navbar" id="k-blog-nav" aria-label="Example blog" popover>
                   <ul class="luz-navbar__list">
                     <li><a class="luz-navbar__link" href="#header" aria-current="true">News</a></li>
@@ -28,7 +28,7 @@ reviewed: false
                     <li><a class="luz-navbar__link" href="#header">Opinion</a></li>
                   </ul>
                 </nav>
-                <div class="o-row luz-cms-header__actions">
+                <div class="o-row luz-site-header__actions">
                   <a class="luz-btn luz-btn--ghost" href="#header">Subscribe</a>
                 </div>
               </div>
@@ -44,12 +44,12 @@ reviewed: false
           <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page and header markup"><code id="code-k-blog-header">&lt;body class=&quot;o-page&quot;&gt;
   &lt;a class=&quot;luz-skip-link&quot; href=&quot;#main-content&quot;&gt;Skip to content&lt;/a&gt;
 
-  &lt;header class=&quot;luz-cms-header o-sticky&quot;&gt;
+  &lt;header class=&quot;luz-site-header luz-site-header--publication o-sticky&quot;&gt;
     &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
       &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;cms-nav&quot; aria-label=&quot;Sections&quot;&gt;
         &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z&quot;/&gt;&lt;/svg&gt;
       &lt;/button&gt;
-      &lt;a class=&quot;luz-cms-header__brand&quot; href=&quot;/&quot;&gt;The Vejer Review&lt;/a&gt;
+      &lt;a class=&quot;luz-site-header__brand&quot; href=&quot;/&quot;&gt;The Vejer Review&lt;/a&gt;
       &lt;nav class=&quot;luz-navbar&quot; id=&quot;cms-nav&quot; aria-label=&quot;Sections&quot; popover&gt;
         &lt;ul class=&quot;luz-navbar__list&quot;&gt;
           &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/news/&quot; aria-current=&quot;true&quot;&gt;News&lt;/a&gt;&lt;/li&gt;
@@ -57,7 +57,7 @@ reviewed: false
           &lt;li&gt;&lt;a class=&quot;luz-navbar__link&quot; href=&quot;/opinion/&quot;&gt;Opinion&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/nav&gt;
-      &lt;div class=&quot;o-row luz-cms-header__actions&quot;&gt;
+      &lt;div class=&quot;o-row luz-site-header__actions&quot;&gt;
         &lt;luz-search&gt;…&lt;/luz-search&gt;
         &lt;luz-lang-switch&gt;…&lt;/luz-lang-switch&gt;
       &lt;/div&gt;
@@ -74,12 +74,12 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="page-header">Cabecera de página</h2>
-        <p>El título de una página que no es un artículo: una sección, un archivo, la página «Acerca de». La <a href="/docs/catalog/cms-page-header/">cabecera de página</a> contiene su <code>&lt;h1&gt;</code> y una frase.</p>
+        <p>El título de una página que no es un artículo: una sección, un archivo, la página «Acerca de». La <a href="/docs/catalog/page-header/">cabecera de página</a> contiene su <code>&lt;h1&gt;</code> y una frase.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="luz-cms-page-header u-mb-0">
-              <p class="luz-cms-page-header__title">Coast</p>
-              <p class="luz-cms-page-header__lead">The sea, the port and the beaches of Vejer, and the people who work on them.</p>
+            <div class="luz-page-header u-mb-0">
+              <p class="luz-page-header__title">Coast</p>
+              <p class="luz-page-header__lead">The sea, the port and the beaches of Vejer, and the people who work on them.</p>
             </div>
           </div>
         </div>
@@ -88,9 +88,9 @@ reviewed: false
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-page-header" aria-label="Copy the page header markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page header markup"><code id="code-k-blog-page-header">&lt;div class=&quot;luz-cms-page-header&quot;&gt;
-  &lt;h1 class=&quot;luz-cms-page-header__title&quot;&gt;Coast&lt;/h1&gt;
-  &lt;p class=&quot;luz-cms-page-header__lead&quot;&gt;The sea, the port and the beaches of Vejer, and the people who work on them.&lt;/p&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Page header markup"><code id="code-k-blog-page-header">&lt;div class=&quot;luz-page-header&quot;&gt;
+  &lt;h1 class=&quot;luz-page-header__title&quot;&gt;Coast&lt;/h1&gt;
+  &lt;p class=&quot;luz-page-header__lead&quot;&gt;The sea, the port and the beaches of Vejer, and the people who work on them.&lt;/p&gt;
 &lt;/div&gt;</code></pre>
         </div>
       </div>
@@ -139,21 +139,21 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="article-header">Cabecera de artículo</h2>
-        <p>El principio de un artículo: su sección, el título, la entradilla, la firma con la fecha y el tiempo de lectura, y la imagen principal. La <a href="/docs/catalog/cms-article-header/">cabecera de artículo</a> contiene el <code>&lt;h1&gt;</code> del artículo; la fecha y el tiempo de lectura son la <a href="/docs/components/meta/">línea de metadatos</a> de core.</p>
+        <p>El principio de un artículo: su sección, el título, la entradilla, la firma con la fecha y el tiempo de lectura, y la imagen principal. La <a href="/docs/catalog/article-header/">cabecera de artículo</a> contiene el <code>&lt;h1&gt;</code> del artículo; la fecha y el tiempo de lectura son la <a href="/docs/components/meta/">línea de metadatos</a> de core.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <header class="luz-cms-article-header u-mb-0">
-              <p class="luz-cms-article-header__kicker"><a href="#article-header">Coast</a></p>
-              <p class="luz-cms-article-header__title">What ten years of tide records say about the bay</p>
-              <p class="luz-cms-article-header__standfirst">Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.</p>
-              <div class="luz-cms-article-header__byline">
+            <header class="luz-article-header u-mb-0">
+              <p class="luz-article-header__kicker"><a href="#article-header">Coast</a></p>
+              <p class="luz-article-header__title">What ten years of tide records say about the bay</p>
+              <p class="luz-article-header__standfirst">Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.</p>
+              <div class="luz-article-header__byline">
                 <span class="luz-avatar luz-avatar--lg" aria-hidden="true">AR</span>
                 <div>
                   <p>By <a href="#article-header">Ana Ruiz</a></p>
                   <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
                 </div>
               </div>
-              <figure class="luz-cms-article-header__media">
+              <figure class="luz-article-header__media">
                 <div class="luz-image"></div>
                 <figcaption>The tide gauge in the port, at low tide.</figcaption>
               </figure>
@@ -165,18 +165,18 @@ reviewed: false
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-article-header" aria-label="Copy the article header markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article header markup"><code id="code-k-blog-article-header">&lt;header class=&quot;luz-cms-article-header&quot;&gt;
-  &lt;p class=&quot;luz-cms-article-header__kicker&quot;&gt;&lt;a href=&quot;/coast/&quot;&gt;Coast&lt;/a&gt;&lt;/p&gt;
-  &lt;h1 class=&quot;luz-cms-article-header__title&quot;&gt;What ten years of tide records say about the bay&lt;/h1&gt;
-  &lt;p class=&quot;luz-cms-article-header__standfirst&quot;&gt;Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.&lt;/p&gt;
-  &lt;div class=&quot;luz-cms-article-header__byline&quot;&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article header markup"><code id="code-k-blog-article-header">&lt;header class=&quot;luz-article-header&quot;&gt;
+  &lt;p class=&quot;luz-article-header__kicker&quot;&gt;&lt;a href=&quot;/coast/&quot;&gt;Coast&lt;/a&gt;&lt;/p&gt;
+  &lt;h1 class=&quot;luz-article-header__title&quot;&gt;What ten years of tide records say about the bay&lt;/h1&gt;
+  &lt;p class=&quot;luz-article-header__standfirst&quot;&gt;Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher.&lt;/p&gt;
+  &lt;div class=&quot;luz-article-header__byline&quot;&gt;
     &lt;span class=&quot;luz-avatar luz-avatar--lg&quot;&gt;&lt;img src=&quot;/authors/ana-ruiz-96.jpg&quot; width=&quot;48&quot; height=&quot;48&quot; alt=&quot;&quot;&gt;&lt;/span&gt;
     &lt;div&gt;
       &lt;p&gt;By &lt;a href=&quot;/authors/ana-ruiz/&quot;&gt;Ana Ruiz&lt;/a&gt;&lt;/p&gt;
       &lt;p class=&quot;luz-meta&quot;&gt;&lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt; &lt;span&gt;6 min read&lt;/span&gt;&lt;/p&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;figure class=&quot;luz-cms-article-header__media&quot;&gt;
+  &lt;figure class=&quot;luz-article-header__media&quot;&gt;
     &lt;div class=&quot;luz-image&quot;&gt;
       &lt;img src=&quot;/img/tide-gauge-1280.jpg&quot; width=&quot;1280&quot; height=&quot;720&quot; alt=&quot;A green gauge post marked in centimetres, in shallow water by a stone quay&quot; fetchpriority=&quot;high&quot; decoding=&quot;async&quot;&gt;
     &lt;/div&gt;
@@ -187,14 +187,14 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="toc">Índice</h2>
-        <p>Las secciones de un artículo largo, junto a su texto: el <a href="/docs/catalog/cms-toc/">índice</a>, en un <code>&lt;article&gt;</code> con el texto como <a href="/docs/components/prose/">texto corrido</a> de core. Omítelo en un artículo corto y la maquetación es solo el texto.</p>
+        <p>Las secciones de un artículo largo, junto a su texto: el <a href="/docs/catalog/toc/">índice</a>, en un <code>&lt;article&gt;</code> con el texto como <a href="/docs/components/prose/">texto corrido</a> de core. Omítelo en un artículo corto y la maquetación es solo el texto.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <article class="luz-cms-article">
-              <div class="luz-cms-article__layout">
-                <nav class="luz-cms-toc" aria-labelledby="k-blog-toc-title" data-luz-spy>
-                  <h3 class="luz-cms-toc__title" id="k-blog-toc-title">Contents</h3>
-                  <ol class="luz-cms-toc__list">
+            <article class="luz-article">
+              <div class="luz-article__layout">
+                <nav class="luz-toc" aria-labelledby="k-blog-toc-title" data-luz-spy>
+                  <h3 class="luz-toc__title" id="k-blog-toc-title">Contents</h3>
+                  <ol class="luz-toc__list">
                     <li><a href="#k-blog-toc-method">How the readings were taken</a></li>
                     <li><a href="#k-blog-toc-level">Four centimetres in ten years</a></li>
                   </ol>
@@ -216,12 +216,12 @@ reviewed: false
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-toc" aria-label="Copy the article with a table of contents markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article with a table of contents markup"><code id="code-k-blog-toc">&lt;article class=&quot;luz-cms-article&quot;&gt;
-  &lt;header class=&quot;luz-cms-article-header&quot;&gt;…&lt;/header&gt;
-  &lt;div class=&quot;luz-cms-article__layout&quot;&gt;
-    &lt;nav class=&quot;luz-cms-toc&quot; aria-labelledby=&quot;toc-title&quot; data-luz-spy&gt;
-      &lt;h2 class=&quot;luz-cms-toc__title&quot; id=&quot;toc-title&quot;&gt;Contents&lt;/h2&gt;
-      &lt;ol class=&quot;luz-cms-toc__list&quot;&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article with a table of contents markup"><code id="code-k-blog-toc">&lt;article class=&quot;luz-article&quot;&gt;
+  &lt;header class=&quot;luz-article-header&quot;&gt;…&lt;/header&gt;
+  &lt;div class=&quot;luz-article__layout&quot;&gt;
+    &lt;nav class=&quot;luz-toc&quot; aria-labelledby=&quot;toc-title&quot; data-luz-spy&gt;
+      &lt;h2 class=&quot;luz-toc__title&quot; id=&quot;toc-title&quot;&gt;Contents&lt;/h2&gt;
+      &lt;ol class=&quot;luz-toc__list&quot;&gt;
         &lt;li&gt;&lt;a href=&quot;#method&quot;&gt;How the readings were taken&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href=&quot;#level&quot;&gt;Four centimetres in ten years&lt;/a&gt;&lt;/li&gt;
       &lt;/ol&gt;
@@ -239,10 +239,10 @@ reviewed: false
       </div>
       <div class="docs-block">
         <h2 id="footer">Pie de página</h2>
-        <p>Quién publica el blog y los enlaces que se buscan al final, en una fila: el <a href="/docs/catalog/cms-footer/">pie de página</a>.</p>
+        <p>Quién publica el blog y los enlaces que se buscan al final, en una fila: el <a href="/docs/catalog/site-footer/">pie de página</a>.</p>
         <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <div class="luz-cms-footer">
+            <div class="luz-site-footer">
               <div class="o-container o-container--inline o-row">
                 <p class="u-text-muted">The Vejer Review · Published by a cooperative</p>
                 <div class="o-actions">
@@ -259,7 +259,7 @@ reviewed: false
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-blog-footer" aria-label="Copy the footer markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-k-blog-footer">&lt;footer class=&quot;luz-cms-footer&quot;&gt;
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Footer markup"><code id="code-k-blog-footer">&lt;footer class=&quot;luz-site-footer&quot;&gt;
   &lt;div class=&quot;o-container o-container--inline o-row&quot;&gt;
     &lt;p&gt;The Vejer Review is published by a cooperative.&lt;/p&gt;
     &lt;nav class=&quot;o-actions&quot; aria-label=&quot;Links&quot;&gt;

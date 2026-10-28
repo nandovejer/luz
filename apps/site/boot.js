@@ -3,7 +3,7 @@
  *
  * luz-exception: EX-009 — a classic, render-blocking script in <head>
  * (PRINCIPLES §3: no JS on the critical rendering path). The pages are
- * served as Vejer light, and <luz-mode> (apps/site/header.js, a deferred
+ * served as Vejer light, and <luz-color-mode> (apps/site/header.js, a deferred
  * module) applies the visitor's mode and the light of the hour only after
  * the first paint, so a dark page flashed light on every navigation. This
  * sets data-theme and data-light on <html> the same way, before anything is
@@ -12,15 +12,15 @@
  *      that mode, its light pinned: light is the afternoon, dark and high
  *      contrast the night;
  *   2. else the light is the phase of the hour the globe's bar pinned
- *      (<luz-mode>.pin(), stored under "luz-light" in minutes of the day),
+ *      (<luz-color-mode>.pin(), stored under "luz-light" in minutes of the day),
  *      or of the local hour (the boundaries of
- *      phaseOf in packages/catalog/src/mode.js). With prefers-contrast: more
- *      the mode is high contrast, with that light, as <luz-mode by="clock">
+ *      phaseOf in packages/catalog/src/color-mode.js). With prefers-contrast: more
+ *      the mode is high contrast, with that light, as <luz-color-mode by="clock">
  *      writes it after it upgrades (theme-light.css never overrides high
  *      contrast, so the light changes nothing on screen); otherwise dawn,
  *      dusk and night are dark, the others light. The system's colour
  *      scheme is not read: the clock decides.
- * <luz-mode remember by="clock"> stays the owner: it re-applies the mode,
+ * <luz-color-mode remember by="clock"> stays the owner: it re-applies the mode,
  * stores the choice and follows the clock. It reads, never writes. Without
  * JavaScript nothing changes: no data-light, and core's radios switch.
  *

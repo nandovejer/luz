@@ -1,15 +1,16 @@
 // @ts-check
 /**
- * `.luz-landing-footer` (`components/landing-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
- * §1.5, §3.3 and §9 step 10): the footer of a landing page, no longer
- * `.luz-site-footer` of site. It is a native <footer> with a row of core's
- * inside: `footer.luz-landing-footer > div.o-container.o-container--inline.o-row`.
- * The landing adds the divider, the padding and the distribution of the row:
+ * `.luz-site-footer` (`components/site-footer.css` of @luz-ds/catalog; F8 of .claude/plans/ai-and-catalog-only.md,
+ * decisions 66 and 67): the footer of a landing page and the footer of a blog or a newspaper are one component, the two
+ * `.luz-landing-footer` and `.luz-cms-footer` that were the same rules twice. It is a native <footer> with a row of core's
+ * inside: `footer.luz-site-footer > div.o-container.o-container--inline.o-row`.
+ * It adds the divider, the padding and the distribution of the row:
  * its items at the two ends (`justify-content: space-between`), and at 768px
  * and below a column aligned to the start.
  *
- * The cases run on a page of tokens, core and landing (tests/fixtures/landing-page.html,
- * no site), and on the pages that use the class: the home page in its three
+ * The cases run on a page of tokens, core and catalog (tests/fixtures/landing-page.html,
+ * the landing's footer; tests/fixtures/cms-page.html, the blog's, which must be the same to the pixel),
+ * and on the pages that use the class: the home page in its three
  * languages and the documentation (the docs footer partial). The mode switcher
  * in the home footer is tested by tests/landing.spec.js.
  * Runs in `chromium` and `chromium-nojs`: the footer has no script.
@@ -111,35 +112,67 @@ test.describe('landing footer', () => {
     expect(parseFloat(await style(page, '#ftr', 'borderBlockStartWidth'))).toBeGreaterThanOrEqual(1);
   });
 
-  test('the markup carries no `luz-site-*` class', async ({ page }) => {
-    expect(await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => c.startsWith('luz-site-')))).toEqual([]);
+  test('the footer is `.luz-site-footer`, and the classes of before F8 do nothing: `.luz-landing-footer` and `.luz-cms-footer` give a footer no divider', async ({ page }) => {
+    await expect(page.locator('#ftr')).toHaveClass(/\bluz-site-footer\b/);
+    expect(await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => /^luz-(?:landing|cms)-/.test(c)))).toEqual([]);
+    for (const old of ['luz-landing-footer', 'luz-cms-footer']) {
+      await page.evaluate((name) => { document.getElementById('ftr').className = name; }, old);
+      expect(await style(page, '#ftr', 'borderBlockStartStyle'), old).toBe('none');
+      expect(await style(page, '#ftr-row', 'justifyContent'), old).not.toBe('space-between');
+    }
   });
+});
+
+test.describe('the footer of a blog is the same component: the cms page and the landing page have the same footer, number for number', () => {
+  const READ = () => {
+    const footer = document.getElementById('ftr');
+    const row = document.getElementById('ftr-row');
+    const f = getComputedStyle(footer);
+    const r = getComputedStyle(row);
+    return {
+      cls: footer.className,
+      border: [f.borderBlockStartWidth, f.borderBlockStartStyle, f.borderBlockStartColor],
+      padding: [f.paddingBlockStart, f.paddingBlockEnd],
+      background: f.backgroundColor,
+      row: [r.justifyContent, r.flexDirection, r.alignItems, r.columnGap, r.rowGap],
+    };
+  };
+  for (const width of [1280, 768, 320]) {
+    test(`at ${width} px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(FIXTURE);
+      const landing = await page.evaluate(READ);
+      await page.goto('/tests/fixtures/cms-page.html');
+      const blog = await page.evaluate(READ);
+      expect(blog.cls).toBe('luz-site-footer');
+      expect(landing.cls).toBe('luz-site-footer');
+      expect(blog).toEqual(landing);
+      expect(blog.border[1]).toBe('solid');
+    });
+  }
 });
 
 test.describe('the pages that use the landing footer', () => {
   for (const route of ['/', '/es/', '/ar/']) {
-    test(`${route}: the footer is \`footer.luz-landing-footer\` around a core grid (brand and columns, F5), not \`.luz-site-footer\``, async ({ page }) => {
+    test(`${route}: the footer is \`footer.luz-site-footer\` around a core grid (brand and columns, F5)`, async ({ page }) => {
       await page.goto(route);
-      await expect(page.locator('footer.luz-landing-footer > .o-container.o-container--inline.o-grid')).toHaveCount(1);
-      await expect(page.locator('footer.luz-landing-footer > .o-row')).toHaveCount(0);
-      await expect(page.locator('.luz-site-footer')).toHaveCount(0);
-      expect(await page.locator('footer.luz-landing-footer').evaluate((el) => getComputedStyle(el).borderBlockStartStyle)).toBe('solid');
+      await expect(page.locator('footer.luz-site-footer > .o-container.o-container--inline.o-grid')).toHaveCount(1);
+      await expect(page.locator('footer.luz-site-footer > .o-row')).toHaveCount(0);
+      expect(await page.locator('footer.luz-site-footer').evaluate((el) => getComputedStyle(el).borderBlockStartStyle)).toBe('solid');
     });
   }
 
   test('the documentation\'s footer partial is the landing footer too, on a docs page and on the 404', async ({ page }) => {
     await page.goto('/docs/');
-    await expect(page.locator('#site-footer.luz-landing-footer, #site-footer .luz-landing-footer')).toHaveCount(1);
-    await expect(page.locator('.luz-site-footer')).toHaveCount(0);
+    await expect(page.locator('#site-footer.luz-site-footer, #site-footer .luz-site-footer')).toHaveCount(1);
     expect(await page.locator('#site-footer .luz-mode-switcher').count()).toBeGreaterThan(0);
 
     await page.goto('/404.html');
-    await expect(page.locator('footer.luz-landing-footer, footer .luz-landing-footer')).toHaveCount(1);
-    await expect(page.locator('.luz-site-footer')).toHaveCount(0);
+    await expect(page.locator('footer.luz-site-footer, footer .luz-site-footer')).toHaveCount(1);
   });
 });
 
-// F4 of the identity plan (`landing-footer.css` of catalog): a brand block and columns of links.
+// F4 of the identity plan (`site-footer.css` of catalog): a brand block and columns of links.
 // The page is tests/fixtures/landing-f4.html (`div.o-container.o-container--inline.o-grid` inside the footer);
 // the old `> .o-row` footer is tests/fixtures/landing-page.html, tested above and unchanged.
 const F4 = '/tests/fixtures/landing-f4.html';
@@ -216,7 +249,7 @@ test.describe('landing footer: brand and columns', () => {
   test('the links of a column are targets of 24 px or more, from the package alone', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(F4);
-    const heights = await page.locator('.luz-landing-footer__col a').evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
+    const heights = await page.locator('.luz-site-footer__col a').evaluateAll((links) => links.map((a) => a.getBoundingClientRect().height));
     expect(heights.length).toBeGreaterThan(0);
     for (const height of heights) expect(height).toBeGreaterThanOrEqual(24);
   });

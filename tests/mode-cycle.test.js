@@ -53,8 +53,8 @@ describe("apps/site/header.css does not draw the button: core does", () => {
     expect(fixed.map((r) => r.selector)).toEqual([]);
   });
 
-  it("has no rule for `.site-modes:where(luz-mode)`", () => {
-    expect(rules.filter((r) => /\.site-modes:where\(luz-mode\)/.test(r.selector)).map((r) => r.selector)).toEqual([]);
+  it("has no rule for `.site-modes:where(luz-color-mode)`", () => {
+    expect(rules.filter((r) => /\.site-modes:where\(luz-color-mode\)/.test(r.selector)).map((r) => r.selector)).toEqual([]);
   });
 
   it("has no size rule for the cycle button (core's is --luz-control-lg)", () => {

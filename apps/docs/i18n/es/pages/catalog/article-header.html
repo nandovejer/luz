@@ -1,0 +1,173 @@
+<!-- luz:page
+title: Cabecera de artículo
+description: Presenta un artículo con su sección, título, entradilla, autor y fecha, y una imagen opcional al principio.
+fits: la parte superior de un artículo, bajo la cabecera del sitio
+source: 97a77b8a9743
+reviewed: false
+-->
+    <div class="docs-component" id="p-article-header">
+          <h2 id="example">Ejemplo</h2>
+          <p>La cabecera de un artículo sobre los registros de mareas de una bahía.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <header class="luz-article-header u-mb-0">
+              <p class="luz-article-header__kicker"><a href="#p-article-header">Coast</a></p>
+              <p class="luz-article-header__title">What ten years of tide records say about the bay</p>
+              <p class="luz-article-header__standfirst">Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher, and winter storms now reach the old town's walls.</p>
+              <div class="luz-article-header__byline">
+                <span class="luz-avatar luz-avatar--lg" aria-hidden="true">AR</span>
+                <div>
+                  <p>By <a href="#p-article-header">Ana Ruiz</a></p>
+                  <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+                </div>
+              </div>
+              <figure class="luz-article-header__media">
+                <div class="luz-image"></div>
+                <figcaption>The tide gauge in the port, at low tide.</figcaption>
+              </figure>
+            </header>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera del artículo">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-article-header" aria-label="Copy the article header markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Article header markup"><code id="code-article-header">&lt;header class=&quot;luz-article-header&quot;&gt;
+  &lt;p class=&quot;luz-article-header__kicker&quot;&gt;&lt;a href=&quot;/coast/&quot;&gt;Coast&lt;/a&gt;&lt;/p&gt;
+  &lt;h1 class=&quot;luz-article-header__title&quot;&gt;What ten years of tide records say about the bay&lt;/h1&gt;
+  &lt;p class=&quot;luz-article-header__standfirst&quot;&gt;Volunteers have read the gauge in the port twice a day since 2016. The sea is four centimetres higher, and winter storms now reach the old town's walls.&lt;/p&gt;
+  &lt;div class=&quot;luz-article-header__byline&quot;&gt;
+    &lt;span class=&quot;luz-avatar luz-avatar--lg&quot;&gt;&lt;img src=&quot;/authors/ana-ruiz-96.jpg&quot; width=&quot;48&quot; height=&quot;48&quot; alt=&quot;&quot;&gt;&lt;/span&gt;
+    &lt;div&gt;
+      &lt;p&gt;By &lt;a href=&quot;/authors/ana-ruiz/&quot;&gt;Ana Ruiz&lt;/a&gt;&lt;/p&gt;
+      &lt;p class=&quot;luz-meta&quot;&gt;&lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt; &lt;span&gt;6 min read&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;figure class=&quot;luz-article-header__media&quot;&gt;
+    &lt;div class=&quot;luz-image&quot;&gt;
+      &lt;img src=&quot;/img/tide-gauge-1280.jpg&quot; width=&quot;1280&quot; height=&quot;720&quot; alt=&quot;A green gauge post marked in centimetres, standing in shallow water by a stone quay&quot; fetchpriority=&quot;high&quot; decoding=&quot;async&quot;&gt;
+    &lt;/div&gt;
+    &lt;figcaption&gt;The tide gauge in the port, at low tide. Photo: Ana Ruiz.&lt;/figcaption&gt;
+  &lt;/figure&gt;
+&lt;/header&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay modificadores. Solo el título es obligatorio: omite las partes que no tengas.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Partes de la cabecera del artículo" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-article-header</code></div></td><td data-label="Qué hace"><div>El bloque: sus partes, separadas 12 px entre sí y con 32 px de espacio debajo</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-article-header__kicker</code></div></td><td data-label="Qué hace"><div>La sección, encima del título, en versalitas con la tipografía monoespaciada, como el antetítulo del <a href="/docs/catalog/hero/">hero</a>. Opcional</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-article-header__title</code></div></td><td data-label="Qué hace"><div>El título: tipografía de encabezado, tamaño 3xl, peso ligero y líneas equilibradas; 2xl a 640 px o menos</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-article-header__standfirst</code></div></td><td data-label="Qué hace"><div>Una o dos frases en el color de texto secundario, un tamaño mayor que el texto del cuerpo y un máximo de 70 caracteres de ancho. Opcional</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-article-header__byline</code></div></td><td data-label="Qué hace"><div>Una fila con la tipografía sans que puede saltar de línea: un <a href="/docs/components/avatar/">avatar</a>, el autor y una <a href="/docs/components/meta/">línea de metadatos</a> con la fecha. Opcional</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-article-header__media</code></div></td><td data-label="Qué hace"><div>Un <code>&lt;figure&gt;</code> sin panel alrededor, para un <a href="/docs/components/image/">marco de imagen</a> y su pie. Opcional</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Una cuadrícula de una columna, con estilos de <code>components/article-header.css</code> de <code>@luz-ds/catalog</code>, que se carga después de core y de los componentes del catálogo que use la página. Sin JavaScript.</p>
+            <ul>
+              <li>Cada parte aplica sus estilos al texto mediante la herencia, así que puedes poner la clase en el elemento que contiene el texto o en un contenedor. Una plantilla de CMS que envuelve la entradilla en un <code>&lt;div&gt;</code> funciona igual que un <code>&lt;p&gt;</code> sin contenedor. En una plantilla de bloques de WordPress, asigna a cada bloque su clase en <code>className</code>.</li>
+              <li>El antetítulo es un enlace si las secciones tienen página propia; si no, es texto sin enlace. El título debe ser el <code>&lt;h1&gt;</code> de la página; las clases solo cambian su aspecto.</li>
+              <li>La imagen inicial usa el <a href="/docs/components/image/">marco de imagen</a> de core: mantiene su proporción y muestra una superficie plana hasta que se carga. No le asignes <code>loading="lazy"</code>: está cerca del principio de la página.</li>
+              <li>La fecha visible es un <code>&lt;time&gt;</code> con un <code>datetime</code> legible por máquinas. Si el artículo se actualiza después de publicarse, añade una segunda línea: <code>Updated &lt;time datetime="…"&gt;…&lt;/time&gt;</code>.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: la cabecera del artículo usa HTML y CSS.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>La cabecera no tiene interacciones propias: al pulsar Tab se llega primero al enlace del antetítulo y después al del autor.</p>
+            <ul>
+              <li>El título <code>&lt;h1&gt;</code> permite encontrar el artículo en la lista de encabezados del lector de pantalla. El antetítulo aparece antes en el código fuente, igual que en pantalla; es breve y no retrasa la lectura del título.</li>
+              <li>Dentro de <code>&lt;article&gt;</code>, <code>&lt;header&gt;</code> no es un punto de referencia; no necesita etiqueta.</li>
+              <li>El avatar que aparece junto al nombre del autor es decorativo: las iniciales llevan <code>aria-hidden="true"</code> y la foto, <code>alt=""</code>.</li>
+            </ul>
+            <p class="docs-view__xref">La pestaña Diseño contiene <a href="#contrast">el contraste y el foco</a>.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa una cabecera de artículo al principio de una noticia, una entrada o un reportaje: una página con autor y fecha que se lee de principio a fin.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No la uses en una página sin autor ni fecha, como una página de contacto o de sección: usa la <a href="/docs/catalog/page-header/">cabecera de página</a>.</p>
+            <ul>
+              <li>Para el primer bloque de una página de inicio o de aterrizaje, usa el <a href="/docs/catalog/hero/">hero</a>.</li>
+              <li>Para un artículo de una lista, usa una <a href="/docs/kinds/blog/">tarjeta de artículo</a>: la cabecera es para la página del artículo.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Un título que cuenta lo ocurrido y una entradilla que añade lo que el título no podía incluir.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-article-header u-mb-0"><p class="luz-article-header__title">The council closes the beach road from May to September</p><p class="luz-article-header__standfirst">Buses and bicycles keep their lane. Residents can apply for a pass from 1 March.</p></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Un título que oculta la noticia y una entradilla que repite el título.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-article-header u-mb-0"><p class="luz-article-header__title">You will not believe what is changing this summer</p><p class="luz-article-header__standfirst">Something is changing this summer, and here is what it is.</p></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Una firma con el nombre del autor como texto y la fecha escrita con palabras.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-article-header__byline"><span class="luz-avatar luz-avatar--lg">AR</span><div><p>By <a href="#p-article-header">Ana Ruiz</a></p><p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p></div></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Una foto sin el nombre al lado y una fecha escrita solo con cifras, que en otros países se leen en distinto orden.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-article-header__byline"><span class="luz-avatar luz-avatar--lg">AR</span><div><p><time datetime="2026-10-12">12/10/26</time></p></div></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>El título cuenta lo ocurrido o lo que aprenderá quien lo lea, con mayúscula inicial y sin punto final. No superes los 90 caracteres: las listas y los resultados de búsqueda recortan los más largos.</p>
+            <ul>
+              <li>El antetítulo tiene una o dos palabras: la sección o el tipo de artículo («Análisis», «Entrevista»).</li>
+              <li>La entradilla consta de una o dos frases, menos de 40 palabras, que complementan el título. A menudo es la descripción que el CMS muestra en las listas y en los buscadores.</li>
+              <li>Escribe la fecha con palabras y el mes completo, en el idioma de quien lee. «6 min de lectura» calcula unas 200 palabras por minuto; omítelo en las entradas cortas.</li>
+              <li>El pie de foto indica qué muestra la imagen y quién la hizo. <code>alt</code> describe lo que necesita saber quien no puede verla; nunca repite el pie.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Todas las partes son texto sobre la página. Consulta los pares de contraste del avatar en <a href="/docs/components/avatar/#contrast">su página</a>.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la cabecera del artículo en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Título</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Antetítulo, entradilla, firma y pie de foto</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlaces (antetítulo y autor)</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido corresponde a WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> la cabecera no recibe el foco; sus enlaces conservan el anillo de core.</li>
+              <li>Los enlaces están subrayados, así que el color no es la única indicación (WCAG 1.4.1).</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 14 tokens que usan las reglas de <code>.luz-article-header</code> de <code>components/article-header.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-2xl</code>, <code>--luz-text-3xl</code>, <code>--luz-text-base</code>, <code>--luz-text-lg</code>, <code>--luz-text-md</code>, <code>--luz-text-xs</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">La pestaña Código contiene <a href="#keyboard">el teclado y ARIA</a>.</p>
+          </div>
+    </div>

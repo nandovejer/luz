@@ -61,9 +61,9 @@ const state = (page) =>
     light: document.documentElement.getAttribute('data-light'),
   }));
 
-/** The modules have run: <luz-mode> is defined, core has had its turn and the page is quiet. */
+/** The modules have run: <luz-color-mode> is defined, core has had its turn and the page is quiet. */
 async function modulesRan(page) {
-  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
   await idle(page);
 }
 
@@ -143,7 +143,7 @@ test.describe('with no choice, the light follows the clock', () => {
         await modulesRan(page);
         await expect(page.locator('input[name="luz-theme"]:checked'), 'no mode chosen: no radio checked').toHaveCount(0);
         expect(await state(page)).toEqual({ theme: mode, light });
-        // Core's theme module and <luz-mode> both run: neither writes the other mode, not even to correct it in a later task
+        // Core's theme module and <luz-color-mode> both run: neither writes the other mode, not even to correct it in a later task
         expect(only(await took(page, 'data-theme'))).toEqual([mode]);
         expect(only(await took(page, 'data-light'))).toEqual([light]);
       });
@@ -169,7 +169,7 @@ test.describe('with no choice, the light follows the clock', () => {
   });
 
   for (const path of PAGES) {
-    test(`${path}: prefers-contrast: more at 09:00 is morning at <body> insertion and after <luz-mode> upgraded, with no flip`, async ({ page }) => {
+    test(`${path}: prefers-contrast: more at 09:00 is morning at <body> insertion and after <luz-color-mode> upgraded, with no flip`, async ({ page }) => {
       await page.emulateMedia({ contrast: 'more' });
       await atTime(page, '09:00');
       await watch(page);
@@ -177,7 +177,7 @@ test.describe('with no choice, the light follows the clock', () => {
       await modulesRan(page);
       expect(await page.evaluate(() => /** @type {any} */ (window).__dcl)).toEqual(['high-contrast', 'morning']);
       expect(await state(page)).toEqual({ theme: 'high-contrast', light: 'morning' });
-      // Every value the attributes took: boot's, then <luz-mode>'s, the same
+      // Every value the attributes took: boot's, then <luz-color-mode>'s, the same
       expect(only(await took(page, 'data-theme'))).toEqual(['high-contrast']);
       expect(only(await took(page, 'data-light'))).toEqual(['morning']);
       await expect(page.locator('input[name="luz-theme"]:checked'), 'no mode chosen: no radio checked').toHaveCount(0);
@@ -195,7 +195,7 @@ test.describe('with no choice, the light follows the clock', () => {
 });
 
 test.describe('with no choice, core\'s own theme handling runs under every system colour scheme and stays on the clock', () => {
-  // core's initThemeSystem and <luz-mode> both listen to prefers-color-scheme
+  // core's initThemeSystem and <luz-color-mode> both listen to prefers-color-scheme
   for (const path of PAGES) {
     test(`${path}: a dark system at 14:00, modules loaded: light, afternoon, and a change of the system does not move it`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: 'dark' });

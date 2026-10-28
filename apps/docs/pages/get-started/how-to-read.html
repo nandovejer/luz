@@ -15,13 +15,9 @@ keywords: naming, prefix, bem, data attributes, custom elements, public api
             <tr><th scope="col">Prefix</th><th scope="col">What it is</th><th scope="col">Package</th><th scope="col">Example</th></tr>
           </thead>
           <tbody>
-            <tr><td data-label="Prefix"><div><code>.luz-</code></div></td><td data-label="What it is"><div>A component, or a part of one</div></td><td data-label="Package"><div>core</div></td><td data-label="Example"><div><code>.luz-btn</code></div></td></tr>
+            <tr><td data-label="Prefix"><div><code>.luz-</code></div></td><td data-label="What it is"><div>A component, or a part of one</div></td><td data-label="Package"><div>core, catalog</div></td><td data-label="Example"><div><code>.luz-btn</code>, <code>.luz-hero</code></div></td></tr>
             <tr><td data-label="Prefix"><div><code>.o-</code></div></td><td data-label="What it is"><div>A layout object: it arranges things and has no look of its own</div></td><td data-label="Package"><div>core</div></td><td data-label="Example"><div><code>.o-stack</code></div></td></tr>
             <tr><td data-label="Prefix"><div><code>.u-</code></div></td><td data-label="What it is"><div>A utility: one job, with no component around it</div></td><td data-label="Package"><div>core</div></td><td data-label="Example"><div><code>.u-sr-only</code></div></td></tr>
-            <tr><td data-label="Prefix"><div><code>.luz-landing-</code></div></td><td data-label="What it is"><div>A piece of a landing page</div></td><td data-label="Package"><div>catalog</div></td><td data-label="Example"><div><code>.luz-landing-hero</code></div></td></tr>
-            <tr><td data-label="Prefix"><div><code>.luz-cms-</code></div></td><td data-label="What it is"><div>A piece of a blog, a newspaper or any CMS</div></td><td data-label="Package"><div>catalog</div></td><td data-label="Example"><div><code>.luz-cms-header</code></div></td></tr>
-            <tr><td data-label="Prefix"><div><code>.luz-app-</code></div></td><td data-label="What it is"><div>A piece of a web application</div></td><td data-label="Package"><div>catalog</div></td><td data-label="Example"><div><code>.luz-app-header</code></div></td></tr>
-            <tr><td data-label="Prefix"><div><code>.luz-docs-</code></div></td><td data-label="What it is"><div>A piece of a documentation page</div></td><td data-label="Package"><div>catalog</div></td><td data-label="Example"><div><code>.luz-docs-pager</code></div></td></tr>
             <tr><td data-label="Prefix"><div><code>.is-</code></div></td><td data-label="What it is"><div>A state a script mirrors onto an element. Read it, but do not style from outside: it is not part of what you can rely on</div></td><td data-label="Package"><div>core</div></td><td data-label="Example"><div><code>.is-active</code></div></td></tr>
           </tbody>
         </table>
@@ -92,8 +88,8 @@ keywords: naming, prefix, bem, data attributes, custom elements, public api
       <h2 class="docs-chapter__title" id="elements">Elements that start with luz</h2>
       <p class="docs-lead">A tag that starts with <code>luz-</code> is a custom element. LUZ's are in the light DOM, so your CSS reaches inside them, and their parts are classes: <code>.luz-&lt;tag&gt;__&lt;part&gt;</code>.</p>
       <ul>
-        <li><strong>With a script:</strong> <code>&lt;luz-search&gt;</code>, <code>&lt;luz-consent&gt;</code>, <code>&lt;luz-mode&gt;</code> and <code>&lt;luz-timeline&gt;</code> need their script to do their job.</li>
-        <li><strong>CSS only:</strong> <code>&lt;luz-lang-switch&gt;</code>, <code>&lt;luz-submenu&gt;</code> and <code>&lt;luz-banner&gt;</code> have no script at all. They are a tag you can style before and without its script.</li>
+        <li><strong>With a script:</strong> <code>&lt;luz-search&gt;</code>, <code>&lt;luz-cookie-consent&gt;</code>, <code>&lt;luz-color-mode&gt;</code> and <code>&lt;luz-timeline&gt;</code> need their script to do their job.</li>
+        <li><strong>CSS only:</strong> <code>&lt;luz-lang-switch&gt;</code>, <code>&lt;luz-submenu&gt;</code> and <code>&lt;luz-announcement&gt;</code> have no script at all. They are a tag you can style before and without its script.</li>
       </ul>
       <p>Which package holds each one is in <a href="/docs/get-started/structure/">How LUZ is organised</a>.</p>
     </section>

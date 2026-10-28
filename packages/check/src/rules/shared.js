@@ -25,15 +25,10 @@ import { echoName } from "../sanitize.js";
 export const SUGGESTIONS_PER_FILE = 200;
 export const SUGGESTIONS_IN_ALL = 5000;
 
-// The patterns of a kind of site (landing, cms, app, docs) are catalog's
-// components since plan ai-and-catalog-only, F5b; F8 renames them
-const PACKAGE_PREFIXES = [
-  ["luz-landing-", "catalog"],
-  ["luz-cms-", "catalog"],
-  ["luz-app-", "catalog"],
-  ["luz-docs-", "catalog"],
-  ["luz-catalog-", "catalog"],
-];
+// Every component of catalog is named for what it is, with no kind of site in
+// the name (plan ai-and-catalog-only, decision 66): only luz-catalog- points
+// at the package by its prefix
+const PACKAGE_PREFIXES = [["luz-catalog-", "catalog"]];
 
 export function packageOfName(name) {
   for (const [prefix, pkg] of PACKAGE_PREFIXES) if (name.startsWith(prefix)) return pkg;

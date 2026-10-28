@@ -1,8 +1,8 @@
 # @luz-ds/catalog
 
-Components that are not core's, each one stylesheet: light-DOM `<luz-*>` tags (search, cookie consent, color mode, language switch, submenu, banner and timeline), the navigation of a site (the navbar and the sidebar, which are classes with no tag), the terminal, and the patterns of a landing page, a blog, an app and a documentation site. Catalog is the navigation of the site and the pieces with JS or an identity of their own; everything else is in `@luz-ds/core`, which names nothing of catalog.
+Components that are not core's, each one stylesheet: light-DOM `<luz-*>` tags (search, cookie consent, color mode, language switch, submenu, announcement and timeline), the navigation of a site (the navbar and the sidebar, which are classes with no tag), the terminal, and the patterns of a landing page, a blog, an app and a documentation site. Catalog is the navigation of the site and the pieces with JS or an identity of their own; everything else is in `@luz-ds/core`, which names nothing of catalog.
 
-The rest are the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. They are catalog components too, one file each, `<kind>-<name>.css`. The name says what the piece is, and its docs page says which kind of site it fits. See [Patterns of a kind of site](#patterns-of-a-kind-of-site).
+The rest are the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. They are catalog components too, one file each, `<block>.css`. The name says what the piece is, with no kind of site in it, and its docs page says which kinds of site it fits best. See [Patterns of a kind of site](#patterns-of-a-kind-of-site).
 
 > **Beta.** The tokens, components and patterns work and are tested, but names, classes and behavior can still change before the stable release. Pin an exact version and read the changelog before you upgrade.
 
@@ -27,7 +27,7 @@ import '@luz-ds/tokens/css'
 import '@luz-ds/core/css'
 // One import per component the page uses: here the search and the color mode
 import '@luz-ds/catalog/components/search.css'
-import '@luz-ds/catalog/components/mode.css'
+import '@luz-ds/catalog/components/color-mode.css'
 
 import '@luz-ds/core'        // optional: the core behaviors
 import '@luz-ds/catalog'    // the loader: the chunks of the search, the cookie banner, the color mode, the timeline and the sidebar, when the page has them
@@ -42,11 +42,11 @@ import '@luz-ds/catalog'    // the loader: the chunks of the search, the cookie 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css">
 <!-- One link per component the page uses: here the search and the color mode -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/search.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/mode.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/color-mode.min.css">
 <script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js"></script>
 <!-- The loader: it loads search.min.js on a page with a <luz-search>,
-     consent.min.js on a page with a <luz-consent>, mode.min.js on a
-     page with a <luz-mode>, timeline.min.js on a page with a
+     cookie-consent.min.js on a page with a <luz-cookie-consent>, color-mode.min.js on a
+     page with a <luz-color-mode>, timeline.min.js on a page with a
      <luz-timeline> and sidebar.min.js on a page with a .luz-sidebar,
      and nothing else -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.js"></script>
@@ -59,8 +59,8 @@ With Subresource Integrity, an `integrity` on the `<script>` covers `catalog.min
 {
   "integrity": {
     "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/search.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/consent.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/mode.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/cookie-consent.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/color-mode.min.js": "sha384-…",
     "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/timeline.min.js": "sha384-…",
     "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/sidebar.min.js": "sha384-…"
   }
@@ -73,13 +73,13 @@ A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari
 
 ## Package exports
 
-- **`.`** → `catalog.js` — The presence loader. Warns when core is not loaded, scans the page once and loads `search.js` when it has a `<luz-search>` (on the first pointerdown or focus in it, Ctrl+K, or idle) `consent.js` when it has a `<luz-consent>` (on idle) `mode.js` when it has a `<luz-mode>` (on idle), `timeline.js` when it has a `<luz-timeline>` and `sidebar.js` when it has a `.luz-sidebar`, both as soon as the page is scanned. `catalog.min.js` imports `./search.min.js`, `./consent.min.js`, `./mode.min.js`, `./timeline.min.js` and `./sidebar.min.js` and nothing else
+- **`.`** → `catalog.js` — The presence loader. Warns when core is not loaded, scans the page once and loads `search.js` when it has a `<luz-search>` (on the first pointerdown or focus in it, Ctrl+K, or idle) `cookie-consent.js` when it has a `<luz-cookie-consent>` (on idle) `color-mode.js` when it has a `<luz-color-mode>` (on idle), `timeline.js` when it has a `<luz-timeline>` and `sidebar.js` when it has a `.luz-sidebar`, both as soon as the page is scanned. `catalog.min.js` imports `./search.min.js`, `./cookie-consent.min.js`, `./color-mode.min.js`, `./timeline.min.js` and `./sidebar.min.js` and nothing else
 - **`./search`** → `search.js` — defines `<luz-search>`, a custom element (light DOM) that holds the fallback link, the trigger and the search `<dialog>`, and wires them when it connects; importing it in a page defines the element (once, however many copies), importing it in Node does nothing. Import it by hand for a `<luz-search>` added after the page has loaded
-- **`./consent`** → `consent.js` — defines `<luz-consent>`, the cookie banner (light DOM), and exports `getConsent(key?)`. Importing it in Node does nothing but give `getConsent`
-- **`./mode`** → `mode.js` — defines `<luz-mode>`, the color mode switcher with an Auto state (light DOM), and exports `phaseOf(hour)`, the phase of the day at a local hour. Importing it in Node does nothing but give `phaseOf`
+- **`./cookie-consent`** → `cookie-consent.js` — defines `<luz-cookie-consent>`, the cookie banner (light DOM), and exports `getConsent(key?)`. Importing it in Node does nothing but give `getConsent`
+- **`./color-mode`** → `color-mode.js` — defines `<luz-color-mode>`, the color mode switcher with an Auto state (light DOM), and exports `phaseOf(hour)`, the phase of the day at a local hour. Importing it in Node does nothing but give `phaseOf`
 - **`./timeline`** → `timeline.js` — defines `<luz-timeline>`, a timeline with a rail of dates (light DOM), and exports `initTimeline(root, translate)`. It carries its own four strings, in English and Spanish, and reads `data-luz-label-<key>` on the element or an ancestor, then the nearest `lang`, as the search and the cookie banner do (EX-010). A language added with `registerLocale()` does not reach it by itself: call `initTimeline(document, t)` with core's `t`. Importing it in Node does nothing
 - **`./sidebar`** → `sidebar.js` — exports `initSidebar()`: the scroll spy that marks the link of the section on screen (`.luz-sidebar__link`, and every in-page link inside `[data-luz-spy]`), and closes the drawer when a link is chosen. The loader calls it when the page has a `.luz-sidebar`; call it yourself for a sidebar added later. The drawer itself is a native popover and works without it. Importing it has no side effects
-- **`./components/*`** → `dist/components/` — the package's only CSS: one stylesheet per component, `<name>.css` and `<name>.min.css`, its screen rules in `luz.catalog` and what it does on paper in `luz.print`: `banner`, `consent`, `lang-switch`, `mode`, `navbar`, `search`, `sidebar`, `submenu`, `terminal`, `timeline` and the patterns of a kind of site (`landing-*`, `cms-*`, `app-*` and `docs-*`). `classes.json` says the file of each class (`files`) and `custom-elements.json` the file of each tag (`stylesheet`)
+- **`./components/*`** → `dist/components/` — the package's only CSS: one stylesheet per component, `<name>.css` and `<name>.min.css`, its screen rules in `luz.catalog` and what it does on paper in `luz.print`: `announcement`, `color-mode`, `cookie-consent`, `lang-switch`, `navbar`, `search`, `sidebar`, `submenu`, `terminal`, `timeline` and the patterns of a kind of site, each named by its block (`hero`, `site-header`, `page-rail` and the others of the table below). `classes.json` says the file of each class (`files`) and `custom-elements.json` the file of each tag (`stylesheet`)
 
 There is no `./css`, `./css/min` or `./print.css` since 0.3: link the components instead.
 
@@ -90,13 +90,13 @@ The four packages `@luz-ds/landing`, `@luz-ds/cms`, `@luz-ds/app` and `@luz-ds/d
 Each tag is the block; its parts are `.luz-<tag>__<part>`.
 
 - `<luz-submenu>` — An item of the header's links that holds more links: a tag (no class, no script, `display: contents`) around a native `<details name>`, in the flow in the menu panel and a box under its button from 769 px
-- `<luz-banner>` (`tone="warning"`) — A tag (no class, no script) around one `<section aria-labelledby>`: a band above the header with one short announcement and one link; no close button
-- `<luz-consent>` and `.luz-consent` (`__title`, `__choices`) — The cookie banner, first after the skip link in the markup and shown as a band fixed at the bottom of the window (in the flow under 30rem tall), hidden until `consent.js` shows it; its confirmation has a `[data-luz-consent-close]` button, and while it shows `consent.js` sets `--luz-consent-h` on `:root` so the page keeps room for it
+- `<luz-announcement>` (`tone="warning"`) — A tag (no class, no script) around one `<section aria-labelledby>`: a band above the header with one short announcement and one link; no close button
+- `<luz-cookie-consent>` and `.luz-cookie-consent` (`__title`, `__choices`) — The cookie banner, first after the skip link in the markup and shown as a band fixed at the bottom of the window (in the flow under 30rem tall), hidden until `cookie-consent.js` shows it; its confirmation has a `[data-luz-consent-close]` button, and while it shows `cookie-consent.js` sets `--luz-consent-h` on `:root` so the page keeps room for it
 - `.luz-navbar` (`__list`, `__link`) — The links of a header: a `nav[popover]` that is a row of the bar from 769 px and a native popover panel under it below, opened by a `.luz-nav-toggle`. No script
 - `.luz-sidebar` (`__brand`, `__logo`, `__brand-name`, `__version`, `__section`, `__section-label`, `__link`, `__footer`) with `.luz-nav-toggle` (`--fixed`, `__bar`) — Sidebar navigation and its drawer, a native popover on small screens. The brand is the part of the sidebar that holds the logo, the name and the version. `sidebar.js` adds the scroll spy
 - `.luz-terminal` (`__tabs`, `__pane`, `__code`) — A command in a framed block: tabs as its title bar and a copy button at the end of the line it copies. No script of its own; the copy button is core's
 - `<luz-timeline>` with `.luz-timeline` (`__item`, `__date`, `__title`, `__text`, `__rail`, `__stage`, `__track`, `__stop`, `__arrow`, `__toggle`) — Dated events in order, one card at a time on a rail of dates or all at once down a line; without JavaScript it is a list
-- `<luz-mode>` — Color mode: a tag around core's `.luz-mode-switcher` radios (and its `--cycle` variant) with a fourth, "Auto", radio first; `mode.js` makes Auto follow the system or the clock
+- `<luz-color-mode>` — Color mode: a tag around core's `.luz-mode-switcher` radios (and its `--cycle` variant) with a fourth, "Auto", radio first; `color-mode.js` makes Auto follow the system or the clock
 - `<luz-lang-switch>` with `.luz-lang-switch__button`, `__menu`, `__list`, `__link`, `__name`, `__title`, `__icon` — Language switch: a tag (no script) around a button that opens a native popover list of links; `--luz-lang-switch-top` (default `--luz-bar-h`) places the list
 - `<luz-search>` with `.luz-search__fallback` (`__fallback-label`), `.luz-search__trigger` (`--compact`, `__trigger-icon`, `__trigger-label`, `__trigger-key`) and `.luz-search` (`__body`, `__head`, `__title`, `__field`, `__status`, `__close`, `__results`, `__foot`) — Site search: a link to your index that a button replaces, in the same space, and a native `<dialog>` of grouped links
 
@@ -117,12 +117,12 @@ Each item is `[text, url, meta?, lang?]`. The component fetches it only from the
 
 ## Cookie consent
 
-A band fixed at the bottom of the window asks once whether the site may use optional cookies: Accept and Reject side by side, with the same style, and a `<details>` with one checkbox per category. It is `hidden` in the markup and `consent.js` shows it when no answer is stored, when the stored one has expired (180 days by default, `data-luz-consent-days`, 395 at most), or when it offers a category the stored answer was not asked about. It does not take focus, and while it shows it reserves the page's height, so it covers nothing; Escape is not an answer. Without JavaScript it stays hidden: none of your scripts run either, and the cookie policy is a link on every page.
+A band fixed at the bottom of the window asks once whether the site may use optional cookies: Accept and Reject side by side, with the same style, and a `<details>` with one checkbox per category. It is `hidden` in the markup and `cookie-consent.js` shows it when no answer is stored, when the stored one has expired (180 days by default, `data-luz-consent-days`, 395 at most), or when it offers a category the stored answer was not asked about. It does not take focus, and while it shows it reserves the page's height, so it covers nothing; Escape is not an answer. Without JavaScript it stays hidden: none of your scripts run either, and the cookie policy is a link on every page.
 
-The answer is stored in `localStorage` under `luz-consent` (or `data-luz-consent-key`, starting with `luz-`), as `{"version":1,"expires":<ms>,"asked":[…],"granted":[…]}`. Read it with `getConsent()`, which returns `{ asked, granted, expires }` or `null`, and listen for `luz:consent` on `document`, dispatched with the same object as `detail` on every new answer. A button with `data-luz-consent-open` (and `hidden`) shows the banner again. The script writes no text. Full markup on the [Cookie consent page of the docs](https://nandovejer.github.io/luz/docs/catalog/consent/).
+The answer is stored in `localStorage` under `luz-consent` (or `data-luz-consent-key`, starting with `luz-`), as `{"version":1,"expires":<ms>,"asked":[…],"granted":[…]}`. Read it with `getConsent()`, which returns `{ asked, granted, expires }` or `null`, and listen for `luz:consent` on `document`, dispatched with the same object as `detail` on every new answer. A button with `data-luz-consent-open` (and `hidden`) shows the banner again. The script writes no text. Full markup on the [Cookie consent page of the docs](https://nandovejer.github.io/luz/docs/catalog/cookie-consent/).
 
 ```js
-import { getConsent } from "@luz-ds/catalog/consent";
+import { getConsent } from "@luz-ds/catalog/cookie-consent";
 const granted = (answer) => answer?.granted.includes("analytics");
 if (granted(getConsent())) startMeasuring();
 document.addEventListener("luz:consent", (e) => (granted(e.detail) ? startMeasuring() : location.reload()));
@@ -130,10 +130,10 @@ document.addEventListener("luz:consent", (e) => (granted(e.detail) ? startMeasur
 
 ## Color mode
 
-`<luz-mode>` wraps core's color mode radios and adds an "Auto" radio, first. Without JavaScript the radios change the mode through the tokens, and Auto leaves the page light. With it, Auto follows the system (`prefers-contrast: more`, then `prefers-color-scheme: dark`) or, with `by="clock"`, the phase of the day from the local hour, written as `data-light` (`dawn`, `morning`, `afternoon`, `sunset`, `dusk`, `night`; dawn, dusk and night are dark), checked again each minute. A chosen mode is applied as `data-theme`, and with the clock its light is pinned (light: `afternoon`, dark and high contrast: `night`). With `remember` the choice is stored under core's `luz-theme` key, and Auto removes it; without it nothing is stored. `for` names the element that gets the attributes (default `<html>`), `light-attr` the attribute of the light (a `data-*` name, default `data-light`). The script writes no text: its labels are the radios'. With `luz.js` on the page, core's cycle button steps through the four states.
+`<luz-color-mode>` wraps core's color mode radios and adds an "Auto" radio, first. Without JavaScript the radios change the mode through the tokens, and Auto leaves the page light. With it, Auto follows the system (`prefers-contrast: more`, then `prefers-color-scheme: dark`) or, with `by="clock"`, the phase of the day from the local hour, written as `data-light` (`dawn`, `morning`, `afternoon`, `sunset`, `dusk`, `night`; dawn, dusk and night are dark), checked again each minute. A chosen mode is applied as `data-theme`, and with the clock its light is pinned (light: `afternoon`, dark and high contrast: `night`). With `remember` the choice is stored under core's `luz-theme` key, and Auto removes it; without it nothing is stored. `for` names the element that gets the attributes (default `<html>`), `light-attr` the attribute of the light (a `data-*` name, default `data-light`). The script writes no text: its labels are the radios'. With `luz.js` on the page, core's cycle button steps through the four states.
 
 ```html
-<luz-mode remember by="clock">
+<luz-color-mode remember by="clock">
   <fieldset class="luz-mode-switcher luz-mode-switcher--cycle">
     <legend class="luz-mode-switcher__label">Color mode</legend>
     <label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="auto" checked>Auto</label>
@@ -141,53 +141,52 @@ document.addEventListener("luz:consent", (e) => (granted(e.detail) ? startMeasur
     <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark">Dark</label>
     <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast">High contrast</label>
   </fieldset>
-</luz-mode>
+</luz-color-mode>
 ```
 
-The element has `mode` (`"auto"`, `"light"`, `"dark"` or `"high-contrast"`), `light` (the phase, or `null` without the clock) and `preview(phase | hour | null)`, which shows another hour of the day with the clock (and returns `false` without it). It dispatches `luz-mode:change`, bubbling, after it starts and on every change, with `{ mode, theme, light, remembered, simulated }`. Full markup, the boot snippet for `<head>` and a theme with a day and a night light on the [Color mode page of the docs](https://nandovejer.github.io/luz/docs/catalog/mode/).
+The element has `mode` (`"auto"`, `"light"`, `"dark"` or `"high-contrast"`), `light` (the phase, or `null` without the clock) and `preview(phase | hour | null)`, which shows another hour of the day with the clock (and returns `false` without it). It dispatches `luz-color-mode:change`, bubbling, after it starts and on every change, with `{ mode, theme, light, remembered, simulated }`. Full markup, the boot snippet for `<head>` and a theme with a day and a night light on the [Color mode page of the docs](https://nandovejer.github.io/luz/docs/catalog/color-mode/).
 
 ## Patterns of a kind of site
 
-Each pattern is CSS only, in `luz.catalog`, with no script and no tag of its own: the classes go on the markup the docs page shows. A landing page, a blog, an application and a documentation site were four packages; they are files of this one. Link the ones your page uses, after core, in the order of the table, which is the order the stylesheet of the kind had them.
+Each pattern is CSS only, in `luz.catalog`, with no script and no tag of its own: the classes go on the markup the docs page shows. A landing page, a blog, an application and a documentation site were four packages; they are files of this one. Link the ones your page uses, after core, in the order of the table, which is the order the stylesheet of the kind had them. A file that two kinds use is listed once.
 
 ```js
-import '@luz-ds/catalog/components/landing-header.css'
-import '@luz-ds/catalog/components/landing-hero.css'
+import '@luz-ds/catalog/components/site-header.css'
+import '@luz-ds/catalog/components/hero.css'
 ```
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/landing-hero.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/components/hero.min.css">
 ```
 
-| Kind | File in `components/` | Block | Docs page |
+| Fits best | File in `components/` | Block | Docs page |
 | --- | --- | --- | --- |
-| Landing page | `landing-header.css` | `.luz-landing-header` | [landing-header](https://nandovejer.github.io/luz/docs/catalog/landing-header/) |
-| Landing page | `landing-hero.css` | `.luz-landing-hero` | [landing-hero](https://nandovejer.github.io/luz/docs/catalog/landing-hero/) |
-| Landing page | `landing-main.css` | `.luz-landing-main` | none |
-| Landing page | `landing-section.css` | `.luz-landing-section` | [landing-section](https://nandovejer.github.io/luz/docs/catalog/landing-section/) |
-| Landing page | `landing-stat.css` | `.luz-landing-stat` | [landing-stat](https://nandovejer.github.io/luz/docs/catalog/landing-stat/) |
-| Landing page | `landing-footer.css` | `.luz-landing-footer` | [landing-footer](https://nandovejer.github.io/luz/docs/catalog/landing-footer/) |
-| Landing page | `landing-glow.css` | `.luz-landing-glow` | none |
-| Blog or newspaper | `cms-header.css` | `.luz-cms-header` | [cms-header](https://nandovejer.github.io/luz/docs/catalog/cms-header/) |
-| Blog or newspaper | `cms-page-header.css` | `.luz-cms-page-header` | [cms-page-header](https://nandovejer.github.io/luz/docs/catalog/cms-page-header/) |
-| Blog or newspaper | `cms-article-header.css` | `.luz-cms-article-header` | [cms-article-header](https://nandovejer.github.io/luz/docs/catalog/cms-article-header/) |
-| Blog or newspaper | `cms-article.css` | `.luz-cms-article`, `.luz-cms-toc` | [cms-toc](https://nandovejer.github.io/luz/docs/catalog/cms-toc/) |
-| Blog or newspaper | `cms-footer.css` | `.luz-cms-footer` | [cms-footer](https://nandovejer.github.io/luz/docs/catalog/cms-footer/) |
-| Web application | `app-header.css` | `.luz-app-header` | [app-header](https://nandovejer.github.io/luz/docs/catalog/app-header/) |
-| Web application | `app-dashboard.css` | `.luz-app-dashboard` | [app-dashboard](https://nandovejer.github.io/luz/docs/catalog/app-dashboard/) |
-| Documentation site | `docs-shell.css` | `.luz-docs-shell` | [docs-shell](https://nandovejer.github.io/luz/docs/catalog/docs-shell/) |
-| Documentation site | `docs-page-head.css` | `.luz-docs-page-head` | [docs-page-head](https://nandovejer.github.io/luz/docs/catalog/docs-page-head/) |
-| Documentation site | `docs-rail.css` | `.luz-docs-rail` | [docs-rail](https://nandovejer.github.io/luz/docs/catalog/docs-rail/) |
-| Documentation site | `docs-example.css` | `.luz-docs-example` | [docs-example](https://nandovejer.github.io/luz/docs/catalog/docs-example/) |
-| Documentation site | `docs-dodont.css` | `.luz-docs-dodont` | [docs-dodont](https://nandovejer.github.io/luz/docs/catalog/docs-dodont/) |
-| Documentation site | `docs-pager.css` | `.luz-docs-pager` | [docs-pager](https://nandovejer.github.io/luz/docs/catalog/docs-pager/) |
-| Documentation site | `docs-page-foot.css` | `.luz-docs-page-foot` | [docs-page-foot](https://nandovejer.github.io/luz/docs/catalog/docs-page-foot/) |
+| Landing page, blog or newspaper | `site-header.css` | `.luz-site-header` (`--publication` for a blog) | [site-header](https://nandovejer.github.io/luz/docs/catalog/site-header/) |
+| Landing page | `hero.css` | `.luz-hero` | [hero](https://nandovejer.github.io/luz/docs/catalog/hero/) |
+| Landing page | `main.css` | `.luz-main` | none |
+| Landing page | `section.css` | `.luz-section` | [section](https://nandovejer.github.io/luz/docs/catalog/section/) |
+| Landing page | `stat.css` | `.luz-stat` | [stat](https://nandovejer.github.io/luz/docs/catalog/stat/) |
+| Landing page, blog or newspaper | `site-footer.css` | `.luz-site-footer` | [site-footer](https://nandovejer.github.io/luz/docs/catalog/site-footer/) |
+| Landing page | `glow.css` | `.luz-glow` | none |
+| Blog or newspaper | `masthead.css` | `.luz-masthead` | [masthead](https://nandovejer.github.io/luz/docs/catalog/masthead/) |
+| Blog or newspaper | `page-header.css` | `.luz-page-header` | [page-header](https://nandovejer.github.io/luz/docs/catalog/page-header/) |
+| Blog or newspaper | `article-header.css` | `.luz-article-header` | [article-header](https://nandovejer.github.io/luz/docs/catalog/article-header/) |
+| Blog or newspaper | `article.css` | `.luz-article`, `.luz-toc` | [toc](https://nandovejer.github.io/luz/docs/catalog/toc/) |
+| Web application | `app-bar.css` | `.luz-app-bar` | [app-bar](https://nandovejer.github.io/luz/docs/catalog/app-bar/) |
+| Web application | `dashboard.css` | `.luz-dashboard` | [dashboard](https://nandovejer.github.io/luz/docs/catalog/dashboard/) |
+| Documentation site | `docs-layout.css` | `.luz-docs-layout` | [docs-layout](https://nandovejer.github.io/luz/docs/catalog/docs-layout/) |
+| Documentation site | `doc-header.css` | `.luz-doc-header` | [doc-header](https://nandovejer.github.io/luz/docs/catalog/doc-header/) |
+| Documentation site | `page-rail.css` | `.luz-page-rail` | [page-rail](https://nandovejer.github.io/luz/docs/catalog/page-rail/) |
+| Documentation site | `example.css` | `.luz-example` | [example](https://nandovejer.github.io/luz/docs/catalog/example/) |
+| Documentation site | `do-dont.css` | `.luz-do-dont` | [do-dont](https://nandovejer.github.io/luz/docs/catalog/do-dont/) |
+| Documentation site | `pager.css` | `.luz-pager` | [pager](https://nandovejer.github.io/luz/docs/catalog/pager/) |
+| Documentation site | `page-footer.css` | `.luz-page-footer` | [page-footer](https://nandovejer.github.io/luz/docs/catalog/page-footer/) |
 
-Load `landing-hero.css` with `landing-section.css`: the head of a section shares its rules. The classes of the blog are `cms`, whatever CMS you use.
+Load `hero.css` with `section.css`: the head of a section shares its rules. The blog and the newspaper work with any CMS.
 
 ## What moved out
 
-Before 0.1, this package also held the page structure. The skip link, the image frame (`.luz-image`, a flat surface with no placeholder), the band, the action group (`.o-actions`), the sticky bar (`.o-sticky`), the page column (`.o-page`) are in `@luz-ds/core`. The header, hero, sections and footer of a landing page, the pieces of a blog, an application and a documentation site were in four packages and are now the files above. The image placeholders are no longer published.
+Before 0.1, this package also held the page structure. The skip link, the image frame (`.luz-image`, a flat surface with no placeholder), the band, the action group (`.o-actions`), the sticky bar (`.o-sticky`), the page column (`.o-page`) are in `@luz-ds/core`. The header, hero, sections and footer of a landing page, the pieces of a blog, an application and a documentation site were in four packages and are now the files above. The image placeholders are no longer published. Their classes lost the kind of site: `.luz-landing-hero` is `.luz-hero`, `.luz-docs-rail` is `.luz-page-rail`, and `<luz-mode>`, `<luz-consent>` and `<luz-banner>` are `<luz-color-mode>`, `<luz-cookie-consent>` and `<luz-announcement>`. The old names do nothing; the changelog has the full table, and `luz-check` names the new one.
 
 This package also holds four components that were core's: the navbar, the sidebar (with its brand and `.luz-nav-toggle`), the terminal and the timeline. The classes, the markup and the look are the same; the package, the layer (`luz.catalog`) and the import path changed. `@luz-ds/core/sidebar` is now `@luz-ds/catalog/sidebar`, `@luz-ds/core/timeline` is `@luz-ds/catalog/timeline`, and `luz.css` no longer includes the four stylesheets: link `@luz-ds/catalog/components/<name>.css` for each one you use.
 

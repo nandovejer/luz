@@ -121,14 +121,14 @@ describe("the header moved to apps/site keeps what it did", () => {
     expect(css).toContain(".site-modes");
   });
 
-  it("header.js exports initSiteHeader() with no option, still wires core's cycle button and the sidebar, and defines <luz-mode>", () => {
+  it("header.js exports initSiteHeader() with no option, still wires core's cycle button and the sidebar, and defines <luz-color-mode>", () => {
     expect(existsSync(join(repo, "apps/site/header.js")), "apps/site/header.js exists").toBe(true);
     const code = read("apps/site/header.js").replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
     expect(code).toMatch(/export\s+function\s+initSiteHeader\s*\(\s*\)/);
     expect(code).toMatch(/\binitThemeCycle\s*\(/);
     expect(code).toMatch(/\binitSidebar\s*\(/);
     expect(code).toContain("--site-header-h");
-    expect(code).toMatch(/import\s*["']\/packages\/catalog\/dist\/mode\.js["']|from\s*["']\/packages\/catalog\/dist\/mode\.js["']/);
+    expect(code).toMatch(/import\s*["']\/packages\/catalog\/dist\/color-mode\.js["']|from\s*["']\/packages\/catalog\/dist\/color-mode\.js["']/);
     expect(code).not.toMatch(/onModeChange|luz-site-mode|initModes/);
   });
 });

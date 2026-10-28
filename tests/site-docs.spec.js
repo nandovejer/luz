@@ -4,7 +4,7 @@
  * documentation, in the one area of patterns (/docs/catalog/<slug>/), with the same structure as a component page:
  * example, known issues, then the Code and Design tabs (PRINCIPLES.md red line 18 and strong rule SR-5).
  * Since F5b of .claude/plans/ai-and-catalog-only.md the 19 patterns of a landing page, a blog, an app and a
- * documentation site are files of catalog (`components/<kind>-<name>.css`, classes `.luz-<kind>-<name>`) beside the
+ * documentation site are files of catalog (`components/<block>.css`, classes `.luz-<block>`, F8: no kind of site in the name) beside the
  * six components with data of the site, and the areas of @luz-ds/landing, cms, app and docs (/docs/landing/,
  * /docs/cms/, /docs/app/, /docs/documentation/) are gone. The class list is read from catalog's source, so a new
  * class without a pattern fails.
@@ -31,39 +31,40 @@ const PACKAGES = {
     patternOf: {
       // The six components with data of the site: each a `<luz-*>` tag that is the block (`.luz-<tag>__<part>`, D5)
       search: 'search',
-      consent: 'consent',
-      mode: 'mode',
+      'cookie-consent': 'cookie-consent',
+      'color-mode': 'color-mode',
       'lang-switch': 'lang-switch',
       submenu: 'submenu',
-      banner: 'banner',
-      // A landing page. The glow and the main are the page's own and have no page: they are on the section's
-      'landing-header': 'landing-header',
-      'landing-hero': 'landing-hero',
-      'landing-footer': 'landing-footer',
-      'landing-main': 'landing-section',
-      'landing-section': 'landing-section',
-      'landing-glow': 'landing-section',
-      'landing-stat': 'landing-stat',
-      // A blog or a newspaper. The contents of an article have a page of their own, `toc` (its CSS is in cms-article.css)
-      'cms-article-header': 'article-header',
-      'cms-article': 'toc',
-      'cms-toc': 'toc',
-      'cms-header': 'cms-header',
-      'cms-footer': 'cms-footer',
-      'cms-page-header': 'cms-page-header',
+      announcement: 'announcement',
+      // F8: the blocks are named for what they are, not for the kind of site that uses them. The glow and the main are the
+      // page's own and have no page: they are on the section's. The bar of a landing page, the bar of a blog (--publication)
+      // and the two footers are one page each; the masthead has a page of its own
+      'site-header': 'site-header',
+      masthead: 'masthead',
+      hero: 'hero',
+      'site-footer': 'site-footer',
+      main: 'section',
+      section: 'section',
+      glow: 'section',
+      stat: 'stat',
+      // A blog or a newspaper. The contents of an article have a page of their own, `toc` (its CSS is in article.css)
+      'article-header': 'article-header',
+      article: 'toc',
+      toc: 'toc',
+      'page-header': 'page-header',
       // An application: the bar and the dashboard; the sidebar is catalog's too since F7 (below)
-      'app-header': 'app-header',
-      'app-dashboard': 'app-dashboard',
-      // A documentation site. The shell is also `.luz-docs-nav` and `.luz-docs-main`
-      'docs-shell': 'docs-shell',
-      'docs-nav': 'docs-shell',
-      'docs-main': 'docs-shell',
-      'docs-page-head': 'docs-page-head',
-      'docs-rail': 'docs-rail',
-      'docs-example': 'docs-example',
-      'docs-dodont': 'docs-dodont',
-      'docs-pager': 'docs-pager',
-      'docs-page-foot': 'docs-page-foot',
+      'app-bar': 'app-bar',
+      dashboard: 'dashboard',
+      // A documentation site. The layout is also `.luz-docs-nav` and `.luz-docs-main`
+      'docs-layout': 'docs-layout',
+      'docs-nav': 'docs-layout',
+      'docs-main': 'docs-layout',
+      'doc-header': 'doc-header',
+      'page-rail': 'page-rail',
+      example: 'example',
+      'do-dont': 'do-dont',
+      pager: 'pager',
+      'page-footer': 'page-footer',
       // F7: the four that came from core, with the pages they had (docs-component id `c-<name>`, not `p-`). The drawer's button is the sidebar's
       navbar: 'navbar',
       sidebar: 'sidebar',
@@ -98,11 +99,11 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
       for (const block of blocks) expect(patternOf[block], `luz-${block} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
     });
 
-    test('catalog ships exactly its 35 blocks: the six components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
+    test('catalog ships exactly its 34 blocks: the six components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
       expect(blocksOf('catalog').sort()).toEqual(Object.keys(patternOf).sort());
     });
 
-    test('the Catalog gallery lists the 29 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
+    test('the Catalog gallery lists the 28 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
       await page.goto('/docs/catalog/');
       const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
       expect(cards.filter((href) => href.startsWith('/docs/catalog/')).sort()).toEqual(

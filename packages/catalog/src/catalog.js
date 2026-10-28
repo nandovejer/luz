@@ -5,10 +5,10 @@
  *
  *   <luz-search>   search.js, on the first pointerdown or focus inside one,
  *                  on Ctrl+K or ⌘K, or when the browser is idle
- *   <luz-consent>  consent.js, when the browser is idle (at most 1 s later),
+ *   <luz-cookie-consent>  cookie-consent.js, when the browser is idle (at most 1 s later),
  *                  and after the search chunk, if there is one, has loaded
  *                  or failed
- *   <luz-mode>     mode.js, when the browser is idle (at most 1 s later),
+ *   <luz-color-mode>     color-mode.js, when the browser is idle (at most 1 s later),
  *                  whether or not the search chunk has loaded: until then
  *                  the radios, and core's cycle button, work as they do
  *                  without it, and the boot snippet in <head> has already
@@ -56,8 +56,8 @@
 // SEC-CHUNK-1: the only five files this one loads, each by a literal
 const CHUNKS = {
   "luz-search": () => import("./search.js"),
-  "luz-consent": () => import("./consent.js"),
-  "luz-mode": () => import("./mode.js"),
+  "luz-cookie-consent": () => import("./cookie-consent.js"),
+  "luz-color-mode": () => import("./color-mode.js"),
   "luz-timeline": () => import("./timeline.js"),
   // Not a tag: the sidebar is a class (and a list marked data-luz-spy); its chunk defines no element, so it is started here
   sidebar: () => import("./sidebar.js").then((m) => m.initSidebar()),
@@ -108,9 +108,9 @@ if (typeof document !== "undefined") {
     // The banner after the search has loaded or failed: the search shows
     // its buttons elsewhere on the page, which would move a banner already
     // shown below them
-    if (document.querySelector("luz-consent")) idle(() => Promise.resolve(loading["luz-search"]).then(() => load("luz-consent")));
+    if (document.querySelector("luz-cookie-consent")) idle(() => Promise.resolve(loading["luz-search"]).then(() => load("luz-cookie-consent")));
     // The mode on its own: it moves nothing on the page
-    if (document.querySelector("luz-mode")) idle(() => load("luz-mode"));
+    if (document.querySelector("luz-color-mode")) idle(() => load("luz-color-mode"));
     // The timeline defines its element, which upgrades every instance; the sidebar starts its scroll spy at once, as core's entry did
     if (document.querySelector("luz-timeline")) load("luz-timeline");
     if (document.querySelector(".luz-sidebar, [data-luz-spy]")) load("sidebar");

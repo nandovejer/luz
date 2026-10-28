@@ -1064,7 +1064,7 @@ describe("tests/fixtures/check: the folder", () => {
 
   it("covers every rule of the spec that a file can show, in some file", () => {
     const covered = new Set();
-    for (const folder of ["fail", "warn"]) for (const name of fixtureFiles(folder)) for (const e of expectations(readFileSync(join(FIXTURES, folder, name), "utf-8"))) covered.add(e.rule);
+    for (const folder of ["fail", "warn"]) for (const name of fixtureFiles(folder)) for (const e of expectations(readFileSync(join(FIXTURES, folder, name), "utf-8"))) covered.add(e.rule.split(":")[0]);
     // file/skipped comes from the disk, theme/advisory from the way themes are ordered: no file shows them alone
     for (const rule of [...BLOCKING_RULES, ...WARNING_RULES].filter((r) => !["file/skipped", "theme/advisory"].includes(r))) {
       expect(covered.has(rule), `a fixture for ${rule}`).toBe(true);
@@ -1076,16 +1076,18 @@ describe("tests/fixtures/check: the folder", () => {
     for (const folder of ["fail", "warn"]) {
       for (const name of fixtureFiles(folder)) {
         for (const e of expectations(readFileSync(join(FIXTURES, folder, name), "utf-8"))) {
-          expect(keys.has(e.rule), `${folder}/${name}: ${e.rule}`).toBe(true);
-          expect(messages.MESSAGES[e.rule].severity, `${folder}/${name}: ${e.rule}`).toBe(folder === "fail" ? "block" : "warn");
+          // A rule that blocks in a page and only warns in a stylesheet (names/renamed:css) is named by its variant
+          expect(keys.has(e.rule.split(":")[0]), `${folder}/${name}: ${e.rule}`).toBe(true);
+          expect(messages.MESSAGES[e.rule]?.severity, `${folder}/${name}: ${e.rule}`).toBe(folder === "fail" ? "block" : "warn");
         }
       }
     }
   });
 
   it("points each expectation at the thing the rule is about: a class, a tag, an attribute, a declaration", () => {
-    const CLASS_ATTR = new Set(["class/unknown", "misuse/host-element", "misuse/modifier-alone", "load/package-missing", "misuse/state-class", "misuse/part-orphan"]);
-    const ELEMENT = { "element/unknown": /^luz-/, "load/tokens-missing": /^link$/, "load/layer-statement": /^style$/, "a11y/link-no-href": /^a$/ };
+    const CLASS_ATTR = new Set(["class/unknown", "misuse/host-element", "misuse/modifier-alone", "load/package-missing", "misuse/state-class", "misuse/part-orphan", "names/renamed", "names/renamed:publication"]);
+    // names/renamed:element is at the `<` of an old tag, names/renamed:file at the `<` of the link or the script of an old file
+    const ELEMENT = { "element/unknown": /^luz-/, "load/tokens-missing": /^link$/, "load/layer-statement": /^style$/, "a11y/link-no-href": /^a$/, "names/renamed:element": /^luz-/, "names/renamed:file": /^(?:link|script)$/ };
     const CSS_DECLARATION = new Set(["css/literal-colour", "css/literal-size", "css/important", "css/private-token", "css/knob-in-px", "css/unknown-token"]);
     for (const folder of ["fail", "warn"]) {
       for (const name of fixtureFiles(folder)) {
@@ -1112,7 +1114,7 @@ describe("tests/fixtures/check: the folder", () => {
             expect([error.line, error.column], at).toEqual([e.line, e.column]);
           } else if (CSS_DECLARATION.has(e.rule)) {
             expect(lines[e.line - 1].slice(e.column - 1), at).toMatch(/^[a-z-]+\s*:/);
-          } else if (e.rule === "class/unknown-in-css" || e.rule === "class/reserved-prefix") {
+          } else if (e.rule === "class/unknown-in-css" || e.rule === "class/reserved-prefix" || e.rule === "names/renamed:css") {
             expect(lines[e.line - 1].slice(e.column - 1), at).toMatch(/^\.luz-/);
           } else {
             expect.fail(`${at}: no way to check where this rule points`);

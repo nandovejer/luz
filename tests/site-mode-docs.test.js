@@ -1,11 +1,11 @@
 /**
- * The docs that go with <luz-mode> (.claude/plans/luz-home-docs-identity.md
- * section 3.3, F1): the pattern page apps/docs/pages/catalog/mode.html and the
+ * The docs that go with <luz-color-mode> (.claude/plans/luz-home-docs-identity.md
+ * section 3.3, F1): the pattern page apps/docs/pages/catalog/color-mode.html and the
  * pages that point at it. tests/docs-site.test.js and tests/site-docs.spec.js
  * hold the structure every pattern page has and the attributes against the
  * element manifest; this file holds the content only this element has:
  *   - the table of the six phases (their hours, dark or light), computed from
- *     phaseOf() in mode.js, so the page and the code cannot drift;
+ *     phaseOf() in color-mode.js, so the page and the code cannot drift;
  *   - the boot snippet for <head>: at most eight lines, and run in a sandbox it
  *     sets data-theme the way the element will (stored choice, then
  *     prefers-contrast, then prefers-color-scheme), whatever the storage does;
@@ -32,8 +32,8 @@ import { describe, expect, it } from "vitest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PAGES = "apps/docs/pages";
-const MODE_PAGE = `${PAGES}/catalog/mode.html`;
-const ROUTE = "/docs/catalog/mode/";
+const MODE_PAGE = `${PAGES}/catalog/color-mode.html`;
+const ROUTE = "/docs/catalog/color-mode/";
 
 /** A page's source; a missing page is the assertion that fails, not an ENOENT. */
 const page = (rel) => {
@@ -57,19 +57,19 @@ const DARK = new Set(["dawn", "dusk", "night"]);
 
 /* ---- The page ---------------------------------------------------------------- */
 
-describe("apps/docs/pages/catalog/mode.html", () => {
+describe("apps/docs/pages/catalog/color-mode.html", () => {
   it("is a pattern page of the Catalog area: front matter with the module and the files", () => {
     const meta = frontMatter(page(MODE_PAGE));
     // The group is by function since F5b: the mode switch is a piece for the whole site
-    expect(meta).toMatchObject({ area: "catalog", group: "site-wide", module: "mode.js", toc: "h2,h3" });
+    expect(meta).toMatchObject({ area: "catalog", group: "site-wide", module: "color-mode.js", toc: "h2,h3" });
     expect(meta.title, "title").toBeTruthy();
     expect(meta.description, "description").toBeTruthy();
-    expect(meta.files, "files").toMatch(/mode\.css|luz-mode/);
+    expect(meta.files, "files").toMatch(/mode\.css|luz-color-mode/);
   });
 
   it("has the table of the six phases: hours computed from phaseOf(), and dark or light", async () => {
-    expect(existsSync(join(repo, "packages/catalog/src/mode.js")), "packages/catalog/src/mode.js exists").toBe(true);
-    const { phaseOf } = await import("../packages/catalog/src/mode.js");
+    expect(existsSync(join(repo, "packages/catalog/src/color-mode.js")), "packages/catalog/src/color-mode.js exists").toBe(true);
+    const { phaseOf } = await import("../packages/catalog/src/color-mode.js");
     const html = page(MODE_PAGE);
     const table = rows(html);
     // Where each phase starts and ends, on the 24-hour circle, read off the function
@@ -101,7 +101,7 @@ describe("apps/docs/pages/catalog/mode.html", () => {
 
   it("documents the event, with every key of its detail", () => {
     const body = text(page(MODE_PAGE));
-    expect(body).toContain("luz-mode:change");
+    expect(body).toContain("luz-color-mode:change");
     for (const key of ["mode", "theme", "light", "remembered", "simulated"]) expect(body, `detail.${key}`).toMatch(new RegExp(`\\b${key}\\b`));
   });
 
@@ -170,7 +170,7 @@ describe("the boot snippet for <head> on the docs page", () => {
 
   const script = () => {
     const found = bootScript();
-    expect(found, "an inline <script> in a code block of catalog/mode.html that reads `luz-theme`").not.toBeNull();
+    expect(found, "an inline <script> in a code block of catalog/color-mode.html that reads `luz-theme`").not.toBeNull();
     return found;
   };
 
@@ -236,7 +236,7 @@ describe("the two-light theme example on the docs page", () => {
 
 /* ---- The pages around it -------------------------------------------------------- */
 
-describe("the pages that point at <luz-mode>", () => {
+describe("the pages that point at <luz-color-mode>", () => {
   it("components/mode-switcher.html links to the page: the radios with an Auto state are this element", () => {
     expect(hasLink(page(`${PAGES}/components/mode-switcher.html`), ROUTE)).toBe(true);
   });
@@ -245,12 +245,12 @@ describe("the pages that point at <luz-mode>", () => {
     const html = page(`${PAGES}/tokens/modes.html`);
     const heading = /<h2\b[^>]*\bid="([\w-]+)"[^>]*>\s*Following the system or the clock\s*<\/h2>/.exec(html);
     expect(heading, 'an <h2 id="…">Following the system or the clock</h2>').not.toBeNull();
-    expect(hasLink(html.slice(heading.index), ROUTE), "a link to /docs/catalog/mode/ after the heading").toBe(true);
+    expect(hasLink(html.slice(heading.index), ROUTE), "a link to /docs/catalog/color-mode/ after the heading").toBe(true);
   });
 
   it("accessibility.html states the Auto radio and the element", () => {
     const body = text(page(`${PAGES}/accessibility.html`));
-    expect(body).toContain("luz-mode");
+    expect(body).toContain("luz-color-mode");
     expect(body).toMatch(/\bAuto\b/);
   });
 
@@ -274,10 +274,10 @@ const section = (html, id) => {
 const labelsOf = (markup) => [...markup.matchAll(/<label\b[^>]*\bluz-mode-btn\b[^>]*>[\s\S]*?<\/label>/g)].map((m) => m[0]);
 const ICON = /<svg\b(?=[^>]*\bclass="[^"]*\bluz-mode-btn__icon\b)(?=[^>]*\baria-hidden="true")[^>]*>/;
 
-describe("catalog/mode.html: the icons are in the labels (the cycle button shows the checked label's icon)", () => {
+describe("catalog/color-mode.html: the icons are in the labels (the cycle button shows the checked label's icon)", () => {
   it("every label of the markup snippet has a .luz-mode-btn__icon svg with aria-hidden=\"true\", Auto included", () => {
-    const snippet = codeBlocks(page(MODE_PAGE)).find((c) => c.includes("<luz-mode"));
-    expect(snippet, "the code block with <luz-mode>").toBeTruthy();
+    const snippet = codeBlocks(page(MODE_PAGE)).find((c) => c.includes("<luz-color-mode"));
+    expect(snippet, "the code block with <luz-color-mode>").toBeTruthy();
     const labels = labelsOf(snippet);
     expect(labels, "four labels").toHaveLength(4);
     for (const l of labels) expect(l, `an icon in ${text(l)}`).toMatch(ICON);
@@ -297,8 +297,8 @@ describe("catalog/mode.html: the icons are in the labels (the cycle button shows
     expect(body).toMatch(/\bno Auto icon\b|\bAuto\b[^.]{0,40}\bno icon\b|\bno icon\b[^.]{0,40}\bAuto\b/i);
   });
 
-  it("the header comment of mode.js has the icons in its example too", () => {
-    const src = readFileSync(join(repo, "packages/catalog/src/mode.js"), "utf-8");
+  it("the header comment of color-mode.js has the icons in its example too", () => {
+    const src = readFileSync(join(repo, "packages/catalog/src/color-mode.js"), "utf-8");
     // reads packages/ only; the implementer edits it, this test does not
     expect(src).toMatch(/luz-mode-btn__icon/);
   });
@@ -306,7 +306,7 @@ describe("catalog/mode.html: the icons are in the labels (the cycle button shows
 
 describe("what Auto does that a reader would not expect: on the page and in the accessibility statement", () => {
   const where = {
-    "catalog/mode.html (When not to use or Known issues)": () => text(section(page(MODE_PAGE), "when-not")) + " " + text(section(page(MODE_PAGE), "known-issues")),
+    "catalog/color-mode.html (When not to use or Known issues)": () => text(section(page(MODE_PAGE), "when-not")) + " " + text(section(page(MODE_PAGE), "known-issues")),
     "accessibility.html": () => text(page(`${PAGES}/accessibility.html`).split(/Auto color mode/)[1] ?? ""),
   };
   for (const [name, get] of Object.entries(where)) {
@@ -335,7 +335,7 @@ describe("what Auto does that a reader would not expect: on the page and in the 
 
 describe("the CSP sentence for the script for the head", () => {
   const CSP = /\bCSP\b|Content[- ]Security[- ]Policy/;
-  it("catalog/mode.html #boot says: under a CSP without 'unsafe-inline', serve it as a classic file in <head> or allow it by its sha256 hash", () => {
+  it("catalog/color-mode.html #boot says: under a CSP without 'unsafe-inline', serve it as a classic file in <head> or allow it by its sha256 hash", () => {
     const t = text(section(page(MODE_PAGE), "boot"));
     expect(t).toMatch(CSP);
     expect(t).toMatch(/unsafe-inline/);

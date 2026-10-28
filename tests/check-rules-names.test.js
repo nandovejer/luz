@@ -209,9 +209,9 @@ describe("class/unknown", () => {
   it("knows every class of every package, whatever the page links: that is load/package-missing's to say", () => {
     const html = page(
       [
-        '  <div class="luz-search__field luz-sidebar luz-consent">site</div>',
-        '  <section class="luz-landing-hero"><h1 class="luz-landing-hero__title">Landing</h1></section>',
-        '  <article class="luz-cms-header luz-cms-header__brand luz-app-header luz-app-header__product luz-docs-pager luz-docs-shell">Kinds</article>',
+        '  <div class="luz-search__field luz-sidebar luz-cookie-consent">site</div>',
+        '  <section class="luz-hero"><h1 class="luz-hero__title">Landing</h1></section>',
+        '  <article class="luz-site-header luz-site-header__brand luz-app-bar luz-app-bar__product luz-pager luz-docs-layout">Kinds</article>',
       ].join("\n"),
     );
     expect(ofRule(check({ "index.html": html }), "class/")).toEqual([]);
@@ -259,10 +259,11 @@ describe("class/unknown", () => {
     expect(text.stdout).not.toMatch(UNSAFE);
   });
 
-  it("says where to look when nothing is close, by the package its prefix names: classes.json of that package, and catalog's for the four kinds of site (F5b)", () => {
+  it("says where to look when nothing is close, by the package its prefix names: classes.json of that package; only `luz-catalog-` names catalog, and the names of a kind of site are plain unknown classes (F8, decision 57)", () => {
     const html = page(
       [
         '  <p class="luz-completely-unrelated-thing">core</p>',
+        '  <p class="luz-catalog-qqqqqqqqqq">catalog</p>',
         '  <p class="luz-landing-qqqqqqqqqq">landing</p>',
         '  <p class="luz-cms-qqqqqqqqqq">cms</p>',
         '  <p class="luz-app-qqqqqqqqqq">app</p>',
@@ -270,13 +271,15 @@ describe("class/unknown", () => {
       ].join("\n"),
     );
     const result = check({ "index.html": html });
-    expect(result.findings.map((f) => f.suggestion)).toEqual([null, null, null, null, null]);
+    expect(result.findings.map((f) => f.suggestion)).toEqual([null, null, null, null, null, null]);
+    expect(result.findings.map((f) => f.rule), "none of them is told to be renamed: they are not in the table").toEqual(Array(6).fill("class/unknown"));
     const expected = [
       ["luz-completely-unrelated-thing", "core"],
-      ["luz-landing-qqqqqqqqqq", "catalog"],
-      ["luz-cms-qqqqqqqqqq", "catalog"],
-      ["luz-app-qqqqqqqqqq", "catalog"],
-      ["luz-docs-qqqqqqqqqq", "catalog"],
+      ["luz-catalog-qqqqqqqqqq", "catalog"],
+      ["luz-landing-qqqqqqqqqq", "core"],
+      ["luz-cms-qqqqqqqqqq", "core"],
+      ["luz-app-qqqqqqqqqq", "core"],
+      ["luz-docs-qqqqqqqqqq", "core"],
     ];
     expected.forEach(([name, pkg], i) => expect(result.findings[i].message).toBe(messages.message("class/unknown:none", { name, package: pkg })));
   });
@@ -292,7 +295,7 @@ describe("class/unknown: the suggestion table", () => {
     ["luz-alert-error", ".luz-alert--error"],
     ["luz-tabel", ".luz-table"],
     ["o-stck", ".o-stack"],
-    ["luz-landing-hero__titel", ".luz-landing-hero__title"],
+    ["luz-hero__titel", ".luz-hero__title"],
     ["luz-Btn", ".luz-btn"], // case matters to a browser
     ["luz-btn--xl", ".luz-btn--lg"], // lg and sm are as close: ties go in alphabetical order
   ];
@@ -416,7 +419,7 @@ describe("element/unknown", () => {
       [
         '  <luz-timeline><ol><li>1</li></ol></luz-timeline>',
         "  <luz-search></luz-search>",
-        '  <luz-banner tone="warning">x</luz-banner>',
+        '  <luz-announcement tone="warning">x</luz-announcement>',
         "  <luz-lang-switch></luz-lang-switch>",
         "  <luz-card>a block that is also a tag</luz-card>",
       ].join("\n"),
@@ -529,8 +532,8 @@ describe("element/unknown-attribute", () => {
     expect(result.findings.map((f) => f.message.split(" ")[0])).toEqual(["foo"]);
   });
 
-  it("reads the attributes of the right element: tone belongs to luz-banner", () => {
-    expect(ofRule(check({ "index.html": page('  <luz-banner tone="warning">x</luz-banner>') }), "element/")).toEqual([]);
+  it("reads the attributes of the right element: tone belongs to luz-announcement", () => {
+    expect(ofRule(check({ "index.html": page('  <luz-announcement tone="warning">x</luz-announcement>') }), "element/")).toEqual([]);
   });
 
   it("never echoes an attribute name that is not safe to print", () => {
@@ -748,7 +751,7 @@ describe("a page that loads a LUZ release newer than the snapshot", () => {
   });
 
   it("reads the release of catalog from a CDN URL of a file of a pattern too: a class of the documentation patterns is catalog's", () => {
-    const head = CDN("0.1.0") + '  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/components/docs-pager.min.css">\n';
+    const head = CDN("0.1.0") + '  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.0/dist/components/pager.min.css">\n';
     const result = check({ "index.html": page('  <p class="luz-docs-shiny-new-thing">x</p>', head) }, { snapshot: { version: "0.1.0" } });
     expect(result.code).toBe(0);
     expect(result.findings.map((f) => [f.rule, f.severity])).toEqual([["class/unknown", "warn"]]);

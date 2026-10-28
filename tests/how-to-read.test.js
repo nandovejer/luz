@@ -23,9 +23,10 @@ import { PACKAGES } from "../scripts/luz-packages.js";
 import { codesOf, columnOf, declaredTokens, escapeRe, h2Ids, linksOf, packFiles, packageSources, readPage, repo, sectionsOf, stripCssComments, tablesOf, textOf } from "./helpers/page-facts.js";
 
 const IDS = ["classes", "tokens", "attributes", "elements", "layers", "public", "files"];
-const PREFIXES = [".luz-", ".o-", ".u-", ".luz-landing-", ".luz-cms-", ".luz-app-", ".luz-docs-", ".is-"];
+// F8: no prefix names a kind of site (`.luz-landing-`, `.luz-cms-`, `.luz-app-`, `.luz-docs-`): a catalog block is `.luz-<block>`
+const PREFIXES = [".luz-", ".o-", ".u-", ".is-"];
 const ATTRIBUTES = ["data-theme", "data-mode", "data-luz-*", "data-luz-label-*"];
-const ELEMENTS = ["luz-search", "luz-consent", "luz-mode", "luz-timeline", "luz-lang-switch", "luz-submenu", "luz-banner"];
+const ELEMENTS = ["luz-search", "luz-cookie-consent", "luz-color-mode", "luz-timeline", "luz-lang-switch", "luz-submenu", "luz-announcement"];
 const FILES = ["luz-tokens.css", "tokens.css", "components/<name>.css", "base.css", "classless.css", "themes/_template.css"];
 
 const page = readPage("get-started/how-to-read.html");
@@ -95,6 +96,7 @@ describe("classes", () => {
 
   it("has the table of prefixes of the spec", () => {
     for (const prefix of PREFIXES) expect(prefixes(), `no row for ${prefix}`).toContain(prefix);
+    for (const old of [".luz-landing-", ".luz-cms-", ".luz-app-", ".luz-docs-"]) expect(prefixes(), `a row for ${old}`).not.toContain(old);
   });
 
   it("keeps to prefixes the packages' CSS uses", () => {

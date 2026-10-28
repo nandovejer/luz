@@ -41,7 +41,7 @@ import { gzipSync } from "node:zlib";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { HtmlError, compactHtml, readHtml, tags } from "./html.js";
 import { BASE, PACKAGES } from "../luz-packages.js";
-import { fitsKindsOf, isKindFile } from "./kinds.js";
+import { fileKinds, fitsKindsOf, isKindFile } from "./kinds.js";
 import { fillAiMarkers } from "./ai.js";
 import { catalogComponents, catalogFilesIn, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
@@ -731,9 +731,9 @@ export function renderFits(site, page, { links = true } = {}) {
 export function renderPageHead(site, page) {
   const t = tOf(site);
   const h1 = `    <h1 class="docs-title"${enAttr(site, page)}>${escapeHtml(page.meta.title)}</h1>`;
-  const lead = page.meta.lead === "true" ? [`    <p class="luz-docs-page-head__lead"${enAttr(site, page)}>${escapeHtml(page.meta.description)}</p>`] : [];
+  const lead = page.meta.lead === "true" ? [`    <p class="luz-doc-header__lead"${enAttr(site, page)}>${escapeHtml(page.meta.description)}</p>`] : [];
   if (page.route === NOT_FOUND_ROUTE) {
-    return `  <div class="luz-docs-page-head">\n${h1}${page.meta.lead === "true" ? `\n    <p class="docs-lead">${escapeHtml(page.meta.description)}</p>` : ""}\n  </div>`;
+    return `  <div class="luz-doc-header">\n${h1}${page.meta.lead === "true" ? `\n    <p class="docs-lead">${escapeHtml(page.meta.description)}</p>` : ""}\n  </div>`;
   }
   const area = areaOf(site, page);
   const group = area?.groups?.find((g) => g.id === page.meta.group);
@@ -741,17 +741,17 @@ export function renderPageHead(site, page) {
   // (a package name is code, in its own case)
   const pkg = area && page.route === areaRoute(area, docsRootOf(site)) && area.package ? `<code>${escapeHtml(area.package)}</code>` : null;
   const second = pkg ?? (group ? escapeHtml(group.label) : null);
-  const eyebrow = area ? [`    <p class="luz-docs-page-head__eyebrow">${escapeHtml(area.label)}${second ? ` · ${second}` : ""}</p>`] : [];
+  const eyebrow = area ? [`    <p class="luz-doc-header__eyebrow">${escapeHtml(area.label)}${second ? ` · ${second}` : ""}</p>`] : [];
   const files = page.meta.files.split(";").map((f) => f.trim()).filter(Boolean);
   const fits = renderFits(site, page);
   // A component or pattern page ends with the chips; any other page with files says them in a line
   const chips = isViewPage(page)
-    ? [`    <ul class="luz-docs-page-head__meta">${chipsOf(site, page).map((c) => `<li>${c}</li>`).join("")}</ul>`]
+    ? [`    <ul class="luz-doc-header__meta">${chipsOf(site, page).map((c) => `<li>${c}</li>`).join("")}</ul>`]
     : files.length
-      ? [`    <p class="luz-docs-page-head__files">${say(t, "page.files")} ${files.map((f) => `<code class="docs-demo__file">${escapeHtml(f)}</code>`).join(", ")}</p>`]
+      ? [`    <p class="luz-doc-header__files">${say(t, "page.files")} ${files.map((f) => `<code class="docs-demo__file">${escapeHtml(f)}</code>`).join(", ")}</p>`]
       : [];
   const crumb = renderBreadcrumb(site, page);
-  return [...(crumb ? [crumb] : []), '  <header class="luz-docs-page-head">', ...eyebrow, h1, ...lead, ...(fits ? [`    <p class="docs-fits">${fits}</p>`] : []), ...chips, "  </header>"].join("\n");
+  return [...(crumb ? [crumb] : []), '  <header class="luz-doc-header">', ...eyebrow, h1, ...lead, ...(fits ? [`    <p class="docs-fits">${fits}</p>`] : []), ...chips, "  </header>"].join("\n");
 }
 
 /**
@@ -772,19 +772,19 @@ export function renderToc(page, html, t = englishT(), site = {}) {
   const missing = headings.find((h) => !h.id);
   if (missing) throw new Error(`${page.file}: the heading "${missing.text}" belongs in "On this page" and needs an id`);
   if (headings[0].level !== 2) throw new Error(`${page.file}: the h3 "${headings[0].text}" comes before any h2`);
-  const item = (h) => link(`#${h.id}`, h.text, ' class="luz-sidebar__link luz-docs-rail__link"');
+  const item = (h) => link(`#${h.id}`, h.text, ' class="luz-sidebar__link luz-page-rail__link"');
   const lines = [];
   headings.forEach((h, i) => {
     const next = headings[i + 1];
     if (h.level === 2) {
-      lines.push(next?.level === 3 ? `        <li>${item(h)}\n          <ul class="luz-docs-rail__sub">` : `        <li>${item(h)}</li>`);
+      lines.push(next?.level === 3 ? `        <li>${item(h)}\n          <ul class="luz-page-rail__sub">` : `        <li>${item(h)}</li>`);
       return;
     }
     lines.push(`            <li>${item(h)}</li>`);
     if (next?.level !== 3) lines.push("          </ul>\n        </li>");
   });
   // The headings are the content's: English on a page that is not translated yet
-  return `  <nav class="luz-docs-rail__onpage" aria-labelledby="docs-rail-title">\n    <details class="luz-docs-rail__fold" open>\n      <summary class="luz-docs-rail__title" id="docs-rail-title">${say(t, "rail.on-page")}</summary>\n      <ul class="luz-docs-rail__list"${enAttr(site, page)}>\n${lines.join("\n")}\n      </ul>\n    </details>\n  </nav>`;
+  return `  <nav class="luz-page-rail__onpage" aria-labelledby="docs-rail-title">\n    <details class="luz-page-rail__fold" open>\n      <summary class="luz-page-rail__title" id="docs-rail-title">${say(t, "rail.on-page")}</summary>\n      <ul class="luz-page-rail__list"${enAttr(site, page)}>\n${lines.join("\n")}\n      </ul>\n    </details>\n  </nav>`;
 }
 
 /**
@@ -810,12 +810,12 @@ export function renderEndNav(site, page) {
     const target = around?.[key];
     if (!target) continue;
     pager.push(
-      `      <li class="luz-docs-pager__${key}"><a class="luz-docs-pager__link" rel="${rel}" href="${escapeHtml(target.route)}">` +
-        `<span class="luz-docs-pager__label">${label}</span> ` +
-        `<span class="luz-docs-pager__title"${enAttr(site, target)}>${escapeHtml(target.meta.title)}</span></a></li>`,
+      `      <li class="luz-pager__${key}"><a class="luz-pager__link" rel="${rel}" href="${escapeHtml(target.route)}">` +
+        `<span class="luz-pager__label">${label}</span> ` +
+        `<span class="luz-pager__title"${enAttr(site, target)}>${escapeHtml(target.meta.title)}</span></a></li>`,
     );
   }
-  if (pager.length) lines.push('    <ul class="luz-docs-pager">', ...pager, "    </ul>");
+  if (pager.length) lines.push('    <ul class="luz-pager">', ...pager, "    </ul>");
   lines.push("  </nav>");
   return lines.join("\n");
 }
@@ -838,10 +838,10 @@ const actionsOf = (page) => ({
 export function renderRail(page, toc, t = englishT()) {
   const { edit, report } = actionsOf(page);
   return [
-    `  <aside class="luz-docs-rail" aria-label="${say(t, "rail.about")}">`,
-    '  <div class="luz-docs-rail__inner">',
+    `  <aside class="luz-page-rail" aria-label="${say(t, "rail.about")}">`,
+    '  <div class="luz-page-rail__inner">',
     ...(toc ? [toc] : []),
-    '    <div class="luz-docs-rail__actions">',
+    '    <div class="luz-page-rail__actions">',
     `      ${link(`${page.route}index.md`, t("rail.copy"), ` data-docs-copy-page data-docs-copied="${say(t, "rail.copied")}" data-docs-not-copied="${say(t, "rail.not-copied")}"`)}`,
     `      ${link(page.route, t("rail.copy-link"), ` data-docs-copy-link data-docs-copied="${say(t, "rail.link-copied")}" data-docs-not-copied="${say(t, "rail.link-not-copied")}"`)}`,
     `      ${link(edit, t("rail.edit"))}`,
@@ -902,7 +902,7 @@ export function renderPageFoot(site, page, options = {}) {
   const iso = lastUpdatedOf(site, page, options);
   const { edit, report } = actionsOf(page);
   const day = dayOf(iso, t("format.date-locale"));
-  return `  <p class="luz-docs-page-foot">${say(t, "page.updated")} <time datetime="${iso}">${day}</time> · ${link(edit, t("rail.edit"))} · ${link(report, t("rail.report"))}</p>`;
+  return `  <p class="luz-page-footer">${say(t, "page.updated")} <time datetime="${iso}">${day}</time> · ${link(edit, t("rail.edit"))} · ${link(report, t("rail.report"))}</p>`;
 }
 
 /**
@@ -1625,6 +1625,7 @@ function gzipBytes(path) {
 function packageBytes(root, budgets, name, what) {
   const under = `packages/${name}/dist/`;
   const files = [];
+  const kindsOf = fileKinds(root);
   const matches = (glob) => {
     // "dir/{a-*,b}.ext": files named "a-…" or exactly "b.ext" (as scripts/check-size.js reads it)
     const list = /^(.*?)\/\{([a-z*,-]+)\}(\.[a-z.]+)$/.exec(glob);
@@ -1656,7 +1657,7 @@ function packageBytes(root, budgets, name, what) {
       const skip = new Set(b.except ? matches(b.except) : []);
       const found = matches(b.glob).filter((file) => !skip.has(file));
       if (!found.length) throw new Error(`${b.glob} matches nothing: run pnpm build before ${what} can be read`);
-      files.push(...found.filter((file) => !isKindFile(file.slice(under.length))));
+      files.push(...found.filter((file) => !isKindFile(file.slice(under.length), kindsOf)));
     }
   }
   return files.reduce((sum, file) => sum + gzipBytes(resolve(root, file)), 0);
@@ -1826,12 +1827,13 @@ function levelLists(site, locale, used) {
   const file = `${I18N_DIR}/${locale.code}.json`;
   const say = (key) => lookup(locale, key, file, used);
   const root = site.repoRoot;
+  const kindsOf = fileKinds(root);
   const read = (path) => readFileSync(resolve(root, path), "utf-8");
   const sheets = (dir) =>
     readdirSync(resolve(root, dir))
       .filter((name) => name.endsWith(".css") && name !== "index.css" && !name.startsWith("_"))
       // The patterns of a kind of site are catalog's files since F5b; the home lists the pieces every site can use
-      .filter((name) => !isKindFile(`components/${name}`))
+      .filter((name) => !isKindFile(`components/${name}`, kindsOf))
       .map((name) => name.slice(0, -4));
   const pages = "apps/docs/pages";
   const ids = (path) => new Set([...read(`${pages}/${path}`).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));

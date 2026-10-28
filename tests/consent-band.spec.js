@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * The cookie band of @luz-ds/catalog (<luz-consent>, D7 of
+ * The cookie band of @luz-ds/catalog (<luz-cookie-consent>, D7 of
  * .claude/plans/specs/f3-package-model.md, step 9, and the accessibility
  * requirements C1 to C11 and the owner's second round on C3 and C5): a band
  * fixed at the block end of the window, so showing it shifts nothing, whose
@@ -45,7 +45,7 @@ const rect = (page, selector) => page.evaluate((s) => {
 /** --luz-consent-h as the page computes it on :root. */
 const published = (page) => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--luz-consent-h').trim());
 const activeId = (page) => page.evaluate(() => document.activeElement?.id || document.activeElement?.localName);
-const insideBand = (page) => page.evaluate(() => !!document.activeElement?.closest('luz-consent'));
+const insideBand = (page) => page.evaluate(() => !!document.activeElement?.closest('luz-cookie-consent'));
 
 /** Answer with Accept, which moves to the saved state. */
 async function accept(page) {
@@ -142,7 +142,7 @@ test.describe('where it sits', () => {
     const overModal = await page.evaluate(() => {
       const band = document.getElementById('consent').getBoundingClientRect();
       const hit = document.elementFromPoint(band.left + band.width / 2, band.top + band.height / 2);
-      return { inModal: hit?.closest('dialog')?.id, inBand: !!hit?.closest('luz-consent') };
+      return { inModal: hit?.closest('dialog')?.id, inBand: !!hit?.closest('luz-cookie-consent') };
     });
     expect(overModal).toEqual({ inModal: 'modal', inBand: false });
   });
@@ -151,7 +151,7 @@ test.describe('where it sits', () => {
 test.describe('C1 and C7: its place in the page, and what it is', () => {
   test('C1: it comes right after the skip link, before the page, and the Tab order is skip, policy, Accept, Reject, Choose, then the page', async ({ page }) => {
     await open(page);
-    expect(await page.evaluate(() => document.getElementById('skip').nextElementSibling?.localName)).toBe('luz-consent');
+    expect(await page.evaluate(() => document.getElementById('skip').nextElementSibling?.localName)).toBe('luz-cookie-consent');
     const order = [];
     for (let i = 0; i < 6; i++) {
       await page.keyboard.press('Tab');
@@ -195,7 +195,7 @@ test.describe('C4: nothing that Tab reaches is under the band (WCAG 2.4.11)', ()
           const el = document.activeElement;
           const band = document.getElementById('consent').getBoundingClientRect();
           const r = el.getBoundingClientRect();
-          return { id: el.id || el.localName, inBand: !!el.closest('luz-consent'), bottom: r.bottom, top: r.top, band: band.top };
+          return { id: el.id || el.localName, inBand: !!el.closest('luz-cookie-consent'), bottom: r.bottom, top: r.top, band: band.top };
         });
         visited.add(stop.id);
         if (!stop.inBand && stop.bottom > stop.band + 0.5) under.push(`${stop.id}: bottom ${Math.round(stop.bottom)} > band ${Math.round(stop.band)}`);
@@ -246,7 +246,7 @@ test.describe('C6: --luz-consent-h follows the band', () => {
     await style(page, 'html { font-size: 200% }');
     await expect.poll(() => published(page)).toBe(await ceilHeight(page));
 
-    await style(page, 'luz-consent * { line-height: 2 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important }');
+    await style(page, 'luz-cookie-consent * { line-height: 2 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important }');
     await expect.poll(() => published(page)).toBe(await ceilHeight(page));
 
     await accept(page);

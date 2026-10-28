@@ -12,7 +12,7 @@ const sentinels = [
   "../packages/tokens/dist/luz-tokens.css",
   "../packages/core/dist/luz.css",
   "../packages/catalog/dist/components/search.css",
-  "../packages/catalog/dist/components/landing-hero.css",
+  "../packages/catalog/dist/components/hero.css",
   "../packages/check/dist/luz-check.js",
 ].map((p) => resolve(__dirname, p));
 

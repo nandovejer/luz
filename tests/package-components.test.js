@@ -84,8 +84,8 @@ describe("@luz-ds/catalog: no bundle, print rules in each component", () => {
     for (const f of ["catalog.css", "catalog.min.css", "print.css"]) expect(existsSync(`${root}packages/catalog/dist/${f}`), f).toBe(false);
   });
 
-  it.skipIf(!built)("search, consent, docs-shell and landing-glow carry one `@layer luz.print` block with `@media print`, plain and minified", () => {
-    for (const name of ["search", "consent", "docs-shell", "landing-glow"]) {
+  it.skipIf(!built)("search, cookie-consent, docs-layout and glow carry one `@layer luz.print` block with `@media print`, plain and minified", () => {
+    for (const name of ["search", "cookie-consent", "docs-layout", "glow"]) {
       for (const file of [`${name}.css`, `${name}.min.css`]) {
         const css = readFileSync(`${root}packages/catalog/dist/components/${file}`, "utf-8");
         expect(css.match(/@layer luz\.print\s*\{/g), file).toHaveLength(1);

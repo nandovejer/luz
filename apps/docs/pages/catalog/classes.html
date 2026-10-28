@@ -4,7 +4,7 @@ description: Every tag and class of the catalog, from search and cookie consent 
 area: catalog
 order: 30
 group: reference
-files: components/search.css, components/consent.css, components/lang-switch.css, components/submenu.css, components/banner.css
+files: components/search.css, components/cookie-consent.css, components/lang-switch.css, components/submenu.css, components/announcement.css
 -->
     <div class="docs-block" id="p-reference">
           <p>Look up a tag or a class by name. Each component's own page has its markup and guidance.</p>
@@ -188,8 +188,8 @@ files: components/search.css, components/consent.css, components/lang-switch.css
             </div>
           </div>
           <div class="docs-prose">
-            <h2 id="banner-and-consent" class="docs-prose__title">Banner and cookie consent</h2>
-            <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Catalog classes: banner and cookie consent">
+            <h2 id="announcement-and-consent" class="docs-prose__title">Announcement and cookie consent</h2>
+            <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Catalog classes: announcement and cookie consent">
           <table class="luz-table docs-ref-table">
             <thead>
               <tr>
@@ -200,27 +200,27 @@ files: components/search.css, components/consent.css, components/lang-switch.css
             </thead>
             <tbody>
               <tr>
-                <td data-label="Class"><div>&lt;luz-banner&gt;</div></td>
+                <td data-label="Class"><div>&lt;luz-announcement&gt;</div></td>
                 <td data-label="Element"><div>around a &lt;section&gt;</div></td>
                 <td data-label="Description"><div>A tag, no class: a band above the header with one short announcement and one link, its text in the header’s column. No script, no close button.</div></td>
               </tr>
               <tr>
                 <td data-label="Class"><div>tone="warning"</div></td>
-                <td data-label="Element"><div>&lt;luz-banner&gt;</div></td>
+                <td data-label="Element"><div>&lt;luz-announcement&gt;</div></td>
                 <td data-label="Description"><div>The warning colours, for something that stops the visitor; the words say it too.</div></td>
               </tr>
               <tr>
-                <td data-label="Class"><div>.luz-consent</div></td>
+                <td data-label="Class"><div>.luz-cookie-consent</div></td>
                 <td data-label="Element"><div>&lt;section hidden&gt;</div></td>
-                <td data-label="Description"><div>The cookie banner, in a <code class="luz-code-inline">&lt;luz-consent&gt;</code> before the header, shown as a band fixed at the bottom of the window. Hidden in the markup: <code class="luz-code-inline">consent.min.js</code> shows it when no answer is stored.</div></td>
+                <td data-label="Description"><div>The cookie banner, in a <code class="luz-code-inline">&lt;luz-cookie-consent&gt;</code> before the header, shown as a band fixed at the bottom of the window. Hidden in the markup: <code class="luz-code-inline">cookie-consent.min.js</code> shows it when no answer is stored.</div></td>
               </tr>
               <tr>
-                <td data-label="Class"><div>.luz-consent__title</div></td>
+                <td data-label="Class"><div>.luz-cookie-consent__title</div></td>
                 <td data-label="Element"><div>&lt;h2&gt;</div></td>
                 <td data-label="Description"><div>The banner’s heading, in the sans; it names the region.</div></td>
               </tr>
               <tr>
-                <td data-label="Class"><div>.luz-consent__choices</div></td>
+                <td data-label="Class"><div>.luz-cookie-consent__choices</div></td>
                 <td data-label="Element"><div>&lt;details&gt;</div></td>
                 <td data-label="Description"><div>The categories of optional cookies, as checkboxes in a form, under Accept and Reject.</div></td>
               </tr>

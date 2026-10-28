@@ -13,7 +13,7 @@
  * its markup are.
  *
  * Width (Button, Card, Form fields, Table): Phone / Tablet / Full set
- * --luz-docs-example-w on `.luz-docs-example__frame`; its inline size follows
+ * --luz-example-w on `.luz-example__frame`; its inline size follows
  * (about 375px, 768px, 100%), never wider than the box it sits in. Full is the
  * default. Hidden without JavaScript. No sideways scroll at 320px with any choice.
  *
@@ -342,7 +342,7 @@ const TABLET = 768;
 const TOLERANCE = 8;
 
 const exampleOf = (page) => page.locator('#example ~ .docs-example').first();
-const frameOf = (page) => exampleOf(page).locator('.luz-docs-example__frame').first();
+const frameOf = (page) => exampleOf(page).locator('.luz-example__frame').first();
 const widthGroup = (page) => exampleOf(page).getByRole('group', { name: 'Width', exact: true });
 /** A width radio, once its group is shown (fails in five seconds, not thirty, when it is not). */
 const widthRadio = async (page, name) => {
@@ -354,7 +354,7 @@ const widthRadio = async (page, name) => {
 const widthSet = (page) => exampleOf(page).locator('fieldset', { has: page.locator('legend', { hasText: /^Width$/ }) });
 /** The frame's inline size, and the room it has: its parent's content box. */
 const sizes = async (page) => {
-  await expect(frameOf(page), 'div.luz-docs-example__frame in the first .docs-example').toHaveCount(1);
+  await expect(frameOf(page), 'div.luz-example__frame in the first .docs-example').toHaveCount(1);
   return measure(page);
 };
 const measure = (page) => frameOf(page).evaluate((frame) => {
@@ -363,7 +363,7 @@ const measure = (page) => frameOf(page).evaluate((frame) => {
   return {
     frame: frame.getBoundingClientRect().width,
     room: parent.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight),
-    custom: frame.style.getPropertyValue('--luz-docs-example-w').trim(),
+    custom: frame.style.getPropertyValue('--luz-example-w').trim(),
   };
 });
 const near = (actual, wanted) => Math.abs(actual - wanted) <= TOLERANCE;

@@ -1,17 +1,17 @@
 // @ts-check
 /**
  * The CSS-only tags of @luz-ds/catalog in a browser: <luz-lang-switch>,
- * <luz-submenu>, <luz-banner> (.claude/plans/specs/f3-package-model.md
+ * <luz-submenu>, <luz-announcement> (.claude/plans/specs/f3-package-model.md
  * section 2.2, step 8). No LUZ script ever defines them: after catalog.min.js
  * has run and both chunks have loaded, `customElements.get()` still answers
  * undefined and the tags are `:not(:defined)`. On
  * tests/fixtures/css-only-tags.html, which also holds a <luz-search> and a
- * <luz-consent> so that both chunks load. The sources: tests/css-only-tags.test.js.
+ * <luz-cookie-consent> so that both chunks load. The sources: tests/css-only-tags.test.js.
  */
 import { test, expect } from '@playwright/test';
 
 const FIXTURE = '/tests/fixtures/css-only-tags.html';
-const TAGS = ['luz-lang-switch', 'luz-submenu', 'luz-banner'];
+const TAGS = ['luz-lang-switch', 'luz-submenu', 'luz-announcement'];
 
 test.describe('the CSS-only tags are never defined', () => {
   test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript');
@@ -19,7 +19,7 @@ test.describe('the CSS-only tags are never defined', () => {
   test('after both chunks load, the two elements are defined and the three tags are not', async ({ page }) => {
     await page.goto(FIXTURE);
     // Both chunks (search on idle, then consent): wait for them, so the answer below is after the loader ran
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-search') && !!customElements.get('luz-consent')), { timeout: 10_000 }).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-search') && !!customElements.get('luz-cookie-consent')), { timeout: 10_000 }).toBe(true);
     const state = await page.evaluate((tags) => Object.fromEntries(tags.map((tag) => [tag, {
       definition: customElements.get(tag),
       defined: document.querySelector(tag).matches(':defined'),
@@ -27,7 +27,7 @@ test.describe('the CSS-only tags are never defined', () => {
     expect(state).toEqual({
       'luz-lang-switch': { definition: undefined, defined: false },
       'luz-submenu': { definition: undefined, defined: false },
-      'luz-banner': { definition: undefined, defined: false },
+      'luz-announcement': { definition: undefined, defined: false },
     });
   });
 
@@ -35,17 +35,17 @@ test.describe('the CSS-only tags are never defined', () => {
     await page.goto(FIXTURE);
     await page.evaluate(async () => {
       await import('/packages/catalog/dist/search.min.js');
-      await import('/packages/catalog/dist/consent.min.js');
+      await import('/packages/catalog/dist/cookie-consent.min.js');
     });
     expect(await page.evaluate((tags) => tags.map((tag) => !!customElements.get(tag)), TAGS)).toEqual([false, false, false]);
   });
 });
 
 test.describe('what the tags give, with or without JavaScript', () => {
-  test('<luz-banner> is a block, <luz-submenu> is display: contents', async ({ page }) => {
+  test('<luz-announcement> is a block, <luz-submenu> is display: contents', async ({ page }) => {
     await page.goto(FIXTURE);
     const display = await page.evaluate(() => ({
-      banner: getComputedStyle(document.querySelector('luz-banner')).display,
+      banner: getComputedStyle(document.querySelector('luz-announcement')).display,
       submenu: getComputedStyle(document.querySelector('luz-submenu')).display,
     }));
     expect(display).toEqual({ banner: 'block', submenu: 'contents' });

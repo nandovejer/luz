@@ -1,0 +1,23 @@
+/* ==========================================================================
+	 LUZ Catalog: color mode, <luz-color-mode>.
+	 A wrapper around core's color mode radios (.luz-mode-switcher, with or
+	 without its --cycle variant) that adds an "Auto" radio: color-mode.js follows
+	 the system or the clock while it is checked. The look is core's: this
+	 file only makes the tag a block, so the fieldset inside it lays out as
+	 it does anywhere else, and leaves no empty block behind when core's
+	 round button is fixed at the corner of the window. Without JavaScript the radios work through the
+	 tokens' :root:has(), and "Auto" leaves the page light.
+	 ========================================================================== */
+
+:where(luz-color-mode) {
+	display: block;
+}
+
+/* Core's cycle button is fixed at the corner of the window with scripting
+   on: the tag around it would be an empty block in the flow, with the gap
+   of its parent. */
+@media (scripting: enabled) {
+	:where(luz-color-mode):has(> .luz-mode-switcher--cycle:not(.luz-mode-switcher--inline) > .luz-mode-cycle) {
+		display: contents;
+	}
+}

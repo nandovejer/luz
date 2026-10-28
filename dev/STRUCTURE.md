@@ -3,7 +3,7 @@
 ```
 luz-design-system/
 ├── apps/                              ← internal apps (NOT publishable)
-│   ├── docs/                          ← @luz-ds/docs-site (private): the documentation site, built by scripts/docs-site; consumes catalog's docs-* components
+│   ├── docs/                          ← @luz-ds/docs-site (private): the documentation site, built by scripts/docs-site; consumes catalog's patterns of a documentation site (docs-layout, doc-header, page-rail, pager and the others)
 │   │   ├── site.json                  ← the areas of the docs (id, label, slug, groups)
 │   │   ├── pages/                     ← one HTML fragment per page, front matter in <!-- luz:page -->; route = path
 │   │   │   ├── index.html             ← /docs/ (the hub)
@@ -12,7 +12,7 @@ luz-design-system/
 │   │   │   ├── get-started/           ← install, structure, JavaScript modules
 │   │   │   ├── components/            ← gallery (index.html), one page per component, helpers; _thumbs/ = gallery thumbnails
 │   │   │   ├── tokens/                ← index and one page per family
-│   │   │   ├── catalog/               ← index, one page per component (the patterns of a kind of site too: <kind>-<name>), class reference
+│   │   │   ├── catalog/               ← index, one page per component (the patterns of a kind of site too: one page per block), class reference
 │   │   │   ├── kinds/                 ← the kinds of site: an index and one page each (landing, blog, app, docs), with their recipes
 │   │   │   └── html/                  ← overview with the A–Z table, one page per element category
 │   │   ├── 404.html                   ← /404.html (absolute <base>, no script)
@@ -80,13 +80,13 @@ luz-design-system/
 │   │
 │   ├── catalog/                   ← @luz-ds/catalog (publishable)
 │   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/{search,consent,mode,lang-switch,submenu,banner,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
-│   │   │   ├── components/<kind>-<name>.css  ← the patterns of a kind of site (kind: landing, cms, app, docs), one file each
+│   │   │   ├── components/{search,cookie-consent,color-mode,lang-switch,submenu,announcement,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
+│   │   │   ├── components/<block>.css  ← the patterns of a kind of site (hero, site-header, page-rail, …), one file each, named by what the piece is
 │   │   │   ├── catalog.js                ← the presence loader
-│   │   │   └── search.js, consent.js, mode.js, timeline.js, sidebar.js  ← lazy chunks (the last two were core's)
+│   │   │   └── search.js, cookie-consent.js, color-mode.js, timeline.js, sidebar.js  ← lazy chunks (the last two were core's)
 │   │   └── dist/                      ← GENERATED (do not edit)
 │   │       ├── components/*.css (+ .min)  ← the only CSS: one file per component
-│   │       └── catalog.js, search.js, consent.js, mode.js, timeline.js, sidebar.js (+ .min)
+│   │       └── catalog.js, search.js, cookie-consent.js, color-mode.js, timeline.js, sidebar.js (+ .min)
 │   │
 │   └── check/                     ← @luz-ds/check (publishable tool: a bin, no CSS, no layer; own version, 0.x)
 │       ├── src/                       ← EDIT HERE (Node ESM: main.js is the bin's glue, cli.js is run(argv, env))

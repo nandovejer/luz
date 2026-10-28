@@ -6,7 +6,7 @@
 
    Two kinds of colour. The interface (the line, the bar, its buttons, the
    slider's thumb, the focus ring) reads LUZ's semantic tokens, so it follows
-   the mode and the light <luz-mode> writes on <html>. The drawing (the
+   the mode and the light <luz-color-mode> writes on <html>. The drawing (the
    sun, the shade, the glint, the sky on the slider's track) has its own
    inks, declared once below as --light-*; high contrast and forced colours
    replace them with the page's text and surface.
@@ -50,14 +50,14 @@ home-light {
 /* The visual runs out to the edges of the page's frame, over the gutters of
    the home's main (.landing-wrap in apps/landing/landing.css: the same
    values, at the same width). Inside the landing hero's
-   .luz-landing-hero__media--bleed, which takes it to the edges of the
+   .luz-hero__media--bleed, which takes it to the edges of the
    window, it has no margins of its own */
-home-light[bleed]:not(.luz-landing-hero__media--bleed > *) {
+home-light[bleed]:not(.luz-hero__media--bleed > *) {
   margin-inline: calc(-1 * (var(--site-edge, 0px) + var(--luz-space-xl)));
 }
 
 @media (max-width: 640px) {
-  home-light[bleed]:not(.luz-landing-hero__media--bleed > *) {
+  home-light[bleed]:not(.luz-hero__media--bleed > *) {
     margin-inline: calc(-1 * var(--luz-space-md));
   }
 }

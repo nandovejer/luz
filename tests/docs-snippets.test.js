@@ -14,7 +14,7 @@
  * content per file, so a version or a hash taken from the wrong place fails.
  */
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,12 +25,16 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 /* ---- What the spec fixes (3.4.1): files per package, the ten ids -------- */
 
-/** The patterns of the kinds of site (F5b: files of catalog, not packages), in the order of the kind's old stylesheet. */
+/**
+ * The files a snippet of a kind of site links after the example, in the order of the cascade (CASCADE of kinds.js): the stylesheets of
+ * the catalog pages that name the kind in `fits-kinds`, or `any` (F8: named for their blocks; the pieces that fit any site, the navbar, and
+ * the sidebar, the terminal and the timeline of F7 come with them). The header and the footer are the landing page's and the blog's.
+ */
 const KIND_FILES = {
-  landing: ["header", "hero", "main", "section", "stat", "footer", "glow"].map((n) => `landing-${n}`),
-  cms: ["header", "page-header", "article-header", "article", "footer"].map((n) => `cms-${n}`),
-  app: ["header", "dashboard"].map((n) => `app-${n}`),
-  docs: ["shell", "page-head", "rail", "example", "dodont", "pager", "page-foot"].map((n) => `docs-${n}`),
+  landing: ["navbar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
+  blog: ["navbar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article"],
+  app: ["navbar", "sidebar", "app-bar", "dashboard"],
+  docs: ["navbar", "sidebar", "terminal", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
 };
 const FILES = {
   tokens: ["luz-tokens.min.css"],
@@ -38,15 +42,14 @@ const FILES = {
   core: ["luz.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "i18n-es.min.js"],
   // Catalog has no bundle (F5a): one stylesheet per component, plain and minified, and the scripts
   catalog: [
-    "components/search.css", "components/search.min.css", "components/consent.css", "components/consent.min.css", "components/banner.css", "components/banner.min.css",
-    ...Object.values(KIND_FILES).flat().flatMap((name) => [`components/${name}.css`, `components/${name}.min.css`]),
-    // F7: the four layout components that came from core are files of components/ like any other
-    ...["navbar", "sidebar", "terminal", "timeline"].flatMap((name) => [`components/${name}.css`, `components/${name}.min.css`]),
-    "catalog.min.js", "search.min.js", "consent.min.js", "mode.min.js", "timeline.min.js", "sidebar.min.js",
+    "components/search.css", "components/search.min.css", "components/cookie-consent.css", "components/cookie-consent.min.css", "components/announcement.css", "components/announcement.min.css",
+    // the sheets of the pages of catalog that name a kind (the four layout components of F7 are among them) and the three more the docs' own pages list
+    ...[...new Set(Object.values(KIND_FILES).flat())].flatMap((name) => [`components/${name}.css`, `components/${name}.min.css`]),
+    "catalog.min.js", "search.min.js", "cookie-consent.min.js", "color-mode.min.js", "timeline.min.js", "sidebar.min.js",
   ],
 };
-/** The kind a snippet is for, and the prefix of its patterns' files (a blog's are the cms-* ones): null for the one with none. */
-const KIND_PATTERNS = { atoms: null, landing: "landing", blog: "cms", app: "app", docs: "docs" };
+/** The kind a snippet is for, and the kind of its patterns (F8: the same word, `blog` for a blog): null for the one with none. */
+const KIND_PATTERNS = { atoms: null, landing: "landing", blog: "blog", app: "app", docs: "docs" };
 const KINDS = Object.keys(KIND_PATTERNS);
 const IDS = KINDS.flatMap((k) => [`${k}-npm`, `${k}-cdn`]);
 
@@ -58,16 +61,16 @@ const CATALOG_MANIFESTS = {
     version: "1.0.0",
     classes: [
       { name: "luz-search", kind: "component", layer: "luz.catalog", files: ["components/search.css"], defined: true, block: "luz-search" },
-      { name: "luz-consent", kind: "component", layer: "luz.catalog", files: ["components/consent.css"], defined: true, block: "luz-consent" },
-      // the patterns of the four kinds of site: one file each (the generator checks them against its own list, kinds.js)
-      ...Object.values(KIND_FILES).flatMap((names) => names.map((name) => ({ name: `luz-${name}`, kind: "pattern", layer: "luz.catalog", files: [`components/${name}.css`], defined: true, block: `luz-${name}` }))),
+      { name: "luz-cookie-consent", kind: "component", layer: "luz.catalog", files: ["components/cookie-consent.css"], defined: true, block: "luz-cookie-consent" },
+      // the patterns of the four kinds of site: one file each (the generator reads the pages of catalog, kinds.js, and checks the files against these)
+      ...[...new Set(Object.values(KIND_FILES).flat())].map((name) => ({ name: `luz-${name}`, kind: "component", layer: "luz.catalog", files: [`components/${name}.css`], defined: true, block: `luz-${name}` })),
     ],
     properties: [],
   },
   "custom-elements.json": {
     schemaVersion: "2.1.0",
     modules: [
-      { kind: "javascript-module", path: "components/banner.css", declarations: [{ kind: "class", name: "LuzBanner", customElement: true, tagName: "luz-banner", stylesheet: "components/banner.css" }] },
+      { kind: "javascript-module", path: "components/announcement.css", declarations: [{ kind: "class", name: "LuzAnnouncement", customElement: true, tagName: "luz-announcement", stylesheet: "components/announcement.css" }] },
       { kind: "javascript-module", path: "search.js", declarations: [{ kind: "class", name: "LuzSearch", customElement: true, tagName: "luz-search", stylesheet: "components/search.css" }] },
     ],
   },
@@ -75,8 +78,8 @@ const CATALOG_MANIFESTS = {
 
 /** Catalog is linked a component at a time: any `components/<name>.min.css` of the package is the example. */
 const CATALOG_SHEET = /^components\/[a-z0-9-]+\.min\.css$/;
-/** A pattern of a kind of site: its file is `components/<kind>-<name>.min.css`, named exactly. */
-const PATTERN_SHEET = /^components\/(?:landing|cms|app|docs)-[a-z0-9-]+\.min\.css$/;
+/** A file of the kind of site: the stylesheets its snippet links after the example, named exactly. */
+const PATTERN_SHEET = new RegExp(`^components/(?:${[...new Set(Object.values(KIND_FILES).flat())].join("|")})\\.min\\.css$`);
 /** The example component is `catalog/components/*`: which one the snippet shows is the generator's choice; a pattern is its file. */
 const shape = (pkg, file) => (pkg === "catalog" && !PATTERN_SHEET.test(file) && (CATALOG_SHEET.test(file) || file === "components/*.min.css") ? "catalog/components/*.min.css" : `${pkg}/${file}`);
 
@@ -113,6 +116,9 @@ function fixtureRoot({ without = [] } = {}) {
     }
   });
   for (const [name, manifest] of Object.entries(CATALOG_MANIFESTS)) writeFileSync(join(root, "packages/catalog/dist", name), JSON.stringify(manifest));
+  // The patterns of a kind are the catalog pages that name it in `fits-kinds` (F8, decision 72): the pages of the root are the repository's
+  mkdirSync(join(root, "apps/docs/pages"), { recursive: true });
+  cpSync(join(repo, "apps/docs/pages/catalog"), join(root, "apps/docs/pages/catalog"), { recursive: true });
   return root;
 }
 
@@ -242,7 +248,7 @@ describe("the snippet generator", () => {
           const css = imports.filter((s) => s.endsWith(".css") || s.endsWith("/css"));
           // catalog has no `/css`: its first line is one component's file (the example), then the file of each pattern of the kind
           const want = ["@luz-ds/tokens/css", "@luz-ds/core/css", ...(prefix ? ["@luz-ds/catalog/components/*.css", ...KIND_FILES[prefix].map((name) => `@luz-ds/catalog/components/${name}.css`)] : [])];
-          expect(css.map((s) => (/^@luz-ds\/catalog\/components\/[a-z0-9-]+\.css$/.test(s) && !/\/(?:landing|cms|app|docs)-/.test(s) ? "@luz-ds/catalog/components/*.css" : s))).toEqual(want);
+          expect(css.map((s) => (/^@luz-ds\/catalog\/components\/[a-z0-9-]+\.css$/.test(s) && !PATTERN_SHEET.test(`${s.slice("@luz-ds/catalog/".length).replace(/\.css$/, ".min.css")}`) ? "@luz-ds/catalog/components/*.css" : s))).toEqual(want);
           expect(css, "no import of a catalog bundle").not.toContain("@luz-ds/catalog/css");
           expect(code, "no import of a package of a kind").not.toMatch(/@luz-ds\/(?:landing|cms|app|docs)(?![\w-])/);
           const js = imports.filter((s) => !s.endsWith("/css") && !s.endsWith(".css")).sort();
@@ -271,7 +277,7 @@ describe("the snippet generator", () => {
 
       it("gives, in the chunks section, one import map whose integrity lists exactly the lazy chunks that budgets.json budgets, each with its version and sha384", () => {
         const budgeted = budgetedChunks();
-        expect(budgeted.length).toBe(8); // core: midi, table-sort, i18n-es; catalog: search, consent, mode, timeline, sidebar (the last two came from core in F7)
+        expect(budgeted.length).toBe(8); // core: midi, table-sort, i18n-es; catalog: search, cookie-consent, color-mode, timeline, sidebar (the last two came from core in F7)
         expect(budgeted).toContain("catalog/dist/timeline.min.js");
         expect(budgeted).toContain("catalog/dist/sidebar.min.js");
         expect(budgeted).not.toContain("core/dist/timeline.min.js");
@@ -309,7 +315,7 @@ describe("the snippet generator", () => {
           expect(hash, rel).toBe(sri(root, pkg, file));
         }
         // each row says when to add the line
-        for (const element of ["luz-timeline", "luz-search", "luz-consent", "luz-mode", "luz-sidebar"]) expect(section, element).toContain(element);
+        for (const element of ["luz-timeline", "luz-search", "luz-cookie-consent", "luz-color-mode", "luz-sidebar"]) expect(section, element).toContain(element);
       });
 
       it("calls the import map the way to check a chunk, and modulepreload only a performance hint (it does not block a bad file in Safari and Firefox)", () => {
@@ -359,7 +365,7 @@ describe("the snippet generator", () => {
     const versions = new Set(tagsOf(codeOf(html, "app-cdn")).map((t) => parts(t.url).version));
     expect(versions.size).toBe(3); // tokens, core, catalog: there is no package of a kind
     for (const pkg of ["tokens", "core", "catalog"]) expect(versions.has(versionOf(fixture, pkg)), pkg).toBe(true);
-    const docs = tagsOf(codeOf(html, "docs-cdn")).filter((t) => /\/docs-/.test(t.url));
+    const docs = tagsOf(codeOf(html, "docs-cdn")).filter((t) => t.tag === "link" && PATTERN_SHEET.test(parts(t.url).file));
     expect(docs).toHaveLength(KIND_FILES.docs.length);
     for (const t of docs) expect(parts(t.url).version, t.url).toBe(versionOf(fixture, "catalog"));
   });

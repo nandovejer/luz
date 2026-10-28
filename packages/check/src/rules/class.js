@@ -9,6 +9,8 @@
  *   class/unknown-in-css a stylesheet writes an unknown `.luz-*` class in a
  *                        selector
  *   class/reserved-prefix a stylesheet defines a class of LUZ's prefix
+ *   names/renamed        an unknown `luz-` class that is the old name of one of
+ *                        catalog 0.3 (rules/renamed.js): the new name, not a guess
  *
  * What a template or a framework computes is never read as a mistake: a token
  * that holds `{ } $ : @ [` is skipped, and in a file of --ext a value that
@@ -18,6 +20,7 @@
  */
 import { finding } from "../report.js";
 import { closest } from "../suggest.js";
+import { renamedClass, pinsOldRelease } from "./renamed.js";
 import { classAttribute, classTokens, isEcho, packageOfName } from "./shared.js";
 
 const LINK = /@luz-ds\/(tokens|core|catalog)@(\d{1,9})\.(\d{1,9})\.(\d{1,9})/g;
@@ -82,6 +85,7 @@ export function unknownClasses(ctx) {
   const found = [];
   const memo = memoOf(world);
   let newer; // the newer release the page links, looked up at the first unknown class
+  let pinned; // does the page link a catalog release that still has the old names
   for (const record of records) {
     const attribute = classAttribute(record, template);
     if (attribute === undefined) continue;
@@ -103,6 +107,16 @@ export function unknownClasses(ctx) {
       }
       const where = { file, line: attribute.line, column: attribute.column };
       const pkg = packageOfName(token);
+      const renamed = token.startsWith("luz-") ? renamedClass(token) : null;
+      if (renamed !== null) {
+        if (pinned === undefined) pinned = pinsOldRelease(records);
+        // The masthead's root says luz-cms-header too: its --masthead token says what it is now
+        if (token === "luz-cms-header" && attribute.value.split(/\s+/).includes("luz-cms-header--masthead")) continue;
+        if (!pinned) {
+          found.push(finding(renamed.publication ? "names/renamed:publication" : "names/renamed", { ...where, vars: { name: token, current: renamed.current }, suggestion: `.${renamed.current}` }));
+          continue;
+        }
+      }
       if (token.startsWith("luz-")) {
         if (newer === undefined) newer = newerRelease(records, world);
         if (newer !== null) {
@@ -127,6 +141,11 @@ export function stylesheetClasses(ctx) {
     const { name } = entry;
     if (!name.startsWith("luz-") || world.classes.has(name)) continue;
     const where = { file, line: entry.line, column: entry.column };
+    const renamed = entry.defined ? null : renamedClass(name);
+    if (renamed !== null) {
+      found.push(finding("names/renamed:css", { ...where, vars: { name, current: renamed.current }, suggestion: `.${renamed.current}` }));
+      continue;
+    }
     if (entry.defined) {
       found.push(finding("class/reserved-prefix", { ...where, vars: { name } }));
       continue;

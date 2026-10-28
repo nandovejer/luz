@@ -6,22 +6,22 @@
   <title>Docs patterns: shell, page head, rail, example, do and don't, pager, page foot</title>
   <!-- tests/docs-patterns.spec.js: tokens + core + docs ONLY. No site stylesheet, no script at all: every
        pattern of the docs files of @luz-ds/catalog is CSS (f6-docs-spec.md, F6a). The page is the shape of a docs page:
-       body.o-shell.luz-docs-shell > header, nav.luz-docs-nav, aside.luz-docs-rail, main.luz-docs-main.
+       body.o-shell.luz-docs-layout > header, nav.luz-docs-nav, aside.luz-page-rail, main.luz-docs-main.
        The rail is before main in the markup and the grid places it: the third column from 80rem, above the
        content below it (the order of the markup is the order of the screen). The page has no script, so
        "On this page" is a details that is open at every width; on the docs site a script folds it below 80rem. -->
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-shell.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-rail.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-page-head.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-example.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-dodont.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-pager.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-page-foot.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-layout.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/doc-header.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/page-rail.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/example.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/do-dont.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/pager.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/page-footer.css">
 </head>
-<body class="o-shell luz-docs-shell" id="shell">
+<body class="o-shell luz-docs-layout" id="shell">
   <a class="luz-skip-link" href="#main-content">Skip to content</a>
   <header id="top">
     <p><a href="#main-content" id="brand">Docs patterns</a></p>
@@ -33,24 +33,24 @@
       <a class="luz-sidebar__link" href="#main-content">Form</a>
     </div>
   </nav>
-  <aside class="luz-docs-rail" id="rail" aria-label="About this page">
-    <div class="luz-docs-rail__inner" id="rail-inner">
-      <nav class="luz-docs-rail__onpage" id="onpage" aria-labelledby="onpage-label">
-        <details class="luz-docs-rail__fold" open>
-          <summary class="luz-docs-rail__title" id="onpage-label">On this page</summary>
-          <ul class="luz-docs-rail__list">
-            <li><a class="luz-sidebar__link luz-docs-rail__link" id="on-example" href="#example-title">Example</a></li>
-            <li><a class="luz-sidebar__link luz-docs-rail__link" id="on-issues" href="#known-issues">Known issues</a></li>
-            <li><a class="luz-sidebar__link luz-docs-rail__link" id="on-dodont" href="#do-dont">Do and don't</a>
-              <ul class="luz-docs-rail__sub">
-                <li><a class="luz-sidebar__link luz-docs-rail__link" href="#do-dont">Names</a></li>
+  <aside class="luz-page-rail" id="rail" aria-label="About this page">
+    <div class="luz-page-rail__inner" id="rail-inner">
+      <nav class="luz-page-rail__onpage" id="onpage" aria-labelledby="onpage-label">
+        <details class="luz-page-rail__fold" open>
+          <summary class="luz-page-rail__title" id="onpage-label">On this page</summary>
+          <ul class="luz-page-rail__list">
+            <li><a class="luz-sidebar__link luz-page-rail__link" id="on-example" href="#example-title">Example</a></li>
+            <li><a class="luz-sidebar__link luz-page-rail__link" id="on-issues" href="#known-issues">Known issues</a></li>
+            <li><a class="luz-sidebar__link luz-page-rail__link" id="on-dodont" href="#do-dont">Do and don't</a>
+              <ul class="luz-page-rail__sub">
+                <li><a class="luz-sidebar__link luz-page-rail__link" href="#do-dont">Names</a></li>
               </ul>
             </li>
-            <li><a class="luz-sidebar__link luz-docs-rail__link" id="on-reading" href="#prose-title">Reading</a></li>
+            <li><a class="luz-sidebar__link luz-page-rail__link" id="on-reading" href="#prose-title">Reading</a></li>
           </ul>
         </details>
       </nav>
-      <div class="luz-docs-rail__actions" id="actions">
+      <div class="luz-page-rail__actions" id="actions">
         <a href="#main-content" id="act-copy">Copy page as Markdown</a>
         <a href="#main-content" id="act-edit">Edit this page</a>
         <a href="#main-content" id="act-report">Report a problem</a>
@@ -58,11 +58,11 @@
     </div>
   </aside>
   <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
-    <header class="luz-docs-page-head" id="head">
-      <p class="luz-docs-page-head__eyebrow" id="eyebrow">Components · Actions and input</p>
+    <header class="luz-doc-header" id="head">
+      <p class="luz-doc-header__eyebrow" id="eyebrow">Components · Actions and input</p>
       <h1 id="title">Button</h1>
-      <p class="luz-docs-page-head__lead" id="lead">The control that does something when it is pressed, in four variants and three sizes.</p>
-      <ul class="luz-docs-page-head__meta" id="meta">
+      <p class="luz-doc-header__lead" id="lead">The control that does something when it is pressed, in four variants and three sizes.</p>
+      <ul class="luz-doc-header__meta" id="meta">
         <li id="chip-1">components/button.css</li>
         <li id="chip-2">No JavaScript</li>
         <li id="chip-3">Light · Dark · High contrast</li>
@@ -72,36 +72,36 @@
     </header>
 
     <h2 id="example-title">Example</h2>
-    <figure class="luz-docs-example" id="example">
-      <div class="luz-docs-example__preview" id="preview">
-        <div class="luz-docs-example__frame" id="frame">
+    <figure class="luz-example" id="example">
+      <div class="luz-example__preview" id="preview">
+        <div class="luz-example__frame" id="frame">
           <button class="luz-btn luz-btn--primary" type="button">Save changes</button>
         </div>
       </div>
-      <div class="luz-docs-example__code" id="code">
+      <div class="luz-example__code" id="code">
         <pre class="luz-code-block" tabindex="0" aria-label="Markup of the example" id="code-pre"><code>&lt;button class="luz-btn luz-btn--primary" type="button"&gt;Save changes&lt;/button&gt; &lt;!-- a long line so that the code scrolls in its own box and never widens the page: SKU-0001;SKU-0002;SKU-0003;SKU-0004;SKU-0005;SKU-0006;SKU-0007;SKU-0008 --&gt;</code></pre>
       </div>
     </figure>
 
-    <figure class="luz-docs-example" id="example-plain">
-      <div class="luz-docs-example__preview" id="preview-plain">
-        <div class="luz-docs-example__frame" id="frame-plain">
+    <figure class="luz-example" id="example-plain">
+      <div class="luz-example__preview" id="preview-plain">
+        <div class="luz-example__frame" id="frame-plain">
           <button class="luz-btn luz-btn--secondary" type="button">Cancel</button>
         </div>
       </div>
     </figure>
 
-    <figure class="luz-docs-example" id="example-narrow">
-      <div class="luz-docs-example__preview">
-        <div class="luz-docs-example__frame" id="frame-narrow" style="--luz-docs-example-w: 20rem">
+    <figure class="luz-example" id="example-narrow">
+      <div class="luz-example__preview">
+        <div class="luz-example__frame" id="frame-narrow" style="--luz-example-w: 20rem">
           <button class="luz-btn luz-btn--primary luz-btn--block" type="button">Pay now</button>
         </div>
       </div>
     </figure>
 
-    <figure class="luz-docs-example" id="example-wide">
-      <div class="luz-docs-example__preview">
-        <div class="luz-docs-example__frame" id="frame-wide" style="--luz-docs-example-w: 64rem">
+    <figure class="luz-example" id="example-wide">
+      <div class="luz-example__preview">
+        <div class="luz-example__frame" id="frame-wide" style="--luz-example-w: 64rem">
           <button class="luz-btn luz-btn--primary luz-btn--block" type="button">Pay now</button>
         </div>
       </div>
@@ -111,14 +111,14 @@
     <p>None known.</p>
 
     <h2 id="do-dont">Do and don't</h2>
-    <div class="luz-docs-dodont" id="dodont">
-      <figure class="luz-docs-dodont__item luz-docs-dodont__item--do" id="do">
-        <figcaption><strong class="luz-docs-dodont__verdict" id="do-verdict">Do</strong> Name the action: the label says what happens when the button is pressed.</figcaption>
-        <div class="luz-docs-dodont__stage" id="do-stage" inert aria-hidden="true"><button class="luz-btn luz-btn--primary" type="button">Save changes</button></div>
+    <div class="luz-do-dont" id="dodont">
+      <figure class="luz-do-dont__item luz-do-dont__item--do" id="do">
+        <figcaption><strong class="luz-do-dont__verdict" id="do-verdict">Do</strong> Name the action: the label says what happens when the button is pressed.</figcaption>
+        <div class="luz-do-dont__stage" id="do-stage" inert aria-hidden="true"><button class="luz-btn luz-btn--primary" type="button">Save changes</button></div>
       </figure>
-      <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont" id="dont">
-        <figcaption><strong class="luz-docs-dodont__verdict" id="dont-verdict">Don't</strong> Leave the label generic: "Click here" says nothing to someone who hears only the button.</figcaption>
-        <div class="luz-docs-dodont__stage" id="dont-stage" inert aria-hidden="true"><button class="luz-btn luz-btn--primary" type="button">Click here</button></div>
+      <figure class="luz-do-dont__item luz-do-dont__item--dont" id="dont">
+        <figcaption><strong class="luz-do-dont__verdict" id="dont-verdict">Don't</strong> Leave the label generic: "Click here" says nothing to someone who hears only the button.</figcaption>
+        <div class="luz-do-dont__stage" id="dont-stage" inert aria-hidden="true"><button class="luz-btn luz-btn--primary" type="button">Click here</button></div>
       </figure>
     </div>
 
@@ -149,13 +149,13 @@
       <p id="p24">Paragraph 24. A documentation page is read, not scanned: a measure of about forty-six rem keeps a line of running text short enough to follow from its end back to its start, and long enough that a sentence does not break every few words. This text repeats so that the page is tall enough to scroll.</p>
 
     <nav aria-label="Previous and next page" id="pager-nav">
-      <ul class="luz-docs-pager" id="pager">
-        <li class="luz-docs-pager__prev"><a class="luz-docs-pager__link" id="pager-prev" rel="prev" href="#main-content"><span class="luz-docs-pager__label">Previous</span> <span class="luz-docs-pager__title">Badge</span></a></li>
-        <li class="luz-docs-pager__next"><a class="luz-docs-pager__link" id="pager-next" rel="next" href="#main-content"><span class="luz-docs-pager__label">Next</span> <span class="luz-docs-pager__title">Card</span></a></li>
+      <ul class="luz-pager" id="pager">
+        <li class="luz-pager__prev"><a class="luz-pager__link" id="pager-prev" rel="prev" href="#main-content"><span class="luz-pager__label">Previous</span> <span class="luz-pager__title">Badge</span></a></li>
+        <li class="luz-pager__next"><a class="luz-pager__link" id="pager-next" rel="next" href="#main-content"><span class="luz-pager__label">Next</span> <span class="luz-pager__title">Card</span></a></li>
       </ul>
     </nav>
 
-    <p class="luz-docs-page-foot" id="foot">Last updated <time datetime="2026-10-17">17 October 2026</time> · <a href="#main-content" id="foot-edit">Edit this page</a> · <a href="#main-content" id="foot-report">Report a problem</a></p>
+    <p class="luz-page-footer" id="foot">Last updated <time datetime="2026-10-17">17 October 2026</time> · <a href="#main-content" id="foot-edit">Edit this page</a> · <a href="#main-content" id="foot-report">Report a problem</a></p>
   </main>
   <footer id="site-footer">
     <!-- The site footer spans the shell (grid area foot), under main and the rail: its links sit under the rail's column -->

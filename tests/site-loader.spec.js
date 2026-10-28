@@ -3,8 +3,8 @@
  * The presence loader (packages/catalog/src/catalog.js, .claude/plans/specs/f3-package-model.md,
  * section 2.3 and 9 step 7): catalog.min.js scans the page once and loads
  * search.min.js only when there is a <luz-search> (on its first pointerdown or
- * focusin, or on idle) and consent.min.js only when there is a <luz-consent>
- * (on idle) and mode.min.js only when there is a <luz-mode> (on idle). Content added later is not upgraded until the page imports the
+ * focusin, or on idle) and cookie-consent.min.js only when there is a <luz-cookie-consent>
+ * (on idle) and color-mode.min.js only when there is a <luz-color-mode> (on idle). Content added later is not upgraded until the page imports the
  * chunk by hand. Security: SEC-CHUNK-4 (R5), the full-SRI path is an import map
  * with an `integrity` section: a chunk with a wrong hash is never defined, in
  * every engine. A modulepreload with `integrity` is only a hint: Chromium
@@ -80,49 +80,49 @@ test.describe('the loader: which chunk, and when', () => {
     await page.locator('#consent-ask').dispatchEvent('pointerdown');
     await page.locator('#consent-ask').dispatchEvent('focusin');
     await page.waitForTimeout(SETTLE);
-    expect(seen).not.toContain('consent');
+    expect(seen).not.toContain('cookie-consent');
     await releaseIdle(page);
-    await expect.poll(() => seen).toContain('consent');
-    await expect.poll(() => isDefined(page, 'luz-consent')).toBe(true);
+    await expect.poll(() => seen).toContain('cookie-consent');
+    await expect.poll(() => isDefined(page, 'luz-cookie-consent')).toBe(true);
   });
 
   test('(b) with no stub the chunks arrive by themselves, without the page doing anything', async ({ page }) => {
     const seen = chunkRequests(page);
     await page.goto(PAGE);
-    await expect.poll(() => seen.slice().sort()).toEqual(['consent', 'search']);
+    await expect.poll(() => seen.slice().sort()).toEqual(['cookie-consent', 'search']);
   });
 });
 
 test.describe('the loader: the mode chunk', () => {
-  test('(e) with a <luz-mode>, the mode chunk waits for idle: not requested while idle is held', async ({ page }) => {
+  test('(e) with a <luz-color-mode>, the mode chunk waits for idle: not requested while idle is held', async ({ page }) => {
     await holdIdle(page);
     const seen = chunkRequests(page);
     await page.goto(MODE_PAGE);
     await page.waitForTimeout(SETTLE);
     expect(seen).toEqual([]);
-    expect(await isDefined(page, 'luz-mode')).toBe(false);
+    expect(await isDefined(page, 'luz-color-mode')).toBe(false);
   });
 
-  test('(e) idle requests the mode chunk, once, and defines <luz-mode>; the search and consent chunks are not requested', async ({ page }) => {
+  test('(e) idle requests the mode chunk, once, and defines <luz-color-mode>; the search and consent chunks are not requested', async ({ page }) => {
     await holdIdle(page);
     const seen = chunkRequests(page);
     await page.goto(MODE_PAGE);
     await releaseIdle(page);
-    await expect.poll(() => seen).toContain('mode');
-    await expect.poll(() => isDefined(page, 'luz-mode')).toBe(true);
+    await expect.poll(() => seen).toContain('color-mode');
+    await expect.poll(() => isDefined(page, 'luz-color-mode')).toBe(true);
     await page.waitForTimeout(SETTLE);
-    expect(seen).toEqual(['mode']);
+    expect(seen).toEqual(['color-mode']);
   });
 
   test('(e) with no stub the mode chunk arrives by itself', async ({ page }) => {
     const seen = chunkRequests(page);
     await page.goto(MODE_PAGE);
-    await expect.poll(() => seen).toEqual(['mode']);
-    await expect.poll(() => isDefined(page, 'luz-mode')).toBe(true);
+    await expect.poll(() => seen).toEqual(['color-mode']);
+    await expect.poll(() => isDefined(page, 'luz-color-mode')).toBe(true);
   });
 
   for (const url of [EMPTY, PAGE]) {
-    test(`(e) a page without a <luz-mode> never requests the mode chunk, idle or not (${url})`, async ({ browser }) => {
+    test(`(e) a page without a <luz-color-mode> never requests the mode chunk, idle or not (${url})`, async ({ browser }) => {
       // A page of its own per URL: the idle stub and the request listener are installed once
       const page = await browser.newPage();
       await holdIdle(page);
@@ -132,8 +132,8 @@ test.describe('the loader: the mode chunk', () => {
       await page.waitForTimeout(SETTLE);
       await page.keyboard.press('Control+k');
       await page.waitForTimeout(SETTLE);
-      expect(seen).not.toContain('mode');
-      expect(await isDefined(page, 'luz-mode')).toBe(false);
+      expect(seen).not.toContain('color-mode');
+      expect(await isDefined(page, 'luz-color-mode')).toBe(false);
       await page.close();
     });
   }
@@ -186,7 +186,7 @@ test.describe('the loader: layout shift (d)', () => {
       await watchLayoutShift(page);
       await page.goto(PAGE);
       await expect.poll(() => isDefined(page)).toBe(true);
-      await expect.poll(() => isDefined(page, 'luz-consent')).toBe(true);
+      await expect.poll(() => isDefined(page, 'luz-cookie-consent')).toBe(true);
       await page.waitForTimeout(500);
       expect(await layoutShift(page)).toBe(0);
     });
@@ -234,12 +234,12 @@ test.describe('the loader: an import map with integrity (R5)', () => {
 
   test('each URL has its own entry: a wrong hash for the consent chunk blocks that one only, the search chunk (not listed) loads', async ({ page }) => {
     const body = await (await page.request.get(CHUNK_URL)).body();
-    await withImportMap(page, { '/packages/catalog/dist/consent.min.js': `sha384-${createHash('sha384').update(body).digest('base64')}` });
+    await withImportMap(page, { '/packages/catalog/dist/cookie-consent.min.js': `sha384-${createHash('sha384').update(body).digest('base64')}` });
     await page.goto(PAGE);
-    // the entry for consent.min.js holds the hash of search.min.js, so the consent chunk is blocked; the search is not listed and loads
+    // the entry for cookie-consent.min.js holds the hash of search.min.js, so the consent chunk is blocked; the search is not listed and loads
     await expect.poll(() => isDefined(page)).toBe(true);
     await page.waitForTimeout(800);
-    expect(await isDefined(page, 'luz-consent')).toBe(false);
+    expect(await isDefined(page, 'luz-cookie-consent')).toBe(false);
   });
 });
 

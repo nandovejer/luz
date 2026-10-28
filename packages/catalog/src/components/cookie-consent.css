@@ -1,0 +1,107 @@
+/* ==========================================================================
+	 LUZ Catalog: cookie consent, <luz-cookie-consent>.
+	 The banner asks for cookies once: hidden in the markup, cookie-consent.js shows
+	 it when no choice is stored. A band fixed at the block end of the
+	 window, so showing it moves nothing (D7). It sits under the top layer:
+	 a modal dialog or a popover draws over it. At most half the window,
+	 scrolling inside; in a window under 30rem tall it is in the flow, where
+	 the markup puts it (first, after the skip link). cookie-consent.js publishes
+	 its height as --luz-consent-h on :root, and while it shows the page
+	 keeps that much room at its end and scrolls what Tab reaches out from
+	 under it (WCAG 2.4.11). No motion: it appears, it does not slide in.
+	 ========================================================================== */
+
+.luz-cookie-consent {
+	padding-block: var(--luz-space-md);
+	padding-inline: max(var(--luz-space-md), (100% - var(--luz-content-max)) / 2 + var(--luz-space-md));
+	border-block-start: 1px solid var(--luz-divider);
+	background: var(--luz-surface-muted);
+	color: var(--luz-text-primary);
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-md);
+}
+
+@media (min-width: 641px) {
+	.luz-cookie-consent {
+		padding-inline: max(var(--luz-space-xl), (100% - var(--luz-content-max)) / 2 + var(--luz-space-xl));
+	}
+}
+
+/* On a screen taller than 30rem: fixed at the block end, at most half the
+   window, scrolling inside; and while it shows, the room it covers is kept
+   at the end of the page (on <html>) and of each part that scrolls on its
+   own. In a shorter window it stays in the flow, where the markup puts it
+   (first, after the skip link), with its full height. */
+@media screen and (height > 30rem) {
+	.luz-cookie-consent {
+		position: fixed;
+		inset-inline: 0;
+		inset-block-end: 0;
+		z-index: var(--luz-z-toast);
+		max-block-size: 50dvh;
+		overflow-y: auto;
+	}
+
+	:root:has(:where(luz-cookie-consent) > :not([hidden])),
+	:root:has(:where(luz-cookie-consent) > :not([hidden])) :is(.o-main, .luz-sidebar) {
+		padding-block-end: var(--luz-consent-h);
+		scroll-padding-block-end: var(--luz-consent-h);
+	}
+
+	/* Core's round colour-mode button is fixed at the same corner, under the
+	   banner's layer: while the banner shows it rides on the banner's top
+	   edge, and what Tab reaches is scrolled out from under both. */
+	@media (scripting: enabled) {
+		:root:has(:where(luz-cookie-consent) > :not([hidden])) .luz-mode-switcher--cycle:not(.luz-mode-switcher--inline) {
+			inset-block-end: calc(var(--luz-space-md) + var(--luz-consent-h));
+		}
+
+		:root:has(:where(luz-cookie-consent) > :not([hidden])):has(.luz-mode-switcher--cycle:not(.luz-mode-switcher--inline) > .luz-mode-cycle) {
+			scroll-padding-block-end: calc(var(--luz-consent-h) + var(--luz-control-lg) + var(--luz-space-md) * 2);
+		}
+	}
+}
+
+.luz-cookie-consent__title {
+	margin-block-end: var(--luz-space-xs);
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-lg);
+}
+
+/* Core's details is a box: here it starts a step below the buttons */
+.luz-cookie-consent__choices {
+	margin-block: var(--luz-space-md) 0;
+}
+
+/* The details is already the box: a fieldset inside it is a label and its
+   checkboxes, with no second frame. Its padding is in rem, so at 200 % text
+   a framed fieldset (24 + 16 + the legend's word) did not fit 320 px */
+.luz-cookie-consent__choices :where(fieldset) {
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+.luz-cookie-consent__choices :where(legend) {
+	padding: 0;
+	margin-block-end: var(--luz-space-xs);
+}
+
+.luz-cookie-consent :where(form) {
+	margin-block-start: var(--luz-space-md);
+}
+
+/* The buttons that reopen it keep their place until cookie-consent.js shows them
+   (C11): nothing moves when they appear */
+[data-luz-consent-open][hidden] {
+	display: inline-flex;
+	visibility: hidden;
+}
+
+/* On paper: the banner only works on a screen. The build puts this block
+   in luz.print, after the screen rules of every layer. */
+@media print {
+	.luz-cookie-consent {
+		display: none;
+	}
+}

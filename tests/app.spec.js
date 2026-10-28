@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * The app patterns, files of @luz-ds/catalog since F5b (`components/app-header.css` and `components/app-dashboard.css`, layer
+ * The app patterns, files of @luz-ds/catalog since F5b (`components/app-bar.css` and `components/dashboard.css`, layer
  * luz.catalog; formerly @luz-ds/app 0.1) (.claude/plans/specs/f3-package-model.md, section 6 and
  * section 9 step 14; .claude/plans/specs/f3-ux.md, section 2 and the
  * accessibility answers A1 to A13; accessibility requirements O5, O6): the
@@ -8,13 +8,13 @@
  * and `.o-main`, the sidebar drawer, `.o-sticky`, `.luz-nav-toggle`, `.o-row`,
  * `.luz-dropdown`, `.luz-avatar`, `.o-grid` and `.luz-card`. No script.
  *
- *   header.luz-app-header.o-sticky inside .o-main (the page's banner)
+ *   header.luz-app-bar.o-sticky inside .o-main (the page's banner)
  *     > div.o-row: core's toggle (`__toggle`), `__product` (the product name,
  *       only while the sidebar is a drawer), div.o-row.`__actions` (an optional
  *       <luz-search>, then the account dropdown whose button is `__account`:
  *       initials in `.luz-avatar`, then `__account-name`, clipped at 320 px but
  *       kept in the accessible name).
- *   main.luz-app-dashboard (the container of the size query; its sibling is the
+ *   main.luz-dashboard (the container of the size query; its sibling is the
  *     header): div.__head (the view's one h1 and its actions), then
  *     ul.o-grid.o-grid--auto of li.luz-card.__panel (an h2 each), `__panel--wide`
  *     two columns from a 40rem container.
@@ -120,7 +120,7 @@ for (const [label, url] of [['without site', PLAIN], ['with site', WITH_SITE]]) 
           h1InMain: document.querySelectorAll('h1').length === 1 && !!document.querySelector('h1').closest('main'),
           h1InBar: !!hdr.querySelector('h1'),
           primaryOutsideBar: document.querySelectorAll('.luz-btn--primary').length === 1 && !hdr.querySelector('.luz-btn--primary') && !!document.querySelector('.luz-btn--primary').closest('main'),
-          mainIsDashboard: main.classList.contains('luz-app-dashboard'),
+          mainIsDashboard: main.classList.contains('luz-dashboard'),
         };
       });
       expect(facts).toEqual({ parentIsMain: true, bannerInMain: false, mainInBanner: false, h1InMain: true, h1InBar: false, primaryOutsideBar: true, mainIsDashboard: true });
@@ -328,12 +328,12 @@ test.describe('app dashboard', () => {
   });
 
   test('the main is the container of the size query, and the panels are cards in a list under their own h2', async ({ page }) => {
-    expect(await style(page, 'main.luz-app-dashboard', 'containerType')).toBe('inline-size');
+    expect(await style(page, 'main.luz-dashboard', 'containerType')).toBe('inline-size');
     const facts = await page.evaluate(() => {
       const items = [...document.querySelectorAll('#grid > li')];
       return {
         count: items.length,
-        allCards: items.every((li) => li.classList.contains('luz-card') && li.classList.contains('luz-app-dashboard__panel')),
+        allCards: items.every((li) => li.classList.contains('luz-card') && li.classList.contains('luz-dashboard__panel')),
         startsWithH2: items.every((li) => li.firstElementChild?.tagName === 'H2'),
         headIsDiv: document.getElementById('head').tagName === 'DIV',
         headInMain: !!document.getElementById('head').closest('main'),
@@ -610,7 +610,7 @@ test.describe('app without site: nothing of site is asked for', () => {
     await page.waitForLoadState('networkidle');
     const catalog = requests.map((url) => new URL(url).pathname).filter((path) => path.includes('/packages/catalog/'));
     // the sidebar is catalog's since F7: the page links its stylesheet (it is CSS, and its drawer is a native popover), never its chunk
-    expect(catalog.sort()).toEqual(['/packages/catalog/dist/components/app-dashboard.css', '/packages/catalog/dist/components/app-header.css', '/packages/catalog/dist/components/sidebar.css']);
+    expect(catalog.sort()).toEqual(['/packages/catalog/dist/components/app-bar.css', '/packages/catalog/dist/components/dashboard.css', '/packages/catalog/dist/components/sidebar.css']);
     // No bundle and no package of app any more
     expect(requests.some((url) => /\/packages\/app\/|app\.css|catalog\.css/.test(new URL(url).pathname))).toBe(false);
     for (const file of catalog) {
@@ -618,6 +618,6 @@ test.describe('app without site: nothing of site is asked for', () => {
       expect(response?.status, file).toBe(200);
       expect(response?.type, file).toContain('css');
     }
-    expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-consent, luz-lang-switch, luz-submenu, luz-banner').length)).toBe(0);
+    expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-cookie-consent, luz-lang-switch, luz-submenu, luz-announcement').length)).toBe(0);
   });
 });

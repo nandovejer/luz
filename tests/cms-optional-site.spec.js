@@ -2,15 +2,15 @@
 /**
  * The cms patterns work without the site-wide parts of @luz-ds/catalog (.claude/plans/specs/f3-package-model.md,
  * §5 and §9 step 11; since F5b they are files of catalog, one per block, and a page links only the ones it uses).
- * A page that loads tokens, core and the files `cms-header`, `cms-page-header` and `cms-footer` and nothing else
+ * A page that loads tokens, core and the files `site-header`, `page-header` and `site-footer` and nothing else
  * (tests/fixtures/cms-page.html: no search, consent or language switch file, no script) still renders its header, page header and
  * footer, and axe finds nothing serious in the three modes. The rules of cms
- * that refine site's tags (`.luz-cms-header luz-lang-switch`) simply match
+ * that refine site's tags (`.luz-site-header luz-lang-switch`) simply match
  * nothing there.
  *
- * Also here: `.luz-cms-footer`, the footer of a blog or a newspaper, no longer
- * `.luz-site-footer` of site. Like the landing's, it is a native <footer> with
- * a row of core's inside (`footer.luz-cms-footer > div.o-container.o-container--inline.o-row`):
+ * Also here: `.luz-site-footer`, the footer of a blog or a newspaper (before F8 `.luz-cms-footer`, the same
+ * component as the landing's footer). Like the landing's, it is a native <footer> with
+ * a row of core's inside (`footer.luz-site-footer > div.o-container.o-container--inline.o-row`):
  * a divider above, its items at the two ends, and at 768px and below a column
  * aligned to the start.
  * Runs in `chromium` and `chromium-nojs`: it is CSS only.
@@ -41,23 +41,23 @@ test.describe('cms without site', () => {
     await page.setViewportSize({ width: 1280, height: 900 });
   });
 
-  test('the page asks for its three cms files, the navbar and the sidebar (from catalog since F7) and no other file or script of catalog, and has none of the site-wide tags', async ({ page }) => {
+  test('the page asks for its three files (the bar of a blog, its page header and its footer), the navbar and the sidebar (from catalog since F7) and no other file or script of catalog, and has none of the site-wide tags', async ({ page }) => {
     const requests = [];
     page.on('request', (req) => requests.push(new URL(req.url()).pathname));
     await page.goto(FIXTURE);
     await page.waitForLoadState('networkidle');
     expect(requests.filter((path) => path.includes('/packages/catalog/')).sort()).toEqual([
-      '/packages/catalog/dist/components/cms-footer.css',
-      '/packages/catalog/dist/components/cms-header.css',
-      '/packages/catalog/dist/components/cms-page-header.css',
+      '/packages/catalog/dist/components/site-footer.css',
+      '/packages/catalog/dist/components/site-header.css',
+      '/packages/catalog/dist/components/page-header.css',
       // the navbar and the sidebar of the header's panel came from core to catalog in F7: two more stylesheets, never a script
       '/packages/catalog/dist/components/navbar.css',
       '/packages/catalog/dist/components/sidebar.css',
-    ]);
+    ].sort());
     expect(requests.some((path) => /\/packages\/cms\/|cms\.css|catalog\.css/.test(path))).toBe(false);
     // ... and every one of them is a file catalog serves (the navbar and the sidebar are no longer core's)
     for (const file of ['navbar', 'sidebar']) expect((await page.request.get(`/packages/catalog/dist/components/${file}.css?direct`)).status(), `catalog ${file}.css`).toBe(200);
-    expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-consent, luz-lang-switch, luz-submenu, luz-banner').length)).toBe(0);
+    expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-cookie-consent, luz-lang-switch, luz-submenu, luz-announcement').length)).toBe(0);
   });
 
   test('the header renders: the skin, the stickiness of core, the masthead brand and the row of sections', async ({ page }) => {
@@ -168,7 +168,7 @@ test.describe('cms footer', () => {
     expect(parseFloat(await style(page, '#ftr', 'borderBlockStartWidth'))).toBeGreaterThanOrEqual(1);
   });
 
-  test('the markup carries no `luz-site-*` class', async ({ page }) => {
-    expect(await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => c.startsWith('luz-site-')))).toEqual([]);
+  test('the markup carries no class named for a kind of site (`luz-landing-*`, `luz-cms-*`, `luz-app-*`)', async ({ page }) => {
+    expect(await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => /^luz-(?:cms|landing|app)-/.test(c)))).toEqual([]);
   });
 });

@@ -1,0 +1,178 @@
+<!-- luz:page
+title: Cabecera de portada
+description: Abre la portada y las secciones de un periódico con la fecha, una búsqueda, el nombre de la publicación en letra grande y sus secciones, en tres filas que se desplazan con la página.
+fits: la portada y las secciones de un periódico, donde el nombre y la fecha marcan el tono
+keywords: periódico, portada, parte superior
+source: 47f22b596561
+reviewed: false
+-->
+    <div class="docs-component" id="p-masthead">
+          <h2 id="example">Ejemplo</h2>
+          <p>La cabecera de portada de un periódico: la fecha y un botón, el nombre y las secciones.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <header class="luz-masthead">
+              <div class="o-container o-container--inline o-stack">
+                <div class="o-row luz-masthead__top">
+                  <p class="luz-masthead__date"><time datetime="2026-10-14">Wednesday, 14 October 2026</time></p>
+                  <div class="o-row luz-masthead__actions">
+                    <a class="luz-btn luz-btn--ghost" href="#p-masthead">Subscribe</a>
+                  </div>
+                </div>
+                <a class="luz-masthead__brand" href="#p-masthead">The Vejer Review</a>
+                <div class="o-row luz-masthead__sections">
+                  <button class="luz-nav-toggle" type="button" popovertarget="demo-masthead-nav" aria-label="Sections of the example newspaper">
+                    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
+                  </button>
+                  <nav class="luz-navbar" id="demo-masthead-nav" aria-label="Example newspaper" popover>
+                    <ul class="luz-navbar__list">
+                      <li><a class="luz-navbar__link" href="#p-masthead" aria-current="page">News</a></li>
+                      <li><a class="luz-navbar__link" href="#p-masthead">Culture</a></li>
+                      <li><a class="luz-navbar__link" href="#p-masthead">Opinion</a></li>
+                      <li><a class="luz-navbar__link" href="#p-masthead">Sport</a></li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </header>
+          </div>
+          <p class="docs-demo__note">At 768 px of window width and below the sections collapse into a menu, the catalog's <a href="/docs/catalog/navbar/">navbar</a>.</p>
+          <p class="docs-demo__note">The masthead is not sticky: three rows stuck to the top would take a third of a phone's screen. For one row that stays at the top, use the <a href="/docs/catalog/site-header/">site header</a> with <code class="luz-code-inline">--publication</code>.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>El problema propio de la cabecera de portada y los de las piezas de las que se compone.</p>
+          <ul>
+            <li><strong>El menú de la cabecera de portada sin posicionamiento de anclas.</strong> En los navegadores sin posicionamiento de anclas CSS, el menú de secciones se abre cerca de la parte superior de la ventana y, mientras está abierto, cubre el nombre de la publicación y el botón de menú. Pulsa Escape o haz clic fuera del menú para cerrarlo y volver a la página.</li>
+            <li><strong>El panel del menú.</strong> Si sigues pulsando Tab después del último enlace del menú abierto, el foco avanza por la página y el menú permanece abierto encima; Escape lo cierra. Consulta los <a href="/docs/catalog/navbar/#known-issues">problemas conocidos de la barra de navegación</a>.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la cabecera de portada">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Con la búsqueda de catalog en la fila superior:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-masthead" aria-label="Copy the masthead markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Masthead markup"><code id="code-masthead">&lt;header class=&quot;luz-masthead&quot;&gt;
+  &lt;div class=&quot;o-container o-container--inline o-stack&quot;&gt;
+    &lt;div class=&quot;o-row luz-masthead__top&quot;&gt;
+      &lt;p class=&quot;luz-masthead__date&quot;&gt;&lt;time datetime=&quot;2026-10-14&quot;&gt;Wednesday, 14 October 2026&lt;/time&gt;&lt;/p&gt;
+      &lt;div class=&quot;o-row luz-masthead__actions&quot;&gt;
+        &lt;luz-search&gt;…&lt;/luz-search&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;a class=&quot;luz-masthead__brand&quot; href=&quot;/&quot;&gt;The Vejer Review&lt;/a&gt;
+    &lt;div class=&quot;o-row luz-masthead__sections&quot;&gt;
+      &lt;button class=&quot;luz-nav-toggle&quot; type=&quot;button&quot; popovertarget=&quot;masthead-nav&quot; aria-label=&quot;Sections&quot;&gt;…&lt;/button&gt;
+      &lt;nav class=&quot;luz-navbar&quot; id=&quot;masthead-nav&quot; aria-label=&quot;Sections&quot; popover&gt;…&lt;/nav&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>Ningún modificador. La cabecera de portada es una clase de catalog aplicada a un <code>&lt;header&gt;</code> nativo, maquetada con los objetos de core en el marcado.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases de la cabecera de portada" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-masthead</code></div></td><td data-label="Efecto"><div>En <code>&lt;header&gt;</code>: la cabecera de portada del periódico. La superficie de la página, tres filas en un <code>.o-stack</code>, 16 px arriba y abajo, no fija</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-masthead__top</code></div></td><td data-label="Efecto"><div>En un <code>.o-row</code>: la fecha al inicio y las acciones al final, en una sola fila</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-masthead__date</code></div></td><td data-label="Efecto"><div>La fecha de hoy en un <code>&lt;time datetime&gt;</code>, pequeña y secundaria; se ajusta para dejar su espacio a las acciones</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-masthead__actions</code></div></td><td data-label="Efecto"><div>En un <code>.o-row</code>: la <a href="/docs/catalog/search/">búsqueda</a> de catalog y después su <a href="/docs/catalog/lang-switch/">selector de idioma</a></div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-masthead__brand</code></div></td><td data-label="Efecto"><div>El nombre de la publicación como enlace a la página de inicio, con la fuente de los títulos, grande y centrado, seminegrita y subrayado solo al pasar el cursor. Un <code>&lt;img&gt;</code> de logotipo dentro mide 88 px de alto</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-masthead__sections</code></div></td><td data-label="Efecto"><div>En un <code>.o-row</code>: el botón de menú y la barra de navegación entre dos líneas, centrados a partir de 769 px; su panel se abre debajo de esta fila</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.o-container.o-container--inline.o-stack</code> (core)</div></td><td data-label="Efecto"><div>El ancho y los márgenes laterales de la página, para que la cabecera de portada empiece donde empieza el contenido, y sus tres filas</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-nav-toggle</code>, <code>.luz-navbar</code> (catalog)</div></td><td data-label="Efecto"><div>El botón de menú y las secciones: consulta la <a href="/docs/catalog/navbar/">barra de navegación</a></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>components/masthead.css</code> de <code>@luz-ds/catalog</code> aplicado a los objetos de core y a la barra de navegación de catalog. Sin JavaScript.</p>
+            <ul>
+              <li>La cabecera de portada solo aporta la apariencia: la superficie de la página, la marca, las líneas de la fila de secciones y la fecha. Core se ocupa del resto: <code>.o-container--inline</code> los márgenes laterales, <code>.o-row</code> y <code>.o-stack</code> las filas, y la barra de navegación los enlaces y su panel.</li>
+              <li>La cabecera de portada no es fija: tres filas pegadas arriba ocuparían un tercio de la pantalla del móvil. La marca mide 49 px a partir de 1024 px, 39 px por debajo y 31 px a 640 px o menos (<code>--luz-text-4xl</code>, <code>-3xl</code> y <code>-2xl</code>, los escalones del hero).</li>
+              <li>La cabecera de portada, y la fila de secciones dentro de ella, se identifican como el ancla <code>--luz-bar</code>, dentro de su propio ámbito. En los navegadores compatibles con el posicionamiento de anclas CSS, el panel de la barra de navegación se abre debajo de la fila de secciones. En los demás se abre a <code>--luz-bar-h</code> de la parte superior de la ventana (consulta Problemas conocidos).</li>
+              <li>Con <code>@luz-ds/catalog</code>, la lista de su <code>&lt;luz-lang-switch&gt;</code> se abre debajo de la cabecera de portada. Sin él, no cambia nada: las reglas que amplían los elementos del catálogo no coinciden con ninguno.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: el menú es una ventana emergente que abre <code>popovertarget</code> del botón, sin scripts; los enlaces son enlaces normales y la búsqueda del catálogo muestra un enlace al índice alfabético.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Orden:</strong> el del código fuente: acciones de la fila superior, marca, botón de menú y secciones.</li>
+              <li><strong>Teclas:</strong> Enter o Espacio en el botón de menú abre y cierra el panel; Escape lo cierra y devuelve el foco al botón. El panel no es modal: al pulsar Tab después del último enlace se continúa por la página.</li>
+              <li><strong>Nombres:</strong> tanto <code>&lt;nav&gt;</code> como el botón de menú se llaman «Secciones»; el navegador expone el estado expandido del botón. La sección del artículo lleva <code>aria-current="true"</code> y el índice de la propia sección, <code>aria-current="page"</code>; ambos aparecen subrayados.</li>
+              <li><strong>Marca:</strong> un enlace, nunca un encabezado: el título del artículo es el único <code>h1</code> de la página. El logotipo es un <code>&lt;img&gt;</code> cuyo <code>alt</code> contiene el nombre de la publicación, sin texto al lado.</li>
+              <li><strong>Puntos de referencia:</strong> un <code>&lt;header&gt;</code> que es hijo directo de <code>&lt;body&gt;</code> es el banner. Pon antes el <a href="/docs/components/skip-link/">enlace para saltar al contenido</a>.</li>
+            </ul>
+            <p class="docs-view__xref">La pestaña Diseño contiene <a href="#contrast">el contraste y el foco</a>.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Usa la cabecera de portada al principio de la portada y de las secciones de un periódico, donde el nombre y la fecha marcan el tono y quien lee llega a cada sección.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No la uses en todas las páginas de un blog: para una sola fila que permanece arriba, usa la <a href="/docs/catalog/site-header/">cabecera del sitio</a> con <code>--publication</code>.</p>
+            <ul>
+              <li>Una cabecera por página, nunca dentro de un componente o artículo: es el banner de la página.</li>
+              <li>No fijes la cabecera de portada ni pongas la fecha en una barra de una fila: en una sola fila competiría con el nombre.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> El nombre de la publicación como texto y unas pocas secciones con los nombres que conoce quien lee.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <header class="luz-masthead"><div class="o-container o-container--inline o-stack"><a class="luz-masthead__brand" href="#">The Vejer Review</a><div class="o-row luz-masthead__sections"><nav class="luz-navbar" aria-label="Sections"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#" aria-current="true">News</a></li><li><a class="luz-navbar__link" href="#">Culture</a></li><li><a class="luz-navbar__link" href="#">Opinion</a></li></ul></nav></div></div></header>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Recortar el nombre con puntos suspensivos o poner cada etiqueta del sitio como sección: quien lee no sabrá dónde está.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <header class="luz-masthead"><div class="o-container o-container--inline o-stack"><a class="luz-masthead__brand" href="#">The Vejer Re…</a><div class="o-row luz-masthead__sections"><nav class="luz-navbar" aria-label="Sections"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="#" aria-current="true">News</a></li><li><a class="luz-navbar__link" href="#">Local</a></li><li><a class="luz-navbar__link" href="#">Tides</a></li><li><a class="luz-navbar__link" href="#">Beaches</a></li><li><a class="luz-navbar__link" href="#">Food</a></li><li><a class="luz-navbar__link" href="#">Wine</a></li><li><a class="luz-navbar__link" href="#">Misc</a></li><li><a class="luz-navbar__link" href="#">Weather</a></li></ul></nav></div></div></header>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>La marca es el nombre de la publicación; las secciones usan los nombres que quienes leen dan a sus apartados.</p>
+            <ul>
+              <li>Marca: el nombre completo, tal como aparece en la publicación. Se parte en varias líneas si el ancho es reducido; nunca lo acortes con puntos suspensivos.</li>
+              <li>Secciones: entre cuatro y siete, de una o dos palabras cada una, con los mismos nombres que los títulos de sus páginas de índice.</li>
+              <li>Fecha: escrita con palabras en el idioma de la página, «miércoles, 14 de octubre de 2026», con el mismo día en <code>datetime</code>.</li>
+              <li>Botón de menú: «Secciones», traducido como el resto de la página.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El texto se muestra sobre la superficie de la página, tanto en las filas como en el panel abierto. La capa oscura empieza debajo de la cabecera de portada, así que esta nunca queda atenuada.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la cabecera en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Marca y sección actual</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Secciones y fecha</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido corresponde a WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> cada enlace y botón de la cabecera conserva el anillo de core, de 2 px y color <code>--luz-focus-ring</code>. La sección actual también está subrayada, así que la indicación no depende solo del color.</li>
+              <li><strong>Bordes:</strong> las dos líneas de la fila de secciones (<code>--luz-divider</code>) son decorativas y no tienen un mínimo; se conservan con colores forzados.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 15 tokens que usan las reglas de <code>.luz-masthead</code> de <code>components/masthead.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde figuran los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-sans</code>, <code>--luz-text-2xl</code>, <code>--luz-text-3xl</code>, <code>--luz-text-4xl</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/layout/">Layout and breakpoints</a></dt><dd><code>--luz-bar-h</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">La pestaña Código contiene <a href="#keyboard">el teclado y ARIA</a>.</p>
+          </div>
+    </div>

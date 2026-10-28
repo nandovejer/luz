@@ -18,7 +18,7 @@ pnpm lint:js        # ESLint
 | Scope          | Prefix   | Example                        |
 | -------------- | -------- | ------------------------------ |
 | Components     | `.luz-`  | `.luz-btn`, `.luz-card__title` |
-| Patterns of a kind of site (catalog) | `.luz-<kind>-` | `.luz-landing-hero`, `.luz-docs-rail` (file `components/landing-hero.css`) |
+| Patterns of a kind of site (catalog) | `.luz-<block>` | `.luz-hero`, `.luz-page-rail` (file `components/hero.css`) |
 | Layout objects | `.o-`    | `.o-shell`, `.o-main`          |
 | Utilities      | `.u-`    | `.u-hidden`, `.u-sr-only`      |
 | Docs           | `.docs-` | `.docs-section`, `.docs-demo`  |
@@ -124,7 +124,7 @@ Requires the tokens layer, then `base.css` (core settings such as z-index and la
 
 - **Package source:** `packages/{tokens,core,catalog}/src/` (CSS) and `packages/check/src/` (Node, no CSS)
 - **Package dist:** `packages/{tokens,core,catalog}/dist/` and `packages/check/dist/luz-check.js` (generated)
-- **Docs app:** pages in `apps/docs/pages/` (front matter + fragment), wrapped by `apps/docs/_layouts/` and `apps/docs/_partials/` through `scripts/docs-site/`; styles in `apps/docs/reference.css` and `elements.css`, on top of catalog's `docs-*` components (`.luz-docs-*`: page head, "On this page", Previous / Next, Do and don't)
+- **Docs app:** pages in `apps/docs/pages/` (front matter + fragment), wrapped by `apps/docs/_layouts/` and `apps/docs/_partials/` through `scripts/docs-site/`; styles in `apps/docs/reference.css` and `elements.css`, on top of catalog's patterns of a documentation site (`.luz-doc-header`, `.luz-page-rail`, `.luz-pager`, `.luz-do-dont` and the others)
 - **Shared site app:** `apps/site/` (`header.css`, `header.js`, `boot.js`, `theme-light.css`, `_partials/`, `assets/`): what the home page and the docs share; it depends on no other app
 - **Landing app:** `apps/landing/` (external consumer)
 

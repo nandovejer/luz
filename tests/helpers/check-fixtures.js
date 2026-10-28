@@ -147,7 +147,7 @@ export function removeWorkspaces() {
 /* ---- A small world of manifests, made by hand ------------------------------------------------- */
 
 const BEM = /^(.+?)(?:__(.+?))?(?:--(.+))?$/;
-const kindOf = (name) => (/^luz-(?:catalog|landing|cms|app|docs)-/.test(name) ? "pattern" : name.startsWith("o-") ? "object" : name.startsWith("u-") ? "utility" : name.startsWith("is-") ? "state" : "component");
+const kindOf = (name) => (/^luz-catalog-/.test(name) ? "pattern" : name.startsWith("o-") ? "object" : name.startsWith("u-") ? "utility" : name.startsWith("is-") ? "state" : "component");
 
 /** A class as a manifest lists it: name, kind, layer, files, defined, then block, modifier, part. */
 function fullClass(pkg, spec) {
@@ -202,27 +202,27 @@ export const MINI = {
   catalog: {
     // Catalog has no bundle (F5a): a class says the component file that defines it, a tag the file that styles it
     classes: [
-      { name: "luz-consent", file: "components/consent.css" },
+      { name: "luz-cookie-consent", file: "components/cookie-consent.css" },
       { name: "luz-search", file: "components/search.css" },
       { name: "luz-search__field", file: "components/search.css" },
       { name: "luz-search__results", file: "components/search.css" },
       "luz-sidebar",
       "luz-catalog-hero",
-      // The patterns of the four kinds of site are components of catalog, one file each (`<kind>-<name>.css`)
-      { name: "luz-landing-hero", file: "components/landing-hero.css" },
-      { name: "luz-landing-hero__title", file: "components/landing-hero.css" },
-      { name: "luz-landing-main", file: "components/landing-main.css" },
-      { name: "luz-cms-header", file: "components/cms-header.css" },
-      { name: "luz-cms-header__brand", file: "components/cms-header.css" },
-      { name: "luz-app-header", file: "components/app-header.css" },
-      { name: "luz-app-header__product", file: "components/app-header.css" },
-      { name: "luz-docs-pager", file: "components/docs-pager.css" },
-      { name: "luz-docs-pager__link", file: "components/docs-pager.css" },
-      { name: "luz-docs-shell", file: "components/docs-shell.css" },
+      // The patterns of the four kinds of site are components of catalog, one file each, named for the block (`<block>.css`, F8)
+      { name: "luz-hero", file: "components/hero.css" },
+      { name: "luz-hero__title", file: "components/hero.css" },
+      { name: "luz-main", file: "components/main.css" },
+      { name: "luz-site-header", file: "components/site-header.css" },
+      { name: "luz-site-header__brand", file: "components/site-header.css" },
+      { name: "luz-app-bar", file: "components/app-bar.css" },
+      { name: "luz-app-bar__product", file: "components/app-bar.css" },
+      { name: "luz-pager", file: "components/pager.css" },
+      { name: "luz-pager__link", file: "components/pager.css" },
+      { name: "luz-docs-layout", file: "components/docs-layout.css" },
     ],
     properties: [],
     elements: [
-      { tag: "luz-banner", attributes: ["tone"], stylesheet: "components/banner.css" },
+      { tag: "luz-announcement", attributes: ["tone"], stylesheet: "components/announcement.css" },
       { tag: "luz-lang-switch", attributes: [], stylesheet: "components/lang-switch.css" },
       { tag: "luz-search", attributes: ["data-luz-search-src", "data-luz-search-show"], stylesheet: "components/search.css" },
     ],

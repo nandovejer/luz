@@ -35,7 +35,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { KIND_PATTERNS, kindFiles } from "./kinds.js";
+import { FITS_KINDS, kindPatterns } from "./kinds.js";
 import { englishT } from "./strings.js";
 
 /**
@@ -48,7 +48,7 @@ import { englishT } from "./strings.js";
 export const FILES = {
   tokens: { css: "luz-tokens.min.css", js: null, chunks: [] },
   core: { css: "luz.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "i18n-es.min.js"] },
-  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "consent.min.js", "mode.min.js", "timeline.min.js", "sidebar.min.js"] },
+  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "cookie-consent.min.js", "color-mode.min.js", "timeline.min.js", "sidebar.min.js"] },
 };
 
 /** The catalog component the snippet of a kind of site links, as the example of one link per component. */
@@ -101,7 +101,7 @@ export function catalogFilesIn(text, components) {
 export const KINDS = [
   { id: "atoms", patterns: null },
   { id: "landing", patterns: "landing" },
-  { id: "blog", patterns: "cms" },
+  { id: "blog", patterns: "blog" },
   { id: "app", patterns: "app" },
   { id: "docs", patterns: "docs" },
 ];
@@ -115,8 +115,8 @@ const CHUNK_WHEN = {
   "table-sort.min.js": ["core", "snippets.when.table-sort"],
   "i18n-es.min.js": ["core", "snippets.when.i18n-es"],
   "search.min.js": ["catalog", "snippets.when.luz-search"],
-  "consent.min.js": ["catalog", "snippets.when.luz-consent"],
-  "mode.min.js": ["catalog", "snippets.when.luz-mode"],
+  "cookie-consent.min.js": ["catalog", "snippets.when.luz-cookie-consent"],
+  "color-mode.min.js": ["catalog", "snippets.when.luz-color-mode"],
   "timeline.min.js": ["catalog", "snippets.when.luz-timeline"],
   "sidebar.min.js": ["catalog", "snippets.when.luz-sidebar"],
 };
@@ -138,11 +138,11 @@ export function snippetData({ root, readFile, dev = false, warn = console.warn }
   try {
     const built = catalogComponents({ root, readFile });
     components = built.map(({ file }) => minified(file));
-    patterns = Object.fromEntries(Object.keys(KIND_PATTERNS).map((kind) => [kind, kindFiles(kind, built)]));
+    patterns = Object.fromEntries(FITS_KINDS.map((kind) => [kind, kindPatterns(kind, root, built).files]));
   } catch (error) {
     if (!dev) throw error;
     warn(`[docs] ${error.message}`);
-    patterns = Object.fromEntries(Object.entries(KIND_PATTERNS).map(([kind, { files }]) => [kind, files.map((name) => `components/${kind}-${name}.css`)]));
+    patterns = Object.fromEntries(FITS_KINDS.map((kind) => [kind, kindPatterns(kind, root, null).files]));
     components = [minified(EXAMPLE_COMPONENT), ...Object.values(patterns).flat().map(minified)];
   }
   for (const [pkg, spec] of Object.entries(FILES)) {

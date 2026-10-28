@@ -133,10 +133,10 @@ describe("AGENTS.md", () => {
       expect(text).toMatch(/\$header/);
     });
 
-    it("says that a language for core does not translate <luz-search> or <luz-consent>", () => {
+    it("says that a language for core does not translate <luz-search> or <luz-cookie-consent>", () => {
       const text = list();
       expect(text).toContain("luz-search");
-      expect(text).toContain("luz-consent");
+      expect(text).toContain("luz-cookie-consent");
     });
   });
 

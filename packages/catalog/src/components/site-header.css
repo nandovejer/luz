@@ -1,0 +1,103 @@
+/* ==========================================================================
+	 LUZ Catalog: site header.
+	 Layer: catalog
+	 The bar at the top of every page: header.luz-site-header.o-sticky >
+	 div.o-container.o-container--inline.o-row holding catalog's
+	 .luz-nav-toggle, the __brand link, catalog's nav.luz-navbar[popover] and
+	 a div.o-row.__actions (search, language, a login link). Core gives the
+	 stickiness, the width, the row and the collapsing links; this file adds
+	 the surface, the divider, the brand and the gaps.
+	 --publication: the brand as a publication's name, in the heading font,
+	 larger, underlined on hover (a blog or a newspaper).
+	 ========================================================================== */
+
+/* A one-row bar of 44px controls is core's --luz-bar-h tall: two 2xs
+   paddings, the row and the divider. With enlarged text the row wraps
+   and the bar grows. */
+.luz-site-header {
+	padding-block: var(--luz-space-2xs);
+	border-block-end: 1px solid var(--luz-divider);
+	background: var(--luz-surface-page);
+}
+
+/* The row wraps rather than overflow (WCAG 1.4.4, 1.4.10); its gutters are
+   the page's, so the brand starts where the content starts */
+.luz-site-header > .o-row {
+	gap: var(--luz-space-xs) var(--luz-space-md);
+}
+
+/* A link outside a <nav>, so core would underline it. It wraps, never
+   ellipsised, and takes the free room of the row, which pushes the links
+   and the actions to the end */
+.luz-site-header__brand {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--luz-space-xs);
+	min-block-size: var(--luz-control-lg);
+	margin-inline-end: auto;
+	color: var(--luz-text-primary);
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-base);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+/* A logo: an <img> whose alt is the site's name */
+.luz-site-header__brand :where(img) {
+	block-size: var(--luz-control-lg);
+	inline-size: auto;
+}
+
+.luz-site-header__actions {
+	gap: var(--luz-space-xs);
+}
+
+/* The language list of catalog's <luz-lang-switch> opens under this bar */
+.luz-site-header :where(luz-lang-switch) {
+	--luz-lang-switch-top: var(--luz-bar-h);
+}
+
+/* --publication: the name, never a heading (the story's title is the h1) */
+.luz-site-header--publication .luz-site-header__brand {
+	gap: normal;
+	font-family: var(--luz-font-heading);
+	font-size: var(--luz-text-xl);
+}
+
+.luz-site-header--publication .luz-site-header__brand:hover {
+	text-decoration: underline;
+}
+
+@media (min-width: 769px) {
+	.luz-site-header > .o-row {
+		column-gap: var(--luz-space-lg);
+	}
+}
+
+/* With the links in the panel, the brand fills the room between the toggle
+   and the actions and wraps there, so the bar stays one row of controls */
+@media (max-width: 768px) {
+	.luz-site-header--publication > .o-row > .luz-site-header__brand {
+		flex: 1 1 0;
+	}
+}
+
+@media (max-width: 640px) {
+	.luz-site-header--publication .luz-site-header__brand {
+		font-size: var(--luz-text-lg);
+	}
+}
+
+/* With anchor positioning the panels opened inside the bar (catalog's navbar,
+   the language list) open at its block end, on two rows as on one. Scoped,
+   so with two bars on a page each panel finds its own */
+@supports (anchor-name: --luz-bar) {
+	.luz-site-header {
+		anchor-name: --luz-bar;
+		anchor-scope: --luz-bar;
+	}
+
+	.luz-site-header :where(luz-lang-switch) {
+		--luz-lang-switch-top: anchor(--luz-bar end, var(--luz-bar-h));
+	}
+}
