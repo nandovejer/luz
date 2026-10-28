@@ -33,6 +33,7 @@
   color: var(--luz-text-secondary);
   font-family: var(--luz-font-sans);
   font-size: var(--luz-text-md);
+  text-decoration: none;
 }
 
 .luz-navbar__link:hover {
@@ -43,6 +44,7 @@
    colours keep, and the weight unchanged, so the links do not move */
 .luz-navbar__link[aria-current] {
   color: var(--luz-text-primary);
+  font-weight: inherit;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: var(--luz-space-2xs);

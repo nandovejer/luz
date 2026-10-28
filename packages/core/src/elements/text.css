@@ -1,11 +1,45 @@
 /* ==========================================================================
    LUZ — 3. ELEMENTS · text
-   Flow content: hr, figure, figcaption. Specificity: type (0,0,1).
+   Flow content: the space between blocks, hr, figure, lists, quotation, pre.
+   Every rule is :where() (0,0,0).
    ========================================================================== */
 
 :where(hr) {
   border: none;
   border-top: 1px solid var(--luz-divider);
+  margin-block: var(--luz-space-xl);
+}
+
+/* ========================================================================== */
+/* Flow — the space between the blocks of running text (DR-9). The reset      */
+/* zeroes every margin; a block that is not the first of its parent starts   */
+/* one step below the one before it, a heading further down, and the first   */
+/* block after a heading closer. Logical, so it follows the writing mode.    */
+/* A component sets its own margin (it wins by layer), a layout object       */
+/* (.o-stack and the rest) spaces its children with its gap, and the layout  */
+/* of div, section and the other structure tags is yours.                    */
+/* ========================================================================== */
+
+:where(:is(p, ul, ol, dl, menu, blockquote, pre, table, details, fieldset, address, h1, h2, h3, h4, h5, h6):not(:first-child)) {
+  margin-block-start: var(--luz-space-md);
+}
+
+:where(:is(h1, h2, h3, h4, h5, h6):not(:first-child)) {
+  margin-block-start: var(--luz-space-xl);
+}
+
+:where(:is(h1, h2, h3, h4, h5, h6) + :is(p, ul, ol, dl, blockquote, figure, pre, table, details, h1, h2, h3, h4, h5, h6)) {
+  margin-block-start: var(--luz-space-sm);
+}
+
+/* The items of a list, and the blocks inside an item or a quotation, sit
+   closer: a list with a class is a component's */
+:where(:is(ul, ol):not([class]) > li + li) {
+  margin-block-start: var(--luz-space-xs);
+}
+
+:where(:is(blockquote, li) > :is(p, ul, ol, dl, pre, blockquote, table, figure):not(:first-child)) {
+  margin-block-start: var(--luz-space-sm);
 }
 
 
@@ -85,10 +119,11 @@
 }
 
 /* ========================================================================== */
-/* Pre — preformatted text (.luz-code-block overrides all of this)           */
+/* Pre — preformatted text; the rule is shared with .luz-code-block, which   */
+/* adds the badge, the colours of the highlight and the copy bar              */
 /* ========================================================================== */
 
-:where(pre) {
+:where(pre, .luz-code-block) {
   font-family: var(--luz-font-mono);
   font-size: var(--luz-text-sm);
   line-height: 1.6;

@@ -78,7 +78,7 @@ keywords: naming, prefix, bem, data attributes, custom elements, public api
         <li><code>data-theme</code> on <code>&lt;html&gt;</code> picks the color mode (<code>light</code>, <code>dark</code> or <code>high-contrast</code>) or the name of a look of your own.</li>
         <li><code>data-mode</code> on <code>&lt;html&gt;</code> picks the color mode inside a look of your own: <code>data-theme="my-brand"</code> with <code>data-mode="dark"</code>.</li>
         <li><code>data-luz-*</code> are the hooks of LUZ's scripts, such as <code>data-luz-js</code>, which the script sets on <code>&lt;html&gt;</code> once it runs. A script binds to these, never to a class.</li>
-        <li><code>data-luz-classless</code> turns on <a href="/docs/get-started/classless/">classless styles</a> for the markup inside it.</li>
+        <li><code>data-luz</code> marks a zone for <code>luz.conditional.css</code>: the reset and the bare elements apply only inside it.</li>
         <li><code>data-luz-label-*</code> overrides one string a script writes.</li>
       </ul>
       <p>These are examples, not the full list: each component's page names the attributes it uses.</p>
@@ -126,7 +126,7 @@ keywords: naming, prefix, bem, data attributes, custom elements, public api
             <tr><td data-label="File"><div><code>luz.css</code></div></td><td data-label="Package"><div><code>@luz-ds/core</code></div></td><td data-label="When to load it"><div>For the reset, the bare elements, the layout objects, the components and the utilities, all at once</div></td></tr>
             <tr><td data-label="File"><div><code>base.css</code></div></td><td data-label="Package"><div><code>@luz-ds/core</code></div></td><td data-label="When to load it"><div>When you want only a few components: the reset and the bare elements, then one file per component</div></td></tr>
             <tr><td data-label="File"><div><code>components/&lt;name&gt;.css</code></div></td><td data-label="Package"><div><code>@luz-ds/core</code></div></td><td data-label="When to load it"><div>After <code>base.css</code>, for each component you use</div></td></tr>
-            <tr><td data-label="File"><div><code>classless.css</code></div></td><td data-label="Package"><div><code>@luz-ds/core</code></div></td><td data-label="When to load it"><div>For markup you cannot add classes to, inside <code>data-luz-classless</code>. It is a file of its own, not in <code>luz.css</code></div></td></tr>
+            <tr><td data-label="File"><div><code>luz.conditional.css</code></div></td><td data-label="Package"><div><code>@luz-ds/core</code></div></td><td data-label="When to load it"><div>Instead of <code>luz.css</code>, for a page that already has a design: the reset and the bare elements apply only inside <code>data-luz</code>. Objects, components and utilities are not scoped</div></td></tr>
             <tr><td data-label="File"><div><code>themes/_template.css</code></div></td><td data-label="Package"><div><code>@luz-ds/core</code></div></td><td data-label="When to load it"><div>Never as it is: copy it as the start of a look of your own</div></td></tr>
             <tr><td data-label="File"><div><code>components/&lt;name&gt;.css</code></div></td><td data-label="Package"><div><code>@luz-ds/catalog</code></div></td><td data-label="When to load it"><div>After core, one per catalog element the page uses, such as <code>&lt;luz-search&gt;</code></div></td></tr>
           </tbody>

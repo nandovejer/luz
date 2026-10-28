@@ -1,20 +1,22 @@
 /* --------------------------------------------------------------------------
    LUZ Component: accordion
-   A stack of native <details> that reads as one block. The look of a single
-   details and summary is in elements/interactive.css.
+   A stack of native <details> that reads as one block. A single details has
+   no box (elements/interactive.css: a summary and a divider below); here the
+   group gets its box, and the radius only on the block's corners.
    Layer: components (ITCSS 5) · Prefix: .luz-
    Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
    -------------------------------------------------------------------------- */
 
-/* One edge between neighbours, and the radius only on the block's corners */
 .luz-accordion > details {
-  margin-block: 0;
-  border-color: var(--luz-divider);
-  border-radius: 0;
+  border: 1px solid var(--luz-divider);
+  padding: var(--luz-space-xs) var(--luz-space-sm);
+  background: var(--luz-surface);
+  transition: background var(--luz-duration-base);
 }
 
 .luz-accordion > details + details {
   border-block-start: 0;
+  margin-block-start: 0;
 }
 
 .luz-accordion > details:first-child {

@@ -122,7 +122,7 @@ Words are a component. A button with the wrong label is a broken button. These r
 | --- | --- | --- | --- | --- |
 | `tokens` CSS | 1 kB (a theme or scale is probably missing) | 1–3 kB | 3 kB | 5 kB |
 | `core` CSS | — | ≤ 8.75 kB | 8.75 kB | 11.5 kB |
-| `core` classless CSS (a file of its own, not in `luz.css`) | — | ≤ 2 kB | 2 kB | 3 kB |
+| `core` conditional CSS (`luz.conditional.css`: `luz.css` with the reset and the elements only inside `[data-luz]`) | — | ≤ 8.75 kB | 8.75 kB | 11.5 kB |
 | `core` JS entry (lazy chunks excluded) | — | ≤ 5 kB | 5 kB | 8 kB |
 | `core` JS lazy chunk: `midi` | — | ≤ 3 kB | 3 kB | 4 kB |
 | `core` JS lazy chunk: `table-sort` | — | ≤ 1 kB | 1 kB | 2 kB |

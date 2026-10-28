@@ -128,7 +128,7 @@ Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.t
 - **`./base.css`** → Settings + reset + elements: the prerequisite for per-component CSS
 - **`./components/*`** → Per-component CSS files (standalone use)
 - **`./print.css`** → Print styles alone, for pages that load components one by one (`luz.css` already includes them)
-- **`./classless.css`** → The look of a bare button, field, select and table inside `[data-luz-classless]`; not part of `luz.css`
+- **`./conditional.css`** → `luz.css` with the reset and the bare elements only inside `[data-luz]`, for a project that already has a design
 - **`./theme`**, **`./clipboard`**, **`./modal`**, **`./highlight`**, **`./player`**, **`./tabs`** → Individual JS behavior modules (no side effects on import)
 - **`./i18n`** → Strings for the JS-generated text (`t`, `getLang`, `registerLocale`, `loadLocales`); **`./i18n/*`** → one language LUZ ships, as a dictionary (`@luz-ds/core/i18n/es`)
 - **`./midi`** → `midi.js` — MIDI player (lazy-loaded)

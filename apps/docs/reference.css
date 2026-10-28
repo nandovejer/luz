@@ -528,6 +528,12 @@
 /* The end of every page but the hub: "Keep going" (the area's essential
    links, site.json), then Previous / Next as two link blocks, the whole
    block the link, stacked from 640px */
+.docs-end,
+.docs-az__halves {
+  /* A nav has no font of its own */
+  font-family: var(--luz-font-sans);
+}
+
 .docs-end {
   display: grid;
   gap: var(--luz-space-md);
@@ -548,6 +554,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--luz-space-2xs) var(--luz-space-lg);
+}
+
+.docs-end__links a {
+  text-decoration: none;
 }
 
 .docs-end__links a,

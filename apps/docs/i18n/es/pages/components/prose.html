@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Texto corrido
 description: Establece líneas de unos 70 caracteres y espacio entre bloques de texto largo, sea cual sea el marcado que escriba el editor.
-source: 4b42ecc9bc7a
+source: a7d4e289405e
 reviewed: false
 -->
     <div class="docs-component" id="c-prose">
@@ -63,7 +63,6 @@ reviewed: false
                 <tbody>
                   <tr><td data-label="Clase o propiedad"><div><code>.luz-prose</code></div></td><td data-label="Qué hace"><div>En el elemento que contiene el texto: líneas de unos 70 caracteres, espacio entre bloques, sangría y viñetas para las listas, y el código integrado con aspecto de ficha</div></td></tr>
                   <tr><td data-label="Clase o propiedad"><div><code>--luz-prose-measure</code></div></td><td data-label="Qué hace"><div>El ancho máximo de línea, <code>70ch</code> de forma predeterminada. Establécelo en el contenedor entre <code>60ch</code> y <code>80ch</code></div></td></tr>
-                  <tr><td data-label="Clase o propiedad"><div><code>data-luz-classless</code> en el mismo elemento</div></td><td data-label="Qué hace"><div>Con el <a href="/docs/get-started/classless/">modo classless</a> cargado, sus tablas, botones y campos adoptan el aspecto de los componentes de core.</div></td></tr>
                 </tbody>
               </table>
             </div>
@@ -74,7 +73,7 @@ reviewed: false
               <li><strong>Espacio entre bloques.</strong> Cada bloque empieza <code>--luz-space-md</code> por debajo del anterior. Los encabezados y las líneas separadoras empiezan más abajo (<code>--luz-space-xl</code>), y el bloque posterior a un encabezado queda más cerca (<code>--luz-space-sm</code>). Se usan márgenes, no una separación: los componentes conservan sus propios márgenes y los dos se combinan.</li>
               <li><strong>Listas.</strong> Todas las listas recuperan su sangría y sus viñetas, con o sin clase (por ejemplo, la lista <code>ul.wp-block-list</code> de un editor), salvo las que tengan un objeto de maquetación (<code>.o-grid</code>, <code>.o-stack</code>) o una clase de componente de LUZ.</li>
               <li><strong>Código integrado</strong> tiene el aspecto de <code>.luz-code-inline</code>. Las palabras y direcciones largas saltan de línea en vez de desplazar la página lateralmente.</li>
-              <li><strong>Modo classless</strong> aplica la misma separación de tres pasos entre bloques, así que ambos modos coinciden; el texto corrido está en una capa posterior y prevalece donde se superponen. El texto corrido establece la longitud de línea y las listas; el modo classless, el aspecto de las tablas y los controles.</li>
+              <li><strong>Los elementos sin clase</strong> toman los mismos tres pasos entre bloques en <code>luz.css</code>, así que ambos coinciden; el texto corrido está en una capa posterior y prevalece donde se superponen. El texto corrido añade la longitud de línea y las listas.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
             <p>No cambia nada: el texto corrido se crea con CSS.</p>

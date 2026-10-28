@@ -55,6 +55,11 @@
 	margin: 0;
 }
 
+/* The columns are navigation, and a nav has no font of its own */
+.luz-site-footer__col {
+	font-family: var(--luz-font-sans);
+}
+
 .luz-site-footer__col-title {
 	font-family: var(--luz-font-sans);
 	font-size: var(--luz-text-sm);
@@ -71,6 +76,7 @@
 /* Each link is a target of 24px or more (WCAG 2.5.8): a box of its own,
    as tall as a small control, the text centred in it */
 .luz-site-footer__col :where(a) {
+	text-decoration: none;
 	display: inline-flex;
 	align-items: center;
 	min-block-size: var(--luz-control-sm);

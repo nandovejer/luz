@@ -7,7 +7,9 @@
  * Strategy:
  * - CSS: inline the @import graph of src/index.css (single source of truth)
  *   into dist/luz.css, plus one dist/components/<name>.css per component
- *   and dist/base.css (settings + reset + elements) as their prerequisite
+ *   and dist/base.css (settings + reset + elements) as their prerequisite,
+ *   and dist/luz.conditional.css: luz.css with the reset and the bare
+ *   elements only inside [data-luz] (scripts/css-scope.js)
  * - JS: bundle with Rollup — utils.js inlined, midi.js and table-sort.js as lazy chunks;
  *   individual modules copied verbatim (browser-native ESM)
  * - Languages: src/i18n/<code>.json is validated (scripts/i18n-languages.js) and written as
@@ -31,6 +33,7 @@ import { rollup } from "rollup";
 import * as esbuild from "esbuild";
 import { writeManifests } from "./ai-manifests.js";
 import { LAYER_ORDER, inLuzLayer } from "./luz-layers.js";
+import { scopeCss } from "./css-scope.js";
 import { moduleOf, readLanguages } from "./i18n-languages.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -50,18 +53,23 @@ if (failures.length) {
 rmSync(distRoot, { recursive: true, force: true });
 mkdirSync(distRoot, { recursive: true });
 
+// The layers luz.conditional.css puts inside [data-luz] (scripts/css-scope.js)
+const ZONED_LAYERS = new Set(["luz.generic", "luz.elements"]);
+
 /**
  * Recursively inline the local @import graph of a CSS file.
  * src/index.css is the single source of truth for layer order.
  */
-function inlineCssImports(filePath, seen = new Set()) {
+function inlineCssImports(filePath, seen = new Set(), scoped = false, zone = false) {
   if (seen.has(filePath)) return "";
   seen.add(filePath);
   const dir = dirname(filePath);
-  return readFileSync(filePath, "utf-8").replace(
+  const source = readFileSync(filePath, "utf-8");
+  // luz.conditional.css: the reset and the elements, inside the zone
+  return (scoped ? scopeCss(source) : source).replace(
     /@import\s+url\(\s*["']?(\.[^"')]+)["']?\s*\)(?:\s+layer\(\s*([\w.-]+)\s*\))?\s*;/g,
     (_, relPath, layer) => {
-      const css = inlineCssImports(resolve(dir, relPath), seen);
+      const css = inlineCssImports(resolve(dir, relPath), seen, scoped || (zone && ZONED_LAYERS.has(layer)), zone);
       return layer ? `@layer ${layer} {\n${css}\n}\n` : css;
     },
   );
@@ -116,12 +124,12 @@ await writeCssWithMin(
 );
 console.log("✓ Print CSS built → dist/print.css (+ min)");
 
-// --- CSS: classless layer, a file of its own (scoped by [data-luz-classless]) ---
+// --- CSS: the same, with the reset and the bare elements only inside [data-luz] ---
 await writeCssWithMin(
-  resolve(distRoot, "classless.css"),
-  inLuzLayer("elements", readFileSync(resolve(srcRoot, "classless/_classless.css"), "utf-8")),
+  resolve(distRoot, "luz.conditional.css"),
+  inlineCssImports(resolve(srcRoot, "index.css"), new Set(), false, true),
 );
-console.log("✓ Classless CSS built → dist/classless.css (+ min)");
+console.log("✓ Conditional CSS built → dist/luz.conditional.css (+ min)");
 
 // --- JS: bundle with Rollup ---
 async function buildJS() {

@@ -92,6 +92,8 @@
 .site-header__nav {
   display: flex;
   gap: var(--luz-space-md);
+  /* A nav has no font of its own: the links are UI text, not the serif of the page */
+  font-family: var(--luz-font-sans);
 }
 
 .site-header__nav a {

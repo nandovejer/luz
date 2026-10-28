@@ -1697,7 +1697,7 @@ function renderWeights(site, locale, used) {
  * the order of the rows; the words come from the catalog (`why.zero.cat.*`).
  */
 const ZERO_KINDS = [
-  ["css-frameworks", ["bootstrap", "tailwindcss", "bulma", "foundation-sites", "@picocss/", "open-props", "uikit", "materialize-css"]],
+  ["css-frameworks", ["bootstrap", "tailwindcss", "bulma", "foundation-sites", "open-props", "uikit", "materialize-css"]],
   ["css-preprocessors", ["sass", "node-sass", "sass-embedded", "less", "stylus", "postcss"]],
   ["js-frameworks", ["react", "react-dom", "vue", "svelte", "@angular/", "preact", "solid-js", "lit", "alpinejs", "htmx.org", "jquery"]],
   ["highlighters", ["prismjs", "highlight.js", "shiki", "@shikijs/", "codemirror", "monaco-editor"]],

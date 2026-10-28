@@ -65,7 +65,6 @@ toc: h2,h3
                 <tbody>
                   <tr><td data-label="Class or property"><div><code>.luz-prose</code></div></td><td data-label="What it does"><div>On the element that holds the text: lines of about 70 characters, the space between its blocks, the indent and markers of its lists, inline code as a chip</div></td></tr>
                   <tr><td data-label="Class or property"><div><code>--luz-prose-measure</code></div></td><td data-label="What it does"><div>The longest line, <code>70ch</code> by default. Set it on the wrapper, between <code>60ch</code> and <code>80ch</code></div></td></tr>
-                  <tr><td data-label="Class or property"><div><code>data-luz-classless</code> on the same element</div></td><td data-label="What it does"><div>With <a href="/docs/get-started/classless/">classless mode</a> loaded, its tables, buttons and fields take the look of core's components</div></td></tr>
                 </tbody>
               </table>
             </div>
@@ -76,7 +75,7 @@ toc: h2,h3
               <li><strong>Space between blocks.</strong> A block starts <code>--luz-space-md</code> below the one before it. A heading or a rule starts further down (<code>--luz-space-xl</code>), and the block after a heading sits closer (<code>--luz-space-sm</code>). Margins, not a gap: a component inside keeps its own margin, and the two collapse.</li>
               <li><strong>Lists.</strong> Every list gets its indent and markers back, with a class or without one (an editor's <code>ul.wp-block-list</code>), except a list with a layout object (<code>.o-grid</code>, <code>.o-stack</code>) or a LUZ component class.</li>
               <li><strong>Inline code</strong> has the look of <code>.luz-code-inline</code>. Long words and addresses break rather than push the page sideways.</li>
-              <li><strong>Classless mode</strong> takes the same three steps between blocks, so the two agree; prose is in a later layer, so it wins where they meet. Prose adds the line length and the lists; classless mode adds the look of tables and controls.</li>
+              <li><strong>Bare elements</strong> take the same three steps between blocks in <code>luz.css</code>, so the two agree; prose is in a later layer, so it wins where they meet. Prose adds the line length and the lists.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
             <p>Nothing changes: prose is CSS.</p>

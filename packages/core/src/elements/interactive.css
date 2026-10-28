@@ -1,23 +1,16 @@
 /* ==========================================================================
    LUZ — 3. ELEMENTS · interactive
-   Native disclosure: details, summary. Specificity: type (0,0,1).
+   Native disclosure and dialog: details, summary, dialog. Every rule is :where() (0,0,0).
    ========================================================================== */
 
 /* ========================================================================== */
-/* Details & Summary — native accordion                                      */
+/* Details & Summary — a disclosure with no box: the summary leads, a        */
+/* divider closes it. .luz-accordion adds the box and the group              */
 /* ========================================================================== */
 
 :where(details) {
-  border: 1px solid var(--luz-divider);
-  border-radius: var(--luz-radius-md);
-  padding: var(--luz-space-sm);
-  margin-block: var(--luz-space-xs);
-  background: var(--luz-surface);
-  transition: background var(--luz-duration-base);
-}
-
-:where(details[open]) {
-  background: var(--luz-surface);
+  border-block-end: 1px solid var(--luz-divider);
+  padding-block-end: var(--luz-space-xs);
 }
 
 :where(summary) {
@@ -27,11 +20,17 @@
   /* stylelint-disable-next-line property-no-vendor-prefix -- iOS Safari has only the prefixed name */
   -webkit-user-select: none;
   user-select: none;
-  padding: var(--luz-space-2xs);
-  margin: calc(-1 * var(--luz-space-sm));
-  margin-bottom: var(--luz-space-xs);
+  /* The hover surface reaches past the text on the start side, which stays on
+     the edge of the content below it. The end side has no negative margin: it
+     would widen the page by one step at 320px (1.4.10) */
+  padding: var(--luz-space-2xs) var(--luz-space-xs);
+  margin-inline-start: calc(-1 * var(--luz-space-xs));
   border-radius: var(--luz-radius-sm);
   transition: background var(--luz-duration-fast);
+}
+
+:where(details[open] > summary) {
+  margin-block-end: var(--luz-space-xs);
 }
 
 :where(summary:hover) {
@@ -45,7 +44,8 @@
 
 
 /* ========================================================================== */
-/* Dialog — native modal / non-modal dialog (.luz-modal overrides this)      */
+/* Dialog — native modal / non-modal dialog (.luz-modal adds the parts, the */
+/* small-screen layout and the fade)                                         */
 /* ========================================================================== */
 
 /* No display here: the browser shows a dialog only while it is open.
@@ -53,17 +53,17 @@
    of a dialog in the top layer. It is on every dialog: .luz-modal is one, and
    a component that places its dialog elsewhere (site search) sets its own
    margin and wins by layer. */
-:where(dialog) {
+:where(dialog, .luz-modal) {
   margin: auto;
-  padding: var(--luz-space-lg);
+  padding: var(--luz-space-xl);
   color: var(--luz-text-primary);
   background: var(--luz-surface);
   border: 1px solid var(--luz-divider);
   border-radius: var(--luz-radius-md);
   box-shadow: var(--luz-shadow-lg);
-  max-width: min(90vw, 600px);
-  max-height: 90vh;
-  max-height: 90dvh;
+  max-inline-size: min(90vw, 600px);
+  max-block-size: 90vh;
+  max-block-size: 90dvh;
   overflow-y: auto;
 }
 

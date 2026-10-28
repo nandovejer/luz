@@ -115,7 +115,7 @@ There are no packages for one kind of site. The patterns of a landing page, a bl
 | File | Package | What it is |
 | --- | --- | --- |
 | `base.css` + `components/<name>.css` | core | The reset and bare elements, then only the components you list, instead of `luz.css` |
-| `classless.css` (`@luz-ds/core/classless.css`) | core | Styles bare `button`, fields, `select` and `table` inside `[data-luz-classless]`, for Markdown or a CMS |
+| `luz.conditional.css` (`@luz-ds/core/conditional.css`) | core | `luz.css` with the reset and the bare elements only inside `[data-luz]`, to add LUZ to a project that already has a design, one region at a time |
 | `print.css` | core | The print styles on their own; `luz.css` already contains them |
 | `themes/_template.css` | core | The starting point of a theme of your own |
 | `tokens.css`, `fonts.css` | tokens | The tokens without `@font-face`, or the `@font-face` only |
@@ -238,7 +238,7 @@ luz-design-system/
 │   │   ├── src/               # Edit here, never dist/
 │   │   │   ├── settings/  generic/  elements/  objects/  utilities/
 │   │   │   ├── components/    # One file per component
-│   │   │   ├── classless/  print/
+│   │   │   ├── print/
 │   │   │   ├── themes/        # _template.css, the starting point of a theme of your own
 │   │   │   └── *.js           # One module per behavior
 │   │   └── dist/              # Generated: do not edit directly
@@ -322,7 +322,7 @@ pnpm tokens:build
 pnpm core:build
 ```
 
-This regenerates `dist/luz.css`, `dist/base.css` (settings + reset + elements, the prerequisite for per-component CSS), `dist/components/*.css`, `dist/classless.css`, `dist/print.css`, the JS modules, the lazy `midi.js` and `table-sort.js` chunks and `dist/themes/*.css`. Core settings (z-index scale, layout widths, `--luz-text-control`) ship with core; motion, breakpoints and the font roles (`--luz-font-heading`, `--luz-font-body`, `--luz-text-body`) ship with tokens.
+This regenerates `dist/luz.css`, `dist/base.css` (settings + reset + elements, the prerequisite for per-component CSS), `dist/components/*.css`, `dist/luz.conditional.css`, `dist/print.css`, the JS modules, the lazy `midi.js` and `table-sort.js` chunks and `dist/themes/*.css`. Core settings (z-index scale, layout widths, `--luz-text-control`) ship with core; motion, breakpoints and the font roles (`--luz-font-heading`, `--luz-font-body`, `--luz-text-body`) ship with tokens.
 
 **Catalog.** `@luz-ds/catalog` holds page patterns that are too opinionated for core. It is CSS first; `dist/catalog.js` defines the search element and warns when core is not loaded.
 

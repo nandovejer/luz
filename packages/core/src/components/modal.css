@@ -11,18 +11,6 @@
    restoration. It centers the dialog with `margin: auto`, which the reset
    removes and the `dialog` rule of elements/interactive.css gives back, so
    the modal needs base.css (as the header says). CSS only draws the surface. */
-.luz-modal {
-  background: var(--luz-surface);
-  color: var(--luz-text-primary);
-  border: 1px solid var(--luz-divider);
-  border-radius: var(--luz-radius-md);
-  box-shadow: var(--luz-shadow-lg);
-  padding: var(--luz-space-xl);
-  max-inline-size: min(90vw, 600px);
-  max-block-size: 90vh;
-  max-block-size: 90dvh;
-  overflow-y: auto;
-}
 
 .luz-modal[open] {
   animation: luz-fade-in var(--luz-duration-fast) ease-out;
