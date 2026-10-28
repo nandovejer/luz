@@ -72,7 +72,7 @@ describe("the 20 patterns are stylesheets of catalog, named for their block", ()
     expect(ALL).toHaveLength(20);
     // `app-bar` and `docs-layout` are the names of their blocks (`.luz-app-bar`, `.luz-docs-layout`), not a kind's prefix on a name
     const sources = readdirSync(`${root}packages/catalog/src/components`).filter((f) => f.endsWith(".css") && !f.startsWith("_")).map((f) => f.replace(/\.css$/, ""));
-    expect(sources.filter((f) => !["search", "navbar", "sidebar", "terminal", "timeline", "lang-switch", "submenu", "announcement", "cookie-consent", "color-mode"].includes(f)).sort()).toEqual([...ALL].sort());
+    expect(sources.filter((f) => !["search", "navbar", "sidebar", "terminal", "timeline", "lang-switch", "submenu", "announcement", "faq", "cookie-consent", "color-mode"].includes(f)).sort()).toEqual([...ALL].sort());
   });
 
   it.each([...OLD_ALL, ...OLD_ELEMENT_FILES])("the F5b file %s is gone from src, dist (plain and minified) and the tarball list", (name) => {
@@ -144,7 +144,7 @@ describe("the budget rows of catalog: a row for the 20 patterns, and the general
     const excluded = (name) => list[1].split(",").includes(name);
     for (const name of ALL) expect(excluded(name), `${name} is the patterns' row`).toBe(true);
     for (const slug of ["navbar", "sidebar", "terminal", "timeline"]) expect(excluded(slug), `${slug} is the layout row`).toBe(true);
-    for (const slug of ["search", "cookie-consent", "color-mode", "lang-switch", "submenu", "announcement"]) expect(excluded(slug), `${slug} stays in the general row`).toBe(false);
+    for (const slug of ["search", "cookie-consent", "color-mode", "lang-switch", "submenu", "announcement", "faq"]) expect(excluded(slug), `${slug} stays in the general row`).toBe(false);
   });
 
   it("has no row of the four packages: landing CSS, cms CSS, app CSS, docs CSS", () => {
@@ -441,13 +441,13 @@ const PAGES = [
 ];
 /** The pages of the old routes of F5b (`<kind>-<name>`) and of the pieces F8 renamed: none is a page now, in English or Spanish. */
 const OLD_SLUGS = [...OLD_ALL, "cms-toc", "consent", "mode", "banner"];
-const ELEMENT_PAGES = ["announcement", "cookie-consent", "lang-switch", "color-mode", "search", "submenu"];
+const ELEMENT_PAGES = ["announcement", "faq", "cookie-consent", "lang-switch", "color-mode", "search", "submenu"];
 /** F7: the pages that came from core, in `pages/components/` until then. */
 const LAYOUT_PAGES = ["navbar", "sidebar", "terminal", "timeline"];
 const catalogPages = () => repoSite.pages.filter((p) => p.meta.area === "catalog");
 
 describe("the pages of the 18 patterns, at /docs/catalog/<block>/", () => {
-  it("are 18 pages beside the six elements, the four that came from core (F7), the class reference and the gallery: 30 in the area", () => {
+  it("are 18 pages beside the seven elements, the four that came from core (F7), the class reference and the gallery: 31 in the area", () => {
     expect(PAGES).toHaveLength(18);
     const routes = catalogPages().map((p) => p.route).sort();
     expect(routes).toEqual(["/docs/catalog/", "/docs/catalog/classes/", ...[...ELEMENT_PAGES, ...LAYOUT_PAGES, ...PAGES.map(([slug]) => slug)].map((slug) => `/docs/catalog/${slug}/`)].sort());
@@ -640,7 +640,7 @@ describe("the Catalog area groups its pages by what they do", () => {
   const MEMBERS = {
     navigation: ["app-bar", "masthead", "site-header", "lang-switch", "submenu", "navbar", "sidebar"],
     "page-structure": ["article-header", "site-footer", "page-header", "hero", "section"],
-    content: ["dashboard", "stat", "toc", "terminal", "timeline"],
+    content: ["dashboard", "faq", "stat", "toc", "terminal", "timeline"],
     "site-wide": ["color-mode", "announcement", "cookie-consent", "search"],
     documentation: ["do-dont", "example", "page-footer", "doc-header", "pager", "page-rail", "docs-layout"],
     reference: ["classes"],
@@ -666,7 +666,7 @@ describe("the Catalog area groups its pages by what they do", () => {
 
   it("gives every page of the area its own order number: 0 for the gallery, then 1 to 30 at most, no ties", () => {
     const orders = catalogPages().map((p) => Number(p.meta.order));
-    expect(catalogPages()).toHaveLength(30);
+    expect(catalogPages()).toHaveLength(31);
     expect(new Set(orders).size, `orders: ${orders.sort((a, b) => a - b).join(" ")}`).toBe(orders.length);
     expect(Math.min(...orders)).toBe(0);
     expect(Math.max(...orders)).toBeLessThanOrEqual(30);
@@ -745,7 +745,7 @@ describe("Fits best: the real pages", () => {
   const patterns = () => catalogPages().filter((p) => p.meta.group && p.meta.group !== "reference");
 
   it("every pattern page of catalog has both, and no other page has either", () => {
-    expect(patterns()).toHaveLength(28);
+    expect(patterns()).toHaveLength(29);
     for (const page of patterns()) {
       expect(page.meta["fits-kinds"], page.file).toBeTruthy();
       expect(page.meta.fits.length, page.file).toBeGreaterThan(10);
@@ -757,7 +757,7 @@ describe("Fits best: the real pages", () => {
     }
   });
 
-  it("a pattern fits the kinds its page says (the header and the footer fit landing and blog; the masthead blog), and the six elements fit any site", () => {
+  it("a pattern fits the kinds its page says (the header and the footer fit landing and blog; the masthead blog), and the seven elements fit any site", () => {
     for (const [slug, , , fits] of PAGES) {
       expect(repoSite.byRoute.get(`/docs/catalog/${slug}/`).meta["fits-kinds"], slug).toBe(fits);
     }
@@ -826,7 +826,7 @@ describe("Fits best: what a page, a card and the Spanish page say", () => {
   it("the card of the gallery says it too, in plain words (the card is one link): no link inside the line", () => {
     for (const [route, lang] of [["/docs/catalog/", "en"], ["/es/docs/catalog/", "es"]]) {
       const cards = findAll(parse(rendered.get(route)), (n) => n.name === "li" && hasClass(n, "docs-card"));
-      expect(cards, route).toHaveLength(28);
+      expect(cards, route).toHaveLength(29);
       for (const card of cards) {
         const href = query(card, "h3.docs-card__title").children.find((n) => n.name === "a").attrs.get("href");
         const slug = href.split("/").filter(Boolean).at(-1);

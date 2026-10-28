@@ -4,7 +4,7 @@
  * each package that ships a tag, in the Custom Elements Manifest format, schema
  * version 2.1.0: catalog ships `<luz-search>`, `<luz-cookie-consent>`, `<luz-color-mode>`,
  * `<luz-timeline>` (it was core's until F7) and the CSS-only `<luz-lang-switch>`,
- * `<luz-submenu>`, `<luz-announcement>`. Tokens and core ship none: core defines no tag.
+ * `<luz-submenu>`, `<luz-announcement>`, `<luz-faq>`. Tokens and core ship none: core defines no tag.
  *
  * The facts come from the code, not from this file: the expected sets are read
  * from the JS and CSS sources by a scan of their own (`readsOf`, `eventsOf`,
@@ -128,6 +128,7 @@ const TAGS = [
   { tag: "luz-lang-switch", pkg: "catalog", file: "components/lang-switch.css", script: false },
   { tag: "luz-submenu", pkg: "catalog", file: "components/submenu.css", script: false },
   { tag: "luz-announcement", pkg: "catalog", file: "components/announcement.css", script: false },
+  { tag: "luz-faq", pkg: "catalog", file: "components/faq.css", script: false },
 ];
 const SHIPPING = [...new Set(TAGS.map((t) => t.pkg))];
 const tagsOf = (pkg) => TAGS.filter((t) => t.pkg === pkg).map((t) => t.tag);
@@ -296,7 +297,7 @@ describe("which tags exist (the scan of the sources agrees with the spec)", () =
     expect([...defined].sort()).toEqual(TAGS.filter((t) => t.script).map((t) => [t.tag, t.pkg]).sort());
   });
 
-  it("the tags no script defines are lang-switch, submenu and announcement, in catalog", () => {
+  it("the tags no script defines are lang-switch, submenu, announcement and faq, in catalog", () => {
     const cssOnly = cssOnlyTags(definedTags());
     expect([...cssOnly].sort()).toEqual(TAGS.filter((t) => !t.script).map((t) => [t.tag, t.pkg]).sort());
   });

@@ -5,7 +5,7 @@
  *   (a) layering: a lower package never names a higher one
  *   (b) names: no block is shipped by two packages
  *   (c) peers: catalog takes tokens and core, and nothing else; the packages for one kind of site are gone
- *   (d) catalog after F3, F1, F5b and F7: six elements, the 21 patterns of the four kinds of site and the four
+ *   (d) catalog after F3, F1, F5b and F7: seven elements, the 21 patterns of the four kinds of site and the four
  *       layout components that came from core (navbar, sidebar, terminal, timeline), the exports of spec §1.3, no placeholders
  *
  * F5b (.claude/plans/ai-and-catalog-only.md, decisions 1, 2, 51 to 58): landing, cms, app and docs are not
@@ -27,7 +27,7 @@ import { isNpmOrReleased } from "./helpers/versions.js";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const KINDS = ["landing", "cms", "app", "docs"];
 /** The tags catalog defines or styles for any site (the four components of F7 are in tests/helpers/catalog-names.js). */
-const SITE_TAGS = ["search", "cookie-consent", "lang-switch", "submenu", "announcement"];
+const SITE_TAGS = ["search", "cookie-consent", "lang-switch", "submenu", "announcement", "faq"];
 // <luz-color-mode> is not in SITE_TAGS: core's theme.js has a storage key spelled "luz-mode" (the mode of a custom
 // theme), which the layering check would take for the old tag; the new name has no such twin
 const SITE_COMPONENTS = [...SITE_TAGS, "color-mode"];
@@ -64,7 +64,7 @@ const isPatternFile = (path) => new RegExp(`/components/(?:${PATTERNS.join("|")}
 const OLD_NAME = /luz-(?:landing|cms)-|luz-app-(?:header|dashboard)(?![\w-])|luz-docs-(?:shell|page-|rail|pager|example|dodont)|luz-(?:consent|banner)(?![\w:-])/;
 
 describe("layering: tokens < core < catalog", () => {
-  it("tokens and core name no catalog block (the 20 patterns, the four layout components) and none of catalog's six tags", () => {
+  it("tokens and core name no catalog block (the 20 patterns, the four layout components) and none of catalog's seven tags", () => {
     const tags = new RegExp(`(?<![\\w-])luz-(?:${SITE_COMPONENTS.join("|")})(?:__|--|(?![\\w-]))`);
     const blocks = new RegExp(`(?<![\\w-])luz-(?:${[...PATTERNS, ...LAYOUT].join("|")})(?:__|--|(?![\\w-]))`);
     expect(offenders(["tokens", "core"], /luz-(?:site|catalog|landing|cms)-/)).toEqual([]);
@@ -72,7 +72,7 @@ describe("layering: tokens < core < catalog", () => {
     expect(offenders(["tokens", "core"], tags)).toEqual([]);
   });
 
-  it("the elements of catalog (search, cookie-consent, color-mode, lang-switch, submenu, announcement) name no pattern of a kind of site, nor a name of before F8", () => {
+  it("the elements of catalog (search, cookie-consent, color-mode, lang-switch, submenu, announcement, faq) name no pattern of a kind of site, nor a name of before F8", () => {
     expect(offenders(["catalog"], OLD_NAME, (path) => !isPatternFile(path) && /\/components\//.test(path))).toEqual([]);
   });
 
@@ -168,9 +168,9 @@ describe("peers: catalog needs tokens and core, and the four packages for one ki
   });
 });
 
-/* ---- (d) catalog after F3 and F1: six components and nothing else (step 12) -------- */
+/* ---- (d) catalog after F3 and F1: seven components and nothing else (step 12) -------- */
 
-describe("catalog after F8: six `<luz-*>` elements, the 20 patterns of the four kinds of site and the four layout components of core", () => {
+describe("catalog after F8: seven `<luz-*>` elements, the 20 patterns of the four kinds of site and the four layout components of core", () => {
   const read = (path) => readFileSync(`${root}${path}`, "utf-8");
   const manifest = JSON.parse(read("packages/catalog/package.json"));
   const components = [...SITE_COMPONENTS, ...LAYOUT, ...PATTERNS].map((name) => `${name}.css`).sort();
@@ -178,7 +178,7 @@ describe("catalog after F8: six `<luz-*>` elements, the 20 patterns of the four 
   const list = (dir, keep) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(keep).sort() : []);
   const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");
 
-  it("src/components holds the six elements, the four layout components and the 20 patterns, nothing else: no `_print.css`, the print rules are in each component", () => {
+  it("src/components holds the seven elements, the four layout components and the 20 patterns, nothing else: no `_print.css`, the print rules are in each component", () => {
     expect(list("packages/catalog/src/components", (f) => f.endsWith(".css"))).toEqual(components);
   });
 
@@ -192,7 +192,7 @@ describe("catalog after F8: six `<luz-*>` elements, the 20 patterns of the four 
     for (const f of ["catalog.css", "catalog.min.css", "print.css"]) expect(existsSync(`${root}packages/catalog/dist/${f}`), f).toBe(false);
   });
 
-  it.skipIf(!built)("dist/components is exactly the six elements, the four layout components and the 20 patterns, plain and minified", () => {
+  it.skipIf(!built)("dist/components is exactly the seven elements, the four layout components and the 20 patterns, plain and minified", () => {
     expect(list("packages/catalog/dist/components", isCss)).toEqual(components);
     expect(list("packages/catalog/dist/components", (f) => f.endsWith(".min.css"))).toEqual(minified);
   });
@@ -228,11 +228,11 @@ describe("catalog after F8: six `<luz-*>` elements, the 20 patterns of the four 
 
   it("ships `dist` and the licence only, and describes its components", () => {
     expect(manifest.files).toEqual(["dist", "LICENSE"]);
-    for (const word of ["search", "consent", "language", "submenu", "announcement"]) expect(manifest.description.toLowerCase(), word).toContain(word);
+    for (const word of ["search", "consent", "language", "submenu", "announcement", "faq"]) expect(manifest.description.toLowerCase(), word).toContain(word);
     expect(manifest.description.toLowerCase(), "no placeholder in the package").not.toContain("placeholder");
   });
 
-  it("pack-files.txt lists the six elements, the four layout components and the 20 patterns, plain and minified, and no placeholder", () => {
+  it("pack-files.txt lists the seven elements, the four layout components and the 20 patterns, plain and minified, and no placeholder", () => {
     const packed = read("packages/catalog/pack-files.txt").split("\n").filter(Boolean);
     expect(packed.filter((f) => f.startsWith("dist/components/")).sort()).toEqual([...components, ...minified].sort().map((f) => `dist/components/${f}`));
     expect(packed.filter((f) => /placeholder/.test(f))).toEqual([]);
