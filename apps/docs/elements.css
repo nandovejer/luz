@@ -104,10 +104,12 @@
 }
 
 .elements-card__desc {
+  margin-block-start: 0;
   color: var(--luz-text-secondary);
 }
 
 .elements-card__style {
+  margin-block-start: 0;
   font-size: var(--luz-text-sm);
   color: var(--luz-text-secondary);
 }

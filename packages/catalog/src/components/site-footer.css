@@ -58,6 +58,7 @@
 /* The columns are navigation, and a nav has no font of its own */
 .luz-site-footer__col {
 	font-family: var(--luz-font-sans);
+	line-height: 1.5;
 }
 
 .luz-site-footer__col-title {
