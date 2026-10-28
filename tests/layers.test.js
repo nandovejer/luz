@@ -91,7 +91,7 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
       .map((f) => f.replace(/\.css$/, ""))
       .sort();
     // F7: the sidebar and the timeline brought their print rules from core's _print.css
-    expect(printing).toEqual(["cookie-consent", "docs-layout", "glow", "search", "sidebar", "timeline"]);
+    expect(printing).toEqual(["cookie-consent", "docs-layout", "faq", "glow", "search", "sidebar", "timeline"]);
     const all = readdirSync(dist("packages/catalog/dist/components")).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, ""));
     for (const name of all) {
       const items = topLevel(readFileSync(dist(`packages/catalog/dist/components/${name}.css`), "utf-8"));

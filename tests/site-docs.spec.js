@@ -36,6 +36,7 @@ const PACKAGES = {
       'lang-switch': 'lang-switch',
       submenu: 'submenu',
       announcement: 'announcement',
+      faq: 'faq',
       // F8: the blocks are named for what they are, not for the kind of site that uses them. The glow and the main are the
       // page's own and have no page: they are on the section's. The bar of a landing page, the bar of a blog (--publication)
       // and the two footers are one page each; the masthead has a page of its own
@@ -99,11 +100,11 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
       for (const block of blocks) expect(patternOf[block], `luz-${block} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
     });
 
-    test('catalog ships exactly its 34 blocks: the six components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
+    test('catalog ships exactly its 35 blocks: the seven components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
       expect(blocksOf('catalog').sort()).toEqual(Object.keys(patternOf).sort());
     });
 
-    test('the Catalog gallery lists the 28 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
+    test('the Catalog gallery lists the 29 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
       await page.goto('/docs/catalog/');
       const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
       expect(cards.filter((href) => href.startsWith('/docs/catalog/')).sort()).toEqual(

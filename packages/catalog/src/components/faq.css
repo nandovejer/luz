@@ -1,0 +1,214 @@
+/* ==========================================================================
+	 LUZ Catalog: frequently asked questions, <luz-faq>.
+	 A list of native details, one question each: the answer is in the served
+	 HTML, opens with the keyboard and without JavaScript, and the browser's
+	 find in page and a link to the answer's id open it (no chunk). Questions
+	 in the heading face on hairlines, a plus that turns to a minus; groups
+	 under a small title; an optional row of links to the groups, for a long
+	 FAQ. A CSS-only tag: no script defines it, so every selector that names
+	 it is inside :where().
+	 A loose details has a box in core today, so the item takes it off here.
+
+	 @element luz-faq - CSS-only: no script defines this tag. Questions and answers, each a details whose answer has an id.
+	 ========================================================================== */
+
+:where(luz-faq) {
+	--luz-faq-measure: 65ch;
+
+	display: block;
+	overflow-wrap: break-word;
+}
+
+:where(luz-faq > * + *) {
+	margin-block-start: var(--luz-space-lg);
+}
+
+/* Title and lead: the heading level is the author's */
+:where(.luz-faq__title) {
+	margin: 0;
+	font-family: var(--luz-font-heading);
+	font-weight: 400;
+	line-height: 1.2;
+	text-wrap: balance;
+}
+
+:where(.luz-faq__lead) {
+	max-inline-size: var(--luz-faq-measure);
+	margin-block-start: var(--luz-space-sm);
+	color: var(--luz-text-secondary);
+	font-size: var(--luz-text-lg);
+}
+
+/* The links to the groups: a row of tags that wraps. Brand text says
+   "a link" (the border is decoration, not the control's only edge); the
+   hover is one surface step */
+:where(.luz-faq__nav ul) {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--luz-space-xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+:where(.luz-faq__nav a) {
+	display: inline-block;
+	padding: var(--luz-space-2xs) var(--luz-space-sm);
+	border: 1px solid var(--luz-divider);
+	border-radius: var(--luz-radius-sm);
+	color: var(--luz-brand-primary);
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-sm);
+	font-weight: 500;
+	text-decoration: none;
+}
+
+:where(.luz-faq__nav a:hover) {
+	background: var(--luz-surface-hover);
+}
+
+/* A group: a real heading over its questions, for navigation by headings */
+:where(.luz-faq__group + .luz-faq__group) {
+	margin-block-start: var(--luz-space-xl);
+}
+
+/* A heading, so the heading face and its light weight (DR-5); secondary,
+   since brand would say "act here" (DR-10) */
+:where(.luz-faq__group-title) {
+	margin: 0 0 var(--luz-space-sm);
+	color: var(--luz-text-secondary);
+	font-family: var(--luz-font-heading);
+	font-size: var(--luz-text-lg);
+	font-weight: 400;
+	line-height: 1.25;
+	scroll-margin-block-start: var(--luz-space-2xl);
+}
+
+/* One question: a hairline under each, and over the first of its list,
+   without the box of a loose details */
+:where(.luz-faq__item) {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-block-end: 1px solid var(--luz-divider);
+	border-radius: 0;
+	background: none;
+}
+
+:where(.luz-faq__item:not(.luz-faq__item + .luz-faq__item)) {
+	border-block-start: 1px solid var(--luz-divider);
+}
+
+/* The whole summary is the control, at least a large control high */
+:where(.luz-faq__question) {
+	display: flex;
+	gap: var(--luz-space-sm);
+	align-items: center;
+	justify-content: space-between;
+	min-block-size: var(--luz-control-lg);
+	margin: 0;
+	padding: var(--luz-space-md) 0;
+	border-radius: var(--luz-radius-sm);
+	color: var(--luz-text-primary);
+	font-family: var(--luz-font-heading);
+	font-size: var(--luz-text-xl);
+	font-weight: 400;
+	line-height: 1.25;
+	list-style: none;
+	/* Core's summary is not selectable; a question can be copied to cite it */
+	/* stylelint-disable-next-line property-no-vendor-prefix -- iOS Safari has only the prefixed name */
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+:where(.luz-faq__question)::-webkit-details-marker {
+	display: none;
+}
+
+:where(.luz-faq__question:hover) {
+	background: none;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.15em;
+}
+
+/* A plus of two bars, sized by the question's text, whose upright bar
+   folds away when open, a minus: the state is the shape, never only a
+   colour (DR-16: short, eased, it says what changed) */
+:where(.luz-faq__question)::after {
+	content: "";
+	flex: none;
+	inline-size: 0.625em;
+	block-size: 0.625em;
+	background:
+		linear-gradient(currentcolor, currentcolor) center / 100% 1.5px no-repeat,
+		linear-gradient(currentcolor, currentcolor) center / 1.5px 100% no-repeat;
+	transition: background-size var(--luz-duration-fast) var(--luz-easing-standard);
+}
+
+/* Open: the question in the brand colour, so it reads apart from its
+   answer in the text colour under it, and the marker a minus */
+:where(.luz-faq__item[open] > .luz-faq__question) {
+	color: var(--luz-brand-primary);
+}
+
+:where(.luz-faq__item[open] > .luz-faq__question)::after {
+	background-size: 100% 1.5px, 1.5px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:where(.luz-faq__question)::after {
+		transition: none;
+	}
+}
+
+/* Forced colours drop a gradient: the bars keep the system's text colour */
+@media (forced-colors: active) {
+	:where(.luz-faq__question)::after {
+		color: CanvasText;
+		forced-color-adjust: none;
+	}
+}
+
+/* The answer: reading text, at a comfortable measure, any HTML inside. A
+   link to its id opens it (an id on the details would not: its summary is
+   already in view); the question stays above it */
+:where(.luz-faq__answer) {
+	max-inline-size: var(--luz-faq-measure);
+	padding-block: 0 var(--luz-space-lg);
+	color: var(--luz-text-primary);
+	font-family: var(--luz-font-body);
+	font-size: var(--luz-text-base);
+	scroll-margin-block-start: calc(var(--luz-control-lg) + var(--luz-space-xl));
+}
+
+:where(.luz-faq__answer > *) {
+	margin-block: 0;
+}
+
+:where(.luz-faq__answer > * + *) {
+	margin-block-start: var(--luz-space-sm);
+}
+
+:where(.luz-faq__answer :is(pre, table)) {
+	max-inline-size: 100%;
+	overflow-x: auto;
+}
+
+:where(.luz-faq__more) {
+	color: var(--luz-text-secondary);
+	font-family: var(--luz-font-sans);
+}
+
+/* Print: every answer, open or closed (::details-content; an older browser
+   prints the closed ones closed), without the marker */
+@media print {
+	:where(.luz-faq__item)::details-content {
+		content-visibility: visible;
+		display: block;
+	}
+
+	:where(.luz-faq__question)::after {
+		display: none;
+	}
+}

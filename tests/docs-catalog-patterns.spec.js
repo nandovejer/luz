@@ -31,7 +31,7 @@ const read = (/** @type {string} */ path) => readFileSync(fromRepo(path), 'utf-8
 const GROUPS = [
   { id: 'navigation', en: 'Navigation', pages: ['app-bar', 'lang-switch', 'masthead', 'navbar', 'sidebar', 'site-header', 'submenu'] },
   { id: 'page-structure', en: 'Page structure', pages: ['article-header', 'hero', 'page-header', 'section', 'site-footer'] },
-  { id: 'content', en: 'Content', pages: ['dashboard', 'stat', 'terminal', 'timeline', 'toc'] },
+  { id: 'content', en: 'Content', pages: ['dashboard', 'faq', 'stat', 'terminal', 'timeline', 'toc'] },
   { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'color-mode', 'cookie-consent', 'search'] },
   { id: 'documentation', en: 'Documentation', pages: ['do-dont', 'doc-header', 'docs-layout', 'example', 'page-footer', 'page-rail', 'pager'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
@@ -49,7 +49,7 @@ const KIND_OF = {
   // F7: the four that came from core (the owner's, decision 35 and the pages they had): a sidebar and a timeline fit two kinds
   navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'],
   // The components with data of the site fit any
-  search: ['any'], 'cookie-consent': ['any'], 'color-mode': ['any'], 'lang-switch': ['any'], submenu: ['any'], announcement: ['any'],
+  search: ['any'], 'cookie-consent': ['any'], 'color-mode': ['any'], 'lang-switch': ['any'], submenu: ['any'], announcement: ['any'], faq: ['any'],
 };
 const KINDS = (/** @type {string} */ slug) => {
   if (!(slug in KIND_OF)) throw new Error(`tests/docs-catalog-patterns.spec.js: ${slug} has no kinds`);
