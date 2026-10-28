@@ -99,6 +99,7 @@ function copyOfSources() {
   // The hash of a prompt reads the module itself, at this path under the root it is given
   mkdirSync(join(dir, "scripts/docs-site"), { recursive: true });
   cpSync(join(root, "scripts/docs-site/prompts.js"), join(dir, "scripts/docs-site/prompts.js"));
+  cpSync(join(root, "scripts/docs-site/kinds.js"), join(dir, "scripts/docs-site/kinds.js"));
   return dir;
 }
 
@@ -262,10 +263,15 @@ describe("what a prompt says about the system comes from the packages", () => {
     // The patterns come last: what they refine is linked before them
     expect(links.slice(links.length - PATTERNS[id].length), id).toEqual(PATTERNS[id]);
     expect(links.slice(0, links.length - PATTERNS[id].length).some(isPattern), `${id}: no pattern among the others`).toBe(false);
-    // The pieces of catalog that fit this kind (or any) come with them: the navbar fits any site, the timeline landing and blog, the sidebar app and docs
+    // The pieces of catalog that fit this kind (or any) come with them: the navbar fits any site, the timeline landing and blog, the sidebar app and docs.
+    // Landing and blog link the sidebar too: the nav toggle of the site header and of the masthead is defined in the sidebar's file
     const rest = new Set(links);
-    for (const name of { landing: ["navbar", "timeline"], blog: ["navbar", "timeline"], app: ["navbar", "sidebar"], docs: ["navbar", "sidebar", "terminal"] }[id]) expect(rest.has(name), `${id} links ${name}`).toBe(true);
-    for (const name of { landing: ["sidebar", "terminal"], blog: ["sidebar", "terminal"], app: ["terminal", "timeline"], docs: ["timeline"] }[id]) expect(rest.has(name), `${id} does not link ${name}`).toBe(false);
+    for (const name of { landing: ["navbar", "timeline", "sidebar"], blog: ["navbar", "timeline", "sidebar"], app: ["navbar", "sidebar"], docs: ["navbar", "sidebar", "terminal"] }[id]) expect(rest.has(name), `${id} links ${name}`).toBe(true);
+    for (const name of { landing: ["terminal"], blog: ["terminal"], app: ["terminal", "timeline"], docs: ["timeline"] }[id]) expect(rest.has(name), `${id} does not link ${name}`).toBe(false);
+    // …and the sidebar comes before the headers it serves, in the cascade
+    const header = { landing: "site-header", blog: "site-header", app: "app-bar", docs: "docs-layout" }[id];
+    expect(links.indexOf("sidebar"), `${id}: sidebar before ${header}`).toBeLessThan(links.indexOf(header));
+    if (id === "blog") expect(links.indexOf("sidebar"), "blog: sidebar before masthead").toBeLessThan(links.indexOf("masthead"));
     expect(new Set(links).size, `${id}: each file once`).toBe(links.length);
     expect(text, `${id}: no package of a kind`).not.toMatch(/@luz-ds\/(?:landing|cms|app|docs)(?![\w-])/);
     expect(text, `${id}: the load order names no package of a kind`).not.toMatch(/then @luz-ds\//);
@@ -295,6 +301,15 @@ describe("what a prompt says about the system comes from the packages", () => {
     expect(new Set(catalogPages).size, `${id}: one line a page`).toBe(catalogPages.length);
     expect(text, id).not.toMatch(/docs\/(?:landing|cms|app|documentation)\//);
     for (const page of catalogPages) expect(existsSync(join(root, `apps/docs/pages/catalog/${page}.html`)), `${id}: ${page} is a page of the docs`).toBe(true);
+  });
+
+  it.each(["landing", "blog", "app", "docs"])("%s: each docs line reads `- <url>: markup of the <page>.`, with the page's name in words", (id) => {
+    const lines = prompt(id).split("\n").filter((l) => l.startsWith(`- ${SITE}docs/catalog/`));
+    expect(lines.length, id).toBeGreaterThan(0);
+    for (const line of lines) {
+      const slug = line.slice(`- ${SITE}docs/catalog/`.length).split("/")[0];
+      expect(line, id).toBe(`- ${SITE}docs/catalog/${slug}/: markup of the ${slug.replace(/-/g, " ")}.`);
+    }
   });
 
   it.each(IDS)("%s: every link starts with the published site or the @luz-ds files on the CDN", (id) => {
@@ -469,6 +484,11 @@ describe("the ceiling of a prompt", () => {
   it.each(IDS)("%s is at most that row's ceiling", (id) => {
     expect(Buffer.byteLength(prompt(id))).toBeLessThanOrEqual(row().max);
   });
+
+  // The skeletons and the colour mode switcher are worth their bytes only if the prose stays short: a tighter number, just for this change (budgets.json keeps its row)
+  it.each(IDS)("%s is at most 16100 bytes, so the skeletons did not eat the room the ceiling leaves", (id) => {
+    expect(Buffer.byteLength(prompt(id))).toBeLessThanOrEqual(16100);
+  });
 });
 
 /* ---- a placeholder the generator does not know ------------------------------------ */
@@ -621,7 +641,21 @@ describe("the five are emitted by the build, served in dev and listed in llms.tx
 describe("promptSourceHash: all the prose of a prompt, and nothing a release or a class adds", () => {
   const SRC = "apps/site/prompts";
   const MODULE_FILE = "scripts/docs-site/prompts.js";
+  const KINDS_FILE = "scripts/docs-site/kinds.js";
   const filesOf = (id) => [`${SRC}/body.md`, ...(PRESET_OF[id] ? [`${SRC}/presets/${PRESET_OF[id]}.md`] : []), `${SRC}/stacks.json`, MODULE_FILE];
+  /** Attribute names as an element line lists them: three or more that share a `data-luz-<group>-` prefix are one entry, `data-luz-<group>-*`, where the first of them stood. */
+  const grouped = (names) => {
+    const prefix = (name) => /^(data-luz-[a-z0-9]+-)/.exec(name)?.[1];
+    const count = (key) => names.filter((n) => prefix(n) === key).length;
+    const seen = new Set();
+    return names.flatMap((name) => {
+      const key = prefix(name);
+      if (key === undefined || count(key) < 3) return [name];
+      if (seen.has(key)) return [];
+      seen.add(key);
+      return [`${key}*`];
+    });
+  };
   /** The element lines as the prompt lists them: catalog's (core defines no tag since F7), `- `<tag>` (attr, attr): description`, joined by a newline. */
   const elementBlock = (dir) =>
     ["catalog"]
@@ -630,7 +664,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
           (m.declarations ?? [])
             .filter((d) => d.tagName)
             .map((d) => {
-              const attrs = (d.attributes ?? []).map((a) => a.name);
+              const attrs = grouped((d.attributes ?? []).map((a) => a.name));
               // Catalog has no bundle (F5a): an element of catalog says the file of its stylesheet
               const sheet = pkg === "catalog" && d.stylesheet ? ` Its stylesheet: \`@luz-ds/catalog/${d.stylesheet}\`.` : "";
               return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}${sheet}`.trimEnd();
@@ -638,10 +672,29 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
         ),
       )
       .join("\n");
+  /** One line per catalog page that has `fits-kinds`, in the order of the pages: `<slug>|<kinds>|<files>|<order>`, read from the front matter. */
+  const patternBlock = (dir) => {
+    const folder = join(dir, "apps/docs/pages/catalog");
+    return readdirSync(folder)
+      .filter((f) => f.endsWith(".html") && !f.startsWith("_"))
+      .sort()
+      .flatMap((name) => {
+        const head = /^<!-- luz:page\n([\s\S]*?)\n-->/.exec(readFileSync(join(folder, name), "utf-8"))?.[1] ?? "";
+        const key = (k) => new RegExp(`^${k}: (.*)$`, "m").exec(head)?.[1].trim();
+        if (!key("fits-kinds")) return [];
+        const kinds = key("fits-kinds").split(",").map((k) => k.trim());
+        const files = (key("files") ?? "").split(/[;,]/).map((f) => f.trim());
+        return [{ line: `${name.slice(0, -5)}|${kinds.join(",")}|${files.join(",")}|${Number(key("order") ?? 0)}`, order: Number(key("order") ?? 0) }];
+      })
+      .sort((a, b) => a.order - b.order)
+      .map((page) => page.line)
+      .join("\n");
+  };
   const sha = (dir, id) => {
     const hash = createHash("sha256");
-    for (const file of filesOf(id)) hash.update(readFileSync(join(dir, file))).update("\0");
+    for (const file of [...filesOf(id), KINDS_FILE]) hash.update(readFileSync(join(dir, file))).update("\0");
     hash.update(elementBlock(dir)).update("\0");
+    hash.update(patternBlock(dir)).update("\0");
     return hash.digest("hex");
   };
   const hashes = (dir) => Object.fromEntries(IDS.map((id) => [id, member("promptSourceHash")(id, { root: dir })]));
@@ -668,7 +721,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     return join(dir, "packages/catalog/dist/custom-elements.json");
   }
 
-  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, scripts/docs-site/prompts.js and the element lines of the prompt, each followed by a NUL byte", () => {
+  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, prompts.js, kinds.js, the element lines of the prompt and the fits-kinds, files and order of each catalog page, each followed by a NUL byte", () => {
     for (const id of IDS) {
       const hash = member("promptSourceHash")(id, { root });
       expect(hash, id).toMatch(/^[0-9a-f]{64}$/);
@@ -726,6 +779,21 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     }
   });
 
+  it("lists the attributes of an element grouped by prefix: three or more `data-luz-<group>-…` are one `data-luz-<group>-*`, two stay as they are, the tag and the description do not change", () => {
+    const dir = copyOfSources();
+    const manifest = withOwnElements(dir);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
+    const names = ["remember", "data-luz-pair-a", "data-luz-pair-b", "data-luz-trio-a", "data-luz-trio-b", "data-luz-trio-c", "data-luz-trio-d"];
+    declaration.attributes = names.map((name) => ({ name }));
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    const text = member("assemblePrompt")("start", { root: dir });
+    const line = text.split("\n").find((l) => l.startsWith(`- \`<${declaration.tagName}>\``));
+    expect(line, `<${declaration.tagName}> is listed`).toBeTruthy();
+    expect(line.startsWith(`- \`<${declaration.tagName}>\` (remember, data-luz-pair-a, data-luz-pair-b, data-luz-trio-*): ${declaration.description}`), line).toBe(true);
+    expect(line).not.toContain("data-luz-trio-a");
+  });
+
   it("changes all five when the description of an element changes in custom-elements.json", () => {
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
@@ -736,6 +804,41 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     declaration.description += " Then do something else.";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
     expectAllFiveChanged(before, hashes(dir), `a change of the description of <${declaration.tagName}>`);
+  });
+
+  it("changes all five when one byte of scripts/docs-site/kinds.js changes (it picks the files and pages a prompt lists)", () => {
+    const dir = copyOfSources();
+    cpSync(join(root, "scripts/docs-site/kinds.js"), join(dir, "scripts/docs-site/kinds.js"));
+    const before = hashes(dir);
+    append(dir, "scripts/docs-site/kinds.js", "\n// x\n");
+    expectAllFiveChanged(before, hashes(dir), "a comment appended to kinds.js");
+  });
+
+  it.each([
+    ["fits-kinds", "apps/docs/pages/catalog/doc-header.html", /^fits-kinds: docs$/m, "fits-kinds: docs, app"],
+    ["files", "apps/docs/pages/catalog/doc-header.html", /^files: components\/doc-header\.css$/m, "files: components/doc-header.css, components/other.css"],
+  ])("changes all five when the %s line of the front matter of a catalog page changes", (line, page, pattern, replacement) => {
+    const dir = copyOfSources();
+    const before = hashes(dir);
+    const text = readFileSync(join(dir, page), "utf-8");
+    expect(pattern.test(text), `${page} has the ${line} line this test edits`).toBe(true);
+    writeFileSync(join(dir, page), text.replace(pattern, replacement));
+    expectAllFiveChanged(before, hashes(dir), `a change of ${line} in ${page}`);
+  });
+
+  it("leaves all five unchanged when only the body of a catalog page changes, its front matter intact", () => {
+    const dir = copyOfSources();
+    const before = hashes(dir);
+    append(dir, "apps/docs/pages/catalog/doc-header.html", "\n<p>One more paragraph in the body.</p>\n");
+    const text = readFileSync(join(dir, "apps/docs/pages/catalog/doc-header.html"), "utf-8");
+    writeFileSync(join(dir, "apps/docs/pages/catalog/doc-header.html"), text.replace("<h2 id=\"example\">Example</h2>", "<h2 id=\"example\">Another example title</h2>"));
+    expect(hashes(dir)).toEqual(before);
+  });
+
+  it("is deterministic: the same files give the same hash, call after call", () => {
+    const dir = copyOfSources();
+    cpSync(join(root, "scripts/docs-site/kinds.js"), join(dir, "scripts/docs-site/kinds.js"));
+    expect(hashes(dir)).toEqual(hashes(dir));
   });
 
   it("changes all five when one byte of scripts/docs-site/prompts.js changes (a comment line, the copy still imports)", async () => {

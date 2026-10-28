@@ -48,10 +48,13 @@ const BLOCKS = {
 const TAGS = { "luz-mode": "luz-color-mode", "luz-consent": "luz-cookie-consent", "luz-banner": "luz-announcement" };
 // The masthead's own parts were parts of luz-cms-header
 const MASTHEAD = new Set(["__top", "__date", "__sections"]);
+const MAX_NAME = 64;
 const PART = /^(luz-[a-z0-9]+(?:-[a-z0-9]+)*?)((?:__|--)[a-z0-9_-]+)?$/;
 
 /** @returns {{ current: string, publication: boolean } | null} */
 export function renamedClass(name) {
+  // The echo of a name is capped at 64 characters everywhere; a longer one is not a name to repeat in a fix
+  if (name.length > MAX_NAME) return null;
   const [, block, rest = ""] = PART.exec(name) ?? [];
   if (!Object.hasOwn(BLOCKS, block ?? "")) return null;
   if (block === "luz-cms-header" && (rest === "--masthead" || MASTHEAD.has(rest))) return { current: rest === "--masthead" ? "luz-masthead" : `luz-masthead${rest}`, publication: false };

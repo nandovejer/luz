@@ -250,6 +250,8 @@ function copyOfRepo({ withScripts = false } = {}) {
   // The hash of a prompt reads the module itself, at this path under the root it is given
   mkdirSync(join(dir, "scripts/docs-site"), { recursive: true });
   cpSync(join(root, "scripts/docs-site/prompts.js"), join(dir, "scripts/docs-site/prompts.js"));
+  // …and the module that says which pages and files a kind lists
+  cpSync(join(root, "scripts/docs-site/kinds.js"), join(dir, "scripts/docs-site/kinds.js"));
   if (withScripts) {
     cpSync(join(root, "scripts"), join(dir, "scripts"), { recursive: true, force: true });
     cpSync(join(root, "package.json"), join(dir, "package.json"));

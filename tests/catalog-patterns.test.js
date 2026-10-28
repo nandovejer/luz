@@ -332,10 +332,19 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
   });
 
   it("the files of a kind are those of the catalog pages that name it (or `any`), in the order of the cascade", () => {
-    expect(kindPatterns("landing", root, null).files).toEqual(["navbar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow"].map((n) => `components/${n}.css`));
-    expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("landing", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article"].map((n) => `components/${n}.css`));
     expect(kindPatterns("app", root, null).files).toEqual(["navbar", "sidebar", "app-bar", "dashboard"].map((n) => `components/${n}.css`));
     expect(kindPatterns("docs", root, null).files).toEqual(["navbar", "sidebar", "terminal", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"].map((n) => `components/${n}.css`));
+  });
+
+  it("landing and blog link the sidebar's file though no page of theirs lists it: the nav toggle of the site header and of the masthead is defined there, and it comes before the headers", () => {
+    for (const kind of ["landing", "blog"]) {
+      const files = kindPatterns(kind, root, null).files;
+      expect(files, kind).toContain("components/sidebar.css");
+      expect(files.indexOf("components/sidebar.css"), `${kind}: the sidebar before the header`).toBeLessThan(files.indexOf("components/site-header.css"));
+      expect(kindPatterns(kind, root, null).pages, `${kind}: the sidebar is not one of its patterns`).not.toContain("sidebar");
+    }
   });
 
   it("the pages of a kind are the slugs of the pages that name it, `any` left out: the header and the footer are the page of landing and of blog", () => {
@@ -373,20 +382,22 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
 
     it("a page that names a kind adds its file to that kind, and no other kind's (a new pattern needs a page, nothing in kinds.js)", () => {
       const dir = tree({ hero: page("landing", "components/hero.css"), "app-bar": page("app", "components/app-bar.css", 2), search: page("any", "<luz-search>", 3) });
-      expect(kindPatterns("landing", dir, null)).toEqual({ files: ["components/hero.css"], pages: ["hero"] });
+      // landing and blog also link the sidebar's file, which defines the nav toggle of their headers
+      expect(kindPatterns("landing", dir, null)).toEqual({ files: ["components/sidebar.css", "components/hero.css"], pages: ["hero"] });
       expect(kindPatterns("app", dir, null)).toEqual({ files: ["components/app-bar.css"], pages: ["app-bar"] });
       expect(kindPatterns("docs", dir, null)).toEqual({ files: [], pages: [] });
     });
 
     it("a page of `any` puts its file in every kind but names no page of it", () => {
       const dir = tree({ navbar: page("any", "components/navbar.css") });
-      for (const kind of ["landing", "blog", "app", "docs"]) expect(kindPatterns(kind, dir, null), kind).toEqual({ files: ["components/navbar.css"], pages: [] });
+      for (const kind of ["app", "docs"]) expect(kindPatterns(kind, dir, null), kind).toEqual({ files: ["components/navbar.css"], pages: [] });
+      for (const kind of ["landing", "blog"]) expect(kindPatterns(kind, dir, null), kind).toEqual({ files: ["components/navbar.css", "components/sidebar.css"], pages: [] });
     });
 
     it("fails, naming the file, for a stylesheet the page lists and catalog does not build", () => {
       const dir = tree({ hero: page("landing", "components/hero.css") });
-      expect(() => kindPatterns("landing", dir, [{ file: "components/main.css" }])).toThrow(/components\/hero\.css, which packages\/catalog\/dist does not have/);
-      expect(() => kindPatterns("landing", dir, [{ file: "components/hero.css" }])).not.toThrow();
+      expect(() => kindPatterns("landing", dir, [{ file: "components/main.css" }])).toThrow(/components\/hero\.css[^]*which packages\/catalog\/dist does not have/);
+      expect(() => kindPatterns("landing", dir, [{ file: "components/hero.css" }, { file: "components/sidebar.css" }])).not.toThrow();
     });
 
     it("fails, asking for CASCADE, when a page lists a stylesheet whose place in the cascade is not written", () => {

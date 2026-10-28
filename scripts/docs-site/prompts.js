@@ -33,7 +33,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { expandNumbers, siteNumbers } from "./i18n.js";
-import { fileKinds, isKindFile, kindPatterns } from "./kinds.js";
+import { catalogPatterns, fileKinds, isKindFile, kindPatterns } from "./kinds.js";
 import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 
 /** The published site: every link of a prompt starts here. */
@@ -43,6 +43,7 @@ const CDN = "https://cdn.jsdelivr.net/npm";
 const SOURCE = "apps/site/prompts";
 /** This module, as the hash of a prompt reads it. */
 const MODULE = "scripts/docs-site/prompts.js";
+const KINDS = "scripts/docs-site/kinds.js";
 /** The packages whose elements a prompt lists. */
 const ELEMENT_PACKAGES = ["catalog"];
 /** The packages every prompt installs, in load order. */
@@ -88,8 +89,29 @@ function classLines(root, pkg, seen, keep = () => true) {
   return [...blocks].map(([block, parts]) =>
     names.has(block)
       ? `- \`${block}\`${parts.length ? `: ${parts.map((p) => `\`${p}\``).join(", ")}` : ""}`
-      : `- the parts of \`<${block}>\`: ${parts.map((p) => `\`${block}${p}\``).join(", ")}`,
+      : `- the parts of \`<${block}>\` (prefix ${block}): ${parts.map((p) => `\`${p}\``).join(", ")}`,
   );
+}
+
+/**
+ * Attribute names for an element line: those that share a `data-luz-<group>-` prefix
+ * (`data-luz-label-idle`, `data-luz-label-none`…) are one entry, `data-luz-label-*`
+ * (the manifest lists each name).
+ */
+function groupAttributes(names) {
+  const groups = new Map();
+  for (const name of names) {
+    const key = /^(data-luz-[a-z]+-)/.exec(name)?.[1];
+    if (key) groups.set(key, (groups.get(key) ?? 0) + 1);
+  }
+  const done = new Set();
+  return names.flatMap((name) => {
+    const key = /^(data-luz-[a-z]+-)/.exec(name)?.[1];
+    if (!key || groups.get(key) < 3) return [name];
+    if (done.has(key)) return [];
+    done.add(key);
+    return [`${key}*`];
+  });
 }
 
 /**
@@ -101,7 +123,7 @@ function elementLines(root, pkg) {
   for (const module of readJson(root, `packages/${pkg}/dist/custom-elements.json`).modules) {
     for (const d of module.declarations ?? []) {
       if (!d.tagName) continue;
-      const attributes = (d.attributes ?? []).map((a) => a.name);
+      const attributes = groupAttributes((d.attributes ?? []).map((a) => a.name));
       const stylesheet = d.stylesheet ? ` Its stylesheet: \`@luz-ds/${pkg}/${d.stylesheet}\`.` : "";
       lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}${stylesheet}`.trimEnd());
     }
@@ -162,7 +184,7 @@ export function assemblePrompt(id, { root }) {
     elements: ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n"),
     "kind-links": kind.docs
       ? patterns.pages
-          .map((page) => `- ${PROMPT_SITE}${kind.docs}${page}/: the ${page.replace(/-/g, " ")} pattern of ${kind.title}, with its markup.`)
+          .map((page) => `- ${PROMPT_SITE}${kind.docs}${page}/: markup of the ${page.replace(/-/g, " ")}.`)
           .join("\n")
       : [
           "- The prompts for one kind of site, for the person to paste instead of this one (do not follow them from here):",
@@ -190,9 +212,11 @@ export function assemblePrompt(id, { root }) {
 /**
  * The SHA-256, in hex, of every piece of prose that reaches one prompt:
  * body.md, its preset (none for start), stacks.json, this module (the titles
- * and the sentences it writes) and the lines of the elements as the prompt
- * has them (their names, attributes and descriptions, from the packages'
- * custom-elements.json), each followed by a NUL. The sentinel's case for the
+ * and the sentences it writes), kinds.js (which patterns a kind lists, and in
+ * what order), the lines of the elements as the prompt has them (their names,
+ * attributes and descriptions, from the packages' custom-elements.json) and
+ * the `fits-kinds`, `files` and `order` of each catalog page (which pages and
+ * files a kind lists; never a page's body), each followed by a NUL. The sentinel's case for the
  * prompt holds it (`source`), so an edit of any of them voids its SAFE until
  * the sentinel reads the prompt again. The versions and the class names are
  * left out: they change with every release and every class, carry no prose,
@@ -201,10 +225,11 @@ export function assemblePrompt(id, { root }) {
 export function promptSourceHash(id, { root }) {
   const kind = PROMPT_KINDS.find((k) => k.id === id);
   if (!kind) throw new Error(`${id} is not a prompt (${PROMPT_KINDS.map((k) => k.id).join(", ")})`);
-  const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`, MODULE];
+  const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`, MODULE, KINDS];
   const hash = createHash("sha256");
   for (const file of files) hash.update(readFileSync(join(root, file))).update("\0");
   hash.update(ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n")).update("\0");
+  hash.update(catalogPatterns(root).map((page) => `${page.slug}|${page.kinds.join(",")}|${page.files.join(",")}|${page.order}`).join("\n")).update("\0");
   return hash.digest("hex");
 }
 
