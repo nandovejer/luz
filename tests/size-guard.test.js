@@ -196,7 +196,8 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     ["tokens CSS", 5 * KiB],
     // F7: the four layout components left core, and its ceiling went down with them (15 KiB to 11.5 KiB); a ceiling that only goes down
     ["core CSS", 11.5 * KiB],
-    ["core classless CSS (a file of its own)", 3 * KiB],
+    // The classless file went into luz.css (the bare elements need no attribute); luz.conditional.css, the same sheet with the reset and the elements inside [data-luz], takes its place with the ceiling of core CSS
+    ["core conditional CSS (luz.css with the reset and the elements inside [data-luz])", 11.5 * KiB],
     ["core JS (entry, lazy chunks excluded)", 8 * KiB],
     ["core JS lazy chunk: midi", 4 * KiB],
     ["core JS lazy chunk: table-sort", 2 * KiB],

@@ -197,7 +197,7 @@ export const MINI = {
     ],
     properties: ["--luz-type-base"],
     elements: [{ tag: "luz-timeline", attributes: ["layout", "autoplay", "interval", "data-luz-label-previous", "data-luz-label-next", "data-luz-label-pause", "data-luz-label-play"] }],
-    hooks: ["data-luz-classless", "data-luz-sort", "data-luz-spy"],
+    hooks: ["data-luz-sort", "data-luz-spy", "data-luz-themes"],
   },
   catalog: {
     // Catalog has no bundle (F5a): a class says the component file that defines it, a tag the file that styles it

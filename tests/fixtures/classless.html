@@ -3,25 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LUZ classless fixture</title>
+  <title>LUZ bare element and its component</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/core/dist/classless.css">
   <style>
     body { padding: 80px; }
   </style>
 </head>
 <body>
-  <!-- Outside the scope: bare elements are the browser's, as before -->
-  <section id="outside">
-    <button id="out-button" type="button">Plain</button>
-    <input id="out-input" type="text" aria-label="Plain">
-    <select id="out-select" aria-label="Plain"><option>One</option></select>
-    <table id="out-table"><caption>Plain</caption><thead><tr><th scope="col">A</th></tr></thead><tbody><tr><td>1</td></tr></tbody></table>
-  </section>
-
-  <!-- The scope: bare elements and, next to each, the component that is its reference -->
-  <article id="scope" data-luz-classless>
+  <!-- Bare elements, no attribute anywhere, and next to each the component that is its reference -->
+  <article id="scope">
     <button id="button" type="button">Save</button>
     <button id="submit" type="submit">Send</button>
     <button id="button-disabled" type="button" disabled>Off</button>
@@ -50,25 +41,27 @@
     <table id="table"><caption>Releases</caption><thead><tr><th scope="col">Name</th><th scope="col">Version</th></tr></thead><tbody><tr><td>Core</td><td>2.1.0</td></tr><tr><td>Tokens</td><td>2.1.0</td></tr></tbody></table>
     <table id="ref-table" class="luz-table"><caption>Releases</caption><thead><tr><th scope="col">Name</th><th scope="col">Version</th></tr></thead><tbody><tr><td>Core</td><td>2.1.0</td></tr><tr><td>Tokens</td><td>2.1.0</td></tr></tbody></table>
 
-    <!-- A LUZ component's own button inside the scope: left to its component -->
+    <details id="details"><summary>More</summary><p>Hidden text.</p></details>
+    <div id="ref-accordion" class="luz-accordion"><details id="ref-details"><summary>More</summary><p>Hidden text.</p></details></div>
+
+    <dialog id="dialog" open><p>A dialog</p></dialog>
+    <dialog id="ref-dialog" class="luz-modal" open><p>A dialog</p></dialog>
+
+    <meter id="meter" min="0" max="100" value="40" aria-label="Disk">40</meter>
+    <meter id="ref-meter" class="luz-meter" min="0" max="100" value="40" aria-label="Disk">40</meter>
+    <progress id="progress" max="100" value="40" aria-label="Upload">40</progress>
+    <progress id="ref-progress" class="luz-progress" max="100" value="40" aria-label="Upload">40</progress>
+
+    <pre id="pre"><code>const a = 1;</code></pre>
+    <pre id="ref-pre" class="luz-code-block"><code>const a = 1;</code></pre>
+
+    <fieldset id="fieldset"><legend>Contact</legend></fieldset>
+    <fieldset id="ref-fieldset" class="luz-fieldset"><legend>Contact</legend></fieldset>
+
+    <!-- A LUZ component's own button next to the bare ones: left to its component -->
     <button id="copy" class="luz-copy-btn" type="button">Copy</button>
     <div id="field" class="luz-field"><input id="field-input" class="luz-input" type="text" aria-label="In a field"></div>
   </article>
 
-  <!-- Space between blocks, in and out of the scope -->
-  <article id="flow" data-luz-classless>
-    <h2 id="flow-h">Title</h2>
-    <p id="flow-p1">First paragraph.</p>
-    <p id="flow-p2">Second paragraph.</p>
-    <ul id="flow-ul"><li id="flow-li1">One<ul id="flow-nested"><li>Nested</li></ul></li><li id="flow-li2">Two</li></ul>
-    <h3 id="flow-h3">Subtitle</h3>
-    <h4 id="flow-h4">Direct subtitle</h4>
-    <input id="flow-field" type="text" aria-label="Name">
-    <button id="flow-button" type="submit">Send</button>
-  </article>
-  <section id="flow-out">
-    <p id="out-p1">First paragraph.</p>
-    <p id="out-p2">Second paragraph.</p>
-  </section>
 </body>
 </html>
