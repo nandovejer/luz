@@ -96,6 +96,56 @@ describe("names/renamed: an old class (table 1 of the changeset)", () => {
   });
 });
 
+describe("names/renamed: the name echoed is capped like every other name (64 characters)", () => {
+  const OLD = "luz-landing-hero__";
+  const named = (length) => OLD + "a1_-".repeat(40).slice(0, length - OLD.length);
+  const sheet = (selector) => ({ "index.html": page('  <p class="o-stack">x</p>', links(TOKENS, CORE, '  <link rel="stylesheet" href="own.css">')), "own.css": `.promo ${selector} {\n  margin: 0;\n}\n` });
+  // Unreadable: a control character, a zero-width or bidi control, or the BOM
+  const readable = (text) => [...text].every((ch) => {
+    const code = ch.codePointAt(0);
+    return !(code <= 0x1f || (code >= 0x7f && code <= 0x9f) || (code >= 0x200b && code <= 0x200f) || (code >= 0x202a && code <= 0x202e) || (code >= 0x2066 && code <= 0x2069) || code === 0xfeff);
+  });
+
+  it("a class that has an old block but is 100 characters longer gets no names/renamed finding in a page: it is an unknown class with the capped echo", () => {
+    const name = OLD + "a".repeat(100);
+    const result = run(`  <h1 class="${name}">x</h1>`);
+    expect(renamed(result)).toEqual([]);
+    expect(ofRule(result, "class/unknown"), "the generic path says it").toHaveLength(1);
+  });
+
+  it("the same name in a stylesheet gets no names/renamed:css warning either", () => {
+    const result = check(sheet(`.${OLD}${"a".repeat(100)}`), { snapshot: data });
+    expect(renamed(result)).toEqual([]);
+  });
+
+  it("a name of 65 characters gets no names/renamed finding, and one of exactly 64 characters gets it, in a page and in a stylesheet", () => {
+    expect(named(65)).toHaveLength(65);
+    expect(named(64)).toHaveLength(64);
+    expect(renamed(run(`  <h1 class="${named(65)}">x</h1>`))).toEqual([]);
+    const found = renamed(run(`  <h1 class="${named(64)}">x</h1>`));
+    expect(found).toHaveLength(1);
+    expect(found[0]).toMatchObject({ rule: "names/renamed", severity: "block", suggestion: `.luz-hero__${named(64).slice(OLD.length)}` });
+    expect(renamed(check(sheet(`.${named(65)}`), { snapshot: data }))).toEqual([]);
+    const css = renamed(check(sheet(`.${named(64)}`), { snapshot: data }));
+    expect(css).toHaveLength(1);
+    expect(css[0]).toMatchObject({ rule: "names/renamed", severity: "warn" });
+  });
+
+  it("no finding, from a page or from a stylesheet, has a suggestion over 64 characters or an unreadable one", () => {
+    const long = OLD + "a1_-".repeat(40);
+    const body = `  <h1 class="${long}">x</h1><h2 class="luz-cms-header__${"b".repeat(100)}">y</h2><p class="luz-cms-toc__list">z</p>`;
+    const results = [run(body), check(sheet(`.${long}, .promo .luz-cms-header__${"b".repeat(100)}, .promo .luz-cms-toc__list`), { snapshot: data })];
+    for (const result of results) {
+      const suggested = result.findings.filter((f) => typeof f.suggestion === "string");
+      expect(suggested.length, "the short renamed class still has its suggestion").toBeGreaterThan(0);
+      for (const f of suggested) {
+        expect(f.suggestion.length, `${f.rule}: ${f.suggestion.slice(0, 80)}`).toBeLessThanOrEqual(64);
+        expect(readable(f.suggestion), `${f.rule}: readable`).toBe(true);
+      }
+    }
+  });
+});
+
 describe("names/renamed: an old element (table 2)", () => {
   it.each(TAGS)("<%s> is now <%s>: blocks, at the tag, with the new tag in the message and as the suggestion", (old, current) => {
     const body = `  <${old}>x</${old}>`;
