@@ -331,8 +331,9 @@
 		max-block-size: none;
 		margin: 0;
 		padding: 0;
-		/* A field or a link brought into view by Tab stops below the pinned head (WCAG 2.4.11) */
-		scroll-padding-block-start: calc(max(var(--luz-space-xs), env(safe-area-inset-top)) + var(--luz-space-xs) + var(--luz-control-lg) + 1px);
+		/* A field or a link brought into view by Tab stops below the pinned head, and one step more
+		   for the browsers that stop short (WCAG 2.4.11) */
+		scroll-padding-block-start: calc(max(var(--luz-space-xs), env(safe-area-inset-top)) + var(--luz-space-xs) + var(--luz-control-lg) + 1px + var(--luz-space-md));
 	}
 
 	.luz-search__body {

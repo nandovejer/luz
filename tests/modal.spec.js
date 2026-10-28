@@ -274,10 +274,23 @@ test.describe('a small screen: scrolling', () => {
           height: window.innerHeight,
         };
       });
+      // WebKit and Firefox animate the scroll a keyboard focus causes: read after it stopped (two reads of the
+      // scroll position, 50 ms apart, that match), two frames after the key so a scroll that has not started is seen
+      const settle = async () => {
+        await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(() => done(undefined)))));
+        let last = Number.NaN;
+        await expect.poll(async () => {
+          const now = await dialog.evaluate((d) => d.scrollTop);
+          const same = now === last;
+          last = now;
+          return same;
+        }, { message: 'the dialog stopped scrolling', intervals: [50], timeout: 5000 }).toBe(true);
+      };
       const visited = new Set();
       for (const direction of ['Tab', 'Shift+Tab']) {
         for (let i = 0; i < 18; i++) {
           await page.keyboard.press(direction);
+          await settle();
           const s = await sample();
           expect(s.outside, `${direction} ${i}: the focus left the dialog`).toBeUndefined();
           visited.add(s.name);

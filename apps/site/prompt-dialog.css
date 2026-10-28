@@ -58,9 +58,21 @@
     border-block-start: 1px solid var(--luz-divider);
   }
 
+  /* Under 20.5rem the link and Copy no longer fit in one row: the foot is two rows
+     and taller than core's one-row foot size, so the scroll padding adds the second row */
+  @media (max-width: 20.5rem) {
+    .site-prompt {
+      scroll-padding-block-end: calc(var(--luz-modal-foot-size) + var(--luz-space-sm) + var(--luz-control-lg) + var(--luz-space-md));
+    }
+  }
+
   /* In a short window (a phone held sideways, 400 % zoom) the foot scrolls
      with the rest: pinned, it would leave a strip of the prompt */
   @media (max-height: 30rem) {
+    .site-prompt {
+      scroll-padding-block-end: var(--luz-space-xs);
+    }
+
     .site-prompt__foot {
       position: static;
     }
