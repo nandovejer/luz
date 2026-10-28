@@ -263,17 +263,17 @@ test.describe('landing footer: brand and columns', () => {
 });
 
 test.describe('the footer brand of the home page: the logo mark', () => {
-  /** The mark is wide (1.57:1): 35 x 22 px beside the version and the beta tag, in every language. */
+  /** The mark is the prism, a square: 22 x 22 px beside the version and the beta tag, in every language. */
   const brand = (page) => page.locator('footer p.landing-brand');
   const mark = (page) => brand(page).locator('> svg');
 
   for (const [path, rtl] of [['/', false], ['/es/', false], ['/ar/', true]]) {
     for (const width of [1280, 375, 320]) {
-      test(`${path} at ${width}px: the mark is 35 x 22 px, first at the inline start of the brand, nothing scrolls sideways`, async ({ page }) => {
+      test(`${path} at ${width}px: the mark is 22 x 22 px, first at the inline start of the brand, nothing scrolls sideways`, async ({ page }) => {
         await page.setViewportSize({ width, height: 800 });
         await page.goto(path);
         const [m, b] = await Promise.all([mark(page).evaluate((el) => el.getBoundingClientRect().toJSON()), brand(page).evaluate((el) => el.getBoundingClientRect().toJSON())]);
-        expect(Math.abs(m.width - 35), `width ${m.width}`).toBeLessThanOrEqual(1);
+        expect(Math.abs(m.width - 22), `width ${m.width}`).toBeLessThanOrEqual(1);
         expect(Math.abs(m.height - 22), `height ${m.height}`).toBeLessThanOrEqual(1);
         if (rtl) expect(Math.abs(m.right - b.right), 'at the right, the start of Arabic').toBeLessThanOrEqual(1);
         else expect(Math.abs(m.left - b.left), 'at the left').toBeLessThanOrEqual(1);
@@ -288,9 +288,15 @@ test.describe('the footer brand of the home page: the logo mark', () => {
     }
   }
 
-  test('the mark is decorative and the name LUZ is said by its hidden text', async ({ page }) => {
+  test('the mark is decorative, takes no focus, and the name LUZ is said by its hidden text', async ({ page }) => {
     await page.goto('/');
     await expect(mark(page)).toHaveAttribute('aria-hidden', 'true');
+    // No focusable="false" is written on it (the home weighs against its page ceiling): no browser LUZ supports puts an svg in the tab order
+    const focused = await mark(page).evaluate((el) => {
+      el.focus();
+      return document.activeElement === el;
+    });
+    expect(focused, 'the mark takes no focus').toBe(false);
     await expect(brand(page).locator('strong.u-sr-only')).toHaveText('LUZ');
   });
 

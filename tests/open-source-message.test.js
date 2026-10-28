@@ -49,7 +49,8 @@ describe("the home page says it in three languages", () => {
   it("English says it in the lead, in one sentence", () => {
     // README.md and PRINCIPLES.md keep STATEMENT and LINE
     const lead = catalog("en")["hero.lead"];
-    expect(textOfHtml(lead)).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads, and every change starts with a failing test.");
+    // It also says what to do with LUZ: start a project, or migrate one page by page
+    expect(textOfHtml(lead)).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does: start a project with LUZ, or migrate it page by page. Every component works before JavaScript loads, and every change starts with a failing test.");
     expect(textOfHtml(lead).toLowerCase()).toContain(LINE.toLowerCase());
   });
 
@@ -63,7 +64,7 @@ describe("the home page says it in three languages", () => {
   it("Arabic says it in Arabic: the lead has Arabic letters, and only the names of the technologies in Latin", () => {
     const lead = textOfHtml(catalog("ar")["hero.lead"]);
     expect(lead).toMatch(/[؀-ۿ]/);
-    expect(lead.replace(/\b(?:CSS|JavaScript|HTML)\b/g, "")).not.toMatch(/[A-Za-z]/);
+    expect(lead.replace(/\b(?:LUZ|CSS|JavaScript|HTML)\b/g, "")).not.toMatch(/[A-Za-z]/);
   });
 
   it("the three built.* keys are gone from every catalog, and the template has no line of its own", () => {

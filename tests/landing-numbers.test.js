@@ -3,21 +3,22 @@
  * .claude/plans/luz-home-docs-identity.md, section 3.6 and Q23).
  *
  * A catalog value may say `{n:components}`, `{n:objects}`, `{n:primitives}`,
- * `{n:semantic}`, `{n:cssonly}` or `{n:withjs}`; scripts/docs-site/i18n.js writes the count at build, from the
+ * `{n:semantic}`, `{n:elements}`, `{n:cssonly}` or `{n:withjs}`; scripts/docs-site/i18n.js writes the count at build, from the
  * packages, so a number in the copy is never typed and never drifts. An unknown
  * name fails the build with file:line.
  *
  * The contract this file holds the implementation to (all exported by
  * scripts/docs-site/i18n.js):
- *   NUMBER_NAMES                      the six names, in this order
- *   siteNumbers(repoRoot)             { components, objects, primitives, semantic, cssonly, withjs }
+ *   NUMBER_NAMES                      the seven names, in this order
+ *   siteNumbers(repoRoot)             { components, objects, primitives, semantic, elements, cssonly, withjs }
  *   expandNumbers(text, numbers, where)
  *       the text with every `{n:name}` replaced by String(numbers[name]); `{n}`, `{shown}`
  *       and every other placeholder stay as written (they are the scripts' own); an unknown or
  *       empty name throws `${where}: …"{n:name}"…` naming the name and the known ones
  * and the build (scanSite / buildSite) resolves them in the catalogs of the home page.
  */
-import { readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
@@ -55,10 +56,13 @@ function countsFromPackages() {
     for (const m of head.matchAll(/components\/([a-z0-9-]+)\.css/g)) scripted.add(m[1]);
   }
 
-  return { components, objects, primitives, semantic, cssonly: components - scripted.size, withjs: scripted.size };
+  // The tags that come styled with no class: the elements of the fixture whose style is a stylesheet of core's elements/
+  const elements = JSON.parse(read("tests/fixtures/html-elements.json")).elements.filter((element) => /^elements\//.test(element.styledBy)).length;
+
+  return { components, objects, primitives, semantic, elements, cssonly: components - scripted.size, withjs: scripted.size };
 }
 
-const NAMES = ["components", "objects", "primitives", "semantic", "cssonly", "withjs"];
+const NAMES = ["components", "objects", "primitives", "semantic", "elements", "cssonly", "withjs"];
 const fn = (name) => {
   expect(typeof i18n[name], `scripts/docs-site/i18n.js exports ${name}`).toBe("function");
   return i18n[name];
@@ -67,15 +71,16 @@ const fn = (name) => {
 /* ---- The function --------------------------------------------------------- */
 
 describe("{n:name} in a catalog value: expandNumbers", () => {
-  it("exports the six names, and the two functions", () => {
+  it("exports the seven names, and the functions", () => {
     expect(i18n.NUMBER_NAMES).toEqual(NAMES);
     fn("expandNumbers");
     fn("siteNumbers");
+    fn("countBareElements");
   });
 
   it("writes each count where the placeholder is, as plain digits, as many times as it appears", () => {
     const expand = fn("expandNumbers");
-    const numbers = { components: 32, objects: 10, primitives: 53, semantic: 55, cssonly: 25, withjs: 7 };
+    const numbers = { components: 32, objects: 10, primitives: 53, semantic: 55, elements: 68, cssonly: 25, withjs: 7 };
     expect(expand("{n:components} components and {n:objects} layout objects", numbers, "en.json:1")).toBe("32 components and 10 layout objects");
     expect(expand("{n:semantic} semantic tokens, {n:primitives} primitives, {n:semantic} again", numbers, "en.json:1")).toBe("55 semantic tokens, 53 primitives, 55 again");
     expect(expand("{n:components}", { ...numbers, components: 0 }, "en.json:1")).toBe("0");
@@ -83,7 +88,7 @@ describe("{n:name} in a catalog value: expandNumbers", () => {
 
   it("leaves a value with no placeholder alone, and the placeholders the scripts fill", () => {
     const expand = fn("expandNumbers");
-    const numbers = { components: 32, objects: 10, primitives: 53, semantic: 55, cssonly: 25, withjs: 7 };
+    const numbers = { components: 32, objects: 10, primitives: 53, semantic: 55, elements: 68, cssonly: 25, withjs: 7 };
     for (const text of ["Nothing to count", "{n} results", "{shown} of {n} results. Type more to narrow.", "No results for “{query}”.", "{mode}", "<span data-count=\"x\">3</span>"]) {
       expect(expand(text, numbers, "en.json:1"), text).toBe(text);
     }
@@ -92,7 +97,7 @@ describe("{n:name} in a catalog value: expandNumbers", () => {
 
   it("fails on an unknown name, with the file:line it is given and the names that are known", () => {
     const expand = fn("expandNumbers");
-    const numbers = { components: 32, objects: 10, primitives: 53, semantic: 55, cssonly: 25, withjs: 7 };
+    const numbers = { components: 32, objects: 10, primitives: 53, semantic: 55, elements: 68, cssonly: 25, withjs: 7 };
     for (const bad of ["{n:families}", "{n:Components}", "{n:}", "{n:x}"]) {
       let message = "";
       try {
@@ -104,6 +109,33 @@ describe("{n:name} in a catalog value: expandNumbers", () => {
       expect(message, bad).toMatch(/components/);
       expect(message, bad).toMatch(/semantic/);
     }
+  });
+});
+
+describe("countBareElements: the tags that come styled with no class", () => {
+  const dir = () => {
+    const root = mkdtempSync(join(tmpdir(), "luz-elements-"));
+    temps.push(root);
+    return root;
+  };
+
+  it("counts the real elements/ of core as the tags of the fixture whose style is a stylesheet of elements/ (68 today)", () => {
+    expect(fn("countBareElements")(join(repo, "packages/core/src/elements"))).toBe(countsFromPackages().elements);
+  });
+
+  it("counts each type selector once, across the files, and only the type selectors", () => {
+    const root = dir();
+    writeFileSync(join(root, "text.css"), `/* h6 { } */
+:where(a, a:hover, button[type="submit"], input:not([type="checkbox"]):focus-visible, h1, h2) { color: red; }
+@media (min-width: 40rem) { :where(code, kbd) { color: red; } }
+.luz-btn, #id, [hidden], * { color: red; }
+:where(p:lang(en), li:nth-child(2n + 1), div:dir(rtl)) { color: red; }
+`);
+    writeFileSync(join(root, "forms.css"), ":where(a, input, select, textarea) { color: red; }\n");
+    writeFileSync(join(root, "_private.css"), ":where(blockquote) { color: red; }\n");
+    writeFileSync(join(root, "index.css"), '@import "text.css"; :where(figure) { color: red; }\n');
+    // a, button, input, h1, h2, code, kbd, p, li, div, select, textarea; not the classes, the id, the attribute, the comment, a private file or the index
+    expect(fn("countBareElements")(root)).toBe(12);
   });
 });
 

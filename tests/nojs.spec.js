@@ -243,14 +243,14 @@ for (const home of ['/', '/es/', '/ar/']) {
 
 // The home: nine sections in a fixed order (the hero, the light, the four levels of "inside", why, native and modes), all of them
 // words and native elements; what needs a script (the buttons of Modes, the copy buttons) is not shown dead
-const SECTIONS = ['hero', 'light', 'inside', 'inside-2', 'inside-3', 'inside-4', 'why', 'native', 'modes'];
+const SECTIONS = ['hero', 'light', 'inside', 'inside-2', 'inside-3', 'inside-4', 'why', 'native', 'modes', 'faq'];
 const HOME_CATALOG = { '/': 'en', '/es/': 'es', '/ar/': 'ar' };
 const homeCatalog = (home) => JSON.parse(readFileSync(fileURLToPath(new URL(`../apps/landing/i18n/${HOME_CATALOG[home]}.json`, import.meta.url)), 'utf-8'));
 
 for (const home of ['/', '/es/', '/ar/']) {
-  test(`${home}: the nine sections are in the page, in order, and every one but the light has words`, async ({ page }) => {
+  test(`${home}: the ten sections are in the page, in order, and every one but the light has words`, async ({ page }) => {
     await page.goto(home);
-    expect(await page.locator('main section').evaluateAll((all) => all.map((el) => el.id))).toEqual(SECTIONS);
+    expect(await page.locator('main section[id]').evaluateAll((all) => all.map((el) => el.id))).toEqual(SECTIONS);
     await expect(page.locator('h1')).toHaveCount(1);
     for (const id of SECTIONS.filter((section) => section !== 'light')) {
       const section = page.locator(`main section#${id}`);
@@ -297,13 +297,14 @@ for (const home of ['/', '/es/', '/ar/']) {
     await expect(scenes).toHaveCount(3);
     const code = scenes.nth(0).locator('pre.luz-code-block');
     await expect(code).toBeVisible();
-    await expect(code).toContainText('<meter');
-    // The code of the other two scenes is in the page too, as text
+    await expect(code).toContainText('<details open>');
+    // The code of the other two scenes is in the page too, as text: a field and a button with no class, then a link and a button with one
     expect(await scenes.nth(1).locator('pre.luz-code-block').textContent()).toContain('<input');
-    expect(await scenes.nth(2).locator('pre.luz-code-block').textContent()).toContain('<button');
+    expect(await scenes.nth(1).locator('pre.luz-code-block').textContent()).toContain('<button');
+    expect(await scenes.nth(2).locator('pre.luz-code-block').textContent()).toContain('luz-btn luz-btn--danger');
     // The result is a picture of the code: native elements, inert
     await expect(scenes.nth(0).locator('.landing-typed__result')).toHaveJSProperty('inert', true);
-    await expect(scenes.nth(0).locator('.landing-typed__state--luz meter.luz-meter')).toBeVisible();
+    await expect(scenes.nth(0).locator('.landing-typed__state--luz details')).toBeVisible();
     // The points and the link to every tag are plain links and text
     await expect(page.locator('#native a.landing-inside__cta')).toBeVisible();
   });

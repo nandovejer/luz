@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 import { homedir } from "node:os";
 import { execFileSync } from "node:child_process";
 import { BASE_PATH } from "../scripts/docs-site/plugin.js";
+import { quoted } from "./helpers/quoted-attributes.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
@@ -245,7 +246,8 @@ describe("Pages site: Content-Security-Policy", () => {
   it("every published page has a CSP that only runs the site's own scripts", () => {
     expect(pages).toContain("docs/docs/index.html");
     for (const page of pages) {
-      const html = read(page);
+      // The home's pages are written without the quotes a value does not need: read them with the quotes back
+      const html = quoted(read(page), page);
       const csp = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)">/)?.[1];
       expect(csp, `${page} has no CSP meta`).toBeTruthy();
       const scriptSrc = csp.split(";").map((d) => d.trim()).find((d) => d.startsWith("script-src"));

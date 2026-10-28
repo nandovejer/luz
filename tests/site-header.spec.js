@@ -554,16 +554,16 @@ test.describe('accessibility', () => {
 });
 
 test.describe('the logo mark', () => {
-  /** The mark is wide (1.57:1): 35 x 22 px, sized by its height, in every width and direction. */
+  /** The mark is the prism, a square: 22 x 22 px, sized by its height, in every width and direction. */
   const mark = (page) => page.locator('#site-header .site-header__brand .site-header__mark svg');
 
   for (const path of [HOME, '/ar/', DOCS]) {
     for (const width of [1280, 375, 320]) {
-      test(`${path} at ${width}px: the mark is 35 x 22 px and nothing scrolls sideways`, async ({ page, javaScriptEnabled }) => {
+      test(`${path} at ${width}px: the mark is 22 x 22 px and nothing scrolls sideways`, async ({ page, javaScriptEnabled }) => {
         await page.setViewportSize({ width, height: 700 });
         await open(page, path, javaScriptEnabled);
         const m = await box(mark(page));
-        expect(Math.abs(m.width - 35), `width ${m.width}`).toBeLessThanOrEqual(1);
+        expect(Math.abs(m.width - 22), `width ${m.width}`).toBeLessThanOrEqual(1);
         expect(Math.abs(m.height - 22), `height ${m.height}`).toBeLessThanOrEqual(1);
         expect(m.left >= 0 && m.right <= width, JSON.stringify(m)).toBe(true);
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

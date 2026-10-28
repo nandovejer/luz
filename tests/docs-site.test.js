@@ -13,6 +13,7 @@ import { decodeEntities, readHtml } from "../scripts/docs-site/html.js";
 import { PROMPT_KINDS, promptRoute } from "../scripts/docs-site/prompts.js";
 import { classesOf, findAll, hasClass, isInside, isLive, parse, query, queryAllLive, textOf } from "./helpers/html-dom.js";
 import { PATTERN_AREAS } from "./helpers/package-areas.js";
+import { quoted } from "./helpers/quoted-attributes.js";
 import { readIndex, search } from "../packages/catalog/src/search.js";
 import {
   SEARCH_INDEX_ROUTE,
@@ -508,7 +509,8 @@ describe("the LUZ docs site", () => {
   });
 
   it("renders one header for every page from the shared partial, with the current links marked, and the language switcher on the docs pages", () => {
-    const header = (html) => html.match(/<header class="site-header"[\s\S]*?<\/header>/)[0];
+    // The home is written without the quotes a value does not need: its header is read with them restored
+    const header = (html) => quoted(html).match(/<header class="site-header"[\s\S]*?<\/header>/)[0];
     // The docs header and the home's differ in the switcher alone: the home's is in its language, the docs' lists the same page in each language
     const flat = (html) =>
       html

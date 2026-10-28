@@ -121,10 +121,10 @@ describe("apps/landing/index.html: the template of the home", () => {
     expect(at("/apps/landing/light/light.css")).toBeGreaterThan(-1);
   });
 
-  it("writes the sections of the home in order: the hero and the light first, then the levels, why, native and modes", () => {
+  it("writes the sections of the home in order: the hero and the light first, then the levels, why, native, modes and the FAQ", () => {
     const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
     const ids = [...main.matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-    expect(ids).toEqual(["hero", "light", "inside", "inside-2", "inside-3", "inside-4", "why", "native", "modes"]);
+    expect(ids).toEqual(["hero", "light", "inside", "inside-2", "inside-3", "inside-4", "why", "native", "modes", "faq"]);
     expect(main.match(/<h1\b/g)).toHaveLength(1);
     expect(html, "no link to a section that went").not.toMatch(/href="#(?:fit|type|start)"/);
   });
