@@ -104,6 +104,9 @@ export const isKindFile = (file, kinds) => {
   return named !== undefined && !named.includes("any") && !BASE_PIECES.has(css);
 };
 
+/** The kinds whose header holds `.luz-nav-toggle`, which sidebar.css defines: they link that file though their pages do not list it. */
+const NAV_TOGGLE_KINDS = ["landing", "blog"];
+
 /**
  * The patterns of one kind: the pages that name it, or `any`, and their
  * stylesheets (`components/<name>.css`) in the order of CASCADE; `pages` are the
@@ -115,7 +118,8 @@ export function kindPatterns(kind, root, components) {
   if (!FITS_KINDS.includes(kind)) throw new Error(`${kind} is not a kind of site with patterns (${FITS_KINDS.join(", ")})`);
   const pages = catalogPatterns(root).filter((p) => p.kinds.includes(kind) || p.kinds.includes("any"));
   const built = new Set((components ?? []).map(({ file }) => file));
-  const files = [...new Set(pages.flatMap(stylesheetsOf))];
+  // The nav toggle of the site header and of the masthead (landing, blog) is defined in the sidebar's file
+  const files = [...new Set([...pages.flatMap(stylesheetsOf), ...(NAV_TOGGLE_KINDS.includes(kind) ? ["components/sidebar.css"] : [])])];
   const missing = components ? files.filter((file) => !built.has(file)) : [];
   if (missing.length) throw new Error(`scripts/docs-site/kinds.js: a page of catalog lists ${missing.join(", ")}, which packages/catalog/dist does not have`);
   const unordered = files.filter((file) => !CASCADE.includes(file.replace(/^components\/|\.css$/g, "")));

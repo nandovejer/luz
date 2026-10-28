@@ -88,8 +88,29 @@ function classLines(root, pkg, seen, keep = () => true) {
   return [...blocks].map(([block, parts]) =>
     names.has(block)
       ? `- \`${block}\`${parts.length ? `: ${parts.map((p) => `\`${p}\``).join(", ")}` : ""}`
-      : `- the parts of \`<${block}>\`: ${parts.map((p) => `\`${block}${p}\``).join(", ")}`,
+      : `- the parts of \`<${block}>\` (prefix ${block}): ${parts.map((p) => `\`${p}\``).join(", ")}`,
   );
+}
+
+/**
+ * Attribute names for an element line: those that share a `data-luz-<group>-` prefix
+ * (`data-luz-label-idle`, `data-luz-label-none`…) are one entry, `data-luz-label-*`
+ * (the manifest lists each name).
+ */
+function groupAttributes(names) {
+  const groups = new Map();
+  for (const name of names) {
+    const key = /^(data-luz-[a-z]+-)/.exec(name)?.[1];
+    if (key) groups.set(key, (groups.get(key) ?? 0) + 1);
+  }
+  const done = new Set();
+  return names.flatMap((name) => {
+    const key = /^(data-luz-[a-z]+-)/.exec(name)?.[1];
+    if (!key || groups.get(key) < 3) return [name];
+    if (done.has(key)) return [];
+    done.add(key);
+    return [`${key}*`];
+  });
 }
 
 /**
@@ -101,7 +122,7 @@ function elementLines(root, pkg) {
   for (const module of readJson(root, `packages/${pkg}/dist/custom-elements.json`).modules) {
     for (const d of module.declarations ?? []) {
       if (!d.tagName) continue;
-      const attributes = (d.attributes ?? []).map((a) => a.name);
+      const attributes = groupAttributes((d.attributes ?? []).map((a) => a.name));
       const stylesheet = d.stylesheet ? ` Its stylesheet: \`@luz-ds/${pkg}/${d.stylesheet}\`.` : "";
       lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}${stylesheet}`.trimEnd());
     }
@@ -162,7 +183,7 @@ export function assemblePrompt(id, { root }) {
     elements: ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n"),
     "kind-links": kind.docs
       ? patterns.pages
-          .map((page) => `- ${PROMPT_SITE}${kind.docs}${page}/: the ${page.replace(/-/g, " ")} pattern of ${kind.title}, with its markup.`)
+          .map((page) => `- ${PROMPT_SITE}${kind.docs}${page}/: markup of the ${page.replace(/-/g, " ")}.`)
           .join("\n")
       : [
           "- The prompts for one kind of site, for the person to paste instead of this one (do not follow them from here):",
