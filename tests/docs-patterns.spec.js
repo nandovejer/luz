@@ -5,15 +5,15 @@
  * seven files of @luz-ds/catalog (`components/docs-*.css`, layer luz.catalog; the package @luz-ds/docs is gone
  * since F5b), with no script.
  *
- *   shell      body.o-shell.luz-docs-shell > header, nav.luz-sidebar.luz-docs-nav, main.o-main.luz-docs-main,
- *              aside.luz-docs-rail: sidebar 16.5rem | content | rail 14rem from 80rem, two columns from
+ *   shell      body.o-shell.luz-docs-layout > header, nav.luz-sidebar.luz-docs-nav, main.o-main.luz-docs-main,
+ *              aside.luz-page-rail: sidebar 16.5rem | content | rail 14rem from 80rem, two columns from
  *              60rem, one below; the measure of the content is --luz-docs-measure: 46rem
- *   page-head  header.luz-docs-page-head > p.__eyebrow, h1, p.__lead, ul.__meta (chips)
- *   rail       aside.luz-docs-rail > nav.luz-docs-rail__onpage (sticky) + .luz-docs-rail__actions
- *   example    figure.luz-docs-example > .__preview (> .__frame, --luz-docs-example-w) + optional .__code
- *   dodont     .luz-docs-dodont > figure.__item--do / --dont (figcaption > strong.__verdict, .__stage)
- *   pager      ul.luz-docs-pager > li.__prev / li.__next > a.__link > span.__label + span.__title
- *   page-foot  p.luz-docs-page-foot (Last updated, Edit, Report)
+ *   page-head  header.luz-doc-header > p.__eyebrow, h1, p.__lead, ul.__meta (chips)
+ *   rail       aside.luz-page-rail > nav.luz-page-rail__onpage (sticky) + .luz-page-rail__actions
+ *   example    figure.luz-example > .__preview (> .__frame, --luz-example-w) + optional .__code
+ *   dodont     .luz-do-dont > figure.__item--do / --dont (figcaption > strong.__verdict, .__stage)
+ *   pager      ul.luz-pager > li.__prev / li.__next > a.__link > span.__label + span.__title
+ *   page-foot  p.luz-page-footer (Last updated, Edit, Report)
  *
  * Page: tests/fixtures/docs-patterns.html (tokens, core and the docs files of catalog only), built by
  * `pnpm catalog:build`.
@@ -27,8 +27,8 @@ import { focusAndHitTest, ringBeyondInlineStart } from './helpers/obscured.js';
 import { readingOrder } from './helpers/reading-order.js';
 
 const PAGE = '/tests/fixtures/docs-patterns.html';
-/** The docs patterns are seven files of catalog since F5b (no package, no bundle): the page links each one. */
-const FILES = ['docs-shell', 'docs-rail', 'docs-page-head', 'docs-example', 'docs-dodont', 'docs-pager', 'docs-page-foot'];
+/** The docs patterns are seven files of catalog since F5b (no package, no bundle), named for the block since F8, in the order of the cascade: the page links each one. */
+const FILES = ['docs-layout', 'doc-header', 'page-rail', 'example', 'do-dont', 'pager', 'page-footer'];
 const DIR = '/packages/catalog/dist/components';
 
 /** Measured against a root font size of 16px: 1rem. */
@@ -259,10 +259,10 @@ test.describe('rail: "On this page" that stays in view, and the page actions', (
 
 test.describe('rail: from 80rem the aside stretches over its grid area and its inner box sticks, so the footer is never covered', () => {
   for (const width of [1440, 1280]) {
-    test(`${width}px: aside > div.luz-docs-rail__inner (the list and the actions); the aside is not sticky and is as tall as main`, async ({ page }) => {
+    test(`${width}px: aside > div.luz-page-rail__inner (the list and the actions); the aside is not sticky and is as tall as main`, async ({ page }) => {
       await page.setViewportSize({ width, height: 800 });
       await page.goto(PAGE);
-      await expect(page.locator('#rail > .luz-docs-rail__inner')).toHaveCount(1);
+      await expect(page.locator('#rail > .luz-page-rail__inner')).toHaveCount(1);
       await expect(page.locator('#rail > *')).toHaveCount(1);
       await expect(page.locator('#rail-inner > #onpage')).toHaveCount(1);
       await expect(page.locator('#rail-inner > #actions')).toHaveCount(1);
@@ -448,7 +448,7 @@ test.describe('example: the preview and its code in one frame, a frame as wide a
   });
 
   test('the code is optional: a figure with only a preview is framed too', async ({ page }) => {
-    await expect(page.locator('#example-plain .luz-docs-example__code')).toHaveCount(0);
+    await expect(page.locator('#example-plain .luz-example__code')).toHaveCount(0);
     const figure = await box(page, '#example-plain');
     const preview = await box(page, '#preview-plain');
     expect(figure.height).toBeGreaterThan(preview.height - 1);
@@ -459,13 +459,13 @@ test.describe('example: the preview and its code in one frame, a frame as wide a
     }), 'the figure has a border').toBe(true);
   });
 
-  test('the frame is as wide as the preview, unless --luz-docs-example-w narrows it', async ({ page }) => {
+  test('the frame is as wide as the preview, unless --luz-example-w narrows it', async ({ page }) => {
     const preview = await box(page, '#preview');
     const open = await box(page, '#frame');
     const narrow = await box(page, '#frame-narrow');
     expect(open.width, 'no width set: the room there is').toBeGreaterThan(30 * REM - 1);
     expect(open.width).toBeLessThanOrEqual(preview.width + 1);
-    expect(near(narrow.width, 20 * REM), `--luz-docs-example-w: 20rem gives ${narrow.width}px`).toBe(true);
+    expect(near(narrow.width, 20 * REM), `--luz-example-w: 20rem gives ${narrow.width}px`).toBe(true);
     expect(narrow.width).toBeLessThan(open.width);
   });
 
@@ -545,7 +545,7 @@ test.describe('pager: Previous and Next as two link blocks', () => {
     expect(near(prev.top, next.top, 1)).toBe(true);
     expect(next.left).toBeGreaterThan(prev.right);
     expect(near(prev.width, next.width, 2)).toBe(true);
-    expect(await page.locator('#pager .luz-docs-pager__next').evaluate((el) => getComputedStyle(el).textAlign)).toMatch(/^(end|right)$/);
+    expect(await page.locator('#pager .luz-pager__next').evaluate((el) => getComputedStyle(el).textAlign)).toMatch(/^(end|right)$/);
     for (const link of [prev, next]) expect(link.height).toBeGreaterThanOrEqual(24);
   });
 

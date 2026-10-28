@@ -3,13 +3,13 @@
  * writes the rest of the page (scripts/docs-site). What the generated pages
  * must do, from the markup of tests/fixtures/docs-patterns.html:
  *
- *   shell      body.o-shell.luz-docs-shell > nav.luz-sidebar.luz-docs-nav,
- *              then aside.luz-docs-rail "About this page", then main.luz-docs-main
+ *   shell      body.o-shell.luz-docs-layout > nav.luz-sidebar.luz-docs-nav,
+ *              then aside.luz-page-rail "About this page", then main.luz-docs-main
  *              (the rail is before main in the markup, and the grid places it: the
  *              third column from 80rem, above the content below it)
  *   sidebar    an accordion: every area of site.json with pages is a native details (one name), open only for
  *              the area of the current page, every page listed (tests/docs-nav-fold.test.js holds the markup)
- *   page head  header.luz-docs-page-head: eyebrow "Area · Group", h1, lead and,
+ *   page head  header.luz-doc-header: eyebrow "Area · Group", h1, lead and,
  *              on a component or pattern page, the chips
  *   rail       "On this page" (outside main) and the three actions
  *   index.md   every page also published as Markdown, from the text of llms-full.txt
@@ -107,8 +107,8 @@ const partsOf = (root) => {
   const body = query(root, "body");
   const main = query(root, "main");
   const nav = queryLive(root, "nav.luz-docs-nav");
-  const aside = queryLive(root, "aside.luz-docs-rail");
-  const head = queryLive(root, "header.luz-docs-page-head");
+  const aside = queryLive(root, "aside.luz-page-rail");
+  const head = queryLive(root, "header.luz-doc-header");
   return { body, main, nav, aside, head };
 };
 
@@ -223,13 +223,13 @@ const renderedOf = (fixture, route, options) => {
  * 1. The shell
  * =================================================================================== */
 
-describe("the shell: body.o-shell.luz-docs-shell, the sidebar, the rail, then main", () => {
+describe("the shell: body.o-shell.luz-docs-layout, the sidebar, the rail, then main", () => {
   it("every docs page has the shell classes on body, on the sidebar nav and on main", () => {
     for (const p of site.pages) {
       const { body, main, nav } = partsOf(treeOf(p.route));
       expect(body, p.route).toBeTruthy();
       expect(hasClass(body, "o-shell"), `${p.route} body.o-shell`).toBe(true);
-      expect(hasClass(body, "luz-docs-shell"), `${p.route} body.luz-docs-shell`).toBe(true);
+      expect(hasClass(body, "luz-docs-layout"), `${p.route} body.luz-docs-layout`).toBe(true);
       expect(nav, `${p.route} nav.luz-docs-nav`).toBeTruthy();
       expect(hasClass(nav, "luz-sidebar"), `${p.route} the nav is core's sidebar`).toBe(true);
       expect(queryAllLive(treeOf(p.route), "nav.luz-docs-nav"), p.route).toHaveLength(1);
@@ -238,10 +238,10 @@ describe("the shell: body.o-shell.luz-docs-shell, the sidebar, the rail, then ma
     }
   });
 
-  it("aside.luz-docs-rail, named \"About this page\", comes right before main, as its sibling (the grid places it)", () => {
+  it("aside.luz-page-rail, named \"About this page\", comes right before main, as its sibling (the grid places it)", () => {
     for (const p of site.pages) {
       const { main, aside } = partsOf(treeOf(p.route));
-      expect(aside, `${p.route} aside.luz-docs-rail`).toBeTruthy();
+      expect(aside, `${p.route} aside.luz-page-rail`).toBeTruthy();
       expect(aside.attrs.get("aria-label"), p.route).toBe("About this page");
       expect(aside.parent, p.route).toBe(main.parent);
       const siblings = main.parent.children;
@@ -261,10 +261,10 @@ describe("the shell: body.o-shell.luz-docs-shell, the sidebar, the rail, then ma
     }
   });
 
-  it("the page head, header.luz-docs-page-head, still opens main: only the breadcrumb may come before it, and the h1 is the first heading", () => {
+  it("the page head, header.luz-doc-header, still opens main: only the breadcrumb may come before it, and the h1 is the first heading", () => {
     for (const p of site.pages) {
       const { main, head } = partsOf(treeOf(p.route));
-      expect(head, `${p.route} header.luz-docs-page-head`).toBeTruthy();
+      expect(head, `${p.route} header.luz-doc-header`).toBeTruthy();
       const before = main.children.slice(0, main.children.indexOf(head));
       expect(before.map((n) => `${n.name}.${n.attrs.get("class")}`), `${p.route}: what comes before the page head in main`).toEqual(before.length ? ["nav.docs-breadcrumb"] : []);
       expect(queryAll(head, "h1"), `${p.route}: the h1 is in the page head`).toHaveLength(1);
@@ -276,10 +276,10 @@ describe("the shell: body.o-shell.luz-docs-shell, the sidebar, the rail, then ma
     let checked = 0;
     for (const p of site.pages) {
       const { aside } = partsOf(treeOf(p.route));
-      const onpage = queryAll(aside, "nav.luz-docs-rail__onpage");
+      const onpage = queryAll(aside, "nav.luz-page-rail__onpage");
       if (!onpage.length) continue;
-      const fold = query(onpage[0], "details.luz-docs-rail__fold");
-      expect(fold.attrs.has("open"), `${p.route}: details.luz-docs-rail__fold carries \`open\` in the markup`).toBe(true);
+      const fold = query(onpage[0], "details.luz-page-rail__fold");
+      expect(fold.attrs.has("open"), `${p.route}: details.luz-page-rail__fold carries \`open\` in the markup`).toBe(true);
       checked += 1;
     }
     expect(checked).toBeGreaterThan(0);
@@ -290,9 +290,9 @@ describe("the shell: body.o-shell.luz-docs-shell, the sidebar, the rail, then ma
     const root = parse(html, "/404.html");
     expect(findAll(root, (n) => n.name === "script"), "no script").toEqual([]);
     expect(findAll(root, (n) => n.name === "aside"), "no aside").toEqual([]);
-    expect(html).not.toContain("luz-docs-rail");
+    expect(html).not.toContain("luz-page-rail");
     expect(queryAll(root, "h1.docs-title"), "one h1, with its old class").toHaveLength(1);
-    expect(queryAll(root, "header.luz-docs-page-head"), "it keeps its old head: no page-head header").toEqual([]);
+    expect(queryAll(root, "header.luz-doc-header"), "it keeps its old head: no page-head header").toEqual([]);
   });
 });
 
@@ -389,13 +389,13 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     return area?.label ?? null;
   };
 
-  it("every page with an area has header.luz-docs-page-head in main, with the eyebrow \"Area · Group\" (or the area alone) ABOVE the one h1", () => {
+  it("every page with an area has header.luz-doc-header in main, with the eyebrow \"Area · Group\" (or the area alone) ABOVE the one h1", () => {
     for (const p of site.pages.filter((q) => areaOf(site, q))) {
       const root = treeOf(p.route);
       const { main, head } = partsOf(root);
-      expect(head, `${p.route} header.luz-docs-page-head`).toBeTruthy();
+      expect(head, `${p.route} header.luz-doc-header`).toBeTruthy();
       expect(isInside(head, main), `${p.route}: the head is in main`).toBe(true);
-      const eyebrow = query(head, "p.luz-docs-page-head__eyebrow");
+      const eyebrow = query(head, "p.luz-doc-header__eyebrow");
       expect(eyebrow, `${p.route} eyebrow`).toBeTruthy();
       expect(textOf(eyebrow), p.route).toBe(eyebrowOf(p));
       const h1s = queryAll(head, "h1");
@@ -409,7 +409,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
   it("then the lead, which is the description, unless the page brings its own lead (lead: false)", () => {
     for (const p of site.pages.filter((q) => areaOf(site, q))) {
       const { head } = partsOf(treeOf(p.route));
-      const lead = query(head, "p.luz-docs-page-head__lead");
+      const lead = query(head, "p.luz-doc-header__lead");
       if (p.meta.lead === "false") {
         expect(lead, `${p.route} brings its own lead`).toBeNull();
         continue;
@@ -427,7 +427,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
       if (!index) continue;
       const { head, main } = partsOf(treeOf(index.route));
       const pkg = eyebrowPackageOf(area.id);
-      expect(textOf(query(head, "p.luz-docs-page-head__eyebrow")), index.route).toBe(pkg ? `${area.label} · ${pkg}` : area.label);
+      expect(textOf(query(head, "p.luz-doc-header__eyebrow")), index.route).toBe(pkg ? `${area.label} · ${pkg}` : area.label);
       // Nothing styled as an eyebrow sits in the content under the h1
       const below = findAll(main, (n) => n.name === "p" && /(^|\s)docs-eyebrow(\s|$)/.test(n.attrs.get("class") ?? ""));
       expect(below.map((n) => textOf(n)), index.route).toEqual([]);
@@ -439,7 +439,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     expect(views.length).toBeGreaterThan(40);
     for (const p of views) {
       const { head } = partsOf(treeOf(p.route));
-      const meta = query(head, "ul.luz-docs-page-head__meta");
+      const meta = query(head, "ul.luz-doc-header__meta");
       expect(meta, `${p.route} chips`).toBeTruthy();
       const chips = meta.children.filter((c) => c.name === "li");
       const texts = chips.map((c) => textOf(c));
@@ -464,24 +464,24 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     }
   });
 
-  it("a comma-separated list is one chip: the files of a page are what the front matter says between semicolons (the tag and the attribute of the banner)", () => {
-    const banner = site.byRoute.get("/docs/catalog/banner/");
-    expect(banner.meta.files).toContain(",");
-    const meta = query(partsOf(treeOf(banner.route)).head, "ul.luz-docs-page-head__meta");
-    expect(textOf(meta?.children[0])).toBe(banner.meta.files);
+  it("a comma-separated list is one chip: the files of a page are what the front matter says between semicolons (the tag and the attribute of the announcement)", () => {
+    const announcement = site.byRoute.get("/docs/catalog/announcement/");
+    expect(announcement.meta.files).toContain(",");
+    const meta = query(partsOf(treeOf(announcement.route)).head, "ul.luz-doc-header__meta");
+    expect(textOf(meta?.children[0])).toBe(announcement.meta.files);
   });
 
-  it("the file of a pattern of a kind of site is a chip of its own: components/<kind>-<name>.css, in code", () => {
-    const hero = site.byRoute.get("/docs/catalog/landing-hero/");
-    const first = query(partsOf(treeOf(hero.route)).head, "ul.luz-docs-page-head__meta").children[0];
-    expect(textOf(first)).toBe("components/landing-hero.css");
+  it("the file of a pattern of a kind of site is a chip of its own: components/<block>.css, in code", () => {
+    const hero = site.byRoute.get("/docs/catalog/hero/");
+    const first = query(partsOf(treeOf(hero.route)).head, "ul.luz-doc-header__meta").children[0];
+    expect(textOf(first)).toBe("components/hero.css");
     expect(query(first, "code.docs-demo__file")).toBeTruthy();
   });
 
   it("the chips are for component and pattern pages only: every other page has the eyebrow, the h1 and the lead, and no list of chips", () => {
     for (const p of site.pages.filter((q) => areaOf(site, q) && !isView(q))) {
       const { head } = partsOf(treeOf(p.route));
-      expect(query(head, "ul.luz-docs-page-head__meta"), p.route).toBeNull();
+      expect(query(head, "ul.luz-doc-header__meta"), p.route).toBeNull();
     }
   });
 
@@ -493,19 +493,19 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     };
     for (const [id, pkg] of Object.entries(expected)) {
       const area = site.areas.find((a) => a.id === id);
-      expect(textOf(query(partsOf(treeOf(`/docs/${area.slug}/`)).head, "p.luz-docs-page-head__eyebrow")), id).toBe(`${area.label} · ${pkg}`);
+      expect(textOf(query(partsOf(treeOf(`/docs/${area.slug}/`)).head, "p.luz-doc-header__eyebrow")), id).toBe(`${area.label} · ${pkg}`);
       expect(eyebrowPackageOf(id), `${id}: the helper reads the package.json name`).toBe(pkg);
     }
     for (const id of ["get-started", "accessibility"]) {
       const area = site.areas.find((a) => a.id === id);
-      expect(textOf(query(partsOf(treeOf(`/docs/${area.slug}/`)).head, "p.luz-docs-page-head__eyebrow")), id).toBe(area.label);
+      expect(textOf(query(partsOf(treeOf(`/docs/${area.slug}/`)).head, "p.luz-doc-header__eyebrow")), id).toBe(area.label);
     }
   });
 
   it("the package is the area's, not the page's: a page of the area keeps \"Area · Group\" or the area alone", () => {
-    for (const route of ["/docs/components/button/", "/docs/components/keyframes/", "/docs/tokens/color/", "/docs/catalog/landing-hero/"]) {
+    for (const route of ["/docs/components/button/", "/docs/components/keyframes/", "/docs/tokens/color/", "/docs/catalog/hero/"]) {
       const p = site.byRoute.get(route);
-      const eyebrow = textOf(query(partsOf(treeOf(route)).head, "p.luz-docs-page-head__eyebrow"));
+      const eyebrow = textOf(query(partsOf(treeOf(route)).head, "p.luz-doc-header__eyebrow"));
       expect(eyebrow, route).not.toContain("@luz-ds/");
       expect(eyebrow, route).toBe(eyebrowOf(p));
     }
@@ -515,7 +515,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     let plain = 0;
     for (const p of site.pages.filter((q) => areaOf(site, q))) {
       const { head } = partsOf(treeOf(p.route));
-      const line = queryAllLive(head, "p.luz-docs-page-head__files");
+      const line = queryAllLive(head, "p.luz-doc-header__files");
       if (isView(p) || !p.meta.files) {
         expect(line, `${p.route}: no Files line`).toEqual([]);
         continue;
@@ -525,10 +525,10 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
       const files = filesOf(p);
       expect(textOf(line[0]).replace(/ ,/g, ","), p.route).toBe(`Files: ${files.join(", ")}`);
       expect(findAll(line[0], (n) => n.name === "code").map((c) => textOf(c)), `${p.route}: each file in a <code>`).toEqual(files);
-      expect(query(head, "ul.luz-docs-page-head__meta"), `${p.route}: a line, not chips`).toBeNull();
+      expect(query(head, "ul.luz-doc-header__meta"), `${p.route}: a line, not chips`).toBeNull();
       // Under the h1 and the lead, where the chips would stand
       expect(line[0].open.index, p.route).toBeGreaterThan(query(head, "h1").open.index);
-      const lead = query(head, "p.luz-docs-page-head__lead");
+      const lead = query(head, "p.luz-doc-header__lead");
       if (lead) expect(line[0].open.index, p.route).toBeGreaterThan(lead.open.index);
     }
     expect(plain, "there are such pages").toBeGreaterThan(5);
@@ -540,7 +540,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
       ["/docs/tokens/color/", ["src/semantic.css"]],
     ]) {
       const { head } = partsOf(treeOf(route));
-      const line = queryLive(head, "p.luz-docs-page-head__files");
+      const line = queryLive(head, "p.luz-doc-header__files");
       expect(line, route).toBeTruthy();
       expect(textOf(line).replace(/ ,/g, ","), route).toBe(`Files: ${files.join(", ")}`);
     }
@@ -548,20 +548,20 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
 
   it("keeps the chips on a component page (/docs/components/button/) and gives it no Files line", () => {
     const { head } = partsOf(treeOf("/docs/components/button/"));
-    expect(query(head, "ul.luz-docs-page-head__meta")).toBeTruthy();
-    expect(query(head, "p.luz-docs-page-head__files")).toBeNull();
+    expect(query(head, "ul.luz-doc-header__meta")).toBeTruthy();
+    expect(query(head, "p.luz-doc-header__files")).toBeNull();
   });
 
   describe("on a repository made for it", () => {
     const chipsNodes = (fixture, route) => {
       const { head } = partsOf(renderedOf(fixture, route));
-      const meta = query(head, "ul.luz-docs-page-head__meta");
+      const meta = query(head, "ul.luz-doc-header__meta");
       expect(meta, `${route} chips`).toBeTruthy();
       return (meta?.children ?? []).filter((c) => c.name === "li");
     };
     const chipsOf = (fixture, route) => {
       const { head } = partsOf(renderedOf(fixture, route));
-      const meta = query(head, "ul.luz-docs-page-head__meta");
+      const meta = query(head, "ul.luz-doc-header__meta");
       expect(meta, `${route} chips`).toBeTruthy();
       return meta.children.filter((c) => c.name === "li").map((c) => textOf(c));
     };
@@ -607,7 +607,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
 
     it("names the eyebrow \"Area · Group\" for a page with a group, and the area alone without one", () => {
       const fixture = fixtureSite();
-      const eyebrow = (route) => textOf(query(renderedOf(fixture, route), "p.luz-docs-page-head__eyebrow"));
+      const eyebrow = (route) => textOf(query(renderedOf(fixture, route), "p.luz-doc-header__eyebrow"));
       expect(eyebrow("/docs/components/widget/")).toBe("Components · Actions and input");
       expect(eyebrow("/docs/components/")).toBe("Components");
       expect(eyebrow("/docs/get-started/short/")).toBe("Get started");
@@ -643,7 +643,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
 
     it("an area index says \"Area · package\" with the package of its entry in site.json; an area with none says the label alone", () => {
       const fixture = packaged();
-      const eyebrow = (route) => textOf(query(headOf(fixture, route), "p.luz-docs-page-head__eyebrow"));
+      const eyebrow = (route) => textOf(query(headOf(fixture, route), "p.luz-doc-header__eyebrow"));
       expect(eyebrow("/docs/components/")).toBe("Components · @luz-ds/core");
       expect(eyebrow("/docs/tokens/")).toBe("Tokens · @luz-ds/tokens");
       expect(eyebrow("/docs/get-started/")).toBe("Get started");
@@ -651,7 +651,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
 
     it("the package is for the index only: a page of the area says \"Area · Group\", and a page without a group the area alone", () => {
       const fixture = packaged();
-      const eyebrow = (route) => textOf(query(headOf(fixture, route), "p.luz-docs-page-head__eyebrow"));
+      const eyebrow = (route) => textOf(query(headOf(fixture, route), "p.luz-doc-header__eyebrow"));
       expect(eyebrow("/docs/components/widget/")).toBe("Components · Actions and input");
       expect(eyebrow("/docs/tokens/color/")).toBe("Tokens · Token families");
       expect(eyebrow("/docs/get-started/short/")).toBe("Get started");
@@ -665,11 +665,11 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
         ["/docs/tokens/color/", ["src/semantic.css", "src/extra.css"]],
       ]) {
         const head = headOf(fixture, route);
-        const line = queryAll(head, "p.luz-docs-page-head__files");
+        const line = queryAll(head, "p.luz-doc-header__files");
         expect(line, route).toHaveLength(1);
         expect(textOf(line[0]).replace(/ ,/g, ","), route).toBe(`Files: ${files.join(", ")}`);
         expect(findAll(line[0], (n) => n.name === "code").map((c) => textOf(c)), route).toEqual(files);
-        expect(query(head, "ul.luz-docs-page-head__meta"), route).toBeNull();
+        expect(query(head, "ul.luz-doc-header__meta"), route).toBeNull();
         expect(line[0].parent, `${route}: in the page head`).toBe(head);
       }
     });
@@ -677,24 +677,24 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     it("a component page keeps its chips and has no Files line; a page without files has neither", () => {
       const fixture = packaged();
       const widget = headOf(fixture, "/docs/components/widget/");
-      expect(query(widget, "ul.luz-docs-page-head__meta")).toBeTruthy();
-      expect(query(widget, "p.luz-docs-page-head__files")).toBeNull();
+      expect(query(widget, "ul.luz-doc-header__meta")).toBeTruthy();
+      expect(query(widget, "p.luz-doc-header__files")).toBeNull();
       for (const route of ["/docs/tokens/bare/", "/docs/get-started/short/"]) {
         const head = headOf(fixture, route);
-        expect(query(head, "p.luz-docs-page-head__files"), route).toBeNull();
-        expect(query(head, "ul.luz-docs-page-head__meta"), route).toBeNull();
+        expect(query(head, "p.luz-doc-header__files"), route).toBeNull();
+        expect(query(head, "ul.luz-doc-header__meta"), route).toBeNull();
       }
     });
 
     it("gives a page that is not a component the eyebrow, the h1 and the lead, whatever its front matter says of files and module; lead: false leaves the lead to the content", () => {
       const fixture = fixtureSite();
       const { head } = partsOf(renderedOf(fixture, "/docs/get-started/plain/"));
-      expect(query(head, "ul.luz-docs-page-head__meta"), "no chips").toBeNull();
-      expect(query(head, "p.luz-docs-page-head__eyebrow")).toBeTruthy();
+      expect(query(head, "ul.luz-doc-header__meta"), "no chips").toBeNull();
+      expect(query(head, "p.luz-doc-header__eyebrow")).toBeTruthy();
       expect(query(head, "h1")).toBeTruthy();
-      expect(query(head, "p.luz-docs-page-head__lead"), "lead: false").toBeNull();
+      expect(query(head, "p.luz-doc-header__lead"), "lead: false").toBeNull();
       const short = partsOf(renderedOf(fixture, "/docs/get-started/short/")).head;
-      expect(textOf(query(short, "p.luz-docs-page-head__lead"))).toBe("A short page without a rail list.");
+      expect(textOf(query(short, "p.luz-doc-header__lead"))).toBe("A short page without a rail list.");
     });
   });
 });
@@ -707,7 +707,7 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
   const ACTIONS = ["Copy page as Markdown", "Copy link to this page", "Edit this page", "Report a problem"];
   const ACTIONS_ES = ["Copiar la página en Markdown", "Copiar el enlace a esta página", "Editar esta página", "Avisar de un problema"];
   const actionsOf = (aside) => {
-    const box = query(aside, ".luz-docs-rail__actions");
+    const box = query(aside, ".luz-page-rail__actions");
     return box ? findAll(box, (n) => n.name === "a") : [];
   };
 
@@ -746,21 +746,21 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
     expect(links[1].attrs.get("data-docs-not-copied")).toBe("No se pudo copiar el enlace.");
   }, 120_000);
 
-  it("holds the rail's content in one div.luz-docs-rail__inner (the sticky box, WCAG 2.4.11): aside > div.__inner > the list nav and the actions", () => {
+  it("holds the rail's content in one div.luz-page-rail__inner (the sticky box, WCAG 2.4.11): aside > div.__inner > the list nav and the actions", () => {
     for (const p of site.pages) {
       const { aside } = partsOf(treeOf(p.route));
       expect(aside.children.map((c) => c.name), `${p.route}: the aside has one child`).toEqual(["div"]);
       const [inner] = aside.children;
-      expect(hasClass(inner, "luz-docs-rail__inner"), `${p.route}: div.luz-docs-rail__inner`).toBe(true);
-      const onpage = queryAll(aside, "nav.luz-docs-rail__onpage");
+      expect(hasClass(inner, "luz-page-rail__inner"), `${p.route}: div.luz-page-rail__inner`).toBe(true);
+      const onpage = queryAll(aside, "nav.luz-page-rail__onpage");
       for (const nav of onpage) expect(nav.parent, `${p.route}: "On this page" is a child of the inner box`).toBe(inner);
-      const actions = queryAll(aside, ".luz-docs-rail__actions");
+      const actions = queryAll(aside, ".luz-page-rail__actions");
       expect(actions, `${p.route}: one actions box`).toHaveLength(1);
       expect(actions[0].parent, `${p.route}: the actions are a child of the inner box`).toBe(inner);
     }
   });
 
-  it("puts \"On this page\" in the rail, never in main: nav.luz-docs-rail__onpage > details > summary.luz-docs-rail__title", () => {
+  it("puts \"On this page\" in the rail, never in main: nav.luz-page-rail__onpage > details > summary.luz-page-rail__title", () => {
     let withList = 0;
     let expected = 0;
     for (const p of site.pages) {
@@ -769,12 +769,12 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
       // A list is written when the page has three or more h2 with an id outside the demos
       const h2s = readHtml(rendered.get(p.route).slice(main.open.index, main.close.end), p.route).headings.filter((h) => h.level === 2 && !h.specimen && h.id && h.id !== "docs-end-title");
       if (p.meta.toc !== "false" && h2s.length >= 3) expected += 1;
-      expect(queryAllLive(main, "nav.luz-docs-rail__onpage"), `${p.route}: nothing of the list stays in main`).toEqual([]);
-      const onpage = queryAll(aside, "nav.luz-docs-rail__onpage");
+      expect(queryAllLive(main, "nav.luz-page-rail__onpage"), `${p.route}: nothing of the list stays in main`).toEqual([]);
+      const onpage = queryAll(aside, "nav.luz-page-rail__onpage");
       if (!onpage.length) continue;
       withList += 1;
       expect(onpage, p.route).toHaveLength(1);
-      const summary = query(onpage[0], "summary.luz-docs-rail__title");
+      const summary = query(onpage[0], "summary.luz-page-rail__title");
       expect(textOf(summary), p.route).toBe("On this page");
       expect(summary.parent.name, p.route).toBe("details");
       expect(isInside(summary.parent, onpage[0]), p.route).toBe(true);
@@ -790,7 +790,7 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
       const levels = p.meta.toc === "h2,h3" ? [2, 3] : [2];
       const html = rendered.get(p.route).slice(main.open.index, main.close.end);
       const headings = readHtml(html, p.route).headings.filter((h) => levels.includes(h.level) && !h.specimen && h.id && h.id !== "docs-end-title");
-      const onpage = query(aside, "nav.luz-docs-rail__onpage");
+      const onpage = query(aside, "nav.luz-page-rail__onpage");
       if (headings.filter((h) => h.level === 2).length < 3) continue;
       expect(onpage, `${p.route} has the list`).toBeTruthy();
       const hrefs = findAll(onpage, (n) => n.name === "a").map((a) => a.attrs.get("href"));
@@ -804,7 +804,7 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
     for (const p of pages) {
       const { aside } = partsOf(treeOf(p.route));
       expect(aside, p.route).toBeTruthy();
-      expect(queryAll(aside, "nav.luz-docs-rail__onpage"), p.route).toEqual([]);
+      expect(queryAll(aside, "nav.luz-page-rail__onpage"), p.route).toEqual([]);
       expect(actionsOf(aside), p.route).toHaveLength(4);
     }
   });
@@ -814,12 +814,12 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
       const fixture = fixtureSite();
       const root = renderedOf(fixture, "/docs/components/widget/");
       const { main, aside } = partsOf(root);
-      expect(queryAllLive(main, "nav.luz-docs-rail__onpage")).toEqual([]);
-      const onpage = query(aside, "nav.luz-docs-rail__onpage");
+      expect(queryAllLive(main, "nav.luz-page-rail__onpage")).toEqual([]);
+      const onpage = query(aside, "nav.luz-page-rail__onpage");
       expect(findAll(onpage, (n) => n.name === "a").map((a) => a.attrs.get("href"))).toEqual(["#example", "#known-issues", "#code", "#markup", "#design", "#when"]);
       const markup = find(onpage, (n) => n.name === "a" && n.attrs.get("href") === "#markup");
       const sub = markup.parent.parent;
-      expect(hasClass(sub, "luz-docs-rail__sub")).toBe(true);
+      expect(hasClass(sub, "luz-page-rail__sub")).toBe(true);
       const owner = sub.parent;
       expect(owner.name).toBe("li");
       expect(find(owner, (n) => n.name === "a").attrs.get("href")).toBe("#code");
@@ -828,7 +828,7 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
     it("toc: false leaves only the actions, with the same four links", () => {
       const fixture = fixtureSite();
       const { aside } = partsOf(renderedOf(fixture, "/docs/get-started/short/"));
-      expect(queryAll(aside, "nav.luz-docs-rail__onpage")).toEqual([]);
+      expect(queryAll(aside, "nav.luz-page-rail__onpage")).toEqual([]);
       expect(actionsOf(aside).map((a) => textOf(a))).toEqual(ACTIONS);
     });
 
@@ -846,10 +846,10 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
   });
 
   it("the Pages build makes the Copy link relative to the page, as it does every link to a route (the site lives under /luz/)", () => {
-    const plugin = docsSite({ repoRoot: repo, relative: true, outRoot: join(tmpdir(), "luz-docs-shell-out"), pagesBase: "/luz/", siteUrl: "" });
+    const plugin = docsSite({ repoRoot: repo, relative: true, outRoot: join(tmpdir(), "luz-docs-layout-out"), pagesBase: "/luz/", siteUrl: "" });
     const file = join(repo, "apps/docs/pages/components/button.html");
     const html = plugin.transformIndexHtml.handler(readFileSync(file, "utf-8"), { filename: file });
-    const aside = query(parse(html, "button"), "aside.luz-docs-rail");
+    const aside = query(parse(html, "button"), "aside.luz-page-rail");
     const copy = actionsOf(aside)[0];
     expect(copy, "the Copy link").toBeTruthy();
     const href = copy.attrs.get("href");
@@ -868,7 +868,7 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
  * =================================================================================== */
 
 describe("index.md: every page also published as Markdown, from the same text as llms-full.txt (RL-19)", () => {
-  const plugin = (relative) => docsSite({ repoRoot: repo, relative, outRoot: join(tmpdir(), "luz-docs-shell-out"), pagesBase: "/luz/", siteUrl: "" });
+  const plugin = (relative) => docsSite({ repoRoot: repo, relative, outRoot: join(tmpdir(), "luz-docs-layout-out"), pagesBase: "/luz/", siteUrl: "" });
   const mdFileOf = (route) => `${route.slice(1)}index.md`;
   const emittedBy = (relative) => {
     const files = new Map();
@@ -957,14 +957,14 @@ describe("index.md: every page also published as Markdown, from the same text as
 
 describe("the page foot: Last updated <time>, then Edit and Report", () => {
   /** The datetime of the page's own "Last updated" (undefined when there is none). */
-  const timeOf = (root) => query(queryLive(root, "p.luz-docs-page-foot"), "time")?.attrs.get("datetime");
+  const timeOf = (root) => query(queryLive(root, "p.luz-page-footer"), "time")?.attrs.get("datetime");
 
   const footOf = (root) => {
     const { main } = partsOf(root);
-    return queryAllLive(main, "p.luz-docs-page-foot");
+    return queryAllLive(main, "p.luz-page-footer");
   };
 
-  it("every page has one p.luz-docs-page-foot in main, after the pager, with Last updated and a <time datetime> from git log", () => {
+  it("every page has one p.luz-page-footer in main, after the pager, with Last updated and a <time datetime> from git log", () => {
     for (const p of site.pages) {
       const root = treeOf(p.route);
       const foots = footOf(root);
@@ -979,7 +979,7 @@ describe("the page foot: Last updated <time>, then Edit and Report", () => {
       if (expected) expect(iso, `${p.route}: git log -1 --format=%cs -- ${p.file}`).toBe(expected);
       else expect(isToday(iso), `${p.route}: not in git, so today`).toBe(true);
       // After the pager
-      const pager = queryLive(root, ".luz-docs-pager");
+      const pager = queryLive(root, ".luz-pager");
       if (pager) expect(foot.open.index, p.route).toBeGreaterThan(pager.open.index);
     }
   });
@@ -988,7 +988,7 @@ describe("the page foot: Last updated <time>, then Edit and Report", () => {
     for (const p of site.pages) {
       const root = treeOf(p.route);
       const foot = footOf(root)[0];
-      const [, , edit, report] = findAll(queryLive(root, ".luz-docs-rail__actions"), (n) => n.name === "a");
+      const [, , edit, report] = findAll(queryLive(root, ".luz-page-rail__actions"), (n) => n.name === "a");
       const links = findAll(foot, (n) => n.name === "a");
       expect(links.map((a) => textOf(a)), p.route).toEqual(["Edit this page", "Report a problem"]);
       expect(links[0].attrs.get("href"), p.route).toBe(edit.attrs.get("href"));
@@ -1035,15 +1035,15 @@ describe("the pager: @luz-ds/docs's Previous / Next, named by its visible text (
   it("every page of the reading order has the pager, with a nav around it and the prev and next items", () => {
     for (const p of order) {
       const root = treeOf(p.route);
-      const pager = queryLive(root, ".luz-docs-pager");
+      const pager = queryLive(root, ".luz-pager");
       expect(pager, `${p.route} pager`).toBeTruthy();
-      expect(pager.name, `${p.route}: the package's form is ul.luz-docs-pager`).toBe("ul");
+      expect(pager.name, `${p.route}: the package's form is ul.luz-pager`).toBe("ul");
       let nav = pager;
       while (nav && nav.name !== "nav") nav = nav.parent;
       expect(nav?.name, `${p.route}: the pager is in a nav`).toBe("nav");
       const { prev, next } = neighboursOf(site, p);
-      expect(queryAllLive(root, ".luz-docs-pager__prev").length, `${p.route} prev`).toBe(prev ? 1 : 0);
-      expect(queryAllLive(root, ".luz-docs-pager__next").length, `${p.route} next`).toBe(next ? 1 : 0);
+      expect(queryAllLive(root, ".luz-pager__prev").length, `${p.route} prev`).toBe(prev ? 1 : 0);
+      expect(queryAllLive(root, ".luz-pager__next").length, `${p.route} next`).toBe(next ? 1 : 0);
     }
   });
 
@@ -1053,14 +1053,14 @@ describe("the pager: @luz-ds/docs's Previous / Next, named by its visible text (
       const { prev, next } = neighboursOf(site, p);
       for (const [key, label, target] of [["prev", "Previous", prev], ["next", "Next", next]]) {
         if (!target) continue;
-        const link = query(queryLive(root, `.luz-docs-pager__${key}`), "a.luz-docs-pager__link");
+        const link = query(queryLive(root, `.luz-pager__${key}`), "a.luz-pager__link");
         expect(link, `${p.route} ${key}`).toBeTruthy();
         expect(link.attrs.get("rel"), p.route).toBe(key);
         expect(link.attrs.get("href"), p.route).toBe(target.route);
         expect(link.attrs.has("aria-label"), `${p.route} ${key} has no aria-label`).toBe(false);
         expect(link.attrs.has("aria-labelledby"), `${p.route} ${key} has no aria-labelledby`).toBe(false);
-        expect(textOf(query(link, "span.luz-docs-pager__label")), p.route).toBe(label);
-        expect(textOf(query(link, "span.luz-docs-pager__title")), p.route).toBe(target.meta.title);
+        expect(textOf(query(link, "span.luz-pager__label")), p.route).toBe(label);
+        expect(textOf(query(link, "span.luz-pager__title")), p.route).toBe(target.meta.title);
         expect(textOf(link), `${p.route}: the name`).toBe(`${label} ${target.meta.title}`);
       }
     }
@@ -1069,7 +1069,7 @@ describe("the pager: @luz-ds/docs's Previous / Next, named by its visible text (
   it("the pages outside the reading order (the hub area, the not-found page) have none", () => {
     for (const [route] of rendered) {
       if (orderRoutes.includes(route)) continue;
-      expect(queryLive(parse(rendered.get(route), route), ".luz-docs-pager"), route).toBeNull();
+      expect(queryLive(parse(rendered.get(route), route), ".luz-pager"), route).toBeNull();
     }
   });
 });
@@ -1103,7 +1103,7 @@ describe("<!-- luz:generated --> puts the gallery of an area index where the mar
   it("the rail lists the headings in the order they are on the page, the gallery's among them", () => {
     const fixture = fixtureSite();
     const root = parse(renderPage(fixture.site.byRoute.get("/docs/components/"), fixture.site), "/docs/components/");
-    const onpage = query(query(root, "aside.luz-docs-rail"), "nav.luz-docs-rail__onpage");
+    const onpage = query(query(root, "aside.luz-page-rail"), "nav.luz-page-rail__onpage");
     expect(onpage, "the list is in the rail").toBeTruthy();
     expect(findAll(onpage, (n) => n.name === "a").map((a) => a.attrs.get("href"))).toEqual(["#before", "#group-actions", "#after"]);
   });

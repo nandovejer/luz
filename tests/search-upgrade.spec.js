@@ -185,7 +185,7 @@ test.describe('S4 and R4: the chunk does not load', () => {
     await rejections(page);
     await holdIdle(page);
     await page.route(SEARCH_CHUNK, (route) => route.fulfill({ status: 500, body: 'no' }));
-    // The fixture has a <luz-consent> too: count the search chunk only
+    // The fixture has a <luz-cookie-consent> too: count the search chunk only
     const all = chunkRequests(page);
     const seen = { get length() { return all.filter((c) => c === 'search').length; } };
     await page.goto(PAGE);

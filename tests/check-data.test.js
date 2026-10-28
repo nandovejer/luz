@@ -59,6 +59,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { buildClassManifest, formatClassManifest, writeManifests } from "../scripts/ai-manifests.js";
 import { LAYERS } from "../scripts/luz-layers.js";
 import { buildCheckTo, builtOnce, removeBuilds, root } from "./helpers/check-build.js";
+import { checkModule } from "./helpers/check-modules.js";
 import { builtData, checkJson, removeWorkspaces, workspace } from "./helpers/check-fixtures.js";
 
 afterAll(removeBuilds);
@@ -243,27 +244,27 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(copy.hooks).toEqual(source.hooks);
   });
 
-  it("keeps the file of every catalog class where the data is read: the default is the file of the block, the rest is written (cms-toc is in cms-article.css)", async () => {
+  it("keeps the file of every catalog class where the data is read: the default is the file of the block, the rest is written (luz-toc is in article.css)", async () => {
     expect(built.error).toBeNull();
     const source = manifestOf("catalog").classes;
     // One class in its own file, and one that is not: the snapshot says so in its own way
-    const own = source.find((c) => c.name === "luz-landing-hero");
-    const other = source.find((c) => c.name === "luz-cms-toc");
+    const own = source.find((c) => c.name === "luz-hero");
+    const other = source.find((c) => c.name === "luz-toc");
     expect(own.files, "the default case").toEqual([ownFile(own)]);
-    expect(other.files, "the case that is not the default").toEqual(["components/cms-article.css"]);
-    expect(ownFile(other), "cms-toc has no file named for its block").toBe("components/cms-toc.css");
+    expect(other.files, "the case that is not the default").toEqual(["components/article.css"]);
+    expect(ownFile(other), "luz-toc has no file named for its block: components/toc.css does not exist").toBe("components/toc.css");
     const copy = snapshot("catalog", "classes.json").classes;
     expect(copy.find((c) => c.name === own.name)).not.toHaveProperty("files");
-    expect(copy.find((c) => c.name === other.name).files).toEqual(["components/cms-article.css"]);
+    expect(copy.find((c) => c.name === other.name).files).toEqual(["components/article.css"]);
     // What luz-check reads from it, the load rule and its message: the right file for each, from the snapshot alone
     const data = (await builtData()).data;
-    for (const [name, file] of [["luz-landing-hero", "components/landing-hero.css"], ["luz-cms-toc", "components/cms-article.css"], ["luz-docs-rail", "components/docs-rail.css"]]) {
+    for (const [name, file] of [["luz-hero", "components/hero.css"], ["luz-toc", "components/article.css"], ["luz-page-rail", "components/page-rail.css"]]) {
       const dir = workspace({
         "index.html": `<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="utf-8">\n  <title>P</title>\n  <link rel="stylesheet" href="node_modules/@luz-ds/tokens/dist/luz-tokens.min.css">\n  <link rel="stylesheet" href="node_modules/@luz-ds/core/dist/luz.min.css">\n</head>\n<body>\n  <p class="${name}">x</p>\n</body>\n</html>\n`,
       });
       const result = checkJson(["."], dir, { data });
       const found = result.data.findings.filter((f) => f.rule === "load/package-missing");
-      expect(found.map((f) => f.message), name).toEqual([`.${name} is in @luz-ds/catalog/${file}, which this page does not load; add it after core`]);
+      expect(found.map((f) => f.message), name).toEqual([(await checkModule("messages")).message("load/package-missing:file", { name, package: "catalog", file })]);
     }
   });
 

@@ -27,6 +27,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, describe, expect, it } from "vitest";
 import { siteNumbers } from "../scripts/docs-site/i18n.js";
 import { builtData, checkJson, removeWorkspaces, workspace } from "./helpers/check-fixtures.js";
+import { checkModule } from "./helpers/check-modules.js";
 
 const repo = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(join(repo, path), "utf-8");
@@ -277,9 +278,9 @@ describe("catalog.js, the presence loader, loads the two chunks that came from c
   const loader = () => read("packages/catalog/src/catalog.js");
   const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'\\])\/\/.*$/gm, "$1");
 
-  it("names five chunks as literals (SEC-CHUNK-1), search, consent, mode, timeline and sidebar, and nothing else", () => {
+  it("names five chunks as literals (SEC-CHUNK-1), search, cookie-consent, color-mode, timeline and sidebar, and nothing else (F8 named the chunks for their elements)", () => {
     const targets = [...code(loader()).matchAll(/\bimport\s*\(\s*(["'])(\.\/[\w.-]+\.js)\1\s*\)/g)].map((m) => m[2]).sort();
-    expect(targets).toEqual(["./consent.js", "./mode.js", "./search.js", "./sidebar.js", "./timeline.js"]);
+    expect(targets).toEqual(["./color-mode.js", "./cookie-consent.js", "./search.js", "./sidebar.js", "./timeline.js"]);
     expect(code(loader()).match(/\bimport\s*\(/g)).toHaveLength(5);
   });
 
@@ -313,7 +314,7 @@ describe("catalog.js, the presence loader, loads the two chunks that came from c
 
   it("the build lists the five chunks and the size guard expects them", () => {
     const chunks = /chunks:\s*\[([^\]]*)\]/.exec(read("scripts/build-catalog.js"))?.[1] ?? "";
-    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "consent.js", "mode.js", "timeline.js", "sidebar.js"]);
+    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "color-mode.js", "timeline.js", "sidebar.js"]);
     const loaders = /const LOADERS = \{([^;]*)\};/.exec(read("scripts/check-size.js"))?.[1] ?? "";
     expect(loaders).toContain("./sidebar.min.js");
     expect(loaders).toContain("./timeline.min.js");
@@ -446,23 +447,24 @@ ${body}
   };
 
   it.each([
-    { name: "luz-sidebar", file: "sidebar", body: '<nav class="luz-sidebar" aria-label="Main"><a class="luz-sidebar__link" href="/">Home</a></nav>' },
-    { name: "luz-navbar", file: "navbar", body: '<nav class="luz-navbar" aria-label="Main"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="/">Home</a></li></ul></nav>' },
-    { name: "luz-terminal", file: "terminal", body: '<div class="luz-terminal"><pre class="luz-code-block"><code>npm i</code></pre></div>' },
-    { name: "luz-timeline", file: "timeline", body: '<ol class="luz-timeline"><li class="luz-timeline__item">2026</li></ol>' },
-  ])(".$name is in @luz-ds/catalog/components/$file.css, which a page that links core only does not load", async ({ name, file, body }) => {
+    { name: "luz-sidebar", component: "components/sidebar.css", body: '<nav class="luz-sidebar" aria-label="Main"><a class="luz-sidebar__link" href="/">Home</a></nav>' },
+    { name: "luz-navbar", component: "components/navbar.css", body: '<nav class="luz-navbar" aria-label="Main"><ul class="luz-navbar__list"><li><a class="luz-navbar__link" href="/">Home</a></li></ul></nav>' },
+    { name: "luz-terminal", component: "components/terminal.css", body: '<div class="luz-terminal"><pre class="luz-code-block"><code>npm i</code></pre></div>' },
+    { name: "luz-timeline", component: "components/timeline.css", body: '<ol class="luz-timeline"><li class="luz-timeline__item">2026</li></ol>' },
+  ])("a page that links core only is told to add the file of .$name: $component", async ({ name, component, body }) => {
     const messages = await found(body);
-    expect(messages).toContain(`.${name} is in @luz-ds/catalog/components/${file}.css, which this page does not load; add it after core`);
+    // the words are messages.js's, not typed here
+    expect(messages).toContain((await checkModule("messages")).message("load/package-missing:file", { name, package: "catalog", file: component }));
   });
 
   it("<luz-timeline> names the same file", async () => {
     const messages = await found('<luz-timeline aria-label="History"><ol><li>2026</li></ol></luz-timeline>');
-    expect(messages).toEqual(["<luz-timeline> is in @luz-ds/catalog/components/timeline.css, which this page does not load; add it after core"]);
+    expect(messages).toEqual([(await checkModule("messages")).message("load/package-missing:tag-file", { tag: "luz-timeline", package: "catalog", file: "components/timeline.css" })]);
   });
 
   it("the sidebar's mobile button, .luz-nav-toggle, is the sidebar's file too", async () => {
     const messages = await found('<button class="luz-nav-toggle" popovertarget="nav" aria-label="Menu"></button>');
-    expect(messages).toEqual([".luz-nav-toggle is in @luz-ds/catalog/components/sidebar.css, which this page does not load; add it after core"]);
+    expect(messages).toEqual([(await checkModule("messages")).message("load/package-missing:file", { name: "luz-nav-toggle", package: "catalog", file: "components/sidebar.css" })]);
   });
 
   it("a page that links the catalog file after core is told nothing", async () => {

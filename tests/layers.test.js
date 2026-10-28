@@ -14,7 +14,8 @@ const dist = (path) => `${root}${path}`;
 const listed = (dir) => (existsSync(dist(dir)) ? readdirSync(dist(dir)).filter((f) => f.endsWith(".css")).map((f) => `${dir}/${f}`) : []);
 
 const KINDS = ["landing", "cms", "app", "docs"];
-const KIND_SAMPLE = { landing: "hero", cms: "header", app: "dashboard", docs: "shell" };
+// F8: a pattern's file is named for its block, one sample of each kind of site (the header is the landing page's and the blog's)
+const KIND_SAMPLE = { landing: "hero", cms: "masthead", app: "dashboard", docs: "docs-layout" };
 
 const files = [
   "packages/tokens/dist/luz-tokens.css",
@@ -59,7 +60,7 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
     expect(files.some((f) => f.endsWith("catalog.css")), "catalog has no bundle").toBe(false);
     // The patterns of a landing page, a blog, an app and a documentation site are files of catalog since F5b
     for (const kind of KINDS) {
-      expect(files.some((f) => f.startsWith("packages/catalog/dist/components/") && f.endsWith(`/${kind}-${KIND_SAMPLE[kind]}.css`)), `packages/catalog/dist/components/${kind}-${KIND_SAMPLE[kind]}.css`).toBe(true);
+      expect(files.some((f) => f.startsWith("packages/catalog/dist/components/") && f.endsWith(`/${KIND_SAMPLE[kind]}.css`)), `packages/catalog/dist/components/${KIND_SAMPLE[kind]}.css`).toBe(true);
       expect(files.some((f) => f.endsWith(`/${kind}.css`)), `${kind} has no bundle: its package is gone`).toBe(false);
     }
   });
@@ -83,14 +84,14 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
   }
 
   it("a catalog component that prints puts those rules in `luz.print`, after its `luz.catalog` block, and one that does not has `luz.catalog` only", () => {
-    // Print rules are the top-level `@media print` blocks of the source; docs-shell and landing-glow are patterns that print
+    // Print rules are the top-level `@media print` blocks of the source; docs-layout and glow are patterns that print
     const printing = readdirSync(dist("packages/catalog/src/components"))
       .filter((f) => f.endsWith(".css") && !f.startsWith("_"))
       .filter((f) => /^@media\s+print\b/m.test(readFileSync(dist(`packages/catalog/src/components/${f}`), "utf-8")))
       .map((f) => f.replace(/\.css$/, ""))
       .sort();
     // F7: the sidebar and the timeline brought their print rules from core's _print.css
-    expect(printing).toEqual(["consent", "docs-shell", "landing-glow", "search", "sidebar", "timeline"]);
+    expect(printing).toEqual(["cookie-consent", "docs-layout", "glow", "search", "sidebar", "timeline"]);
     const all = readdirSync(dist("packages/catalog/dist/components")).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, ""));
     for (const name of all) {
       const items = topLevel(readFileSync(dist(`packages/catalog/dist/components/${name}.css`), "utf-8"));

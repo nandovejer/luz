@@ -1,21 +1,21 @@
 // @ts-check
 /**
- * `.luz-cms-header` (`components/cms-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md, §1.6
- * and §9 step 11; .claude/plans/specs/f3-ux.md, §1 and the accessibility
- * answers A1 to A13): the header of a blog or a newspaper, no longer
- * `.luz-site-header` of site. One block, one modifier.
+ * The header of a blog or a newspaper (F8 of .claude/plans/ai-and-catalog-only.md, decisions 66 and 67; before F8 it was
+ * `.luz-cms-header` and `.luz-cms-header--masthead`, `components/cms-header.css`):
  *
- *   Default (the blog bar): header.luz-cms-header.o-sticky >
+ *   The blog bar is `.luz-site-header` with `.luz-site-header--publication` (`components/site-header.css` of
+ *   @luz-ds/catalog): header.luz-site-header.luz-site-header--publication.o-sticky >
  *     div.o-container.o-container--inline.o-row holding core's .luz-nav-toggle,
- *     the `__brand` link, core's nav.luz-navbar[popover] and div.o-row.__actions
+ *     the `__brand` link, catalog's nav.luz-navbar[popover] and div.o-row.__actions
  *     (<luz-search>, then an optional <luz-lang-switch>). Sticky through core's
- *     `.o-sticky`; the same bar as the landing's, with a masthead brand.
- *   `--masthead` (the newspaper): three rows, not sticky. `__top` (`__date`, a
- *     time[datetime], and `__actions`), the large centred `__brand`, and
+ *     `.o-sticky`; the same bar as a landing page's, with a publication's brand.
+ *   `.luz-masthead` (`components/masthead.css`, its own component, not a modifier of the bar): the newspaper, three
+ *     rows, not sticky. `__top` (`__date`, a time[datetime], and `__actions`), the large centred `__brand`, and
  *     `__sections` (the toggle and the navbar) between two rules.
  *
  * Pages: tests/fixtures/cms-header.html and tests/fixtures/cms-masthead.html
- * (tokens, core, catalog's search and cms files; no script at all). The collapse mechanics are
+ * (tokens, core, catalog's navbar, sidebar, search, site-header and masthead files; no script at all). The numbers are
+ * the ones of the bar and the masthead before F8: the union changes no look. The collapse mechanics are
  * tested once, in core, by tests/navbar.spec.js; the stickiness by
  * tests/objects.spec.js; the search slot by tests/search-slot.spec.js.
  * Runs in `chromium` and `chromium-nojs`: the header has no script.
@@ -83,7 +83,7 @@ async function axeIn(page, mode) {
 /* The blog bar                                                              */
 /* ======================================================================== */
 
-test.describe('cms header: the blog bar', () => {
+test.describe('site header --publication: the blog bar', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 600, height: 800 });
     await page.goto(BAR);
@@ -321,8 +321,26 @@ test.describe('cms header: the blog bar', () => {
     expect(await page.locator('#toggle svg path').evaluate((p) => getComputedStyle(p).fill)).not.toMatch(/none|rgba\(0, 0, 0, 0\)/);
   });
 
-  test('the markup carries no `luz-site-*` class: the header is composed of core and cms classes', async ({ page }) => {
-    expect(await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => c.startsWith('luz-site-')))).toEqual([]);
+  test('the bar is `.luz-site-header` with `--publication`, its parts are the site header\'s, and no class of before F8 is left', async ({ page }) => {
+    await expect(page.locator('#hdr')).toHaveClass(/\bluz-site-header\b/);
+    await expect(page.locator('#hdr')).toHaveClass(/\bluz-site-header--publication\b/);
+    await expect(page.locator('#hdr')).not.toHaveClass(/\bluz-masthead\b/);
+    await expect(page.locator('#brand')).toHaveClass(/\bluz-site-header__brand\b/);
+    await expect(page.locator('#actions')).toHaveClass(/\bluz-site-header__actions\b/);
+    const classes = await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]));
+    expect(classes.filter((c) => /^luz-(?:cms|landing|app)-/.test(c))).toEqual([]);
+  });
+
+  test('the old class does nothing: `.luz-cms-header` gives a bar no skin, brand or sticky look', async ({ page }) => {
+    await page.evaluate(() => {
+      const bar = document.getElementById('hdr');
+      bar.className = 'luz-cms-header';
+      for (const el of bar.querySelectorAll('[class]')) el.setAttribute('class', (el.getAttribute('class') ?? '').replace(/luz-site-header__/g, 'luz-cms-header__'));
+    });
+    expect(await style(page, '#hdr', 'borderBlockEndWidth')).toBe('0px');
+    expect(await style(page, '#hdr', 'paddingBlockStart')).toBe('0px');
+    expect(await style(page, '#brand', 'fontWeight')).not.toBe('600');
+    expect(await style(page, '#brand', 'minBlockSize')).not.toBe(`${await px(page, 'var(--luz-control-lg)')}px`);
   });
 
   for (const mode of MODES) {
@@ -340,7 +358,7 @@ test.describe('cms header: the blog bar', () => {
 /* --masthead                                                                */
 /* ======================================================================== */
 
-test.describe('cms header: --masthead', () => {
+test.describe('masthead: the newspaper header', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(MASTHEAD);
@@ -544,8 +562,13 @@ test.describe('cms header: --masthead', () => {
     }
   });
 
-  test('the markup carries no `luz-site-*` class', async ({ page }) => {
-    expect(await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => c.startsWith('luz-site-')))).toEqual([]);
+  test('the masthead is `.luz-masthead` on its own, with its own parts: no class of the site header, none of before F8', async ({ page }) => {
+    await expect(page.locator('#hdr')).toHaveClass(/\bluz-masthead\b/);
+    const classes = await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]));
+    expect(classes.filter((c) => c.startsWith('luz-site-header') || /^luz-(?:cms|landing|app)-/.test(c))).toEqual([]);
+    for (const [id, part] of [['top-row', 'top'], ['date', 'date'], ['actions', 'actions'], ['brand', 'brand'], ['sections', 'sections']]) {
+      await expect(page.locator(`#${id}`), part).toHaveClass(new RegExp(`\\bluz-masthead__${part}\\b`));
+    }
   });
 
   for (const mode of MODES) {

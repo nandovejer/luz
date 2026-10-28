@@ -303,7 +303,7 @@ test.describe('Documentation site', () => {
       await gotoId(page, 'c-button');
       await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).locator('a, [aria-current]')).toHaveText(['Docs', 'Core', 'Button']);
       // Each link is named by its visible text, not by an aria-label (WCAG 2.5.3)
-      const pager = page.locator('.luz-docs-pager');
+      const pager = page.locator('.luz-pager');
       await expect(pager.getByRole('link', { name: 'Previous Breadcrumb', exact: true })).toHaveAttribute('rel', 'prev');
       await expect(pager.getByRole('link', { name: 'Next Card', exact: true })).toHaveAttribute('rel', 'next');
       await expect(pager.locator('a[aria-label]')).toHaveCount(0);
@@ -312,7 +312,7 @@ test.describe('Documentation site', () => {
     test('an area index leads on to its first page, and the last page of an area to the next area', async ({ page }) => {
       await page.goto('/docs/tokens/');
       const end = page.getByRole('navigation', { name: 'Keep going' });
-      const pager = page.locator('.luz-docs-pager');
+      const pager = page.locator('.luz-pager');
       await expect(pager.getByRole('link', { name: 'Previous Documentation site', exact: true })).toHaveAttribute('href', /\/docs\/kinds\/docs\/$/);
       await expect(pager.getByRole('link', { name: 'Next Color', exact: true })).toHaveAttribute('href', /\/docs\/tokens\/color\/$/);
       await expect(end.locator('.docs-end__links a')).toHaveText(['Color modes and themes', 'Core', 'Tokens in Figma']);
@@ -328,12 +328,12 @@ test.describe('Documentation site', () => {
         // Tab from the last essential link reaches Previous, then Next
         await end.locator('.docs-end__links a').last().focus();
         await page.keyboard.press('Tab');
-        await expect(page.locator('.luz-docs-pager__prev a')).toBeFocused();
+        await expect(page.locator('.luz-pager__prev a')).toBeFocused();
         await page.keyboard.press('Tab');
-        await expect(page.locator('.luz-docs-pager__next a')).toBeFocused();
-        const outline = await page.locator('.luz-docs-pager__next a').evaluate((el) => getComputedStyle(el).outlineStyle);
+        await expect(page.locator('.luz-pager__next a')).toBeFocused();
+        const outline = await page.locator('.luz-pager__next a').evaluate((el) => getComputedStyle(el).outlineStyle);
         expect(outline).not.toBe('none');
-        const [prev, next] = await page.locator('.luz-docs-pager a').evaluateAll((links) => links.map((a) => a.getBoundingClientRect().toJSON()));
+        const [prev, next] = await page.locator('.luz-pager a').evaluateAll((links) => links.map((a) => a.getBoundingClientRect().toJSON()));
         for (const box of [prev, next]) expect(box.height).toBeGreaterThanOrEqual(24);
         // Side by side, or stacked full width at 640px and below
         if (width <= 640) {
@@ -392,7 +392,7 @@ test.describe('Documentation site', () => {
       await expect(page.locator('main').getByRole('navigation', { name: 'On this page' })).toHaveCount(0);
       expect(await toc.locator('details').evaluate((d) => d.open), 'open from 80rem').toBe(true);
       // The rail is before main in the markup and the third column on the screen, open from 80rem
-      const [main, aside] = await Promise.all(['main', 'aside.luz-docs-rail'].map((s) => page.locator(s).evaluate((el) => el.getBoundingClientRect().toJSON())));
+      const [main, aside] = await Promise.all(['main', 'aside.luz-page-rail'].map((s) => page.locator(s).evaluate((el) => el.getBoundingClientRect().toJSON())));
       expect(aside.left).toBeGreaterThanOrEqual(main.right - 1);
       // Both tabs' sections, each h3 under its tab's h2 (NAV-13)
       await expect(toc.getByRole('link')).toHaveText(['Example', 'Known issues', 'Code', 'Copy the markup', 'Variants and options', 'How it works', 'Without JavaScript', 'Keyboard and ARIA', 'Design', 'When to use', 'When not to use', "Do and don't", 'Writing the content', 'Contrast and focus', 'Tokens it uses']);
@@ -415,7 +415,7 @@ test.describe('Documentation site', () => {
       await page.setViewportSize({ width: 1000, height: 800 });
       await gotoId(page, 'c-button');
       const main = await page.locator('main').evaluate((el) => el.getBoundingClientRect().toJSON());
-      const aside = await page.locator('aside.luz-docs-rail').evaluate((el) => el.getBoundingClientRect().toJSON());
+      const aside = await page.locator('aside.luz-page-rail').evaluate((el) => el.getBoundingClientRect().toJSON());
       expect(aside.bottom, 'the rail is above the content').toBeLessThanOrEqual(main.top + 1);
       const toc = page.getByRole('complementary', { name: 'About this page' }).getByRole('navigation', { name: 'On this page' });
       const summary = toc.locator('summary');
@@ -436,7 +436,7 @@ test.describe('Documentation site', () => {
         await page.setViewportSize({ width, height: 800 });
         for (const route of [...ALL, '/'].filter((r) => r !== '/docs/components/')) {
           await page.goto(route);
-          const toGallery = page.locator('a[href="/docs/components/"]:visible').filter({ hasNot: page.locator('xpath=ancestor::*[@id="page-nav" or contains(@class,"luz-docs-rail")]') });
+          const toGallery = page.locator('a[href="/docs/components/"]:visible').filter({ hasNot: page.locator('xpath=ancestor::*[@id="page-nav" or contains(@class,"luz-page-rail")]') });
           expect(await toGallery.count(), route).toBeGreaterThan(0);
         }
         await page.goto('/docs/components/');
@@ -1055,7 +1055,7 @@ test.describe('Documentation site', () => {
       await expect(page.locator('a.docs-nav__area')).toHaveCount(0);
       await expect(page.locator('nav.luz-docs-nav')).toHaveCount(0);
       await expect(page.locator('aside')).toHaveCount(0);
-      await expect(page.locator('.luz-docs-rail')).toHaveCount(0);
+      await expect(page.locator('.luz-page-rail')).toHaveCount(0);
     });
 
     test('keeps the header\'s drawer, with the two site links only', async ({ page }) => {
@@ -1514,12 +1514,12 @@ test.describe('Site header and navigation toggle', () => {
     for (const file of ['apps/docs/site-header.css', 'apps/docs/site-header.js', 'apps/landing/site-header.css', 'apps/landing/site-header.js']) expect(existsSync(fromRepo(file)), `${file} moved`).toBe(false);
     expect(/from\s+["']\/apps\/site\/header\.js["']/.test(read('apps/docs/reference.js')), 'reference.js imports /apps/site/header.js').toBe(true);
     expect(/from\s+["']\/apps\/site\/header\.js["']/.test(read('apps/landing/landing.js')), 'landing.js imports /apps/site/header.js').toBe(true);
-    // The header no longer keeps a mode of its own: <luz-mode> does, and the page learns of it from its event
+    // The header no longer keeps a mode of its own: <luz-color-mode> does, and the page learns of it from its event
     const header = read('apps/site/header.js');
     expect(header).not.toContain('luz-site-mode');
     expect(header).not.toMatch(/onModeChange/);
-    expect(header).toMatch(/\/packages\/catalog\/dist\/mode\.js/);
-    expect(read('apps/docs/reference.js')).toMatch(/luz-mode:change/);
+    expect(header).toMatch(/\/packages\/catalog\/dist\/color-mode\.js/);
+    expect(read('apps/docs/reference.js')).toMatch(/luz-color-mode:change/);
   });
 
   const PAGES = [

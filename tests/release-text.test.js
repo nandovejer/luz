@@ -65,18 +65,22 @@ describe("the core / site rule (spec §7)", () => {
     expect(layering).toMatch(/catalog components now/i);
   });
 
-  it("AGENTS.md says the patterns of a kind of site are catalog too, one file each, `components/<kind>-<name>.css` and the class `.luz-<kind>-<name>`, composed from core's objects", () => {
+  it("AGENTS.md says the patterns of a kind of site are catalog too, one file each, `components/<block>.css` and the class `.luz-<block>` (F8: no kind of site in the name), composed from core's objects", () => {
     expect(layering).toMatch(/patterns of a kind of site are catalog too, one file each/i);
-    expect(layering).toContain("`components/<kind>-<name>.css`");
-    expect(layering).toContain("`.luz-<kind>-<name>`");
+    expect(layering).toContain("`components/<block>.css`");
+    expect(layering).toContain("`.luz-<block>`");
+    expect(layering).not.toContain("`components/<kind>-<name>.css`");
+    expect(layering).not.toContain("`.luz-<kind>-<name>`");
     expect(layering).toMatch(/composed in the markup from core's objects/);
-    expect(layering).toMatch(/page says which kind of site it fits/i);
+    expect(layering).toMatch(/page says which kinds of site it fits best/i);
   });
 
-  it('AGENTS.md says how to add a pattern: one file of catalog, its page, its line in KIND_PATTERNS of kinds.js; and no recipe of a package for a kind', () => {
-    expect(layering).toMatch(/To add a pattern of a kind of site: one file in `packages\/catalog\/src\/components\/<kind>-<name>\.css`/);
-    expect(layering).toContain("apps/docs/pages/catalog/<kind>-<name>.html");
-    expect(layering).toContain("`KIND_PATTERNS` of `scripts/docs-site/kinds.js`");
+  it('AGENTS.md says how to add a pattern: one file of catalog, its page with `fits-kinds`, and the place in CASCADE of kinds.js; and no recipe of a package for a kind', () => {
+    expect(layering).toMatch(/To add a pattern of a kind of site: one file in `packages\/catalog\/src\/components\/<block>\.css`/);
+    expect(layering).toContain("apps/docs/pages/catalog/<block>.html");
+    expect(layering).toContain("`fits-kinds`");
+    expect(layering).toContain("`CASCADE`");
+    expect(layering, "nothing lists the pattern by hand any more").not.toContain("KIND_PATTERNS");
     expect(layering).not.toMatch(/peerDependenciesMeta[^\n]*optional/);
     expect(layering).not.toMatch(/SITE_KINDS|`<name>:build`|scripts\/build-<name>\.js/);
     expect(layering).not.toMatch(/luz\.(?:landing|cms|app|docs)\b/);
@@ -123,7 +127,9 @@ describe("@luz-ds/catalog's README says what site is now", () => {
   it("says where the page structure of the four kinds went: the packages are not published any more, and a pattern is a file of catalog", () => {
     expect(readme).toMatch(/`@luz-ds\/landing`, `@luz-ds\/cms`, `@luz-ds\/app` and `@luz-ds\/docs` are not published any more/);
     expect(readme).toMatch(/## Patterns of a kind of site/);
-    for (const name of ["landing-header", "cms-header", "app-header", "docs-shell"]) expect(readme, name).toContain(name);
+    for (const name of ["site-header", "masthead", "app-bar", "docs-layout"]) expect(readme, name).toContain(name);
+    // F8: the files are named for their blocks, and the README says the old names do nothing
+    for (const name of ["landing-header", "cms-header", "app-header", "docs-shell"]) expect(readme, `${name} is the F5b name of a file`).not.toMatch(new RegExp(`\\| \`${name}\\.css\``));
   });
 
   it("describes the cookie banner as a band fixed at the bottom of the window, not above the header", () => {
@@ -153,7 +159,11 @@ describe("the F3 changesets carry the old -> new migration table", () => {
     .filter((note) => /^f3-.*\.md$/.test(note.file) || note.released)
     .flatMap((note) => note.text.split("\n"));
 
-  // A row passes when one line of some f3-*.md holds the old name and its replacement
+  // A row passes when one line of some f3-*.md holds the old name and its replacement. F3's notes are history:
+  // `luz-site-header` -> `luz-landing-header` and `luz-site-footer` -> `luz-landing-footer`/`luz-cms-footer` are what
+  // F3 said, and stay in the changelog as written. F8 makes `luz-site-header` and `luz-site-footer` current names again
+  // (the unions of decision 67; their table is in .changeset/catalog-names.md and tests/catalog-names.test.js), so a row
+  // here reads "that class became this, in F3", not "this name is gone".
   const ROWS = [
     ["<luz-site-search>", "<luz-search>"],
     ["luz-site-search-trigger", "luz-search__trigger"],

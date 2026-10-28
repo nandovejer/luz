@@ -250,7 +250,7 @@ describe("the breadcrumb of an HTML page: Docs > HTML elements > Title", () => {
 describe("the reading order (Previous / Next)", () => {
   const end = (route) => {
     const tree = treeOf(route);
-    const rel = (kind) => queryAllLive(tree, "a.luz-docs-pager__link").find((n) => n.attrs.get("rel") === kind)?.attrs.get("href") ?? null;
+    const rel = (kind) => queryAllLive(tree, "a.luz-pager__link").find((n) => n.attrs.get("rel") === kind)?.attrs.get("href") ?? null;
     return { prev: rel("prev"), next: rel("next") };
   };
   const areaRuns = (routes, areaOf) => routes.map(areaOf).filter((id, i, all) => id !== all[i - 1]);
@@ -403,7 +403,7 @@ describe("the sidebar in Spanish (real) and Arabic (a stand-in copy of the docs)
       });
 
       it("reads in the same order: Catalog, HTML elements, its pages, Accessibility", () => {
-        const rel = (route, kind) => queryAllLive(tree(`${root}${route}`), "a.luz-docs-pager__link").find((n) => n.attrs.get("rel") === kind)?.attrs.get("href");
+        const rel = (route, kind) => queryAllLive(tree(`${root}${route}`), "a.luz-pager__link").find((n) => n.attrs.get("rel") === kind)?.attrs.get("href");
         const lastDocumentation = orderRoutes.filter((r) => langSite.byRoute.get(r).meta.area === "catalog").at(-1);
         expect(rel(lastDocumentation, "next")).toBe(`${root}${HTML_INDEX}`);
         expect(rel(HTML_INDEX, "prev")).toBe(`${root}${lastDocumentation}`);

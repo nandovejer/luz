@@ -125,9 +125,9 @@ describe("the sky is defined once, in apps/site/sky.css", () => {
   it("the home page does not redefine it: landing.css has no rule of its own on the layers, only the twinkle properties and its keyframes", () => {
     const css = stripComments(read("apps/landing/landing.css"));
     for (const [selector] of rules("apps/landing/landing.css")) {
-      expect(selector, "a rule on the layers of the sky").not.toMatch(/\.luz-landing-main::(?:before|after)|\.site-sky::(?:before|after)/);
+      expect(selector, "a rule on the layers of the sky").not.toMatch(/\.luz-main::(?:before|after)|\.site-sky::(?:before|after)/);
     }
-    expect(css).not.toMatch(/\.luz-landing-main::/);
+    expect(css).not.toMatch(/\.luz-main::/);
     expect(css).toMatch(/--site-sky-twinkle-near:/);
     expect(css).toMatch(/--site-sky-twinkle-far:/);
     expect(css).toMatch(/@keyframes landing-twinkle/);

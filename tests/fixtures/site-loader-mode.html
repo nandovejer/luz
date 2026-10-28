@@ -6,7 +6,7 @@
   <title>LUZ site loader fixture: a color mode switcher only</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/mode.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
   <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
 </head>
 <body>
@@ -15,7 +15,7 @@
     <p>Text of the page.</p>
   </main>
   <footer>
-    <luz-mode id="mode">
+    <luz-color-mode id="mode">
       <fieldset class="luz-mode-switcher">
         <legend class="luz-mode-switcher__label">Color mode</legend>
         <label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="auto" checked>Auto</label>
@@ -23,7 +23,7 @@
         <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark">Dark</label>
         <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast">High contrast</label>
       </fieldset>
-    </luz-mode>
+    </luz-color-mode>
   </footer>
 </body>
 </html>

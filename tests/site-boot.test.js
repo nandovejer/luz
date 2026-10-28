@@ -10,9 +10,9 @@
  *      high-contrast) is that mode, with its light pinned: light is the
  *      afternoon, dark and high contrast are the night;
  *   2. else prefers-contrast: more is the high contrast mode, with the light of
- *      the local hour (what <luz-mode by="clock"> writes after it upgrades);
+ *      the local hour (what <luz-color-mode by="clock"> writes after it upgrades);
  *   3. else the phase of the local hour (the boundaries of phaseOf in
- *      packages/catalog/src/mode.js) is data-light, and dawn, dusk and night
+ *      packages/catalog/src/color-mode.js) is data-light, and dawn, dusk and night
  *      are dark, the others light. The system's colour scheme is not read.
  * Storage may throw. The script is classic (no import) and writes nothing.
  */
@@ -21,7 +21,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import { describe, expect, it } from "vitest";
-import { phaseOf } from "../packages/catalog/src/mode.js";
+import { phaseOf } from "../packages/catalog/src/color-mode.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => readFileSync(join(repo, rel), "utf-8");
@@ -321,7 +321,7 @@ describe("the texts that say how the site follows the clock", () => {
     // In the same item: the four lights and the contrast they meet
     const items = page.split(/<\/li>|<\/p>/);
     expect(items.some((item) => /four lights/i.test(item) && /contrast/i.test(item)), "an item that says the four lights meet the contrast").toBe(true);
-    // The clock and the Auto radio about the site itself (not only about <luz-mode>)
+    // The clock and the Auto radio about the site itself (not only about <luz-color-mode>)
     expect(items.some((item) => /20:30/.test(item) && /\bAuto\b/.test(item) && /\bsite\b/i.test(item)), "an item that says the site follows the clock in Auto").toBe(true);
   });
 });

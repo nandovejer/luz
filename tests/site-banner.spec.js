@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * The banner of @luz-ds/catalog (<luz-banner>, a CSS-only tag around one
+ * The banner of @luz-ds/catalog (<luz-announcement>, a CSS-only tag around one
  * section[aria-labelledby]: .claude/plans/specs/f3-package-model.md section
  * 2.2, D1 and D4, step 8; accessibility requirement O2). A band above the
  * site header with one announcement and an optional link. No script and no
@@ -33,7 +33,7 @@ const box = (page, selector) => page.evaluate((s) => {
 const sideways = (page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 
 /** The banner as the first test pages see it: `tone` on the tag, the section inside. */
-const tone = (page, value) => page.evaluate((v) => document.querySelector('luz-banner').setAttribute('tone', v), value);
+const tone = (page, value) => page.evaluate((v) => document.querySelector('luz-announcement').setAttribute('tone', v), value);
 
 /**
  * How the band is painted, wherever the implementation puts it (the tag or its
@@ -41,7 +41,7 @@ const tone = (page, value) => page.evaluate((v) => document.querySelector('luz-b
  * two, that has them.
  */
 const paint = (page) => page.evaluate(() => {
-  const host = document.querySelector('luz-banner');
+  const host = document.querySelector('luz-announcement');
   const section = host.querySelector('section');
   const of = (el) => {
     const s = getComputedStyle(el);
@@ -91,19 +91,19 @@ test.describe('site banner', () => {
         await open(page, 1280);
         await page.evaluate(([t, w]) => {
           document.documentElement.dataset.theme = t;
-          if (w) document.querySelector('luz-banner').setAttribute('tone', 'warning');
+          if (w) document.querySelector('luz-announcement').setAttribute('tone', 'warning');
         }, [theme, warning]);
         await settled(page); // axe must not sample a colour mid-transition (Firefox)
-        const { violations } = await new AxeBuilder({ page }).include('luz-banner').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+        const { violations } = await new AxeBuilder({ page }).include('luz-announcement').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
         expect(violations.filter((v) => ['serious', 'critical'].includes(v.impact)).map((v) => v.id)).toEqual([]);
       });
     }
   }
 
-  test('is <luz-banner> around one section: no class anywhere, the old classes gone, a block', async ({ page }) => {
+  test('is <luz-announcement> around one section: no class anywhere, the old classes gone, a block', async ({ page }) => {
     await open(page, 1280);
     const shape = await page.evaluate(() => {
-      const host = document.querySelector('luz-banner');
+      const host = document.querySelector('luz-announcement');
       return {
         children: [...host.children].map((c) => c.localName),
         labelled: host.firstElementChild.hasAttribute('aria-labelledby'),
@@ -118,12 +118,12 @@ test.describe('site banner', () => {
 
   test('O1: the accessibility tree is what the classed section gave, plain and warning', async ({ page }) => {
     await open(page, 1280);
-    await expect(page.locator('luz-banner')).toMatchAriaSnapshot(PLAIN);
+    await expect(page.locator('luz-announcement')).toMatchAriaSnapshot(PLAIN);
     await page.evaluate(() => {
-      document.querySelector('luz-banner').setAttribute('tone', 'warning');
-      document.querySelector('luz-banner strong').textContent = 'Planned maintenance.';
+      document.querySelector('luz-announcement').setAttribute('tone', 'warning');
+      document.querySelector('luz-announcement strong').textContent = 'Planned maintenance.';
     });
-    await expect(page.locator('luz-banner')).toMatchAriaSnapshot(WARNING);
+    await expect(page.locator('luz-announcement')).toMatchAriaSnapshot(WARNING);
   });
 
   test('a region named by its visible label, above the header, the width of the window', async ({ page }) => {
@@ -155,7 +155,7 @@ test.describe('site banner', () => {
     const order = await page.evaluate(() => {
       const position = (selector) => document.querySelector(selector);
       const before = (a, b) => !!(position(a).compareDocumentPosition(position(b)) & Node.DOCUMENT_POSITION_FOLLOWING);
-      return [before('#skip', 'luz-consent'), before('luz-consent', 'luz-banner'), before('luz-banner', '#hdr')];
+      return [before('#skip', 'luz-cookie-consent'), before('luz-cookie-consent', 'luz-announcement'), before('luz-announcement', '#hdr')];
     });
     expect(order).toEqual([true, true, true]);
 
@@ -166,14 +166,14 @@ test.describe('site banner', () => {
     await expect(page.locator('#notice-link')).toBeFocused();
     await page.keyboard.press('Tab');
     expect(await page.evaluate(() => !!document.activeElement.closest('#hdr'))).toBe(true);
-    await expect(page.locator('luz-banner button')).toHaveCount(0);
+    await expect(page.locator('luz-announcement button')).toHaveCount(0);
   });
 
   test('warning: tone="warning" changes the band and its rule, and the words say it as well (RL-6)', async ({ page }) => {
     await open(page, 1280);
     const plain = await paint(page);
     await tone(page, 'warning');
-    await page.evaluate(() => { document.querySelector('luz-banner strong').textContent = 'Planned maintenance.'; });
+    await page.evaluate(() => { document.querySelector('luz-announcement strong').textContent = 'Planned maintenance.'; });
     const warning = await paint(page);
     expect(warning.bg).toBe(await token(page, '--luz-color-warning-bg'));
     expect(warning.bg).not.toBe(plain.bg);
@@ -187,7 +187,7 @@ test.describe('site banner', () => {
     await tone(page, 'danger');
     expect(await paint(page)).toEqual(plain);
     await page.evaluate(() => {
-      document.querySelector('luz-banner').removeAttribute('tone');
+      document.querySelector('luz-announcement').removeAttribute('tone');
       document.querySelector('#notice').classList.add('luz-site-notice--warning');
     });
     expect(await paint(page)).toEqual(plain);
@@ -196,21 +196,21 @@ test.describe('site banner', () => {
   test('O2: each banner is a region with a name of its own; none is an alert, a status or a live region', async ({ page }) => {
     await open(page, 1280);
     await page.evaluate(() => {
-      const second = document.querySelector('luz-banner').cloneNode(true);
+      const second = document.querySelector('luz-announcement').cloneNode(true);
       second.setAttribute('tone', 'warning');
       second.querySelector('section').id = 'notice-2';
       second.querySelector('strong').id = 'notice-label-2';
       second.querySelector('section').setAttribute('aria-labelledby', 'notice-label-2');
       second.querySelector('strong').textContent = 'Planned maintenance.';
       second.querySelector('a').id = 'notice-link-2';
-      document.querySelector('luz-banner').after(second);
+      document.querySelector('luz-announcement').after(second);
     });
     await expect(page.getByRole('region', { name: 'Open day.' })).toHaveCount(1);
     await expect(page.getByRole('region', { name: 'Planned maintenance.' })).toHaveCount(1);
-    const live = await page.evaluate(() => document.querySelectorAll('luz-banner [role="alert"], luz-banner [role="status"], luz-banner [aria-live], luz-banner [aria-atomic], luz-banner [role="alertdialog"]').length);
+    const live = await page.evaluate(() => document.querySelectorAll('luz-announcement [role="alert"], luz-announcement [role="status"], luz-announcement [aria-live], luz-announcement [aria-atomic], luz-announcement [role="alertdialog"]').length);
     expect(live).toBe(0);
     // Static: neither sticks nor floats (it scrolls away with the page)
-    const positions = await page.locator('luz-banner').evaluateAll((all) => all.map((el) => getComputedStyle(el).position));
+    const positions = await page.locator('luz-announcement').evaluateAll((all) => all.map((el) => getComputedStyle(el).position));
     expect(positions).toEqual(['static', 'static']);
   });
 
@@ -224,7 +224,7 @@ test.describe('site banner', () => {
       expect(border.style, value || 'plain').not.toBe('none');
     }
     // The warning is also in the words, not only in a colour (RL-6): the label says what it is
-    await page.evaluate(() => { document.querySelector('luz-banner strong').textContent = 'Planned maintenance.'; });
+    await page.evaluate(() => { document.querySelector('luz-announcement strong').textContent = 'Planned maintenance.'; });
     await expect(page.getByRole('region', { name: 'Planned maintenance.' })).toHaveCount(1);
   });
 

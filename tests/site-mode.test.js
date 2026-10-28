@@ -1,10 +1,10 @@
 /**
- * <luz-mode> of @luz-ds/catalog, the parts that need no browser
+ * <luz-color-mode> of @luz-ds/catalog, the parts that need no browser
  * (.claude/plans/luz-home-docs-identity.md section 3.3, F1; the behaviour is
  * in tests/site-mode.spec.js):
  *   - the phase of the day, from the local hour: the boundaries are 5, 7.5,
  *     12, 17.5, 20.5 and 22.5;
- *   - mode.js is a lazy chunk like search.js and consent.js: it imports
+ *   - color-mode.js is a lazy chunk like search.js and cookie-consent.js: it imports
  *     nothing (SEC-CHUNK-2), catalog.js loads it by a literal specifier
  *     (SEC-CHUNK-1), scripts/build-catalog.js and scripts/check-size.js know it;
  *   - its row in budgets.json and in the table of PRINCIPLES.md section 8,
@@ -18,21 +18,21 @@ import { describe, expect, it } from "vitest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => readFileSync(join(repo, rel), "utf-8");
-const MODE = "packages/catalog/src/mode.js";
-/** The text of mode.js; a missing file is the assertion that fails, not an ENOENT. */
+const MODE = "packages/catalog/src/color-mode.js";
+/** The text of color-mode.js; a missing file is the assertion that fails, not an ENOENT. */
 const readMode = () => {
   expect(existsSync(join(repo, MODE)), `${MODE} exists`).toBe(true);
   return read(MODE);
 };
 
 /**
- * mode.js, loaded in Node: the chunk guards `customElements`, as search.js and consent.js do.
- * The `class extends HTMLElement` sits inside that guard too (as consent.js does), not only
+ * color-mode.js, loaded in Node: the chunk guards `customElements`, as search.js and cookie-consent.js do.
+ * The `class extends HTMLElement` sits inside that guard too (as cookie-consent.js does), not only
  * the `define` call: Node has no HTMLElement.
  */
 async function load() {
   expect(existsSync(join(repo, MODE)), `${MODE} exists`).toBe(true);
-  return import("../packages/catalog/src/mode.js");
+  return import("../packages/catalog/src/color-mode.js");
 }
 
 /* ---- The phase of the day ------------------------------------------------ */
@@ -67,7 +67,7 @@ describe("phaseOf(hour): the phase from the local wall-clock hour (minutes as a 
 
   it.each(CASES)("%s -> %s", async (hour, phase) => {
     const { phaseOf } = await load();
-    expect(typeof phaseOf, "phaseOf is a named export of mode.js").toBe("function");
+    expect(typeof phaseOf, "phaseOf is a named export of color-mode.js").toBe("function");
     expect(phaseOf(hour)).toBe(phase);
   });
 
@@ -101,7 +101,7 @@ const STATIC = /(?:^|[;}\s])(?:import\b(?!\s*[(.])|export\b[^"'();]*?\bfrom\b)/;
 /** JS without its comments: a header may say "import" in words. */
 const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'\\])\/\/.*$/gm, "$1");
 
-describe("mode.js is a lazy chunk that imports nothing", () => {
+describe("color-mode.js is a lazy chunk that imports nothing", () => {
   it("has no static import or export-from, and no import() (SEC-CHUNK-2)", () => {
     const source = code(readMode());
     expect(STATIC.test(source), "a static import or export-from").toBe(false);
@@ -109,10 +109,10 @@ describe("mode.js is a lazy chunk that imports nothing", () => {
     expect(source).not.toMatch(/import\.meta/);
   });
 
-  it("defines <luz-mode> behind a guard, so a second copy of the module does not throw", () => {
+  it("defines <luz-color-mode> behind a guard, so a second copy of the module does not throw", () => {
     const source = code(readMode());
-    expect(source).toMatch(/customElements\.define\(\s*["']luz-mode["']/);
-    expect(source).toMatch(/customElements\.get\(\s*["']luz-mode["']\s*\)/);
+    expect(source).toMatch(/customElements\.define\(\s*["']luz-color-mode["']/);
+    expect(source).toMatch(/customElements\.get\(\s*["']luz-color-mode["']\s*\)/);
   });
 
   it("writes no text of its own: its labels are the radios' (SR-7)", () => {
@@ -129,51 +129,51 @@ describe("mode.js is a lazy chunk that imports nothing", () => {
 });
 
 describe("catalog.js, the build and the size guard know the chunk", () => {
-  it("catalog.js loads it by a literal import(\"./mode.js\"), for the tag luz-mode", () => {
+  it("catalog.js loads it by a literal import(\"./color-mode.js\"), for the tag luz-color-mode", () => {
     const loader = read("packages/catalog/src/catalog.js");
-    expect([...loader.matchAll(LITERAL_IMPORT)].map((m) => m[2]).sort()).toContain("./mode.js");
-    expect(loader).toMatch(/["']luz-mode["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/mode\.js["']\s*\)/);
+    expect([...loader.matchAll(LITERAL_IMPORT)].map((m) => m[2]).sort()).toContain("./color-mode.js");
+    expect(loader).toMatch(/["']luz-color-mode["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/color-mode\.js["']\s*\)/);
     expect(code(loader).match(IMPORT_CALL)).toHaveLength(5);
   });
 
-  it("scripts/build-catalog.js lists mode.js among the chunks", () => {
+  it("scripts/build-catalog.js lists color-mode.js among the chunks", () => {
     const build = read("scripts/build-catalog.js");
     const chunks = /chunks:\s*\[([^\]]*)\]/.exec(build)?.[1] ?? "";
-    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "consent.js", "mode.js", "timeline.js", "sidebar.js"]); // timeline and sidebar came from core in F7
+    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "color-mode.js", "timeline.js", "sidebar.js"]); // timeline and sidebar came from core in F7
   });
 
   it("scripts/check-size.js expects the mode chunk of the loader, with the other four", () => {
     const guard = read("scripts/check-size.js");
     const loaders = /const LOADERS = \{([^;]*)\};/.exec(guard)?.[1] ?? "";
-    expect(loaders).toContain("./mode.min.js");
+    expect(loaders).toContain("./color-mode.min.js");
     expect(loaders).toContain("./search.min.js");
-    expect(loaders).toContain("./consent.min.js");
+    expect(loaders).toContain("./cookie-consent.min.js");
     expect(loaders).toContain("./timeline.min.js");
     expect(loaders).toContain("./sidebar.min.js");
   });
 
   it("package.json exports it as ./mode and lists its files as side effects", () => {
     const manifest = JSON.parse(read("packages/catalog/package.json"));
-    expect(manifest.exports["./mode"]).toBe("./dist/mode.js");
-    expect(manifest.sideEffects).toEqual(expect.arrayContaining(["./dist/mode.js", "./dist/mode.min.js"]));
+    expect(manifest.exports["./color-mode"]).toBe("./dist/color-mode.js");
+    expect(manifest.sideEffects).toEqual(expect.arrayContaining(["./dist/color-mode.js", "./dist/color-mode.min.js"]));
   });
 
   it("has a stylesheet of its own, a file of components/ that the package no longer bundles, in the luz.catalog layer", () => {
-    expect(existsSync(join(repo, "packages/catalog/src/components/mode.css")), "components/mode.css").toBe(true);
-    expect(read("packages/catalog/src/components/mode.css")).toMatch(/(?<![.\w#-])luz-mode(?![\w-])/);
+    expect(existsSync(join(repo, "packages/catalog/src/components/color-mode.css")), "components/color-mode.css").toBe(true);
+    expect(read("packages/catalog/src/components/color-mode.css")).toMatch(/(?<![.\w#-])luz-color-mode(?![\w-])/);
     expect(existsSync(join(repo, "packages/catalog/src/index.css")), "catalog has no src/index.css").toBe(false);
   });
 
-  it("scripts/smoke-consumer.js probes dist/mode.js for its phaseOf() export, as it does for consent's getConsent()", () => {
+  it("scripts/smoke-consumer.js probes dist/color-mode.js for its phaseOf() export, as it does for consent's getConsent()", () => {
     const smoke = read("scripts/smoke-consumer.js");
-    expect(smoke).toMatch(/\[site \+ "\/dist\/mode\.js"\]:\s*\[\s*"phaseOf"\s*\]/);
-    expect(smoke).toMatch(/\[site \+ "\/dist\/consent\.js"\]:\s*\[\s*"getConsent"\s*\]/);
+    expect(smoke).toMatch(/\[site \+ "\/dist\/color-mode\.js"\]:\s*\[\s*"phaseOf"\s*\]/);
+    expect(smoke).toMatch(/\[site \+ "\/dist\/cookie-consent\.js"\]:\s*\[\s*"getConsent"\s*\]/);
   });
 
   it("scripts/docs-site/snippets.js lists the chunk and says when a page needs it", () => {
     const snippets = read("scripts/docs-site/snippets.js");
-    expect(snippets).toContain("mode.min.js");
-    expect(snippets).toMatch(/["']mode\.min\.js["']\s*:\s*\[\s*["']catalog["']\s*,\s*["'][^"']*luz-mode/);
+    expect(snippets).toContain("color-mode.min.js");
+    expect(snippets).toMatch(/["']color-mode\.min\.js["']\s*:\s*\[\s*["']catalog["']\s*,\s*["'][^"']*luz-color-mode/);
   });
 });
 
@@ -182,24 +182,24 @@ describe("catalog.js, the build and the size guard know the chunk", () => {
 describe("the budget of the mode chunk", () => {
   const budgets = JSON.parse(read("budgets.json")).budgets;
 
-  it("has the row `catalog JS lazy chunk: mode`: dist/mode.min.js, ideal 1 kB, ceiling 1.5 kB", () => {
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: mode")).toEqual({
-      name: "catalog JS lazy chunk: mode",
-      file: "packages/catalog/dist/mode.min.js",
+  it("has the row `catalog JS lazy chunk: color-mode`: dist/color-mode.min.js, ideal 1 kB, ceiling 1.5 kB", () => {
+    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: color-mode")).toEqual({
+      name: "catalog JS lazy chunk: color-mode",
+      file: "packages/catalog/dist/color-mode.min.js",
       ideal: 1024,
       max: 1536,
     });
   });
 
   it("leaves the other catalog rows as they were (a new row, never a raised ceiling)", () => {
-    const rows = budgets.filter((b) => /^catalog /.test(b.name) && b.name !== "catalog JS lazy chunk: mode");
+    const rows = budgets.filter((b) => /^catalog /.test(b.name) && b.name !== "catalog JS lazy chunk: color-mode");
     // F5b: the 21 patterns of the four kinds of site have a row, and the general one leaves them out; F7: the four layout
     // components (and the timeline and sidebar chunks) came from core with a row of their own, and the general row leaves the CSS out
     expect(rows.map(({ name, ideal, max }) => ({ name, ideal, max }))).toEqual([
       { name: "catalog component CSS (each)", ideal: 1280, max: 1536 },
       { name: "catalog JS", ideal: 1024, max: 2048 },
       { name: "catalog JS lazy chunk: search", ideal: 2048, max: 2560 },
-      { name: "catalog JS lazy chunk: consent", ideal: 1024, max: 1536 },
+      { name: "catalog JS lazy chunk: cookie-consent", ideal: 1024, max: 1536 },
       { name: "catalog JS lazy chunk: timeline", ideal: 2048, max: 3072 },
       { name: "catalog JS lazy chunk: sidebar", ideal: 768, max: 1024 },
       { name: "catalog layout CSS (each)", ideal: 1792, max: 2048 },
@@ -210,26 +210,26 @@ describe("the budget of the mode chunk", () => {
   });
 
   it("repeats the row in the table of PRINCIPLES.md section 8, with the ceiling of 1.5 kB", () => {
-    expect(read("PRINCIPLES.md")).toMatch(/^\| `catalog` JS lazy chunk: `mode`[^\n]*\| ≤ 1 kB \| 1 kB \| 1\.5 kB \|$/m);
+    expect(read("PRINCIPLES.md")).toMatch(/^\| `catalog` JS lazy chunk: `color-mode`[^\n]*\| ≤ 1 kB \| 1 kB \| 1\.5 kB \|$/m);
   });
 });
 
 /* ---- The header comment: custom-elements.json is made from it ----------------- */
 
-describe("the header of mode.js", () => {
+describe("the header of color-mode.js", () => {
   const header = () => /^\s*\/\*\*([\s\S]*?)\*\//.exec(readMode())?.[1] ?? "";
   const lines = () => header().split("\n").map((l) => l.replace(/^[\s*]*/, "").trimEnd());
 
-  it("declares the element: @element luz-mode - description", () => {
+  it("declares the element: @element luz-color-mode - description", () => {
     const element = lines().filter((l) => l.startsWith("@element"));
     expect(element).toHaveLength(1);
-    expect(element[0]).toMatch(/^@element\s+luz-mode\s+-\s+\S.{10,}/);
+    expect(element[0]).toMatch(/^@element\s+luz-color-mode\s+-\s+\S.{10,}/);
   });
 
-  it("declares the event: @fires luz-mode:change {CustomEvent} - description", () => {
+  it("declares the event: @fires luz-color-mode:change {CustomEvent} - description", () => {
     const fires = lines().filter((l) => l.startsWith("@fires"));
     expect(fires).toHaveLength(1);
-    expect(fires[0]).toMatch(/^@fires\s+luz-mode:change\s+\{[^}]+\}\s+-\s+\S/);
+    expect(fires[0]).toMatch(/^@fires\s+luz-color-mode:change\s+\{[^}]+\}\s+-\s+\S/);
   });
 
   it("declares its four attributes with @attr: remember, by, for and light-attr", () => {
@@ -242,7 +242,7 @@ describe("the header of mode.js", () => {
 
   it("dispatches the event it declares, with that name, bubbling", () => {
     const source = code(readMode());
-    expect(source).toMatch(/new\s+CustomEvent\(\s*["']luz-mode:change["']/);
+    expect(source).toMatch(/new\s+CustomEvent\(\s*["']luz-color-mode:change["']/);
     expect(source).toMatch(/bubbles:\s*true/);
   });
 });

@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * `.luz-cms-page-header` (`components/cms-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
+ * `.luz-page-header` (`components/page-header.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
  * §1.6, D11 and §9 step 11): the title of a page that is not an article (about,
  * contact), no longer `.luz-site-page-header` of site. A wrapper with the page's
  * `h1` (`__title`) and one sentence about what the page is for (`__lead`),
@@ -102,8 +102,8 @@ test.describe('cms page header', () => {
     });
   }
 
-  test('the markup carries no `luz-site-*` class', async ({ page }) => {
-    expect(await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => c.startsWith('luz-site-')))).toEqual([]);
+  test('the markup carries no class named for a kind of site (`luz-landing-*`, `luz-cms-*`, `luz-app-*`)', async ({ page }) => {
+    expect(await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => /^luz-(?:cms|landing|app)-/.test(c)))).toEqual([]);
   });
 
   for (const mode of MODES) {

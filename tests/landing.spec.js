@@ -93,11 +93,11 @@ async function open(page, path = '/') {
   return { requests, failed, problems };
 }
 
-/** Open the home with JavaScript on and wait until <luz-mode> (a lazy chunk) has upgraded. */
+/** Open the home with JavaScript on and wait until <luz-color-mode> (a lazy chunk) has upgraded. */
 async function openLive(page, path = '/?look=city', time) {
   if (time) await atTime(page, time);
   const seen = await open(page, path);
-  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
   return seen;
 }
 
@@ -222,11 +222,11 @@ test.describe('Landing page', () => {
         // textContent: the eyebrows are set in capitals by CSS, which innerText would return
         const text = async (selector) => plain((await page.locator(selector).first().textContent()) ?? '');
 
-        // Why LUZ is headed by the section head of catalog's landing-section.css
-        await expect(page.locator('section#why')).toHaveClass(/\bluz-landing-section\b/);
-        expect(await text('#why .luz-landing-section__eyebrow')).toBe(plain(words['why.eyebrow']));
-        expect(await text('#why h2.luz-landing-section__title')).toBe(plain(words['why.title']));
-        expect(await text('#why .luz-landing-section__lead')).toBe(plain(words['why.lead']));
+        // Why LUZ is headed by the section head of catalog's section.css
+        await expect(page.locator('section#why')).toHaveClass(/\bluz-section\b/);
+        expect(await text('#why .luz-section__eyebrow')).toBe(plain(words['why.eyebrow']));
+        expect(await text('#why h2.luz-section__title')).toBe(plain(words['why.title']));
+        expect(await text('#why .luz-section__lead')).toBe(plain(words['why.lead']));
         // The stressed word of "Three words, one promise." is an em
         await expect(page.locator('#why h2 em')).toHaveCount(1);
 
@@ -404,7 +404,7 @@ test.describe('Landing page', () => {
           };
         });
       const main = await edges('main.o-container');
-      const footer = await edges('footer.luz-landing-footer > .o-container');
+      const footer = await edges('footer.luz-site-footer > .o-container');
       const brand = await page.locator('.site-header__brand').evaluate((el) => el.getBoundingClientRect().left);
       expect(main.left).toBeGreaterThan(100);
       expect(Math.abs(main.left - main.right), 'main is centred').toBeLessThanOrEqual(1);
@@ -422,8 +422,8 @@ test.describe('Landing page', () => {
       await open(page);
 
       const hero = page.locator('section#hero');
-      await expect(hero).toHaveClass(/\bluz-landing-hero\b/);
-      await expect(hero).toHaveClass(/\bluz-landing-hero--centered\b/);
+      await expect(hero).toHaveClass(/\bluz-hero\b/);
+      await expect(hero).toHaveClass(/\bluz-hero--centered\b/);
       expect(await hero.locator('h1').evaluate((el) => getComputedStyle(el).textAlign)).toBe('center');
       const centre = await page.evaluate(() => document.documentElement.clientWidth / 2);
       const actions = await hero.locator('a.luz-btn').evaluateAll((all) => {
@@ -438,17 +438,17 @@ test.describe('Landing page', () => {
       await open(page);
 
       const hero = page.locator('section#hero');
-      await expect(hero.locator('h1.luz-landing-hero__title')).toHaveText('LUZ Design system for humans, ready for AI.');
+      await expect(hero.locator('h1.luz-hero__title')).toHaveText('LUZ Design system for humans, ready for AI.');
       await expect(hero.locator('h1 .landing-hero__brand')).toHaveText('LUZ');
       // Both ends are stressed: the human and the AI
       await expect(hero.locator('h1 em')).toHaveText(['humans', 'AI']);
-      await expect(hero.locator('.luz-landing-hero__lead')).toHaveText(
+      await expect(hero.locator('.luz-hero__lead')).toHaveText(
         'Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads, and every change starts with a failing test.',
       );
       // No eyebrow over the title, no second line under the lead, and the lead carries no link
-      await expect(hero.locator('.luz-landing-hero__eyebrow')).toHaveCount(0);
+      await expect(hero.locator('.luz-hero__eyebrow')).toHaveCount(0);
       await expect(hero.locator('.landing-built')).toHaveCount(0);
-      await expect(hero.locator('.luz-landing-hero__lead a')).toHaveCount(0);
+      await expect(hero.locator('.luz-hero__lead a')).toHaveCount(0);
 
       // Two actions: Get started is the primary one and leads to the levels; the docs follow
       await expect(hero.locator('a.luz-btn')).toHaveCount(2);
@@ -479,7 +479,7 @@ test.describe('Landing page', () => {
 
         const hero = page.locator('section#hero');
         expect(((await hero.locator('h1').textContent()) ?? '').replace(/\s+/g, ' ').trim()).toBe(plain(words['hero.title']));
-        expect(((await hero.locator('.luz-landing-hero__lead').textContent()) ?? '').replace(/\s+/g, ' ').trim()).toBe(plain(words['hero.lead']));
+        expect(((await hero.locator('.luz-hero__lead').textContent()) ?? '').replace(/\s+/g, ' ').trim()).toBe(plain(words['hero.lead']));
         // The brand is written in capitals in every language; every language stresses the human and the AI
         await expect(hero.locator('h1 .landing-hero__brand')).toHaveText('LUZ');
         await expect(hero.locator('h1 em')).toHaveCount(2);
@@ -501,7 +501,7 @@ test.describe('Landing page', () => {
 
       await expect(page.locator('section#light h2.u-sr-only')).toHaveText(EN['light.title']);
       await expect(page.locator('section#light home-light')).toHaveCount(1);
-      expect(await page.locator('home-light').evaluate((el) => !!el.closest('.luz-landing-hero__media--bleed'))).toBe(true);
+      expect(await page.locator('home-light').evaluate((el) => !!el.closest('.luz-hero__media--bleed'))).toBe(true);
       // Edge to edge of the window
       const box = await page.locator('home-light').boundingBox();
       const width = await page.evaluate(() => document.documentElement.clientWidth);
@@ -918,25 +918,25 @@ test.describe('Landing page', () => {
   /* ---- The footer -------------------------------------------------------- */
 
   test.describe('footer', () => {
-    const footer = (page) => page.locator('footer.luz-landing-footer');
+    const footer = (page) => page.locator('footer.luz-site-footer');
 
     test('a brand, then two columns (Documentation, Project) on the landing footer grid', async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 800 });
       await open(page);
 
       await expect(footer(page).locator('> .o-container.o-container--inline.o-grid')).toHaveCount(1);
-      const brand = footer(page).locator('.luz-landing-footer__brand');
+      const brand = footer(page).locator('.luz-site-footer__brand');
       await expect(brand).toHaveCount(1);
       await expect(brand).toContainText('LUZ');
       await expect(brand).toContainText(/\d+\.\d+\.\d+/);
       await expect(brand.locator('svg, img').first()).toBeVisible();
       // The titles are headings; the second column is the project's, and there is no Language column
-      await expect(footer(page).locator('.luz-landing-footer__col-title')).toHaveText([EN['site.docs'], EN['footer.project']]);
-      await expect(footer(page).locator('h2.luz-landing-footer__col-title')).toHaveCount(2);
-      await expect(footer(page).locator('.luz-landing-footer__col')).toHaveCount(2);
+      await expect(footer(page).locator('.luz-site-footer__col-title')).toHaveText([EN['site.docs'], EN['footer.project']]);
+      await expect(footer(page).locator('h2.luz-site-footer__col-title')).toHaveCount(2);
+      await expect(footer(page).locator('.luz-site-footer__col')).toHaveCount(2);
       await expect(footer(page).locator('a[hreflang]')).toHaveCount(0);
       // Side by side from 768px: the brand and the two columns in one row
-      const tops = await footer(page).locator('.luz-landing-footer__brand, .luz-landing-footer__col').evaluateAll((all) => all.map((el) => Math.round(el.getBoundingClientRect().top)));
+      const tops = await footer(page).locator('.luz-site-footer__brand, .luz-site-footer__col').evaluateAll((all) => all.map((el) => Math.round(el.getBoundingClientRect().top)));
       expect(new Set(tops).size).toBe(1);
     });
 
@@ -956,7 +956,7 @@ test.describe('Landing page', () => {
         const words = catalog(lang);
         await open(page, route);
 
-        const [docs, project] = await footer(page).locator('.luz-landing-footer__col').all();
+        const [docs, project] = await footer(page).locator('.luz-site-footer__col').all();
         await expect(docs.locator('h2')).toHaveText(words['site.docs']);
         await expect(project.locator('h2')).toHaveText(words['footer.project']);
         await expect(docs.locator('h3')).toHaveText([words['footer.packages'], words['footer.kinds']]);
@@ -992,7 +992,7 @@ test.describe('Landing page', () => {
     test('the links of the columns are targets of 24px or more', async ({ page }) => {
       await open(page);
 
-      const cols = footer(page).locator('.luz-landing-footer__col');
+      const cols = footer(page).locator('.luz-site-footer__col');
       for (const link of await cols.locator('a').all()) expect((await link.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(24);
     });
 
@@ -1006,10 +1006,10 @@ test.describe('Landing page', () => {
       });
     }
 
-    test('the colour mode switcher is the <luz-mode remember by="clock"> of the footer, with its three radios', async ({ page }) => {
+    test('the colour mode switcher is the <luz-color-mode remember by="clock"> of the footer, with its three radios', async ({ page }) => {
       await open(page);
 
-      const mode = footer(page).locator('luz-mode');
+      const mode = footer(page).locator('luz-color-mode');
       await expect(mode).toHaveCount(1);
       await expect(mode).toHaveAttribute('remember', '');
       await expect(mode).toHaveAttribute('by', 'clock');
@@ -1041,10 +1041,10 @@ test.describe('Landing page', () => {
         await open(page);
 
         const box = (selector) => footer(page).locator(selector).first().evaluate((el) => el.getBoundingClientRect().toJSON());
-        const mode = await box('luz-mode');
+        const mode = await box('luz-color-mode');
         expect(mode.left).toBeGreaterThanOrEqual(-1);
         expect(mode.right).toBeLessThanOrEqual(width + 1);
-        const others = await footer(page).locator('.luz-landing-footer__brand, .luz-landing-footer__col').evaluateAll((all) => all.map((el) => el.getBoundingClientRect().toJSON()));
+        const others = await footer(page).locator('.luz-site-footer__brand, .luz-site-footer__col').evaluateAll((all) => all.map((el) => el.getBoundingClientRect().toJSON()));
         for (const other of others) {
           const apart = mode.left >= other.right - 1 || mode.right <= other.left + 1 || mode.top >= other.bottom - 1 || mode.bottom <= other.top + 1;
           expect(apart).toBe(true);
@@ -1305,7 +1305,7 @@ test.describe('Landing page', () => {
       await open(page);
 
       const heights = await page
-        .locator('.site-header__nav a, #inside a, #native a, #why a.luz-btn, .luz-landing-footer a')
+        .locator('.site-header__nav a, #inside a, #native a, #why a.luz-btn, .luz-site-footer a')
         .evaluateAll((links) => links.map((el) => el.getBoundingClientRect().height));
       expect(heights.length).toBeGreaterThan(14);
       for (const height of heights) expect(height).toBeGreaterThanOrEqual(24);

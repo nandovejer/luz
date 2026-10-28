@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * `.luz-landing-header` (`components/landing-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
+ * `.luz-site-header` (`components/site-header.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
  * §1.5, §3 and §9 step 10): the header of a landing page, no longer a block of
  * site. It is a native <header> composed in the markup from core's pieces:
  * `.o-sticky` (stays at the top), `.o-container.o-container--inline.o-row`
@@ -224,8 +224,8 @@ test.describe('landing header', () => {
     expect(await page.locator('#site-nav a[aria-current="page"]').evaluate((a) => getComputedStyle(a).textDecorationLine)).toBe('underline');
   });
 
-  test('the markup carries no `luz-site-*` class: the header is composed of core and landing classes', async ({ page }) => {
-    const classes = await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => c.startsWith('luz-site-')));
+  test('the markup carries no class named for a kind of site (`luz-landing-*`, `luz-cms-*`, `luz-app-*`): the header is composed of core classes and catalog\'s `luz-site-header`', async ({ page }) => {
+    const classes = await page.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => /^luz-(?:cms|landing|app)-/.test(c)));
     expect(classes).toEqual([]);
   });
 

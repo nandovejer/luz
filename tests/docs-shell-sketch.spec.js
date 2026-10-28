@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * /docs/catalog/docs-shell/: the Example section has a picture of the three
+ * /docs/catalog/docs-layout/: the Example section has a picture of the three
  * columns (F7, accessibility review). The shell is the whole page, so the
  * example cannot be live; a sketch shows it instead: three labelled boxes,
  * "Sidebar", "Content" and "Rail", inside the first `.docs-example`. The
@@ -14,7 +14,7 @@
  */
 import { test, expect } from '@playwright/test';
 
-const PAGE = '/docs/catalog/docs-shell/';
+const PAGE = '/docs/catalog/docs-layout/';
 const LABELS = ['Sidebar', 'Content', 'Rail'];
 
 /** The boxes of the three labels, as the browser lays them out. */

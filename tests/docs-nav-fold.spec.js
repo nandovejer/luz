@@ -251,7 +251,7 @@ test.describe('the button of a fold', () => {
       expect(await openAreas(page)).toEqual(['html']);
       await button(page, 'catalog').click();
       expect(await openAreas(page)).toEqual(['catalog']);
-      await expect(nav(page).locator(`a[href="${prefix}/docs/catalog/landing-hero/"]`).first()).toBeVisible();
+      await expect(nav(page).locator(`a[href="${prefix}/docs/catalog/hero/"]`).first()).toBeVisible();
       await expect(nav(page).locator(`a[href="${prefix}${FORMS}"]`)).toBeHidden();
       await button(page, 'components').click();
       expect(await openAreas(page)).toEqual(['components']);

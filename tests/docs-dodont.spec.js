@@ -13,10 +13,10 @@ import { faded } from './helpers/settle.js';
 import { routesWith } from './helpers/docs-site.js';
 
 // The pages with a Design tab: the Do and don't section is a direct child of its panel
-const DESIGN = routesWith('luz-docs-dodont__stage').filter((r) => routesWith('docs-view-tabs').includes(r));
+const DESIGN = routesWith('luz-do-dont__stage').filter((r) => routesWith('docs-view-tabs').includes(r));
 // Any other page that shows a pair as a demo (a recipe of the Kinds of site area,
 // inside a specimen): no Design tab, but the stage is the same picture
-const DEMOS = routesWith('luz-docs-dodont__stage').filter((r) => !DESIGN.includes(r));
+const DEMOS = routesWith('luz-do-dont__stage').filter((r) => !DESIGN.includes(r));
 const THEMES = ['light', 'dark', 'high-contrast'];
 
 for (const route of DESIGN) {
@@ -24,14 +24,14 @@ for (const route of DESIGN) {
     await page.goto(`${route}#design`);
     await expect(page.locator('#design-panel')).toBeVisible();
     // One pair for each lesson of the page: a Do, then its Don't
-    const figures = page.locator('#do-dont ~ .luz-docs-dodont > figure');
+    const figures = page.locator('#do-dont ~ .luz-do-dont > figure');
     const count = await figures.count();
     expect(count, route).toBeGreaterThanOrEqual(2);
     expect(count % 2, route).toBe(0);
 
     // Every stage is inert and hidden; an id in it (a label's for) is used
     // inside that stage only, so nothing outside points into a picture
-    const stages = page.locator('.luz-docs-dodont__stage');
+    const stages = page.locator('.luz-do-dont__stage');
     for (const stage of await stages.all()) {
       await expect(stage).toHaveAttribute('inert', '');
       await expect(stage).toHaveAttribute('aria-hidden', 'true');
@@ -56,7 +56,7 @@ for (const route of DESIGN) {
 
     // Nothing in a stage takes focus, by script or by Tab
     const focusable = 'a[href], button, input, select, textarea, summary, [tabindex], [contenteditable], audio[controls], video[controls], iframe';
-    const reached = await page.locator('.luz-docs-dodont__stage').evaluateAll((list, sel) => {
+    const reached = await page.locator('.luz-do-dont__stage').evaluateAll((list, sel) => {
       const hits = [];
       for (const stage of list) for (const el of stage.querySelectorAll(sel)) {
         el.focus();
@@ -75,7 +75,7 @@ for (const route of DESIGN) {
         const a = document.activeElement;
         const next = document.getElementById('content');
         return {
-          inStage: !!a?.closest('.luz-docs-dodont__stage'),
+          inStage: !!a?.closest('.luz-do-dont__stage'),
           passed: !!(next.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_FOLLOWING),
         };
       });
@@ -92,7 +92,7 @@ for (const route of DESIGN) {
       await page.evaluate((t) => {
         document.documentElement.dataset.theme = t;
         // axe skips hidden content: expose the stages to measure what is seen
-        for (const s of document.querySelectorAll('.luz-docs-dodont__stage')) {
+        for (const s of document.querySelectorAll('.luz-do-dont__stage')) {
           s.removeAttribute('aria-hidden');
           s.removeAttribute('inert');
         }
@@ -101,7 +101,7 @@ for (const route of DESIGN) {
       await faded(page);
       await page.waitForTimeout(400);
       const { violations } = await new AxeBuilder({ page })
-        .include('.luz-docs-dodont')
+        .include('.luz-do-dont')
         .withRules(['color-contrast', 'link-in-text-block'])
         .analyze();
       expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => `${n.target.join(' ')} ${n.any[0]?.message ?? ''}`).join('; ')}`)).toEqual([]);
@@ -112,13 +112,13 @@ for (const route of DESIGN) {
 for (const route of DEMOS) {
   test(`${route}: a Do and don't demo is a captioned picture`, async ({ page }) => {
     await page.goto(route);
-    const stages = page.locator('.luz-docs-dodont__stage');
+    const stages = page.locator('.luz-do-dont__stage');
     expect(await stages.count(), route).toBeGreaterThanOrEqual(2);
     for (const stage of await stages.all()) {
       await expect(stage).toHaveAttribute('inert', '');
       await expect(stage).toHaveAttribute('aria-hidden', 'true');
     }
-    const figures = page.locator('.luz-docs-dodont > figure');
+    const figures = page.locator('.luz-do-dont > figure');
     const count = await figures.count();
     expect(count % 2, route).toBe(0);
     for (let i = 0; i < count; i++) {
@@ -142,7 +142,7 @@ for (const route of DEMOS) {
       await page.goto(route);
       await page.evaluate((t) => {
         document.documentElement.dataset.theme = t;
-        for (const s of document.querySelectorAll('.luz-docs-dodont__stage')) {
+        for (const s of document.querySelectorAll('.luz-do-dont__stage')) {
           s.removeAttribute('aria-hidden');
           s.removeAttribute('inert');
         }
@@ -150,7 +150,7 @@ for (const route of DEMOS) {
       await faded(page);
       await page.waitForTimeout(400);
       const { violations } = await new AxeBuilder({ page })
-        .include('.luz-docs-dodont')
+        .include('.luz-do-dont')
         .withRules(['color-contrast', 'link-in-text-block'])
         .analyze();
       expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => `${n.target.join(' ')} ${n.any[0]?.message ?? ''}`).join('; ')}`)).toEqual([]);

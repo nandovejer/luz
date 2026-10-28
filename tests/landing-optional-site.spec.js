@@ -5,10 +5,10 @@
  * A page that loads tokens, core and the six landing files and nothing else (tests/fixtures/landing-page.html:
  * no search, consent or language switch file, no script) still renders its header, hero, main,
  * sections, band and footer, and axe finds nothing serious in the three modes.
- * The rules of landing that refine site's tags (`.luz-landing-header luz-lang-switch`)
+ * The rules of landing that refine site's tags (`.luz-site-header luz-lang-switch`)
  * simply match nothing there.
  *
- * Also here: the glow of the page (`.luz-landing-glow`, on the `.o-page` element),
+ * Also here: the glow of the page (`.luz-glow`, on the `.o-page` element),
  * which replaced `.luz-site-page--gradient`.
  * Runs in `chromium` and `chromium-nojs`: it is CSS only.
  */
@@ -53,17 +53,17 @@ test.describe('landing without site', () => {
     await page.waitForLoadState('networkidle');
     expect(requests.filter((path) => path.includes('/packages/catalog/')).sort()).toEqual(
       [
-        ...['footer', 'glow', 'header', 'hero', 'main', 'section'].map((name) => `/packages/catalog/dist/components/landing-${name}.css`),
+        ...['glow', 'hero', 'main', 'section', 'site-footer', 'site-header'].map((name) => `/packages/catalog/dist/components/${name}.css`),
         // the navbar and the sidebar of the header's panel came from core to catalog in F7: two more stylesheets, never a script
         '/packages/catalog/dist/components/navbar.css',
         '/packages/catalog/dist/components/sidebar.css',
-      ],
+      ].sort(),
     );
     expect(requests.some((path) => /\/packages\/landing\/|landing\.css|catalog\.css/.test(path))).toBe(false);
     // ... and every one of them is a file catalog serves (the navbar and the sidebar are no longer core's)
     for (const file of ['navbar', 'sidebar']) expect((await page.request.get(`/packages/catalog/dist/components/${file}.css?direct`)).status(), `catalog ${file}.css`).toBe(200);
     // And nothing on it is a site tag
-    expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-consent, luz-lang-switch, luz-submenu, luz-banner').length)).toBe(0);
+    expect(await page.evaluate(() => document.querySelectorAll('luz-search, luz-cookie-consent, luz-lang-switch, luz-submenu, luz-announcement').length)).toBe(0);
   });
 
   test('the header renders: the skin, the stickiness of core and the row of links', async ({ page }) => {
@@ -143,7 +143,7 @@ test.describe('landing without site', () => {
 });
 
 test.describe('the glow of the page', () => {
-  test('`.luz-landing-glow` on the page element paints the brand tint in the corner where reading starts', async ({ page }) => {
+  test('`.luz-glow` on the page element paints the brand tint in the corner where reading starts', async ({ page }) => {
     await page.goto(FIXTURE);
     const glow = await page.evaluate(() => getComputedStyle(document.body).backgroundImage);
     expect(glow).toMatch(/radial-gradient\(circle at (left top|top left|0% 0%)/);

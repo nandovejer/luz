@@ -40,7 +40,7 @@ const state = (page) =>
     light: document.documentElement.getAttribute('data-light'),
     pinned: localStorage.getItem('luz-light'),
     mode: localStorage.getItem('luz-theme'),
-    checked: [...document.querySelectorAll('footer luz-mode input[type="radio"]')].filter((r) => /** @type {HTMLInputElement} */ (r).checked).map((r) => /** @type {HTMLInputElement} */ (r).value),
+    checked: [...document.querySelectorAll('footer luz-color-mode input[type="radio"]')].filter((r) => /** @type {HTMLInputElement} */ (r).checked).map((r) => /** @type {HTMLInputElement} */ (r).value),
   }));
 
 const bar = (page) => page.locator('home-light .home-light__bar');
@@ -55,21 +55,21 @@ async function slideTo(page, hhmm) {
   await page.locator('home-light input[type="range"]').fill(String(h * 60 + m));
 }
 async function chooseInFooter(page, value) {
-  await page.locator(`footer luz-mode input[value="${value}"]`).evaluate((r) => /** @type {HTMLInputElement} */ (r).click());
+  await page.locator(`footer luz-color-mode input[value="${value}"]`).evaluate((r) => /** @type {HTMLInputElement} */ (r).click());
 }
 
 test('the footer has no Auto: Light, Dark and High contrast, none checked on a first visit, and the light is the hour\'s', async ({ page }) => {
   await atTime(page, '10:05');
   await page.goto('/');
   await expect(page.locator('home-light .home-light__line')).toBeVisible();
-  const values = await page.locator('footer luz-mode input[type="radio"]').evaluateAll((rs) => rs.map((r) => /** @type {HTMLInputElement} */ (r).value));
+  const values = await page.locator('footer luz-color-mode input[type="radio"]').evaluateAll((rs) => rs.map((r) => /** @type {HTMLInputElement} */ (r).value));
   expect(values).toEqual(['light', 'dark', 'high-contrast']);
   await expect.poll(() => state(page)).toMatchObject({ theme: 'light', light: 'morning', pinned: null, mode: null, checked: [] });
 });
 
 test('the docs footer has no Auto either', async ({ page }) => {
   await page.goto('/docs/');
-  const values = await page.locator('footer luz-mode input[type="radio"]').evaluateAll((rs) => rs.map((r) => /** @type {HTMLInputElement} */ (r).value));
+  const values = await page.locator('footer luz-color-mode input[type="radio"]').evaluateAll((rs) => rs.map((r) => /** @type {HTMLInputElement} */ (r).value));
   expect(values).toEqual(['light', 'dark', 'high-contrast']);
 });
 

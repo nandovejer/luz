@@ -1,8 +1,8 @@
 // @ts-check
 /**
- * The cookie consent of @luz-ds/catalog: the banner (.luz-consent) and
- * its module, consent.js (<luz-consent>; D5 of .claude/plans/specs/f3-package-model.md:
- * no `site-` in the names), loaded on its own as dist/consent.min.js by
+ * The cookie consent of @luz-ds/catalog: the banner (.luz-cookie-consent) and
+ * its module, cookie-consent.js (<luz-cookie-consent>; D5 of .claude/plans/specs/f3-package-model.md:
+ * no `site-` in the names), loaded on its own as dist/cookie-consent.min.js by
  * tests/fixtures/site-top.html. A band fixed at the block end of the window
  * (D7, step 9): where it sits, what it shifts and the reopen button's space
  * are here; the rest of the band (C1 to C11: Tab stops, the saved state and
@@ -19,11 +19,11 @@ import { hold, layoutShift, watchLayoutShift } from './helpers/site-loader.js';
 const FIXTURE = '/tests/fixtures/site-top.html';
 const KEY = 'luz-consent';
 
-/** Open the fixture; with JavaScript, wait for <luz-consent> to be defined, so a missing element fails here. */
+/** Open the fixture; with JavaScript, wait for <luz-cookie-consent> to be defined, so a missing element fails here. */
 async function open(page, width = 1280, dir = 'ltr', { withScript = true } = {}) {
   await page.setViewportSize({ width, height: 900 });
   await page.goto(FIXTURE);
-  if (withScript) await expect.poll(() => page.evaluate(() => !!customElements.get('luz-consent'))).toBe(true);
+  if (withScript) await expect.poll(() => page.evaluate(() => !!customElements.get('luz-cookie-consent'))).toBe(true);
   if (dir === 'rtl') await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
 }
 
@@ -61,25 +61,25 @@ test.describe('cookie consent without JavaScript', () => {
 test.describe('cookie consent', () => {
   test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript');
 
-  test('is <luz-consent> with .luz-consent parts; the old names are gone', async ({ page }) => {
+  test('is <luz-cookie-consent> with .luz-cookie-consent parts; the old names are gone', async ({ page }) => {
     await open(page);
     await expect(page.locator('#consent')).toBeVisible();
     const names = await page.evaluate(() => ({
-      defined: !!customElements.get('luz-consent'),
+      defined: !!customElements.get('luz-cookie-consent'),
       oldDefined: !!customElements.get('luz-site-consent'),
       host: document.querySelector('#consent')?.parentElement?.localName,
-      title: !!document.querySelector('#consent .luz-consent__title'),
-      choices: !!document.querySelector('#consent .luz-consent__choices'),
+      title: !!document.querySelector('#consent .luz-cookie-consent__title'),
+      choices: !!document.querySelector('#consent .luz-cookie-consent__choices'),
       oldClass: !!document.querySelector('[class*="luz-site-consent"]'),
     }));
-    expect(names).toEqual({ defined: true, oldDefined: false, host: 'luz-consent', title: true, choices: true, oldClass: false });
+    expect(names).toEqual({ defined: true, oldDefined: false, host: 'luz-cookie-consent', title: true, choices: true, oldClass: false });
   });
 
   // SEC-CHUNK-5 (R7): a CDN copy and a bundled copy of the chunk on one page
   test('loaded from two copies of the module, one answer is one luz:consent event', async ({ page }) => {
     await listen(page);
     await open(page);
-    await page.evaluate(() => import('/packages/catalog/dist/consent.js'));
+    await page.evaluate(() => import('/packages/catalog/dist/cookie-consent.js'));
     await page.click('#accept');
     await expect(page.locator('#done')).toBeVisible();
     expect(await page.evaluate(() => window.__events)).toHaveLength(1);
@@ -114,7 +114,7 @@ test.describe('cookie consent', () => {
     expect(band.left).toBe(0);
     expect(band.width).toBe(1280);
     // Still first in the page after the skip link (C1), whatever its place on screen
-    expect(await page.evaluate(() => document.getElementById('skip').nextElementSibling?.localName)).toBe('luz-consent');
+    expect(await page.evaluate(() => document.getElementById('skip').nextElementSibling?.localName)).toBe('luz-cookie-consent');
     const order = [];
     for (let i = 0; i < 6; i++) {
       await page.keyboard.press('Tab');
@@ -136,7 +136,7 @@ test.describe('cookie consent', () => {
     await expect(page.locator('h1')).toBeVisible();
     await page.waitForTimeout(300);
     release();
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-consent'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-cookie-consent'))).toBe(true);
     await page.waitForTimeout(500);
   }
 

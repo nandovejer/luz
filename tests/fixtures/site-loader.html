@@ -6,7 +6,7 @@
   <title>LUZ site loader fixture: a search and a consent banner</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/consent.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/cookie-consent.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">
   <style>
     .bar { display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1rem; }
@@ -42,10 +42,10 @@
     <textarea id="notes" aria-label="Notes"></textarea>
   </main>
   <button class="luz-btn luz-btn--ghost" id="external" type="button" data-luz-search-open hidden>Search from here</button>
-  <luz-consent>
-    <section class="luz-consent" id="consent" data-luz-consent aria-labelledby="consent-title" hidden>
+  <luz-cookie-consent>
+    <section class="luz-cookie-consent" id="consent" data-luz-consent aria-labelledby="consent-title" hidden>
       <div data-luz-consent-ask id="consent-ask">
-        <h2 class="luz-consent__title" id="consent-title">Cookies</h2>
+        <h2 class="luz-cookie-consent__title" id="consent-title">Cookies</h2>
         <p>We use cookies that this site needs to work.</p>
         <form>
           <button class="luz-btn luz-btn--primary" id="accept" type="submit" value="all">Accept</button>
@@ -54,6 +54,6 @@
       </div>
       <p data-luz-consent-done tabindex="-1" hidden>Saved.</p>
     </section>
-  </luz-consent>
+  </luz-cookie-consent>
 </body>
 </html>

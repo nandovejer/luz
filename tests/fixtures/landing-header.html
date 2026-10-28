@@ -10,17 +10,17 @@
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/navbar.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/site-header.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/main.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/lang-switch.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-header.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/landing-main.css">
 </head>
 <body class="o-page">
-  <header class="luz-landing-header o-sticky" id="hdr">
+  <header class="luz-site-header o-sticky" id="hdr">
     <div class="o-container o-container--inline o-row" id="row">
       <button class="luz-nav-toggle" id="toggle" type="button" popovertarget="site-nav" aria-label="Menu">
         <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h18v2H3zM3 11h18v2H3zM3 17h18v2H3z"/></svg>
       </button>
-      <a class="luz-landing-header__brand" id="brand" href="#top">Bodega Albar</a>
+      <a class="luz-site-header__brand" id="brand" href="#top">Bodega Albar</a>
       <nav class="luz-navbar" id="site-nav" aria-label="Main" popover>
         <ul class="luz-navbar__list">
           <li><a class="luz-navbar__link" href="#top" aria-current="page">Wines</a></li>
@@ -31,7 +31,7 @@
           <li><a class="luz-navbar__link" href="#top">Contact</a></li>
         </ul>
       </nav>
-      <div class="o-row luz-landing-header__actions" id="actions">
+      <div class="o-row luz-site-header__actions" id="actions">
         <luz-lang-switch id="lang">
           <button class="luz-lang-switch__button" id="lang-button" type="button" popovertarget="lang-menu"><span class="u-sr-only">Language: </span><span class="luz-lang-switch__name">English</span></button>
           <nav class="luz-lang-switch__menu" id="lang-menu" popover aria-labelledby="lang-title">
@@ -46,7 +46,7 @@
       </div>
     </div>
   </header>
-  <main id="top" class="o-container luz-landing-main">
+  <main id="top" class="o-container luz-main">
     <h1>Page</h1>
     <p>Something under the bar for the scrim to dim.</p>
     <p style="block-size: 2400px">A tall page, to scroll.</p>

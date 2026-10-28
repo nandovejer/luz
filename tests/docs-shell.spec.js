@@ -46,9 +46,9 @@ test.describe('docs shell, with JavaScript', () => {
   test('at 1440px the sidebar, main and the rail stand side by side, in this order', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
-    await expect(page.locator('body.o-shell.luz-docs-shell')).toHaveCount(1);
+    await expect(page.locator('body.o-shell.luz-docs-layout')).toHaveCount(1);
     await expect(rail(page)).toBeVisible();
-    const [nav, main, aside] = await Promise.all(['nav.luz-docs-nav', 'main.luz-docs-main', 'aside.luz-docs-rail'].map((s) => box(page, s)));
+    const [nav, main, aside] = await Promise.all(['nav.luz-docs-nav', 'main.luz-docs-main', 'aside.luz-page-rail'].map((s) => box(page, s)));
     expect(nav.right, 'the sidebar is left of main').toBeLessThanOrEqual(main.x + 1);
     expect(main.right, 'main is left of the rail').toBeLessThanOrEqual(aside.x + 1);
   });
@@ -56,10 +56,10 @@ test.describe('docs shell, with JavaScript', () => {
   test('"On this page" is in the rail, not in main, and the page does not scroll sideways', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
-    await expect(page.locator('main nav.luz-docs-rail__onpage')).toHaveCount(0);
-    const onpage = rail(page).locator('nav.luz-docs-rail__onpage');
+    await expect(page.locator('main nav.luz-page-rail__onpage')).toHaveCount(0);
+    const onpage = rail(page).locator('nav.luz-page-rail__onpage');
     await expect(onpage).toBeVisible();
-    await expect(onpage.locator('summary.luz-docs-rail__title')).toHaveText('On this page');
+    await expect(onpage.locator('summary.luz-page-rail__title')).toHaveText('On this page');
     await expect(onpage.getByRole('link', { name: 'Example', exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
@@ -67,7 +67,7 @@ test.describe('docs shell, with JavaScript', () => {
   test('the rail ends with Copy page as Markdown, Copy link to this page, Edit this page and Report a problem, in this order', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
-    const actions = rail(page).locator('.luz-docs-rail__actions').getByText(/^(Copy page as Markdown|Copy link to this page|Edit this page|Report a problem)$/);
+    const actions = rail(page).locator('.luz-page-rail__actions').getByText(/^(Copy page as Markdown|Copy link to this page|Edit this page|Report a problem)$/);
     await expect(actions).toHaveText(['Copy page as Markdown', 'Copy link to this page', 'Edit this page', 'Report a problem']);
     await expect(rail(page).getByRole('link', { name: 'Edit this page', exact: true })).toHaveAttribute('href', 'https://github.com/nandovejer/luz/edit/main/apps/docs/pages/components/button.html');
     await expect(rail(page).getByRole('link', { name: 'Report a problem', exact: true })).toHaveAttribute('href', 'https://github.com/nandovejer/luz/issues/new?title=Button');
@@ -106,12 +106,12 @@ test.describe('docs shell, with JavaScript', () => {
   test('the page head reads eyebrow, h1, lead and chips from top to bottom', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
-    const head = page.locator('header.luz-docs-page-head');
-    await expect(head.locator('p.luz-docs-page-head__eyebrow')).toHaveText('Core · Actions and input');
+    const head = page.locator('header.luz-doc-header');
+    await expect(head.locator('p.luz-doc-header__eyebrow')).toHaveText('Core · Actions and input');
     await expect(head.locator('h1')).toHaveText('Button');
-    await expect(head.locator('p.luz-docs-page-head__lead')).toHaveText(site.byRoute.get(BUTTON)?.meta.description ?? '');
+    await expect(head.locator('p.luz-doc-header__lead')).toHaveText(site.byRoute.get(BUTTON)?.meta.description ?? '');
     const [eyebrow, h1, lead, meta] = await Promise.all(
-      ['.luz-docs-page-head__eyebrow', 'header.luz-docs-page-head h1', '.luz-docs-page-head__lead', '.luz-docs-page-head__meta'].map((s) => box(page, s)),
+      ['.luz-doc-header__eyebrow', 'header.luz-doc-header h1', '.luz-doc-header__lead', '.luz-doc-header__meta'].map((s) => box(page, s)),
     );
     expect(eyebrow.bottom, 'eyebrow above the h1').toBeLessThanOrEqual(h1.y + 1);
     expect(h1.bottom, 'h1 above the lead').toBeLessThanOrEqual(lead.y + 1);
@@ -123,17 +123,17 @@ test.describe('docs shell, with JavaScript', () => {
       ...(['button.spec.js', 'components-button.spec.js'].some((name) => existsSync(fromRepo(`tests/${name}`))) ? ['Tested'] : []),
       'No known issues',
     ];
-    await expect(head.locator('ul.luz-docs-page-head__meta > li')).toHaveText(chips);
+    await expect(head.locator('ul.luz-doc-header__meta > li')).toHaveText(chips);
   });
 
   test('on an area index the eyebrow is above the h1, and says the area and its package', async ({ page }) => {
     for (const area of ['components', 'tokens', 'catalog']) {
       await page.goto(`/docs/${area}/`);
-      const eyebrow = await box(page, 'header.luz-docs-page-head p.luz-docs-page-head__eyebrow');
-      const h1 = await box(page, 'header.luz-docs-page-head h1');
+      const eyebrow = await box(page, 'header.luz-doc-header p.luz-doc-header__eyebrow');
+      const h1 = await box(page, 'header.luz-doc-header h1');
       expect(eyebrow.bottom, area).toBeLessThanOrEqual(h1.y + 1);
       const label = site.areas.find((a) => a.id === area)?.label ?? '';
-      await expect(page.locator('header.luz-docs-page-head p.luz-docs-page-head__eyebrow')).toHaveText(`${label} · ${eyebrowPackageOf(area)}`);
+      await expect(page.locator('header.luz-doc-header p.luz-doc-header__eyebrow')).toHaveText(`${label} · ${eyebrowPackageOf(area)}`);
     }
   });
 
@@ -147,7 +147,7 @@ test.describe('docs shell, with JavaScript', () => {
     await expect(nav.locator('details[open] a[href="/docs/components/button/"]')).toBeVisible();
     // Every area is a link, open or not; the pages of the closed folds are in the markup, not on the screen
     for (const area of site.areas) await expect(nav.locator(`a.docs-nav__area[href="/docs/${area.slug}/"]`), area.id).toBeVisible();
-    for (const href of ['/docs/tokens/color/', '/docs/get-started/snippet/', '/docs/catalog/search/', '/docs/catalog/docs-rail/']) {
+    for (const href of ['/docs/tokens/color/', '/docs/get-started/snippet/', '/docs/catalog/search/', '/docs/catalog/page-rail/']) {
       await expect(nav.locator(`a[href="${href}"]`), href).toBeHidden();
     }
     // Every page of the reading order is in it, once (an area index is the area link)
@@ -164,16 +164,16 @@ test.describe('docs shell, with JavaScript', () => {
   test('the page ends with the pager, then the foot: Last updated, Edit and Report', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
-    const foot = page.locator('main p.luz-docs-page-foot');
+    const foot = page.locator('main p.luz-page-footer');
     await expect(foot).toHaveCount(1);
     await expect(foot).toContainText('Last updated');
     await expect(foot.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}$/);
     await expect(foot.getByRole('link')).toHaveText(['Edit this page', 'Report a problem']);
-    const pager = await box(page, '.luz-docs-pager');
-    const f = await box(page, 'main p.luz-docs-page-foot');
+    const pager = await box(page, '.luz-pager');
+    const f = await box(page, 'main p.luz-page-footer');
     expect(f.y, 'the foot is under the pager').toBeGreaterThanOrEqual(pager.bottom - 1);
     // The pager's links are named by their text
-    await expect(page.locator('.luz-docs-pager').getByRole('link', { name: 'Previous Breadcrumb', exact: true })).toBeVisible();
+    await expect(page.locator('.luz-pager').getByRole('link', { name: 'Previous Breadcrumb', exact: true })).toBeVisible();
   });
 
   test('on the catalog index the gallery is the six groups, one under the other in the order of the sidebar, under the lead', async ({ page }) => {
@@ -230,7 +230,7 @@ test.describe('docs shell, with JavaScript', () => {
         await page.reload();
       }
       await idle(page);
-      const fold = rail(page).locator('nav.luz-docs-rail__onpage details');
+      const fold = rail(page).locator('nav.luz-page-rail__onpage details');
       await expect(fold.locator('> summary'), 'the title is always visible').toBeVisible();
       expect(await fold.evaluate((d) => /** @type {HTMLDetailsElement} */ (d).open), `open: ${open}`).toBe(open);
       const first = fold.getByRole('link').first();
@@ -243,7 +243,7 @@ test.describe('docs shell, with JavaScript', () => {
     await page.setViewportSize({ width: 390, height: 800 });
     await page.goto(BUTTON);
     await idle(page);
-    const fold = rail(page).locator('nav.luz-docs-rail__onpage details');
+    const fold = rail(page).locator('nav.luz-page-rail__onpage details');
     const first = fold.getByRole('link').first();
     await expect(first).toBeHidden();
     await fold.locator('> summary').click();
@@ -261,12 +261,12 @@ test.describe('docs shell, without JavaScript', () => {
     test(`${width}px: "On this page" is open and its links are visible, and the rail is still above main below 80rem`, async ({ page }) => {
       await page.setViewportSize({ width, height: 800 });
       await page.goto(BUTTON);
-      const fold = rail(page).locator('nav.luz-docs-rail__onpage details');
+      const fold = rail(page).locator('nav.luz-page-rail__onpage details');
       expect(await fold.evaluate((d) => /** @type {HTMLDetailsElement} */ (d).open), 'the details is open').toBe(true);
       await expect(fold.getByRole('link', { name: 'Example', exact: true })).toBeVisible();
       if (width < 1280) {
         const main = await box(page, 'main.luz-docs-main');
-        const aside = await box(page, 'aside.luz-docs-rail');
+        const aside = await box(page, 'aside.luz-page-rail');
         expect(aside.bottom, 'the rail is above main').toBeLessThanOrEqual(main.y + 1);
       }
     });
@@ -300,8 +300,8 @@ test.describe('docs shell, without JavaScript', () => {
   test('the rail has the four actions as links, and "On this page" is a native <details>', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(BUTTON);
-    await expect(rail(page).locator('.luz-docs-rail__actions a')).toHaveText(['Copy page as Markdown', 'Copy link to this page', 'Edit this page', 'Report a problem']);
-    const summary = rail(page).locator('nav.luz-docs-rail__onpage details > summary');
+    await expect(rail(page).locator('.luz-page-rail__actions a')).toHaveText(['Copy page as Markdown', 'Copy link to this page', 'Edit this page', 'Report a problem']);
+    const summary = rail(page).locator('nav.luz-page-rail__onpage details > summary');
     await expect(summary).toHaveText('On this page');
     await expect(summary).toBeVisible();
   });
@@ -312,7 +312,7 @@ test.describe('docs shell, without JavaScript', () => {
       await page.goto(BUTTON);
       const header = await box(page, 'body > header');
       const main = await box(page, 'main.luz-docs-main');
-      const aside = await box(page, 'aside.luz-docs-rail');
+      const aside = await box(page, 'aside.luz-page-rail');
       expect(aside.bottom, `${width}px: the rail is above main`).toBeLessThanOrEqual(main.y + 1);
       expect(aside.y, `${width}px: the rail is under the site header`).toBeGreaterThanOrEqual(header.bottom - 1);
       expect(main.right, `${width}px: main is not beside the rail`).toBeGreaterThan(aside.x);
@@ -324,12 +324,12 @@ test.describe('docs shell, without JavaScript', () => {
     await page.setViewportSize({ width: 1440, height: 800 });
     await page.goto(BUTTON);
     const main = await box(page, 'main.luz-docs-main');
-    const aside = await box(page, 'aside.luz-docs-rail');
+    const aside = await box(page, 'aside.luz-page-rail');
     expect(aside.x, 'beside main, on the right').toBeGreaterThanOrEqual(main.right - 1);
     expect(aside.y, 'at the top of the content, not above it').toBeLessThan(main.y + 200);
     await page.evaluate(() => window.scrollTo({ top: 1500, behavior: 'instant' }));
     expect(await page.evaluate(() => window.scrollY), 'the page scrolled').toBeGreaterThan(1000);
-    const inner = await box(page, 'aside.luz-docs-rail .luz-docs-rail__inner');
+    const inner = await box(page, 'aside.luz-page-rail .luz-page-rail__inner');
     expect(inner.y, 'the sticky box is in the window').toBeGreaterThanOrEqual(0);
     expect(inner.y, 'near the top edge').toBeLessThanOrEqual(200);
     expect(inner.x, 'in the same column').toBeGreaterThanOrEqual(main.right - 1);
@@ -337,10 +337,10 @@ test.describe('docs shell, without JavaScript', () => {
 
   test('the rail is before main in the markup: the sidebar, the rail, then main, and the page head opens main', async ({ page }) => {
     await page.goto(BUTTON);
-    const order = await page.evaluate(() => [...document.body.children].map((el) => el.matches('nav.luz-docs-nav') ? 'sidebar' : el.matches('aside.luz-docs-rail') ? 'rail' : el.matches('main.luz-docs-main') ? 'main' : null).filter(Boolean));
+    const order = await page.evaluate(() => [...document.body.children].map((el) => el.matches('nav.luz-docs-nav') ? 'sidebar' : el.matches('aside.luz-page-rail') ? 'rail' : el.matches('main.luz-docs-main') ? 'main' : null).filter(Boolean));
     expect(order).toEqual(['sidebar', 'rail', 'main']);
     // Only the breadcrumb may come before the page head, and the h1 is the first heading of main
-    const before = await page.evaluate(() => [...document.querySelector('main.luz-docs-main').children].slice(0, [...document.querySelector('main.luz-docs-main').children].indexOf(document.querySelector('header.luz-docs-page-head'))).map((el) => el.className));
+    const before = await page.evaluate(() => [...document.querySelector('main.luz-docs-main').children].slice(0, [...document.querySelector('main.luz-docs-main').children].indexOf(document.querySelector('header.luz-doc-header'))).map((el) => el.className));
     expect(before).toEqual(['docs-breadcrumb']);
     expect(await page.evaluate(() => document.querySelector('main.luz-docs-main').querySelector('h1, h2, h3, h4, h5, h6').tagName)).toBe('H1');
   });
@@ -361,7 +361,7 @@ test.describe('docs shell, without JavaScript', () => {
   test('the not-found page keeps no rail (its markup has no script: tests/docs-shell.test.js; the dev server adds its own client)', async ({ page }) => {
     await page.goto('/404.html');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
-    await expect(page.locator('aside.luz-docs-rail')).toHaveCount(0);
+    await expect(page.locator('aside.luz-page-rail')).toHaveCount(0);
   });
 });
 
@@ -396,11 +396,11 @@ for (const javaScriptEnabled of [true, false]) {
         expect(problems, 'footer links covered by something else').toEqual([]);
         const bottoms = await page.evaluate(() => {
           const footer = document.querySelector('#site-footer').getBoundingClientRect().top;
-          const aside = document.querySelector('aside.luz-docs-rail');
+          const aside = document.querySelector('aside.luz-page-rail');
           return {
             footer,
             rail: aside.getBoundingClientRect().bottom,
-            inner: aside.querySelector('.luz-docs-rail__inner')?.getBoundingClientRect().bottom ?? null,
+            inner: aside.querySelector('.luz-page-rail__inner')?.getBoundingClientRect().bottom ?? null,
           };
         });
         expect(bottoms.rail, 'the rail ends at or above the footer').toBeLessThanOrEqual(bottoms.footer + 0.5);
@@ -413,14 +413,14 @@ for (const javaScriptEnabled of [true, false]) {
 test.describe('S1 the rail is a box that stretches, with a sticky box inside it', () => {
   test.use({ viewport: { width: 1440, height: 800 } });
 
-  test('aside > div.luz-docs-rail__inner holds "On this page" and the actions; the inner box is sticky, the aside is not', async ({ page }) => {
+  test('aside > div.luz-page-rail__inner holds "On this page" and the actions; the inner box is sticky, the aside is not', async ({ page }) => {
     await page.goto(BUTTON);
-    const aside = page.locator('aside.luz-docs-rail');
-    const inner = aside.locator(':scope > div.luz-docs-rail__inner');
+    const aside = page.locator('aside.luz-page-rail');
+    const inner = aside.locator(':scope > div.luz-page-rail__inner');
     await expect(inner, 'one inner box, a direct child of the aside').toHaveCount(1);
     await expect(aside.locator(':scope > *'), 'the aside has nothing else').toHaveCount(1);
-    await expect(inner.locator(':scope > nav.luz-docs-rail__onpage')).toHaveCount(1);
-    await expect(inner.locator(':scope > .luz-docs-rail__actions')).toHaveCount(1);
+    await expect(inner.locator(':scope > nav.luz-page-rail__onpage')).toHaveCount(1);
+    await expect(inner.locator(':scope > .luz-page-rail__actions')).toHaveCount(1);
     expect(await aside.evaluate((el) => getComputedStyle(el).position), 'the aside does not stick').not.toBe('sticky');
     expect(await inner.evaluate((el) => getComputedStyle(el).position), 'the inner box sticks').toBe('sticky');
   });
@@ -428,7 +428,7 @@ test.describe('S1 the rail is a box that stretches, with a sticky box inside it'
   test('the aside stretches over its grid area: as tall as main', async ({ page }) => {
     await page.goto(BUTTON);
     const main = await box(page, 'main.luz-docs-main');
-    const aside = await box(page, 'aside.luz-docs-rail');
+    const aside = await box(page, 'aside.luz-page-rail');
     expect(Math.abs(aside.height - main.height), `aside ${aside.height}px, main ${main.height}px`).toBeLessThanOrEqual(1);
   });
 });
@@ -570,8 +570,8 @@ test.describe('m1 the focus ring of a rail control is whole at the start edge', 
   test.use({ viewport: { width: 1440, height: 800 }, reducedMotion: 'reduce' });
 
   const controls = {
-    'the "On this page" title': (page) => rail(page).locator('summary.luz-docs-rail__title'),
-    'a link of the list': (page) => rail(page).locator('a.luz-docs-rail__link').first(),
+    'the "On this page" title': (page) => rail(page).locator('summary.luz-page-rail__title'),
+    'a link of the list': (page) => rail(page).locator('a.luz-page-rail__link').first(),
     'Copy page as Markdown': (page) => copyControl(page),
     'Edit this page': (page) => rail(page).getByText('Edit this page', { exact: true }),
     'Report a problem': (page) => rail(page).getByText('Report a problem', { exact: true }),
@@ -618,7 +618,7 @@ const COPY_LINK = {
   es: { route: '/es/docs/components/button/', name: 'Copiar el enlace a esta página', copied: 'Enlace copiado.', notCopied: 'No se pudo copiar el enlace.', actions: ['Copiar la página en Markdown', 'Copiar el enlace a esta página', 'Editar esta página', 'Avisar de un problema'] },
 };
 // The rail's name is in the language of the page
-const railOf = (page) => page.locator('aside.luz-docs-rail');
+const railOf = (page) => page.locator('aside.luz-page-rail');
 /** Click the button the script made (an assertion first, so a missing one fails at once, not at the click's timeout). */
 async function clickCopyLink(page, name) {
   const button = railOf(page).getByRole('button', { name, exact: true });
@@ -639,7 +639,7 @@ for (const [code, words] of Object.entries(COPY_LINK)) {
     test('the rail has four actions in this order, and the second is a button, not a link', async ({ page }) => {
       await page.goto(words.route);
       await idle(page);
-      await expect(railOf(page).locator('.luz-docs-rail__actions').locator('a, button')).toHaveText(words.actions);
+      await expect(railOf(page).locator('.luz-page-rail__actions').locator('a, button')).toHaveText(words.actions);
       const button = railOf(page).getByRole('button', { name: words.name, exact: true });
       await expect(button).toBeVisible();
       expect(await button.evaluate((el) => el.tagName)).toBe('BUTTON');
@@ -691,8 +691,8 @@ for (const [code, words] of Object.entries(COPY_LINK)) {
       await page.goto(words.route);
       await idle(page);
       await expect(railStatus(page)).toHaveCount(1);
-      await expect(railOf(page).locator('.luz-docs-rail__actions button').first()).toBeVisible();
-      await railOf(page).locator('.luz-docs-rail__actions button').first().click();
+      await expect(railOf(page).locator('.luz-page-rail__actions button').first()).toBeVisible();
+      await railOf(page).locator('.luz-page-rail__actions button').first().click();
       await expect(railStatus(page)).not.toHaveText('');
       const first = await railStatus(page).textContent();
       await clickCopyLink(page, words.name);
@@ -706,7 +706,7 @@ for (const [code, words] of Object.entries(COPY_LINK)) {
       await idle(page);
       await clickCopyLink(page, words.name);
       await expect(railStatus(page)).toHaveText(words.copied);
-      const { violations } = await new AxeBuilder({ page }).include('aside.luz-docs-rail').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+      const { violations } = await new AxeBuilder({ page }).include('aside.luz-page-rail').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
       expect(violations.map((v) => `${v.id}: ${v.nodes[0]?.target?.join(' ')}`)).toEqual([]);
     });
   });
@@ -718,7 +718,7 @@ for (const [code, words] of Object.entries(COPY_LINK)) {
 
     test('the second action is a link to the page itself, and nothing is a button', async ({ page }) => {
       await page.goto(words.route);
-      await expect(railOf(page).locator('.luz-docs-rail__actions a')).toHaveText(words.actions);
+      await expect(railOf(page).locator('.luz-page-rail__actions a')).toHaveText(words.actions);
       const own = railOf(page).getByRole('link', { name: words.name, exact: true });
       await expect(own).toBeVisible();
       expect(new URL(await own.evaluate((a) => /** @type {HTMLAnchorElement} */ (a).href)).pathname, 'its own route').toBe(words.route);
@@ -733,7 +733,7 @@ test.describe('Copy link to this page on a page with toc: false', () => {
     const noToc = site.pages.find((p) => p.meta.toc === 'false');
     expect(noToc, 'the site has a page with toc: false').toBeTruthy();
     await page.goto(noToc.route);
-    await expect(railOf(page).locator('nav.luz-docs-rail__onpage')).toHaveCount(0);
-    await expect(railOf(page).locator('.luz-docs-rail__actions a')).toHaveText(COPY_LINK.en.actions);
+    await expect(railOf(page).locator('nav.luz-page-rail__onpage')).toHaveCount(0);
+    await expect(railOf(page).locator('.luz-page-rail__actions a')).toHaveText(COPY_LINK.en.actions);
   });
 });

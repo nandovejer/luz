@@ -4,7 +4,7 @@
  * A block is the name a package ships and owns: a custom-element tag
  * (`luz-search`), a component class (`.luz-card` of `.luz-card__title`) or
  * an object (`.o-stack`). A selector names a block it only *refines* when
- * the block is not first in the selector (`.luz-landing-header luz-lang-switch`
+ * the block is not first in the selector (`.luz-site-header luz-lang-switch`
  * defines landing's header and merely styles site's tag), so only the
  * leftmost compound of each selector counts, with `:where()` / `:is()`
  * unwrapped and every other functional pseudo-class (`:has()`, `:not()`)

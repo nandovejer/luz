@@ -4,10 +4,10 @@
  * wants and nothing of LUZ. Four additions, on tests/fixtures/landing-f4.html (tokens, core
  * and landing only):
  *
- *   - the head of a section: `.luz-landing-section__eyebrow`, `__title` and `__lead`, and the
- *     `em` of a hero or section title that takes `--luz-landing-title-accent` only when set
- *   - `.luz-landing-stat` with `__value` and `__label`
- *   - `--luz-landing-glow-x`, the horizontal position of the glow's tint
+ *   - the head of a section: `.luz-section__eyebrow`, `__title` and `__lead`, and the
+ *     `em` of a hero or section title that takes `--luz-title-accent` only when set
+ *   - `.luz-stat` with `__value` and `__label`
+ *   - `--luz-glow-x`, the horizontal position of the glow's tint
  *   - axe on the whole page in light, dark and high contrast
  *
  * The hero (--centered, __media--bleed) is in tests/landing-hero.spec.js and the footer
@@ -95,10 +95,10 @@ test.describe('landing section head', () => {
       expect(await css(page, em, 'color')).toBe(await css(page, section, 'color'));
     });
 
-    test(`the em of a ${name} title takes --luz-landing-title-accent when it is set, and the title does not`, async ({ page }) => {
+    test(`the em of a ${name} title takes --luz-title-accent when it is set, and the title does not`, async ({ page }) => {
       await open(page);
       const before = await css(page, section, 'color');
-      await page.evaluate(() => document.documentElement.style.setProperty('--luz-landing-title-accent', 'rgb(200, 30, 30)'));
+      await page.evaluate(() => document.documentElement.style.setProperty('--luz-title-accent', 'rgb(200, 30, 30)'));
       expect(await css(page, em, 'color')).toBe('rgb(200, 30, 30)');
       expect(await css(page, section, 'color')).toBe(before);
     });
@@ -145,7 +145,7 @@ test.describe('landing stat', () => {
   });
 });
 
-test.describe('landing glow: --luz-landing-glow-x', () => {
+test.describe('landing glow: --luz-glow-x', () => {
   const glowPage = (dir) => `<!doctype html>
 <html lang="${dir === 'rtl' ? 'ar' : 'en'}" dir="${dir}">
 <head>
@@ -154,9 +154,9 @@ test.describe('landing glow: --luz-landing-glow-x', () => {
 <title>Glow</title>
 <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
 <link rel="stylesheet" href="/packages/core/dist/luz.css">
-<link rel="stylesheet" href="/packages/catalog/dist/components/landing-glow.css">
+<link rel="stylesheet" href="/packages/catalog/dist/components/glow.css">
 </head>
-<body class="o-page luz-landing-glow">
+<body class="o-page luz-glow">
 <main id="main-content" class="o-container"><p>Decoration only.</p></main>
 </body>
 </html>`;
@@ -169,7 +169,7 @@ test.describe('landing glow: --luz-landing-glow-x', () => {
     await page.goto('/__glow__');
     await page.waitForLoadState('load');
     // The knob is set on the element that carries the glow, like the other knobs of a component
-    if (knob) await page.evaluate((x) => document.body.style.setProperty('--luz-landing-glow-x', x), knob);
+    if (knob) await page.evaluate((x) => document.body.style.setProperty('--luz-glow-x', x), knob);
     const png = await page.screenshot();
     const subtle = await paintOf(page, 'var(--luz-brand-subtle)');
     const points = await readPoints(page, png, [[3, 3], [640, 3], [1276, 3]]);

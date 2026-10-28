@@ -253,7 +253,7 @@ describe("On this page", () => {
     const html = renderToc(page("h2,h3"), body);
     const items = readHtml(html, "toc").links.map((l) => l.href);
     expect(items).toEqual(["#a", "#b", "#b1", "#b2", "#c"]);
-    expect(html.replace(/\s+/g, " ")).toContain('href="#b">B</a> <ul class="luz-docs-rail__sub"> <li><a class="luz-sidebar__link luz-docs-rail__link" href="#b1">B one</a></li> <li><a class="luz-sidebar__link luz-docs-rail__link" href="#b2">B two</a></li> </ul> </li>');
+    expect(html.replace(/\s+/g, " ")).toContain('href="#b">B</a> <ul class="luz-page-rail__sub"> <li><a class="luz-sidebar__link luz-page-rail__link" href="#b1">B one</a></li> <li><a class="luz-sidebar__link luz-page-rail__link" href="#b2">B two</a></li> </ul> </li>');
     expect(html).not.toContain("Demo");
   });
 
@@ -603,7 +603,7 @@ describe("the LUZ docs site", () => {
     expect(codes).toEqual(["es"]);
     const prefixOf = (route) => codes.map((code) => `/${code}`).find((prefix) => route === `${prefix}/` || route.startsWith(`${prefix}/`)) ?? "";
     const visible = (html) => {
-      const main = html.match(/<main[\s\S]*?<\/main>/)[0].replace(/<nav class="luz-docs-rail__onpage"[\s\S]*?<\/nav>/, "");
+      const main = html.match(/<main[\s\S]*?<\/main>/)[0].replace(/<nav class="luz-page-rail__onpage"[\s\S]*?<\/nav>/, "");
       return new Set([...main.matchAll(/href="((?:\/[a-z]{2,3})?\/docs\/[^"#]*)/g)].map((m) => m[1]));
     };
     const starts = [...withLanguages.rendered].filter(([route]) => route !== "/404.html");
@@ -631,7 +631,7 @@ describe("the LUZ docs site", () => {
     const viewPages = site.pages.filter(
       (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group && p.meta.group !== "reference"),
     );
-    expect(viewPages).toHaveLength(58);
+    expect(viewPages).toHaveLength(57);
     const CODE = ["markup", "variants", "how", "no-js", "keyboard"];
     const DESIGN = ["when", "when-not", "do-dont", "content", "contrast", "tokens"];
     for (const page of viewPages) {
@@ -734,7 +734,8 @@ describe("the LUZ docs site", () => {
     expect(index.pages.filter(([, url]) => url === "catalog/lang-switch/").map(([, , keywords]) => keywords)).toEqual(["Catalog · translation, locale, i18n, hreflang"]);
     expect(index.pages.filter(([, url]) => url === "catalog/lang-switcher/")).toEqual([]);
     expect(index.pages.filter(([, url]) => url === "catalog/notice/")).toEqual([]);
-    expect(index.pages.filter(([, url]) => url === "catalog/banner/")).toHaveLength(1);
+    expect(index.pages.filter(([, url]) => url === "catalog/announcement/")).toHaveLength(1);
+    expect(index.pages.filter(([, url]) => url === "catalog/banner/"), "the page of before F8 is gone").toEqual([]);
     // A keyword is never the title of another page: that page would come second in its own search
     const titles = new Set(site.pages.map((p) => p.meta.title.toLowerCase()));
     for (const { keywords, title } of indexData(site)) for (const k of keywords) expect(titles.has(k.toLowerCase()), `${title}: ${k}`).toBe(false);
@@ -770,7 +771,7 @@ describe("the LUZ docs site", () => {
     const nav = html.match(/<nav class="docs-end" aria-labelledby="docs-end-title">[\s\S]*?<\/nav>/)?.[0] ?? null;
     const tree = parse(html, "page");
     const rel = (kind) => {
-      const link = queryAllLive(tree, "a.luz-docs-pager__link").find((a) => a.attrs.get("rel") === kind);
+      const link = queryAllLive(tree, "a.luz-pager__link").find((a) => a.attrs.get("rel") === kind);
       return link ? [link.attrs.get("href"), textOf(link), link.attrs.has("aria-label")] : null;
     };
     const links = nav?.match(/<ul class="docs-end__links">([\s\S]*?)<\/ul>/)?.[1].match(/href="[^"]*"/g)?.map((h) => h.slice(6, -1)) ?? [];
@@ -914,15 +915,18 @@ describe("the LUZ docs site", () => {
   // F3 step 12: what moved out of catalog leaves its pages behind. Each went to core (shell and
   // actions to `layout`, section to `band`, image, skip link), or to a pattern of a kind of site (hero, footer,
   // header, section, page header: files of catalog since F5b); the old URLs fall to the 404 page
-  const LEFT_SITE = ["actions", "footer", "hero", "image", "lang-switcher", "notice", "page-header", "section", "shell", "site-header", "skip-link", "templates"];
+  // F8 gives four of the names back to current pages (`hero`, `page-header`, `section` and `site-header` are patterns of
+  // catalog again, under the names of their blocks), so a link to /docs/catalog/hero/ is not a link to a page that left
+  const LEFT_SITE = ["actions", "footer", "image", "lang-switcher", "notice", "shell", "skip-link", "templates"];
 
-  it("the Catalog area holds its six components, the navbar, sidebar, terminal and timeline that came from core (F7), the 19 pages of the patterns of the kinds of site, and its class reference", () => {
+  it("the Catalog area holds its six components, the navbar, sidebar, terminal and timeline that came from core (F7), the 18 pages of the patterns of the kinds of site, named for their blocks (F8), and its class reference", () => {
     const routes = site.pages.filter((p) => p.meta.area === "catalog").map((p) => p.route).sort();
-    const patterns = ["landing-header", "landing-hero", "landing-section", "landing-stat", "landing-footer", "cms-header", "cms-page-header", "cms-article-header", "cms-toc", "cms-footer", "app-header", "app-dashboard", "docs-shell", "docs-page-head", "docs-rail", "docs-example", "docs-dodont", "docs-pager", "docs-page-foot"];
+    const patterns = ["site-header", "masthead", "hero", "section", "stat", "site-footer", "page-header", "article-header", "toc", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
     const layout = ["navbar", "sidebar", "terminal", "timeline"];
-    expect(routes).toEqual(["/docs/catalog/", ...["banner", "classes", "consent", "lang-switch", "mode", "search", "submenu", ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`)]);
+    const elements = ["announcement", "cookie-consent", "color-mode", "lang-switch", "search", "submenu"];
+    expect(routes).toEqual(["/docs/catalog/", ...["classes", ...elements, ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`)]);
     const groups = site.pages.filter((p) => p.meta.area === "catalog" && p.meta.group && p.meta.group !== "reference").map((p) => p.route);
-    expect(groups.sort()).toEqual(["banner", "consent", "lang-switch", "mode", "search", "submenu", ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`));
+    expect(groups.sort()).toEqual([...elements, ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`));
   });
 
   it("the navbar, the sidebar, the terminal and the timeline are pages of /docs/catalog/<slug>/ and no longer of /docs/components/<slug>/, in English and in Spanish (F7, decision 34)", () => {
@@ -955,7 +959,7 @@ describe("the LUZ docs site", () => {
       .replace(/&gt;/g, ">")
       .replace(/&lt;/g, "<")
       .replace(/&amp;/g, "&");
-    for (const tag of ["search", "consent", "mode", "lang-switch", "submenu", "banner"]) expect(chain, `catalog's ${tag}`).toContain(tag);
+    for (const tag of ["search", "cookie-consent", "color-mode", "lang-switch", "submenu", "announcement"]) expect(chain, `catalog's ${tag}`).toContain(tag);
     // F5b: the patterns of a landing page, a blog, an app and a documentation site are catalog's; there is no package for a kind
     for (const kind of ["landing", "cms", "app", "docs"]) expect(chain, `no package ${kind}`).not.toMatch(new RegExp(`@luz-ds/${kind}(?![\\w-])`));
     expect(chain).toMatch(/landing page/i);
@@ -1040,7 +1044,8 @@ describe("the LUZ docs site", () => {
         const ids = h2.map((h) => h.attrs.get("id"));
         expect(ids.every(Boolean), `${kind.id}: every recipe has an id`).toBe(true);
         expect(new Set(ids).size, `${kind.id}: ids are unique`).toBe(ids.length);
-        const patterns = kind.docs; // "docs/catalog/": a page of a kind is /docs/catalog/<kind.patterns>-<name>/
+        // F8: a page of a kind is a catalog page that names the kind in its `fits-kinds`, whatever its name
+        const fitting = new Set(site.pages.filter((p) => p.meta.area === "catalog" && (p.meta["fits-kinds"] ?? "").split(/,\s*/).includes(kind.id)).map((p) => p.route));
         h2.forEach((heading, i) => {
           const end = h2[i + 1]?.open.index ?? Infinity;
           const within = (node) => node.open.index > heading.open.index && node.open.index < end;
@@ -1054,7 +1059,7 @@ describe("the LUZ docs site", () => {
           const links = findAll(tree, (n) => n.name === "a" && within(n) && isLive(n)).map((a) => a.attrs.get("href") ?? "");
           // The pattern of the recipe, a page of /docs/catalog/<prefix>-<name>/, or core's components when the recipe is
           // made of core alone (the post card is core's card, the shell of an app is core's sidebar: no CSS of their own)
-          const own = links.filter((href) => href.startsWith(`/${patterns}${kind.patterns}-`));
+          const own = links.filter((href) => fitting.has(href.split("#")[0]));
           const core = links.filter((href) => href.startsWith("/docs/components/"));
           // F7: the shell of an app is the sidebar, and the sidebar is a page of catalog now, as the navbar, the terminal and the timeline
           const layout = links.filter((href) => /^\/docs\/catalog\/(?:navbar|sidebar|terminal|timeline)\//.test(href));
@@ -1067,7 +1072,8 @@ describe("the LUZ docs site", () => {
     it("links every pattern page of its kind from its page, so a pattern is found from the kind it is for", () => {
       for (const kind of KINDS) {
         const links = new Set(queryAllLive(bodyOf(site.byRoute.get(routeOfKind(kind))), "a").map((a) => a.attrs.get("href").split("#")[0]));
-        const own = site.pages.filter((p) => p.meta.area === "catalog" && p.route.startsWith(`/docs/catalog/${kind.patterns}-`)).map((p) => p.route);
+        // the pattern pages of the kind: the pages of catalog that name it in `fits-kinds`, but the four pieces of F7 (navbar, sidebar, terminal, timeline), which the recipes link where they use them
+        const own = site.pages.filter((p) => p.meta.area === "catalog" && (p.meta["fits-kinds"] ?? "").split(/,\s*/).includes(kind.id) && !["navbar", "sidebar", "terminal", "timeline"].includes(p.route.split("/").filter(Boolean).at(-1))).map((p) => p.route);
         expect(own.length, `${kind.id}: pattern pages`).toBeGreaterThanOrEqual(2);
         expect(own.filter((route) => !links.has(route)), `${kind.id}: pattern pages its page does not link`).toEqual([]);
       }
@@ -1145,8 +1151,9 @@ describe("the LUZ docs site", () => {
   it("no page, partial, layout, home page or stylesheet of the apps uses a class or property of catalog's old blocks", () => {
     // `luz-site-mode` is the key of the stored colour mode. A sentence that says what a class was called before
     // F3 is fine; a `class` attribute (in a demo or in a snippet) or a selector is not
-    const inMarkup = /\bclass=(?:"|&quot;)[^"&]*\bluz-site-(?!mode)/;
-    const inCode = /\.luz-site-(?!mode)[a-z]|--luz-site-(?!mode)[a-z]/;
+    // F8: `luz-site-header` and `luz-site-footer` are current names (the two unions of decision 67), not blocks of the old @luz-ds/site
+    const inMarkup = /\bclass=(?:"|&quot;)[^"&]*\bluz-site-(?!mode|header|footer)/;
+    const inCode = /\.luz-site-(?!mode|header|footer)[a-z]|--luz-site-(?!mode|header|footer)[a-z]/;
     const offenders = [];
     const walk = (dir) => {
       for (const entry of readdirSync(dir)) {

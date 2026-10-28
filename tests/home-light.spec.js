@@ -10,7 +10,7 @@
  * from globe-data.js once the globe is on screen and the browser is idle
  * (<home-globe land> says it is drawn). There is one look and no way to
  * choose another: no look buttons, no ?look=, nothing remembered. It does not own the colour mode:
- * <luz-mode> (the footer's) is the only writer of data-theme and data-light,
+ * <luz-color-mode> (the footer's) is the only writer of data-theme and data-light,
  * and <home-light> asks it to preview an hour (the slider) or to return to now
  * (Live). What it writes on <html> are custom properties: --sun-alt, --sun-az,
  * --sun-x and --day-left. Its texts are data-luz-label-* of <body>, from the
@@ -106,12 +106,12 @@ const scrub = async (page, hhmm) => {
   await openBar(page);
   await slider(page).fill(String(h * 60 + m));
 };
-/** Choose a mode in the footer's <luz-mode>, as a click on its radio does. */
-const chooseMode = (page, value) => page.locator(`luz-mode input[value="${value}"]`).evaluate((input) => /** @type {HTMLInputElement} */ (input).click());
-/** The hours <luz-mode>.preview() was given, in order. */
+/** Choose a mode in the footer's <luz-color-mode>, as a click on its radio does. */
+const chooseMode = (page, value) => page.locator(`luz-color-mode input[value="${value}"]`).evaluate((input) => /** @type {HTMLInputElement} */ (input).click());
+/** The hours <luz-color-mode>.preview() was given, in order. */
 const spyPreview = (page) =>
   page.evaluate(() => {
-    const mode = /** @type {any} */ (document.querySelector('luz-mode'));
+    const mode = /** @type {any} */ (document.querySelector('luz-color-mode'));
     const calls = [];
     const original = mode.preview;
     mode.preview = function (x) {
@@ -140,9 +140,9 @@ test.describe('without JavaScript', () => {
   for (const [route] of ROUTES) {
     test(`${route}: the hero is complete, and the light section is an empty element with a heading`, async ({ page }) => {
       await page.goto(route);
-      await expect(page.locator('.luz-landing-hero h1')).toBeVisible();
-      await expect(page.locator('.luz-landing-hero .luz-landing-hero__lead')).toBeVisible();
-      await expect(page.locator('.luz-landing-hero a.luz-btn')).toHaveCount(2);
+      await expect(page.locator('.luz-hero h1')).toBeVisible();
+      await expect(page.locator('.luz-hero .luz-hero__lead')).toBeVisible();
+      await expect(page.locator('.luz-hero a.luz-btn')).toHaveCount(2);
       const light = page.locator('section#light');
       await expect(light).toHaveCount(1);
       await expect(light.locator('h2')).toHaveText(/\S/);
@@ -225,7 +225,7 @@ test.describe('with JavaScript', () => {
     await expect.poll(async () => (await html(page)).sunX).toMatch(/^\d+(\.\d+)?%$/);
   });
 
-  /* -- The slider and Live call <luz-mode>.preview() --------------------- */
+  /* -- The slider and Live call <luz-color-mode>.preview() --------------------- */
 
   test('in Auto the slider scrubs the page: data-light and data-theme follow the hour, and closing the bar keeps the hour it was let go at', async ({ page }) => {
     await still(page);
@@ -244,7 +244,7 @@ test.describe('with JavaScript', () => {
     await expect.poll(async () => (await html(page)).light).toBe('morning');
     expect((await html(page)).theme).toBe('light');
 
-    // <luz-mode> was asked, with an hour from 0 to 24
+    // <luz-color-mode> was asked, with an hour from 0 to 24
     const hours = await previews(page);
     expect(hours.length).toBeGreaterThan(0);
     expect(hours.every((h) => typeof h === 'number' && h >= 0 && h <= 24)).toBe(true);
@@ -343,15 +343,15 @@ test.describe('with JavaScript', () => {
     await expect(bar).toBeVisible();
   });
 
-  /* -- <luz-mode> is the only writer ------------------------------------- */
+  /* -- <luz-color-mode> is the only writer ------------------------------------- */
 
-  test('without <luz-mode> the visuals follow the slider and nothing writes data-theme or data-light', async ({ page }) => {
-    // The module that defines <luz-mode> is replaced by an empty one: the page has the element, nobody upgrades it
-    for (const file of ['mode.js', 'mode.min.js']) {
+  test('without <luz-color-mode> the visuals follow the slider and nothing writes data-theme or data-light', async ({ page }) => {
+    // The module that defines <luz-color-mode> is replaced by an empty one: the page has the element, nobody upgrades it
+    for (const file of ['color-mode.js', 'color-mode.min.js']) {
       await page.route(`**/packages/catalog/dist/${file}`, (route) => route.fulfill({ contentType: 'text/javascript', body: 'export {};' }));
     }
     await open(page, '/', { time: '14:00' });
-    expect(await page.evaluate(() => !!customElements.get('luz-mode'))).toBe(false);
+    expect(await page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(false);
     const before = await html(page);
     // From here on every write of the two attributes is recorded; the boot script ran before
     await page.evaluate(() => {
@@ -559,7 +559,7 @@ test.describe('with JavaScript', () => {
             const r = document.querySelector(selector)?.getBoundingClientRect();
             return r ? { top: Math.round(r.top + window.scrollY), height: Math.round(r.height), width: Math.round(r.width) } : null;
           };
-          return { hero: box('.luz-landing-hero'), light: box('section#light'), element: box('home-light') };
+          return { hero: box('.luz-hero'), light: box('section#light'), element: box('home-light') };
         });
       const withScript = await boxes(page);
 
@@ -939,7 +939,7 @@ test.describe('review fixes', () => {
       // Two layers behind the page's content (main's ::before and ::after)
       await expect
         .poll(() => page.evaluate(() => {
-          const main = document.querySelector('main.luz-landing-main');
+          const main = document.querySelector('main.luz-main');
           return ['::before', '::after'].map((pseudo) => {
             const s = getComputedStyle(main, pseudo);
             return {
@@ -967,7 +967,7 @@ test.describe('review fixes', () => {
     await open(page, '/', { time: '23:30' });
     test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the layers cannot drift without the timeline)');
     // The block offset of each layer's translate (none is 0)
-    const ys = () => page.evaluate(() => ['::before', '::after'].map((p) => parseFloat(getComputedStyle(document.querySelector('main.luz-landing-main'), p).translate.split(' ')[1]) || 0));
+    const ys = () => page.evaluate(() => ['::before', '::after'].map((p) => parseFloat(getComputedStyle(document.querySelector('main.luz-main'), p).translate.split(' ')[1]) || 0));
     expect(await ys(), 'still at the top of the page').toEqual([0, 0]);
     // 'instant': html has scroll-behavior: smooth, and WebKit animates a plain scrollTo
     await page.evaluate(() => window.scrollTo({ top: 300, behavior: 'instant' }));
@@ -1015,14 +1015,14 @@ test.describe('review fixes', () => {
     await open(page, '/', { time: '23:30' });
     await page.evaluate(() => window.scrollTo(0, 300));
     await page.waitForTimeout(300);
-    const t = await page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-landing-main'), p).translate));
+    const t = await page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-main'), p).translate));
     expect(t).toEqual(['none', 'none']);
   });
 
   test('under reduced motion the stars are still: no twinkle', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await open(page, '/', { time: '23:30' });
-    const names = await page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-landing-main'), p).animationName));
+    const names = await page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-main'), p).animationName));
     expect(names).toEqual(['none', 'none']);
   });
 
@@ -1412,7 +1412,7 @@ test.describe('no Pause motion button', () => {
 
   test('a [still] attribute on <home-light> is ignored: the stars of the page keep twinkling and drifting at night', async ({ page }) => {
     await open(page, '/', { time: '23:30' });
-    const names = () => page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-landing-main'), p).animationName));
+    const names = () => page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-main'), p).animationName));
     expect((await names()).every((n) => n !== 'none'), 'control: the stars move before the attribute').toBe(true);
     await page.locator('home-light').evaluate((el) => el.setAttribute('still', ''));
     await page.waitForTimeout(300);

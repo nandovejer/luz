@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * `.luz-landing-hero` (`components/landing-*.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
+ * `.luz-hero` (`components/hero.css` of @luz-ds/catalog; .claude/plans/specs/f3-package-model.md,
  * §1.5 and §9 step 10): the first block of a home or landing page, no longer a
  * block of site (the port of tests/site-hero.spec.js, which stays until site's
  * old CSS goes at step 12). It is a native <section> on core's `.o-grid.o-grid--split`:
@@ -12,7 +12,7 @@
  *
  * The page is a synthetic one, served at /__hero__ with tokens, core and
  * landing only (site is an optional peer), built like a consumer's page
- * (`main.o-container.o-stack.luz-landing-main`); the home page (`/`, `/ar/`) is
+ * (`main.o-container.o-stack.luz-main`); the home page (`/`, `/ar/`) is
  * the real use, with no picture.
  * Runs in `chromium` and `chromium-nojs` (it is CSS only).
  */
@@ -27,27 +27,27 @@ const page = (dir = 'ltr', lang = 'en') => `<!doctype html>
 <title>Hero</title>
 <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
 <link rel="stylesheet" href="/packages/core/dist/luz.css">
-<link rel="stylesheet" href="/packages/catalog/dist/components/landing-main.css">
-<link rel="stylesheet" href="/packages/catalog/dist/components/landing-hero.css">
-<link rel="stylesheet" href="/packages/catalog/dist/components/landing-section.css">
+<link rel="stylesheet" href="/packages/catalog/dist/components/main.css">
+<link rel="stylesheet" href="/packages/catalog/dist/components/hero.css">
+<link rel="stylesheet" href="/packages/catalog/dist/components/section.css">
 </head>
 <body class="o-page">
-<main id="main-content" class="o-container o-stack luz-landing-main">
-  <section class="luz-landing-hero o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
-    <div class="luz-landing-hero__copy" id="copy">
-      <p class="luz-landing-hero__eyebrow">12 and 13 May 2027 · Seville</p>
-      <h1 class="luz-landing-hero__title" id="hero-title">Acme Summit 2027</h1>
-      <p class="luz-landing-hero__lead">Two days of talks and workshops for retail teams.</p>
+<main id="main-content" class="o-container o-stack luz-main">
+  <section class="luz-hero o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
+    <div class="luz-hero__copy" id="copy">
+      <p class="luz-hero__eyebrow">12 and 13 May 2027 · Seville</p>
+      <h1 class="luz-hero__title" id="hero-title">Acme Summit 2027</h1>
+      <p class="luz-hero__lead">Two days of talks and workshops for retail teams.</p>
       <div class="o-actions">
         <a class="luz-btn luz-btn--primary" href="#register">Register</a>
         <a class="luz-btn luz-btn--outline" href="#programme">Programme</a>
       </div>
     </div>
-    <div class="luz-landing-hero__media" id="media">
+    <div class="luz-hero__media" id="media">
       <div class="luz-image luz-image--4x3" role="img" aria-label="The main hall"></div>
     </div>
   </section>
-  <section class="o-stack luz-landing-section" aria-labelledby="programme">
+  <section class="o-stack luz-section" aria-labelledby="programme">
     <h2 id="programme">Programme</h2>
     <p id="register">Registration opens in March.</p>
   </section>
@@ -168,13 +168,13 @@ test.describe('landing hero', () => {
       probe.remove();
       return c;
     }, token);
-    const eyebrow = await read('.luz-landing-hero__eyebrow');
+    const eyebrow = await read('.luz-hero__eyebrow');
     expect(eyebrow.transform).toBe('uppercase');
     expect(eyebrow.family.replace(/\s/g, '')).toBe((await family('--luz-font-mono')).replace(/\s/g, ''));
-    const title = await read('.luz-landing-hero__title');
+    const title = await read('.luz-hero__title');
     expect(title.weight).toBe('300');
     expect(title.family.replace(/\s/g, '')).toBe((await family('--luz-font-heading')).replace(/\s/g, ''));
-    expect((await read('.luz-landing-hero__lead')).color).toBe(await colorOf('--luz-text-secondary'));
+    expect((await read('.luz-hero__lead')).color).toBe(await colorOf('--luz-text-secondary'));
   });
 
   test('in Arabic the eyebrow takes the sans and neither it nor the title is letter-spaced', async ({ page: p }) => {
@@ -183,10 +183,10 @@ test.describe('landing hero', () => {
     await p.goto('/__hero__');
     const read = (selector) => p.locator(selector).evaluate((el) => ({ family: getComputedStyle(el).fontFamily, spacing: getComputedStyle(el).letterSpacing }));
     const sans = await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--luz-font-sans').trim());
-    const eyebrow = await read('.luz-landing-hero__eyebrow');
+    const eyebrow = await read('.luz-hero__eyebrow');
     expect(eyebrow.family.replace(/\s/g, '')).toBe(sans.replace(/\s/g, ''));
     expect(['normal', '0px']).toContain(eyebrow.spacing);
-    expect(['normal', '0px']).toContain((await read('.luz-landing-hero__title')).spacing);
+    expect(['normal', '0px']).toContain((await read('.luz-hero__title')).spacing);
   });
 
   test('the actions are core\'s `.o-actions`: a column of full-width buttons at 640 px, a row above', async ({ page: p }) => {
@@ -199,9 +199,9 @@ test.describe('landing hero', () => {
     for (const { width, parent } of column) expect(Math.abs(width - parent)).toBeLessThanOrEqual(1);
   });
 
-  test('the markup carries no `luz-site-*` class', async ({ page: p }) => {
+  test('the markup carries no class named for a kind of site (`luz-landing-*`, `luz-cms-*`, `luz-app-*`)', async ({ page: p }) => {
     await open(p, 1280);
-    expect(await p.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => c.startsWith('luz-site-')))).toEqual([]);
+    expect(await p.evaluate(() => [...document.querySelectorAll('[class]')].flatMap((el) => [...el.classList]).filter((c) => /^luz-(?:cms|landing|app)-/.test(c)))).toEqual([]);
   });
 
   test('right to left at 1280 px: the copy is the right-hand column', async ({ page: p }) => {
@@ -230,12 +230,12 @@ test.describe('home page hero', () => {
   test('in Arabic the centred copy is centred about the hero, in the sans with no letter-spacing', async ({ page: p }) => {
     await p.setViewportSize({ width: 1280, height: 900 });
     await p.goto('/ar/');
-    await expect(p.locator('.luz-landing-hero')).toHaveCount(1);
-    await expect(p.locator('.luz-landing-hero')).toHaveClass(/\bluz-landing-hero--centered\b/);
+    await expect(p.locator('.luz-hero')).toHaveCount(1);
+    await expect(p.locator('.luz-hero')).toHaveClass(/\bluz-hero--centered\b/);
     const geometry = await p.evaluate(() => {
-      const hero = document.querySelector('.luz-landing-hero');
+      const hero = document.querySelector('.luz-hero');
       const box = hero.getBoundingClientRect();
-      const title = document.querySelector('.luz-landing-hero__title');
+      const title = document.querySelector('.luz-hero__title');
       // The text, not the block: the lines are centred about the middle of the hero
       const range = document.createRange();
       range.selectNodeContents(title);
@@ -259,7 +259,7 @@ test.describe('home page hero', () => {
   });
 });
 
-// F4 of the identity plan (`landing-hero.css` of catalog): the centred hero and the picture that bleeds.
+// F4 of the identity plan (`hero.css` of catalog): the centred hero and the picture that bleeds.
 // The page is tests/fixtures/landing-f4.html: tokens, core and the landing files of catalog only.
 const F4 = '/tests/fixtures/landing-f4.html';
 
@@ -322,7 +322,7 @@ test.describe('landing hero --centered', () => {
     await p.route('**/__hero__', (route) => route.fulfill({ contentType: 'text/html', body: page('ltr') }));
     await p.setViewportSize({ width: 1280, height: 900 });
     await p.goto('/__hero__');
-    expect(await p.locator('.luz-landing-hero__title').evaluate((el) => getComputedStyle(el).textAlign)).toMatch(/^(start|left)$/);
+    expect(await p.locator('.luz-hero__title').evaluate((el) => getComputedStyle(el).textAlign)).toMatch(/^(start|left)$/);
   });
 });
 

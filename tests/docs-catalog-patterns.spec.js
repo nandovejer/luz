@@ -22,27 +22,38 @@
 import { test, expect } from '@playwright/test';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { OLD_PAGES } from './helpers/catalog-names.js';
 
 const fromRepo = (/** @type {string} */ path) => fileURLToPath(new URL(`../${path}`, import.meta.url));
 const read = (/** @type {string} */ path) => readFileSync(fromRepo(path), 'utf-8');
 
 /** The groups of Catalog, in order, with their label in each language (the strings of the docs) and their pages. */
 const GROUPS = [
-  { id: 'navigation', en: 'Navigation', pages: ['app-header', 'cms-header', 'landing-header', 'lang-switch', 'navbar', 'sidebar', 'submenu'] },
-  { id: 'page-structure', en: 'Page structure', pages: ['cms-article-header', 'cms-footer', 'cms-page-header', 'landing-footer', 'landing-hero', 'landing-section'] },
-  { id: 'content', en: 'Content', pages: ['app-dashboard', 'cms-toc', 'landing-stat', 'terminal', 'timeline'] },
-  { id: 'site-wide', en: 'Site-wide', pages: ['banner', 'consent', 'mode', 'search'] },
-  { id: 'documentation', en: 'Documentation', pages: ['docs-dodont', 'docs-example', 'docs-page-foot', 'docs-page-head', 'docs-pager', 'docs-rail', 'docs-shell'] },
+  { id: 'navigation', en: 'Navigation', pages: ['app-bar', 'lang-switch', 'masthead', 'navbar', 'sidebar', 'site-header', 'submenu'] },
+  { id: 'page-structure', en: 'Page structure', pages: ['article-header', 'hero', 'page-header', 'section', 'site-footer'] },
+  { id: 'content', en: 'Content', pages: ['dashboard', 'stat', 'terminal', 'timeline', 'toc'] },
+  { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'color-mode', 'cookie-consent', 'search'] },
+  { id: 'documentation', en: 'Documentation', pages: ['do-dont', 'doc-header', 'docs-layout', 'example', 'page-footer', 'page-rail', 'pager'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
 ];
 const PATTERNS = GROUPS.filter((g) => g.id !== 'reference').flatMap((g) => g.pages);
 
 /** The kind of site each pattern fits best (the names a reader says: a blog, not cms), or `any`. */
-const KINDS = (/** @type {string} */ slug) => {
+const KIND_OF = {
+  // F8: the kind of site a pattern fits is no longer in its name. The two unions fit both kinds that had one of them; the masthead is the blog's
+  'site-header': ['landing', 'blog'], 'site-footer': ['landing', 'blog'], masthead: ['blog'],
+  hero: ['landing'], section: ['landing'], stat: ['landing'],
+  'page-header': ['blog'], 'article-header': ['blog'], toc: ['blog'],
+  'app-bar': ['app'], dashboard: ['app'],
+  'docs-layout': ['docs'], 'doc-header': ['docs'], 'page-rail': ['docs'], pager: ['docs'], 'page-footer': ['docs'], example: ['docs'], 'do-dont': ['docs'],
   // F7: the four that came from core (the owner's, decision 35 and the pages they had): a sidebar and a timeline fit two kinds
-  const MOVED = { navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'] };
-  if (slug in MOVED) return MOVED[slug];
-  return [slug.startsWith('landing-') ? 'landing' : slug.startsWith('cms-') ? 'blog' : slug.startsWith('app-') ? 'app' : slug.startsWith('docs-') ? 'docs' : 'any'];
+  navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'],
+  // The components with data of the site fit any
+  search: ['any'], 'cookie-consent': ['any'], 'color-mode': ['any'], 'lang-switch': ['any'], submenu: ['any'], announcement: ['any'],
+};
+const KINDS = (/** @type {string} */ slug) => {
+  if (!(slug in KIND_OF)) throw new Error(`tests/docs-catalog-patterns.spec.js: ${slug} has no kinds`);
+  return KIND_OF[slug];
 };
 
 const LANGUAGES = [
@@ -121,7 +132,7 @@ test.describe('every pattern page says where it fits best', () => {
         const kinds = KINDS(slug);
         const sentence = sentenceOf(code, slug);
         await page.goto(`${prefix}/docs/catalog/${slug}/`);
-        const head = page.locator('main > header.luz-docs-page-head');
+        const head = page.locator('main > header.luz-doc-header');
         const line = head.locator('p.docs-fits');
         await expect(line).toHaveCount(1);
         await expect(line).toBeVisible();
@@ -138,8 +149,8 @@ test.describe('every pattern page says where it fits best', () => {
         }
         // Between the lead and the chips, in the head (not in the body, not under the demo)
         const order = await head.evaluate((el) => [...el.children].map((c) => c.className));
-        expect(order.indexOf('docs-fits'), 'the line is after the lead').toBeGreaterThan(order.indexOf('luz-docs-page-head__lead'));
-        expect(order.indexOf('docs-fits'), 'and before the chips').toBeLessThan(order.indexOf('luz-docs-page-head__meta'));
+        expect(order.indexOf('docs-fits'), 'the line is after the lead').toBeGreaterThan(order.indexOf('luz-doc-header__lead'));
+        expect(order.indexOf('docs-fits'), 'and before the chips').toBeLessThan(order.indexOf('luz-doc-header__meta'));
 
         // The card of the gallery says the same
         await page.goto(`${prefix}/docs/catalog/`);
@@ -160,15 +171,17 @@ test.describe('every pattern page says where it fits best', () => {
     await expect(page.locator('.docs-card__fits')).toHaveCount(0);
   });
 
-  test('the lines of the pages are the lines of the kinds: landing is a link on the page of the Hero and any site is not one on the Banner', async ({ page }) => {
-    await page.goto('/docs/catalog/landing-hero/');
+  test('the lines of the pages are the lines of the kinds: landing is a link on the page of the Hero and any site is not one on the Announcement', async ({ page }) => {
+    await page.goto('/docs/catalog/hero/');
     await expect(page.locator('p.docs-fits')).toHaveText('Fits best: landing — the top of a landing page, under the header');
     await expect(page.locator('p.docs-fits a')).toHaveAttribute('href', '/docs/kinds/landing/');
-    await page.goto('/docs/catalog/banner/');
+    await page.goto('/docs/catalog/announcement/');
     await expect(page.locator('p.docs-fits')).toHaveText('Fits best: any site — a short notice for every visitor, such as a sale or planned maintenance');
-    await page.goto('/docs/catalog/cms-header/');
+    await page.goto('/docs/catalog/masthead/');
     await expect(page.locator('p.docs-fits a')).toHaveText('blog');
     await expect(page.locator('p.docs-fits a')).toHaveAttribute('href', '/docs/kinds/blog/');
+    await page.goto('/docs/catalog/site-header/');
+    await expect(page.locator('p.docs-fits a')).toHaveText(['landing', 'blog']);
   });
 });
 
@@ -193,7 +206,7 @@ test.describe('the four areas of the packages that are gone are not served', () 
     });
   }
 
-  test('the search index lists the 29 pages and the class reference of Catalog, and no page of a gone area', async ({ request }) => {
+  test('the search index lists the 28 pages and the class reference of Catalog, and no page of a gone area', async ({ request }) => {
     const index = await (await request.get('/docs/search-index.json')).json();
     const paths = /** @type {string[]} */ (index.pages.map((/** @type {string[]} */ row) => row[1]));
     for (const slug of [...PATTERNS, 'classes']) expect(paths, slug).toContain(`catalog/${slug}/`);
@@ -204,7 +217,7 @@ test.describe('the four areas of the packages that are gone are not served', () 
 
   test('the sidebar of any docs page names no area of a package that is gone, and no link of it goes there', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto('/docs/catalog/landing-hero/');
+    await page.goto('/docs/catalog/hero/');
     const hrefs = await page.locator('nav.luz-docs-nav a').evaluateAll((links) => links.map((a) => a.getAttribute('href') ?? ''));
     expect(hrefs.filter((href) => /^\/docs\/(landing|cms|app|documentation)\//.test(href))).toEqual([]);
     await expect(page.locator('a.docs-nav__area')).toHaveText(['Get started', 'Kinds of site', 'Tokens', 'Core', 'Catalog', 'HTML elements', 'Accessibility']);
@@ -214,6 +227,32 @@ test.describe('the four areas of the packages that are gone are not served', () 
     for (const file of ['landing/dist/landing.css', 'cms/dist/cms.css', 'app/dist/app.css', 'docs/dist/docs.css']) {
       expect((await request.get(`/packages/${file}`)).status(), file).toBe(404);
     }
+  });
+});
+
+/* ---- 3b. The routes of the names before F8 (decision 69: no redirects) ---------------------------- */
+
+test.describe('the routes of catalog before F8 are not served: /docs/catalog/<old>/ answers 404, in English and in Spanish', () => {
+  for (const { code, prefix } of LANGUAGES) {
+    test(`${code}: none of the ${OLD_PAGES.length} old slugs answers 200`, async ({ request }) => {
+      const served = [];
+      for (const slug of OLD_PAGES) {
+        const response = await request.get(`${prefix}/docs/catalog/${slug}/`, { maxRedirects: 0 });
+        if (response.status() !== 404) served.push(`${prefix}/docs/catalog/${slug}/: ${response.status()}`);
+      }
+      expect(served).toEqual([]);
+    });
+  }
+
+  test('the search index and the sidebar link no old slug, and the new slugs are all there', async ({ page, request }) => {
+    const index = await (await request.get('/docs/search-index.json')).json();
+    const paths = /** @type {string[]} */ (index.pages.map((/** @type {string[]} */ row) => row[1]));
+    expect(paths.filter((path) => OLD_PAGES.some((slug) => path === `catalog/${slug}/`))).toEqual([]);
+    for (const slug of PATTERNS) expect(paths, slug).toContain(`catalog/${slug}/`);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/docs/catalog/hero/');
+    const hrefs = await page.locator('nav.luz-docs-nav a').evaluateAll((links) => links.map((a) => a.getAttribute('href') ?? ''));
+    expect(hrefs.filter((href) => OLD_PAGES.some((slug) => href === `/docs/catalog/${slug}/`))).toEqual([]);
   });
 });
 
@@ -238,7 +277,7 @@ test.describe('a pattern page shows its pattern live with the rules of catalog',
       return [...found];
     }, block);
 
-  for (const [slug, block] of [['landing-hero', 'luz-landing-hero'], ['landing-footer', 'luz-landing-footer'], ['cms-header', 'luz-cms-header'], ['cms-toc', 'luz-cms-toc'], ['app-dashboard', 'luz-app-dashboard'], ['docs-rail', 'luz-docs-rail'], ['docs-shell', 'luz-docs-shell']]) {
+  for (const [slug, block] of [['hero', 'luz-hero'], ['site-footer', 'luz-site-footer'], ['site-header', 'luz-site-header--publication'], ['masthead', 'luz-masthead'], ['toc', 'luz-toc'], ['dashboard', 'luz-dashboard'], ['page-rail', 'luz-page-rail'], ['docs-layout', 'luz-docs-layout']]) {
     test(`${slug}: the page has the rules of .${block} in the layer luz.catalog, and asks for no file of a package that is gone`, async ({ page }) => {
       const requests = [];
       page.on('request', (req) => requests.push(new URL(req.url()).pathname));

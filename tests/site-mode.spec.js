@@ -1,8 +1,8 @@
 // @ts-check
 /**
- * <luz-mode> of @luz-ds/catalog (.claude/plans/luz-home-docs-identity.md section 3.3, F1):
+ * <luz-color-mode> of @luz-ds/catalog (.claude/plans/luz-home-docs-identity.md section 3.3, F1):
  * the color mode switcher with an "Auto" state, wrapped around core's radios.
- * Its module, mode.js, is loaded on its own as dist/mode.min.js by
+ * Its module, color-mode.js, is loaded on its own as dist/color-mode.min.js by
  * tests/fixtures/site-mode.html (the loader is checked in
  * tests/site-loader.spec.js); tests/fixtures/site-mode-luz.html adds core's
  * luz.js before it, as a real page has it. The query string authors the page:
@@ -13,7 +13,7 @@
  * the local wall-clock (by="clock", which also writes data-light); a chosen
  * mode is applied and, with `remember`, stored under core's `luz-theme` (auto
  * is the absence of the key); `mode`, `light` and `preview()` on the element;
- * `luz-mode:change`. The pure phase function and the file rules are in
+ * `luz-color-mode:change`. The pure phase function and the file rules are in
  * tests/site-mode.test.js.
  *
  * Without JavaScript the radios change the mode through tokens' :root:has(),
@@ -23,7 +23,7 @@
  * JavaScript and skips itself where it is off.
  *
  * tests/fixtures/site-loader-mode-luz.html is the real loading path: luz.js,
- * the boot snippet in <head> and catalog.min.js, which loads mode.min.js on idle.
+ * the boot snippet in <head> and catalog.min.js, which loads color-mode.min.js on idle.
  * Every fixture is lang="en": core's cycle button takes its name from the
  * language of the page, and in English core's two boot waves run in one task,
  * so "Current: Auto" is there when the chunk has upgraded the element.
@@ -44,8 +44,8 @@ test.use({ timezoneId: 'Europe/Madrid' });
 const at = (hhmm) => `2026-06-15T${hhmm.length === 5 ? `${hhmm}:00` : hhmm}+02:00`;
 
 /**
- * Open the fixture and wait for <luz-mode> to be defined and to have fired its
- * first luz-mode:change, so a missing chunk fails here, as a timeout of the poll.
+ * Open the fixture and wait for <luz-color-mode> to be defined and to have fired its
+ * first luz-color-mode:change, so a missing chunk fails here, as a timeout of the poll.
  * @param {import('@playwright/test').Page} page
  * @param {string} query the query string that authors the page
  * @param {{ fixture?: string, time?: string, scheme?: 'light'|'dark', contrast?: 'more'|'no-preference', stored?: string, throwingStorage?: boolean }} [options]
@@ -60,7 +60,7 @@ async function open(page, query = '', { fixture = FIXTURE, time, scheme = 'light
     w.__themeFirst = false;
     w.__intervals = 0;
     w.__timeouts = [];
-    document.addEventListener('luz-mode:change', (e) => w.__changes.push({ ...(/** @type {CustomEvent} */ (e)).detail }));
+    document.addEventListener('luz-color-mode:change', (e) => w.__changes.push({ ...(/** @type {CustomEvent} */ (e)).detail }));
     // Every value data-theme takes on <html>, from the first script on: each write is
     // read from the next record's oldValue (two writes in one task are two values), and
     // the last one from the attribute. The first record's oldValue is the attribute
@@ -106,7 +106,7 @@ async function open(page, query = '', { fixture = FIXTURE, time, scheme = 'light
     });
   }
   await page.goto(`${fixture}${query ? `?${query}` : ''}`);
-  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
   await expect.poll(() => page.evaluate(() => /** @type {any} */ (window).__changes.length)).toBeGreaterThan(0);
 }
 
@@ -166,7 +166,7 @@ test.describe('without JavaScript', () => {
   });
 });
 
-test.describe('<luz-mode>', () => {
+test.describe('<luz-color-mode>', () => {
   test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript');
 
   /* ---- by="system" (the default) ---------------------------------------- */
@@ -614,7 +614,7 @@ test.describe('<luz-mode>', () => {
       await preview(page, null);
       expect(await state(page)).toMatchObject({ theme: 'light', light: 'sunset' });
       await page.reload();
-      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
       await expect.poll(() => state(page)).toEqual({ theme: 'light', light: 'sunset', mode: 'auto', checked: 'auto' });
     });
 
@@ -653,7 +653,7 @@ test.describe('<luz-mode>', () => {
 
   /* ---- The event -------------------------------------------------------- */
 
-  test.describe('luz-mode:change', () => {
+  test.describe('luz-color-mode:change', () => {
     test('fires once after the upgrade, bubbling, with { mode, theme, light, remembered, simulated, pinned }', async ({ page }) => {
       await open(page, '', { scheme: 'dark' });
       await page.waitForTimeout(200);
@@ -759,7 +759,7 @@ test.describe('<luz-mode>', () => {
 
 /* ---- Together with core's luz.js ---------------------------------------- */
 
-test.describe('<luz-mode> on a page that also loads luz.js', () => {
+test.describe('<luz-color-mode> on a page that also loads luz.js', () => {
   test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript');
 
   const history = themeHistory;
@@ -853,7 +853,7 @@ test.describe('<luz-mode> on a page that also loads luz.js', () => {
     expect(await page.evaluate((k) => localStorage.getItem(k), KEY)).toBeNull();
     // A reload: the system is dark and nothing is stored, so auto, dark, and never another value
     await page.reload();
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
     await expect.poll(() => page.evaluate(() => /** @type {any} */ (window).__changes.length)).toBeGreaterThan(0);
     await settled(page);
     expect(await state(page)).toEqual({ theme: 'dark', light: null, mode: 'auto', checked: 'auto' });
@@ -900,7 +900,7 @@ test.describe('<luz-mode> on a page that also loads luz.js', () => {
       await expect.poll(() => state(page)).toMatchObject({ mode: 'dark', theme: 'dark' });
     });
 
-    test('luz-mode:change comes with every step', async ({ page }) => {
+    test('luz-color-mode:change comes with every step', async ({ page }) => {
       await open(page, 'boot=light&by=clock', { fixture: WITH_LUZ, time: at('09:30') });
       const button = page.locator('#mode .luz-mode-cycle');
       await page.waitForTimeout(100);

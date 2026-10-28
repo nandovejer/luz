@@ -299,14 +299,14 @@ function widgetPage({ how = "<p>HOW-TEXT, with <a href=\"/docs/tokens/color/#mod
     <h3 id="when-not">When not to use</h3>
     <p>WHEN-NOT-TEXT</p>
     <h3 id="do-dont">Do and don't</h3>
-    <div class="luz-docs-dodont">
-      <figure class="luz-docs-dodont__item luz-docs-dodont__item--do">
-        <figcaption><strong class="luz-docs-dodont__verdict">Do</strong> DO-REASON</figcaption>
-        <div class="luz-docs-dodont__stage" inert aria-hidden="true"><button class="luz-btn" type="button">DO-STAGE</button></div>
+    <div class="luz-do-dont">
+      <figure class="luz-do-dont__item luz-do-dont__item--do">
+        <figcaption><strong class="luz-do-dont__verdict">Do</strong> DO-REASON</figcaption>
+        <div class="luz-do-dont__stage" inert aria-hidden="true"><button class="luz-btn" type="button">DO-STAGE</button></div>
       </figure>
-      <figure class="luz-docs-dodont__item luz-docs-dodont__item--dont">
-        <figcaption><strong class="luz-docs-dodont__verdict">Don't</strong> DONT-REASON</figcaption>
-        <div class="luz-docs-dodont__stage" inert aria-hidden="true"><button class="luz-btn" type="button">DONT-STAGE</button></div>
+      <figure class="luz-do-dont__item luz-do-dont__item--dont">
+        <figcaption><strong class="luz-do-dont__verdict">Don't</strong> DONT-REASON</figcaption>
+        <div class="luz-do-dont__stage" inert aria-hidden="true"><button class="luz-btn" type="button">DONT-STAGE</button></div>
       </figure>
     </div>
     <h3 id="content">Writing the content</h3>
@@ -595,9 +595,10 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
   });
 
   it("gives a page of catalog its own package", () => {
-    const banner = entry("/docs/catalog/banner/");
-    expect(banner, "an entry for Banner").toBeTruthy();
-    expect(banner.text).toContain("Package: @luz-ds/catalog");
+    const announcement = entry("/docs/catalog/announcement/");
+    expect(announcement, "an entry for Announcement").toBeTruthy();
+    expect(announcement.text).toContain("Package: @luz-ds/catalog");
+    expect(entry("/docs/catalog/banner/"), "the page of F5b is gone").toBeFalsy();
   });
 
   it("keeps the sections a person reads by id and leaves the computed and the demo ones out, on Button", () => {
@@ -678,7 +679,7 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
       const route = `/${e.url?.slice(SITE_URL.length)}`;
       // the html area's outline is the names of elements (`<blockquote>`), the one place a tag is the text
       if (!e.url || PLAIN_TAGS.has(route) || site.byRoute.get(route)?.meta.area === "html") continue;
-      // a `Files:` line may carry the page's own `files` text, such as <luz-banner>
+      // a `Files:` line may carry the page's own `files` text, such as <luz-announcement>
       const prose = proseOf(e.text).split("\n").filter((l) => !l.startsWith("Files:")).join("\n");
       expect(prose, e.url).not.toMatch(TAG);
     }
@@ -1035,7 +1036,7 @@ const CATALOG_FILES = new Set(CATALOG_STYLESHEETS.map(({ file }) => file));
 /**
  * The stylesheets an example of this page loads, in load order, as [package, file]: tokens, core, one file
  * per catalog component the markup uses (and, on a page of the catalog area, the file named like its slug when
- * there is one: `cms-toc` has none, its table of contents is a class of cms-article.css), by file name. A kind
+ * there is one: `toc` has none, its table of contents is a class of article.css), by file name. A kind
  * of site has no stylesheet of its own: its patterns are the catalog files.
  */
 const LAYOUT_FIRST = ["sidebar", "navbar", "terminal", "timeline"].map((name) => `components/${name}.css`);
@@ -1324,9 +1325,9 @@ describe("exampleDocuments: the rules on a small site", () => {
     // F7: <luz-timeline> is catalog's tag since the timeline left core, so its page is in the catalog area
     "pages/catalog/timeline.html": page("Timeline", "catalog", [["Timeline markup", "html", '<luz-timeline role="group" aria-label="Releases"><ol class="luz-timeline"></ol></luz-timeline>']]),
     "pages/components/plain.html": FRONT("Plain", "A page with no markup section.", "components") + "<h2 id=\"how\">How</h2><p>PLAIN-TEXT</p>\n",
-    "pages/catalog/banner.html": page("Banner", "catalog", [["Banner markup", "html", '<luz-banner tone="warning">Closed on Monday</luz-banner>']]),
+    "pages/catalog/announcement.html": page("Announcement", "catalog", [["Banner markup", "html", '<luz-announcement tone="warning">Closed on Monday</luz-announcement>']]),
     // A pattern of a kind of site is a page of the catalog area, its CSS a file of catalog (F5b)
-    "pages/catalog/landing-header.html": page("Landing header", "catalog", [["Header markup", "html", '<header class="luz-landing-header"><luz-search>…</luz-search></header>']]),
+    "pages/catalog/site-header.html": page("Site header", "catalog", [["Header markup", "html", '<header class="luz-site-header"><luz-search>…</luz-search></header>']]),
     "pages/tokens/color.html": TOKENS_PAGE,
   };
   const build = () => {
@@ -1340,7 +1341,7 @@ describe("exampleDocuments: the rules on a small site", () => {
       build()
         .map((d) => d.route)
         .sort(),
-    ).toEqual(["/examples/catalog/banner.html", "/examples/catalog/timeline.html", "/examples/components/widget.html", "/examples/catalog/landing-header.html"].sort());
+    ).toEqual(["/examples/catalog/announcement.html", "/examples/catalog/timeline.html", "/examples/components/widget.html", "/examples/catalog/site-header.html"].sort());
   });
 
   it("writes the kept html blocks as markup, decoded once, and leaves out the js block, the handler, the script and other sections", () => {
@@ -1373,25 +1374,25 @@ describe("exampleDocuments: the rules on a small site", () => {
     // <luz-timeline> is catalog's tag since F7 (core defines none): a page that uses it links its file after core
     expect(hrefs("/examples/catalog/timeline.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/timeline.min.css"]);
     // catalog has no bundle: one link per component, the file of the element or class the markup uses
-    expect(hrefs("/examples/catalog/banner.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/banner.min.css"]);
-    // a pattern of a kind of site is a file of catalog: the file of its class, then the file of the tag it holds (by file name)
-    expect(hrefs("/examples/catalog/landing-header.html")).toEqual([
+    expect(hrefs("/examples/catalog/announcement.html")).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/announcement.min.css"]);
+    // a pattern of a kind of site is a file of catalog: the file of its class and the file of the tag it holds, in the order of the file names (F8: `search` sorts before `site-header`)
+    expect(hrefs("/examples/catalog/site-header.html")).toEqual([
       "../dist/tokens/tokens.min.css",
       "../dist/core/luz.min.css",
-      "../dist/catalog/components/landing-header.min.css",
       "../dist/catalog/components/search.min.css",
+      "../dist/catalog/components/site-header.min.css",
     ]);
     const scripts = (route) => inspect(byRoute(docs, route).html, route).scripts.map((s) => s.src);
     expect(scripts("/examples/components/widget.html")).toEqual(["../dist/core/luz.min.js"]);
-    expect(scripts("/examples/catalog/landing-header.html")).toEqual(["../dist/core/luz.min.js", "../dist/catalog/catalog.min.js"]);
+    expect(scripts("/examples/catalog/site-header.html")).toEqual(["../dist/core/luz.min.js", "../dist/catalog/catalog.min.js"]);
     expect(scripts("/examples/catalog/timeline.html")).toEqual(["../dist/core/luz.min.js", "../dist/catalog/catalog.min.js"]);
   });
 
   it("links the file of a pattern of a kind of site by its class, even when no tag of catalog is named, and no stylesheet of a package of the kind", () => {
-    const plainLanding = { ...files, "pages/catalog/landing-header.html": page("Landing header", "catalog", [["Header markup", "html", '<header class="luz-landing-header">Name</header>']]) };
+    const plainLanding = { ...files, "pages/catalog/site-header.html": page("Site header", "catalog", [["Header markup", "html", '<header class="luz-site-header">Name</header>']]) };
     const docs = exampleDocuments(fixtureSite(plainLanding).scan(), { csp: "default-src 'self'", versions: VERSIONS });
-    const links = inspect(byRoute(docs, "/examples/catalog/landing-header.html").html, "header").links.map((l) => l.href);
-    expect(links).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/landing-header.min.css"]);
+    const links = inspect(byRoute(docs, "/examples/catalog/site-header.html").html, "header").links.map((l) => l.href);
+    expect(links).toEqual(["../dist/tokens/tokens.min.css", "../dist/core/luz.min.css", "../dist/catalog/components/site-header.min.css"]);
   });
 
   it("follows the page: change a block and the example changes, nothing else holds the old text", () => {

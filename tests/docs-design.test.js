@@ -21,13 +21,13 @@ const text = (html) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 
 describe("Design tab of every component and pattern page", () => {
   it("covers the 57 pages", () => {
-    expect(viewPages).toHaveLength(58);
+    expect(viewPages).toHaveLength(57);
   });
 
   it("Do and don't: a Do then a Don't, labelled with a word, never a live barrier (a11y.md TAB-20)", () => {
     for (const page of viewPages) {
       const html = section(page, "do-dont");
-      const items = [...html.matchAll(/<figure class="luz-docs-dodont__item luz-docs-dodont__item--(do|dont)">\s*<figcaption><strong class="luz-docs-dodont__verdict">([^<]+)<\/strong>([^<]|<(?!\/figcaption>))+<\/figcaption>\s*(<div class="luz-docs-dodont__stage"[^>]*>|<pre class="luz-code-block")/g)];
+      const items = [...html.matchAll(/<figure class="luz-do-dont__item luz-do-dont__item--(do|dont)">\s*<figcaption><strong class="luz-do-dont__verdict">([^<]+)<\/strong>([^<]|<(?!\/figcaption>))+<\/figcaption>\s*(<div class="luz-do-dont__stage"[^>]*>|<pre class="luz-code-block")/g)];
       // One pair for each lesson of the page: a Do, then its Don't
       const verdicts = items.map((m) => [m[1], m[2]]);
       expect(verdicts.length, page.file).toBeGreaterThanOrEqual(2);
@@ -37,7 +37,7 @@ describe("Design tab of every component and pattern page", () => {
         expect(text(m[0]).length, `${page.file} ${m[1]}`).toBeGreaterThan(30);
         // A live example is a picture: inert, hidden from assistive technology
         // (the caption describes it); a harmful one is code, never live
-        if (m[4].startsWith("<div")) expect(m[4], `${page.file} ${m[1]}`).toBe('<div class="luz-docs-dodont__stage" inert aria-hidden="true">');
+        if (m[4].startsWith("<div")) expect(m[4], `${page.file} ${m[1]}`).toBe('<div class="luz-do-dont__stage" inert aria-hidden="true">');
       }
     }
   });

@@ -1,9 +1,9 @@
 // @ts-check
 /**
- * The cms patterns, files of @luz-ds/catalog since F5b (`components/cms-*.css`; formerly @luz-ds/cms): the article header and the article layout with its table of
+ * The cms patterns, files of @luz-ds/catalog since F5b (`components/article-header.css` and `article.css`; formerly @luz-ds/cms): the article header and the article layout with its table of
  * contents. The page is tests/fixtures/cms-article.html, a whole story as a
  * consumer builds it with tokens, core and the three cms files of catalog it uses (the
- * sticky `.luz-cms-header` on core's `.o-sticky`, the article, the author box and related posts, which
+ * sticky `.luz-site-header--publication` bar on core's `.o-sticky`, the article, the author box and related posts, which
  * are templates of core classes), served at
  * /__cms__ with the language and direction each test needs.
  *
@@ -106,7 +106,7 @@ test.describe('cms article page', () => {
   });
 
   // The offset is core's --luz-bar-h plus --luz-space-lg under a `.o-sticky` bar; the header
-  // does not need to be a block of site (its class is `.luz-cms-header`)
+  // does not need to be a block of site (its class is `.luz-site-header` with `--publication`)
   test('the contents stick --luz-bar-h + --luz-space-lg from the top when the page has an `.o-sticky` bar', async ({ page: p }) => {
     await open(p, 1280);
     await p.evaluate(() => window.scrollTo({ top: document.getElementById('level').getBoundingClientRect().top + window.scrollY, behavior: 'instant' }));
@@ -161,9 +161,9 @@ test.describe('cms article page', () => {
     const scripts = test.info().project.name === 'chromium-nojs' ? [] : ['/packages/catalog/dist/catalog.js', '/packages/catalog/dist/sidebar.js'];
     expect(requests.filter((path) => path.includes('/packages/catalog/')).sort()).toEqual(
       [
-        '/packages/catalog/dist/components/cms-article-header.css',
-        '/packages/catalog/dist/components/cms-article.css',
-        '/packages/catalog/dist/components/cms-header.css',
+        '/packages/catalog/dist/components/article-header.css',
+        '/packages/catalog/dist/components/article.css',
+        '/packages/catalog/dist/components/site-header.css',
         ...scripts,
       ].sort(),
     );
@@ -206,7 +206,7 @@ test.describe('cms article page', () => {
 
   test('in Arabic the kicker and the title have no letter-spacing, and the kicker is in the sans', async ({ page: p }) => {
     await open(p, 1280, { lang: 'ar', dir: 'rtl' });
-    const kicker = await p.locator('.luz-cms-article-header__kicker').evaluate((el) => {
+    const kicker = await p.locator('.luz-article-header__kicker').evaluate((el) => {
       const cs = getComputedStyle(el);
       return { spacing: cs.letterSpacing, family: cs.fontFamily, sans: getComputedStyle(document.documentElement).getPropertyValue('--luz-font-sans').trim() };
     });

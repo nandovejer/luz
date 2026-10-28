@@ -8,7 +8,7 @@
  *     say it in their own language (in the three catalogs, and in Arabic not
  *     in Latin letters); the docs are English and write it as text.
  *   - The 404 page keeps its promise of no script, so it has no colour mode
- *     switcher and no <luz-mode>: its footer is the links alone.
+ *     switcher and no <luz-color-mode>: its footer is the links alone.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -44,9 +44,9 @@ describe("the footer has no Auto (2026-10-18): the light follows the hour, or th
 });
 
 describe("the 404 page has no switcher: its button would need the script", () => {
-  it("is the links alone: no <luz-mode>, no mode radios, no cycle button, no script", () => {
+  it("is the links alone: no <luz-color-mode>, no mode radios, no cycle button, no script", () => {
     const html = read("apps/docs/_layouts/not-found.html");
-    expect(html.includes("<luz-mode")).toBe(false);
+    expect(html.includes("<luz-color-mode")).toBe(false);
     expect(html.includes('name="luz-theme"')).toBe(false);
     expect(html.includes("luz-mode-cycle")).toBe(false);
     expect(/<script/.test(html)).toBe(false);

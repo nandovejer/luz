@@ -2,7 +2,7 @@
 /**
  * The footer of the home page and of the docs (F2 of
  * .claude/plans/luz-home-docs-identity.md, section 3.4): the color mode
- * switcher is <luz-mode remember by="clock"> around core's fieldset, with
+ * switcher is <luz-color-mode remember by="clock"> around core's fieldset, with
  * Light, Dark and High contrast (no Auto since 2026-10-18: the light follows
  * the hour, or the hour the home's globe pinned, until a mode is chosen, and
  * then no radio is checked), an icon in every label, an icon per state in the
@@ -35,14 +35,14 @@ const writes = (page) => page.evaluate(() => /** @type {any} */ (window).__write
 
 test.describe('the markup of the footer, as served', () => {
   for (const path of PAGES) {
-    test(`${path}: <luz-mode remember by="clock"> wraps the fieldset, three radios, none checked`, async ({ request }) => {
+    test(`${path}: <luz-color-mode remember by="clock"> wraps the fieldset, three radios, none checked`, async ({ request }) => {
       const html = await (await request.get(path)).text();
       // The footer that holds the switcher, not the first <footer> of the page (a demo may have one)
-      const footer = [...html.matchAll(/<footer\b[\s\S]*?<\/footer>/g)].map((m) => m[0]).find((f) => f.includes('<luz-mode')) ?? '';
-      expect(footer, 'a <footer> with <luz-mode> in it').not.toBe('');
-      expect(footer).toMatch(/<luz-mode\b[^>]*\bremember\b[^>]*>/);
-      expect(footer).toMatch(/<luz-mode\b[^>]*\bby="clock"[^>]*>/);
-      const group = footer.slice(footer.indexOf('<luz-mode'), footer.indexOf('</luz-mode>'));
+      const footer = [...html.matchAll(/<footer\b[\s\S]*?<\/footer>/g)].map((m) => m[0]).find((f) => f.includes('<luz-color-mode')) ?? '';
+      expect(footer, 'a <footer> with <luz-color-mode> in it').not.toBe('');
+      expect(footer).toMatch(/<luz-color-mode\b[^>]*\bremember\b[^>]*>/);
+      expect(footer).toMatch(/<luz-color-mode\b[^>]*\bby="clock"[^>]*>/);
+      const group = footer.slice(footer.indexOf('<luz-color-mode'), footer.indexOf('</luz-color-mode>'));
       expect(group, 'the fieldset is inside the element').toContain('<fieldset');
       const radios = [...group.matchAll(/<input\b[^>]*type="radio"[^>]*>/g)].map((m) => m[0]);
       expect(radios.map((r) => r.match(/value="([^"]+)"/)?.[1])).toEqual(VALUES);
@@ -59,12 +59,12 @@ test.describe('the markup of the footer, as served', () => {
 
 test.describe('the footer in the page', () => {
   for (const path of PAGES) {
-    test(`${path}: three radios in <luz-mode>, none checked on a first visit, an icon in every label, and the cycle button shows Auto's`, async ({ page }) => {
+    test(`${path}: three radios in <luz-color-mode>, none checked on a first visit, an icon in every label, and the cycle button shows Auto's`, async ({ page }) => {
       await atTime(page, '14:00');
       await page.goto(path);
-      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
 
-      const mode = page.locator('footer luz-mode[remember][by="clock"]');
+      const mode = page.locator('footer luz-color-mode[remember][by="clock"]');
       await expect(mode).toHaveCount(1);
       await expect(mode.locator('fieldset.luz-mode-switcher')).toHaveCount(1);
       const radios = mode.locator('input[name="luz-theme"]');
@@ -95,7 +95,7 @@ test.describe('the choice', () => {
     test(`${path}: the cycle goes from no choice to Light, Dark, High contrast and back to Light`, async ({ page }) => {
       await atTime(page, '14:00');
       await page.goto(path);
-      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
       const button = page.locator('footer .luz-mode-cycle');
       // No radio is checked while the hour leads: core names the mode Auto
       await expect(button).toHaveAccessibleName('Change color mode. Current: Auto');
@@ -110,7 +110,7 @@ test.describe('the choice', () => {
       await atTime(page, '14:00');
       await recordWrites(page);
       await page.goto(path);
-      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
       const button = page.locator('footer .luz-mode-cycle');
 
       expect(await page.evaluate((k) => localStorage.getItem(k), KEY), 'nothing is stored before a choice').toBeNull();
@@ -122,7 +122,7 @@ test.describe('the choice', () => {
 
       // The choice follows the visitor
       await page.reload();
-      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe('dark');
       await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue('dark');
 
@@ -138,7 +138,7 @@ test.describe('the choice', () => {
     test(`${path}: a choice made with the keyboard on the cycle button`, async ({ page }) => {
       await atTime(page, '14:00');
       await page.goto(path);
-      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
       await page.locator('footer .luz-mode-cycle').focus();
       await page.keyboard.press('Enter');
       await page.keyboard.press('Space');
@@ -154,7 +154,7 @@ test.describe('the button in the corner of the window', () => {
   for (const path of PAGES) {
     test(`${path}: with scripting it is core's round button, fixed at the end corner, bottom left in Arabic`, async ({ page }) => {
       await page.goto(path);
-      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+      await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
       const button = page.locator('footer .luz-mode-cycle');
       await expect(page.locator('footer .luz-mode-switcher--cycle')).toHaveCSS('position', 'fixed');
       const side = await page.evaluate(() => {
@@ -193,7 +193,7 @@ test.describe('the button in the corner of the window', () => {
         await page.emulateMedia({ reducedMotion: 'reduce' });
         await page.setViewportSize({ width, height: 700 });
         await page.goto(path);
-        await expect.poll(() => page.evaluate(() => !!customElements.get('luz-mode'))).toBe(true);
+        await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
         const covered = await page.evaluate(() => {
           const button = document.querySelector('footer .luz-mode-cycle');

@@ -93,6 +93,9 @@ function copyOfSources() {
   cpSync(join(root, "apps/site/prompts"), join(dir, "apps/site/prompts"), { recursive: true });
   symlinkSync(join(root, "packages"), join(dir, "packages"));
   cpSync(join(root, "budgets.json"), join(dir, "budgets.json"));
+  // The patterns of each kind are the catalog pages that name it in `fits-kinds` (F8, decisions 71 and 72)
+  mkdirSync(join(dir, "apps/docs/pages"), { recursive: true });
+  cpSync(join(root, "apps/docs/pages/catalog"), join(dir, "apps/docs/pages/catalog"), { recursive: true });
   // The hash of a prompt reads the module itself, at this path under the root it is given
   mkdirSync(join(dir, "scripts/docs-site"), { recursive: true });
   cpSync(join(root, "scripts/docs-site/prompts.js"), join(dir, "scripts/docs-site/prompts.js"));
@@ -110,11 +113,11 @@ describe("the sources of the prompts: one body, a preset per kind, the stacks", 
     expect(stacks.stacks.length).toBeGreaterThan(0);
   });
 
-  it("point the four kinds at catalog and at /docs/catalog/, and say which patterns they link (a blog's are the cms-* ones)", () => {
+  it("point the four kinds at catalog and at /docs/catalog/, and say which kind's patterns they link: the pages that fit it by `fits-kinds` (a blog's are the blog's: F8 left `cms` as a name of nothing)", () => {
     const kinds = member("PROMPT_KINDS");
     expect(kinds.filter((k) => k.preset).map((k) => [k.id, k.pkg, k.docs, k.patterns])).toEqual([
       ["landing", "catalog", "docs/catalog/", "landing"],
-      ["blog", "catalog", "docs/catalog/", "cms"],
+      ["blog", "catalog", "docs/catalog/", "blog"],
       ["app", "catalog", "docs/catalog/", "app"],
       ["docs", "catalog", "docs/catalog/", "docs"],
     ]);
@@ -223,29 +226,47 @@ describe("what a prompt says about the system comes from the packages", () => {
     }
   });
 
-  /** The files of the patterns of each kind, in the order of the cascade (kinds.js): a blog's are the `cms` ones (F8 renames the class). */
+  /**
+   * The files of the patterns of each kind, in the order of the cascade (CASCADE of kinds.js): the stylesheets of the catalog pages
+   * whose `fits-kinds` names the kind and not `any` (F8: no `<kind>-` in the name; the header and the footer are the landing page's
+   * and the blog's). The navbar, the sidebar, the terminal and the timeline are catalog's own pieces and are linked beside them.
+   */
   const PATTERNS = {
-    landing: ["landing-header", "landing-hero", "landing-main", "landing-section", "landing-stat", "landing-footer", "landing-glow"],
-    blog: ["cms-header", "cms-page-header", "cms-article-header", "cms-article", "cms-footer"],
-    app: ["app-header", "app-dashboard"],
-    docs: ["docs-shell", "docs-page-head", "docs-rail", "docs-example", "docs-dodont", "docs-pager", "docs-page-foot"],
+    landing: ["site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
+    blog: ["site-header", "masthead", "site-footer", "page-header", "article-header", "article"],
+    app: ["app-bar", "dashboard"],
+    docs: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
   };
+  /** The pages that name each kind in `fits-kinds`, any of them, as a set: the order is the docs' (the `order` of each page). */
   const PAGES = {
-    landing: ["landing-header", "landing-hero", "landing-section", "landing-stat", "landing-footer"],
-    blog: ["cms-header", "cms-page-header", "cms-article-header", "cms-toc", "cms-footer"],
-    app: ["app-header", "app-dashboard"],
-    docs: PATTERNS.docs,
+    landing: ["hero", "section", "site-footer", "site-header", "stat", "timeline"],
+    blog: ["article-header", "masthead", "page-header", "site-footer", "site-header", "timeline", "toc"],
+    app: ["app-bar", "dashboard", "sidebar"],
+    docs: ["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "pager", "sidebar", "terminal"],
+  };
+  /** The blocks only one kind uses: the classes the other prompts must not list. */
+  const EXCLUSIVE = {
+    landing: ["luz-hero", "luz-main", "luz-section", "luz-stat", "luz-glow"],
+    blog: ["luz-masthead", "luz-page-header", "luz-article-header", "luz-article", "luz-toc"],
+    app: ["luz-app-bar", "luz-dashboard"],
+    docs: ["luz-docs-layout", "luz-doc-header", "luz-page-rail", "luz-example", "luz-do-dont", "luz-pager", "luz-page-footer"],
   };
   const catalogLinks = (text) => [...text.matchAll(/<link rel="stylesheet" href="https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/catalog@[^/"]+\/dist\/components\/([a-z0-9-]+)\.min\.css">/g)].map((m) => m[1]);
-  const isPattern = (name) => /^(?:landing|cms|app|docs)-/.test(name);
+  const ALL_PATTERN_FILES = [...new Set(Object.values(PATTERNS).flat())];
+  const isPattern = (name) => ALL_PATTERN_FILES.includes(name);
 
-  it.each(["landing", "blog", "app", "docs"])("%s: the install lines are tokens, core and catalog, and link every pattern of its kind, in the order of the cascade, after the other catalog files (F5b: no package of a kind)", (id) => {
+  it.each(["landing", "blog", "app", "docs"])("%s: the install lines are tokens, core and catalog, and link every pattern of its kind, in the order of the cascade, after the other catalog files (the kind's patterns come from `fits-kinds`: no package of a kind)", (id) => {
     const text = prompt(id);
     const links = catalogLinks(text);
     expect(links.filter(isPattern), `${id}: its patterns, and no other kind's`).toEqual(PATTERNS[id]);
     // The patterns come last: what they refine is linked before them
     expect(links.slice(links.length - PATTERNS[id].length), id).toEqual(PATTERNS[id]);
     expect(links.slice(0, links.length - PATTERNS[id].length).some(isPattern), `${id}: no pattern among the others`).toBe(false);
+    // The pieces of catalog that fit this kind (or any) come with them: the navbar fits any site, the timeline landing and blog, the sidebar app and docs
+    const rest = new Set(links);
+    for (const name of { landing: ["navbar", "timeline"], blog: ["navbar", "timeline"], app: ["navbar", "sidebar"], docs: ["navbar", "sidebar", "terminal"] }[id]) expect(rest.has(name), `${id} links ${name}`).toBe(true);
+    for (const name of { landing: ["sidebar", "terminal"], blog: ["sidebar", "terminal"], app: ["terminal", "timeline"], docs: ["timeline"] }[id]) expect(rest.has(name), `${id} does not link ${name}`).toBe(false);
+    expect(new Set(links).size, `${id}: each file once`).toBe(links.length);
     expect(text, `${id}: no package of a kind`).not.toMatch(/@luz-ds\/(?:landing|cms|app|docs)(?![\w-])/);
     expect(text, `${id}: the load order names no package of a kind`).not.toMatch(/then @luz-ds\//);
     expect(text, `${id}: its npm line`).toMatch(new RegExp(`npm install @luz-ds/tokens@${versionOf("tokens").replace(/\./g, "\\.")} @luz-ds/core@\\S+ @luz-ds/catalog@\\S+(?: @luz-ds/check@\\S+)?\\n`));
@@ -257,19 +278,21 @@ describe("what a prompt says about the system comes from the packages", () => {
     expect(text).not.toMatch(/@luz-ds\/(?:landing|cms|app|docs)(?![\w-])/);
   });
 
-  it.each(["landing", "blog", "app", "docs"])("%s: lists the classes of its own patterns from catalog, and none of the other kinds'", (id) => {
+  it.each(["landing", "blog", "app", "docs"])("%s: lists the classes of its own patterns from catalog, and none of the other kinds' (by the new names)", (id) => {
     const text = prompt(id);
-    const prefix = { landing: "landing", blog: "cms", app: "app", docs: "docs" }[id];
-    const others = ["landing", "cms", "app", "docs"].filter((k) => k !== prefix);
-    expect(text, `${id}: its own classes`).toMatch(new RegExp(`^- \`luz-${prefix}-[a-z-]+\``, "m"));
-    for (const other of others) expect(text, `${id}: no class of ${other}`).not.toMatch(new RegExp(`\`luz-${other}-`));
+    for (const block of EXCLUSIVE[id]) expect(text, `${id}: ${block}`).toMatch(new RegExp(`^- \`${block}\``, "m"));
+    for (const [other, blocks] of Object.entries(EXCLUSIVE)) {
+      if (other !== id) for (const block of blocks) expect(text, `${id}: no class of ${other} (${block})`).not.toMatch(new RegExp(`\`${block}(?:__[a-z-]+|--[a-z-]+)?\``));
+    }
+    expect(text, `${id}: no class of before F8`).not.toMatch(/`luz-(?:landing|cms)-|`luz-app-(?:header|dashboard)|`luz-docs-(?:shell|page-|rail|pager|example|dodont)/);
   });
 
-  it.each(["landing", "blog", "app", "docs"])("%s: links the docs page of each of its patterns, one line each, and no area of a package", (id) => {
+  it.each(["landing", "blog", "app", "docs"])("%s: links the docs page of each page that fits its kind, one line each, and no area of a package", (id) => {
     const text = prompt(id);
     const lines = text.split("\n").filter((l) => l.startsWith(`- ${SITE}docs/`));
     const catalogPages = lines.filter((l) => l.startsWith(`- ${SITE}docs/catalog/`)).map((l) => l.slice(`- ${SITE}docs/catalog/`.length).split("/")[0]);
-    expect(catalogPages, id).toEqual(PAGES[id]);
+    expect([...catalogPages].sort(), id).toEqual(PAGES[id]);
+    expect(new Set(catalogPages).size, `${id}: one line a page`).toBe(catalogPages.length);
     expect(text, id).not.toMatch(/docs\/(?:landing|cms|app|documentation)\//);
     for (const page of catalogPages) expect(existsSync(join(root, `apps/docs/pages/catalog/${page}.html`)), `${id}: ${page} is a page of the docs`).toBe(true);
   });
@@ -308,14 +331,54 @@ describe("what a prompt says about the system comes from the packages", () => {
     const named = [...prompt(id).matchAll(/<(luz-[a-z0-9-]+)[\s>/]/g)].map((m) => m[1]);
     expect(named.length, `${id} names elements`).toBeGreaterThan(0);
     expect(named.filter((tag) => !manifests.elements.has(tag)), `${id}: elements no package has`).toEqual([]);
-    expect(named, `${id} names <luz-mode>, the colour mode switcher`).toContain("luz-mode");
+    expect(named, `${id} names <luz-color-mode>, the colour mode switcher`).toContain("luz-color-mode");
+    expect(named.filter((tag) => ["luz-mode", "luz-consent", "luz-banner"].includes(tag))).toEqual([]);
   });
 
-  it("the kinds name the classes of their own patterns, from the manifest of their package", () => {
-    for (const [id, prefix] of [["landing", "luz-landing-"], ["blog", "luz-cms-"], ["app", "luz-app-"], ["docs", "luz-docs-"]]) {
-      expect(prompt(id), id).toContain(`\`${prefix}`);
-      expect(prompt("start"), "the general prompt names none of them").not.toContain(`\`${prefix}`);
+  it("the kinds name the classes of their own patterns, from the manifest of their package, and the general prompt names none of them", () => {
+    for (const [id, blocks] of Object.entries(EXCLUSIVE)) {
+      for (const block of blocks) {
+        expect(prompt(id), `${id}: ${block}`).toContain(`\`${block}`);
+        expect(prompt("start"), `the general prompt names none of them (${block})`).not.toContain(`\`${block}\``);
+      }
     }
+  });
+
+  it("takes the patterns of a kind from the `fits-kinds` of the pages: a page that adds a kind adds its file, its classes and its docs line to that prompt, and nothing is listed by hand (decision 72)", () => {
+    const dir = copyOfSources();
+    // The stat fits landing; the page now fits landing and app
+    const stat = join(dir, "apps/docs/pages/catalog/stat.html");
+    writeFileSync(stat, readFileSync(stat, "utf-8").replace(/^fits-kinds: .*$/m, "fits-kinds: landing, app"));
+    const app = member("assemblePrompt")("app", { root: dir });
+    expect(catalogLinks(app), "the app links the stat's file").toContain("stat");
+    expect(app).toMatch(/^- `luz-stat`/m);
+    expect(app).toContain(`${SITE}docs/catalog/stat/`);
+    const blog = member("assemblePrompt")("blog", { root: dir });
+    expect(catalogLinks(blog), "the blog does not").not.toContain("stat");
+    expect(blog).not.toContain(`${SITE}docs/catalog/stat/`);
+    // and a page that leaves a kind takes its file out of that prompt
+    writeFileSync(stat, readFileSync(stat, "utf-8").replace(/^fits-kinds: .*$/m, "fits-kinds: app"));
+    expect(catalogLinks(member("assemblePrompt")("landing", { root: dir })), "the landing page does not link the stat any more").not.toContain("stat");
+  });
+
+  it("links the pieces that fit `any` in every prompt: a page that says `any` is in the five, with its file, and a page of one kind is in no other", () => {
+    const dir = copyOfSources();
+    const navbar = join(dir, "apps/docs/pages/catalog/navbar.html");
+    expect(readFileSync(navbar, "utf-8")).toMatch(/^fits-kinds: any$/m);
+    for (const id of ["landing", "blog", "app", "docs"]) expect(catalogLinks(member("assemblePrompt")(id, { root: dir })), id).toContain("navbar");
+    // the terminal fits docs: when its page adds app, the app prompt links its file, and the landing page's still does not
+    const terminal = join(dir, "apps/docs/pages/catalog/terminal.html");
+    expect(catalogLinks(member("assemblePrompt")("app", { root: dir })), "before").not.toContain("terminal");
+    writeFileSync(terminal, readFileSync(terminal, "utf-8").replace(/^fits-kinds: .*$/m, "fits-kinds: docs, app"));
+    expect(catalogLinks(member("assemblePrompt")("app", { root: dir }))).toContain("terminal");
+    expect(catalogLinks(member("assemblePrompt")("landing", { root: dir }))).not.toContain("terminal");
+  });
+
+  it("fails, naming the file, when a page of a kind lists a stylesheet that the cascade does not place (CASCADE is the one thing typed)", () => {
+    const dir = copyOfSources();
+    const pager = join(dir, "apps/docs/pages/catalog/pager.html");
+    writeFileSync(pager, readFileSync(pager, "utf-8").replace(/^files: .*$/m, "files: components/pager.css, components/ribbon.css"));
+    expect(() => member("assemblePrompt")("docs", { root: dir })).toThrow(/ribbon/);
   });
 });
 
