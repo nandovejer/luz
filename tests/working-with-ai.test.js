@@ -208,16 +208,16 @@ describe("the page: front matter and its place", () => {
     expect(meta.keywords).toContain("llms.txt");
   });
 
-  it("is order 10, and Classless styles is order 11", () => {
+  it("is order 10, and Classless styles is gone", () => {
     expect(pageOf().meta.order).toBe("10");
-    expect(pageOf("/docs/get-started/classless/").meta.order).toBe("11");
+    expect(siteOf().pages.some((p) => p.route === "/docs/get-started/classless/")).toBe(false);
   });
 
-  it("comes after Print styles and before Classless styles in the reading order", () => {
+  it("comes after Print styles and before How LUZ is built in the reading order", () => {
     const order = siteOf().pages.filter((p) => p.meta.area === "get-started").sort((a, b) => Number(a.meta.order) - Number(b.meta.order));
     const routes = order.map((p) => p.route);
     expect(routes.indexOf(ROUTE)).toBe(routes.indexOf("/docs/get-started/print/") + 1);
-    expect(routes.indexOf("/docs/get-started/classless/")).toBe(routes.indexOf(ROUTE) + 1);
+    expect(routes.indexOf("/docs/get-started/how-luz-is-built/")).toBe(routes.indexOf(ROUTE) + 1);
   });
 
   it("has no script and no event handler in its source: it works as it is without JavaScript", () => {
