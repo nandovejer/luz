@@ -23,7 +23,7 @@ const files = [
   "packages/core/dist/luz.css",
   "packages/core/dist/base.css",
   "packages/core/dist/print.css",
-  "packages/core/dist/classless.css",
+  "packages/core/dist/luz.conditional.css",
   // catalog has no bundle (F5a): each component is a file of its own
   ...listed("packages/catalog/dist/components").filter((f) => !f.endsWith(".min.css")),
   ...listed("packages/core/dist/components").filter((f) => !f.endsWith(".min.css")),

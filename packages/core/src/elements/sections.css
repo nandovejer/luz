@@ -1,6 +1,7 @@
 /* ==========================================================================
    LUZ — 3. ELEMENTS · sections
-   Headings. Specificity: type (0,0,1).
+   Headings and address. Structure (section, article, aside, header, footer,
+   main, search, nav, hgroup) has no rule. Every rule is :where() (0,0,0).
    ========================================================================== */
 
 /* Headings — use the heading config token (defaults to serif) */
@@ -19,7 +20,7 @@
 
 
 /* ========================================================================== */
-/* Address & hgroup — contact block and heading with a subtitle              */
+/* Address — a contact block, in the page's voice                            */
 /* ========================================================================== */
 
 :where(address) {
@@ -27,16 +28,6 @@
   color: var(--luz-text-secondary);
 }
 
-:where(hgroup > p) {
-  margin-block-start: var(--luz-space-2xs);
-  font-size: var(--luz-text-md);
-  color: var(--luz-text-secondary);
-}
-
-/* Navigation stays in the sans, as controls, labels and tables do (they have
-   their component's class): running text is the serif, a list of links is
-   not. */
-:where(nav) {
-  font-family: var(--luz-font-sans);
-  line-height: 1.5;
-}
+/* No rule for nav, hgroup, section, article, aside, header, footer, main,
+   search, form, div or span: they are structure, and the layout is yours
+   (the o-* objects). */

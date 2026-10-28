@@ -2,7 +2,7 @@
 title: Cómo leer LUZ
 description: Qué indican los nombres del CSS, el marcado y los tokens de LUZ, y en cuáles puedes confiar.
 keywords: nombres, prefijo, bem, atributos de datos, elementos personalizados, api pública
-source: a23ed032b2e8
+source: 1d02d48d0d56
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="classes">
@@ -78,7 +78,7 @@ reviewed: false
         <li><code>data-theme</code> en <code>&lt;html&gt;</code> elige el modo de color (<code>light</code>, <code>dark</code> o <code>high-contrast</code>) o el nombre de un aspecto propio.</li>
         <li><code>data-mode</code> en <code>&lt;html&gt;</code> elige el modo de color dentro de un aspecto propio: <code>data-theme="my-brand"</code> con <code>data-mode="dark"</code>.</li>
         <li><code>data-luz-*</code> son los puntos de integración de los scripts de LUZ, como <code>data-luz-js</code>, que el script establece en <code>&lt;html&gt;</code> cuando se ejecuta. Los scripts se conectan a estos atributos, nunca a una clase.</li>
-        <li><code>data-luz-classless</code> activa los <a href="/docs/get-started/classless/">estilos sin clases</a> para el marcado que contiene.</li>
+        <li><code>data-luz</code> marca una zona para <code>luz.conditional.css</code>: el reinicio y los elementos sin clase se aplican solo dentro de ella.</li>
         <li><code>data-luz-label-*</code> sobrescribe un texto que escribe un script.</li>
       </ul>
       <p>Estos son ejemplos, no la lista completa: la página de cada componente indica los atributos que usa.</p>
@@ -126,7 +126,7 @@ reviewed: false
             <tr><td data-label="Archivo"><div><code>luz.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Para cargar de una vez el restablecimiento, los elementos sin clases, los objetos de maquetación, los componentes y las utilidades</div></td></tr>
             <tr><td data-label="Archivo"><div><code>base.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Si solo quieres unos pocos componentes: carga el restablecimiento y los elementos sin clases y, después, un archivo por componente</div></td></tr>
             <tr><td data-label="Archivo"><div><code>components/&lt;name&gt;.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Después de <code>base.css</code>, para cada componente que uses</div></td></tr>
-            <tr><td data-label="Archivo"><div><code>classless.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Para el marcado al que no puedes añadir clases, dentro de <code>data-luz-classless</code>. Es un archivo independiente, no está en <code>luz.css</code></div></td></tr>
+            <tr><td data-label="Archivo"><div><code>luz.conditional.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>En lugar de <code>luz.css</code>, para una página que ya tiene diseño: el reinicio y los elementos sin clase se aplican solo dentro de <code>data-luz</code>. Los objetos, los componentes y las utilidades no están acotados</div></td></tr>
             <tr><td data-label="Archivo"><div><code>themes/_template.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Cuándo cargarlo"><div>Nunca lo uses tal cual: cópialo como punto de partida para crear tu propio aspecto</div></td></tr>
             <tr><td data-label="Archivo"><div><code>components/&lt;name&gt;.css</code></div></td><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Cuándo cargarlo"><div>Después de core, una por cada elemento del catálogo que use la página, como <code>&lt;luz-search&gt;</code></div></td></tr>
           </tbody>

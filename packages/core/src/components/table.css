@@ -2,7 +2,9 @@
    LUZ Component: table
    Table + sticky column + container-query card stacking
    Layer: components (ITCSS 5) · Prefix: .luz-
-   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first: the
+   look of the table, its caption, headings and cells is in elements/tables.css,
+   shared with the bare table; what is here needs the class or a wrapper.
    -------------------------------------------------------------------------- */
 
 
@@ -20,39 +22,6 @@
   outline-offset: 2px;
 }
 
-.luz-table {
-  font-family: var(--luz-font-sans); /* UI text: never the body serif */
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--luz-text-md);
-}
-
-.luz-table caption {
-  text-align: start;
-  font-size: var(--luz-text-sm);
-  color: var(--luz-text-secondary);
-  padding: var(--luz-space-xs) var(--luz-space-md);
-  caption-side: top;
-}
-
-.luz-table th a {
-  /* The brand blue is below 4.5:1 on the header surface */
-  color: var(--luz-text-primary);
-  text-decoration: underline;
-}
-
-.luz-table th {
-  background: var(--luz-surface-strong);
-  color: var(--luz-text-primary);
-  text-align: start;
-  padding: var(--luz-space-xs) var(--luz-space-md);
-  font-weight: 500;
-  font-size: var(--luz-text-sm);
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  transition: background var(--luz-duration-base);
-}
-
 /* ---- Sortable headings ---------------------------------------------
    A heading that holds a link (sorted by the server) or a button (sorted in
    the browser by table-sort.js) and carries aria-sort gets a triangle drawn
@@ -62,6 +31,7 @@
    least 24px high on its own (WCAG 2.5.8), whatever the padding of the cell.
 --------------------------------------------------------------------- */
 .luz-table th > button {
+  display: inline-block; /* the bare button is inline-flex: its triangle would be a block */
   font: inherit;
   letter-spacing: inherit;
   color: var(--luz-text-primary);
@@ -94,24 +64,8 @@
 
 /* Spacing between letters breaks the joins of Arabic script (the card
    labels of narrow screens too) */
-.luz-table th:lang(ar),
 .luz-table td[data-label]:lang(ar)::before {
   letter-spacing: 0;
-}
-
-.luz-table td {
-  padding: var(--luz-space-sm) var(--luz-space-md);
-  border-bottom: 1px solid var(--luz-divider);
-  color: var(--luz-text-primary);
-  transition: background var(--luz-duration-fast);
-}
-
-.luz-table tr:hover td {
-  background: var(--luz-surface-hover);
-}
-
-.luz-table tr:last-child td {
-  border-bottom: none;
 }
 
 /* ---- Numbers -------------------------------------------------------

@@ -171,6 +171,12 @@
   gap: var(--luz-space-sm);
 }
 
+/* The children of a layout object are spaced by its gap: the margin between
+   blocks that elements/text.css gives running text would add to it */
+:where(.o-stack, .o-grid, .o-row, .o-actions, .o-media) > * {
+  margin-block-start: 0;
+}
+
 /* A list laid out as a grid, a stack or a row: the layout replaces the
    markers and the indent. The items stay a list: a screen reader says how
    many there are (Safari drops that for a list without markers outside a

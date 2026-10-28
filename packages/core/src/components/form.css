@@ -2,7 +2,10 @@
    LUZ Component: form
    Form controls: field, input, textarea, range, color, file, date, fieldset, output, checkbox, radio, toggle
    Layer: components (ITCSS 5) · Prefix: .luz-
-   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first: the
+   look of .luz-input, .luz-fieldset and .luz-legend is in elements/forms.css,
+   shared with the bare field, fieldset and legend; what is here is what needs
+   a class (the error, the textarea, the range, the colour and the file).
    -------------------------------------------------------------------------- */
 
 
@@ -36,35 +39,6 @@
   margin-top: var(--luz-space-2xs);
 }
 
-.luz-input {
-  display: block;
-  width: 100%;
-  height: var(--luz-control-lg);
-  background: var(--luz-input-bg);
-  border: none;
-  border-bottom: 1px solid var(--luz-input-border);
-  color: var(--luz-text-primary);
-  font-family: var(--luz-font-sans);
-  font-size: var(--luz-text-control);
-  padding: 0 var(--luz-space-sm);
-  transition: border-color var(--luz-duration-fast),
-    background var(--luz-duration-base);
-}
-
-.luz-input::placeholder {
-  color: var(--luz-text-muted);
-}
-
-.luz-input:focus {
-  border-bottom: 2px solid var(--luz-focus-ring);
-}
-
-/* Same ring as buttons and links: one focus appearance everywhere */
-.luz-input:focus-visible {
-  outline: 2px solid var(--luz-focus-ring);
-  outline-offset: 2px;
-}
-
 .luz-input--error {
   border-bottom: 2px solid var(--luz-color-danger);
 }
@@ -74,16 +48,6 @@
   padding: var(--luz-space-xs) var(--luz-space-sm);
   min-height: 80px;
   resize: vertical;
-}
-
-.luz-input:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.luz-input[readonly] {
-  opacity: 0.7;
-  border-bottom-style: dashed;
 }
 
 /* --------------------------------------------------------------------------
@@ -149,52 +113,12 @@
 
 /* --------------------------------------------------------------------------
    FORM — Date / time inputs
+   The light picker and the centred value are in elements/forms.css; the dark
+   picker needs the colour mode in front of the field.
    -------------------------------------------------------------------------- */
-
-.luz-input[type="date"],
-.luz-input[type="time"],
-.luz-input[type="datetime-local"],
-.luz-input[type="month"],
-.luz-input[type="week"] {
-  color-scheme: light; /* the picker follows the mode: dark only in dark */
-  /* WebKit's own sheet centres the value with inline-flex, which the block
-     display of .luz-input removes: do it here, so the value is at the middle
-     of the field in every engine */
-  display: flex;
-  align-items: center;
-}
 
 :is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme"][value="dark"]:checked)) .luz-input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]) {
   color-scheme: dark;
-}
-
-/* --------------------------------------------------------------------------
-   FORM — Fieldset / Legend
-   -------------------------------------------------------------------------- */
-
-.luz-fieldset {
-  font-family: var(--luz-font-sans); /* UI text: never the body serif */
-  border: 1px solid var(--luz-divider);
-  border-radius: var(--luz-radius-md);
-  padding: var(--luz-space-md) var(--luz-space-lg);
-  margin: 0;
-  background: var(--luz-input-bg);
-}
-
-.luz-fieldset legend,
-.luz-legend {
-  font-size: var(--luz-text-sm);
-  font-weight: 500;
-  color: var(--luz-text-secondary);
-  padding: 0 var(--luz-space-xs);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-/* Spacing between letters breaks the joins of Arabic script */
-.luz-fieldset legend:lang(ar),
-.luz-legend:lang(ar) {
-  letter-spacing: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -293,6 +217,7 @@
 }
 
 .luz-check-item label {
+  margin: 0;
   font-size: var(--luz-text-md);
   cursor: pointer;
   color: var(--luz-text-primary);

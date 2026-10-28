@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ bare elements fixture</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <!-- No script, no class on the bare elements: this is the page of a reader who wrote plain HTML.
+       The ids are the spec's handles; the .luz-* and .o-* classes are on the references only. -->
+</head>
+<body>
+  <div id="page">
+
+    <!-- Structure: no rule of their own -->
+    <div id="structure">
+      <header id="s-header">Header text</header>
+      <nav id="s-nav" aria-label="Sections"><a id="s-nav-link" href="#structure">A link in a nav</a></nav>
+      <hgroup id="s-hgroup"><h2 id="s-hgroup-h">Title</h2><p id="s-hgroup-p">Subtitle</p></hgroup>
+      <section id="s-section">Section text</section>
+      <article id="s-article">Article text</article>
+      <aside id="s-aside">Aside text</aside>
+      <main id="s-main">Main text</main>
+      <footer id="s-footer">Footer text</footer>
+      <form id="s-form" action="#">Form text</form>
+      <search id="s-search">Search text</search>
+      <div id="s-div">Div text</div>
+    </div>
+
+    <!-- Running text: the space between blocks -->
+    <section id="flow">
+      <h2 id="flow-h">Title</h2>
+      <p id="flow-p1">First paragraph after the heading.</p>
+      <p id="flow-p2">Second paragraph.</p>
+      <ul id="flow-ul"><li id="flow-li1">One<ul id="flow-nested"><li>Nested</li></ul></li><li id="flow-li2">Two</li></ul>
+      <h3 id="flow-h3">Subtitle</h3>
+      <h4 id="flow-h4">A heading under a heading</h4>
+      <blockquote id="flow-quote"><p id="flow-quote-p1">A quotation.</p><p id="flow-quote-p2">Its second paragraph.</p></blockquote>
+      <div id="flow-div-a">A div</div>
+      <div id="flow-div-b">Another div</div>
+      <div id="flow-div-c">A third div</div>
+    </section>
+
+    <div id="stack" class="o-stack">
+      <p id="stack-p1">First child of a stack.</p>
+      <p id="stack-p2">Second child of a stack.</p>
+      <ul id="stack-ul"><li>Third child of a stack</li></ul>
+    </div>
+
+    <!-- Controls -->
+    <form id="controls" action="#">
+      <button id="btn">Save</button>
+      <button id="btn-submit" type="submit">Send</button>
+      <button id="btn-button" type="button">Cancel</button>
+      <button id="btn-reset" type="reset">Reset</button>
+      <button id="btn-disabled" type="button" disabled>Off</button>
+      <button id="btn-disabled-primary" disabled>Off primary</button>
+      <input id="in-submit" type="submit" value="Send">
+      <input id="in-button" type="button" value="Cancel">
+      <input id="in-reset" type="reset" value="Reset">
+
+      <label id="lbl" for="f-text">Name</label>
+      <input id="f-text" type="text" value="Ada">
+      <input id="f-untyped" aria-label="Untyped">
+      <input id="f-email" type="email" aria-label="Email">
+      <input id="f-number" type="number" aria-label="Number">
+      <input id="f-password" type="password" aria-label="Password">
+      <input id="f-search" type="search" aria-label="Search">
+      <input id="f-date" type="date" aria-label="Date">
+      <input id="f-invalid" type="text" aria-label="Invalid" aria-invalid="true" value="x">
+      <input id="f-disabled" type="text" aria-label="Disabled" disabled value="Locked">
+      <input id="f-readonly" type="text" aria-label="Read only" readonly value="Fixed">
+      <textarea id="ta" aria-label="Notes"></textarea>
+      <textarea id="ta-invalid" aria-label="Invalid notes" aria-invalid="true"></textarea>
+      <textarea id="ta-disabled" aria-label="Disabled notes" disabled>Locked</textarea>
+
+      <select id="sel" aria-label="Pick"><option>One</option><option>Two</option></select>
+      <select id="sel-invalid" aria-label="Invalid pick" aria-invalid="true"><option>One</option></select>
+      <select id="sel-disabled" aria-label="Disabled pick" disabled><option>One</option></select>
+      <select id="sel-multiple" aria-label="Pick many" multiple><option>One</option><option>Two</option></select>
+
+      <label id="lbl-check"><input id="chk" type="checkbox"> Remember me</label>
+      <label id="lbl-check-off"><input id="chk-disabled" type="checkbox" disabled> Not available</label>
+      <label id="lbl-radio"><input id="rad" type="radio" name="r" checked> Yes</label>
+      <label id="lbl-radio-off"><input id="rad-disabled" type="radio" name="r" disabled> Not available</label>
+      <label id="lbl-wrap">Wrapping label <input id="f-wrapped" type="text"></label>
+      <input id="rng" type="range" aria-label="Volume">
+      <input id="f-color" type="color" aria-label="Colour">
+      <input id="f-file" type="file" aria-label="File">
+
+      <fieldset id="fs"><legend id="lg">Contact</legend><label for="fs-in">Email</label><input id="fs-in" type="email"></fieldset>
+    </form>
+
+    <!-- References: the component of each, to tell a class from no class -->
+    <div id="refs">
+      <button id="ref-btn" class="luz-btn luz-btn--secondary" type="button">Save</button>
+      <button id="ref-btn-type-less" class="luz-btn luz-btn--secondary">Save</button>
+      <button id="foreign-btn" class="luz-not-a-component">Foreign</button>
+      <input id="foreign-input" class="luz-not-a-component" type="text" aria-label="Foreign">
+      <select id="foreign-select" class="luz-not-a-component" aria-label="Foreign"><option>One</option></select>
+      <input id="ref-input" class="luz-input" type="text" aria-label="Component">
+      <select id="ref-select" class="luz-select" aria-label="Component"><option>One</option></select>
+      <fieldset id="ref-fs" class="luz-fieldset"><legend>Contact</legend></fieldset>
+    </div>
+
+    <!-- Links -->
+    <p id="links"><a id="link" href="#links">A link</a> <a id="link-current" href="#links" aria-current="page">The page you are on</a></p>
+
+    <!-- Table -->
+    <table id="table">
+      <caption>Releases</caption>
+      <thead><tr><th scope="col">Name</th><th scope="col"><a href="#table">Version</a></th></tr></thead>
+      <tbody><tr><td>Core</td><td>2.1.0</td></tr><tr><td>Tokens</td><td>2.1.0</td></tr></tbody>
+      <tfoot><tr><td>Total</td><td>2</td></tr></tfoot>
+    </table>
+
+    <!-- Disclosure, dialog, meter, progress, pre -->
+    <details id="det"><summary id="det-sum">More</summary><p>Hidden text.</p></details>
+    <details id="det-open" open><summary id="det-open-sum">Open by default</summary><p>Visible text.</p></details>
+    <div id="acc" class="luz-accordion"><details id="acc-det"><summary>First</summary><p>Text.</p></details><details><summary>Second</summary><p>Text.</p></details></div>
+    <dialog id="dlg" open><p>A dialog</p></dialog>
+    <meter id="meter" min="0" max="100" value="40" aria-label="Disk">40</meter>
+    <progress id="progress" max="100" value="40" aria-label="Upload">40</progress>
+    <pre id="pre"><code>const a = 1;</code></pre>
+
+    <!-- Reflow (1.4.10): a long label, a disclosure with no padding around it, a slider -->
+    <div id="reflow">
+      <button id="btn-long-word">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</button>
+      <button id="btn-long-text" type="button">Save the changes you made to this very long document</button>
+      <div id="unpadded"><details id="det-unpadded" open><summary id="det-unpadded-sum">Open in a container with no padding</summary><p>Visible text.</p></details></div>
+      <input id="rng-wide" type="range" aria-label="Wide volume">
+    </div>
+  </div>
+</body>
+</html>

@@ -12,12 +12,8 @@
   text-underline-offset: 0.18em;
 }
 
-/* Links inside a <nav> are exempt: their position says they are links.
-   Button classes remove the underline themselves. */
-:where(nav a) {
-  text-decoration: none;
-}
-
+/* Button classes remove the underline themselves, and so does a component
+   that holds links (a tab, a breadcrumb, a menu): a nav has no rule. */
 :where(a:hover) {
   text-decoration: underline;
 }
@@ -26,6 +22,14 @@
   outline: 2px solid var(--luz-focus-ring);
   outline-offset: 2px;
   border-radius: var(--luz-radius-sm);
+}
+
+/* The link of the page you are on (DR-12): heavier, in the text colour, with
+   a thicker underline, so it is told by more than colour */
+:where(a[aria-current="page"]) {
+  color: var(--luz-text-primary);
+  font-weight: 600;
+  text-decoration-thickness: 2px;
 }
 
 /* ========================================================================== */

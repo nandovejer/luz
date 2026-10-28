@@ -791,9 +791,9 @@ describe("the LUZ docs site", () => {
       expect(order.indexOf(route), route).toBeGreaterThanOrEqual(order.indexOf(`/docs/${area.slug}/`));
     }
     // F4 (D7) and F5 (f5-ai-ready.md 6): Install, Choose your snippet, organised, how to read,
-    // Make it yours, bundler, JavaScript, layers, print, Working with AI, Classless, then (F7 step 7,
+    // Make it yours, bundler, JavaScript, layers, print, Working with AI, then (F7 step 7,
     // f7-open-source.md) How LUZ is built last, then the area Kinds of site (the plan ai-and-catalog-only, F3), which follows Get started
-    expect(order.slice(0, 18)).toEqual([
+    expect(order.slice(0, 17)).toEqual([
       "/docs/get-started/",
       "/docs/get-started/snippet/",
       "/docs/get-started/structure/",
@@ -804,7 +804,6 @@ describe("the LUZ docs site", () => {
       "/docs/get-started/layers/",
       "/docs/get-started/print/",
       "/docs/get-started/ai/",
-      "/docs/get-started/classless/",
       "/docs/get-started/how-luz-is-built/",
       "/docs/kinds/",
       "/docs/kinds/landing/",
@@ -830,7 +829,6 @@ describe("the LUZ docs site", () => {
       ["8", "Cascade layers"],
       ["9", "Print styles"],
       ["10", "Working with AI"],
-      ["11", "Classless styles"],
       ["12", "How LUZ is built"],
     ]);
   });
@@ -882,7 +880,7 @@ describe("the LUZ docs site", () => {
     expect(endOf(rendered.get("/docs/tokens/")).prev?.[0]).toBe("/docs/kinds/docs/");
     expect(endOf(rendered.get("/docs/kinds/")).prev?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/tokens/")).next?.[0]).toBe("/docs/tokens/color/");
-    expect(endOf(rendered.get("/docs/get-started/classless/")).next?.[0]).toBe("/docs/get-started/how-luz-is-built/");
+    expect(endOf(rendered.get("/docs/get-started/ai/")).next?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/get-started/how-luz-is-built/")).next?.[0]).toBe("/docs/kinds/");
     expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/catalog\//);
     expect(endOf(rendered.get("/docs/components/")).prev?.[0]).toMatch(/^\/docs\/tokens\//);

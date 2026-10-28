@@ -7,10 +7,10 @@
  * Two things that the rules of tests/check-rules-names.test.js stand on:
  *
  * 1. `hooks` in classes.json. attr/unknown-hook has to know the data-luz-*
- *    names that LUZ reads but no element declares (data-luz-classless,
+ *    names that LUZ reads but no element declares (data-luz-flip,
  *    data-luz-sort, data-luz-spy, data-luz-themes). The class manifest of
  *    step 2 holds none, so the generator (scripts/ai-manifests.js) adds
- *      "hooks": ["data-luz-classless", ...]
+ *      "hooks": ["data-luz-flip", ...]
  *    as the LAST key, only when the package reads at least one, so a package
  *    with none keeps the manifest of step 2 byte for byte. The names are the
  *    attribute selectors of the unminified CSS of dist/ ([data-luz-x],
@@ -93,7 +93,7 @@ describe("classes.json: the hooks a package reads", () => {
   }
 
   const ORDER = `@layer ${LAYERS.map((l) => `luz.${l}`).join(", ")};\n`;
-  const CSS = `${ORDER}@layer luz.components {\n  .luz-btn { color: red; }\n  th[data-luz-sort] { cursor: pointer; }\n  [data-luz-classless] .luz-btn { margin: 0; }\n  [data-luz-state="open"] .luz-btn { margin: 0; }\n}\n`;
+  const CSS = `${ORDER}@layer luz.components {\n  .luz-btn { color: red; }\n  th[data-luz-sort] { cursor: pointer; }\n  [data-luz-themes] .luz-btn { margin: 0; }\n  [data-luz-state="open"] .luz-btn { margin: 0; }\n}\n`;
   const JS = [
     "export function go(root) {",
     '  root.dataset.luzFooBar = "1";',
@@ -107,7 +107,7 @@ describe("classes.json: the hooks a package reads", () => {
   it("lists the data-luz-* names of the attribute selectors and of the script, sorted and once", () => {
     const dir = fixtureRoot({ "luz.css": CSS, "luz.js": JS, "components/button.css": `${ORDER}@layer luz.components {\n  [data-luz-sort] .luz-btn { margin: 0; }\n}\n` });
     const manifest = buildClassManifest("core", { root: dir });
-    expect(manifest.hooks).toEqual(["data-luz-classless", "data-luz-foo-bar", "data-luz-ready", "data-luz-sort", "data-luz-spy", "data-luz-state"]);
+    expect(manifest.hooks).toEqual(["data-luz-foo-bar", "data-luz-ready", "data-luz-sort", "data-luz-spy", "data-luz-state", "data-luz-themes"]);
   });
 
   it("leaves out the label overrides and every minified file", () => {
@@ -141,10 +141,11 @@ describe("classes.json: the hooks a package reads", () => {
     expect(Object.keys(manifest)).toEqual(["schema", "package", "version", "classes", "properties"]);
   });
 
-  it("is in the three real manifests: core reads classless, sort and themes, catalog reads spy (the sidebar's scroll spy moved there in F7); tokens reads none", () => {
+  it("is in the three real manifests: core reads sort and themes (and no longer classless: the attribute is gone), catalog reads spy (the sidebar's scroll spy moved there in F7); tokens reads none", () => {
     const core = buildClassManifest("core");
     expect(core.hooks, "hooks in the manifest of core").toBeDefined();
-    for (const name of ["data-luz-classless", "data-luz-sort", "data-luz-themes"]) expect(core.hooks, name).toContain(name);
+    for (const name of ["data-luz-sort", "data-luz-themes"]) expect(core.hooks, name).toContain(name);
+    expect(core.hooks, "[data-luz-classless] is gone: the bare elements need no attribute").not.toContain("data-luz-classless");
     expect(core.hooks, "core's scripts no longer read data-luz-spy").not.toContain("data-luz-spy");
     expect(buildClassManifest("catalog").hooks, "hooks in the manifest of catalog").toContain("data-luz-spy");
     expect("hooks" in buildClassManifest("tokens")).toBe(false);

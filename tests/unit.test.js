@@ -231,7 +231,7 @@ describe.skipIf(!distBuilt)("dist build artifacts (BUG-02)", () => {
   });
 
   it("core ships no docs-app selectors", () => {
-    for (const f of ["luz.js", "luz.css", "classless.css", "print.css"]) {
+    for (const f of ["luz.js", "luz.css", "luz.conditional.css", "print.css"]) {
       expect(readFileSync(resolve(coreDist, f), "utf-8")).not.toMatch(/\.docs-|#demo-form/);
     }
   });

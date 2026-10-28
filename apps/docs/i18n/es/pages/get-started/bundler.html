@@ -2,7 +2,7 @@
 title: Con un empaquetador o framework
 description: Importa el CSS y el script de LUZ en Astro o en cualquier herramienta que resuelva nombres de paquetes, y conserva el orden de las capas y las fuentes.
 keywords: vite, astro, empaquetador, framework, import
-source: e6679a0e263a
+source: 095005dcb3ac
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="imports">
@@ -55,7 +55,7 @@ import "@luz-ds/catalog/components/hero.css";</code></pre>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./css/min</code></div></td><td data-label="Qué es"><div><code>luz.min.css</code>: lo mismo, minimizado</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./base.css</code></div></td><td data-label="Qué es"><div>Los ajustes, el restablecimiento y los elementos sin clases, para cargar los componentes uno a uno</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./print.css</code></div></td><td data-label="Qué es"><div>Solo los estilos de impresión. <code>luz.css</code> ya los incluye</div></td></tr>
-            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./classless.css</code></div></td><td data-label="Qué es"><div>Estilos para marcado al que no puedes añadir clases, dentro de <code>data-luz-classless</code></div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./conditional.css</code></div></td><td data-label="Qué es"><div><code>luz.conditional.css</code>: lo mismo que <code>luz.css</code>, con el reinicio y los elementos sin clase solo dentro de <code>data-luz</code>, para una página que ya tiene diseño</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./components/*</code></div></td><td data-label="Qué es"><div>Una hoja de estilos por componente, como <code>@luz-ds/core/components/button.css</code></div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./themes/*</code></div></td><td data-label="Qué es"><div>La plantilla para crear tu propio aspecto, <code>themes/_template.css</code></div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./theme</code></div></td><td data-label="Qué es"><div>Modo de color: <code>initThemeSystem</code>, <code>applyTheme</code></div></td></tr>

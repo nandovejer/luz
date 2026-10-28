@@ -65,7 +65,7 @@ const fingerprint = () => {
     const tag = el.localName.startsWith('luz-') ? 'luz-control-for-the-test' : el.localName;
     const control = document.createElement(tag);
     // a class nobody styles: core resets a list that has any class, and the element has one
-    control.className = 'a-class-nobody-styles';
+    control.className = 'luz-a-class-nobody-styles';
     el.parentElement.append(control);
     control.textContent = el.textContent;
     const result = { element: read(el, null), before: read(el, '::before'), after: read(el, '::after') };

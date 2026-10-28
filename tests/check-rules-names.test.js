@@ -566,7 +566,7 @@ describe("attr/unknown-hook", () => {
   it("knows the hooks of the manifests, the attributes of every element and the label overrides", () => {
     const html = page(
       [
-        "  <div data-luz-classless>classless</div>",
+        "  <div data-luz-themes>themes</div>",
         '  <table><thead><tr><th data-luz-sort>Plan</th></tr></thead></table>',
         '  <nav data-luz-spy>spy</nav>',
         '  <div data-luz-search-src="/search-index.json">the attribute of luz-search, on a div</div>',

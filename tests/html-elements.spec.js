@@ -44,9 +44,12 @@ const selectorsByFile = new Map(
   ]),
 );
 
-/** True when `tag` is used as a type selector in any of the given preludes. */
+/**
+ * True when `tag` is used as a type selector in any of the given preludes. An attribute selector is left out:
+ * `input[type="search"]` is a field, not the <search> element.
+ */
 const hasTypeSelector = (preludes, tag) =>
-  preludes.some((prelude) => new RegExp(`(^|[^\\w.#:\\[-])${tag}(?![\\w-])`).test(prelude));
+  preludes.some((prelude) => new RegExp(`(^|[^\\w.#:\\[-])${tag}(?![\\w-])`).test(prelude.replace(/\[[^\]]*\]/g, '[]')));
 
 /* ---- Helpers ------------------------------------------------------------ */
 

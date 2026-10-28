@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ conditional fixture</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.conditional.css">
+  <!-- A page that already has a design: its rules are the legacy ones, outside the zone -->
+  <style>
+    .legacy button { color: rgb(10, 20, 30); }
+    .legacy p { margin: 0 0 24px; }
+  </style>
+</head>
+<body>
+  <!-- Outside the zone: the page as it was, with LUZ's file linked -->
+  <div id="legacy" class="legacy">
+    <h2 id="legacy-h">Legacy title</h2>
+    <p id="legacy-p1">First legacy paragraph.</p>
+    <p id="legacy-p2">Second legacy paragraph.</p>
+    <button id="legacy-button">Legacy button</button>
+    <input id="legacy-input" type="text" aria-label="Legacy">
+    <select id="legacy-select" aria-label="Legacy"><option>One</option></select>
+    <table id="legacy-table"><caption>Legacy</caption><thead><tr><th scope="col">A</th></tr></thead><tbody><tr><td>1</td></tr></tbody></table>
+    <details id="legacy-details"><summary>Legacy</summary><p>Text</p></details>
+    <label id="legacy-label" for="legacy-input">Legacy label</label>
+    <div id="legacy-div">A div</div>
+    <a id="legacy-link" href="#legacy">A link</a>
+  </div>
+
+  <!-- Outside the zone, the components work as they always did -->
+  <div id="components">
+    <button id="c-btn" class="luz-btn luz-btn--primary" type="button">Component</button>
+    <input id="c-input" class="luz-input" type="text" aria-label="Component">
+    <select id="c-select" class="luz-select" aria-label="Component"><option>One</option></select>
+    <fieldset id="c-fieldset" class="luz-fieldset"><legend>Component</legend></fieldset>
+    <table id="c-table" class="luz-table"><caption>Component</caption><thead><tr><th scope="col">A</th></tr></thead><tbody><tr><td>1</td></tr></tbody></table>
+    <div id="c-stack" class="o-stack"><p>One</p><p>Two</p></div>
+  </div>
+
+  <!-- The zone -->
+  <section id="zone" data-luz>
+    <h2 id="zone-h">Zone title</h2>
+    <p id="zone-p1">First paragraph.</p>
+    <p id="zone-p2">Second paragraph.</p>
+    <button id="zone-button">Zone button</button>
+    <button id="zone-button-secondary" type="button">Zone secondary</button>
+    <label id="zone-label" for="zone-input">Zone label</label>
+    <input id="zone-input" type="text">
+    <select id="zone-select" aria-label="Zone"><option>One</option></select>
+    <textarea id="zone-textarea" aria-label="Zone notes"></textarea>
+    <label id="zone-check"><input id="zone-checkbox" type="checkbox"> Remember</label>
+    <fieldset id="zone-fieldset"><legend>Zone</legend></fieldset>
+    <table id="zone-table"><caption>Zone</caption><thead><tr><th scope="col">A</th></tr></thead><tbody><tr><td>1</td></tr></tbody></table>
+    <details id="zone-details"><summary>Zone</summary><p>Text</p></details>
+    <div id="zone-div">A div</div>
+    <button id="zone-component" class="luz-btn luz-btn--secondary" type="button">Component in the zone</button>
+    <div id="zone-nested" data-theme="dark"><select id="zone-select-dark" aria-label="Dark"><option>One</option></select></div>
+  </section>
+</body>
+</html>

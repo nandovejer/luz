@@ -3,8 +3,6 @@ README.md
 dist/base.css
 dist/base.min.css
 dist/classes.json
-dist/classless.css
-dist/classless.min.css
 dist/clipboard.js
 dist/clipboard.min.js
 dist/components/_animations.css
@@ -73,6 +71,8 @@ dist/i18n-es.js
 dist/i18n-es.min.js
 dist/i18n.js
 dist/i18n.min.js
+dist/luz.conditional.css
+dist/luz.conditional.min.css
 dist/luz.css
 dist/luz.js
 dist/luz.min.css

@@ -136,7 +136,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/button.css",
+      "styledBy": "elements/forms.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button"
     },
     {
@@ -152,7 +152,7 @@
       "category": "tables",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/table.css",
+      "styledBy": "elements/tables.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/caption"
     },
     {
@@ -200,7 +200,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/datalist"
     },
     {
@@ -288,7 +288,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "elements/forms.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/fieldset"
     },
     {
@@ -320,7 +320,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form"
     },
     {
@@ -400,7 +400,7 @@
       "category": "sectioning",
       "status": "standard",
       "render": "live",
-      "styledBy": "elements/sections.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/hgroup"
     },
     {
@@ -448,7 +448,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "elements/forms.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input"
     },
     {
@@ -472,7 +472,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "elements/forms.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label"
     },
     {
@@ -480,7 +480,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "elements/forms.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/legend"
     },
     {
@@ -488,7 +488,7 @@
       "category": "text",
       "status": "standard",
       "render": "live",
-      "styledBy": "none",
+      "styledBy": "elements/text.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/li"
     },
     {
@@ -560,7 +560,7 @@
       "category": "sectioning",
       "status": "standard",
       "render": "live",
-      "styledBy": "elements/sections.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/nav"
     },
     {
@@ -592,7 +592,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/optgroup"
     },
     {
@@ -600,7 +600,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/option"
     },
     {
@@ -720,7 +720,7 @@
       "category": "forms",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/form.css",
+      "styledBy": "elements/forms.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select"
     },
     {
@@ -816,7 +816,7 @@
       "category": "tables",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/table.css",
+      "styledBy": "elements/tables.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/table"
     },
     {
@@ -824,7 +824,7 @@
       "category": "tables",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/table.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/tbody"
     },
     {
@@ -832,7 +832,7 @@
       "category": "tables",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/table.css",
+      "styledBy": "elements/tables.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/td"
     },
     {
@@ -856,7 +856,7 @@
       "category": "tables",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/table.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/tfoot"
     },
     {
@@ -864,7 +864,7 @@
       "category": "tables",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/table.css",
+      "styledBy": "elements/tables.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/th"
     },
     {
@@ -872,7 +872,7 @@
       "category": "tables",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/table.css",
+      "styledBy": "none",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/thead"
     },
     {
@@ -896,7 +896,7 @@
       "category": "tables",
       "status": "standard",
       "render": "live",
-      "styledBy": "components/table.css",
+      "styledBy": "elements/tables.css",
       "mdn": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/tr"
     },
     {

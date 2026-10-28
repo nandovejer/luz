@@ -25,9 +25,10 @@ import { codesOf, columnOf, declaredTokens, escapeRe, h2Ids, linksOf, packFiles,
 const IDS = ["classes", "tokens", "attributes", "elements", "layers", "public", "files"];
 // F8: no prefix names a kind of site (`.luz-landing-`, `.luz-cms-`, `.luz-app-`, `.luz-docs-`): a catalog block is `.luz-<block>`
 const PREFIXES = [".luz-", ".o-", ".u-", ".is-"];
-const ATTRIBUTES = ["data-theme", "data-mode", "data-luz-*", "data-luz-label-*"];
+// data-luz is the zone of luz.conditional.css; data-luz-classless is gone with classless.css
+const ATTRIBUTES = ["data-theme", "data-mode", "data-luz", "data-luz-*", "data-luz-label-*"];
 const ELEMENTS = ["luz-search", "luz-cookie-consent", "luz-color-mode", "luz-timeline", "luz-lang-switch", "luz-submenu", "luz-announcement"];
-const FILES = ["luz-tokens.css", "tokens.css", "components/<name>.css", "base.css", "classless.css", "themes/_template.css"];
+const FILES = ["luz-tokens.css", "tokens.css", "components/<name>.css", "base.css", "luz.conditional.css", "themes/_template.css"];
 
 const page = readPage("get-started/how-to-read.html");
 const sections = sectionsOf(page.body);
@@ -155,7 +156,7 @@ describe("attributes", () => {
   const named = () =>
     [...new Set(codesOf(section("attributes")).filter((c) => /^data-[a-z0-9-]+\*?(?:=.*)?$/.test(c)).map((c) => c.replace(/=.*$/, "")))];
 
-  it("names data-theme, data-mode, data-luz-* and data-luz-label-*", () => {
+  it("names data-theme, data-mode, data-luz (the zone), data-luz-* and data-luz-label-*", () => {
     for (const a of ATTRIBUTES) expect(named(), a).toContain(a);
   });
 

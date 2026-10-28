@@ -182,8 +182,10 @@ function hooksOf(dist) {
 
 /** The files to name for a class or property: its own stylesheets, else the bundle. */
 function filesOf(set, bundle) {
-  const own = [...set].filter((file) => file !== bundle);
-  return (own.length ? own : [...set]).sort();
+  // luz.conditional.css is the bundle again, with the reset and the elements inside [data-luz]
+  const variant = typeof bundle === "string" && bundle.endsWith(".css") ? bundle.replace(/\.css$/, ".conditional.css") : null;
+  const own = [...set].filter((file) => file !== bundle && file !== variant);
+  return (own.length ? own : [...set].filter((file) => file !== variant)).sort();
 }
 
 const SCRIPT_CLASS = new RegExp(`\\.((?:luz|o|u|is)-[a-z0-9]+(?:(?:__|--|-)[a-z0-9]+)*)(?![\\w$-])`, "g");

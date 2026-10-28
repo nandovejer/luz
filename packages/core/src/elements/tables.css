@@ -1,0 +1,71 @@
+/* ==========================================================================
+   LUZ — 3. ELEMENTS · tables
+   A table on the bare element, with no class: caption, thead, tbody, tfoot,
+   tr, th and td. The look of .luz-table, at the full width of its container.
+   What a bare table cannot do stays in the component: the scroll of a wide
+   table and the stacking of its rows into cards (a wrapper and data-label),
+   the sortable headings, the numeric columns, the density and the sticky
+   column. Every rule is :where() (0,0,0): any .luz-* class and any rule of
+   yours wins.
+   ========================================================================== */
+
+:where(table, .luz-table) {
+  font-family: var(--luz-font-sans);
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--luz-text-md);
+}
+
+:where(caption, .luz-table caption) {
+  text-align: start;
+  font-size: var(--luz-text-sm);
+  color: var(--luz-text-secondary);
+  padding: var(--luz-space-xs) var(--luz-space-md);
+  caption-side: top;
+}
+
+/* The brand blue is below 4.5:1 on the header surface */
+:where(th a, .luz-table th a) {
+  color: var(--luz-text-primary);
+  text-decoration: underline;
+}
+
+:where(th, .luz-table th) {
+  background: var(--luz-surface-strong);
+  color: var(--luz-text-primary);
+  text-align: start;
+  padding: var(--luz-space-xs) var(--luz-space-md);
+  font-weight: 500;
+  font-size: var(--luz-text-sm);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  transition: background var(--luz-duration-base);
+}
+
+/* Spacing between letters breaks the joins of Arabic script */
+:where(th:lang(ar), .luz-table th:lang(ar)) {
+  letter-spacing: 0;
+}
+
+:where(td, .luz-table td) {
+  padding: var(--luz-space-sm) var(--luz-space-md);
+  border-bottom: 1px solid var(--luz-divider);
+  color: var(--luz-text-primary);
+  transition: background var(--luz-duration-fast);
+}
+
+:where(tr:hover td, .luz-table tr:hover td) {
+  background: var(--luz-surface-hover);
+}
+
+:where(tr:last-child td, .luz-table tr:last-child td) {
+  border-bottom: none;
+}
+
+/* Forced colors drops the header's background: a line under it keeps the
+   header row apart from the data (a border is kept, in the text colour) */
+@media (forced-colors: active) {
+  :where(th, .luz-table th) {
+    border-block-end: 1px solid;
+  }
+}

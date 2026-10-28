@@ -6,7 +6,7 @@
  * (bare blocks, a ul.wp-block-list), served at /__prose__ with the language
  * and direction each test needs. Checks the line length in ch at 1440 px,
  * the space between blocks, the lists, that a .luz-* class inside wins, that
- * classless mode agrees with it, 320 px and 200 % text without sideways
+ * the page-wide rhythm of the bare elements agrees with it, 320 px and 200 % text without sideways
  * scroll, right to left, and axe in the three modes. CSS only: runs in
  * `chromium` and `chromium-nojs`.
  */
@@ -132,13 +132,16 @@ test.describe('prose', () => {
     expect(await spaceBefore(p, 'luz-figure')).toBeCloseTo(lg, 0);
   });
 
-  test('with classless mode on the same element, the space between blocks does not change', async ({ page: p }) => {
+  test('the same content with no .luz-prose class has the same space between blocks: the rhythm is page-wide (elements/text.css)', async ({ page: p }) => {
     await open(p, 1280);
-    const ids = ['p2', 'h-method', 'after-h2', 'wp-list', 'quote', 'figure', 'pre', 'hr', 'after-hr'];
+    // A figure is left out: the bare figure has a box and a margin of its own (elements/text.css), and .luz-prose sets another
+    const ids = ['p2', 'h-method', 'after-h2', 'wp-list', 'quote', 'pre', 'hr', 'after-hr'];
     const before = [];
     for (const id of ids) before.push(await spaceBefore(p, id));
-    await open(p, 1280, { head: '<link rel="stylesheet" href="/packages/core/dist/classless.css">' });
-    await p.evaluate(() => document.getElementById('prose').setAttribute('data-luz-classless', ''));
+    await p.evaluate(() => {
+      const wrapper = document.getElementById('prose');
+      for (const c of [...wrapper.classList].filter((name) => name.startsWith('luz-prose'))) wrapper.classList.remove(c);
+    });
     const after = [];
     for (const id of ids) after.push(await spaceBefore(p, id));
     after.forEach((v, i) => expect(v, ids[i]).toBeCloseTo(before[i], 0));

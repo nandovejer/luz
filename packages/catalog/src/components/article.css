@@ -43,6 +43,7 @@
 	border-inline-start: 2px solid transparent;
 	font-size: var(--luz-text-md);
 	color: var(--luz-text-secondary);
+	text-decoration: none;
 }
 
 .luz-toc__list a:hover {

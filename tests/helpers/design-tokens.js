@@ -78,10 +78,41 @@ export const formatRatio = format;
 
 /* ---- The tokens a component reads ---------------------------------------- */
 
+/**
+ * The classes whose look is a rule of elements/*.css, shared with the bare element: `:where(select, .luz-select)` is one
+ * rule, in elements/forms.css, and it is the component's as much as the element's. The page of the component documents
+ * the tokens of that rule too, so they are read with the component's own file. A rule for the bare element alone is not
+ * the component's: a details has no box until `.luz-accordion` adds it, so the accordion page lists what the accordion
+ * reads. Keyed by the stylesheet the page documents.
+ */
+const SHARED_WITH_ELEMENTS = {
+  "components/form.css": ["luz-input", "luz-fieldset", "luz-legend"],
+  "components/select.css": ["luz-select"],
+  "components/table.css": ["luz-table"],
+  "components/modal.css": ["luz-modal"],
+  "components/code.css": ["luz-code-block"],
+};
+
+/** The rules of elements/*.css that name one of these classes, as CSS text. */
+function sharedWithElements(files) {
+  const classes = files.flatMap((f) => SHARED_WITH_ELEMENTS[f] ?? []);
+  if (!classes.length) return "";
+  const named = new RegExp(`\\.(?:${classes.join("|")})(?![\\w-])`);
+  const dir = "packages/core/src/elements";
+  return readdirSync(`${repo}${dir}`)
+    .filter((f) => f.endsWith(".css") && f !== "index.css")
+    .flatMap((f) => rules(read(`${dir}/${f}`)))
+    .filter(({ selector }) => named.test(selector))
+    .map(({ selector, body }) => `${selector} {${body}}`)
+    .join("\n");
+}
+
 /** The CSS of a page and, for a pattern of catalog, the classes that are its own. */
 function sourceOf(page) {
   if (page.meta.area === "components") {
-    return { css: page.meta.files.split(";").map((f) => read(`packages/core/src/${f.trim()}`)).join("\n"), classes: null, tags: [] };
+    const files = page.meta.files.split(";").map((f) => f.trim());
+    const own = files.map((f) => read(`packages/core/src/${f}`)).join("\n");
+    return { css: `${own}\n${sharedWithElements(files)}`, classes: null, tags: [] };
   }
   if (page.meta.module === "search.js") return { css: read("packages/catalog/src/components/search.css"), classes: null, tags: [] };
   const entries = page.meta.files.split(",").map((f) => f.trim());
