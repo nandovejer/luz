@@ -129,7 +129,9 @@
     border-radius: 0;
     box-shadow: none;
     overscroll-behavior: contain;
-    scroll-padding-block: var(--luz-modal-head-size) var(--luz-modal-foot-size);
+    /* The bars' height and one step more: Firefox and WebKit stop a keyboard
+       focus scroll 10 to 18px short of the padding, and the step covers it */
+    scroll-padding-block: calc(var(--luz-modal-head-size) + var(--luz-space-md)) calc(var(--luz-modal-foot-size) + var(--luz-space-md));
   }
 
   .luz-modal[open] {
