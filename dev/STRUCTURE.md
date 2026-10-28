@@ -80,7 +80,7 @@ luz-design-system/
 │   │
 │   ├── catalog/                   ← @luz-ds/catalog (publishable)
 │   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/{search,cookie-consent,color-mode,lang-switch,submenu,announcement,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
+│   │   │   ├── components/{search,cookie-consent,color-mode,lang-switch,submenu,announcement,faq,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
 │   │   │   ├── components/<block>.css  ← the patterns of a kind of site (hero, site-header, page-rail, …), one file each, named by what the piece is
 │   │   │   ├── catalog.js                ← the presence loader
 │   │   │   └── search.js, cookie-consent.js, color-mode.js, timeline.js, sidebar.js  ← lazy chunks (the last two were core's)

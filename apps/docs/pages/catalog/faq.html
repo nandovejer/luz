@@ -1,0 +1,270 @@
+<!-- luz:page
+title: FAQ
+description: Lists the questions visitors ask with their answers, in groups, as native disclosures that work without a script.
+area: catalog
+order: 9
+group: content
+fits-kinds: any
+fits: a list of questions with their answers, on a help page, a landing page or the foot of a product page
+files: <luz-faq>, .luz-faq__title, .luz-faq__lead, .luz-faq__nav, .luz-faq__group, .luz-faq__group-title, .luz-faq__item, .luz-faq__question, .luz-faq__answer, .luz-faq__more
+keywords: frequently asked questions, questions and answers, help center, expandable answers
+toc: h2,h3
+-->
+    <div class="docs-component" id="p-faq">
+          <h2 id="example">Example</h2>
+          <p>The questions of a bike rental shop, in two groups. The first answer is open, and the links under the lead jump to each group.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <luz-faq>
+              <h3 class="luz-faq__title">Questions about renting a bike</h3>
+              <p class="luz-faq__lead">What to know before you pick up your bike at Marea Bikes in Cádiz.</p>
+              <nav class="luz-faq__nav" aria-label="In this FAQ">
+                <ul>
+                  <li><a href="#faq-demo-booking">Booking and pickup</a></li>
+                  <li><a href="#faq-demo-road">On the road</a></li>
+                </ul>
+              </nav>
+              <section class="luz-faq__group" aria-labelledby="faq-demo-booking">
+                <h4 class="luz-faq__group-title" id="faq-demo-booking">Booking and pickup</h4>
+                <details class="luz-faq__item">
+                  <summary class="luz-faq__question">How do I book a bike?</summary>
+                  <div class="luz-faq__answer" id="faq-demo-book">
+                    <p>Book on the Marea Bikes website or at our shop. Choose the day, the size and the type of bike, and pay online or when you pick it up. We send a confirmation by e-mail with your pickup time.</p>
+                  </div>
+                </details>
+                <details class="luz-faq__item" open>
+                  <summary class="luz-faq__question">What do I need to bring?</summary>
+                  <div class="luz-faq__answer" id="faq-demo-bring">
+                    <p>Bring three things to the shop:</p>
+                    <ul>
+                      <li>A photo ID.</li>
+                      <li>The confirmation e-mail, on paper or on your phone.</li>
+                      <li>A card for the €100 deposit, which we release when you return the bike.</li>
+                    </ul>
+                  </div>
+                </details>
+                <details class="luz-faq__item">
+                  <summary class="luz-faq__question">Can I cancel a booking?</summary>
+                  <div class="luz-faq__answer" id="faq-demo-cancel">
+                    <p>Yes, free of charge until 24 hours before pickup. After that, Marea Bikes keeps the price of the first day.</p>
+                  </div>
+                </details>
+              </section>
+              <section class="luz-faq__group" aria-labelledby="faq-demo-road">
+                <h4 class="luz-faq__group-title" id="faq-demo-road">On the road</h4>
+                <details class="luz-faq__item">
+                  <summary class="luz-faq__question">Can I ride outside Cádiz?</summary>
+                  <div class="luz-faq__answer" id="faq-demo-outside">
+                    <p>Yes, anywhere in the province of Cádiz. For a trip outside it, ask us before you book: the insurance of a Marea Bikes bike covers the province only.</p>
+                  </div>
+                </details>
+                <details class="luz-faq__item">
+                  <summary class="luz-faq__question">What if the bike breaks down?</summary>
+                  <div class="luz-faq__answer" id="faq-demo-breakdown">
+                    <p>Call the number on the tag of your key. In the city centre we fix or swap the bike within two hours, at no cost, unless the damage is not from normal use.</p>
+                  </div>
+                </details>
+              </section>
+              <p class="luz-faq__more">Not here? <a href="#example">Write to the shop</a></p>
+            </luz-faq>
+          </div>
+          <p class="docs-demo__note">On a site the list takes the width of its container, and each answer stops at a comfortable line length.</p>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>In a browser before Chrome 97, Firefox 148 or Safari 26.2, a link to an answer lands on its closed question: the answer is one click away, but it does not open by itself. In Safari 26.2 the page does not scroll well to the answer found with Find in page.</p>
+          <p>Closed answers print only where the browser supports <code>::details-content</code> (Chrome 131, Firefox 143, Safari 18.4). An older browser prints a closed question without its answer: open the questions before you print.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="FAQ documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>A <code>&lt;luz-faq&gt;</code> around a title, a lead, the groups and, last, a line for the visitor who did not find the answer. Each question is a <code>&lt;details&gt;</code> and each answer is a <code>&lt;div&gt;</code> with its own <code>id</code>. The title is yours to level: use the heading that fits your page, and the next level for the groups.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-faq" aria-label="Copy the FAQ markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="FAQ markup"><code id="code-faq">&lt;luz-faq&gt;
+  &lt;h2 class=&quot;luz-faq__title&quot;&gt;Questions about renting a bike&lt;/h2&gt;
+  &lt;p class=&quot;luz-faq__lead&quot;&gt;What to know before you pick up your bike.&lt;/p&gt;
+  &lt;nav class=&quot;luz-faq__nav&quot; aria-label=&quot;In this FAQ&quot;&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#booking&quot;&gt;Booking and pickup&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#road&quot;&gt;On the road&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;section class=&quot;luz-faq__group&quot; aria-labelledby=&quot;booking&quot;&gt;
+    &lt;h3 class=&quot;luz-faq__group-title&quot; id=&quot;booking&quot;&gt;Booking and pickup&lt;/h3&gt;
+    &lt;details class=&quot;luz-faq__item&quot;&gt;
+      &lt;summary class=&quot;luz-faq__question&quot;&gt;Can I cancel a booking?&lt;/summary&gt;
+      &lt;div class=&quot;luz-faq__answer&quot; id=&quot;faq-cancel&quot;&gt;
+        &lt;p&gt;Yes, free of charge until 24 hours before pickup.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/details&gt;
+    &lt;details class=&quot;luz-faq__item&quot;&gt;
+      &lt;summary class=&quot;luz-faq__question&quot;&gt;What do I need to bring?&lt;/summary&gt;
+      &lt;div class=&quot;luz-faq__answer&quot; id=&quot;faq-bring&quot;&gt;
+        &lt;p&gt;Bring a photo ID and the confirmation e-mail.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/details&gt;
+  &lt;/section&gt;
+  &lt;section class=&quot;luz-faq__group&quot; aria-labelledby=&quot;road&quot;&gt;
+    &lt;h3 class=&quot;luz-faq__group-title&quot; id=&quot;road&quot;&gt;On the road&lt;/h3&gt;
+    …
+  &lt;/section&gt;
+  &lt;p class=&quot;luz-faq__more&quot;&gt;Not here? &lt;a href=&quot;/contact/&quot;&gt;Write to the shop&lt;/a&gt;&lt;/p&gt;
+&lt;/luz-faq&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variants and options</h3>
+            <p>Only the list of questions is needed. The title, the lead, the groups, the links to the groups and the last line are optional parts.</p>
+            <div class="luz-table-wrap" role="region" aria-label="FAQ parts and options" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Part or option</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part or option"><div><code>&lt;luz-faq&gt;</code></div></td><td data-label="Effect"><div>The block, as wide as its container. A tag that no script defines</div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>.luz-faq__title</code>, <code>.luz-faq__lead</code></div></td><td data-label="Effect"><div>Optional. The title in the heading face, and a lead under it in secondary text. Any heading level, any element for the lead</div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>.luz-faq__nav</code></div></td><td data-label="Effect"><div>Optional, for a long FAQ with groups: a <code>&lt;nav&gt;</code> with a list of links to the group titles, as a row of tags that wraps. Give it an <code>aria-label</code></div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>.luz-faq__group</code>, <code>.luz-faq__group-title</code></div></td><td data-label="Effect"><div>Optional, for a FAQ with several topics: a <code>&lt;section&gt;</code> named by its title, which is a real heading. A short FAQ has no groups</div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>.luz-faq__item</code>, <code>.luz-faq__question</code></div></td><td data-label="Effect"><div>One question: a <code>&lt;details&gt;</code> and its <code>&lt;summary&gt;</code>, between hairlines, with a plus that becomes a minus when it opens</div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>.luz-faq__answer</code></div></td><td data-label="Effect"><div>The answer, in reading text, with any HTML inside: paragraphs, lists, links, code. Its <code>id</code> is the link to it</div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>.luz-faq__more</code></div></td><td data-label="Effect"><div>Optional, last: a line in secondary text for a visitor who did not find the answer, with a link to support</div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>name</code></div></td><td data-label="Effect"><div>On the <code>&lt;details&gt;</code>, the browser’s own attribute: with the same name on all of them, opening a question closes the one that was open. Without it, several can stay open</div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>open</code></div></td><td data-label="Effect"><div>On one <code>&lt;details&gt;</code>, the browser’s own attribute: that question is open when the page loads. Use it for the most common doubt only</div></td></tr>
+                  <tr><td data-label="Part or option"><div><code>--luz-faq-measure</code></div></td><td data-label="Effect"><div>On the tag, the widest an answer or a lead gets. Default <code>65ch</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>CSS from <code>@luz-ds/catalog</code>. No JavaScript: <code>&lt;luz-faq&gt;</code> is a tag that no script ever defines.</p>
+            <ul>
+              <li>Every answer is in the HTML the server sends, so a reader, a search engine and a tool that does not run scripts all get it.</li>
+              <li>Put the <code>id</code> on the <code>.luz-faq__answer</code>, never on the <code>&lt;details&gt;</code>. A link to an id on the <code>&lt;details&gt;</code> lands on its <code>&lt;summary&gt;</code>, which is already in view, so the browser opens nothing. A link to an id inside the hidden answer opens the question, and the answer keeps the question above it when the page scrolls.</li>
+              <li>The browser’s Find in page also opens a question whose answer holds the words it found.</li>
+              <li>The whole question is the control, at least a large control high, not only the plus. Its text can be selected, so a visitor can copy it to quote it.</li>
+              <li>The state is the shape of the marker: a plus when closed, a minus when open. The open question also takes the brand colour, so it reads apart from its answer. The marker folds with a short ease, and with reduced motion it changes without it.</li>
+              <li>Long words break, and code or a table inside an answer scrolls inside it: the page never scrolls sideways.</li>
+              <li>On paper every answer prints, open or closed, and the markers do not.</li>
+            </ul>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>Nothing changes: all of it works. Opening, closing, the exclusive group, the link to an answer and Find in page are the browser’s.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <p>Tab reaches each question in order. Enter or Space opens or closes it. There are no arrow-key shortcuts between questions.</p>
+            <ul>
+              <li><strong>The control:</strong> the <code>&lt;summary&gt;</code> is the control and the browser gives it its role and its state. Add no <code>aria-expanded</code>, no <code>aria-controls</code> and no role: they repeat what the element already says.</li>
+              <li><strong>Headings:</strong> the questions are not headings. A heading inside a <code>&lt;summary&gt;</code> is not announced as one in every screen reader. The group titles are the headings of the list, so a reader can move through the topics by headings.</li>
+              <li><strong>Groups and links:</strong> a group is a <code>&lt;section&gt;</code> named by its title with <code>aria-labelledby</code>. The links to the groups go in a <code>&lt;nav&gt;</code> with an <code>aria-label</code>.</li>
+              <li>Keep links and buttons out of a question: the question is itself the control. Links belong in the answer.</li>
+              <li>The FAQ has not been tested with a screen reader.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use it for a list of several questions that visitors really ask, which you can answer in a few sentences each: opening hours, prices, how to book, what a product does not do.</p>
+            <ul>
+              <li>It fits a landing page, a help page or the foot of a product page, in a site of any kind.</li>
+              <li>Group the questions when there are several topics; leave the groups out of a short list.</li>
+            </ul>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use it for one disclosure: a single <code>&lt;details&gt;</code>, or the <a href="/docs/components/accordion/">accordion</a> of core, is enough and carries no list around it.</p>
+            <ul>
+              <li>Do not put a long guide in an answer. Answer in a few sentences and link to the page that explains it.</li>
+              <li>Do not use it to hide content the visitor needs on every visit: show that on the page.</li>
+              <li>Do not use it to stuff a page with keywords. A question nobody asks helps nobody.</li>
+            </ul>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Write the question as the visitor would say it, and start the answer with the answer: yes, no, a number, a date.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <luz-faq>
+                    <details class="luz-faq__item" open>
+                      <summary class="luz-faq__question">Can I cancel a booking?</summary>
+                      <div class="luz-faq__answer">
+                        <p>Yes, free of charge until 24 hours before pickup. After that, Marea Bikes keeps the price of the first day.</p>
+                      </div>
+                    </details>
+                  </luz-faq>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Name a topic instead of asking, and answer with a pointer: “as said above” means nothing to a visitor who opened only this question.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <luz-faq>
+                    <details class="luz-faq__item" open>
+                      <summary class="luz-faq__question">Cancellation policy</summary>
+                      <div class="luz-faq__answer">
+                        <p>See the conditions above. This depends on several factors.</p>
+                      </div>
+                    </details>
+                  </luz-faq>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Put the <code>id</code> on the answer: a link to it opens the question and shows the answer.</figcaption>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Do: id on the answer"><code>&lt;details class=&quot;luz-faq__item&quot;&gt;
+  &lt;summary class=&quot;luz-faq__question&quot;&gt;…&lt;/summary&gt;
+  &lt;div class=&quot;luz-faq__answer&quot; id=&quot;faq-cancel&quot;&gt;…&lt;/div&gt;
+&lt;/details&gt;</code></pre>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Put the <code>id</code> on the <code>&lt;details&gt;</code>: a link to it lands on the closed question and the browser opens nothing.</figcaption>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Don't: id on the details"><code>&lt;details class=&quot;luz-faq__item&quot; id=&quot;faq-cancel&quot;&gt;
+  &lt;summary class=&quot;luz-faq__question&quot;&gt;…&lt;/summary&gt;
+  &lt;div class=&quot;luz-faq__answer&quot;&gt;…&lt;/div&gt;
+&lt;/details&gt;</code></pre>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>An answer can be read alone, in a search result, in a quote or in a link, so write each one to stand on its own.</p>
+            <ul>
+              <li>Write each question in natural language, one doubt per question, as the visitor would ask it. Never write one only to carry a keyword.</li>
+              <li>Answer in the first sentence. Then add the context, the steps or the exceptions.</li>
+              <li>Make every answer understandable alone: no “this”, “the above” or “as said before”. Use the concrete names: the product, the file, the element.</li>
+              <li>Give facts, conditions and examples, and link to the page that explains the subject in depth instead of copying it.</li>
+              <li>Keep the answers up to date and consistent with the rest of the site. A figure that appears elsewhere is written once.</li>
+              <li>Use a list for steps and a short code block for a command. Keep sentence case in the questions, with the question mark.</li>
+            </ul>
+            <p>Structured data of type <code>FAQPage</code> is your call, and the component adds none. Search engines show rich results for FAQs on a few kinds of sites only, and no markup makes a page appear in an AI answer. Add it if it applies to your site, and promise nothing with it.</p>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>The questions, answers and links sit on the page surface.</p>
+            <div class="luz-table-wrap" role="region" aria-label="FAQ contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Question and answer</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Open question, links to the groups</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Link to a group, hovered</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>5.1:1</div></td><td data-label="Dark"><div>6.4:1</div></td><td data-label="High contrast"><div>13.5:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Lead, group title, last line</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Marker, closed</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Marker, open</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Focus ring on a question</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for the marker and focus rings. On a surface other than the page, measure again.</p>
+            <ul>
+              <li><strong>Focus:</strong> the question has core’s 2 px <code>--luz-focus-ring</code> outline, 2 px outside its box.</li>
+              <li>Open or closed is never told by colour alone: the marker changes shape, from a plus to a minus.</li>
+              <li>The hairlines between questions (<code>--luz-divider</code>) are decoration: the text of each question, not a border, says where it is.</li>
+              <li>In forced colours the marker takes the system’s text colour and stays visible.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 23 tokens that the rules of catalog’s <code>components/faq.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-body</code>, <code>--luz-font-heading</code>, <code>--luz-font-sans</code>, <code>--luz-text-base</code>, <code>--luz-text-lg</code>, <code>--luz-text-sm</code>, <code>--luz-text-xl</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code>, <code>--luz-easing-standard</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

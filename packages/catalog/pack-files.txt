@@ -27,6 +27,8 @@ dist/components/docs-layout.css
 dist/components/docs-layout.min.css
 dist/components/example.css
 dist/components/example.min.css
+dist/components/faq.css
+dist/components/faq.min.css
 dist/components/glow.css
 dist/components/glow.min.css
 dist/components/hero.css
