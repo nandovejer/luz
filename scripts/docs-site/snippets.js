@@ -176,8 +176,14 @@ export function snippetData({ root, readFile, dev = false, warn = console.warn }
 const esc = (s) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
+/**
+ * Text between tags (a <code>): a quote needs no escape there, only an attribute value does, and a snippet
+ * is full of them (eight in every <link>), so `&quot;` would be about 20 % of the page.
+ */
+const escText = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 /** The lines of a snippet; a `null` is a blank line. */
-const text = (lines) => lines.map((l) => (l === null ? "" : esc(l))).join("\n");
+const text = (lines) => lines.map((l) => (l === null ? "" : escText(l))).join("\n");
 
 // The comments inside a snippet are code: English in every language (D7)
 const OPTIONAL_SITE = "Optional: one line per catalog component the page uses (here the search), then the patterns of the kind of site. Delete the ones the page does not use.";
@@ -221,7 +227,7 @@ export function renderComponentLinks(data, file, t = englishT()) {
   if (!cdn) throw new Error(`the snippets have no catalog/${minified(file)}: run pnpm build`);
   const npm = importLine("catalog", file);
   const name = file.slice("components/".length, -".css".length);
-  const block = (id, label, shown, code) => codeBlock({ id, lang: id.endsWith("npm") ? "js" : "html", label, copy: t("snippets.copy-chunk", { file: shown }), name: t("snippets.name-chunk", { file: shown }), code: esc(code) }, t);
+  const block = (id, label, shown, code) => codeBlock({ id, lang: id.endsWith("npm") ? "js" : "html", label, copy: t("snippets.copy-chunk", { file: shown }), name: t("snippets.name-chunk", { file: shown }), code: escText(code) }, t);
   return [
     block(`load-${name}-npm`, t("snippets.label-bundler"), `@luz-ds/catalog/${file}`, npm),
     block(`load-${name}-cdn`, t("snippets.label-html"), `dist/${minified(file)}`, linkTag(cdn)),
@@ -325,7 +331,7 @@ function renderChunks(data, t) {
     return `            <tr>
               <th scope="row"><code>${esc(file)}</code></th>
               <td data-label="${esc(t("snippets.col-when"))}"><div>${when}</div></td>
-              <td data-label="${esc(t("snippets.col-line"))}">${copyBlock(id, t("snippets.copy-chunk", { file }), t("snippets.name-chunk", { file }), esc(member(e)))}</td>
+              <td data-label="${esc(t("snippets.col-line"))}">${copyBlock(id, t("snippets.copy-chunk", { file }), t("snippets.name-chunk", { file }), escText(member(e)))}</td>
             </tr>`;
   });
   const map = `<script type="importmap">\n${JSON.stringify({ integrity: Object.fromEntries(chunks.map(({ e }) => [e.url, e.integrity])) }, null, 2)}\n</script>`;
@@ -333,9 +339,9 @@ function renderChunks(data, t) {
       <h2 class="docs-chapter__title" id="chunks">${esc(t("snippets.chunks-title"))}</h2>
       <p>${t("snippets.chunks-p1")}</p>
       <p>${t("snippets.chunks-p2")}</p>
-${copyBlock("chunks-importmap", t("snippets.copy-importmap"), t("snippets.name-importmap"), esc(map)).replace(/^/, "      ")}
+${copyBlock("chunks-importmap", t("snippets.copy-importmap"), t("snippets.name-importmap"), escText(map)).replace(/^/, "      ")}
       <p>${t("snippets.chunks-p3")}</p>
-${copyBlock("chunks-hint", t("snippets.copy-hint"), t("snippets.name-hint"), esc(`<link rel="modulepreload" href="${search.url}" integrity="${search.integrity}" crossorigin="anonymous">`)).replace(/^/, "      ")}
+${copyBlock("chunks-hint", t("snippets.copy-hint"), t("snippets.name-hint"), escText(`<link rel="modulepreload" href="${search.url}" integrity="${search.integrity}" crossorigin="anonymous">`)).replace(/^/, "      ")}
       <p>${t("snippets.chunks-p4")}</p>
       <div class="luz-table-wrap" role="region" aria-label="${esc(t("snippets.chunks-title"))}" tabindex="0">
         <table class="luz-table">
@@ -360,7 +366,7 @@ function renderVerify(t) {
           <span class="docs-snippet__lang">${esc(t("snippets.label-shell"))}</span>
           <button class="luz-copy-btn" type="button" data-copy-from="code-verify" aria-label="${esc(t("snippets.verify-copy"))}">${esc(t("snippets.copy"))}</button>
         </div>
-        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="${esc(t("snippets.verify-name"))}"><code id="code-verify">${esc("curl -s <url of the file> | openssl dgst -sha384 -binary | openssl base64 -A")}</code></pre>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="${esc(t("snippets.verify-name"))}"><code id="code-verify">${escText("curl -s <url of the file> | openssl dgst -sha384 -binary | openssl base64 -A")}</code></pre>
       </div>
       <p>${t("snippets.verify-p2")}</p>
     </section>`;

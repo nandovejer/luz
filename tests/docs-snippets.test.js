@@ -29,10 +29,11 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * The files a snippet of a kind of site links after the example, in the order of the cascade (CASCADE of kinds.js): the stylesheets of
  * the catalog pages that name the kind in `fits-kinds`, or `any` (F8: named for their blocks; the pieces that fit any site, the navbar, and
  * the sidebar, the terminal and the timeline of F7 come with them). The header and the footer are the landing page's and the blog's.
+ * Landing and blog link the sidebar's file too, before their headers: the nav toggle of the site header and of the masthead is defined there.
  */
 const KIND_FILES = {
-  landing: ["navbar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
-  blog: ["navbar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article"],
+  landing: ["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
+  blog: ["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article"],
   app: ["navbar", "sidebar", "app-bar", "dashboard"],
   docs: ["navbar", "sidebar", "terminal", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
 };
@@ -353,6 +354,14 @@ describe("the snippet generator", () => {
       expect(files, `${kind}: the example, then the patterns of the kind`).toHaveLength(1 + KIND_FILES[KIND_PATTERNS[kind]].length);
       expect(CATALOG_SHEET.test(files[0]) && !PATTERN_SHEET.test(files[0]), `${files[0]} is the example component`).toBe(true);
       expect(files.slice(1), `${kind}: the patterns, in the order of the cascade`).toEqual(KIND_FILES[KIND_PATTERNS[kind]].map((name) => `components/${name}.min.css`));
+      if (kind === "landing" || kind === "blog") {
+        // the nav toggle of the headers is defined in the sidebar's file, so it is linked before them
+        const header = files.indexOf("components/site-header.min.css");
+        const masthead = files.indexOf("components/masthead.min.css");
+        expect(files.indexOf("components/sidebar.min.css"), `${kind}: the sidebar is linked`).toBeGreaterThan(-1);
+        expect(files.indexOf("components/sidebar.min.css"), `${kind}: the sidebar before the site header`).toBeLessThan(header);
+        if (kind === "blog") expect(files.indexOf("components/sidebar.min.css"), "blog: the sidebar before the masthead").toBeLessThan(masthead);
+      }
       for (const file of files) expect(known.has(file.replace(".min.css", ".css")), `${file} is a stylesheet the manifests of catalog list`).toBe(true);
       expect(codeOf(html, `${kind}-npm`), `${kind}-npm`).not.toMatch(/@luz-ds\/catalog\/(?:css|print\.css)/);
       expect(codeOf(html, `${kind}-cdn`), `${kind}-cdn`).not.toMatch(/catalog\.min\.css|print\.css/);
