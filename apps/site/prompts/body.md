@@ -75,7 +75,7 @@ Link only the catalog stylesheets the page uses; drop the other lines. Each stac
 
 ## Refactor, page by page
 
-- LUZ goes in its layer `luz`, under the current CSS: `@layer luz, legacy, site;`.
+- LUZ goes in its layer `luz`, under the current CSS: `@layer luz, legacy, site;`. Nothing of the old CSS changes yet.
 - Migrate one page or component at a time, in the person's order, and show what changed and what is left.
 - Never delete the old framework or its files without the person's OK for that step.
 
