@@ -1,7 +1,7 @@
 {
   "name": "@luz-ds/catalog",
   "version": "0.2.1",
-  "description": "LUZ Design System — catalog components, one stylesheet each: the navigation of a site (navbar, sidebar), the light-DOM `<luz-*>` elements (search, cookie consent, color mode, language switch, submenu, banner, timeline), the terminal and the patterns of a landing page, a blog, an app and a documentation site, built on @luz-ds/core",
+  "description": "LUZ Design System — catalog components, one stylesheet each: the navigation of a site (navbar, sidebar), the light-DOM `<luz-*>` elements (search, cookie consent, color mode, language switch, submenu, announcement, timeline), the terminal and the patterns of a landing page, a blog, an app and a documentation site, built on @luz-ds/core",
   "license": "MIT",
   "type": "module",
   "main": "dist/catalog.js",

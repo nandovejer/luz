@@ -59,6 +59,7 @@
 
 /* --publication: the name, never a heading (the story's title is the h1) */
 .luz-site-header--publication .luz-site-header__brand {
+	gap: normal;
 	font-family: var(--luz-font-heading);
 	font-size: var(--luz-text-xl);
 }

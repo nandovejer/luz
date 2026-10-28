@@ -1,6 +1,6 @@
 /* ==========================================================================
 	 LUZ Catalog: cms page header.
-	 Layer: catalog · Prefix: .luz-cms-
+	 Layer: catalog · Prefix: .luz-page-header
 	 The title of a page that is not an article (about, contact):
 	 .luz-page-header > h1.__title + p.__lead, the one sentence that says
 	 what the page is for. An article has .luz-article-header instead.

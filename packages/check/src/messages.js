@@ -130,12 +130,12 @@ export const MESSAGES = {
   // A package with no bundle (catalog): the page links the file of each component it uses
   "load/package-missing:file": {
     severity: "block",
-    template: ".{name} is in @luz-ds/{package}/{file}, which this page does not load; add it after core",
+    template: ".{name} is in @luz-ds/{package}/{file}; add it after core",
     sample: { name: "luz-search", package: "catalog", file: "components/search.css" },
   },
   "load/package-missing:tag-file": {
     severity: "block",
-    template: "<{tag}> is in @luz-ds/{package}/{file}, which this page does not load; add it after core",
+    template: "<{tag}> is in @luz-ds/{package}/{file}; add it after core",
     sample: { tag: "luz-announcement", package: "catalog", file: "components/announcement.css" },
   },
   "load/layer-statement": {

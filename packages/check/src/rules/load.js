@@ -180,7 +180,13 @@ export function loadRules(ctx) {
     const linkedFiles = new Set(entries.filter((entry) => entry.file !== null).map((entry) => `${entry.pkg}/${entry.file}`));
     const missing = new Set();
     // The file that is missing for a class or a tag of `pkg` that has `files`, or null when none is
-    const fileMissing = (pkg, files) => (whole.has(pkg) || files.some((file) => linkedFiles.has(`${pkg}/${file}`)) ? null : files[0]);
+    // The file to ask for: the one named after the class's own block (components/page-rail.css for .luz-page-rail__link,
+    // although docs-layout.css holds some of its rules too), else the first the manifest lists
+    const fileMissing = (pkg, files, block) => {
+      if (whole.has(pkg) || files.some((file) => linkedFiles.has(`${pkg}/${file}`))) return null;
+      const own = typeof block === "string" ? `components/${block.replace(/^luz-/, "")}.css` : null;
+      return files.includes(own) ? own : files[0];
+    };
     for (const record of records) {
       const tag = record.name.startsWith("luz-") ? world.tags.get(record.name) : undefined;
       if (tag?.stylesheet !== undefined) {
@@ -199,7 +205,7 @@ export function loadRules(ctx) {
         const entry = world.info.get(token);
         if (entry === undefined || entry.kind === "state" || entry.defined === false || token.startsWith("is-")) continue;
         if (entry.files !== undefined) {
-          const file = fileMissing(entry.package, entry.files);
+          const file = fileMissing(entry.package, entry.files, entry.block);
           if (file === null || missing.has(`${entry.package}/${file}`)) continue;
           missing.add(`${entry.package}/${file}`);
           found.push(finding("load/package-missing:file", { ...at(attribute), vars: { name: token, package: entry.package, file } }));

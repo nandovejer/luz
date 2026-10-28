@@ -1,6 +1,6 @@
 /* ==========================================================================
    LUZ Catalog: docs do and don't.
-   Layer: catalog · Prefix: .luz-docs-
+   Layer: catalog · Prefix: .luz-do-dont
    div.luz-do-dont > figure.__item.__item--do, then --dont, each a
    figcaption > strong.__verdict ("Do", "Don't") and its reason, then a
    div.__stage (the example, inert and aria-hidden: the caption says what it

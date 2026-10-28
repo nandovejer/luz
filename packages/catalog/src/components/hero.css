@@ -1,6 +1,6 @@
 /* ==========================================================================
 	 LUZ Catalog: landing hero.
-	 Layer: catalog · Prefix: .luz-landing-
+	 Layer: catalog · Prefix: .luz-hero
 	 The first block of a home or a landing page:
 	 section.luz-hero.o-grid.o-grid--split > __copy (+ __media). Core's
 	 split grid gives two equal columns when each gets 24rem and one below:
