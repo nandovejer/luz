@@ -98,8 +98,8 @@ describe("classes.json of catalog has the new names and none of the old", () => 
 describe("custom-elements.json of catalog has the new elements and none of the old", () => {
   const tags = declarations.map((d) => d.tagName).sort();
 
-  it("holds the seven tags: search, cookie consent, color mode, language switch, submenu, announcement and the timeline", () => {
-    expect(tags).toEqual(["luz-announcement", "luz-color-mode", "luz-cookie-consent", "luz-lang-switch", "luz-search", "luz-submenu", "luz-timeline"]);
+  it("holds the eight tags: search, cookie consent, color mode, language switch, submenu, announcement, the FAQ and the timeline", () => {
+    expect(tags).toEqual(["luz-announcement", "luz-color-mode", "luz-cookie-consent", "luz-faq", "luz-lang-switch", "luz-search", "luz-submenu", "luz-timeline"]);
   });
 
   it.each(TAGS.map(([old]) => old))("has no <%s>", (old) => {
@@ -146,10 +146,10 @@ describe("components/<block>.css and its .min.css exist for every new block, and
     expect(exists(`packages/catalog/dist/components/${name}.min.css`), `dist/components/${name}.min.css`).toBe(true);
   });
 
-  it("holds exactly the 30 components of the catalog: the 20 patterns, the four of F7 and the six elements, plain and minified", () => {
+  it("holds exactly the 31 components of the catalog: the 20 patterns, the four of F7 and the seven elements, plain and minified", () => {
     const built = readdirSync(`${root}packages/catalog/dist/components`).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, "")).sort();
     expect(built).toEqual([...new Set(NEW)].sort());
-    expect(built).toHaveLength(30);
+    expect(built).toHaveLength(31);
   });
 
   it.each(FILES.map(([old]) => old))("components/%s.css is gone, in src, dist and the tarball list", (old) => {

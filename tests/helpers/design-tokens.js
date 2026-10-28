@@ -139,9 +139,9 @@ function sourceOf(page) {
       tags: [],
     };
   }
-  // The shell patterns, and the patterns with a file of their own (the language switcher, the submenu, the announcement and the cookie consent)
+  // The shell patterns, and the patterns with a file of their own (the language switcher, the submenu, the announcement, the FAQ and the cookie consent)
   // (renamed in F8: banner.css to announcement.css, consent.css to cookie-consent.css; whichever exist)
-  const files = ["_components.css", "lang-switcher.css", "lang-switch.css", "submenu.css", "banners.css", "announcement.css", "cookie-consent.css"]
+  const files = ["_components.css", "lang-switcher.css", "lang-switch.css", "submenu.css", "banners.css", "announcement.css", "faq.css", "cookie-consent.css"]
     .filter((f) => existsSync(`${repo}packages/catalog/src/components/${f}`))
     .map((f) => read(`packages/catalog/src/components/${f}`));
   return { css: files.join("\n"), classes, tags };

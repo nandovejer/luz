@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ catalog: the frequently asked questions, &lt;luz-faq&gt;</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/faq.css">
+</head>
+<body>
+  <main id="main">
+    <h1>Help</h1>
+    <luz-faq>
+      <h2 class="luz-faq__title">Frequently asked questions</h2>
+      <p class="luz-faq__lead">Answers to what visitors ask the winery most often.</p>
+      <nav class="luz-faq__nav" aria-label="Groups of questions">
+        <ul>
+          <li><a href="#group-orders">Orders</a></li>
+          <li><a href="#group-visits">Visits</a></li>
+        </ul>
+      </nav>
+      <section class="luz-faq__group" aria-labelledby="group-orders">
+        <h3 class="luz-faq__group-title" id="group-orders">Orders</h3>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">How long does a delivery take?</summary>
+          <div class="luz-faq__answer" id="answer-delivery">
+            <p>Two to four working days in Spain. See also <a href="#answer-returns">the returns</a>.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">Can I return a bottle?</summary>
+          <div class="luz-faq__answer" id="answer-returns">
+            <p>Within fourteen days, unopened.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">Do you ship abroad?</summary>
+          <div class="luz-faq__answer" id="answer-abroad">
+            <p>To the European Union.</p>
+          </div>
+        </details>
+      </section>
+      <section class="luz-faq__group" aria-labelledby="group-visits">
+        <h3 class="luz-faq__group-title" id="group-visits">Visits</h3>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">Do I need to book a visit?</summary>
+          <div class="luz-faq__answer" id="answer-book">
+            <p>Yes, for groups of more than six people.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">Where do I park?</summary>
+          <div class="luz-faq__answer" id="answer-long">
+            <p>Behind the cellar: Supercalifragilisticexpialidocious_Supercalifragilisticexpialidocious_Supercalifragilisticexpialidocious_Supercalifragilisticexpialidocious.</p>
+            <pre><code>GET /parking?plate=0000XYZ&amp;zone=cellar-back-yard&amp;date=2026-10-26&amp;time=11:00&amp;duration=two-hours</code></pre>
+          </div>
+        </details>
+      </section>
+      <p class="luz-faq__more">Not here? <a href="#main">Write to us</a>.</p>
+    </luz-faq>
+  </main>
+</body>
+</html>

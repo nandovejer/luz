@@ -468,9 +468,9 @@ describe("presetProblems: a preset names only the patterns that fit its kind (F5
 
   it("the pages the presets are read from are the catalog pages with a fits-kinds, and each kind's pages say it", () => {
     const patterns = member("catalogPatterns")(root);
-    // the 18 pages of patterns (F8: the two headers and the two footers are one page each, the masthead has its own), the six
+    // the 18 pages of patterns (F8: the two headers and the two footers are one page each, the masthead has its own), the seven
     // elements and (F7) the navbar, the sidebar, the terminal and the timeline; the gallery and the class reference have no fits-kinds
-    expect(patterns.length).toBe(28);
+    expect(patterns.length).toBe(29);
     for (const [slug, kinds] of [["navbar", ["any"]], ["sidebar", ["docs", "app"]], ["terminal", ["docs"]], ["timeline", ["blog", "landing"]]]) {
       expect(patterns.find((p) => p.slug === slug), slug).toMatchObject({ kinds, files: [`components/${slug}.css`] });
     }

@@ -577,6 +577,24 @@ describe("the five are emitted by the build, served in dev and listed in llms.tx
     }
   });
 
+  it("the pages build writes the link to a prompt relative to its page, so it still leads to the text when the site is not at the root of its host", () => {
+    // The home's opener and the docs' ones: a root-absolute /prompts/<id>.txt would be nandovejer.github.io/prompts/…, a 404
+    const hook = plugin(true).transformIndexHtml.handler;
+    for (const [file, route, up] of [
+      ["apps/docs/pages/get-started/ai.html", "/docs/get-started/ai/", "../../../"],
+      ["apps/docs/pages/kinds/landing.html", "/docs/kinds/landing/", "../../../"],
+    ]) {
+      const out = hook(readFileSync(join(root, file), "utf-8"), { filename: join(root, file) });
+      expect(out, `${file} links no prompt from the root of the host`).not.toMatch(/href="\/prompts\//);
+      const hrefs = [...out.matchAll(/href="([^"]*prompts\/[a-z]+\.txt)"/g)].map((m) => m[1]);
+      expect(hrefs.length, `${route} links a prompt`).toBeGreaterThan(0);
+      for (const href of hrefs) {
+        expect(href.startsWith(`${up}prompts/`), `${href} is relative to ${route}`).toBe(true);
+        expect(new URL(href, `https://example.org/luz${route}`).pathname).toMatch(/^\/luz\/prompts\/[a-z]+\.txt$/);
+      }
+    }
+  });
+
   it("the dev server serves /prompts/<id>.txt as plain text, the same text as the build", async () => {
     const middlewares = [];
     plugin(false).configureServer({
