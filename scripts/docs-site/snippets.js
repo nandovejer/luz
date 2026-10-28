@@ -47,7 +47,7 @@ import { englishT } from "./strings.js";
  */
 export const FILES = {
   tokens: { css: "luz-tokens.min.css", js: null, chunks: [] },
-  core: { css: "luz.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "i18n-es.min.js"] },
+  core: { css: "luz.min.css", conditional: "luz.conditional.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "i18n-es.min.js"] },
   catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "cookie-consent.min.js", "color-mode.min.js", "timeline.min.js", "sidebar.min.js"] },
 };
 
@@ -154,7 +154,7 @@ export function snippetData({ root, readFile, dev = false, warn = console.warn }
       throw new Error(`the snippets need ${manifest}: ${error.message}`);
     }
     if (typeof version !== "string" || !/^[0-9A-Za-z.+-]+$/.test(version)) throw new Error(`${manifest}: "version" is not a version`);
-    for (const file of [spec.css, ...(pkg === "catalog" ? components : []), spec.js, ...spec.chunks].filter(Boolean)) {
+    for (const file of [spec.css, spec.conditional, ...(pkg === "catalog" ? components : []), spec.js, ...spec.chunks].filter(Boolean)) {
       const path = join(root, "packages", pkg, "dist", file);
       let integrity;
       try {
@@ -315,6 +315,21 @@ ${rows.join("\n")}
     </section>`;
 }
 
+/**
+ * "In a project that already has a design": luz.conditional.css instead of luz.css, LUZ only inside [data-luz].
+ * The two ways to load it, a block each, after the snippets of the kinds of site.
+ */
+function renderConditional(data, t) {
+  const cdn = data.entries[`core/${FILES.core.conditional}`];
+  const block = (id, lang, label, shown, code) => codeBlock({ id, lang, label, copy: t("snippets.copy-chunk", { file: shown }), name: t("snippets.name-chunk", { file: shown }), code: escText(code) }, t);
+  return `    <section class="docs-block" aria-labelledby="conditional">
+      <h2 class="docs-chapter__title" id="conditional">${esc(t("snippets.conditional-title"))}</h2>
+      <p>${t("snippets.conditional-p")}</p>
+${block("conditional-npm", "js", t("snippets.label-bundler"), "@luz-ds/core/conditional.css", importLine("core", "conditional.css"))}
+${block("conditional-cdn", "html", t("snippets.label-html"), `dist/${FILES.core.conditional}`, linkTag(cdn))}
+    </section>`;
+}
+
 function renderChunks(data, t) {
   const copyBlock = (id, copy, name, code) => `<div class="docs-snippet">
                 <div class="docs-snippet__bar">
@@ -384,5 +399,5 @@ export function renderSnippets(data, t = englishT()) {
 ${WAYS.map((way) => renderSnippet(data, kind, way, t)).join("\n")}
     </section>`,
   );
-  return [renderIndex(t), ...sections, renderChunks(data, t), renderVerify(t)].join("\n");
+  return [renderIndex(t), ...sections, renderConditional(data, t), renderChunks(data, t), renderVerify(t)].join("\n");
 }

@@ -19,7 +19,9 @@ keywords: npm, cdn
       <div class="docs-prose">
         <h2 id="which-level" class="docs-prose__title">Which level do I need?</h2>
         <ul>
-          <li><strong>Your own components, LUZ's colours and spacing:</strong> level 1, tokens only.</li>
+          <li><strong>A new project:</strong> level 2, tokens and core. <code class="luz-code-inline">luz.css</code> styles the HTML you write.</li>
+          <li><strong>A project that already has a design:</strong> level 1, tokens only, to start: it changes nothing you can see. Then <a href="#existing-project">level 2 for an existing project</a>, with <code class="luz-code-inline">luz.conditional.css</code>, one region at a time. <a href="/docs/get-started/migrate/">Migrate a project to LUZ</a> has the steps.</li>
+          <li><strong>Your own components, LUZ’s colours and spacing:</strong> level 1, tokens only.</li>
           <li><strong>Ready-made buttons, forms, tables and dialogs:</strong> level 2, tokens and core.</li>
           <li><strong>Whole pages: shell, page header, footer, search:</strong> level 3, the Catalog, all three packages.</li>
           <li><strong>A landing page, with its header, hero and blocks:</strong> level 3 and <a href="#site-kinds">the patterns for that kind of site</a>, which are catalog components.</li>
@@ -93,6 +95,24 @@ import &quot;@luz-ds/core&quot;;</code></pre>
           <li>Every page works without the script. See <a href="/docs/get-started/javascript/">what each JavaScript module adds</a>.</li>
           <li>Need a single component? Load <code class="luz-code-inline">dist/base.min.css</code> plus the file you want, for example <code class="luz-code-inline">dist/components/button.min.css</code>.</li>
           <li>Markup you cannot add classes to, such as Markdown or a CMS? A bare <code class="luz-code-inline">button</code>, field or <code class="luz-code-inline">table</code> already has its look in <code class="luz-code-inline">luz.css</code>. On a page that already has a design, load <code class="luz-code-inline">luz.conditional.css</code> instead and mark the zone with <code class="luz-code-inline">data-luz</code>.</li>
+        </ul>
+      </div>
+
+      <div class="docs-prose">
+        <h2 id="existing-project" class="docs-prose__title">Level 2 for a project that already has a design</h2>
+        <p>Load <code class="luz-code-inline">luz.conditional.css</code> instead of <code class="luz-code-inline">luz.css</code>. It is the same file, with the reset and the bare elements limited to the region you mark with <code class="luz-code-inline">data-luz</code>. Load the tokens first, as for any level. From a CDN, link <code class="luz-code-inline">luz.conditional.min.css</code> of <code class="luz-code-inline">@luz-ds/core</code> in place of <code class="luz-code-inline">luz.min.css</code>; with a bundler, import it as below.</p>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">Bundler</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-bundler-conditional" aria-label="Copy the bundler imports for an existing project">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Bundler imports, an existing project"><code id="code-bundler-conditional">import &quot;@luz-ds/tokens/css&quot;;
+import &quot;@luz-ds/core/conditional.css&quot;;</code></pre>
+        </div>
+        <ul>
+          <li>The element with <code class="luz-code-inline">data-luz</code> takes the font, color and background of the page. The tokens stay on <code class="luz-code-inline">:root</code>.</li>
+          <li>Layout objects, components and utilities are not limited to the region: they apply wherever you put their class.</li>
+          <li>Your old CSS must not be unlayered, or it beats LUZ. Put it in a layer before <code class="luz-code-inline">luz</code>: see <a href="/docs/get-started/layers/">Cascade layers</a> and <a href="/docs/get-started/migrate/">Migrate a project to LUZ</a>.</li>
         </ul>
       </div>
 
@@ -221,4 +241,51 @@ import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
           <li><a href="/docs/get-started/structure/">See how LUZ is organised</a>: packages, CSS layers and the page skeleton.</li>
         </ul>
       </div>
+
+      <luz-faq>
+        <h2 class="luz-faq__title" id="faq">Frequently asked questions</h2>
+        <p class="luz-faq__lead">The short answers. Each links to the page that explains it.</p>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">What is LUZ?</summary>
+          <div class="luz-faq__answer" id="faq-what">
+            <p>LUZ is a design system for the web, in three packages: tokens (colors, scales, fonts and three color modes), core (the reset, the style of HTML elements, layout objects, components and optional JavaScript) and the catalog (pieces that act for the whole site, such as search). Use the tokens alone, core with the tokens, or all three. <a href="/docs/get-started/ai/">Working with AI</a> shows how an AI can write a site with it.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">Are HTML tags styled without a class?</summary>
+          <div class="luz-faq__answer" id="faq-tags">
+            <p>Yes, most of them. Text, links, lists, tables, buttons, form fields, <code>details</code> and <code>dialog</code> come out styled with no class. Tags that only structure the page, such as <code>div</code>, <code>section</code>, <code>header</code> and <code>nav</code>, have no style: the layout is yours. <a href="/docs/html/#html-styled">Which elements have a style with no class</a> lists them all.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">What are the classes for?</summary>
+          <div class="luz-faq__answer" id="faq-classes">
+            <p>A class adds what HTML cannot say: a link that looks like a button, a role such as danger, a size, a component with markup of its own such as a card, and the layout with the <code>o-*</code> objects. The HTML says the rest: <code>type="button"</code> makes the secondary button, and <code>aria-invalid="true"</code> marks a field with an error. <a href="/docs/components/">Browse the components</a> to see what each class adds.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">Do I need JavaScript?</summary>
+          <div class="luz-faq__answer" id="faq-js">
+            <p>No. Most components are CSS only, and the ones with a script work without it too. <a href="/docs/get-started/javascript/">JavaScript modules</a> says what each module adds.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">Can I change the default styles?</summary>
+          <div class="luz-faq__answer" id="faq-change">
+            <p>Yes, without fighting them. Change the tokens to change the whole look, or write your own CSS: CSS with no layer beats every layer of LUZ, with no <code>!important</code>. What you leave alone stays. <a href="/docs/html/#html-change">Changing the default styles</a> shows the three ways.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">Is LUZ only for new projects?</summary>
+          <div class="luz-faq__answer" id="faq-new-only">
+            <p>No. LUZ fits a new project best, but you can add it to one that already has a design, one region at a time: load <code>luz.conditional.css</code> instead of <code>luz.css</code> and put <code>data-luz</code> on the region. <a href="#existing-project">Level 2 for a project that already has a design</a> has the lines to load.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">How do I migrate a project to LUZ?</summary>
+          <div class="luz-faq__answer" id="faq-migrate">
+            <p>Migrate one page at a time, in five steps: the tokens with your brand, the old CSS in a layer before LUZ, a first region, the other pages one by one, and the old CSS removed. An AI does the mechanical work; you decide and check. <a href="/docs/get-started/migrate/">Migrate a project to LUZ</a> has the steps.</p>
+          </div>
+        </details>
+      </luz-faq>
     </div>

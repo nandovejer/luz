@@ -42,7 +42,7 @@ A ──► B  B needs A
 The name stands for Light, Usable & Zero-dependency: light in weight (plain CSS and ES modules, nothing to build for the people who use it), usable by everyone (native HTML, three color modes, tested for accessibility), and with zero runtime dependencies.
 
 - [`@luz-ds/tokens`](./packages/tokens): design tokens (CSS custom properties), the three color modes and the font.
-- [`@luz-ds/core`](./packages/core): the components, the layout objects, the styles of bare HTML elements and optional JavaScript.
+- [`@luz-ds/core`](./packages/core): the styles of bare HTML elements (text, controls and tables come out styled with no class; the tags that only structure a page have no style), the layout objects, the components and optional JavaScript.
 - [`@luz-ds/catalog`](./packages/catalog): the components that act for the site as a whole (search, cookie consent, color mode, language switch, submenu, announcement) and the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. One stylesheet per component; you link only the ones you use.
 - [`@luz-ds/check`](./packages/check): a tool, not a stylesheet. The `luz-check` command reads the HTML and CSS of your project, offline, and says which LUZ classes, elements, load order and theme colors are wrong. It has its own version, 0.x, and needs no other package.
 
@@ -54,7 +54,10 @@ Each package needs the ones below it and nothing above it. Adopt one level and s
 | --- | --- | --- |
 | Tokens only | `@luz-ds/tokens` | `luz-tokens.css` |
 | Tokens + components | `@luz-ds/tokens` `@luz-ds/core` | `luz-tokens.css`, `luz.css`, optionally `luz.js` |
+| Tokens + components, in a region of a project that already has a design | `@luz-ds/tokens` `@luz-ds/core` | `luz-tokens.css`, `luz.conditional.css`, with `data-luz` on the region |
 | Tokens + components + page patterns | `@luz-ds/tokens` `@luz-ds/core` `@luz-ds/catalog` | `luz-tokens.css`, `luz.css`, then catalog's `components/<name>.css` for each component the page uses, optionally `luz.js` and `catalog.js` |
+
+The HTML you write comes out styled with no class, and a class adds what HTML cannot say (a link that looks like a button, a role, a size, a component with its own markup). To add LUZ to a project that already has a design, load `luz.conditional.css` instead of `luz.css`, mark a region with `data-luz`, and migrate page by page: [Migrate a project to LUZ](https://nandovejer.github.io/luz/docs/get-started/migrate/).
 
 `@luz-ds/core` declares `@luz-ds/tokens` as a required peer dependency; `@luz-ds/catalog` declares both. npm and pnpm install required peers automatically; Yarn only warns, so list every package explicitly.
 

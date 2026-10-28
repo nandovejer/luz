@@ -24,6 +24,16 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
+            <p>A bare <code>progress</code> needs no class: it has the size of the component and the brand color in its fill.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-progress-bare" aria-label="Copy the bare progress markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare progress markup"><code id="code-progress-bare">&lt;label for=&quot;upload&quot;&gt;Uploading report.pdf&lt;/label&gt;
+&lt;progress id=&quot;upload&quot; value=&quot;25&quot; max=&quot;100&quot;&gt;25%&lt;/progress&gt;</code></pre>
+            </div>
+            <p><code>.luz-progress</code> draws the track and the fill itself. With the class:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

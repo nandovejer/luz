@@ -151,7 +151,7 @@ const DROPPED = new Set(["script", "style", "dialog", "template", "noscript", "s
 // Inline: part of a line of text
 const INLINE_PLAIN = new Set(["span", "abbr", "small", "mark", "cite", "q", "s", "time", "var", "samp", "sub", "sup", "dfn", "u", "data", "bdi", "bdo", "del", "ins"]);
 // Block containers that say nothing of their own: their children are the text
-const CONTAINERS = new Set(["div", "section", "article", "header", "footer", "nav", "main", "aside", "figure", "hgroup", "search", "address"]);
+const CONTAINERS = new Set(["div", "section", "article", "header", "footer", "nav", "main", "aside", "figure", "hgroup", "search", "address", "luz-faq"]);
 const HEADINGS = /^h([1-6])$/;
 const TABLE_PARTS = new Set(["thead", "tbody", "tfoot", "tr", "th", "td", "caption", "colgroup", "col"]);
 
@@ -539,6 +539,7 @@ const KINDS_INDEX_POINTER = "Each kind of site has a page of this area; llms.txt
 // an agent that writes HTML does not need: its summary, its files and a pointer, so the file keeps its ideal.
 const SUMMARY_POINTERS = new Map([
   ["/docs/tokens/figma/", "This page explains how to import the tokens file into Figma and other design tools, step by step: open its URL for the steps."],
+  ["/docs/get-started/migrate/", "This page moves a project that has its own CSS to LUZ one page at a time, in five steps: open its URL for the steps."],
 ]);
 
 // The accessibility statement is about LUZ, not about the markup an agent writes (what is checked, what has

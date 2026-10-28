@@ -66,6 +66,21 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
+            <p>A bare <code>select</code> needs no class. Its open list is the browser’s.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-select-bare" aria-label="Copy the bare select markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare select markup"><code id="code-select-bare">&lt;label for=&quot;country&quot;&gt;Country&lt;/label&gt;
+&lt;select id=&quot;country&quot; name=&quot;country&quot;&gt;
+  &lt;option value=&quot;&quot;&gt;Select a country&lt;/option&gt;
+  &lt;option value=&quot;de&quot;&gt;Germany&lt;/option&gt;
+  &lt;option value=&quot;es&quot;&gt;Spain&lt;/option&gt;
+  &lt;option value=&quot;fr&quot;&gt;France&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+            </div>
+            <p><code>.luz-select</code> adds the styled open list, where the browser can draw one. With the class:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

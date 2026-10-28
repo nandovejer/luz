@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Select
 description: Lista desplegable nativa para elegir una opción de una lista larga; el cuadro cerrado está diseñado con tokens.
-source: c7c77d1c9016
+source: e95113daec28
 reviewed: false
 -->
     <div class="docs-component" id="c-select">
@@ -64,6 +64,21 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>select</code> sin clase no necesita ninguna. Su lista abierta es la del navegador.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-select-bare" aria-label="Copy the bare select markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare select markup"><code id="code-select-bare">&lt;label for=&quot;country&quot;&gt;Country&lt;/label&gt;
+&lt;select id=&quot;country&quot; name=&quot;country&quot;&gt;
+  &lt;option value=&quot;&quot;&gt;Select a country&lt;/option&gt;
+  &lt;option value=&quot;de&quot;&gt;Germany&lt;/option&gt;
+  &lt;option value=&quot;es&quot;&gt;Spain&lt;/option&gt;
+  &lt;option value=&quot;fr&quot;&gt;France&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+            </div>
+            <p><code>.luz-select</code> añade la lista abierta con estilo, donde el navegador pueda dibujarla. Con la clase:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

@@ -35,6 +35,16 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
+            <p>A bare <code>meter</code> needs no class: it has the size of the component and the colors of the browser.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-meter-bare" aria-label="Copy the bare meter markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare meter markup"><code id="code-meter-bare">&lt;label for=&quot;storage&quot;&gt;Storage used, 6 of 10 GB&lt;/label&gt;
+&lt;meter id=&quot;storage&quot; value=&quot;6&quot; min=&quot;0&quot; max=&quot;10&quot;&gt;6 of 10 GB&lt;/meter&gt;</code></pre>
+            </div>
+            <p><code>.luz-meter</code> draws the bar and its track in the brand color.</p>
             <p>A bar in the cell of its figure, in a table. The figure is text, so the bar is a picture of it and is hidden from assistive technology:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">

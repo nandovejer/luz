@@ -90,6 +90,8 @@
   "snippets.col-kind": "Qué estás creando",
   "snippets.with-npm": "con npm",
   "snippets.from-cdn": "desde un CDN",
+  "snippets.conditional-title": "En un proyecto que ya tiene un diseño",
+  "snippets.conditional-p": "Enlaza <code>luz.conditional.css</code> en lugar de <code>luz.css</code>: LUZ da estilo solo a lo que está dentro de un elemento con el atributo <code>data-luz</code> y deja el resto de la página como está. Los tokens siguen yendo en toda la página. Pon el hash en el enlace como abajo, y <code>data-luz</code> en la región que pasas a LUZ.",
   "snippets.chunks-title": "Archivos que se cargan bajo demanda",
   "snippets.chunks-p1": "Core y catalog solo cargan algunos archivos cuando la página los necesita: una tabla ordenable, una línea de tiempo, un reproductor MIDI, una página en español, la búsqueda o el banner de cookies. El hash de un script solo cubre ese archivo, así que cada archivo necesita su propio hash. Para proporcionárselo en todos los navegadores, usa un mapa de importaciones con una sección <code>integrity</code>, antes del primer script de módulo: así, el navegador comprueba cada archivo cuando el script lo importa y no ejecuta los archivos cuyo hash no coincide.",
   "snippets.chunks-p2": "Safari y Firefox no usan el valor <code>integrity</code> de un <code>&lt;link rel=\"modulepreload\"&gt;</code> para bloquear un archivo, así que solo sirve como indicación de rendimiento: úsalo, si quieres, para descargar un archivo antes, pero no confíes en él como comprobación. El mapa de importaciones de abajo enumera todos esos archivos. Conserva solo las líneas correspondientes a lo que incluye la página, como indica la tabla: un hash de un archivo que la página nunca carga no sirve de nada.",

@@ -1,11 +1,12 @@
 <!-- luz:page
 title: Elementos HTML
 description: Cómo aplica LUZ estilos a cada uno de los 116 elementos HTML actuales, con un ejemplo en vivo y el marcado que puedes copiar.
-source: bcfcece2cc4c
+source: 2175aec3f671
 reviewed: false
 -->
     <p class="docs-lead">Cómo aplica LUZ estilos a cada uno de los <span data-elements-count>116</span> elementos HTML actuales, agrupados en <span data-categories-count>14</span> categorías, con un ejemplo en vivo y el marcado que puedes copiar.</p>
     <p>La lista sigue la referencia de <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements">MDN</a>. Se excluyen deliberadamente los elementos obsoletos: <a href="#html-deprecated">aquí tienes alternativas</a>.</p>
+    <p>La mayoría de los elementos tienen estilo sin clase. Mira <a href="#html-styled">cuáles, y cuáles quedan en tus manos</a>, y <a href="#html-change">cómo cambiar los estilos por defecto</a>.</p>
 
     <nav class="docs-toc docs-toc--inline" aria-label="Contenido de los elementos HTML">
         <div>
@@ -34,10 +35,55 @@ reviewed: false
       <ul>
         <li><strong>Ejemplo en vivo.</strong> El elemento real, con los estilos de LUZ. Cambia el modo de color en el pie de página para comprobarlo en los tres modos.</li>
         <li><strong>Marcado.</strong> El código exacto del ejemplo. El botón para copiar copia lo que ves.</li>
-        <li><strong>Nota de LUZ.</strong> Indica si el elemento tiene estilos sin clase, mediante una clase de componente o si se deja al navegador.</li>
+        <li><strong>Nota de LUZ.</strong> Indica si el elemento tiene estilo sin clase, si se deja al navegador o si no tiene estilo porque solo agrupa contenido. Cuando una clase añade algo, la nota dice qué.</li>
       </ul>
       <p>Las reglas que dan estilo a elementos sin clase tienen especificidad cero: cualquier clase <code>.luz-*</code> o regla propia prevalece.</p>
     </div>
+
+    <section class="elements-index" id="html-styled" aria-labelledby="html-styled-title">
+      <h2 class="elements-index__title" id="html-styled-title">Qué elementos tienen estilo sin clase</h2>
+      <p class="elements-index__lead">Escribe el HTML y LUZ le da estilo, sin ponerle ninguna clase. La estructura es la excepción: la maquetación de la página es tuya.</p>
+      <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Elementos con estilo sin clase">
+        <table class="luz-table">
+          <caption>Con estilo sin clase</caption>
+          <thead>
+            <tr><th scope="col">Grupo</th><th scope="col">Elementos</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Texto</th><td><code>h1</code> a <code>h6</code>, <code>p</code>, <code>ul</code>, <code>ol</code>, <code>menu</code>, <code>li</code>, <code>dl</code>, <code>dt</code>, <code>dd</code>, <code>blockquote</code>, <code>pre</code>, <code>hr</code>, <code>figure</code>, <code>figcaption</code>, <code>address</code>. Tipografía, color y el espacio entre bloques.</td></tr>
+            <tr><th scope="row">Texto en línea</th><td><code>a</code>, <code>abbr</code>, <code>b</code>, <code>strong</code>, <code>code</code>, <code>kbd</code>, <code>samp</code>, <code>var</code>, <code>mark</code>, <code>small</code>, <code>sub</code>, <code>sup</code>, <code>time</code>, <code>dfn</code>, <code>s</code>, <code>u</code>, <code>del</code>, <code>ins</code>, <code>rt</code>.</td></tr>
+            <tr><th scope="row">Controles</th><td><code>button</code>, <code>input</code>, <code>textarea</code>, <code>select</code>, <code>label</code>, <code>fieldset</code>, <code>legend</code>, <code>output</code>, <code>meter</code>, <code>progress</code>. Los campos de archivo y de color conservan el aspecto del navegador; <code>.luz-input</code> les da estilo.</td></tr>
+            <tr><th scope="row">Tablas</th><td><code>table</code>, <code>caption</code>, <code>tr</code>, <code>th</code>, <code>td</code>. Al ancho completo del contenedor.</td></tr>
+            <tr><th scope="row">Desplegables y diálogos</th><td><code>details</code>, <code>summary</code>, <code>dialog</code>.</td></tr>
+            <tr><th scope="row">Imágenes y medios</th><td><code>img</code>, <code>picture</code>, <code>video</code>, <code>audio</code>, <code>canvas</code>, <code>svg</code>, <code>iframe</code>, <code>embed</code>, <code>object</code>.</td></tr>
+            <tr><th scope="row">La página</th><td><code>html</code>, <code>body</code>. <code>body</code> fija la tipografía, el color y el fondo de la página. No tiene maquetación: ni contenedor ni centrado.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Elementos sin estilo">
+        <table class="luz-table">
+          <caption>Sin estilo</caption>
+          <thead>
+            <tr><th scope="col">Grupo</th><th scope="col">Elementos</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Estructura</th><td><code>div</code>, <code>span</code>, <code>section</code>, <code>article</code>, <code>aside</code>, <code>header</code>, <code>footer</code>, <code>main</code>, <code>search</code>, <code>form</code>, <code>nav</code>, <code>hgroup</code>, <code>col</code>, <code>colgroup</code>. Solo agrupan contenido. Maquétalos con los objetos <code>o-*</code>, como <code>.o-stack</code> y <code>.o-grid</code>, o con tu propio CSS.</td></tr>
+            <tr><th scope="row">El aspecto del navegador</th><td><code>option</code>, <code>optgroup</code>, <code>datalist</code>, <code>em</code>, <code>i</code>, <code>cite</code>, <code>q</code>, <code>br</code>, <code>wbr</code>, <code>bdi</code>, <code>bdo</code>, <code>ruby</code>, <code>rp</code>, <code>data</code>, <code>map</code>, <code>area</code>, <code>slot</code>, <code>source</code>, <code>math</code>, <code>thead</code>, <code>tbody</code>, <code>tfoot</code>. LUZ los deja como los dibuja el navegador. <code>thead</code>, <code>tbody</code> y <code>tfoot</code> solo agrupan filas: las filas y las celdas llevan el aspecto de la tabla.</td></tr>
+            <tr><th scope="row">No se muestran</th><td><code>head</code>, <code>title</code>, <code>meta</code>, <code>link</code>, <code>style</code>, <code>base</code>, <code>script</code>, <code>noscript</code>, <code>template</code>, <code>selectedcontent</code>, <code>geolocation</code>. Llevan información para el navegador, no para quien lee.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>El único elemento que falta, <code>track</code>, recibe estilo del reproductor de vídeo y necesita su clase.</p>
+      <h3 class="docs-prose__title" id="html-variants">El HTML dice la variante</h3>
+      <p>No hace falta una clase para distinguir un aspecto de otro cuando el HTML ya lo dice:</p>
+      <ul>
+        <li>Un <code>button</code> sin <code>type</code>, o con <code>type="submit"</code>, es la acción principal. <code>type="button"</code> y <code>type="reset"</code> son la secundaria.</li>
+        <li><code>aria-invalid="true"</code> marca un campo con un error.</li>
+        <li><code>disabled</code> marca un control que no se puede usar.</li>
+        <li><code>aria-current="page"</code> marca el enlace de la página en la que estás.</li>
+      </ul>
+      <p>Una clase añade lo que el HTML no puede decir: un enlace con aspecto de botón, los papeles de peligro y fantasma, los tamaños y las partes que necesitan su propio marcado. La ficha de cada elemento dice qué añade su clase. Un elemento con una clase <code>luz-*</code> toma el aspecto de su componente.</p>
+    </section>
 
     <section class="elements-index" id="html-index" aria-labelledby="html-index-title">
       <h2 class="elements-index__title" id="html-index-title">Todos los elementos, de la A a la Z</h2>
@@ -48,702 +94,122 @@ reviewed: false
             <tr><th scope="col">Elemento</th><th scope="col">Categoría</th><th scope="col">Estilo de LUZ</th><th scope="col">En esta página</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-a"><code>a</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-abbr"><code>abbr</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-address"><code>address</code></a></th>
-              <td>Estructura de página</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-area"><code>area</code></a></th>
-              <td>Imágenes y medios</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-article"><code>article</code></a></th>
-              <td>Estructura de página</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-aside"><code>aside</code></a></th>
-              <td>Estructura de página</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-audio"><code>audio</code></a></th>
-              <td>Imágenes y medios</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-b"><code>b</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-base"><code>base</code></a></th>
-              <td>Metadatos de página</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-bdi"><code>bdi</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-bdo"><code>bdo</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-blockquote"><code>blockquote</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/document/#el-body"><code>body</code></a></th>
-              <td>Raíz del documento</td>
-              <td><code>elements/document.css</code></td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-br"><code>br</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-button"><code>button</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/button.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/scripting/#el-canvas"><code>canvas</code></a></th>
-              <td>Script y canvas</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-caption"><code>caption</code></a></th>
-              <td>Tablas</td>
-              <td><code>components/table.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-cite"><code>cite</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-code"><code>code</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-col"><code>col</code></a></th>
-              <td>Tablas</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-colgroup"><code>colgroup</code></a></th>
-              <td>Tablas</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-data"><code>data</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-datalist"><code>datalist</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-dd"><code>dd</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/edits/#el-del"><code>del</code></a></th>
-              <td>Ediciones registradas</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/widgets/#el-details"><code>details</code></a></th>
-              <td>Widgets integrados</td>
-              <td><code>elements/interactive.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-dfn"><code>dfn</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/widgets/#el-dialog"><code>dialog</code></a></th>
-              <td>Widgets integrados</td>
-              <td><code>elements/interactive.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-div"><code>div</code></a></th>
-              <td>Bloques de texto</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-dl"><code>dl</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-dt"><code>dt</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-em"><code>em</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-embed"><code>embed</code></a></th>
-              <td>Marcos e incrustaciones</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-fieldset"><code>fieldset</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-figcaption"><code>figcaption</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-figure"><code>figure</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-footer"><code>footer</code></a></th>
-              <td>Estructura de página</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-form"><code>form</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/widgets/#el-geolocation"><code>geolocation</code></a></th>
-              <td>Widgets integrados</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado <span class="luz-tag luz-tag--purple">Experimental</span></td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h1"><code>h1</code></a></th>
-              <td>Estructura de página</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h2"><code>h2</code></a></th>
-              <td>Estructura de página</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h3"><code>h3</code></a></th>
-              <td>Estructura de página</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h4"><code>h4</code></a></th>
-              <td>Estructura de página</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h5"><code>h5</code></a></th>
-              <td>Estructura de página</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h6"><code>h6</code></a></th>
-              <td>Estructura de página</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-head"><code>head</code></a></th>
-              <td>Metadatos de página</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-header"><code>header</code></a></th>
-              <td>Estructura de página</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-hgroup"><code>hgroup</code></a></th>
-              <td>Estructura de página</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-hr"><code>hr</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/document/#el-html"><code>html</code></a></th>
-              <td>Raíz del documento</td>
-              <td><code>elements/document.css</code></td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-i"><code>i</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-iframe"><code>iframe</code></a></th>
-              <td>Marcos e incrustaciones</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-img"><code>img</code></a></th>
-              <td>Imágenes y medios</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-input"><code>input</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/edits/#el-ins"><code>ins</code></a></th>
-              <td>Ediciones registradas</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-kbd"><code>kbd</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-label"><code>label</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-legend"><code>legend</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-li"><code>li</code></a></th>
-              <td>Bloques de texto</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-link"><code>link</code></a></th>
-              <td>Metadatos de página</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-main"><code>main</code></a></th>
-              <td>Estructura de página</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-map"><code>map</code></a></th>
-              <td>Imágenes y medios</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-mark"><code>mark</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/svg-mathml/#el-math"><code>math</code></a></th>
-              <td>SVG y MathML</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-menu"><code>menu</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-meta"><code>meta</code></a></th>
-              <td>Metadatos de página</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-meter"><code>meter</code></a></th>
-              <td>Formularios</td>
-              <td><code>elements/forms.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-nav"><code>nav</code></a></th>
-              <td>Estructura de página</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/scripting/#el-noscript"><code>noscript</code></a></th>
-              <td>Script y canvas</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-object"><code>object</code></a></th>
-              <td>Marcos e incrustaciones</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-ol"><code>ol</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-optgroup"><code>optgroup</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-option"><code>option</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-output"><code>output</code></a></th>
-              <td>Formularios</td>
-              <td><code>elements/forms.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-p"><code>p</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-picture"><code>picture</code></a></th>
-              <td>Marcos e incrustaciones</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-pre"><code>pre</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-progress"><code>progress</code></a></th>
-              <td>Formularios</td>
-              <td><code>elements/forms.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-q"><code>q</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-rp"><code>rp</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-rt"><code>rt</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-ruby"><code>ruby</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-s"><code>s</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-samp"><code>samp</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/scripting/#el-script"><code>script</code></a></th>
-              <td>Script y canvas</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-search"><code>search</code></a></th>
-              <td>Estructura de página</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-section"><code>section</code></a></th>
-              <td>Estructura de página</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-select"><code>select</code></a></th>
-              <td>Formularios</td>
-              <td><code>components/form.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-selectedcontent"><code>selectedcontent</code></a></th>
-              <td>Formularios</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado <span class="luz-tag luz-tag--purple">Experimental</span></td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/web-components/#el-slot"><code>slot</code></a></th>
-              <td>Web Components</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-small"><code>small</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-source"><code>source</code></a></th>
-              <td>Marcos e incrustaciones</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-span"><code>span</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-strong"><code>strong</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-style"><code>style</code></a></th>
-              <td>Metadatos de página</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-sub"><code>sub</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/widgets/#el-summary"><code>summary</code></a></th>
-              <td>Widgets integrados</td>
-              <td><code>elements/interactive.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-sup"><code>sup</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/svg-mathml/#el-svg"><code>svg</code></a></th>
-              <td>SVG y MathML</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-table"><code>table</code></a></th>
-              <td>Tablas</td>
-              <td><code>components/table.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-tbody"><code>tbody</code></a></th>
-              <td>Tablas</td>
-              <td><code>components/table.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-td"><code>td</code></a></th>
-              <td>Tablas</td>
-              <td><code>components/table.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/web-components/#el-template"><code>template</code></a></th>
-              <td>Web Components</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-textarea"><code>textarea</code></a></th>
-              <td>Formularios</td>
-              <td><code>elements/forms.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-tfoot"><code>tfoot</code></a></th>
-              <td>Tablas</td>
-              <td><code>components/table.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-th"><code>th</code></a></th>
-              <td>Tablas</td>
-              <td><code>components/table.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-thead"><code>thead</code></a></th>
-              <td>Tablas</td>
-              <td><code>components/table.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-time"><code>time</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-title"><code>title</code></a></th>
-              <td>Metadatos de página</td>
-              <td>Aspecto nativo</td>
-              <td>Solo marcado</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-tr"><code>tr</code></a></th>
-              <td>Tablas</td>
-              <td><code>components/table.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-track"><code>track</code></a></th>
-              <td>Imágenes y medios</td>
-              <td><code>components/player.css</code> (clase)</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-u"><code>u</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-ul"><code>ul</code></a></th>
-              <td>Bloques de texto</td>
-              <td><code>elements/text.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-var"><code>var</code></a></th>
-              <td>Texto en línea</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-video"><code>video</code></a></th>
-              <td>Imágenes y medios</td>
-              <td><code>elements/media.css</code></td>
-              <td>Ejemplo en vivo</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-wbr"><code>wbr</code></a></th>
-              <td>Texto en línea</td>
-              <td>Aspecto nativo</td>
-              <td>Ejemplo en vivo</td>
-            </tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-a"><code>a</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-abbr"><code>abbr</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-address"><code>address</code></a></th><td>Estructura de página</td><td><code>elements/sections.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-area"><code>area</code></a></th><td>Imágenes y medios</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-article"><code>article</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-aside"><code>aside</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-audio"><code>audio</code></a></th><td>Imágenes y medios</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-b"><code>b</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-base"><code>base</code></a></th><td>Metadatos de página</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-bdi"><code>bdi</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-bdo"><code>bdo</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-blockquote"><code>blockquote</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/document/#el-body"><code>body</code></a></th><td>Raíz del documento</td><td><code>elements/document.css</code></td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-br"><code>br</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-button"><code>button</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/scripting/#el-canvas"><code>canvas</code></a></th><td>Script y canvas</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-caption"><code>caption</code></a></th><td>Tablas</td><td><code>elements/tables.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-cite"><code>cite</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-code"><code>code</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-col"><code>col</code></a></th><td>Tablas</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-colgroup"><code>colgroup</code></a></th><td>Tablas</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-data"><code>data</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-datalist"><code>datalist</code></a></th><td>Formularios</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-dd"><code>dd</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/edits/#el-del"><code>del</code></a></th><td>Ediciones registradas</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/widgets/#el-details"><code>details</code></a></th><td>Widgets integrados</td><td><code>elements/interactive.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-dfn"><code>dfn</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/widgets/#el-dialog"><code>dialog</code></a></th><td>Widgets integrados</td><td><code>elements/interactive.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-div"><code>div</code></a></th><td>Bloques de texto</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-dl"><code>dl</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-dt"><code>dt</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-em"><code>em</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-embed"><code>embed</code></a></th><td>Marcos e incrustaciones</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-fieldset"><code>fieldset</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-figcaption"><code>figcaption</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-figure"><code>figure</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-footer"><code>footer</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-form"><code>form</code></a></th><td>Formularios</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/widgets/#el-geolocation"><code>geolocation</code></a></th><td>Widgets integrados</td><td>Aspecto nativo</td><td>Solo marcado <span class="luz-tag luz-tag--purple">Experimental</span></td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h1"><code>h1</code></a></th><td>Estructura de página</td><td><code>elements/sections.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h2"><code>h2</code></a></th><td>Estructura de página</td><td><code>elements/sections.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h3"><code>h3</code></a></th><td>Estructura de página</td><td><code>elements/sections.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h4"><code>h4</code></a></th><td>Estructura de página</td><td><code>elements/sections.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h5"><code>h5</code></a></th><td>Estructura de página</td><td><code>elements/sections.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h6"><code>h6</code></a></th><td>Estructura de página</td><td><code>elements/sections.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-head"><code>head</code></a></th><td>Metadatos de página</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-header"><code>header</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-hgroup"><code>hgroup</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-hr"><code>hr</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/document/#el-html"><code>html</code></a></th><td>Raíz del documento</td><td><code>elements/document.css</code></td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-i"><code>i</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-iframe"><code>iframe</code></a></th><td>Marcos e incrustaciones</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-img"><code>img</code></a></th><td>Imágenes y medios</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-input"><code>input</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/edits/#el-ins"><code>ins</code></a></th><td>Ediciones registradas</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-kbd"><code>kbd</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-label"><code>label</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-legend"><code>legend</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-li"><code>li</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-link"><code>link</code></a></th><td>Metadatos de página</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-main"><code>main</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-map"><code>map</code></a></th><td>Imágenes y medios</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-mark"><code>mark</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/svg-mathml/#el-math"><code>math</code></a></th><td>SVG y MathML</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-menu"><code>menu</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-meta"><code>meta</code></a></th><td>Metadatos de página</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-meter"><code>meter</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-nav"><code>nav</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/scripting/#el-noscript"><code>noscript</code></a></th><td>Script y canvas</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-object"><code>object</code></a></th><td>Marcos e incrustaciones</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-ol"><code>ol</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-optgroup"><code>optgroup</code></a></th><td>Formularios</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-option"><code>option</code></a></th><td>Formularios</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-output"><code>output</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-p"><code>p</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-picture"><code>picture</code></a></th><td>Marcos e incrustaciones</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-pre"><code>pre</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-progress"><code>progress</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-q"><code>q</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-rp"><code>rp</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-rt"><code>rt</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-ruby"><code>ruby</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-s"><code>s</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-samp"><code>samp</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/scripting/#el-script"><code>script</code></a></th><td>Script y canvas</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-search"><code>search</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-section"><code>section</code></a></th><td>Estructura de página</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-select"><code>select</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-selectedcontent"><code>selectedcontent</code></a></th><td>Formularios</td><td>Aspecto nativo</td><td>Solo marcado <span class="luz-tag luz-tag--purple">Experimental</span></td></tr>
+            <tr><th scope="row"><a href="/docs/html/web-components/#el-slot"><code>slot</code></a></th><td>Web Components</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-small"><code>small</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-source"><code>source</code></a></th><td>Marcos e incrustaciones</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-span"><code>span</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-strong"><code>strong</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-style"><code>style</code></a></th><td>Metadatos de página</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-sub"><code>sub</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/widgets/#el-summary"><code>summary</code></a></th><td>Widgets integrados</td><td><code>elements/interactive.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-sup"><code>sup</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/svg-mathml/#el-svg"><code>svg</code></a></th><td>SVG y MathML</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-table"><code>table</code></a></th><td>Tablas</td><td><code>elements/tables.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-tbody"><code>tbody</code></a></th><td>Tablas</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-td"><code>td</code></a></th><td>Tablas</td><td><code>elements/tables.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/web-components/#el-template"><code>template</code></a></th><td>Web Components</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-textarea"><code>textarea</code></a></th><td>Formularios</td><td><code>elements/forms.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-tfoot"><code>tfoot</code></a></th><td>Tablas</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-th"><code>th</code></a></th><td>Tablas</td><td><code>elements/tables.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-thead"><code>thead</code></a></th><td>Tablas</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-time"><code>time</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-title"><code>title</code></a></th><td>Metadatos de página</td><td>Aspecto nativo</td><td>Solo marcado</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-tr"><code>tr</code></a></th><td>Tablas</td><td><code>elements/tables.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-track"><code>track</code></a></th><td>Imágenes y medios</td><td><code>components/player.css</code> (clase)</td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-u"><code>u</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-ul"><code>ul</code></a></th><td>Bloques de texto</td><td><code>elements/text.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-var"><code>var</code></a></th><td>Texto en línea</td><td><code>elements/inline.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-video"><code>video</code></a></th><td>Imágenes y medios</td><td><code>elements/media.css</code></td><td>Ejemplo en vivo</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-wbr"><code>wbr</code></a></th><td>Texto en línea</td><td>Aspecto nativo</td><td>Ejemplo en vivo</td></tr>
           </tbody>
         </table>
       </div>
@@ -901,6 +367,31 @@ reviewed: false
       </div>
     </section>
 
+
+    <section class="elements-index" id="html-change" aria-labelledby="html-change-title">
+      <h2 class="elements-index__title" id="html-change-title">Cambiar los estilos por defecto</h2>
+      <p class="elements-index__lead">Toda regla que da estilo a un elemento sin clase tiene especificidad cero, así que la tuya gana sin pelea.</p>
+      <ul>
+        <li><strong>Cambia los tokens.</strong> Es la forma de cambiar el aspecto de todo el sitio: colores, tipografía, espacio y radio. Copia <code>themes/_template.css</code> y cambia los valores. <a href="/docs/get-started/make-it-yours/">Hazlo tuyo</a> explica cómo.</li>
+        <li><strong>Escribe tu propio CSS.</strong> El CSS sin capa gana a todas las <a href="/docs/get-started/layers/">capas de LUZ</a>. No necesitas <code>!important</code> ni un selector más largo. Lo que no tocas se queda: si solo cambias el color de un <code>h1</code>, conserva el tamaño que le da LUZ.</li>
+        <li><strong>Usa LUZ en una región de una página que ya tiene diseño.</strong> Carga <code>luz.conditional.css</code> en lugar de <code>luz.css</code> y pon <code>data-luz</code> en el elemento que contiene la región. El reset y los elementos sin clase se aplican solo dentro de ella. <a href="/docs/get-started/#which-level">¿Qué nivel necesito?</a> dice cuándo elegirla.</li>
+      </ul>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">CSS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-html-change" aria-label="Copiar el CSS">Copiar</button>
+        </div>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Cómo sobrescribir los estilos por defecto"><code id="code-html-change">/* Your CSS has no layer, so it beats every layer of LUZ. */
+h1 {
+  font-weight: 600;
+}
+
+button {
+  border-radius: 0;
+}</code></pre>
+      </div>
+      <p>Los tokens, tu CSS y la región funcionan juntos: los tokens cambian lo que dibuja LUZ, tu CSS tiene la última palabra y la región limita dónde dibuja LUZ.</p>
+    </section>
 
     <section class="docs-block" id="c-elements" aria-labelledby="c-elements-title">
           <div class="docs-demo__head">

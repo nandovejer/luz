@@ -2,7 +2,7 @@
 title: Diálogo modal
 description: Pide tomar una decisión antes de continuar, mediante un elemento dialog nativo.
 keywords: diálogo, ventana emergente
-source: f1cff5fd580f
+source: 9408a77f1d85
 reviewed: false
 -->
     <div class="docs-component" id="c-modal">
@@ -41,6 +41,25 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>dialog</code> sin clase no necesita ninguna: tiene una superficie y está centrado.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-modal-bare" aria-label="Copy the bare dialog markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare dialog markup"><code id="code-modal-bare">&lt;button type=&quot;button&quot; commandfor=&quot;rename&quot; command=&quot;show-modal&quot;&gt;Rename project&lt;/button&gt;
+
+&lt;dialog id=&quot;rename&quot; aria-labelledby=&quot;rename-title&quot;&gt;
+  &lt;h2 id=&quot;rename-title&quot;&gt;Rename project&lt;/h2&gt;
+  &lt;form method=&quot;dialog&quot;&gt;
+    &lt;label for=&quot;rename-name&quot;&gt;New name&lt;/label&gt;
+    &lt;input id=&quot;rename-name&quot; type=&quot;text&quot; autofocus&gt;
+    &lt;button type=&quot;button&quot; commandfor=&quot;rename&quot; command=&quot;close&quot;&gt;Cancel&lt;/button&gt;
+    &lt;button value=&quot;rename&quot;&gt;Rename project&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;</code></pre>
+            </div>
+            <p><code>.luz-modal</code> añade la cabecera con su botón de cerrar, el cuerpo y el pie, la disposición en pantallas pequeñas y el desvanecimiento. Con la clase:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

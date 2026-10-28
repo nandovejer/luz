@@ -1,0 +1,121 @@
+<!-- luz:page
+title: Migra un proyecto a LUZ
+description: Pasa a LUZ un proyecto que tiene su propio CSS, una página cada vez y en cinco pasos. Una IA hace el trabajo mecánico; tú decides y compruebas.
+keywords: migrar, refactor, proyecto existente, css antiguo, bootstrap
+source: 83a94c789401
+reviewed: false
+-->
+    <section class="docs-block" id="overview" aria-labelledby="overview-title">
+      <h2 class="docs-chapter__title" id="overview-title">Cómo funciona la migración</h2>
+      <p class="docs-lead">Mantén el CSS antiguo funcionando hasta que se haya movido la última página. Una regla va antes que todas las demás: una IA acelera el trabajo mecánico, y tú decides y compruebas.</p>
+      <p>Encaja en un sitio de muchas páginas o de contenido. En una aplicación de una sola página hecha con una biblioteca de componentes como React o Vue, una migración cambia el aspecto pero no los componentes: <a href="#cost">mira lo que cuesta</a>.</p>
+      <p>Lo que lo hace posible es <code>luz.conditional.css</code>, el mismo archivo que <code>luz.css</code> con el reset y los elementos sin clase limitados a una región marcada con <code>data-luz</code>. <a href="/docs/get-started/#existing-project">Instálalo</a> en el paso 3.</p>
+    </section>
+
+    <section class="docs-block" id="before" aria-labelledby="before-title">
+      <h2 class="docs-chapter__title" id="before-title">Antes de tocar nada</h2>
+      <ol>
+        <li><strong>Haz un inventario.</strong> Pide a la IA que liste las páginas o las plantillas, los componentes del framework antiguo y cuántas veces se usa cada uno, el JavaScript que depende de clases o de marcado (modales, menús, pestañas, validación) y cada <code>!important</code>. Corrige la lista: es el mapa de la migración.</li>
+        <li><strong>Haz capturas.</strong> Una de cada página en los estados que importan: claro y oscuro, móvil y escritorio, un formulario con error, un modal abierto. Sin ellas no sabes qué has roto.</li>
+        <li><strong>Escribe pruebas de humo.</strong> Si el proyecto no tiene tests, pide a la IA unos pocos sobre lo que no puede romperse: el formulario envía, el menú abre, el inicio de sesión funciona. Las ejecutas tú.</li>
+        <li><strong>Escribe una vez cuándo una página está hecha.</strong> La página no carga ninguna clase ni script del framework antiguo, <a href="/docs/get-started/ai/#check"><code>luz-check</code></a> y una comprobación de accesibilidad salen limpios, las capturas coinciden salvo lo que has decidido cambiar, y las pruebas de humo pasan.</li>
+      </ol>
+    </section>
+
+    <section class="docs-block" id="steps" aria-labelledby="steps-title">
+      <h2 class="docs-chapter__title" id="steps-title">Los cinco pasos</h2>
+      <h3 class="docs-subhead" id="step-1">Paso 1: tokens con tu marca actual</h3>
+      <p>Haz un tema a partir de <code>themes/_template.css</code> con los valores que usas hoy. La IA relaciona tus variables o colores sueltos con los tokens de LUZ y te da la tabla; tú la revisas. No cambia nada en pantalla, y tu CSS y LUZ ya comparten vocabulario. <a href="/docs/get-started/make-it-yours/">Hazlo tuyo</a> explica cómo.</p>
+      <h3 class="docs-subhead" id="step-2">Paso 2: el CSS antiguo en una capa anterior a LUZ</h3>
+      <p>Pon la hoja de estilos antigua en una capa que vaya antes de <code>luz</code>, para que LUZ gane donde las dos den estilo a un elemento:</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">CSS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-migrate-layer" aria-label="Copia las líneas de la capa">Copiar</button>
+        </div>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Cómo poner el CSS antiguo en una capa"><code id="code-migrate-layer">/* site.css, linked before the LUZ stylesheets */
+@layer legacy, luz;
+@import url(&quot;legacy.css&quot;) layer(legacy);</code></pre>
+      </div>
+      <ul>
+        <li><strong>Revisa las reglas con <code>!important</code>.</strong> En una capa anterior siguen ganando a LUZ. La IA las lista; tú decides cuáles se quitan ahora.</li>
+        <li><strong>Busca el CSS sin capa.</strong> Un atributo style o el CSS de un plugin gana a todas las capas, LUZ incluida. Las capturas lo muestran.</li>
+        <li><strong>Usa <code>@import</code> solo durante la migración.</strong> Añade una petición. <a href="/docs/get-started/layers/">Capas de cascada</a> explica el orden.</li>
+      </ul>
+      <h3 class="docs-subhead" id="step-3">Paso 3: la primera región</h3>
+      <p>Carga <code>luz.conditional.css</code> en lugar de <code>luz.css</code>, elige una página pequeña y sin JavaScript, y pon <code>data-luz</code> en el elemento que la contiene. Dentro, el HTML sin clases sale con el estilo de LUZ:</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">HTML</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-migrate-region" aria-label="Copia el marcado de la región">Copiar</button>
+        </div>
+        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Una región con el estilo de LUZ"><code id="code-migrate-region">&lt;main data-luz&gt;
+  &lt;h1&gt;Contact us&lt;/h1&gt;
+  &lt;form action=&quot;/contact&quot; method=&quot;post&quot;&gt;
+    &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+    &lt;input id=&quot;email&quot; name=&quot;email&quot; type=&quot;email&quot; required&gt;
+    &lt;button&gt;Send&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/main&gt;</code></pre>
+      </div>
+      <p>Esta hazla a mano. Lo que aprendas va al prompt de las siguientes páginas.</p>
+      <h3 class="docs-subhead" id="step-4">Paso 4: página a página</h3>
+      <p>Elige el orden, de las páginas simples a las complejas, con las páginas que comparten plantilla juntas. Migra las partes compartidas (cabecera, pie de página, menú) una sola vez, después de las páginas simples y antes de las complejas, para no tener dos cabeceras durante meses. Con cada página, repite el mismo bucle:</p>
+      <ol>
+        <li>La IA, con <a href="/docs/get-started/ai/">el prompt de LUZ</a>, mete la página en la región, quita las clases del framework antiguo, deja el HTML semántico y añade una clase de LUZ solo donde el HTML no basta. Quitar es más seguro que añadir.</li>
+        <li>Ejecuta <code>npx @luz-ds/check@0.2.1</code> y una comprobación de accesibilidad, y te enseña qué ha cambiado y qué queda, nunca el archivo entero reescrito.</li>
+        <li>Tú lees el diff y las capturas, y pasas las pruebas de humo.</li>
+        <li>Un commit por página, para poder revertir una página y no un mes.</li>
+      </ol>
+      <p><code>luz-check</code> lee las clases, los elementos, el orden de carga y los tokens de color de LUZ. No busca las clases del framework antiguo que quedan: búscalas tú.</p>
+      <h3 class="docs-subhead" id="step-5">Paso 5: retira el CSS antiguo</h3>
+      <p>Cuando ninguna página use el CSS antiguo, quita la capa <code>legacy</code>, carga <code>luz.css</code> en lugar de <code>luz.conditional.css</code> y suprime <code>data-luz</code>. La IA busca las clases y los scripts que quedan; tú borras el framework antiguo. Nunca antes: la IA no borra nada sin tu OK para este paso.</p>
+    </section>
+
+    <section class="docs-block" id="bugs" aria-labelledby="bugs-title">
+      <h2 class="docs-chapter__title" id="bugs-title">De dónde salen los errores</h2>
+      <p>Los errores de una migración no salen del CSS nuevo. Salen de borrar el código antiguo sin saber quién lo usaba.</p>
+      <ul>
+        <li><strong>El JavaScript del framework antiguo.</strong> Un modal de Bootstrap es un <code>dialog</code> en LUZ, pero el código que lo abría o lo validaba sigue ahí. La IA te dice qué script toca cada página; tú revisas la sustitución, porque lleva lógica de negocio.</li>
+        <li><strong>Los formularios.</strong> Migra primero uno solo, del campo al envío.</li>
+        <li><strong>Las partes compartidas.</strong> Migra la cabecera, el pie de página y el menú una sola vez, como dice el paso 4.</li>
+        <li><strong>El JavaScript que busca clases antiguas.</strong> Antes de borrar una clase, búscala en los scripts y las plantillas. Un <code>querySelector('.btn-primary')</code> que deja de encontrar su botón no da error: solo deja de funcionar.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="who" aria-labelledby="who-title">
+      <h2 class="docs-chapter__title" id="who-title">Quién hace qué</h2>
+      <p>La IA trabaja en lo mecánico; tú te quedas con cada decisión.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Qué hace la IA y qué haces tú" tabindex="0">
+        <table class="luz-table">
+          <thead>
+            <tr><th scope="col">La IA</th><th scope="col">Tú</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="La IA"><div>Hace el inventario, relaciona variables con tokens y lista las reglas con <code>!important</code></div></td><td data-label="Tú"><div>Lee y corrige el inventario, y elige el orden de las páginas</div></td></tr>
+            <tr><td data-label="La IA"><div>Escribe las pruebas de humo y los tests de cada página</div></td><td data-label="Tú"><div>Las ejecuta y decide si bastan</div></td></tr>
+            <tr><td data-label="La IA"><div>Quita clases, deja HTML semántico y añade las pocas clases de LUZ</div></td><td data-label="Tú"><div>Hace la primera región a mano y revisa cada diff</div></td></tr>
+            <tr><td data-label="La IA"><div>Pasa <code>luz-check</code> y la comprobación de accesibilidad, y resume qué ha cambiado y qué queda</div></td><td data-label="Tú"><div>Mira las capturas y aprueba el commit</div></td></tr>
+            <tr><td data-label="La IA"><div>Busca las clases y los scripts que quedan antes de borrar nada</div></td><td data-label="Tú"><div>Sustituye el JavaScript con lógica de negocio y borra el framework antiguo</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="docs-block" id="cost" aria-labelledby="cost-title">
+      <h2 class="docs-chapter__title" id="cost-title">Lo que cuesta, y cuándo no</h2>
+      <p>Una migración tiene tres costes, y un caso en el que no compensa.</p>
+      <ul>
+        <li><strong>Los costes:</strong> dos lenguajes visuales durante un tiempo (el paso 1 lo suaviza), el peso de las dos hojas de estilos mientras dura, y el JavaScript del framework antiguo, que tienes que reescribir.</li>
+        <li><strong>Cuándo no:</strong> en una aplicación de una sola página hecha con una biblioteca de componentes de React o Vue, cambias el aspecto pero no los componentes. Es más honesto reescribir pantalla a pantalla con LUZ.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="next" aria-labelledby="next-title">
+      <h2 class="docs-chapter__title" id="next-title">Siguientes pasos</h2>
+      <ul>
+        <li><a href="/docs/get-started/#existing-project">Carga luz.conditional.css</a> para un proyecto que ya tiene diseño.</li>
+        <li><a href="/docs/get-started/ai/">Trabaja con IA</a>: los prompts, y el verificador que revisa lo que escribe la IA.</li>
+        <li><a href="/docs/html/#html-change">Cambia los estilos por defecto</a> que LUZ da a los elementos sin clase.</li>
+      </ul>
+    </section>
