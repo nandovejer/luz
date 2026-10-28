@@ -461,8 +461,6 @@ home-light:defined ~ .landing-light__nojs {
   /* Rows of one height in every chart, so the three line up bar by bar */
   grid-auto-rows: 1fr;
   gap: var(--luz-space-xs);
-  /* At least the figures' height; larger text grows it */
-  min-block-size: var(--landing-why-figure);
   margin: 0;
   padding: 0;
   list-style: none;
