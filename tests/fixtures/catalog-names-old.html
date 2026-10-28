@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The names of catalog before F8 do nothing</title>
+  <!-- tests/catalog-names.spec.js: one element for every block of F8 (the old classes and tags), with every stylesheet of the blocks
+       linked after core in the cascade order; nothing else. Generated once from tests/helpers/catalog-names.js's table, kept by hand -->
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/site-header.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/masthead.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/hero.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/main.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/section.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/stat.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/site-footer.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/glow.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/page-header.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/article-header.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/article.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/app-bar.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/dashboard.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/docs-layout.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/doc-header.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/page-rail.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/example.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/do-dont.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/pager.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/page-footer.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/announcement.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/cookie-consent.css">
+</head>
+<body>
+  <div id="stage">
+    <section class="luz-landing-hero" id="hero"><h1 class="luz-landing-hero__title" id="hero-title">hero-title</h1></section>
+    <section class="luz-landing-section" id="section"><h2 class="luz-landing-section__title" id="section-title">section-title</h2></section>
+    <div class="luz-landing-stat" id="stat"><p class="luz-landing-stat__value" id="stat-value">stat-value</p></div>
+    <div class="luz-landing-glow" id="glow">glow</div>
+    <div class="luz-landing-main" id="main">main</div>
+    <header class="luz-landing-header" id="site-header"><a class="luz-landing-header__brand" id="site-header-brand">site-header-brand</a></header>
+    <header class="luz-cms-header" id="site-header-publication"><a class="luz-cms-header__brand" id="publication-brand">publication-brand</a></header>
+    <header class="luz-cms-header luz-cms-header--masthead" id="masthead"><a class="luz-cms-header__brand" id="masthead-brand">masthead-brand</a><p class="luz-cms-header__date" id="masthead-date">masthead-date</p></header>
+    <footer class="luz-landing-footer" id="site-footer"><p class="luz-landing-footer__brand" id="site-footer-brand">site-footer-brand</p><h2 class="luz-landing-footer__col-title" id="site-footer-title">site-footer-title</h2></footer>
+    <footer class="luz-cms-footer" id="site-footer-blog">site-footer-blog</footer>
+    <header class="luz-app-header" id="app-bar"><span class="luz-app-header__product" id="app-bar-product">app-bar-product</span></header>
+    <div class="luz-app-dashboard" id="dashboard"><div class="luz-app-dashboard__panel" id="dashboard-panel">dashboard-panel</div></div>
+    <div class="luz-cms-page-header" id="page-header"><h1 class="luz-cms-page-header__title" id="page-header-title">page-header-title</h1></div>
+    <header class="luz-cms-article-header" id="article-header"><h1 class="luz-cms-article-header__title" id="article-header-title">article-header-title</h1></header>
+    <article class="luz-cms-article" id="article">article</article>
+    <nav class="luz-cms-toc" id="toc"><h2 class="luz-cms-toc__title" id="toc-title">toc-title</h2></nav>
+    <div class="luz-docs-shell" id="docs-layout">docs-layout</div>
+    <header class="luz-docs-page-head" id="doc-header"><p class="luz-docs-page-head__lead" id="doc-header-lead">doc-header-lead</p></header>
+    <aside class="luz-docs-rail" id="page-rail"><div class="luz-docs-rail__inner" id="page-rail-inner">page-rail-inner</div></aside>
+    <ul class="luz-docs-pager" id="pager"><li class="luz-docs-pager__next" id="pager-next">pager-next</li></ul>
+    <p class="luz-docs-page-foot" id="page-footer">page-footer</p>
+    <figure class="luz-docs-example" id="example"><div class="luz-docs-example__preview" id="example-preview">example-preview</div></figure>
+    <div class="luz-docs-dodont" id="do-dont"><figure class="luz-docs-dodont__item luz-docs-dodont__item--do" id="do-dont-item">do-dont-item</figure></div>
+    <section class="luz-consent" id="cookie-consent"><h2 class="luz-consent__title" id="cookie-consent-title">cookie-consent-title</h2></section>
+    <luz-banner id="announcement">announcement</luz-banner>
+    <luz-mode id="color-mode">color-mode</luz-mode>
+    <luz-consent id="cookie-consent-element">cookie-consent-element</luz-consent>
+  </div>
+</body>
+</html>

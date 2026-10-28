@@ -1,0 +1,4 @@
+/* expect: names/renamed:css 2:8 suggestion=.luz-hero__title */
+.promo .luz-landing-hero__title {
+  margin: 0;
+}
