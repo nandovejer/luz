@@ -44,6 +44,21 @@ import '@luz-ds/core'   // optional: the JavaScript, starts every behavior
 <html data-theme="my-brand" data-luz-themes="my-brand">
 ```
 
+### Bare HTML elements
+
+The HTML comes out styled with no class: text, links, lists, buttons, fields, `select`, `fieldset`, tables, `details` and `dialog`. A `button` with no `type`, or with `type="submit"`, is the primary action; `type="button"` is the secondary one. The tags that only structure a page (`div`, `section`, `header`, `nav` and the rest) have no style: the layout is yours. A class adds what HTML cannot say, such as `.luz-btn` on an `a`, a danger role, a size or a card. Every rule has zero specificity, so any rule of yours wins. [Which elements have a style with no class](https://nandovejer.github.io/luz/docs/html/#html-styled).
+
+### In a project that already has a design
+
+Load `luz.conditional.css` instead of `luz.css`: the same file, with the reset and the bare elements only inside `[data-luz]`. The element with `data-luz` takes the font, color and background of the page; objects, components and utilities apply wherever you put their class. [Migrate a project to LUZ](https://nandovejer.github.io/luz/docs/get-started/migrate/) has the steps.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.2.1/dist/luz-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.conditional.css">
+
+<main data-luz>…</main>
+```
+
 ### Using a single component (standalone CSS)
 
 Every component also ships as its own file in `dist/components/` — load only what you need. Tokens come first, then `base.css` (core settings such as z-index and layout widths, reset, bare elements):

@@ -1,0 +1,122 @@
+<!-- luz:page
+title: Migrate a project to LUZ
+description: Move a project that has its own CSS to LUZ one page at a time, in five steps. An AI does the mechanical work; you decide and check.
+area: get-started
+order: 11
+toc: h2,h3
+keywords: migrate, refactor, existing project, legacy css, bootstrap
+-->
+    <section class="docs-block" id="overview" aria-labelledby="overview-title">
+      <h2 class="docs-chapter__title" id="overview-title">How the migration works</h2>
+      <p class="docs-lead">Keep the old CSS running until the last page has moved. One rule comes before all the others: an AI speeds up the mechanical work, and you decide and check.</p>
+      <p>It fits a site of many pages or of content. In a single-page app built on a component library such as React or Vue, a migration changes the look but not the components: <a href="#cost">see what it costs</a>.</p>
+      <p>What makes it possible is <code>luz.conditional.css</code>, the same file as <code>luz.css</code> with the reset and the bare elements limited to a region marked <code>data-luz</code>. <a href="/docs/get-started/#existing-project">Install it</a> in step 3.</p>
+    </section>
+
+    <section class="docs-block" id="before" aria-labelledby="before-title">
+      <h2 class="docs-chapter__title" id="before-title">Before you touch anything</h2>
+      <ol>
+        <li><strong>Make an inventory.</strong> Ask the AI to list the pages or templates, the components of the old framework and how often each is used, the JavaScript that depends on classes or markup (modals, menus, tabs, validation) and every <code>!important</code>. Correct the list: it is the map of the migration.</li>
+        <li><strong>Take screenshots.</strong> One of each page in the states that matter: light and dark, phone and desktop, a form with an error, an open modal. Without them you cannot tell what you broke.</li>
+        <li><strong>Write smoke tests.</strong> If the project has no tests, ask the AI for a few on what must not break: the form sends, the menu opens, the login works. You run them.</li>
+        <li><strong>Write down when a page is done, once.</strong> The page loads no class or script of the old framework, <a href="/docs/get-started/ai/#check"><code>luz-check</code></a> and an accessibility check come out clean, the screenshots match except what you chose to change, and the smoke tests pass.</li>
+      </ol>
+    </section>
+
+    <section class="docs-block" id="steps" aria-labelledby="steps-title">
+      <h2 class="docs-chapter__title" id="steps-title">The five steps</h2>
+      <h3 class="docs-subhead" id="step-1">Step 1: tokens with your current brand</h3>
+      <p>Make a look of your own from <code>themes/_template.css</code> with the values you use today. The AI maps your variables or loose colors to the tokens of LUZ and gives you the table; you check it. Nothing changes on screen, and your CSS and LUZ now share a vocabulary. <a href="/docs/get-started/make-it-yours/">Make it yours</a> shows how.</p>
+      <h3 class="docs-subhead" id="step-2">Step 2: the old CSS in a layer before LUZ</h3>
+      <p>Put the old stylesheet in a layer that comes before <code>luz</code>, so LUZ wins where both style an element:</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">CSS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-migrate-layer" aria-label="Copy the layer lines">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Putting the old CSS in a layer"><code id="code-migrate-layer">/* site.css, linked before the LUZ stylesheets */
+@layer legacy, luz;
+@import url(&quot;legacy.css&quot;) layer(legacy);</code></pre>
+      </div>
+      <ul>
+        <li><strong>Check the <code>!important</code> rules.</strong> In an earlier layer they still win over LUZ. The AI lists them; you decide which go now.</li>
+        <li><strong>Look for CSS with no layer.</strong> A style attribute or the CSS of a plugin beats every layer, LUZ included. The screenshots show it.</li>
+        <li><strong>Use <code>@import</code> for the migration only.</strong> It adds a request. <a href="/docs/get-started/layers/">Cascade layers</a> explains the order.</li>
+      </ul>
+      <h3 class="docs-subhead" id="step-3">Step 3: the first region</h3>
+      <p>Load <code>luz.conditional.css</code> instead of <code>luz.css</code>, pick a small page with no JavaScript, and put <code>data-luz</code> on the element that holds it. Inside, the HTML with no classes comes out styled by LUZ:</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">HTML</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-migrate-region" aria-label="Copy the region markup">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="A region styled by LUZ"><code id="code-migrate-region">&lt;main data-luz&gt;
+  &lt;h1&gt;Contact us&lt;/h1&gt;
+  &lt;form action=&quot;/contact&quot; method=&quot;post&quot;&gt;
+    &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+    &lt;input id=&quot;email&quot; name=&quot;email&quot; type=&quot;email&quot; required&gt;
+    &lt;button&gt;Send&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/main&gt;</code></pre>
+      </div>
+      <p>Do this one by hand. What you learn goes into the prompt for the next pages.</p>
+      <h3 class="docs-subhead" id="step-4">Step 4: page by page</h3>
+      <p>Choose the order, from the simple pages to the complex ones, with the pages that share a template together. Migrate the shared parts (header, footer, menu) once, after the simple pages and before the complex ones, so you do not keep two headers for months. For each page, repeat the same loop:</p>
+      <ol>
+        <li>The AI, with <a href="/docs/get-started/ai/">the LUZ prompt</a>, puts the page in the region, removes the classes of the old framework, leaves the HTML semantic, and adds a LUZ class only where HTML is not enough. Removing is safer than adding.</li>
+        <li>It runs <code>npx @luz-ds/check@0.2.1</code> and an accessibility check, and shows you what changed and what is left, never the whole file rewritten.</li>
+        <li>You read the diff and the screenshots, and run the smoke tests.</li>
+        <li>One commit per page, so you can revert a page and not a month.</li>
+      </ol>
+      <p><code>luz-check</code> reads LUZ’s classes, elements, load order and color tokens. It does not look for classes of the old framework that are left over: search for them yourself.</p>
+      <h3 class="docs-subhead" id="step-5">Step 5: remove the old CSS</h3>
+      <p>When no page uses the old CSS, remove the <code>legacy</code> layer, load <code>luz.css</code> instead of <code>luz.conditional.css</code>, and drop <code>data-luz</code>. The AI searches for the classes and scripts that are left; you delete the old framework. Never earlier: the AI deletes nothing without your OK for this step.</p>
+    </section>
+
+    <section class="docs-block" id="bugs" aria-labelledby="bugs-title">
+      <h2 class="docs-chapter__title" id="bugs-title">Where the bugs come from</h2>
+      <p>The bugs of a migration do not come from the new CSS. They come from deleting the old code without knowing who used it.</p>
+      <ul>
+        <li><strong>The JavaScript of the old framework.</strong> A Bootstrap modal is a <code>dialog</code> in LUZ, but the code that opened or validated it is still there. The AI tells you which script each page touches; you review the replacement, because it holds business logic.</li>
+        <li><strong>Forms.</strong> Migrate one form first, from the field to the submit.</li>
+        <li><strong>Shared parts.</strong> Migrate the header, footer and menu once, as step 4 says.</li>
+        <li><strong>JavaScript that looks for old classes.</strong> Before you delete a class, search the scripts and templates for it. A <code>querySelector('.btn-primary')</code> that stops finding its button gives no error: it just stops working.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="who" aria-labelledby="who-title">
+      <h2 class="docs-chapter__title" id="who-title">Who does what</h2>
+      <p>The AI works on the mechanical parts; you keep every decision.</p>
+      <div class="luz-table-wrap" role="region" aria-label="What the AI does and what you do" tabindex="0">
+        <table class="luz-table">
+          <thead>
+            <tr><th scope="col">The AI</th><th scope="col">You</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="The AI"><div>Makes the inventory, maps variables to tokens, lists the <code>!important</code> rules</div></td><td data-label="You"><div>Reads and corrects the inventory, and chooses the order of the pages</div></td></tr>
+            <tr><td data-label="The AI"><div>Writes the smoke tests and the tests of each page</div></td><td data-label="You"><div>Runs them and decides if they are enough</div></td></tr>
+            <tr><td data-label="The AI"><div>Removes classes, leaves semantic HTML, adds the few LUZ classes</div></td><td data-label="You"><div>Does the first region by hand and reviews every diff</div></td></tr>
+            <tr><td data-label="The AI"><div>Runs <code>luz-check</code> and the accessibility check, and sums up what changed and what is left</div></td><td data-label="You"><div>Looks at the screenshots and approves the commit</div></td></tr>
+            <tr><td data-label="The AI"><div>Searches for classes and scripts left over before anything is deleted</div></td><td data-label="You"><div>Replaces the JavaScript that holds business logic, and deletes the old framework</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="docs-block" id="cost" aria-labelledby="cost-title">
+      <h2 class="docs-chapter__title" id="cost-title">What it costs, and when not to</h2>
+      <p>A migration has three costs, and one case where it does not pay.</p>
+      <ul>
+        <li><strong>The costs:</strong> two visual languages for a while (step 1 softens it), the weight of both stylesheets while it lasts, and the JavaScript of the old framework, which you must rewrite.</li>
+        <li><strong>When not to:</strong> in a single-page app built on a component library for React or Vue, you change the look but not the components. It is more honest to rewrite screen by screen with LUZ.</li>
+      </ul>
+    </section>
+
+    <section class="docs-block" id="next" aria-labelledby="next-title">
+      <h2 class="docs-chapter__title" id="next-title">Next steps</h2>
+      <ul>
+        <li><a href="/docs/get-started/#existing-project">Load luz.conditional.css</a> for a project that already has a design.</li>
+        <li><a href="/docs/get-started/ai/">Work with AI</a>: the prompts, and the checker that reviews what the AI writes.</li>
+        <li><a href="/docs/html/#html-change">Change the default styles</a> that LUZ gives the bare elements.</li>
+      </ul>
+    </section>

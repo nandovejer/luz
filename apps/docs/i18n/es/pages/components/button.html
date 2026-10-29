@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Botón
 description: Inicia una acción en la página actual, como guardar, enviar o abrir un diálogo.
-source: 801476c735db
+source: 11cb1fecb869
 reviewed: false
 -->
     <div class="docs-component" id="c-button">
@@ -78,6 +78,16 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>button</code> sin clase no necesita ninguna. Sin <code>type</code>, o con <code>type="submit"</code>, es la acción principal; <code>type="button"</code> es la secundaria:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-button-bare" aria-label="Copy the bare button markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare button markup"><code id="code-button-bare">&lt;button type=&quot;submit&quot;&gt;Save changes&lt;/button&gt;
+&lt;button type=&quot;button&quot;&gt;Cancel&lt;/button&gt;</code></pre>
+            </div>
+            <p><code>.luz-btn</code> añade lo que el HTML no puede decir: el aspecto de botón en un <code>a</code>, los papeles, los tamaños y el ancho completo. Con la clase:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

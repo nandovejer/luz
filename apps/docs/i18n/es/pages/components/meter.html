@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Medidor
 description: Representa un valor dentro de un intervalo conocido con una barra junto a la cifra, mediante el elemento meter nativo.
-source: e45194b59ce2
+source: 24c23cb7656f
 reviewed: false
 -->
     <div class="docs-component" id="c-meter">
@@ -33,6 +33,16 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>meter</code> sin clase no necesita ninguna: tiene el tamaño del componente y los colores del navegador.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-meter-bare" aria-label="Copy the bare meter markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare meter markup"><code id="code-meter-bare">&lt;label for=&quot;storage&quot;&gt;Storage used, 6 of 10 GB&lt;/label&gt;
+&lt;meter id=&quot;storage&quot; value=&quot;6&quot; min=&quot;0&quot; max=&quot;10&quot;&gt;6 of 10 GB&lt;/meter&gt;</code></pre>
+            </div>
+            <p><code>.luz-meter</code> dibuja la barra y su pista en el color de marca.</p>
             <p>Una barra en la celda de su cifra, dentro de una tabla. La cifra es texto, así que la barra es una representación visual y se oculta a las tecnologías de asistencia:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">

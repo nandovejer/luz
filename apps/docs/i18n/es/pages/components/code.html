@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Código
 description: Muestra código dentro de una frase o en un bloque con colores de sintaxis en todos los modos.
-source: 4aaec8fc8fa2
+source: 6dd638b65ad5
 reviewed: false
 -->
     <div class="docs-component" id="c-code">
@@ -145,6 +145,15 @@ npx playwright test \
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>pre</code> sin clase no necesita ninguna: tipografía monoespaciada, una superficie atenuada y un borde.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-code-bare" aria-label="Copy the bare pre markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare pre markup"><code id="code-code-bare">&lt;pre&gt;&lt;code&gt;npm install @luz-ds/core&lt;/code&gt;&lt;/pre&gt;</code></pre>
+            </div>
+            <p><code>.luz-code-block</code> añade la insignia del lenguaje y los colores del resaltado. Con la clase:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

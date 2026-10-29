@@ -1,11 +1,11 @@
 <!-- luz:page
 title: Formularios
-description: Controles y la estructura que los rodea. Los campos, las listas de selección y los botones obtienen su aspecto de una clase .luz-*; textarea, output, meter y progress tienen estilos sin clase.
-source: 7bb8b61ca235
+description: Controles y la estructura que los rodea. Los botones, los campos, las listas de selección, los label y los fieldset tienen estilos sin clase, y también output, meter y progress. Una clase .luz-* añade un papel, un tamaño o las partes que un elemento sin clase no puede expresar.
+source: 1d04b491b772
 reviewed: false
 -->
     <div class="docs-block elements-section" id="cat-forms" data-category="forms">
-        <p class="elements-section__lead">Controles y la estructura que los rodea. Los campos, las listas de selección y los botones obtienen su aspecto de una clase .luz-*; textarea, output, meter y progress tienen estilos sin clase.</p>
+        <p class="elements-section__lead">Controles y la estructura que los rodea. Los botones, los campos, las listas de selección, los label y los fieldset tienen estilos sin clase, y también output, meter y progress. Una clase .luz-* añade un papel, un tamaño o las partes que un elemento sin clase no puede expresar.</p>
         <div class="elements-grid">
         <article class="elements-card" id="el-button" data-element="button" aria-labelledby="el-button-title">
           <div class="elements-card__head">
@@ -14,20 +14,20 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Ejecuta una acción al hacer clic o al pulsarlo. Define siempre type: dentro de un formulario, de forma predeterminada lo envía.</p>
           <div class="elements-stage">
-            <button class="luz-btn luz-btn--primary" type="button">Save</button>
-            <button class="luz-btn luz-btn--outline" type="button">Cancel</button>
-            <button class="luz-btn luz-btn--ghost" type="button" disabled>Disabled</button>
+            <button type="submit">Save</button>
+            <button type="button">Cancel</button>
+            <button type="button" disabled>Disabled</button>
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-button" aria-label="Copy the button markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="button markup"><code id="code-button">&lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot;&gt;Save&lt;/button&gt;
-&lt;button class=&quot;luz-btn luz-btn--outline&quot; type=&quot;button&quot;&gt;Cancel&lt;/button&gt;
-&lt;button class=&quot;luz-btn luz-btn--ghost&quot; type=&quot;button&quot; disabled&gt;Disabled&lt;/button&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="button markup"><code id="code-button">&lt;button type=&quot;submit&quot;&gt;Save&lt;/button&gt;
+&lt;button type=&quot;button&quot;&gt;Cancel&lt;/button&gt;
+&lt;button type=&quot;button&quot; disabled&gt;Disabled&lt;/button&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante su clase, de <code>components/button.css</code>.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase. Un botón sin <code>type</code>, o con <code>type="submit"</code>, es la acción principal; <code>type="button"</code> y <code>type="reset"</code> son la secundaria. Añade <code>.luz-btn</code> a un <code>a</code> que deba verse como botón, y para los papeles de peligro y fantasma y los tamaños.</p>
         </article>
 
         <article class="elements-card" id="el-datalist" data-element="datalist" aria-labelledby="el-datalist-title">
@@ -37,32 +37,28 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Sugerencias que aparecen mientras se escribe en un campo input. Se puede escribir cualquier otro valor.</p>
           <div class="elements-stage">
-            <div class="luz-field">
-              <label class="luz-field__label" for="d-datalist">Browser</label>
-              <input class="luz-input" id="d-datalist" list="d-browsers" placeholder="Start typing">
-              <datalist id="d-browsers">
-                <option value="Chrome"></option>
-                <option value="Firefox"></option>
-                <option value="Safari"></option>
-              </datalist>
-            </div>
+            <label for="d-datalist">Browser</label>
+            <input id="d-datalist" list="d-browsers" placeholder="Start typing">
+            <datalist id="d-browsers">
+              <option value="Chrome"></option>
+              <option value="Firefox"></option>
+              <option value="Safari"></option>
+            </datalist>
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-datalist" aria-label="Copy the datalist markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="datalist markup"><code id="code-datalist">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;d-datalist&quot;&gt;Browser&lt;/label&gt;
-  &lt;input class=&quot;luz-input&quot; id=&quot;d-datalist&quot; list=&quot;d-browsers&quot; placeholder=&quot;Start typing&quot;&gt;
-  &lt;datalist id=&quot;d-browsers&quot;&gt;
-    &lt;option value=&quot;Chrome&quot;&gt;&lt;/option&gt;
-    &lt;option value=&quot;Firefox&quot;&gt;&lt;/option&gt;
-    &lt;option value=&quot;Safari&quot;&gt;&lt;/option&gt;
-  &lt;/datalist&gt;
-&lt;/div&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="datalist markup"><code id="code-datalist">&lt;label for=&quot;d-datalist&quot;&gt;Browser&lt;/label&gt;
+&lt;input id=&quot;d-datalist&quot; list=&quot;d-browsers&quot; placeholder=&quot;Start typing&quot;&gt;
+&lt;datalist id=&quot;d-browsers&quot;&gt;
+  &lt;option value=&quot;Chrome&quot;&gt;&lt;/option&gt;
+  &lt;option value=&quot;Firefox&quot;&gt;&lt;/option&gt;
+  &lt;option value=&quot;Safari&quot;&gt;&lt;/option&gt;
+&lt;/datalist&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante su clase, de <code>components/form.css</code>.</p>
+          <p class="elements-card__style">LUZ no añade estilos al datalist: el navegador dibuja las sugerencias. El campo toma el aspecto de un campo de texto sin clase, de <code>elements/forms.css</code>.</p>
         </article>
 
         <article class="elements-card" id="el-fieldset" data-element="fieldset" aria-labelledby="el-fieldset-title">
@@ -72,12 +68,10 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Agrupa controles relacionados, como los datos de una dirección o un conjunto de botones de opción. Un legend como primer elemento hijo da nombre al grupo.</p>
           <div class="elements-stage">
-            <fieldset class="luz-fieldset">
+            <fieldset>
               <legend>Plan</legend>
-              <div class="luz-check-group">
-                <div class="luz-check-item"><input type="radio" name="d-plan" id="d-plan-1" checked><label for="d-plan-1">Free</label></div>
-                <div class="luz-check-item"><input type="radio" name="d-plan" id="d-plan-2"><label for="d-plan-2">Team</label></div>
-              </div>
+              <label><input type="radio" name="d-plan" checked> Free</label>
+              <label><input type="radio" name="d-plan"> Team</label>
             </fieldset>
           </div>
           <div class="elements-snippet">
@@ -85,15 +79,13 @@ reviewed: false
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-fieldset" aria-label="Copy the fieldset markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="fieldset markup"><code id="code-fieldset">&lt;fieldset class=&quot;luz-fieldset&quot;&gt;
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="fieldset markup"><code id="code-fieldset">&lt;fieldset&gt;
   &lt;legend&gt;Plan&lt;/legend&gt;
-  &lt;div class=&quot;luz-check-group&quot;&gt;
-    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;d-plan&quot; id=&quot;d-plan-1&quot; checked&gt;&lt;label for=&quot;d-plan-1&quot;&gt;Free&lt;/label&gt;&lt;/div&gt;
-    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;d-plan&quot; id=&quot;d-plan-2&quot;&gt;&lt;label for=&quot;d-plan-2&quot;&gt;Team&lt;/label&gt;&lt;/div&gt;
-  &lt;/div&gt;
+  &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;d-plan&quot; checked&gt; Free&lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;d-plan&quot;&gt; Team&lt;/label&gt;
 &lt;/fieldset&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante su clase, de <code>components/form.css</code>.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase: una caja con la leyenda en su borde. Un label que contiene un botón de radio o una casilla la coloca junto al texto. Las clases del componente <code>.luz-check-group</code> y <code>.luz-check-item</code> dibujan ellas mismas la casilla y el punto.</p>
         </article>
 
         <article class="elements-card" id="el-form" data-element="form" aria-labelledby="el-form-title">
@@ -103,12 +95,10 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Agrupa controles cuyos valores se envían juntos. El navegador comprueba los campos obligatorios y sus formatos antes de enviar nada.</p>
           <div class="elements-stage">
-            <form action="#" class="o-stack">
-              <div class="luz-field">
-              <label class="luz-field__label" for="d-form-name">Name</label>
-              <input class="luz-input" id="d-form-name" name="name" required>
-            </div>
-              <button class="luz-btn luz-btn--primary" type="submit">Send</button>
+            <form action="#">
+              <label for="d-form-name">Name</label>
+              <input id="d-form-name" name="name" required>
+              <button type="submit">Send</button>
             </form>
           </div>
           <div class="elements-snippet">
@@ -116,15 +106,13 @@ reviewed: false
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-form" aria-label="Copy the form markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="form markup"><code id="code-form">&lt;form action=&quot;#&quot; class=&quot;o-stack&quot;&gt;
-  &lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;d-form-name&quot;&gt;Name&lt;/label&gt;
-  &lt;input class=&quot;luz-input&quot; id=&quot;d-form-name&quot; name=&quot;name&quot; required&gt;
-&lt;/div&gt;
-  &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;submit&quot;&gt;Send&lt;/button&gt;
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="form markup"><code id="code-form">&lt;form action=&quot;#&quot;&gt;
+  &lt;label for=&quot;d-form-name&quot;&gt;Name&lt;/label&gt;
+  &lt;input id=&quot;d-form-name&quot; name=&quot;name&quot; required&gt;
+  &lt;button type=&quot;submit&quot;&gt;Send&lt;/button&gt;
 &lt;/form&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante su clase, de <code>components/form.css</code>. Deja Nombre vacío y pulsa Enviar: el navegador detendrá el envío y explicará el motivo.</p>
+          <p class="elements-card__style">Un form no tiene estilos propios: es estructura. Los controles que contiene llevan el aspecto, y el espacio entre ellos viene de sus propias reglas. Deja Nombre vacío y pulsa Enviar: el navegador detendrá el envío y explicará el motivo.</p>
         </article>
 
         <article class="elements-card" id="el-input" data-element="input" aria-labelledby="el-input-title">
@@ -134,22 +122,18 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Un campo que rellena quien visita la página. El atributo type determina su tipo: text, email, number, range, color, date y muchos más.</p>
           <div class="elements-stage">
-            <div class="luz-field">
-              <label class="luz-field__label" for="d-input">Email</label>
-              <input class="luz-input" id="d-input" type="email" placeholder="jane@example.com" autocomplete="off">
-            </div>
+            <label for="d-input">Email</label>
+            <input id="d-input" type="email" placeholder="jane@example.com" autocomplete="off">
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-input" aria-label="Copy the input markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="input markup"><code id="code-input">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;d-input&quot;&gt;Email&lt;/label&gt;
-  &lt;input class=&quot;luz-input&quot; id=&quot;d-input&quot; type=&quot;email&quot; placeholder=&quot;jane@example.com&quot; autocomplete=&quot;off&quot;&gt;
-&lt;/div&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="input markup"><code id="code-input">&lt;label for=&quot;d-input&quot;&gt;Email&lt;/label&gt;
+&lt;input id=&quot;d-input&quot; type=&quot;email&quot; placeholder=&quot;jane@example.com&quot; autocomplete=&quot;off&quot;&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante su clase, de <code>components/form.css</code>.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase: los tipos de texto, correo, número, fecha y similares llenan su contenedor. Añade <code>.luz-input</code> a un campo de color o de archivo, y <code>.luz-field</code> a un label con texto de ayuda y error.</p>
         </article>
 
         <article class="elements-card" id="el-label" data-element="label" aria-labelledby="el-label-title">
@@ -159,22 +143,18 @@ reviewed: false
           </div>
           <p class="elements-card__desc">El nombre visible de un control. Relaciónalos mediante for e id: los lectores de pantalla lo anunciarán y, al hacer clic en él, se enfocará o cambiará el control.</p>
           <div class="elements-stage">
-            <div class="luz-field">
-              <label class="luz-field__label" for="d-label">Project name</label>
-              <input class="luz-input" id="d-label" type="text">
-            </div>
+            <label for="d-label">Project name</label>
+            <input id="d-label" type="text">
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-label" aria-label="Copy the label markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="label markup"><code id="code-label">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;d-label&quot;&gt;Project name&lt;/label&gt;
-  &lt;input class=&quot;luz-input&quot; id=&quot;d-label&quot; type=&quot;text&quot;&gt;
-&lt;/div&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="label markup"><code id="code-label">&lt;label for=&quot;d-label&quot;&gt;Project name&lt;/label&gt;
+&lt;input id=&quot;d-label&quot; type=&quot;text&quot;&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante su clase, de <code>components/form.css</code>.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase: un bloque encima de su campo, o junto a la casilla o el botón de radio que contiene.</p>
         </article>
 
         <article class="elements-card" id="el-legend" data-element="legend" aria-labelledby="el-legend-title">
@@ -184,12 +164,10 @@ reviewed: false
           </div>
           <p class="elements-card__desc">El nombre de un fieldset, que se anuncia al entrar en el grupo. Es el primer elemento hijo de fieldset.</p>
           <div class="elements-stage">
-            <fieldset class="luz-fieldset">
+            <fieldset>
               <legend>Notifications</legend>
-              <div class="luz-check-group">
-                <div class="luz-check-item"><input type="checkbox" id="d-notify-1" checked><label for="d-notify-1">Email</label></div>
-                <div class="luz-check-item"><input type="checkbox" id="d-notify-2"><label for="d-notify-2">Push</label></div>
-              </div>
+              <label><input type="checkbox" checked> Email</label>
+              <label><input type="checkbox"> Push</label>
             </fieldset>
           </div>
           <div class="elements-snippet">
@@ -197,15 +175,13 @@ reviewed: false
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-legend" aria-label="Copy the legend markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="legend markup"><code id="code-legend">&lt;fieldset class=&quot;luz-fieldset&quot;&gt;
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="legend markup"><code id="code-legend">&lt;fieldset&gt;
   &lt;legend&gt;Notifications&lt;/legend&gt;
-  &lt;div class=&quot;luz-check-group&quot;&gt;
-    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;d-notify-1&quot; checked&gt;&lt;label for=&quot;d-notify-1&quot;&gt;Email&lt;/label&gt;&lt;/div&gt;
-    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;d-notify-2&quot;&gt;&lt;label for=&quot;d-notify-2&quot;&gt;Push&lt;/label&gt;&lt;/div&gt;
-  &lt;/div&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot; checked&gt; Email&lt;/label&gt;
+  &lt;label&gt;&lt;input type=&quot;checkbox&quot;&gt; Push&lt;/label&gt;
 &lt;/fieldset&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante su clase, de <code>components/form.css</code>.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase: texto pequeño en mayúsculas y en el color secundario, en el borde del fieldset.</p>
         </article>
 
         <article class="elements-card" id="el-meter" data-element="meter" aria-labelledby="el-meter-title">
@@ -226,7 +202,7 @@ reviewed: false
             <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="meter markup"><code id="code-meter">&lt;label for=&quot;d-meter&quot;&gt;Storage used, 6 of 10 GB&lt;/label&gt;
 &lt;meter id=&quot;d-meter&quot; min=&quot;0&quot; max=&quot;10&quot; low=&quot;3&quot; high=&quot;8&quot; optimum=&quot;2&quot; value=&quot;6&quot;&gt;6 of 10 GB&lt;/meter&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase: el tamaño de la barra. El navegador dibuja sus colores; <code>.luz-meter</code> los dibuja en el color de marca.</p>
         </article>
 
         <article class="elements-card" id="el-optgroup" data-element="optgroup" aria-labelledby="el-optgroup-title">
@@ -236,38 +212,34 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Un conjunto etiquetado de opciones dentro de select, como ciudades agrupadas por país. La etiqueta del grupo no se puede elegir.</p>
           <div class="elements-stage">
-            <div class="luz-field">
-              <label class="luz-field__label" for="d-optgroup">Role</label>
-              <select class="luz-select" id="d-optgroup">
-                <optgroup label="Product">
-                  <option>Designer</option>
-                  <option>Product manager</option>
-                </optgroup>
-                <optgroup label="Engineering">
-                  <option>Developer</option>
-                </optgroup>
-              </select>
-            </div>
+            <label for="d-optgroup">Role</label>
+            <select id="d-optgroup">
+              <optgroup label="Product">
+                <option>Designer</option>
+                <option>Product manager</option>
+              </optgroup>
+              <optgroup label="Engineering">
+                <option>Developer</option>
+              </optgroup>
+            </select>
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-optgroup" aria-label="Copy the optgroup markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="optgroup markup"><code id="code-optgroup">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;d-optgroup&quot;&gt;Role&lt;/label&gt;
-  &lt;select class=&quot;luz-select&quot; id=&quot;d-optgroup&quot;&gt;
-    &lt;optgroup label=&quot;Product&quot;&gt;
-      &lt;option&gt;Designer&lt;/option&gt;
-      &lt;option&gt;Product manager&lt;/option&gt;
-    &lt;/optgroup&gt;
-    &lt;optgroup label=&quot;Engineering&quot;&gt;
-      &lt;option&gt;Developer&lt;/option&gt;
-    &lt;/optgroup&gt;
-  &lt;/select&gt;
-&lt;/div&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="optgroup markup"><code id="code-optgroup">&lt;label for=&quot;d-optgroup&quot;&gt;Role&lt;/label&gt;
+&lt;select id=&quot;d-optgroup&quot;&gt;
+  &lt;optgroup label=&quot;Product&quot;&gt;
+    &lt;option&gt;Designer&lt;/option&gt;
+    &lt;option&gt;Product manager&lt;/option&gt;
+  &lt;/optgroup&gt;
+  &lt;optgroup label=&quot;Engineering&quot;&gt;
+    &lt;option&gt;Developer&lt;/option&gt;
+  &lt;/optgroup&gt;
+&lt;/select&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante la clase <code>.luz-select</code>, de <code>components/select.css</code>.</p>
+          <p class="elements-card__style">LUZ no añade estilos al optgroup: el navegador dibuja la lista. La caja cerrada tiene el estilo del select.</p>
         </article>
 
         <article class="elements-card" id="el-option" data-element="option" aria-labelledby="el-option-title">
@@ -277,30 +249,26 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Una opción de select o una sugerencia de datalist.</p>
           <div class="elements-stage">
-            <div class="luz-field">
-              <label class="luz-field__label" for="d-option">Role</label>
-              <select class="luz-select" id="d-option">
-                <option value="">Select a role</option>
-                <option value="dev">Developer</option>
-                <option value="design">Designer</option>
-              </select>
-            </div>
+            <label for="d-option">Role</label>
+            <select id="d-option">
+              <option value="">Select a role</option>
+              <option value="dev">Developer</option>
+              <option value="design">Designer</option>
+            </select>
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-option" aria-label="Copy the option markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="option markup"><code id="code-option">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;d-option&quot;&gt;Role&lt;/label&gt;
-  &lt;select class=&quot;luz-select&quot; id=&quot;d-option&quot;&gt;
-    &lt;option value=&quot;&quot;&gt;Select a role&lt;/option&gt;
-    &lt;option value=&quot;dev&quot;&gt;Developer&lt;/option&gt;
-    &lt;option value=&quot;design&quot;&gt;Designer&lt;/option&gt;
-  &lt;/select&gt;
-&lt;/div&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="option markup"><code id="code-option">&lt;label for=&quot;d-option&quot;&gt;Role&lt;/label&gt;
+&lt;select id=&quot;d-option&quot;&gt;
+  &lt;option value=&quot;&quot;&gt;Select a role&lt;/option&gt;
+  &lt;option value=&quot;dev&quot;&gt;Developer&lt;/option&gt;
+  &lt;option value=&quot;design&quot;&gt;Designer&lt;/option&gt;
+&lt;/select&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante la clase <code>.luz-select</code>, de <code>components/select.css</code>.</p>
+          <p class="elements-card__style">LUZ no añade estilos al option: el navegador dibuja la lista. La caja cerrada tiene el estilo del select.</p>
         </article>
 
         <article class="elements-card" id="el-output" data-element="output" aria-labelledby="el-output-title">
@@ -311,7 +279,7 @@ reviewed: false
           <p class="elements-card__desc">Muestra el resultado de un cálculo o de una acción de quien visita la página. Los lectores de pantalla lo anuncian cuando cambia.</p>
           <div class="elements-stage">
             <label for="d-range">Volume <output id="d-range-out" for="d-range">50</output></label>
-            <input class="luz-input" id="d-range" type="range" min="0" max="100" value="50" data-output="d-range-out">
+            <input id="d-range" type="range" min="0" max="100" value="50" data-output="d-range-out">
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
@@ -319,7 +287,7 @@ reviewed: false
               <button class="luz-copy-btn" type="button" data-copy-from="code-output" aria-label="Copy the output markup">Copy</button>
             </div>
             <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="output markup"><code id="code-output">&lt;label for=&quot;d-range&quot;&gt;Volume &lt;output id=&quot;d-range-out&quot; for=&quot;d-range&quot;&gt;50&lt;/output&gt;&lt;/label&gt;
-&lt;input class=&quot;luz-input&quot; id=&quot;d-range&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;50&quot; data-output=&quot;d-range-out&quot;&gt;</code></pre>
+&lt;input id=&quot;d-range&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;50&quot; data-output=&quot;d-range-out&quot;&gt;</code></pre>
           </div>
           <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase.</p>
           <div class="elements-worth">
@@ -352,7 +320,7 @@ reviewed: false
 &lt;label for=&quot;d-progress-wait&quot;&gt;Working&lt;/label&gt;
 &lt;progress id=&quot;d-progress-wait&quot;&gt;Working&lt;/progress&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase. El componente .luz-progress es un div independiente para crear barras personalizadas.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase: el tamaño de la barra y el color de marca de su relleno. <code>.luz-progress</code> dibuja ella misma la pista y el relleno.</p>
         </article>
 
         <article class="elements-card" id="el-select" data-element="select" aria-labelledby="el-select-title">
@@ -362,30 +330,26 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Una lista de opciones fijas entre las que elegir. Si solo hay unas pocas y deben estar siempre a la vista, los botones de opción son más rápidos.</p>
           <div class="elements-stage">
-            <div class="luz-field">
-              <label class="luz-field__label" for="d-select">Role</label>
-              <select class="luz-select" id="d-select">
-                <option value="">Select a role</option>
-                <option value="dev">Developer</option>
-                <option value="design">Designer</option>
-              </select>
-            </div>
+            <label for="d-select">Role</label>
+            <select id="d-select">
+              <option value="">Select a role</option>
+              <option value="dev">Developer</option>
+              <option value="design">Designer</option>
+            </select>
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-select" aria-label="Copy the select markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="select markup"><code id="code-select">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;d-select&quot;&gt;Role&lt;/label&gt;
-  &lt;select class=&quot;luz-select&quot; id=&quot;d-select&quot;&gt;
-    &lt;option value=&quot;&quot;&gt;Select a role&lt;/option&gt;
-    &lt;option value=&quot;dev&quot;&gt;Developer&lt;/option&gt;
-    &lt;option value=&quot;design&quot;&gt;Designer&lt;/option&gt;
-  &lt;/select&gt;
-&lt;/div&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="select markup"><code id="code-select">&lt;label for=&quot;d-select&quot;&gt;Role&lt;/label&gt;
+&lt;select id=&quot;d-select&quot;&gt;
+  &lt;option value=&quot;&quot;&gt;Select a role&lt;/option&gt;
+  &lt;option value=&quot;dev&quot;&gt;Developer&lt;/option&gt;
+  &lt;option value=&quot;design&quot;&gt;Designer&lt;/option&gt;
+&lt;/select&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Estilizado mediante la clase <code>.luz-select</code>, de <code>components/select.css</code>.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase: la caja cerrada. La lista abierta es la del navegador. Añade <code>.luz-select</code> para dar estilo también a la lista abierta, donde el navegador pueda.</p>
         </article>
 
         <article class="elements-card" id="el-selectedcontent" data-element="selectedcontent" aria-labelledby="el-selectedcontent-title">
@@ -419,33 +383,29 @@ reviewed: false
           </div>
           <p class="elements-card__desc">Un campo para texto de varias líneas, como un mensaje. LUZ solo permite que crezca en vertical.</p>
           <div class="elements-stage">
-            <div class="luz-field">
-              <label class="luz-field__label" for="d-textarea">Notes</label>
-              <textarea class="luz-input luz-input--textarea" id="d-textarea" rows="3" placeholder="Anything else?"></textarea>
-            </div>
+            <label for="d-textarea">Notes</label>
+            <textarea id="d-textarea" rows="3" placeholder="Anything else?"></textarea>
           </div>
           <div class="elements-snippet">
             <div class="elements-snippet__bar">
               <span class="elements-eyebrow">HTML</span>
               <button class="luz-copy-btn" type="button" data-copy-from="code-textarea" aria-label="Copy the textarea markup">Copy</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="textarea markup"><code id="code-textarea">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;d-textarea&quot;&gt;Notes&lt;/label&gt;
-  &lt;textarea class=&quot;luz-input luz-input--textarea&quot; id=&quot;d-textarea&quot; rows=&quot;3&quot; placeholder=&quot;Anything else?&quot;&gt;&lt;/textarea&gt;
-&lt;/div&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="textarea markup"><code id="code-textarea">&lt;label for=&quot;d-textarea&quot;&gt;Notes&lt;/label&gt;
+&lt;textarea id=&quot;d-textarea&quot; rows=&quot;3&quot; placeholder=&quot;Anything else?&quot;&gt;&lt;/textarea&gt;</code></pre>
           </div>
-          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase.</p>
+          <p class="elements-card__style">Con estilos de <code>elements/forms.css</code>, sin clase: el aspecto de un campo de texto, más alto, que crece solo en vertical. Las clases <code>.luz-input</code> y <code>.luz-input--textarea</code> dan el mismo aspecto dentro de un <code>.luz-field</code>.</p>
         </article>
         </div>
 
         <section class="elements-section__extra" id="input-types" aria-labelledby="input-types-title">
           <h2 class="elements-index__title" id="input-types-title">Los 22 tipos de input</h2>
-          <p class="elements-index__lead">Un mismo elemento, <code>&lt;input&gt;</code>, se convierte en controles distintos según su <code>type</code>. Cada uno tiene un ejemplo en vivo y usa la clase de LUZ cuando existe; <code>hidden</code> e <code>image</code> no tienen nada que mostrar. El navegador valida y ofrece el teclado adecuado por sí solo: elige el tipo más específico antes de recurrir a un script.</p>
+          <p class="elements-index__lead">Un mismo elemento, <code>&lt;input&gt;</code>, se convierte en controles distintos según su <code>type</code>. Cada uno tiene un ejemplo en vivo sin clase, salvo <code>color</code> y <code>file</code>, que llevan <code>.luz-input</code>; <code>hidden</code> e <code>image</code> no tienen nada que mostrar. El navegador valida y ofrece el teclado adecuado por sí solo: elige el tipo más específico antes de recurrir a un script.</p>
           <ul class="elements-types">
             <li class="elements-type" id="it-button">
               <p class="elements-type__name"><code>type=&quot;button&quot;</code></p>
               <p class="elements-type__desc">Un botón que no hace nada por sí solo: un script le da una función. Es mejor usar el elemento <code>button</code>, que puede contener marcado.</p>
-              <div class="elements-type__stage"><input class="luz-btn luz-btn--secondary" type="button" value="Button"></div>
+              <div class="elements-type__stage"><input type="button" value="Button"></div>
             </li>
             <li class="elements-type" id="it-checkbox">
               <p class="elements-type__name"><code>type=&quot;checkbox&quot;</code></p>
@@ -460,17 +420,17 @@ reviewed: false
             <li class="elements-type" id="it-date">
               <p class="elements-type__name"><code>type=&quot;date&quot;</code></p>
               <p class="elements-type__desc">Un día: año, mes y día. El valor es <code>YYYY-MM-DD</code>, independientemente del idioma de visualización.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="date" value="2026-10-12" aria-label="Fecha"></div>
+              <div class="elements-type__stage"><input type="date" value="2026-10-12" aria-label="Fecha"></div>
             </li>
             <li class="elements-type" id="it-datetime-local">
               <p class="elements-type__name"><code>type=&quot;datetime-local&quot;</code></p>
               <p class="elements-type__desc">Una fecha y una hora sin zona horaria.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="datetime-local" value="2026-10-12T09:30" aria-label="Fecha y hora"></div>
+              <div class="elements-type__stage"><input type="datetime-local" value="2026-10-12T09:30" aria-label="Fecha y hora"></div>
             </li>
             <li class="elements-type" id="it-email">
               <p class="elements-type__name"><code>type=&quot;email&quot;</code></p>
               <p class="elements-type__desc">Una dirección, o varias con <code>multiple</code>. El navegador comprueba el formato y muestra una <code>@</code> en el teclado del móvil.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="email" value="jane@example.com" autocomplete="off" aria-label="Dirección de correo electrónico"></div>
+              <div class="elements-type__stage"><input type="email" value="jane@example.com" autocomplete="off" aria-label="Dirección de correo electrónico"></div>
             </li>
             <li class="elements-type" id="it-file">
               <p class="elements-type__name"><code>type=&quot;file&quot;</code></p>
@@ -490,17 +450,17 @@ reviewed: false
             <li class="elements-type" id="it-month">
               <p class="elements-type__name"><code>type=&quot;month&quot;</code></p>
               <p class="elements-type__desc">Un año y un mes. En ordenadores, Firefox y Safari muestran un campo de texto: escribe <code>YYYY-MM</code> y añade <code>pattern</code>.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="month" value="2026-10" aria-label="Mes"></div>
+              <div class="elements-type__stage"><input type="month" value="2026-10" aria-label="Mes"></div>
             </li>
             <li class="elements-type" id="it-number">
               <p class="elements-type__name"><code>type=&quot;number&quot;</code></p>
               <p class="elements-type__desc">Un número con incrementos: <code>min</code>, <code>max</code> y <code>step</code>. Para un código postal o un número de tarjeta, usa <code>inputmode=&quot;numeric&quot;</code> en un campo de texto.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="number" min="0" max="10" value="3" aria-label="Número"></div>
+              <div class="elements-type__stage"><input type="number" min="0" max="10" value="3" aria-label="Número"></div>
             </li>
             <li class="elements-type" id="it-password">
               <p class="elements-type__name"><code>type=&quot;password&quot;</code></p>
               <p class="elements-type__desc">Oculta los caracteres. Define <code>autocomplete</code> como <code>current-password</code> o <code>new-password</code> para que pueda ayudar un gestor de contraseñas.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="password" value="secret" autocomplete="new-password" aria-label="Contraseña"></div>
+              <div class="elements-type__stage"><input type="password" value="secret" autocomplete="new-password" aria-label="Contraseña"></div>
             </li>
             <li class="elements-type" id="it-radio">
               <p class="elements-type__name"><code>type=&quot;radio&quot;</code></p>
@@ -510,47 +470,47 @@ reviewed: false
             <li class="elements-type" id="it-range">
               <p class="elements-type__name"><code>type=&quot;range&quot;</code></p>
               <p class="elements-type__desc">Un control deslizante entre <code>min</code> y <code>max</code>. No muestra el valor: acompáñalo de un elemento <code>output</code>.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="range" min="0" max="100" value="40" aria-label="Rango"></div>
+              <div class="elements-type__stage"><input type="range" min="0" max="100" value="40" aria-label="Rango"></div>
             </li>
             <li class="elements-type" id="it-reset">
               <p class="elements-type__name"><code>type=&quot;reset&quot;</code></p>
               <p class="elements-type__desc">Restablece los campos del formulario a sus valores iniciales. Casi nunca hace falta y se puede pulsar por error.</p>
-              <div class="elements-type__stage"><input class="luz-btn luz-btn--outline" type="reset" value="Reset"></div>
+              <div class="elements-type__stage"><input type="reset" value="Reset"></div>
             </li>
             <li class="elements-type" id="it-search">
               <p class="elements-type__name"><code>type=&quot;search&quot;</code></p>
               <p class="elements-type__desc">Un término de búsqueda. Algunos navegadores añaden un botón para borrarlo.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="search" value="Search" autocomplete="off" aria-label="Búsqueda"></div>
+              <div class="elements-type__stage"><input type="search" value="Search" autocomplete="off" aria-label="Búsqueda"></div>
             </li>
             <li class="elements-type" id="it-submit">
               <p class="elements-type__name"><code>type=&quot;submit&quot;</code></p>
               <p class="elements-type__desc">Envía el formulario. Si no está dentro de uno, no hace nada.</p>
-              <div class="elements-type__stage"><input class="luz-btn luz-btn--primary" type="submit" value="Submit"></div>
+              <div class="elements-type__stage"><input type="submit" value="Submit"></div>
             </li>
             <li class="elements-type" id="it-tel">
               <p class="elements-type__name"><code>type=&quot;tel&quot;</code></p>
               <p class="elements-type__desc">Un número de teléfono. El navegador no comprueba su formato y muestra un teclado numérico en el móvil.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="tel" value="+34 600 000 000" autocomplete="off" aria-label="Número de teléfono"></div>
+              <div class="elements-type__stage"><input type="tel" value="+34 600 000 000" autocomplete="off" aria-label="Número de teléfono"></div>
             </li>
             <li class="elements-type" id="it-text">
               <p class="elements-type__name"><code>type=&quot;text&quot;</code></p>
               <p class="elements-type__desc">El tipo predeterminado: una línea de texto libre.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="text" value="Anything" autocomplete="off" aria-label="Texto"></div>
+              <div class="elements-type__stage"><input type="text" value="Anything" autocomplete="off" aria-label="Texto"></div>
             </li>
             <li class="elements-type" id="it-time">
               <p class="elements-type__name"><code>type=&quot;time&quot;</code></p>
               <p class="elements-type__desc">Una hora del día sin fecha.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="time" value="09:30" aria-label="Hora"></div>
+              <div class="elements-type__stage"><input type="time" value="09:30" aria-label="Hora"></div>
             </li>
             <li class="elements-type" id="it-url">
               <p class="elements-type__name"><code>type=&quot;url&quot;</code></p>
               <p class="elements-type__desc">Una dirección web absoluta, que el navegador comprueba.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="url" value="https://example.com" autocomplete="off" aria-label="Dirección web"></div>
+              <div class="elements-type__stage"><input type="url" value="https://example.com" autocomplete="off" aria-label="Dirección web"></div>
             </li>
             <li class="elements-type" id="it-week">
               <p class="elements-type__name"><code>type=&quot;week&quot;</code></p>
               <p class="elements-type__desc">Un año y una semana según ISO. En ordenadores, Firefox y Safari muestran un campo de texto: escribe <code>YYYY-Www</code> y añade <code>pattern</code>.</p>
-              <div class="elements-type__stage"><input class="luz-input" type="week" value="2026-W42" aria-label="Semana"></div>
+              <div class="elements-type__stage"><input type="week" value="2026-W42" aria-label="Semana"></div>
             </li>
           </ul>
         </section>

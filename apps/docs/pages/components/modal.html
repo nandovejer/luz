@@ -44,6 +44,25 @@ keywords: dialog, popup
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
+            <p>A bare <code>dialog</code> needs no class: it has a surface and is centred.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-modal-bare" aria-label="Copy the bare dialog markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare dialog markup"><code id="code-modal-bare">&lt;button type=&quot;button&quot; commandfor=&quot;rename&quot; command=&quot;show-modal&quot;&gt;Rename project&lt;/button&gt;
+
+&lt;dialog id=&quot;rename&quot; aria-labelledby=&quot;rename-title&quot;&gt;
+  &lt;h2 id=&quot;rename-title&quot;&gt;Rename project&lt;/h2&gt;
+  &lt;form method=&quot;dialog&quot;&gt;
+    &lt;label for=&quot;rename-name&quot;&gt;New name&lt;/label&gt;
+    &lt;input id=&quot;rename-name&quot; type=&quot;text&quot; autofocus&gt;
+    &lt;button type=&quot;button&quot; commandfor=&quot;rename&quot; command=&quot;close&quot;&gt;Cancel&lt;/button&gt;
+    &lt;button value=&quot;rename&quot;&gt;Rename project&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;</code></pre>
+            </div>
+            <p><code>.luz-modal</code> adds the header with its close button, the body and the footer, the small-screen layout and the fade. With the class:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

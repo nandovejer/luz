@@ -39,6 +39,18 @@ keywords: collapse, disclosure
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
+            <p>A bare <code>details</code> needs no class: a summary and a divider, with no box.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-accordion-bare" aria-label="Copy the bare details markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare details markup"><code id="code-accordion-bare">&lt;details&gt;
+  &lt;summary&gt;What is a design token?&lt;/summary&gt;
+  &lt;p&gt;A named value that components read.&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+            </div>
+            <p><code>.luz-accordion</code> adds the box and the group. With the class:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

@@ -89,6 +89,8 @@
   "snippets.col-kind": "What you are building",
   "snippets.with-npm": "with npm",
   "snippets.from-cdn": "from a CDN",
+  "snippets.conditional-title": "In a project that already has a design",
+  "snippets.conditional-p": "Link <code>luz.conditional.css</code> instead of <code>luz.css</code>: LUZ then styles only what is inside an element with the <code>data-luz</code> attribute, and leaves the rest of the page as it is. The tokens still go on the whole page. Put the hash on the link as below, and <code>data-luz</code> on the region you are moving to LUZ.",
   "snippets.chunks-title": "Lazy chunks",
   "snippets.chunks-p1": "Core and catalog load some files only when the page needs them: a sortable table, a timeline, a MIDI player, a page in Spanish, the search, the cookie banner. A hash on a script covers that file only, so a chunk needs its own hash. The way to give it one in every browser is an import map with an <code>integrity</code> section, placed before the first module script: the browser then checks each chunk when the script imports it, and a file with a wrong hash does not run.",
   "snippets.chunks-p2": "Safari and Firefox do not use the <code>integrity</code> of a <code>&lt;link rel=\"modulepreload\"&gt;</code> to block a file, so it is a performance hint only: use it, if you like, to fetch a chunk earlier, but do not rely on it as the check. The import map below lists every chunk. Keep only the lines for what the page has, as the rows say, because a hash for a file the page never loads does nothing.",
