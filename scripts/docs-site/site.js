@@ -43,6 +43,7 @@ import { HtmlError, compactHtml, readHtml, tags } from "./html.js";
 import { BASE, PACKAGES } from "../luz-packages.js";
 import { fileKinds, fitsKindsOf, isKindFile } from "./kinds.js";
 import { fillAiMarkers } from "./ai.js";
+import { DEBUG_FILE, DEBUG_ROUTE, hasDebugPage, renderDebug } from "./debug.js";
 import { catalogComponents, catalogFilesIn, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
 import { isDemo, loadDocsLocales, localizeLinks, localize } from "./docs-i18n.js";
@@ -2206,8 +2207,19 @@ export function buildSite(site, { extra = [], unchecked = [], root, languages = 
     docs.push({ route: doc.route, ids: new Set(ids.keys()), links });
   }
 
+  // /debug/: every element and component on one page, for the real site only; its ids and links are checked like any page's
+  if (hasDebugPage(site)) {
+    const html = renderDebug({ site });
+    const file = `${DEBUG_FILE} (rendered as ${DEBUG_ROUTE})`;
+    const { ids, links } = readHtml(html, file);
+    rendered.set(DEBUG_ROUTE, html);
+    docs.push({ route: DEBUG_ROUTE, ids: new Set(ids.keys()), links: links.map((l) => ({ ...l, file })) });
+  }
+
   // The home pages (/, /es/, /ar/) are not docs: a link to one is not checked
   const known = new Map([...docs.map((d) => [d.route, d.ids]), ...[...homesOf(site), ...unchecked].map((route) => [route, null])]);
+  // /debug/ is a route of the real site (debug.js): a link to it is no mistake in a copy of the docs the build does not render it for
+  if (!known.has(DEBUG_ROUTE)) known.set(DEBUG_ROUTE, null);
   // The pages of the docs languages exist even when this build does not render them (a link to one is not a mistake)
   if (!languages) {
     for (const language of docsI18n?.languages ?? []) {

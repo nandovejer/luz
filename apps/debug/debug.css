@@ -1,0 +1,143 @@
+/* ==========================================================================
+   LUZ — /debug/ page frame
+   The page is built to look at LUZ by hand, so it adds as little as it can:
+   a bar for the controls, the index, and a frame around each block with its
+   name, its file and its docs page above the demo. Everything inside a block
+   is LUZ's own, from the published CSS of tokens, core and catalog.
+   The generator inlines this file in a <style> of the page (scripts/docs-site/debug.js),
+   because the page links only the published stylesheets.
+   Rules: semantic tokens only; no literal colors; logical properties.
+   ========================================================================== */
+
+/* Anchors stop below the sticky bar */
+:is([data-debug-group], [data-debug-block]) {
+  scroll-margin-block-start: var(--luz-space-4xl);
+}
+
+.debug-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--luz-space-sm) var(--luz-space-md);
+  padding: var(--luz-space-sm) var(--luz-space-md);
+  background: var(--luz-surface);
+  border-block-end: 1px solid var(--luz-divider);
+}
+
+.debug-bar__title {
+  margin: 0;
+  font-size: var(--luz-text-lg);
+}
+
+.debug-bar__control {
+  display: flex;
+  align-items: center;
+  gap: var(--luz-space-xs);
+}
+
+.debug-bar__control > span {
+  white-space: nowrap;
+}
+
+.debug-note {
+  margin: 0;
+  padding-inline: var(--luz-space-md);
+}
+
+:is(.debug-note, .debug-group__lead) {
+  color: var(--luz-text-muted);
+  font-size: var(--luz-text-sm);
+}
+
+.debug-group__lead {
+  margin-block: 0 var(--luz-space-md);
+}
+
+/* The index: every group and every block, as links in a flowing list */
+.debug-index {
+  padding: var(--luz-space-sm) var(--luz-space-md);
+}
+
+.debug-index ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--luz-space-2xs) var(--luz-space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--luz-text-sm);
+}
+
+.debug-index__group {
+  font-weight: 600;
+}
+
+.debug-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--luz-space-xl);
+  padding: var(--luz-space-md);
+}
+
+.debug-group__title {
+  margin-block: var(--luz-space-md) var(--luz-space-xs);
+}
+
+.debug-group__blocks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--luz-space-lg);
+}
+
+/* One block: the frame of the page, never the look of what it holds */
+.debug-block {
+  border: 1px solid var(--luz-divider);
+  border-radius: var(--luz-radius-md);
+  background: var(--luz-surface-page);
+  overflow-x: auto;
+}
+
+.debug-block__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--luz-space-xs) var(--luz-space-sm);
+  padding: var(--luz-space-xs) var(--luz-space-md);
+  background: var(--luz-surface-muted);
+  border-block-end: 1px solid var(--luz-divider);
+}
+
+.debug-block__name {
+  margin: 0;
+  font-size: var(--luz-text-lg);
+}
+
+.debug-block__file {
+  color: var(--luz-text-muted);
+  font-size: var(--luz-text-sm);
+}
+
+.debug-block__docs {
+  margin-inline-start: auto;
+  font-size: var(--luz-text-sm);
+}
+
+.debug-block__demo {
+  padding: var(--luz-space-md);
+  /* A part fixed to the window (the cookie banner, the round colour-mode button) is
+     fixed to its own block, never over the others */
+  contain: layout;
+}
+
+/* The cookie banner leaves the flow, so its block holds the room it asks for: half the window at most */
+.debug-block__demo:has(luz-cookie-consent) {
+  min-block-size: 50dvh;
+}
+
+/* The layout examples are drawn with a docs class this page does not have */
+[data-debug-group="objects"] .docs-box {
+  padding: var(--luz-space-xs) var(--luz-space-sm);
+  border: 1px solid var(--luz-outline);
+  border-radius: var(--luz-radius-sm);
+  background: var(--luz-surface);
+}
