@@ -297,7 +297,7 @@
   "footer.changelog": "Changelog",
   "footer.contributing": "Contributing",
   "footer.reviews": "Browser reviews",
-  "footer.legal": "© 2024–2026 Fernando Muñoz. LUZ is released under the <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">MIT License</a>: use it, change it and share it, in commercial work too, as long as the notice goes with it. Every file it ships, fonts and icons included, is MIT.",
+  "footer.legal": "© 2024–2026 Fernando Muñoz. LUZ is released under the <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">MIT License</a>: use it, change it and share it, in commercial work too, as long as the notice goes with it. Credit to the original project is appreciated. Every file it ships, fonts and icons included, is MIT.",
   "footer.mode": "Color mode",
   "footer.mode-change": "Change color mode",
   "footer.light": "Light",
