@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Progreso
 description: Muestra cuánto ha avanzado una tarea que lleva tiempo, mediante el elemento progress nativo.
-source: 17f29a54f38f
+source: 920d58daa90c
 reviewed: false
 -->
     <div class="docs-component" id="c-progress">
@@ -22,6 +22,16 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>progress</code> sin clase no necesita ninguna: tiene el tamaño del componente y el color de marca en su relleno.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-progress-bare" aria-label="Copy the bare progress markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare progress markup"><code id="code-progress-bare">&lt;label for=&quot;upload&quot;&gt;Uploading report.pdf&lt;/label&gt;
+&lt;progress id=&quot;upload&quot; value=&quot;25&quot; max=&quot;100&quot;&gt;25%&lt;/progress&gt;</code></pre>
+            </div>
+            <p><code>.luz-progress</code> dibuja ella misma la pista y el relleno. Con la clase:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

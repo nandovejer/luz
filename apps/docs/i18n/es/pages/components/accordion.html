@@ -2,7 +2,7 @@
 title: Acordeón
 description: Muestra y oculta secciones de contenido con los elementos nativos details y summary, de una en una si asignas un nombre al grupo.
 keywords: contraer, desplegar
-source: 95f93a7d5dcf
+source: e757608655fe
 reviewed: false
 -->
     <div class="docs-component" id="c-accordion">
@@ -37,6 +37,18 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Un <code>details</code> sin clase no necesita ninguna: un resumen y un divisor, sin caja.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-accordion-bare" aria-label="Copy the bare details markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare details markup"><code id="code-accordion-bare">&lt;details&gt;
+  &lt;summary&gt;What is a design token?&lt;/summary&gt;
+  &lt;p&gt;A named value that components read.&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+            </div>
+            <p><code>.luz-accordion</code> añade la caja y el grupo. Con la clase:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

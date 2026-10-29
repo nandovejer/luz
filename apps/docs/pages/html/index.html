@@ -7,6 +7,7 @@ lead: false
 -->
     <p class="docs-lead">How LUZ styles each of the <span data-elements-count>116</span> current HTML elements, in <span data-categories-count>14</span> categories, with a live example and the markup to copy.</p>
     <p>The list follows <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements">MDN</a>. Deprecated elements are left out on purpose: <a href="#html-deprecated">here is what to use instead</a>.</p>
+    <p>Most elements are styled with no class. See <a href="#html-styled">which ones, and which are left to you</a>, and <a href="#html-change">how to change the defaults</a>.</p>
 
     <nav class="docs-toc docs-toc--inline" aria-label="HTML elements contents">
         <div>
@@ -35,10 +36,55 @@ lead: false
       <ul>
         <li><strong>Live example.</strong> The real element, styled by LUZ right now. Change the color mode in the page footer to check it in all three.</li>
         <li><strong>Markup.</strong> The exact code of the example. The copy button copies what you see.</li>
-        <li><strong>LUZ note.</strong> Whether the element is styled with no class, through a component class, or left to the browser.</li>
+        <li><strong>LUZ note.</strong> Whether the element is styled with no class, left to the browser, or has no style because it only groups content. When a class adds something, the note says what.</li>
       </ul>
       <p>Rules that style bare elements have zero specificity: any <code>.luz-*</code> class, or a rule of your own, wins.</p>
     </div>
+
+    <section class="elements-index" id="html-styled" aria-labelledby="html-styled-title">
+      <h2 class="elements-index__title" id="html-styled-title">Which elements have a style with no class</h2>
+      <p class="elements-index__lead">Write the HTML and LUZ styles it, with no class on it. Structure is the exception: the layout of a page is yours.</p>
+      <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Elements styled with no class">
+        <table class="luz-table">
+          <caption>Styled with no class</caption>
+          <thead>
+            <tr><th scope="col">Group</th><th scope="col">Elements</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Text</th><td><code>h1</code> to <code>h6</code>, <code>p</code>, <code>ul</code>, <code>ol</code>, <code>menu</code>, <code>li</code>, <code>dl</code>, <code>dt</code>, <code>dd</code>, <code>blockquote</code>, <code>pre</code>, <code>hr</code>, <code>figure</code>, <code>figcaption</code>, <code>address</code>. Type, color and the space between blocks.</td></tr>
+            <tr><th scope="row">Inline text</th><td><code>a</code>, <code>abbr</code>, <code>b</code>, <code>strong</code>, <code>code</code>, <code>kbd</code>, <code>samp</code>, <code>var</code>, <code>mark</code>, <code>small</code>, <code>sub</code>, <code>sup</code>, <code>time</code>, <code>dfn</code>, <code>s</code>, <code>u</code>, <code>del</code>, <code>ins</code>, <code>rt</code>.</td></tr>
+            <tr><th scope="row">Controls</th><td><code>button</code>, <code>input</code>, <code>textarea</code>, <code>select</code>, <code>label</code>, <code>fieldset</code>, <code>legend</code>, <code>output</code>, <code>meter</code>, <code>progress</code>. The file and color inputs keep the look of the browser; <code>.luz-input</code> styles them.</td></tr>
+            <tr><th scope="row">Tables</th><td><code>table</code>, <code>caption</code>, <code>tr</code>, <code>th</code>, <code>td</code>. The full width of the container.</td></tr>
+            <tr><th scope="row">Disclosure and dialog</th><td><code>details</code>, <code>summary</code>, <code>dialog</code>.</td></tr>
+            <tr><th scope="row">Images and media</th><td><code>img</code>, <code>picture</code>, <code>video</code>, <code>audio</code>, <code>canvas</code>, <code>svg</code>, <code>iframe</code>, <code>embed</code>, <code>object</code>.</td></tr>
+            <tr><th scope="row">The page</th><td><code>html</code>, <code>body</code>. <code>body</code> sets the type, color and background of the page. It has no layout: no container and no centring.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="luz-table-wrap" tabindex="0" role="region" aria-label="Elements with no style">
+        <table class="luz-table">
+          <caption>No style</caption>
+          <thead>
+            <tr><th scope="col">Group</th><th scope="col">Elements</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Structure</th><td><code>div</code>, <code>span</code>, <code>section</code>, <code>article</code>, <code>aside</code>, <code>header</code>, <code>footer</code>, <code>main</code>, <code>search</code>, <code>form</code>, <code>nav</code>, <code>hgroup</code>, <code>col</code>, <code>colgroup</code>. They only group content. Lay them out with the <code>o-*</code> objects, such as <code>.o-stack</code> and <code>.o-grid</code>, or with your own CSS.</td></tr>
+            <tr><th scope="row">The look of the browser</th><td><code>option</code>, <code>optgroup</code>, <code>datalist</code>, <code>em</code>, <code>i</code>, <code>cite</code>, <code>q</code>, <code>br</code>, <code>wbr</code>, <code>bdi</code>, <code>bdo</code>, <code>ruby</code>, <code>rp</code>, <code>data</code>, <code>map</code>, <code>area</code>, <code>slot</code>, <code>source</code>, <code>math</code>, <code>thead</code>, <code>tbody</code>, <code>tfoot</code>. LUZ leaves them as the browser draws them. <code>thead</code>, <code>tbody</code> and <code>tfoot</code> only group rows: the rows and cells carry the look of the table.</td></tr>
+            <tr><th scope="row">Not shown</th><td><code>head</code>, <code>title</code>, <code>meta</code>, <code>link</code>, <code>style</code>, <code>base</code>, <code>script</code>, <code>noscript</code>, <code>template</code>, <code>selectedcontent</code>, <code>geolocation</code>. They hold information for the browser, not for the reader.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The one element left, <code>track</code>, is styled by the video player and needs its class.</p>
+      <h3 class="docs-prose__title" id="html-variants">The HTML says the variant</h3>
+      <p>A class is not needed to tell one look from another when the HTML already says it:</p>
+      <ul>
+        <li>A <code>button</code> with no <code>type</code>, or with <code>type="submit"</code>, is the primary action. <code>type="button"</code> and <code>type="reset"</code> are the secondary one.</li>
+        <li><code>aria-invalid="true"</code> marks a field with an error.</li>
+        <li><code>disabled</code> marks a control that cannot be used.</li>
+        <li><code>aria-current="page"</code> marks the link of the page you are on.</li>
+      </ul>
+      <p>A class adds what HTML cannot say: a link that looks like a button, the danger and ghost roles, the sizes, and the parts that need markup of their own. The card of each element says what its class adds. An element with a <code>luz-*</code> class takes the look of its component.</p>
+    </section>
 
     <section class="elements-index" id="html-index" aria-labelledby="html-index-title">
       <h2 class="elements-index__title" id="html-index-title">All elements, A to Z</h2>
@@ -49,702 +95,122 @@ lead: false
             <tr><th scope="col">Element</th><th scope="col">Category</th><th scope="col">LUZ style</th><th scope="col">On this page</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-a"><code>a</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-abbr"><code>abbr</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-address"><code>address</code></a></th>
-              <td>Page structure</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-area"><code>area</code></a></th>
-              <td>Images and media</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-article"><code>article</code></a></th>
-              <td>Page structure</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-aside"><code>aside</code></a></th>
-              <td>Page structure</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-audio"><code>audio</code></a></th>
-              <td>Images and media</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-b"><code>b</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-base"><code>base</code></a></th>
-              <td>Page metadata</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-bdi"><code>bdi</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-bdo"><code>bdo</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-blockquote"><code>blockquote</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/document/#el-body"><code>body</code></a></th>
-              <td>Document root</td>
-              <td><code>elements/document.css</code></td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-br"><code>br</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-button"><code>button</code></a></th>
-              <td>Forms</td>
-              <td><code>components/button.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/scripting/#el-canvas"><code>canvas</code></a></th>
-              <td>Script and canvas</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-caption"><code>caption</code></a></th>
-              <td>Tables</td>
-              <td><code>components/table.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-cite"><code>cite</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-code"><code>code</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-col"><code>col</code></a></th>
-              <td>Tables</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-colgroup"><code>colgroup</code></a></th>
-              <td>Tables</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-data"><code>data</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-datalist"><code>datalist</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-dd"><code>dd</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/edits/#el-del"><code>del</code></a></th>
-              <td>Tracked edits</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/widgets/#el-details"><code>details</code></a></th>
-              <td>Built-in widgets</td>
-              <td><code>elements/interactive.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-dfn"><code>dfn</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/widgets/#el-dialog"><code>dialog</code></a></th>
-              <td>Built-in widgets</td>
-              <td><code>elements/interactive.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-div"><code>div</code></a></th>
-              <td>Text blocks</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-dl"><code>dl</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-dt"><code>dt</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-em"><code>em</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-embed"><code>embed</code></a></th>
-              <td>Frames and embeds</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-fieldset"><code>fieldset</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-figcaption"><code>figcaption</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-figure"><code>figure</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-footer"><code>footer</code></a></th>
-              <td>Page structure</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-form"><code>form</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/widgets/#el-geolocation"><code>geolocation</code></a></th>
-              <td>Built-in widgets</td>
-              <td>Native look</td>
-              <td>Markup only <span class="luz-tag luz-tag--purple">Experimental</span></td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h1"><code>h1</code></a></th>
-              <td>Page structure</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h2"><code>h2</code></a></th>
-              <td>Page structure</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h3"><code>h3</code></a></th>
-              <td>Page structure</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h4"><code>h4</code></a></th>
-              <td>Page structure</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h5"><code>h5</code></a></th>
-              <td>Page structure</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-h6"><code>h6</code></a></th>
-              <td>Page structure</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-head"><code>head</code></a></th>
-              <td>Page metadata</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-header"><code>header</code></a></th>
-              <td>Page structure</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-hgroup"><code>hgroup</code></a></th>
-              <td>Page structure</td>
-              <td><code>elements/sections.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-hr"><code>hr</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/document/#el-html"><code>html</code></a></th>
-              <td>Document root</td>
-              <td><code>elements/document.css</code></td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-i"><code>i</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-iframe"><code>iframe</code></a></th>
-              <td>Frames and embeds</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-img"><code>img</code></a></th>
-              <td>Images and media</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-input"><code>input</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/edits/#el-ins"><code>ins</code></a></th>
-              <td>Tracked edits</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-kbd"><code>kbd</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-label"><code>label</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-legend"><code>legend</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-li"><code>li</code></a></th>
-              <td>Text blocks</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-link"><code>link</code></a></th>
-              <td>Page metadata</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-main"><code>main</code></a></th>
-              <td>Page structure</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-map"><code>map</code></a></th>
-              <td>Images and media</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-mark"><code>mark</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/svg-mathml/#el-math"><code>math</code></a></th>
-              <td>SVG and MathML</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-menu"><code>menu</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-meta"><code>meta</code></a></th>
-              <td>Page metadata</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-meter"><code>meter</code></a></th>
-              <td>Forms</td>
-              <td><code>elements/forms.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-nav"><code>nav</code></a></th>
-              <td>Page structure</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/scripting/#el-noscript"><code>noscript</code></a></th>
-              <td>Script and canvas</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-object"><code>object</code></a></th>
-              <td>Frames and embeds</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-ol"><code>ol</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-optgroup"><code>optgroup</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-option"><code>option</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-output"><code>output</code></a></th>
-              <td>Forms</td>
-              <td><code>elements/forms.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-p"><code>p</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-picture"><code>picture</code></a></th>
-              <td>Frames and embeds</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-pre"><code>pre</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-progress"><code>progress</code></a></th>
-              <td>Forms</td>
-              <td><code>elements/forms.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-q"><code>q</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-rp"><code>rp</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-rt"><code>rt</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-ruby"><code>ruby</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-s"><code>s</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-samp"><code>samp</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/scripting/#el-script"><code>script</code></a></th>
-              <td>Script and canvas</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-search"><code>search</code></a></th>
-              <td>Page structure</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/structure/#el-section"><code>section</code></a></th>
-              <td>Page structure</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-select"><code>select</code></a></th>
-              <td>Forms</td>
-              <td><code>components/form.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-selectedcontent"><code>selectedcontent</code></a></th>
-              <td>Forms</td>
-              <td>Native look</td>
-              <td>Markup only <span class="luz-tag luz-tag--purple">Experimental</span></td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/web-components/#el-slot"><code>slot</code></a></th>
-              <td>Web Components</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-small"><code>small</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/embeds/#el-source"><code>source</code></a></th>
-              <td>Frames and embeds</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-span"><code>span</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-strong"><code>strong</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-style"><code>style</code></a></th>
-              <td>Page metadata</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-sub"><code>sub</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/widgets/#el-summary"><code>summary</code></a></th>
-              <td>Built-in widgets</td>
-              <td><code>elements/interactive.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-sup"><code>sup</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/svg-mathml/#el-svg"><code>svg</code></a></th>
-              <td>SVG and MathML</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-table"><code>table</code></a></th>
-              <td>Tables</td>
-              <td><code>components/table.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-tbody"><code>tbody</code></a></th>
-              <td>Tables</td>
-              <td><code>components/table.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-td"><code>td</code></a></th>
-              <td>Tables</td>
-              <td><code>components/table.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/web-components/#el-template"><code>template</code></a></th>
-              <td>Web Components</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/forms/#el-textarea"><code>textarea</code></a></th>
-              <td>Forms</td>
-              <td><code>elements/forms.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-tfoot"><code>tfoot</code></a></th>
-              <td>Tables</td>
-              <td><code>components/table.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-th"><code>th</code></a></th>
-              <td>Tables</td>
-              <td><code>components/table.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-thead"><code>thead</code></a></th>
-              <td>Tables</td>
-              <td><code>components/table.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-time"><code>time</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/metadata/#el-title"><code>title</code></a></th>
-              <td>Page metadata</td>
-              <td>Native look</td>
-              <td>Markup only</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/tables/#el-tr"><code>tr</code></a></th>
-              <td>Tables</td>
-              <td><code>components/table.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-track"><code>track</code></a></th>
-              <td>Images and media</td>
-              <td><code>components/player.css</code> (class)</td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-u"><code>u</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/text/#el-ul"><code>ul</code></a></th>
-              <td>Text blocks</td>
-              <td><code>elements/text.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-var"><code>var</code></a></th>
-              <td>Inline text</td>
-              <td><code>elements/inline.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/media/#el-video"><code>video</code></a></th>
-              <td>Images and media</td>
-              <td><code>elements/media.css</code></td>
-              <td>Live example</td>
-            </tr>
-            <tr>
-              <th scope="row"><a href="/docs/html/inline/#el-wbr"><code>wbr</code></a></th>
-              <td>Inline text</td>
-              <td>Native look</td>
-              <td>Live example</td>
-            </tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-a"><code>a</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-abbr"><code>abbr</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-address"><code>address</code></a></th><td>Page structure</td><td><code>elements/sections.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-area"><code>area</code></a></th><td>Images and media</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-article"><code>article</code></a></th><td>Page structure</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-aside"><code>aside</code></a></th><td>Page structure</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-audio"><code>audio</code></a></th><td>Images and media</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-b"><code>b</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-base"><code>base</code></a></th><td>Page metadata</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-bdi"><code>bdi</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-bdo"><code>bdo</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-blockquote"><code>blockquote</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/document/#el-body"><code>body</code></a></th><td>Document root</td><td><code>elements/document.css</code></td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-br"><code>br</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-button"><code>button</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/scripting/#el-canvas"><code>canvas</code></a></th><td>Script and canvas</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-caption"><code>caption</code></a></th><td>Tables</td><td><code>elements/tables.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-cite"><code>cite</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-code"><code>code</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-col"><code>col</code></a></th><td>Tables</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-colgroup"><code>colgroup</code></a></th><td>Tables</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-data"><code>data</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-datalist"><code>datalist</code></a></th><td>Forms</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-dd"><code>dd</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/edits/#el-del"><code>del</code></a></th><td>Tracked edits</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/widgets/#el-details"><code>details</code></a></th><td>Built-in widgets</td><td><code>elements/interactive.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-dfn"><code>dfn</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/widgets/#el-dialog"><code>dialog</code></a></th><td>Built-in widgets</td><td><code>elements/interactive.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-div"><code>div</code></a></th><td>Text blocks</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-dl"><code>dl</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-dt"><code>dt</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-em"><code>em</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-embed"><code>embed</code></a></th><td>Frames and embeds</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-fieldset"><code>fieldset</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-figcaption"><code>figcaption</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-figure"><code>figure</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-footer"><code>footer</code></a></th><td>Page structure</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-form"><code>form</code></a></th><td>Forms</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/widgets/#el-geolocation"><code>geolocation</code></a></th><td>Built-in widgets</td><td>Native look</td><td>Markup only <span class="luz-tag luz-tag--purple">Experimental</span></td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h1"><code>h1</code></a></th><td>Page structure</td><td><code>elements/sections.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h2"><code>h2</code></a></th><td>Page structure</td><td><code>elements/sections.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h3"><code>h3</code></a></th><td>Page structure</td><td><code>elements/sections.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h4"><code>h4</code></a></th><td>Page structure</td><td><code>elements/sections.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h5"><code>h5</code></a></th><td>Page structure</td><td><code>elements/sections.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-h6"><code>h6</code></a></th><td>Page structure</td><td><code>elements/sections.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-head"><code>head</code></a></th><td>Page metadata</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-header"><code>header</code></a></th><td>Page structure</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-hgroup"><code>hgroup</code></a></th><td>Page structure</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-hr"><code>hr</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/document/#el-html"><code>html</code></a></th><td>Document root</td><td><code>elements/document.css</code></td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-i"><code>i</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-iframe"><code>iframe</code></a></th><td>Frames and embeds</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-img"><code>img</code></a></th><td>Images and media</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-input"><code>input</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/edits/#el-ins"><code>ins</code></a></th><td>Tracked edits</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-kbd"><code>kbd</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-label"><code>label</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-legend"><code>legend</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-li"><code>li</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-link"><code>link</code></a></th><td>Page metadata</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-main"><code>main</code></a></th><td>Page structure</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-map"><code>map</code></a></th><td>Images and media</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-mark"><code>mark</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/svg-mathml/#el-math"><code>math</code></a></th><td>SVG and MathML</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-menu"><code>menu</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-meta"><code>meta</code></a></th><td>Page metadata</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-meter"><code>meter</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-nav"><code>nav</code></a></th><td>Page structure</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/scripting/#el-noscript"><code>noscript</code></a></th><td>Script and canvas</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-object"><code>object</code></a></th><td>Frames and embeds</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-ol"><code>ol</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-optgroup"><code>optgroup</code></a></th><td>Forms</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-option"><code>option</code></a></th><td>Forms</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-output"><code>output</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-p"><code>p</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-picture"><code>picture</code></a></th><td>Frames and embeds</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-pre"><code>pre</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-progress"><code>progress</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-q"><code>q</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-rp"><code>rp</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-rt"><code>rt</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-ruby"><code>ruby</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-s"><code>s</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-samp"><code>samp</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/scripting/#el-script"><code>script</code></a></th><td>Script and canvas</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-search"><code>search</code></a></th><td>Page structure</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/structure/#el-section"><code>section</code></a></th><td>Page structure</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-select"><code>select</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-selectedcontent"><code>selectedcontent</code></a></th><td>Forms</td><td>Native look</td><td>Markup only <span class="luz-tag luz-tag--purple">Experimental</span></td></tr>
+            <tr><th scope="row"><a href="/docs/html/web-components/#el-slot"><code>slot</code></a></th><td>Web Components</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-small"><code>small</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/embeds/#el-source"><code>source</code></a></th><td>Frames and embeds</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-span"><code>span</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-strong"><code>strong</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-style"><code>style</code></a></th><td>Page metadata</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-sub"><code>sub</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/widgets/#el-summary"><code>summary</code></a></th><td>Built-in widgets</td><td><code>elements/interactive.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-sup"><code>sup</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/svg-mathml/#el-svg"><code>svg</code></a></th><td>SVG and MathML</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-table"><code>table</code></a></th><td>Tables</td><td><code>elements/tables.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-tbody"><code>tbody</code></a></th><td>Tables</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-td"><code>td</code></a></th><td>Tables</td><td><code>elements/tables.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/web-components/#el-template"><code>template</code></a></th><td>Web Components</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/forms/#el-textarea"><code>textarea</code></a></th><td>Forms</td><td><code>elements/forms.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-tfoot"><code>tfoot</code></a></th><td>Tables</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-th"><code>th</code></a></th><td>Tables</td><td><code>elements/tables.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-thead"><code>thead</code></a></th><td>Tables</td><td>Native look</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-time"><code>time</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/metadata/#el-title"><code>title</code></a></th><td>Page metadata</td><td>Native look</td><td>Markup only</td></tr>
+            <tr><th scope="row"><a href="/docs/html/tables/#el-tr"><code>tr</code></a></th><td>Tables</td><td><code>elements/tables.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-track"><code>track</code></a></th><td>Images and media</td><td><code>components/player.css</code> (class)</td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-u"><code>u</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/text/#el-ul"><code>ul</code></a></th><td>Text blocks</td><td><code>elements/text.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-var"><code>var</code></a></th><td>Inline text</td><td><code>elements/inline.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/media/#el-video"><code>video</code></a></th><td>Images and media</td><td><code>elements/media.css</code></td><td>Live example</td></tr>
+            <tr><th scope="row"><a href="/docs/html/inline/#el-wbr"><code>wbr</code></a></th><td>Inline text</td><td>Native look</td><td>Live example</td></tr>
           </tbody>
         </table>
       </div>
@@ -902,6 +368,31 @@ lead: false
       </div>
     </section>
 
+
+    <section class="elements-index" id="html-change" aria-labelledby="html-change-title">
+      <h2 class="elements-index__title" id="html-change-title">Changing the default styles</h2>
+      <p class="elements-index__lead">Every rule that styles a bare element has zero specificity, so yours wins without a fight.</p>
+      <ul>
+        <li><strong>Change the tokens.</strong> This is the way to change the look of the whole site: colors, type, space and radius. Copy <code>themes/_template.css</code> and change the values. <a href="/docs/get-started/make-it-yours/">Make it yours</a> shows how.</li>
+        <li><strong>Write your own CSS.</strong> CSS with no layer beats every <a href="/docs/get-started/layers/">layer of LUZ</a>. You need no <code>!important</code> and no longer selector. What you leave alone stays: if you change only the color of an <code>h1</code>, it keeps the size LUZ gives it.</li>
+        <li><strong>Use LUZ in one region of a page that already has a design.</strong> Load <code>luz.conditional.css</code> instead of <code>luz.css</code>, and put <code>data-luz</code> on the element that holds the region. The reset and the bare elements apply only inside it. <a href="/docs/get-started/#which-level">Which level do I need?</a> says when to choose it.</li>
+      </ul>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">CSS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-html-change" aria-label="Copy the CSS">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Overriding LUZ defaults"><code id="code-html-change">/* Your CSS has no layer, so it beats every layer of LUZ. */
+h1 {
+  font-weight: 600;
+}
+
+button {
+  border-radius: 0;
+}</code></pre>
+      </div>
+      <p>The tokens, your CSS and the region work together: the tokens change what LUZ draws, your CSS has the last word, and the region limits where LUZ draws at all.</p>
+    </section>
 
     <section class="docs-block" id="c-elements" aria-labelledby="c-elements-title">
           <div class="docs-demo__head">

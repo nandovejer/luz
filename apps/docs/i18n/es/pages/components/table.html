@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Tabla
 description: Compara registros con varios atributos, en filas y columnas que se leen bien a 320 px.
-source: 6c5d2ef4a116
+source: 9eea5572599a
 reviewed: false
 -->
     <div class="docs-component" id="c-table">
@@ -47,6 +47,23 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Una <code>table</code> sin clase no necesita ninguna: llena su contenedor.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-table-bare" aria-label="Copy the bare table markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare table markup"><code id="code-table-bare">&lt;table&gt;
+  &lt;caption&gt;Invoices&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Number&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Date&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Amount (€)&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;INV-0042&lt;/td&gt;&lt;td&gt;1 Oct 2026&lt;/td&gt;&lt;td&gt;120.00&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <p>Las clases añaden lo que una tabla sin clase no puede hacer: <code>.luz-table-wrap</code> hace que una tabla ancha se desplace, y <code>.luz-table</code> con <code>data-label</code> apila sus filas en tarjetas. Con las clases:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

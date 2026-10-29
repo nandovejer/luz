@@ -213,11 +213,12 @@ describe("the page: front matter and its place", () => {
     expect(siteOf().pages.some((p) => p.route === "/docs/get-started/classless/")).toBe(false);
   });
 
-  it("comes after Print styles and before How LUZ is built in the reading order", () => {
+  it("comes after Print styles and before Migrate a project to LUZ, which comes before How LUZ is built, in the reading order", () => {
     const order = siteOf().pages.filter((p) => p.meta.area === "get-started").sort((a, b) => Number(a.meta.order) - Number(b.meta.order));
     const routes = order.map((p) => p.route);
     expect(routes.indexOf(ROUTE)).toBe(routes.indexOf("/docs/get-started/print/") + 1);
-    expect(routes.indexOf("/docs/get-started/how-luz-is-built/")).toBe(routes.indexOf(ROUTE) + 1);
+    expect(routes.indexOf("/docs/get-started/migrate/")).toBe(routes.indexOf(ROUTE) + 1);
+    expect(routes.indexOf("/docs/get-started/how-luz-is-built/")).toBe(routes.indexOf("/docs/get-started/migrate/") + 1);
   });
 
   it("has no script and no event handler in its source: it works as it is without JavaScript", () => {

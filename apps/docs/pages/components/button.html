@@ -80,6 +80,16 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
+            <p>A bare <code>button</code> needs no class. With no <code>type</code>, or with <code>type="submit"</code>, it is the primary action; <code>type="button"</code> is the secondary one:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-button-bare" aria-label="Copy the bare button markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare button markup"><code id="code-button-bare">&lt;button type=&quot;submit&quot;&gt;Save changes&lt;/button&gt;
+&lt;button type=&quot;button&quot;&gt;Cancel&lt;/button&gt;</code></pre>
+            </div>
+            <p><code>.luz-btn</code> adds what HTML cannot say: the look of a button on an <code>a</code>, the roles, the sizes and the full width. With the class:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

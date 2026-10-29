@@ -2,7 +2,7 @@
 title: Campos de formulario
 description: Recoge datos con campos, opciones y selectores nativos, cada uno con una etiqueta visible, una indicación y un error.
 keywords: input, textarea, casilla
-source: 4778826b13bf
+source: a592d550d222
 reviewed: false
 -->
     <div class="docs-component" id="c-form">
@@ -179,6 +179,26 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
+            <p>Un formulario no necesita ninguna clase: los elementos llevan el aspecto y el espacio entre ellos.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-form-bare" aria-label="Copy the bare form markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare form markup"><code id="code-form-bare">&lt;form&gt;
+  &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+  &lt;input id=&quot;email&quot; type=&quot;email&quot; required&gt;
+  &lt;label for=&quot;notes&quot;&gt;Notes&lt;/label&gt;
+  &lt;textarea id=&quot;notes&quot; rows=&quot;3&quot;&gt;&lt;/textarea&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Plan&lt;/legend&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; checked&gt; Free&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot;&gt; Team&lt;/label&gt;
+  &lt;/fieldset&gt;
+  &lt;button&gt;Subscribe&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+            </div>
+            <p>Las clases añaden lo que necesita marcado: <code>.luz-field</code> para una pista y un error, <code>.luz-input--error</code>, el interruptor, y <code>.luz-check-group</code> con <code>.luz-check-item</code> para casillas y botones de radio que dibuja LUZ. Con las clases:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

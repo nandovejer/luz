@@ -75,9 +75,15 @@ Link only the catalog stylesheets the page uses; drop the other lines. Each stac
 
 ## Refactor, page by page
 
-- LUZ goes in its layer `luz`, under the current CSS: `@layer luz, legacy, site;`. Nothing of the old CSS changes yet.
-- Migrate one page or component at a time, in the person's order, and show what changed and what is left.
-- Never delete the old framework or its files without the person's OK for that step.
+In the person's order; show what changed and what is left.
+
+1. Tokens first, brand values.
+2. Old CSS before LUZ: `@import "legacy.css" layer(legacy);` and `@layer legacy, luz;`. List each `!important`: they still win.
+3. `luz.conditional.css` for `luz.css`: LUZ only in `data-luz`.
+4. Page by page, one commit per page: remove old classes. Search scripts and templates before deleting one.
+5. Last, ask: drop `legacy`, use `luz.css`, drop `data-luz`.
+
+Never delete the old framework or its files without the person's OK for that step.
 
 ## Check every step
 

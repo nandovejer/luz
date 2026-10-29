@@ -148,6 +148,15 @@ npx playwright test \
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
+            <p>A bare <code>pre</code> needs no class: monospace type, a muted surface and a border.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-code-bare" aria-label="Copy the bare pre markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare pre markup"><code id="code-code-bare">&lt;pre&gt;&lt;code&gt;npm install @luz-ds/core&lt;/code&gt;&lt;/pre&gt;</code></pre>
+            </div>
+            <p><code>.luz-code-block</code> adds the language badge and the colors of the highlight. With the class:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>

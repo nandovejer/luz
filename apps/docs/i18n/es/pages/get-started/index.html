@@ -2,7 +2,7 @@
 title: Instala LUZ
 description: Elige un nivel y copia un comando de instalación o las etiquetas de CDN. Cada nivel necesita los que están por debajo, pero ninguno de los que están por encima.
 keywords: npm, CDN
-source: b1211b1eccc3
+source: 6168799ce4aa
 reviewed: false
 -->
     <div class="docs-block" id="installation">
@@ -18,6 +18,8 @@ reviewed: false
       <div class="docs-prose">
         <h2 id="which-level" class="docs-prose__title">¿Qué nivel necesito?</h2>
         <ul>
+          <li><strong>Un proyecto nuevo:</strong> nivel 2, tokens y core. <code class="luz-code-inline">luz.css</code> da estilo al HTML que escribes.</li>
+          <li><strong>Un proyecto que ya tiene diseño:</strong> para empezar, nivel 1, solo tokens: no cambia nada de lo que se ve. Después, el <a href="#existing-project">nivel 2 para un proyecto existente</a>, con <code class="luz-code-inline">luz.conditional.css</code>, una región cada vez. <a href="/docs/get-started/migrate/">Migra un proyecto a LUZ</a> tiene los pasos.</li>
           <li><strong>Tus propios componentes, los colores y el espaciado de LUZ:</strong> nivel 1, solo tokens.</li>
           <li><strong>Botones, formularios, tablas y diálogos listos para usar:</strong> nivel 2, tokens y core.</li>
           <li><strong>Páginas completas: estructura, cabecera, pie de página y búsqueda:</strong> nivel 3, el Catálogo, los tres paquetes.</li>
@@ -92,6 +94,24 @@ import &quot;@luz-ds/core&quot;;</code></pre>
           <li>Todas las páginas funcionan sin el script. Consulta <a href="/docs/get-started/javascript/">qué aporta cada módulo de JavaScript</a>.</li>
           <li>¿Solo necesitas un componente? Carga <code class="luz-code-inline">dist/base.min.css</code> y el archivo que quieras, por ejemplo <code class="luz-code-inline">dist/components/button.min.css</code>.</li>
           <li>¿Tienes marcado al que no puedes añadir clases, como Markdown o el de un CMS? Un <code class="luz-code-inline">button</code>, un campo o una <code class="luz-code-inline">table</code> sin clase ya tienen su aspecto en <code class="luz-code-inline">luz.css</code>. En una página que ya tiene diseño, carga en su lugar <code class="luz-code-inline">luz.conditional.css</code> y marca la zona con <code class="luz-code-inline">data-luz</code>.</li>
+        </ul>
+      </div>
+
+      <div class="docs-prose">
+        <h2 id="existing-project" class="docs-prose__title">Nivel 2 para un proyecto que ya tiene diseño</h2>
+        <p>Carga <code class="luz-code-inline">luz.conditional.css</code> en lugar de <code class="luz-code-inline">luz.css</code>. Es el mismo archivo, con el reset y los elementos sin clase limitados a la región que marcas con <code class="luz-code-inline">data-luz</code>. Carga primero los tokens, como en cualquier nivel. Desde un CDN, enlaza <code class="luz-code-inline">luz.conditional.min.css</code> de <code class="luz-code-inline">@luz-ds/core</code> en lugar de <code class="luz-code-inline">luz.min.css</code>; con un bundler, impórtalo como se muestra abajo.</p>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">Bundler</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-bundler-conditional" aria-label="Copia las importaciones del bundler para un proyecto existente">Copiar</button>
+          </div>
+          <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Importaciones del bundler, un proyecto existente"><code id="code-bundler-conditional">import &quot;@luz-ds/tokens/css&quot;;
+import &quot;@luz-ds/core/conditional.css&quot;;</code></pre>
+        </div>
+        <ul>
+          <li>El elemento con <code class="luz-code-inline">data-luz</code> toma la fuente, el color y el fondo de la página. Los tokens siguen en <code class="luz-code-inline">:root</code>.</li>
+          <li>Los objetos de maquetación, los componentes y las utilidades no se limitan a la región: se aplican allí donde pongas su clase.</li>
+          <li>Tu CSS antiguo no debe quedar sin capa, o ganará a LUZ. Ponlo en una capa anterior a <code class="luz-code-inline">luz</code>: mira <a href="/docs/get-started/layers/">Capas de cascada</a> y <a href="/docs/get-started/migrate/">Migra un proyecto a LUZ</a>.</li>
         </ul>
       </div>
 
@@ -220,4 +240,51 @@ import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
           <li><a href="/docs/get-started/structure/">Descubre cómo se organiza LUZ</a>: paquetes, capas de CSS y estructura de la página.</li>
         </ul>
       </div>
+
+      <luz-faq>
+        <h2 class="luz-faq__title" id="faq">Preguntas frecuentes</h2>
+        <p class="luz-faq__lead">Las respuestas breves. Cada una enlaza a la página que la explica.</p>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Qué es LUZ?</summary>
+          <div class="luz-faq__answer" id="faq-what">
+            <p>LUZ es un sistema de diseño para la web, en tres paquetes: tokens (colores, escalas, fuentes y tres modos de color), core (el reset, el estilo de los elementos HTML, los objetos de maquetación, los componentes y JavaScript opcional) y el catálogo (piezas que actúan para todo el sitio, como la búsqueda). Usa solo los tokens, core con los tokens, o los tres. <a href="/docs/get-started/ai/">Trabajar con IA</a> muestra cómo una IA puede escribir un sitio con LUZ.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Tienen estilo las etiquetas HTML sin clase?</summary>
+          <div class="luz-faq__answer" id="faq-tags">
+            <p>Sí, la mayoría. El texto, los enlaces, las listas, las tablas, los botones, los campos de formulario, <code>details</code> y <code>dialog</code> salen con estilo sin ninguna clase. Las etiquetas que solo estructuran la página, como <code>div</code>, <code>section</code>, <code>header</code> y <code>nav</code>, no tienen estilo: la maquetación es tuya. <a href="/docs/html/#html-styled">Qué elementos tienen estilo sin clase</a> los enumera todos.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Para qué sirven las clases?</summary>
+          <div class="luz-faq__answer" id="faq-classes">
+            <p>Una clase añade lo que el HTML no puede decir: un enlace que parece un botón, un papel como peligro, un tamaño, un componente con su propio marcado, como una tarjeta, y la maquetación con los objetos <code>o-*</code>. El HTML dice el resto: <code>type="button"</code> hace el botón secundario, y <code>aria-invalid="true"</code> marca un campo con error. <a href="/docs/components/">Explora los componentes</a> para ver qué añade cada clase.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Necesito JavaScript?</summary>
+          <div class="luz-faq__answer" id="faq-js">
+            <p>No. La mayoría de los componentes son solo CSS, y los que tienen un script funcionan también sin él. <a href="/docs/get-started/javascript/">Módulos de JavaScript</a> dice qué añade cada módulo.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Puedo cambiar los estilos por defecto?</summary>
+          <div class="luz-faq__answer" id="faq-change">
+            <p>Sí, sin pelearte con ellos. Cambia los tokens para cambiar todo el aspecto, o escribe tu propio CSS: el CSS sin capa gana a todas las capas de LUZ, sin <code>!important</code>. Lo que no tocas se queda. <a href="/docs/html/#html-change">Cambiar los estilos por defecto</a> muestra las tres formas.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿LUZ es solo para proyectos nuevos?</summary>
+          <div class="luz-faq__answer" id="faq-new-only">
+            <p>No. LUZ encaja mejor en un proyecto nuevo, pero puedes añadirlo a uno que ya tiene diseño, una región cada vez: carga <code>luz.conditional.css</code> en lugar de <code>luz.css</code> y pon <code>data-luz</code> en la región. <a href="#existing-project">Nivel 2 para un proyecto que ya tiene diseño</a> tiene las líneas que debes cargar.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Cómo migro un proyecto a LUZ?</summary>
+          <div class="luz-faq__answer" id="faq-migrate">
+            <p>Migra una página cada vez, en cinco pasos: los tokens con tu marca, el CSS antiguo en una capa anterior a LUZ, una primera región, las demás páginas una a una, y el CSS antiguo fuera. Una IA hace el trabajo mecánico; tú decides y compruebas. <a href="/docs/get-started/migrate/">Migra un proyecto a LUZ</a> tiene los pasos.</p>
+          </div>
+        </details>
+      </luz-faq>
     </div>
