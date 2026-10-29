@@ -486,12 +486,26 @@ describe("the LUZ docs site", () => {
   const landing = landingDocuments(site, "apps/landing/index.html", readFileSync(join(repo, "apps/landing/index.html"), "utf-8"));
   const homes = landing.map((d) => d.route);
   const { rendered, problems } = buildSite(site, { extra: landing });
-  const pages = [...rendered].filter(([route]) => !homes.includes(route));
+  // /debug/ is a tool page of the real site (scripts/docs-site/debug.js), not a docs page: no site header, sidebar, h1 of .docs-title or pager.
+  // The tests about the docs pages leave it out on purpose; its own tests (tests/debug-*.test.js) and the one below say what it has instead.
+  const DEBUG = "/debug/";
+  const pages = [...rendered].filter(([route]) => !homes.includes(route) && route !== DEBUG);
 
   it("builds with every source well nested, every internal link resolving and every catalog key used", () => {
     expect(problems).toEqual([]);
     expect(homes).toEqual(["/", "/es/", "/ar/"]);
-    expect([...rendered.keys()].sort()).toEqual([...homes, "/404.html", ...site.pages.map((p) => p.route)].sort());
+    // The pages of the docs, the not-found page, the homes and /debug/ (the one route that is no page of apps/docs/pages/)
+    expect([...rendered.keys()].sort()).toEqual([...homes, "/404.html", DEBUG, ...site.pages.map((p) => p.route)].sort());
+    expect(site.byRoute.has(DEBUG)).toBe(false);
+  });
+
+  it("renders /debug/ as a tool page with none of the docs chrome: no site header, no sidebar, no docs title", () => {
+    const html = rendered.get(DEBUG);
+    expect(html).toBeTruthy();
+    expect(html).not.toMatch(/<header class="site-header"/);
+    expect(html).not.toContain("docs-nav");
+    expect(html).not.toContain('class="docs-title"');
+    // The Previous / Next of the reading order is not asserted here: /debug/ shows the catalog's pager as a demo (docs-shell.test.js skips it for that)
   });
 
   // Decision D1: a language has docs when apps/docs/i18n/<code>/ exists. The delivery is Spanish; Arabic docs are planned, the home page alone is in Arabic for now (owner, 2026-10-19).
@@ -520,6 +534,8 @@ describe("the LUZ docs site", () => {
     const switcherOf = (html) => header(html).match(/<luz-lang-switch>[\s\S]*?<\/luz-lang-switch>/)?.[0] ?? "";
     const docsHeader = flat(header(rendered.get("/docs/")));
     for (const [route, html] of rendered) {
+      // /debug/ has no site header on purpose (tested above)
+      if (route === DEBUG) continue;
       const own = header(html);
       if (route === "/" || !homes.includes(route)) expect(flat(own), route).toBe(docsHeader);
       // A docs page has the switcher (the not-found page, which is no page in any language, does not: its text names the languages)
