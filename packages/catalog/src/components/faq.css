@@ -16,7 +16,7 @@
 	--luz-faq-measure: 65ch;
 
 	display: block;
-	overflow-wrap: break-word;
+	overflow-wrap: anywhere;
 }
 
 :where(luz-faq > * + *) {
