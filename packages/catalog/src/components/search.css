@@ -80,7 +80,9 @@
 	block-size: 1.125rem;
 	fill: none;
 	stroke: currentcolor;
-	stroke-width: 2;
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 }
 
 .luz-search__trigger-key {
@@ -188,7 +190,9 @@
 	block-size: 1.125rem;
 	fill: none;
 	stroke: currentcolor;
-	stroke-width: 2;
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 	color: var(--luz-text-secondary);
 	pointer-events: none;
 }
@@ -235,8 +239,9 @@
 	block-size: 1.25rem;
 	fill: none;
 	stroke: currentcolor;
-	stroke-width: 2;
+	stroke-width: 1.5;
 	stroke-linecap: round;
+	stroke-linejoin: round;
 }
 
 .luz-search__results {

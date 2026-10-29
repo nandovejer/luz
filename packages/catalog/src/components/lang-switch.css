@@ -78,7 +78,9 @@
 	block-size: 1.125rem;
 	fill: none;
 	stroke: currentcolor;
-	stroke-width: 1.75;
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 }
 
 /* The list: the browser's popover box (fixed, in the top layer) moved from

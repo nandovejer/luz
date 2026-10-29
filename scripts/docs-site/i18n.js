@@ -275,7 +275,7 @@ export function renderAlternates(i18n, current = i18n.default, siteUrl = "") {
 
 /** The globe of the language switch's button (decorative). */
 const GLOBE =
-  '<svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg>';
+  '<svg class="luz-lang-switch__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.2 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.2-3.5-8.5s1.2-6.1 3.5-8.5Z"/></svg>';
 
 /** ` dir="ltr"` on the name of a left-to-right language among the links of a right-to-left page: its letters keep their order. */
 const isolate = (current, l) => (current.dir === "rtl" && l.dir === "ltr" ? ' dir="ltr"' : "");

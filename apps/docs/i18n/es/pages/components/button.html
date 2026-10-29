@@ -1,12 +1,12 @@
 <!-- luz:page
 title: Botón
 description: Inicia una acción en la página actual, como guardar, enviar o abrir un diálogo.
-source: 11cb1fecb869
+source: e9f7c4d283a2
 reviewed: false
 -->
     <div class="docs-component" id="c-button">
           <h2 id="example">Ejemplo</h2>
-          <p>Las cinco variantes, los tres tamaños, un botón desactivado y un enlace con aspecto de botón.</p>
+          <p>Las cinco variantes, los tres tamaños, botones con icono, un botón desactivado y un enlace con aspecto de botón.</p>
           <div class="docs-example" data-docs-specimen>
           <fieldset class="docs-width" hidden>
             <legend>Ancho</legend>
@@ -29,6 +29,11 @@ reviewed: false
               <button class="luz-btn luz-btn--primary luz-btn--lg" type="button">Large</button>
             </div>
             <div class="o-row">
+              <button class="luz-btn luz-btn--primary" type="button"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 4h2.5l2.2 10.5h9.6L19.5 7H6.2"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg>Add to cart</button>
+              <a class="luz-btn luz-btn--outline" href="#c-button">Next step<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" data-luz-flip><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <button class="luz-btn luz-btn--ghost" type="button"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg><span class="u-sr-only">Add</span></button>
+            </div>
+            <div class="o-row">
               <button class="luz-btn luz-btn--primary" type="button" disabled>Disabled</button>
               <a class="luz-btn luz-btn--outline" href="#c-button">Link as button</a>
             </div>
@@ -39,7 +44,7 @@ reviewed: false
           </div>
           </div>
           <form class="docs-try" hidden>
-            <p class="docs-try__lead">Pruébalo: elige una variante, un tamaño y el ancho; después, copia el marcado.</p>
+            <p class="docs-try__lead">Pruébalo: elige una variante, un tamaño, un icono y el ancho; después, copia el marcado.</p>
             <div class="docs-try__controls">
               <fieldset class="docs-try__group">
                 <legend>Variante</legend>
@@ -56,10 +61,18 @@ reviewed: false
                 <label class="luz-check-item"><input type="radio" name="size" value="lg"> Grande</label>
               </fieldset>
               <fieldset class="docs-try__group">
+                <legend>Icono</legend>
+                <label class="luz-check-item"><input type="radio" name="icon" value="none" checked> Ninguno</label>
+                <label class="luz-check-item"><input type="radio" name="icon" value="start"> Antes de la etiqueta</label>
+                <label class="luz-check-item"><input type="radio" name="icon" value="end"> Después de la etiqueta</label>
+                <label class="luz-check-item"><input type="radio" name="icon" value="only"> Solo el icono</label>
+              </fieldset>
+              <fieldset class="docs-try__group">
                 <legend>Ancho completo</legend>
                 <label class="luz-check-item"><input type="checkbox" name="block" value="block"> Ocupar todo el ancho del contenedor</label>
               </fieldset>
             </div>
+            <template class="docs-try__icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7"/></svg></template>
             <div class="docs-try__preview" data-docs-specimen><button class="luz-btn luz-btn--primary" type="button">Save changes</button></div>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
@@ -113,6 +126,29 @@ reviewed: false
   &lt;button class=&quot;luz-btn luz-btn--primary luz-btn--block&quot; type=&quot;submit&quot;&gt;Add to cart&lt;/button&gt;
 &lt;/form&gt;</code></pre>
             </div>
+            <p>Con un icono, antes o después de la etiqueta, o solo. Toma el icono de <a href="/docs/components/icons/">Iconos</a> o dibuja el tuyo sobre la misma cuadrícula de 24 × 24:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-button-icon" aria-label="Copy the button with an icon markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Button with an icon markup"><code id="code-button-icon">&lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;submit&quot;&gt;
+  &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M3 4h2.5l2.2 10.5h9.6L19.5 7H6.2&quot;/&gt;&lt;circle cx=&quot;9&quot; cy=&quot;19&quot; r=&quot;1.4&quot;/&gt;&lt;circle cx=&quot;17&quot; cy=&quot;19&quot; r=&quot;1.4&quot;/&gt;&lt;/svg&gt;
+  Add to cart
+&lt;/button&gt;
+
+&lt;!-- After the label: an icon that points to the end of the line carries data-luz-flip --&gt;
+&lt;a class=&quot;luz-btn luz-btn--outline&quot; href=&quot;/checkout/&quot;&gt;
+  Next step
+  &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot; data-luz-flip=&quot;&quot;&gt;&lt;path d=&quot;M5 12h14M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;
+&lt;/a&gt;
+
+&lt;!-- Icon only: the name is real text, hidden from the eye --&gt;
+&lt;button class=&quot;luz-btn luz-btn--ghost&quot; type=&quot;button&quot;&gt;
+  &lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;24&quot; height=&quot;24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M12 5v14M5 12h14&quot;/&gt;&lt;/svg&gt;
+  &lt;span class=&quot;u-sr-only&quot;&gt;Add&lt;/span&gt;
+&lt;/button&gt;</code></pre>
+            </div>
             <h3 id="variants">Variantes y opciones</h3>
             <p>Combina <code>.luz-btn</code> con una variante y, si hace falta, un tamaño y el ancho completo.</p>
             <div class="luz-table-wrap" role="region" aria-label="Variantes y tamaños de botón" tabindex="0">
@@ -129,11 +165,12 @@ reviewed: false
                   <tr><td data-label="Clase o atributo"><div><code>.luz-btn--sm</code></div></td><td data-label="Efecto"><div>36 px de alto, texto pequeño</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-btn--lg</code></div></td><td data-label="Efecto"><div>56 px de alto, texto base</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-btn--block</code></div></td><td data-label="Efecto"><div>Ocupa el ancho del contenedor y permite que la etiqueta ocupe varias líneas: para tarjetas, formularios o cajones, no para columnas anchas</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>&lt;svg&gt;</code> dentro</div></td><td data-label="Efecto"><div>Un icono de 16 × 16 px, antes o después de la etiqueta, a poca distancia de ella y del color del texto</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>disabled</code></div></td><td data-label="Efecto"><div>Texto atenuado, borde discontinuo y sin eventos de puntero</div></td></tr>
                 </tbody>
               </table>
             </div>
-            <p>La altura predeterminada es 44 px. Un <code>&lt;svg&gt;</code> dentro del botón se muestra a 16 × 16 px, antes o después de la etiqueta.</p>
+            <p>La altura predeterminada es 44 px. El icono mide 16 px en todos los tamaños.</p>
             <h3 id="how">Cómo funciona</h3>
             <p>Un <code>&lt;button&gt;</code> (o <code>&lt;a&gt;</code>) nativo con clases de <code>components/button.css</code>. No necesita JavaScript.</p>
             <ul>
@@ -148,7 +185,7 @@ reviewed: false
             <p>Con Tab se llega al botón; Enter o Espacio lo activa. Un enlace con aspecto de botón solo responde a Enter, como cualquier enlace.</p>
             <ul>
               <li>No hace falta ARIA: la etiqueta visible es el nombre.</li>
-              <li>Un botón que solo tiene un icono necesita un nombre: <code>aria-label="Close"</code>; el icono debe llevar <code>aria-hidden="true"</code>.</li>
+              <li>Un icono lleva <code>aria-hidden="true"</code> y <code>focusable="false"</code>: la etiqueta da nombre al botón. Un botón que solo tiene un icono toma su nombre de un texto con <code>.u-sr-only</code>, no de un <code>aria-label</code>: ese texto se traduce con la página.</li>
               <li>Tab omite los botones desactivados y es posible que los lectores de pantalla no los encuentren: es preferible usar un botón activo que explique qué falta.</li>
             </ul>
             <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>

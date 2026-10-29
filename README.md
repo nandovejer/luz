@@ -170,7 +170,7 @@ background: #0d0e11;
 Every component has a page in the documentation with a live example, the markup to copy, when to use it and when not to.
 
 - **Actions and input:** buttons, copy button, dropdown, form fields (text, date and time, range, color, file, checkbox and radio groups, switches), select
-- **Show content:** accordion, avatar, card, code block, figure, icon grid, table, tag and badge
+- **Show content:** accordion, avatar, card, code block, figure, icons, table, tag and badge
 - **Feedback and status:** alert, modal, progress and meter, toast, tooltip
 - **Navigation:** breadcrumb, pagination, tabs, theme mode (the color mode), and, in catalog, the navbar and the sidebar
 - **Media:** video, audio and MIDI player

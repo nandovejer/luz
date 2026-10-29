@@ -343,12 +343,33 @@ function initAssets() {
 
 /* ---- Copy buttons ----------------------------------------------------- */
 
+/**
+ * The Icons page: each copy button copies the SVG of the icon beside it, and
+ * the sprite button copies one symbol per icon of the set, both read from the
+ * icons on screen, so the page carries each icon once and the two cannot drift.
+ */
+function initIconCopy() {
+  const symbols = [];
+  document.querySelectorAll(".docs-example .luz-icon-item").forEach((item) => {
+    const svg = item.querySelector(".luz-icon-display svg");
+    const button = item.querySelector(".luz-copy-btn");
+    if (!svg || !button) return;
+    button.dataset.copy = svg.outerHTML;
+    // The logo has its own grid; the set shares one
+    const id = item.querySelector(".luz-icon-name")?.id.replace(/^c-icons-/, "");
+    if (id && svg.getAttribute("viewBox") === "0 0 24 24") symbols.push(`  <symbol id="luz-icon-${id}" viewBox="0 0 24 24">${svg.innerHTML}</symbol>`);
+  });
+  const sprite = document.querySelector("[data-icon-sprite]");
+  if (sprite && symbols.length) sprite.dataset.copy = `<svg width="0" height="0" aria-hidden="true" focusable="false">\n${symbols.join("\n")}\n</svg>`;
+}
+
 function initCopy() {
   // The HTML element cards copy the code on screen, so it cannot drift
   document.querySelectorAll("[data-copy-from]").forEach((button) => {
     const source = document.getElementById(button.dataset.copyFrom);
     if (source) button.dataset.copy = source.textContent.trim();
   });
+  initIconCopy();
   initCopyButtons();
 }
 
@@ -356,6 +377,8 @@ function initCopy() {
 
 const VARIANTS = new Set(["primary", "secondary", "outline", "ghost", "danger"]);
 const SIZES = new Set(["sm", "lg"]);
+const ICONS = new Set(["start", "end", "only"]);
+const LABEL = "Save changes";
 
 /**
  * Try it (the Button page): the form is hidden in the markup, so without a
@@ -369,6 +392,7 @@ function initTryIt() {
   const code = form?.querySelector("pre.luz-code-block code");
   if (!form || !button || !code) return;
   const copy = form.querySelector(".luz-copy-btn[data-copy-from]");
+  const icon = form.querySelector("template.docs-try__icon")?.content.firstElementChild;
   const render = () => {
     const value = (name) => form.querySelector(`input[name="${name}"]:checked`)?.value;
     const variant = value("variant");
@@ -377,6 +401,20 @@ function initTryIt() {
     if (SIZES.has(size)) classes.push(`luz-btn--${size}`);
     if (value("block")) classes.push("luz-btn--block");
     button.className = classes.join(" ");
+    // The icon: before or after the label, or alone with the label for screen readers only
+    const where = value("icon");
+    const parts = [LABEL];
+    if (icon && ICONS.has(where)) {
+      if (where === "only") {
+        const name = document.createElement("span");
+        name.className = "u-sr-only";
+        name.textContent = LABEL;
+        parts[0] = name;
+      }
+      parts.splice(where === "end" ? 1 : 0, 0, icon.cloneNode(true));
+    }
+    // One part a line in the code, as a person would write it
+    button.replaceChildren(...(parts.length > 1 ? parts.flatMap((part) => ["\n  ", part]).concat("\n") : parts));
     code.textContent = button.outerHTML;
     highlightBlock(code.closest("pre"));
     // initCopy() took the text once, at load: give the button the new one
