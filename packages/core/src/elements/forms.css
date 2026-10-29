@@ -311,13 +311,14 @@
 /* ---- The space between controls ---------------------------------------
    A label, a field, a fieldset or a button after another control starts one
    step below it; the boxes of a list of checkboxes sit closer. A button after
-   another button is left beside it. */
+   another button is left beside it. A control with a luz- class is left to its
+   component: a .luz-check-item in a row would start lower than the first. */
 
-:where(:is(label, fieldset, input:not([type="hidden"], [type="checkbox"], [type="radio"]), select, textarea) + :is(label, fieldset, button, input:is([type="button"], [type="submit"], [type="reset"]))) {
+:where(:is(label, fieldset, input:not([type="hidden"], [type="checkbox"], [type="radio"]), select, textarea) + :is(label, fieldset, button, input:is([type="button"], [type="submit"], [type="reset"])):not([class*="luz-"])) {
   margin-block-start: var(--luz-space-md);
 }
 
-:where(label:has(> input:is([type="checkbox"], [type="radio"])) + label:has(> input:is([type="checkbox"], [type="radio"]))) {
+:where(label:has(> input:is([type="checkbox"], [type="radio"])) + label:has(> input:is([type="checkbox"], [type="radio"])):not([class*="luz-"])) {
   margin-block-start: var(--luz-space-xs);
 }
 

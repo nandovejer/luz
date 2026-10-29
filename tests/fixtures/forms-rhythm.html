@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ forms rhythm fixture</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <style>
+    /* A row the consumer wrote: flex with a gap, items from the top, so a margin shows as an offset */
+    .row { display: flex; gap: 16px; align-items: flex-start; margin-block-end: 24px; }
+    .row.o-row { align-items: flex-start; }
+  </style>
+</head>
+<body>
+
+  <!-- Components in a row: the bare rhythm margin must not reach a control whose class has "luz-" -->
+  <div id="rows">
+    <div id="row-label-check" class="row"><label id="a1">Bare label</label><label id="b1" class="luz-check-item"><input type="checkbox"> Component</label></div>
+    <div id="row-fieldset-btn" class="row"><fieldset id="a2"><legend>Bare</legend></fieldset><button id="b2" class="luz-btn" type="button">Component</button></div>
+    <div id="row-input-btn" class="row"><input id="a3" type="text" aria-label="Bare"><button id="b3" class="luz-btn luz-btn--primary" type="button">Component</button></div>
+    <div id="row-check-check" class="row"><label id="a4" class="luz-check-item"><input type="checkbox"> One</label><label id="b4" class="luz-check-item"><input type="checkbox"> Two</label></div>
+    <div id="row-object" class="o-row"><label id="a5">Bare label</label><label id="b5" class="luz-check-item"><input type="checkbox"> Component</label></div>
+  </div>
+
+  <!-- Bare controls keep their rhythm -->
+  <div id="bare">
+    <div id="bare-input-btn" class="row"><input id="c1" type="text" aria-label="Bare"><button id="d1" type="button">Bare</button></div>
+    <div id="bare-input-label" class="row"><input id="c2" type="text" aria-label="Bare"><label id="d2">Bare label</label></div>
+    <div id="bare-check-check" class="row"><label id="c3"><input type="checkbox"> One</label><label id="d3"><input type="checkbox"> Two</label></div>
+    <!-- A class without "luz-" is the consumer's own: the rhythm stays -->
+    <div id="other-class" class="row"><input id="c4" type="text" aria-label="Bare"><label id="d4" class="site-field">Site label</label></div>
+    <div id="other-class-btn" class="row"><input id="c5" type="text" aria-label="Bare"><button id="d5" class="site-button" type="button">Site button</button></div>
+  </div>
+</body>
+</html>
