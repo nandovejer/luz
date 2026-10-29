@@ -1,0 +1,313 @@
+<!-- luz:page
+title: Color mode by time of day
+description: Gives Auto the time of day: the mode follows the clock or the sun in the moments you declare, and an optional slider lets a reader try any hour.
+area: catalog
+order: 19
+group: site-wide
+fits-kinds: any
+fits: a site with a color mode control that wants a look for each part of the day
+files: <luz-theme-time>, .luz-theme-time
+module: theme-time.js
+toc: h2,h3
+keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
+-->
+    <div class="docs-component" id="p-theme-time">
+          <h2 id="example">Example</h2>
+          <p>The slider of the day as the bar builds it: alone, which is the default, and with every optional part (<code>show="time place saved moments"</code>). They are pictures: they are inert and no script runs on them, so they do not change this page. The working bar is on the <a href="/">home page</a>, and the moments of this site are the ones its footer declares: in Auto, the page follows them.</p>
+          <div class="docs-example" data-docs-specimen>
+          <p class="docs-stage__label">The slider alone</p>
+          <div class="docs-demo__stage" inert aria-hidden="true">
+            <div class="luz-theme-time__bar"><div class="luz-theme-time__day"><label class="luz-theme-time__label" for="tt-specimen-1">Hour of the day (specimen)</label><input class="luz-theme-time__slider" id="tt-specimen-1" type="range" min="0" max="1439" value="780"></div></div>
+          </div>
+          <p class="docs-stage__label">show="time place saved moments"</p>
+          <div class="docs-demo__stage" inert aria-hidden="true">
+            <luz-theme-time show="time place saved moments"><div class="luz-theme-time__bar"><p class="luz-theme-time__saved" data-on>Saved<span class="luz-theme-time__check" aria-hidden="true">✓</span></p><p class="luz-theme-time__where">Madrid · Afternoon</p><p class="luz-theme-time__hour">13:00</p><div class="luz-theme-time__day"><label class="luz-theme-time__label" for="tt-specimen-2">Hour of the day (specimen)</label><input class="luz-theme-time__slider" id="tt-specimen-2" type="range" min="0" max="1439" value="780"></div></div><fieldset class="luz-theme-time__moments"><legend class="luz-theme-time__legend">Time of day</legend><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="tt-specimen-moment" value="dawn">Dawn</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="tt-specimen-moment" value="morning">Morning</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="tt-specimen-moment" value="afternoon" checked>Afternoon</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="tt-specimen-moment" value="sunset">Sunset</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="tt-specimen-moment" value="dusk">Dusk</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="tt-specimen-moment" value="night">Night</label></fieldset></luz-theme-time>
+          </div>
+          <p class="docs-demo__note">Without JavaScript there is no bar and the moments are not shown. Core's radios still change the mode.</p>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>What to expect:</p>
+          <ul>
+            <li>The <a href="#boot">script for the head</a> ignores <code>latitude</code> and <code>longitude</code>: with a place, the element corrects the moment after the first paint, so it can change once near sunrise or sunset.</li>
+            <li>The moments are written twice: in the markup and in <code>data-moments</code> of the <a href="#boot">script for the head</a>. Nothing checks that they agree, so change both together.</li>
+            <li>Without <code>data-luz-label-scrub</code> the slider has no name, and without <code>data-luz-label-saved</code> the note is silent: no English fallback.</li>
+            <li>Only the first <code>&lt;luz-theme-time&gt;</code> with moments owns the page.</li>
+            <li>It has not been tested with a screen reader.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Color mode by time of day documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>Wrap core's <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> in <code>&lt;luz-theme-time&gt;</code> and add the moments of the day after it, one radio each, in the order of the day. Its <code>value</code> is the name of the moment; its label is what a reader sees.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-time" aria-label="Copy the markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Markup"><code id="code-theme-time">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/catalog.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;luz-theme-time&gt;
+  &lt;luz-theme-mode&gt;
+    …the fieldset and the four radios of core's page…
+  &lt;/luz-theme-mode&gt;
+  &lt;fieldset class=&quot;luz-theme-time__moments&quot;&gt;
+    &lt;legend class=&quot;luz-theme-time__legend&quot;&gt;Time of day&lt;/legend&gt;
+    &lt;label class=&quot;luz-theme-time__moment&quot;&gt;&lt;input class=&quot;luz-theme-time__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-moment&quot; value=&quot;dawn&quot; data-from=&quot;05:00&quot; data-theme=&quot;dark&quot;&gt;Dawn&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-time__moment&quot;&gt;&lt;input class=&quot;luz-theme-time__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-moment&quot; value=&quot;morning&quot; data-from=&quot;07:30&quot; data-theme=&quot;light&quot;&gt;Morning&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-time__moment&quot;&gt;&lt;input class=&quot;luz-theme-time__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-moment&quot; value=&quot;afternoon&quot; data-from=&quot;12:00&quot; data-theme=&quot;light&quot; data-default&gt;Afternoon&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-time__moment&quot;&gt;&lt;input class=&quot;luz-theme-time__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-moment&quot; value=&quot;sunset&quot; data-from=&quot;17:30&quot; data-theme=&quot;light&quot;&gt;Sunset&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-time__moment&quot;&gt;&lt;input class=&quot;luz-theme-time__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-moment&quot; value=&quot;dusk&quot; data-from=&quot;20:30&quot; data-theme=&quot;dark&quot;&gt;Dusk&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-time__moment&quot;&gt;&lt;input class=&quot;luz-theme-time__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-moment&quot; value=&quot;night&quot; data-from=&quot;22:30&quot; data-theme=&quot;dark&quot; data-default&gt;Night&lt;/label&gt;
+  &lt;/fieldset&gt;
+&lt;/luz-theme-time&gt;</code></pre>
+            </div>
+            <p><code>catalog.min.js</code> loads <code>theme-time.min.js</code> when the browser is idle and the page has the element. To load it on its own, import <code>@luz-ds/catalog/theme-time</code> and link <code>components/theme-time.css</code> after core's.</p>
+            <h3 id="variants">Variants and options</h3>
+            <p>A bar with a place, and the texts it needs:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-time-bar" aria-label="Copy the bar markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bar markup"><code id="code-theme-time-bar">&lt;luz-theme-time variant=&quot;bar&quot; show=&quot;time place saved&quot; place=&quot;Madrid&quot; latitude=&quot;40.42&quot; longitude=&quot;-3.7&quot;
+                 data-luz-label-scrub=&quot;Hour of the day&quot; data-luz-label-saved=&quot;Saved&quot;&gt;
+  &lt;luz-theme-mode inline&gt;
+    …the fieldset and the four radios of core's page…
+  &lt;/luz-theme-mode&gt;
+&lt;/luz-theme-time&gt;</code></pre>
+            </div>
+            <div class="luz-table-wrap" role="region" aria-label="Attributes and classes" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Class or attribute</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Class or attribute"><div><code>variant="bar"</code></div></td><td data-label="Effect"><div>Adds the slider of the 24 hours: by default the slider alone.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>show</code></div></td><td data-label="Effect"><div>Words that add parts to the bar: <code>time</code> (the hour in large type), <code>place</code> (the place and the moment), <code>saved</code> (the note “Saved”; without it the note is still written, for a screen reader) and <code>moments</code> (the declared moments as options under the slider; choosing one pins its hour).</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>place</code></div></td><td data-label="Effect"><div>The name of the place for <code>show="place"</code>; a label, it does not set the sun.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>latitude</code>, <code>longitude</code></div></td><td data-label="Effect"><div>Degrees north and east of the place whose sunrise and sunset set the turns of the day.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>no-remember</code></div></td><td data-label="Effect"><div>A pinned hour is not stored under <code>luz-light</code>.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div>On a moment: <code>value</code>, <code>data-from</code>, <code>data-theme</code>, <code>data-default</code></div></td><td data-label="Effect"><div>Its name (written to <code>data-moment</code>); where it starts, HH:MM by the visitor's clock; the base it is painted over, <code>light</code> or <code>dark</code>; and the one a chosen mode shows (light, the default light moment; dark and high contrast, the default dark one).</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>data-luz-label-scrub</code>, <code>data-luz-label-saved</code></div></td><td data-label="Effect"><div>On the element or an ancestor: the slider's name and the note “Saved”.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h4 id="api">Properties, methods and event</h4>
+            <div class="luz-table-wrap" role="region" aria-label="Properties, methods and event" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Name</th><th scope="col">What it does</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Name"><div><code>el.hour</code>, <code>el.moments</code>, <code>el.moment</code>, <code>el.pinned</code>, <code>el.place</code></div></td><td data-label="What it does"><div>Read-only: the hour in use (0 to 24); the declared moments, <code>{ name, from, theme, input }</code>; the name of the moment shown and the pinned hour (each <code>null</code> if none); the <code>place</code> attribute.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>preview(hour)</code>, <code>pin(hour)</code>, <code>unpin()</code></div></td><td data-label="What it does"><div>The page follows that hour, in Auto, and nothing is stored (<code>preview(null)</code> goes back); Auto at that hour instead of now, stored under <code>luz-light</code> unless <code>no-remember</code>; lets go of the pinned hour.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>luz-theme-time:change</code></div></td><td data-label="What it does"><div>Bubbles after the upgrade and when the moment or the pinned hour changes. <code>detail</code>: <code>moment</code> and <code>pinned</code> (each <code>null</code> if none).</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>A method returns false when it does nothing: no moments, or an hour outside 0 to 24.</p>
+            <h3 id="how">How it works</h3>
+            <p><code>theme-time.js</code> gives Auto of <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> the hour. Core does the rest, and the button alone if the catalog does not load.</p>
+            <ul>
+              <li><strong>Auto by the clock:</strong> the mode is the base of the moment now, by the visitor's local hour, checked every minute. The moment now is the last one that has started (night runs through midnight): its name goes to <code>data-moment</code> and its radio is checked. The visitor's location is never asked.</li>
+              <li><strong>A mode the reader chose</strong> shows its default moment. <strong>High contrast always wins:</strong> <code>data-theme</code> is <code>high-contrast</code>, so a rule for <code>"light"</code> or <code>"dark"</code> does not match.</li>
+              <li><strong>With a place,</strong> <code>latitude</code> and <code>longitude</code> give today's real sunrise and sunset, worked out in the page with no network, in place of the two turns of the day; if the sun does not rise or set there, the declared hours stand.</li>
+              <li><strong>A pinned hour</strong> is Auto at that hour, stored under <code>luz-light</code> to five minutes; choosing a mode, or Auto, in <code>&lt;luz-theme-mode&gt;</code> lets it go.</li>
+              <li><strong>The slider</strong> (<code>variant="bar"</code>): dragging previews the hour; letting go pins and stores it and writes the note “Saved”. Its track is painted with <code>--luz-theme-time-sky-&lt;value&gt;</code>, one for each moment: <a href="#sky">Paint the track</a>.</li>
+              <li><strong>Two files:</strong> <code>theme-time.min.js</code> and <code>theme-time-bar.min.js</code>, which only <code>variant="bar"</code> loads. For a bar added after the scan, import <code>@luz-ds/catalog/theme-time-bar</code> and call <code>initThemeTimeBar(root)</code>.</li>
+            </ul>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>There is no bar and the moments are not shown. Core's radios still change the mode; Auto is light, and <code>data-moment</code> is not written.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <ul>
+              <li><strong>Slider:</strong> a native range in steps of 5 minutes: Tab reaches it, the arrow keys move one step, Home goes to 00:00 and End to 23:55. Each press previews the hour.</li>
+              <li><strong>Escape</strong> on the slider lets go of a pinned hour, and then does not close a dialog around the bar.</li>
+              <li><strong>Name and value:</strong> the name is <code>data-luz-label-scrub</code>; <code>aria-valuetext</code> is the moment and the hour, “Afternoon, 13:00”. When an hour is pinned a <code>role="status"</code> region says your <code>data-luz-label-saved</code>, shown or not.</li>
+              <li><strong>Moments as options</strong> (<code>show="moments"</code>) are radios in a fieldset: the arrow keys choose one. The mode button is core's: <a href="/docs/components/theme-mode/#keyboard">its keyboard and ARIA</a>.</li>
+            </ul>
+            <h3 id="boot">Script for the head</h3>
+            <p>Optional, after <a href="/docs/components/theme-mode/#boot">core's</a>. It writes the moment before the first paint. Copy <code>node_modules/@luz-ds/catalog/dist/theme-time-boot.min.js</code> to your own origin. The moments travel on its tag, as <code>data-moments</code>: the body is not read yet.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-time-boot" aria-label="Copy the scripts for the head">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Scripts for the head"><code id="code-theme-time-boot">&lt;head&gt;
+  &lt;script src=&quot;/theme-boot.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/theme-time-boot.min.js&quot;
+          data-moments=&quot;dawn@05:00=dark morning@07:30=light afternoon@12:00=light* sunset@17:30=light dusk@20:30=dark night@22:30=dark*&quot;&gt;&lt;/script&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;…&quot;&gt;
+&lt;/head&gt;</code></pre>
+            </div>
+            <ul>
+              <li><strong><code>data-moments</code>:</strong> <code>value@HH:MM=base</code> for each moment, in markup order; <code>*</code> marks <code>data-default</code>..</li>
+              <li><strong>What it writes:</strong> <code>data-moment</code> on <code>&lt;html&gt;</code> and, in Auto, <code>data-mode</code> (and <code>data-theme</code>, with no brand) of that moment's base. A stored mode shows its default moment; a pinned hour (<code>luz-light</code>) replaces the clock; <code>prefers-contrast: more</code> wins. It never writes the storage. It blocks rendering as core's does, under the same exception (EX-012).</li>
+            </ul>
+            <h3 id="moments">The six example moments</h3>
+            <p>By the visitor's clock, as the markup above and the footer of this site declare them. Night runs through midnight, and <code>data-moment</code> on <code>&lt;html&gt;</code> takes the name.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Example moments of the day" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Moment</th><th scope="col">From</th><th scope="col">To</th><th scope="col">Base</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Moment"><div><code>dawn</code></div></td><td data-label="From"><div>05:00</div></td><td data-label="To"><div>07:30</div></td><td data-label="Base"><div>dark</div></td></tr>
+                  <tr><td data-label="Moment"><div><code>morning</code></div></td><td data-label="From"><div>07:30</div></td><td data-label="To"><div>12:00</div></td><td data-label="Base"><div>light</div></td></tr>
+                  <tr><td data-label="Moment"><div><code>afternoon</code></div></td><td data-label="From"><div>12:00</div></td><td data-label="To"><div>17:30</div></td><td data-label="Base"><div>light</div></td></tr>
+                  <tr><td data-label="Moment"><div><code>sunset</code></div></td><td data-label="From"><div>17:30</div></td><td data-label="To"><div>20:30</div></td><td data-label="Base"><div>light</div></td></tr>
+                  <tr><td data-label="Moment"><div><code>dusk</code></div></td><td data-label="From"><div>20:30</div></td><td data-label="To"><div>22:30</div></td><td data-label="Base"><div>dark</div></td></tr>
+                  <tr><td data-label="Moment"><div><code>night</code></div></td><td data-label="From"><div>22:30</div></td><td data-label="To"><div>05:00</div></td><td data-label="Base"><div>dark</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="paint">Paint each moment</h3>
+            <p>The colours are yours: set only the tokens that differ, over the base the moment names, as <a href="/docs/tokens/themes/">a theme of your own</a> does, and measure each pair with the <a href="/docs/tokens/contrast/">contrast check</a>.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">CSS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-time-css" aria-label="Copy the moment styles">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Styles of a moment"><code id="code-theme-time-css">/* Painted over the base the moment names: only the tokens that differ */
+:root[data-theme=&quot;light&quot;][data-moment=&quot;morning&quot;] {
+  --luz-surface-page: #fdf3dc;
+  --luz-surface: #fffaf0;
+}
+
+:root[data-theme=&quot;dark&quot;][data-moment=&quot;dawn&quot;] {
+  --luz-surface-page: #0f1520;
+  --luz-surface: #172030;
+}
+
+/* With a brand of your own: */
+:root[data-theme=&quot;my-brand&quot;][data-mode=&quot;light&quot;][data-moment=&quot;morning&quot;] { … }</code></pre>
+            </div>
+            <h3 id="sky">Paint the track</h3>
+            <p>Set one property for each moment, once, on <code>:root</code>:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">CSS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-time-sky" aria-label="Copy the sky colours">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="Sky colours of the moments"><code id="code-theme-time-sky">:root {
+  --luz-theme-time-sky-night: #171b36;
+  --luz-theme-time-sky-dawn: #6b3f5f;
+  --luz-theme-time-sky-afternoon: #cfe1f6;
+}</code></pre>
+            </div>
+            <ul>
+              <li><strong>Without them,</strong> a bar gets a neutral ramp of tokens. It reads which properties are set when it is built; the colours stay variables, so a mode that changes them repaints the track.</li>
+              <li><strong>High contrast:</strong> under <code>:root[data-theme="high-contrast"]</code> set every moment to <code>var(--luz-text-primary)</code>: one solid fill that keeps its contrast. In forced colors the track is <code>CanvasText</code>. In right to left the day runs from the right.</li>
+            </ul>
+            <div class="luz-table-wrap" role="region" aria-label="Custom properties" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Property</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Property"><div><code>--luz-theme-time-sky-&lt;value&gt;</code></div></td><td data-label="Effect"><div>Yours, on <code>:root</code>: the colour of a moment on the track.</div></td></tr>
+                  <tr><td data-label="Property"><div><code>--luz-theme-time-sky</code></div></td><td data-label="Effect"><div>Written by the bar: the gradient of the track. Set it for a track of your own.</div></td></tr>
+                  <tr><td data-label="Property"><div><code>--luz-theme-time-edge</code></div></td><td data-label="Effect"><div>The ring around the track, a <code>box-shadow</code> (default <code>--luz-text-secondary</code>); keep 3:1 against the page.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use it when a site has a look for each part of the day, or when readers should be able to try the light at another hour.</p>
+            <ul>
+              <li>The moments alone, in a footer or a navbar, for a site that changes its look with the day.</li>
+              <li>The bar, where the light is part of the page, such as a home page.</li>
+            </ul>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use it when the site has one look in one mode: <a href="/docs/components/theme-mode/">core's color mode</a> is enough.</p>
+            <ul>
+              <li>Do not promise the real sunrise without a place: the declared hours are fixed.</li>
+              <li>Do not use the bar as the only control: keep core's button.</li>
+              <li>Do not ask for the visitor's location: write the place yourself.</li>
+            </ul>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Name a moment for the light a reader sees: “Dawn”, “Sunset”, “Night”.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <luz-theme-time show="moments"><div class="luz-theme-time__bar"><div class="luz-theme-time__day"><label class="luz-theme-time__label" for="dd-do-slider">Hour of the day (specimen)</label><input class="luz-theme-time__slider" id="dd-do-slider" type="range" min="0" max="1439" value="780"></div></div><fieldset class="luz-theme-time__moments"><legend class="luz-theme-time__legend">Time of day</legend><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-do" value="dawn">Dawn</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-do" value="morning">Morning</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-do" value="afternoon" checked>Afternoon</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-do" value="sunset">Sunset</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-do" value="dusk">Dusk</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-do" value="night">Night</label></fieldset></luz-theme-time>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Name a moment by its hours: they change with the place and the season, and the name is what a screen reader reads with the hour.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <luz-theme-time show="moments"><div class="luz-theme-time__bar"><div class="luz-theme-time__day"><label class="luz-theme-time__label" for="dd-dont-slider">Hour of the day (specimen)</label><input class="luz-theme-time__slider" id="dd-dont-slider" type="range" min="0" max="1439" value="780"></div></div><fieldset class="luz-theme-time__moments"><legend class="luz-theme-time__legend">Time of day</legend><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m0">05:00 to 07:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m1">07:30 to 12:00</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m2" checked>12:00 to 17:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m3">17:30 to 20:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m4">20:30 to 22:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m5">22:30 to 05:00</label></fieldset></luz-theme-time>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Paint a moment over the base it names, so high contrast is never matched.</figcaption>
+                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A moment painted over its base"><code>/* Do: over the base the moment belongs to; high contrast is never matched */
+:root[data-theme=&quot;dark&quot;][data-moment=&quot;dawn&quot;] {
+  --luz-text-primary: #f1ece4;
+  --luz-surface-page: #20242b;
+}</code></pre>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Paint a moment with no base: the rule also matches high contrast and breaks its contrast.</figcaption>
+                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A moment painted with no base"><code>/* Don't: no base, so this also matches high contrast */
+[data-moment=&quot;dawn&quot;] {
+  --luz-text-primary: #8a8a8a;
+  --luz-surface-page: #20242b;
+}</code></pre>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>Call the moments by the light they show: “Dawn”, “Morning”, “Afternoon”, “Sunset”, “Dusk” and “Night”.</p>
+            <ul>
+              <li>The labels are in the language of the page: the slider reads them with the hour.</li>
+              <li>Name the slider for what it does, “Hour of the day”, and the note “Saved”.</li>
+              <li>Say near the control what Auto follows: “Auto follows the time of day”.</li>
+            </ul>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>The bar reads the semantic tokens of the page. The colours you give each moment are yours to measure, in the light and in the dark.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Hour, in large type</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Place and moment</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Saved note</div></td><td data-label="Colour on background"><div><code>--luz-color-success</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.3:1</div></td><td data-label="Dark"><div>12.5:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Moment, hover</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>14.4:1</div></td><td data-label="Dark"><div>12.6:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Moment border</div></td><td data-label="Colour on background"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>4.3:1</div></td><td data-label="Dark"><div>3.6:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Checked moment</div></td><td data-label="Colour on background"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Light"><div>6.0:1</div></td><td data-label="Dark"><div>4.9:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Checked fill</div></td><td data-label="Colour on background"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>3.5:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Slider track ring</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Slider thumb edge</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>7.2:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+            <ul>
+              <li><strong>Focus:</strong> a 2 px outline, 2 px outside the slider or the moment, in <code>--luz-focus-ring</code>.</li>
+              <li><strong>Track against the page:</strong> the ring uses <code>--luz-text-secondary</code> on <code>--luz-surface-page</code>, the pair in the table. Read on the pixels of the worst stretch of the track, which is a gradient and a soft edge the table cannot measure, the implementer found 3.48:1 in light, 4.63:1 in dark and 21:1 in high contrast.</li>
+              <li><strong>Not colour alone:</strong> the track has a soft ring in <code>--luz-text-secondary</code> around its gradient, the hour is written as text, and by night the thumb is a crescent. In forced colors the track is <code>CanvasText</code> with a 1 px outline of the same colour, and the checked moment is a system highlight.</li>
+              <li><strong>Target:</strong> the slider is 2.75rem high over a track 6 px high: the target is the slider, the track only draws.</li>
+              <li><strong>Motion:</strong> the note fades in and out; there is no other motion.</li>
+              <li><strong>Print:</strong> the element is not printed.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 22 tokens that <code>components/theme-time.css</code> reads, by family. Each family links to its page, with the values in every mode. The button is core's: its tokens are on <a href="/docs/components/theme-mode/#tokens">Color mode</a>. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-color-success"><code>--luz-color-success</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-sidebar-active-bg"><code>--luz-sidebar-active-bg</code></a>, <a href="/docs/tokens/color/#luz-sidebar-bg"><code>--luz-sidebar-bg</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-page"><code>--luz-surface-page</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-3xl</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code>, <code>--luz-duration-slow</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

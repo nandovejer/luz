@@ -4,8 +4,8 @@
    The home page and the docs share it; each puts the class site-sky on the
    element whose ::before and ::after are the sky (the home its <main>, the
    docs their <body>), and includes the partial sky-filter (the SVG filter
-   the clouds once used). It follows the light of the hour (data-light, which
-   boot.js and <luz-color-mode by="clock"> write on <html>):
+   the clouds once used). It follows the light of the hour (data-moment, which
+   theme-time-boot.js and <luz-theme-time> write on <html>):
 
      dawn, dusk, night            stars
      morning, afternoon, sunset   nothing (over light): the page is the light
@@ -19,7 +19,7 @@
    contrast or forced colours. Decorative: no text, no pointer.
 
    Unlayered, like theme-light.css: without JavaScript there is no
-   data-light, and nothing here applies.
+   data-moment, and nothing here applies.
    Rules: semantic tokens only; no literal colours.
    ========================================================================== */
 
@@ -125,12 +125,12 @@
     radial-gradient(1px 1px at 20.8% 63.1%, color-mix(in oklab, var(--luz-text-primary) 19%, transparent), transparent);
 }
 
-:root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .site-sky::before {
+:root:is([data-moment="dawn"], [data-moment="dusk"], [data-moment="night"]):not([data-theme="high-contrast"]) .site-sky::before {
   opacity: 1;
   animation: var(--site-sky-twinkle-near, none);
 }
 
-:root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .site-sky::after {
+:root:is([data-moment="dawn"], [data-moment="dusk"], [data-moment="night"]):not([data-theme="high-contrast"]) .site-sky::after {
   opacity: 1;
   animation: var(--site-sky-twinkle-far, none);
 }
@@ -145,13 +145,13 @@
 }
 
 @supports (animation-timeline: scroll()) {
-  :root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .site-sky::before {
+  :root:is([data-moment="dawn"], [data-moment="dusk"], [data-moment="night"]):not([data-theme="high-contrast"]) .site-sky::before {
     animation: var(--site-sky-twinkle-near, none), site-sky-drift linear 6 both;
     animation-timeline: auto, scroll(root);
     animation-range: normal, 0 2000vh;
   }
 
-  :root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .site-sky::after {
+  :root:is([data-moment="dawn"], [data-moment="dusk"], [data-moment="night"]):not([data-theme="high-contrast"]) .site-sky::after {
     animation: var(--site-sky-twinkle-far, none), site-sky-drift linear 3 both;
     animation-timeline: auto, scroll(root);
     animation-range: normal, 0 2000vh;
@@ -163,8 +163,8 @@
    page itself is the light
    -------------------------------------------------------------------------- */
 
-:root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::before,
-:root[data-theme="light"]:is([data-light="morning"], [data-light="afternoon"], [data-light="sunset"]) .site-sky::after {
+:root[data-theme="light"]:is([data-moment="morning"], [data-moment="afternoon"], [data-moment="sunset"]) .site-sky::before,
+:root[data-theme="light"]:is([data-moment="morning"], [data-moment="afternoon"], [data-moment="sunset"]) .site-sky::after {
   display: none;
 }
 
@@ -182,8 +182,8 @@
   }
 
   /* As specific as the rules that start them */
-  :root:is([data-light]):not([data-theme="high-contrast"]) .site-sky::before,
-  :root:is([data-light]):not([data-theme="high-contrast"]) .site-sky::after {
+  :root:is([data-moment]):not([data-theme="high-contrast"]) .site-sky::before,
+  :root:is([data-moment]):not([data-theme="high-contrast"]) .site-sky::after {
     animation: none;
   }
 }

@@ -342,10 +342,10 @@
   }
 }
 
-/* The color mode switcher, in the page footer: core's cycle variant. With
-   scripting it is one round icon button fixed at the end corner of the window
-   (core draws it); without JavaScript it is the native radio group, here in
-   the footer, with its legend beside the buttons. */
+/* The color mode, in the page footer: <luz-theme-time> around core's
+   <luz-theme-mode>. With scripting it is one round icon button fixed at the
+   end corner of the window (core draws it); without JavaScript it is the
+   native radio group, here in the footer, with its legend beside the buttons. */
 .site-modes {
   flex-shrink: 0;
   align-items: center;
@@ -389,13 +389,13 @@
   }
 }
 
-.site-modes .luz-mode-switcher__label {
+.site-modes .luz-theme-mode__legend {
   float: inline-start;
   margin-block: 0;
   margin-inline: 0 var(--luz-space-2xs);
 }
 
-.site-modes .luz-mode-btn {
+.site-modes .luz-theme-mode__option {
   flex: none;
   min-block-size: var(--luz-control-sm);
   padding-inline: var(--luz-space-xs);
@@ -407,22 +407,15 @@
    button may shrink below its one-line width and break "High contrast"
    over two lines; the legend breaks the same way. */
 .site-modes,
-.site-modes .luz-mode-btn,
-.site-modes .luz-mode-switcher__label {
+.site-modes .luz-theme-mode__option,
+.site-modes .luz-theme-mode__legend {
   min-inline-size: 0;
   max-inline-size: 100%;
   overflow-wrap: anywhere;
 }
 
-.site-modes .luz-mode-btn {
+.site-modes .luz-theme-mode__option {
   flex-shrink: 1;
-}
-
-/* No Auto radio: while the light follows the hour (the clock's, or the one
-   the home's globe pinned) no radio is checked, and the button shows the
-   Auto icon */
-.site-modes:not(:has(input:checked)) > .luz-mode-cycle > [data-mode-icon="auto"] {
-  display: block;
 }
 
 

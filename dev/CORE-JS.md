@@ -4,11 +4,13 @@ Moved out of [AGENTS.md](../AGENTS.md) so the file every session loads stays sho
 
 ## JS in `packages/core/src/`
 
-Vanilla JS, ES modules — JavaScript only enhances what the browser already does (native `dialog`, `popover`, `input type=range|radio|checkbox`, `progress`, forms). One module per concern, all re-exported (and auto-initialized) by the `luz.js` entry. Importing an individual module has no side effects until you call its `init*()`. Published exports: `@luz-ds/core/theme`, `/clipboard`, `/modal`, `/highlight`, `/player`, `/tabs`, `/utils`, `/i18n`, `/i18n/<code>`, `/midi`, `/table-sort`.
+Vanilla JS, ES modules — JavaScript only enhances what the browser already does (native `dialog`, `popover`, `input type=range|radio|checkbox`, `progress`, forms). One module per concern, all re-exported (and auto-initialized) by the `luz.js` entry. Importing an individual module has no side effects until you call its `init*()`. Published exports: `@luz-ds/core/theme`, `/clipboard`, `/modal`, `/highlight`, `/player`, `/tabs`, `/utils`, `/i18n`, `/i18n/<code>`, `/theme-mode`, `/theme-boot`, `/midi`, `/table-sort`.
 
 | Module         | Key exports                                                    |
 | -------------- | -------------------------------------------------------------- |
-| `theme.js`     | `applyTheme(theme)` (sets `data-theme` on `<html>`, persists), `applyMode`, `getInitialTheme`, `getCustomThemes()` (the names in `<html data-luz-themes="…">`; LUZ ships none), `initThemeSystem()`, `initThemeCycle()` (one button for a `.luz-mode-switcher--cycle` group) |
+| `theme.js`     | `applyTheme(theme)` (sets `data-theme` on `<html>`, persists), `applyMode`, `getInitialTheme`, `getCustomThemes()` (the names in `<html data-luz-themes="…">`; LUZ ships none), `initThemeSystem()` (the buttons of a custom theme; the color mode is `<luz-theme-mode>`'s) |
+| `theme-mode.js` | `<luz-theme-mode>` — the color mode (Auto, light, dark, high contrast): radios that work with no script, or one round button (`inline` keeps it in the flow); writes `data-mode` (and `data-theme`, with no brand), stores the choice under `luz-theme` (`no-remember` skips it), dispatches `luz-theme-mode:change` with `{ mode, auto, user }`; `choice`, `mode`, `refresh()`, `autoMode` (a function another script sets to own what Auto means). A lazy chunk: `luz.js` loads it only when the page has the element, with no imports |
+| `theme-boot.js` | A classic script for the `<head>` (`@luz-ds/core/theme-boot`, EX-009), not a module: it writes `data-mode` and `data-theme` from the stored choice or the system before the first paint |
 | `clipboard.js` | `copyToClipboard(text, el, type)` (visual feedback), `initCopyButtons()` |
 | `modal.js`     | `initModals()` — fallback for `command`/`commandfor` on a native `<dialog>`; `supportsCommands()` |
 | `highlight.js` | `highlightBlock(pre)` — dependency-free highlight for `pre.luz-code-block`, `initHighlight()` |

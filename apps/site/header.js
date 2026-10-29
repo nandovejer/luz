@@ -4,12 +4,13 @@
  * a native radio group (:root:has() in the tokens) and the menu
  * drawer is a native popover.
  *
- * - Color mode: <luz-color-mode remember by="clock"> in the footer owns it (it
- *   stores the choice under core's "luz-theme" key and, in Auto, follows
- *   the clock: apps/site/boot.js set the same mode before the first paint);
- *   this module defines the element and turns the radios into core's cycle
- *   button. With scripting on, that button is fixed at the bottom right of
- *   the window (header.css); without it the radios stay in the footer.
+ * - Color mode: <luz-theme-time> around core's <luz-theme-mode> in the footer
+ *   owns it (core stores the choice under its "luz-theme" key and, in Auto,
+ *   the clock decides the moment: core's theme-boot.js and catalog's
+ *   theme-time-boot.js set the same mode before the first paint); this module
+ *   defines both elements, which turn the radios into core's round button.
+ *   With scripting on, that button is fixed at the bottom right of the window
+ *   (core draws it); without it the radios stay in the footer.
  * - Menu drawer: catalog's initSidebar() on #page-nav, so a link closes the
  *   drawer and the current section is marked.
  * - Publishes the sticky header's height as --site-header-h on <html>, so
@@ -19,10 +20,10 @@
  * Not part of any published package.
  */
 
-import { initThemeCycle } from "/packages/core/dist/theme.js";
 import { initSidebar } from "/packages/catalog/dist/sidebar.js";
-// Defines <luz-color-mode>: the footer's switcher on every page, which owns the mode
-import "/packages/catalog/dist/color-mode.js";
+// Define <luz-theme-mode> and <luz-theme-time>: the footer's switcher on every page, which owns the mode
+import "/packages/core/dist/theme-mode.js";
+import "/packages/catalog/dist/theme-time.js";
 
 function publishHeight(header) {
   const publish = () =>
@@ -33,8 +34,7 @@ function publishHeight(header) {
 
 /**
  * Wire the drawer and the header's height: what the header does besides the
- * colour-mode button. A page that names that button itself (the docs, which
- * wait for the strings of the page's language) calls this alone.
+ * colour-mode button. A page that names that button itself calls this alone.
  */
 export function initSiteChrome() {
   const nav = document.getElementById("page-nav");
@@ -43,9 +43,7 @@ export function initSiteChrome() {
   if (header) publishHeight(header);
 }
 
-/** Wire the header of a page of the site: the cycle button, the drawer and the header's height. */
+/** Wire the header of a page of the site: the drawer and the header's height (the mode button is the footer's element). */
 export function initSiteHeader() {
-  // One button that steps through the modes; the radios stay underneath
-  initThemeCycle();
   initSiteChrome();
 }

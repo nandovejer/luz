@@ -207,8 +207,10 @@ export function valuesFor(target, sources) {
       for (const selector of rule.selectors) {
         const read = readSelector(selector);
         if (!read) {
-          // LUZ's own no-JS path (:root:has(...)) is not a consumer's rule
-          if (file !== "tokens") ignored.push({ file, line: rule.line, selector, reason: "only html, :root, [data-theme] and [data-mode] selectors are read" });
+          // LUZ's own no-JS path (:root:has(...)) is not a consumer's rule, and the
+          // brand template carries the same path for <luz-theme-mode>'s radios
+          const radios = /^:is\(:root\[data-theme=[^\]]+\]:not\(\[data-mode\]\):has\(input\[name="luz-theme-mode"\]\[value="[\w-]+"\]:checked\)\)$/.test(selector.trim().replace(/\s+/g, ""));
+          if (file !== "tokens" && !radios) ignored.push({ file, line: rule.line, selector, reason: "only html, :root, [data-theme] and [data-mode] selectors are read" });
           continue;
         }
         const themeOk = read.theme === null || read.theme === target.theme;

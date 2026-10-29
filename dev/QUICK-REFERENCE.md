@@ -62,7 +62,7 @@ pnpm lint:js        # ESLint
 
 ## Core Components
 
-**Mode switcher:** `.luz-mode-switcher`, `.luz-mode-btn`
+**Color mode:** `<luz-theme-mode>` with `.luz-theme-mode__group`, `__legend`, `__option`, `__input`, `__icon`, `__button` (catalog's `<luz-theme-time>` adds `.luz-theme-time__*`)
 
 **Forms:** `.luz-field`, `.luz-input`, `.luz-select-wrap`, `.luz-check-group`, `.luz-toggle`
 
@@ -125,7 +125,7 @@ Requires the tokens layer, then `base.css` (core settings such as z-index and la
 - **Package source:** `packages/{tokens,core,catalog}/src/` (CSS) and `packages/check/src/` (Node, no CSS)
 - **Package dist:** `packages/{tokens,core,catalog}/dist/` and `packages/check/dist/luz-check.js` (generated)
 - **Docs app:** pages in `apps/docs/pages/` (front matter + fragment), wrapped by `apps/docs/_layouts/` and `apps/docs/_partials/` through `scripts/docs-site/`; styles in `apps/docs/reference.css` and `elements.css`, on top of catalog's patterns of a documentation site (`.luz-doc-header`, `.luz-page-rail`, `.luz-pager`, `.luz-do-dont` and the others)
-- **Shared site app:** `apps/site/` (`header.css`, `header.js`, `boot.js`, `theme-light.css`, `_partials/`, `assets/`): what the home page and the docs share; it depends on no other app
+- **Shared site app:** `apps/site/` (`header.css`, `header.js`, `theme-light.css`, `_partials/`, `assets/`): what the home page and the docs share; it depends on no other app
 - **Landing app:** `apps/landing/` (external consumer)
 
 **See [STRUCTURE.md](./STRUCTURE.md) for full directory layout.**

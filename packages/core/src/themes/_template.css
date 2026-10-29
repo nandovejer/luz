@@ -1,6 +1,6 @@
 /* ==========================================================================
    LUZ — Theme template
-   Copy this file, rename `my-brand` (three times below) and change what you
+   Copy this file, rename `my-brand` (every occurrence) and change what you
    need. A theme overrides semantic tokens only: it never changes a primitive
    or a component's CSS. Every value below is LUZ's own (the Vejer look), so
    the file passes the contrast check as it is.
@@ -11,6 +11,10 @@
      <html data-theme="my-brand" data-mode="high-contrast">
    List it so the mode switcher remembers it:
      <html data-theme="my-brand" data-luz-themes="my-brand">
+
+   The :is(:root…:has(…)) selector of each block is the no-JavaScript path:
+   the checked radio of <luz-theme-mode> picks the mode while <html> has no
+   data-mode. Keep it: it is why the radios work with no script.
 
    Check it before you ship it:
      npx @luz-ds/tokens check-contrast my-brand.css
@@ -34,7 +38,8 @@
    -------------------------------------------------------------------------- */
 
 [data-theme="my-brand"],
-[data-theme="my-brand"][data-mode="light"] {
+[data-theme="my-brand"][data-mode="light"],
+:is(:root[data-theme="my-brand"]:not([data-mode]):has(input[name="luz-theme-mode"][value="light"]:checked)) {
 
   /* Surfaces */
   --luz-surface-page: #fbf8f2; /* the walls: a warm, creamy white */
@@ -119,7 +124,8 @@
    DARK
    -------------------------------------------------------------------------- */
 
-[data-theme="my-brand"][data-mode="dark"] {
+[data-theme="my-brand"][data-mode="dark"],
+:is(:root[data-theme="my-brand"]:not([data-mode]):has(input[name="luz-theme-mode"][value="dark"]:checked)) {
 
   /* Surfaces */
   --luz-surface-page: #1c1712;
@@ -205,7 +211,8 @@
    HIGH CONTRAST
    -------------------------------------------------------------------------- */
 
-[data-theme="my-brand"][data-mode="high-contrast"] {
+[data-theme="my-brand"][data-mode="high-contrast"],
+:is(:root[data-theme="my-brand"]:not([data-mode]):has(input[name="luz-theme-mode"][value="high-contrast"]:checked)) {
 
   /* Surfaces */
   --luz-surface-page: #fff;

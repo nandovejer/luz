@@ -1,9 +1,9 @@
 ## The kind of site: a blog
 
-A blog is a site of articles: a newspaper, a magazine, a company's news. It works with any CMS or generator. Ask:
+A blog is a site of articles: a newspaper, a magazine, a company's news. Ask:
 
 1. The CMS or generator, and the folder of its templates. Ask before you change one.
-2. The templates: home, list of posts, article, plain page, search, 404. All are recommended for a new site.
+2. The templates: home, list of posts, article, plain page, search, 404 (all recommended for a new site).
 3. The header: one row with the sections and a search, or a masthead.
 4. The article: contents, author box, related posts, comments.
 

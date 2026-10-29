@@ -14,6 +14,7 @@ import { MESSAGES } from "../../packages/check/src/messages.js";
 /** What a rule finds: one sentence of 20 to 240 characters, a text of its own, no placeholder. */
 export const RULE_FINDS = {
   "a11y/link-no-href": "An <a> that has a class made for links and no href, so it is not a link and a keyboard cannot reach it.",
+  "a11y/slider-no-name": "A <luz-theme-time variant=\"bar\"> with no data-luz-label-scrub on it or an ancestor, so its slider has no accessible name: the script writes no English text.",
   "a11y/role-on-generic": "A widget role, or onclick, on a <div> or <span> where a native element such as <button> does the same with the keyboard.",
   "attr/unknown-hook": "A data-luz-* attribute on an element that no package reads: usually a misspelling of one it does.",
   "class/reserved-prefix": "A stylesheet of yours that defines a class starting with luz-, the prefix LUZ keeps for itself.",
@@ -37,7 +38,7 @@ export const RULE_FINDS = {
   "misuse/modifier-alone": "A modifier such as luz-btn--primary on an element that does not also have the class it modifies.",
   "misuse/part-orphan": "A part such as luz-card__title with no element of its block around it.",
   "misuse/state-class": "An is-* class that LUZ's own script sets, written in the markup.",
-  "names/renamed": "A class, element or file of catalog that has its old name from before 0.3 (luz-landing-hero, <luz-mode>, landing-hero.css): the finding gives the new name.",
+  "names/renamed": "A class, element or file of catalog that has its old name from before 0.3 (luz-landing-hero, <luz-mode>, <luz-color-mode>, luz-mode-btn, landing-hero.css): the finding gives the new name.",
   "parse/error": "A file that ends inside a comment, tag, string or brace, so the rest of it cannot be read.",
   "theme/advisory": "A note on how the colour check ran: the file order it used, a token no colour mode can place, a wide-gamut colour it does not measure, or sets of colour tokens past its limit.",
   "theme/contrast": "A foreground and background pair in your colour token files that is under its WCAG contrast minimum in light, dark or high contrast.",

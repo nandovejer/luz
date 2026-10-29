@@ -68,7 +68,7 @@ keywords: dark mode, prefers-color-scheme
       <h2 class="docs-chapter__title" id="themes-title">Modes and themes</h2>
       <p class="docs-lead">A color mode changes how light or dark the page is; a theme changes its whole identity. LUZ ships one look, in three modes. A theme of your own sits on top of it.</p>
       <ul>
-        <li>The three modes ship with the tokens: <code class="luz-code-inline">data-theme="light"</code>, <code class="luz-code-inline">"dark"</code> and <code class="luz-code-inline">"high-contrast"</code>. Light is the default, whatever the device's setting: <a href="#system">follow it with one script</a>.</li>
+        <li>The three modes ship with the tokens: <code class="luz-code-inline">data-theme="light"</code>, <code class="luz-code-inline">"dark"</code> and <code class="luz-code-inline">"high-contrast"</code>. Light is the default, whatever the device's setting: <a href="#switching">let readers choose, or follow the system</a>.</li>
         <li>The default look is Vejer, inspired by Vejer de la Frontera. It is the value the tokens have, not a file you load: ET Book for running text and headings, whitewash and sandstone surfaces, iron-black text, sky-blue links and actions, and every link underlined.</li>
         <li>LUZ ships no theme file. <a href="/docs/tokens/themes/">Make your own</a>: copy the template, change what you need, and check it.</li>
       </ul>
@@ -78,38 +78,11 @@ keywords: dark mode, prefers-color-scheme
       <p>Every mode is measured against the same minimums: 4.5:1 for text, 3:1 for disabled text, borders and focus rings. The same measure runs on a theme of your own with <code class="luz-code-inline">npx @luz-ds/tokens@0.2.1 check-contrast</code>, or in the browser with <a href="/docs/tokens/contrast/">the contrast check</a>.</p>
     </section>
 
-    <section class="docs-block docs-chapter" aria-labelledby="system">
-      <h2 class="docs-chapter__title" id="system">Following the system or the clock</h2>
-      <p class="docs-lead">A page is light until it says otherwise: LUZ reads nothing of the visitor's device by itself. To start in dark when the device is in dark, set the attribute from a script in the head.</p>
-      <div class="docs-snippet">
-        <div class="docs-snippet__bar">
-          <span class="docs-snippet__lang">HTML</span>
-          <button class="luz-copy-btn" type="button" data-copy-from="code-system-mode" aria-label="Copy the script">Copy</button>
-        </div>
-        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Following the system color mode"><code id="code-system-mode">&lt;script&gt;
-  (function () {
-    var mode;
-    try { mode = localStorage.getItem(&quot;luz-theme&quot;); } catch (e) {}
-    if ([&quot;light&quot;, &quot;dark&quot;, &quot;high-contrast&quot;].indexOf(mode) &lt; 0) {
-      mode = matchMedia(&quot;(prefers-contrast: more)&quot;).matches ? &quot;high-contrast&quot;
-        : matchMedia(&quot;(prefers-color-scheme: dark)&quot;).matches ? &quot;dark&quot; : &quot;light&quot;;
-    }
-    document.documentElement.dataset.theme = mode;
-  })();
-&lt;/script&gt;</code></pre>
-      </div>
+    <section class="docs-block docs-chapter" aria-labelledby="switching">
+      <h2 class="docs-chapter__title" id="switching">Letting readers choose</h2>
+      <p class="docs-lead">A page is light until it says otherwise: LUZ reads nothing of the visitor's device by itself. Two elements let a reader choose, and follow the system or the clock for them.</p>
       <ul>
-        <li>Put it in <code class="luz-code-inline">&lt;head&gt;</code>. It runs before the first paint, so the page does not flash light. Make it <code class="luz-code-inline">&lt;script type=&quot;module&quot;&gt;</code> to keep it off the critical path: the page then paints light first, and switches.</li>
-        <li>Under a CSP without <code class="luz-code-inline">'unsafe-inline'</code>, serve it as a classic file in <code class="luz-code-inline">&lt;head&gt;</code> or allow it by its <code class="luz-code-inline">'sha256-…'</code> hash.</li>
-        <li>A mode the reader chose wins. The color mode switcher stores it under <code class="luz-code-inline">luz-theme</code>, and the script reads that first. The system setting is never stored, so the page keeps following it until the reader chooses.</li>
-        <li>Without JavaScript the page stays light, and the radios of the switcher still change the mode for the session.</li>
-        <li>It reads the setting once, when the page loads. To follow a change while the page is open, listen to the <code class="luz-code-inline">change</code> event of <code class="luz-code-inline">matchMedia()</code> and call <code class="luz-code-inline">applyTheme(mode, { persist: false })</code> from <code class="luz-code-inline">@luz-ds/core/theme</code>, only while <code class="luz-code-inline">getStoredTheme()</code> is <code class="luz-code-inline">null</code>.</li>
-        <li>It sets the three modes. A theme of your own is set with <code class="luz-code-inline">data-theme</code> and <code class="luz-code-inline">data-mode</code>, as <a href="/docs/tokens/themes/">the themes page</a> says.</li>
-      </ul>
-      <p>The script sets the mode once. To keep following the system while the page is open, and to give the reader an Auto choice beside the three modes, wrap the switcher in <a href="/docs/catalog/color-mode/"><code class="luz-code-inline">&lt;luz-color-mode&gt;</code></a>, from <code class="luz-code-inline">@luz-ds/catalog</code>.</p>
-      <ul>
-        <li>Auto follows the system: <code class="luz-code-inline">prefers-contrast: more</code> gives high contrast, then <code class="luz-code-inline">prefers-color-scheme: dark</code> gives dark, otherwise light.</li>
-        <li>With <code class="luz-code-inline">by="clock"</code> Auto follows the time of day instead, and writes the phase as <code class="luz-code-inline">data-light</code>: see <a href="/docs/catalog/color-mode/#how">how it works</a>.</li>
-        <li>A mode the reader chooses wins over both. Without JavaScript Auto is light.</li>
+        <li><a href="/docs/components/theme-mode/">Color mode</a>, in core: a button that steps through Auto, light, dark and high contrast, and an optional script for the head that applies the stored or system mode before the first paint.</li>
+        <li><a href="/docs/catalog/theme-time/">Color mode by time of day</a>, in the catalog: gives Auto the time of day, in moments you declare, with an optional slider of the 24 hours.</li>
       </ul>
     </section>

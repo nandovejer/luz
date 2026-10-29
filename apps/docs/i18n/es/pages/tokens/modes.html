@@ -2,7 +2,7 @@
 title: Modos de color y temas
 description: Cambia entre claro, oscuro y alto contraste con un solo atributo, o crea tu propio aspecto.
 keywords: modo oscuro, prefers-color-scheme
-source: fc7f3a2bf891
+source: 8d8192fe2107
 reviewed: false
 -->
     <div class="docs-block" id="t-modes">
@@ -67,7 +67,7 @@ reviewed: false
       <h2 class="docs-chapter__title" id="themes-title">Modos y temas</h2>
       <p class="docs-lead">Un modo de color cambia la claridad u oscuridad de la página; un tema cambia toda su identidad. LUZ incluye un aspecto en tres modos. Tu propio tema se aplica sobre él.</p>
       <ul>
-        <li>Los tokens incluyen los tres modos: <code class="luz-code-inline">data-theme="light"</code>, <code class="luz-code-inline">"dark"</code> y <code class="luz-code-inline">"high-contrast"</code>. Claro es el modo predeterminado, sea cual sea la configuración del dispositivo: <a href="#system">síguela con un script</a>.</li>
+        <li>Los tokens incluyen los tres modos: <code class="luz-code-inline">data-theme="light"</code>, <code class="luz-code-inline">"dark"</code> y <code class="luz-code-inline">"high-contrast"</code>. Claro es el modo predeterminado, sea cual sea la configuración del dispositivo: <a href="#switching">deja que cada persona elija o sigue el sistema</a>.</li>
         <li>El aspecto predeterminado es Vejer, inspirado en Vejer de la Frontera. Es el valor de los tokens, no un archivo que se carga: ET Book para el texto corrido y los encabezados, superficies blancas y de arenisca, texto negro hierro, enlaces y acciones azul cielo, y todos los enlaces subrayados.</li>
         <li>LUZ no incluye ningún archivo de tema. <a href="/docs/tokens/themes/">Crea el tuyo</a>: copia la plantilla, cambia lo que necesites y compruébalo.</li>
       </ul>
@@ -77,38 +77,11 @@ reviewed: false
       <p>Todos los modos se evalúan con los mismos mínimos: 4,5:1 para el texto y 3:1 para el texto deshabilitado, los bordes y los anillos de foco. Puedes aplicar la misma comprobación a tu tema con <code class="luz-code-inline">npx @luz-ds/tokens@0.2.1 check-contrast</code> o en el navegador con <a href="/docs/tokens/contrast/">la comprobación del contraste</a>.</p>
     </section>
 
-    <section class="docs-block docs-chapter" aria-labelledby="system">
-      <h2 class="docs-chapter__title" id="system">Seguir el sistema o el reloj</h2>
-      <p class="docs-lead">Una página es clara salvo que se indique lo contrario: LUZ no lee por sí solo ninguna configuración del dispositivo del visitante. Para empezar en modo oscuro cuando el dispositivo lo esté, define el atributo mediante un script en el head.</p>
-      <div class="docs-snippet">
-        <div class="docs-snippet__bar">
-          <span class="docs-snippet__lang">HTML</span>
-          <button class="luz-copy-btn" type="button" data-copy-from="code-system-mode" aria-label="Copy the script">Copy</button>
-        </div>
-        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Following the system color mode"><code id="code-system-mode">&lt;script&gt;
-  (function () {
-    var mode;
-    try { mode = localStorage.getItem(&quot;luz-theme&quot;); } catch (e) {}
-    if ([&quot;light&quot;, &quot;dark&quot;, &quot;high-contrast&quot;].indexOf(mode) &lt; 0) {
-      mode = matchMedia(&quot;(prefers-contrast: more)&quot;).matches ? &quot;high-contrast&quot;
-        : matchMedia(&quot;(prefers-color-scheme: dark)&quot;).matches ? &quot;dark&quot; : &quot;light&quot;;
-    }
-    document.documentElement.dataset.theme = mode;
-  })();
-&lt;/script&gt;</code></pre>
-      </div>
+    <section class="docs-block docs-chapter" aria-labelledby="switching">
+      <h2 class="docs-chapter__title" id="switching">Dejar que cada persona elija</h2>
+      <p class="docs-lead">Una página es clara hasta que se diga otra cosa: LUZ no lee nada del dispositivo de quien la visita por sí sola. Dos elementos permiten elegir y siguen por esa persona el sistema o el reloj.</p>
       <ul>
-        <li>Ponlo en <code class="luz-code-inline">&lt;head&gt;</code>. Se ejecuta antes del primer renderizado, así que la página no muestra un destello claro. Usa <code class="luz-code-inline">&lt;script type=&quot;module&quot;&gt;</code> para sacarlo de la ruta crítica: la página se renderiza primero en claro y después cambia.</li>
-        <li>Con una CSP sin <code class="luz-code-inline">'unsafe-inline'</code>, sírvelo como archivo clásico en <code class="luz-code-inline">&lt;head&gt;</code> o autorízalo mediante su hash <code class="luz-code-inline">'sha256-…'</code>.</li>
-        <li>Tiene prioridad el modo que elija quien lee. El selector de modo de color lo guarda con la clave <code class="luz-code-inline">luz-theme</code>, y el script la consulta primero. La configuración del sistema nunca se guarda, así que la página la sigue hasta que la persona elige un modo.</li>
-        <li>Sin JavaScript, la página permanece en modo claro y los botones de opción del selector siguen cambiando el modo durante la sesión.</li>
-        <li>Lee la configuración una vez, al cargar la página. Para seguir un cambio mientras la página está abierta, escucha el evento <code class="luz-code-inline">change</code> de <code class="luz-code-inline">matchMedia()</code> y llama a <code class="luz-code-inline">applyTheme(mode, { persist: false })</code> desde <code class="luz-code-inline">@luz-ds/core/theme</code>, solo mientras <code class="luz-code-inline">getStoredTheme()</code> sea <code class="luz-code-inline">null</code>.</li>
-        <li>Establece los tres modos. Para definir un tema propio, usa <code class="luz-code-inline">data-theme</code> y <code class="luz-code-inline">data-mode</code>, como se explica en <a href="/docs/tokens/themes/">la página de temas</a>.</li>
-      </ul>
-      <p>El script establece el modo una sola vez. Para seguir el sistema mientras la página está abierta y ofrecer la opción Automático junto a los tres modos, envuelve el selector en <a href="/docs/catalog/color-mode/"><code class="luz-code-inline">&lt;luz-color-mode&gt;</code></a>, de <code class="luz-code-inline">@luz-ds/catalog</code>.</p>
-      <ul>
-        <li>Automático sigue el sistema: <code class="luz-code-inline">prefers-contrast: more</code> activa el alto contraste; si no, <code class="luz-code-inline">prefers-color-scheme: dark</code> activa el modo oscuro; en los demás casos, el claro.</li>
-        <li>Con <code class="luz-code-inline">by="clock"</code>, Automático sigue la hora del día y escribe la fase en <code class="luz-code-inline">data-light</code>: consulta <a href="/docs/catalog/color-mode/#how">cómo funciona</a>.</li>
-        <li>El modo que elija quien lee tiene prioridad sobre ambos. Sin JavaScript, Automático usa el modo claro.</li>
+        <li><a href="/docs/components/theme-mode/">Modo de color</a>, en core: un botón que recorre Automático, claro, oscuro y alto contraste, y un script opcional para la cabecera que aplica el modo guardado o del sistema antes del primer pintado.</li>
+        <li><a href="/docs/catalog/theme-time/">Modo de color según la hora del día</a>, en el catálogo: da a Automático la hora del día, en los momentos que declares, con un deslizador opcional de las 24 horas.</li>
       </ul>
     </section>

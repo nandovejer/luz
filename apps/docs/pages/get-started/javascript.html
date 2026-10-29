@@ -5,7 +5,7 @@ area: get-started
 order: 7
 -->
     <div class="docs-block" id="c-js">
-          <p>Every LUZ page works without JavaScript. The scripts add behaviour on top: copying, highlighting, a cycling color mode button, players, tabs and sorting a table. The catalog adds its own: search, the cookie banner, the Auto color mode, a timeline and the scroll spy of the sidebar.</p>
+          <p>Every LUZ page works without JavaScript. The scripts add behaviour on top: copying, highlighting, a cycling color mode button, players, tabs and sorting a table. The catalog adds its own: search, the cookie banner, the time of day for the color mode, a timeline and the scroll spy of the sidebar.</p>
           <h2 id="js-load">Load all of it, or one module</h2>
           <div class="docs-snippet">
             <div class="docs-snippet__bar">
@@ -26,14 +26,15 @@ initTabs();</code></pre>
             <li><code>luz.js</code> starts every module when the page loads.</li>
             <li>Importing a single module does nothing until you call its <code>init</code> function.</li>
             <li><code>midi.js</code> and <code>table-sort.js</code> are chunks of their own: <code>luz.js</code> loads each one on demand, and only on a page that needs it.</li>
-            <li>The site search is in <code>@luz-ds/catalog</code>: see <a href="/docs/catalog/search/">Search</a>. So is the cookie banner, a module of its own that <code>catalog.js</code> does not include: see <a href="/docs/catalog/cookie-consent/">Cookie consent</a>. The Auto color mode is a third module of the same kind, <code>color-mode.js</code>, loaded by <code>catalog.js</code> only on a page with a <code>&lt;luz-color-mode&gt;</code>: see <a href="/docs/catalog/color-mode/">Auto color mode</a>.</li>
+            <li><code>theme-mode.js</code> is another: <code>luz.js</code> loads it only on a page with a <code>&lt;luz-theme-mode&gt;</code>. See <a href="/docs/components/theme-mode/">Color mode</a>.</li>
+            <li>The site search is in <code>@luz-ds/catalog</code>: see <a href="/docs/catalog/search/">Search</a>. So is the cookie banner, a module of its own that <code>catalog.js</code> does not include: see <a href="/docs/catalog/cookie-consent/">Cookie consent</a>. The time of day for the color mode is a third module of the same kind, <code>theme-time.js</code>, loaded by <code>catalog.js</code> only on a page with a <code>&lt;luz-theme-time&gt;</code>: see <a href="/docs/catalog/theme-time/">Color mode by time of day</a>.</li>
             <li>The timeline and the sidebar's scroll spy are in <code>@luz-ds/catalog</code> too, as <code>timeline.js</code> and <code>sidebar.js</code>. <code>catalog.js</code> loads the first on a page with a <code>&lt;luz-timeline&gt;</code> and the second on a page with a <code>.luz-sidebar</code>, or a list marked <code>data-luz-spy</code>. Import them by name for a timeline or a sidebar added later: <code>@luz-ds/catalog/timeline</code> and <code>@luz-ds/catalog/sidebar</code>.</li>
             <li>A page that loads only core has no scroll spy. The sidebar drawer is a native popover and works without a script.</li>
             <li>The timeline has a small dictionary of its own for its four buttons (<code>en</code> and <code>es</code> only), then <code>data-luz-label-*</code> and the nearest <code>lang</code>. A language added with <code>registerLocale()</code> does not reach it: call <code>initTimeline(document, t)</code> with the <code>t</code> of core.</li>
           </ul>
           <h2 id="js-modules">The modules</h2>
           <details class="docs-fold" open data-fold-narrow>
-            <summary>All <span data-count="modules">11</span> JavaScript modules of core</summary>
+            <summary>All <span data-count="modules">13</span> JavaScript modules of core</summary>
             <div class="docs-demo__stage">
             <div class="luz-table-wrap" role="region" aria-label="JavaScript modules" tabindex="0">
               <table class="luz-table">
@@ -42,7 +43,9 @@ initTabs();</code></pre>
                 </thead>
                 <tbody>
                   <tr><td data-label="Module"><div><code>luz.js</code></div></td><td data-label="What it does"><div>Entry: re-exports every module and initializes them all on load</div></td><td data-label="Key exports"><div>Everything below</div></td></tr>
-                  <tr><td data-label="Module"><div><code>theme.js</code></div></td><td data-label="What it does"><div>Color mode switching</div></td><td data-label="Key exports"><div><code>applyTheme</code></div></td></tr>
+                  <tr><td data-label="Module"><div><code>theme.js</code></div></td><td data-label="What it does"><div>Switching to a look of your own; the color mode is <code>theme-mode.js</code>'s</div></td><td data-label="Key exports"><div><code>applyTheme</code></div></td></tr>
+                  <tr><td data-label="Module"><div><code>theme-mode.js</code></div></td><td data-label="What it does"><div>The <code>&lt;luz-theme-mode&gt;</code> element, in a chunk of its own, loaded on demand</div></td><td data-label="Key exports"><div>None: importing it defines the element</div></td></tr>
+                  <tr><td data-label="Module"><div><code>theme-boot.js</code></div></td><td data-label="What it does"><div>A classic script for the <code>&lt;head&gt;</code>: the color mode before the first paint</div></td><td data-label="Key exports"><div>None</div></td></tr>
                   <tr><td data-label="Module"><div><code>clipboard.js</code></div></td><td data-label="What it does"><div>Copy with visual feedback</div></td><td data-label="Key exports"><div><code>copyToClipboard</code>, <code>initCopyButtons</code></div></td></tr>
                   <tr><td data-label="Module"><div><code>modal.js</code></div></td><td data-label="What it does"><div>Fallback for the <code>command</code> and <code>commandfor</code> attributes in browsers without them</div></td><td data-label="Key exports"><div><code>initModals</code>, <code>supportsCommands</code></div></td></tr>
                   <tr><td data-label="Module"><div><code>highlight.js</code></div></td><td data-label="What it does"><div>Dependency-free syntax highlight for code blocks</div></td><td data-label="Key exports"><div><code>highlightBlock</code>, <code>initHighlight</code></div></td></tr>
@@ -59,7 +62,7 @@ initTabs();</code></pre>
           </details>
           <h3 id="js-languages">Languages and the strings scripts write</h3>
           <p>English is in the entry. Every other language LUZ ships is a small file, fetched at start for a page whose <code>&lt;html lang&gt;</code>, or any <code>lang</code> outside a link or an option, names it; a page in English makes no request.</p>
-          <p>With the individual modules, call <code>loadLocales()</code> yourself, and <code>await loadLocales()</code> before <code>initHighlight()</code>, <code>initPlayers()</code> and <code>initThemeCycle()</code>. A file that cannot load is one console warning, and English.</p>
+          <p>With the individual modules, call <code>loadLocales()</code> yourself, and <code>await loadLocales()</code> before <code>initHighlight()</code> and <code>initPlayers()</code>. A file that cannot load is one console warning, and English.</p>
           <p>For a language LUZ does not ship, set <code>data-luz-label-*</code> once on <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code>, or call <code>registerLocale()</code> before the scripts start.</p>
           <p>To check the file, put an import map with an <code>integrity</code> section for it before the first module script, on the pages in that language only. A <code>modulepreload</code> link with <code>integrity</code> is not a guard in Safari or Firefox: use it as a performance hint.</p>
           <p>A language for LUZ is a pull request: the JSON file <code>packages/core/src/i18n/&lt;code&gt;.json</code>, one line in the <code>files</code> map of <code>i18n.js</code> and a budget row. The steps are in AGENTS.md.</p>
@@ -72,8 +75,8 @@ initTabs();</code></pre>
               </thead>
               <tbody>
                 <tr><td data-label="Component"><div><a href="/docs/components/tabs/">Tabs</a></div></td><td data-label="Without JavaScript"><div>Links, and every panel stacked</div></td></tr>
-                <tr><td data-label="Component"><div><a href="/docs/components/mode-switcher/">Color mode switcher</a></div></td><td data-label="Without JavaScript"><div>Three radios that still change the mode; not remembered</div></td></tr>
-                <tr><td data-label="Component"><div><a href="/docs/catalog/color-mode/">Auto color mode</a></div></td><td data-label="Without JavaScript"><div>The four radios still change the mode; Auto is light, and neither the system nor the clock is followed</div></td></tr>
+                <tr><td data-label="Component"><div><a href="/docs/components/theme-mode/">Color mode</a></div></td><td data-label="Without JavaScript"><div>The four radios still change the mode; Auto is light, and the choice is not remembered</div></td></tr>
+                <tr><td data-label="Component"><div><a href="/docs/catalog/theme-time/">Color mode by time of day</a></div></td><td data-label="Without JavaScript"><div>No bar and no moments are shown; core's radios still change the mode, and the clock is not followed</div></td></tr>
                 <tr><td data-label="Component"><div><a href="/docs/components/copy-button/">Copy button</a></div></td><td data-label="Without JavaScript"><div>Hidden; the text stays selectable</div></td></tr>
                 <tr><td data-label="Component"><div><a href="/docs/components/player/">Player</a></div></td><td data-label="Without JavaScript"><div>The browser's own media controls; MIDI shows its fallback text</div></td></tr>
                 <tr><td data-label="Component"><div><a href="/docs/components/modal/">Modal</a></div></td><td data-label="Without JavaScript"><div>Opens where the browser supports <code>command</code>; elsewhere the open button does nothing</div></td></tr>

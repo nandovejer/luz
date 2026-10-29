@@ -19,11 +19,11 @@ files: themes/_template.css
       <h2 id="steps">Make one, step by step</h2>
       <ol>
         <li><strong>Copy the template.</strong> It is <code>@luz-ds/core/themes/_template.css</code>. Every value in it is LUZ's own, so it passes the contrast check before you change anything.</li>
-        <li><strong>Rename it.</strong> Replace <code>my-brand</code>, three times, by the name of your theme: lowercase letters, digits and hyphens.</li>
+        <li><strong>Rename it.</strong> Replace every <code>my-brand</code> by the name of your theme: lowercase letters, digits and hyphens.</li>
         <li><strong>Change what you need.</strong> Start with the brand colors and the surfaces. Keep the three blocks complete: a token left out of the dark block takes its light value.</li>
         <li><strong>Check it.</strong> Run the command in <a href="#check">Check it</a> until it passes.</li>
         <li><strong>Load it</strong> after <code>luz-tokens.css</code> and <code>luz.css</code>, and set the attribute.</li>
-        <li><strong>List it</strong> in <code>data-luz-themes</code>, so the mode switcher remembers the visitor's choice.</li>
+        <li><strong>List it</strong> in <code>data-luz-themes</code>, so <code>applyTheme()</code> and the buttons of custom themes know it. <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> does not need the list: it writes <code>data-mode</code> and leaves <code>data-theme</code> to your theme.</li>
       </ol>
       <div class="docs-snippet">
         <div class="docs-snippet__bar">
@@ -37,6 +37,15 @@ files: themes/_template.css
 &lt;html lang=&quot;en&quot; data-theme=&quot;my-brand&quot; data-luz-themes=&quot;my-brand&quot;&gt;
 &lt;!-- or, in its dark mode --&gt;
 &lt;html lang=&quot;en&quot; data-theme=&quot;my-brand&quot; data-mode=&quot;dark&quot; data-luz-themes=&quot;my-brand&quot;&gt;</code></pre>
+      </div>
+      <p>With no JavaScript, the radios of <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> change the mode of your theme if its template is current. A copy made before needs one line more in each block, after its <code>data-mode</code> selector (use <code>dark</code> and <code>high-contrast</code> in the other two):</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">CSS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-theme-nojs" aria-label="Copy the selector">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="The selector for the radios without JavaScript"><code id="code-theme-nojs">[data-theme=&quot;my-brand&quot;][data-mode=&quot;light&quot;],
+:is(:root[data-theme=&quot;my-brand&quot;]:not([data-mode]):has(input[name=&quot;luz-theme-mode&quot;][value=&quot;light&quot;]:checked)) {</code></pre>
       </div>
       <p>A small theme can be only the tokens that differ, in the first block: what you leave out takes LUZ's value. Fill the dark and high-contrast blocks as well if you offer those modes.</p>
       <div class="docs-snippet">
@@ -98,13 +107,13 @@ files: themes/_template.css
         <li><strong>One zone.</strong> <code>data-theme</code> works on any element: the theme applies to that element and what is inside it. A date or time picker and a select take their color scheme from an ancestor <code>data-theme</code>, so for those put the attribute on <code>&lt;html&gt;</code>.</li>
         <li><strong>Forced colors.</strong> A reader who forces colors sees system colors, not your theme. Nothing to do: the components handle it.</li>
         <li><strong>Print.</strong> The <code>luz.print</code> layer sets paper colors whatever the theme.</li>
-        <li><strong>The OS preference.</strong> With no stored choice and no attribute, the page is light. To follow <code>prefers-color-scheme</code>, <a href="/docs/tokens/modes/#system">set <code>data-theme</code> from a short script</a>: it is on the color modes page.</li>
+        <li><strong>The OS preference.</strong> With no stored choice and no attribute, the page is light. To follow <code>prefers-color-scheme</code>, use <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> and, to avoid a flash, its <a href="/docs/components/theme-mode/#boot">script for the head</a>.</li>
       </ul>
 
       <h2 id="limits">Limits</h2>
       <ul>
         <li>One theme at a time on an element. Mix a theme and a mode, not two themes.</li>
-        <li>The mode switcher knows only the names in <code>data-luz-themes</code>: a name that is not listed works as an attribute, and is not remembered.</li>
+        <li><code>applyTheme()</code> knows only the names in <code>data-luz-themes</code>: a name that is not listed works as an attribute, and is not remembered.</li>
         <li><code>light-dark()</code> is not used: it is not Baseline Widely available before 2026-11-13.</li>
       </ul>
     </div>

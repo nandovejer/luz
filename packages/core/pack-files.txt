@@ -41,8 +41,6 @@ dist/components/meter.css
 dist/components/meter.min.css
 dist/components/modal.css
 dist/components/modal.min.css
-dist/components/mode-switcher.css
-dist/components/mode-switcher.min.css
 dist/components/pagination.css
 dist/components/pagination.min.css
 dist/components/player.css
@@ -61,10 +59,13 @@ dist/components/tabs.css
 dist/components/tabs.min.css
 dist/components/tag.css
 dist/components/tag.min.css
+dist/components/theme-mode.css
+dist/components/theme-mode.min.css
 dist/components/toast.css
 dist/components/toast.min.css
 dist/components/tooltip.css
 dist/components/tooltip.min.css
+dist/custom-elements.json
 dist/highlight.js
 dist/highlight.min.js
 dist/i18n-es.js
@@ -89,6 +90,10 @@ dist/table-sort.js
 dist/table-sort.min.js
 dist/tabs.js
 dist/tabs.min.js
+dist/theme-boot.js
+dist/theme-boot.min.js
+dist/theme-mode.js
+dist/theme-mode.min.js
 dist/theme.js
 dist/theme.min.js
 dist/themes/_template.css

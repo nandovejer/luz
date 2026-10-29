@@ -1093,7 +1093,7 @@ h3.docs-subhead {
 }
 
 /* With scripting on, the colour-mode button is fixed at the bottom end of the
-   window (core's .luz-mode-switcher--cycle): the footer row stops before it, so the last
+   window (core's .luz-theme-mode__button): the footer row stops before it, so the last
    link is never under the button (WCAG 2.4.11, 2.5.8). Without scripting the
    radios are in the row and need no room. */
 @media (scripting: enabled) {
@@ -2293,8 +2293,8 @@ h2.docs-demo__title {
    text of every page: a star may be at most 15% of the text colour there, the
    most that keeps secondary text at 4.5:1 over it. The layers' opacity scales
    their brightest star down to that; the header band above keeps its own */
-:root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .docs-page.site-sky::before,
-:root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .docs-page.site-sky::after {
+:root:is([data-moment="dawn"], [data-moment="dusk"], [data-moment="night"]):not([data-theme="high-contrast"]) .docs-page.site-sky::before,
+:root:is([data-moment="dawn"], [data-moment="dusk"], [data-moment="night"]):not([data-theme="high-contrast"]) .docs-page.site-sky::after {
   opacity: 0.15;
 }
 

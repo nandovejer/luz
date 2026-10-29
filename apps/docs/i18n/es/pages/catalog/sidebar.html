@@ -3,12 +3,12 @@ title: Barra lateral
 description: Contiene la navegación principal de un sitio o una aplicación y se convierte en un panel lateral en pantallas pequeñas.
 keywords: panel lateral, navegación lateral
 fits: la navegación de un sitio con muchas páginas o secciones, junto al contenido, con un panel lateral en el móvil
-source: b21540988806
+source: 2d7456772c34
 reviewed: false
 -->
     <div class="docs-component" id="c-sidebar">
           <h2 id="example">Ejemplo</h2>
-          <p>Barra lateral con el nombre del producto, una lista de enlaces y el selector del modo de color.</p>
+          <p>Barra lateral con el nombre del producto, una lista de enlaces y el control del modo de color.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage docs-sidebar-demo">
             <nav class="luz-sidebar" aria-label="Sidebar specimen">
@@ -26,11 +26,11 @@ reviewed: false
                 <a class="luz-sidebar__link" href="/docs/catalog/">Catalog</a>
               </div>
               <div class="luz-sidebar__footer">
-                <fieldset class="luz-mode-switcher" disabled>
-                  <legend class="luz-mode-switcher__label">Color mode (specimen)</legend>
-                  <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="light" checked>Light</label>
-                  <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="dark">Dark</label>
-                  <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="high-contrast">High contrast</label>
+                <fieldset class="luz-theme-mode__group" style="--luz-theme-mode-line: var(--luz-sidebar-border); --luz-theme-mode-hover: var(--luz-sidebar-hover); --luz-theme-mode-focus: var(--luz-sidebar-text-hover); --luz-theme-mode-on: var(--luz-sidebar-active-bg); --luz-theme-mode-on-text: var(--luz-sidebar-active-text); --luz-theme-mode-text: var(--luz-sidebar-label)" inert>
+                  <legend class="luz-theme-mode__legend">Color mode (specimen)</legend>
+                  <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="light" checked>Light</label>
+                  <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="dark">Dark</label>
+                  <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="high-contrast">High contrast</label>
                 </fieldset>
               </div>
             </nav>
@@ -99,7 +99,7 @@ initSidebar();</code></pre>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-sidebar__link</code></div></td><td data-label="Qué hace"><div>Enlace</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>data-luz-spy</code> en cualquier elemento</div></td><td data-label="Qué hace"><div>No forma parte de la barra lateral: el indicador de desplazamiento también marca los enlaces a secciones de la página dentro de ella, como una tabla de contenidos con tu propio diseño</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.is-active</code> en un enlace</div></td><td data-label="Qué hace"><div>Resalta el enlace actual con el grosor y el color; acompáñalo de <code>aria-current="page"</code></div></td></tr>
-                  <tr><td data-label="Clase o atributo"><div><code>.luz-sidebar__footer</code></div></td><td data-label="Qué hace"><div>Fijado en la parte inferior, por ejemplo, para el <a href="/docs/components/mode-switcher/">selector del modo de color</a></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-sidebar__footer</code></div></td><td data-label="Qué hace"><div>Fijado en la parte inferior, por ejemplo, para el <a href="/docs/components/theme-mode/">modo de color</a></div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-nav-toggle</code></div></td><td data-label="Qué hace"><div>Botón de menú, visible con 768 px o menos; colócalo al principio de la fila de cabecera</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-nav-toggle--fixed</code></div></td><td data-label="Qué hace"><div>Fija el botón de menú en la esquina superior inicial, en páginas sin cabecera</div></td></tr>
                 </tbody>

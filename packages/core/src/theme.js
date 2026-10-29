@@ -6,9 +6,11 @@
  * Importing this module has no side effects; call initThemeSystem() to
  * wire up persistence and the initial theme.
  *
- * The color-mode switcher is a native radio group and works without this
- * module (see components/mode-switcher.css); this module persists the
- * choice and keeps the radios in step with it.
+ * The color mode itself is <luz-theme-mode> (theme-mode.js, a lazy chunk):
+ * a native radio group that works without any script (components/
+ * theme-mode.css) and writes data-mode (and, with no brand, data-theme) on
+ * <html>. This module is for the pages that name a brand: applyTheme() and
+ * applyMode() switch a custom theme and its mode.
  */
 import { enableJs } from "./utils.js";
 import { t } from "./i18n.js";
@@ -27,8 +29,11 @@ export function getCustomThemes() {
 }
 
 const allThemes = () => [...MODES, ...getCustomThemes()];
+// "luz-theme" holds the color MODE (light, dark or high-contrast; Auto is its
+// absence), as <luz-theme-mode> and the boot script read it. The name of a
+// custom theme has a key of its own, so the two never collide.
 const STORAGE_KEY = "luz-theme";
-const STORAGE_KEY_MODE = "luz-mode";
+const STORAGE_KEY_BRAND = "luz-brand";
 const STORAGE_KEY_LAST_MODE = "luz-last-mode";
 
 // localStorage throws in sandboxed iframes and storage-blocked contexts;
@@ -41,13 +46,15 @@ const store = (op, key, value) => {
   }
 };
 
+// The custom theme the visitor applied, else the stored base mode
 export function getStoredTheme() {
-  const saved = store("get", STORAGE_KEY);
-  return saved && allThemes().includes(saved) ? saved : null;
+  const brand = store("get", STORAGE_KEY_BRAND);
+  if (brand && getCustomThemes().includes(brand)) return brand;
+  return getStoredMode();
 }
 
 export function getStoredMode() {
-  const saved = store("get", STORAGE_KEY_MODE);
+  const saved = store("get", STORAGE_KEY);
   return saved && MODES.includes(saved) ? saved : null;
 }
 
@@ -60,15 +67,7 @@ export function getInitialTheme() {
 }
 
 function syncButtons(theme) {
-  const isCustom = getCustomThemes().includes(theme);
   const currentMode = document.documentElement.dataset.mode;
-
-  // Mode radios (footer) — checked only when a base color mode is selected
-  document.querySelectorAll('input[name="luz-theme"]').forEach((radio) => {
-    radio.checked = !isCustom && radio.value === theme;
-    const label = radio.closest(".luz-mode-btn");
-    label?.classList.toggle("is-dimmed", isCustom);
-  });
 
   // Custom theme apply buttons
   document.querySelectorAll(".luz-theme-apply-btn").forEach((btn) => {
@@ -91,19 +90,19 @@ function syncButtons(theme) {
 export function applyTheme(theme, { persist = true } = {}) {
   const isCustom = getCustomThemes().includes(theme);
   document.documentElement.dataset.theme = theme;
-  if (persist) store("set", STORAGE_KEY, theme);
 
   if (isCustom) {
-    // Restore saved mode, or fall back to the theme's default mode
-    const savedMode = getStoredMode();
-    const mode = savedMode || "light";
-    document.documentElement.dataset.mode = mode;
-    // Persist the resolved mode so it survives page reload
-    if (persist) store("set", STORAGE_KEY_MODE, mode);
+    if (persist) store("set", STORAGE_KEY_BRAND, theme);
+    // The stored mode, else the one already on the page (the boot script's), else light
+    document.documentElement.dataset.mode =
+      getStoredMode() || document.documentElement.dataset.mode || "light";
   } else {
-    // Base color mode: clear data-mode
-    delete document.documentElement.dataset.mode;
-    if (persist) store("remove", STORAGE_KEY_MODE);
+    // A base color mode: data-mode says it too, as <luz-theme-mode> writes it
+    document.documentElement.dataset.mode = theme;
+    if (persist) {
+      store("remove", STORAGE_KEY_BRAND);
+      store("set", STORAGE_KEY, theme);
+    }
   }
 
   syncButtons(theme);
@@ -116,110 +115,24 @@ export function applyMode(mode, parentTheme, { persist = true } = {}) {
   if (current !== parentTheme) {
     if (persist && MODES.includes(current)) store("set", STORAGE_KEY_LAST_MODE, current);
     document.documentElement.dataset.theme = parentTheme;
-    if (persist) store("set", STORAGE_KEY, parentTheme);
+    if (persist) store("set", STORAGE_KEY_BRAND, parentTheme);
   }
   document.documentElement.dataset.mode = mode;
-  if (persist) store("set", STORAGE_KEY_MODE, mode);
+  if (persist) store("set", STORAGE_KEY, mode);
   syncButtons(parentTheme);
 }
 
-/* --- Cycle button: one button for a .luz-mode-switcher--cycle group ---
-   The radios stay the source of truth and the no-JS control. The button
-   checks the next enabled radio and fires its change event, so whatever
-   listens to the radios (initThemeSystem or a page's own script) applies it. */
-
-function labelOf(radio) {
-  return radio?.closest(".luz-mode-btn")?.textContent.trim() ?? "";
-}
-
-function renderCycle(group) {
-  const button = group.querySelector(":scope > .luz-mode-cycle");
-  if (!button) return;
-  const current = group.querySelector("input:checked");
-  // A button that ships its own icons ([data-mode-icon]) shows the right one by CSS
-  if (!button.querySelector("[data-mode-icon]")) {
-    const icon = current?.closest(".luz-mode-btn")?.querySelector(".luz-mode-btn__icon");
-    button.replaceChildren(...(icon ? [icon.cloneNode(true)] : []));
-  }
-  const name = t("changeMode", button, { mode: labelOf(current) || t("modeAuto", button) });
-  button.setAttribute("aria-label", name);
-  button.title = name;
-}
-
-function cycle(group) {
-  const radios = [...group.querySelectorAll("input[type=radio]:not(:disabled)")];
-  if (!radios.length) return;
-  const next = radios[(radios.findIndex((r) => r.checked) + 1) % radios.length];
-  next.checked = true;
-  next.dispatchEvent(new Event("change", { bubbles: true }));
-  renderCycle(group);
-  group.querySelector(":scope > .luz-mode-cycle__status").textContent = t(
-    "modeChanged",
-    group,
-    { mode: labelOf(next) },
-  );
-}
-
-const wiredGroups = new WeakSet();
-
 /**
- * Turn each fieldset.luz-mode-switcher--cycle into one button that steps
- * through its modes, showing the icon of the current one. Uses the
- * .luz-mode-cycle button already in the markup, or adds one. Idempotent.
- * `defer = true` wires the buttons the markup has and writes no name and no
- * data-luz-js: call it again without it when the page's strings are ready.
- */
-export function initThemeCycle(root = document, defer = false) {
-  defer || enableJs();
-  const groups = [...root.querySelectorAll(".luz-mode-switcher--cycle")];
-  // Deferred: wire the buttons the markup has (their click needs no string);
-  // the button the script would add, and every name, wait for the second call
-  const fresh = groups.filter(
-    (group) => !wiredGroups.has(group) && (!defer || group.querySelector(":scope > .luz-mode-cycle")),
-  );
-  fresh.forEach((group) => {
-    wiredGroups.add(group);
-    let button = group.querySelector(":scope > .luz-mode-cycle");
-    if (!button) {
-      button = document.createElement("button");
-      button.type = "button";
-      button.className = "luz-mode-cycle";
-      group.querySelector("legend")?.after(button) ?? group.prepend(button);
-    }
-    if (!group.querySelector(":scope > .luz-mode-cycle__status")) {
-      const status = document.createElement("span");
-      status.className = "luz-mode-cycle__status";
-      status.setAttribute("role", "status");
-      button.after(status);
-    }
-    button.addEventListener("click", () => cycle(group));
-    group.addEventListener("change", () => renderCycle(group));
-  });
-  if (!defer) groups.forEach(renderCycle);
-  // Scripts that set the mode check the radios without a change event;
-  // they set data-theme in the same task, so re-render after it.
-  if (fresh.length) {
-    new MutationObserver(() => fresh.forEach(renderCycle)).observe(
-      document.documentElement,
-      { attributes: true, attributeFilter: ["data-theme", "data-mode"] },
-    );
-  }
-}
-
-/**
- * Wire up theme buttons and the initial theme.
+ * Wire up the buttons of custom themes (.luz-theme-apply-btn and
+ * .luz-theme-mode-btn). The color mode is <luz-theme-mode>'s, not this
+ * function's: it starts no mode and listens to no radio.
  * `defer = true` leaves data-luz-js to a later call of an init*().
  */
 export function initThemeSystem(defer = false) {
   defer || enableJs();
-  // Apply initial theme without forcing persistence when it comes from the OS
-  applyTheme(getInitialTheme(), { persist: !!getStoredTheme() });
-
-  // --- Color mode switcher (footer): native radios ---
-  document.addEventListener("change", (e) => {
-    const radio = e.target.closest?.('input[name="luz-theme"]');
-    if (radio?.checked && allThemes().includes(radio.value)) applyTheme(radio.value);
-  });
+  // The custom theme the visitor applied last time: the mode is <luz-theme-mode>'s and the boot script's
+  const brand = store("get", STORAGE_KEY_BRAND);
+  if (getCustomThemes().includes(brand)) applyTheme(brand, { persist: false });
 
   document.body.addEventListener("click", (e) => {
     // --- Mode buttons scoped to a custom theme ---
@@ -240,7 +153,6 @@ export function initThemeSystem(defer = false) {
       if (current === themeApplyBtn.dataset.theme) {
         const lastMode = store("get", STORAGE_KEY_LAST_MODE);
         const fallback = MODES.includes(lastMode) ? lastMode : "light";
-        store("remove", STORAGE_KEY_MODE);
         applyTheme(fallback);
       } else {
         // Store current base mode before switching to a custom theme

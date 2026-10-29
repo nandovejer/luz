@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Crea tu propio tema
 description: LUZ incluye un aspecto en tres modos de color. Tu propio tema es un archivo de tokens semánticos: parte de la plantilla, compruébalo y cárgalo.
-source: 33b1a79e0a5e
+source: 1b05d14a56d3
 reviewed: false
 -->
     <div class="docs-block" id="t-themes">
@@ -17,11 +17,11 @@ reviewed: false
       <h2 id="steps">Créalo paso a paso</h2>
       <ol>
         <li><strong>Copia la plantilla.</strong> Está en <code>@luz-ds/core/themes/_template.css</code>. Todos sus valores son propios de LUZ, así que supera la comprobación de contraste antes de que cambies nada.</li>
-        <li><strong>Cámbiale el nombre.</strong> Sustituye las tres apariciones de <code>my-brand</code> por el nombre de tu tema: usa letras minúsculas, dígitos y guiones.</li>
+        <li><strong>Cámbiale el nombre.</strong> Sustituye todas las apariciones de <code>my-brand</code> por el nombre de tu tema: usa letras minúsculas, dígitos y guiones.</li>
         <li><strong>Cambia lo que necesites.</strong> Empieza por los colores de marca y las superficies. Mantén completos los tres bloques: un token que falte en el bloque oscuro toma el valor del claro.</li>
         <li><strong>Compruébalo.</strong> Ejecuta el comando de <a href="#check">Compruébalo</a> hasta que lo supere.</li>
         <li><strong>Cárgalo</strong> después de <code>luz-tokens.css</code> y <code>luz.css</code>, y define el atributo.</li>
-        <li><strong>Inclúyelo</strong> en <code>data-luz-themes</code> para que el selector de modo recuerde la elección del visitante.</li>
+        <li><strong>Inclúyelo</strong> en <code>data-luz-themes</code> para que <code>applyTheme()</code> y los botones de temas personalizados lo reconozcan. <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> no necesita la lista: escribe <code>data-mode</code> y deja <code>data-theme</code> a tu tema.</li>
       </ol>
       <div class="docs-snippet">
         <div class="docs-snippet__bar">
@@ -35,6 +35,15 @@ reviewed: false
 &lt;html lang=&quot;en&quot; data-theme=&quot;my-brand&quot; data-luz-themes=&quot;my-brand&quot;&gt;
 &lt;!-- or, in its dark mode --&gt;
 &lt;html lang=&quot;en&quot; data-theme=&quot;my-brand&quot; data-mode=&quot;dark&quot; data-luz-themes=&quot;my-brand&quot;&gt;</code></pre>
+      </div>
+      <p>Sin JavaScript, los botones de opción de <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> cambian el modo de tu tema si su plantilla es la actual. Una copia anterior necesita una línea más en cada bloque, después de su selector <code>data-mode</code> (usa <code>dark</code> y <code>high-contrast</code> en los otros dos):</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">CSS</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-theme-nojs" aria-label="Copy the selector">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="The selector for the radios without JavaScript"><code id="code-theme-nojs">[data-theme=&quot;my-brand&quot;][data-mode=&quot;light&quot;],
+:is(:root[data-theme=&quot;my-brand&quot;]:not([data-mode]):has(input[name=&quot;luz-theme-mode&quot;][value=&quot;light&quot;]:checked)) {</code></pre>
       </div>
       <p>Un tema pequeño puede incluir solo los tokens distintos en el primer bloque: lo que omitas toma el valor de LUZ. Completa también los bloques oscuro y de alto contraste si ofreces esos modos.</p>
       <div class="docs-snippet">
@@ -96,13 +105,13 @@ reviewed: false
         <li><strong>Una zona.</strong> <code>data-theme</code> funciona en cualquier elemento: el tema se aplica a ese elemento y a su contenido. Un selector de fecha u hora y un selector toman el esquema de color de un antecesor con <code>data-theme</code>, así que en esos casos pon el atributo en <code>&lt;html&gt;</code>.</li>
         <li><strong>Colores forzados.</strong> Quien fuerza los colores ve los del sistema, no tu tema. No tienes que hacer nada: los componentes se encargan.</li>
         <li><strong>Impresión.</strong> La capa <code>luz.print</code> establece los colores del papel, sea cual sea el tema.</li>
-        <li><strong>Preferencia del sistema operativo.</strong> Si no hay una elección guardada ni un atributo, la página es clara. Para seguir <code>prefers-color-scheme</code>, <a href="/docs/tokens/modes/#system">define <code>data-theme</code> mediante un script breve</a>: se explica en la página de modos de color.</li>
+        <li><strong>Preferencia del sistema operativo.</strong> Si no hay una elección guardada ni un atributo, la página es clara. Para seguir <code>prefers-color-scheme</code>, usa <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> y, para evitar un parpadeo, su <a href="/docs/components/theme-mode/#boot">script para la cabecera</a>.</li>
       </ul>
 
       <h2 id="limits">Límites</h2>
       <ul>
         <li>Un solo tema a la vez por elemento. Combina un tema y un modo, no dos temas.</li>
-        <li>El selector de modo solo reconoce los nombres de <code>data-luz-themes</code>: un nombre que no esté en la lista funciona como atributo, pero no se recuerda.</li>
+        <li><code>applyTheme()</code> solo reconoce los nombres de <code>data-luz-themes</code>: un nombre que no esté en la lista funciona como atributo, pero no se recuerda.</li>
         <li>No se usa <code>light-dark()</code>: no será Baseline Widely available antes del 2026-11-13.</li>
       </ul>
     </div>

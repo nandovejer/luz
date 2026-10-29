@@ -13,7 +13,7 @@ keywords: drawer, side navigation
 -->
     <div class="docs-component" id="c-sidebar">
           <h2 id="example">Example</h2>
-          <p>A sidebar with the product name, a list of links and the color mode switcher.</p>
+          <p>A sidebar with the product name, a list of links and the color mode control.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage docs-sidebar-demo">
             <nav class="luz-sidebar" aria-label="Sidebar specimen">
@@ -31,11 +31,11 @@ keywords: drawer, side navigation
                 <a class="luz-sidebar__link" href="/docs/catalog/">Catalog</a>
               </div>
               <div class="luz-sidebar__footer">
-                <fieldset class="luz-mode-switcher" disabled>
-                  <legend class="luz-mode-switcher__label">Color mode (specimen)</legend>
-                  <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="light" checked>Light</label>
-                  <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="dark">Dark</label>
-                  <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme-specimen" value="high-contrast">High contrast</label>
+                <fieldset class="luz-theme-mode__group" style="--luz-theme-mode-line: var(--luz-sidebar-border); --luz-theme-mode-hover: var(--luz-sidebar-hover); --luz-theme-mode-focus: var(--luz-sidebar-text-hover); --luz-theme-mode-on: var(--luz-sidebar-active-bg); --luz-theme-mode-on-text: var(--luz-sidebar-active-text); --luz-theme-mode-text: var(--luz-sidebar-label)" inert>
+                  <legend class="luz-theme-mode__legend">Color mode (specimen)</legend>
+                  <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="light" checked>Light</label>
+                  <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="dark">Dark</label>
+                  <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="high-contrast">High contrast</label>
                 </fieldset>
               </div>
             </nav>
@@ -104,7 +104,7 @@ initSidebar();</code></pre>
                   <tr><td data-label="Class or attribute"><div><code>.luz-sidebar__link</code></div></td><td data-label="What it does"><div>A link</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>data-luz-spy</code> on any element</div></td><td data-label="What it does"><div>Not part of the sidebar: the scroll spy also marks the links to sections of the page inside it, such as a table of contents styled your own way</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.is-active</code> on a link</div></td><td data-label="What it does"><div>Marks the current link with weight and colour; pair it with <code>aria-current="page"</code></div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-sidebar__footer</code></div></td><td data-label="What it does"><div>Pinned to the bottom, for example for the <a href="/docs/components/mode-switcher/">color mode switcher</a></div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-sidebar__footer</code></div></td><td data-label="What it does"><div>Pinned to the bottom, for example for the <a href="/docs/components/theme-mode/">color mode</a></div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-nav-toggle</code></div></td><td data-label="What it does"><div>The menu button, shown at 768 px and below; put it first in your header row</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-nav-toggle--fixed</code></div></td><td data-label="What it does"><div>Pins the menu button to the top start corner, for a page with no header</div></td></tr>
                 </tbody>

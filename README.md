@@ -43,7 +43,7 @@ The name stands for Light, Usable & Zero-dependency: light in weight (plain CSS 
 
 - [`@luz-ds/tokens`](./packages/tokens): design tokens (CSS custom properties), the three color modes and the font.
 - [`@luz-ds/core`](./packages/core): the styles of bare HTML elements (text, controls and tables come out styled with no class; the tags that only structure a page have no style), the layout objects, the components and optional JavaScript.
-- [`@luz-ds/catalog`](./packages/catalog): the components that act for the site as a whole (search, cookie consent, color mode, language switch, submenu, announcement) and the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. One stylesheet per component; you link only the ones you use.
+- [`@luz-ds/catalog`](./packages/catalog): the components that act for the site as a whole (search, cookie consent, theme time, language switch, submenu, announcement) and the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. One stylesheet per component; you link only the ones you use.
 - [`@luz-ds/check`](./packages/check): a tool, not a stylesheet. The `luz-check` command reads the HTML and CSS of your project, offline, and says which LUZ classes, elements, load order and theme colors are wrong. It has its own version, 0.x, and needs no other package.
 
 ## Install and load
@@ -136,7 +136,7 @@ import { initTabs } from "@luz-ds/core/tabs";
 import { copyToClipboard } from "@luz-ds/core/clipboard";
 ```
 
-Published modules of core: `theme`, `clipboard`, `modal`, `highlight`, `player`, `tabs`, `utils`, `i18n`, `midi`, `table-sort`. Those of catalog are `search`, `cookie-consent`, `color-mode`, `sidebar` and `timeline`. Importing one has no side effects until you call its `init*()`. Every page works without JavaScript.
+Published modules of core: `theme`, `theme-mode`, `clipboard`, `modal`, `highlight`, `player`, `tabs`, `utils`, `i18n`, `midi`, `table-sort`. Those of catalog are `search`, `cookie-consent`, `theme-time`, `theme-time-bar`, `sidebar` and `timeline`. Importing one has no side effects until you call its `init*()`. Every page works without JavaScript.
 
 ## What each package needs
 
@@ -172,7 +172,7 @@ Every component has a page in the documentation with a live example, the markup 
 - **Actions and input:** buttons, copy button, dropdown, form fields (text, date and time, range, color, file, checkbox and radio groups, switches), select
 - **Show content:** accordion, avatar, card, code block, figure, icon grid, table, tag and badge
 - **Feedback and status:** alert, modal, progress and meter, toast, tooltip
-- **Navigation:** breadcrumb, pagination, tabs, color mode switcher, and, in catalog, the navbar and the sidebar
+- **Navigation:** breadcrumb, pagination, tabs, theme mode (the color mode), and, in catalog, the navbar and the sidebar
 - **Media:** video, audio and MIDI player
 - **Helpers:** layout objects (`.o-*`), utility classes (`.u-*`) and keyframes
 

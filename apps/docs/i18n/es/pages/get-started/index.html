@@ -2,7 +2,7 @@
 title: Instala LUZ
 description: Elige un nivel y copia un comando de instalación o las etiquetas de CDN. Cada nivel necesita los que están por debajo, pero ninguno de los que están por encima.
 keywords: npm, CDN
-source: 6168799ce4aa
+source: bfc91c72de16
 reviewed: false
 -->
     <div class="docs-block" id="installation">
@@ -117,7 +117,7 @@ import &quot;@luz-ds/core/conditional.css&quot;;</code></pre>
 
       <div class="docs-prose">
         <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Nivel 3, el Catálogo: tokens, core y catalog</h2>
-        <p>La navegación del sitio y las piezas con un script o una identidad propios: barra de navegación, barra lateral, terminal, línea de tiempo, búsqueda, consentimiento de cookies, modo de color, selector de idioma, submenú, anuncio y preguntas frecuentes, y los patrones de un tipo de sitio. El catálogo necesita core y tokens.</p>
+        <p>La navegación del sitio y las piezas con un script o una identidad propios: barra de navegación, barra lateral, terminal, línea de tiempo, búsqueda, consentimiento de cookies, modo de color según la hora del día, selector de idioma, submenú, anuncio y preguntas frecuentes, y los patrones de un tipo de sitio. El catálogo necesita core y tokens.</p>
         <p>La estructura de la página de cada tipo de sitio, desde la cabecera hasta el pie, también está en el catálogo, una hoja de estilos por patrón: consulta <a href="#site-kinds">Tipos de sitio</a>.</p>
         <p>El catálogo tiene una hoja de estilos por componente: enlaza las que use la página, después de core.</p>
         <div class="docs-command-block">
@@ -209,7 +209,7 @@ import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Computing the integrity hash"><code id="code-integrity">curl -s https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css | openssl dgst -sha384 -binary | openssl base64 -A</code></pre>
         </div>
         <p>Añade el resultado como <code class="luz-code-inline">integrity="sha384-…"</code> a la etiqueta que carga ese archivo y repite el proceso con cada archivo.</p>
-        <p>El hash de un script solo cubre ese archivo, no los que carga después. <code class="luz-code-inline">catalog.min.js</code> carga <code class="luz-code-inline">search.min.js</code> en páginas con búsqueda, <code class="luz-code-inline">cookie-consent.min.js</code> en páginas con un banner de cookies y <code class="luz-code-inline">color-mode.min.js</code> en páginas con el modo de color automático.</p>
+        <p>El hash de un script solo cubre ese archivo, no los que carga después. <code class="luz-code-inline">catalog.min.js</code> carga <code class="luz-code-inline">search.min.js</code> en páginas con búsqueda, <code class="luz-code-inline">cookie-consent.min.js</code> en páginas con un banner de cookies y <code class="luz-code-inline">theme-time.min.js</code> en páginas con la hora del día para el modo de color.</p>
         <p>Asigna a cada uno su propio hash en un mapa de importaciones, antes del primer script de módulo. Funciona en Chrome 127, Safari 18 y Firefox 138 y posteriores; un navegador más antiguo lo ignora y carga los archivos sin comprobarlos.</p>
         <p>Un <code class="luz-code-inline">&lt;link rel="modulepreload"&gt;</code> con un hash no protege en Safari ni en Firefox: úsalo solo como indicación para mejorar el rendimiento.</p>
         <div class="docs-snippet">
@@ -222,7 +222,7 @@ import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
   &quot;integrity&quot;: {
     &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/search.min.js&quot;: &quot;sha384-…&quot;,
     &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/cookie-consent.min.js&quot;: &quot;sha384-…&quot;,
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/color-mode.min.js&quot;: &quot;sha384-…&quot;
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/theme-time.min.js&quot;: &quot;sha384-…&quot;
   }
 }
 &lt;/script&gt;

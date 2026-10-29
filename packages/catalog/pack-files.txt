@@ -3,8 +3,6 @@ README.md
 dist/catalog.js
 dist/catalog.min.js
 dist/classes.json
-dist/color-mode.js
-dist/color-mode.min.js
 dist/components/announcement.css
 dist/components/announcement.min.css
 dist/components/app-bar.css
@@ -13,8 +11,6 @@ dist/components/article-header.css
 dist/components/article-header.min.css
 dist/components/article.css
 dist/components/article.min.css
-dist/components/color-mode.css
-dist/components/color-mode.min.css
 dist/components/cookie-consent.css
 dist/components/cookie-consent.min.css
 dist/components/dashboard.css
@@ -65,6 +61,8 @@ dist/components/submenu.css
 dist/components/submenu.min.css
 dist/components/terminal.css
 dist/components/terminal.min.css
+dist/components/theme-time.css
+dist/components/theme-time.min.css
 dist/components/timeline.css
 dist/components/timeline.min.css
 dist/cookie-consent.js
@@ -74,6 +72,12 @@ dist/search.js
 dist/search.min.js
 dist/sidebar.js
 dist/sidebar.min.js
+dist/theme-time-bar.js
+dist/theme-time-bar.min.js
+dist/theme-time-boot.js
+dist/theme-time-boot.min.js
+dist/theme-time.js
+dist/theme-time.min.js
 dist/timeline.js
 dist/timeline.min.js
 package.json

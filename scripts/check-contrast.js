@@ -81,7 +81,7 @@ for (const file of (existsSync(themesDir) ? readdirSync(themesDir) : []).filter(
   }
 }
 // The four lights of the site (apps/site/theme-light.css): each
-// :root[data-theme="<mode>"][data-light="<light>"] block layers over its base
+// :root[data-theme="<mode>"][data-moment="<light>"] block layers over its base
 // mode, as in the browser. Afternoon and night are Vejer itself (no block).
 const LIGHTS_FILE = "apps/site/theme-light.css";
 if (existsSync(resolve(root, LIGHTS_FILE))) {
@@ -89,7 +89,7 @@ if (existsSync(resolve(root, LIGHTS_FILE))) {
   let found = 0;
   for (const { selectors, props } of blocks(css)) {
     for (const selector of selectors) {
-      const m = selector.match(/^:root\[data-theme="(light|dark)"\]\[data-light="([\w-]+)"\]$/);
+      const m = selector.match(/^:root\[data-theme="(light|dark)"\]\[data-moment="([\w-]+)"\]$/);
       if (!m) continue;
       found += 1;
       const key = `light ${m[2]} (${m[1]})`;
@@ -97,7 +97,7 @@ if (existsSync(resolve(root, LIGHTS_FILE))) {
     }
   }
   if (!found) {
-    console.error(`✗ ${LIGHTS_FILE}: no :root[data-theme][data-light] block`);
+    console.error(`✗ ${LIGHTS_FILE}: no :root[data-theme][data-moment] block`);
     process.exit(1);
   }
 }

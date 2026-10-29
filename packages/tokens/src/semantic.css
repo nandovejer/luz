@@ -1,7 +1,8 @@
 /* -------------------------------------------------------------------------
    LAYER 2: SEMANTIC
    Theme-aware tokens. Components ONLY consume these (never Layer 1 primitives).
-   Base color modes are activated via data-theme on <html>:
+   Base color modes are activated via data-theme on <html> (<luz-theme-mode>
+   writes it, and data-mode with it, when the page names no brand):
      <html>                            → default (light)
      <html data-theme="light">         → light (explicit)
      <html data-theme="dark">          → dark
@@ -103,13 +104,15 @@
    COLOR MODE: DARK — <html data-theme="dark">
    -------------------------------------------------------------------------- */
 
-/* The :root:has() selectors are the no-JavaScript path: a checked radio of the
-   color-mode switcher (.luz-mode-switcher) re-scopes the tokens for the
-   session. theme.js adds persistence and the OS preference on top. They are
-   wrapped in :is() so a browser without :has() drops them instead of
-   invalidating the whole rule. */
+/* The :root:has() selectors are the no-JavaScript path: a checked radio of
+   <luz-theme-mode> re-scopes the tokens for the session, while <html> has no
+   data-mode. With scripting on, <luz-theme-mode> (or the boot script) writes
+   data-mode and, with no brand, data-theme. A brand made from _template.css
+   carries the same selector for its own three blocks, so its radios work
+   with no script too. They are wrapped in :is() so a browser without :has()
+   drops them instead of invalidating the whole rule. */
 [data-theme="dark"],
-:is(:root:has(input[name="luz-theme"][value="dark"]:checked)) {
+:is(:root:not([data-mode]):has(input[name="luz-theme-mode"][value="dark"]:checked)) {
   /* Surfaces */
   --luz-surface-page: #1c1712;
   --luz-surface: #241e18;
@@ -196,7 +199,7 @@
    -------------------------------------------------------------------------- */
 
 [data-theme="high-contrast"],
-:is(:root:has(input[name="luz-theme"][value="high-contrast"]:checked)) {
+:is(:root:not([data-mode]):has(input[name="luz-theme-mode"][value="high-contrast"]:checked)) {
   /* Surfaces */
   --luz-surface-page: #fff;
   --luz-surface: #fff;

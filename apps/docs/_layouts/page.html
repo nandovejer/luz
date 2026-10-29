@@ -21,14 +21,15 @@
   <link rel="stylesheet" href="/packages/catalog/dist/components/announcement.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/faq.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/cookie-consent.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/theme-time.css">
   <link rel="stylesheet" href="/apps/docs/catalog-patterns.css">
   <link rel="stylesheet" href="/apps/site/header.css">
   <link rel="stylesheet" href="/apps/site/prompt-dialog.css">
   <link rel="stylesheet" href="/apps/site/theme-light.css">
   <link rel="stylesheet" href="/apps/site/sky.css">
-  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
-  <script src="/apps/site/boot.js"></script>
+  <!-- Before the first paint: the visitor's color mode (core) and the moment of the day (catalog), EX-009 -->
+  <script src="/packages/core/dist/theme-boot.min.js"></script>
+  <script src="/packages/catalog/dist/theme-time-boot.min.js" data-moments="dawn@05:00=dark morning@07:30=light afternoon@12:00=light* sunset@17:30=light dusk@20:30=dark night@22:30=dark*"></script>
   <link rel="stylesheet" href="/apps/docs/reference.css">
   <link rel="stylesheet" href="/apps/docs/elements.css">
 </head>
