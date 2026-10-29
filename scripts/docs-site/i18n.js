@@ -43,7 +43,39 @@ export const INLINE_HTML = {
 };
 
 /** The counts a catalog value may say as `{n:<name>}`, in this order. */
-export const NUMBER_NAMES = ["components", "objects", "primitives", "semantic", "cssonly", "withjs"];
+export const NUMBER_NAMES = ["components", "objects", "primitives", "semantic", "elements", "cssonly", "withjs"];
+
+/**
+ * How many distinct HTML tags the stylesheets of `dir` (packages/core/src/elements) style with no
+ * class: the type selectors of their rules, once comments, attribute selectors, pseudo-classes and
+ * the arguments of :lang(), :dir() and :nth-*() are set aside. The structure tags have no rule, so
+ * they are not counted; `body` and `html`, which carry the page's type and colour, are.
+ */
+export function countBareElements(dir) {
+  const tags = new Set();
+  for (const file of readdirSync(dir).filter((name) => name.endsWith(".css") && name !== "index.css" && !name.startsWith("_"))) {
+    const css = readFileSync(join(dir, file), "utf-8").replace(/\/\*[\s\S]*?\*\//g, "");
+    let text = "";
+    for (const char of css) {
+      if (char === "{") {
+        // Only the text before a "{" is a selector (or an at-rule's prelude)
+        const selector = text.trim();
+        if (selector && !selector.startsWith("@")) {
+          const bare = selector.replace(/\[[^\]]*\]/g, "").replace(/:(?:lang|dir|nth-[a-z-]+)\([^)]*\)/g, "");
+          for (const match of bare.matchAll(/(?<![\w.#:-])([a-z][a-z0-9]*)(?![\w-])/g)) tags.add(match[1]);
+        }
+        text = "";
+      } else if (char === "}") {
+        text = "";
+      } else if (char === ";") {
+        text = "";
+      } else {
+        text += char;
+      }
+    }
+  }
+  return tags.size;
+}
 
 /**
  * The counts of NUMBER_NAMES, read from the packages of `repoRoot`:
@@ -51,6 +83,7 @@ export const NUMBER_NAMES = ["components", "objects", "primitives", "semantic", 
  *   objects     the distinct `.o-*` blocks of packages/core/src/objects/_objects.css
  *   primitives  the colour steps of packages/tokens/tokens.json
  *   semantic    the tokens of the light block of packages/tokens/src/semantic.css
+ *   elements    the HTML tags with a style and no class: the distinct type selectors of packages/core/src/elements
  *   withjs      the stylesheets of the docs pages of components that name a script (`module:`)
  *   cssonly     the components that name none: no script to load
  */
@@ -73,7 +106,8 @@ export function siteNumbers(repoRoot) {
     for (const m of head.matchAll(/components\/([a-z0-9-]+)\.css/g)) scripted.add(m[1]);
   }
   const withjs = scripted.size;
-  return { components, objects, primitives, semantic, cssonly: components - withjs, withjs };
+  const elements = countBareElements(join(repoRoot, "packages/core/src/elements"));
+  return { components, objects, primitives, semantic, elements, cssonly: components - withjs, withjs };
 }
 
 /**

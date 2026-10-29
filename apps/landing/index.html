@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/lang-switch.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/faq.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/hero.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/main.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/section.css">
@@ -75,6 +76,7 @@
         <li><a class="luz-sidebar__link" href="#why">{{t:why.eyebrow}}</a></li>
         <li><a class="luz-sidebar__link" href="#native">{{t:native.eyebrow}}</a></li>
         <li><a class="luz-sidebar__link" href="#modes">{{t:modes.eyebrow}}</a></li>
+        <li><a class="luz-sidebar__link" href="#faq">{{t:faq.eyebrow}}</a></li>
       </ul>
     </div>
 
@@ -96,10 +98,11 @@
     <!-- ====================== 1. HERO ====================== -->
     <section class="luz-hero luz-hero--centered o-grid o-grid--split" id="hero" aria-labelledby="hero-title">
       <div class="luz-hero__copy">
-        <h1 class="luz-hero__title" id="hero-title">{{html:hero.title}}</h1>
+        <h1 class="luz-hero__title" id="hero-title"><span class="landing-hero__brand landing-imago" lang="en"><span class="landing-imago__word" dir="ltr" aria-hidden="true"><span class="ch ch--l">L</span><span class="ch ch--u">U</span><span class="ch ch--z">Z</span></span><span class="u-sr-only">LUZ</span></span> {{html:hero.title}}</h1>
         <p class="luz-hero__lead">{{html:hero.lead}}</p>
         <div class="o-actions">
           <a class="luz-btn luz-btn--primary luz-btn--lg" href="#inside">{{t:hero.start}}</a>
+          <a class="luz-btn luz-btn--secondary luz-btn--lg" href="#inside-4">{{t:hero.start-ai}}</a>
           <a class="luz-btn luz-btn--outline luz-btn--lg" href="/docs/">{{t:hero.docs}}</a>
         </div>
       </div>
@@ -122,20 +125,20 @@
 
     <section class="landing-inside" id="inside" aria-labelledby="inside-1-title">
         <div class="landing-inside__copy">
-          <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>{{t:inside.l1.eyebrow}}</span></p>
+          <p class="landing-inside__eyebrow"><svg aria-hidden="true"><use href="#i0"/></svg><span>{{t:inside.l1.eyebrow}}</span></p>
           <h2 class="landing-inside__title" id="inside-1-title">{{html:inside.l1.title}}</h2>
           <p class="landing-inside__lead">{{t:inside.l1.lead}}</p>
           <ul class="landing-inside__points">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>{{t:inside.l1.p1.name}}</strong> {{t:inside.l1.p1.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>{{t:inside.l1.p2.name}}</strong> {{t:inside.l1.p2.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>{{t:inside.weight}}</strong> {{weight1}} {{t:inside.gzip}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i1"/></svg><span><strong>{{t:inside.l1.p1.name}}</strong> {{t:inside.l1.p1.text}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i2"/></svg><span><strong>{{t:inside.l1.p2.name}}</strong> {{t:inside.l1.p2.text}}</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i3"/></svg><span><strong>{{t:inside.weight}}</strong> {{weight1}} {{t:inside.gzip}}</span></li>
           </ul>
         </div>
       <div class="landing-panel">
         <nav class="luz-tabs luz-tabs--pill" aria-label="{{t:inside.l1.panel}}">
-          <a class="luz-tab" href="#in1-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>{{t:inside.tab.install}}</span></a>
-          <a class="luz-tab" href="#in1-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>{{t:inside.tab.list}}</span></a>
-          <a class="luz-tab" href="#in1-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>{{t:inside.tab.code}}</span></a>
+          <a class="luz-tab" href="#in1-install"><svg class="ic" aria-hidden="true"><use href="#i4"/></svg><span>{{t:inside.tab.install}}</span></a>
+          <a class="luz-tab" href="#in1-list"><svg aria-hidden="true"><use href="#i5"/></svg><span>{{t:inside.tab.list}}</span></a>
+          <a class="luz-tab" href="#in1-code"><svg class="ic" aria-hidden="true"><use href="#i6"/></svg><span>{{t:inside.tab.code}}</span></a>
         </nav>
         <div class="luz-tabpanel landing-panel__pane" id="in1-install">
           <div class="landing-install">
@@ -150,7 +153,7 @@
               <span class="landing-install__label">{{t:inside.install.cdn}}</span>
               <button class="luz-copy-btn" type="button" data-copy-from="in1-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in1-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@{{version}}/dist/luz-tokens.min.css&quot;&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in1-cdn">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@{{version}}/dist/luz-tokens.min.css"></code></pre>
           </div>
         </div>
         <div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in1-list">
@@ -174,20 +177,20 @@ a {
       </section>
     <section class="landing-inside landing-inside--flip" id="inside-2" aria-labelledby="inside-2-title">
         <div class="landing-inside__copy">
-          <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>{{t:inside.l2.eyebrow}}</span></p>
+          <p class="landing-inside__eyebrow"><svg aria-hidden="true"><use href="#i0"/></svg><span>{{t:inside.l2.eyebrow}}</span></p>
           <h2 class="landing-inside__title" id="inside-2-title">{{html:inside.l2.title}}</h2>
           <p class="landing-inside__lead">{{t:inside.l2.lead}}</p>
           <ul class="landing-inside__points">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>{{t:inside.l2.p1.name}}</strong> {{t:inside.l2.p1.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>{{t:inside.l2.p2.name}}</strong> {{t:inside.l2.p2.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>{{t:inside.weight}}</strong> {{weight2}} {{t:inside.gzip}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i1"/></svg><span><strong>{{t:inside.l2.p1.name}}</strong> {{t:inside.l2.p1.text}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i2"/></svg><span><strong>{{t:inside.l2.p2.name}}</strong> {{t:inside.l2.p2.text}}</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i3"/></svg><span><strong>{{t:inside.weight}}</strong> {{weight2}} {{t:inside.gzip}}</span></li>
           </ul>
         </div>
       <div class="landing-panel">
         <nav class="luz-tabs luz-tabs--pill" aria-label="{{t:inside.l2.panel}}">
-          <a class="luz-tab" href="#in2-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>{{t:inside.tab.install}}</span></a>
-          <a class="luz-tab" href="#in2-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>{{t:inside.tab.list}}</span></a>
-          <a class="luz-tab" href="#in2-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>{{t:inside.tab.code}}</span></a>
+          <a class="luz-tab" href="#in2-install"><svg class="ic" aria-hidden="true"><use href="#i4"/></svg><span>{{t:inside.tab.install}}</span></a>
+          <a class="luz-tab" href="#in2-list"><svg aria-hidden="true"><use href="#i5"/></svg><span>{{t:inside.tab.list}}</span></a>
+          <a class="luz-tab" href="#in2-code"><svg class="ic" aria-hidden="true"><use href="#i6"/></svg><span>{{t:inside.tab.code}}</span></a>
         </nav>
         <div class="luz-tabpanel landing-panel__pane" id="in2-install">
           <div class="landing-install">
@@ -202,45 +205,45 @@ a {
               <span class="landing-install__label">{{t:inside.install.cdn}}</span>
               <button class="luz-copy-btn" type="button" data-copy-from="in2-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in2-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@{{version}}/dist/luz-tokens.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.css&quot;&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in2-cdn">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@{{version}}/dist/luz-tokens.min.css">
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.css">
+&lt;script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.js">&lt;/script></code></pre>
           </div>
         </div>
         <div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in2-list">
           {{list2}}
         </div>
         <div class="luz-tabpanel landing-panel__pane" id="in2-code">
-          <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.tab.code}}"><code id="in2-code-code">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;f-name&quot;&gt;Project name&lt;/label&gt;
-  &lt;input class=&quot;luz-input&quot; id=&quot;f-name&quot; type=&quot;text&quot; aria-describedby=&quot;f-name-help&quot;&gt;
-  &lt;div class=&quot;luz-field__helper&quot; id=&quot;f-name-help&quot;&gt;Shown on the dashboard.&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;f-slug&quot;&gt;Slug&lt;/label&gt;
-  &lt;input class=&quot;luz-input luz-input--error&quot; id=&quot;f-slug&quot; type=&quot;text&quot;
-         aria-invalid=&quot;true&quot; aria-describedby=&quot;f-slug-error&quot;&gt;
-  &lt;div class=&quot;luz-field__error&quot; id=&quot;f-slug-error&quot;&gt;Use letters, numbers and dashes only.&lt;/div&gt;
-&lt;/div&gt;</code></pre>
+          <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.tab.code}}"><code id="in2-code-code">&lt;div class="luz-field">
+  &lt;label class="luz-field__label" for="f-name">Project name&lt;/label>
+  &lt;input class="luz-input" id="f-name" type="text" aria-describedby="f-name-help">
+  &lt;div class="luz-field__helper" id="f-name-help">Shown on the dashboard.&lt;/div>
+&lt;/div>
+&lt;div class="luz-field">
+  &lt;label class="luz-field__label" for="f-slug">Slug&lt;/label>
+  &lt;input class="luz-input luz-input--error" id="f-slug" type="text"
+         aria-invalid="true" aria-describedby="f-slug-error">
+  &lt;div class="luz-field__error" id="f-slug-error">Use letters, numbers and dashes only.&lt;/div>
+&lt;/div></code></pre>
         </div>
       </div>
       </section>
     <section class="landing-inside" id="inside-3" aria-labelledby="inside-3-title">
         <div class="landing-inside__copy">
-          <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>{{t:inside.l3.eyebrow}}</span></p>
+          <p class="landing-inside__eyebrow"><svg aria-hidden="true"><use href="#i0"/></svg><span>{{t:inside.l3.eyebrow}}</span></p>
           <h2 class="landing-inside__title" id="inside-3-title">{{html:inside.l3.title}}</h2>
           <p class="landing-inside__lead">{{t:inside.l3.lead}}</p>
           <ul class="landing-inside__points">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>{{t:inside.l3.p1.name}}</strong> {{t:inside.l3.p1.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span><strong>{{t:inside.l3.p2.name}}</strong> {{t:inside.l3.p2.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></svg><span><strong>{{t:inside.weight}}</strong> {{weight3}} {{t:inside.gzip}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i1"/></svg><span><strong>{{t:inside.l3.p1.name}}</strong> {{t:inside.l3.p1.text}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i2"/></svg><span><strong>{{t:inside.l3.p2.name}}</strong> {{t:inside.l3.p2.text}}</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i3"/></svg><span><strong>{{t:inside.weight}}</strong> {{weight3}} {{t:inside.gzip}}</span></li>
           </ul>
         </div>
       <div class="landing-panel">
         <nav class="luz-tabs luz-tabs--pill" aria-label="{{t:inside.l3.panel}}">
-          <a class="luz-tab" href="#in3-install"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m5 8 4 4-4 4M12 16h7"/></svg><span>{{t:inside.tab.install}}</span></a>
-          <a class="luz-tab" href="#in3-list"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>{{t:inside.tab.list}}</span></a>
-          <a class="luz-tab" href="#in3-code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><span>{{t:inside.tab.code}}</span></a>
+          <a class="luz-tab" href="#in3-install"><svg class="ic" aria-hidden="true"><use href="#i4"/></svg><span>{{t:inside.tab.install}}</span></a>
+          <a class="luz-tab" href="#in3-list"><svg aria-hidden="true"><use href="#i5"/></svg><span>{{t:inside.tab.list}}</span></a>
+          <a class="luz-tab" href="#in3-code"><svg class="ic" aria-hidden="true"><use href="#i6"/></svg><span>{{t:inside.tab.code}}</span></a>
         </nav>
         <div class="luz-tabpanel landing-panel__pane" id="in3-install">
           <div class="landing-install">
@@ -255,30 +258,30 @@ a {
               <span class="landing-install__label">{{t:inside.install.cdn}}</span>
               <button class="luz-copy-btn" type="button" data-copy-from="in3-cdn" aria-label="{{t:inside.copy.cdn}}" hidden>{{t:see.copy}}</button>
             </div>
-            <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in3-cdn">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/tokens@{{version}}/dist/luz-tokens.min.css&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.css&quot;&gt;
-&lt;!-- One link per catalog component the page uses: here the search --&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@{{version}}/dist/components/search.min.css&quot;&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@{{version}}/dist/catalog.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+            <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.install.cdn}}"><code id="in3-cdn">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@{{version}}/dist/luz-tokens.min.css">
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.css">
+&lt;!-- One link per catalog component the page uses: here the search -->
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@{{version}}/dist/components/search.min.css">
+&lt;script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@{{version}}/dist/luz.min.js">&lt;/script>
+&lt;script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@{{version}}/dist/catalog.min.js">&lt;/script></code></pre>
           </div>
         </div>
         <div class="luz-tabpanel landing-panel__pane landing-panel__pane--list" id="in3-list">
           {{list3}}
         </div>
         <div class="luz-tabpanel landing-panel__pane" id="in3-code">
-          <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.tab.code}}"><code id="in3-code-code">&lt;luz-search&gt;
-  &lt;a class=&quot;luz-search__fallback&quot; href=&quot;/docs/a-z/&quot; data-luz-search-fallback&gt;A–Z&lt;/a&gt;
-  &lt;button class=&quot;luz-search__trigger&quot; type=&quot;button&quot; data-luz-search-open hidden&gt;Search&lt;/button&gt;
-  &lt;dialog class=&quot;luz-modal luz-search&quot; id=&quot;luz-search&quot;
-          data-luz-search-src=&quot;/search-index.json&quot;&gt;
-    &lt;search class=&quot;luz-search__body&quot;&gt;
-      &lt;input class=&quot;luz-input&quot; id=&quot;luz-search-q&quot; type=&quot;text&quot;&gt;
-      &lt;p class=&quot;luz-search__status&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
-      &lt;div class=&quot;luz-search__results&quot; data-luz-search-results&gt;…&lt;/div&gt;
-    &lt;/search&gt;
-  &lt;/dialog&gt;
-&lt;/luz-search&gt;</code></pre>
+          <pre class="luz-code-block" data-lang="html" dir="ltr" tabindex="0" role="region" aria-label="{{t:inside.tab.code}}"><code id="in3-code-code">&lt;luz-search>
+  &lt;a class="luz-search__fallback" href="/docs/a-z/" data-luz-search-fallback>A–Z&lt;/a>
+  &lt;button class="luz-search__trigger" type="button" data-luz-search-open hidden>Search&lt;/button>
+  &lt;dialog class="luz-modal luz-search" id="luz-search"
+          data-luz-search-src="/search-index.json">
+    &lt;search class="luz-search__body">
+      &lt;input class="luz-input" id="luz-search-q" type="text">
+      &lt;p class="luz-search__status" role="status">&lt;/p>
+      &lt;div class="luz-search__results" data-luz-search-results>…&lt;/div>
+    &lt;/search>
+  &lt;/dialog>
+&lt;/luz-search></code></pre>
         </div>
       </div>
       </section>
@@ -289,42 +292,42 @@ a {
          and the card's title, so five "Open the prompt" are told apart -->
     <section class="landing-inside landing-inside--flip" id="inside-4" aria-labelledby="inside-4-title">
         <div class="landing-inside__copy">
-          <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></svg><span>{{t:inside.l4.eyebrow}}</span></p>
+          <p class="landing-inside__eyebrow"><svg aria-hidden="true"><use href="#i0"/></svg><span>{{t:inside.l4.eyebrow}}</span></p>
           <h2 class="landing-inside__title" id="inside-4-title">{{html:inside.l4.title}}</h2>
           <p class="landing-inside__lead">{{t:inside.l4.lead}}</p>
           <ul class="landing-inside__points">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M4.5 5h15v10.5H10L6 19v-3.5H4.5Z"/></svg><span><strong>{{t:inside.l4.p1.name}}</strong> {{t:inside.l4.p1.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M4 7h9m4 0h3M4 17h3m4 0h9M15 5v4M9 15v4"/></svg><span><strong>{{t:inside.l4.p2.name}}</strong> {{t:inside.l4.p2.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12 2.5 2.5 4.5-5"/></g></svg><span><strong>{{t:inside.l4.p3.name}}</strong> {{t:inside.l4.p3.text}}</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M4.5 5h15v10.5H10L6 19v-3.5H4.5Z"/></svg><span><strong>{{t:inside.l4.p1.name}}</strong> {{t:inside.l4.p1.text}}</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M4 7h9m4 0h3M4 17h3m4 0h9M15 5v4M9 15v4"/></svg><span><strong>{{t:inside.l4.p2.name}}</strong> {{t:inside.l4.p2.text}}</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span><strong>{{t:inside.l4.p3.name}}</strong> {{t:inside.l4.p3.text}}</span></li>
           </ul>
         </div>
       <ul class="landing-inside__kinds" aria-label="{{t:inside.l4.panel}}">
           <li class="landing-kind landing-kind--landing">
-            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M7 8.5h10M8.5 11.5h7"/><rect x="9" y="14.5" width="6" height="2.5" rx="1.25"/></g></svg><hgroup class="landing-kind__name"><h3 id="in4-landing">{{t:inside.kind.landing.title}}</h3><p>{{t:inside.kind.landing.text}}</p></hgroup></div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M7 8.5h10M8.5 11.5h7"/><rect x="9" y="14.5" width="6" height="2.5" rx="1.25"/></svg><hgroup class="landing-kind__name"><h3 id="in4-landing">{{t:inside.kind.landing.title}}</h3><p>{{t:inside.kind.landing.text}}</p></hgroup></div>
             <div class="o-actions landing-kind__actions">
               <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-landing-prompt" href="/prompts/landing.txt" data-prompt-open data-prompt-title="{{t:inside.kind.landing.prompt}}" aria-labelledby="in4-landing-prompt in4-landing">{{t:inside.kind.open}}</a>
-              <a class="landing-kind__docs" id="in4-landing-recipes" href="/docs/kinds/landing/" aria-labelledby="in4-landing-recipes in4-landing">{{t:inside.kind.recipes}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+              <a class="landing-kind__docs" id="in4-landing-recipes" href="/docs/kinds/landing/" aria-labelledby="in4-landing-recipes in4-landing">{{t:inside.kind.recipes}}<svg class="ic" aria-hidden="true"><use href="#i7"/></svg></a>
             </div>
           </li>
           <li class="landing-kind landing-kind--blog">
-            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11"/><path d="M7.5 9h4M7.5 12.5h7M7.5 16h7"/><path d="m17.5 3.5 3 3-6 6H11.5v-3l6-6Z"/></g></svg><hgroup class="landing-kind__name"><h3 id="in4-blog">{{t:inside.kind.blog.title}}</h3><p>{{t:inside.kind.blog.text}}</p></hgroup></div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11"/><path d="M7.5 9h4M7.5 12.5h7M7.5 16h7"/><path d="m17.5 3.5 3 3-6 6H11.5v-3l6-6Z"/></svg><hgroup class="landing-kind__name"><h3 id="in4-blog">{{t:inside.kind.blog.title}}</h3><p>{{t:inside.kind.blog.text}}</p></hgroup></div>
             <div class="o-actions landing-kind__actions">
               <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-blog-prompt" href="/prompts/blog.txt" data-prompt-open data-prompt-title="{{t:inside.kind.blog.prompt}}" aria-labelledby="in4-blog-prompt in4-blog">{{t:inside.kind.open}}</a>
-              <a class="landing-kind__docs" id="in4-blog-recipes" href="/docs/kinds/blog/" aria-labelledby="in4-blog-recipes in4-blog">{{t:inside.kind.recipes}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+              <a class="landing-kind__docs" id="in4-blog-recipes" href="/docs/kinds/blog/" aria-labelledby="in4-blog-recipes in4-blog">{{t:inside.kind.recipes}}<svg class="ic" aria-hidden="true"><use href="#i7"/></svg></a>
             </div>
           </li>
           <li class="landing-kind landing-kind--app">
-            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 9h17M9 9v10"/></g></svg><hgroup class="landing-kind__name"><h3 id="in4-app">{{t:inside.kind.app.title}}</h3><p>{{t:inside.kind.app.text}}</p></hgroup></div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 9h17M9 9v10"/></svg><hgroup class="landing-kind__name"><h3 id="in4-app">{{t:inside.kind.app.title}}</h3><p>{{t:inside.kind.app.text}}</p></hgroup></div>
             <div class="o-actions landing-kind__actions">
               <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-app-prompt" href="/prompts/app.txt" data-prompt-open data-prompt-title="{{t:inside.kind.app.prompt}}" aria-labelledby="in4-app-prompt in4-app">{{t:inside.kind.open}}</a>
-              <a class="landing-kind__docs" id="in4-app-recipes" href="/docs/kinds/app/" aria-labelledby="in4-app-recipes in4-app">{{t:inside.kind.recipes}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+              <a class="landing-kind__docs" id="in4-app-recipes" href="/docs/kinds/app/" aria-labelledby="in4-app-recipes in4-app">{{t:inside.kind.recipes}}<svg class="ic" aria-hidden="true"><use href="#i7"/></svg></a>
             </div>
           </li>
           <li class="landing-kind landing-kind--docs">
-            <div class="landing-kind__head"><svg class="landing-kind__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></g></svg><hgroup class="landing-kind__name"><h3 id="in4-docs">{{t:inside.kind.docs.title}}</h3><p>{{t:inside.kind.docs.text}}</p></hgroup></div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Zm0 0v13"/></svg><hgroup class="landing-kind__name"><h3 id="in4-docs">{{t:inside.kind.docs.title}}</h3><p>{{t:inside.kind.docs.text}}</p></hgroup></div>
             <div class="o-actions landing-kind__actions">
               <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-docs-prompt" href="/prompts/docs.txt" data-prompt-open data-prompt-title="{{t:inside.kind.docs.prompt}}" aria-labelledby="in4-docs-prompt in4-docs">{{t:inside.kind.open}}</a>
-              <a class="landing-kind__docs" id="in4-docs-recipes" href="/docs/kinds/docs/" aria-labelledby="in4-docs-recipes in4-docs">{{t:inside.kind.recipes}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+              <a class="landing-kind__docs" id="in4-docs-recipes" href="/docs/kinds/docs/" aria-labelledby="in4-docs-recipes in4-docs">{{t:inside.kind.recipes}}<svg class="ic" aria-hidden="true"><use href="#i7"/></svg></a>
             </div>
           </li>
         </ul>
@@ -368,19 +371,19 @@ a {
            warning, so it stays neutral -->
       <div class="landing-fit">
         <div class="landing-fit__col landing-fit__col--good">
-          <h3 class="landing-fit__title"><span class="landing-fit__badge"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>{{t:fit.good}}</h3>
+          <h3 class="landing-fit__title"><span class="landing-fit__badge"><svg aria-hidden="true"><use href="#i8"/></svg></span>{{t:fit.good}}</h3>
           <ul class="landing-fit__list">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>{{t:fit.good.public}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>{{t:fit.good.server}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>{{t:fit.good.own}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i8"/></svg><span>{{t:fit.good.public}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i8"/></svg><span>{{t:fit.good.server}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i8"/></svg><span>{{t:fit.good.own}}</span></li>
           </ul>
         </div>
         <div class="landing-fit__col landing-fit__col--bad">
-          <h3 class="landing-fit__title"><span class="landing-fit__badge"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg></span>{{t:fit.bad}}</h3>
+          <h3 class="landing-fit__title"><span class="landing-fit__badge"><svg aria-hidden="true"><use href="#i9"/></svg></span>{{t:fit.bad}}</h3>
           <ul class="landing-fit__list">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>{{t:fit.bad.react}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>{{t:fit.bad.grid}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg><span>{{t:fit.bad.beta}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i9"/></svg><span>{{t:fit.bad.react}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i9"/></svg><span>{{t:fit.bad.grid}}</span></li>
+            <li><svg aria-hidden="true"><use href="#i9"/></svg><span>{{t:fit.bad.beta}}</span></li>
           </ul>
         </div>
       </div>
@@ -389,81 +392,85 @@ a {
     <!-- ====================== 5. NATIVE ====================== -->
     <section class="landing-inside" id="native" aria-labelledby="native-title">
       <div class="landing-inside__copy">
-        <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m8 7-5 5 5 5M16 7l5 5-5 5M14 5l-4 14"/></svg><span>{{t:native.eyebrow}}</span></p>
+        <p class="landing-inside__eyebrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 5l-4 14"/></svg><span>{{t:native.eyebrow}}</span></p>
         <h2 class="landing-inside__title" id="native-title">{{html:native.title}}</h2>
-        <p class="landing-inside__lead">{{t:native.lead}}</p>
+        <p class="landing-inside__lead">{{html:native.lead}}</p>
+        <!-- The three levels: with no class, with one, and inside a project that exists -->
         <ul class="landing-inside__points">
-          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v14H4zM4 9h16M8 13h5"/></svg><span><strong>{{t:native.p1.name}}</strong> {{t:native.p1.text}}</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>{{t:native.p2.name}}</strong> {{t:native.p2.text}}</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 3 4 6v6c0 4.5 3.2 7.8 8 9 4.8-1.2 8-4.5 8-9V6l-8-3Zm-3 9 2.2 2.2L15.5 10"/></svg><span><strong>{{t:native.p3.name}}</strong> {{t:native.p3.text}}</span></li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 9h16M8 13h5"/></svg><span><strong>{{t:native.p1.name}}</strong> {{t:native.p1.text}}</span></li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg><span><strong>{{t:native.p2.name}}</strong> {{t:native.p2.text}}</span></li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4M15 4h4v16h-4"/></svg><span><strong>{{t:native.p3.name}}</strong> {{html:native.p3.text}}</span></li>
         </ul>
-        <a class="luz-btn luz-btn--primary landing-inside__cta" href="/docs/html/">{{t:native.tags}}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+        <p class="landing-native__js">{{t:native.js}}</p>
+        <a class="luz-btn luz-btn--primary landing-inside__cta" href="/docs/html/">{{t:native.tags}}<svg class="ic" aria-hidden="true"><use href="#i7"/></svg></a>
       </div>
 
       <!-- The scenes play one after another on a CSS loop (landing.css): no script. With reduced motion, or
            with no CSS animation, the first scene shows its last frame: the whole code and its result.
            The results are pictures of the code beside them: inert, out of the tab order and of the
-           accessibility tree; the code is what a reader reads -->
+           accessibility tree; the code is what a reader reads. In the first two the "before" is the
+           same HTML in a page without LUZ (the browser's own); in the last, with no class -->
       <div class="landing-typed__panel" role="group" aria-label="{{t:native.panel}}">
-        <div class="landing-typed__scene landing-typed__scene--meter">
-          <pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="{{t:typed.meter.code}}"><code><span class="landing-typed__line"><span class="tok-name">&lt;meter</span></span>
-<span class="landing-typed__line">  <span class="tok-property">value</span>=<span class="tok-string">&quot;0.7&quot;</span></span>
-<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-meter&quot;</span></span>
-<span class="landing-typed__line">  <span class="tok-property">aria-label</span>=<span class="tok-string">&quot;{{t:typed.name}}&quot;</span>&gt;</span>
-<span class="landing-typed__line"><span class="tok-name">&lt;/meter</span>&gt;</span></code></pre>
+        <div class="landing-typed__scene landing-typed__scene--details">
+          <pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="{{t:typed.details.code}}"><code><span class="landing-typed__line"><span class="tok-name">&lt;details</span> <span class="tok-property">open</span>></span>
+<span class="landing-typed__line">  <span class="tok-name">&lt;summary</span>>{{t:typed.details.q}}<span class="tok-name">&lt;/summary</span>></span>
+<span class="landing-typed__line">  <span class="tok-name">&lt;p</span>>{{t:typed.details.a}}<span class="tok-name">&lt;/p</span>></span>
+<span class="landing-typed__line"><span class="tok-name">&lt;/details</span>></span></code></pre>
           <div class="landing-typed__result" inert>
             <div class="landing-typed__state landing-typed__state--raw">
-              <meter value="0.7"></meter>
-              <p class="landing-typed__caption">{{t:typed.meter.raw}}</p>
+              <div class="landing-typed__pane landing-typed__pane--before"><details open><summary>{{t:typed.details.q}}</summary><p>{{t:typed.details.a}}</p></details></div>
+              <p class="landing-typed__caption">{{t:typed.before}}</p>
             </div>
             <div class="landing-typed__state landing-typed__state--luz">
-              <meter class="luz-meter" value="0.7" aria-label="{{t:typed.name}}"></meter>
-              <p class="landing-typed__caption landing-typed__extra"><span>{{t:typed.named}}</span> <q>{{t:typed.name}}</q></p>
+              <div class="landing-typed__pane"><details open><summary>{{t:typed.details.q}}</summary><p>{{t:typed.details.a}}</p></details></div>
+              <p class="landing-typed__caption">{{t:typed.after}}</p>
             </div>
             <div class="landing-typed__modes">
-              <div class="landing-typed__mode" data-theme="light"><meter class="luz-meter" value="0.7"></meter><span>{{t:typed.light}}</span></div>
-              <div class="landing-typed__mode" data-theme="dark"><meter class="luz-meter" value="0.7"></meter><span>{{t:typed.dark}}</span></div>
-              <div class="landing-typed__mode" data-theme="high-contrast"><meter class="luz-meter" value="0.7"></meter><span>{{t:typed.hc}}</span></div>
+              <div class="landing-typed__mode" data-theme="light"><details><summary>{{t:typed.details.q}}</summary></details><span>{{t:typed.light}}</span></div>
+              <div class="landing-typed__mode" data-theme="dark"><details><summary>{{t:typed.details.q}}</summary></details><span>{{t:typed.dark}}</span></div>
+              <div class="landing-typed__mode" data-theme="high-contrast"><details><summary>{{t:typed.details.q}}</summary></details><span>{{t:typed.hc}}</span></div>
             </div>
           </div>
         </div>
-        <div class="landing-typed__scene landing-typed__scene--input">
-          <pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="{{t:typed.input.code}}"><code><span class="landing-typed__line"><span class="tok-name">&lt;input</span></span>
-<span class="landing-typed__line">  <span class="tok-property">type</span>=<span class="tok-string">&quot;email&quot;</span></span>
-<span class="landing-typed__line">  <span class="tok-property">value</span>=<span class="tok-string">&quot;ana@luz.dev&quot;</span></span>
-<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-input&quot;</span>&gt;</span></code></pre>
+        <div class="landing-typed__scene landing-typed__scene--form">
+          <pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="{{t:typed.form.code}}"><code><span class="landing-typed__line"><span class="tok-name">&lt;label</span> <span class="tok-property">for</span>=<span class="tok-string">"email"</span>>{{t:typed.form.label}}<span class="tok-name">&lt;/label</span>></span>
+<span class="landing-typed__line"><span class="tok-name">&lt;input</span> <span class="tok-property">id</span>=<span class="tok-string">"email"</span> <span class="tok-property">type</span>=<span class="tok-string">"email"</span></span>
+<span class="landing-typed__line">  <span class="tok-property">value</span>=<span class="tok-string">"ana@luz.dev"</span>></span>
+<span class="landing-typed__line"><span class="tok-name">&lt;button</span>>{{t:typed.button.text}}<span class="tok-name">&lt;/button</span>></span></code></pre>
           <div class="landing-typed__result" inert>
             <div class="landing-typed__state landing-typed__state--raw">
-              <input type="email" value="ana@luz.dev" aria-label="{{t:typed.input.label}}">
-              <p class="landing-typed__caption">{{t:typed.input.raw}}</p>
+              <div class="landing-typed__pane landing-typed__pane--before"><label>{{t:typed.form.label}}</label><input type="email" value="ana@luz.dev" aria-label="{{t:typed.form.label}}"><button>{{t:typed.button.text}}</button></div>
+              <p class="landing-typed__caption">{{t:typed.before}}</p>
             </div>
             <div class="landing-typed__state landing-typed__state--luz">
-              <input class="luz-input" type="email" value="ana@luz.dev" aria-label="{{t:typed.input.label}}">
+              <div class="landing-typed__pane"><label>{{t:typed.form.label}}</label><input type="email" value="ana@luz.dev" aria-label="{{t:typed.form.label}}"><button>{{t:typed.button.text}}</button></div>
+              <p class="landing-typed__caption">{{t:typed.after}}</p>
             </div>
             <div class="landing-typed__modes">
-              <div class="landing-typed__mode" data-theme="light"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="{{t:typed.input.label}}"><span>{{t:typed.light}}</span></div>
-              <div class="landing-typed__mode" data-theme="dark"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="{{t:typed.input.label}}"><span>{{t:typed.dark}}</span></div>
-              <div class="landing-typed__mode" data-theme="high-contrast"><input class="luz-input" type="email" value="ana@luz.dev" aria-label="{{t:typed.input.label}}"><span>{{t:typed.hc}}</span></div>
+              <div class="landing-typed__mode" data-theme="light"><button>{{t:typed.button.text}}</button><span>{{t:typed.light}}</span></div>
+              <div class="landing-typed__mode" data-theme="dark"><button>{{t:typed.button.text}}</button><span>{{t:typed.dark}}</span></div>
+              <div class="landing-typed__mode" data-theme="high-contrast"><button>{{t:typed.button.text}}</button><span>{{t:typed.hc}}</span></div>
             </div>
           </div>
         </div>
-        <div class="landing-typed__scene landing-typed__scene--button">
-          <pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="{{t:typed.button.code}}"><code><span class="landing-typed__line"><span class="tok-name">&lt;button</span></span>
-<span class="landing-typed__line">  <span class="tok-property">class</span>=<span class="tok-string">&quot;luz-btn luz-btn--primary&quot;</span>&gt;</span>
-<span class="landing-typed__line">  {{t:typed.button.text}}</span>
-<span class="landing-typed__line"><span class="tok-name">&lt;/button</span>&gt;</span></code></pre>
+        <div class="landing-typed__scene landing-typed__scene--class">
+          <pre class="luz-code-block landing-typed__code" data-typed dir="ltr" tabindex="0" role="region" aria-label="{{t:typed.class.code}}"><code><span class="landing-typed__line"><span class="tok-name">&lt;a</span> <span class="tok-property">class</span>=<span class="tok-string">"luz-btn luz-btn--primary"</span></span>
+<span class="landing-typed__line">  <span class="tok-property">href</span>=<span class="tok-string">"/docs/"</span>>{{t:typed.class.link}}<span class="tok-name">&lt;/a</span>></span>
+<span class="landing-typed__line"><span class="tok-name">&lt;button</span> <span class="tok-property">class</span>=<span class="tok-string">"luz-btn luz-btn--danger"</span></span>
+<span class="landing-typed__line">  <span class="tok-property">type</span>=<span class="tok-string">"button"</span>>{{t:typed.class.delete}}<span class="tok-name">&lt;/button</span>></span></code></pre>
           <div class="landing-typed__result" inert>
             <div class="landing-typed__state landing-typed__state--raw">
-              <button type="button">{{t:typed.button.text}}</button>
-              <p class="landing-typed__caption">{{t:typed.button.raw}}</p>
+              <div class="landing-typed__pane"><a href="/docs/">{{t:typed.class.link}}</a><button type="button">{{t:typed.class.delete}}</button></div>
+              <p class="landing-typed__caption">{{t:typed.class.before}}</p>
             </div>
             <div class="landing-typed__state landing-typed__state--luz">
-              <button class="luz-btn luz-btn--primary" type="button">{{t:typed.button.text}}</button>
+              <div class="landing-typed__pane"><a class="luz-btn luz-btn--primary" href="/docs/">{{t:typed.class.link}}</a><button class="luz-btn luz-btn--danger" type="button">{{t:typed.class.delete}}</button></div>
+              <p class="landing-typed__caption">{{t:typed.class.after}}</p>
             </div>
             <div class="landing-typed__modes">
-              <div class="landing-typed__mode" data-theme="light"><button class="luz-btn luz-btn--primary" type="button">{{t:typed.button.text}}</button><span>{{t:typed.light}}</span></div>
-              <div class="landing-typed__mode" data-theme="dark"><button class="luz-btn luz-btn--primary" type="button">{{t:typed.button.text}}</button><span>{{t:typed.dark}}</span></div>
-              <div class="landing-typed__mode" data-theme="high-contrast"><button class="luz-btn luz-btn--primary" type="button">{{t:typed.button.text}}</button><span>{{t:typed.hc}}</span></div>
+              <div class="landing-typed__mode" data-theme="light"><button class="luz-btn luz-btn--danger" type="button">{{t:typed.class.delete}}</button><span>{{t:typed.light}}</span></div>
+              <div class="landing-typed__mode" data-theme="dark"><button class="luz-btn luz-btn--danger" type="button">{{t:typed.class.delete}}</button><span>{{t:typed.dark}}</span></div>
+              <div class="landing-typed__mode" data-theme="high-contrast"><button class="luz-btn luz-btn--danger" type="button">{{t:typed.class.delete}}</button><span>{{t:typed.hc}}</span></div>
             </div>
           </div>
         </div>
@@ -473,7 +480,7 @@ a {
     <!-- ====================== 6. MODES ====================== -->
     <section class="landing-modes" id="modes" aria-labelledby="modes-title">
       <div class="landing-modes__head">
-        <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path fill="currentColor" stroke="none" d="M12 4a8 8 0 0 1 0 16Z"/></g></svg><span>{{t:modes.eyebrow}}</span></p>
+        <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path fill="currentColor" stroke="none" d="M12 4a8 8 0 0 1 0 16Z"/></g></svg><span>{{t:modes.eyebrow}}</span></p>
         <h2 class="landing-inside__title" id="modes-title">{{html:modes.title}}</h2>
         <p class="landing-inside__lead">{{html:modes.lead}}</p>
       </div>
@@ -493,7 +500,7 @@ a {
               </div>
             </div>
             <button class="landing-cut__apply" type="button" data-apply-mode="light" aria-pressed="false" hidden data-needs-js>
-              <span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg></span>
+              <span class="landing-cut__icon"><svg aria-hidden="true"><use href="#i10"/></svg></span>
               <span class="landing-cut__now">{{t:modes.apply.light}}</span>
             </button>
           </div>
@@ -506,7 +513,7 @@ a {
               </div>
             </div>
             <button class="landing-cut__apply" type="button" data-apply-mode="dark" aria-pressed="false" hidden data-needs-js>
-              <span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg></span>
+              <span class="landing-cut__icon"><svg aria-hidden="true"><use href="#i11"/></svg></span>
               <span class="landing-cut__now">{{t:modes.apply.dark}}</span>
             </button>
           </div>
@@ -519,7 +526,7 @@ a {
               </div>
             </div>
             <button class="landing-cut__apply" type="button" data-apply-mode="high-contrast" aria-pressed="false" hidden data-needs-js>
-              <span class="landing-cut__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></span>
+              <span class="landing-cut__icon"><svg aria-hidden="true"><use href="#i12"/></svg></span>
               <span class="landing-cut__now">{{t:modes.apply.contrast}}</span>
             </button>
           </div>
@@ -527,13 +534,179 @@ a {
       </div>
     </section>
 
+    <!-- ====================== 7. FAQ ======================
+         The catalog's <luz-faq> (faq.css): the section's head (the eyebrow with its
+         icon, the title with the marked word, the lead, the links to the groups) is the
+         other sections' own classes, which win over the part's look because
+         landing.css has no layer. Each answer's id is on the answer, so a link to it opens
+         its question. The questions are in the language of faq.lang -->
+    <section class="landing-faq" id="faq" aria-labelledby="faq-title">
+      <luz-faq lang="{{t:faq.lang}}">
+        <div class="landing-modes__head landing-faq__head" lang="{{lang}}">
+          <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.6a2.4 2.4 0 1 1 3.4 2.2c-.6.3-1 .8-1 1.5v.5"/></g><circle cx="12" cy="16.6" r="1" fill="currentColor"/></svg><span>{{t:faq.eyebrow}}</span></p>
+          <h2 class="luz-faq__title landing-inside__title" id="faq-title">{{html:faq.title}}</h2>
+          <p class="luz-faq__lead landing-inside__lead">{{t:faq.lead}}</p>
+          <nav class="luz-faq__nav" aria-label="{{t:faq.nav}}">
+            <ul>
+              <li><a href="#faq-g-about">{{t:faq.group.about}}</a></li>
+              <li><a href="#faq-g-html">{{t:faq.group.html}}</a></li>
+              <li><a href="#faq-g-use">{{t:faq.group.use}}</a></li>
+              <li><a href="#faq-g-existing">{{t:faq.group.existing}}</a></li>
+            </ul>
+          </nav>
+        </div>
+        <section class="luz-faq__group" aria-labelledby="faq-g-about">
+          <h3 class="luz-faq__group-title" id="faq-g-about" lang="{{lang}}">{{t:faq.group.about}}</h3>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.what.q}}</summary>
+            <div class="luz-faq__answer" id="faq-what">
+              <p>{{html:faq.what.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.parts.q}}</summary>
+            <div class="luz-faq__answer" id="faq-parts">
+              <p>{{html:faq.parts.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.different.q}}</summary>
+            <div class="luz-faq__answer" id="faq-different">
+              <p>{{html:faq.different.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.loses.q}}</summary>
+            <div class="luz-faq__answer" id="faq-loses">
+              <p>{{html:faq.loses.a}}</p>
+            </div>
+          </details>
+        </section>
+        <section class="luz-faq__group" aria-labelledby="faq-g-html">
+          <h3 class="luz-faq__group-title" id="faq-g-html" lang="{{lang}}">{{t:faq.group.html}}</h3>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.classes.q}}</summary>
+            <div class="luz-faq__answer" id="faq-classes">
+              <p>{{html:faq.classes.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.unstyled.q}}</summary>
+            <div class="luz-faq__answer" id="faq-unstyled">
+              <p>{{html:faq.unstyled.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.why-classes.q}}</summary>
+            <div class="luz-faq__answer" id="faq-why-classes">
+              <p>{{html:faq.why-classes.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.same.q}}</summary>
+            <div class="luz-faq__answer" id="faq-same">
+              <p>{{html:faq.same.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.classless.q}}</summary>
+            <div class="luz-faq__answer" id="faq-classless">
+              <p>{{html:faq.classless.a}}</p>
+            </div>
+          </details>
+        </section>
+        <section class="luz-faq__group" aria-labelledby="faq-g-use">
+          <h3 class="luz-faq__group-title" id="faq-g-use" lang="{{lang}}">{{t:faq.group.use}}</h3>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.how.q}}</summary>
+            <div class="luz-faq__answer" id="faq-how">
+              <p>{{html:faq.how.p0}}</p>
+              <ol>
+                <li>{{html:faq.how.ol1}}</li>
+                <li>{{html:faq.how.ol2}}</li>
+                <li>{{html:faq.how.ol3}}</li>
+                <li>{{html:faq.how.ol4}}</li>
+                <li>{{html:faq.how.ol5}}</li>
+                <li>{{html:faq.how.ol6}}</li>
+              </ol>
+              <p>{{html:faq.how.p1}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.js.q}}</summary>
+            <div class="luz-faq__answer" id="faq-js">
+              <p>{{html:faq.js.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.change.q}}</summary>
+            <div class="luz-faq__answer" id="faq-change">
+              <p>{{html:faq.change.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.for.q}}</summary>
+            <div class="luz-faq__answer" id="faq-for">
+              <p>{{html:faq.for.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.not-for.q}}</summary>
+            <div class="luz-faq__answer" id="faq-not-for">
+              <p>{{html:faq.not-for.a}}</p>
+            </div>
+          </details>
+        </section>
+        <section class="luz-faq__group" aria-labelledby="faq-g-existing">
+          <h3 class="luz-faq__group-title" id="faq-g-existing" lang="{{lang}}">{{t:faq.group.existing}}</h3>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.new-only.q}}</summary>
+            <div class="luz-faq__answer" id="faq-new-only">
+              <p>{{html:faq.new-only.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.worth.q}}</summary>
+            <div class="luz-faq__answer" id="faq-worth">
+              <p>{{html:faq.worth.a}}</p>
+            </div>
+          </details>
+          <details class="luz-faq__item">
+            <summary class="luz-faq__question">{{t:faq.migrate.q}}</summary>
+            <div class="luz-faq__answer" id="faq-migrate">
+              <p>{{html:faq.migrate.p1}}</p>
+              <p>{{html:faq.migrate.p2}}</p>
+              <p>{{html:faq.migrate.p3}}</p>
+            </div>
+          </details>
+        </section>
+      </luz-faq>
+    </section>
+
+    <!-- Icons used more than once, drawn once here and used by reference (<use>) -->
+    <svg class="landing-sprite" width="0" height="0" aria-hidden="true">
+      <symbol id="i0" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></symbol>
+      <symbol id="i1" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></symbol>
+      <symbol id="i2" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+      <symbol id="i3" viewBox="0 0 24 24"><path d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></symbol>
+      <symbol id="i4" viewBox="0 0 24 24"><path d="m5 8 4 4-4 4M12 16h7"/></symbol>
+      <symbol id="i5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+      <symbol id="i6" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></symbol>
+      <symbol id="i7" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+      <symbol id="i8" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i9" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></symbol>
+      <symbol id="i10" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></symbol>
+      <symbol id="i11" viewBox="0 0 24 24"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></symbol>
+      <symbol id="i12" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></symbol>
+    </svg>
+
     <!-- luz:include sky-filter -->
   </main>
 
   <footer class="luz-site-footer">
     <div class="o-container o-container--inline o-grid">
       <div class="luz-site-footer__brand">
-        <p class="landing-brand"><svg viewBox="55.5 67.6 276.8 175.9" width="35" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M55.5 67.6H89.3V204.4L55.5 238.2ZM93 210.1H193.7L160.4 243.4H59.8ZM124.2 67.6H157.4V131.8L124.2 165.1ZM157.3 140.8V153.3A18.1 18.1 0 0 0 193.7 153.3V119.2C204.7 114.2 215.4 110.5 225.9 108.5V153.3A50.4 50.4 0 0 1 128 170.1ZM228.6 67.6H307.4L283 100.4H241.2C225.8 100.4 210 105 193.8 112.5V106.1ZM211.4 208L314.9 69L332.2 101.9L228.7 241ZM261.2 210.1H329.4V243.4H236.5Z"/></svg><strong class="u-sr-only">LUZ</strong> <a class="landing-brand__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v{{version}}<span class="u-sr-only">, {{t:footer.changelog}}</span></a> <span class="landing-brand__beta">{{t:footer.beta}}</span></p>
+        <p class="landing-brand"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true"><path fill="currentColor" fill-opacity="0.25" d="M20.8 10.46 7.04 17.66 23.36 14.89Z"/><path fill="currentColor" fill-opacity="0.45" d="M23.36 14.89 7.04 17.66 25.92 19.33Z"/><path fill="currentColor" fill-opacity="0.65" d="M25.92 19.33 7.04 17.66 28.48 23.76Z"/><path fill="currentColor" fill-rule="evenodd" d="M20.8 10.46 16 2.14 7.04 17.66ZM32 29.86 28.48 23.76 7.04 17.66 0 29.86Z"/></svg><strong class="u-sr-only">LUZ</strong> <a class="landing-brand__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v{{version}}<span class="u-sr-only">, {{t:footer.changelog}}</span></a> <span class="landing-brand__beta">{{t:footer.beta}}</span></p>
       </div>
       <!-- The docs: one title over three lists, the guides, under a small label
            the docs of each package (in the order they stack), and under another
@@ -573,11 +746,11 @@ a {
       <luz-color-mode class="site-modes" remember by="clock">
         <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
           <legend class="luz-mode-switcher__label">{{t:footer.mode}}</legend>
-          <button class="luz-mode-cycle" type="button" aria-label="{{t:footer.mode-change}}"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg></button>
+          <button class="luz-mode-cycle" type="button" aria-label="{{t:footer.mode-change}}"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" aria-hidden="true"><use href="#i10"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" aria-hidden="true"><use href="#i11"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" aria-hidden="true"><use href="#i12"/></svg></button>
           <span class="luz-mode-cycle__status" role="status"></span>
-          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>{{t:footer.light}}</label>
-          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>{{t:footer.dark}}</label>
-          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>{{t:footer.contrast}}</label>
+          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" aria-hidden="true"><use href="#i10"/></svg>{{t:footer.light}}</label>
+          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" aria-hidden="true"><use href="#i11"/></svg>{{t:footer.dark}}</label>
+          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" aria-hidden="true"><use href="#i12"/></svg>{{t:footer.contrast}}</label>
         </fieldset>
       </luz-color-mode>
       <p class="u-text-muted landing-legal">{{html:footer.legal}}</p>
