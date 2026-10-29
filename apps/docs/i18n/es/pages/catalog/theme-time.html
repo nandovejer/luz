@@ -3,7 +3,7 @@ title: Modo de color según la hora del día
 description: Da a Automático la hora del día: el modo sigue el reloj o el sol en los momentos que declares, y una barra opcional deja probar cualquier hora.
 fits: cuando el sitio tiene un selector de modo y quiere un aspecto para cada momento del día
 keywords: momento del día, amanecer, atardecer, hora, reloj, modo oscuro automático
-source: 1e98dd09e96a
+source: cd07a7f2b005
 reviewed: false
 -->
     <div class="docs-component" id="p-theme-time">
@@ -160,7 +160,7 @@ reviewed: false
               </table>
             </div>
             <h3 id="paint">Pintar cada momento</h3>
-            <p>Los colores son tuyos: define solo los tokens que cambian, sobre la base que nombra el momento, como hace <a href="/docs/tokens/themes/">un tema propio</a>, y mide cada par con la <a href="/docs/tokens/contrast/">comprobación de contraste</a>.</p>
+            <p>Los colores son tuyos: define solo los tokens que cambian, sobre la base que nombra el momento, como hace <a href="/docs/tokens/themes/">un tema propio</a>, y mide cada par con la <a href="/docs/tokens/contrast/">comprobación de contraste</a>. Escribe siempre la base junto al momento: una regla con <code>[data-moment]</code> sola también coincide con el alto contraste y rompe su contraste.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">CSS</span>
@@ -239,22 +239,6 @@ reviewed: false
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <luz-theme-time show="moments"><div class="luz-theme-time__bar"><div class="luz-theme-time__day"><label class="luz-theme-time__label" for="dd-dont-slider">Hour of the day (specimen)</label><input class="luz-theme-time__slider" id="dd-dont-slider" type="range" min="0" max="1439" value="780"></div></div><fieldset class="luz-theme-time__moments"><legend class="luz-theme-time__legend">Time of day</legend><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m0">05:00 to 07:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m1">07:30 to 12:00</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m2" checked>12:00 to 17:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m3">17:30 to 20:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m4">20:30 to 22:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m5">22:30 to 05:00</label></fieldset></luz-theme-time>
                 </div>
-              </figure>
-              <figure class="luz-do-dont__item luz-do-dont__item--do">
-                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Pinta un momento sobre la base que nombra, para que el alto contraste nunca coincida.</figcaption>
-                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A moment painted over its base"><code>/* Do: over the base the moment belongs to; high contrast is never matched */
-:root[data-theme=&quot;dark&quot;][data-moment=&quot;dawn&quot;] {
-  --luz-text-primary: #f1ece4;
-  --luz-surface-page: #20242b;
-}</code></pre>
-              </figure>
-              <figure class="luz-do-dont__item luz-do-dont__item--dont">
-                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Pintar un momento sin base: la regla también coincide con el alto contraste y rompe su contraste.</figcaption>
-                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A moment painted with no base"><code>/* Don't: no base, so this also matches high contrast */
-[data-moment=&quot;dawn&quot;] {
-  --luz-text-primary: #8a8a8a;
-  --luz-surface-page: #20242b;
-}</code></pre>
               </figure>
             </div>
             <h3 id="content">Cómo escribir el contenido</h3>

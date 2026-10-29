@@ -165,7 +165,7 @@ keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
               </table>
             </div>
             <h3 id="paint">Paint each moment</h3>
-            <p>The colours are yours: set only the tokens that differ, over the base the moment names, as <a href="/docs/tokens/themes/">a theme of your own</a> does, and measure each pair with the <a href="/docs/tokens/contrast/">contrast check</a>.</p>
+            <p>The colours are yours: set only the tokens that differ, over the base the moment names, as <a href="/docs/tokens/themes/">a theme of your own</a> does, and measure each pair with the <a href="/docs/tokens/contrast/">contrast check</a>. Always write the base next to the moment: a rule with <code>[data-moment]</code> alone also matches high contrast and breaks its contrast.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">CSS</span>
@@ -244,22 +244,6 @@ keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <luz-theme-time show="moments"><div class="luz-theme-time__bar"><div class="luz-theme-time__day"><label class="luz-theme-time__label" for="dd-dont-slider">Hour of the day (specimen)</label><input class="luz-theme-time__slider" id="dd-dont-slider" type="range" min="0" max="1439" value="780"></div></div><fieldset class="luz-theme-time__moments"><legend class="luz-theme-time__legend">Time of day</legend><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m0">05:00 to 07:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m1">07:30 to 12:00</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m2" checked>12:00 to 17:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m3">17:30 to 20:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m4">20:30 to 22:30</label><label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="dd-time-dont" value="m5">22:30 to 05:00</label></fieldset></luz-theme-time>
                 </div>
-              </figure>
-              <figure class="luz-do-dont__item luz-do-dont__item--do">
-                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Paint a moment over the base it names, so high contrast is never matched.</figcaption>
-                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A moment painted over its base"><code>/* Do: over the base the moment belongs to; high contrast is never matched */
-:root[data-theme=&quot;dark&quot;][data-moment=&quot;dawn&quot;] {
-  --luz-text-primary: #f1ece4;
-  --luz-surface-page: #20242b;
-}</code></pre>
-              </figure>
-              <figure class="luz-do-dont__item luz-do-dont__item--dont">
-                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Paint a moment with no base: the rule also matches high contrast and breaks its contrast.</figcaption>
-                <pre class="luz-code-block" data-lang="css" tabindex="0" role="region" aria-label="A moment painted with no base"><code>/* Don't: no base, so this also matches high contrast */
-[data-moment=&quot;dawn&quot;] {
-  --luz-text-primary: #8a8a8a;
-  --luz-surface-page: #20242b;
-}</code></pre>
               </figure>
             </div>
             <h3 id="content">Writing the content</h3>

@@ -2,7 +2,7 @@
 title: Modo de color
 description: Permite elegir Automático, claro, oscuro o alto contraste: con botones de opción que funcionan sin JavaScript o con un botón redondo que los recorre.
 keywords: modo oscuro, selector de modo, claro y oscuro
-source: db3d02764a5d
+source: 145d8ac86e4f
 reviewed: false
 -->
     <div class="docs-component" id="c-theme-mode">
@@ -93,7 +93,7 @@ reviewed: false
             <h3 id="how">Cómo funciona</h3>
             <p>Un grupo nativo de botones de opción con estilos de <code>components/theme-mode.css</code>. Los botones de opción son el estado; con scripting activado, el elemento los convierte en un botón.</p>
             <ul>
-              <li><strong>El botón:</strong> cada pulsación marca el siguiente botón de opción y lo aplica; el grupo se oculta mientras está el botón. Un botón de opción con foco se lo pasa al botón.</li>
+              <li><strong>El botón:</strong> cada pulsación marca el siguiente botón de opción y lo aplica; el grupo se oculta mientras está el botón. El script añade <code>luz-theme-mode__button--fixed</code> al botón fijo y no lo añade con <code>inline</code>. Un botón de opción con foco se lo pasa al botón.</li>
               <li><strong>Automático sigue el sistema,</strong> también mientras la página está abierta: <code>prefers-contrast: more</code> da <code>high-contrast</code>; si no, <code>prefers-color-scheme: dark</code> da <code>dark</code>; si no, <code>light</code>.</li>
               <li><strong>Qué escribe en <code>&lt;html&gt;</code>:</strong> el modo en <code>data-mode</code> y, sin marca, el mismo valor en <code>data-theme</code>, que es el que leen los tokens. Una página que nombra una marca (<code>data-theme="my-brand"</code>, un <a href="/docs/tokens/themes/">tema propio</a> hecho a partir de <code>_template.css</code>) la conserva, y los bloques de la marca responden a <code>data-mode</code>.</li>
               <li><strong>La elección se recuerda</strong> en <code>luz-theme</code>, en <code>localStorage</code>; Automático la elimina y <code>no-remember</code> lo desactiva. Si el script de la cabecera ya ha escrito <code>data-mode</code>, el primer Automático lo adopta. Un segundo <code>&lt;luz-theme-mode&gt;</code> sigue al primero.</li>

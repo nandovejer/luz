@@ -222,7 +222,7 @@ test.describe("the colour-mode button is named in the language of the page at lo
       expect(label, `aria-label "${label}"`).toBe(`${legend}: ${auto}`);
       if (code !== "en")
         expect(label, "no English left in the name").not.toMatch(
-          /Change color mode|Current|Color mode|Auto/
+          /Change color mode|Current|Color mode|\bAuto\b/
         );
     });
   }
