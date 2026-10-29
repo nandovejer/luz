@@ -103,6 +103,7 @@
   gap: var(--luz-space-xs);
   min-block-size: var(--luz-control-lg);
   font-size: var(--luz-text-md);
+  font-weight: inherit;
   color: var(--luz-text-secondary);
 }
 

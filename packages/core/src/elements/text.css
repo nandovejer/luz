@@ -15,20 +15,21 @@
 /* zeroes every margin; a block that is not the first of its parent starts   */
 /* one step below the one before it, a heading further down, and the first   */
 /* block after a heading closer. Logical, so it follows the writing mode.    */
-/* A component sets its own margin (it wins by layer), a layout object       */
-/* (.o-stack and the rest) spaces its children with its gap, and the layout  */
-/* of div, section and the other structure tags is yours.                    */
+/* A block with a luz-* class is left to its component, so a part draws as   */
+/* it always did; a layout object (.o-stack and the rest) spaces its         */
+/* children with its gap; the layout of div, section and the other           */
+/* structure tags is yours.                                                  */
 /* ========================================================================== */
 
-:where(:is(p, ul, ol, dl, menu, blockquote, pre, table, details, fieldset, address, h1, h2, h3, h4, h5, h6):not(:first-child)) {
+:where(:is(p, ul, ol, dl, menu, blockquote, pre, table, details, fieldset, address, h1, h2, h3, h4, h5, h6):not(:first-child, [class*="luz-"])) {
   margin-block-start: var(--luz-space-md);
 }
 
-:where(:is(h1, h2, h3, h4, h5, h6):not(:first-child)) {
+:where(:is(h1, h2, h3, h4, h5, h6):not(:first-child, [class*="luz-"])) {
   margin-block-start: var(--luz-space-xl);
 }
 
-:where(:is(h1, h2, h3, h4, h5, h6) + :is(p, ul, ol, dl, blockquote, figure, pre, table, details, h1, h2, h3, h4, h5, h6)) {
+:where(:is(h1, h2, h3, h4, h5, h6) + :is(p, ul, ol, dl, blockquote, figure, pre, table, details, h1, h2, h3, h4, h5, h6):not([class*="luz-"])) {
   margin-block-start: var(--luz-space-sm);
 }
 
@@ -38,7 +39,7 @@
   margin-block-start: var(--luz-space-xs);
 }
 
-:where(:is(blockquote, li) > :is(p, ul, ol, dl, pre, blockquote, table, figure):not(:first-child)) {
+:where(:is(blockquote, li) > :is(p, ul, ol, dl, pre, blockquote, table, figure):not(:first-child, [class*="luz-"])) {
   margin-block-start: var(--luz-space-sm);
 }
 

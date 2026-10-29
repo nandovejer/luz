@@ -87,12 +87,17 @@
   margin-bottom: var(--luz-space-2xs);
 }
 
+h3.docs-subhead {
+  margin-block-start: 0;
+}
+
 /* Core gives headings a family and a weight, and leaves the size to the page */
 .docs-heading-sample {
   font-size: var(--luz-text-xl);
 }
 
 .docs-lead {
+  margin-block-start: 0;
   font-size: var(--luz-text-lg);
   color: var(--luz-text-secondary);
   max-width: 65ch;
@@ -499,6 +504,7 @@
 
 /* Tokens it uses: the family, then its tokens, wrapping under it when narrow */
 .docs-uses {
+  margin-block-start: 0;
   display: grid;
   gap: var(--luz-space-xs);
 }
@@ -615,6 +621,7 @@
 /* The big search button of the home (the A–Z link without JavaScript),
    with its hint below */
 .docs-hub__find {
+  margin-block-start: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   justify-items: start;
@@ -751,6 +758,7 @@
 }
 
 .docs-hub__beta {
+  margin-block-start: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1478,6 +1486,7 @@ h2.docs-demo__title {
 }
 
 .docs-demo__note {
+  margin-block-start: 0;
   font-size: var(--luz-text-sm);
   color: var(--luz-text-secondary);
 }
@@ -1577,6 +1586,7 @@ h2.docs-demo__title {
 /* The colour gallery: one card per token, its name, its job, then its value
    in light, dark and high contrast, each a swatch and the value as text */
 .docs-token-grid {
+  margin-block-start: 0;
   list-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
@@ -1660,6 +1670,7 @@ h2.docs-demo__title {
 }
 
 .docs-scale-list {
+  margin-block-start: 0;
   display: grid;
   gap: var(--luz-space-xs);
 }
