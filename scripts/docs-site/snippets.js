@@ -47,8 +47,8 @@ import { englishT } from "./strings.js";
  */
 export const FILES = {
   tokens: { css: "luz-tokens.min.css", js: null, chunks: [] },
-  core: { css: "luz.min.css", conditional: "luz.conditional.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "i18n-es.min.js"] },
-  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "cookie-consent.min.js", "color-mode.min.js", "timeline.min.js", "sidebar.min.js"] },
+  core: { css: "luz.min.css", conditional: "luz.conditional.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "theme-mode.min.js", "i18n-es.min.js"] },
+  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "cookie-consent.min.js", "theme-time.min.js", "theme-time-bar.min.js", "timeline.min.js", "sidebar.min.js"] },
 };
 
 /** The catalog component the snippet of a kind of site links, as the example of one link per component. */
@@ -113,10 +113,12 @@ export const WAYS = [{ id: "npm" }, { id: "cdn" }];
 const CHUNK_WHEN = {
   "midi.min.js": ["core", "snippets.when.midi"],
   "table-sort.min.js": ["core", "snippets.when.table-sort"],
+  "theme-mode.min.js": ["core", "snippets.when.luz-theme-mode"],
   "i18n-es.min.js": ["core", "snippets.when.i18n-es"],
   "search.min.js": ["catalog", "snippets.when.luz-search"],
   "cookie-consent.min.js": ["catalog", "snippets.when.luz-cookie-consent"],
-  "color-mode.min.js": ["catalog", "snippets.when.luz-color-mode"],
+  "theme-time.min.js": ["catalog", "snippets.when.luz-theme-time"],
+  "theme-time-bar.min.js": ["catalog", "snippets.when.luz-theme-time-bar"],
   "timeline.min.js": ["catalog", "snippets.when.luz-timeline"],
   "sidebar.min.js": ["catalog", "snippets.when.luz-sidebar"],
 };
@@ -399,5 +401,7 @@ export function renderSnippets(data, t = englishT()) {
 ${WAYS.map((way) => renderSnippet(data, kind, way, t)).join("\n")}
     </section>`,
   );
-  return [renderIndex(t), ...sections, renderConditional(data, t), renderChunks(data, t), renderVerify(t)].join("\n");
+  // The indentation of the markup is for whoever reads this file, not for the page, which a docs page is measured by in
+  // bytes (RL-17). A code block keeps its lines: its text is escaped, so no line of it starts with a tag.
+  return [renderIndex(t), ...sections, renderConditional(data, t), renderChunks(data, t), renderVerify(t)].join("\n").replace(/\n[ ]+(?=<)/g, "\n");
 }

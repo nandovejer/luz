@@ -70,7 +70,7 @@ Every component also ships as its own file in `dist/components/` — load only w
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/components/card.css">
 ```
 
-Available: `accordion`, `alert`, `avatar`, `breadcrumb`, `button`, `card`, `code`, `copy-btn`, `dropdown`, `figure`, `form`, `icon-grid`, `modal`, `mode-switcher`, `pagination`, `player`, `progress`, `select`, `table`, `tabs`, `tag`, `toast`, `tooltip` (+ `_animations` for the shared keyframes). Each has a `.min.css` twin.
+Available: `accordion`, `alert`, `avatar`, `breadcrumb`, `button`, `card`, `code`, `copy-btn`, `dropdown`, `figure`, `form`, `icon-grid`, `modal`, `pagination`, `player`, `progress`, `select`, `table`, `tabs`, `tag`, `theme-mode`, `toast`, `tooltip` (+ `_animations` for the shared keyframes). Each has a `.min.css` twin.
 
 ### Using a single JS behavior
 
@@ -103,12 +103,10 @@ registerLocale("fr", { play: "Lire", pause: "Pause", copy: "Copier" });
 import { loadLocales } from "@luz-ds/core/i18n";
 import { initHighlight } from "@luz-ds/core/highlight";
 import { initPlayers } from "@luz-ds/core/player";
-import { initThemeCycle } from "@luz-ds/core/theme";
 
 await loadLocales();
 initHighlight();
 initPlayers();
-initThemeCycle();
 ```
 
 `loadLocales()` returns nothing to wait for on a page in English, and a promise that always resolves otherwise: a file that cannot load is one console warning and the English strings. Strings written on a click (copied, sorted, play or pause) read the dictionary when they are written, so they need no wait. `@luz-ds/core/i18n/es` is the Spanish dictionary alone, as a default export.
@@ -128,7 +126,7 @@ To check the language file, put an import map with an `integrity` section before
 
 A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari and Firefox do not block a file with a wrong hash. Use it as a performance hint only.
 
-Keys: `play`, `pause`, `mute`, `unmute`, `fullscreen`, `exitFullscreen`, `captions`, `captionsOff`, `loading`, `midiError`, `timeOf` (`{current}`, `{total}`), `copy`, `copied`, `copiedStatus`, `copyFailed`, `codeExample` (`{lang}`), `copyCode` (`{n}`), `applyTheme`, `themeApplied`, `changeMode` and `modeChanged` (`{mode}`), `modeAuto` (the mode when none is chosen: Auto), `sortedAsc` and `sortedDesc` (`{column}`), `previous` and `next`. A key in camelCase becomes kebab-case in the attribute: `data-luz-label-exit-fullscreen`. Missing keys fall back to English.
+Keys: `play`, `pause`, `mute`, `unmute`, `fullscreen`, `exitFullscreen`, `captions`, `captionsOff`, `loading`, `midiError`, `timeOf` (`{current}`, `{total}`), `copy`, `copied`, `copiedStatus`, `copyFailed`, `codeExample` (`{lang}`), `copyCode` (`{n}`), `applyTheme`, `themeApplied`, `sortedAsc` and `sortedDesc` (`{column}`), `previous` and `next`. A key in camelCase becomes kebab-case in the attribute: `data-luz-label-exit-fullscreen`. Missing keys fall back to English.
 
 `registerLocale()` must reach the same module instance the components use: with the auto-initializing entry import it from `@luz-ds/core`, with the individual modules from `@luz-ds/core/i18n`. Strings written later (play/pause, copied, status messages) use it right away; the ones written when a component initializes (code block names) need it registered before the `init*()` call.
 
@@ -144,6 +142,8 @@ Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.t
 - **`./components/*`** → Per-component CSS files (standalone use)
 - **`./print.css`** → Print styles alone, for pages that load components one by one (`luz.css` already includes them)
 - **`./conditional.css`** → `luz.css` with the reset and the bare elements only inside `[data-luz]`, for a project that already has a design
+- **`./theme-mode`** → `theme-mode.js` — defines `<luz-theme-mode>`, the color mode (Auto, light, dark, high contrast); a lazy chunk that `luz.js` loads when the page has the element
+- **`./theme-boot`** → `theme-boot.js` — an optional classic script for the `<head>` that writes `data-mode` (and `data-theme`, with no brand) before the first paint
 - **`./theme`**, **`./clipboard`**, **`./modal`**, **`./highlight`**, **`./player`**, **`./tabs`** → Individual JS behavior modules (no side effects on import)
 - **`./i18n`** → Strings for the JS-generated text (`t`, `getLang`, `registerLocale`, `loadLocales`); **`./i18n/*`** → one language LUZ ships, as a dictionary (`@luz-ds/core/i18n/es`)
 - **`./midi`** → `midi.js` — MIDI player (lazy-loaded)
@@ -160,17 +160,21 @@ Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.t
 - Alerts, toasts, badges, avatars
 - And more...
 
+## Color mode
+
+`<luz-theme-mode>` holds the radios of the color mode (`auto`, `light`, `dark`, `high-contrast`, `name="luz-theme-mode"`). Without JavaScript they change the mode through the tokens; with it, `luz.js` loads `theme-mode.min.js` and the element becomes one round button, fixed at the end corner of the window (`inline` keeps it in the flow, `no-remember` stops it storing the choice under `luz-theme`). It writes `data-mode` on `<html>`, and `data-theme` when the page names no brand, and fires `luz-theme-mode:change`. The optional `theme-boot.min.js`, a classic script in the `<head>`, applies the stored or system mode before the first paint. The markup and the options are on the [Theme mode](https://nandovejer.github.io/luz/docs/components/theme-mode/) page. To give Auto the time of day, wrap it in `<luz-theme-time>` from `@luz-ds/catalog`.
+
 ## Themes
 
 LUZ ships one look, Vejer, in three color modes (`light`, `dark`, `high-contrast`): ET Book for running text, whitewash and sandstone surfaces, iron-black text, sky-blue links and actions, every link underlined.
 
-A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, with `data-mode` for its light, dark and high-contrast variants. Copy `@luz-ds/core/themes/_template.css`, and check it with `npx @luz-ds/tokens@0.2.1 check-contrast my-brand.css`. List its name in `<html data-luz-themes="my-brand">` so the mode switcher remembers the choice.
+A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, with `data-mode` for its light, dark and high-contrast variants. Copy `@luz-ds/core/themes/_template.css`, and check it with `npx @luz-ds/tokens@0.2.1 check-contrast my-brand.css`. `<luz-theme-mode>` writes `data-mode` and leaves `data-theme` to your theme; list the name in `<html data-luz-themes="my-brand">` only for `applyTheme()` and the buttons of custom themes.
 
 ## Vanilla JS behaviors
 
 The core JS (`luz.js`) provides no-dependency implementations of:
 
-- Theme switching and persistence
+- The color mode: Auto, light, dark and high contrast, remembered (`<luz-theme-mode>`)
 - Seekbar and media player controls
 - Syntax highlighting for code blocks
 - And more...

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>&lt;luz-theme-mode&gt; and the cookie band: a long page with links at the end corner</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/cookie-consent.css">
+  <!-- The real loading path: core, then the presence loader, which loads the chunks of the two elements on the page.
+       The query string authors it: ?dir=rtl&inline -->
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      if (q.get('dir') === 'rtl') document.documentElement.dir = 'rtl';
+    })();
+  </script>
+  <script type="module" src="/packages/core/dist/luz.min.js"></script>
+  <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
+  <style>
+    /* Fixture only: the rail beside a long main part, as the docs shell lays them out */
+    .fixture-page { display: flex; align-items: stretch; }
+    .fixture-page > main { flex: 1; min-inline-size: 0; padding: var(--luz-space-md); }
+        .fixture-page .end { text-align: end; }
+  </style>
+</head>
+<body>
+  <luz-cookie-consent>
+    <section class="luz-cookie-consent" id="consent" data-luz-consent aria-labelledby="consent-title" hidden>
+      <div data-luz-consent-ask>
+        <h2 class="luz-cookie-consent__title" id="consent-title">Cookies on Bodega Albar</h2>
+        <p>We use cookies that this site needs to work. We would also like to measure how you use it, to improve it. <a id="policy" href="#cookies">Read the cookie policy</a>.</p>
+        <form class="o-actions">
+          <button class="luz-btn luz-btn--primary" id="accept" type="submit" value="all">Accept optional cookies</button>
+          <button class="luz-btn luz-btn--primary" id="reject" type="submit" value="none">Reject optional cookies</button>
+        </form>
+        <details class="luz-cookie-consent__choices" id="choices">
+          <summary id="choose">Choose which cookies to allow</summary>
+          <form class="o-stack">
+            <fieldset class="luz-fieldset">
+              <legend>Optional cookies</legend>
+              <div class="luz-check-group">
+                <label class="luz-check-item"><input type="checkbox" id="c-analytics" value="analytics"> Measuring visits</label>
+                <label class="luz-check-item"><input type="checkbox" id="c-marketing" value="marketing"> Adverts on other sites</label>
+              </div>
+            </fieldset>
+            <div class="o-actions">
+              <button class="luz-btn luz-btn--secondary" id="save" type="submit">Save my choices</button>
+            </div>
+          </form>
+        </details>
+      </div>
+      <div id="done" data-luz-consent-done tabindex="-1" hidden>
+        <p>Your choice is saved. You can change it at any time on the <a id="done-policy" href="#cookies">cookie policy</a> page.</p>
+        <button class="luz-btn luz-btn--secondary" id="close" type="button" data-luz-consent-close>Close</button>
+      </div>
+    </section>
+  </luz-cookie-consent>
+
+  <div class="fixture-page">
+    <main id="main" tabindex="-1">
+      <h1>A long page</h1>
+      <p><button class="luz-btn luz-btn--outline" id="settings" type="button" data-luz-consent-open hidden>Change cookie settings</button></p>
+        <p>Paragraph 1. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 2. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 3. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 4. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 5. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 6. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 7. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 8. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 9. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 10. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 11. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 12. Text that fills the page so that it scrolls.</p>
+        <p class="end"><a id="end-12" href="#end-12">End link 12</a></p>
+        <p>Paragraph 13. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 14. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 15. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 16. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 17. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 18. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 19. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 20. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 21. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 22. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 23. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 24. Text that fills the page so that it scrolls.</p>
+        <p class="end"><a id="end-24" href="#end-24">End link 24</a></p>
+        <p>Paragraph 25. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 26. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 27. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 28. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 29. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 30. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 31. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 32. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 33. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 34. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 35. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 36. Text that fills the page so that it scrolls.</p>
+        <p class="end"><a id="end-36" href="#end-36">End link 36</a></p>
+        <p>Paragraph 37. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 38. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 39. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 40. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 41. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 42. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 43. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 44. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 45. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 46. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 47. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 48. Text that fills the page so that it scrolls.</p>
+        <p class="end"><a id="end-48" href="#end-48">End link 48</a></p>
+        <p>Paragraph 49. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 50. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 51. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 52. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 53. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 54. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 55. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 56. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 57. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 58. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 59. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 60. Text that fills the page so that it scrolls.</p>
+        <p class="end"><a id="end-60" href="#end-60">End link 60</a></p>
+        <p>Paragraph 61. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 62. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 63. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 64. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 65. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 66. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 67. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 68. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 69. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 70. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 71. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 72. Text that fills the page so that it scrolls.</p>
+        <p class="end"><a id="end-72" href="#end-72">End link 72</a></p>
+        <p>Paragraph 73. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 74. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 75. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 76. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 77. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 78. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 79. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 80. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 81. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 82. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 83. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 84. Text that fills the page so that it scrolls.</p>
+        <p class="end"><a id="end-84" href="#end-84">End link 84</a></p>
+        <p>Paragraph 85. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 86. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 87. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 88. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 89. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 90. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 91. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 92. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 93. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 94. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 95. Text that fills the page so that it scrolls.</p>
+        <p>Paragraph 96. Text that fills the page so that it scrolls.</p>
+        <p class="end"><a id="end-96" href="#end-96">End link 96</a></p>
+      <footer class="fixture-end">
+        <luz-theme-mode id="mode">
+      <fieldset class="luz-theme-mode__group">
+        <legend class="luz-theme-mode__legend">Color mode</legend>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/></svg>Auto</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>Light</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>Dark</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>
+      </fieldset>
+        </luz-theme-mode>
+            <p><a id="foot-last" href="#foot-last">The last link of the page</a></p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

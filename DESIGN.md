@@ -38,7 +38,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is each line the token of its job? Is an accent bar the thin width on a box with its own border and the thick one on a block without? Is a control's edge still visible on the surface it sits on, in the three modes?
 
-**Exceptions:** the two widths of the accent bar (decided 2026-10-24); a transparent border that keeps the box the same size when forced colors paints it is not a line. The round colour-mode button (`.luz-mode-switcher--cycle`) has a hairline edge in `--luz-divider`, about 1.4:1 on the surface, and not `--luz-input-border`: its icon, at 3:1 or more, is what tells the control apart, and the edge only keeps the circle's shape (decided 2026-10-26).
+**Exceptions:** the two widths of the accent bar (decided 2026-10-24); a transparent border that keeps the box the same size when forced colors paints it is not a line. The round colour-mode button (`.luz-theme-mode__button`) has a hairline edge in `--luz-divider`, about 1.4:1 on the surface, and not `--luz-input-border`: its icon, at 3:1 or more, is what tells the control apart, and the edge only keeps the circle's shape (decided 2026-10-26).
 
 ### DR-3 Elevation has three steps
 

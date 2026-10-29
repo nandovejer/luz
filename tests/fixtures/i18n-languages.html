@@ -5,8 +5,8 @@
   The static page is Spanish: with JavaScript off it is what the visitor gets.
     ?lang=<tag>   the language of <html> (a script in <head>, so JavaScript only)
     ?fragment     keep #fragment, a Spanish block (lang="es") of its own; without it, it is removed
-  The markup carries authored English names (aria-label="Play", the cycle
-  button's name): what the page reads at the end is what the scripts wrote.
+  The markup carries authored English names (aria-label="Play"): what the page reads at the end is what the scripts wrote.
+  The color mode's button writes no string (its name is the page's legend and label), so it is no witness of a language.
   The links and the option that name Spanish are on every page: they must
   never fetch a language file.
 -->
@@ -46,18 +46,17 @@
       </select>
     </p>
 
-    <!-- The color mode: the radios, and the button that JavaScript steps them with -->
-    <fieldset class="luz-mode-switcher luz-mode-switcher--cycle luz-mode-switcher--inline" id="modes">
-      <legend class="luz-mode-switcher__label">Color mode</legend>
-      <button class="luz-mode-cycle" type="button" aria-label="Authored mode name" id="cycle">
-        <svg class="luz-mode-btn__icon" data-mode-icon="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>
-        <svg class="luz-mode-btn__icon" data-mode-icon="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>
-        <svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>
-      </button>
-      <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light" checked>Light</label>
-      <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark">Dark</label>
-      <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast">High contrast</label>
-    </fieldset>
+    <!-- The color mode: the radios, and the button that JavaScript steps them with. Its text is the page's own (Spanish here),
+         so no script writes a string into it: the click of the button must work while the language is still on its way -->
+    <luz-theme-mode inline id="modes">
+      <fieldset class="luz-theme-mode__group">
+        <legend class="luz-theme-mode__legend">Modo de color</legend>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10Z"/></svg>Automático</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>Claro</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>Oscuro</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Alto contraste</label>
+      </fieldset>
+    </luz-theme-mode>
 
     <!-- The legacy apply buttons of a custom theme: written by the first wave, in whatever language is there -->
     <p>

@@ -1,0 +1,29 @@
+<!-- expect: names/renamed:file 16:3 -->
+<!-- expect: names/renamed 21:15 suggestion=.luz-theme-mode__group -->
+<!-- expect: names/renamed 22:15 suggestion=.luz-theme-mode__legend -->
+<!-- expect: names/renamed 23:14 suggestion=.luz-theme-mode__option -->
+<!-- expect: names/renamed 23:42 suggestion=.luz-theme-mode__input -->
+<!-- expect: names/renamed 23:126 suggestion=.luz-theme-mode__icon -->
+<!-- expect: names/renamed 25:13 suggestion=.luz-theme-mode__button -->
+<!-- expect: names/renamed 26:11 suggestion=.luz-theme-mode__status -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The color mode of core and catalog, before the theme-mode release</title>
+  <link rel="stylesheet" href="node_modules/@luz-ds/tokens/dist/luz-tokens.min.css">
+  <link rel="stylesheet" href="node_modules/@luz-ds/core/dist/luz.min.css">
+  <link rel="stylesheet" href="node_modules/@luz-ds/catalog/dist/components/color-mode.min.css">
+</head>
+<body>
+  <main class="o-container o-stack">
+    <h1>Acme Summit 2027</h1>
+    <fieldset class="luz-mode-switcher">
+      <legend class="luz-mode-switcher__label">Color mode</legend>
+      <label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="auto" checked><svg class="luz-mode-btn__icon" aria-hidden="true" viewBox="0 0 24 24"></svg>Auto</label>
+    </fieldset>
+    <button class="luz-mode-cycle" type="button">Color mode</button>
+    <span class="luz-mode-cycle__status" role="status"></span>
+  </main>
+</body>
+</html>

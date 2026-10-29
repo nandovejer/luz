@@ -3,31 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LUZ site mode fixture: a luz-color-mode with the four radios</title>
+  <title>LUZ site mode fixture: a luz-theme-time around a luz-theme-mode with the four radios and the six moments</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
-  <!-- Nothing but the chunk: no luz.js (tests/fixtures/site-mode-luz.html adds it) -->
-  <script type="module" src="/packages/catalog/dist/color-mode.min.js"></script>
+  <link rel="stylesheet" href="/packages/catalog/dist/components/theme-time.css">
+  <!-- Nothing but the two chunks: no luz.js (tests/fixtures/site-mode-luz.html adds it) -->
+  <script type="module" src="/packages/core/dist/theme-mode.min.js"></script>
+  <script type="module" src="/packages/catalog/dist/theme-time.min.js"></script>
 </head>
 <body>
   <main id="main">
     <h1>Color mode</h1>
     <p>Text of the page.</p>
-    <div id="target"><p>An element that <code>for="target"</code> points at.</p></div>
-  </main>
+      </main>
   <footer>
-    <luz-color-mode id="mode">
-      <fieldset class="luz-mode-switcher luz-mode-switcher--cycle">
-        <legend class="luz-mode-switcher__label">Color mode</legend>
-        <label class="luz-mode-btn"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="auto" checked>Auto</label>
-        <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light">Light</label>
-        <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark">Dark</label>
-        <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast">High contrast</label>
+    <luz-theme-time id="time">
+      <luz-theme-mode id="mode">
+        <fieldset class="luz-theme-mode__group">
+          <legend class="luz-theme-mode__legend">Color mode</legend>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10Z"/></svg>Auto</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>Light</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>Dark</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>
+        </fieldset>
+      </luz-theme-mode>
+      <fieldset class="luz-theme-time__moments">
+        <legend class="luz-theme-time__legend">Time of day</legend>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="dawn" data-from="05:00" data-theme="dark">Dawn</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="morning" data-from="07:30" data-theme="light">Morning</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="afternoon" data-from="12:00" data-theme="light" data-default>Afternoon</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="sunset" data-from="17:30" data-theme="light">Sunset</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="dusk" data-from="20:30" data-theme="dark">Dusk</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="night" data-from="22:30" data-theme="dark" data-default>Night</label>
       </fieldset>
-    </luz-color-mode>
+    </luz-theme-time>
   </footer>
-  <!-- The query string is the test's way to author the page: ?by=clock&remember&for=target&light-attr=data-sky&boot=dark&themes=brand&mode=dark.
+  <!-- The query string is the test's way to author the page: ?boot=dark&themes=brand&mode=dark&no-remember&latitude=40.42&longitude=-3.7.
        It runs before the module scripts, which wait for the parser. -->
   <script>
     (function () {
@@ -36,9 +47,9 @@
       if (q.has('boot')) html.setAttribute('data-theme', q.get('boot'));
       if (q.has('mode')) html.setAttribute('data-mode', q.get('mode'));
       if (q.has('themes')) html.setAttribute('data-luz-themes', q.get('themes'));
-      var el = document.getElementById('mode');
-      ['by', 'for', 'light-attr'].forEach(function (name) { if (q.has(name)) el.setAttribute(name, q.get(name)); });
-      if (q.has('remember')) el.setAttribute('remember', '');
+      var time = document.getElementById('time');
+      ['latitude', 'longitude', 'place'].forEach(function (name) { if (q.has(name)) time.setAttribute(name, q.get(name)); });
+      if (q.has('no-remember')) { time.setAttribute('no-remember', ''); document.getElementById('mode').setAttribute('no-remember', ''); }
     })();
   </script>
 </body>

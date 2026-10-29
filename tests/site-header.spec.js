@@ -113,9 +113,9 @@ async function open(page, path, javaScript, { light = true } = {}) {
   if (javaScript && light) await page.addInitScript(() => localStorage.setItem('luz-theme', 'light'));
   await page.goto(path);
   if (javaScript) {
-    // The search button replaces the A-Z link once its chunk has loaded (idle); the cycle button once color-mode.js has
+    // The search button replaces the A-Z link once its chunk has loaded (idle); the round button once theme-mode.js has
     await page.locator('#site-header [data-luz-search-open]').waitFor({ state: 'visible' });
-    await page.locator('.luz-mode-cycle').waitFor({ state: 'attached' });
+    await page.locator('.luz-theme-mode__button').waitFor({ state: 'attached' });
     await faded(page);
   }
 }
@@ -275,9 +275,9 @@ test.describe('the colour mode is in the corner, not in the header', () => {
         needsJs(javaScriptEnabled);
         await page.setViewportSize({ width, height: 700 });
         await open(page, path, javaScriptEnabled);
-        const cycle = page.locator('footer .luz-mode-cycle');
+        const cycle = page.locator('footer .luz-theme-mode__button');
         await expect(cycle).toBeVisible();
-        await expect(page.locator('#site-header .luz-mode-cycle, #site-header luz-color-mode')).toHaveCount(0);
+        await expect(page.locator('#site-header .luz-theme-mode__button, #site-header luz-theme-time')).toHaveCount(0);
         // Some element from the button up is position: fixed
         expect(await cycle.evaluate((el) => { for (let n = el; n; n = n.parentElement) if (getComputedStyle(n).position === 'fixed') return true; return false; }), 'position: fixed').toBe(true);
         const gutter = await px(page, 'var(--luz-space-xl)');
@@ -297,9 +297,9 @@ test.describe('the colour mode is in the corner, not in the header', () => {
           expect(await cycle.evaluate((el) => { const r = el.getBoundingClientRect(); const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !!hit && el.contains(hit); }), 'nothing covers it').toBe(true);
         }
         // The legend is not drawn, and the radios are not shown beside the button
-        expect(await visibleText(page.locator('footer luz-color-mode legend')), 'no legend text').toBe('');
-        for (const radio of await page.locator('footer luz-color-mode input[name="luz-theme"]').all()) {
-          expect((await box(radio.locator('xpath=..'))).width, 'a radio is not drawn').toBeLessThanOrEqual(1);
+        expect(await visibleText(page.locator('footer luz-theme-time')), 'no legend text, no moment name').toBe('');
+        for (const radio of await page.locator('footer luz-theme-time input[name="luz-theme-mode"]').all()) {
+          await expect(radio.locator('xpath=..'), 'a radio is not drawn').toBeHidden();
         }
       });
     }
@@ -308,11 +308,11 @@ test.describe('the colour mode is in the corner, not in the header', () => {
       withoutJs(javaScriptEnabled);
       await page.setViewportSize({ width: 1280, height: 700 });
       await open(page, path, javaScriptEnabled);
-      const mode = page.locator('footer luz-color-mode');
-      await expect(page.locator('#site-header input[name="luz-theme"]')).toHaveCount(0);
+      const mode = page.locator('footer luz-theme-time');
+      await expect(page.locator('#site-header input[name="luz-theme-mode"]')).toHaveCount(0);
       expect(await mode.evaluate((el) => { for (let n = el; n && n !== document.body; n = n.parentElement) if (getComputedStyle(n).position === 'fixed') return true; return false; }), 'not fixed').toBe(false);
-      const labels = mode.locator('label.luz-mode-btn');
-      await expect(labels).toHaveCount(3);
+      const labels = mode.locator('label.luz-theme-mode__option');
+      await expect(labels).toHaveCount(4);
       for (const label of await labels.all()) await expect(label).toBeVisible();
       const footer = await box(page.locator('footer'));
       const inside = await box(mode);

@@ -81,12 +81,11 @@
   }
 
   /* Navigation, controls that only work on a screen, and the player */
-  :where(nav, audio),
+  :where(nav, audio, luz-theme-mode),
   .luz-skip-link,
   .luz-tabs,
   .luz-copy-btn,
-  .luz-mode-switcher,
-  .luz-mode-cycle,
+  .luz-theme-mode__button,
   .luz-player,
   .luz-toast,
   .luz-tooltip__text {

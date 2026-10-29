@@ -29,7 +29,9 @@ describe("apps/landing/landing.js: no mode logic", () => {
     for (const forbidden of [
       /data-theme/,
       /data-light/,
-      /dataset\.(theme|light)\b/,
+      /data-mode\b(?!-preview)/,
+      /data-moment/,
+      /dataset\.(theme|light|moment)\b/,
       /localStorage|sessionStorage/,
       /matchMedia|prefers-color-scheme|prefers-contrast/,
       /\.mode\s*=[^=]/,
@@ -38,13 +40,18 @@ describe("apps/landing/landing.js: no mode logic", () => {
     }
   });
 
-  it("names the colour mode only as the radio of <luz-color-mode>, which it checks, and listens to luz-color-mode:change", () => {
-    // The page never writes the mode: a box checks the footer's radio, and <luz-color-mode> applies and remembers it
-    const names = [...js.matchAll(/\bluz-theme\b/g)].map((m) => js.slice(Math.max(0, m.index - 12), m.index + 12));
+  it("names the colour mode only as the radio of <luz-theme-mode>, which it clicks, and listens to luz-theme-mode:change", () => {
+    // The page never writes the mode: a box clicks the footer's radio, and <luz-theme-mode> applies and remembers it
+    const bare = [...js.matchAll(/\bluz-theme\b(?!-)/g)].map((m) => js.slice(Math.max(0, m.index - 24), m.index + 14));
+    expect(bare, "luz-theme alone is core's storage key: this script never names it").toEqual([]);
+    const names = [...js.matchAll(/\bluz-theme-mode\b(?![:_-])/g)].map((m) => js.slice(Math.max(0, m.index - 24), m.index + 14));
     expect(names.length).toBeGreaterThan(0);
-    for (const around of names) expect(around, "luz-theme is the radio's name, never a key").toMatch(/input\[name=\\?["']luz-theme/);
+    const radios = names.filter((around) => /input\[name=\\?["']luz-theme-mode/.test(around));
+    expect(radios.length, "the radio's name is luz-theme-mode").toBeGreaterThan(0);
+    for (const around of names) expect(around, "luz-theme-mode is the element or the radio's name, never a key").toMatch(/input\[name=\\?["']luz-theme-mode|querySelector\(["']luz-theme-mode/);
     expect(js).toMatch(/\.click\(\)/);
-    expect(js).toContain("luz-color-mode:change");
+    expect(js).toContain("luz-theme-mode:change");
+    expect(js, "the old element and event are gone").not.toMatch(/luz-color-mode/);
   });
 
   it("has no HTML sink", () => {

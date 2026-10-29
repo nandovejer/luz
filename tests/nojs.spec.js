@@ -150,28 +150,31 @@ test('docs: the home shows the A–Z link in place of the big search button', as
   await expect(page.getByRole('main').getByRole('button', { name: /^Search/ })).toBeHidden();
 });
 
-test('docs: the color mode switcher is three radios, none checked, that set the mode', async ({ page }) => {
+test('docs: the color mode switcher is four radios, Auto checked, that set the mode', async ({ page }) => {
   await page.goto('/docs/');
-  const switcher = page.locator('footer luz-color-mode .luz-mode-switcher--cycle');
-  await expect(switcher.locator('.luz-mode-btn')).toHaveCount(3);
-  await expect(switcher.locator('input[name="luz-theme"]')).toHaveCount(3);
-  expect(await switcher.locator('input[name="luz-theme"]').evaluateAll((all) => all.map((r) => r.value))).toEqual(['light', 'dark', 'high-contrast']);
-  await expect(switcher.locator('input:checked')).toHaveCount(0);
-  for (const label of await switcher.locator('.luz-mode-btn').all()) await expect(label).toBeVisible();
-  await expect(page.locator('.luz-mode-cycle')).toBeHidden();
+  const switcher = page.locator('footer luz-theme-mode .luz-theme-mode__group');
+  await expect(switcher.locator('.luz-theme-mode__option')).toHaveCount(4);
+  await expect(switcher.locator('input[name="luz-theme-mode"]')).toHaveCount(4);
+  expect(await switcher.locator('input[name="luz-theme-mode"]').evaluateAll((all) => all.map((r) => r.value))).toEqual(['auto', 'light', 'dark', 'high-contrast']);
+  await expect(switcher.locator('input:checked')).toHaveCount(1);
+  await expect(switcher.locator('input[value="auto"]')).toBeChecked();
+  for (const label of await switcher.locator('.luz-theme-mode__option').all()) await expect(label).toBeVisible();
+  await expect(page.locator('.luz-theme-mode__button')).toHaveCount(0);
+  // The moments of <luz-theme-time> are a declaration: nothing of them is shown without the script
+  await expect(page.locator('footer .luz-theme-time__moments')).toBeHidden();
   const background = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  // No choice is Vejer light without JavaScript: the clock is followed only by the script
+  // Auto is Vejer light without JavaScript: the clock is followed only by the script
   const light = await background();
-  await switcher.locator('.luz-mode-btn:has(input[value="dark"])').click();
+  await switcher.locator('.luz-theme-mode__option:has(input[value="dark"])').click();
   await expect.poll(background).not.toBe(light);
-  await switcher.locator('.luz-mode-btn:has(input[value="light"])').click();
+  await switcher.locator('.luz-theme-mode__option:has(input[value="light"])').click();
   await expect.poll(background).toBe(light);
 });
 
 for (const app of ['/', '/docs/', '/docs/components/button/']) {
   test(`${app}: nothing is served about the light, and the page is Vejer light`, async ({ page }) => {
     await page.goto(app);
-    expect(await page.evaluate(() => document.documentElement.hasAttribute('data-light'))).toBe(false);
+    expect(await page.evaluate(() => document.documentElement.hasAttribute('data-moment'))).toBe(false);
     expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe('light');
   });
 }
@@ -186,13 +189,13 @@ test('docs: the specimens carry no data-theme without JavaScript, and the radios
   // Light first: Vejer's, whatever the hour (nothing is served about the light)
   expect(channels(await colorOf(specimen, '--luz-surface-page'))).toEqual(vejer('light', '--luz-surface-page'));
   const before = await background();
-  await page.locator('footer .luz-mode-btn:has(input[value="dark"])').click();
+  await page.locator('footer .luz-theme-mode__option:has(input[value="dark"])').click();
   await expect.poll(background).not.toBe(before);
   // The specimen follows: its tokens are Vejer's dark, not the light it was served in
   // (polled: the page fades between modes when motion is welcome, and the specimen inherits the fade)
   await expect.poll(async () => channels(await colorOf(specimen, '--luz-surface-page'))).toEqual(vejer('dark', '--luz-surface-page'));
   await expect.poll(async () => channels(await colorOf(specimen, '--luz-text-primary'))).toEqual(vejer('dark', '--luz-text-primary'));
-  await page.locator('footer .luz-mode-btn:has(input[value="high-contrast"])').click();
+  await page.locator('footer .luz-theme-mode__option:has(input[value="high-contrast"])').click();
   await expect.poll(async () => channels(await colorOf(specimen, '--luz-surface-page'))).toEqual(vejer('high-contrast', '--luz-surface-page'));
 });
 
@@ -322,12 +325,12 @@ for (const home of ['/', '/es/', '/ar/']) {
     expect(new Set(surfaces).size).toBe(3);
   });
 
-  test(`${home}: the footer lists its two columns, the three colour modes and the legal line, and the three languages are in the header`, async ({ page }) => {
+  test(`${home}: the footer lists its two columns, the four colour modes and the legal line, and the three languages are in the header`, async ({ page }) => {
     await page.goto(home);
     const footer = page.locator('footer.luz-site-footer');
     await expect(footer.locator('.luz-site-footer__col')).toHaveCount(2);
     await expect(footer.locator('.luz-site-footer__col').nth(1).locator('a')).toHaveCount(4);
-    await expect(footer.locator('luz-color-mode input[name="luz-theme"]')).toHaveCount(3);
+    await expect(footer.locator('luz-theme-mode input[name="luz-theme-mode"]')).toHaveCount(4);
     expect((await footer.locator('p').allInnerTexts()).join(' ').length).toBeGreaterThan(40);
     // The languages are links of the header's switch (a popover nav, in the markup without a script)
     await expect(page.locator('.site-header luz-lang-switch a')).toHaveCount(3);

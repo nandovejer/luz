@@ -154,14 +154,16 @@ describe("the header's row", () => {
   it("holds no colour mode: the switcher is in the footer, not in the header", () => {
     for (const route of [...homes, ...DOCS_PAGES, "/404.html"]) {
       const header = headerOf(route);
-      expect(query(header, "luz-color-mode"), `${route}: luz-color-mode`).toBeNull();
-      expect(findAll(header, (n) => n.name === "input" && n.attrs.get("name") === "luz-theme"), `${route}: radios`).toEqual([]);
-      expect(findAll(header, (n) => hasClass(n, "luz-mode-cycle")), `${route}: cycle button`).toEqual([]);
+      expect(query(header, "luz-theme-mode"), `${route}: luz-theme-mode`).toBeNull();
+      expect(query(header, "luz-theme-time"), `${route}: luz-theme-time`).toBeNull();
+      expect(findAll(header, (n) => n.name === "input" && n.attrs.get("name") === "luz-theme-mode"), `${route}: radios`).toEqual([]);
+      expect(findAll(header, (n) => hasClass(n, "luz-theme-mode__button")), `${route}: round button`).toEqual([]);
     }
     for (const route of [...homes, ...DOCS_PAGES]) {
       const footer = query(treeOf(route), "footer");
-      expect(query(footer, "luz-color-mode"), `${route}: the footer holds <luz-color-mode>`).toBeTruthy();
-      expect(findAll(footer, (n) => n.name === "input" && n.attrs.get("name") === "luz-theme"), `${route}: radios for no-JS`).toHaveLength(3);
+      expect(query(footer, "luz-theme-time"), `${route}: the footer holds <luz-theme-time>`).toBeTruthy();
+      expect(query(footer, "luz-theme-mode"), `${route}: the footer holds <luz-theme-mode>`).toBeTruthy();
+      expect(findAll(footer, (n) => n.name === "input" && n.attrs.get("name") === "luz-theme-mode"), `${route}: radios for no-JS (Auto, Light, Dark, High contrast)`).toHaveLength(4);
     }
   });
 });

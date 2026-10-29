@@ -20,7 +20,6 @@ import { initTabs } from "/packages/core/dist/tabs.js";
 import { initModals } from "/packages/core/dist/modal.js";
 import { initPlayers } from "/packages/core/dist/player.js";
 import { initSidebar } from "/packages/catalog/dist/sidebar.js";
-import { initThemeCycle } from "/packages/core/dist/theme.js";
 // Defines <luz-search> at once, not on idle as catalog.js would: the header's
 // search button is on every page, and wires itself when it connects
 import "/packages/catalog/dist/search.js";
@@ -453,7 +452,7 @@ function drawCanvas() {
 function initCanvas() {
   if (!document.getElementById("d-canvas")) return;
   drawCanvas();
-  document.addEventListener("luz-color-mode:change", () => {
+  document.addEventListener("luz-theme-mode:change", () => {
     drawCanvas();
     const fading = document.documentElement.getAnimations?.() ?? [];
     if (fading.length) Promise.allSettled(fading.map((a) => a.finished)).then(drawCanvas);
@@ -464,7 +463,7 @@ function initCanvas() {
  * Re-anchor every specimen to the colour mode of <html> (plan §3.4): the
  * site's light changes the page, never what is documented. A specimen gets
  * <html>'s data-theme, so its tokens are Vejer's for that mode under any
- * light. It follows luz-color-mode:change and any other write to <html>'s
+ * light. It follows luz-theme-mode:change and any other write to <html>'s
  * data-theme. Nothing is served with it: without JavaScript a specimen
  * inherits the page, and the radios still re-scope it.
  */
@@ -478,7 +477,7 @@ function initSpecimenTheme() {
     }
   };
   apply();
-  document.addEventListener("luz-color-mode:change", apply);
+  document.addEventListener("luz-theme-mode:change", apply);
   new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
 }
 
@@ -510,11 +509,9 @@ function initSlotDemo() {
 
 /* ---- Boot -------------------------------------------------------------- */
 
-// Menu drawer and header height (shared with the home page), and the
-// colour-mode button: wired now, named once core's strings for the page's
-// language are registered (the markup names it in that language meanwhile)
+// Menu drawer and header height (shared with the home page); the colour-mode
+// button is the footer's <luz-theme-mode>, named by the markup
 initSiteChrome();
-initThemeCycle(document, true);
 // The specimens stay in Vejer whatever the light; the canvas demo paints with
 // the token values, so it repaints per mode and light
 initSpecimenTheme();
@@ -530,7 +527,6 @@ initAssets();
 // they wait for the language of the page to be loaded; the rest does not
 const language = loadStrings();
 language.then(() => {
-  initThemeCycle();
   initCopy();
   // highlightBlock() only: initHighlight() also injects a copy button into each
   // block, and core ships no position for it.

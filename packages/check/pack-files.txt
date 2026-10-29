@@ -4,6 +4,7 @@ dist/agents/luz-accessibility-reviewer.md
 dist/data/catalog/classes.json
 dist/data/catalog/custom-elements.json
 dist/data/core/classes.json
+dist/data/core/custom-elements.json
 dist/data/index.json
 dist/data/tokens/classes.json
 dist/data/tokens/tokens.css

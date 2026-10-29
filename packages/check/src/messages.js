@@ -82,10 +82,25 @@ export const MESSAGES = {
     template: ".{name} is now .{current}; replace the old name with the new one",
     sample: { name: "luz-landing-hero", current: "luz-hero" },
   },
+  "names/renamed:inline": {
+    severity: "block",
+    template: ".{name} is now the inline attribute of <luz-theme-mode>; remove the class",
+    sample: { name: "luz-mode-switcher--inline" },
+  },
+  "names/renamed:cycle": {
+    severity: "block",
+    template: ".{name} is gone, as the button is the default now; remove --cycle",
+    sample: { name: "luz-mode-switcher--cycle" },
+  },
   "names/renamed:element": {
     severity: "block",
     template: "<{tag}> is now <{current}>; replace the old tag with the new one",
     sample: { tag: "luz-mode", current: "luz-color-mode" },
+  },
+  "names/renamed:element-wrap": {
+    severity: "block",
+    template: "<{tag}> is now <{current}>, around <{inner}> with the radios in it; replace the tag and wrap them",
+    sample: { tag: "luz-color-mode", current: "luz-theme-time", inner: "luz-theme-mode" },
   },
   "names/renamed:file": {
     severity: "block",
@@ -225,6 +240,11 @@ export const MESSAGES = {
     template: "<{tag}> has .{name} and no href; add an href, or use <button> for an action",
     sample: { tag: "a", name: "luz-btn" },
   },
+  "a11y/slider-no-name": {
+    severity: "block",
+    template: "<{tag} variant=\"bar\"> has no data-luz-label-scrub, so its slider has no name; add one in the page's language",
+    sample: { tag: "luz-theme-time" },
+  },
   "attr/unknown-hook": {
     severity: "warn",
     template: "{attribute} is not a data-luz-* attribute that LUZ reads; remove it or check the spelling",
@@ -324,6 +344,7 @@ const DOCS = {
   "misuse/part-orphan": `${READ}#classes`,
   "a11y/role-on-generic": AI,
   "a11y/link-no-href": AI,
+  "a11y/slider-no-name": AI,
   "css/literal-colour": `${READ}#tokens`,
   "css/literal-size": `${READ}#tokens`,
   "css/knob-in-px": `${READ}#tokens`,

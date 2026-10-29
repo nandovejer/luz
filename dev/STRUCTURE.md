@@ -24,8 +24,7 @@ luz-design-system/
 │   │   └── assets/                    ← demo media and images; placeholders/ (docs-only, MIT LICENSE next to them)
 │   ├── site/                          ← @luz-ds/website (private): what the home page and the docs share; depends on no other app
 │   │   ├── header.css, header.js      ← the header of the docs and the home page (not published)
-│   │   ├── boot.js                    ← colour mode and light before the first paint (EX-009)
-│   │   ├── theme-light.css            ← the four lights (morning, sunset, dawn, dusk)
+│   │   ├── theme-light.css            ← the four moments (dawn, morning, sunset, dusk) over their base mode; the scripts for the head are the packages' (theme-boot.js, theme-time-boot.js)
 │   │   ├── _partials/                 ← header, site-links, footer (the generator reads this folder and apps/docs/_partials)
 │   │   └── assets/                    ← favicon set and LUZ mark
 │   ├── landing/                       ← home page
@@ -61,6 +60,7 @@ luz-design-system/
 │   │   │   ├── index.css              ← entry with ITCSS imports (source of truth for layer order)
 │   │   │   ├── luz.js                 ← entry: re-exports API + auto-init
 │   │   │   ├── theme.js               ← theme system (applyTheme, applyMode, …)
+│   │   │   ├── theme-mode.js          ← <luz-theme-mode> (lazy chunk); theme-boot.js is its script for the <head> (EX-009)
 │   │   │   ├── clipboard.js           ← copy-to-clipboard behaviors
 │   │   │   ├── modal.js               ← modals + focus trap
 │   │   │   ├── highlight.js           ← dependency-free syntax highlight
@@ -75,19 +75,19 @@ luz-design-system/
 │   │       ├── components/*.css       ← per-component files (standalone use)
 │   │       ├── luz.js                 ← bundled entry (rollup)
 │   │       ├── theme.js, clipboard.js, … ← individual ESM modules
-│   │       ├── midi.js                ← lazy chunk
+│   │       ├── theme-mode.js, midi.js, table-sort.js, i18n-es.js ← lazy chunks
 │   │       ├── fonts/custom-faces/    ← copied for the themes
 │   │       └── themes/*.css
 │   │
 │   ├── catalog/                   ← @luz-ds/catalog (publishable)
 │   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/{search,cookie-consent,color-mode,lang-switch,submenu,announcement,faq,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
+│   │   │   ├── components/{search,cookie-consent,theme-time,lang-switch,submenu,announcement,faq,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
 │   │   │   ├── components/<block>.css  ← the patterns of a kind of site (hero, site-header, page-rail, …), one file each, named by what the piece is
 │   │   │   ├── catalog.js                ← the presence loader
-│   │   │   └── search.js, cookie-consent.js, color-mode.js, timeline.js, sidebar.js  ← lazy chunks (the last two were core's)
+│   │   │   └── search.js, cookie-consent.js, theme-time.js, theme-time-bar.js, timeline.js, sidebar.js  ← lazy chunks; theme-time-boot.js is the script for the <head> (EX-012)
 │   │   └── dist/                      ← GENERATED (do not edit)
 │   │       ├── components/*.css (+ .min)  ← the only CSS: one file per component
-│   │       └── catalog.js, search.js, cookie-consent.js, color-mode.js, timeline.js, sidebar.js (+ .min)
+│   │       └── catalog.js, search.js, cookie-consent.js, theme-time.js, theme-time-bar.js, timeline.js, sidebar.js, theme-time-boot.js (+ .min)
 │   │
 │   └── check/                     ← @luz-ds/check (publishable tool: a bin, no CSS, no layer; own version, 0.x)
 │       ├── src/                       ← EDIT HERE (Node ESM: main.js is the bin's glue, cli.js is run(argv, env))

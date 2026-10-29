@@ -32,8 +32,8 @@ test.describe('LUZ Design System UI Smoke Tests', () => {
 
       expect(initialTheme).toBe('light');
 
-      // The footer's cycle button steps to the next mode
-      await page.click('footer .luz-mode-cycle');
+      // The footer's round button steps to the next mode: from light, dark
+      await page.click('footer .luz-theme-mode__button');
 
       // Verify theme changed
       const newTheme = await page.evaluate(() => document.documentElement.dataset.theme);
@@ -50,13 +50,14 @@ test.describe('LUZ Design System UI Smoke Tests', () => {
       expect(theme).toBe('dark');
     });
 
-    // luz.js (initThemeSystem) and its own storage key: no site page loads
-    // luz.js since the site reference moved into /docs/, so a fixture does
+    // <luz-theme-mode> and its own storage key
     test('should persist a theme chosen with the switcher', async ({ page }) => {
       await page.goto('/tests/fixtures/mode-switcher.html');
       await page.waitForLoadState('networkidle');
 
-      await page.click('.luz-mode-btn:has(input[value="dark"])');
+      // Auto, light, dark
+      await page.click('.luz-theme-mode__button');
+      await page.click('.luz-theme-mode__button');
 
       expect(await page.evaluate(() => localStorage.getItem('luz-theme'))).toBe('dark');
     });
@@ -65,10 +66,11 @@ test.describe('LUZ Design System UI Smoke Tests', () => {
       await page.goto('/tests/fixtures/mode-switcher.html');
       await page.waitForLoadState('networkidle');
 
-      await expect(page.locator('fieldset.luz-mode-switcher legend')).toHaveText('Color mode');
-      await page.click('.luz-mode-btn:has(input[value="dark"])');
-      await expect(page.locator('input[name="luz-theme"][value="dark"]')).toBeChecked();
-      await expect(page.locator('input[name="luz-theme"][value="light"]')).not.toBeChecked();
+      await expect(page.locator('.luz-theme-mode__button')).toHaveAccessibleName('Color mode: Auto');
+      await page.click('.luz-theme-mode__button');
+      await page.click('.luz-theme-mode__button');
+      await expect(page.locator('input[name="luz-theme-mode"][value="dark"]')).toBeChecked();
+      await expect(page.locator('input[name="luz-theme-mode"][value="light"]')).not.toBeChecked();
     });
   });
 

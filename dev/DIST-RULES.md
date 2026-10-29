@@ -67,7 +67,7 @@ builder, `scripts/build-package.js`, emits every `src/components/*.css` as
 `dist/components/<name>.css` (+ `.min`), its screen rules in `luz.catalog` and
 its top-level `@media print` blocks, with the comment before each, in
 `luz.print`; a `src/components/_*.css` fails the build. It syncs `catalog.js`,
-`search.js`, `cookie-consent.js`, `color-mode.js`, `timeline.js` and `sidebar.js` and bundles each into a `.min.js`. The navbar, the sidebar, the terminal and the timeline are catalog components, built like the others (`src/components/<name>.css`, in `luz.catalog`), and core's `luz.css` does not include them.
+`search.js`, `cookie-consent.js`, `theme-time.js`, `theme-time-bar.js`, `timeline.js`, `sidebar.js` and `theme-time-boot.js` and bundles each into a `.min.js`. The navbar, the sidebar, the terminal and the timeline are catalog components, built like the others (`src/components/<name>.css`, in `luz.catalog`), and core's `luz.css` does not include them.
 
 The patterns of a kind of site (landing, cms, app and docs) are catalog
 components, `src/components/<block>.css`, named by what the piece is: they build

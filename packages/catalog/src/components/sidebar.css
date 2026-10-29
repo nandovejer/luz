@@ -279,17 +279,15 @@
 
 /* On the sidebar surface. --luz-focus-ring would be black on a
    black sidebar in high contrast. */
-.luz-sidebar .luz-mode-switcher {
-  --luz-switcher-label: var(--luz-sidebar-label);
-  --luz-switcher-border: var(--luz-sidebar-border);
-  --luz-switcher-hover-bg: var(--luz-sidebar-hover);
-  --luz-switcher-hover-text: var(--luz-sidebar-text-hover);
-  --luz-switcher-focus: var(--luz-sidebar-text-hover);
-  --luz-switcher-on-bg: var(--luz-sidebar-active-bg);
-  --luz-switcher-on-text: var(--luz-sidebar-active-text);
-  --luz-switcher-cycle-bg: transparent;
-  --luz-switcher-cycle-border: var(--luz-sidebar-border);
-  --luz-switcher-cycle-text: var(--luz-sidebar-label);
+.luz-sidebar :where(luz-theme-mode) {
+  --luz-theme-mode-line: var(--luz-sidebar-border);
+  --luz-theme-mode-hover: var(--luz-sidebar-hover);
+  --luz-theme-mode-focus: var(--luz-sidebar-text-hover);
+  --luz-theme-mode-on: var(--luz-sidebar-active-bg);
+  --luz-theme-mode-on-text: var(--luz-sidebar-active-text);
+  --luz-theme-mode-bg: transparent;
+  --luz-theme-mode-edge: var(--luz-sidebar-border);
+  --luz-theme-mode-text: var(--luz-sidebar-label);
 }
 
 /* On paper the sidebar is navigation, which does not print */

@@ -2,23 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Mode switcher, cycle variant</title>
+  <title>Theme mode, the round button</title>
   <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
   <link rel="stylesheet" href="/packages/core/dist/luz.css">
 </head>
 <body>
   <main>
-    <h1>Mode switcher, cycle variant</h1>
-    <fieldset class="luz-mode-switcher luz-mode-switcher--cycle">
-      <legend class="luz-mode-switcher__label">Color mode</legend>
-      <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light" checked><svg class="luz-mode-btn__icon" data-icon="sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>Light</label>
-      <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" data-icon="moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>Dark</label>
-      <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" data-icon="contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>
-    </fieldset>
+    <h1>Theme mode, the round button</h1>
+    <luz-theme-mode id="mode">
+      <fieldset class="luz-theme-mode__group">
+        <legend class="luz-theme-mode__legend">Color mode</legend>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" data-icon="auto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10Z"/></svg>Auto</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" data-icon="sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>Light</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" data-icon="moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>Dark</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" data-icon="contrast" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>
+      </fieldset>
+    </luz-theme-mode>
   </main>
-  <script type="module">
-    import { initThemeCycle } from "/packages/core/dist/theme.js";
-    initThemeCycle();
+  <!-- The query string authors the page: ?inline keeps the button in the flow, before the module script reads the element -->
+  <script>
+    if (new URLSearchParams(location.search).has('inline')) document.getElementById('mode').setAttribute('inline', '');
   </script>
+  <script type="module" src="/packages/core/dist/luz.min.js"></script>
 </body>
 </html>

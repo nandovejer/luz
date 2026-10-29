@@ -9,8 +9,8 @@
  *
  * The boot has two waves. Wave 1 never waits and writes no string: theme,
  * scroll spy, copy handlers, dialogs, tabs, and the click of the color-mode
- * cycle button; `data-luz-js` is NOT set yet, so no control is revealed
- * unbound. Wave 2 (code block names and copy buttons, players, the cycle
+ * round button; `data-luz-js` is NOT set yet, so no control is revealed
+ * unbound. Wave 2 (code block names and copy buttons, players, the round
  * button's name, sortable tables) runs when the language arrives or after
  * 2 s, then sets `data-luz-js`. A late arrival registers the dictionary for
  * the strings written afterwards and moves no focus. The timeline is catalog's
@@ -38,7 +38,6 @@ const EN = {
   copyName: 'Copy code example 1',
   play: 'Play',
   mute: 'Mute',
-  cycle: 'Change color mode. Current: Light',
   previous: 'Previous',
   next: 'Next',
 };
@@ -48,7 +47,6 @@ const ES = {
   copyName: 'Copiar el ejemplo de código 1',
   play: 'Reproducir',
   mute: 'Silenciar',
-  cycle: 'Cambiar el modo de color. Actual: Light',
   previous: 'Anterior',
   next: 'Siguiente',
 };
@@ -58,7 +56,9 @@ const ES = {
  */
 const EN_CORE_ES_TIMELINE = { ...EN, previous: ES.previous, next: ES.next };
 /** What the markup says before any script has run. */
-const AUTHORED = { play: 'Authored play', mute: 'Authored mute', cycle: 'Authored mode name' };
+const AUTHORED = { play: 'Authored play', mute: 'Authored mute' };
+/** The round button of the color mode (core's chunk makes it): its name is the page's legend and label, no string of a language. */
+const CYCLE = '#modes .luz-theme-mode__button';
 
 /** Called first in each block that needs JavaScript: the no-JS block is the last one. */
 const needsJavaScript = () => test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'needs JavaScript');
@@ -82,7 +82,6 @@ const labels = (page) =>
       copyName: attr('#code-main .luz-code-block__copy', 'aria-label'),
       play: attr('#player-main .luz-player-playpause', 'aria-label'),
       mute: attr('#player-main .luz-player-mute', 'aria-label'),
-      cycle: attr('#cycle', 'aria-label'),
       previous: attr('#timeline .luz-timeline__arrow--previous', 'aria-label'),
       next: attr('#timeline .luz-timeline__arrow--next', 'aria-label'),
     };
@@ -120,7 +119,9 @@ async function theWholePageStillWorks(page) {
   await expect(page.locator('#panel-a')).toHaveAttribute('hidden', /.*/);
   await expect(page.locator('#panel-b')).not.toHaveAttribute('hidden', /.*/);
 
-  await page.locator('#cycle').click();
+  // Auto, then light, then dark: the button needs no string, so it works at once
+  await page.locator(CYCLE).click();
+  await page.locator(CYCLE).click();
   await expect(page.locator('input[value="dark"]')).toBeChecked();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
@@ -189,22 +190,13 @@ test.describe('a page in Spanish', () => {
     await expect(status).toHaveAttribute('lang', 'es');
   });
 
-  test('the color mode is announced in Spanish', async ({ page }) => {
+  test('the color mode writes no string of core: its button is named by the page, in Spanish, from the legend and the label', async ({ page }) => {
     await open(page);
     await done(page);
-    await page.locator('#cycle').click();
-    await expect(page.locator('.luz-mode-cycle__status')).toHaveText('Modo de color: Dark');
-    await expect(page.locator('#cycle')).toHaveAttribute('aria-label', 'Cambiar el modo de color. Actual: Dark');
-  });
-
-  test('with no color mode chosen the button is named Auto in Spanish', async ({ page }) => {
-    await open(page);
-    await done(page);
-    await page.locator('#modes').evaluate((group) => {
-      group.querySelectorAll('input').forEach((input) => { input.checked = false; });
-      group.dispatchEvent(new Event('change', { bubbles: true }));
-    });
-    await expect(page.locator('#cycle')).toHaveAttribute('aria-label', 'Cambiar el modo de color. Actual: Automático');
+    await expect(page.locator(CYCLE)).toHaveAttribute('aria-label', 'Modo de color: Automático');
+    await page.locator(CYCLE).click();
+    await expect(page.locator(CYCLE)).toHaveAttribute('aria-label', 'Modo de color: Claro');
+    await expect(page.locator('#modes .luz-theme-mode__status')).toHaveText('Modo de color: Claro');
   });
 });
 
@@ -314,7 +306,7 @@ test.describe('a language file that fails', () => {
       const response = await route.fetch();
       const origin = new URL(route.request().url()).origin;
       const allowed = [
-        ...['luz.js', 'table-sort.js', 'midi.js'].map((f) => `${origin}/packages/core/dist/${f}`),
+        ...['luz.js', 'table-sort.js', 'midi.js', 'theme-mode.js'].map((f) => `${origin}/packages/core/dist/${f}`),
         ...['catalog.js', 'timeline.js'].map((f) => `${origin}/packages/catalog/dist/${f}`),
       ];
       await route.fulfill({
@@ -344,7 +336,6 @@ test.describe('a language file that fails', () => {
     await expect(page.locator('#player-main .luz-player-controls')).toBeHidden();
     const pending = await labels(page);
     expect(pending.play).toBe(AUTHORED.play);
-    expect(pending.cycle).toBe(AUTHORED.cycle);
     expect(pending.code).toBeNull();
     // The timeline does not wait for core's language file: catalog's chunk carries Spanish, so it is built and named at once
     await expect(page.locator('#timeline .luz-timeline__arrow--previous')).toHaveAttribute('aria-label', ES.previous);
@@ -359,8 +350,7 @@ test.describe('a language file that fails', () => {
     expect(elapsed).toBeLessThan(4000);
     expect(await page.evaluate(() => document.documentElement.hasAttribute('data-luz-js'))).toBe(true);
     const after = await labels(page);
-    expect({ ...after, cycle: undefined }).toEqual({ ...EN_CORE_ES_TIMELINE, cycle: undefined });
-    expect(after.cycle).toMatch(/^Change color mode\. Current: /);
+    expect(after).toEqual(EN_CORE_ES_TIMELINE);
     expect(seen.errors).toEqual([]);
     await file.release();
   });
@@ -468,12 +458,15 @@ test.describe('the timeline, which is catalog\'s', () => {
 
 test.describe('the legacy apply buttons of a custom theme (a known issue, written in the accessibility statement)', () => {
   needsJavaScript();
-  test('are written by the first wave, so on a Spanish page they are English until the theme changes', async ({ page }) => {
+  test('are written when a theme is applied, in the language of the page at that moment', async ({ page }) => {
     await open(page);
     await done(page);
     const texts = () => page.evaluate(() => [document.querySelector('#apply-light').textContent, document.querySelector('#apply-dark').textContent]);
-    expect(await texts()).toEqual(['Applied', 'Apply theme']);
-    await page.locator('#cycle').click();
+    // The mode button no longer applies a theme (it writes data-mode and data-theme itself): only applyTheme() writes these texts
+    expect(await texts()).toEqual(['Apply', 'Apply']);
+    await page.evaluate(() => window.luz.applyTheme('light'));
+    expect(await texts()).toEqual(['Aplicado', 'Aplicar tema']);
+    await page.evaluate(() => window.luz.applyTheme('dark'));
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     expect(await texts()).toEqual(['Aplicar tema', 'Aplicado']);
   });
@@ -517,8 +510,8 @@ test.describe('the Spanish page without JavaScript', () => {
     await expect(page.locator('#player-main audio')).toHaveAttribute('controls', /.*/);
     await expect(page.locator('#player-main .luz-player-controls')).toBeHidden();
     await expect(page.locator('#player-main .luz-player-playpause')).toHaveAttribute('aria-label', AUTHORED.play);
-    await expect(page.locator('#cycle')).toBeHidden();
-    await expect(page.locator('#modes input[value="dark"]')).toBeVisible();
+    await expect(page.locator(CYCLE)).toHaveCount(0);
+    await expect(page.locator('#modes label', { hasText: 'Oscuro' })).toBeVisible();
     await expect(page.locator('#panel-a')).toBeVisible();
     await expect(page.locator('#panel-b')).toBeVisible();
   });

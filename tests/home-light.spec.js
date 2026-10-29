@@ -10,7 +10,7 @@
  * from globe-data.js once the globe is on screen and the browser is idle
  * (<home-globe land> says it is drawn). There is one look and no way to
  * choose another: no look buttons, no ?look=, nothing remembered. It does not own the colour mode:
- * <luz-color-mode> (the footer's) is the only writer of data-theme and data-light,
+ * <luz-theme-time> (the footer's) is the only writer of data-theme and data-moment,
  * and <home-light> asks it to preview an hour (the slider) or to return to now
  * (Live). What it writes on <html> are custom properties: --sun-alt, --sun-az,
  * --sun-x and --day-left. Its texts are data-luz-label-* of <body>, from the
@@ -90,7 +90,7 @@ const FRAMES_WITHIN = 15_000;
 const html = (page) =>
   page.evaluate(() => ({
     theme: document.documentElement.getAttribute('data-theme'),
-    light: document.documentElement.getAttribute('data-light'),
+    light: document.documentElement.getAttribute('data-moment'),
     sunX: document.documentElement.style.getPropertyValue('--sun-x').trim(),
     sunAlt: document.documentElement.style.getPropertyValue('--sun-alt').trim(),
   }));
@@ -100,18 +100,20 @@ const openBar = async (page) => {
   await expect(bar).toBeVisible();
 };
 const slider = (page) => page.locator('home-light input[type="range"]');
+/** Close the bar the way a visitor does with a pinned hour: the sentence (Escape on the slider lets the hour go instead; tests/home-light-bar.spec.js). */
+const closeBar = (page) => page.locator('home-light .home-light__line').click();
 /** Scrub the day to `hh:mm`. */
 const scrub = async (page, hhmm) => {
   const [h, m] = hhmm.split(':').map(Number);
   await openBar(page);
   await slider(page).fill(String(h * 60 + m));
 };
-/** Choose a mode in the footer's <luz-color-mode>, as a click on its radio does. */
-const chooseMode = (page, value) => page.locator(`luz-color-mode input[value="${value}"]`).evaluate((input) => /** @type {HTMLInputElement} */ (input).click());
-/** The hours <luz-color-mode>.preview() was given, in order. */
+/** Choose a mode in the footer's <luz-theme-time>, as a click on its radio does. */
+const chooseMode = (page, value) => page.locator(`luz-theme-mode input[value="${value}"]`).evaluate((input) => /** @type {HTMLInputElement} */ (input).click());
+/** The hours <luz-theme-time>.preview() was given, in order. */
 const spyPreview = (page) =>
   page.evaluate(() => {
-    const mode = /** @type {any} */ (document.querySelector('luz-color-mode'));
+    const mode = /** @type {any} */ (document.querySelector('luz-theme-time'));
     const calls = [];
     const original = mode.preview;
     mode.preview = function (x) {
@@ -225,9 +227,9 @@ test.describe('with JavaScript', () => {
     await expect.poll(async () => (await html(page)).sunX).toMatch(/^\d+(\.\d+)?%$/);
   });
 
-  /* -- The slider and Live call <luz-color-mode>.preview() --------------------- */
+  /* -- The slider and Live call <luz-theme-time>.preview() --------------------- */
 
-  test('in Auto the slider scrubs the page: data-light and data-theme follow the hour, and closing the bar keeps the hour it was let go at', async ({ page }) => {
+  test('in Auto the slider scrubs the page: data-moment and data-theme follow the hour, and closing the bar keeps the hour it was let go at', async ({ page }) => {
     await still(page);
     await open(page, '/', { time: '14:00' });
     await expect.poll(async () => (await html(page)).light).toBe('afternoon');
@@ -244,7 +246,7 @@ test.describe('with JavaScript', () => {
     await expect.poll(async () => (await html(page)).light).toBe('morning');
     expect((await html(page)).theme).toBe('light');
 
-    // <luz-color-mode> was asked, with an hour from 0 to 24
+    // <luz-theme-time> was asked, with an hour from 0 to 24
     const hours = await previews(page);
     expect(hours.length).toBeGreaterThan(0);
     expect(hours.every((h) => typeof h === 'number' && h >= 0 && h <= 24)).toBe(true);
@@ -252,7 +254,7 @@ test.describe('with JavaScript', () => {
 
     // No Back to now button: letting the slider go pinned its hour (2026-10-18), and closing the bar keeps it
     await expect(page.locator('home-light .home-light__live')).toHaveCount(0);
-    await page.keyboard.press('Escape');
+    await closeBar(page);
     await page.waitForTimeout(300);
     expect(await html(page)).toMatchObject({ light: 'morning', theme: 'light' });
   });
@@ -271,7 +273,7 @@ test.describe('with JavaScript', () => {
     await expect.poll(async () => (await html(page)).light).toBe('sunset');
     expect((await html(page)).theme).toBe('light');
 
-    await page.keyboard.press('Escape');
+    await closeBar(page);
     await page.waitForTimeout(300);
     expect(await html(page)).toMatchObject({ light: 'sunset', theme: 'light' });
   });
@@ -285,10 +287,11 @@ test.describe('with JavaScript', () => {
     await range.focus();
     await page.keyboard.press('End');
     await expect.poll(async () => (await html(page)).light).toBe('night');
-    await expect(range).toHaveAttribute('aria-valuetext', /23:59$/);
+    await expect(range).toHaveAttribute('aria-valuetext', /23:55$/);
     await page.keyboard.press('Home');
     await expect(range).toHaveAttribute('aria-valuetext', /00:00$/);
-    await page.keyboard.press('Escape');
+    // The slider's step is five minutes, so its end is 23:55; Escape on it lets a pinned hour go and keeps the bar open
+    await closeBar(page);
     await expect(page.locator('home-light .home-light__bar')).toBeHidden();
   });
 
@@ -305,68 +308,30 @@ test.describe('with JavaScript', () => {
     await expect(line).toHaveAttribute('aria-expanded', 'false');
   });
 
-  test('from 1024px with a pointer that hovers the bar is always open: after load, Escape and a click on the line, resting at 70% and whole under the pointer', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await open(page);
-    const line = page.locator('home-light .home-light__line');
-    const bar = page.locator('home-light .home-light__bar');
-    const opacity = () => bar.evaluate((el) => parseFloat(getComputedStyle(el).opacity));
-    await expect(bar).toBeVisible();
-    await expect(line).toHaveAttribute('aria-expanded', 'true');
-    // Nothing closes it here: not Escape, not the line, not a click elsewhere
-    await page.keyboard.press('Escape');
-    await line.click();
-    await page.mouse.click(5, 400);
-    await expect(bar).toBeVisible();
-    await expect(line).toHaveAttribute('aria-expanded', 'true');
-    // At rest it is at 70% (the least that keeps its text readable over the sky and the globe), and the pointer or the focus brings it up whole
-    await page.mouse.move(5, 5);
-    await expect.poll(opacity).toBe(0.7);
-    const box = /** @type {{ x: number, y: number, width: number, height: number }} */ (await bar.boundingBox());
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await expect.poll(opacity).toBe(1);
-    await page.mouse.move(5, 5);
-    await expect.poll(opacity).toBe(0.7);
-    await slider(page).focus();
-    await expect.poll(opacity).toBe(1);
-  });
+  // Legacy, not ported: the bar that was always open from 1024px (resting at 70%) and the one that closed when the window narrowed are gone.
+  // The owner's decision of 2026-10-29: closed at rest at every width, opened by the sentence; tests/home-light-bar.spec.js holds it.
 
-  test('narrowing the window below 1024px closes the bar, and widening it opens it again', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await open(page);
-    const bar = page.locator('home-light .home-light__bar');
-    await expect(bar).toBeVisible();
-    await page.setViewportSize(NARROW);
-    await expect(bar).toBeHidden();
-    await expect(page.locator('home-light .home-light__line')).toHaveAttribute('aria-expanded', 'false');
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await expect(bar).toBeVisible();
-  });
+  /* -- <luz-theme-time> is the only writer ------------------------------------- */
 
-  /* -- <luz-color-mode> is the only writer ------------------------------------- */
-
-  test('without <luz-color-mode> the visuals follow the slider and nothing writes data-theme or data-light', async ({ page }) => {
-    // The module that defines <luz-color-mode> is replaced by an empty one: the page has the element, nobody upgrades it
-    for (const file of ['color-mode.js', 'color-mode.min.js']) {
+  test('without the chunk of <luz-theme-time> the bar is empty, the visuals show now and nothing writes data-theme or data-moment', async ({ page }) => {
+    // The module that defines <luz-theme-time> is replaced by an empty one: the page has the element, nobody upgrades it
+    for (const file of ['theme-time.js', 'theme-time.min.js']) {
       await page.route(`**/packages/catalog/dist/${file}`, (route) => route.fulfill({ contentType: 'text/javascript', body: 'export {};' }));
     }
     await open(page, '/', { time: '14:00' });
-    expect(await page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(false);
+    expect(await page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(false);
     const before = await html(page);
-    // From here on every write of the two attributes is recorded; the boot script ran before
+    // From here on every write of the two attributes is recorded; the boot scripts ran before
     await page.evaluate(() => {
       const writes = [];
       /** @type {any} */ (window).__writes = writes;
       new MutationObserver((records) => {
         for (const r of records) writes.push({ name: r.attributeName, from: r.oldValue, to: document.documentElement.getAttribute(r.attributeName ?? '') });
-      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-light'], attributeOldValue: true });
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-moment'], attributeOldValue: true });
     });
-    await scrub(page, '03:00');
-    await expect.poll(async () => (await html(page)).sunAlt).not.toBe(before.sunAlt);
-    const night = await html(page);
-    await scrub(page, '13:00');
-    await expect.poll(async () => (await html(page)).sunAlt).not.toBe(night.sunAlt);
-    await page.keyboard.press('Escape');
+    // The bar has no slider without the element (the slider is the catalog's); the sentence still opens it
+    await openBar(page);
+    await expect(slider(page)).toHaveCount(0);
     await page.waitForTimeout(2500); // two ticks of the controller
     expect(await page.evaluate(() => /** @type {any} */ (window).__writes)).toEqual([]);
     expect(await html(page)).toMatchObject({ theme: before.theme, light: before.light });
@@ -591,7 +556,7 @@ test.describe('with JavaScript', () => {
     test(`axe: / in the ${light} light (${time}, ${mode}), the land drawn`, async ({ page, browserName }) => {
       test.skip(browserName !== 'chromium', 'Chromium only');
       await open(page, '/', { time });
-      await expect.poll(() => page.evaluate(() => document.documentElement.dataset.light)).toBe(light);
+      await expect.poll(() => page.evaluate(() => document.documentElement.dataset.moment)).toBe(light);
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
       await expect(page.locator('home-globe[land]')).toHaveCount(1, { timeout: 15000 });
       await page.waitForLoadState('networkidle');
@@ -602,7 +567,7 @@ test.describe('with JavaScript', () => {
     test(`axe: / with the bar open in the ${light} light (${time})`, async ({ page, browserName }) => {
       test.skip(browserName !== 'chromium', 'Chromium only');
       await open(page, '/', { time });
-      await expect.poll(() => page.evaluate(() => document.documentElement.dataset.light)).toBe(light);
+      await expect.poll(() => page.evaluate(() => document.documentElement.dataset.moment)).toBe(light);
       await page.waitForLoadState('networkidle');
       await openBar(page);
       await faded(page);
@@ -665,23 +630,19 @@ test.describe('review fixes', () => {
   /* -- 2. aria-valuetext --------------------------------------------------- */
 
   for (const [route, lang] of ROUTES) {
-    test(`${route}: the slider's aria-valuetext is the phase name and the hour, joined by the catalog's separator (${lang})`, async ({ page }) => {
+    test(`${route}: the slider's aria-valuetext is the moment's name and the hour, joined by ", " (${lang})`, async ({ page }) => {
       const cat = catalog(lang);
       expect(typeof cat['light.sep'], 'light.sep is a key of the catalog').toBe('string');
       await open(page, route, { time: '14:00' });
       await scrub(page, '09:30');
       await expect.poll(async () => (await html(page)).light).toBe('morning');
       // The hour is not shown in the bar any more (the owner's cut, 2026-10-17): the slider still says it
-      const prefix = `${cat['light.morning']}${cat['light.sep']}`;
+      // The bar is the catalog's: it joins the moment and the hour with ", " (the chunk carries no separator of a language)
+      const prefix = `${cat['light.morning']}, `;
       await expect.poll(async () => (await slider(page).getAttribute('aria-valuetext')) ?? '').toMatch(/[0-9\u0660-\u0669]{2}\D[0-9\u0660-\u0669]{2}$/);
       const expected = (await slider(page).getAttribute('aria-valuetext')) ?? '';
       expect(expected.startsWith(prefix), `"${expected}" starts with "${prefix}"`).toBe(true);
       if (lang === 'en') expect(expected).toBe('Morning light, 09:30');
-      if (lang === 'ar') {
-        const valuetext = (await slider(page).getAttribute('aria-valuetext')) ?? '';
-        expect(valuetext).toContain('\u060C');
-        expect(valuetext).not.toContain(', ');
-      }
     });
   }
 
@@ -693,20 +654,12 @@ test.describe('review fixes', () => {
     await expect(output(page)).toHaveCount(0);
     await slider(page).fill('600');
     const live = await page.locator('home-light').evaluate((el) => [...el.querySelectorAll('[role="status"], [role="alert"], [role="log"], [aria-live]:not([aria-live="off"])')].map((n) => `${n.getAttribute('role')} ${n.className}`));
-    expect(live).toEqual(['status home-light__saved']);
+    expect(live).toEqual(['status luz-theme-time__saved']);
   });
 
   /* -- 4. Forced colours ------------------------------------------------------- */
 
-  test('forced colors: the slider track has a background colour of its own', async ({ page }) => {
-    await page.emulateMedia({ forcedColors: 'active' });
-    await open(page, '/', { time: '14:00' });
-    await openBar(page);
-    await faded(page);
-    const clear = (colour) => /^(transparent|rgba\(.*,\s*0\))$/.test(colour);
-    const track = await slider(page).evaluate((input) => getComputedStyle(input, '::-webkit-slider-runnable-track').backgroundColor);
-    expect(clear(track), `the track is drawn in a colour of the system, not "${track}"`).toBe(false);
-  });
+  // Legacy, not ported: the forced-colours track of the old bar (tests/theme-time-bar.spec.js: the day is CanvasText with an outline)
 
   /* -- 5. The globe is an image, not a control ---------------------------------- */
 
@@ -803,32 +756,7 @@ test.describe('review fixes', () => {
     await expect(line(page)).toHaveAttribute('aria-expanded', 'false');
   });
 
-  /* -- 6c. The slider's thumb is a sun by day and a moon by night -------------- */
-
-  test("the slider's thumb is a sun while the scrubbed hour is day, a moon while it is night", async ({ page }) => {
-    await open(page, '/', { time: '14:00' });
-    await openBar(page);
-    await scrub(page, '12:00');
-    await expect(page.locator('home-light')).toHaveAttribute('data-sky', 'day');
-    await scrub(page, '23:30');
-    await expect(page.locator('home-light')).toHaveAttribute('data-sky', 'night');
-    // Chromium's getComputedStyle does not reach the thumb: read the rules that draw it
-    const rules = await page.evaluate(() => {
-      const all = [...document.styleSheets].flatMap((sheet) => {
-        try {
-          return [...sheet.cssRules];
-        } catch {
-          return [];
-        }
-      });
-      const thumb = all.filter((r) => r.selectorText?.includes('::-webkit-slider-thumb') && r.selectorText.includes('home-light'));
-      const night = thumb.find((r) => r.selectorText.includes('[data-sky="night"]'));
-      const day = thumb.find((r) => !r.selectorText.includes('[data-sky'));
-      return { day: day?.style.background || day?.style.backgroundColor || '', night: night?.style.background || night?.style.backgroundColor || '' };
-    });
-    expect(rules.night, 'a rule draws the thumb at night').not.toBe('');
-    expect(rules.night, 'the night thumb is not the day thumb').not.toBe(rules.day);
-  });
+  // Legacy, not ported: the sun and moon thumb (data-sky) left with the old bar; the thumb of the bar is catalog's (tests/theme-time-bar.spec.js)
 
   /* -- 6d. The phrase sits 10 px lower than the light's box ---------------------- */
 
@@ -1128,7 +1056,7 @@ test.describe('review fixes', () => {
         await page.setViewportSize({ width, height: 800 });
         await open(page, '/', { time });
         await expect(page.locator('home-globe[land]')).toHaveCount(1, { timeout: 15000 });
-        await expect.poll(() => page.evaluate(() => document.documentElement.dataset.light)).toBe(light);
+        await expect.poll(() => page.evaluate(() => document.documentElement.dataset.moment)).toBe(light);
         expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
         await page.waitForLoadState('networkidle');
         await faded(page);
@@ -1243,115 +1171,11 @@ test.describe('the page at rest costs little', () => {
   });
 });
 
-/* ---- The bar at rest keeps its text readable ------------------------------------- */
+/* ---- The bar at rest keeps its text readable: legacy, not ported ------------------- */
 
-/**
- * From 1024px with a pointer that hovers, the bar rests faint over the sky and
- * the globe. Its hour is large text (3:1) and its place is small (4.5:1), and
- * the ink is blended into what is behind it by the bar's opacity. Measured on
- * the pixels actually drawn: the text is made transparent, the rectangle of the
- * text is photographed, and each pixel is measured against the ink as the
- * opacity lets it through. The 5th percentile counts, not the worst pixel: a
- * few stars or a bright coast do not decide it. The globe is held still
- * (reduced motion) so the picture is the same on every run.
- */
-test.describe('the bar at rest: its hour and its place have their contrast over the sky and the globe', () => {
-  test.beforeEach(() => {
-    test.skip(jsOff(), 'needs JavaScript');
-  });
-  test.use({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
-
-  /**
-   * The ratios, per pixel behind the text of `selector`, sorted ascending, with the bar's opacity blended into the ink.
-   * @param {import('@playwright/test').Page} page
-   * @param {string} selector
-   */
-  async function behindTheText(page, selector) {
-    const target = page.locator(selector).first();
-    await target.scrollIntoViewIfNeeded();
-    const prepared = await target.evaluate(async (el) => {
-      const canvas = document.createElement('canvas');
-      canvas.width = canvas.height = 1;
-      const context = canvas.getContext('2d', { willReadFrequently: true });
-      context.fillStyle = getComputedStyle(el).color;
-      context.fillRect(0, 0, 1, 1);
-      const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
-      const opacity = parseFloat(getComputedStyle(el.closest('.home-light__bar')).opacity);
-      const style = document.createElement('style');
-      style.id = 'probe-hide-text';
-      style.textContent = 'home-light .home-light__bar, home-light .home-light__bar * { transition: none !important; } home-light .home-light__time, home-light .home-light__where { color: transparent !important; text-shadow: none !important; }';
-      document.head.append(style);
-      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      const range = document.createRange();
-      range.selectNodeContents(el);
-      const box = range.getBoundingClientRect();
-      return { ink: [r, g, b], alpha: (a / 255) * opacity, clip: { x: Math.max(0, Math.floor(box.left)), y: Math.max(0, Math.floor(box.top)), width: Math.ceil(box.width) + 1, height: Math.ceil(box.height) + 1 } };
-    });
-    let png;
-    try {
-      png = await page.screenshot({ clip: prepared.clip, animations: 'disabled' });
-    } finally {
-      await page.evaluate(() => document.getElementById('probe-hide-text')?.remove());
-    }
-    const reader = await page.context().newPage();
-    try {
-      await reader.goto('about:blank');
-      return await reader.evaluate(
-        async ({ data, ink, alpha }) => {
-          const image = new Image();
-          image.src = `data:image/png;base64,${data}`;
-          await image.decode();
-          const canvas = document.createElement('canvas');
-          canvas.width = image.width;
-          canvas.height = image.height;
-          const context = canvas.getContext('2d', { willReadFrequently: true });
-          context.drawImage(image, 0, 0);
-          const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
-          const lum = (r, g, b) => {
-            const c = (v) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
-            return 0.2126 * c(r) + 0.7152 * c(g) + 0.0722 * c(b);
-          };
-          const ratios = [];
-          for (let i = 0; i < pixels.length; i += 4) {
-            const back = [pixels[i], pixels[i + 1], pixels[i + 2]];
-            const [r, g, b] = back.map((v, k) => ink[k] * alpha + v * (1 - alpha));
-            const a = lum(r, g, b);
-            const bg = lum(back[0], back[1], back[2]);
-            ratios.push((Math.max(a, bg) + 0.05) / (Math.min(a, bg) + 0.05));
-          }
-          return ratios.sort((x, y) => x - y);
-        },
-        { data: png.toString('base64'), ink: prepared.ink, alpha: prepared.alpha },
-      );
-    } finally {
-      await reader.close();
-    }
-  }
-
-  for (const [light, time] of LIGHTS) {
-    test(`${light} light: at rest the hour has 3:1 and the place 4.5:1 over what is behind them (5th percentile)`, async ({ page }) => {
-      await open(page, '/', { time });
-      await expect(page.locator('home-globe[land]')).toHaveCount(1, { timeout: 15000 });
-      await expect.poll(() => page.evaluate(() => document.documentElement.dataset.light)).toBe(light);
-      await page.waitForLoadState('networkidle');
-      await faded(page);
-      const bar = page.locator('home-light .home-light__bar');
-      await expect(bar).toBeVisible();
-      await page.mouse.move(5, 5);
-      // At rest: the opacity has come down from 1 and its transition has ended
-      await expect.poll(() => bar.evaluate((el) => parseFloat(getComputedStyle(el).opacity))).toBeLessThan(1);
-      await expect.poll(() => bar.evaluate((el) => el.getAnimations().filter((a) => a.playState === 'running').length)).toBe(0);
-      await page.waitForTimeout(500); // the glow of the visual settles
-      const p5 = (ratios) => ratios[Math.floor(ratios.length * 0.05)];
-      const hour = await behindTheText(page, 'home-light .home-light__time');
-      const place = await behindTheText(page, 'home-light .home-light__where');
-      expect(hour.length, 'pixels behind the hour').toBeGreaterThan(50);
-      expect(place.length, 'pixels behind the place').toBeGreaterThan(50);
-      expect(p5(hour), `the hour (large text) over its background, 5th percentile: ${p5(hour).toFixed(2)}:1`).toBeGreaterThanOrEqual(3);
-      expect(p5(place), `the place over its background, 5th percentile: ${p5(place).toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
-    });
-  }
-});
+// The old bar rested faint at 70% from 1024px with an hour and a place over the sky, and this block measured their contrast
+// on the drawn pixels. The bar is closed at rest and is the slider alone now (2026-10-29): there is no text at rest to measure.
+// The track against the page is tests/theme-time-bar.spec.js; the closed bar is tests/home-light-bar.spec.js.
 
 /* ---- No Pause motion: only prefers-reduced-motion stops the light ---------------- */
 
@@ -1436,7 +1260,7 @@ test.describe('no Pause motion button', () => {
     await open(page);
     await page.waitForLoadState('networkidle');
     await scrub(page, '10:00');
-    await page.keyboard.press('Escape');
+    await closeBar(page);
     await expect(page.locator('home-light .home-light__bar')).toBeHidden();
     expect(await page.evaluate(() => Object.keys(localStorage).filter((k) => /home-light/.test(k)))).toEqual([]);
   });

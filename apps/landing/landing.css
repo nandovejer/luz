@@ -74,7 +74,7 @@
    system's reduced motion). The docs keep their stars still
    -------------------------------------------------------------------------- */
 
-:root:is([data-light="dawn"], [data-light="dusk"], [data-light="night"]):not([data-theme="high-contrast"]) .luz-main {
+:root:is([data-moment="dawn"], [data-moment="dusk"], [data-moment="night"]):not([data-theme="high-contrast"]) .luz-main {
   --site-sky-twinkle-near: landing-twinkle calc(var(--luz-duration-lazy) * 5) ease-in-out infinite alternate;
   --site-sky-twinkle-far: landing-twinkle calc(var(--luz-duration-lazy) * 7) ease-in-out calc(var(--luz-duration-lazy) * -3) infinite alternate;
 }
@@ -1847,7 +1847,7 @@ home-light:defined ~ .landing-light__nojs {
 
 /* The licence line: small, across the whole width. With scripting on, the
    mode switcher is a round button fixed at the window's bottom end
-   (core's .luz-mode-switcher--cycle: --luz-control-lg wide, --luz-space-md from the edge): the
+   (core's .luz-theme-mode__button: --luz-control-lg wide, --luz-space-md from the edge): the
    line keeps that room free at its end, so its last words never sit under
    the button when the page is scrolled to the bottom */
 .landing-legal {

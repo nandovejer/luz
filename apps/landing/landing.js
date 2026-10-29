@@ -7,7 +7,8 @@
  *
  * luz.js is deliberately not loaded: its auto-init applies the stored or
  * default custom theme to <html>. The mode and the light of the hour belong
- * to the footer's <luz-color-mode> (defined by apps/site/header.js).
+ * to the footer's <luz-theme-time> and <luz-theme-mode> (defined by
+ * apps/site/header.js).
  */
 
 import { initCopyButtons } from "/packages/core/dist/clipboard.js";
@@ -16,6 +17,9 @@ import { initTabs } from "/packages/core/dist/tabs.js";
 // Defines <luz-search> at once, not on idle as catalog.js would: the header's
 // search button wires itself when it connects
 import "/packages/catalog/dist/search.js";
+// The slider of the day (<luz-theme-time variant="bar">) is built by <home-light> after the
+// page is scanned, so its chunk is imported here
+import { initThemeTimeBar } from "/packages/catalog/dist/theme-time-bar.js";
 import { initSiteHeader } from "/apps/site/header.js";
 // The prompts of the fourth level: each link to a prompt's text becomes the
 // button that opens it in a dialog
@@ -23,6 +27,9 @@ import { initPromptDialogs } from "/apps/site/prompt-dialog.js";
 // <home-light>, the visitor's sky under the hero: defines the element, which
 // loads its one visual
 import "/apps/landing/light/light.js";
+
+// <home-light> has built its bar by now: give it its slider
+initThemeTimeBar();
 
 /* ---- Copy buttons ----------------------------------------------------- */
 
@@ -41,14 +48,15 @@ function initCopy() {
 
 /**
  * The buttons of "Modes" check the footer's radio of their mode, as a click
- * would: <luz-color-mode> applies it, remembers it and moves its cycle button, and
- * tells the page with luz-color-mode:change, which presses the box of the mode in
- * use. While the page takes the mode, its colours change at the pace of a
- * click (data-mode-preview, landing.css) and the box's icon moves
- * (is-loading). Without <luz-color-mode> (no site module) the buttons stay hidden.
+ * would: <luz-theme-mode> applies it, remembers it and moves its button, and
+ * tells the page with luz-theme-mode:change, which presses the box of the mode
+ * in use (none in Auto). While the page takes the mode, its colours change at
+ * the pace of a click (data-mode-preview, landing.css) and the box's icon
+ * moves (is-loading). Without <luz-theme-mode> (no site module) the buttons
+ * stay hidden.
  */
 function initModes() {
-  const modes = document.querySelector("luz-color-mode");
+  const modes = document.querySelector("luz-theme-mode");
   const buttons = [...document.querySelectorAll("[data-apply-mode]")];
   if (!modes || !buttons.length) return;
   const root = document.documentElement;
@@ -64,14 +72,14 @@ function initModes() {
       // A reflow, so the icon moves again on a second click
       void button.offsetWidth;
       button.classList.add("is-loading");
-      modes.querySelector(`input[name="luz-theme"][value="${button.dataset.applyMode}"]`)?.click();
+      modes.querySelector(`input[name="luz-theme-mode"][value="${button.dataset.applyMode}"]`)?.click();
       settle = setTimeout(() => delete root.dataset.modePreview, 500);
     });
     button.addEventListener("animationend", () => button.classList.remove("is-loading"));
   }
-  document.addEventListener("luz-color-mode:change", (event) => press(event.detail?.mode));
-  press(modes.querySelector('input[name="luz-theme"]:checked')?.value ?? null);
-  // What needs this script and <luz-color-mode>: shown only now
+  document.addEventListener("luz-theme-mode:change", (event) => press(event.detail?.auto ? null : event.detail?.mode));
+  press(modes.choice && modes.choice !== "auto" ? modes.choice : null);
+  // What needs this script and <luz-theme-mode>: shown only now
   for (const el of document.querySelectorAll("[data-needs-js]")) el.hidden = false;
 }
 

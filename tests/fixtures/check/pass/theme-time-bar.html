@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The time of day: core's button, the moments and the slider</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.0/dist/luz-tokens.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/theme-time.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/theme-boot.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/theme-time-boot.min.js" data-moments="morning@07:30=light afternoon@12:00=light* dusk@20:30=dark night@22:30=dark*"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.min.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/catalog.min.js"></script>
+</head>
+<body data-luz-label-scrub="Hour of the day" data-luz-label-saved="Saved">
+  <main class="o-container o-stack">
+    <h1>Acme Summit 2027</h1>
+    <p>The slider is named by the page: here by the body, in the page's language.</p>
+    <luz-theme-time variant="bar" show="time place saved" place="Madrid" latitude="40.42" longitude="-3.7"></luz-theme-time>
+    <section data-luz-label-scrub="Hour of the day">
+      <luz-theme-time variant="bar"></luz-theme-time>
+    </section>
+    <luz-theme-time variant="bar" data-luz-label-scrub="Hora del día" data-luz-label-saved="Guardado"></luz-theme-time>
+  </main>
+  <footer class="o-container">
+    <luz-theme-time>
+      <luz-theme-mode inline>
+        <fieldset class="luz-theme-mode__group">
+          <legend class="luz-theme-mode__legend">Color mode</legend>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked>Auto</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light">Light</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark">Dark</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast">High contrast</label>
+        </fieldset>
+      </luz-theme-mode>
+      <fieldset class="luz-theme-time__moments">
+        <legend class="luz-theme-time__legend">Time of day</legend>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="morning" data-from="07:30" data-theme="light">Morning</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="afternoon" data-from="12:00" data-theme="light" data-default>Afternoon</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="dusk" data-from="20:30" data-theme="dark">Dusk</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="night" data-from="22:30" data-theme="dark" data-default>Night</label>
+      </fieldset>
+    </luz-theme-time>
+    <!-- A bar built by a script has no tag in this markup, so there is nothing to name: the script gives it data-luz-label-scrub -->
+    <script type="module">
+      const bar = document.createElement("luz-theme-time");
+      bar.setAttribute("variant", "bar");
+      bar.setAttribute("data-luz-label-scrub", "Hour of the day");
+      document.querySelector("main").append(bar);
+    </script>
+  </footer>
+</body>
+</html>

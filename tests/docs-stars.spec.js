@@ -546,7 +546,7 @@ test.describe('the lights of the hour (no stored choice)', () => {
     test(`${light} (${mode}): ${mode === 'dark' ? 'the band of stars is drawn' : 'no band'}`, async ({ page }) => {
       await atTime(page, hhmm);
       await page.goto('/docs/');
-      await expect(page.locator('html')).toHaveAttribute('data-light', light);
+      await expect(page.locator('html')).toHaveAttribute('data-moment', light);
       await expect(page.locator('html')).toHaveAttribute('data-theme', mode);
       await faded(page);
       const band = await findBand(page);

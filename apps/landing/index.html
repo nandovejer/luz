@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/search.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/lang-switch.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/theme-time.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/faq.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/hero.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/main.css">
@@ -24,8 +24,9 @@
   <link rel="stylesheet" href="/apps/site/theme-light.css">
   <link rel="stylesheet" href="/apps/site/sky.css">
   <link rel="stylesheet" href="/apps/site/prompt-dialog.css">
-  <!-- Before the first paint: the visitor's color mode and the light of the hour (EX-009) -->
-  <script src="/apps/site/boot.js"></script>
+  <!-- Before the first paint: the visitor's color mode (core) and the moment of the day (catalog), EX-009 -->
+  <script src="/packages/core/dist/theme-boot.min.js"></script>
+  <script src="/packages/catalog/dist/theme-time-boot.min.js" data-moments="dawn@05:00=dark morning@07:30=light afternoon@12:00=light* sunset@17:30=light dusk@20:30=dark night@22:30=dark*"></script>
   <link rel="stylesheet" href="/apps/landing/landing.css">
   <link rel="stylesheet" href="/apps/landing/light/light.css">
 </head>
@@ -487,8 +488,8 @@ a {
 
       <!-- One box per mode (data-theme), each telling its own mode. The box is a picture of the
            mode: inert and hidden from the accessibility tree. Each box has a button (shown with
-           JavaScript, landing.js) that checks the footer's radio of its mode: <luz-color-mode> applies
-           it, remembers it and moves the cycle button -->
+           JavaScript, landing.js) that checks the footer's radio of its mode: <luz-theme-mode> applies
+           it, remembers it and moves its button -->
       <div class="landing-modes__figure">
         <div class="landing-cuts">
           <div class="landing-cut landing-cut--1" data-theme="light">
@@ -743,16 +744,26 @@ a {
       </nav>
     </div>
     <div class="o-stack landing-foot">
-      <luz-color-mode class="site-modes" remember by="clock">
-        <fieldset class="luz-mode-switcher luz-mode-switcher--cycle site-modes">
-          <legend class="luz-mode-switcher__label">{{t:footer.mode}}</legend>
-          <button class="luz-mode-cycle" type="button" aria-label="{{t:footer.mode-change}}"><svg class="luz-mode-btn__icon" data-mode-icon="auto" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="light" aria-hidden="true"><use href="#i10"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="dark" aria-hidden="true"><use href="#i11"/></svg><svg class="luz-mode-btn__icon" data-mode-icon="high-contrast" aria-hidden="true"><use href="#i12"/></svg></button>
-          <span class="luz-mode-cycle__status" role="status"></span>
-          <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light"><svg class="luz-mode-btn__icon" aria-hidden="true"><use href="#i10"/></svg>{{t:footer.light}}</label>
-          <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark"><svg class="luz-mode-btn__icon" aria-hidden="true"><use href="#i11"/></svg>{{t:footer.dark}}</label>
-          <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast"><svg class="luz-mode-btn__icon" aria-hidden="true"><use href="#i12"/></svg>{{t:footer.contrast}}</label>
+      <luz-theme-time class="site-modes">
+        <luz-theme-mode>
+          <fieldset class="luz-theme-mode__group site-modes">
+            <legend class="luz-theme-mode__legend">{{t:footer.mode}}</legend>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>{{t:footer.auto}}</label>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" aria-hidden="true"><use href="#i10"/></svg>{{t:footer.light}}</label>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" aria-hidden="true"><use href="#i11"/></svg>{{t:footer.dark}}</label>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" aria-hidden="true"><use href="#i12"/></svg>{{t:footer.contrast}}</label>
+          </fieldset>
+        </luz-theme-mode>
+        <fieldset class="luz-theme-time__moments">
+          <legend class="luz-theme-time__legend">{{t:light.title}}</legend>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="dawn" data-from="05:00" data-theme="dark">{{t:light.dawn}}</label>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="morning" data-from="07:30" data-theme="light">{{t:light.morning}}</label>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="afternoon" data-from="12:00" data-theme="light" data-default>{{t:light.afternoon}}</label>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="sunset" data-from="17:30" data-theme="light">{{t:light.sunset}}</label>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="dusk" data-from="20:30" data-theme="dark">{{t:light.dusk}}</label>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="night" data-from="22:30" data-theme="dark" data-default>{{t:light.night}}</label>
         </fieldset>
-      </luz-color-mode>
+      </luz-theme-time>
       <p class="u-text-muted landing-legal">{{html:footer.legal}}</p>
     </div>
   </footer>

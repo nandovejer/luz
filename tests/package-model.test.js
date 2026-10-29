@@ -27,10 +27,10 @@ import { isNpmOrReleased } from "./helpers/versions.js";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const KINDS = ["landing", "cms", "app", "docs"];
 /** The tags catalog defines or styles for any site (the four components of F7 are in tests/helpers/catalog-names.js). */
-const SITE_TAGS = ["search", "cookie-consent", "lang-switch", "submenu", "announcement", "faq"];
-// <luz-color-mode> is not in SITE_TAGS: core's theme.js has a storage key spelled "luz-mode" (the mode of a custom
-// theme), which the layering check would take for the old tag; the new name has no such twin
-const SITE_COMPONENTS = [...SITE_TAGS, "color-mode"];
+const SITE_TAGS = ["search", "cookie-consent", "lang-switch", "submenu", "announcement", "faq", "theme-time"];
+// <luz-theme-time> replaced <luz-color-mode> (2026-10-29): core's <luz-theme-mode> is its twin in name only, and core names
+// the catalog's element in no code (its page and its comments may say that the catalog extends it)
+const SITE_COMPONENTS = [...SITE_TAGS];
 
 /** Source files (.css and .js) of packages/<name>/src, with their text. */
 function sources(name, extensions = [".css", ".js"]) {
@@ -72,7 +72,7 @@ describe("layering: tokens < core < catalog", () => {
     expect(offenders(["tokens", "core"], tags)).toEqual([]);
   });
 
-  it("the elements of catalog (search, cookie-consent, color-mode, lang-switch, submenu, announcement, faq) name no pattern of a kind of site, nor a name of before F8", () => {
+  it("the elements of catalog (search, cookie-consent, theme-time, lang-switch, submenu, announcement, faq) name no pattern of a kind of site, nor a name of before F8", () => {
     expect(offenders(["catalog"], OLD_NAME, (path) => !isPatternFile(path) && /\/components\//.test(path))).toEqual([]);
   });
 
@@ -210,7 +210,9 @@ describe("catalog after F8: seven `<luz-*>` elements, the 20 patterns of the fou
       ".": "./dist/catalog.js",
       "./search": "./dist/search.js",
       "./cookie-consent": "./dist/cookie-consent.js",
-      "./color-mode": "./dist/color-mode.js",
+      "./theme-time": "./dist/theme-time.js",
+      "./theme-time-bar": "./dist/theme-time-bar.js",
+      "./theme-time-boot": "./dist/theme-time-boot.js",
       "./sidebar": "./dist/sidebar.js",
       "./timeline": "./dist/timeline.js",
       "./classes.json": "./dist/classes.json",
@@ -222,7 +224,7 @@ describe("catalog after F8: seven `<luz-*>` elements, the 20 patterns of the fou
 
   it("`sideEffects` is the component stylesheets and the files that define or load an element", () => {
     expect([...manifest.sideEffects].sort()).toEqual(
-      ["./dist/components/*.css", "./dist/catalog.js", "./dist/catalog.min.js", "./dist/search.js", "./dist/search.min.js", "./dist/cookie-consent.js", "./dist/cookie-consent.min.js", "./dist/color-mode.js", "./dist/color-mode.min.js", "./dist/timeline.js", "./dist/timeline.min.js"].sort(),
+      ["./dist/components/*.css", "./dist/catalog.js", "./dist/catalog.min.js", "./dist/search.js", "./dist/search.min.js", "./dist/cookie-consent.js", "./dist/cookie-consent.min.js", "./dist/theme-time.js", "./dist/theme-time.min.js", "./dist/theme-time-bar.js", "./dist/theme-time-bar.min.js", "./dist/timeline.js", "./dist/timeline.min.js"].sort(),
     );
   });
 

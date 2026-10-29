@@ -2,14 +2,17 @@
  * apps/site/theme-light.css: the four lights of the site (F2 of
  * .claude/plans/luz-home-docs-identity.md, sections 3.3 and 3.4).
  *
+ * The page's moment is data-moment on <html> (catalog's <luz-theme-time> and its
+ * boot script write it; it was data-light).
+ *
  * Afternoon and night are Vejer itself (light and dark): they have no block.
  * Only four lights override tokens, each over the mode it belongs to, and
  * the high contrast mode is never overridden:
  *
- *   :root[data-theme="light"][data-light="morning"]   over light
- *   :root[data-theme="light"][data-light="sunset"]    over light
- *   :root[data-theme="dark"][data-light="dawn"]       over dark
- *   :root[data-theme="dark"][data-light="dusk"]       over dark
+ *   :root[data-theme="light"][data-moment="morning"]   over light
+ *   :root[data-theme="light"][data-moment="sunset"]    over light
+ *   :root[data-theme="dark"][data-moment="dawn"]       over dark
+ *   :root[data-theme="dark"][data-moment="dusk"]       over dark
  *
  * Each block is complete, like a theme: the colour tokens of
  * packages/core/src/themes/_template.css and color-scheme, in literal
@@ -81,10 +84,10 @@ const properties = () => items().filter((x) => x.at === "property");
 const motion = () => items().filter((x) => x.at === "media");
 
 const LIGHTS = [
-  ["morning", "light", ':root[data-theme="light"][data-light="morning"]'],
-  ["sunset", "light", ':root[data-theme="light"][data-light="sunset"]'],
-  ["dawn", "dark", ':root[data-theme="dark"][data-light="dawn"]'],
-  ["dusk", "dark", ':root[data-theme="dark"][data-light="dusk"]'],
+  ["morning", "light", ':root[data-theme="light"][data-moment="morning"]'],
+  ["sunset", "light", ':root[data-theme="light"][data-moment="sunset"]'],
+  ["dawn", "dark", ':root[data-theme="dark"][data-moment="dawn"]'],
+  ["dusk", "dark", ':root[data-theme="dark"][data-moment="dusk"]'],
 ];
 const block = (selector) => rules().find((r) => r.selector === selector);
 
@@ -119,14 +122,29 @@ for (const [, selector, body] of strip(read("packages/tokens/src/semantic.css"))
 /* ---- The four blocks ------------------------------------------------------ */
 
 describe("theme-light.css has the four lights and nothing else", () => {
-  it("has exactly the four blocks, over light and over dark", () => {
-    expect(rules().map((r) => r.selector).sort()).toEqual(LIGHTS.map(([, , selector]) => selector).sort());
+  it("has exactly the four blocks of the lights, over light and over dark, and the two blocks of the sky of the track", () => {
+    const lights = LIGHTS.map(([, , selector]) => selector);
+    expect(rules().map((r) => r.selector).filter((sel) => lights.includes(sel)).sort()).toEqual([...lights].sort());
+    expect(rules().map((r) => r.selector).filter((sel) => !lights.includes(sel)).sort()).toEqual([":root", ':root[data-theme="high-contrast"]'].sort());
   });
 
-  it("overrides neither the high contrast mode nor afternoon and night, which are Vejer itself", () => {
+  it("the sky blocks set only --luz-theme-time-sky-<moment> properties, one for each of the six moments, and nothing that paints the page", () => {
+    const moments = ["night", "dawn", "morning", "afternoon", "sunset", "dusk"].map((m) => `--luz-theme-time-sky-${m}`).sort();
+    for (const selector of [":root", ':root[data-theme="high-contrast"]']) {
+      const found = block(selector);
+      expect(found, `a block for ${selector}`).toBeTruthy();
+      expect(Object.keys(found.props).sort(), selector).toEqual(moments);
+    }
+  });
+
+  it("overrides neither the high contrast mode nor afternoon and night, which are Vejer itself: in high contrast the track is one solid fill of the text colour, and no colour token changes", () => {
     const css = strip((exists(), read(FILE)));
-    expect(css).not.toMatch(/high-contrast/);
-    expect(css).not.toMatch(/data-light="(?:afternoon|night)"/);
+    expect(css).not.toMatch(/data-moment="(?:afternoon|night)"/);
+    expect(css).not.toMatch(/data-light/);
+    const contrast = block(':root[data-theme="high-contrast"]');
+    expect(Object.values(contrast.props).every((value) => value === "var(--luz-text-primary)")).toBe(true);
+    const mentions = css.match(/high-contrast/g) ?? [];
+    expect(mentions, "high-contrast is named once, by the sky block").toHaveLength(1);
   });
 
   it.each(LIGHTS)("%s declares the colour tokens the theme template declares, except the status colours, and color-scheme: %s", (light, mode, selector) => {
@@ -204,7 +222,7 @@ describe("scripts/check-contrast.js reads the lights and fails the build on a pa
     // The text takes the colour of the page, in that block only
     const css = strip(read(FILE));
     const surface = block(selector).props["--luz-surface-page"];
-    const start = css.indexOf(`[data-light="${light}"]`);
+    const start = css.indexOf(`[data-moment="${light}"]`);
     expect(start, `${selector} in the file`).toBeGreaterThanOrEqual(0);
     const end = css.indexOf("}", start);
     const body = css.slice(start, end).replace(/(--luz-text-primary\s*:\s*)[^;]+;/, `$1${surface};`);

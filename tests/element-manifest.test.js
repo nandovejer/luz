@@ -2,9 +2,10 @@
  * F5 step 3, `custom-elements.json` (.claude/plans/specs/f5-ai-ready.md §2.3,
  * §2.2, §10 row 3; decisions D5 and D6, and "Review answers"). One manifest in
  * each package that ships a tag, in the Custom Elements Manifest format, schema
- * version 2.1.0: catalog ships `<luz-search>`, `<luz-cookie-consent>`, `<luz-color-mode>`,
+ * version 2.1.0: catalog ships `<luz-search>`, `<luz-cookie-consent>`, `<luz-theme-time>`,
  * `<luz-timeline>` (it was core's until F7) and the CSS-only `<luz-lang-switch>`,
- * `<luz-submenu>`, `<luz-announcement>`, `<luz-faq>`. Tokens and core ship none: core defines no tag.
+ * `<luz-submenu>`, `<luz-announcement>`, `<luz-faq>`. Core ships one, `<luz-theme-mode>`
+ * (since the theme-mode plan, 2026-10-29). Tokens ship none.
  *
  * The facts come from the code, not from this file: the expected sets are read
  * from the JS and CSS sources by a scan of their own (`readsOf`, `eventsOf`,
@@ -117,14 +118,15 @@ function walk(dir, out = []) {
 
 // [tag, package, file as the package exports it, a script defines it]
 const TAGS = [
-  // F7: the timeline moved from core to catalog; core defines no tag now
+  // F7: the timeline moved from core to catalog; since 2026-10-29 core defines one tag again, the color mode
+  { tag: "luz-theme-mode", pkg: "core", file: "theme-mode.js", script: true },
   { tag: "luz-timeline", pkg: "catalog", file: "timeline.js", script: true },
   { tag: "luz-search", pkg: "catalog", file: "search.js", script: true },
   { tag: "luz-cookie-consent", pkg: "catalog", file: "cookie-consent.js", script: true },
-  // F1 of the identity plan. The generator's grammar applies: attributes are the literal names of
-  // getAttribute("…") / hasAttribute("…") (remember, by, for, light-attr), a boolean one is only ever
+  // F1 of the identity plan, as <luz-theme-time> since 2026-10-29. The generator's grammar applies: attributes are the literal names of
+  // getAttribute("…") / hasAttribute("…") (variant, show, latitude, longitude, place, no-remember), a boolean one is only ever
   // read with hasAttribute, and a declared default exists only for a number
-  { tag: "luz-color-mode", pkg: "catalog", file: "color-mode.js", script: true },
+  { tag: "luz-theme-time", pkg: "catalog", file: "theme-time.js", script: true },
   { tag: "luz-lang-switch", pkg: "catalog", file: "components/lang-switch.css", script: false },
   { tag: "luz-submenu", pkg: "catalog", file: "components/submenu.css", script: false },
   { tag: "luz-announcement", pkg: "catalog", file: "components/announcement.css", script: false },
@@ -279,6 +281,9 @@ function isNamed(name, codes) {
   return key !== undefined && codes.some((c) => c.includes("data-luz-label-")) && codes.some((c) => c === key || c === `-${key}`);
 }
 
+/** The files that read attributes of a tag besides the one that defines it (no @attr in them: the tag has one header). */
+const COMPANIONS = { "luz-theme-time": ["theme-time-bar.js"] };
+
 /** The code texts in the first column of the tables of a page. */
 function firstColumnCodes(html) {
   const out = [];
@@ -292,7 +297,7 @@ function firstColumnCodes(html) {
 /* ---- tests ------------------------------------------------------------------ */
 
 describe("which tags exist (the scan of the sources agrees with the spec)", () => {
-  it("the tags a script defines are timeline, search, cookie consent and color mode, all in catalog (core defines none)", () => {
+  it("the tags a script defines are timeline, search, cookie consent and theme time in catalog, and theme mode in core", () => {
     const defined = definedTags();
     expect([...defined].sort()).toEqual(TAGS.filter((t) => t.script).map((t) => [t.tag, t.pkg]).sort());
   });
@@ -352,7 +357,8 @@ describe("the source tags in the header comment (D5-A), cross-checked with the c
     expect(names("luz-cookie-consent")).toEqual(
       ["data-luz-consent", "data-luz-consent-ask", "data-luz-consent-close", "data-luz-consent-days", "data-luz-consent-done", "data-luz-consent-key", "data-luz-consent-open"].sort(),
     );
-    expect(names("luz-color-mode")).toEqual(["by", "for", "light-attr", "remember"]);
+    expect(names("luz-theme-time")).toEqual(["latitude", "longitude", "no-remember", "place", "show", "variant"]);
+    expect(names("luz-theme-mode")).toEqual(["inline", "no-remember"]);
     expect(names("luz-announcement")).toEqual(["tone"]);
     expect(names("luz-lang-switch")).toEqual([]);
     expect(names("luz-submenu")).toEqual([]);
@@ -385,6 +391,11 @@ describe("the docs name what the manifest declares, and the tables name only wha
   it.each(TAGS)("$tag: a data-luz-* name in the first column of a table of its page is read or written by the code", (entry) => {
     const [page] = pageOf(entry);
     const { names, written } = readsOf(entry, sourceOf(entry));
+    // <luz-theme-time> has a second file, theme-time-bar.js, that reads the two texts of the bar (EX-013): its page documents them too
+    for (const companion of COMPANIONS[entry.tag] ?? []) {
+      const text = read(`packages/${entry.pkg}/src/${companion}`);
+      for (const m of stripJs(text).matchAll(/\btext\(\s*\w+\s*,\s*"(\w+)"\s*\)/g)) names.add(`data-luz-label-${m[1]}`);
+    }
     const documented = firstColumnCodes(page.body)
       .map((c) => /^(data-luz-[a-z0-9-]+)(?:=.*)?$/.exec(c)?.[1])
       .filter(Boolean);
@@ -669,13 +680,24 @@ describe("the built packages: custom-elements.json", () => {
     expect(existsSync(`${root}packages/${pkg}/dist/${declaration.stylesheet.replace(/\.css$/, ".min.css")}`), "its .min.css").toBe(true);
   });
 
-  it("core ships no tag: no custom-elements.json in its dist, and no module of its sources defines an element", () => {
-    expect(SHIPPING).toEqual(["catalog"]);
-    expect(existsSync(`${root}packages/core/dist/custom-elements.json`)).toBe(false);
-    expect(buildElementManifest("core")).toBeNull();
-    for (const file of walk(`${root}packages/core/src`).filter((f) => f.endsWith(".js"))) {
-      expect(readFileSync(file, "utf-8"), file).not.toMatch(/customElements\.define\(/);
-    }
+  // Core has a bundle: the style of its tag is in luz.css (and in its own file, for a page that links the components one by one)
+  it("luz-theme-mode: core names no stylesheet for it, the style is in luz.css, and components/theme-mode.css is in dist/ for a page that links the components one by one", () => {
+    const { declaration } = declarationsOf("core").find((d) => d.declaration.tagName === "luz-theme-mode");
+    expect(declaration.stylesheet).toBeUndefined();
+    expect(existsSync(`${root}packages/core/dist/components/theme-mode.css`)).toBe(true);
+    expect(existsSync(`${root}packages/core/dist/components/theme-mode.min.css`)).toBe(true);
+    expect(read("packages/core/dist/luz.css")).toContain("luz-theme-mode");
+  });
+
+  it("core ships one tag, <luz-theme-mode>: its custom-elements.json is in its dist, and no other module of its sources defines an element", () => {
+    expect(SHIPPING).toEqual(["core", "catalog"]);
+    expect(existsSync(`${root}packages/core/dist/custom-elements.json`)).toBe(true);
+    expect(buildElementManifest("core")).not.toBeNull();
+    const defining = walk(`${root}packages/core/src`)
+      .filter((f) => f.endsWith(".js"))
+      .filter((f) => /customElements\.define\(/.test(readFileSync(f, "utf-8")))
+      .map((f) => basename(f));
+    expect(defining).toEqual(["theme-mode.js"]);
   });
 
   it.each(TAGS)("$tag: attributes and events are the ones its header tags declare, in that order, with the code's types", (entry) => {

@@ -18,7 +18,7 @@
  */
 import { beforeAll, describe, expect, it } from "vitest";
 import { builtData, checkCase, fixtureCases, key } from "./helpers/check-fixtures.js";
-import { CHUNKS, CLASSES, FILES, TAGS } from "./helpers/catalog-names.js";
+import { CHUNKS, CHUNK_NOW, CLASSES, FILES, TAGS, THEME_MODE } from "./helpers/catalog-names.js";
 import { check, links, linkTo, ofRule, page, rulesOf, wordsOf } from "./helpers/check-run.js";
 import { checkModule } from "./helpers/check-modules.js";
 
@@ -84,9 +84,16 @@ describe("names/renamed: an old class (table 1 of the changeset)", () => {
     expect(rulesOf(result, "class/")).toEqual([]);
   });
 
-  it("does not take a current name for an old one: luz-mode-switcher, luz-pagination and the property --luz-consent-h are not in the table", () => {
-    const result = run('  <fieldset class="luz-mode-switcher"><span class="luz-mode-btn">x</span></fieldset><nav class="luz-pagination">y</nav>');
+  it("does not take a current name for an old one: luz-theme-mode's parts, luz-pagination and the property --luz-consent-h are not in the table", () => {
+    const result = run('  <fieldset class="luz-theme-mode__group"><span class="luz-theme-mode__option">x</span></fieldset><nav class="luz-pagination">y</nav>');
     expect(renamed(result)).toEqual([]);
+  });
+
+  it.each(THEME_MODE.classes)("core's old switcher class .%s is now .%s (the theme-mode plan, 2026-10-29): blocks, with no alias", (old, current) => {
+    const found = renamed(run(`  <div class="${old}">x</div>`));
+    expect(found).toHaveLength(1);
+    expect(found[0]).toMatchObject({ rule: "names/renamed", severity: "block", suggestion: `.${current}` });
+    expect(found[0].message).toContain(`.${old}`);
   });
 
   it("is not about a name nobody had: luz-landing-qqq is an unknown class like any other, and the rule does not guess", () => {
@@ -147,20 +154,29 @@ describe("names/renamed: the name echoed is capped like every other name (64 cha
 });
 
 describe("names/renamed: an old element (table 2)", () => {
-  it.each(TAGS)("<%s> is now <%s>: blocks, at the tag, with the new tag in the message and as the suggestion", (old, current) => {
+  // The F8 table (tables.TAGS) names <luz-color-mode> for <luz-mode>; the theme-mode plan replaced it with <luz-theme-time>
+  // around core's <luz-theme-mode>, so the two old tags of the color mode say how to wrap (names/renamed:element-wrap)
+  const NOW = { "luz-mode": "luz-theme-time", "luz-color-mode": "luz-theme-time", "luz-consent": "luz-cookie-consent", "luz-banner": "luz-announcement" };
+  const WRAP = { "luz-mode": "luz-theme-mode", "luz-color-mode": "luz-theme-mode" };
+  const OLD_TAGS = [...TAGS.map(([old]) => old), "luz-color-mode"];
+
+  it.each(OLD_TAGS)("<%s> is now its current tag: blocks, at the tag, with the new tag in the message and as the suggestion", (old) => {
+    const current = NOW[old];
     const body = `  <${old}>x</${old}>`;
     const found = renamed(run(body));
     expect(found).toHaveLength(1);
     expect(found[0]).toMatchObject({ rule: "names/renamed", severity: "block", suggestion: `<${current}>` });
-    expect(found[0].message).toBe(messages.message("names/renamed:element", { tag: old, current }));
+    const expected = WRAP[old] ? messages.message("names/renamed:element-wrap", { tag: old, current, inner: WRAP[old] }) : messages.message("names/renamed:element", { tag: old, current });
+    expect(found[0].message).toBe(expected);
     expect(found[0].message).toContain(`<${old}>`);
     expect(found[0].message).toContain(`<${current}>`);
+    if (WRAP[old]) expect(found[0].message).toContain(`<${WRAP[old]}>`);
     expect(found[0].line).toBe(10);
   });
 
   it("says it once for a tag however often it is written, and the current tags say nothing", () => {
     expect(renamed(run("  <luz-mode>a</luz-mode><luz-mode>b</luz-mode>"))).toHaveLength(2);
-    expect(renamed(run("  <luz-color-mode>a</luz-color-mode><luz-cookie-consent>b</luz-cookie-consent><luz-announcement>c</luz-announcement>"))).toEqual([]);
+    expect(renamed(run("  <luz-theme-time><luz-theme-mode>a</luz-theme-mode></luz-theme-time><luz-cookie-consent>b</luz-cookie-consent><luz-announcement>c</luz-announcement>"))).toEqual([]);
   });
 });
 
@@ -179,7 +195,7 @@ describe("names/renamed: a link or a script to an old file of catalog (tables 2 
     expect(found[0].line, "the third <link> of the head").toBe(8);
   });
 
-  it.each([["consent", "cookie-consent"], ["banner", "announcement"], ["mode", "color-mode"]])("the stylesheet %s.css is %s.css, plain or minified, from a CDN, node_modules or the dev server", (old, current) => {
+  it.each([["consent", "cookie-consent"], ["banner", "announcement"], ["mode", "theme-time"], ["color-mode", "theme-time"]])("the stylesheet %s.css is %s.css, plain or minified, from a CDN, node_modules or the dev server", (old, current) => {
     for (const href of [`https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/${old}.css`, `node_modules/@luz-ds/catalog/dist/components/${old}.min.css`, `/packages/catalog/dist/components/${old}.css`]) {
       const found = renamed(run('  <p class="o-stack">x</p>', links(TOKENS, CORE, `  <link rel="stylesheet" href="${href}">`)));
       expect(found, href).toHaveLength(1);
@@ -187,7 +203,7 @@ describe("names/renamed: a link or a script to an old file of catalog (tables 2 
     }
   });
 
-  it.each(CHUNKS)("the script %s.min.js is now %s.min.js", (old, current) => {
+  it.each([...CHUNKS.map(([old]) => [old, CHUNK_NOW[old]]), ["color-mode", "theme-time"]])("the script %s.min.js is now %s.min.js", (old, current) => {
     const head = links(TOKENS, CORE, "") + SCRIPT("0.3.0", `${old}.min.js`);
     const found = renamed(run('  <p class="o-stack">x</p>', head));
     expect(found).toHaveLength(1);
@@ -262,7 +278,7 @@ describe("names/renamed: the files of tests/fixtures/check, one for every varian
 
   it("has a file for the class, :publication, :element, :file (a stylesheet and a chunk) and :css, the blocking ones in fail/ and the warning in warn/", () => {
     const named = cases.flatMap((c) => c.expected.map((e) => [c.path, e.rule]));
-    for (const rule of ["names/renamed", "names/renamed:publication", "names/renamed:element", "names/renamed:file"]) {
+    for (const rule of ["names/renamed", "names/renamed:publication", "names/renamed:element", "names/renamed:element-wrap", "names/renamed:file"]) {
       expect(named.filter(([path, name]) => name === rule && path.startsWith("fail/")).length, rule).toBeGreaterThan(0);
     }
     expect(named.filter(([path, name]) => name === "names/renamed:css" && path.startsWith("warn/")).length).toBeGreaterThan(0);

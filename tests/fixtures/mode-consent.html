@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/page-rail.css">
   <link rel="stylesheet" href="/packages/catalog/dist/components/cookie-consent.css">
-  <link rel="stylesheet" href="/packages/catalog/dist/components/color-mode.css">
-  <!-- The real loading path: core, then the presence loader, which loads the chunks of the two elements on the page.
-       The query string authors it: ?dir=rtl&inline -->
+  <link rel="stylesheet" href="/packages/catalog/dist/components/theme-time.css">
+  <!-- The real loading path: core, then the presence loader, which loads the chunk of the cookie banner (core loads the mode button's).
+       The query string authors it: ?dir=rtl -->
   <script>
     (function () {
       var q = new URLSearchParams(location.search);
@@ -223,14 +223,23 @@
         <p>Paragraph 96. Text that fills the page so that it scrolls.</p>
         <p class="end"><a id="end-96" href="#end-96">End link 96</a></p>
       <footer class="fixture-end">
-        <luz-color-mode id="mode" remember>
-          <fieldset class="luz-mode-switcher luz-mode-switcher--cycle" id="modes">
-            <legend class="luz-mode-switcher__label">Color mode</legend>
-            <label class="luz-mode-btn" data-theme="light"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="light">Light</label>
-            <label class="luz-mode-btn" data-theme="dark"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="dark">Dark</label>
-            <label class="luz-mode-btn" data-theme="high-contrast"><input class="luz-mode-btn__input" type="radio" name="luz-theme" value="high-contrast">High contrast</label>
+        <luz-theme-time>
+        <luz-theme-mode id="mode">
+          <fieldset class="luz-theme-mode__group">
+            <legend class="luz-theme-mode__legend">Color mode</legend>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10Z"/></svg>Auto</label>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>Light</label>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>Dark</label>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>
           </fieldset>
-        </luz-color-mode>
+        </luz-theme-mode>
+        <fieldset class="luz-theme-time__moments">
+          <legend class="luz-theme-time__legend">Time of day</legend>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="morning" data-from="07:30" data-theme="light">Morning</label>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="afternoon" data-from="12:00" data-theme="light" data-default>Afternoon</label>
+          <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="night" data-from="22:30" data-theme="dark" data-default>Night</label>
+        </fieldset>
+        </luz-theme-time>
         <p><a id="foot-last" href="#foot-last">The last link of the page</a></p>
       </footer>
     </main>

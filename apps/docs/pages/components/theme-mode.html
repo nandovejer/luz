@@ -1,0 +1,230 @@
+<!-- luz:page
+title: Color mode
+description: Lets readers choose Auto, light, dark or high contrast: radios that work without JavaScript, or one round button that steps through them.
+area: components
+group: navigation
+files: components/theme-mode.css
+module: theme-mode.js
+toc: h2,h3
+keywords: dark mode, mode switcher, light and dark
+-->
+    <div class="docs-component" id="c-theme-mode">
+          <h2 id="example">Example</h2>
+          <p>The radio group, the round button fixed at the end corner of its stage, and the same button in the flow. They are pictures of the states: they sit in no element and are inert, so they do not change this page. The working button is the one at the end corner of this window.</p>
+          <div class="docs-example" data-docs-specimen>
+          <p class="docs-stage__label">Radio group</p>
+          <div class="docs-demo__stage" inert aria-hidden="true">
+            <fieldset class="luz-theme-mode__group" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)"><legend class="luz-theme-mode__legend">Color mode (specimen)</legend><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Auto</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Light</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Dark</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label></fieldset>
+          </div>
+          <p class="docs-stage__label">Button, fixed at the end corner</p>
+          <div class="docs-demo__stage docs-stage__fixed" inert aria-hidden="true">
+            <button class="luz-theme-mode__button luz-theme-mode__button--fixed" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)" type="button" aria-label="Color mode: Auto (specimen)"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg></button>
+          </div>
+          <p class="docs-stage__label">Button, inline</p>
+          <div class="docs-demo__stage" inert aria-hidden="true">
+            <button class="luz-theme-mode__button" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)" type="button" aria-label="Color mode: Dark (specimen)"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg></button>
+          </div>
+          <p class="docs-demo__note">Without JavaScript the radios show in the flow, as in the first stage, and there is no button.</p>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>What to expect:</p>
+          <ul>
+            <li>Without <a href="#boot">the script for the head</a>, a dark visitor sees the page light for a moment first: the element runs after the first paint.</li>
+            <li>Auto follows the system setting only. To follow the time of day too, add <a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a> from the catalog.</li>
+            <li>The text is yours: LUZ writes no label, so translate the legend and the modes with the page.</li>
+            <li>It has not been tested with a screen reader.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Color mode documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>Write one radio for each choice inside <code>&lt;luz-theme-mode&gt;</code>, in the order the button steps through them. Put an SVG icon (<code>currentColor</code>, <code>aria-hidden</code>) in each label: the button shows the checked one. The legend and the labels are yours.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-mode" aria-label="Copy the markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Markup"><code id="code-theme-mode">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;luz-theme-mode&gt;
+  &lt;fieldset class=&quot;luz-theme-mode__group&quot;&gt;
+    &lt;legend class=&quot;luz-theme-mode__legend&quot;&gt;Color mode&lt;/legend&gt;
+    &lt;label class=&quot;luz-theme-mode__option&quot;&gt;&lt;input class=&quot;luz-theme-mode__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-mode&quot; value=&quot;auto&quot; checked&gt;&lt;svg class=&quot;luz-theme-mode__icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;Auto&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-mode__option&quot;&gt;&lt;input class=&quot;luz-theme-mode__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-mode&quot; value=&quot;light&quot;&gt;&lt;svg class=&quot;luz-theme-mode__icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;Light&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-mode__option&quot;&gt;&lt;input class=&quot;luz-theme-mode__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-mode&quot; value=&quot;dark&quot;&gt;&lt;svg class=&quot;luz-theme-mode__icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;Dark&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-mode__option&quot;&gt;&lt;input class=&quot;luz-theme-mode__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-mode&quot; value=&quot;high-contrast&quot;&gt;&lt;svg class=&quot;luz-theme-mode__icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;High contrast&lt;/label&gt;
+  &lt;/fieldset&gt;
+&lt;/luz-theme-mode&gt;</code></pre>
+            </div>
+            <p><code>luz.min.js</code> loads <code>theme-mode.min.js</code> when the page has the element. To load it yourself, or for an element added after the page has loaded, <code>import "@luz-ds/core/theme-mode";</code>.</p>
+            <h3 id="variants">Variants and options</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Attributes and classes" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Class or attribute</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Class or attribute"><div><code>&lt;luz-theme-mode&gt;</code></div></td><td data-label="Effect"><div>The element. It holds the radios; with scripting on it adds one round button, fixed at the end corner.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>inline</code></div></td><td data-label="Effect"><div>A boolean. The button stays where the markup puts it: a footer, a navbar, a sidebar.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>no-remember</code></div></td><td data-label="Effect"><div>A boolean. The choice is not read or stored under <code>luz-theme</code>: the page starts in Auto.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>name="luz-theme-mode"</code></div></td><td data-label="Effect"><div>Keep it: without JavaScript the tokens read it to change the mode.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>value</code></div></td><td data-label="Effect"><div><code>auto</code>, <code>light</code>, <code>dark</code> or <code>high-contrast</code>. The button steps through the radios in markup order and skips a disabled one.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-theme-mode__group</code></div></td><td data-label="Effect"><div>The fieldset of radios; without the button, a row of options.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-theme-mode__legend</code>, <code>.luz-theme-mode__option</code>, <code>.luz-theme-mode__input</code>, <code>.luz-theme-mode__icon</code></div></td><td data-label="Effect"><div>The legend (it names the group and, with the checked label, the button); a label with its radio, icon and name; the radio, visually hidden and focusable; the icon, which the button copies from the checked option.</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>__button</code>, <code>__button--fixed</code>, <code>__status</code></div></td><td data-label="Effect"><div>Written by the script, not by you: the round button (fixed unless <code>inline</code>) and a hidden live region that says the new mode.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h4 id="api">Properties, methods and event</h4>
+            <div class="luz-table-wrap" role="region" aria-label="Properties, methods and event" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Name</th><th scope="col">What it does</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Name"><div><code>el.choice</code></div></td><td data-label="What it does"><div>The choice (<code>auto</code>, <code>light</code>, <code>dark</code>, <code>high-contrast</code>). Setting it chooses that radio; other values are ignored.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>el.mode</code></div></td><td data-label="What it does"><div>The mode in use. In Auto it is the system's.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>el.refresh()</code></div></td><td data-label="What it does"><div>Applies the mode again. Call it after you change what Auto means.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>el.autoMode</code></div></td><td data-label="What it does"><div>A function that returns <code>light</code>, <code>dark</code> or nothing (the system's). Another script sets it to own what Auto means, as <code>&lt;luz-theme-time&gt;</code> does; the system's high contrast still wins.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>luz-theme-mode:change</code></div></td><td data-label="What it does"><div>Bubbles after the upgrade and on every change. <code>detail</code>: <code>mode</code>, <code>auto</code> (the choice is Auto) and <code>user</code> (a person chose it).</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>A native radio group, styled by <code>components/theme-mode.css</code>. The radios are the state; with scripting on, the element turns them into one button.</p>
+            <ul>
+              <li><strong>The button:</strong> each press checks the next radio and applies it; the group is hidden while it is there. The script adds <code>luz-theme-mode__button--fixed</code> to the fixed button and leaves it off with <code>inline</code>. A focused radio passes the focus to the button.</li>
+              <li><strong>Auto follows the system,</strong> also while the page is open: <code>prefers-contrast: more</code> gives <code>high-contrast</code>, else <code>prefers-color-scheme: dark</code> gives <code>dark</code>, else <code>light</code>.</li>
+              <li><strong>What it writes on <code>&lt;html&gt;</code>:</strong> the mode in <code>data-mode</code>, and with no brand the same value in <code>data-theme</code>, as the tokens read it. A page that names a brand (<code>data-theme="my-brand"</code>, a <a href="/docs/tokens/themes/">theme of your own</a> made from <code>_template.css</code>) keeps it, and the blocks of the brand answer to <code>data-mode</code>.</li>
+              <li><strong>The choice is remembered</strong> under <code>luz-theme</code> in <code>localStorage</code>; Auto removes it and <code>no-remember</code> turns it off. If the script for the head has written <code>data-mode</code>, the first Auto adopts it. A second <code>&lt;luz-theme-mode&gt;</code> follows the first.</li>
+              <li><strong>Where the button sits:</strong> unless <code>inline</code>, at the end corner of the window (bottom left in a right-to-left page), at <code>--luz-z-raised</code>: above the content, below the sidebar, the dialogs and the toasts.</li>
+              <li><strong>Keep the corner free.</strong> Give the footer an end padding of <code>calc(var(--luz-control-lg) + var(--luz-space-md) * 2)</code> under <code>@media (scripting: enabled)</code>. The stylesheet adds <code>scroll-padding-block-end</code> to <code>&lt;html&gt;</code>, so Tab never leaves a focused element under the button; over a showing <a href="/docs/catalog/cookie-consent/"><code>&lt;luz-cookie-consent&gt;</code></a> the button rides above the banner.</li>
+              <li><strong>In a sidebar</strong> it takes the colours of catalog's <a href="/docs/catalog/sidebar/">sidebar</a>; elsewhere on a dark surface, set the <code>--luz-theme-mode-*</code> properties.</li>
+            </ul>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>The four radios show where the markup puts them; there is no button. Choosing one changes the mode, because the tokens read the checked radio (<code>:root:has()</code>), until <code>&lt;html&gt;</code> has a <code>data-mode</code>. It works for a <a href="/docs/tokens/themes/">brand theme</a> too, if its <code>_template.css</code> is current. The choice is not remembered, and Auto is light.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <ul>
+              <li><strong>Button:</strong> Tab reaches it; Enter or Space moves to the next mode. Focus follows the markup, not the corner.</li>
+              <li><strong>Name and status:</strong> the button's name is the text of the legend, a colon and the label of the checked option, such as “Color mode: Dark”. After a person chooses, a hidden <code>role="status"</code> region says the same; it says nothing when the page loads.</li>
+              <li><strong>Radios:</strong> without the button, Tab reaches the group and the arrow keys choose a mode.</li>
+            </ul>
+            <h3 id="boot">Script for the head</h3>
+            <p>Optional. It sets the mode before the first paint, so a dark visitor never sees the page light first. Copy <code>node_modules/@luz-ds/core/dist/theme-boot.min.js</code> to your own origin and link it in the <code>&lt;head&gt;</code>, before the stylesheets:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-boot" aria-label="Copy the script for the head">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Script for the head"><code id="code-theme-boot">&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;script src=&quot;/theme-boot.min.js&quot;&gt;&lt;/script&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;…&quot;&gt;
+&lt;/head&gt;</code></pre>
+            </div>
+            <ul>
+              <li><strong>What it writes:</strong> <code>data-mode</code> on <code>&lt;html&gt;</code>, and <code>data-theme</code> with the same value unless the page names a brand. The mode is the one stored under <code>luz-theme</code>, else the system's (as Auto, above). It never writes the storage.</li>
+              <li><strong>Why it blocks rendering:</strong> it is a classic script, not a module, and a few hundred bytes: the browser runs it before the first paint. That is the one documented exception to no JavaScript on the critical path (EX-009), and a site opts in. Without it the element writes the same attributes after the first paint, so a dark visitor sees the page light for a moment.</li>
+              <li><strong>Your own origin:</strong> under a Content-Security-Policy (CSP) without <code>'unsafe-inline'</code>, serve the file from your own origin. A blocking script from another host delays the first paint and needs that host in <code>script-src</code>.</li>
+            </ul>
+            <h3 id="extend">Extend it with the catalog: day moments and the bar</h3>
+            <p><a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, in <code>@luz-ds/catalog</code>, wraps this element. It gives Auto the time of day, in moments you declare (dawn, morning, sunset), and can add a slider of the 24 hours. This element does not need it: if the catalog does not load, the button works as it does here.</p>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Offer a color mode control on every page of a site, in the same place.</p>
+            <ul>
+              <li>The round button at the end corner, once per page.</li>
+              <li>The round button with <code>inline</code>, where it belongs to a panel: a footer, a navbar, a sidebar.</li>
+            </ul>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not put a second fixed button on a page: the others are inline.</p>
+            <ul>
+              <li>Do not fix it at a corner another control holds, such as a chat button.</li>
+              <li>Do not leave the radios out of the markup: without JavaScript they are the only control.</li>
+              <li>Do not use it to choose a brand: a brand is named with <code>data-theme</code>; this element chooses its mode.</li>
+            </ul>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Name the modes for what they are: “Auto”, “Light”, “Dark”, “High contrast”.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <fieldset class="luz-theme-mode__group" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)"><legend class="luz-theme-mode__legend">Color mode</legend><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-do" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Auto</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-do" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Light</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-do" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Dark</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-do" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label></fieldset>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Call the high-contrast mode “Accessible”: it says the other modes are not, and does not say what changes.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <fieldset class="luz-theme-mode__group" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)"><legend class="luz-theme-mode__legend">Color mode</legend><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-dont" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Default</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-dont" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Day</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-dont" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Night</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-dont" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Accessible</label></fieldset>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> One fixed button at the end corner, with the radios inside the element for readers without JavaScript.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="docs-stage__fixed"><p class="docs-stage__label">A page, with its one fixed button</p><button class="luz-theme-mode__button luz-theme-mode__button--fixed" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)" type="button" aria-label="Color mode: Auto"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg></button></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Put a second fixed control at the same corner: they cover each other, and one is hidden when the other is on top.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="docs-stage__fixed"><p class="docs-stage__label">A page, with two fixed buttons</p><button class="luz-theme-mode__button luz-theme-mode__button--fixed" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)" type="button" aria-label="Color mode: Auto"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg></button><button class="luz-btn luz-btn--primary docs-stage__fab" type="button" tabindex="-1">Chat</button></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>Call the group “Color mode” and the choices “Auto”, “Light”, “Dark” and “High contrast”.</p>
+            <ul>
+              <li>Each choice keeps its visible name next to its icon, so the radios read without the icons.</li>
+              <li>The button's name is the legend and the checked label, “Color mode: Dark”. Write both so that they read well together, and translate them with the page: LUZ writes none of this text.</li>
+              <li>Say near the control what Auto follows: “Auto follows your device”.</li>
+            </ul>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>On the page the checked option is filled with the brand; in the sidebar it takes the sidebar's current-link colours. The round button is a surface with its icon: the checked mode is its icon, never a fill.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Group label</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Option name, hover</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>14.4:1</div></td><td data-label="Dark"><div>12.6:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Option border</div></td><td data-label="Colour on background"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>4.3:1</div></td><td data-label="Dark"><div>3.6:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Round button icon</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>6.4:1</div></td><td data-label="Dark"><div>6.9:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Round button icon, hover</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>6.2:1</div></td><td data-label="High contrast"><div>18.4:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Checked option</div></td><td data-label="Colour on background"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Light"><div>6.0:1</div></td><td data-label="Dark"><div>4.9:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Checked fill</div></td><td data-label="Colour on background"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>3.5:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Group label, in the sidebar</div></td><td data-label="Colour on background"><div><code>--luz-sidebar-label</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Light"><div>6.7:1</div></td><td data-label="Dark"><div>6.6:1</div></td><td data-label="High contrast"><div>6.4:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Checked option, in the sidebar</div></td><td data-label="Colour on background"><div><code>--luz-sidebar-active-text</code> on <code>--luz-sidebar-active-bg</code></div></td><td data-label="Light"><div>10.3:1</div></td><td data-label="Dark"><div>10.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Checked fill, in the sidebar</div></td><td data-label="Colour on background"><div><code>--luz-sidebar-active-bg</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Light"><div>8.9:1</div></td><td data-label="Dark"><div>10.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Focus ring, in the sidebar</div></td><td data-label="Colour on background"><div><code>--luz-sidebar-text-hover</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Light"><div>15.7:1</div></td><td data-label="Dark"><div>18.9:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+            <ul>
+              <li><strong>Focus:</strong> a 2 px outline, 2 px outside the whole option or the round button, in <code>--luz-focus-ring</code> on the page and <code>--luz-sidebar-text-hover</code> in the sidebar.</li>
+              <li><strong>Not colour alone:</strong> every option keeps its visible name; in forced colors the checked one is a system highlight with a 2 px border, and a disabled one has a dashed border.</li>
+              <li><strong>Edge:</strong> the hairline of the round button (<code>--luz-divider</code>) is a decoration: the icon, 3:1 or more, is what tells the control apart. In forced colors the edge is <code>ButtonText</code> and the shadow is dropped.</li>
+              <li><strong>Target:</strong> each option is at least 28 px high; the round button is <code>--luz-control-lg</code> wide and high.</li>
+              <li><strong>Not hidden:</strong> the page keeps the corner free at its end and scrolls a focused element out from under the button (WCAG 2.4.11).</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 22 tokens that <code>components/theme-mode.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-sidebar-text-hover"><code>--luz-sidebar-text-hover</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+              <div><dt><a href="/docs/tokens/layers/">Layers</a></dt><dd><code>--luz-z-raised</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

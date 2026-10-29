@@ -1087,7 +1087,7 @@ describe("tests/fixtures/check: the folder", () => {
   it("points each expectation at the thing the rule is about: a class, a tag, an attribute, a declaration", () => {
     const CLASS_ATTR = new Set(["class/unknown", "misuse/host-element", "misuse/modifier-alone", "load/package-missing", "misuse/state-class", "misuse/part-orphan", "names/renamed", "names/renamed:publication"]);
     // names/renamed:element is at the `<` of an old tag, names/renamed:file at the `<` of the link or the script of an old file
-    const ELEMENT = { "element/unknown": /^luz-/, "load/tokens-missing": /^link$/, "load/layer-statement": /^style$/, "a11y/link-no-href": /^a$/, "names/renamed:element": /^luz-/, "names/renamed:file": /^(?:link|script)$/ };
+    const ELEMENT = { "element/unknown": /^luz-/, "load/tokens-missing": /^link$/, "load/layer-statement": /^style$/, "a11y/link-no-href": /^a$/, "names/renamed:element": /^luz-/, "names/renamed:element-wrap": /^luz-/, "a11y/slider-no-name": /^luz-theme-time$/, "names/renamed:file": /^(?:link|script)$/ };
     const CSS_DECLARATION = new Set(["css/literal-colour", "css/literal-size", "css/important", "css/private-token", "css/knob-in-px", "css/unknown-token"]);
     for (const folder of ["fail", "warn"]) {
       for (const name of fixtureFiles(folder)) {

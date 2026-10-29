@@ -3,8 +3,11 @@
  *
  *   element/unknown            a <luz-*> tag that is in no custom-elements
  *                              manifest and is not the block of a class
- *   names/renamed:element      a <luz-mode>, <luz-consent> or <luz-banner> of catalog before
- *                              0.3: the new tag (rules/renamed.js)
+ *   names/renamed:element      a <luz-mode>, <luz-color-mode>, <luz-consent> or <luz-banner> of
+ *                              catalog before 0.3: the new tag (rules/renamed.js); for the
+ *                              first two (names/renamed:element-wrap), around core's element
+ *   a11y/slider-no-name        a <luz-theme-time variant="bar"> with no data-luz-label-scrub
+ *                              on it or on an ancestor: its slider would have no name
  *   element/unknown-attribute  an attribute that a <luz-*> element does not
  *                              declare, and that is not global, aria-*,
  *                              data-* (other than data-luz-*), a label
@@ -19,7 +22,7 @@
  */
 import { finding } from "../report.js";
 import { closest } from "../suggest.js";
-import { pinsOldRelease, renamedTag } from "./renamed.js";
+import { pinsOldRelease, renamedTag, wrappedTag } from "./renamed.js";
 import { isEcho, packageOfName } from "./shared.js";
 
 // The global attributes of HTML, and the few a template language puts on any tag
@@ -58,13 +61,21 @@ export function elementRules(ctx) {
       const where = { file, line: record.line, column: record.column };
       const renamed = renamedTag(tag);
       if (renamed !== null && !pinsOldRelease(records)) {
-        found.push(finding("names/renamed:element", { ...where, vars: { tag, current: renamed }, suggestion: `<${renamed}>` }));
+        const inner = wrappedTag(tag);
+        if (inner === null) found.push(finding("names/renamed:element", { ...where, vars: { tag, current: renamed }, suggestion: `<${renamed}>` }));
+        else found.push(finding("names/renamed:element-wrap", { ...where, vars: { tag, current: renamed, inner }, suggestion: `<${renamed}>` }));
         continue;
       }
       const near = isEcho(tag) && take("element/unknown") ? closest(tag, world.tagNames) : null;
       if (near === null) found.push(finding("element/unknown:none", { ...where, vars: { tag, package: packageOfName(tag) } }));
       else found.push(finding("element/unknown", { ...where, vars: { tag, closest: near }, suggestion: `<${near}>` }));
       continue;
+    }
+    // The bar's slider is named by a text the page writes, with no English fallback in the script (EX-013)
+    if (tag === "luz-theme-time" && record.attrs.get("variant")?.value === "bar") {
+      let named = false;
+      for (let at = record; at !== null && at !== undefined && !named; at = at.parent) named = at.attrs.has("data-luz-label-scrub");
+      if (!named) found.push(finding("a11y/slider-no-name", { file, line: record.line, column: record.column, vars: { tag } }));
     }
     for (const [name, attribute] of record.attrs) {
       const where = { file, line: attribute.line, column: attribute.column };

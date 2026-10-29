@@ -70,6 +70,16 @@ const readJson = (root, path) => JSON.parse(readFileSync(join(root, path), "utf-
 const versionOf = (root, pkg) => readJson(root, `packages/${pkg}/package.json`).version;
 
 /**
+ * The parts only a script writes: the author never types them, so a prompt that lists them only costs
+ * bytes. The element builds its button and its slider; the author writes the radios. A name that no
+ * classes.json lists fails the build, so a rename cannot leave one behind.
+ */
+const SCRIPT_PARTS = new Set([
+  ...["button", "button--fixed", "status"].map((p) => `luz-theme-mode__${p}`),
+  ...["bar", "check", "day", "hour", "label", "saved", "slider", "where"].map((p) => `luz-theme-time__${p}`),
+]);
+
+/**
  * `luz-alert`: `--error`, `__title`…, one line per block, in the manifest's
  * order; a class an earlier package already listed (`seen`) is left out, and
  * so is one `keep` says no to (the patterns of the other kinds of site).
@@ -80,6 +90,7 @@ function classLines(root, pkg, seen, keep = () => true) {
   for (const c of classes) {
     if (seen.has(c.name) || !keep(c)) continue;
     seen.add(c.name);
+    if (SCRIPT_PARTS.has(c.name)) continue;
     const block = c.block ?? c.name;
     if (!blocks.has(block)) blocks.set(block, []);
     if (c.name !== block) blocks.get(block).push(c.name.slice(block.length));
@@ -174,6 +185,8 @@ export function assemblePrompt(id, { root }) {
     "check-ext": stacks.filter((s) => s.ext).map((s) => `${s.name} \`--ext ${s.ext}\``).join(", "),
     classes: (() => {
       const seen = new Set();
+      const listed = new Set(["core", "catalog"].flatMap((pkg) => readJson(root, `packages/${pkg}/dist/classes.json`).classes.map((c) => c.name)));
+      for (const name of SCRIPT_PARTS) if (!listed.has(name)) throw new Error(`${MODULE}: SCRIPT_PARTS names ${name}, which no classes.json lists`);
       return packages
         // Catalog lists its own classes and the patterns of the kind, not those of the other kinds of site
         .map((pkg) => [pkg, classLines(root, pkg, seen, (c) => !(c.files ?? []).some((f) => isKindFile(f, kinds) && !own.includes(f)))])

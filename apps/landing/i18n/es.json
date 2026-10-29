@@ -284,7 +284,7 @@
   "footer.reviews": "Revisiones en navegadores",
   "footer.legal": "© 2024–2026 Fernando Muñoz. LUZ se publica con la <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">licencia MIT</a>: úsalo, cámbialo y compártelo, también en trabajos comerciales, siempre que conserves el aviso. Se agradece el crédito al proyecto original. Todo lo que publica, fuentes e iconos incluidos, es MIT.",
   "footer.mode": "Modo de color",
-  "footer.mode-change": "Cambiar el modo de color",
+  "footer.auto": "Automático",
   "footer.light": "Claro",
   "footer.dark": "Oscuro",
   "footer.contrast": "Alto contraste",

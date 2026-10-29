@@ -8,11 +8,12 @@
  *   <luz-cookie-consent>  cookie-consent.js, when the browser is idle (at most 1 s later),
  *                  and after the search chunk, if there is one, has loaded
  *                  or failed
- *   <luz-color-mode>     color-mode.js, when the browser is idle (at most 1 s later),
+ *   <luz-theme-time>     theme-time.js, when the browser is idle (at most 1 s later),
  *                  whether or not the search chunk has loaded: until then
- *                  the radios, and core's cycle button, work as they do
- *                  without it, and the boot snippet in <head> has already
- *                  set the first mode
+ *                  core's <luz-theme-mode> works as it does without it, and
+ *                  the boot snippet in <head> has already set the first mode
+ *                  and moment. With variant="bar" it also loads
+ *                  theme-time-bar.js, the slider of the day, after it
  *   <luz-timeline> timeline.js, when the page is scanned: the chunk defines
  *                  the element, and the browser upgrades each one
  *   .luz-sidebar   sidebar.js, when the page is scanned, with no wait for
@@ -53,11 +54,12 @@
  * hint in Safari and Firefox.
  */
 
-// SEC-CHUNK-1: the only five files this one loads, each by a literal
+// SEC-CHUNK-1: the only six files this one loads, each by a literal
 const CHUNKS = {
   "luz-search": () => import("./search.js"),
   "luz-cookie-consent": () => import("./cookie-consent.js"),
-  "luz-color-mode": () => import("./color-mode.js"),
+  "luz-theme-time": () => import("./theme-time.js"),
+  "luz-theme-time-bar": () => import("./theme-time-bar.js"),
   "luz-timeline": () => import("./timeline.js"),
   // Not a tag: the sidebar is a class (and a list marked data-luz-spy); its chunk defines no element, so it is started here
   sidebar: () => import("./sidebar.js").then((m) => m.initSidebar()),
@@ -109,8 +111,8 @@ if (typeof document !== "undefined") {
     // its buttons elsewhere on the page, which would move a banner already
     // shown below them
     if (document.querySelector("luz-cookie-consent")) idle(() => Promise.resolve(loading["luz-search"]).then(() => load("luz-cookie-consent")));
-    // The mode on its own: it moves nothing on the page
-    if (document.querySelector("luz-color-mode")) idle(() => load("luz-color-mode"));
+    // The time of day on its own: it moves nothing on the page; its slider, if the page has one, after it
+    if (document.querySelector("luz-theme-time")) idle(() => load("luz-theme-time").then(() => document.querySelector('luz-theme-time[variant="bar"]') && load("luz-theme-time-bar")));
     // The timeline defines its element, which upgrades every instance; the sidebar starts its scroll spy at once, as core's entry did
     if (document.querySelector("luz-timeline")) load("luz-timeline");
     if (document.querySelector(".luz-sidebar, [data-luz-spy]")) load("sidebar");

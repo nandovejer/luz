@@ -26,7 +26,7 @@
  *
  * The tests set the light with the clock (no stored choice), as
  * tests/helpers/site-lights.js does, and read the computed style of the layers.
- * It needs JavaScript (boot.js writes data-light), so it runs in `chromium`.
+ * It needs JavaScript (boot.js writes data-moment), so it runs in `chromium`.
  */
 /* global atob, Blob, createImageBitmap, innerHeight, OffscreenCanvas, ScrollTimeline -- these run in the page, inside page.evaluate() */
 import { test, expect } from '@playwright/test';
@@ -34,7 +34,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
 import { LIGHTS, NO_CHOICE, TIMEZONE, atTime, seedMode } from './helpers/site-lights.js';
 
-test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'boot.js writes data-light: the sky needs JavaScript');
+test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'boot.js writes data-moment: the sky needs JavaScript');
 test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
 
 /** [name, route, the host of the sky] */
@@ -55,7 +55,7 @@ const HOURS = { dawn: '06:00', morning: '09:00', afternoon: '14:00', sunset: '19
 async function open(page, route, light) {
   await atTime(page, HOURS[/** @type {keyof typeof HOURS} */ (light)]);
   await page.goto(route);
-  await expect(page.locator('html')).toHaveAttribute('data-light', light);
+  await expect(page.locator('html')).toHaveAttribute('data-moment', light);
   await faded(page);
   await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
 }
@@ -248,7 +248,7 @@ for (const [name, route, host] of PAGES) {
       await open(page, route, 'afternoon');
       await expect.poll(async () => (await layers(page, host))?.map((l) => l.display)).toEqual(['none', 'none']);
       await page.evaluate(() => {
-        document.documentElement.setAttribute('data-light', 'night');
+        document.documentElement.setAttribute('data-moment', 'night');
         document.documentElement.setAttribute('data-theme', 'dark');
       });
       await expect.poll(async () => (await layers(page, host))?.map((l) => [l.stars, l.shadow])).toEqual([[true, 'none'], [true, 'none']]);

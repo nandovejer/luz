@@ -94,7 +94,7 @@ describe("the sky is defined once, in apps/site/sky.css", () => {
     expect(sky).not.toMatch(/box-shadow:/);
     expect(sky).not.toMatch(/filter:\s*url\(/);
     expect(sky).toMatch(/\.site-sky::after\s*\{[^}]*display:\s*none/);
-    const day = rules("apps/site/sky.css").filter(([selector]) => /data-light="morning"/.test(selector));
+    const day = rules("apps/site/sky.css").filter(([selector]) => /data-moment="morning"/.test(selector));
     expect(day.length, "a rule for the lights of the day").toBeGreaterThan(0);
     for (const [selector, declarations] of day) {
       expect(selector, "over light only").toContain('[data-theme="light"]');
@@ -103,8 +103,8 @@ describe("the sky is defined once, in apps/site/sky.css", () => {
   });
 
   it("it is for the lights of the hour, never high contrast, and it switches off under forced colours", () => {
-    expect(sky).toMatch(/data-light="night"/);
-    expect(sky).toMatch(/data-light="afternoon"/);
+    expect(sky).toMatch(/data-moment="night"/);
+    expect(sky).toMatch(/data-moment="afternoon"/);
     expect(sky).toMatch(/:not\(\[data-theme="high-contrast"\]\)|\[data-theme="light"\]/);
     expect(sky).toMatch(/@media \(forced-colors: active\)[\s\S]*display:\s*none/);
   });
@@ -148,7 +148,7 @@ describe("the sky is defined once, in apps/site/sky.css", () => {
     const cap = css.match(/([^{}]*\.site-sky::before[^{}]*\{[^{}]*opacity:\s*([\d.]+)\s*;[^{}]*\})/);
     expect(cap, "a rule caps the opacity").not.toBeNull();
     expect(Number(cap?.[2])).toBe(0.15);
-    expect(cap?.[1]).toMatch(/data-light="night"/);
-    expect(cap?.[1]).not.toMatch(/data-light="afternoon"/);
+    expect(cap?.[1]).toMatch(/data-moment="night"/);
+    expect(cap?.[1]).not.toMatch(/data-moment="afternoon"/);
   });
 });

@@ -35,10 +35,10 @@ const fenced = (text) => [...text.matchAll(/```[\w-]*\n([\s\S]*?)```/g)].map((m)
 const preBlocks = (html) => [...html.matchAll(/<pre\b[^>]*>\s*<code\b[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/g)].map((m) => unescape(m[1].replace(/<[^>]+>/g, "")));
 
 const DOCS = [
-  { name: "SECURITY.md", text: () => read("SECURITY.md"), blocks: (t) => fenced(t), chunks: ["core/midi.min.js", "core/table-sort.min.js", "core/i18n-es.min.js", "catalog/search.min.js", "catalog/cookie-consent.min.js", "catalog/color-mode.min.js", "catalog/timeline.min.js", "catalog/sidebar.min.js"] }, // F7: the timeline is catalog's, with the sidebar's
-  { name: "packages/catalog/README.md", text: () => read("packages/catalog/README.md"), blocks: (t) => fenced(t), chunks: ["catalog/search.min.js", "catalog/cookie-consent.min.js", "catalog/color-mode.min.js", "catalog/timeline.min.js", "catalog/sidebar.min.js"] },
+  { name: "SECURITY.md", text: () => read("SECURITY.md"), blocks: (t) => fenced(t), chunks: ["core/midi.min.js", "core/table-sort.min.js", "core/theme-mode.min.js", "core/i18n-es.min.js", "catalog/search.min.js", "catalog/cookie-consent.min.js", "catalog/theme-time.min.js", "catalog/theme-time-bar.min.js", "catalog/timeline.min.js", "catalog/sidebar.min.js"] }, // F7: the timeline is catalog's, with the sidebar's; 2026-10-29: the color mode is core's theme-mode and catalog's theme-time (and its bar)
+  { name: "packages/catalog/README.md", text: () => read("packages/catalog/README.md"), blocks: (t) => fenced(t), chunks: ["catalog/search.min.js", "catalog/cookie-consent.min.js", "catalog/theme-time.min.js", "catalog/theme-time-bar.min.js", "catalog/timeline.min.js", "catalog/sidebar.min.js"] },
   { name: "packages/core/README.md", text: () => read("packages/core/README.md"), blocks: (t) => fenced(t), chunks: ["core/i18n-es.min.js"] },
-  { name: "apps/docs/pages/get-started/index.html", text: () => read("apps/docs/pages/get-started/index.html"), blocks: (t) => preBlocks(t), chunks: ["catalog/search.min.js", "catalog/cookie-consent.min.js", "catalog/color-mode.min.js"] },
+  { name: "apps/docs/pages/get-started/index.html", text: () => read("apps/docs/pages/get-started/index.html"), blocks: (t) => preBlocks(t), chunks: ["catalog/search.min.js", "catalog/cookie-consent.min.js", "catalog/theme-time.min.js"] },
 ];
 
 /** The block that holds the import map: its text and the parsed map. */

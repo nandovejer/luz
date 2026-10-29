@@ -118,7 +118,7 @@ import &quot;@luz-ds/core/conditional.css&quot;;</code></pre>
 
       <div class="docs-prose">
         <h2 id="level-3-tokens-core-and-catalog" class="docs-prose__title">Level 3, the Catalog: tokens, core and catalog</h2>
-        <p>The site's navigation and the pieces with a script or an identity of their own: navbar, sidebar, terminal, timeline, search, cookie consent, color mode, language switch, submenu, announcement and FAQ, and the patterns of a kind of site. The catalog needs core and tokens.</p>
+        <p>The site's navigation and the pieces with a script or an identity of their own: navbar, sidebar, terminal, timeline, search, cookie consent, color mode by time of day, language switch, submenu, announcement and FAQ, and the patterns of a kind of site. The catalog needs core and tokens.</p>
         <p>The page structure of each kind of site, from the header to the footer, is in the catalog too, one stylesheet per pattern: see <a href="#site-kinds">Kinds of site</a>.</p>
         <p>The catalog has a stylesheet per component: link the ones the page uses, after core.</p>
         <div class="docs-command-block">
@@ -210,7 +210,7 @@ import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
           <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Computing the integrity hash"><code id="code-integrity">curl -s https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.css | openssl dgst -sha384 -binary | openssl base64 -A</code></pre>
         </div>
         <p>Write the result as <code class="luz-code-inline">integrity="sha384-…"</code> on the tag that loads that file, and repeat it for each file.</p>
-        <p>A hash on a script covers that file only, not the files it loads later. <code class="luz-code-inline">catalog.min.js</code> loads <code class="luz-code-inline">search.min.js</code> on a page with a search and <code class="luz-code-inline">cookie-consent.min.js</code> on a page with a cookie banner and <code class="luz-code-inline">color-mode.min.js</code> on a page with an Auto color mode.</p>
+        <p>A hash on a script covers that file only, not the files it loads later. <code class="luz-code-inline">catalog.min.js</code> loads <code class="luz-code-inline">search.min.js</code> on a page with a search and <code class="luz-code-inline">cookie-consent.min.js</code> on a page with a cookie banner and <code class="luz-code-inline">theme-time.min.js</code> on a page with a time of day for the color mode.</p>
         <p>Give each one its own hash in an import map, before the first module script. It works in Chrome 127, Safari 18 and Firefox 138 and later; an older browser ignores it and loads the files unchecked.</p>
         <p>A <code class="luz-code-inline">&lt;link rel="modulepreload"&gt;</code> with a hash is not a guard in Safari or Firefox: use it as a performance hint only.</p>
         <div class="docs-snippet">
@@ -223,7 +223,7 @@ import &quot;@luz-ds/catalog/components/hero.css&quot;;</code></pre>
   &quot;integrity&quot;: {
     &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/search.min.js&quot;: &quot;sha384-…&quot;,
     &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/cookie-consent.min.js&quot;: &quot;sha384-…&quot;,
-    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/color-mode.min.js&quot;: &quot;sha384-…&quot;
+    &quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.2.1/dist/theme-time.min.js&quot;: &quot;sha384-…&quot;
   }
 }
 &lt;/script&gt;

@@ -72,7 +72,7 @@ describe("the 20 patterns are stylesheets of catalog, named for their block", ()
     expect(ALL).toHaveLength(20);
     // `app-bar` and `docs-layout` are the names of their blocks (`.luz-app-bar`, `.luz-docs-layout`), not a kind's prefix on a name
     const sources = readdirSync(`${root}packages/catalog/src/components`).filter((f) => f.endsWith(".css") && !f.startsWith("_")).map((f) => f.replace(/\.css$/, ""));
-    expect(sources.filter((f) => !["search", "navbar", "sidebar", "terminal", "timeline", "lang-switch", "submenu", "announcement", "faq", "cookie-consent", "color-mode"].includes(f)).sort()).toEqual([...ALL].sort());
+    expect(sources.filter((f) => !["search", "navbar", "sidebar", "terminal", "timeline", "lang-switch", "submenu", "announcement", "faq", "cookie-consent", "theme-time"].includes(f)).sort()).toEqual([...ALL].sort());
   });
 
   it.each([...OLD_ALL, ...OLD_ELEMENT_FILES])("the F5b file %s is gone from src, dist (plain and minified) and the tarball list", (name) => {
@@ -144,7 +144,7 @@ describe("the budget rows of catalog: a row for the 20 patterns, and the general
     const excluded = (name) => list[1].split(",").includes(name);
     for (const name of ALL) expect(excluded(name), `${name} is the patterns' row`).toBe(true);
     for (const slug of ["navbar", "sidebar", "terminal", "timeline"]) expect(excluded(slug), `${slug} is the layout row`).toBe(true);
-    for (const slug of ["search", "cookie-consent", "color-mode", "lang-switch", "submenu", "announcement", "faq"]) expect(excluded(slug), `${slug} stays in the general row`).toBe(false);
+    for (const slug of ["search", "cookie-consent", "theme-time", "lang-switch", "submenu", "announcement", "faq"]) expect(excluded(slug), `${slug} stays in the general row`).toBe(false);
   });
 
   it("has no row of the four packages: landing CSS, cms CSS, app CSS, docs CSS", () => {
@@ -440,8 +440,8 @@ const PAGES = [
   ["page-footer", ["page-footer"], "p-page-footer", "docs"],
 ];
 /** The pages of the old routes of F5b (`<kind>-<name>`) and of the pieces F8 renamed: none is a page now, in English or Spanish. */
-const OLD_SLUGS = [...OLD_ALL, "cms-toc", "consent", "mode", "banner"];
-const ELEMENT_PAGES = ["announcement", "faq", "cookie-consent", "lang-switch", "color-mode", "search", "submenu"];
+const OLD_SLUGS = [...OLD_ALL, "cms-toc", "consent", "mode", "color-mode", "banner"];
+const ELEMENT_PAGES = ["announcement", "faq", "cookie-consent", "lang-switch", "theme-time", "search", "submenu"];
 /** F7: the pages that came from core, in `pages/components/` until then. */
 const LAYOUT_PAGES = ["navbar", "sidebar", "terminal", "timeline"];
 const catalogPages = () => repoSite.pages.filter((p) => p.meta.area === "catalog");
@@ -492,7 +492,7 @@ describe("the pages of the 18 patterns, at /docs/catalog/<block>/", () => {
   });
 
   it("each page has a Spanish translation, pending review or reviewed, with its own `fits`", () => {
-    for (const [slug] of [...PAGES, ["announcement"], ["cookie-consent"], ["color-mode"]]) {
+    for (const [slug] of [...PAGES, ["announcement"], ["cookie-consent"], ["theme-time"]]) {
       const file = `apps/docs/i18n/es/pages/catalog/${slug}.html`;
       expect(exists(file), file).toBe(true);
       const head = read(file).split("-->")[0];
@@ -641,7 +641,7 @@ describe("the Catalog area groups its pages by what they do", () => {
     navigation: ["app-bar", "masthead", "site-header", "lang-switch", "submenu", "navbar", "sidebar"],
     "page-structure": ["article-header", "site-footer", "page-header", "hero", "section"],
     content: ["dashboard", "faq", "stat", "toc", "terminal", "timeline"],
-    "site-wide": ["color-mode", "announcement", "cookie-consent", "search"],
+    "site-wide": ["theme-time", "announcement", "cookie-consent", "search"],
     documentation: ["do-dont", "example", "page-footer", "doc-header", "pager", "page-rail", "docs-layout"],
     reference: ["classes"],
   };

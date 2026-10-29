@@ -25,7 +25,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 const SOURCE = fileURLToPath(new URL("../packages/core/src/i18n.js", import.meta.url));
 
-/** The Spanish strings of before F6, plus the two keys F6 adds. */
+/** The Spanish strings of before F6, plus the two keys F6 adds (the colour mode keys left with the cycle button, 2026-10-29). */
 const ES = {
   play: "Reproducir",
   pause: "Pausar",
@@ -46,9 +46,6 @@ const ES = {
   copyCode: "Copiar el ejemplo de código {n}",
   applyTheme: "Aplicar tema",
   themeApplied: "Aplicado",
-  changeMode: "Cambiar el modo de color. Actual: {mode}",
-  modeChanged: "Modo de color: {mode}",
-  modeAuto: "Automático",
   sortedAsc: "Ordenado por {column}, ascendente",
   sortedDesc: "Ordenado por {column}, descendente",
   previous: "Anterior",

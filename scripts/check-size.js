@@ -109,7 +109,7 @@ const IMPORT_CALL = /\bimport\s*\(/g;
 const LITERAL_IMPORT = /\bimport\s*\(\s*(["'])([^"'`]+)\1\s*\)/g;
 const STATIC_IMPORT = /(?:^|[;}\s])(?:import\b(?!\s*[(.])|export\b[^"'();]*?\bfrom\b)/;
 const LOADERS = {
-  "packages/catalog/dist/catalog.min.js": ["./cookie-consent.min.js", "./color-mode.min.js", "./search.min.js", "./sidebar.min.js", "./timeline.min.js"],
+  "packages/catalog/dist/catalog.min.js": ["./cookie-consent.min.js", "./theme-time.min.js", "./theme-time-bar.min.js", "./search.min.js", "./sidebar.min.js", "./timeline.min.js"],
   // The home's light (apps/landing/light/): served as written, no build, so the same rules hold for its sources
   "apps/landing/light/light.js": ["./globe.js"],
   "apps/landing/light/globe.js": ["./globe-data.js"],

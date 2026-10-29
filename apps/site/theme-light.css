@@ -1,9 +1,10 @@
 /* ==========================================================================
    LUZ website — the light by the hour (apps/site/theme-light.css)
 
-   The site follows the clock in Auto (boot.js and <luz-color-mode by="clock">
-   write data-light on <html>). Afternoon and night are Vejer itself, the
-   light and dark modes LUZ ships, so they have no block here; high contrast
+   The site follows the clock in Auto (catalog's theme-time-boot.js and
+   <luz-theme-time> write data-moment on <html>). Afternoon and night are
+   Vejer itself, the light and dark modes LUZ ships, so they have no block
+   here; high contrast
    is never overridden. Four lights override the colour tokens over the mode
    they belong to:
 
@@ -28,12 +29,39 @@
    ========================================================================== */
 
 /* -------------------------------------------------------------------------
+   THE SKY of the bar's track (catalog's <luz-theme-time variant="bar">)
+   One colour for each moment of the footer's list, as the home's bar drew its
+   day before the bar was catalog's: night, dawn, morning, afternoon, sunset,
+   dusk. theme-time-bar.js reads --luz-theme-time-sky-<moment> and puts a
+   stop in the middle of each moment. In high contrast the track is one solid
+   fill of the text colour.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --luz-theme-time-sky-night: #171b36;
+  --luz-theme-time-sky-dawn: #6b3f5f;
+  --luz-theme-time-sky-morning: #f7dfb0;
+  --luz-theme-time-sky-afternoon: #cfe1f6;
+  --luz-theme-time-sky-sunset: #f2aa73;
+  --luz-theme-time-sky-dusk: #27254a;
+}
+
+:root[data-theme="high-contrast"] {
+  --luz-theme-time-sky-night: var(--luz-text-primary);
+  --luz-theme-time-sky-dawn: var(--luz-text-primary);
+  --luz-theme-time-sky-morning: var(--luz-text-primary);
+  --luz-theme-time-sky-afternoon: var(--luz-text-primary);
+  --luz-theme-time-sky-sunset: var(--luz-text-primary);
+  --luz-theme-time-sky-dusk: var(--luz-text-primary);
+}
+
+/* -------------------------------------------------------------------------
    MORNING, over light: warm cream and amber
    Cream walls in the first sun; the actions are amber, a deep amber for text and a
    brighter one for fills, so a button never reads as a link.
    -------------------------------------------------------------------------- */
 
-:root[data-theme="light"][data-light="morning"] {
+:root[data-theme="light"][data-moment="morning"] {
   color-scheme: light;
 
   /* Surfaces */
@@ -100,7 +128,7 @@
    keep 4.5:1 on them.
    -------------------------------------------------------------------------- */
 
-:root[data-theme="light"][data-light="sunset"] {
+:root[data-theme="light"][data-moment="sunset"] {
   color-scheme: light;
 
   /* Surfaces */
@@ -166,7 +194,7 @@
    solid fill a deeper rose that carries white text.
    -------------------------------------------------------------------------- */
 
-:root[data-theme="dark"][data-light="dawn"] {
+:root[data-theme="dark"][data-moment="dawn"] {
   color-scheme: dark;
 
   /* Surfaces */
@@ -233,7 +261,7 @@
    the mockup's so that fill keeps 3:1 on the page and 4.5:1 under white text.
    -------------------------------------------------------------------------- */
 
-:root[data-theme="dark"][data-light="dusk"] {
+:root[data-theme="dark"][data-moment="dusk"] {
   color-scheme: dark;
 
   /* Surfaces */

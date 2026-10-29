@@ -1,0 +1,26 @@
+<!-- expect: a11y/slider-no-name 15:5 -->
+<!-- expect: a11y/slider-no-name 18:7 -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A bar whose slider has no name</title>
+  <link rel="stylesheet" href="node_modules/@luz-ds/tokens/dist/luz-tokens.min.css">
+  <link rel="stylesheet" href="node_modules/@luz-ds/core/dist/luz.min.css">
+  <link rel="stylesheet" href="node_modules/@luz-ds/catalog/dist/components/theme-time.min.css">
+</head>
+<body>
+  <main class="o-container o-stack">
+    <h1>Acme Summit 2027</h1>
+    <luz-theme-time variant="bar" show="time"></luz-theme-time>
+    <section data-luz-label-saved="Saved">
+      <!-- The note is not the name: only data-luz-label-scrub names the slider -->
+      <luz-theme-time variant="bar"></luz-theme-time>
+    </section>
+    <section data-luz-label-scrub="Hour of the day">
+      <luz-theme-time variant="bar"></luz-theme-time>
+    </section>
+    <luz-theme-time></luz-theme-time>
+  </main>
+</body>
+</html>

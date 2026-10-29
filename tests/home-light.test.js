@@ -13,7 +13,7 @@
  *
  * What the browser does with them is in tests/home-light.spec.js. This file
  * holds what a file can say about itself: no HTML sink, no injected style, no
- * write of the attributes <luz-color-mode> owns, one row of budgets.json per file,
+ * write of the attributes <luz-theme-mode> and <luz-theme-time> own, one row of budgets.json per file,
  * the licence of the land data and the phrases of the bar in three languages.
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
@@ -147,16 +147,16 @@ describe("apps/landing/light: no HTML sink, no injected style (SEC-IDX-2, plan s
   }
 });
 
-/* ---- The controller leaves the mode to <luz-color-mode> ----------------------- */
+/* ---- The controller leaves the mode to <luz-theme-mode> and <luz-theme-time> --- */
 
-describe("light.js: <luz-color-mode> is the only writer of data-theme and data-light", () => {
+describe("light.js: <luz-theme-mode> and <luz-theme-time> are the only writers of data-mode, data-theme and data-moment", () => {
   const source = () => code(`${DIR}/light.js`);
 
-  it("does not write data-theme or data-light, by setAttribute, removeAttribute, toggleAttribute or dataset", () => {
+  it("does not write data-theme, data-mode, data-moment or data-light, by setAttribute, removeAttribute, toggleAttribute or dataset", () => {
     const s = source();
-    expect(s).not.toMatch(/(?:set|remove|toggle)Attribute\(\s*["']data-(?:theme|light)["']/);
-    expect(s).not.toMatch(/\.dataset\.(?:theme|light)\s*=/);
-    expect(s).not.toMatch(/\.dataset\[\s*["'](?:theme|light)["']\s*\]\s*=/);
+    expect(s).not.toMatch(/(?:set|remove|toggle)Attribute\(\s*["']data-(?:theme|mode|moment|light)["']/);
+    expect(s).not.toMatch(/\.dataset\.(?:theme|mode|moment|light)\s*=/);
+    expect(s).not.toMatch(/\.dataset\[\s*["'](?:theme|mode|moment|light)["']\s*\]\s*=/);
   });
 
   it("has no mode buttons and no mode, for, light-attr or mode-attr attribute", () => {
@@ -165,17 +165,20 @@ describe("light.js: <luz-color-mode> is the only writer of data-theme and data-l
     expect(s).not.toMatch(/observedAttributes[^;]*["']mode["']/);
   });
 
-  it("does not repeat the phase table of <luz-color-mode> (the phase is <luz-color-mode>'s)", () => {
+  it("does not repeat the moments of <luz-theme-time> (the moment is <luz-theme-time>'s, declared by the page)", () => {
     const s = source();
     expect(s).not.toMatch(/\bphaseOf\b/);
     for (const edge of ["7.5", "17.5", "20.5", "22.5", "6.25", "21.25", "23.75"]) expect(s, `the hour ${edge}`).not.toMatch(new RegExp(`(?<![\\d.])${edge.replace(".", "\\.")}(?![\\d])`));
   });
 
-  it("asks <luz-color-mode> to preview the hour, and listens to luz-color-mode:change", () => {
+  it("builds catalog's <luz-theme-time variant=\"bar\">, follows the hour it holds, and listens to luz-theme-time:change", () => {
     const s = source();
-    expect(s).toMatch(/["']luz-color-mode["']/);
-    expect(s).toMatch(/\.preview\(/);
-    expect(s).toContain("luz-color-mode:change");
+    expect(s).toMatch(/["']luz-theme-time["']/);
+    expect(s).toMatch(/variant:\s*["']bar["']/);
+    expect(s).toMatch(/\.hour\b/);
+    expect(s).toMatch(/\.pinned\b/);
+    expect(s).toContain("luz-theme-time:change");
+    expect(s).not.toContain("luz-color-mode");
   });
 
   it("writes only custom properties on the page: --sun-alt, --sun-az, --sun-x and --day-left", () => {
@@ -303,7 +306,7 @@ describe("apps/landing/index.html: the light section", () => {
     expect(tag, "a <home-light> in it").not.toBe("");
     for (const flag of ["bleed", "favicon"]) expect(tag).toMatch(new RegExp(`\\s${flag}(?=[\\s>=])`));
     for (const gone of ["looks", "look", "remember", "still"]) expect(tag, `the ${gone} attribute is gone`).not.toMatch(new RegExp(`\\s${gone}(?=[\\s>=])`));
-    // the modes, the target and the attribute names are gone: <luz-color-mode> owns them
+    // the modes, the target and the attribute names are gone: <luz-theme-time> owns them
     for (const gone of ["modes=", "mode=", "for=", "light-attr", "mode-attr"]) expect(tag).not.toContain(gone);
   });
 
@@ -400,9 +403,10 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
     expect(budgets.some((b) => /light\/(?:city|map|puzzle)\.js$/.test(b.file ?? ""))).toBe(false);
   });
 
-  it("puts them after the color-mode chunk row, the last row that existed, with the prompts row and the debug page row appended after them (no other row moved or raised)", () => {
+  it("puts them after the theme-time-boot script row, the last row that existed, with the prompts row and the debug page row appended after them (no other row moved or raised)", () => {
     const names = budgets.map((b) => b.name);
-    const mode = names.indexOf("catalog JS lazy chunk: color-mode");
+    const mode = names.findIndex((name) => /^catalog theme-time-boot script/.test(name));
+    expect(mode, "the theme-time-boot script row").toBeGreaterThanOrEqual(0);
     expect(names.slice(mode + 1)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)", "debug page HTML (docs/debug/index.html, uncompressed)"]);
   });
 
@@ -413,7 +417,8 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
       .slice(header + 2)
       .filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")))
       .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
-    const at = table.findIndex((cells) => /^`catalog` JS lazy chunk: `color-mode`/.test(cells[0]));
+    const at = table.findIndex((cells) => /^`catalog` theme-time boot script/.test(cells[0]));
+    expect(at, "the theme-time boot script row of the table").toBeGreaterThanOrEqual(0);
     // the prompts row (the kinds plan, F1) comes after them, then the debug page row
     const rows = table.slice(at + 1, at + 1 + ROWS.length);
     expect(table.slice(at + 1)).toHaveLength(ROWS.length + 2);

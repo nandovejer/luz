@@ -64,7 +64,6 @@ describe("apps/site holds what the home page and the docs share", () => {
   const MOVED = [
     ["apps/docs/site-header.css", "apps/site/header.css"],
     ["apps/docs/site-header.js", "apps/site/header.js"],
-    ["apps/landing/theme-boot.js", "apps/site/boot.js"],
     ["apps/docs/_partials/header.html", "apps/site/_partials/header.html"],
     ["apps/docs/_partials/site-links.html", "apps/site/_partials/site-links.html"],
     ["apps/docs/_partials/footer.html", "apps/site/_partials/footer.html"],
@@ -77,6 +76,13 @@ describe("apps/site holds what the home page and the docs share", () => {
   it.each(MOVED)("%s moved to %s", (from, to) => {
     expect(existsSync(join(repo, to)), `${to} exists`).toBe(true);
     expect(existsSync(join(repo, from)), `${from} is gone`).toBe(false);
+  });
+
+  it("has no boot.js: the scripts for the <head> are the packages' (core's theme-boot.js and catalog's theme-time-boot.js), and apps/landing/theme-boot.js is gone", () => {
+    expect(existsSync(join(repo, "apps/site/boot.js")), "apps/site/boot.js is gone").toBe(false);
+    expect(existsSync(join(repo, "apps/landing/theme-boot.js")), "apps/landing/theme-boot.js is gone").toBe(false);
+    expect(existsSync(join(repo, "packages/core/src/theme-boot.js"))).toBe(true);
+    expect(existsSync(join(repo, "packages/catalog/src/theme-time-boot.js"))).toBe(true);
   });
 
   it("has theme-light.css, the four lights", () => {
@@ -121,14 +127,16 @@ describe("the header moved to apps/site keeps what it did", () => {
     expect(css).toContain(".site-modes");
   });
 
-  it("header.js exports initSiteHeader() with no option, still wires core's cycle button and the sidebar, and defines <luz-color-mode>", () => {
+  it("header.js exports initSiteHeader() with no option, still wires the sidebar, and defines <luz-theme-mode> and <luz-theme-time>; the round button is the element's own, so it calls no initThemeCycle()", () => {
     expect(existsSync(join(repo, "apps/site/header.js")), "apps/site/header.js exists").toBe(true);
     const code = read("apps/site/header.js").replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
     expect(code).toMatch(/export\s+function\s+initSiteHeader\s*\(\s*\)/);
-    expect(code).toMatch(/\binitThemeCycle\s*\(/);
+    expect(code).not.toMatch(/\binitThemeCycle\b/);
     expect(code).toMatch(/\binitSidebar\s*\(/);
     expect(code).toContain("--site-header-h");
-    expect(code).toMatch(/import\s*["']\/packages\/catalog\/dist\/color-mode\.js["']|from\s*["']\/packages\/catalog\/dist\/color-mode\.js["']/);
+    expect(code).toMatch(/import\s*["']\/packages\/core\/dist\/theme-mode\.js["']|from\s*["']\/packages\/core\/dist\/theme-mode\.js["']/);
+    expect(code).toMatch(/import\s*["']\/packages\/catalog\/dist\/theme-time\.js["']|from\s*["']\/packages\/catalog\/dist\/theme-time\.js["']/);
+    expect(code).not.toMatch(/color-mode/);
     expect(code).not.toMatch(/onModeChange|luz-site-mode|initModes/);
   });
 });

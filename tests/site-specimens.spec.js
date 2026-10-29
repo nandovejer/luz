@@ -6,7 +6,7 @@
  * (`[data-docs-specimen]`, `.luz-do-dont__stage`) is re-anchored to the
  * colour mode of <html> with a data-theme of its own, so under any of the six
  * lights its tokens are Vejer's for that mode. apps/docs/reference.js does it
- * (initSpecimenTheme) and follows `luz-color-mode:change`. Nothing is served with
+ * (initSpecimenTheme) and follows `luz-theme-time:change`. Nothing is served with
  * data-theme on a specimen: without JavaScript the specimens inherit Vejer's
  * light and the no-JS radios still re-scope them (tests/nojs.spec.js).
  */
@@ -23,7 +23,7 @@ const TOKENS = ['--luz-surface-page', '--luz-text-primary', '--luz-brand-fill'];
 
 const ready = async (page) => {
   await page.goto(PAGE);
-  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
+  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
 };
 
 test.describe('a specimen keeps the colours of the mode, whatever the light', () => {
@@ -31,7 +31,7 @@ test.describe('a specimen keeps the colours of the mode, whatever the light', ()
     test(`${light} (${time}): <html> is ${mode} and every specimen carries data-theme="${mode}" with Vejer's tokens`, async ({ page }) => {
       await atTime(page, time);
       await ready(page);
-      expect(await page.evaluate(() => [document.documentElement.dataset.theme, document.documentElement.dataset.light])).toEqual([mode, light]);
+      expect(await page.evaluate(() => [document.documentElement.dataset.theme, document.documentElement.dataset.moment])).toEqual([mode, light]);
 
       const specimens = page.locator(SPECIMENS);
       expect(await specimens.count(), 'the page has specimens').toBeGreaterThan(1);
@@ -69,7 +69,7 @@ test.describe('a specimen follows the mode when the visitor changes it', () => {
   test('Dark, then High contrast, then Light: data-theme follows <html> and the tokens follow data-theme', async ({ page }) => {
     await atTime(page, '14:00');
     await ready(page);
-    const button = page.locator('footer .luz-mode-cycle');
+    const button = page.locator('footer .luz-theme-mode__button');
     const specimen = page.locator('[data-docs-specimen]').first();
     // Auto → Light → Dark → High contrast → Auto
     await button.click();
@@ -102,7 +102,7 @@ test.describe('a specimen follows the mode when the visitor changes it', () => {
     await atTime(page, '23:30');
     await ready(page);
     await expect(page.locator('[data-docs-specimen]').first()).toHaveAttribute('data-theme', 'dark');
-    const button = page.locator('footer .luz-mode-cycle');
+    const button = page.locator('footer .luz-theme-mode__button');
     await button.click(); // Light
     await expect(page.locator('[data-docs-specimen]').first()).toHaveAttribute('data-theme', 'light');
     await expect(page.locator('.luz-do-dont__stage').first()).toHaveAttribute('data-theme', 'light');
@@ -117,7 +117,7 @@ test.describe('the canvas of the HTML reference is painted with the tokens of th
     const other = await page.context().newPage();
     await seedMode(other, 'dark');
     await gotoId(other, 'd-canvas');
-    await expect.poll(() => other.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
+    await expect.poll(() => other.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
     const value = await pixel(other);
     await other.close();
     return value;
@@ -126,12 +126,12 @@ test.describe('the canvas of the HTML reference is painted with the tokens of th
   test('a choice repaints it, and after the fade it is the colour of a page loaded in that mode', async ({ page }) => {
     await seedMode(page, 'light');
     await gotoId(page, 'd-canvas');
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
     const dark = await darkPixel(page);
     const light = await pixel(page);
     expect(light).not.toBe('0,0,0,0');
     expect(light).not.toBe(dark);
-    await page.locator('footer .luz-mode-cycle').click();
+    await page.locator('footer .luz-theme-mode__button').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await faded(page);
     // Not the colours of the first frame of the fade
@@ -141,12 +141,12 @@ test.describe('the canvas of the HTML reference is painted with the tokens of th
   test('the clock repaints it when it moves the page from the afternoon to the night', async ({ page }) => {
     await atTime(page, '14:00');
     await gotoId(page, 'd-canvas');
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
     const dark = await darkPixel(page);
     const afternoon = await pixel(page);
     expect(afternoon).not.toBe(dark);
     await page.clock.fastForward('09:30:00');
-    await expect(page.locator('html')).toHaveAttribute('data-light', 'night');
+    await expect(page.locator('html')).toHaveAttribute('data-moment', 'night');
     await faded(page);
     await expect.poll(() => pixel(page)).toBe(dark);
   });

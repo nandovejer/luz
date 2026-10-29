@@ -1,0 +1,227 @@
+<!-- luz:page
+title: Modo de color
+description: Permite elegir Automático, claro, oscuro o alto contraste: con botones de opción que funcionan sin JavaScript o con un botón redondo que los recorre.
+keywords: modo oscuro, selector de modo, claro y oscuro
+source: 145d8ac86e4f
+reviewed: false
+-->
+    <div class="docs-component" id="c-theme-mode">
+          <h2 id="example">Ejemplo</h2>
+          <p>El grupo de botones de opción, el botón redondo fijo en la esquina final de su escenario y el mismo botón en el flujo. Son imágenes de los estados: no están dentro de ningún elemento y son inertes, así que no cambian esta página. El botón que funciona es el de la esquina final de esta ventana.</p>
+          <div class="docs-example" data-docs-specimen>
+          <p class="docs-stage__label">Radio group</p>
+          <div class="docs-demo__stage" inert aria-hidden="true">
+            <fieldset class="luz-theme-mode__group" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)"><legend class="luz-theme-mode__legend">Color mode (specimen)</legend><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Auto</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Light</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Dark</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode-specimen" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label></fieldset>
+          </div>
+          <p class="docs-stage__label">Button, fixed at the end corner</p>
+          <div class="docs-demo__stage docs-stage__fixed" inert aria-hidden="true">
+            <button class="luz-theme-mode__button luz-theme-mode__button--fixed" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)" type="button" aria-label="Color mode: Auto (specimen)"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg></button>
+          </div>
+          <p class="docs-stage__label">Button, inline</p>
+          <div class="docs-demo__stage" inert aria-hidden="true">
+            <button class="luz-theme-mode__button" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)" type="button" aria-label="Color mode: Dark (specimen)"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg></button>
+          </div>
+          <p class="docs-demo__note">Without JavaScript the radios show in the flow, as in the first stage, and there is no button.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Qué puedes esperar:</p>
+          <ul>
+            <li>Sin <a href="#boot">el script de la cabecera</a>, una persona con modo oscuro ve primero la página clara durante un instante: el elemento se ejecuta después del primer pintado.</li>
+            <li>Automático sigue solo los ajustes del sistema. Para que siga también la hora del día, añade <a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, del catálogo.</li>
+            <li>El texto es tuyo: LUZ no escribe ninguna etiqueta, así que traduce la leyenda y los modos con la página.</li>
+            <li>No se ha probado con un lector de pantalla.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del modo de color">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Escribe un botón de opción por cada elección dentro de <code>&lt;luz-theme-mode&gt;</code>, en el orden en que el botón los recorre. Pon un icono SVG (<code>currentColor</code>, <code>aria-hidden</code>) en cada etiqueta: el botón muestra el de la opción seleccionada. La leyenda y las etiquetas son tuyas.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-mode" aria-label="Copy the markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Markup"><code id="code-theme-mode">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/core@0.2.1/dist/luz.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;luz-theme-mode&gt;
+  &lt;fieldset class=&quot;luz-theme-mode__group&quot;&gt;
+    &lt;legend class=&quot;luz-theme-mode__legend&quot;&gt;Color mode&lt;/legend&gt;
+    &lt;label class=&quot;luz-theme-mode__option&quot;&gt;&lt;input class=&quot;luz-theme-mode__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-mode&quot; value=&quot;auto&quot; checked&gt;&lt;svg class=&quot;luz-theme-mode__icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;Auto&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-mode__option&quot;&gt;&lt;input class=&quot;luz-theme-mode__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-mode&quot; value=&quot;light&quot;&gt;&lt;svg class=&quot;luz-theme-mode__icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;Light&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-mode__option&quot;&gt;&lt;input class=&quot;luz-theme-mode__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-mode&quot; value=&quot;dark&quot;&gt;&lt;svg class=&quot;luz-theme-mode__icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;Dark&lt;/label&gt;
+    &lt;label class=&quot;luz-theme-mode__option&quot;&gt;&lt;input class=&quot;luz-theme-mode__input&quot; type=&quot;radio&quot; name=&quot;luz-theme-mode&quot; value=&quot;high-contrast&quot;&gt;&lt;svg class=&quot;luz-theme-mode__icon&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;High contrast&lt;/label&gt;
+  &lt;/fieldset&gt;
+&lt;/luz-theme-mode&gt;</code></pre>
+            </div>
+            <p><code>luz.min.js</code> carga <code>theme-mode.min.js</code> cuando la página tiene el elemento. Para cargarlo tú, o para un elemento añadido cuando la página ya ha cargado, <code>import "@luz-ds/core/theme-mode";</code>.</p>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Atributos y clases" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>&lt;luz-theme-mode&gt;</code></div></td><td data-label="Efecto"><div>El elemento. Contiene los botones de opción; con scripting activado añade un botón redondo, fijo en la esquina final.</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>inline</code></div></td><td data-label="Efecto"><div>Un booleano. El botón se queda donde lo pone el marcado: un pie de página, una barra de navegación, una barra lateral.</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>no-remember</code></div></td><td data-label="Efecto"><div>Un booleano. La elección no se lee ni se guarda en <code>luz-theme</code>: la página empieza en Automático.</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>name="luz-theme-mode"</code></div></td><td data-label="Efecto"><div>Mantenlo: sin JavaScript, los tokens lo leen para cambiar el modo.</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>value</code></div></td><td data-label="Efecto"><div><code>auto</code>, <code>light</code>, <code>dark</code> o <code>high-contrast</code>. El botón recorre los botones de opción en el orden del marcado y se salta los desactivados.</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-theme-mode__group</code></div></td><td data-label="Efecto"><div>El fieldset de botones de opción; sin el botón, una fila de opciones.</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-theme-mode__legend</code>, <code>.luz-theme-mode__option</code>, <code>.luz-theme-mode__input</code>, <code>.luz-theme-mode__icon</code></div></td><td data-label="Efecto"><div>La leyenda (da nombre al grupo y, con la etiqueta seleccionada, al botón); una etiqueta con su botón de opción, su icono y su nombre; el botón de opción, oculto a la vista pero con foco; el icono, que el botón copia de la opción seleccionada.</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>__button</code>, <code>__button--fixed</code>, <code>__status</code></div></td><td data-label="Efecto"><div>Los escribe el script, no tú: el botón redondo (fijo salvo con <code>inline</code>) y una región dinámica oculta que dice el nuevo modo.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h4 id="api">Propiedades, métodos y evento</h4>
+            <div class="luz-table-wrap" role="region" aria-label="Propiedades, métodos y evento" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Nombre</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Nombre"><div><code>el.choice</code></div></td><td data-label="Qué hace"><div>La elección (<code>auto</code>, <code>light</code>, <code>dark</code>, <code>high-contrast</code>). Al asignarla se elige ese botón de opción; cualquier otro valor se ignora.</div></td></tr>
+                  <tr><td data-label="Nombre"><div><code>el.mode</code></div></td><td data-label="Qué hace"><div>El modo en uso. En Automático es el del sistema.</div></td></tr>
+                  <tr><td data-label="Nombre"><div><code>el.refresh()</code></div></td><td data-label="Qué hace"><div>Aplica el modo de nuevo. Llámalo después de cambiar lo que significa Automático.</div></td></tr>
+                  <tr><td data-label="Nombre"><div><code>el.autoMode</code></div></td><td data-label="Qué hace"><div>Una función que devuelve <code>light</code>, <code>dark</code> o nada (el del sistema). Otro script la asigna para decidir qué significa Automático, como hace <code>&lt;luz-theme-time&gt;</code>; el alto contraste del sistema sigue ganando.</div></td></tr>
+                  <tr><td data-label="Nombre"><div><code>luz-theme-mode:change</code></div></td><td data-label="Qué hace"><div>Sube por el árbol tras la mejora y en cada cambio. <code>detail</code>: <code>mode</code>, <code>auto</code> (la elección es Automático) y <code>user</code> (la ha elegido una persona).</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Un grupo nativo de botones de opción con estilos de <code>components/theme-mode.css</code>. Los botones de opción son el estado; con scripting activado, el elemento los convierte en un botón.</p>
+            <ul>
+              <li><strong>El botón:</strong> cada pulsación marca el siguiente botón de opción y lo aplica; el grupo se oculta mientras está el botón. El script añade <code>luz-theme-mode__button--fixed</code> al botón fijo y no lo añade con <code>inline</code>. Un botón de opción con foco se lo pasa al botón.</li>
+              <li><strong>Automático sigue el sistema,</strong> también mientras la página está abierta: <code>prefers-contrast: more</code> da <code>high-contrast</code>; si no, <code>prefers-color-scheme: dark</code> da <code>dark</code>; si no, <code>light</code>.</li>
+              <li><strong>Qué escribe en <code>&lt;html&gt;</code>:</strong> el modo en <code>data-mode</code> y, sin marca, el mismo valor en <code>data-theme</code>, que es el que leen los tokens. Una página que nombra una marca (<code>data-theme="my-brand"</code>, un <a href="/docs/tokens/themes/">tema propio</a> hecho a partir de <code>_template.css</code>) la conserva, y los bloques de la marca responden a <code>data-mode</code>.</li>
+              <li><strong>La elección se recuerda</strong> en <code>luz-theme</code>, en <code>localStorage</code>; Automático la elimina y <code>no-remember</code> lo desactiva. Si el script de la cabecera ya ha escrito <code>data-mode</code>, el primer Automático lo adopta. Un segundo <code>&lt;luz-theme-mode&gt;</code> sigue al primero.</li>
+              <li><strong>Dónde está el botón:</strong> salvo con <code>inline</code>, en la esquina final de la ventana (abajo a la izquierda en una página de derecha a izquierda), en <code>--luz-z-raised</code>: por encima del contenido y por debajo de la barra lateral, los diálogos y los avisos.</li>
+              <li><strong>Deja libre la esquina.</strong> Dale al pie de página un relleno final de <code>calc(var(--luz-control-lg) + var(--luz-space-md) * 2)</code> dentro de <code>@media (scripting: enabled)</code>. La hoja de estilos añade <code>scroll-padding-block-end</code> a <code>&lt;html&gt;</code>, así que con Tab ningún elemento con foco queda bajo el botón; con <a href="/docs/catalog/cookie-consent/"><code>&lt;luz-cookie-consent&gt;</code></a> visible, el botón se coloca sobre el banner.</li>
+              <li><strong>En una barra lateral</strong> toma los colores de la <a href="/docs/catalog/sidebar/">barra lateral</a> del catálogo; en otra superficie oscura, define las propiedades <code>--luz-theme-mode-*</code>.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>Los cuatro botones de opción se muestran donde los pone el marcado; no hay botón. Elegir uno cambia el modo, porque los tokens leen el botón de opción seleccionado (<code>:root:has()</code>), mientras <code>&lt;html&gt;</code> no tenga un <code>data-mode</code>. Funciona también con un <a href="/docs/tokens/themes/">tema de marca</a>, si su <code>_template.css</code> es el actual. La elección no se recuerda y Automático es claro.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Botón:</strong> se llega a él con Tab; Enter o Espacio pasa al modo siguiente. El foco sigue el marcado, no la esquina.</li>
+              <li><strong>Nombre y estado:</strong> el nombre del botón es el texto de la leyenda, dos puntos y la etiqueta de la opción seleccionada, como «Modo de color: Oscuro». Después de que una persona elija, una región oculta con <code>role="status"</code> dice lo mismo; no dice nada cuando carga la página.</li>
+              <li><strong>Botones de opción:</strong> sin el botón, con Tab se llega al grupo y las teclas de dirección eligen un modo.</li>
+            </ul>
+            <h3 id="boot">Script para la cabecera</h3>
+            <p>Opcional. Establece el modo antes del primer pintado, así que una persona con modo oscuro nunca ve primero la página clara. Copia <code>node_modules/@luz-ds/core/dist/theme-boot.min.js</code> a tu propio origen y enlázalo en el <code>&lt;head&gt;</code>, antes de las hojas de estilos:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-theme-boot" aria-label="Copy the script for the head">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Script for the head"><code id="code-theme-boot">&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;script src=&quot;/theme-boot.min.js&quot;&gt;&lt;/script&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;…&quot;&gt;
+&lt;/head&gt;</code></pre>
+            </div>
+            <ul>
+              <li><strong>Qué escribe:</strong> <code>data-mode</code> en <code>&lt;html&gt;</code> y <code>data-theme</code> con el mismo valor, salvo que la página nombre una marca. El modo es el guardado en <code>luz-theme</code> o, si no, el del sistema (como Automático, arriba). Nunca escribe en el almacenamiento.</li>
+              <li><strong>Por qué bloquea el renderizado:</strong> es un script clásico, no un módulo, de unos cientos de bytes: el navegador lo ejecuta antes del primer pintado. Es la única excepción documentada a no usar JavaScript en la ruta crítica (EX-009), y cada sitio decide si lo usa. Sin él, el elemento escribe los mismos atributos después del primer pintado, así que una persona con modo oscuro ve la página clara durante un instante.</li>
+              <li><strong>Tu propio origen:</strong> con una Content-Security-Policy (CSP) sin <code>'unsafe-inline'</code>, sirve el archivo desde tu propio origen. Un script bloqueante de otro servidor retrasa el primer pintado y necesita ese servidor en <code>script-src</code>.</li>
+            </ul>
+            <h3 id="extend">Amplíalo con el catálogo: momentos del día y la barra</h3>
+            <p><a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, de <code>@luz-ds/catalog</code>, envuelve a este elemento. Le da a Automático la hora del día, en los momentos que declares (amanecer, mañana, atardecer), y puede añadir un deslizador de las 24 horas. Este elemento no lo necesita: si el catálogo no carga, el botón funciona como aquí.</p>
+            <p class="docs-view__xref"><a href="#contrast">El contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Ofrece un control del modo de color en todas las páginas del sitio, siempre en el mismo lugar.</p>
+            <ul>
+              <li>El botón redondo en la esquina final, una vez por página.</li>
+              <li>El botón redondo con <code>inline</code>, cuando forma parte de un panel: un pie de página, una barra de navegación, una barra lateral.</li>
+            </ul>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No pongas un segundo botón fijo en una página: los demás son en línea.</p>
+            <ul>
+              <li>No lo fijes en una esquina que ocupa otro control, como un botón de chat.</li>
+              <li>No dejes los botones de opción fuera del marcado: sin JavaScript son el único control.</li>
+              <li>No lo uses para elegir una marca: una marca se nombra con <code>data-theme</code>; este elemento elige su modo.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Nombra los modos según lo que son: «Automático», «Claro», «Oscuro» y «Alto contraste».</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <fieldset class="luz-theme-mode__group" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)"><legend class="luz-theme-mode__legend">Color mode</legend><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-do" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Auto</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-do" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Light</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-do" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Dark</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-do" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label></fieldset>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Llamar «Accesible» al modo de alto contraste: da a entender que los otros no lo son y no explica qué cambia.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <fieldset class="luz-theme-mode__group" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)"><legend class="luz-theme-mode__legend">Color mode</legend><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-dont" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg>Default</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-dont" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="12" cy="12" r="4.75"/><circle cx="21.25" cy="12.00" r="1.35"/><circle cx="18.54" cy="18.54" r="1.35"/><circle cx="12.00" cy="21.25" r="1.35"/><circle cx="5.46" cy="18.54" r="1.35"/><circle cx="2.75" cy="12.00" r="1.35"/><circle cx="5.46" cy="5.46" r="1.35"/><circle cx="12.00" cy="2.75" r="1.35"/><circle cx="18.54" cy="5.46" r="1.35"/></g></svg>Day</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-dont" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Night</label><label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="dd-mode-dont" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>Accessible</label></fieldset>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Un único botón fijo en la esquina final, con los botones de opción dentro del elemento para quien no tiene JavaScript.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="docs-stage__fixed"><p class="docs-stage__label">A page, with its one fixed button</p><button class="luz-theme-mode__button luz-theme-mode__button--fixed" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)" type="button" aria-label="Color mode: Auto"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg></button></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Poner un segundo control fijo en la misma esquina: se tapan entre sí y uno queda oculto cuando el otro está encima.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="docs-stage__fixed"><p class="docs-stage__label">A page, with two fixed buttons</p><button class="luz-theme-mode__button luz-theme-mode__button--fixed" style="--luz-theme-mode-line: var(--luz-outline); --luz-theme-mode-hover: var(--luz-surface-hover); --luz-theme-mode-focus: var(--luz-focus-ring); --luz-theme-mode-on: var(--luz-brand-fill); --luz-theme-mode-on-text: var(--luz-text-on-fill); --luz-theme-mode-bg: var(--luz-surface); --luz-theme-mode-edge: var(--luz-divider); --luz-theme-mode-text: var(--luz-text-secondary)" type="button" aria-label="Color mode: Auto"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/><path stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M11 3h0M5 6h0M2 12h0M5 18h0M11 21h0"/></svg></button><button class="luz-btn luz-btn--primary docs-stage__fab" type="button" tabindex="-1">Chat</button></div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Llama al grupo «Modo de color» y a las opciones «Automático», «Claro», «Oscuro» y «Alto contraste».</p>
+            <ul>
+              <li>Cada opción conserva su nombre visible junto a su icono, así que los botones de opción se leen sin los iconos.</li>
+              <li>El nombre del botón es la leyenda más la etiqueta seleccionada, «Modo de color: Oscuro». Escribe ambas de modo que se lean bien juntas y tradúcelas con la página: LUZ no escribe nada de este texto.</li>
+              <li>Di cerca del control qué sigue Automático: «Automático sigue tu dispositivo».</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>En la página, la opción seleccionada aparece rellena con el color de marca; en la barra lateral usa los colores del enlace actual de esa barra. El botón redondo es una superficie con su icono: el modo seleccionado es su icono, nunca un relleno.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Etiqueta del grupo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Nombre de la opción, al pasar el cursor</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde de la opción</div></td><td data-label="Color sobre el fondo"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4.3:1</div></td><td data-label="Oscuro"><div>3.6:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Icono del botón redondo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Icono del botón redondo, al pasar el cursor</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>6.2:1</div></td><td data-label="Alto contraste"><div>18.4:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Opción seleccionada</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Relleno de la opción seleccionada</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>3.5:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta del grupo, en la barra lateral</div></td><td data-label="Color sobre el fondo"><div><code>--luz-sidebar-label</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Claro"><div>6.7:1</div></td><td data-label="Oscuro"><div>6.6:1</div></td><td data-label="Alto contraste"><div>6.4:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Opción seleccionada, en la barra lateral</div></td><td data-label="Color sobre el fondo"><div><code>--luz-sidebar-active-text</code> on <code>--luz-sidebar-active-bg</code></div></td><td data-label="Claro"><div>10.3:1</div></td><td data-label="Oscuro"><div>10.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Relleno de la opción seleccionada, en la barra lateral</div></td><td data-label="Color sobre el fondo"><div><code>--luz-sidebar-active-bg</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Claro"><div>8.9:1</div></td><td data-label="Oscuro"><div>10.2:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco, en la barra lateral</div></td><td data-label="Color sobre el fondo"><div><code>--luz-sidebar-text-hover</code> on <code>--luz-sidebar-bg</code></div></td><td data-label="Claro"><div>15.7:1</div></td><td data-label="Oscuro"><div>18.9:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> un contorno de 2 px, a 2 px de la opción completa o del botón redondo, con <code>--luz-focus-ring</code> en la página y <code>--luz-sidebar-text-hover</code> en la barra lateral.</li>
+              <li><strong>No solo color:</strong> cada opción conserva su nombre visible; con colores forzados, la seleccionada usa el color de resaltado del sistema y un borde de 2 px, y una desactivada tiene un borde discontinuo.</li>
+              <li><strong>Borde:</strong> la línea fina del botón redondo (<code>--luz-divider</code>) es un adorno: lo que distingue el control es el icono, con 3:1 o más. Con colores forzados el borde es <code>ButtonText</code> y se elimina la sombra.</li>
+              <li><strong>Área interactiva:</strong> cada opción mide al menos 28 px de alto; el botón redondo mide <code>--luz-control-lg</code> de ancho y de alto.</li>
+              <li><strong>Sin taparse:</strong> la página deja libre la esquina en su final y desplaza un elemento con foco para sacarlo de debajo del botón (WCAG 2.4.11).</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 22 tokens que lee <code>components/theme-mode.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-brand-subtle"><code>--luz-brand-subtle</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-sidebar-text-hover"><code>--luz-sidebar-text-hover</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Espaciado y tamaños</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Tipografía</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radio</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Sombras</a></dt><dd><code>--luz-shadow-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Movimiento</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+              <div><dt><a href="/docs/tokens/layers/">Capas</a></dt><dd><code>--luz-z-raised</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">El teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

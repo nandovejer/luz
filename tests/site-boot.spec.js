@@ -1,17 +1,17 @@
 // @ts-check
 /**
- * apps/site/boot.js in the browser (F2 of .claude/plans/luz-home-docs-identity.md,
+ * core's theme-boot.js and catalog's theme-time-boot.js in the browser (F2 of .claude/plans/luz-home-docs-identity.md,
  * section 3.4; EX-009). The rules are checked one by one in tests/site-boot.test.js:
  * here the real pages.
  *
  *   - a stored choice is on <html> before any module of the page has run, so
  *     the first frame is the visitor's mode;
- *   - with no choice, the light follows the clock: data-light is the phase,
+ *   - with no choice, the light follows the clock: data-moment is the phase,
  *     data-theme is dark for dawn, dusk and night, on the home page and on
  *     the docs, and the system's colour scheme does not decide;
  *   - the served HTML says nothing of the light: without JavaScript the page is
  *     Vejer light and core's radios switch it, so the script is the only
- *     writer of data-light.
+ *     writer of data-moment.
  */
 import { test, expect } from '@playwright/test';
 import { LIGHTS, NO_CHOICE, TIMEZONE, atTime, colorOf, channels, lightToken, seedMode, vejer } from './helpers/site-lights.js';
@@ -22,11 +22,11 @@ import { faded, idle } from './helpers/settle.js';
 test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
 
 const PAGES = ['/', '/docs/'];
-// Every module the pages load, except the boot script, which is classic
+// Every module the pages load, except the boot scripts, which is classic
 const MODULES = /\/apps\/(?:landing\/landing|docs\/reference|site\/header)\.js/;
 
 /**
- * Record every write to data-theme and data-light on <html> with the value it
+ * Record every write to data-theme and data-moment on <html> with the value it
  * replaced (attributeOldValue), so a value written and overwritten in the
  * same task is seen too, and what the parser had at DOMContentLoaded.
  */
@@ -35,11 +35,19 @@ const watch = (page) =>
     const w = /** @type {any} */ (window);
     w.__log = [];
     w.__dcl = null;
+    const html = () => document.documentElement;
     new MutationObserver((records) => {
       for (const r of records) if (r.target === document.documentElement) w.__log.push([r.attributeName, r.oldValue]);
-    }).observe(document, { attributes: true, subtree: true, attributeOldValue: true, attributeFilter: ['data-theme', 'data-light'] });
+    }).observe(document, { attributes: true, subtree: true, attributeOldValue: true, attributeFilter: ['data-theme', 'data-moment'] });
+    // The two boot scripts of the <head> write one after the other, in one task, before the first frame: the first
+    // value anyone can see is the one <html> has when <body> is inserted. The log starts from there, as the markup served it.
+    new MutationObserver((records, observer) => {
+      if (!records.some((r) => [...r.addedNodes].some((n) => n.nodeName === 'BODY'))) return;
+      w.__log = [['data-theme', html().getAttribute('data-theme')], ['data-moment', html().getAttribute('data-moment')]];
+      observer.disconnect();
+    }).observe(document, { childList: true, subtree: true });
     document.addEventListener('DOMContentLoaded', () => {
-      w.__dcl = [document.documentElement.getAttribute('data-theme'), document.documentElement.getAttribute('data-light')];
+      w.__dcl = [document.documentElement.getAttribute('data-theme'), document.documentElement.getAttribute('data-moment')];
     });
   });
 
@@ -58,12 +66,12 @@ const only = (values) => [...new Set(values)];
 const state = (page) =>
   page.evaluate(() => ({
     theme: document.documentElement.getAttribute('data-theme'),
-    light: document.documentElement.getAttribute('data-light'),
+    light: document.documentElement.getAttribute('data-moment'),
   }));
 
-/** The modules have run: <luz-color-mode> is defined, core has had its turn and the page is quiet. */
+/** The modules have run: <luz-theme-time> is defined, core has had its turn and the page is quiet. */
 async function modulesRan(page) {
-  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-color-mode'))).toBe(true);
+  await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
   await idle(page);
 }
 
@@ -81,14 +89,14 @@ test.describe('a stored choice is applied before the first frame', () => {
       test(`${path} with ${mode} stored: ${mode}, light ${light}, before any module runs`, async ({ page }) => {
         await watch(page);
         await seedMode(page, mode);
-        // Only the boot script can have set it: the page's modules never load
+        // Only the boot scripts can have set it: the page's modules never load
         await page.route(MODULES, (route) => route.abort());
         await page.goto(path);
         const dcl = await page.evaluate(() => /** @type {any} */ (window).__dcl);
         expect(dcl, 'on <html> when the parser is done').toEqual([mode, light]);
         // Every value the attributes took, the overwritten ones too: never another mode, even for one task
         expect(only(await took(page, 'data-theme'))).toEqual([mode]);
-        expect(only(await took(page, 'data-light'))).toEqual([light]);
+        expect(only(await took(page, 'data-moment'))).toEqual([light]);
         expect(await state(page)).toEqual({ theme: mode, light });
       });
 
@@ -100,8 +108,8 @@ test.describe('a stored choice is applied before the first frame', () => {
         await page.goto(path);
         await modulesRan(page);
         expect(only(await took(page, 'data-theme'))).toEqual([mode]);
-        expect(only(await took(page, 'data-light'))).toEqual([light]);
-        await expect(page.locator(`input[name="luz-theme"][value="${mode}"]`)).toBeChecked();
+        expect(only(await took(page, 'data-moment'))).toEqual([light]);
+        await expect(page.locator(`input[name="luz-theme-mode"][value="${mode}"]`)).toBeChecked();
       });
     }
   }
@@ -131,7 +139,7 @@ test.describe('with no choice, the light follows the clock', () => {
         await watch(page);
         await page.route(MODULES, (route) => route.abort());
         await page.goto(path);
-        // Before any module: the boot script alone
+        // Before any module: the boot scripts alone
         expect(await page.evaluate(() => /** @type {any} */ (window).__dcl)).toEqual([mode, light]);
         expect(await state(page)).toEqual({ theme: mode, light });
       });
@@ -141,11 +149,11 @@ test.describe('with no choice, the light follows the clock', () => {
         await watch(page);
         await page.goto(path);
         await modulesRan(page);
-        await expect(page.locator('input[name="luz-theme"]:checked'), 'no mode chosen: no radio checked').toHaveCount(0);
+        await expect(page.locator('input[name="luz-theme-mode"]:checked'), 'no mode chosen: Auto is the radio checked').toHaveValue('auto');
         expect(await state(page)).toEqual({ theme: mode, light });
-        // Core's theme module and <luz-color-mode> both run: neither writes the other mode, not even to correct it in a later task
+        // Core's theme module and <luz-theme-time> both run: neither writes the other mode, not even to correct it in a later task
         expect(only(await took(page, 'data-theme'))).toEqual([mode]);
-        expect(only(await took(page, 'data-light'))).toEqual([light]);
+        expect(only(await took(page, 'data-moment'))).toEqual([light]);
       });
     }
   }
@@ -169,7 +177,7 @@ test.describe('with no choice, the light follows the clock', () => {
   });
 
   for (const path of PAGES) {
-    test(`${path}: prefers-contrast: more at 09:00 is morning at <body> insertion and after <luz-color-mode> upgraded, with no flip`, async ({ page }) => {
+    test(`${path}: prefers-contrast: more at 09:00 is morning at <body> insertion and after <luz-theme-time> upgraded, with no flip`, async ({ page }) => {
       await page.emulateMedia({ contrast: 'more' });
       await atTime(page, '09:00');
       await watch(page);
@@ -177,10 +185,10 @@ test.describe('with no choice, the light follows the clock', () => {
       await modulesRan(page);
       expect(await page.evaluate(() => /** @type {any} */ (window).__dcl)).toEqual(['high-contrast', 'morning']);
       expect(await state(page)).toEqual({ theme: 'high-contrast', light: 'morning' });
-      // Every value the attributes took: boot's, then <luz-color-mode>'s, the same
+      // Every value the attributes took: boot's, then <luz-theme-time>'s, the same
       expect(only(await took(page, 'data-theme'))).toEqual(['high-contrast']);
-      expect(only(await took(page, 'data-light'))).toEqual(['morning']);
-      await expect(page.locator('input[name="luz-theme"]:checked'), 'no mode chosen: no radio checked').toHaveCount(0);
+      expect(only(await took(page, 'data-moment'))).toEqual(['morning']);
+      await expect(page.locator('input[name="luz-theme-mode"]:checked'), 'no mode chosen: Auto is the radio checked').toHaveValue('auto');
     });
   }
 
@@ -195,7 +203,7 @@ test.describe('with no choice, the light follows the clock', () => {
 });
 
 test.describe('with no choice, core\'s own theme handling runs under every system colour scheme and stays on the clock', () => {
-  // core's initThemeSystem and <luz-color-mode> both listen to prefers-color-scheme
+  // core's initThemeSystem and <luz-theme-time> both listen to prefers-color-scheme
   for (const path of PAGES) {
     test(`${path}: a dark system at 14:00, modules loaded: light, afternoon, and a change of the system does not move it`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: 'dark' });
@@ -210,7 +218,7 @@ test.describe('with no choice, core\'s own theme handling runs under every syste
       await page.evaluate(() => /** @type {any} */ (window).__scheme);
       expect(await state(page)).toEqual({ theme: 'light', light: 'afternoon' });
       expect(only(await took(page, 'data-theme'))).toEqual(['light']);
-      await expect(page.locator('input[name="luz-theme"]:checked'), 'no mode chosen: no radio checked').toHaveCount(0);
+      await expect(page.locator('input[name="luz-theme-mode"]:checked'), 'no mode chosen: Auto is the radio checked').toHaveValue('auto');
     });
 
     test(`${path}: a light system at 21:00, modules loaded: dark, dusk, and a change of the system does not move it`, async ({ page }) => {
@@ -270,7 +278,7 @@ test.describe('the four lights are in the page', () => {
         await atTime(page, time);
         await page.goto(path);
         await modulesRan(page);
-        expect(await page.evaluate(() => document.documentElement.dataset.light)).toBe(light);
+        expect(await page.evaluate(() => document.documentElement.dataset.moment)).toBe(light);
         expect(channels(await colorOf(page.locator('html'), '--luz-surface-page')), `--luz-surface-page in ${light}`).toEqual(lightToken(light, '--luz-surface-page'));
         expect(channels(await colorOf(page.locator('html'), '--luz-text-primary')), `--luz-text-primary in ${light}`).toEqual(lightToken(light, '--luz-text-primary'));
         // The boot script sets the light before the first frame: there is no fade to wait for
@@ -303,7 +311,7 @@ test.describe('the cross-fade follows the visitor\'s motion setting', () => {
         if (event.target === document.documentElement && event.propertyName.startsWith('--luz-')) w.__fades.push(event.propertyName);
       });
     });
-    await page.locator('footer .luz-mode-cycle').click();
+    await page.locator('footer .luz-theme-mode__button').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await expect.poll(() => page.evaluate(() => /** @type {any} */ (window).__fades.length), 'the colour tokens of <html> are transitioning').toBeGreaterThan(0);
     await faded(page);
@@ -315,7 +323,7 @@ test.describe('the cross-fade follows the visitor\'s motion setting', () => {
     await seedMode(page, 'light');
     await page.goto('/docs/');
     await modulesRan(page);
-    await page.locator('footer .luz-mode-cycle').click();
+    await page.locator('footer .luz-theme-mode__button').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     // No settling: the very next read is the colour of the mode
     expect(await page.evaluate(() => document.documentElement.getAnimations().filter((a) => String(/** @type {any} */ (a).transitionProperty).startsWith('--luz-')).length)).toBe(0);
@@ -325,21 +333,26 @@ test.describe('the cross-fade follows the visitor\'s motion setting', () => {
 
 test.describe('the served HTML says nothing of the light', () => {
   for (const path of ['/', '/es/', '/ar/', '/docs/', '/docs/components/button/']) {
-    test(`${path}: no data-light, and the boot script is in <head>`, async ({ request }) => {
+    test(`${path}: no data-moment, and the boot scripts is in <head>`, async ({ request }) => {
       const response = await request.get(path);
       expect(response.ok()).toBe(true);
       const html = await response.text();
-      expect(html).not.toMatch(/\sdata-light(?:=|\s|>)/);
+      expect(html).not.toMatch(/\sdata-moment(?:=|\s|>)/);
       const head = html.slice(html.indexOf('<head'), html.indexOf('</head>'));
-      expect(head).toMatch(/<script src="[^"]*boot\.js[^"]*"><\/script>/);
-      // Classic and render-blocking, by design (EX-009): neither deferred, async nor a module
-      expect(head).not.toMatch(/<script[^>]*(?:defer|async|type="module")[^>]*boot\.js/);
+      // Core's script, then the catalog's with the moments on its tag
+      expect(head).toMatch(/<script src="[^"]*theme-boot(?:\.min)?\.js[^"]*"><\/script>/);
+      expect(head).toMatch(/<script src="[^"]*theme-time-boot(?:\.min)?\.js[^"]*" data-moments="[^"]+"><\/script>/);
+      expect(head.indexOf('theme-boot'), 'core\'s first').toBeLessThan(head.indexOf('theme-time-boot'));
+      // Classic and render-blocking, by design (EX-009, EX-012): neither deferred, async nor a module
+      expect(head).not.toMatch(/<script[^>]*(?:defer|async|type="module")[^>]*boot(?:\.min)?\.js/);
     });
   }
 
-  test('the boot script is served, as a classic script with no import', async ({ request }) => {
-    const response = await request.get('/apps/site/boot.js');
-    expect(response.ok()).toBe(true);
-    expect(await response.text()).not.toMatch(/^\s*(?:import|export)\b/m);
+  test('the boot scripts are served, as classic scripts with no import', async ({ request }) => {
+    for (const file of ['/packages/core/dist/theme-boot.min.js', '/packages/catalog/dist/theme-time-boot.min.js']) {
+      const response = await request.get(file);
+      expect(response.ok(), file).toBe(true);
+      expect(await response.text(), file).not.toMatch(/^\s*(?:import|export)\b/m);
+    }
   });
 });

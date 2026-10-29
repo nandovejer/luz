@@ -9,7 +9,7 @@
  *   import { initTabs } from "@luz-ds/core/tabs";
  */
 
-import { initThemeSystem, initThemeCycle } from "./theme.js";
+import { initThemeSystem } from "./theme.js";
 import { initCopyButtons } from "./clipboard.js";
 import { initModals } from "./modal.js";
 import { initHighlight } from "./highlight.js";
@@ -26,7 +26,6 @@ export {
   applyTheme,
   applyMode,
   initThemeSystem,
-  initThemeCycle,
 } from "./theme.js";
 export { copyToClipboard, initCopyButtons } from "./clipboard.js";
 export { initModals, supportsCommands } from "./modal.js";
@@ -72,10 +71,11 @@ if (typeof document !== "undefined") {
 
   /**
    * Two waves. Wave 1 writes no string and never waits: it is what a visitor
-   * uses at once (theme, copy handlers, dialogs, tabs, the click of the
-   * color-mode button), and it does not set data-luz-js, so no control is
-   * revealed before it works. Wave 2 writes the strings of its scripts (code
-   * block names, players, the cycle button's name, sortable tables): it runs
+   * uses at once (theme, copy handlers, dialogs, tabs, the color-mode button,
+   * whose chunk loads only when the page has a <luz-theme-mode>), and it does
+   * not set data-luz-js, so no control is revealed before it works. Wave 2
+   * writes the strings of its scripts (code block names, players, sortable
+   * tables): it runs
    * when the language has arrived, or after two seconds, and then the page
    * is marked as enhanced. On a page in English both waves
    * run in the same task.
@@ -84,12 +84,12 @@ if (typeof document !== "undefined") {
     warnIfTokensMissing();
     const defer = true;
     initThemeSystem(defer);
-    initThemeCycle(document, defer);
+    // The mode button is its own chunk and its own budget; its names come from the markup, so it waits for nothing
+    if (document.querySelector("luz-theme-mode")) import("./theme-mode.js");
     initCopyButtons(defer);
     initModals();
     initTabs(document, defer);
     const strings = () => {
-      initThemeCycle();
       initHighlight();
       initPlayers();
       // A sortable heading loads its module on demand: its own chunk, its own budget

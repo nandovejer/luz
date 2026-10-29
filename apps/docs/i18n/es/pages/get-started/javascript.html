@@ -1,11 +1,11 @@
 <!-- luz:page
 title: Módulos de JavaScript
 description: Qué añade cada script opcional, cómo cargar solo el que necesitas y qué hace la página sin ellos.
-source: 851a684f03b9
+source: a7637620c5f1
 reviewed: false
 -->
     <div class="docs-block" id="c-js">
-          <p>Todas las páginas de LUZ funcionan sin JavaScript. Los scripts añaden comportamiento: copiar, resaltar, un botón que alterna el modo de color, reproductores, pestañas y ordenación de tablas. El catálogo añade los suyos: búsqueda, aviso de cookies, modo de color automático, una línea de tiempo y el seguimiento del desplazamiento de la barra lateral.</p>
+          <p>Todas las páginas de LUZ funcionan sin JavaScript. Los scripts añaden comportamiento: copiar, resaltar, un botón que alterna el modo de color, reproductores, pestañas y ordenación de tablas. El catálogo añade los suyos: búsqueda, aviso de cookies, la hora del día para el modo de color, una línea de tiempo y el seguimiento del desplazamiento de la barra lateral.</p>
           <h2 id="js-load">Cargarlo todo o un módulo</h2>
           <div class="docs-snippet">
             <div class="docs-snippet__bar">
@@ -26,14 +26,15 @@ initTabs();</code></pre>
             <li><code>luz.js</code> inicia todos los módulos al cargar la página.</li>
             <li>Importar un solo módulo no hace nada hasta que llamas a su función <code>init</code>.</li>
             <li><code>midi.js</code> y <code>table-sort.js</code> son fragmentos independientes: <code>luz.js</code> carga cada uno cuando hace falta y solo en las páginas que lo necesitan.</li>
-            <li>La búsqueda del sitio está en <code>@luz-ds/catalog</code>: consulta <a href="/docs/catalog/search/">Búsqueda</a>. El aviso de cookies también está ahí, en un módulo propio que <code>catalog.js</code> no incluye: consulta <a href="/docs/catalog/cookie-consent/">Consentimiento de cookies</a>. El modo de color automático es un tercer módulo del mismo tipo, <code>color-mode.js</code>, que <code>catalog.js</code> carga solo en páginas con <code>&lt;luz-color-mode&gt;</code>: consulta <a href="/docs/catalog/color-mode/">Modo de color automático</a>.</li>
+            <li><code>theme-mode.js</code> es otro: <code>luz.js</code> lo carga solo en una página con un <code>&lt;luz-theme-mode&gt;</code>. Consulta <a href="/docs/components/theme-mode/">Modo de color</a>.</li>
+            <li>La búsqueda del sitio está en <code>@luz-ds/catalog</code>: consulta <a href="/docs/catalog/search/">Búsqueda</a>. El aviso de cookies también está ahí, en un módulo propio que <code>catalog.js</code> no incluye: consulta <a href="/docs/catalog/cookie-consent/">Consentimiento de cookies</a>. La hora del día para el modo de color es un tercer módulo del mismo tipo, <code>theme-time.js</code>, que <code>catalog.js</code> carga solo en páginas con un <code>&lt;luz-theme-time&gt;</code>: consulta <a href="/docs/catalog/theme-time/">Modo de color según la hora del día</a>.</li>
             <li>La línea de tiempo y el seguimiento del desplazamiento de la barra lateral también están en <code>@luz-ds/catalog</code>, como <code>timeline.js</code> y <code>sidebar.js</code>. <code>catalog.js</code> carga el primero en páginas con <code>&lt;luz-timeline&gt;</code> y el segundo en páginas con <code>.luz-sidebar</code>, o con una lista marcada con <code>data-luz-spy</code>. Impórtalos por su nombre para una línea de tiempo o una barra lateral añadidas más tarde: <code>@luz-ds/catalog/timeline</code> y <code>@luz-ds/catalog/sidebar</code>.</li>
             <li>Una página que solo carga core no tiene seguimiento del desplazamiento. El cajón de la barra lateral es un popover nativo y funciona sin script.</li>
             <li>La línea de tiempo tiene un diccionario pequeño propio para sus cuatro botones (solo <code>en</code> y <code>es</code>), y después <code>data-luz-label-*</code> y el <code>lang</code> más cercano. Un idioma añadido con <code>registerLocale()</code> no le llega: llama a <code>initTimeline(document, t)</code> con la <code>t</code> de core.</li>
           </ul>
           <h2 id="js-modules">Los módulos</h2>
           <details class="docs-fold" open data-fold-narrow>
-            <summary>Los <span data-count="modules">11</span> módulos de JavaScript de core</summary>
+            <summary>Los <span data-count="modules">13</span> módulos de JavaScript de core</summary>
             <div class="docs-demo__stage">
             <div class="luz-table-wrap" role="region" aria-label="Módulos de JavaScript" tabindex="0">
               <table class="luz-table">
@@ -42,7 +43,9 @@ initTabs();</code></pre>
                 </thead>
                 <tbody>
                   <tr><td data-label="Módulo"><div><code>luz.js</code></div></td><td data-label="Qué hace"><div>Punto de entrada: vuelve a exportar todos los módulos y los inicia al cargar la página</div></td><td data-label="Exportaciones principales"><div>Todo lo que aparece a continuación</div></td></tr>
-                  <tr><td data-label="Módulo"><div><code>theme.js</code></div></td><td data-label="Qué hace"><div>Cambio del modo de color</div></td><td data-label="Exportaciones principales"><div><code>applyTheme</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>theme.js</code></div></td><td data-label="Qué hace"><div>Cambio a un aspecto propio; el modo de color es de <code>theme-mode.js</code></div></td><td data-label="Exportaciones principales"><div><code>applyTheme</code></div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>theme-mode.js</code></div></td><td data-label="Qué hace"><div>El elemento <code>&lt;luz-theme-mode&gt;</code>, en un archivo propio que se carga bajo demanda</div></td><td data-label="Exportaciones principales"><div>Ninguna: al importarlo se define el elemento</div></td></tr>
+                  <tr><td data-label="Módulo"><div><code>theme-boot.js</code></div></td><td data-label="Qué hace"><div>Un script clásico para la <code>&lt;head&gt;</code>: el modo de color antes del primer pintado</div></td><td data-label="Exportaciones principales"><div>Ninguna</div></td></tr>
                   <tr><td data-label="Módulo"><div><code>clipboard.js</code></div></td><td data-label="Qué hace"><div>Copiar con respuesta visual</div></td><td data-label="Exportaciones principales"><div><code>copyToClipboard</code>, <code>initCopyButtons</code></div></td></tr>
                   <tr><td data-label="Módulo"><div><code>modal.js</code></div></td><td data-label="Qué hace"><div>Alternativa para los atributos <code>command</code> y <code>commandfor</code> en navegadores que no los admiten</div></td><td data-label="Exportaciones principales"><div><code>initModals</code>, <code>supportsCommands</code></div></td></tr>
                   <tr><td data-label="Módulo"><div><code>highlight.js</code></div></td><td data-label="Qué hace"><div>Resaltado de sintaxis sin dependencias para bloques de código</div></td><td data-label="Exportaciones principales"><div><code>highlightBlock</code>, <code>initHighlight</code></div></td></tr>
@@ -59,7 +62,7 @@ initTabs();</code></pre>
           </details>
           <h3 id="js-languages">Idiomas y textos que escriben los scripts</h3>
           <p>El inglés está en el punto de entrada. Cada uno de los demás idiomas que incluye LUZ es un archivo pequeño, que se carga al inicio en páginas cuyo <code>&lt;html lang&gt;</code> o cuyo <code>lang</code> fuera de un enlace o una opción lo indica; las páginas en inglés no hacen ninguna solicitud.</p>
-          <p>Con los módulos individuales, llama tú a <code>loadLocales()</code> y usa <code>await loadLocales()</code> antes de <code>initHighlight()</code>, <code>initPlayers()</code> e <code>initThemeCycle()</code>. Si no se puede cargar un archivo, se muestra un único aviso en la consola y se usa el inglés.</p>
+          <p>Con los módulos individuales, llama tú a <code>loadLocales()</code> y usa <code>await loadLocales()</code> antes de <code>initHighlight()</code> e <code>initPlayers()</code>. Si no se puede cargar un archivo, se muestra un único aviso en la consola y se usa el inglés.</p>
           <p>Para un idioma que LUZ no incluya, establece una vez <code>data-luz-label-*</code> en <code>&lt;html&gt;</code> o <code>&lt;body&gt;</code>, o llama a <code>registerLocale()</code> antes de iniciar los scripts.</p>
           <p>Para comprobar el archivo, añade un mapa de importación con una sección <code>integrity</code> antes del primer script de módulo, solo en las páginas de ese idioma. Un enlace <code>modulepreload</code> con <code>integrity</code> no es una protección en Safari ni Firefox: úsalo como mejora del rendimiento.</p>
           <p>Añadir un idioma a LUZ requiere un pull request: el archivo JSON <code>packages/core/src/i18n/&lt;code&gt;.json</code>, una línea en el mapa <code>files</code> de <code>i18n.js</code> y una fila de presupuesto. Los pasos están en AGENTS.md.</p>
@@ -72,8 +75,8 @@ initTabs();</code></pre>
               </thead>
               <tbody>
                 <tr><td data-label="Componente"><div><a href="/docs/components/tabs/">Pestañas</a></div></td><td data-label="Sin JavaScript"><div>Enlaces y todos los paneles apilados</div></td></tr>
-                <tr><td data-label="Componente"><div><a href="/docs/components/mode-switcher/">Selector del modo de color</a></div></td><td data-label="Sin JavaScript"><div>Tres botones de opción que siguen cambiando el modo; no se recuerda la elección</div></td></tr>
-                <tr><td data-label="Componente"><div><a href="/docs/catalog/color-mode/">Modo de color automático</a></div></td><td data-label="Sin JavaScript"><div>Los cuatro botones de opción siguen cambiando el modo; Automático equivale a claro, y no se sigue ni el sistema ni el reloj</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/components/theme-mode/">Modo de color</a></div></td><td data-label="Sin JavaScript"><div>Los cuatro botones de opción siguen cambiando el modo; Automático equivale a claro y no se recuerda la elección</div></td></tr>
+                <tr><td data-label="Componente"><div><a href="/docs/catalog/theme-time/">Hora del tema</a></div></td><td data-label="Sin JavaScript"><div>No se muestran ni la barra ni los momentos; los botones de opción de core siguen cambiando el modo y no se sigue el reloj</div></td></tr>
                 <tr><td data-label="Componente"><div><a href="/docs/components/copy-button/">Botón de copia</a></div></td><td data-label="Sin JavaScript"><div>Oculto; el texto sigue pudiéndose seleccionar</div></td></tr>
                 <tr><td data-label="Componente"><div><a href="/docs/components/player/">Reproductor</a></div></td><td data-label="Sin JavaScript"><div>Los controles propios del navegador para archivos multimedia; MIDI muestra su texto alternativo</div></td></tr>
                 <tr><td data-label="Componente"><div><a href="/docs/components/modal/">Diálogo modal</a></div></td><td data-label="Sin JavaScript"><div>Se abre donde el navegador admite <code>command</code>; en los demás casos, el botón de apertura no hace nada</div></td></tr>

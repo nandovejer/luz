@@ -26,7 +26,8 @@ export const LAYOUT = ["navbar", "sidebar", "terminal", "timeline"];
 export const ELEMENTS = [
   { name: "search", tag: "luz-search", css: "search", chunk: "search" },
   { name: "cookie-consent", tag: "luz-cookie-consent", css: "cookie-consent", chunk: "cookie-consent" },
-  { name: "color-mode", tag: "luz-color-mode", css: "color-mode", chunk: "color-mode" },
+  // F8 named it color-mode; the theme-mode plan (2026-10-29) replaced it with the time of day, over core's <luz-theme-mode>
+  { name: "theme-time", tag: "luz-theme-time", css: "theme-time", chunk: "theme-time" },
   { name: "lang-switch", tag: "luz-lang-switch", css: "lang-switch", chunk: null },
   { name: "submenu", tag: "luz-submenu", css: "submenu", chunk: null },
   { name: "announcement", tag: "luz-announcement", css: "announcement", chunk: null },
@@ -102,6 +103,9 @@ export const CHUNKS = [
   ["consent", "cookie-consent"],
 ];
 
+/** The chunks of catalog that exist now: F8's `color-mode` became `theme-time` in the theme-mode plan. */
+export const CHUNK_NOW = { mode: "theme-time", consent: "cookie-consent" };
+
 /** Table 4 of the changeset, the custom properties. */
 export const PROPERTIES = [
   ["--luz-landing-glow-x", "--luz-glow-x"],
@@ -127,9 +131,25 @@ export const DOCS_KEPT = ["luz-docs-layout", "luz-docs-main", "luz-docs-nav"];
 
 /**
  * What F8 does not change and a scan for old names must leave alone: `getConsent()`, the `data-luz-consent*` attributes,
- * the `--luz-consent-h` property, the `luz-consent` key of localStorage and the `luz:consent` event; core's `luz-mode-*`.
+ * the `--luz-consent-h` property, the `luz-consent` key of localStorage and the `luz:consent` event. (Core's `luz-mode-*` classes
+ * were kept here until the theme-mode plan renamed them, with no alias, to `luz-theme-mode__*`.)
  */
-export const KEPT = ["getConsent", "data-luz-consent", "--luz-consent-h", "luz:consent", "luz-mode-switcher", "luz-mode-btn", "luz-mode-cycle"];
+export const KEPT = ["getConsent", "data-luz-consent", "--luz-consent-h", "luz:consent"];
+
+/**
+ * The names the theme-mode plan (2026-10-29) took out, with no alias: what replaced each. Old tag, class, chunk and event of the color
+ * mode, and of core's switcher, against the elements of core and catalog.
+ */
+export const THEME_MODE = {
+  tags: [["luz-color-mode", "luz-theme-time"]],
+  classes: [
+    ["luz-mode-switcher", "luz-theme-mode__group"],
+    ["luz-mode-btn", "luz-theme-mode__option"],
+    ["luz-mode-cycle", "luz-theme-mode__button"],
+  ],
+  chunks: [["color-mode", "theme-time"]],
+  events: [["luz-color-mode:change", "luz-theme-time:change"]],
+};
 
 /** A regular expression for an old class name as a whole word (`luz-cms-toc` but not `luz-cms-toc-top`'s property). */
 export const oldClassPattern = () => new RegExp(`(?<![\\w-])(?:${CLASSES.map(([old]) => old).filter((o) => o !== "luz-consent").join("|")})(?![a-z0-9-])`);

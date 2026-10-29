@@ -1,0 +1,279 @@
+/* ==========================================================================
+	 LUZ Catalog: the time of day, <luz-theme-time>.
+	 A wrapper around core's <luz-theme-mode> that gives its Auto the hour
+	 (theme-time.js). Without the bar it draws nothing of its own: the tag
+	 steps out of the way when core's button is fixed, and core's button is
+	 where core puts it. With
+	 variant="bar" (theme-time-bar.js) it is the slider of the 24 hours: the
+	 slider alone. Four more parts are opt-in, by the `show` attribute, a list
+	 of words: `time` (the hour in large type), `place` (the place and the
+	 moment), `saved` (the note, when an hour is pinned; without it the note
+	 is still there for a screen reader) and `moments` (the moments the markup
+	 declares, as options under it). The moments are a declaration, not a
+	 control, until the bar is built and asks for them: without JavaScript
+	 they are not shown.
+	 ========================================================================== */
+
+:where(luz-theme-time) {
+	display: block;
+}
+
+/* Core's button is fixed at the corner of the window: the tag would be an
+   empty block in the flow, with the gap of its parent */
+:where(luz-theme-time:not([variant="bar"])):has(.luz-theme-mode__button--fixed) {
+	display: contents;
+}
+
+.luz-theme-time__moments {
+	display: none;
+}
+
+/* The options under the bar, once it is there and `show` has moments */
+:where(luz-theme-time)[show~="moments"]:has(> .luz-theme-time__bar) .luz-theme-time__moments {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--luz-space-2xs);
+	min-inline-size: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.luz-theme-time__legend,
+.luz-theme-time__label {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.luz-theme-time__moment {
+	position: relative;
+	margin: 0;
+	padding: var(--luz-space-3xs) var(--luz-space-sm);
+	border: 1px solid var(--luz-outline);
+	border-radius: var(--luz-radius-full);
+	font-size: var(--luz-text-sm);
+	cursor: pointer;
+	transition: background var(--luz-duration-fast), color var(--luz-duration-fast);
+}
+
+.luz-theme-time__moment:hover {
+	background: var(--luz-surface-hover);
+}
+
+.luz-theme-time__moment:has(:checked) {
+	border-color: var(--luz-brand-fill);
+	background: var(--luz-brand-fill);
+	color: var(--luz-text-on-fill);
+}
+
+.luz-theme-time__moment:has(:focus-visible),
+.luz-theme-time__slider:focus-visible {
+	outline: 2px solid var(--luz-focus-ring);
+	outline-offset: 2px;
+}
+
+/* The radio is the label's: visually hidden, still focusable */
+.luz-theme-time__input {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	margin: -1px;
+	opacity: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+}
+
+.luz-theme-time__bar {
+	--luz-theme-time-way: 90deg;
+	--luz-theme-time-target: 2.75rem;
+	--luz-theme-time-track: 6px;
+	--luz-theme-time-thumb: 18px;
+	--luz-theme-time-edge: 0 0 2px 1px var(--luz-text-secondary);
+	--luz-theme-time-day: var(
+		--luz-theme-time-sky,
+		linear-gradient(
+			var(--luz-theme-time-way),
+			var(--luz-sidebar-bg) 18%,
+			var(--luz-brand-fill) 30%,
+			var(--luz-sidebar-active-bg) 40% 70%,
+			var(--luz-brand-fill) 82%,
+			var(--luz-sidebar-bg) 92%
+		)
+	);
+
+	display: flex;
+	flex-direction: column;
+	gap: var(--luz-space-2xs);
+	padding: var(--luz-space-sm) var(--luz-space-md);
+	color: var(--luz-text-primary);
+	font-size: var(--luz-text-sm);
+	line-height: 1.4;
+	text-align: center;
+}
+
+.luz-theme-time__bar > p {
+	margin: 0;
+}
+
+/* The hour and the place are opt-in (show="time place") */
+.luz-theme-time__hour,
+.luz-theme-time__where {
+	display: none;
+}
+
+:where(luz-theme-time)[show~="time"] .luz-theme-time__hour,
+:where(luz-theme-time)[show~="place"] .luz-theme-time__where {
+	display: block;
+}
+
+/* The note keeps its line while it is empty, so the hour does not jump */
+.luz-theme-time__saved {
+	min-block-size: 1lh;
+	color: var(--luz-color-success);
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity var(--luz-duration-slow), visibility var(--luz-duration-slow);
+}
+
+.luz-theme-time__saved[data-on] {
+	visibility: visible;
+	opacity: 1;
+}
+
+/* Without show="saved" the note is for a screen reader only: the live region stays */
+:where(luz-theme-time):not([show~="saved"]) .luz-theme-time__saved {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	min-block-size: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	visibility: visible;
+	opacity: 1;
+	white-space: nowrap;
+}
+
+.luz-theme-time__check {
+	margin-inline-start: 0.3em;
+}
+
+.luz-theme-time__hour {
+	font-size: var(--luz-text-3xl);
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.02em;
+	line-height: 1.1;
+}
+
+/* The day is the track: a bar as tall as the track, with the sky on it and the
+   soft edge around it. The slider is laid over it, as tall as a target needs,
+   and draws nothing but its thumb: a shadow on the browser's own track is
+   clipped by WebKit, and on the slider it would go round the whole target. */
+.luz-theme-time__day {
+	position: relative;
+	block-size: var(--luz-theme-time-track);
+	margin-block: calc((var(--luz-theme-time-target) - var(--luz-theme-time-track)) / 2);
+	border-radius: var(--luz-radius-full);
+	background: var(--luz-theme-time-day);
+	box-shadow: var(--luz-theme-time-edge);
+}
+
+/* The slider: the day on its track, a sun on its thumb by day and a moon by
+   night. Right to left, the day runs from the right. The track has a soft edge,
+   a shadow of 1px spread and 2px blur in the secondary text colour: the track
+   against the page is 1.2:1 at its pale midday in light and at its dark ends
+   in dark, and the edge brings every part of it to 3:1 or more (WCAG 1.4.11:
+   3.48 in light, 4.63 in dark, 21 in high contrast, measured on pixels).
+
+   The day is the sky the site paints. For each moment the markup declares,
+   theme-time-bar.js reads the colour of --luz-theme-time-sky-<value> (the
+   option's value: dawn, morning…) that the site sets on :root, and builds
+   --luz-theme-time-sky with one stop in the middle of the moment (the first
+   and last moment of the day close the track at both ends). A site that sets
+   none gets the ramp below: sidebar tones for the dark moments, brand and sky
+   for the others. */
+.luz-theme-time__bar:dir(rtl) {
+	--luz-theme-time-way: 270deg;
+}
+
+.luz-theme-time__slider {
+	position: absolute;
+	inset-block-start: calc((var(--luz-theme-time-track) - var(--luz-theme-time-target)) / 2);
+	inset-inline: 0;
+	inline-size: 100%;
+	block-size: var(--luz-theme-time-target);
+	margin: 0;
+	background: transparent;
+	cursor: pointer;
+	appearance: none;
+	accent-color: var(--luz-brand-primary);
+}
+
+.luz-theme-time__slider::-webkit-slider-runnable-track {
+	block-size: var(--luz-theme-time-track);
+	background: transparent;
+}
+
+.luz-theme-time__slider::-moz-range-track {
+	block-size: var(--luz-theme-time-track);
+	background: transparent;
+}
+
+.luz-theme-time__slider::-webkit-slider-thumb {
+	inline-size: var(--luz-theme-time-thumb);
+	block-size: var(--luz-theme-time-thumb);
+	margin-block-start: calc((var(--luz-theme-time-track) - var(--luz-theme-time-thumb)) / 2);
+	border: 2px solid var(--luz-brand-primary);
+	border-radius: var(--luz-radius-full);
+	background: var(--luz-surface);
+	box-shadow: 0 0 0 3px color-mix(in oklab, var(--luz-brand-fill) 35%, transparent);
+	appearance: none;
+}
+
+.luz-theme-time__slider::-moz-range-thumb {
+	inline-size: calc(var(--luz-theme-time-thumb) - 4px);
+	block-size: calc(var(--luz-theme-time-thumb) - 4px);
+	border: 2px solid var(--luz-brand-primary);
+	border-radius: var(--luz-radius-full);
+	background: var(--luz-surface);
+	box-shadow: 0 0 0 3px color-mix(in oklab, var(--luz-brand-fill) 35%, transparent);
+}
+
+/* By night the thumb is a crescent */
+.luz-theme-time__bar[data-base="dark"] .luz-theme-time__slider::-webkit-slider-thumb {
+	box-shadow: inset 5px -2px 0 0 var(--luz-surface-page);
+}
+
+.luz-theme-time__bar[data-base="dark"] .luz-theme-time__slider::-moz-range-thumb {
+	box-shadow: inset 4px -2px 0 0 var(--luz-surface-page);
+}
+
+@media (forced-colors: active) {
+	.luz-theme-time__bar {
+		--luz-theme-time-day: CanvasText;
+	}
+
+	/* Forced colours remove shadows: the edge is an outline there */
+	.luz-theme-time__day {
+		outline: 1px solid CanvasText;
+	}
+
+	.luz-theme-time__moment:has(:checked) {
+		forced-color-adjust: none;
+		background: Highlight;
+		color: HighlightText;
+	}
+}
+
+@media print {
+	:where(luz-theme-time) {
+		display: none;
+	}
+}

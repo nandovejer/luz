@@ -235,13 +235,15 @@ test.describe('HTML elements reference, in the documentation', () => {
     await seedMode(page, 'light');
     await open(page, CATEGORY_PAGES[0]);
     await expect(page.locator(`.docs-nav a[href="${OVERVIEW}"]`)).toHaveCount(1);
-    // The footer's cycle button: light, then dark and high contrast; the next step is Light again (no Auto)
+    // The footer's round button: light, then dark and high contrast; the next step is Auto, then Light again
     for (const mode of ['dark', 'high-contrast']) {
-      await page.click('footer .luz-mode-cycle');
+      await page.click('footer .luz-theme-mode__button');
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
     }
-    await page.click('footer .luz-mode-cycle');
-    await expect(page.locator('footer input[name="luz-theme"]:checked')).toHaveValue('light');
+    await page.click('footer .luz-theme-mode__button');
+    await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveValue('auto');
+    await page.click('footer .luz-theme-mode__button');
+    await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveValue('light');
   });
 
   test('the demos that need a script are wired', async ({ page }) => {
@@ -258,7 +260,7 @@ test.describe('HTML elements reference, in the documentation', () => {
       page.evaluate(() => [...document.getElementById('d-canvas').getContext('2d').getImageData(60, 60, 1, 1).data].join());
     const light = await pixel();
     expect(light).not.toBe('0,0,0,0');
-    await page.click('footer .luz-mode-cycle');
+    await page.click('footer .luz-theme-mode__button');
     // The page fades between modes for 1.4 s: the canvas is repainted for the mode it ends in
     await faded(page);
     await expect.poll(pixel).not.toBe(light);

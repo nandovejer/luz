@@ -45,9 +45,10 @@
  *   beside them, and the manifests of every package. Written by the build
  *   (`csp` is the policy of their <meta>; without it none is written) and
  *   served in dev from a route -> body table, never a path joined from the URL.
- * - The color-mode boot script (apps/site/boot.js, EX-009) is a
- *   classic script, which Vite does not bundle: the build copies it to
- *   /boot.js and points every page at it.
+ * - The color-mode boot scripts (core's theme-boot.min.js and catalog's
+ *   theme-time-boot.min.js, EX-009) are classic scripts, which Vite does not
+ *   bundle: the build copies them to /theme-boot.js and /theme-time-boot.js
+ *   and points every page at them.
  * - Every internal link is checked: an error in a build, a warning in dev.
  * - Editing a layout, a partial, a page or site.json reloads the browser.
  *
@@ -96,8 +97,11 @@ const CONTENT_TYPES = {
 /** The file name of a page's Markdown, next to its index.html. */
 const MARKDOWN_FILE = "index.md";
 
-/** The render-blocking color-mode script: its source and its file in the build. */
-const THEME_BOOT = { src: "/apps/site/boot.js", out: "boot.js" };
+/** The render-blocking color-mode scripts (core's, then catalog's): their sources and their files in the build. */
+const THEME_BOOTS = [
+  { src: "/packages/core/dist/theme-boot.min.js", out: "theme-boot.js" },
+  { src: "/packages/catalog/dist/theme-time-boot.min.js", out: "theme-time-boot.js" },
+];
 
 /** Output file of a route: "/" → "index.html", "/docs/a/" → "docs/a/index.html", "/404.html" → "404.html". */
 const outFileOf = (route) => (route.endsWith(".html") ? route.slice(1) : `${route.slice(1)}index.html`);
@@ -508,7 +512,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
         if (command === "build") {
           const root = relativeUrls ? rootFor(doc.route) : "/";
           // vite-ignore: Vite drops the attribute and does not warn about a classic script
-          out = out.replaceAll(`src="${THEME_BOOT.src}"`, `src="${root}${THEME_BOOT.out}" vite-ignore`);
+          for (const boot of THEME_BOOTS) out = out.replaceAll(`src="${boot.src}"`, `src="${root}${boot.out}" vite-ignore`);
           // The languages' alternates point at pages, not assets: Vite must not resolve them
           out = out.replaceAll('<link rel="alternate" ', '<link rel="alternate" vite-ignore ').replaceAll('<link rel="canonical" ', '<link rel="canonical" vite-ignore ');
         }
@@ -526,11 +530,9 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       // The examples, the files they load and the manifests of the packages, next to them
       for (const [route, { body }] of exampleFiles()) this.emitFile({ type: "asset", fileName: route.slice(1), source: body() });
       // Unhashed too: a classic script, which Vite leaves alone (EX-009)
-      this.emitFile({
-        type: "asset",
-        fileName: THEME_BOOT.out,
-        source: readFileSync(resolve(repoRoot, THEME_BOOT.src.slice(1)), "utf-8"),
-      });
+      for (const boot of THEME_BOOTS) {
+        this.emitFile({ type: "asset", fileName: boot.out, source: readFileSync(resolve(repoRoot, boot.src.slice(1)), "utf-8") });
+      }
     },
 
     closeBundle() {

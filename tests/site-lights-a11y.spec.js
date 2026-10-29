@@ -2,8 +2,8 @@
 /**
  * axe on the home page and the docs under each of the six lights (F2 of
  * .claude/plans/luz-home-docs-identity.md, section 3.4). The light is set the
- * way a visitor gets it: the clock, with no stored choice (apps/site/boot.js,
- * then <luz-color-mode by="clock">). The four lights that override tokens
+ * way a visitor gets it: the clock, with no stored choice (core's theme-boot.js and catalog's theme-time-boot.js,
+ * then <luz-theme-time by="clock">). The four lights that override tokens
  * (apps/site/theme-light.css) meet the same contrast as the modes under them.
  * Serious and critical violations fail; Chromium only (tests/a11y.spec.js
  * samples the other engines on the base modes).
@@ -24,7 +24,7 @@ for (const path of PAGES) {
       test.skip(browserName !== 'chromium', 'Chromium only');
       await atTime(page, time);
       await page.goto(path);
-      await expect.poll(() => page.evaluate(() => document.documentElement.dataset.light)).toBe(light);
+      await expect.poll(() => page.evaluate(() => document.documentElement.dataset.moment)).toBe(light);
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
       await idle(page);
       // The boot script sets the light before the first frame, so there is nothing to wait for:

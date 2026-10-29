@@ -207,31 +207,23 @@ test.describe("the colour-mode button is named in the language of the page at lo
     ["/ar/docs/", "ar"],
   ])) {
     test(`names it in ${code} on ${url}, with no click`, async ({ page }) => {
-      const expected = catalog(code)["footer.mode-change"];
-      expect(
-        expected,
-        `footer.mode-change in apps/landing/i18n/${code}.json`
-      ).toBeTruthy();
+      // The name is the page's own text: the legend of the footer's radios and the label of the checked one
+      const legend = catalog(code)["footer.mode"];
+      const auto = catalog(code)["footer.auto"];
+      expect(legend, `footer.mode in apps/landing/i18n/${code}.json`).toBeTruthy();
+      expect(auto, `footer.auto in apps/landing/i18n/${code}.json`).toBeTruthy();
       await page.goto(url);
       await page.waitForSelector("html[data-luz-js]");
       await page.waitForTimeout(1000);
-      const button = page.locator(".luz-mode-cycle");
+      const button = page.locator(".luz-theme-mode__button");
       await expect(button).toHaveCount(1);
-      // The text of the catalog, then the current mode may follow ("Cambiar el modo de color. Actual: Auto")
+      // The footer ships Auto checked: the name says so in the page's language
       const label = (await button.getAttribute("aria-label")) ?? "";
-      expect(
-        label.startsWith(expected),
-        `aria-label "${label}" starts with "${expected}"`
-      ).toBe(true);
+      expect(label, `aria-label "${label}"`).toBe(`${legend}: ${auto}`);
       if (code !== "en")
         expect(label, "no English left in the name").not.toMatch(
-          /Change color mode|Current/
+          /Change color mode|Current|Color mode|\bAuto\b/
         );
-      // The footer ships no checked radio: the mode follows the clock, and the name says so in the page's language
-      const auto = catalog(code)["js.mode-auto"];
-      expect(auto, `js.mode-auto in apps/landing/i18n/${code}.json`).toBeTruthy();
-      // In a right-to-left language the mode sits in a bidi isolate, so the word is inside the name, not at its very end
-      expect(label.includes(auto), `aria-label "${label}" has "${auto}"`).toBe(true);
     });
   }
 });

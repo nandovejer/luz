@@ -113,7 +113,7 @@ export function unknownClasses(ctx) {
         // The masthead's root says luz-cms-header too: its --masthead token says what it is now
         if (token === "luz-cms-header" && attribute.value.split(/\s+/).includes("luz-cms-header--masthead")) continue;
         if (!pinned) {
-          found.push(finding(renamed.publication ? "names/renamed:publication" : "names/renamed", { ...where, vars: { name: token, current: renamed.current }, suggestion: `.${renamed.current}` }));
+          found.push(finding(renamed.kind ? `names/renamed:${renamed.kind}` : renamed.publication ? "names/renamed:publication" : "names/renamed", { ...where, vars: renamed.kind ? { name: token } : { name: token, current: renamed.current }, ...(renamed.kind ? {} : { suggestion: `.${renamed.current}` }) }));
           continue;
         }
       }
@@ -142,7 +142,8 @@ export function stylesheetClasses(ctx) {
     if (!name.startsWith("luz-") || world.classes.has(name)) continue;
     const where = { file, line: entry.line, column: entry.column };
     const renamed = entry.defined ? null : renamedClass(name);
-    if (renamed !== null) {
+    // A modifier that is now an attribute has no class to suggest in a stylesheet: it falls to class/unknown-in-css
+    if (renamed !== null && !renamed.kind) {
       found.push(finding("names/renamed:css", { ...where, vars: { name, current: renamed.current }, suggestion: `.${renamed.current}` }));
       continue;
     }
