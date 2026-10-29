@@ -593,7 +593,7 @@ home-light:defined ~ .landing-light__nojs {
   gap: var(--luz-space-md);
   padding: min(var(--luz-space-xl), 12%);
   border-color: color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
-  border-radius: var(--luz-radius-lg);
+  border-radius: var(--luz-radius-md);
   background: color-mix(in oklab, var(--luz-surface-page) 45%, transparent);
   box-shadow: none;
 }
@@ -825,7 +825,7 @@ home-light:defined ~ .landing-light__nojs {
   min-inline-size: 0;
   padding: var(--luz-space-lg);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
-  border-radius: var(--luz-radius-lg);
+  border-radius: var(--luz-radius-md);
   background: color-mix(in oklab, var(--luz-surface-page) 60%, transparent);
   box-shadow: 0 1rem 2rem -1.5rem color-mix(in oklab, var(--luz-text-primary) 25%, transparent);
   transition: border-color var(--luz-duration-base) ease;
@@ -957,7 +957,7 @@ home-light:defined ~ .landing-light__nojs {
   /* A share of the width caps it at 400 % text; at any usual size the token is the smaller */
   padding: min(var(--luz-space-md), 5%);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
-  border-radius: var(--luz-radius-lg);
+  border-radius: var(--luz-radius-md);
   background: var(--luz-surface-page);
   color: var(--luz-text-primary);
   box-shadow: 0 1.5rem 3rem -1.5rem color-mix(in oklab, var(--luz-text-primary) 25%, transparent);
@@ -1293,7 +1293,7 @@ home-light:defined ~ .landing-light__nojs {
   /* A share of the width caps the padding at 400 % text; at any usual size the token is the smaller */
   padding: min(var(--luz-space-xl), 12%);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
-  border-radius: var(--luz-radius-lg);
+  border-radius: var(--luz-radius-md);
   background: var(--luz-surface-page);
   color: var(--luz-text-primary);
   box-shadow: 0 1.5rem 3rem -1.5rem color-mix(in oklab, var(--luz-text-primary) 25%, transparent);
@@ -1592,7 +1592,7 @@ home-light:defined ~ .landing-light__nojs {
   /* A share of the width caps the padding at 400 % text; at any usual size the token is the smaller */
   padding: min(var(--luz-space-lg), 10%) min(var(--luz-space-xl), 10%);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 12%, transparent);
-  border-radius: var(--luz-radius-lg);
+  border-radius: var(--luz-radius-md);
   background: color-mix(in oklab, var(--luz-surface-page) 60%, transparent);
 }
 
@@ -2262,7 +2262,7 @@ home-light:defined ~ .landing-light__nojs {
   min-inline-size: 0;
   padding: min(var(--luz-space-lg), 10%);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
-  border-radius: var(--luz-radius-lg);
+  border-radius: var(--luz-radius-md);
   background: var(--luz-surface-page);
   box-shadow: 0 1.5rem 3rem -1.5rem color-mix(in oklab, var(--luz-text-primary) 25%, transparent);
 }
