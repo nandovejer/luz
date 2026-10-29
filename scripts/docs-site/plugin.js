@@ -511,30 +511,21 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       },
     },
 
-    // `post`: after the plugins that read the quoted attributes of a page (the pages build's CSP meta is written where
-    // `<meta charset="…">` is quoted, and Vite's own HTML step comes before), so the quotes of the home go last
-    generateBundle: {
-      order: "post",
-      handler(_options, bundle) {
-        for (const doc of documents()) {
-          const asset = doc.kind === "landing" ? bundle[doc.file] : undefined;
-          if (asset?.type === "asset" && typeof asset.source === "string") asset.source = unquoteAttributes(asset.source);
-        }
-        // Unhashed, next to the pages: every page points at it from its depth
-        for (const [route, render] of searchIndexes()) this.emitFile({ type: "asset", fileName: route.slice(1), source: render() });
-        // The files for an AI agent, at the root of the site (discovery is by link, not by convention)
-        for (const [route, render] of aiFiles()) this.emitFile({ type: "asset", fileName: route.slice(1), source: render() });
-        // Every page as Markdown, next to its index.html
-        for (const [route, render] of markdownFiles()) this.emitFile({ type: "asset", fileName: route.slice(1), source: render() });
-        // The examples, the files they load and the manifests of the packages, next to them
-        for (const [route, { body }] of exampleFiles()) this.emitFile({ type: "asset", fileName: route.slice(1), source: body() });
-        // Unhashed too: a classic script, which Vite leaves alone (EX-009)
-        this.emitFile({
-          type: "asset",
-          fileName: THEME_BOOT.out,
-          source: readFileSync(resolve(repoRoot, THEME_BOOT.src.slice(1)), "utf-8"),
-        });
-      },
+    generateBundle() {
+      // Unhashed, next to the pages: every page points at it from its depth
+      for (const [route, render] of searchIndexes()) this.emitFile({ type: "asset", fileName: route.slice(1), source: render() });
+      // The files for an AI agent, at the root of the site (discovery is by link, not by convention)
+      for (const [route, render] of aiFiles()) this.emitFile({ type: "asset", fileName: route.slice(1), source: render() });
+      // Every page as Markdown, next to its index.html
+      for (const [route, render] of markdownFiles()) this.emitFile({ type: "asset", fileName: route.slice(1), source: render() });
+      // The examples, the files they load and the manifests of the packages, next to them
+      for (const [route, { body }] of exampleFiles()) this.emitFile({ type: "asset", fileName: route.slice(1), source: body() });
+      // Unhashed too: a classic script, which Vite leaves alone (EX-009)
+      this.emitFile({
+        type: "asset",
+        fileName: THEME_BOOT.out,
+        source: readFileSync(resolve(repoRoot, THEME_BOOT.src.slice(1)), "utf-8"),
+      });
     },
 
     closeBundle() {
@@ -547,7 +538,10 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
         if (!target.startsWith(realOut + sep) || outFileOf(doc.route).split("/").includes("..")) {
           throw new Error(`${doc.file}: ${doc.route} would be written outside the build folder`);
         }
-        const html = readFileSync(resolve(outRoot, doc.file), "utf-8");
+        let html = readFileSync(resolve(outRoot, doc.file), "utf-8");
+        // The last step: the plugins before this one (the links, the CSP meta written where `<meta charset="…">` is
+        // quoted, Vite's own HTML step) read the quoted attributes of the home, so its quotes go now
+        if (doc.kind === "landing") html = unquoteAttributes(html);
         mkdirSync(dirname(target), { recursive: true });
         writeFileSync(target, html, "utf-8");
       }
