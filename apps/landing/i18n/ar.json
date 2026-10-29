@@ -282,7 +282,7 @@
   "footer.changelog": "سجل التغييرات",
   "footer.contributing": "كيف تساهم",
   "footer.reviews": "المراجعات في المتصفحات",
-  "footer.legal": "© 2024–2026 Fernando Muñoz. يُنشر LUZ بموجب <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">رخصة MIT</a>: استخدمه وعدّله وشاركه، حتى في الأعمال التجارية، ما دام الإشعار يرافقه. كل ملف ينشره، بما في ذلك الخطوط والأيقونات، مرخّص بـ MIT.",
+  "footer.legal": "© 2024–2026 Fernando Muñoz. يُنشر LUZ بموجب <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">رخصة MIT</a>: استخدمه وعدّله وشاركه، حتى في الأعمال التجارية، ما دام الإشعار يرافقه. ويُقدَّر ذكر المشروع الأصلي. كل ملف ينشره، بما في ذلك الخطوط والأيقونات، مرخّص بـ MIT.",
   "footer.mode": "وضع الألوان",
   "footer.mode-change": "تغيير وضع الألوان",
   "footer.light": "فاتح",
