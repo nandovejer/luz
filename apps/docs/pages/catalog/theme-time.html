@@ -144,7 +144,7 @@ keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
 &lt;/head&gt;</code></pre>
             </div>
             <ul>
-              <li><strong><code>data-moments</code>:</strong> <code>value@HH:MM=base</code> for each moment, in markup order; <code>*</code> marks <code>data-default</code>..</li>
+              <li><strong><code>data-moments</code>:</strong> <code>value@HH:MM=base</code> for each moment, in markup order; <code>*</code> marks <code>data-default</code>.</li>
               <li><strong>What it writes:</strong> <code>data-moment</code> on <code>&lt;html&gt;</code> and, in Auto, <code>data-mode</code> (and <code>data-theme</code>, with no brand) of that moment's base. A stored mode shows its default moment; a pinned hour (<code>luz-light</code>) replaces the clock; <code>prefers-contrast: more</code> wins. It never writes the storage. It blocks rendering as core's does, under the same exception (EX-012).</li>
             </ul>
             <h3 id="moments">The six example moments</h3>

@@ -2,7 +2,7 @@
 title: Con un empaquetador o framework
 description: Importa el CSS y el script de LUZ en Astro o en cualquier herramienta que resuelva nombres de paquetes, y conserva el orden de las capas y las fuentes.
 keywords: vite, astro, empaquetador, framework, import
-source: 0ec6b66b4ee9
+source: d588b8a81634
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="imports">
@@ -72,6 +72,7 @@ import "@luz-ds/catalog/components/hero.css";</code></pre>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./i18n</code></div></td><td data-label="Qué es"><div>Los textos de los scripts: <code>t</code>, <code>registerLocale</code>, <code>loadLocales</code></div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./i18n/*</code></div></td><td data-label="Qué es"><div>Los textos de uno de los idiomas que incluye LUZ, por ejemplo <code>@luz-ds/core/i18n/es</code>: su exportación predeterminada es un objeto de textos que se carga cuando hace falta</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./classes.json</code></div></td><td data-label="Qué es"><div>Todas las clases y propiedades personalizadas que define el paquete, con su tipo y capa, en JSON para herramientas y agentes de IA</div></td></tr>
+            <tr><td data-label="Paquete"><div><code>@luz-ds/core</code></div></td><td data-label="Exportación"><div><code>./custom-elements.json</code></div></td><td data-label="Qué es"><div>Todos los elementos personalizados que define o estiliza el paquete, con sus atributos y eventos, en formato Custom Elements Manifest para editores y agentes de IA</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>.</code></div></td><td data-label="Qué es"><div><code>catalog.js</code>: carga el script de cada elemento del sitio que haya en la página, y el de la barra lateral</div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./search</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-search&gt;</code></div></td></tr>
             <tr><td data-label="Paquete"><div><code>@luz-ds/catalog</code></div></td><td data-label="Exportación"><div><code>./cookie-consent</code></div></td><td data-label="Qué es"><div>El elemento <code>&lt;luz-cookie-consent&gt;</code> y <code>getConsent</code></div></td></tr>

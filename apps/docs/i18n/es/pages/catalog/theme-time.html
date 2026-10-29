@@ -3,7 +3,7 @@ title: Modo de color según la hora del día
 description: Da a Automático la hora del día: el modo sigue el reloj o el sol en los momentos que declares, y una barra opcional deja probar cualquier hora.
 fits: cuando el sitio tiene un selector de modo y quiere un aspecto para cada momento del día
 keywords: momento del día, amanecer, atardecer, hora, reloj, modo oscuro automático
-source: 269a561a72c3
+source: 1e98dd09e96a
 reviewed: false
 -->
     <div class="docs-component" id="p-theme-time">
@@ -139,7 +139,7 @@ reviewed: false
 &lt;/head&gt;</code></pre>
             </div>
             <ul>
-              <li><strong><code>data-moments</code>:</strong> <code>value@HH:MM=base</code> por cada momento, en el orden del marcado; <code>*</code> marca <code>data-default</code>..</li>
+              <li><strong><code>data-moments</code>:</strong> <code>value@HH:MM=base</code> por cada momento, en el orden del marcado; <code>*</code> marca <code>data-default</code>.</li>
               <li><strong>Qué escribe:</strong> <code>data-moment</code> en <code>&lt;html&gt;</code> y, en Automático, <code>data-mode</code> (y <code>data-theme</code>, sin marca) con la base de ese momento. Un modo guardado muestra su momento por defecto; una hora fijada (<code>luz-light</code>) sustituye al reloj; <code>prefers-contrast: more</code> gana. Nunca escribe en el almacenamiento. Bloquea el renderizado como el de core, bajo la misma excepción (EX-012).</li>
             </ul>
             <h3 id="moments">Los seis momentos de ejemplo</h3>
