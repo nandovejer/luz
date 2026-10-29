@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>luz-theme-time variant="bar" on a site that sets no sky</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.min.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.min.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/theme-time.min.css">
+  <script src="/packages/core/dist/theme-boot.min.js"></script>
+  <script src="/packages/catalog/dist/theme-time-boot.min.js" data-moments="dawn@05:00=dark morning@07:30=light afternoon@12:00=light* sunset@17:30=light dusk@20:30=dark night@22:30=dark*"></script>
+  <script type="module" src="/packages/core/dist/luz.min.js"></script>
+  <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
+</head>
+<body>
+  <main id="main">
+    <h1>The slider of the day</h1>
+    <p>Text of the page.</p>
+    <luz-theme-time variant="bar" data-luz-label-scrub="Hour of the day" data-luz-label-saved="Saved">
+      <luz-theme-mode inline>
+        <fieldset class="luz-theme-mode__group">
+          <legend class="luz-theme-mode__legend">Color mode</legend>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/></svg>Auto</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>Light</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>Dark</label>
+          <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>
+        </fieldset>
+      </luz-theme-mode>
+      <fieldset class="luz-theme-time__moments">
+        <legend class="luz-theme-time__legend">Time of day</legend>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="dawn" data-from="05:00" data-theme="dark">Dawn</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="morning" data-from="07:30" data-theme="light">Morning light</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="afternoon" data-from="12:00" data-theme="light" data-default>Afternoon light</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="sunset" data-from="17:30" data-theme="light">Sunset</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="dusk" data-from="20:30" data-theme="dark">Dusk</label>
+        <label class="luz-theme-time__moment"><input class="luz-theme-time__input" type="radio" name="luz-theme-moment" value="night" data-from="22:30" data-theme="dark" data-default>Night</label>
+      </fieldset>
+    </luz-theme-time>
+  </main>
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      var el = document.querySelector('luz-theme-time');
+      ['show', 'latitude', 'longitude', 'place', 'no-remember', 'lang', 'dir'].forEach(function (name) {
+        if (!q.has(name)) return;
+        if (name === 'lang' || name === 'dir') document.documentElement.setAttribute(name, q.get(name));
+        else el.setAttribute(name, q.get(name));
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+/* A custom theme made from packages/core/src/themes/_template.css, renamed my-brand: the same three selectors plus the no-JavaScript one of each (the checked radio of <luz-theme-mode>),
+   a handful of tokens with a colour of their own in each mode (the Vejer values are never these). */
+/* In the layer the published template is in (dist/themes/_template.css), declared as luz-tokens.css declares them */
+@layer luz.tokens, luz.themes, luz.settings, luz.generic, luz.elements, luz.objects, luz.components, luz.utilities, luz.catalog, luz.print;
+@layer luz.themes {
+  [data-theme="my-brand"],
+  [data-theme="my-brand"][data-mode="light"],
+  :root[data-theme="my-brand"]:not([data-mode]):has(input[name="luz-theme-mode"][value="light"]:checked) {
+    --luz-surface-page: #fde8ff;
+    --luz-surface: #fff5ff;
+    --luz-text-primary: #2a0033;
+    --luz-brand-fill: #8a1c9e;
+    --luz-brand-primary: #6b0f7d;
+    --luz-text-secondary: #4a2a52;
+  }
+
+  [data-theme="my-brand"][data-mode="dark"],
+  :root[data-theme="my-brand"]:not([data-mode]):has(input[name="luz-theme-mode"][value="dark"]:checked) {
+    --luz-surface-page: #12001a;
+    --luz-surface: #1d0029;
+    --luz-text-primary: #f6dcff;
+    --luz-brand-fill: #6b1a7a;
+    --luz-brand-primary: #f0b3ff;
+    --luz-text-secondary: #e0c0e8;
+  }
+
+  [data-theme="my-brand"][data-mode="high-contrast"],
+  :root[data-theme="my-brand"]:not([data-mode]):has(input[name="luz-theme-mode"][value="high-contrast"]:checked) {
+    --luz-surface-page: #000;
+    --luz-surface: #000;
+    --luz-text-primary: #fff;
+    --luz-brand-fill: #ffd6ff;
+    --luz-brand-primary: #fff;
+    --luz-text-secondary: #fff;
+  }
+}

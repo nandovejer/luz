@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>theme-time-boot.js alone</title>
+  <script src="/packages/core/dist/theme-boot.min.js"></script>
+  <script src="/packages/catalog/dist/theme-time-boot.min.js" data-moments="dawn@05:00=dark morning@07:30=light afternoon@12:00=light* sunset@17:30=light dusk@20:30=dark night@22:30=dark*"></script>
+  <!-- What the root holds the moment the parser leaves the head: before the body, so before the first paint -->
+  <script>
+    window.__atHead = {
+      moment: document.documentElement.getAttribute('data-moment'),
+      mode: document.documentElement.getAttribute('data-mode'),
+      theme: document.documentElement.getAttribute('data-theme'),
+    };
+  </script>
+</head>
+<body>
+  <main id="main"><h1>Boot</h1><p>No other script: the two boot scripts alone.</p></main>
+</body>
+</html>
