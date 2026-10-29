@@ -78,7 +78,8 @@ describe("packages/core/README.md, the Language section", () => {
   it("names loadLocales(), and the rule of the standalone modules: await it before the init functions that write text", () => {
     expect(language).toMatch(/loadLocales\(\)/);
     expect(language).toMatch(/await loadLocales\(\)/);
-    for (const call of ["initHighlight()", "initPlayers()", "initThemeCycle()"]) expect(language, call).toContain(call);
+    for (const call of ["initHighlight()", "initPlayers()"]) expect(language, call).toContain(call);
+    expect(language, "the colour mode button writes no string of its own: it needs no wait").not.toContain("initThemeCycle()");
   });
 
   it("names the author route: data-luz-label-* and registerLocale() for a language LUZ does not ship", () => {

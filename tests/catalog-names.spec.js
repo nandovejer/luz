@@ -8,7 +8,7 @@
  *      `luz-landing-hero`, `luz-cms-header`, `luz-docs-shell`, `<luz-mode>`... gets no rule from any of them, on the
  *      block and on a part of it. tests/fixtures/catalog-names-old.html.
  *   2  The new names are styled, in the three modes: the same page with `luz-hero`, `luz-site-header`, `luz-masthead`,
- *      `<luz-color-mode>`... differs from an element with no class, on the block and on a part, in light, dark and
+ *      `<luz-theme-time>`... differs from an element with no class, on the block and on a part, in light, dark and
  *      high contrast. tests/fixtures/catalog-names-new.html.
  *   3  The two unions and the masthead change no look (decision 67): the bar of a landing page and of a blog
  *      (`--publication`), the masthead, the two footers and the blocks beside them are drawn with the numbers the base
@@ -41,7 +41,7 @@ const PARTS = [
   'app-bar-product', 'dashboard-panel', 'page-header-title', 'article-header-title', 'toc-title', 'doc-header-lead', 'page-rail-inner', 'pager-next',
   'example-preview', 'do-dont-item', 'cookie-consent-title',
 ];
-const ELEMENTS = ['announcement', 'color-mode', 'cookie-consent-element'];
+const ELEMENTS = ['announcement', 'theme-time', 'cookie-consent-element'];
 
 /** What a rule of catalog would change on an element, read from the page: the computed style, and the two pseudo-elements. */
 const fingerprint = () => {

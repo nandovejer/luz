@@ -56,7 +56,7 @@ test.describe('forced-colors: the color mode switcher', () => {
     test(`${app}: the cycle button keeps a visible edge and a visible icon`, async ({ page, browserName }) => {
       test.skip(browserName === 'webkit', 'WebKit does not emulate forced-colors');
       await page.goto(app);
-      const button = page.locator('footer .luz-mode-cycle');
+      const button = page.locator('footer .luz-theme-mode__button');
       await expect(button).toBeVisible();
       const style = await button.evaluate((el) => {
         const s = getComputedStyle(el);
@@ -76,9 +76,9 @@ test.describe('forced-colors: the color mode switcher without JavaScript', () =>
   test('/: the checked mode stays visible', async ({ page, browserName }) => {
     test.skip(browserName === 'webkit', 'WebKit does not emulate forced-colors');
     await page.goto('/');
-    // The home has no Auto radio: Auto is the absence of a choice, so none is checked until the reader picks one
-    await page.locator('footer .luz-mode-btn[data-theme="dark"]').click();
-    const styles = await page.locator('footer .luz-mode-btn').evaluateAll((labels) =>
+    // Auto is checked until the reader picks a mode
+    await page.locator('footer .luz-theme-mode__option', { hasText: 'Dark' }).click();
+    const styles = await page.locator('footer .luz-theme-mode__option').evaluateAll((labels) =>
       labels.map((el) => ({
         checked: el.querySelector('input').checked,
         visible: el.checkVisibility(),

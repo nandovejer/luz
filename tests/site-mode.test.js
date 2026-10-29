@@ -1,15 +1,19 @@
 /**
- * <luz-color-mode> of @luz-ds/catalog, the parts that need no browser
- * (.claude/plans/luz-home-docs-identity.md section 3.3, F1; the behaviour is
- * in tests/site-mode.spec.js):
- *   - the phase of the day, from the local hour: the boundaries are 5, 7.5,
- *     12, 17.5, 20.5 and 22.5;
- *   - color-mode.js is a lazy chunk like search.js and cookie-consent.js: it imports
- *     nothing (SEC-CHUNK-2), catalog.js loads it by a literal specifier
- *     (SEC-CHUNK-1), scripts/build-catalog.js and scripts/check-size.js know it;
- *   - its row in budgets.json and in the table of PRINCIPLES.md section 8,
- *     the same size as consent's, and no other catalog row moves;
- *   - its header comment feeds custom-elements.json (@element, @attr, @fires).
+ * <luz-theme-time> of @luz-ds/catalog, the parts that need no browser
+ * (.claude/plans/theme-mode.md section 3; the behaviour is in the specs of the
+ * element and in tests/site-mode.spec.js):
+ *   - theme-time.js and theme-time-bar.js are lazy chunks like search.js and
+ *     cookie-consent.js: they import nothing (SEC-CHUNK-2), catalog.js loads
+ *     them by a literal specifier (SEC-CHUNK-1), scripts/build-catalog.js and
+ *     scripts/check-size.js know them;
+ *   - their rows in budgets.json and in the table of PRINCIPLES.md section 8,
+ *     and no other catalog row moves;
+ *   - their header comments feed custom-elements.json (@element, @attr, @fires).
+ *
+ * The phase of the day (phaseOf(hour), six fixed boundaries) is gone from the
+ * chunk: the moments, their names and their hours are now declared in the
+ * page's markup (data-from), so there is no table to test here; the moment at
+ * an hour is the element's own behaviour, in its specs.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -18,82 +22,17 @@ import { describe, expect, it } from "vitest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => readFileSync(join(repo, rel), "utf-8");
-const MODE = "packages/catalog/src/color-mode.js";
-/** The text of color-mode.js; a missing file is the assertion that fails, not an ENOENT. */
-const readMode = () => {
-  expect(existsSync(join(repo, MODE)), `${MODE} exists`).toBe(true);
-  return read(MODE);
+const TIME = "packages/catalog/src/theme-time.js";
+const BAR = "packages/catalog/src/theme-time-bar.js";
+/** The text of a chunk; a missing file is the assertion that fails, not an ENOENT. */
+const readChunk = (file) => {
+  expect(existsSync(join(repo, file)), `${file} exists`).toBe(true);
+  return read(file);
 };
+const readTime = () => readChunk(TIME);
+const readBar = () => readChunk(BAR);
 
-/**
- * color-mode.js, loaded in Node: the chunk guards `customElements`, as search.js and cookie-consent.js do.
- * The `class extends HTMLElement` sits inside that guard too (as cookie-consent.js does), not only
- * the `define` call: Node has no HTMLElement.
- */
-async function load() {
-  expect(existsSync(join(repo, MODE)), `${MODE} exists`).toBe(true);
-  return import("../packages/catalog/src/color-mode.js");
-}
-
-/* ---- The phase of the day ------------------------------------------------ */
-
-describe("phaseOf(hour): the phase from the local wall-clock hour (minutes as a fraction)", () => {
-  // [hour, phase]: each side of every boundary of the spec
-  const CASES = [
-    [0, "night"],
-    [0.5, "night"],
-    [4, "night"],
-    [4.99, "night"],
-    [5, "dawn"],
-    [6.25, "dawn"],
-    [7.49, "dawn"],
-    [7.5, "morning"],
-    [9.5, "morning"],
-    [11.99, "morning"],
-    [12, "afternoon"],
-    [14, "afternoon"],
-    [17.49, "afternoon"],
-    [17.5, "sunset"],
-    [19, "sunset"],
-    [20.49, "sunset"],
-    [20.5, "dusk"],
-    [21.25, "dusk"],
-    [22.49, "dusk"],
-    [22.5, "night"],
-    [23.75, "night"],
-    [23.99, "night"],
-    [24, "night"],
-  ];
-
-  it.each(CASES)("%s -> %s", async (hour, phase) => {
-    const { phaseOf } = await load();
-    expect(typeof phaseOf, "phaseOf is a named export of color-mode.js").toBe("function");
-    expect(phaseOf(hour)).toBe(phase);
-  });
-
-  it("can be imported where there is no DOM: the class is built behind the guard, not only the define call", async () => {
-    expect(typeof globalThis.HTMLElement, "this suite runs in Node").toBe("undefined");
-    const mod = await load();
-    expect(Object.keys(mod)).toContain("phaseOf");
-  });
-
-  it("answers with the six phases and no other word", async () => {
-    const { phaseOf } = await load();
-    const seen = new Set();
-    for (let minute = 0; minute < 24 * 60; minute++) seen.add(phaseOf(minute / 60));
-    expect([...seen].sort()).toEqual(["afternoon", "dawn", "dusk", "morning", "night", "sunset"]);
-  });
-
-  it("turns at the minute, not before: 04:59 is night, 05:00 is dawn", async () => {
-    const { phaseOf } = await load();
-    expect(phaseOf(4 + 59 / 60)).toBe("night");
-    expect(phaseOf(5 + 0 / 60)).toBe("dawn");
-    expect(phaseOf(7 + 30 / 60)).toBe("morning");
-    expect(phaseOf(22 + 30 / 60)).toBe("night");
-  });
-});
-
-/* ---- The chunk follows the rules of the other two -------------------------- */
+/* ---- The chunks follow the rules of the other three ------------------------ */
 
 const IMPORT_CALL = /\bimport\s*\(/g;
 const LITERAL_IMPORT = /\bimport\s*\(\s*(["'])(\.\/[\w.-]+\.js)\1\s*\)/g;
@@ -101,98 +40,127 @@ const STATIC = /(?:^|[;}\s])(?:import\b(?!\s*[(.])|export\b[^"'();]*?\bfrom\b)/;
 /** JS without its comments: a header may say "import" in words. */
 const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'\\])\/\/.*$/gm, "$1");
 
-describe("color-mode.js is a lazy chunk that imports nothing", () => {
-  it("has no static import or export-from, and no import() (SEC-CHUNK-2)", () => {
-    const source = code(readMode());
-    expect(STATIC.test(source), "a static import or export-from").toBe(false);
-    expect(source.match(IMPORT_CALL), "a dynamic import").toBeNull();
-    expect(source).not.toMatch(/import\.meta/);
+describe("theme-time.js and theme-time-bar.js are lazy chunks that import nothing", () => {
+  it("have no static import or export-from, and no import() (SEC-CHUNK-2)", () => {
+    for (const [name, text] of [["theme-time.js", readTime()], ["theme-time-bar.js", readBar()]]) {
+      const source = code(text);
+      expect(STATIC.test(source), `${name}: a static import or export-from`).toBe(false);
+      expect(source.match(IMPORT_CALL), `${name}: a dynamic import`).toBeNull();
+      expect(source, name).not.toMatch(/import\.meta/);
+    }
   });
 
-  it("defines <luz-color-mode> behind a guard, so a second copy of the module does not throw", () => {
-    const source = code(readMode());
-    expect(source).toMatch(/customElements\.define\(\s*["']luz-color-mode["']/);
-    expect(source).toMatch(/customElements\.get\(\s*["']luz-color-mode["']\s*\)/);
+  it("theme-time.js defines <luz-theme-time> behind a guard, so a second copy of the module does not throw", () => {
+    const source = code(readTime());
+    expect(source).toMatch(/customElements\.define\(\s*["']luz-theme-time["']/);
+    expect(source).toMatch(/customElements\.get\(\s*["']luz-theme-time["']\s*\)/);
   });
 
-  it("writes no text of its own: its labels are the radios' (SR-7)", () => {
-    const source = code(readMode());
+  it("theme-time-bar.js defines no element: it builds the bar inside the element and exports initThemeTimeBar()", () => {
+    const source = code(readBar());
+    expect(source).not.toMatch(/customElements\.define/);
+    expect(source).toMatch(/export\s+function\s+initThemeTimeBar\b/);
+  });
+
+  it("theme-time.js writes no text of its own: the moments' names are the page's markup (SR-7)", () => {
+    const source = code(readTime());
     expect(source).not.toMatch(/\.(?:textContent|innerText|innerHTML|outerHTML)\s*=/);
     expect(source).not.toMatch(/insertAdjacentHTML|document\.write/);
   });
 
-  it("stores under core's key, `luz-theme`, and nowhere else", () => {
-    const source = code(readMode());
-    expect(source).toMatch(/["']luz-theme["']/);
+  it("neither chunk writes HTML (SEC-IDX-2); the bar's two texts are the page's data-luz-label-* (EX-013)", () => {
+    const source = code(readBar());
+    expect(source).not.toMatch(/innerHTML|outerHTML|insertAdjacentHTML|document\.write|eval\(/);
+    expect(source).toMatch(/data-luz-label-\$\{key\}|data-luz-label-/);
+  });
+
+  it("store under the keys they own: `luz-light` for the pinned hour, never core's `luz-theme`", () => {
+    const source = code(readTime());
+    expect(source).toMatch(/["']luz-light["']/);
+    expect(source).not.toMatch(/setItem\(\s*["']luz-theme["']/);
     expect(source).not.toMatch(/luz-site-mode/);
   });
 });
 
-describe("catalog.js, the build and the size guard know the chunk", () => {
-  it("catalog.js loads it by a literal import(\"./color-mode.js\"), for the tag luz-color-mode", () => {
+describe("catalog.js, the build and the size guard know the chunks", () => {
+  it("catalog.js loads them by literal imports, for the tags luz-theme-time and luz-theme-time-bar", () => {
     const loader = read("packages/catalog/src/catalog.js");
-    expect([...loader.matchAll(LITERAL_IMPORT)].map((m) => m[2]).sort()).toContain("./color-mode.js");
-    expect(loader).toMatch(/["']luz-color-mode["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/color-mode\.js["']\s*\)/);
-    expect(code(loader).match(IMPORT_CALL)).toHaveLength(5);
+    const files = [...loader.matchAll(LITERAL_IMPORT)].map((m) => m[2]).sort();
+    expect(files).toContain("./theme-time.js");
+    expect(files).toContain("./theme-time-bar.js");
+    expect(loader).toMatch(/["']luz-theme-time["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/theme-time\.js["']\s*\)/);
+    expect(loader).toMatch(/["']luz-theme-time-bar["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/theme-time-bar\.js["']\s*\)/);
+    expect(code(loader).match(IMPORT_CALL)).toHaveLength(6);
   });
 
-  it("scripts/build-catalog.js lists color-mode.js among the chunks", () => {
+  it("scripts/build-catalog.js lists them among the chunks", () => {
     const build = read("scripts/build-catalog.js");
     const chunks = /chunks:\s*\[([^\]]*)\]/.exec(build)?.[1] ?? "";
-    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "color-mode.js", "timeline.js", "sidebar.js"]); // timeline and sidebar came from core in F7
+    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "theme-time.js", "theme-time-bar.js", "timeline.js", "sidebar.js"]); // timeline and sidebar came from core in F7
   });
 
-  it("scripts/check-size.js expects the mode chunk of the loader, with the other four", () => {
+  it("scripts/check-size.js expects the two time chunks of the loader, with the other four", () => {
     const guard = read("scripts/check-size.js");
     const loaders = /const LOADERS = \{([^;]*)\};/.exec(guard)?.[1] ?? "";
-    expect(loaders).toContain("./color-mode.min.js");
+    expect(loaders).toContain("./theme-time.min.js");
+    expect(loaders).toContain("./theme-time-bar.min.js");
     expect(loaders).toContain("./search.min.js");
     expect(loaders).toContain("./cookie-consent.min.js");
     expect(loaders).toContain("./timeline.min.js");
     expect(loaders).toContain("./sidebar.min.js");
   });
 
-  it("package.json exports it as ./mode and lists its files as side effects", () => {
+  it("package.json exports ./theme-time, ./theme-time-bar and ./theme-time-boot, and lists the two chunks as side effects", () => {
     const manifest = JSON.parse(read("packages/catalog/package.json"));
-    expect(manifest.exports["./color-mode"]).toBe("./dist/color-mode.js");
-    expect(manifest.sideEffects).toEqual(expect.arrayContaining(["./dist/color-mode.js", "./dist/color-mode.min.js"]));
+    expect(manifest.exports["./theme-time"]).toBe("./dist/theme-time.js");
+    expect(manifest.exports["./theme-time-bar"]).toBe("./dist/theme-time-bar.js");
+    expect(manifest.exports["./theme-time-boot"]).toBe("./dist/theme-time-boot.js");
+    expect(manifest.sideEffects).toEqual(expect.arrayContaining(["./dist/theme-time.js", "./dist/theme-time.min.js", "./dist/theme-time-bar.js", "./dist/theme-time-bar.min.js"]));
+    expect(manifest.exports["./color-mode"]).toBeUndefined();
   });
 
   it("has a stylesheet of its own, a file of components/ that the package no longer bundles, in the luz.catalog layer", () => {
-    expect(existsSync(join(repo, "packages/catalog/src/components/color-mode.css")), "components/color-mode.css").toBe(true);
-    expect(read("packages/catalog/src/components/color-mode.css")).toMatch(/(?<![.\w#-])luz-color-mode(?![\w-])/);
+    expect(existsSync(join(repo, "packages/catalog/src/components/theme-time.css")), "components/theme-time.css").toBe(true);
+    expect(existsSync(join(repo, "packages/catalog/src/components/color-mode.css")), "components/color-mode.css is gone").toBe(false);
+    expect(read("packages/catalog/src/components/theme-time.css")).toMatch(/(?<![.\w#-])luz-theme-time(?![\w-])/);
     expect(existsSync(join(repo, "packages/catalog/src/index.css")), "catalog has no src/index.css").toBe(false);
   });
 
-  it("scripts/smoke-consumer.js probes dist/color-mode.js for its phaseOf() export, as it does for consent's getConsent()", () => {
+  it("scripts/smoke-consumer.js probes dist/theme-time-bar.js for its initThemeTimeBar() export, as it does for consent's getConsent()", () => {
     const smoke = read("scripts/smoke-consumer.js");
-    expect(smoke).toMatch(/\[site \+ "\/dist\/color-mode\.js"\]:\s*\[\s*"phaseOf"\s*\]/);
+    expect(smoke).toMatch(/\[site \+ "\/dist\/theme-time-bar\.js"\]:\s*\[\s*"initThemeTimeBar"\s*\]/);
     expect(smoke).toMatch(/\[site \+ "\/dist\/cookie-consent\.js"\]:\s*\[\s*"getConsent"\s*\]/);
   });
 
-  it("scripts/docs-site/snippets.js lists the chunk and says when a page needs it", () => {
+  it("scripts/docs-site/snippets.js lists the chunks and says when a page needs each", () => {
     const snippets = read("scripts/docs-site/snippets.js");
-    expect(snippets).toContain("color-mode.min.js");
-    expect(snippets).toMatch(/["']color-mode\.min\.js["']\s*:\s*\[\s*["']catalog["']\s*,\s*["'][^"']*luz-color-mode/);
+    expect(snippets).toContain("theme-time.min.js");
+    expect(snippets).toContain("theme-time-bar.min.js");
+    expect(snippets).toMatch(/["']theme-time\.min\.js["']\s*:\s*\[\s*["']catalog["']\s*,\s*["'][^"']*luz-theme-time["']/);
+    expect(snippets).toMatch(/["']theme-time-bar\.min\.js["']\s*:\s*\[\s*["']catalog["']\s*,\s*["'][^"']*luz-theme-time-bar["']/);
+    expect(snippets).not.toContain("color-mode.min.js");
   });
 });
 
-/* ---- The budget ------------------------------------------------------------- */
+/* ---- The budgets -------------------------------------------------------------- */
 
-describe("the budget of the mode chunk", () => {
+describe("the budgets of the time chunks", () => {
   const budgets = JSON.parse(read("budgets.json")).budgets;
+  const ROWS = [
+    { name: "catalog JS lazy chunk: theme-time", file: "packages/catalog/dist/theme-time.min.js", ideal: 2048, max: 2560 },
+    { name: "catalog JS lazy chunk: theme-time-bar", file: "packages/catalog/dist/theme-time-bar.min.js", ideal: 1280, max: 1536 },
+  ];
 
-  it("has the row `catalog JS lazy chunk: color-mode`: dist/color-mode.min.js, ideal 1 kB, ceiling 1.5 kB", () => {
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: color-mode")).toEqual({
-      name: "catalog JS lazy chunk: color-mode",
-      file: "packages/catalog/dist/color-mode.min.js",
-      ideal: 1024,
-      max: 1536,
-    });
+  it.each(ROWS)("has the row `$name`: $file, ideal $ideal, ceiling $max", (row) => {
+    expect(budgets.find((b) => b.name === row.name)).toEqual(row);
+  });
+
+  it("has no row for the old `catalog JS lazy chunk: color-mode`", () => {
+    expect(budgets.find((b) => /color-mode/.test(b.name))).toBeUndefined();
   });
 
   it("leaves the other catalog rows as they were (a new row, never a raised ceiling)", () => {
-    const rows = budgets.filter((b) => /^catalog /.test(b.name) && b.name !== "catalog JS lazy chunk: color-mode");
+    const rows = budgets.filter((b) => /^catalog /.test(b.name) && !ROWS.some((r) => r.name === b.name) && !/theme-time-boot/.test(b.name));
     // F5b: the 21 patterns of the four kinds of site have a row, and the general one leaves them out; F7: the four layout
     // components (and the timeline and sidebar chunks) came from core with a row of their own, and the general row leaves the CSS out
     expect(rows.map(({ name, ideal, max }) => ({ name, ideal, max }))).toEqual([
@@ -209,40 +177,43 @@ describe("the budget of the mode chunk", () => {
     expect(rows.find((b) => b.name === "catalog JS").file).toBe("packages/catalog/dist/catalog.min.js");
   });
 
-  it("repeats the row in the table of PRINCIPLES.md section 8, with the ceiling of 1.5 kB", () => {
-    expect(read("PRINCIPLES.md")).toMatch(/^\| `catalog` JS lazy chunk: `color-mode`[^\n]*\| ≤ 1 kB \| 1 kB \| 1\.5 kB \|$/m);
+  it("repeats the rows in the table of PRINCIPLES.md section 8, with the ceilings of 2.5 kB and 1.5 kB", () => {
+    const principles = read("PRINCIPLES.md");
+    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `theme-time` [^\n]*\| ≤ 2 kB \| 2 kB \| 2\.5 kB \|$/m);
+    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `theme-time-bar` [^\n]*\| ≤ 1\.25 kB \| 1\.25 kB \| 1\.5 kB \|$/m);
+    expect(principles).not.toMatch(/JS lazy chunk: `color-mode`/);
   });
 });
 
-/* ---- The header comment: custom-elements.json is made from it ----------------- */
+/* ---- The header comments: custom-elements.json is made from them --------------- */
 
-describe("the header of color-mode.js", () => {
-  const header = () => /^\s*\/\*\*([\s\S]*?)\*\//.exec(readMode())?.[1] ?? "";
+describe("the header of theme-time.js", () => {
+  const header = () => /^\s*\/\*\*([\s\S]*?)\*\//.exec(readTime())?.[1] ?? "";
   const lines = () => header().split("\n").map((l) => l.replace(/^[\s*]*/, "").trimEnd());
 
-  it("declares the element: @element luz-color-mode - description", () => {
+  it("declares the element: @element luz-theme-time - description", () => {
     const element = lines().filter((l) => l.startsWith("@element"));
     expect(element).toHaveLength(1);
-    expect(element[0]).toMatch(/^@element\s+luz-color-mode\s+-\s+\S.{10,}/);
+    expect(element[0]).toMatch(/^@element\s+luz-theme-time\s+-\s+\S.{10,}/);
   });
 
-  it("declares the event: @fires luz-color-mode:change {CustomEvent} - description", () => {
+  it("declares the event: @fires luz-theme-time:change {CustomEvent} - description", () => {
     const fires = lines().filter((l) => l.startsWith("@fires"));
     expect(fires).toHaveLength(1);
-    expect(fires[0]).toMatch(/^@fires\s+luz-color-mode:change\s+\{[^}]+\}\s+-\s+\S/);
+    expect(fires[0]).toMatch(/^@fires\s+luz-theme-time:change\s+\{[^}]+\}\s+-\s+\S/);
   });
 
-  it("declares its four attributes with @attr: remember, by, for and light-attr", () => {
+  it("declares its attributes with @attr: variant, show, latitude, longitude, place and no-remember", () => {
     const names = lines()
       .filter((l) => /^@attr(ibute)?\b/.test(l))
       .map((l) => /^@attr(?:ibute)?\s+\{[^}]+\}\s+(?:\[([\w-]+)=[^\]]*\]|([\w-]+))\s+-\s+\S/.exec(l))
       .map((m) => m?.[1] ?? m?.[2]);
-    expect(names.sort()).toEqual(["by", "for", "light-attr", "remember"]);
+    expect(names.sort()).toEqual(["latitude", "longitude", "no-remember", "place", "show", "variant"]);
   });
 
   it("dispatches the event it declares, with that name, bubbling", () => {
-    const source = code(readMode());
-    expect(source).toMatch(/new\s+CustomEvent\(\s*["']luz-color-mode:change["']/);
+    const source = code(readTime());
+    expect(source).toMatch(/new\s+CustomEvent\(\s*["']luz-theme-time:change["']/);
     expect(source).toMatch(/bubbles:\s*true/);
   });
 });

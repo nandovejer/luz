@@ -66,6 +66,8 @@ export const BLOCKING_RULES = [
   "load/layer-statement",
   "misuse/host-element",
   "misuse/modifier-alone",
+  // The theme-mode plan (2026-10-29): the slider of <luz-theme-time variant="bar"> has its name from the page (EX-013), so a bar without it blocks
+  "a11y/slider-no-name",
   "theme/contrast",
   "theme/unreadable",
 ];

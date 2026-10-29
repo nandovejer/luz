@@ -1462,12 +1462,12 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
 });
 
 describe("manifestAssets: the manifests of every package, served from /manifests/<pkg>/", () => {
-  it("lists classes.json of every package and custom-elements.json of the packages that have one (catalog only: core defines no tag since F7)", () => {
+  it("lists classes.json of every package and custom-elements.json of the packages that have one (catalog, and core since <luz-theme-mode>)", () => {
     const expected = PACKAGES.flatMap((pkg) =>
       ["classes.json", "custom-elements.json"].filter((file) => existsSync(join(root, "packages", pkg, "dist", file))).map((file) => ({ route: `/manifests/${pkg}/${file}`, from: `packages/${pkg}/dist/${file}` })),
     );
-    expect(expected.map((e) => e.route)).toEqual(expect.arrayContaining(["/manifests/core/classes.json", "/manifests/catalog/custom-elements.json", "/manifests/catalog/classes.json"]));
-    expect(expected.map((e) => e.route), "core has no custom-elements.json").not.toContain("/manifests/core/custom-elements.json");
+    expect(expected.map((e) => e.route)).toEqual(expect.arrayContaining(["/manifests/core/classes.json", "/manifests/catalog/custom-elements.json", "/manifests/catalog/classes.json", "/manifests/core/custom-elements.json"]));
+    expect(expected.map((e) => e.route), "tokens defines no tag").not.toContain("/manifests/tokens/custom-elements.json");
     expect(expected.filter((e) => /\/manifests\/(?:landing|cms|app|docs)\//.test(e.route)), "no manifest of a package that is gone").toEqual([]);
     expect([...manifests()].sort((a, b) => a.route.localeCompare(b.route))).toEqual(expected.sort((a, b) => a.route.localeCompare(b.route)));
     for (const asset of manifests()) expect(existsSync(join(root, asset.from)), asset.from).toBe(true);

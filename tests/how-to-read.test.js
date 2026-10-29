@@ -27,7 +27,7 @@ const IDS = ["classes", "tokens", "attributes", "elements", "layers", "public", 
 const PREFIXES = [".luz-", ".o-", ".u-", ".is-"];
 // data-luz is the zone of luz.conditional.css; data-luz-classless is gone with classless.css
 const ATTRIBUTES = ["data-theme", "data-mode", "data-luz", "data-luz-*", "data-luz-label-*"];
-const ELEMENTS = ["luz-search", "luz-cookie-consent", "luz-color-mode", "luz-timeline", "luz-lang-switch", "luz-submenu", "luz-announcement"];
+const ELEMENTS = ["luz-search", "luz-cookie-consent", "luz-theme-mode", "luz-theme-time", "luz-timeline", "luz-lang-switch", "luz-submenu", "luz-announcement"];
 const FILES = ["luz-tokens.css", "tokens.css", "components/<name>.css", "base.css", "luz.conditional.css", "themes/_template.css"];
 
 const page = readPage("get-started/how-to-read.html");
@@ -178,7 +178,7 @@ describe("attributes", () => {
 describe("elements", () => {
   const tags = () => codesOf(section("elements")).map((c) => /^<(luz-[a-z-]+)>$/.exec(c)?.[1]).filter(Boolean);
 
-  it("names the four that need a script and the three CSS-only tags", () => {
+  it("names the five that need a script (core's theme mode, the catalog's search, cookie consent, theme time and timeline) and the three CSS-only tags", () => {
     for (const tag of ELEMENTS) expect(tags(), `<${tag}>`).toContain(tag);
   });
 

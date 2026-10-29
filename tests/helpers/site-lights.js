@@ -3,7 +3,7 @@
  * (F2 of .claude/plans/luz-home-docs-identity.md, sections 3.3 and 3.4).
  *
  * With no stored choice the site is in Auto and follows the local hour
- * (apps/site/boot.js before the first paint, <luz-color-mode by="clock"> after).
+ * (core's theme-boot.js and catalog's theme-time-boot.js before the first paint, <luz-theme-time> after).
  * A test fixes the zone (`test.use({ timezoneId: TIMEZONE })`) and the clock
  * (`atTime`), and names a light by an hour inside its phase.
  */
@@ -93,7 +93,7 @@ export function lightToken(light, token) {
   if (!existsSync(file)) throw new Error("apps/site/theme-light.css does not exist");
   const css = readFileSync(file, "utf-8").replace(/\/\*[\s\S]*?\*\//g, "");
   for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    if (!selector.includes(`[data-light="${light}"]`)) continue;
+    if (!selector.includes(`[data-moment="${light}"]`)) continue;
     const value = body.match(new RegExp(`${token}\\s*:\\s*([^;]+);`))?.[1].trim();
     if (!value) throw new Error(`${token} is not in the block of ${light}`);
     const { r, g, b, a } = parseColor(value);

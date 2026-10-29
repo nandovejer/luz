@@ -346,8 +346,8 @@ describe("what a prompt says about the system comes from the packages", () => {
     const named = [...prompt(id).matchAll(/<(luz-[a-z0-9-]+)[\s>/]/g)].map((m) => m[1]);
     expect(named.length, `${id} names elements`).toBeGreaterThan(0);
     expect(named.filter((tag) => !manifests.elements.has(tag)), `${id}: elements no package has`).toEqual([]);
-    expect(named, `${id} names <luz-color-mode>, the colour mode switcher`).toContain("luz-color-mode");
-    expect(named.filter((tag) => ["luz-mode", "luz-consent", "luz-banner"].includes(tag))).toEqual([]);
+    expect(named, `${id} names <luz-theme-mode>, the colour mode switcher of core`).toContain("luz-theme-mode");
+    expect(named.filter((tag) => ["luz-mode", "luz-color-mode", "luz-consent", "luz-banner"].includes(tag))).toEqual([]);
   });
 
   it("the kinds name the classes of their own patterns, from the manifest of their package, and the general prompt names none of them", () => {

@@ -5,10 +5,10 @@
  *   - classes.json and custom-elements.json of catalog have the new names and none of the old, and no
  *     `luz-landing-*`, `luz-cms-*`, `luz-app-*` or `luz-docs-*` but the kept `luz-docs-layout`, `luz-docs-main`, `luz-docs-nav`
  *   - `components/<block>.css` and its `.min.css` exist for every new block, the old files do not
- *   - the exports `./color-mode` and `./cookie-consent` exist, `./mode` and `./consent` do not; the loader, its chunks and
- *     the files of dist follow
+ *   - the exports `./theme-time` and `./cookie-consent` exist, `./mode`, `./consent` and `./color-mode` (F8's name, taken out by the
+ *     theme-mode plan, 2026-10-29) do not; the loader, its chunks and the files of dist follow
  *   - what does not change, does not: `getConsent()`, the `data-luz-consent*` attributes, `--luz-consent-h`, the `luz-consent`
- *     key of localStorage and the `luz:consent` event, core's `luz-mode-*` classes
+ *     key of localStorage and the `luz:consent` event
  *   - the changeset names catalog and check, and its tables have every old name
  *
  * The pages (/docs/catalog/<block>/, en and es, the unions, `fits-kinds`) are in tests/catalog-patterns.test.js; the CSS of each
@@ -19,7 +19,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { CHUNKS, CLASSES, DOCS_KEPT, ELEMENTS, FILES, LAYOUT, OLD_PAGES, PATTERNS, PROPERTIES, TAGS } from "./helpers/catalog-names.js";
+import { CHUNKS, CHUNK_NOW, CLASSES, DOCS_KEPT, ELEMENTS, FILES, LAYOUT, OLD_PAGES, PATTERNS, PROPERTIES, TAGS, THEME_MODE } from "./helpers/catalog-names.js";
 import { releaseNotes } from "./helpers/release-notes.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -85,11 +85,14 @@ describe("classes.json of catalog has the new names and none of the old", () => 
     expect(classes.hooks.filter((hook) => /cookie-consent/.test(hook)), "no hook was renamed with the element").toEqual([]);
   });
 
-  it("is untouched where core's classes look the same: luz-mode-switcher, luz-mode-btn and luz-mode-cycle are core's, not catalog's, and are not in the table", () => {
+  it("has none of core's old switcher classes (luz-mode-switcher, luz-mode-btn, luz-mode-cycle): they are gone with no alias, and core's luz-theme-mode__* are not catalog's", () => {
     const core = json("packages/core/dist/classes.json").classes.map((c) => c.name);
-    for (const name of ["luz-mode-switcher", "luz-mode-btn", "luz-mode-cycle"]) expect(core, name).toContain(name);
-    // catalog's stylesheets may name them (the color mode refines the switcher), but never define one
-    expect(classes.classes.filter((c) => c.defined && /^luz-mode(?:-|$)/.test(c.name)).map((c) => c.name), "catalog defines none of them").toEqual([]);
+    for (const [old, now] of THEME_MODE.classes) {
+      expect(core, `core has no ${old}`).not.toContain(old);
+      expect(core.some((name) => name === now || name.startsWith(`${now}`)), `core has ${now}`).toBe(true);
+    }
+    // catalog's stylesheets may name them (the time refines the mode), but never define one
+    expect(classes.classes.filter((c) => c.defined && /^luz-(?:mode|theme-mode)(?:-|_|$)/.test(c.name)).map((c) => c.name), "catalog defines none of them").toEqual([]);
   });
 });
 
@@ -98,8 +101,14 @@ describe("classes.json of catalog has the new names and none of the old", () => 
 describe("custom-elements.json of catalog has the new elements and none of the old", () => {
   const tags = declarations.map((d) => d.tagName).sort();
 
-  it("holds the eight tags: search, cookie consent, color mode, language switch, submenu, announcement, the FAQ and the timeline", () => {
-    expect(tags).toEqual(["luz-announcement", "luz-color-mode", "luz-cookie-consent", "luz-faq", "luz-lang-switch", "luz-search", "luz-submenu", "luz-timeline"]);
+  it("holds the eight tags: search, cookie consent, theme time, language switch, submenu, announcement, the FAQ and the timeline", () => {
+    expect(tags).toEqual(["luz-announcement", "luz-cookie-consent", "luz-faq", "luz-lang-switch", "luz-search", "luz-submenu", "luz-theme-time", "luz-timeline"]);
+    expect(tags).not.toContain("luz-color-mode");
+  });
+
+  it.each(THEME_MODE.tags.map(([old]) => old))("has no <%s>: taken out with no alias by the theme-mode plan", (old) => {
+    expect(tags).not.toContain(old);
+    expect(JSON.stringify(elements)).not.toContain(old);
   });
 
   it.each(TAGS.map(([old]) => old))("has no <%s>", (old) => {
@@ -114,19 +123,20 @@ describe("custom-elements.json of catalog has the new elements and none of the o
     expect(exists(`packages/catalog/dist/components/${css}.css`)).toBe(true);
   });
 
-  it("the module of each element is the file of its script or of its stylesheet: color-mode.js, cookie-consent.js and components/announcement.css", () => {
+  it("the module of each element is the file of its script or of its stylesheet: theme-time.js, cookie-consent.js and components/announcement.css", () => {
     const pathOf = (tag) => elements.modules.find((m) => m.declarations?.some((d) => d.tagName === tag)).path;
-    expect(pathOf("luz-color-mode")).toBe("color-mode.js");
+    expect(pathOf("luz-theme-time")).toBe("theme-time.js");
     expect(pathOf("luz-cookie-consent")).toBe("cookie-consent.js");
     expect(pathOf("luz-announcement")).toBe("components/announcement.css");
-    expect(elements.modules.map((m) => m.path).filter((path) => /(?:^|\/)(?:mode|consent|banner)\.(?:js|css)$/.test(path))).toEqual([]);
+    expect(elements.modules.map((m) => m.path).filter((path) => /(?:^|\/)(?:mode|color-mode|consent|banner)\.(?:js|css)$/.test(path))).toEqual([]);
   });
 
-  it("the event of the color mode is luz-color-mode:change; the cookie consent keeps luz:consent", () => {
+  it("the event of the time of day is luz-theme-time:change; the cookie consent keeps luz:consent", () => {
     const events = (tag) => (declarations.find((d) => d.tagName === tag).events ?? []).map((e) => e.name);
-    expect(events("luz-color-mode")).toEqual(["luz-color-mode:change"]);
+    expect(events("luz-theme-time")).toEqual(["luz-theme-time:change"]);
     expect(events("luz-cookie-consent")).toEqual(["luz:consent"]);
     expect(JSON.stringify(elements)).not.toContain("luz-mode:change");
+    expect(JSON.stringify(elements)).not.toContain("luz-color-mode:change");
   });
 
   it("the classes of the cookie consent are .luz-cookie-consent and its parts (the element and its class are one block)", () => {
@@ -146,7 +156,7 @@ describe("components/<block>.css and its .min.css exist for every new block, and
     expect(exists(`packages/catalog/dist/components/${name}.min.css`), `dist/components/${name}.min.css`).toBe(true);
   });
 
-  it("holds exactly the 31 components of the catalog: the 20 patterns, the four of F7 and the seven elements, plain and minified", () => {
+  it("holds exactly the 31 components of the catalog: the 20 patterns, the four of F7 and the seven elements (theme-time is the color mode's successor), plain and minified", () => {
     const built = readdirSync(`${root}packages/catalog/dist/components`).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, "")).sort();
     expect(built).toEqual([...new Set(NEW)].sort());
     expect(built).toHaveLength(31);
@@ -159,8 +169,10 @@ describe("components/<block>.css and its .min.css exist for every new block, and
     expect(packed).not.toContain(`dist/components/${old}.min.css`);
   });
 
-  it.each(CHUNKS)("the chunk %s.js is gone and %s.js is there, plain and minified, with a source", (old, current) => {
+  it.each(CHUNKS)("the chunk %s.js is gone (and F8's %s.js with it): the one that is there is the successor, plain and minified, with a source", (old, f8) => {
+    const current = CHUNK_NOW[old];
     for (const file of [`src/${old}.js`, `dist/${old}.js`, `dist/${old}.min.js`]) expect(exists(`packages/catalog/${file}`), file).toBe(false);
+    if (current !== f8) for (const file of [`src/${f8}.js`, `dist/${f8}.js`, `dist/${f8}.min.js`]) expect(exists(`packages/catalog/${file}`), file).toBe(false);
     for (const file of [`src/${current}.js`, `dist/${current}.js`, `dist/${current}.min.js`]) expect(exists(`packages/catalog/${file}`), file).toBe(true);
     const packed = read("packages/catalog/pack-files.txt").split("\n");
     expect(packed).toContain(`dist/${current}.js`);
@@ -172,8 +184,9 @@ describe("components/<block>.css and its .min.css exist for every new block, and
 /* ---- exports, the loader --------------------------------------------------------------------------- */
 
 describe("the exports, the loader and the scripts follow the elements", () => {
-  it("exports ./color-mode and ./cookie-consent, and not ./mode or ./consent", () => {
-    expect(manifest.exports["./color-mode"]).toBe("./dist/color-mode.js");
+  it("exports ./theme-time and ./cookie-consent, and not ./mode, ./color-mode or ./consent", () => {
+    expect(manifest.exports["./theme-time"]).toBe("./dist/theme-time.js");
+    expect(manifest.exports).not.toHaveProperty("./color-mode");
     expect(manifest.exports["./cookie-consent"]).toBe("./dist/cookie-consent.js");
     expect(manifest.exports).not.toHaveProperty("./mode");
     expect(manifest.exports).not.toHaveProperty("./consent");
@@ -181,25 +194,25 @@ describe("the exports, the loader and the scripts follow the elements", () => {
   });
 
   it("lists the two scripts, plain and minified, as having side effects, and not the old ones", () => {
-    for (const file of ["./dist/color-mode.js", "./dist/color-mode.min.js", "./dist/cookie-consent.js", "./dist/cookie-consent.min.js"]) expect(manifest.sideEffects, file).toContain(file);
-    expect(manifest.sideEffects.filter((file) => /\/(?:mode|consent)(?:\.min)?\.js$/.test(file))).toEqual([]);
+    for (const file of ["./dist/theme-time.js", "./dist/theme-time.min.js", "./dist/cookie-consent.js", "./dist/cookie-consent.min.js"]) expect(manifest.sideEffects, file).toContain(file);
+    expect(manifest.sideEffects.filter((file) => /\/(?:mode|color-mode|consent)(?:\.min)?\.js$/.test(file))).toEqual([]);
   });
 
-  it("the loader maps each element to its chunk by a literal import: luz-cookie-consent to ./cookie-consent.js and luz-color-mode to ./color-mode.js", () => {
+  it("the loader maps each element to its chunk by a literal import: luz-cookie-consent to ./cookie-consent.js and luz-theme-time to ./theme-time.js", () => {
     const loader = read("packages/catalog/src/catalog.js").replace(/\/\*[\s\S]*?\*\//g, "");
     expect(loader).toMatch(/["']luz-cookie-consent["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/cookie-consent\.js["']\s*\)/);
-    expect(loader).toMatch(/["']luz-color-mode["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/color-mode\.js["']\s*\)/);
-    expect(loader).not.toMatch(/["']luz-(?:consent|mode)["']/);
-    expect(loader).not.toMatch(/import\(\s*["']\.\/(?:consent|mode)\.js["']\s*\)/);
+    expect(loader).toMatch(/["']luz-theme-time["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/theme-time\.js["']\s*\)/);
+    expect(loader).not.toMatch(/["']luz-(?:consent|mode|color-mode)["']/);
+    expect(loader).not.toMatch(/import\(\s*["']\.\/(?:consent|mode|color-mode)\.js["']\s*\)/);
   });
 
   it("the built loader imports the minified chunks by their new names, and the two chunks define the new tags", () => {
     const loader = read("packages/catalog/dist/catalog.min.js");
     expect(loader).toContain("./cookie-consent.min.js");
-    expect(loader).toContain("./color-mode.min.js");
-    expect(loader).not.toMatch(/\.\/(?:consent|mode)\.min\.js/);
+    expect(loader).toContain("./theme-time.min.js");
+    expect(loader).not.toMatch(/\.\/(?:consent|mode|color-mode)\.min\.js/);
     expect(read("packages/catalog/dist/cookie-consent.min.js")).toContain("luz-cookie-consent");
-    expect(read("packages/catalog/dist/color-mode.min.js")).toContain("luz-color-mode");
+    expect(read("packages/catalog/dist/theme-time.min.js")).toContain("luz-theme-time");
   });
 
   it("the cookie consent keeps its public face: getConsent(), the storage key luz-consent, the event luz:consent and --luz-consent-h", () => {
@@ -212,10 +225,11 @@ describe("the exports, the loader and the scripts follow the elements", () => {
     expect(source, "the element is the new tag").toMatch(/customElements\.define\(\s*["']luz-cookie-consent["']/);
   });
 
-  it("the color mode dispatches luz-color-mode:change, and the pages and scripts that listen use the new event", () => {
-    expect(read("packages/catalog/src/color-mode.js")).toContain("luz-color-mode:change");
+  it("the time of day dispatches luz-theme-time:change, and the pages and scripts that listen use the new events (never luz-mode:change or luz-color-mode:change)", () => {
+    expect(read("packages/catalog/src/theme-time.js")).toContain("luz-theme-time:change");
     for (const file of ["apps/landing/landing.js", "apps/landing/light/light.js"]) {
       expect(read(file), file).not.toContain("luz-mode:change");
+      expect(read(file), file).not.toContain("luz-color-mode:change");
     }
   });
 });

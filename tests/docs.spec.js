@@ -175,8 +175,8 @@ test.describe('Documentation site', () => {
       await expect(page.locator('#site-header').getByRole('link', { name: 'GitHub' })).toBeVisible();
       await expect(page.locator('#site-header').getByRole('link', { name: 'Home' })).toHaveCount(0);
       // Exactly one radio group drives the tokens on this page
-      await expect(page.locator('fieldset:has(input[name="luz-theme"])')).toHaveCount(1);
-      await expect(page.locator('input[name="luz-theme"]')).toHaveCount(3);
+      await expect(page.locator('fieldset:has(input[name="luz-theme-mode"])')).toHaveCount(1);
+      await expect(page.locator('input[name="luz-theme-mode"]')).toHaveCount(4);
       await expect(page.locator('#page-nav fieldset')).toHaveCount(0);
     });
 
@@ -186,19 +186,22 @@ test.describe('Documentation site', () => {
       await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveCount(0);
     });
 
-    test('the cycle button in the footer steps through the three modes, under core\'s key', async ({ page }) => {
+    test('the round button in the footer steps through Auto and the three modes, under core\'s key', async ({ page }) => {
       await seedMode(page, 'light');
       await open(page);
       expect(await theme(page)).toBe('light');
 
-      const button = page.locator('footer .luz-mode-cycle');
-      await expect(button).toHaveAccessibleName('Change color mode. Current: Light');
+      const button = page.locator('footer .luz-theme-mode__button');
+      await expect(button).toHaveAccessibleName('Color mode: Light');
       for (const mode of ['dark', 'high-contrast']) {
         await button.click();
         expect(await theme(page)).toBe(mode);
-        await expect(page.locator('input[name="luz-theme"]:checked')).toHaveValue(mode);
+        await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue(mode);
       }
-      // No Auto in the footer (2026-10-18): after High contrast comes Light again
+      // Auto is in the footer (2026-10-29): after High contrast comes Auto, then Light again
+      await button.click();
+      await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue('auto');
+      expect(await page.evaluate((key) => localStorage.getItem(key), MODE_KEY), 'Auto removes the key').toBeNull();
       await button.click();
       expect(await theme(page)).toBe('light');
       await button.click();
@@ -208,7 +211,7 @@ test.describe('Documentation site', () => {
       // The choice follows the visitor to another page
       await page.goto(routeOf('c-button'));
       expect(await theme(page)).toBe('dark');
-      await expect(button).toHaveAccessibleName('Change color mode. Current: Dark');
+      await expect(button).toHaveAccessibleName('Color mode: Dark');
     });
 
     test('a mode can be scoped to any element', async ({ page }) => {
@@ -712,47 +715,46 @@ test.describe('Documentation site', () => {
     test('the sidebar specimen is inert and says where the working one is', async ({ page }) => {
       await gotoId(page, 'c-sidebar');
 
-      await expect(page.locator('#c-sidebar fieldset.luz-mode-switcher')).toHaveAttribute('disabled', '');
+      // The specimen is a picture: its group is inert (it was disabled before the theme-mode plan), so no radio of it answers
+      await expect(page.locator('#c-sidebar fieldset.luz-theme-mode__group')).toHaveAttribute('inert', /.*/);
       for (const radio of await page.locator('#c-sidebar input[type="radio"]').all()) {
-        await expect(radio).toBeDisabled();
+        expect(await radio.evaluate((el) => !!el.closest('[inert]')), 'the radio sits in an inert group').toBe(true);
       }
       await expect(page.locator('#c-sidebar .docs-demo__stage .luz-nav-toggle')).toBeDisabled();
       await expect(page.locator('#c-sidebar a[href="#page-nav"]').first()).toBeVisible();
-      // No dead cycle button: the specimen is not a cycle group
-      await expect(page.locator('#c-sidebar .luz-mode-cycle')).toHaveCount(0);
+      // No dead round button: the specimen is not a <luz-theme-mode>
+      await expect(page.locator('#c-sidebar .luz-theme-mode__button')).toHaveCount(0);
     });
 
-    test('the color mode switcher has its own page: the cycle variant, its markup, init, no-JS state and names', async ({ page }) => {
-      test.slow(); // many checks on one heavy page (about 27 s alone), over the 30 s default under load
-      await gotoId(page, 'c-mode-switcher');
+    test('the color mode has its own page, Theme mode: the radios, the round button fixed and inline, its markup, the script for the head, no-JS state and names', async ({ page }) => {
+      test.slow(); // many checks on one heavy page, over the 30 s default under load
+      await gotoId(page, 'c-theme-mode');
 
-      const guide = page.locator('#c-mode-switcher');
-      // The Example's specimen (the Design tab's Do and don't has inert ones of its own)
-      // Three of them since F6: the radios, the round cycle button fixed in its stage, and the same button inline
-      const specimens = guide.locator('.docs-example fieldset.luz-mode-switcher');
-      await expect(specimens).toHaveCount(3);
-      for (const specimen of await specimens.all()) await expect(specimen).toHaveAttribute('disabled', '');
+      const guide = page.locator('#c-theme-mode');
+      // The Example's specimens (the Design tab's Do and don't has inert ones of its own): the radios, the round button fixed in its stage, and the same button inline
+      const radios = guide.locator('.docs-example fieldset.luz-theme-mode__group');
+      await expect(radios).toHaveCount(1);
+      const buttons = guide.locator('.docs-example button.luz-theme-mode__button');
+      await expect(buttons).toHaveCount(2);
       // The specimen's fixed button stays in its stage: the corner of the window is the site's own button
-      const fixed = guide.locator('.docs-example .docs-stage__fixed fieldset.luz-mode-switcher--cycle:not(.luz-mode-switcher--inline)');
+      const fixed = guide.locator('.docs-example .docs-stage__fixed button.luz-theme-mode__button--fixed');
       await expect(fixed).toHaveCount(1);
       await expect(fixed).toHaveCSS('position', 'fixed');
       const where = await page.evaluate(() => {
-        const stage = document.querySelector('#c-mode-switcher .docs-example .docs-stage__fixed').getBoundingClientRect();
-        const demo = document.querySelector('#c-mode-switcher .docs-example .docs-stage__fixed .luz-mode-cycle').getBoundingClientRect();
-        const site = document.querySelector('footer .luz-mode-cycle').getBoundingClientRect();
+        const stage = document.querySelector('#c-theme-mode .docs-example .docs-stage__fixed').getBoundingClientRect();
+        const demo = document.querySelector('#c-theme-mode .docs-example .docs-stage__fixed .luz-theme-mode__button').getBoundingClientRect();
+        const site = document.querySelector('footer .luz-theme-mode__button').getBoundingClientRect();
         const inside = demo.left >= stage.left - 1 && demo.right <= stage.right + 1 && demo.top >= stage.top - 1 && demo.bottom <= stage.bottom + 1;
         const apart = demo.right <= site.left || demo.left >= site.right || demo.bottom <= site.top || demo.top >= site.bottom;
         return { inside, apart };
       });
       expect(where.inside, 'inside its stage').toBe(true);
       expect(where.apart, 'not over the site\'s own button').toBe(true);
-      await expect(guide).toContainText('luz-mode-switcher--cycle');
-      await expect(guide).toContainText('luz-mode-switcher--inline');
-      await expect(guide).toContainText('initThemeCycle()');
-      await expect(guide.locator('pre')).toContainText(['luz-mode-btn__icon']);
-      await expect(page.locator('#keyboard ~ ul').first()).toContainText('Change color mode. Current:');
-      await gotoId(page, 'h-a11y-checked');
-      await expect(page.locator('#accessibility')).toContainText('three radio buttons');
+      await expect(guide).toContainText('luz-theme-mode__button--fixed');
+      await expect(guide).toContainText('inline');
+      await expect(guide).toContainText('theme-boot.min.js');
+      await expect(guide.locator('pre')).toContainText(['luz-theme-mode__icon']);
+      await expect(page.locator('#keyboard ~ ul').first()).toContainText('Color mode:');
     });
   });
 
@@ -839,8 +841,8 @@ test.describe('Documentation site', () => {
       await page.goto(routeOf('c-button'));
       const background = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
       const light = await background();
-      await expect(page.locator('.luz-mode-cycle')).toBeHidden();
-      await page.click('footer .luz-mode-btn:has(input[value="dark"])');
+      await expect(page.locator('.luz-theme-mode__button')).toHaveCount(0);
+      await page.click('footer .luz-theme-mode__option:has(input[value="dark"])');
       await expect.poll(background).not.toBe(light);
     });
   });
@@ -856,10 +858,14 @@ test.describe('Documentation site', () => {
         await page.goto(route);
         const offenders = await page.evaluate(([themesPage, exempt]) => {
           const found = [];
+          // A file name or a package path is code even where no <code> can hold it (an aria-label, a rule's text from
+          // the checker): a token with a dot extension, a path, an @scope/ or a luz- / --luz- name (also inside data-luz-*
+          // or after a "<") is an identifier. Every other word is still held to the rule.
+          const prose = (text) => text.split(/\s+/).filter((token) => !/\.(?:js|css|json|html|md)\b|\/|^@[\w-]+\/|(?:^|[^\w])(?:--)?luz-/.test(token)).join(' ');
           const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
           while (walker.nextNode()) {
             const node = walker.currentNode;
-            if (!/theme/i.test(node.textContent)) continue;
+            if (!/theme/i.test(prose(node.textContent))) continue;
             if (node.parentElement.closest('code, pre, script, style, #tokens-model')) continue;
             if (node.parentElement.closest(`a[href^="${themesPage}"], a[href^="/docs/tokens/themes/"]`)) continue;
             if (exempt.some((r) => node.parentElement.closest(`.docs-card:has(a[href="${r}"])`))) continue;
@@ -873,7 +879,9 @@ test.describe('Documentation site', () => {
             // "Previous: Color modes and themes" names a link to that page
             if (el.closest(`a[href^="${themesPage}"], a[href^="/docs/tokens/themes/"]`)) return;
             for (const name of ['aria-label', 'title', 'alt']) {
-              if (/theme/i.test(el.getAttribute(name) ?? '')) found.push(el.getAttribute(name));
+              const value = el.getAttribute(name) ?? '';
+              // "Copy the line for theme-time.min.js": the file name is code, an attribute cannot hold <code>
+              if (/theme/i.test(prose(value))) found.push(value);
             }
           });
           return found;
@@ -1127,7 +1135,7 @@ test.describe('Documentation site', () => {
         await page.goto('/404.html');
         const html = page.locator('html');
         await expect(html).toHaveAttribute('data-theme', 'dark');
-        expect(await html.getAttribute('data-light'), 'no hour: no script to read it').toBeNull();
+        expect(await html.getAttribute('data-moment'), 'no hour: no script to read it').toBeNull();
         const colours = await page.evaluate(() => {
           const c = (selector) => getComputedStyle(document.querySelector(selector));
           return { body: c('body').backgroundColor, headline: c('.docs-not-found__code').color, lead: c('main .docs-lead').color, button: c('.docs-not-found__links a.luz-btn--outline').color };
@@ -1514,12 +1522,14 @@ test.describe('Site header and navigation toggle', () => {
     for (const file of ['apps/docs/site-header.css', 'apps/docs/site-header.js', 'apps/landing/site-header.css', 'apps/landing/site-header.js']) expect(existsSync(fromRepo(file)), `${file} moved`).toBe(false);
     expect(/from\s+["']\/apps\/site\/header\.js["']/.test(read('apps/docs/reference.js')), 'reference.js imports /apps/site/header.js').toBe(true);
     expect(/from\s+["']\/apps\/site\/header\.js["']/.test(read('apps/landing/landing.js')), 'landing.js imports /apps/site/header.js').toBe(true);
-    // The header no longer keeps a mode of its own: <luz-color-mode> does, and the page learns of it from its event
+    // The header no longer keeps a mode of its own: <luz-theme-mode> and <luz-theme-time> do, and the page learns of it from the event
     const header = read('apps/site/header.js');
     expect(header).not.toContain('luz-site-mode');
     expect(header).not.toMatch(/onModeChange/);
-    expect(header).toMatch(/\/packages\/catalog\/dist\/color-mode\.js/);
-    expect(read('apps/docs/reference.js')).toMatch(/luz-color-mode:change/);
+    expect(header).toMatch(/\/packages\/core\/dist\/theme-mode\.js/);
+    expect(header).toMatch(/\/packages\/catalog\/dist\/theme-time\.js/);
+    expect(header).not.toMatch(/color-mode/);
+    expect(read('apps/docs/reference.js')).toMatch(/luz-theme-mode:change/);
   });
 
   const PAGES = [

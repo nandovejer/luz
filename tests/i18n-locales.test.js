@@ -7,7 +7,8 @@
  * never bytes a contributor wrote. The source is read as text; nothing is
  * built here (tests/i18n-build.test.js builds a copy).
  *
- *   - en: 26 keys, with `previous` and `next` (F-5) and `modeAuto` (F6 of the ai-and-catalog-only plan: the name of the colour mode button while no mode radio is checked)
+ *   - en: 23 keys, with `previous` and `next` (F-5); `changeMode`, `modeChanged` and `modeAuto` left with the cycle button when
+ *     <luz-theme-mode> replaced it (2026-10-29): the text of the colour mode is the author's, in the markup
  *   - the entry carries no Spanish and no language object but English
  *   - every language file: the schema of the review (keys, strings,
  *     placeholders, length, characters, no address), a $header that names a
@@ -28,7 +29,7 @@ const codes = languageFiles();
 const EN_KEYS = [
   "play", "pause", "mute", "unmute", "fullscreen", "exitFullscreen", "captions", "captionsOff", "loading", "midiError",
   "timeOf", "copy", "copied", "copiedStatus", "copyFailed", "codeExample", "copyCode", "applyTheme", "themeApplied",
-  "changeMode", "modeChanged", "modeAuto", "sortedAsc", "sortedDesc", "previous", "next",
+  "sortedAsc", "sortedDesc", "previous", "next",
 ];
 
 const readLanguage = (code) => {
@@ -38,8 +39,9 @@ const readLanguage = (code) => {
 };
 
 describe("English, in the entry", () => {
-  it("has the 26 keys of the README, previous, next and modeAuto included (the timeline asks for the first two)", () => {
+  it("has the 23 keys of the README, previous and next included (the timeline asks for them) and no key for the colour mode: its text is the page's", () => {
     expect(Object.keys(en).sort()).toEqual([...EN_KEYS].sort());
+    for (const gone of ["changeMode", "modeChanged", "modeAuto"]) expect(en, gone).not.toHaveProperty(gone);
     expect(en.previous).toBe("Previous");
     expect(en.next).toBe("Next");
   });
@@ -83,13 +85,14 @@ describe.each(codes.length ? codes : ["es"])("packages/core/src/i18n/%s.json", (
     expect(text.trimStart().startsWith("{")).toBe(true);
   });
 
-  it("has a key for each of the 26 keys of English, none empty", () => {
+  it("has a key for each of the 23 keys of English, none empty, and none for the colour mode", () => {
     const own = Object.keys(dict()).filter((k) => k !== "$header");
+    for (const gone of ["changeMode", "modeChanged", "modeAuto"]) expect(own, gone).not.toContain(gone);
     expect(own.sort()).toEqual([...EN_KEYS].sort());
     for (const key of own) expect(dict()[key].trim(), key).not.toBe("");
   });
 
-  it("translates every key: none is the English text (the 23 of before and the three new ones)", () => {
+  it("translates every key: none is the English text (the 23 keys)", () => {
     const d = dict();
     const same = EN_KEYS.filter((key) => d[key] === en[key]);
     // a word that is the same in both languages is the contributor's call, never most of the file

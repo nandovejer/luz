@@ -4,7 +4,7 @@
  * section 2.3 and 9 step 7): catalog.min.js scans the page once and loads
  * search.min.js only when there is a <luz-search> (on its first pointerdown or
  * focusin, or on idle) and cookie-consent.min.js only when there is a <luz-cookie-consent>
- * (on idle) and color-mode.min.js only when there is a <luz-color-mode> (on idle). Content added later is not upgraded until the page imports the
+ * (on idle) and theme-time.min.js only when there is a <luz-theme-time> (on idle). Content added later is not upgraded until the page imports the
  * chunk by hand. Security: SEC-CHUNK-4 (R5), the full-SRI path is an import map
  * with an `integrity` section: a chunk with a wrong hash is never defined, in
  * every engine. A modulepreload with `integrity` is only a hint: Chromium
@@ -94,35 +94,35 @@ test.describe('the loader: which chunk, and when', () => {
 });
 
 test.describe('the loader: the mode chunk', () => {
-  test('(e) with a <luz-color-mode>, the mode chunk waits for idle: not requested while idle is held', async ({ page }) => {
+  test('(e) with a <luz-theme-time>, the mode chunk waits for idle: not requested while idle is held', async ({ page }) => {
     await holdIdle(page);
     const seen = chunkRequests(page);
     await page.goto(MODE_PAGE);
     await page.waitForTimeout(SETTLE);
     expect(seen).toEqual([]);
-    expect(await isDefined(page, 'luz-color-mode')).toBe(false);
+    expect(await isDefined(page, 'luz-theme-time')).toBe(false);
   });
 
-  test('(e) idle requests the mode chunk, once, and defines <luz-color-mode>; the search and consent chunks are not requested', async ({ page }) => {
+  test('(e) idle requests the mode chunk, once, and defines <luz-theme-time>; the search and consent chunks are not requested', async ({ page }) => {
     await holdIdle(page);
     const seen = chunkRequests(page);
     await page.goto(MODE_PAGE);
     await releaseIdle(page);
-    await expect.poll(() => seen).toContain('color-mode');
-    await expect.poll(() => isDefined(page, 'luz-color-mode')).toBe(true);
+    await expect.poll(() => seen).toContain('theme-time');
+    await expect.poll(() => isDefined(page, 'luz-theme-time')).toBe(true);
     await page.waitForTimeout(SETTLE);
-    expect(seen).toEqual(['color-mode']);
+    expect(seen).toEqual(['theme-time']);
   });
 
   test('(e) with no stub the mode chunk arrives by itself', async ({ page }) => {
     const seen = chunkRequests(page);
     await page.goto(MODE_PAGE);
-    await expect.poll(() => seen).toEqual(['color-mode']);
-    await expect.poll(() => isDefined(page, 'luz-color-mode')).toBe(true);
+    await expect.poll(() => seen).toEqual(['theme-time']);
+    await expect.poll(() => isDefined(page, 'luz-theme-time')).toBe(true);
   });
 
   for (const url of [EMPTY, PAGE]) {
-    test(`(e) a page without a <luz-color-mode> never requests the mode chunk, idle or not (${url})`, async ({ browser }) => {
+    test(`(e) a page without a <luz-theme-time> never requests the mode chunk, idle or not (${url})`, async ({ browser }) => {
       // A page of its own per URL: the idle stub and the request listener are installed once
       const page = await browser.newPage();
       await holdIdle(page);
@@ -132,8 +132,8 @@ test.describe('the loader: the mode chunk', () => {
       await page.waitForTimeout(SETTLE);
       await page.keyboard.press('Control+k');
       await page.waitForTimeout(SETTLE);
-      expect(seen).not.toContain('color-mode');
-      expect(await isDefined(page, 'luz-color-mode')).toBe(false);
+      expect(seen).not.toContain('theme-time');
+      expect(await isDefined(page, 'luz-theme-time')).toBe(false);
       await page.close();
     });
   }

@@ -100,7 +100,7 @@ describe("the fixtures: every file makes the rules of misuse say what its expect
     expect(result.data, `stdout is JSON (stderr: ${result.stderr})`).not.toBeNull();
     expect(result.found.map(key)).toEqual(result.expected.map(key));
     for (const found of result.found) {
-      const blocks = found.rule === "misuse/host-element" || found.rule === "misuse/modifier-alone";
+      const blocks = found.rule === "misuse/host-element" || found.rule === "misuse/modifier-alone" || found.rule === "a11y/slider-no-name";
       expect(found.severity, key(found)).toBe(blocks ? "block" : "warn");
       expect(found.file, key(found)).toBe(entry.path);
       expect(wordsOf(found.rule, found.message), `${key(found)} is worded by a template of messages.js`).toBe(true);

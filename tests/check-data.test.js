@@ -35,7 +35,7 @@
  *          under its cap with the four components that came from core),
  *          properties [{ name, scope }], hooks as in the manifest. No layer,
  *          no files, no text.
- *      dist/data/catalog/custom-elements.json           only the packages that have one (core defines no tag since F7)
+ *      dist/data/<pkg>/custom-elements.json           only the packages that have one (catalog, and core since <luz-theme-mode>, 2026-10-29)
  *          the Custom Elements Manifest reduced to { schemaVersion, modules:
  *          [{ kind, path, declarations: [{ kind, name, customElement, tagName,
  *          attributes: [{ name }] }] }] }: names, no description, type,
@@ -195,12 +195,13 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(existsSync(join(dataDir(), "index.json")), "data/index.json").toBe(true);
   });
 
-  it("holds exactly index.json, the three classes.json, the custom-elements.json of catalog (core defines no tag), and LUZ's tokens for the theme rules", () => {
+  it("holds exactly index.json, the three classes.json, the custom-elements.json of core (<luz-theme-mode>) and of catalog, and LUZ's tokens for the theme rules", () => {
     expect(built.error).toBeNull();
     expect(filesUnder(dataDir())).toEqual([
       "catalog/classes.json",
       "catalog/custom-elements.json",
       "core/classes.json",
+      "core/custom-elements.json",
       "index.json",
       "tokens/classes.json",
       "tokens/tokens.css",
@@ -299,9 +300,11 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(JSON.stringify(copy)).not.toMatch(/"(?:description|demos|type|default|exports|readme|superclass)"/);
   });
 
-  it("core has no custom-elements.json in the snapshot, because core defines no tag, and catalog's holds luz-timeline with its stylesheet", () => {
+  it("core's custom-elements.json in the snapshot holds luz-theme-mode and its two attributes, and catalog's holds luz-timeline with its stylesheet", () => {
     expect(built.error).toBeNull();
-    expect(existsSync(join(dataDir(), "core", "custom-elements.json"))).toBe(false);
+    const mode = snapshot("core", "custom-elements.json").modules.flatMap((m) => m.declarations ?? []);
+    expect(mode.map((d) => d.tagName)).toEqual(["luz-theme-mode"]);
+    expect(mode[0].attributes.map((a) => a.name).sort()).toEqual(["inline", "no-remember"]);
     const timeline = snapshot("catalog", "custom-elements.json").modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName === "luz-timeline");
     expect(timeline?.stylesheet).toBe("components/timeline.css");
   });

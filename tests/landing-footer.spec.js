@@ -165,7 +165,7 @@ test.describe('the pages that use the landing footer', () => {
   test('the documentation\'s footer partial is the landing footer too, on a docs page and on the 404', async ({ page }) => {
     await page.goto('/docs/');
     await expect(page.locator('#site-footer.luz-site-footer, #site-footer .luz-site-footer')).toHaveCount(1);
-    expect(await page.locator('#site-footer .luz-mode-switcher').count()).toBeGreaterThan(0);
+    expect(await page.locator('#site-footer .luz-theme-mode__group').count()).toBeGreaterThan(0);
 
     await page.goto('/404.html');
     await expect(page.locator('footer.luz-site-footer, footer .luz-site-footer')).toHaveCount(1);

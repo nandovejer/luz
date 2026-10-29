@@ -152,13 +152,14 @@ describe("the manifests say where the four came to", () => {
     expect(module.exports).toStrictEqual([{ kind: "custom-element-definition", name: "luz-timeline", declaration: { name: "LuzTimeline", module: "timeline.js" } }]);
   });
 
-  it("core ships no custom-elements.json: it defines no tag, so it has no export, no field and no file for it", () => {
-    expect(has("packages/core/dist/custom-elements.json")).toBe(false);
+  it("core ships a custom-elements.json for its one tag, <luz-theme-mode>, and it is not the timeline's: its export, its field and its file are core's own", () => {
+    expect(has("packages/core/dist/custom-elements.json")).toBe(true);
     const core = json("packages/core/package.json");
-    expect(core.exports).not.toHaveProperty("./custom-elements.json");
-    expect(core).not.toHaveProperty("customElements");
-    expect(read("packages/core/pack-files.txt").split("\n").map((l) => l.trim())).not.toContain("dist/custom-elements.json");
-    expect(has("packages/core/dist/custom-elements.json")).toBe(false);
+    expect(core.exports["./custom-elements.json"]).toBe("./dist/custom-elements.json");
+    expect(core.customElements).toBe("dist/custom-elements.json");
+    expect(read("packages/core/pack-files.txt").split("\n").map((l) => l.trim())).toContain("dist/custom-elements.json");
+    const tags = json("packages/core/dist/custom-elements.json").modules.flatMap((m) => m.declarations ?? []).map((d) => d.tagName);
+    expect(tags, "the timeline is catalog's: core declares only the color mode").toEqual(["luz-theme-mode"]);
   });
 
   it("the classes of the four are in catalog's classes.json, each defined, in the file of its component, in the luz.catalog layer", () => {
@@ -242,15 +243,16 @@ describe("core names no class and no element of catalog (decision 31)", () => {
     expect(read("packages/tokens/src/semantic.css")).toContain("--luz-sidebar-bg");
   });
 
-  it("the rules core had over the moved classes went with them: the shell's sidebar and the mode switcher in the sidebar are in sidebar.css", () => {
+  it("the rules core had over the moved classes went with them: the shell's sidebar and the color mode in the sidebar are in sidebar.css", () => {
     const sidebar = read("packages/catalog/src/components/sidebar.css");
     // `.o-shell > .luz-sidebar` loses to the sidebar's own rules by specificity now, so it is written inside :where()
     expect(sidebar).toMatch(/:where\(\.o-shell\)\s*>\s*\.luz-sidebar/);
-    expect(sidebar).toMatch(/\.luz-sidebar\s+\.luz-mode-switcher/);
-    expect(sidebar.lastIndexOf(".luz-sidebar .luz-mode-switcher"), "the mode switcher's rule is at the end of the file").toBeGreaterThan(sidebar.indexOf(".luz-sidebar__link"));
+    expect(sidebar).toMatch(/\.luz-sidebar\s+:where\(luz-theme-mode\)/);
+    expect(sidebar.lastIndexOf(".luz-sidebar :where(luz-theme-mode)"), "the color mode's rule is at the end of the file").toBeGreaterThan(sidebar.indexOf(".luz-sidebar__link"));
+    expect(sidebar, "the old switcher class is gone from the sidebar").not.toMatch(/luz-mode-switcher|luz-mode-btn|luz-mode-cycle/);
     // (a token like --luz-sidebar-width is not a class: core keeps those)
     expect(read("packages/core/src/objects/_objects.css")).not.toMatch(/\.luz-sidebar/);
-    expect(read("packages/core/src/components/mode-switcher.css")).not.toMatch(/\.luz-sidebar/);
+    expect(read("packages/core/src/components/theme-mode.css")).not.toMatch(/\.luz-sidebar/);
     expect(read("packages/core/src/print/_print.css")).not.toMatch(/\.luz-sidebar|\.luz-timeline|luz-timeline/);
   });
 });
@@ -278,10 +280,10 @@ describe("catalog.js, the presence loader, loads the two chunks that came from c
   const loader = () => read("packages/catalog/src/catalog.js");
   const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'\\])\/\/.*$/gm, "$1");
 
-  it("names five chunks as literals (SEC-CHUNK-1), search, cookie-consent, color-mode, timeline and sidebar, and nothing else (F8 named the chunks for their elements)", () => {
+  it("names six chunks as literals (SEC-CHUNK-1), search, cookie-consent, theme-time, theme-time-bar, timeline and sidebar, and nothing else (F8 named the chunks for their elements)", () => {
     const targets = [...code(loader()).matchAll(/\bimport\s*\(\s*(["'])(\.\/[\w.-]+\.js)\1\s*\)/g)].map((m) => m[2]).sort();
-    expect(targets).toEqual(["./color-mode.js", "./cookie-consent.js", "./search.js", "./sidebar.js", "./timeline.js"]);
-    expect(code(loader()).match(/\bimport\s*\(/g)).toHaveLength(5);
+    expect(targets).toEqual(["./cookie-consent.js", "./search.js", "./sidebar.js", "./theme-time-bar.js", "./theme-time.js", "./timeline.js"]);
+    expect(code(loader()).match(/\bimport\s*\(/g)).toHaveLength(6);
   });
 
   it("<luz-timeline> loads timeline.js", () => {
@@ -312,9 +314,9 @@ describe("catalog.js, the presence loader, loads the two chunks that came from c
     expect(loader()).toMatch(/\.luz-sidebar[\s\S]{0,800}not a tag|not a tag[\s\S]{0,800}\.luz-sidebar/i);
   });
 
-  it("the build lists the five chunks and the size guard expects them", () => {
+  it("the build lists the six chunks and the size guard expects them", () => {
     const chunks = /chunks:\s*\[([^\]]*)\]/.exec(read("scripts/build-catalog.js"))?.[1] ?? "";
-    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "color-mode.js", "timeline.js", "sidebar.js"]);
+    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "theme-time.js", "theme-time-bar.js", "timeline.js", "sidebar.js"]);
     const loaders = /const LOADERS = \{([^;]*)\};/.exec(read("scripts/check-size.js"))?.[1] ?? "";
     expect(loaders).toContain("./sidebar.min.js");
     expect(loaders).toContain("./timeline.min.js");

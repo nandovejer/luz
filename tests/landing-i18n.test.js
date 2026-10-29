@@ -493,7 +493,7 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
       // Two columns (the docs, the project), and inside the first two labels: the packages and the kinds of site
       expect(footer.match(/class="luz-site-footer__col-title"/g), doc.route).toHaveLength(2);
       expect(footer.match(/class="landing-foot-label"/g), doc.route).toHaveLength(2);
-      expect(footer, doc.route).toMatch(/<luz-color-mode\b[^>]*\sremember\b[^>]*\sby="clock"/);
+      expect(footer, doc.route).toMatch(/<luz-theme-time\b[^>]*>\s*<luz-theme-mode\b/);
       // The languages are the header's switch (not a list in the footer), with a link to each
       const header = html.slice(html.indexOf("<header"), html.indexOf("</header>"));
       for (const lang of ["en", "es", "ar"]) expect(header, `${doc.route} → ${lang}`).toMatch(new RegExp(`<a class="luz-lang-switch__link"[^>]*hreflang="${lang}"`));

@@ -7,8 +7,8 @@
  *     warning), and it uses the pieces of its kind, only classes and elements the same prompt lists, no
  *     root-relative `href="/"`, no `style` attribute and no state class;
  *   - the app's account menu is a `popover` and no `summary` is a `luz-btn`;
- *   - the body of the five prompts holds the colour mode block: `<luz-color-mode remember>` around core's
- *     `fieldset.luz-mode-switcher`, naming `luz-mode-switcher` and `luz-mode-btn` as core's, and it passes luz-check;
+ *   - the body of the five prompts holds the colour mode block: core's `<luz-theme-mode>` around its
+ *     `fieldset.luz-theme-mode__group`, naming `luz-theme-mode__group` and `luz-theme-mode__option` as core's, and it passes luz-check;
  *   - the rules say no `style` attribute, where `@layer luz, site;` goes, that a state class is never typed, and the
  *     install part says to link only the catalog stylesheets the page uses.
  *
@@ -158,23 +158,25 @@ describe("the skeleton of each kind of site", () => {
 });
 
 describe("the colour mode block of the body", () => {
-  const blockOf = (id) => htmlBlocks(prompt(id)).find((b) => b.includes("<luz-color-mode"));
+  const blockOf = (id) => htmlBlocks(prompt(id)).find((b) => b.includes("<luz-theme-mode"));
 
-  it.each(IDS)("%s: has <luz-color-mode remember> around core's fieldset.luz-mode-switcher", (id) => {
+  it.each(IDS)("%s: has core's <luz-theme-mode> around its fieldset.luz-theme-mode__group, Auto first", (id) => {
     const block = blockOf(id);
-    expect(block, `${id}: a fenced html block with <luz-color-mode`).toBeTruthy();
-    const open = block.indexOf("<luz-color-mode remember>");
-    const fieldset = block.search(/<fieldset class="luz-mode-switcher[\s"]/);
-    const close = block.indexOf("</luz-color-mode>");
-    expect(open, `${id}: <luz-color-mode remember>`).toBeGreaterThanOrEqual(0);
+    expect(block, `${id}: a fenced html block with <luz-theme-mode`).toBeTruthy();
+    const open = block.search(/<luz-theme-mode[\s>]/);
+    const fieldset = block.search(/<fieldset class="luz-theme-mode__group[\s"]/);
+    const close = block.indexOf("</luz-theme-mode>");
+    expect(open, `${id}: <luz-theme-mode>`).toBeGreaterThanOrEqual(0);
     expect(fieldset, `${id}: the fieldset is inside`).toBeGreaterThan(open);
     expect(close, `${id}: closed after the fieldset`).toBeGreaterThan(block.indexOf("</fieldset>"));
-    expect(block, `${id}: the buttons are core's`).toContain("luz-mode-btn");
+    expect(block, `${id}: the options are core's`).toContain("luz-theme-mode__option");
+    expect(block.indexOf('value="auto"'), `${id}: Auto first`).toBeLessThan(block.indexOf('value="light"'));
+    expect(block, `${id}: the old element is gone`).not.toMatch(/luz-color-mode|luz-mode-switcher|luz-mode-btn/);
   });
 
-  it.each(IDS)("%s: says in prose that luz-mode-switcher and luz-mode-btn are core's", (id) => {
+  it.each(IDS)("%s: says in prose that luz-theme-mode__group and luz-theme-mode__option are core's", (id) => {
     const prose = prompt(id).replace(/```[\s\S]*?```/g, "");
-    const line = prose.split("\n").find((l) => l.includes("`luz-mode-switcher`") && l.includes("`luz-mode-btn`"));
+    const line = prose.split("\n").find((l) => l.includes("`luz-theme-mode__group`") && l.includes("`luz-theme-mode__option`"));
     expect(line, `${id}: a line outside the code that names both`).toBeTruthy();
     expect(line, `${id}: and says whose they are`).toMatch(/\bcore\b/i);
   });

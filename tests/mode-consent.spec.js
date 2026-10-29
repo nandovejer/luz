@@ -6,12 +6,12 @@
  * the two meet. While the band shows, the button rides on its top edge (the
  * margin of the corner above the band), the window and the sticky docs rail
  * (from 80rem) keep the room of both for what Tab reaches (WCAG 2.4.11), and
- * <luz-color-mode> around a fixed button leaves no empty block in the flow.
+ * <luz-theme-time> and <luz-theme-mode> around a button leave no empty block in the flow.
  *
  * On tests/fixtures/mode-consent.html: a page with a docs rail, a long main
- * part with links at the end corner, and a footer with <luz-color-mode>, loaded
- * through luz.min.js and catalog.min.js, the real path. The button itself is
- * tests/mode-cycle.spec.js; the band alone is tests/consent-band.spec.js.
+ * part with links at the end corner, and a footer with <luz-theme-time> around <luz-theme-mode>, loaded
+ * through luz.min.js (which loads the button's chunk) and catalog.min.js, the real path. The button itself is
+ * tests/mode-cycle.spec.js and tests/theme-mode.spec.js; the band alone is tests/consent-band.spec.js.
  *
  * Needs JavaScript: the button and the band are both written by it.
  */
@@ -28,7 +28,7 @@ async function open(page, { width = 1280, height = 800, dir = 'ltr' } = {}) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width, height });
   await page.goto(`${PAGE}${dir === 'rtl' ? '?dir=rtl' : ''}`);
-  await expect(page.locator('.luz-mode-cycle')).toBeVisible();
+  await expect(page.locator('.luz-theme-mode__button')).toBeVisible();
   await expect(page.locator(BAND)).toBeVisible();
 }
 
@@ -89,7 +89,7 @@ for (const [width, dir] of /** @type {const} */ ([[1280, 'ltr'], [1280, 'rtl'], 
       await open(page, { width, dir });
       const margin = await length(page, 'var(--luz-space-md)');
       const band = await box(page, BAND);
-      const button = await box(page, '.luz-mode-cycle');
+      const button = await box(page, '.luz-theme-mode__button');
       expect(band.top, 'the band is fixed along the bottom edge').toBeGreaterThan(0);
       expect(button.bottom, 'the button ends above the band').toBeLessThanOrEqual(band.top);
       expect(Math.abs(band.top - button.bottom - margin), `gap ${band.top - button.bottom}`).toBeLessThanOrEqual(1);
@@ -103,7 +103,7 @@ for (const [width, dir] of /** @type {const} */ ([[1280, 'ltr'], [1280, 'rtl'], 
       await open(page, { width, dir });
       await answer(page);
       const margin = await length(page, 'var(--luz-space-md)');
-      const button = await box(page, '.luz-mode-cycle');
+      const button = await box(page, '.luz-theme-mode__button');
       const view = await page.evaluate(() => ({ h: window.innerHeight }));
       expect(view.h - button.bottom).toBeCloseTo(margin, 0);
     });
@@ -139,21 +139,24 @@ test('in a window 30rem tall or less the band is in the flow and the button stay
   await expect(page.locator(BAND)).toBeVisible();
   await expect(page.locator(BAND)).toHaveCSS('position', 'static');
   const margin = await length(page, 'var(--luz-space-md)');
-  const button = await box(page, '.luz-mode-cycle');
+  const button = await box(page, '.luz-theme-mode__button');
   expect(440 - button.bottom).toBeCloseTo(margin, 0);
 });
 
-test.describe('<luz-color-mode> around a fixed button', () => {
+test.describe('<luz-theme-mode> around a button', () => {
   test('is display: contents, so it leaves no empty block in the flow', async ({ page }) => {
     await open(page);
-    await expect(page.locator('luz-color-mode')).toHaveCSS('display', 'contents');
-    expect((await box(page, 'luz-color-mode')).height).toBe(0);
+    await expect(page.locator('luz-theme-mode')).toHaveCSS('display', 'contents');
+    expect((await box(page, 'luz-theme-mode')).height).toBe(0);
+    // The time of day around it (catalog) is contents too, once core's button is fixed
+    await expect(page.locator('luz-theme-time')).toHaveCSS('display', 'contents');
+    expect((await box(page, 'luz-theme-time')).height).toBe(0);
   });
 
-  test('is a block again when the button is .luz-mode-switcher--inline', async ({ page }) => {
+  test('is display: contents with `inline` too: the button is in the flow of its parent, the tag adds no block', async ({ page }) => {
     await open(page);
-    await page.locator('.luz-mode-switcher--cycle').evaluate((el) => el.classList.add('luz-mode-switcher--inline'));
-    await expect(page.locator('luz-color-mode')).toHaveCSS('display', 'block');
+    await page.locator('luz-theme-mode').evaluate((el) => el.setAttribute('inline', ''));
+    await expect(page.locator('luz-theme-mode')).toHaveCSS('display', 'contents');
   });
 });
 

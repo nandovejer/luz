@@ -621,7 +621,7 @@ describe("load/package-missing asks for the component file of catalog, not for c
     const built = await builtData();
     expect(built.error, "the build writes dist/data").toBeNull();
     // `luz-page-rail` is declared in docs-layout.css too, and the rule names the first file of the class: the layout's
-    const blocks = [...PATTERNS.filter((name) => name !== "page-rail").map((name) => [`<div class="luz-${name}">x</div>`, name]), ["<div class=\"luz-cookie-consent\">x</div>", "cookie-consent"], ["<luz-cookie-consent>x</luz-cookie-consent>", "cookie-consent"], ["<luz-color-mode>x</luz-color-mode>", "color-mode"], ["<luz-announcement>x</luz-announcement>", "announcement"]];
+    const blocks = [...PATTERNS.filter((name) => name !== "page-rail").map((name) => [`<div class="luz-${name}">x</div>`, name]), ["<div class=\"luz-cookie-consent\">x</div>", "cookie-consent"], ["<luz-cookie-consent>x</luz-cookie-consent>", "cookie-consent"], ["<luz-theme-time>x</luz-theme-time>", "theme-time"], ["<luz-announcement>x</luz-announcement>", "announcement"]];
     const cut = [];
     for (const [markup, file] of blocks) {
       const html = page(`  ${markup}`, links(TOKENS, CORE));

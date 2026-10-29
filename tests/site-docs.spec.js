@@ -32,7 +32,7 @@ const PACKAGES = {
       // The six components with data of the site: each a `<luz-*>` tag that is the block (`.luz-<tag>__<part>`, D5)
       search: 'search',
       'cookie-consent': 'cookie-consent',
-      'color-mode': 'color-mode',
+      'theme-time': 'theme-time',
       'lang-switch': 'lang-switch',
       submenu: 'submenu',
       announcement: 'announcement',

@@ -944,7 +944,7 @@ describe("the LUZ docs site", () => {
     const routes = site.pages.filter((p) => p.meta.area === "catalog").map((p) => p.route).sort();
     const patterns = ["site-header", "masthead", "hero", "section", "stat", "site-footer", "page-header", "article-header", "toc", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
     const layout = ["navbar", "sidebar", "terminal", "timeline"];
-    const elements = ["announcement", "cookie-consent", "color-mode", "faq", "lang-switch", "search", "submenu"];
+    const elements = ["announcement", "cookie-consent", "theme-time", "faq", "lang-switch", "search", "submenu"];
     expect(routes).toEqual(["/docs/catalog/", ...["classes", ...elements, ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`)]);
     const groups = site.pages.filter((p) => p.meta.area === "catalog" && p.meta.group && p.meta.group !== "reference").map((p) => p.route);
     expect(groups.sort()).toEqual([...elements, ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`));
@@ -980,7 +980,7 @@ describe("the LUZ docs site", () => {
       .replace(/&gt;/g, ">")
       .replace(/&lt;/g, "<")
       .replace(/&amp;/g, "&");
-    for (const tag of ["search", "cookie-consent", "color-mode", "lang-switch", "submenu", "announcement"]) expect(chain, `catalog's ${tag}`).toContain(tag);
+    for (const tag of ["search", "cookie-consent", "theme-time", "lang-switch", "submenu", "announcement"]) expect(chain, `catalog's ${tag}`).toContain(tag);
     // F5b: the patterns of a landing page, a blog, an app and a documentation site are catalog's; there is no package for a kind
     for (const kind of ["landing", "cms", "app", "docs"]) expect(chain, `no package ${kind}`).not.toMatch(new RegExp(`@luz-ds/${kind}(?![\\w-])`));
     expect(chain).toMatch(/landing page/i);

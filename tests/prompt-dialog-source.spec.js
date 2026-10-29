@@ -542,8 +542,8 @@ async function passes(page) {
 const setLook = (page, mode, light) =>
   page.evaluate(([m, l]) => {
     document.documentElement.setAttribute('data-theme', m);
-    if (l) document.documentElement.setAttribute('data-light', l);
-    else document.documentElement.removeAttribute('data-light');
+    if (l) document.documentElement.setAttribute('data-moment', l);
+    else document.documentElement.removeAttribute('data-moment');
   }, [mode, light]);
 
 test.describe('colour', () => {

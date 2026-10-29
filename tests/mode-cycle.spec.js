@@ -1,16 +1,16 @@
 // @ts-check
 /**
- * Mode switcher, cycle variant (.luz-mode-switcher--cycle): one button
- * that steps through the radios with JavaScript, the radios without it.
+ * Core's <luz-theme-mode>, the round button: one button that steps through the
+ * radios with JavaScript, the radios without it (the behaviour of the element,
+ * its API, its memory and its event are tests/theme-mode.spec.js).
  *
- * F6 of .claude/plans/ai-and-catalog-only.md (decisions 39 to 45): the button
- * is the round one of the home and the docs, 44 px (--luz-control-lg) on
- * --luz-surface with a --luz-divider hairline, and with scripting it is fixed
- * at the end corner of the window (bottom left in a right-to-left page) above
- * the content and below the sidebar, the dialogs and the toasts.
- * .luz-mode-switcher--inline keeps it in the flow. Without scripting the
- * radios stay in the flow. With no radio checked its name says Auto.
- * Its place next to the cookie band is tests/mode-consent.spec.js.
+ * F6 of .claude/plans/ai-and-catalog-only.md (decisions 39 to 45), as the button
+ * of <luz-theme-mode> since 2026-10-29: the button is the round one of the home
+ * and the docs, 44 px (--luz-control-lg) on --luz-surface with a --luz-divider
+ * hairline, and unless the element says `inline` it is fixed at the end corner
+ * of the window (bottom left in a right-to-left page) above the content and
+ * below the sidebar, the dialogs and the toasts. Without scripting the radios
+ * stay in the flow. Its place next to the cookie band is tests/mode-consent.spec.js.
  */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
@@ -19,84 +19,61 @@ import { focusAndHitTest } from './helpers/obscured.js';
 import { settled } from './helpers/settle.js';
 
 const FIXTURE = '/tests/fixtures/mode-cycle.html';
+const BUTTON = '.luz-theme-mode__button';
 
-test.describe('Mode switcher, cycle variant', () => {
-  test('one named button replaces the three radios', async ({ page }) => {
+test.describe('Theme mode, the round button', () => {
+  test('one named button replaces the four radios', async ({ page }) => {
     await page.goto(FIXTURE);
-    const button = page.locator('.luz-mode-cycle');
+    const button = page.locator(BUTTON);
     await expect(button).toHaveCount(1);
-    await expect(button).toHaveAccessibleName('Change color mode. Current: Light');
-    await expect(page.locator('.luz-mode-btn').first()).toBeHidden();
-    await expect(button.locator('[data-icon="sun"]')).toHaveCount(1);
+    await expect(button).toHaveAccessibleName('Color mode: Auto');
+    await expect(page.locator('.luz-theme-mode__option').first()).toBeHidden();
+    await expect(button.locator('[data-icon="auto"]')).toHaveCount(1);
   });
 
   test('each press checks the next mode, wraps around and announces it', async ({ page }) => {
     await page.goto(FIXTURE);
-    const button = page.locator('.luz-mode-cycle');
-    const status = page.locator('.luz-mode-cycle__status');
+    const button = page.locator(BUTTON);
+    const status = page.locator('.luz-theme-mode__status');
     const steps = [
+      ['light', 'Light', 'sun'],
       ['dark', 'Dark', 'moon'],
       ['high-contrast', 'High contrast', 'contrast'],
-      ['light', 'Light', 'sun'],
+      ['auto', 'Auto', 'auto'],
     ];
     for (const [value, label, icon] of steps) {
       await button.click();
       await expect(page.locator(`input[value="${value}"]`)).toBeChecked();
-      await expect(button).toHaveAccessibleName(`Change color mode. Current: ${label}`);
+      await expect(button).toHaveAccessibleName(`Color mode: ${label}`);
       await expect(button.locator(`[data-icon="${icon}"]`)).toHaveCount(1);
       await expect(status).toHaveText(`Color mode: ${label}`);
     }
   });
 
-  test('the checked radio re-scopes the page tokens', async ({ page }) => {
+  test('the chosen mode re-scopes the page tokens', async ({ page }) => {
     await page.goto(FIXTURE);
     const bg = () => page.evaluate(() => getComputedStyle(document.body).getPropertyValue('--luz-surface-page').trim());
     const light = await bg();
-    await page.locator('.luz-mode-cycle').click();
+    // Auto, light, dark: the second press is the first one that changes the page
+    await page.locator(BUTTON).click();
+    await page.locator(BUTTON).click();
     expect(await bg()).not.toBe(light);
   });
 
   test('works from the keyboard', async ({ page }) => {
     await page.goto(FIXTURE);
     await page.keyboard.press('Tab');
-    await expect(page.locator('.luz-mode-cycle')).toBeFocused();
+    await expect(page.locator(BUTTON)).toBeFocused();
     await page.keyboard.press('Enter');
-    await expect(page.locator('input[value="dark"]')).toBeChecked();
+    await expect(page.locator('input[value="light"]')).toBeChecked();
     await page.keyboard.press('Space');
-    await expect(page.locator('input[value="high-contrast"]')).toBeChecked();
+    await expect(page.locator('input[value="dark"]')).toBeChecked();
   });
 
-  test('follows a mode set by another script', async ({ page }) => {
+  test('loading the chunk twice adds one button', async ({ page }) => {
     await page.goto(FIXTURE);
-    await page.evaluate(() => {
-      document.querySelector('input[value="dark"]').checked = true;
-      document.documentElement.dataset.theme = 'dark';
-    });
-    await expect(page.locator('.luz-mode-cycle')).toHaveAccessibleName('Change color mode. Current: Dark');
-  });
-
-  test('init twice adds one button', async ({ page }) => {
-    await page.goto(FIXTURE);
-    await page.evaluate(async () => (await import('/packages/core/dist/theme.js')).initThemeCycle());
-    await expect(page.locator('.luz-mode-cycle')).toHaveCount(1);
-  });
-
-  test('a button already in the markup is wired, and gets a status if it has none', async ({ page }) => {
-    await page.goto(FIXTURE);
-    await page.evaluate(async () => {
-      const group = document.querySelector('.luz-mode-switcher--cycle').cloneNode(true);
-      group.querySelector('.luz-mode-cycle__status').remove();
-      group.querySelectorAll('input').forEach((input) => { input.name = 'other'; });
-      group.id = 'shipped';
-      document.querySelector('main').append(group);
-      (await import('/packages/core/dist/theme.js')).initThemeCycle();
-    });
-    const group = page.locator('#shipped');
-    await expect(group.locator('.luz-mode-cycle')).toHaveCount(1);
-    await expect(group.locator('.luz-mode-cycle__status')).toHaveCount(1);
-    await group.locator('.luz-mode-cycle').click();
-    await expect(group.locator('input[value="dark"]')).toBeChecked();
-    await expect(group.locator('.luz-mode-cycle__status')).toHaveText('Color mode: Dark');
+    await page.evaluate(async () => { await import('/packages/core/dist/theme-mode.js?again'); });
+    await expect(page.locator(BUTTON)).toHaveCount(1);
   });
 
   test('has no axe violations', async ({ page }) => {
@@ -106,14 +83,14 @@ test.describe('Mode switcher, cycle variant', () => {
   });
 });
 
-test.describe('Mode switcher, cycle variant, without JavaScript', () => {
+test.describe('Theme mode, the round button, without JavaScript', () => {
   test.use({ javaScriptEnabled: false });
 
-  test('the three radios stay usable', async ({ page }) => {
+  test('the four radios stay usable', async ({ page }) => {
     await page.goto(FIXTURE);
-    await expect(page.locator('.luz-mode-cycle')).toHaveCount(0);
-    await expect(page.locator('.luz-mode-btn')).toHaveCount(3);
-    await page.locator('label.luz-mode-btn', { hasText: 'Dark' }).click();
+    await expect(page.locator(BUTTON)).toHaveCount(0);
+    await expect(page.locator('.luz-theme-mode__option')).toHaveCount(4);
+    await page.locator('label.luz-theme-mode__option', { hasText: 'Dark' }).click();
     await expect(page.locator('input[value="dark"]')).toBeChecked();
   });
 });
@@ -130,10 +107,9 @@ const resolved = (page, property, value) => page.evaluate(([p, v]) => {
   return out;
 }, [property, value]);
 
-/** Choose a mode the way another script does: the radio and data-theme. */
+/** Choose a mode the way a script does: through the element's `choice`. */
 const setMode = (page, value) => page.evaluate((mode) => {
-  document.querySelector(`input[value="${mode}"]`).checked = true;
-  document.documentElement.dataset.theme = mode;
+  /** @type {any} */ (document.getElementById('mode')).choice = mode;
 }, value);
 
 /** The window room a fixed button needs: its size and a margin on each side. */
@@ -151,10 +127,10 @@ const box = (locator) => locator.evaluate((el) => {
   return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, width: r.width, height: r.height };
 });
 
-test.describe('Mode switcher, the round button', () => {
+test.describe('Theme mode, the round button, as a circle', () => {
   test('is a circle of --luz-control-lg, at least 24 px, with no corner outside the circle', async ({ page }) => {
     await page.goto(FIXTURE);
-    const button = page.locator('.luz-mode-cycle');
+    const button = page.locator(BUTTON);
     const side = parseFloat(await resolved(page, 'inline-size', 'var(--luz-control-lg)'));
     const b = await box(button);
     expect(b.width).toBeCloseTo(side, 1);
@@ -174,7 +150,7 @@ test.describe('Mode switcher, the round button', () => {
 
   test('takes the surface, the hairline, the shadow and the icon colour of the tokens, in the three modes', async ({ page }) => {
     await page.goto(FIXTURE);
-    const button = page.locator('.luz-mode-cycle');
+    const button = page.locator(BUTTON);
     for (const mode of MODES) {
       await setMode(page, mode);
       await settled(page);
@@ -193,20 +169,20 @@ test.describe('Mode switcher, the round button', () => {
   test('steps to --luz-surface-hover on hover', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(FIXTURE);
-    const button = page.locator('.luz-mode-cycle');
+    const button = page.locator(BUTTON);
     await button.hover();
     await expect.poll(() => button.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(await resolved(page, 'background-color', 'var(--luz-surface-hover)'));
   });
 
-  test('the colours go through --luz-switcher-cycle-bg, -border and -text of the group', async ({ page }) => {
+  test('the colours go through --luz-theme-mode-bg, -edge and -text of the element', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(FIXTURE);
-    const group = page.locator('.luz-mode-switcher--cycle');
-    const button = page.locator('.luz-mode-cycle');
-    await group.evaluate((el) => {
-      el.style.setProperty('--luz-switcher-cycle-bg', 'rgb(1, 2, 3)');
-      el.style.setProperty('--luz-switcher-cycle-border', 'rgb(4, 5, 6)');
-      el.style.setProperty('--luz-switcher-cycle-text', 'rgb(7, 8, 9)');
+    const element = page.locator('luz-theme-mode');
+    const button = page.locator(BUTTON);
+    await element.evaluate((el) => {
+      el.style.setProperty('--luz-theme-mode-bg', 'rgb(1, 2, 3)');
+      el.style.setProperty('--luz-theme-mode-edge', 'rgb(4, 5, 6)');
+      el.style.setProperty('--luz-theme-mode-text', 'rgb(7, 8, 9)');
     });
     const look = await button.evaluate((el) => {
       const s = getComputedStyle(el);
@@ -218,8 +194,8 @@ test.describe('Mode switcher, the round button', () => {
   test('disabled, as a specimen: a dashed border and no hover', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(FIXTURE);
-    await page.locator('.luz-mode-switcher--cycle').evaluate((el) => { el.disabled = true; });
-    const button = page.locator('.luz-mode-cycle');
+    const button = page.locator(BUTTON);
+    await button.evaluate((el) => { /** @type {HTMLButtonElement} */ (el).disabled = true; });
     const before = await button.evaluate((el) => getComputedStyle(el).backgroundColor);
     await button.hover({ force: true });
     const after = await button.evaluate((el) => { const s = getComputedStyle(el); return { bg: s.backgroundColor, style: s.borderTopStyle }; });
@@ -230,7 +206,7 @@ test.describe('Mode switcher, the round button', () => {
   test('keeps a border in forced colors and has no motion when it is reduced', async ({ page }) => {
     await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
     await page.goto(FIXTURE);
-    const look = await page.locator('.luz-mode-cycle').evaluate((el) => {
+    const look = await page.locator(BUTTON).evaluate((el) => {
       const s = getComputedStyle(el);
       return { style: s.borderTopStyle, width: parseFloat(s.borderTopWidth), colour: s.borderTopColor, transition: s.transitionDuration };
     });
@@ -255,20 +231,20 @@ test.describe('Mode switcher, the round button', () => {
     await page.goto(FIXTURE);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(0);
-    const b = await box(page.locator('.luz-mode-cycle'));
+    const b = await box(page.locator(BUTTON));
     expect(b.left).toBeGreaterThanOrEqual(0);
     expect(b.right).toBeLessThanOrEqual(320);
     expect(b.bottom).toBeLessThanOrEqual(640);
   });
 });
 
-test.describe('Mode switcher, fixed at the end corner', () => {
-  test('with scripting the group is fixed at --luz-space-md from the bottom and the end, before and after scrolling', async ({ page }) => {
+test.describe('Theme mode, fixed at the end corner', () => {
+  test('with scripting the button is fixed at --luz-space-md from the bottom and the end, before and after scrolling', async ({ page }) => {
     await page.goto(FIXTURE);
     await longPage(page);
     const margin = parseFloat(await resolved(page, 'inline-size', 'var(--luz-space-md)'));
-    const button = page.locator('.luz-mode-cycle');
-    await expect(page.locator('.luz-mode-switcher--cycle')).toHaveCSS('position', 'fixed');
+    const button = page.locator(BUTTON);
+    await expect(button).toHaveCSS('position', 'fixed');
     for (const y of [0, 600]) {
       await page.evaluate((top) => window.scrollTo(0, top), y);
       const b = await box(button);
@@ -282,7 +258,7 @@ test.describe('Mode switcher, fixed at the end corner', () => {
     await page.goto(FIXTURE);
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
     const margin = parseFloat(await resolved(page, 'inline-size', 'var(--luz-space-md)'));
-    const b = await box(page.locator('.luz-mode-cycle'));
+    const b = await box(page.locator(BUTTON));
     const view = await page.evaluate(() => ({ h: window.innerHeight }));
     expect(b.left).toBeCloseTo(margin, 0);
     expect(view.h - b.bottom).toBeCloseTo(margin, 0);
@@ -293,7 +269,7 @@ test.describe('Mode switcher, fixed at the end corner', () => {
     const z = await page.evaluate(() => {
       const root = getComputedStyle(document.documentElement);
       const token = (name) => parseInt(root.getPropertyValue(name), 10);
-      return { own: getComputedStyle(document.querySelector('.luz-mode-switcher--cycle')).zIndex, raised: token('--luz-z-raised'), sidebar: token('--luz-z-sidebar'), modal: token('--luz-z-modal'), toast: token('--luz-z-toast') };
+      return { own: getComputedStyle(document.querySelector('.luz-theme-mode__button')).zIndex, raised: token('--luz-z-raised'), sidebar: token('--luz-z-sidebar'), modal: token('--luz-z-modal'), toast: token('--luz-z-toast') };
     });
     expect(Number(z.own)).toBe(z.raised);
     expect(z.raised).toBeLessThan(z.sidebar);
@@ -303,12 +279,12 @@ test.describe('Mode switcher, fixed at the end corner', () => {
 
   test('a layer at the level of the sidebar, and an open modal, are drawn over it', async ({ page }) => {
     await page.goto(FIXTURE);
-    const button = page.locator('.luz-mode-cycle');
+    const button = page.locator(BUTTON);
     const centre = async () => {
       const b = await box(button);
       return page.evaluate(([x, y]) => {
         const hit = document.elementFromPoint(x, y);
-        return hit?.closest('.luz-mode-cycle') ? 'button' : (hit?.id || hit?.localName);
+        return hit?.closest('.luz-theme-mode__button') ? 'button' : (hit?.id || hit?.localName);
       }, [b.left + b.width / 2, b.top + b.height / 2]);
     };
     expect(await centre()).toBe('button');
@@ -343,77 +319,42 @@ test.describe('Mode switcher, fixed at the end corner', () => {
     }
   });
 
-  test('with .luz-mode-switcher--inline it stays where the markup puts it, round, with no shadow and no fixed place', async ({ page }) => {
-    await page.goto(FIXTURE);
-    const group = page.locator('.luz-mode-switcher--cycle');
-    await group.evaluate((el) => el.classList.add('luz-mode-switcher--inline'));
-    const position = await group.evaluate((el) => getComputedStyle(el).position);
+  test('with `inline` it stays where the markup puts it, round, with no shadow and no fixed place', async ({ page }) => {
+    await page.goto(`${FIXTURE}?inline`);
+    const element = page.locator('luz-theme-mode');
+    const button = page.locator(BUTTON);
+    const position = await button.evaluate((el) => getComputedStyle(el).position);
     expect(['static', 'relative']).toContain(position);
     const inside = await page.evaluate(() => {
-      const g = document.querySelector('.luz-mode-switcher--cycle').getBoundingClientRect();
+      const g = document.querySelector('.luz-theme-mode__button').getBoundingClientRect();
       const m = document.querySelector('main').getBoundingClientRect();
       return g.top >= m.top && g.bottom <= m.bottom + 1;
     });
-    expect(inside, 'the group is inside <main>').toBe(true);
-    const button = page.locator('.luz-mode-cycle');
+    expect(inside, 'the button is inside <main>').toBe(true);
+    await expect(element).toHaveAttribute('inline', '');
     const side = parseFloat(await resolved(page, 'inline-size', 'var(--luz-control-lg)'));
     const b = await box(button);
     expect([b.width, b.height]).toEqual([side, side]);
     await expect(button).toHaveCSS('box-shadow', 'none');
     await expect(button).toHaveCSS('border-top-width', '1px');
   });
-
-  test('the legend stays the name of the group but is not seen while the button shows', async ({ page }) => {
-    await page.goto(FIXTURE);
-    const legend = page.locator('.luz-mode-switcher__label');
-    const b = await box(legend);
-    expect(b.width).toBeLessThanOrEqual(1);
-    expect(b.height).toBeLessThanOrEqual(1);
-    await expect(page.locator('.luz-mode-switcher--cycle')).toHaveAccessibleName('Color mode');
-  });
 });
 
-test.describe('Mode switcher, cycle variant, named Auto when no mode is chosen', () => {
-  test('with no radio checked the name says Current: Auto, and a chosen mode names itself again', async ({ page }) => {
-    await page.goto(FIXTURE);
-    const button = page.locator('.luz-mode-cycle');
-    await page.locator('.luz-mode-switcher--cycle').evaluate((group) => {
-      group.querySelectorAll('input').forEach((input) => { input.checked = false; });
-      group.dispatchEvent(new Event('change', { bubbles: true }));
-    });
-    await expect(button).toHaveAccessibleName('Change color mode. Current: Auto');
-    await button.click();
-    await expect(button).toHaveAccessibleName('Change color mode. Current: Light');
-    await button.click();
-    await expect(button).toHaveAccessibleName('Change color mode. Current: Dark');
-  });
-
-  test('the word comes from data-luz-label-mode-auto on the page', async ({ page }) => {
-    await page.goto(FIXTURE);
-    await page.evaluate(() => document.body.setAttribute('data-luz-label-mode-auto', 'Automatisch'));
-    await page.locator('.luz-mode-switcher--cycle').evaluate((group) => {
-      group.querySelectorAll('input').forEach((input) => { input.checked = false; });
-      group.dispatchEvent(new Event('change', { bubbles: true }));
-    });
-    await expect(page.locator('.luz-mode-cycle')).toHaveAccessibleName('Change color mode. Current: Automatisch');
-  });
-});
-
-test.describe('Mode switcher, cycle variant, the radios without JavaScript are in the flow', () => {
+test.describe('Theme mode, the radios without JavaScript are in the flow', () => {
   test.use({ javaScriptEnabled: false });
 
-  test('the group is not fixed, the three radios and the legend are seen where the markup puts them', async ({ page }) => {
+  test('the group is not fixed, the four options and the legend are seen where the markup puts them', async ({ page }) => {
     await page.goto(FIXTURE);
-    const group = page.locator('.luz-mode-switcher--cycle');
+    const group = page.locator('.luz-theme-mode__group');
     expect(['static', 'relative']).toContain(await group.evaluate((el) => getComputedStyle(el).position));
     const inside = await page.evaluate(() => {
       const m = document.querySelector('main').getBoundingClientRect();
-      return [...document.querySelectorAll('.luz-mode-switcher--cycle .luz-mode-btn, .luz-mode-switcher__label')].map((el) => {
+      return [...document.querySelectorAll('.luz-theme-mode__option, .luz-theme-mode__legend')].map((el) => {
         const r = el.getBoundingClientRect();
         return r.width > 1 && r.height > 1 && r.top >= m.top && r.bottom <= m.bottom + 1;
       });
     });
-    expect(inside).toEqual([true, true, true, true]);
-    await expect(page.locator('.luz-mode-btn').first()).toBeVisible();
+    expect(inside).toEqual([true, true, true, true, true]);
+    await expect(page.locator('.luz-theme-mode__option').first()).toBeVisible();
   });
 });

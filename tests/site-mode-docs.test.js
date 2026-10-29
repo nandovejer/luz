@@ -1,39 +1,36 @@
 /**
- * The docs that go with <luz-color-mode> (.claude/plans/luz-home-docs-identity.md
- * section 3.3, F1): the pattern page apps/docs/pages/catalog/color-mode.html and the
- * pages that point at it. tests/docs-site.test.js and tests/site-docs.spec.js
- * hold the structure every pattern page has and the attributes against the
- * element manifest; this file holds the content only this element has:
- *   - the table of the six phases (their hours, dark or light), computed from
- *     phaseOf() in color-mode.js, so the page and the code cannot drift;
- *   - the boot snippet for <head>: at most eight lines, and run in a sandbox it
- *     sets data-theme the way the element will (stored choice, then
- *     prefers-contrast, then prefers-color-scheme), whatever the storage does;
- *   - the two-light theme example, written with the tokens of
+ * The docs that go with <luz-theme-mode> and <luz-theme-time>
+ * (.claude/plans/theme-mode.md section 4): the page of core,
+ * apps/docs/pages/components/theme-mode.html, the pattern page of the catalog,
+ * apps/docs/pages/catalog/theme-time.html, and the pages that point at them.
+ * tests/docs-site.test.js and tests/site-docs.spec.js hold the structure every
+ * component and pattern page has and the attributes against the element
+ * manifest; this file holds the content only these two elements have:
+ *   - the table of the six example moments (their hours, dark or light) agrees
+ *     with the markup snippet of the same page and with the moments the site
+ *     itself declares in its footer, so the page and the site cannot drift;
+ *   - the scripts for the <head> are files now (theme-boot.min.js and
+ *     theme-time-boot.min.js): the pages say what they are for, stay short, and
+ *     name the exception that lets them block rendering;
+ *   - the two-moment example, written with the tokens of
  *     packages/core/src/themes/_template.css;
- *   - the links and sections of the pages around it.
+ *   - the links and sections of the pages around them.
  *
- * What the docs-writer must produce, in one list:
- *   - phase table: one <tr> per phase, first cell the phase name (in <code>),
- *     the hours of its start and end as HH:MM, and one cell that says "dark" or
- *     "light" (what data-theme becomes);
- *   - near the boot snippet, a sentence that says it avoids the flash (or the wrong
- *     first paint) of a page that follows a dark system without it; recommended, not required;
- *   - boot snippet: the first inline <script> of a code block that reads
- *     `luz-theme`, 8 non-blank lines or fewer, for by="system";
- *   - two-light example: a code block with [data-light="…"] rules for a dark and
- *     a light phase that set only tokens the template declares.
+ * The phase table used to be computed from phaseOf(), which is gone: the
+ * moments are declared in the page's markup. The sandbox run of the inline
+ * boot snippet moved to tests/site-boot.test.js, which runs the two files.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { runInNewContext } from "node:vm";
 import { describe, expect, it } from "vitest";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PAGES = "apps/docs/pages";
-const MODE_PAGE = `${PAGES}/catalog/color-mode.html`;
-const ROUTE = "/docs/catalog/color-mode/";
+const MODE_PAGE = `${PAGES}/components/theme-mode.html`;
+const TIME_PAGE = `${PAGES}/catalog/theme-time.html`;
+const MODE_ROUTE = "/docs/components/theme-mode/";
+const TIME_ROUTE = "/docs/catalog/theme-time/";
 
 /** A page's source; a missing page is the assertion that fails, not an ENOENT. */
 const page = (rel) => {
@@ -44,224 +41,13 @@ const decode = (s) => s.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&qu
 const text = (html) => decode(html.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
 const frontMatter = (html) =>
   Object.fromEntries(
-    [...(/<!--\s*luz:page\n([\s\S]*?)-->/.exec(html)?.[1] ?? "").matchAll(/^(\w+):\s*(.*)$/gm)].map((m) => [m[1], m[2].trim()]),
+    [...(/<!--\s*luz:page\n([\s\S]*?)-->/.exec(html)?.[1] ?? "").matchAll(/^(\w[\w-]*):\s*(.*)$/gm)].map((m) => [m[1], m[2].trim()]),
   );
 /** The decoded text of every `pre.luz-code-block` of a page. */
 const codeBlocks = (html) =>
   [...html.matchAll(/<pre\b[^>]*\bluz-code-block\b[^>]*>\s*<code\b[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/g)].map((m) => decode(m[1]));
 const rows = (html) => [...html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g)].map((m) => [...m[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/g)].map((c) => text(c[1])));
 const hasLink = (html, route) => new RegExp(`href="${route.replace(/[/]/g, "\\/")}(#[\\w-]*)?"`).test(html);
-
-const PHASES = ["night", "dawn", "morning", "afternoon", "sunset", "dusk"];
-const DARK = new Set(["dawn", "dusk", "night"]);
-
-/* ---- The page ---------------------------------------------------------------- */
-
-describe("apps/docs/pages/catalog/color-mode.html", () => {
-  it("is a pattern page of the Catalog area: front matter with the module and the files", () => {
-    const meta = frontMatter(page(MODE_PAGE));
-    // The group is by function since F5b: the mode switch is a piece for the whole site
-    expect(meta).toMatchObject({ area: "catalog", group: "site-wide", module: "color-mode.js", toc: "h2,h3" });
-    expect(meta.title, "title").toBeTruthy();
-    expect(meta.description, "description").toBeTruthy();
-    expect(meta.files, "files").toMatch(/mode\.css|luz-color-mode/);
-  });
-
-  it("has the table of the six phases: hours computed from phaseOf(), and dark or light", async () => {
-    expect(existsSync(join(repo, "packages/catalog/src/color-mode.js")), "packages/catalog/src/color-mode.js exists").toBe(true);
-    const { phaseOf } = await import("../packages/catalog/src/color-mode.js");
-    const html = page(MODE_PAGE);
-    const table = rows(html);
-    // Where each phase starts and ends, on the 24-hour circle, read off the function
-    const begins = new Map(PHASES.map((p) => [p, new Set()]));
-    const ends = new Map(PHASES.map((p) => [p, new Set()]));
-    for (let minute = 0; minute < 24 * 60; minute++) {
-      const before = phaseOf(((minute + 24 * 60 - 1) % (24 * 60)) / 60);
-      const now = phaseOf(minute / 60);
-      if (before !== now) {
-        begins.get(now).add(minute);
-        ends.get(before).add(minute);
-      }
-    }
-    const clock = (minute) => ({ h: Math.floor(minute / 60), m: String(minute % 60).padStart(2, "0") });
-    const hour = (minute) => {
-      const { h, m } = clock(minute);
-      return new RegExp(`(?<![\\d:])0?${h}:${m}(?![\\d:])`);
-    };
-    for (const phase of PHASES) {
-      const row = table.find((cells) => cells[0]?.toLowerCase() === phase);
-      expect(row, `a table row whose first cell is "${phase}"`).toBeDefined();
-      const line = row.join(" | ");
-      for (const minute of [...begins.get(phase), ...ends.get(phase)]) expect(line, `${phase}: ${clock(minute).h}:${clock(minute).m}`).toMatch(hour(minute));
-      const mode = DARK.has(phase) ? "dark" : "light";
-      expect(row.slice(1).map((c) => c.toLowerCase()), `${phase} is ${mode}`).toContain(mode);
-    }
-    expect(text(html)).toContain("data-light");
-  });
-
-  it("documents the event, with every key of its detail", () => {
-    const body = text(page(MODE_PAGE));
-    expect(body).toContain("luz-color-mode:change");
-    for (const key of ["mode", "theme", "light", "remembered", "simulated"]) expect(body, `detail.${key}`).toMatch(new RegExp(`\\b${key}\\b`));
-  });
-
-  it("documents preview() and the `mode` and `light` properties of the element", () => {
-    const body = text(page(MODE_PAGE));
-    expect(body).toContain("preview(");
-    expect(body).toMatch(/\.mode\b/);
-    expect(body).toMatch(/\.light\b/);
-  });
-});
-
-/* ---- The boot snippet --------------------------------------------------------- */
-
-/** The inline script of the first code block that reads `luz-theme`. */
-function bootScript() {
-  for (const block of codeBlocks(page(MODE_PAGE))) {
-    for (const m of block.matchAll(/<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/g)) if (m[1].includes("luz-theme")) return m[1];
-  }
-  return null;
-}
-
-/**
- * Run a script as a <head> script would: a document with only <html>, a
- * storage, matchMedia. Returns what it wrote to data-theme (null: nothing).
- * @param {string} script
- * @param {{ stored?: string, dark?: boolean, contrast?: boolean, throws?: boolean }} [world]
- */
-function boot(script, { stored, dark = false, contrast = false, throws = false } = {}) {
-  const attrs = new Map();
-  const attr = (prop) => `data-${prop.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}`;
-  const root = {
-    setAttribute: (k, v) => attrs.set(k, String(v)),
-    getAttribute: (k) => (attrs.has(k) ? attrs.get(k) : null),
-    hasAttribute: (k) => attrs.has(k),
-    removeAttribute: (k) => attrs.delete(k),
-    dataset: new Proxy({}, { set: (_, p, v) => (attrs.set(attr(String(p)), String(v)), true), get: (_, p) => attrs.get(attr(String(p))) }),
-  };
-  const localStorage = {
-    getItem: (k) => {
-      if (throws) throw new Error("SecurityError");
-      return k === "luz-theme" && stored !== undefined ? stored : null;
-    },
-    setItem: () => {},
-    removeItem: () => {},
-  };
-  const matchMedia = (query) => {
-    const q = query.replace(/\s/g, "");
-    return { media: query, matches: q.includes("prefers-contrast:more") ? contrast : q.includes("prefers-color-scheme:dark") ? dark : false, addEventListener() {}, addListener() {} };
-  };
-  const context = { document: { documentElement: root }, localStorage, matchMedia, location: { search: "" } };
-  context.window = context;
-  runInNewContext(script, context);
-  return attrs.get("data-theme") ?? null;
-}
-
-describe("the boot snippet for <head> on the docs page", () => {
-  it("says what the snippet is for: it avoids the flash of the wrong mode on the first paint", () => {
-    const html = page(MODE_PAGE);
-    const at = html.search(/<script(?![^>]*\ssrc=)[^>]*>(?:(?!<\/script>)[\s\S])*luz-theme/);
-    const code = at >= 0 ? at : html.indexOf("luz-theme");
-    expect(code, "the snippet is on the page").toBeGreaterThanOrEqual(0);
-    // The words sit near the snippet: within a screen of text either side of it
-    const near = text(html.slice(Math.max(0, code - 2500), code + 2500));
-    expect(near).toMatch(/\bflash(es)?\b|first paint/i);
-  });
-
-  const script = () => {
-    const found = bootScript();
-    expect(found, "an inline <script> in a code block of catalog/color-mode.html that reads `luz-theme`").not.toBeNull();
-    return found;
-  };
-
-  it("is eight lines or fewer", () => {
-    const lines = script().split("\n").filter((l) => l.trim());
-    expect(lines.length).toBeGreaterThan(0);
-    expect(lines.length).toBeLessThanOrEqual(8);
-  });
-
-  it("follows the system when nothing is stored: light, dark, and high contrast over dark", () => {
-    const s = script();
-    expect([null, "light"]).toContain(boot(s));
-    expect(boot(s, { dark: true })).toBe("dark");
-    expect(boot(s, { contrast: true })).toBe("high-contrast");
-    expect(boot(s, { contrast: true, dark: true })).toBe("high-contrast");
-  });
-
-  it("applies a stored mode over the system", () => {
-    const s = script();
-    expect(boot(s, { stored: "dark" })).toBe("dark");
-    expect(boot(s, { stored: "high-contrast" })).toBe("high-contrast");
-    expect(boot(s, { stored: "light", dark: true })).toBe("light");
-  });
-
-  it("ignores a stored value that is no mode", () => {
-    const s = script();
-    for (const bad of ["banana", "auto", "", "Dark"]) expect([null, "light"], JSON.stringify(bad)).toContain(boot(s, { stored: bad }));
-    expect(boot(s, { stored: "banana", dark: true })).toBe("dark");
-  });
-
-  it("does not throw when the storage does, and still follows the system", () => {
-    const s = script();
-    expect(() => boot(s, { throws: true })).not.toThrow();
-    expect(boot(s, { throws: true, dark: true })).toBe("dark");
-  });
-});
-
-/* ---- The two-light theme example ---------------------------------------------- */
-
-describe("the two-light theme example on the docs page", () => {
-  const example = () => {
-    const found = codeBlocks(page(MODE_PAGE)).find((block) => /\[data-light=/.test(block) && /--luz-[\w-]+\s*:/.test(block));
-    expect(found, "a code block with [data-light=…] rules that set --luz-* tokens").toBeDefined();
-    return found;
-  };
-
-  it("has a rule for a dark phase and one for a light phase, under a data-theme of its own", () => {
-    const block = example();
-    const named = [...block.matchAll(/\[data-light=["']?(\w+)["']?\]/g)].map((m) => m[1]);
-    expect(named.filter((p) => DARK.has(p)), "a dark phase").not.toHaveLength(0);
-    expect(named.filter((p) => PHASES.includes(p) && !DARK.has(p)), "a light phase").not.toHaveLength(0);
-    expect(named.filter((p) => !PHASES.includes(p)), "names that are no phase").toEqual([]);
-    expect(block).toMatch(/\[data-theme=/);
-  });
-
-  it("sets only tokens that packages/core/src/themes/_template.css declares", () => {
-    const declared = new Set([...readFileSync(join(repo, "packages/core/src/themes/_template.css"), "utf-8").matchAll(/(--luz-[\w-]+)\s*:/g)].map((m) => m[1]));
-    const set = [...example().matchAll(/(--luz-[\w-]+)\s*:/g)].map((m) => m[1]);
-    expect(set.length).toBeGreaterThan(0);
-    expect(set.filter((name) => !declared.has(name)), "tokens the template does not declare").toEqual([]);
-  });
-});
-
-/* ---- The pages around it -------------------------------------------------------- */
-
-describe("the pages that point at <luz-color-mode>", () => {
-  it("components/mode-switcher.html links to the page: the radios with an Auto state are this element", () => {
-    expect(hasLink(page(`${PAGES}/components/mode-switcher.html`), ROUTE)).toBe(true);
-  });
-
-  it("tokens/modes.html has the section \"Following the system or the clock\", with a link to the page", () => {
-    const html = page(`${PAGES}/tokens/modes.html`);
-    const heading = /<h2\b[^>]*\bid="([\w-]+)"[^>]*>\s*Following the system or the clock\s*<\/h2>/.exec(html);
-    expect(heading, 'an <h2 id="…">Following the system or the clock</h2>').not.toBeNull();
-    expect(hasLink(html.slice(heading.index), ROUTE), "a link to /docs/catalog/color-mode/ after the heading").toBe(true);
-  });
-
-  it("accessibility.html states the Auto radio and the element", () => {
-    const body = text(page(`${PAGES}/accessibility.html`));
-    expect(body).toContain("luz-color-mode");
-    expect(body).toMatch(/\bAuto\b/);
-  });
-
-  it("get-started/javascript.html lists the chunk and links to its page", () => {
-    const html = page(`${PAGES}/get-started/javascript.html`);
-    expect(text(html)).toMatch(/\bmode(\.min)?\.js\b/);
-    expect(hasLink(html, ROUTE)).toBe(true);
-  });
-});
-
-/* ---- Review fixes: icons in the labels, the three surprises of Auto, the CSP ----- */
 
 /** The text of a section: from its heading id to the next heading of the same or a higher level. */
 const section = (html, id) => {
@@ -271,92 +57,281 @@ const section = (html, id) => {
   const end = new RegExp(`<h[1-${m[1]}]\\b`).exec(rest);
   return end ? rest.slice(0, end.index) : rest;
 };
-const labelsOf = (markup) => [...markup.matchAll(/<label\b[^>]*\bluz-mode-btn\b[^>]*>[\s\S]*?<\/label>/g)].map((m) => m[0]);
-const ICON = /<svg\b(?=[^>]*\bclass="[^"]*\bluz-mode-btn__icon\b)(?=[^>]*\baria-hidden="true")[^>]*>/;
 
-describe("catalog/color-mode.html: the icons are in the labels (the cycle button shows the checked label's icon)", () => {
-  it("every label of the markup snippet has a .luz-mode-btn__icon svg with aria-hidden=\"true\", Auto included", () => {
-    const snippet = codeBlocks(page(MODE_PAGE)).find((c) => c.includes("<luz-color-mode"));
-    expect(snippet, "the code block with <luz-color-mode>").toBeTruthy();
+const MOMENTS = ["night", "dawn", "morning", "afternoon", "sunset", "dusk"];
+const DARK = new Set(["dawn", "dusk", "night"]);
+
+/** The moments a piece of markup declares: [{ name, from (minutes), theme }], in the order written. */
+const declared = (markup) =>
+  [...markup.matchAll(/<input\b[^>]*>/g)]
+    .map((m) => m[0])
+    .filter((tag) => /\bdata-from="/.test(tag))
+    .map((tag) => {
+      const [h, m] = /\bdata-from="(\d{1,2}):(\d{2})"/.exec(tag).slice(1);
+      return { name: /\bvalue="([\w-]+)"/.exec(tag)[1], from: +h * 60 + +m, theme: /\bdata-theme="(light|dark)"/.exec(tag)[1] };
+    });
+const hhmm = (minute) => `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`;
+
+/* ---- The pattern page --------------------------------------------------------- */
+
+describe("apps/docs/pages/catalog/theme-time.html", () => {
+  it("is a pattern page of the Catalog area: front matter with the module and the files", () => {
+    const meta = frontMatter(page(TIME_PAGE));
+    // The group is by function since F5b: the time of day is a piece for the whole site
+    expect(meta).toMatchObject({ area: "catalog", group: "site-wide", module: "theme-time.js", toc: "h2,h3" });
+    expect(meta.title, "title").toBeTruthy();
+    expect(meta.description, "description").toBeTruthy();
+    expect(meta.files, "files").toContain("<luz-theme-time>");
+  });
+
+  it("has the table of the six example moments, with the hours and the base of the markup snippet of the same page", () => {
+    const html = page(TIME_PAGE);
+    const snippet = codeBlocks(html).find((block) => block.includes("<luz-theme-time") && block.includes("data-from"));
+    expect(snippet, "the markup snippet with the moments").toBeTruthy();
+    const moments = declared(snippet);
+    expect(moments.map((m) => m.name).sort()).toEqual([...MOMENTS].sort());
+    const table = rows(html);
+    moments.forEach((moment, i) => {
+      const row = table.find((cells) => cells[0]?.toLowerCase() === moment.name);
+      expect(row, `a table row whose first cell is "${moment.name}"`).toBeDefined();
+      const next = moments[(i + 1) % moments.length];
+      expect(row[1], `${moment.name}: from`).toBe(hhmm(moment.from));
+      expect(row[2], `${moment.name}: to`).toBe(hhmm(next.from));
+      expect(row[3].toLowerCase(), `${moment.name} is ${moment.theme}`).toBe(moment.theme);
+      expect(moment.theme, `${moment.name} is ${DARK.has(moment.name) ? "dark" : "light"}`).toBe(DARK.has(moment.name) ? "dark" : "light");
+    });
+    expect(text(html)).toContain("data-moment");
+  });
+
+  it("declares the moments of the site's footer the way its own table does: same names, hours and bases", () => {
+    const footer = declared(page("apps/site/_partials/footer.html"));
+    const snippet = declared(codeBlocks(page(TIME_PAGE)).find((block) => block.includes("<luz-theme-time") && block.includes("data-from")));
+    expect(footer.length).toBe(6);
+    expect(footer).toEqual(snippet);
+  });
+
+  it("documents the event, with every key of its detail", () => {
+    const body = text(page(TIME_PAGE));
+    expect(body).toContain("luz-theme-time:change");
+    for (const key of ["moment", "pinned"]) expect(body, `detail.${key}`).toMatch(new RegExp(`\\b${key}\\b`));
+  });
+
+  it("documents preview(), pin() and unpin(), and the `hour`, `moment`, `moments`, `pinned` and `place` properties of the element", () => {
+    const body = text(page(TIME_PAGE));
+    for (const method of ["preview(", "pin(", "unpin("]) expect(body).toContain(method);
+    for (const property of ["hour", "moment", "moments", "pinned", "place"]) expect(body, `el.${property}`).toMatch(new RegExp(`\\bel\\.${property}\\b`));
+  });
+});
+
+describe("apps/docs/pages/components/theme-mode.html", () => {
+  it("is a component page of the Components area: front matter with the module and the file", () => {
+    const meta = frontMatter(page(MODE_PAGE));
+    expect(meta).toMatchObject({ area: "components", module: "theme-mode.js", files: "components/theme-mode.css", toc: "h2,h3" });
+    expect(meta.title, "title").toBeTruthy();
+    expect(meta.description, "description").toBeTruthy();
+  });
+
+  it("documents the event, with every key of its detail", () => {
+    const body = text(page(MODE_PAGE));
+    expect(body).toContain("luz-theme-mode:change");
+    for (const key of ["mode", "auto", "user"]) expect(body, `detail.${key}`).toMatch(new RegExp(`\\b${key}\\b`));
+  });
+
+  it("documents the `choice` and `mode` properties, refresh() and autoMode", () => {
+    const body = text(page(MODE_PAGE));
+    expect(body).toMatch(/\bel\.choice\b/);
+    expect(body).toMatch(/\bel\.mode\b/);
+    expect(body).toContain("refresh(");
+    expect(body).toContain("autoMode");
+  });
+
+  it("says what it writes on <html>: data-mode, and data-theme unless the page names a brand", () => {
+    const body = text(section(page(MODE_PAGE), "how"));
+    expect(body).toContain("data-mode");
+    expect(body).toContain("data-theme");
+    expect(body).toMatch(/\bbrand\b/);
+  });
+});
+
+/* ---- The scripts for the head -------------------------------------------------- */
+
+describe("the scripts for the <head> on the two pages", () => {
+  const PAGES_BOOT = [
+    ["components/theme-mode.html", MODE_PAGE, "theme-boot.min.js", "EX-009"],
+    ["catalog/theme-time.html", TIME_PAGE, "theme-time-boot.min.js", "EX-012"],
+  ];
+
+  it.each(PAGES_BOOT)("%s: says what the script is for, near the snippet: it avoids the flash of the wrong mode on the first paint", (_, file, script) => {
+    const html = page(file);
+    const body = text(section(html, "boot"));
+    expect(body).toContain(script);
+    expect(body).toMatch(/\bflash(es)?\b|first paint|never (?:drawn|see)|sees the (?:light )?page light|drawn light first/i);
+  });
+
+  it.each(PAGES_BOOT)("%s: the <head> snippet is eight lines or fewer and links the file as a classic script", (_, file, script) => {
+    const block = codeBlocks(page(file)).find((b) => b.includes(script));
+    expect(block, `a code block that links ${script}`).toBeTruthy();
+    const lines = block.split("\n").filter((l) => l.trim());
+    expect(lines.length).toBeGreaterThan(0);
+    expect(lines.length).toBeLessThanOrEqual(8);
+    expect(block).toMatch(new RegExp(`<script src="[^"]*${script.replace(/\./g, "\\.")}"`));
+    expect(block, "classic, not a module").not.toMatch(/<script[^>]*type="module"[^>]*boot/);
+  });
+
+  it.each(PAGES_BOOT)("%s: says why it blocks rendering, names %s, and is optional", (_, file, _script, exception) => {
+    const body = text(section(page(file), "boot"));
+    expect(body).toContain(exception);
+    expect(body).toMatch(/blocks? rendering/i);
+    expect(body).toMatch(/optional/i);
+  });
+
+  it("the page of core says what a Content-Security-Policy without 'unsafe-inline' needs: the file on the page's own origin", () => {
+    const body = text(section(page(MODE_PAGE), "boot"));
+    expect(body).toMatch(/\bCSP\b|Content[- ]Security[- ]Policy/);
+    expect(body).toMatch(/unsafe-inline/);
+    expect(body).toMatch(/\bown origin\b/);
+  });
+
+  it("the page of the catalog tells that the moments of data-moments are written twice and must agree", () => {
+    const body = text(section(page(TIME_PAGE), "known-issues"));
+    expect(body).toContain("data-moments");
+    expect(body).toMatch(/\btogether\b|\bagree\b/);
+  });
+
+  it("the data-moments the site pages carry are the six moments of the footer", () => {
+    const footer = declared(page("apps/site/_partials/footer.html"));
+    const expected = footer.map((m) => `${m.name}@${hhmm(m.from)}=${m.theme}`);
+    const strip = (value) => value.split(/\s+/).map((token) => token.replace(/\*$/, ""));
+    for (const file of ["apps/docs/_layouts/page.html", "apps/landing/index.html"]) {
+      const tag = /<script\b[^>]*theme-time-boot\.min\.js[^>]*>/.exec(page(file))?.[0];
+      expect(tag, `${file}: the script for the head of the moments`).toBeTruthy();
+      expect(strip(/data-moments="([^"]*)"/.exec(tag)?.[1] ?? ""), file).toEqual(expected);
+    }
+  });
+});
+
+/* ---- The two-moment example ---------------------------------------------------- */
+
+describe("the moment example on the docs page of the catalog", () => {
+  const example = () => {
+    const found = codeBlocks(page(TIME_PAGE)).find((block) => /\[data-moment=/.test(block) && /--luz-[\w-]+\s*:/.test(block));
+    expect(found, "a code block with [data-moment=…] rules that set --luz-* tokens").toBeDefined();
+    return found;
+  };
+
+  it("has a rule for a dark moment and one for a light moment, under a data-theme of its own", () => {
+    const block = example();
+    const named = [...block.matchAll(/\[data-moment=["']?(\w+)["']?\]/g)].map((m) => m[1]);
+    expect(named.filter((p) => DARK.has(p)), "a dark moment").not.toHaveLength(0);
+    expect(named.filter((p) => MOMENTS.includes(p) && !DARK.has(p)), "a light moment").not.toHaveLength(0);
+    expect(named.filter((p) => !MOMENTS.includes(p)), "names that are no moment").toEqual([]);
+    expect(block).toMatch(/\[data-theme=/);
+  });
+
+  it("names the mode (data-mode) for a brand of your own, so a brand's blocks answer to it", () => {
+    expect(example()).toMatch(/\[data-theme=["']my-brand["']\]\[data-mode=/);
+  });
+
+  it("sets only tokens that packages/core/src/themes/_template.css declares", () => {
+    const template = new Set([...readFileSync(join(repo, "packages/core/src/themes/_template.css"), "utf-8").matchAll(/(--luz-[\w-]+)\s*:/g)].map((m) => m[1]));
+    const set = [...example().matchAll(/(--luz-[\w-]+)\s*:/g)].map((m) => m[1]);
+    expect(set.length).toBeGreaterThan(0);
+    expect(set.filter((name) => !template.has(name)), "tokens the template does not declare").toEqual([]);
+  });
+});
+
+/* ---- The pages around them ------------------------------------------------------- */
+
+describe("the pages that point at the two elements", () => {
+  it("each of the two pages links to the other", () => {
+    expect(hasLink(page(MODE_PAGE), TIME_ROUTE)).toBe(true);
+    expect(hasLink(page(TIME_PAGE), MODE_ROUTE)).toBe(true);
+  });
+
+  it("the old pages are gone: components/mode-switcher.html and catalog/color-mode.html, in English and in Spanish", () => {
+    for (const rel of [`${PAGES}/components/mode-switcher.html`, `${PAGES}/catalog/color-mode.html`, "apps/docs/i18n/es/pages/components/mode-switcher.html", "apps/docs/i18n/es/pages/catalog/color-mode.html"]) {
+      expect(existsSync(join(repo, rel)), rel).toBe(false);
+    }
+  });
+
+  it("tokens/modes.html has the section \"Letting readers choose\", with a link to each page", () => {
+    const html = page(`${PAGES}/tokens/modes.html`);
+    const heading = /<h2\b[^>]*\bid="([\w-]+)"[^>]*>\s*Letting readers choose\s*<\/h2>/.exec(html);
+    expect(heading, 'an <h2 id="…">Letting readers choose</h2>').not.toBeNull();
+    const after = html.slice(heading.index);
+    expect(hasLink(after, MODE_ROUTE), "a link to /docs/components/theme-mode/ after the heading").toBe(true);
+    expect(hasLink(after, TIME_ROUTE), "a link to /docs/catalog/theme-time/ after the heading").toBe(true);
+  });
+
+  it("accessibility.html states the Auto radio and both elements", () => {
+    const body = text(page(`${PAGES}/accessibility.html`));
+    expect(body).toContain("luz-theme-mode");
+    expect(body).toContain("luz-theme-time");
+    expect(body).toMatch(/\bAuto\b/);
+    expect(body).not.toContain("luz-color-mode");
+  });
+
+  it("get-started/javascript.html lists both chunks and links to their pages", () => {
+    const html = page(`${PAGES}/get-started/javascript.html`);
+    const body = text(html);
+    expect(body).toMatch(/\btheme-mode\.js\b/);
+    expect(body).toMatch(/\btheme-time\.js\b/);
+    expect(hasLink(html, MODE_ROUTE)).toBe(true);
+    expect(hasLink(html, TIME_ROUTE)).toBe(true);
+  });
+});
+
+/* ---- Icons in the labels, the surprises of Auto, the CSP ------------------------- */
+
+const labelsOf = (markup) => [...markup.matchAll(/<label\b[^>]*\bluz-theme-mode__option\b[^>]*>[\s\S]*?<\/label>/g)].map((m) => m[0]);
+const ICON = /<svg\b(?=[^>]*\bclass="[^"]*\bluz-theme-mode__icon\b)(?=[^>]*\baria-hidden="true")[^>]*>/;
+
+describe("components/theme-mode.html: the icons are in the labels (the button shows the checked label's icon)", () => {
+  it("every label of the markup snippet has a .luz-theme-mode__icon svg with aria-hidden=\"true\", Auto included", () => {
+    const snippet = codeBlocks(page(MODE_PAGE)).find((c) => c.includes("<luz-theme-mode>") && c.includes("luz-theme-mode__option"));
+    expect(snippet, "the code block with <luz-theme-mode>").toBeTruthy();
     const labels = labelsOf(snippet);
     expect(labels, "four labels").toHaveLength(4);
     for (const l of labels) expect(l, `an icon in ${text(l)}`).toMatch(ICON);
   });
 
-  it("every label of the live demo has a .luz-mode-btn__icon svg with aria-hidden=\"true\", Auto included", () => {
-    const demo = section(page(MODE_PAGE), "example");
-    const labels = labelsOf(demo);
-    expect(labels, "four labels").toHaveLength(4);
-    for (const l of labels) expect(l, `an icon in ${text(l)}`).toMatch(ICON);
-  });
-
-  it("the page says the icons go in the labels, not data-mode-icon on the button, because core has no Auto icon", () => {
-    const body = text(page(MODE_PAGE));
-    expect(body).toMatch(/data-mode-icon/);
+  it("the page says the icons go in the labels, because the button shows the icon of the checked one", () => {
+    const body = text(section(page(MODE_PAGE), "markup"));
     expect(body).toMatch(/icons?\b[^.]{0,80}\blabels?\b|\blabels?\b[^.]{0,80}\bicons?\b/i);
-    expect(body).toMatch(/\bno Auto icon\b|\bAuto\b[^.]{0,40}\bno icon\b|\bno icon\b[^.]{0,40}\bAuto\b/i);
+    expect(body).toMatch(/\bchecked\b/);
   });
 
-  it("the header comment of color-mode.js has the icons in its example too", () => {
-    const src = readFileSync(join(repo, "packages/catalog/src/color-mode.js"), "utf-8");
-    // reads packages/ only; the implementer edits it, this test does not
-    expect(src).toMatch(/luz-mode-btn__icon/);
-  });
-});
-
-describe("what Auto does that a reader would not expect: on the page and in the accessibility statement", () => {
-  const where = {
-    "catalog/color-mode.html (When not to use or Known issues)": () => text(section(page(MODE_PAGE), "when-not")) + " " + text(section(page(MODE_PAGE), "known-issues")),
-    "accessibility.html": () => text(page(`${PAGES}/accessibility.html`).split(/Auto color mode/)[1] ?? ""),
-  };
-  for (const [name, get] of Object.entries(where)) {
-    it(`${name}: by="clock" is dark from 20:30 to 07:30 even when the device is set to light`, () => {
-      const t = get();
-      expect(t).toMatch(/20:30/);
-      expect(t).toMatch(/07:30/);
-      expect(t).toMatch(/clock/);
-      expect(t).toMatch(/\b(device|system)\b[^.]{0,60}\blight\b|\blight\b[^.]{0,60}\b(device|system)\b/i);
-    });
-
-    it(`${name}: prefers-contrast: more together with a dark setting gives the high-contrast mode in Auto`, () => {
-      const t = get();
-      expect(t).toMatch(/prefers-contrast/);
-      expect(t).toMatch(/high[- ]contrast/i);
-      expect(t).toMatch(/\bdark\b/i);
-    });
-
-    it(`${name}: in the Auto state the cycle button says Auto, not the mode it applied`, () => {
-      const t = get();
-      expect(t).toMatch(/cycle button/i);
-      expect(t).toMatch(/\bsays Auto\b|\bAuto\b[^.]{0,60}\bnot the mode\b|\bnot the mode\b[^.]{0,80}\bAuto\b|\bshows? Auto\b/i);
-    });
-  }
-});
-
-describe("the CSP sentence for the script for the head", () => {
-  const CSP = /\bCSP\b|Content[- ]Security[- ]Policy/;
-  it("catalog/color-mode.html #boot says: under a CSP without 'unsafe-inline', serve it as a classic file in <head> or allow it by its sha256 hash", () => {
-    const t = text(section(page(MODE_PAGE), "boot"));
-    expect(t).toMatch(CSP);
-    expect(t).toMatch(/unsafe-inline/);
-    expect(t).toMatch(/sha256/);
-    expect(t).toMatch(/\b(classic|external)\b[^.]{0,60}\b(file|script)\b|\bfile\b[^.]{0,60}\bhead\b/i);
-  });
-
-  it("tokens/modes.html #system says the same in one sentence", () => {
-    const t = text(section(page(`${PAGES}/tokens/modes.html`), "system"));
-    expect(t).toMatch(CSP);
-    expect(t).toMatch(/unsafe-inline/);
-    expect(t).toMatch(/sha256/);
+  it("the header comment of theme-mode.js has the icons in its example too", () => {
+    const src = readFileSync(join(repo, "packages/core/src/theme-mode.js"), "utf-8");
+    expect(src).toMatch(/luz-theme-mode__icon/);
   });
 });
 
-describe("the attributes table: light-attr", () => {
-  it("says light-attr must not be data-theme or a data-luz-* attribute", () => {
-    const row = rows(page(MODE_PAGE)).find((r) => r[0] === "light-attr");
-    expect(row, "a row for light-attr").toBeTruthy();
-    expect(row[1]).toMatch(/\bnot\b|\bnever\b|\bmust not\b/i);
-    expect(row[1]).toContain("data-theme");
-    expect(row[1]).toMatch(/data-luz-/);
+describe("what Auto does that a reader would not expect: in the accessibility statement", () => {
+  const statement = () => text(page(`${PAGES}/accessibility.html`).split(/Theme mode and theme time/)[1] ?? "");
+
+  it("on this site Auto is dark from 20:30 to 07:30 even when the device is set to light", () => {
+    const t = statement();
+    expect(t).toMatch(/20:30/);
+    expect(t).toMatch(/07:30/);
+    expect(t).toMatch(/\b(device|system)\b[^.]{0,60}\b(light|says)\b|\blight\b[^.]{0,60}\b(device|system)\b/i);
+  });
+
+  it("prefers-contrast: more gives high contrast in Auto", () => {
+    const t = statement();
+    expect(t).toMatch(/prefers-contrast/);
+    expect(t).toMatch(/high[- ]contrast/i);
+  });
+
+  it("the name of the button is the legend and the checked label, and a status region says the new mode", () => {
+    const t = statement();
+    expect(t).toMatch(/Color mode: Auto/);
+    expect(t).toMatch(/status region/i);
+  });
+
+  it("a pinned hour stands only in Auto: choosing a mode or Auto, or Escape on the slider, lets it go", () => {
+    const t = statement();
+    expect(t).toMatch(/Escape/);
+    expect(t).toMatch(/\bAuto\b[^.]{0,80}\blets? it go\b|\blets? it go\b/i);
   });
 });

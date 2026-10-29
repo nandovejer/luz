@@ -5,7 +5,7 @@
  * not scroll sideways, with and without JavaScript.
  *
  * Found in the Safari and Firefox reviews of 2026-10-16:
- *   - the footer's colour mode radios (`.site-modes .luz-mode-btn`, apps/site/header.css)
+ *   - the footer's colour mode radios (`.site-modes .luz-theme-mode__option`, apps/site/header.css)
  *     are the native radio group without JavaScript, and they do not wrap;
  *   - the home page is 386 px too wide: `.landing-render .o-row` holds a `luz-btn`
  *     that does not wrap.
@@ -73,7 +73,7 @@ for (const javaScript of [true, false]) {
       for (const route of ['/docs/get-started/ai/', '/']) {
         test(`${route}`, async ({ page }) => {
           await open(page, route);
-          const outside = await page.locator('.site-modes .luz-mode-btn').evaluateAll((list) => {
+          const outside = await page.locator('.site-modes .luz-theme-mode__option').evaluateAll((list) => {
             const width = document.documentElement.clientWidth;
             return list
               .map((b) => b.getBoundingClientRect())

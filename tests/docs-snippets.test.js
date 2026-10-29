@@ -40,13 +40,13 @@ const KIND_FILES = {
 const FILES = {
   tokens: ["luz-tokens.min.css"],
   // F7: the timeline chunk is catalog's, with the sidebar's
-  core: ["luz.min.css", "luz.conditional.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "i18n-es.min.js"],
+  core: ["luz.min.css", "luz.conditional.min.css", "luz.min.js", "midi.min.js", "table-sort.min.js", "theme-mode.min.js", "i18n-es.min.js"],
   // Catalog has no bundle (F5a): one stylesheet per component, plain and minified, and the scripts
   catalog: [
     "components/search.css", "components/search.min.css", "components/cookie-consent.css", "components/cookie-consent.min.css", "components/announcement.css", "components/announcement.min.css",
     // the sheets of the pages of catalog that name a kind (the four layout components of F7 are among them) and the three more the docs' own pages list
     ...[...new Set(Object.values(KIND_FILES).flat())].flatMap((name) => [`components/${name}.css`, `components/${name}.min.css`]),
-    "catalog.min.js", "search.min.js", "cookie-consent.min.js", "color-mode.min.js", "timeline.min.js", "sidebar.min.js",
+    "catalog.min.js", "search.min.js", "cookie-consent.min.js", "theme-time.min.js", "theme-time-bar.min.js", "timeline.min.js", "sidebar.min.js",
   ],
 };
 /** The kind a snippet is for, and the kind of its patterns (F8: the same word, `blog` for a blog): null for the one with none. */
@@ -278,7 +278,7 @@ describe("the snippet generator", () => {
 
       it("gives, in the chunks section, one import map whose integrity lists exactly the lazy chunks that budgets.json budgets, each with its version and sha384", () => {
         const budgeted = budgetedChunks();
-        expect(budgeted.length).toBe(8); // core: midi, table-sort, i18n-es; catalog: search, cookie-consent, color-mode, timeline, sidebar (the last two came from core in F7)
+        expect(budgeted.length).toBe(10); // core: midi, table-sort, theme-mode, i18n-es; catalog: search, cookie-consent, theme-time, theme-time-bar, timeline, sidebar (the last two came from core in F7)
         expect(budgeted).toContain("catalog/dist/timeline.min.js");
         expect(budgeted).toContain("catalog/dist/sidebar.min.js");
         expect(budgeted).not.toContain("core/dist/timeline.min.js");
@@ -316,7 +316,7 @@ describe("the snippet generator", () => {
           expect(hash, rel).toBe(sri(root, pkg, file));
         }
         // each row says when to add the line
-        for (const element of ["luz-timeline", "luz-search", "luz-cookie-consent", "luz-color-mode", "luz-sidebar"]) expect(section, element).toContain(element);
+        for (const element of ["luz-timeline", "luz-search", "luz-cookie-consent", "luz-theme-mode", "luz-theme-time", "luz-sidebar"]) expect(section, element).toContain(element);
       });
 
       it("calls the import map the way to check a chunk, and modulepreload only a performance hint (it does not block a bad file in Safari and Firefox)", () => {
