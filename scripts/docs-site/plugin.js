@@ -65,6 +65,7 @@ import {
   parseFrontMatter,
   readInside,
   relativizeLinks,
+  unquoteAttributes,
   renderDocument,
   renderPage,
   rootOf,
@@ -497,7 +498,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
           out = renderPage(page, scan(), { root: relativeUrls ? rootFor(doc.route) : "/", dev: command !== "build", ...urlOptions() });
         } else if (doc.kind === "landing") {
           // Errors and line numbers point at the template, for every language
-          out = renderDocument(html, LANDING.file, doc.route, scan(), { locale: doc.locale, siteUrl: relativeUrls ? siteUrl : "" });
+          out = renderDocument(html, LANDING.file, doc.route, scan(), { locale: doc.locale, siteUrl: relativeUrls ? siteUrl : "", unquote: false });
         }
         if (command === "build") {
           const root = relativeUrls ? rootFor(doc.route) : "/";
@@ -537,7 +538,10 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
         if (!target.startsWith(realOut + sep) || outFileOf(doc.route).split("/").includes("..")) {
           throw new Error(`${doc.file}: ${doc.route} would be written outside the build folder`);
         }
-        const html = readFileSync(resolve(outRoot, doc.file), "utf-8");
+        let html = readFileSync(resolve(outRoot, doc.file), "utf-8");
+        // The last step: the plugins before this one (the links, the CSP meta written where `<meta charset="…">` is
+        // quoted, Vite's own HTML step) read the quoted attributes of the home, so its quotes go now
+        if (doc.kind === "landing") html = unquoteAttributes(html);
         mkdirSync(dirname(target), { recursive: true });
         writeFileSync(target, html, "utf-8");
       }

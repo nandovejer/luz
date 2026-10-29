@@ -75,7 +75,21 @@ function initModes() {
   for (const el of document.querySelectorAll("[data-needs-js]")) el.hidden = false;
 }
 
+/* ---- PROTOTYPE: the layout of the demo of "Semantic HTML, styled" ------- */
+
+/**
+ * PROTOTYPE, to be removed when the owner chooses: ?native=a (the default) or
+ * ?native=b sets data-native on <html>, and landing.css lays out the
+ * before-and-after of the demo accordingly.
+ */
+function initNativePrototype() {
+  const layout = location.search.match(/[?&]native=([ab])(?:&|$)/)?.[1];
+  if (layout) document.documentElement.dataset.native = layout;
+}
+
 /* ---- Boot -------------------------------------------------------------- */
+
+initNativePrototype();
 
 // Color mode, menu drawer and header height (shared with the docs)
 initSiteHeader();

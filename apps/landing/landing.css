@@ -165,8 +165,9 @@
   flex-direction: column;
   gap: var(--luz-space-3xl);
   min-block-size: calc(100svh - var(--site-header-h));
-  /* Room under the globe's phrase, which sits a little below its box */
-  padding-block-end: var(--luz-space-xl);
+  /* Room under the globe's phrase, which sits a little below its box; one step
+     less than it was, which the light's own floor (below) takes back */
+  padding-block-end: calc(var(--luz-space-xl) - var(--luz-space-xs));
 }
 
 .landing-first > .luz-hero {
@@ -175,6 +176,27 @@
 
 .landing-first > .landing-light {
   flex: 1 1 auto;
+}
+
+/* Wider than a phone, the light's phrase, time and bar sit in the foot of its
+   box, so a window too short for the hero would draw them over its buttons:
+   the box is at least as tall as what reaches up behind the hero (below) plus
+   the room those three need, and the page goes on below the window instead.
+   A taller window takes the fill above and this changes nothing */
+@media (min-width: 641px) {
+  .landing-first > .landing-light {
+    min-block-size: calc(
+      var(--luz-space-lg) + var(--luz-space-xs) + min(4cqi, 3.75rem) + 14.5rem
+    );
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-first > .landing-light {
+    min-block-size: calc(
+      var(--luz-space-lg) + var(--luz-space-xs) + min(4cqi, 3.75rem) + 17cqi + 14.5rem
+    );
+  }
 }
 
 .landing-first > .landing-light > home-light {
@@ -317,6 +339,13 @@
     gap: var(--luz-space-xs);
   }
 
+  /* Three stacked buttons at the large control step would reach the round mode
+     button fixed at the window's end (a 568px phone): one step down keeps them
+     above it */
+  .landing-first .luz-hero .o-actions > .luz-btn {
+    min-block-size: var(--luz-control-lg);
+  }
+
   .landing-first {
     padding-block-end: var(--luz-space-md);
   }
@@ -343,6 +372,120 @@
    thread near 70% busy in software rendering */
 :root[data-theme="high-contrast"] .landing-hero__brand {
   text-shadow: none;
+}
+
+/* The hero's brand is the word LUZ alone, in ET Book, drawn with CSS (the
+   prism is the logo of the header and the footer, not part of the word).
+   Sized by the brand's own em (3.75em of the title on a phone), so every rule
+   above that sizes the brand still sizes it; the numbers are the demo's
+   (the capitals are 0.679em high) turned into em. The halo is the brand's,
+   on the word alike */
+.landing-imago {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The word is Latin, in ET Book, whatever the page's language: an Arabic page
+     sets its headings in the sans, which this span would inherit (its
+     lang="en" stops :lang(ar) matching it, not the inherited face), and the
+     numbers below are the serif's widths */
+  font-family: var(--luz-font-serif);
+  color: var(--luz-brand-primary);
+  text-shadow: none;
+  filter: drop-shadow(0 0 0.25em color-mix(in oklab, var(--luz-brand-primary) 35%, transparent))
+    drop-shadow(0 0 0.75em color-mix(in oklab, var(--luz-brand-primary) 22%, transparent));
+}
+
+/* The word: the capitals trimmed to their own height, squeezed to .86 and
+   stretched to 1.04 from the start; the box gives back what the squeeze takes
+   (its natural width is 1.5737em: the letters' advances L .5947, U .8149,
+   Z .7046 at their own widths, less two gaps of .1em) */
+.landing-imago__word {
+  display: inline-block;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-box: trim-both cap alphabetic;
+  transform: scale(0.86, 1.04);
+  transform-origin: left center;
+  margin-inline-end: -0.2203em;
+  /* The box is trimmed to the capitals, but the mask paints only inside it:
+     the U's round bottom, which dips under the baseline as every round letter
+     does, was cut flat. The box grows .08em above and below (the same both
+     ways, so the mask's middle stays), and the margins take it back, so
+     nothing moves */
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+  /* The prism's three tints, faint (.72, .8, .88 of the colour; the triangle
+     uses .25, .45, .65), as a fan from the point where the light would enter
+     the triangle, written in the word's own unscaled box. The mask only lowers
+     the alpha: the lowest is .72, so it never erases the word */
+  --px: -0.863em;
+  --py: calc(50% + 0.0398em);
+  -webkit-mask-image: conic-gradient(from 0deg at var(--px) var(--py), #000 0deg 82.6deg, rgb(0 0 0 / 0.72) 82.6deg 86.6deg,
+    rgb(0 0 0 / 0.8) 86.6deg 90.6deg, rgb(0 0 0 / 0.88) 90.6deg 94.7deg, #000 94.7deg);
+  mask-image: conic-gradient(from 0deg at var(--px) var(--py), #000 0deg 82.6deg, rgb(0 0 0 / 0.72) 82.6deg 86.6deg,
+    rgb(0 0 0 / 0.8) 86.6deg 90.6deg, rgb(0 0 0 / 0.88) 90.6deg 94.7deg, #000 94.7deg);
+}
+
+/* Each letter its own width, from its middle, its box given back */
+.landing-imago__word .ch {
+  display: inline-block;
+  transform: scaleX(var(--s));
+  margin-inline: calc((var(--s) - 1) * var(--cw) / 2);
+}
+
+.landing-imago__word .ch + .ch {
+  /* the gap -0.1em, plus one screen pixel (1px before the word's .86 squeeze) */
+  margin-inline-start: calc((var(--s) - 1) * var(--cw) / 2 - 0.1em + 1px / 0.86);
+}
+
+.landing-imago__word .ch--l { --s: 0.88; --cw: 0.5947em; }
+.landing-imago__word .ch--u { --s: 0.86; --cw: 0.8149em; }
+.landing-imago__word .ch--z { --s: 0.78; --cw: 0.7046em; }
+
+/* the Z six screen pixels further from the U than the U is from the L */
+.landing-imago__word .ch--u + .ch--z {
+  margin-inline-start: calc((var(--s) - 1) * var(--cw) / 2 - 0.1em + 7px / 0.86);
+}
+
+/* From a tablet up the word is larger than the phone's (which stays as it
+   is) and has room under it. Its box is trimmed to the capitals, so the room
+   the line used to give is put back as a margin */
+@media (min-width: 641px) {
+  .landing-imago {
+    font-size: min(5em, 22svh);
+    margin-block-end: 0.22em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-imago {
+    font-size: min(5.5em, 24svh);
+  }
+}
+
+/* High contrast and forced colours: no halo, and the word in the system's
+   text colour, whole (a mask only lowers the alpha, and forced colours do not
+   draw a filter's glow) */
+:root[data-theme="high-contrast"] .landing-imago {
+  filter: none;
+}
+
+@media (forced-colors: active) {
+  /* The word is drawn, not read: with forced-color-adjust left to the browser
+     it paints a backplate behind its box, which reaches over the first line of
+     the title under it and cuts the tops of its letters */
+  .landing-imago {
+    filter: none;
+    color: CanvasText;
+    forced-color-adjust: none;
+  }
+
+  .landing-imago__word {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
 }
 
 .landing-first > .luz-hero {
@@ -616,7 +759,7 @@ home-light:defined ~ .landing-light__nojs {
 
 .landing-inside__lead {
   margin: 0;
-  max-inline-size: 48ch;
+  max-inline-size: 60ch;
   font-size: var(--luz-text-lg);
   color: var(--luz-text-secondary);
 }
@@ -1353,6 +1496,70 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 /* --------------------------------------------------------------------------
+   7. FAQ: the catalog's <luz-faq> (faq.css). Its head (the other sections'
+   eyebrow, title and lead, and the links to the groups) is on the left,
+   pinned below the header while the questions scroll on the right; from
+   1024px, as the other two-column sections. Under it, one column with the
+   head centred. The questions and answers are at the lead's size (the
+   component's own: --luz-text-lg), as the rest of the home's running text
+   -------------------------------------------------------------------------- */
+
+.landing-faq .luz-faq__nav {
+  margin-block-start: var(--luz-space-xs);
+}
+
+/* A question and its answer in English on a right-to-left page (the Arabic
+   FAQ is not written yet: faq.lang says "en") read left to right */
+[dir="rtl"] .landing-faq .luz-faq__item:lang(en) {
+  direction: ltr;
+}
+
+/* From the head to the list, as in #modes */
+.landing-faq luz-faq > .landing-faq__head + .luz-faq__group {
+  margin-block-start: var(--luz-space-2xl);
+}
+
+@media (max-width: 1023.98px) {
+  .landing-faq .luz-faq__nav ul {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-faq luz-faq {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: var(--luz-space-3xl);
+    align-items: start;
+  }
+
+  .landing-faq luz-faq > * {
+    grid-column: 2;
+    margin-block-start: 0;
+  }
+
+  /* Pinned where a jump to a group lands its title (the page's scroll
+     padding plus the title's scroll margin), so the two meet. It spans every
+     row of the list: more rows than there will be groups */
+  .landing-faq luz-faq > .landing-faq__head {
+    position: sticky;
+    inset-block-start: calc(var(--site-header-h) + var(--luz-space-sm) + var(--luz-space-2xl));
+    grid-column: 1;
+    grid-row: 1 / span 20;
+    justify-items: start;
+    text-align: start;
+  }
+
+  .landing-faq luz-faq > .landing-faq__head + .luz-faq__group {
+    margin-block-start: 0;
+  }
+
+  .landing-faq luz-faq > .luz-faq__group + .luz-faq__group {
+    margin-block-start: var(--luz-space-2xl);
+  }
+}
+
+/* --------------------------------------------------------------------------
    Who it fits: two short lists
    -------------------------------------------------------------------------- */
 
@@ -1562,7 +1769,7 @@ home-light:defined ~ .landing-light__nojs {
   font-size: var(--luz-text-lg);
 }
 
-/* The mark is wide (1.57:1): sized by its height, the width follows */
+/* The mark is the prism, a square: sized by its height, the width follows */
 .landing-brand > svg {
   flex: none;
   block-size: 1.375rem;
@@ -2075,10 +2282,12 @@ home-light:defined ~ .landing-light__nojs {
   overflow-wrap: anywhere;
 }
 
-/* The browser's meter and LUZ's share one place: one replaces the other */
+/* The "before" and the "after" share one place: one replaces the other. Each
+   is a picture and the words that tell which it is, under it */
 .landing-typed__state {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
   grid-area: 1 / 1;
   gap: var(--luz-space-xs);
 }
@@ -2087,14 +2296,55 @@ home-light:defined ~ .landing-light__nojs {
   visibility: hidden;
 }
 
+/* The picture: a small page of its own, in the panel's frame */
+.landing-typed__pane {
+  min-inline-size: 0;
+  padding: var(--luz-space-md);
+  border: 1px solid var(--luz-divider);
+  border-radius: var(--luz-radius-md);
+  background: var(--luz-surface-page);
+  /* A picture: at 400 % text what does not fit is clipped, never a scroll */
+  overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+/* A page without LUZ: its canvas and its text are the browser's (the system
+   colours, in the light scheme), and so is every element in it. `all: initial`
+   takes what the pane would inherit from LUZ's body (the font, the colour, the
+   size), and `all: revert` on each element under it takes back the
+   browser's style sheet, as no author rule had touched it (unlayered, so it
+   wins over every LUZ layer). Direction stays that of the page */
+.landing-typed__pane--before {
+  all: initial;
+  display: block;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  padding: var(--luz-space-md);
+  border: 1px solid var(--luz-divider);
+  border-radius: var(--luz-radius-md);
+  background: Canvas;
+  color: CanvasText;
+  color-scheme: light;
+  overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.landing-typed__pane--before * {
+  all: revert;
+}
+
+/* The last scene's two controls, side by side while they fit */
+.landing-typed__scene--class .landing-typed__pane {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--luz-space-sm);
+  align-items: center;
+}
+
 .landing-typed__caption {
   margin: 0;
   font-size: var(--luz-text-sm);
   color: var(--luz-text-secondary);
-}
-
-.landing-typed__caption q {
-  color: var(--luz-text-primary);
 }
 
 /* The same meter in the three modes: each strip is a mode of its own */
@@ -2112,6 +2362,7 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 .landing-typed__mode {
+  overflow: clip;
   display: grid;
   gap: var(--luz-space-2xs);
   padding: var(--luz-space-sm);
@@ -2123,9 +2374,49 @@ home-light:defined ~ .landing-light__nojs {
   font-size: var(--luz-text-xs);
 }
 
-.landing-typed__result .luz-meter,
-.landing-typed__result .luz-input {
+.landing-typed__pane :is(input, button, select, textarea) {
   min-inline-size: 0;
+}
+
+/* PROTOTYPE (?native=a|b, set by landing.js; to be removed when the owner
+   chooses). a (the default): the "before" and the "after" take turns in one
+   place. b: side by side, both there at the end, one above the other when the
+   panel is narrow */
+html[data-native="b"] .landing-typed__result {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--luz-space-sm);
+}
+
+html[data-native="b"] .landing-typed__state--raw {
+  grid-area: 1 / 1;
+  visibility: visible;
+}
+
+html[data-native="b"] .landing-typed__state--luz {
+  grid-area: 1 / 2;
+}
+
+html[data-native="b"] .landing-typed__modes {
+  grid-column: 1 / -1;
+}
+
+@container inside (max-inline-size: 30em) {
+  html[data-native="b"] .landing-typed__result {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html[data-native="b"] .landing-typed__state--luz {
+    grid-area: 2 / 1;
+  }
+}
+
+/* The line about JavaScript, under the three levels */
+.landing-native__js {
+  max-inline-size: 60ch;
+  margin: 0;
+  font-size: var(--luz-text-md);
+  color: var(--luz-text-secondary);
+  text-wrap: pretty;
 }
 
 /* A scene's code and result stack in the panel's one place: one turn each */
@@ -2142,15 +2433,18 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 /* The scenes play one after another, 14 seconds each, on one loop of
-   42 seconds: in each, a line of code types itself (its clip opens a
-   character at a time) and the result answers it: first the browser's own
-   element, then LUZ's, then LUZ's in the three modes; the scene fades and the
-   next begins. Each scene runs the same loop, already running when the page
-   comes (a negative delay: the second is two turns in, the third one), so its
-   turn comes 14 seconds after the one before; it is hidden outside its turn. Off screen the browser skips the
-   panel (content-visibility), so it costs nothing until it is seen. With
-   reduced motion, or with no CSS animation, the first scene keeps its last
-   frame (above) and the others are not shown */
+   42 seconds: in each, the lines of code type themselves (a clip opens a
+   character at a time) and the result answers: the same HTML as the browser
+   draws it alone (or, in the last scene, with no class), then as LUZ draws
+   it, then LUZ's in the three modes; the scene fades and the next begins.
+   Each scene runs the same loop, already running when the page comes (a
+   negative delay: the second is two turns in, the third one), so its turn
+   comes 14 seconds after the one before; it is hidden outside its turn. Off
+   screen the browser skips the panel (content-visibility), so it costs
+   nothing until it is seen. With reduced motion, or with no CSS animation,
+   the first scene keeps its last frame (above) and the others are not shown.
+   The timings and the steps are written by the number of characters of each
+   line of code */
 .landing-typed__scene + .landing-typed__scene {
   display: none;
 }
@@ -2161,7 +2455,7 @@ home-light:defined ~ .landing-light__nojs {
   }
 
   .landing-typed__scene,
-  .landing-typed__scene :is(.landing-typed__line, .landing-typed__state, .landing-typed__extra, .landing-typed__modes) {
+  .landing-typed__scene :is(.landing-typed__line, .landing-typed__state, .landing-typed__modes) {
     /* 42 s: the slowest step of the motion scale, many times over */
     animation-duration: calc(var(--luz-duration-lazy) * 52.5);
     animation-iteration-count: infinite;
@@ -2173,130 +2467,141 @@ home-light:defined ~ .landing-light__nojs {
     visibility: visible;
   }
 
-  /* meter */
-  .landing-typed__scene--meter,
-  .landing-typed__scene--meter :is(.landing-typed__line, .landing-typed__state, .landing-typed__extra, .landing-typed__modes) {
+
+  /* details */
+  .landing-typed__scene--details,
+  .landing-typed__scene--details :is(.landing-typed__line, .landing-typed__state, .landing-typed__modes) {
     animation-delay: 0s;
   }
 
-  .landing-typed__scene--meter {
-    animation-name: landing-typed-meter;
+  .landing-typed__scene--details {
+    animation-name: landing-typed-details;
   }
 
-  .landing-typed__scene--meter .landing-typed__line:nth-child(1) {
-    animation-name: landing-typed-meter-1;
+
+  .landing-typed__scene--details .landing-typed__line:nth-child(1) {
+    animation-name: landing-typed-details-1;
   }
 
-  .landing-typed__scene--meter .landing-typed__line:nth-child(2) {
-    animation-name: landing-typed-meter-2;
+
+  .landing-typed__scene--details .landing-typed__line:nth-child(2) {
+    animation-name: landing-typed-details-2;
   }
 
-  .landing-typed__scene--meter .landing-typed__line:nth-child(3) {
-    animation-name: landing-typed-meter-3;
+
+  .landing-typed__scene--details .landing-typed__line:nth-child(3) {
+    animation-name: landing-typed-details-3;
   }
 
-  .landing-typed__scene--meter .landing-typed__line:nth-child(4) {
-    animation-name: landing-typed-meter-4;
+
+  .landing-typed__scene--details .landing-typed__line:nth-child(4) {
+    animation-name: landing-typed-details-4;
   }
 
-  .landing-typed__scene--meter .landing-typed__line:nth-child(5) {
-    animation-name: landing-typed-meter-5;
+
+  .landing-typed__scene--details .landing-typed__state--raw {
+    animation-name: landing-typed-details-raw;
   }
 
-  .landing-typed__scene--meter .landing-typed__state--raw {
-    animation-name: landing-typed-meter-raw;
+  .landing-typed__scene--details .landing-typed__state--luz {
+    animation-name: landing-typed-details-luz;
   }
 
-  .landing-typed__scene--meter .landing-typed__state--luz {
-    animation-name: landing-typed-meter-luz;
+  .landing-typed__scene--details .landing-typed__modes {
+    animation-name: landing-typed-details-modes;
   }
 
-  .landing-typed__scene--meter .landing-typed__modes {
-    animation-name: landing-typed-meter-modes;
-  }
 
-  .landing-typed__scene--meter .landing-typed__extra {
-    animation-name: landing-typed-meter-extra;
-  }
-
-  /* input */
-  .landing-typed__scene--input,
-  .landing-typed__scene--input :is(.landing-typed__line, .landing-typed__state, .landing-typed__extra, .landing-typed__modes) {
+  /* form */
+  .landing-typed__scene--form,
+  .landing-typed__scene--form :is(.landing-typed__line, .landing-typed__state, .landing-typed__modes) {
     animation-delay: calc(var(--luz-duration-lazy) * -35);
   }
 
-  .landing-typed__scene--input {
-    animation-name: landing-typed-input;
+  .landing-typed__scene--form {
+    animation-name: landing-typed-form;
   }
 
-  .landing-typed__scene--input .landing-typed__line:nth-child(1) {
-    animation-name: landing-typed-input-1;
+
+  .landing-typed__scene--form .landing-typed__line:nth-child(1) {
+    animation-name: landing-typed-form-1;
   }
 
-  .landing-typed__scene--input .landing-typed__line:nth-child(2) {
-    animation-name: landing-typed-input-2;
+
+  .landing-typed__scene--form .landing-typed__line:nth-child(2) {
+    animation-name: landing-typed-form-2;
   }
 
-  .landing-typed__scene--input .landing-typed__line:nth-child(3) {
-    animation-name: landing-typed-input-3;
+
+  .landing-typed__scene--form .landing-typed__line:nth-child(3) {
+    animation-name: landing-typed-form-3;
   }
 
-  .landing-typed__scene--input .landing-typed__line:nth-child(4) {
-    animation-name: landing-typed-input-4;
+
+  .landing-typed__scene--form .landing-typed__line:nth-child(4) {
+    animation-name: landing-typed-form-4;
   }
 
-  .landing-typed__scene--input .landing-typed__state--raw {
-    animation-name: landing-typed-input-raw;
+
+  .landing-typed__scene--form .landing-typed__state--raw {
+    animation-name: landing-typed-form-raw;
   }
 
-  .landing-typed__scene--input .landing-typed__state--luz {
-    animation-name: landing-typed-input-luz;
+  .landing-typed__scene--form .landing-typed__state--luz {
+    animation-name: landing-typed-form-luz;
   }
 
-  .landing-typed__scene--input .landing-typed__modes {
-    animation-name: landing-typed-input-modes;
+  .landing-typed__scene--form .landing-typed__modes {
+    animation-name: landing-typed-form-modes;
   }
 
-  /* button */
-  .landing-typed__scene--button,
-  .landing-typed__scene--button :is(.landing-typed__line, .landing-typed__state, .landing-typed__extra, .landing-typed__modes) {
+
+  /* class */
+  .landing-typed__scene--class,
+  .landing-typed__scene--class :is(.landing-typed__line, .landing-typed__state, .landing-typed__modes) {
     animation-delay: calc(var(--luz-duration-lazy) * -17.5);
   }
 
-  .landing-typed__scene--button {
-    animation-name: landing-typed-button;
+  .landing-typed__scene--class {
+    animation-name: landing-typed-class;
   }
 
-  .landing-typed__scene--button .landing-typed__line:nth-child(1) {
-    animation-name: landing-typed-button-1;
+
+  .landing-typed__scene--class .landing-typed__line:nth-child(1) {
+    animation-name: landing-typed-class-1;
   }
 
-  .landing-typed__scene--button .landing-typed__line:nth-child(2) {
-    animation-name: landing-typed-button-2;
+
+  .landing-typed__scene--class .landing-typed__line:nth-child(2) {
+    animation-name: landing-typed-class-2;
   }
 
-  .landing-typed__scene--button .landing-typed__line:nth-child(3) {
-    animation-name: landing-typed-button-3;
+
+  .landing-typed__scene--class .landing-typed__line:nth-child(3) {
+    animation-name: landing-typed-class-3;
   }
 
-  .landing-typed__scene--button .landing-typed__line:nth-child(4) {
-    animation-name: landing-typed-button-4;
+
+  .landing-typed__scene--class .landing-typed__line:nth-child(4) {
+    animation-name: landing-typed-class-4;
   }
 
-  .landing-typed__scene--button .landing-typed__state--raw {
-    animation-name: landing-typed-button-raw;
+
+  .landing-typed__scene--class .landing-typed__state--raw {
+    animation-name: landing-typed-class-raw;
   }
 
-  .landing-typed__scene--button .landing-typed__state--luz {
-    animation-name: landing-typed-button-luz;
+  .landing-typed__scene--class .landing-typed__state--luz {
+    animation-name: landing-typed-class-luz;
   }
 
-  .landing-typed__scene--button .landing-typed__modes {
-    animation-name: landing-typed-button-modes;
+  .landing-typed__scene--class .landing-typed__modes {
+    animation-name: landing-typed-class-modes;
   }
+
 }
 
-@keyframes landing-typed-meter {
+@keyframes landing-typed-details {
   0%,
   30.33% {
     opacity: 1;
@@ -2314,201 +2619,15 @@ home-light:defined ~ .landing-light__nojs {
     visibility: hidden;
   }
 }
-@keyframes landing-typed-meter-1 {
+
+@keyframes landing-typed-details-1 {
   0%,
   1.33% {
-    clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(6, end);
-  }
-
-  3.33%,
-  32% {
-    clip-path: inset(0);
-  }
-
-  32.33%,
-  100% {
-    clip-path: inset(0 100% 0 0);
-  }
-}
-@keyframes landing-typed-meter-2 {
-  0%,
-  4% {
-    clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(13, end);
-  }
-
-  7.33%,
-  32% {
-    clip-path: inset(0);
-  }
-
-  32.33%,
-  100% {
-    clip-path: inset(0 100% 0 0);
-  }
-}
-@keyframes landing-typed-meter-3 {
-  0%,
-  10.67% {
-    clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(19, end);
-  }
-
-  14%,
-  32% {
-    clip-path: inset(0);
-  }
-
-  32.33%,
-  100% {
-    clip-path: inset(0 100% 0 0);
-  }
-}
-@keyframes landing-typed-meter-4 {
-  0%,
-  16.67% {
-    clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(40, end);
-  }
-
-  20.67%,
-  32% {
-    clip-path: inset(0);
-  }
-
-  32.33%,
-  100% {
-    clip-path: inset(0 100% 0 0);
-  }
-}
-@keyframes landing-typed-meter-5 {
-  0%,
-  21.33% {
-    clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(8, end);
-  }
-
-  23.33%,
-  32% {
-    clip-path: inset(0);
-  }
-
-  32.33%,
-  100% {
-    clip-path: inset(0 100% 0 0);
-  }
-}
-@keyframes landing-typed-meter-raw {
-  0%,
-  7.33% {
-    opacity: 0;
-  }
-
-  8%,
-  13.33% {
-    opacity: 1;
-  }
-
-  14%,
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes landing-typed-meter-luz {
-  0%,
-  14% {
-    opacity: 0;
-  }
-
-  15%,
-  32% {
-    opacity: 1;
-  }
-
-  32.33%,
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes landing-typed-meter-extra {
-  0%,
-  20.67% {
-    opacity: 0;
-  }
-
-  21.67%,
-  32% {
-    opacity: 1;
-  }
-
-  32.33%,
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes landing-typed-meter-modes {
-  0%,
-  24.67% {
-    opacity: 0;
-    translate: 0 var(--luz-space-md);
-  }
-
-  26.67%,
-  32% {
-    opacity: 1;
-    translate: 0 0;
-  }
-
-  32.33%,
-  100% {
-    opacity: 0;
-    translate: 0 var(--luz-space-md);
-  }
-}
-@keyframes landing-typed-input {
-  0%,
-  30.33% {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  32% {
-    opacity: 0;
-    visibility: visible;
-  }
-
-  32.33%,
-  100% {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-@keyframes landing-typed-input-1 {
-  0%,
-  1.33% {
-    clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(6, end);
-  }
-
-  3.33%,
-  32% {
-    clip-path: inset(0);
-  }
-
-  32.33%,
-  100% {
-    clip-path: inset(0 100% 0 0);
-  }
-}
-@keyframes landing-typed-input-2 {
-  0%,
-  4% {
     clip-path: inset(0 100% 0 0);
     animation-timing-function: steps(14, end);
   }
 
-  7.33%,
+  3.31%,
   32% {
     clip-path: inset(0);
   }
@@ -2518,14 +2637,15 @@ home-light:defined ~ .landing-light__nojs {
     clip-path: inset(0 100% 0 0);
   }
 }
-@keyframes landing-typed-input-3 {
+
+@keyframes landing-typed-details-2 {
   0%,
-  8% {
+  3.81% {
     clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(21, end);
+    animation-timing-function: steps(39, end);
   }
 
-  12%,
+  7.54%,
   32% {
     clip-path: inset(0);
   }
@@ -2535,14 +2655,15 @@ home-light:defined ~ .landing-light__nojs {
     clip-path: inset(0 100% 0 0);
   }
 }
-@keyframes landing-typed-input-4 {
+
+@keyframes landing-typed-details-3 {
   0%,
-  14.67% {
+  8.04% {
     clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(20, end);
+    animation-timing-function: steps(35, end);
   }
 
-  18.67%,
+  11.49%,
   32% {
     clip-path: inset(0);
   }
@@ -2552,29 +2673,49 @@ home-light:defined ~ .landing-light__nojs {
     clip-path: inset(0 100% 0 0);
   }
 }
-@keyframes landing-typed-input-raw {
+
+@keyframes landing-typed-details-4 {
   0%,
-  12% {
+  11.99% {
+    clip-path: inset(0 100% 0 0);
+    animation-timing-function: steps(10, end);
+  }
+
+  13.69%,
+  32% {
+    clip-path: inset(0);
+  }
+
+  32.33%,
+  100% {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes landing-typed-details-raw {
+  0%,
+  14.19% {
     opacity: 0;
   }
 
-  12.67%,
-  18.67% {
+  14.86%,
+  19.86% {
     opacity: 1;
   }
 
-  19.33%,
+  20.53%,
   100% {
     opacity: 0;
   }
 }
-@keyframes landing-typed-input-luz {
+
+@keyframes landing-typed-details-luz {
   0%,
-  18.67% {
+  19.86% {
     opacity: 0;
   }
 
-  19.67%,
+  20.53%,
   32% {
     opacity: 1;
   }
@@ -2584,14 +2725,15 @@ home-light:defined ~ .landing-light__nojs {
     opacity: 0;
   }
 }
-@keyframes landing-typed-input-modes {
+
+@keyframes landing-typed-details-modes {
   0%,
-  22% {
+  23.53% {
     opacity: 0;
     translate: 0 var(--luz-space-md);
   }
 
-  24%,
+  25.53%,
   32% {
     opacity: 1;
     translate: 0 0;
@@ -2603,7 +2745,8 @@ home-light:defined ~ .landing-light__nojs {
     translate: 0 var(--luz-space-md);
   }
 }
-@keyframes landing-typed-button {
+
+@keyframes landing-typed-form {
   0%,
   30.33% {
     opacity: 1;
@@ -2621,14 +2764,15 @@ home-light:defined ~ .landing-light__nojs {
     visibility: hidden;
   }
 }
-@keyframes landing-typed-button-1 {
+
+@keyframes landing-typed-form-1 {
   0%,
   1.33% {
     clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(7, end);
+    animation-timing-function: steps(32, end);
   }
 
-  3.33%,
+  4.57%,
   32% {
     clip-path: inset(0);
   }
@@ -2638,14 +2782,15 @@ home-light:defined ~ .landing-light__nojs {
     clip-path: inset(0 100% 0 0);
   }
 }
-@keyframes landing-typed-button-2 {
+
+@keyframes landing-typed-form-2 {
   0%,
-  10% {
+  5.07% {
     clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(35, end);
+    animation-timing-function: steps(30, end);
   }
 
-  15.33%,
+  8.17%,
   32% {
     clip-path: inset(0);
   }
@@ -2655,14 +2800,15 @@ home-light:defined ~ .landing-light__nojs {
     clip-path: inset(0 100% 0 0);
   }
 }
-@keyframes landing-typed-button-3 {
+
+@keyframes landing-typed-form-3 {
   0%,
-  16.67% {
+  8.67% {
     clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(18, end);
+    animation-timing-function: steps(22, end);
   }
 
-  19.33%,
+  11.21%,
   32% {
     clip-path: inset(0);
   }
@@ -2672,14 +2818,15 @@ home-light:defined ~ .landing-light__nojs {
     clip-path: inset(0 100% 0 0);
   }
 }
-@keyframes landing-typed-button-4 {
+
+@keyframes landing-typed-form-4 {
   0%,
-  20% {
+  11.71% {
     clip-path: inset(0 100% 0 0);
-    animation-timing-function: steps(9, end);
+    animation-timing-function: steps(29, end);
   }
 
-  22%,
+  14.74%,
   32% {
     clip-path: inset(0);
   }
@@ -2689,29 +2836,31 @@ home-light:defined ~ .landing-light__nojs {
     clip-path: inset(0 100% 0 0);
   }
 }
-@keyframes landing-typed-button-raw {
+
+@keyframes landing-typed-form-raw {
   0%,
-  4% {
+  15.24% {
     opacity: 0;
   }
 
-  4.67%,
-  15.33% {
+  15.91%,
+  20.91% {
     opacity: 1;
   }
 
-  16%,
+  21.58%,
   100% {
     opacity: 0;
   }
 }
-@keyframes landing-typed-button-luz {
+
+@keyframes landing-typed-form-luz {
   0%,
-  15.33% {
+  20.91% {
     opacity: 0;
   }
 
-  16.33%,
+  21.58%,
   32% {
     opacity: 1;
   }
@@ -2721,14 +2870,15 @@ home-light:defined ~ .landing-light__nojs {
     opacity: 0;
   }
 }
-@keyframes landing-typed-button-modes {
+
+@keyframes landing-typed-form-modes {
   0%,
-  23.33% {
+  24.58% {
     opacity: 0;
     translate: 0 var(--luz-space-md);
   }
 
-  25.33%,
+  26.58%,
   32% {
     opacity: 1;
     translate: 0 0;
@@ -2741,3 +2891,217 @@ home-light:defined ~ .landing-light__nojs {
   }
 }
 
+@keyframes landing-typed-class {
+  0%,
+  30.33% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  32% {
+    opacity: 0;
+    visibility: visible;
+  }
+
+  32.33%,
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes landing-typed-class-1 {
+  0%,
+  1.33% {
+    clip-path: inset(0 100% 0 0);
+    animation-timing-function: steps(35, end);
+  }
+
+  4.78%,
+  32% {
+    clip-path: inset(0);
+  }
+
+  32.33%,
+  100% {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes landing-typed-class-2 {
+  0%,
+  5.28% {
+    clip-path: inset(0 100% 0 0);
+    animation-timing-function: steps(33, end);
+  }
+
+  8.59%,
+  32% {
+    clip-path: inset(0);
+  }
+
+  32.33%,
+  100% {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes landing-typed-class-3 {
+  0%,
+  9.09% {
+    clip-path: inset(0 100% 0 0);
+    animation-timing-function: steps(39, end);
+  }
+
+  12.82%,
+  32% {
+    clip-path: inset(0);
+  }
+
+  32.33%,
+  100% {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes landing-typed-class-4 {
+  0%,
+  13.32% {
+    clip-path: inset(0 100% 0 0);
+    animation-timing-function: steps(39, end);
+  }
+
+  17.05%,
+  32% {
+    clip-path: inset(0);
+  }
+
+  32.33%,
+  100% {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes landing-typed-class-raw {
+  0%,
+  17.55% {
+    opacity: 0;
+  }
+
+  18.22%,
+  23.22% {
+    opacity: 1;
+  }
+
+  23.89%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes landing-typed-class-luz {
+  0%,
+  23.22% {
+    opacity: 0;
+  }
+
+  23.89%,
+  32% {
+    opacity: 1;
+  }
+
+  32.33%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes landing-typed-class-modes {
+  0%,
+  26.89% {
+    opacity: 0;
+    translate: 0 var(--luz-space-md);
+  }
+
+  28.89%,
+  32% {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  32.33%,
+  100% {
+    opacity: 0;
+    translate: 0 var(--luz-space-md);
+  }
+}
+
+/* PROTOTYPE (?native=b, to be removed when the owner chooses): in the side
+   by side layout the "before" stays beside the "after" until the scene ends,
+   instead of giving its place to it */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-native="b"] .landing-typed__scene--details .landing-typed__state--raw {
+    animation-name: landing-typed-details-raw-keep;
+  }
+
+  html[data-native="b"] .landing-typed__scene--form .landing-typed__state--raw {
+    animation-name: landing-typed-form-raw-keep;
+  }
+
+  html[data-native="b"] .landing-typed__scene--class .landing-typed__state--raw {
+    animation-name: landing-typed-class-raw-keep;
+  }
+
+}
+
+@keyframes landing-typed-details-raw-keep {
+  0%,
+  14.19% {
+    opacity: 0;
+  }
+
+  14.86%,
+  32% {
+    opacity: 1;
+  }
+}
+
+@keyframes landing-typed-form-raw-keep {
+  0%,
+  15.24% {
+    opacity: 0;
+  }
+
+  15.91%,
+  32% {
+    opacity: 1;
+  }
+}
+
+@keyframes landing-typed-class-raw-keep {
+  0%,
+  17.55% {
+    opacity: 0;
+  }
+
+  18.22%,
+  32% {
+    opacity: 1;
+  }
+}
+
+/* The sprite of the icons used more than once: it has no size and takes no
+   room; <use href="#…"> draws from it */
+.landing-sprite {
+  position: absolute;
+}
+
+/* The outline icons of the page (1.6 wide, round ends): drawn by this class
+   instead of by the same five attributes on each of their paths */
+.ic {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

@@ -14,6 +14,7 @@
  */
 import { test, expect } from '@playwright/test';
 import { KEY, NO_CHOICE, TIMEZONE, atTime } from './helpers/site-lights.js';
+import { quoted } from './helpers/quoted-attributes.js';
 
 test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
 
@@ -36,7 +37,8 @@ const writes = (page) => page.evaluate(() => /** @type {any} */ (window).__write
 test.describe('the markup of the footer, as served', () => {
   for (const path of PAGES) {
     test(`${path}: <luz-color-mode remember by="clock"> wraps the fieldset, three radios, none checked`, async ({ request }) => {
-      const html = await (await request.get(path)).text();
+      // The home is served without the quotes a value does not need: read it with them restored
+      const html = quoted(await (await request.get(path)).text(), path);
       // The footer that holds the switcher, not the first <footer> of the page (a demo may have one)
       const footer = [...html.matchAll(/<footer\b[\s\S]*?<\/footer>/g)].map((m) => m[0]).find((f) => f.includes('<luz-color-mode')) ?? '';
       expect(footer, 'a <footer> with <luz-color-mode> in it').not.toBe('');

@@ -138,25 +138,35 @@ test.describe('catalog faq', () => {
       expect(await isOpen(page, 1)).toBe(false);
     });
 
-    test('is set in the heading face and its text can be selected', async ({ page }) => {
+    test('is set in the body face, bold, at the size of its answer, and its text can be selected', async ({ page }) => {
       await open(page);
-      const heading = await resolved.family(page, '--luz-font-heading');
+      const body = await resolved.family(page, '--luz-font-body');
+      const lg = await resolved.length(page, '--luz-text-lg');
+      await summary(page, 0).click();
       const q = await summary(page, 0).evaluate((el) => {
         const s = getComputedStyle(el);
-        return { family: s.fontFamily, select: s.userSelect };
+        return { family: s.fontFamily, weight: s.fontWeight, size: parseFloat(s.fontSize), select: s.userSelect, answer: parseFloat(getComputedStyle(el.parentElement.querySelector('.luz-faq__answer')).fontSize) };
       });
-      expect(q.family).toBe(heading);
+      expect(q.family).toBe(body);
+      expect(q.weight).toBe('600');
+      expect(q.size, 'the size of --luz-text-lg').toBe(lg);
+      expect(q.size, 'the size of its answer').toBe(q.answer);
       expect(q.select).toBe('text');
     });
 
-    test('hover underlines it without changing its colour', async ({ page }) => {
+    test('hover takes the colour of the open question, with no underline and no surface', async ({ page }) => {
       await open(page);
-      const before = await summary(page, 0).evaluate((el) => ({ color: getComputedStyle(el).color, line: getComputedStyle(el).textDecorationLine }));
+      const read = () => summary(page, 0).evaluate((el) => ({ color: getComputedStyle(el).color, line: getComputedStyle(el).textDecorationLine, background: getComputedStyle(el).backgroundColor }));
+      const brand = await resolved.colour(page, '--luz-brand-primary');
+      const text = await resolved.colour(page, '--luz-text-primary');
+      const before = await read();
       expect(before.line).toBe('none');
+      expect(before.color).toBe(text);
       await summary(page, 0).hover();
-      const after = await summary(page, 0).evaluate((el) => ({ color: getComputedStyle(el).color, line: getComputedStyle(el).textDecorationLine }));
-      expect(after.line).toBe('underline');
-      expect(after.color).toBe(before.color);
+      await expect.poll(async () => (await read()).color).toBe(brand);
+      const after = await read();
+      expect(after.line, 'no underline').toBe('none');
+      expect(after.background === 'rgba(0, 0, 0, 0)' || after.background === 'transparent', `no surface behind it: ${after.background}`).toBe(true);
     });
   });
 

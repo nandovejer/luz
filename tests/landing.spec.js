@@ -31,9 +31,9 @@ test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
 
 const MODES = ['light', 'dark', 'high-contrast'];
 /** The ids of the sections of the home, in the order of the page: the four levels are four sections. */
-const SECTIONS = ['hero', 'light', 'inside', 'inside-2', 'inside-3', 'inside-4', 'why', 'native', 'modes'];
+const SECTIONS = ['hero', 'light', 'inside', 'inside-2', 'inside-3', 'inside-4', 'why', 'native', 'modes', 'faq'];
 /** The sections of the drawer's "On this page", in the order of the page. */
-const DRAWER = ['inside', 'why', 'native', 'modes'];
+const DRAWER = ['inside', 'why', 'native', 'modes', 'faq'];
 const ROUTES = [
   ['/', 'en'],
   ['/es/', 'es'],
@@ -198,16 +198,17 @@ test.describe('Landing page', () => {
 
   test.describe('the map of the page', () => {
     for (const [route, lang] of ROUTES) {
-      test(`${route}: nine sections, in order, one h1, each named by its heading (${lang})`, async ({ page }) => {
+      test(`${route}: ten sections, in order, one h1, each named by its heading (${lang})`, async ({ page }) => {
         await open(page, route);
 
-        expect(await page.locator('main section').evaluateAll((all) => all.map((el) => el.id))).toEqual(SECTIONS);
+        // The sections of the page: the groups of the FAQ are sections inside the FAQ, with no id
+        expect(await page.locator('main section[id]').evaluateAll((all) => all.map((el) => el.id))).toEqual(SECTIONS);
         await expect(page.locator('h1')).toHaveCount(1);
         await expect(page.locator('#hero h1')).toHaveCount(1);
         // The sections that went, with their ids
         for (const gone of ['what', 'see', 'adopt', 'fit', 'type', 'start']) await expect(page.locator(`#${gone}`), `#${gone}`).toHaveCount(0);
         // Every section is named by a heading of its own: h1 for the hero, h2 for the others
-        const named = await page.locator('main section').evaluateAll((all) =>
+        const named = await page.locator('main section[id]').evaluateAll((all) =>
           all.map((el) => {
             const heading = document.getElementById(el.getAttribute('aria-labelledby') ?? '');
             return [el.id, heading ? heading.tagName : null, el.contains(heading)];
@@ -238,6 +239,7 @@ test.describe('Landing page', () => {
           ['inside-4', 'inside.l4'],
           ['native', 'native'],
           ['modes', 'modes'],
+          ['faq', 'faq'],
         ];
         for (const [id, key] of heads) {
           expect(await text(`#${id} .landing-inside__eyebrow`), `${id} eyebrow`).toBe(plain(words[`${key}.eyebrow`]));
@@ -438,26 +440,29 @@ test.describe('Landing page', () => {
       await open(page);
 
       const hero = page.locator('section#hero');
-      await expect(hero.locator('h1.luz-hero__title')).toHaveText('LUZ Design system for humans, ready for AI.');
-      await expect(hero.locator('h1 .landing-hero__brand')).toHaveText('LUZ');
+      // The word LUZ is drawn by CSS with its letters hidden from the tree: the h1 is named "LUZ" and the sentence
+      await expect(hero.locator('h1.luz-hero__title')).toHaveAccessibleName('LUZ Design system for humans, ready for AI.');
+      await expect(hero.locator('h1 .landing-hero__brand .u-sr-only')).toHaveText('LUZ');
+      await expect(hero.locator('h1 .landing-hero__brand .landing-imago__word .ch')).toHaveText(['L', 'U', 'Z']);
       // Both ends are stressed: the human and the AI
       await expect(hero.locator('h1 em')).toHaveText(['humans', 'AI']);
       await expect(hero.locator('.luz-hero__lead')).toHaveText(
-        'Tokens, CSS and a little vanilla JavaScript, built on what the browser already does. Every component works before JavaScript loads, and every change starts with a failing test.',
+        'Tokens, CSS and a little vanilla JavaScript, built on what the browser already does: start a project with LUZ, or migrate it page by page. Every component works before JavaScript loads, and every change starts with a failing test.',
       );
       // No eyebrow over the title, no second line under the lead, and the lead carries no link
       await expect(hero.locator('.luz-hero__eyebrow')).toHaveCount(0);
       await expect(hero.locator('.landing-built')).toHaveCount(0);
       await expect(hero.locator('.luz-hero__lead a')).toHaveCount(0);
 
-      // Two actions: Get started is the primary one and leads to the levels; the docs follow
-      await expect(hero.locator('a.luz-btn')).toHaveCount(2);
+      // Three actions: Get started is the primary one and leads to the levels; Get started with AI leads to the prompts; the docs follow
+      // (the buttons themselves are in tests/landing-hero-buttons.spec.js)
+      await expect(hero.locator('a.luz-btn')).toHaveCount(3);
       await expect(hero.locator('.luz-btn--primary')).toHaveCount(1);
       const primary = hero.locator('a.luz-btn--primary');
       await expect(primary).toHaveText('Get started');
       await expect(primary).toHaveAttribute('href', '#inside');
       await expect(primary).toBeInViewport();
-      const secondary = hero.locator('a.luz-btn:not(.luz-btn--primary)');
+      const secondary = hero.locator('a.luz-btn--outline');
       await expect(secondary).toHaveText('Read the docs');
       await expect(secondary).toHaveAttribute('href', '/docs/');
       await expect(secondary).toBeInViewport();
@@ -478,13 +483,14 @@ test.describe('Landing page', () => {
         await open(page, route);
 
         const hero = page.locator('section#hero');
-        expect(((await hero.locator('h1').textContent()) ?? '').replace(/\s+/g, ' ').trim()).toBe(plain(words['hero.title']));
+        await expect(hero.locator('h1')).toHaveAccessibleName(`LUZ ${plain(words['hero.title'])}`);
         expect(((await hero.locator('.luz-hero__lead').textContent()) ?? '').replace(/\s+/g, ' ').trim()).toBe(plain(words['hero.lead']));
         // The brand is written in capitals in every language; every language stresses the human and the AI
-        await expect(hero.locator('h1 .landing-hero__brand')).toHaveText('LUZ');
+        await expect(hero.locator('h1 .landing-hero__brand .u-sr-only')).toHaveText('LUZ');
         await expect(hero.locator('h1 em')).toHaveCount(2);
         await expect(hero.locator('a.luz-btn--primary')).toHaveText(words['hero.start']);
-        await expect(hero.locator('a.luz-btn:not(.luz-btn--primary)')).toHaveText(words['hero.docs']);
+        await expect(hero.locator('a.luz-btn--secondary')).toHaveText(words['hero.start-ai']);
+        await expect(hero.locator('a.luz-btn--outline')).toHaveText(words['hero.docs']);
         if (lang !== 'en') expect(plain(words['hero.title'])).not.toBe(plain(EN['hero.title']));
         // The old keys of the TDD statement and the brand line are gone from the catalog
         expect(Object.keys(words).filter((key) => /^(built|hero\.(eyebrow|github|tdd))/.test(key))).toEqual([]);
@@ -896,10 +902,10 @@ test.describe('Landing page', () => {
       await expect(cta).toHaveText(EN['native.tags']);
       await expect(cta).toHaveAttribute('href', '/docs/html/');
       await expect(cta).toHaveClass(/\bluz-btn--primary\b/);
-      // The counts in the points are written by the build, and they add up: CSS-only plus with-script is every component
-      const [cssOnly, components] = (await points.nth(0).innerText()).match(/\d+/g).map(Number);
-      const withJs = Number((await points.nth(2).innerText()).match(/\d+/)?.[0]);
-      expect(cssOnly + withJs).toBe(components);
+      // The counts are written by the build: some components are CSS only, of all of them (tests/landing-native.spec.js has the figures)
+      const [cssOnly, components] = (await page.locator('#native .landing-native__js').innerText()).match(/\d+/g).map(Number);
+      expect(cssOnly).toBeGreaterThan(0);
+      expect(cssOnly).toBeLessThan(components);
     });
 
     test('modes: three boxes, one per mode, in the order Light, Dark, High contrast, each telling its own mode', async ({ page }) => {
@@ -1114,7 +1120,7 @@ test.describe('Landing page', () => {
           expect((await section.innerText()).trim().length, id).toBeGreaterThan(20);
         }
         await expect(page.locator('h1')).toBeVisible();
-        for (const id of ['inside', 'inside-2', 'inside-3', 'inside-4', 'why', 'native', 'modes']) {
+        for (const id of ['inside', 'inside-2', 'inside-3', 'inside-4', 'why', 'native', 'modes', 'faq']) {
           for (const element of await page.locator(`#${id} h2, #${id} h3`).all()) await expect(element).toBeVisible();
         }
         expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBe(0);

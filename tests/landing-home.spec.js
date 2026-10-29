@@ -197,31 +197,48 @@ test.describe('Native: the panel works with no script', () => {
 
     const code = scenes.nth(0).locator('pre.luz-code-block');
     await expect(code).toHaveAttribute('tabindex', '0');
-    await expect(code).toHaveAccessibleName(EN['typed.meter.code']);
+    await expect(code).toHaveAccessibleName(EN['typed.details.code']);
     for (const line of await code.locator('.landing-typed__line').all()) await expect(line).toBeVisible();
-    await expect(code).toContainText('<meter');
-    await expect(code).toContainText('class="luz-meter"');
-    await expect(code).toContainText(`aria-label="${EN['typed.name']}">`);
-    await expect(code).toContainText('</meter>');
+    // A details with no class: the markup is the bare element
+    await expect(code).toContainText('<details open>');
+    await expect(code).toContainText(`<summary>${EN['typed.details.q']}</summary>`);
+    await expect(code).toContainText(`<p>${EN['typed.details.a']}</p>`);
+    await expect(code).toContainText('</details>');
+    await expect(code).not.toContainText('class=');
 
     // The result is a picture of the code: out of the tab order and of the accessibility tree
     // Firefox reads the inert property as undefined when JavaScript is off (the property is not exposed to the driver), so there the attribute that sets it is what is read
     if (browserName === 'firefox') await expect(scenes.nth(0).locator('.landing-typed__result')).toHaveAttribute('inert', '');
     else await expect(scenes.nth(0).locator('.landing-typed__result')).toHaveJSProperty('inert', true);
-    await expect(scenes.nth(0).locator('.landing-typed__state--luz meter.luz-meter')).toBeVisible();
+    // At rest it shows the page with LUZ (the last frame), then LUZ in the three modes; the browser's own is the earlier frame
+    await expect(scenes.nth(0).locator('.landing-typed__state--luz details')).toBeVisible();
+    await expect(scenes.nth(0).locator('.landing-typed__state--raw')).toBeHidden();
     await expect(scenes.nth(0).locator('.landing-typed__mode')).toHaveCount(3);
-    for (const [mode] of MODES) await expect(scenes.nth(0).locator(`.landing-typed__mode[data-theme="${mode}"] meter`)).toBeVisible();
+    for (const [mode] of MODES) await expect(scenes.nth(0).locator(`.landing-typed__mode[data-theme="${mode}"] details`)).toBeVisible();
   });
 
-  test('the three scenes are one element each: a meter, an email field and a button', async ({ page }) => {
+  test('the three scenes: a details and a form with no class, then a link and a button with one class each; beside each, the same HTML without LUZ', async ({ page }) => {
     await page.goto('/');
     const scenes = page.locator('#native .landing-typed__scene');
-    await expect(scenes.nth(0).locator('.landing-typed__state--luz meter.luz-meter')).toHaveCount(1);
-    await expect(scenes.nth(1).locator('.landing-typed__state--luz input.luz-input[type="email"]')).toHaveCount(1);
-    await expect(scenes.nth(2).locator('.landing-typed__state--luz button.luz-btn')).toHaveCount(1);
-    // The plain element beside LUZ's: the browser's own
-    await expect(scenes.nth(0).locator('.landing-typed__state--raw meter:not([class])')).toHaveCount(1);
-    await expect(scenes.nth(1).locator('.landing-typed__state--raw input:not([class])')).toHaveCount(1);
+    await expect(scenes).toHaveCount(3);
+    for (const [index, name] of ['details', 'form', 'class'].entries()) await expect(scenes.nth(index)).toHaveClass(new RegExp(`\\blanding-typed__scene--${name}\\b`));
+    // 1. a details: the same bare element before and after
+    await expect(scenes.nth(0).locator('.landing-typed__state--luz details:not([class])')).toHaveCount(1);
+    await expect(scenes.nth(0).locator('.landing-typed__state--raw details:not([class])')).toHaveCount(1);
+    // 2. a field and a button with no class
+    await expect(scenes.nth(1).locator('.landing-typed__state--luz input[type="email"]:not([class])')).toHaveCount(1);
+    await expect(scenes.nth(1).locator('.landing-typed__state--luz button:not([class])')).toHaveCount(1);
+    await expect(scenes.nth(1).locator('.landing-typed__state--raw input[type="email"]:not([class])')).toHaveCount(1);
+    await expect(scenes.nth(1).locator('.landing-typed__state--raw button:not([class])')).toHaveCount(1);
+    // 3. the class is the improvement: a link that looks like a button, a danger button; without it, the bare elements
+    await expect(scenes.nth(2).locator('.landing-typed__state--luz a.luz-btn.luz-btn--primary')).toHaveCount(1);
+    await expect(scenes.nth(2).locator('.landing-typed__state--luz button.luz-btn.luz-btn--danger')).toHaveCount(1);
+    await expect(scenes.nth(2).locator('.landing-typed__state--raw a:not([class])')).toHaveCount(1);
     await expect(scenes.nth(2).locator('.landing-typed__state--raw button:not([class])')).toHaveCount(1);
+    // Every result is inert and carries LUZ's three modes
+    for (const index of [0, 1, 2]) {
+      await expect(scenes.nth(index).locator('.landing-typed__result')).toHaveAttribute('inert', '');
+      await expect(scenes.nth(index).locator('.landing-typed__mode')).toHaveCount(3);
+    }
   });
 });

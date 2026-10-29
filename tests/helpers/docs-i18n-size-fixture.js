@@ -248,6 +248,8 @@ export function makeScriptRepo() {
     ...tracked("packages/check/src"),
     ...tracked("packages/core/src/i18n"),
     ...tracked("packages/core/src/components"),
+    // the home's {n:elements} counts the tags its stylesheets style
+    ...tracked("packages/core/src/elements"),
     // scripts/check-contrast.js, which the home's checks run, reads these
     ...tracked("packages/catalog/src/components"),
     ...tracked("packages/tokens/lib"),

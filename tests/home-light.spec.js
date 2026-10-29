@@ -142,7 +142,7 @@ test.describe('without JavaScript', () => {
       await page.goto(route);
       await expect(page.locator('.luz-hero h1')).toBeVisible();
       await expect(page.locator('.luz-hero .luz-hero__lead')).toBeVisible();
-      await expect(page.locator('.luz-hero a.luz-btn')).toHaveCount(2);
+      await expect(page.locator('.luz-hero a.luz-btn')).toHaveCount(3);
       const light = page.locator('section#light');
       await expect(light).toHaveCount(1);
       await expect(light.locator('h2')).toHaveText(/\S/);
@@ -1175,8 +1175,9 @@ test.describe('the page at rest costs little', () => {
         { message: 'animations running on .landing-hero__brand', timeout: FRAMES_WITHIN },
       )
       .toEqual([]);
-    const halo = await page.locator('.landing-hero__brand').evaluate((el) => getComputedStyle(el).textShadow);
-    expect(halo, 'the still halo is the base text-shadow').not.toBe('none');
+    // The word LUZ is drawn by CSS: its halo is a still drop-shadow filter of the word (a text-shadow would be cut by its mask)
+    const halo = await page.locator('.landing-hero__brand').evaluate((el) => getComputedStyle(el).filter);
+    expect(halo, 'the still halo is the base drop-shadow filter').toContain('drop-shadow');
   });
 
   /** What the globe shows: the outlines of its pieces of land. */

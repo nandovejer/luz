@@ -18,6 +18,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { BASE } from "../scripts/luz-packages.js";
 import { PATTERNS } from "./helpers/catalog-names.js";
+import { findAll, parse, query, queryAll, textOf } from "./helpers/html-dom.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(join(repo, path), "utf-8");
@@ -67,8 +68,11 @@ const globbed = (glob) => {
   const [, dir, ext] = /^(.*)\/\*(\.[a-z.]+)$/.exec(glob) ?? [];
   return dir && existsSync(join(repo, dir)) ? readdirSync(join(repo, dir)).filter((f) => f.endsWith(ext)).sort().map((f) => `${dir}/${f}`).filter((f) => !KIND_PATTERN.test(f)) : [];
 };
+// luz.conditional.css is luz.css for one region of a page: a page links one of the two, so it is not a weight
+// on top of core's (its row is budgeted, and left out of the bar)
+const CONDITIONAL = "packages/core/dist/luz.conditional.min.css";
 const files = (name) => [
-  ...budgets.filter((b) => b.file?.startsWith(`packages/${name}/dist/`)).map((b) => b.file),
+  ...budgets.filter((b) => b.file?.startsWith(`packages/${name}/dist/`) && b.file !== CONDITIONAL).map((b) => b.file),
   ...budgets.filter((b) => b.glob?.startsWith(`packages/${name}/dist/`)).flatMap((b) => globbed(b.glob)),
 ];
 const built = BASE.every((name) => files(name).length > 0 && files(name).every((f) => existsSync(join(repo, f))));
@@ -76,7 +80,13 @@ const built = BASE.every((name) => files(name).length > 0 && files(name).every((
 describe.skipIf(!built || !hasGzip() || !existsSync(join(repo, "docs/index.html")))("docs/index.html: the weights equal gzip -9 -n", () => {
   const gz = (file) => execFileSync("gzip", ["-9", "-n", "-c"], { input: readFileSync(join(repo, file)), maxBuffer: 64 * 1024 * 1024 }).length;
   const html = read("docs/index.html");
-  const list = html.match(/<ul class="landing-bars" aria-label="Packages by size">[\s\S]*?<\/ul>/)?.[0] ?? "";
+  // The page is written without the quotes a value does not need: read it as a tree, not with a regex of quotes
+  const bars = queryAll(parse(html, "docs/index.html"), "ul.landing-bars").find((ul) => ul.attrs.get("aria-label") === "Packages by size");
+  const barOf = (name) => {
+    const row = bars && queryAll(bars, "li").find((li) => textOf(query(li, "span.landing-bar__name")) === name);
+    const meter = row && findAll(row, (node) => node.name === "meter")[0];
+    return meter ? Number(meter.attrs.get("value")) : null;
+  };
 
   it("catalog weighs the sum of its component files, not a bundle, and not the 20 patterns of the kinds of site", () => {
     const parts = files("catalog").filter((f) => f.startsWith("packages/catalog/dist/components/"));
@@ -87,10 +97,34 @@ describe.skipIf(!built || !hasGzip() || !existsSync(join(repo, "docs/index.html"
 
   for (const name of BASE) {
     it(`${name} weighs what gzip -9 -n says`, () => {
-      const row = list.match(new RegExp(`landing-bar__name">${name}</span>[\\s\\S]*?<meter[^>]*value="(\\d+)"`));
-      expect(row, `no bar for ${name} in the weights of docs/index.html`).not.toBeNull();
+      const bar = barOf(name);
+      expect(bar, `no bar for ${name} in the weights of docs/index.html`).not.toBeNull();
       const bytes = files(name).reduce((sum, f) => sum + gz(f), 0);
-      expect(Number(row[1])).toBe(bytes);
+      expect(bar).toBe(bytes);
     });
   }
+
+  it("core's bar leaves out luz.conditional.css: a page links one of the two files, not both", () => {
+    expect(budgets.some((b) => b.file === CONDITIONAL), "the conditional file is budgeted, so only the bar can leave it out").toBe(true);
+    expect(files("core"), "the figure sums luz.css and the rest, not the conditional file").not.toContain(CONDITIONAL);
+    expect(barOf("core")).toBe(files("core").reduce((sum, f) => sum + gz(f), 0));
+    expect(barOf("core"), "core's bar is not the sum with the conditional file").not.toBe(files("core").concat(CONDITIONAL).reduce((sum, f) => sum + gz(f), 0));
+  });
+
+  it("the weight of each level is the sum of the packages below it, with core leaving out luz.conditional.css", () => {
+    const tree = parse(html, "docs/index.html");
+    const weightOf = (id) => {
+      const section = findAll(tree, (node) => node.name === "section" && node.attrs.get("id") === id)[0];
+      const points = section && queryAll(section, "ul.landing-inside__points")[0];
+      const text = points && textOf(findAll(points, (node) => node.name === "li")[2]);
+      return text?.match(/(\d+\.\d) KB/)?.[1];
+    };
+    const bytes = (name) => files(name).reduce((sum, f) => sum + gz(f), 0);
+    const kb = (n) => (n / 1024).toFixed(1);
+    expect([weightOf("inside"), weightOf("inside-2"), weightOf("inside-3")]).toEqual([
+      kb(bytes("tokens")),
+      kb(bytes("tokens") + bytes("core")),
+      kb(bytes("tokens") + bytes("core") + bytes("catalog")),
+    ]);
+  });
 });

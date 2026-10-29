@@ -1650,6 +1650,8 @@ function packageBytes(root, budgets, name, what) {
     return walk(dir);
   };
   for (const b of budgets) {
+    // luz.conditional.css is luz.css for one region of a page: a page links one of the two, so it is not a weight on top
+    if (b.file?.startsWith(under) && /\/luz\.conditional\.min\.css$/.test(b.file)) continue;
     if (b.file?.startsWith(under)) {
       if (!existsSync(resolve(root, b.file))) throw new Error(`${b.file} is missing: run pnpm build before ${what} can be read`);
       files.push(b.file);
@@ -1994,18 +1996,40 @@ function sharedVersion(repoRoot) {
 }
 
 /**
+ * Write the attribute values that need no quotes without them (`class=luz-btn`: no space, quote, `=`, `<`,
+ * `>`, backtick or `&`), two bytes each: the home's pages weigh against the docs page ceiling. Not in a tag
+ * that ends with `/>` or after a value ending in a slash that closes the tag (`href=/>` reads as `/>` to a
+ * tokenizer) and not inside <pre>, <script>,
+ * <template>, <style> or <textarea>.
+ */
+export function unquoteAttributes(html) {
+  return html
+    .split(/(<(pre|script|template|style|textarea)\b[\s\S]*?<\/\2>)/i)
+    .map((part, i) =>
+      i % 3 === 0
+        ? part.replace(/<[a-z][^>]*>/gi, (tag) => (tag.endsWith("/>") ? tag : tag.replace(/(\s[a-z][\w:.-]*)="([^\s"'=<>`&]+)"(?=[\s>])/gi, (whole, name, value, at) => (value.endsWith("/") && tag[at + whole.length] === ">" ? whole : `${name}=${value}`))))
+        : i % 3 === 1
+          ? part
+          : "",
+    )
+    .join("");
+}
+
+/**
  * Render a full document that is not a page (the landing): includes, the
  * language values and the strings of `options.locale` (a language of
  * site.i18n; the default one when not given). Links to the documentation
  * from a page in another language say hreflang="en". `options.siteUrl`
  * (the pages build) makes the canonical and alternate URLs absolute.
+ * `options.unquote: false` keeps every attribute quoted (see unquoteAttributes()).
  */
 export function renderDocument(html, file, route, site, options = {}) {
   const reader = options.reader ?? sourceReader(site);
   const locale = options.locale ?? site.i18n?.default;
   // The switcher's label is a catalog key like any other
   if (site.i18n && locale) options.used?.add("lang.label");
-  // The template's indentation is for the author; the page ships without it
+  // The template's indentation and comments are for the author; the page ships without them (the home's
+  // pages weigh against the docs page ceiling). Raw text is escaped, so a comment is only a comment
   const out = compactHtml(expand(html, {
     file,
     partial: reader.partial,
@@ -2014,10 +2038,12 @@ export function renderDocument(html, file, route, site, options = {}) {
     locale,
     used: options.used,
     values: languageValues(site, locale, { home: true, siteUrl: options.siteUrl, used: options.used }),
-  }));
-  if (!locale || !site.i18n || locale === site.i18n.default) return out;
-  // A language that has docs links to them (apps/docs/i18n/<code>/); one that has not, to the English ones, and says so
-  return site.docsI18n?.byCode.has(locale.code) ? localizeDocsLinks(out, locale.code) : markDocsLinks(out, DOCS_ROUTE, site.i18n.default.code);
+  }).replace(/<!--[\s\S]*?-->/g, ""));
+  // The transforms that read quoted attributes (the links to the docs of a language, then, in the pages build, the
+  // relative links, the boot script and the CSP) come first; the quotes go last. `options.unquote: false` leaves them to
+  // the caller, which then calls unquoteAttributes() on the finished page
+  const done = !locale || !site.i18n || locale === site.i18n.default ? out : site.docsI18n?.byCode.has(locale.code) ? localizeDocsLinks(out, locale.code) : markDocsLinks(out, DOCS_ROUTE, site.i18n.default.code);
+  return options.unquote === false ? done : unquoteAttributes(done);
 }
 
 /**
