@@ -10,7 +10,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Breaking a rule.** A `DR` is broken with the reason written next to it, under its **Exceptions** field, in this file. Never with a `luz-exception` comment and never with a row in [EXCEPTIONS.md](./EXCEPTIONS.md), which are for strong rules. A deviation that is a mistake and not yet fixed is listed in [Open](#open) until it is fixed.
 
-**Scope.** Only the published system. The identity of the LUZ site itself (the light of the home, the chrome of the docs) is out of scope, and a specimen on a docs page always shows Vejer, whatever the light of the page. The packages for one kind of site (`landing`, `cms`, `app`, `docs`) are out of scope too.
+**Scope.** Only the published system. The identity of the LUZ site itself (the light of the home, the chrome of the docs) is out of scope, and a specimen on a docs page always shows Vejer, whatever the light of the page. Where the home shows the system itself (the demo of `#native`) or draws a mark (the word LUZ), a departure from a rule is written under that rule all the same. The packages for one kind of site (`landing`, `cms`, `app`, `docs`) are out of scope too.
 
 **How a rule reads.** Five fields under its heading, after the id: **Rule**, **Why**, **Tokens**, **Look at** (what a reviewer checks, one line each; `ux-designer` runs these at the end of a visual batch and on every new component or pattern) and **Exceptions**.
 
@@ -64,7 +64,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is every font size a token (or `inherit`)? Is a text field at the control step?
 
-**Exceptions:** the caption of a figure is sized from the text it captions, a little under it, and not from the scale (decided 2026-10-24: a step of the scale would change its look by a pixel; `tests/css-tokens-defined.test.js` names it).
+**Exceptions:** the caption of a figure is sized from the text it captions, a little under it, and not from the scale (decided 2026-10-24: a step of the scale would change its look by a pixel; `tests/css-tokens-defined.test.js` names it). The word LUZ in the hero of the home (`.landing-imago`, `apps/landing`) is sized in `em` by media query and not from the scale, because the mark is a drawing and not text: its letters are squeezed and stretched one by one to fit a prism, so a step of the scale would not size it (decided 2026-10-28).
 
 ### DR-5 Headings are light, tight and in their own face
 
@@ -76,7 +76,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is a heading bold? Does a heading in a component read as a heading without a weight to tell it apart?
 
-**Exceptions:** none.
+**Exceptions:** the title of a group of the FAQ (`.luz-faq__group-title`, an `h3`) is a label and not a heading to the eye: the sans face, uppercase, medium weight, the small step and centred, in the secondary text colour, as the eyebrow of a section is (decided 2026-10-28; Arabic keeps neither the capitals nor the letter spacing). The question of the FAQ (`.luz-faq__question`) is a `summary`, not a heading, so it takes the body face at semibold, the strong label of DR-6, and not the heading face (decided 2026-10-28).
 
 ### DR-6 Weight says what a thing is
 
@@ -152,7 +152,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is a box the same surface as the one it sits on? Is a surface used for a state?
 
-**Exceptions:** none.
+**Exceptions:** in the home, a panel of the demo of `#native` (the "after" of the HTML as LUZ draws it) has the surface of its frame and is told apart by its border alone, as the boxes of the three modes (`.landing-modes`) already were: the demo shows what the page looks like, so it sits on the page's own surface (decided 2026-10-28).
 
 ### DR-12 The current item is told by weight and by a mark
 
@@ -172,11 +172,11 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Why:** a state that is the same small change everywhere is felt and not read, and one that moves is a state that gets in the way.
 
-**Tokens:** `--luz-surface-hover`, `--luz-surface-pressed`, `--luz-brand-subtle`, `--luz-brand-fill-hover`, `--luz-text-primary`.
+**Tokens:** `--luz-surface-hover`, `--luz-surface-pressed`, `--luz-brand-subtle`, `--luz-brand-fill-hover`, `--luz-text-primary`, `--luz-outline`, `--luz-text-on-fill`.
 
 **Look at:** does a hover change more than a surface, a text colour and an underline? Does it move anything?
 
-**Exceptions:** none.
+**Exceptions:** a question of the FAQ under the pointer takes the brand colour of the open question, with no underline and no surface step (the summary's hover surface of core goes): the marker, a plus when closed and a minus when open, tells hovered from open, and the open question is also told to assistive technology by its `details`, which exposes the expanded state (decided 2026-10-28). The secondary button (`.luz-btn--secondary` and the bare `button` with `type="button"` or `type="reset"`) steps from the strong surface to `--luz-outline` with `--luz-text-on-fill`, and not to `--luz-surface-hover`: the strong surface is already the deepest, and the hover surface is a hair from it in the three modes, so the hover would not be seen; the pair is held at text contrast by `packages/tokens/lib/contrast.js`. It is a change of colour and surface, as the rule allows, but it is not the shared hover surface and the text is not the primary colour; it comes from the button before the bare elements and is not an owner decision: to confirm.
 
 ### DR-14 Disabled is quiet and says so
 
@@ -216,7 +216,15 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 ## Open
 
-Deviations from the rules above that are a mistake and not yet fixed, with the component and the rule. **None** at the moment.
+Deviations from the rules above that are a mistake and not yet fixed, with the component and the rule.
+
+**Bare elements.** Core also styles the HTML elements with no class (`packages/core/src/elements/`, every selector in `:where()`; a control whose class contains "luz-" is left to its component), draws no style on the structure tags (`div`, `span`, `section`, `header`, `footer`, `nav`, `form` and the like: the layout is the user's, `o-*`), and ships `luz.conditional.css`, the same sheet with the reset and the bare elements only inside `[data-luz]`. They follow every rule above as the components do (the fields and the select are a line, DR-1; the rhythm of bare blocks is DR-9; a bare button is the primary or the secondary of DR-13); what is below is where they do not yet.
+
+**Meter, progress and range (bare).** The track of a bare `meter`, `progress` and `input[type="range"]` is the browser's own and is below 3:1 against the surface in light and in high contrast, where DR-2 asks the edge of a control to be found; the value is in the label, but WCAG 1.4.11 (non-text contrast) is the real issue. The bare `meter` also paints the browser's own green for "good", and DR-10 says green means success. The fix is `appearance: none` with the pseudo-elements of each engine (`.luz-meter` and `.luz-progress` already draw them), and it costs bytes that the core budget has no room for; to decide with a budget row or by leaving the track to the component.
+
+**Checkbox and radio in dark (bare).** The unchecked box of a bare `input[type="checkbox"]` and `input[type="radio"]` is white in dark and in high-contrast dark, because no rule sets `color-scheme: dark` for them (the date and time fields and the select have one): a bright box that does not follow the mode, against DR-11, which says surfaces step with the mode. The fix is a `color-scheme` rule for the dark modes in `elements/forms.css`.
+
+**Space inside a prose list (DR-9).** `.luz-prose` (`components/prose.css`) puts its list items the double extra small step apart, and the blocks inside an item the extra small one; the page-wide rhythm of bare blocks (`elements/text.css`) puts them the extra small and the small step apart, which is what DR-9 says (one and two steps closer than the medium step). A list in `.luz-prose` is a step tighter than the same list outside it, and prose wins by layer. Fix prose to the ladder, or write in DR-9 why running prose is denser.
 
 The first audit (2026-10-24) found eleven. One was a mistake and is fixed: the language switcher's menu read a radius token that does not exist, so it had square corners (`tests/css-tokens-defined.test.js` now fails on any token a stylesheet reads that nothing defines); nothing else derives a font size of its own (the same test holds every component's font size to the scale, except the figure caption, which is sized from the text it captions and is an exception of DR-4). The rest were not mistakes, and each is written as an exception under its rule above, or as a correction of the rule where the rule had it wrong (fields are a line, not a box).
 
