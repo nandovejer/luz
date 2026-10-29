@@ -101,13 +101,14 @@ test.describe('Try it, with JavaScript', () => {
     expect(order).toEqual({ afterExample: true, beforeIssues: true });
   });
 
-  test('has a group with a legend for Variant, Size and Full width, and the defaults checked', async ({ page }) => {
+  test('has a group with a legend for Variant, Size, Icon and Full width, and the defaults checked', async ({ page }) => {
     await gotoButton(page);
-    for (const name of ['Variant', 'Size', 'Full width']) {
+    for (const name of ['Variant', 'Size', 'Icon', 'Full width']) {
       await expect(tryIt(page).getByRole('group', { name, exact: true })).toBeVisible();
     }
     await expect(tryIt(page).getByRole('radio', { name: 'Primary', exact: true })).toBeChecked();
     await expect(tryIt(page).getByRole('radio', { name: 'Default', exact: true })).toBeChecked();
+    await expect(tryIt(page).getByRole('radio', { name: 'None', exact: true })).toBeChecked();
     await expect(tryIt(page).getByRole('checkbox', { name: 'Fill the width of its container', exact: true })).not.toBeChecked();
     expect(await classesOf(page)).toEqual(expected());
   });
@@ -115,12 +116,14 @@ test.describe('Try it, with JavaScript', () => {
   test('every control is a native input with an accessible name, and no ARIA role stands in for one', async ({ page }) => {
     await gotoButton(page);
     const inputs = tryIt(page).locator('input');
-    expect(await inputs.count()).toBe(9);
-    for (let i = 0; i < 9; i++) await expect(inputs.nth(i)).toHaveAccessibleName(/\S/);
+    // Variant (5), Size (3), Icon (4) and the full width (1)
+    const total = 5 + 3 + 4 + 1;
+    expect(await inputs.count()).toBe(total);
+    for (let i = 0; i < total; i++) await expect(inputs.nth(i)).toHaveAccessibleName(/\S/);
     await expect(tryIt(page).getByRole('button', { name: /copy/i })).toHaveCount(1);
     expect(await tryIt(page).locator('[role="radio"], [role="checkbox"], [role="switch"], [role="slider"], [role="listbox"], [role="combobox"]').count()).toBe(0);
     // A radio group is a fieldset with a legend, not a div with a label
-    expect(await tryIt(page).locator('fieldset > legend').count()).toBe(3);
+    expect(await tryIt(page).locator('fieldset > legend').count()).toBe(4);
   });
 
   for (const variant of ['secondary', 'outline', 'ghost', 'danger', 'primary']) {
@@ -259,11 +262,13 @@ test.describe('Try it, with JavaScript', () => {
     await expectCodeIsPreview(page);
   });
 
-  test('Tab goes from the Variant group to the Size group to the full width to Copy, one stop each', async ({ page }) => {
+  test('Tab goes from the Variant group to the Size group to the Icon group to the full width to Copy, one stop each', async ({ page }) => {
     await gotoButton(page);
     await tryIt(page).getByRole('radio', { name: 'Primary', exact: true }).focus();
     await page.keyboard.press('Tab');
     await expect(tryIt(page).getByRole('radio', { name: 'Default', exact: true })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(tryIt(page).getByRole('radio', { name: 'None', exact: true })).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(tryIt(page).getByRole('checkbox', { name: 'Fill the width of its container', exact: true })).toBeFocused();
     await page.keyboard.press('Space');
