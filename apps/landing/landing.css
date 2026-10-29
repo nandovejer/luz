@@ -1267,9 +1267,18 @@ home-light:defined ~ .landing-light__nojs {
 
 .landing-modes__head {
   display: grid;
+  /* One track the width of the section, never the width of its widest word:
+     with overflow-wrap: anywhere WebKit still counts an Arabic title's
+     min-content wider than a 400 % column (204px in 188px), and the auto track
+     followed it out of the window */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--luz-space-md);
   justify-items: center;
   text-align: center;
+}
+
+.landing-modes__head > * {
+  max-inline-size: 100%;
 }
 
 .landing-modes__figure {
