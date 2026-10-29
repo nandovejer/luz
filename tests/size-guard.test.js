@@ -184,6 +184,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
   const budgets = JSON.parse(read("budgets.json")).budgets;
   const principles = read("PRINCIPLES.md").split("\n");
   const KiB = 1024;
+  const kib = (cell) => Math.round(parseFloat(cell.replace(/^\u2264\s*/, "")) * KiB);
   const header = principles.findIndex((line) => /^\|\s*Artifact\s*\|.*\|\s*Ceiling\s*\|$/.test(line));
   const table = principles
     .slice(header + 2)
@@ -220,8 +221,8 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(budgets.slice(0, BEFORE.length).map((b) => [b.name, b.max])).toEqual(BEFORE);
   });
 
-  it("appends the three AI-ready rows after the docs page row, then the language chunk row (F6), the mode chunk row (F1), the three rows of the home's light (F3), then the prompts row (F1 of the kinds plan) and nothing else (no docs CSS row since F5b)", () => {
-    expect(budgets).toHaveLength(BEFORE.length + 9);
+  it("appends the three AI-ready rows after the docs page row, then the language chunk row (F6), the mode chunk row (F1), the three rows of the home's light (F3), then the prompts row (F1 of the kinds plan), then the debug page row, and nothing else (no docs CSS row since F5b)", () => {
+    expect(budgets).toHaveLength(BEFORE.length + 10);
     expect(budgets.at(BEFORE.length - 1).name).toBe(last);
     expect(budgets.slice(BEFORE.length + 3).map((b) => b.name)).toEqual([
       "core JS lazy chunk: i18n-es",
@@ -230,7 +231,29 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
       "home light visual: globe",
       "home light data: globe",
       "prompts (each, uncompressed)",
+      "debug page HTML (docs/debug/index.html, uncompressed)",
     ]);
+  });
+
+  it("measures the debug page by a row of its own: docs/debug/*.html, uncompressed, ideal 230 KiB, ceiling 240 KiB, and takes it out of the docs page row, whose ceiling stays 80 KiB (RL-17)", () => {
+    const docs = budgets.find((b) => b.name === last);
+    expect(docs).toMatchObject({ glob: "docs/**/*.html", except: "docs/debug/*.html", compression: "none", max: 80 * KiB });
+    // the row of the debug page is the last one, and the only one with that glob
+    expect(budgets.at(-1)).toEqual({
+      name: "debug page HTML (docs/debug/index.html, uncompressed)",
+      glob: "docs/debug/*.html",
+      compression: "none",
+      ideal: 230 * KiB,
+      max: 240 * KiB,
+    });
+    expect(budgets.filter((b) => b.glob === "docs/debug/*.html")).toHaveLength(1);
+    // the exception names exactly the glob of the row that measures what it takes out: one file is in one row
+    expect(docs.except).toBe(budgets.at(-1).glob);
+    const cells = table.at(-1);
+    expect(cells[0]).toMatch(/debug page/i);
+    expect(cells[0]).toContain("docs/debug/index.html");
+    expect(kib(cells.at(-1))).toBe(240 * KiB);
+    expect(kib(cells[2])).toBe(230 * KiB);
   });
 
   it("budgets the check CLI bundle, gzipped: ideal 36 KiB, ceiling 40 KiB", () => {
@@ -286,7 +309,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
   });
 
   it("repeats the rows in the PRINCIPLES.md table, in the same order, after \"Each docs page\"", () => {
-    expect(table).toHaveLength(BEFORE.length + 9);
+    expect(table).toHaveLength(BEFORE.length + 10);
     expect(table[BEFORE.length - 1][0]).toMatch(/^Each docs page/);
     const [cli, text, manifests] = table.slice(BEFORE.length);
     expect(cli[0]).toMatch(/check/);

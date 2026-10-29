@@ -74,6 +74,7 @@ import {
   searchIndexRouteOf,
 } from "./site.js";
 import { localize } from "./docs-i18n.js";
+import { DEBUG_FILE, DEBUG_ROUTE, hasDebugPage, renderDebug } from "./debug.js";
 import { PACKAGES } from "../luz-packages.js";
 import { promptFiles } from "./prompts.js";
 import { AI_ROUTES, exampleAssets, exampleDocuments, manifestAssets, renderLlmsFull, renderLlmsTxt, renderPageMarkdown } from "./ai.js";
@@ -195,6 +196,8 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       ...current.pages.map((p) => ({ route: p.route, file: p.file, kind: "page" })),
       ...(current.notFound ? [{ route: NOT_FOUND_ROUTE, file: current.notFound.file, kind: "page" }] : []),
       ...docsDocuments(),
+      // /debug/: a virtual document of the real site, rendered from the scan (debug.js)
+      ...(hasDebugPage(current) ? [{ route: DEBUG_ROUTE, file: DEBUG_FILE, kind: "debug", virtual: true }] : []),
     ];
     const markdown = markdownTable(current);
     derived = {
@@ -218,6 +221,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
   /** The source of a virtual document: the landing's template, or the file of the page a docs language shows (its translation, else the English page). */
   const virtualSource = (doc) => {
     if (doc.kind === "landing") return landingSource();
+    if (doc.kind === "debug") return renderDebug({ site: scan() });
     const language = scan().docsI18n?.byCode.get(doc.locale.code);
     const page = language && localize(scan(), language).byRoute.get(doc.route);
     if (!page) throw new Error(`${doc.file}: ${doc.route} is not a page of the docs in ${doc.locale.code}`);
@@ -462,6 +466,7 @@ export function docsSite({ repoRoot, relative: relativeUrls, outRoot, pagesBase 
       const rel = inDocs ? relative(docsDir, file).split(sep).join("/") : null;
       const generated =
         file === landingAbs ||
+        file.startsWith(resolve(repoRoot, "apps/debug") + sep) ||
         file.startsWith(sharedAbs + sep) ||
         file.startsWith(i18nAbs + sep) ||
         (rel !== null && (rel === "site.json" || /^(_layouts|_partials|pages|i18n)\//.test(rel)));

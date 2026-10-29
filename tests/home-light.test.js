@@ -400,10 +400,10 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
     expect(budgets.some((b) => /light\/(?:city|map|puzzle)\.js$/.test(b.file ?? ""))).toBe(false);
   });
 
-  it("puts them after the color-mode chunk row, the last row that existed, with the prompts row appended after them (no other row moved or raised)", () => {
+  it("puts them after the color-mode chunk row, the last row that existed, with the prompts row and the debug page row appended after them (no other row moved or raised)", () => {
     const names = budgets.map((b) => b.name);
     const mode = names.indexOf("catalog JS lazy chunk: color-mode");
-    expect(names.slice(mode + 1)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)"]);
+    expect(names.slice(mode + 1)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)", "debug page HTML (docs/debug/index.html, uncompressed)"]);
   });
 
   it("repeats them in the PRINCIPLES.md table, with the same ceilings, in the same order", () => {
@@ -414,10 +414,11 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
       .filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")))
       .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
     const at = table.findIndex((cells) => /^`catalog` JS lazy chunk: `color-mode`/.test(cells[0]));
-    // the prompts row (the kinds plan, F1) comes after them
+    // the prompts row (the kinds plan, F1) comes after them, then the debug page row
     const rows = table.slice(at + 1, at + 1 + ROWS.length);
-    expect(table.slice(at + 1)).toHaveLength(ROWS.length + 1);
-    expect(table.at(-1)[0]).toMatch(/prompt/i);
+    expect(table.slice(at + 1)).toHaveLength(ROWS.length + 2);
+    expect(table.at(-2)[0]).toMatch(/prompt/i);
+    expect(table.at(-1)[0]).toMatch(/debug page/i);
     rows.forEach((cells, i) => {
       expect(cells[0].replace(/`/g, ""), `row ${i + 1}`).toMatch(new RegExp(ROWS[i][0].replace(/`/g, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
       const row = budgets.find((b) => b.name === ROWS[i][0]);

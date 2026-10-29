@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Declaración de accesibilidad
 description: LUZ aspira a cumplir WCAG 2.2 nivel AA. Aquí se explica qué se comprueba en cada cambio, qué no se ha probado y cuáles son los problemas conocidos. Última revisión: 17 de octubre de 2026.
-source: e688417f01cd
+source: 8aa9e1712795
 reviewed: false
 -->
     <div class="docs-block docs-prose-chapter" id="accessibility">
@@ -28,6 +28,7 @@ reviewed: false
         <li><code class="luz-code-inline">llms.txt</code> y <code class="luz-code-inline">classes.json</code> se regeneran en cada cambio; si alguno está desactualizado, la compilación falla.</li>
         <li>Un script comprueba el contraste de cada par de tokens que representa un componente, en los tres modos base. El mismo script mide cualquier <a href="/docs/tokens/themes/">tema propio</a>, como se explica en la página de temas.</li>
       </ul>
+      <p>Para revisarlo a mano: <a href="/debug/">todos los componentes y etiquetas HTML en una página</a>, en los tres modos y con texto de derecha a izquierda.</p>
 
       <h2 id="h-a11y-not-tested">Qué no se ha probado</h2>
       <ul>

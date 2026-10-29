@@ -15,7 +15,7 @@
     { "name": "catalog JS lazy chunk: sidebar", "file": "packages/catalog/dist/sidebar.min.js", "ideal": 768, "max": 1024 },
     { "name": "catalog layout CSS (each)", "glob": "packages/catalog/dist/components/{navbar,sidebar,terminal,timeline}.min.css", "ideal": 1792, "max": 2048 },
     { "name": "catalog kind patterns CSS (each)", "glob": "packages/catalog/dist/components/{site-header,masthead,hero,main,section,stat,site-footer,glow,app-bar,dashboard,docs-layout,doc-header,page-rail,example,do-dont,pager,page-footer,page-header,article-header,article}.min.css", "ideal": 768, "max": 1024 },
-    { "name": "docs page HTML (each, uncompressed)", "glob": "docs/**/*.html", "compression": "none", "ideal": 61440, "max": 81920 },
+    { "name": "docs page HTML (each, uncompressed)", "glob": "docs/**/*.html", "except": "docs/debug/*.html", "compression": "none", "ideal": 61440, "max": 81920 },
     { "name": "check CLI (packages/check/dist/luz-check.js)", "file": "packages/check/dist/luz-check.js", "ideal": 36864, "max": 40960 },
     { "name": "llms.txt and llms-full.txt (each, uncompressed)", "glob": "docs/**/*.txt", "compression": "none", "ideal": 409600, "max": 458752 },
     { "name": "manifests (each, uncompressed)", "glob": "docs/manifests/**/*.json", "compression": "none", "ideal": 49152, "max": 65536 },
@@ -24,6 +24,7 @@
     { "name": "home light controller JS", "file": "apps/landing/light/light.js", "ideal": 7424, "max": 7680 },
     { "name": "home light visual: globe", "file": "apps/landing/light/globe.js", "ideal": 9472, "max": 9728 },
     { "name": "home light data: globe", "file": "apps/landing/light/globe-data.js", "ideal": 9728, "max": 9984 },
-    { "name": "prompts (each, uncompressed)", "glob": "docs/prompts/**/*.txt", "compression": "none", "ideal": 14336, "max": 16384 }
+    { "name": "prompts (each, uncompressed)", "glob": "docs/prompts/**/*.txt", "compression": "none", "ideal": 14336, "max": 16384 },
+    { "name": "debug page HTML (docs/debug/index.html, uncompressed)", "glob": "docs/debug/*.html", "compression": "none", "ideal": 235520, "max": 245760 }
   ]
 }

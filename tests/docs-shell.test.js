@@ -366,12 +366,35 @@ describe("the sidebar: every area a fold, only the current one open, every page 
     const routes = new Set(rendered.keys());
     // The built file is a little larger than the generator's: Vite writes the script and link tags
     const ASSET_TAGS = 256;
+    // The file the Pages build writes for a route, to apply the row's `except` glob the way scripts/check-size.js does (a file is in one row)
+    const fileOf = (route) => (route.endsWith("/") ? `docs${route}index.html` : `docs${route}`);
+    const exceptRe = row.except ? new RegExp(`^${row.except.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^/]*")}$`) : null;
+    const skipped = [];
     const over = [];
     for (const [route, html] of rendered) {
+      if (exceptRe?.test(fileOf(route))) {
+        skipped.push(route);
+        continue;
+      }
       const bytes = Buffer.byteLength(relativizeLinks(html, route, routes)) + ASSET_TAGS;
       if (bytes > row.max) over.push(`${route}: ${bytes} > ${row.max}`);
     }
     expect(over).toEqual([]);
+    // Only /debug/ is excepted from this row: it has a row of its own (below), not a larger ceiling here
+    expect(skipped).toEqual(["/debug/"]);
+    expect(row.max, "the docs page ceiling is not raised").toBe(81920);
+  });
+
+  it("keeps /debug/ under the ceiling of its own row of budgets.json, measured as the Pages build writes it", () => {
+    const { budgets } = JSON.parse(readFileSync(join(repo, "budgets.json"), "utf-8"));
+    const row = budgets.find((b) => b.glob === "docs/debug/*.html");
+    expect(row, "the debug page HTML row").toBeTruthy();
+    expect(row.max).toBe(245760);
+    expect(row.compression).toBe("none");
+    const html = rendered.get("/debug/");
+    expect(html, "/debug/ is rendered").toBeTruthy();
+    const bytes = Buffer.byteLength(relativizeLinks(html, "/debug/", new Set(rendered.keys()))) + 256;
+    expect(bytes).toBeLessThanOrEqual(row.max);
   });
 });
 
@@ -1069,6 +1092,8 @@ describe("the pager: @luz-ds/docs's Previous / Next, named by its visible text (
   it("the pages outside the reading order (the hub area, the not-found page) have none", () => {
     for (const [route] of rendered) {
       if (orderRoutes.includes(route)) continue;
+      // /debug/ shows the catalog's pager as one of its demos (tests/debug-*.test.js): it has the demo, not a Previous / Next of its own
+      if (route === "/debug/") continue;
       expect(queryLive(parse(rendered.get(route), route), ".luz-pager"), route).toBeNull();
     }
   });
