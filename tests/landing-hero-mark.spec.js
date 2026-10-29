@@ -1,4 +1,5 @@
 // @ts-check
+/* global atob, createImageBitmap, Blob, OffscreenCanvas -- used inside page.evaluate(), which runs in the browser */
 /**
  * The mark of the home's hero: the word LUZ, drawn with CSS (`.landing-hero__brand.landing-imago` in the h1), in
  * ET Book, with the three tints of the prism as a faint mask over it. The prism is the logo of the header and the

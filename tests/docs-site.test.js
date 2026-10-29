@@ -605,7 +605,7 @@ describe("the LUZ docs site", () => {
     expect(codes).toEqual(["es"]);
     const prefixOf = (route) => codes.map((code) => `/${code}`).find((prefix) => route === `${prefix}/` || route.startsWith(`${prefix}/`)) ?? "";
     const visible = (html) => {
-      const main = html.match(/<main[\s\S]*?<\/main>/)[0].replace(/<nav class="luz-page-rail__onpage"[\s\S]*?<\/nav>/, "");
+      const main = quoted(html).match(/<main[\s\S]*?<\/main>/)[0].replace(/<nav class="luz-page-rail__onpage"[\s\S]*?<\/nav>/, "");
       return new Set([...main.matchAll(/href="((?:\/[a-z]{2,3})?\/docs\/[^"#]*)/g)].map((m) => m[1]));
     };
     const starts = [...withLanguages.rendered].filter(([route]) => route !== "/404.html");
