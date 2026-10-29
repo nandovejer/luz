@@ -57,11 +57,22 @@ test.describe('a bare element has the look of its component', () => {
   });
 
   test('a bare button shows the focus ring and the hover colour', async ({ page }) => {
-    await page.locator('#button').focus();
-    await page.keyboard.press('Shift+Tab');
-    await page.keyboard.press('Tab');
-    const ring = await read(page, 'button', ['outline-style', 'outline-width', 'outline-offset']);
-    const ref = await page.locator('#ref-button').focus().then(() => page.keyboard.press('Shift+Tab')).then(() => page.keyboard.press('Tab')).then(() => read(page, 'ref-button', ['outline-style', 'outline-width', 'outline-offset']));
+    // A sentinel right before the button, and one Tab: the keyboard lands on the button and the ring is the
+    // :focus-visible one (Shift+Tab from the first focusable element stays put in Firefox)
+    const ringAfterTab = async (id) => {
+      await page.locator(`#${id}`).evaluate((el) => {
+        const sentinel = document.createElement('span');
+        sentinel.tabIndex = 0;
+        sentinel.dataset.sentinel = el.id;
+        el.before(sentinel);
+        sentinel.focus();
+      });
+      await page.keyboard.press('Tab');
+      expect(await page.evaluate(() => document.activeElement?.id), `Tab lands on #${id}`).toBe(id);
+      return read(page, id, ['outline-style', 'outline-width', 'outline-offset']);
+    };
+    const ring = await ringAfterTab('button');
+    const ref = await ringAfterTab('ref-button');
     expect(ring['outline-style']).toBe('solid');
     expect(ring).toEqual(ref);
     await page.locator('#button').hover();
@@ -155,7 +166,9 @@ test.describe('a bare element has the look of its component', () => {
     await expectParity(page, 'progress', 'ref-progress', ['display', 'inline-size', 'block-size', 'accent-color']);
     // The track, the edge and the fill of the bar are the component's: the bare one is the browser's
     expect((await read(page, 'meter', ['border-top-width']))['border-top-width']).not.toBe((await read(page, 'ref-meter', ['border-top-width']))['border-top-width']);
-    expect((await read(page, 'progress', ['border-top-width']))['border-top-width']).not.toBe((await read(page, 'ref-progress', ['border-top-width']))['border-top-width']);
+    // (The edge is not told apart: the browser's own progress has a 1px border in Gecko, like the component's)
+    expect((await read(page, 'progress', ['appearance'])).appearance).toBe('auto');
+    expect((await read(page, 'ref-progress', ['appearance'])).appearance).toBe('none');
   });
 
   test('a bare pre is .luz-code-block without the badge', async ({ page }) => {

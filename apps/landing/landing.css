@@ -428,6 +428,18 @@
     rgb(0 0 0 / 0.8) 86.6deg 90.6deg, rgb(0 0 0 / 0.88) 90.6deg 94.7deg, #000 94.7deg);
 }
 
+/* An engine without text-box (Firefox before 154, which includes its ESR 153)
+   keeps the line box of ET Book: .14em above the capitals and .2035em under
+   them. The same amounts as margins give the trimmed box back (the first
+   screen keeps its height), and the mask's centre moves by the difference
+   between the middles of the two boxes */
+@supports not (text-box: trim-both cap alphabetic) {
+  .landing-imago__word {
+    margin-block: -0.22em -0.2835em;
+    --py: calc(50% + 0.008em);
+  }
+}
+
 /* Each letter its own width, from its middle, its box given back */
 .landing-imago__word .ch {
   display: inline-block;
