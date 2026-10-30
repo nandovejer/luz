@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><title>LUZ</title><style>
-/* The prism whole, then its three bands of tone come and go, one after another, in a loop (header.css, "site-mark-band", does the same in the header). Firefox plays an animated SVG favicon; Chrome and Safari draw the first frame, the prism whole. Nothing under reduced motion. */
+/* The prism whole, then its three bands of tone come and go, one after another, in a loop (header.css, "site-mark-band", does the same in the header). Whether a browser plays an animated SVG favicon in its tab is its own choice (not seen on a real tab); where it does not, it draws the logo at rest. Nothing under reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
   .b { animation: band 4.8s ease-in-out infinite backwards; stroke: #fff; stroke-width: .4; stroke-linejoin: round; stroke-opacity: 0; }
   .b1 { --t: .25; }
