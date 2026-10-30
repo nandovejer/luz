@@ -1,6 +1,6 @@
 /**
  * Wait until the page has stopped animating: every running CSS transition and
- * animation has finished. Used after a theme flip and before axe, which would
+ * finite animation has finished (an endless loop is never waited for). Used after a theme flip and before axe, which would
  * otherwise sample a colour mid-transition (Gecko, Safari review 2026-10-16:
  * `#6fb1ec` on `#5e5441` at t=0 of the banner's transition) and report a
  * contrast failure that the settled page does not have.
@@ -9,8 +9,9 @@
 export async function settled(page) {
   await page.evaluate(async () => {
     for (let round = 0; round < 10; round++) {
-      // only rendered targets: Firefox keeps animations of closed <details> and hidden dialogs 'running' for good
-      const running = document.getAnimations().filter((a) => (a.playState === 'running' || a.playState === 'pending') && a.effect?.target?.checkVisibility?.() !== false);
+      // only rendered targets: Firefox keeps animations of closed <details> and hidden dialogs 'running' for good;
+      // and only finite ones: an endless loop (the header's prism, the rain) never finishes, so it never settles
+      const running = document.getAnimations().filter((a) => (a.playState === 'running' || a.playState === 'pending') && a.effect?.target?.checkVisibility?.() !== false && a.effect?.getComputedTiming?.().iterations !== Infinity);
       if (!running.length) break;
       await Promise.allSettled(running.map((a) => a.finished));
     }
