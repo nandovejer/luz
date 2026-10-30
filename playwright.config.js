@@ -1,5 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const BASE_URL = 'http://localhost:5173';
+
+// Every page of the site boots in Auto, from the local hour (catalog's theme-time-boot.js: dusk, night and dawn are
+// dark), so a run at 23:00 would not be a run at 14:00. Every context starts with the hour pinned at 14:00 (840
+// minutes under "luz-light", the afternoon: light, Vejer), whatever the clock of the machine or of CI (UTC). A spec
+// that tests Auto, the moments or the clock itself starts from nothing instead: `test.use({ storageState: NO_CHOICE })`
+// (tests/helpers/site-lights.js). The origin is the base URL's, which is where the page's localStorage is.
+const PINNED_HOUR = { cookies: [], origins: [{ origin: new URL(BASE_URL).origin, localStorage: [{ name: 'luz-light', value: '840' }] }] };
+
 export default defineConfig({
   testDir: './tests',
   testMatch: '**/*.spec.js',
@@ -22,7 +31,8 @@ export default defineConfig({
     toHaveScreenshot: { threshold: 0.1, maxDiffPixelRatio: 0.002, animations: 'disabled', caret: 'hide' },
   },
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: BASE_URL,
+    storageState: PINNED_HOUR,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -53,7 +63,7 @@ export default defineConfig({
 
   webServer: {
     command: 'pnpm dev',
-    url: 'http://localhost:5173',
+    url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
