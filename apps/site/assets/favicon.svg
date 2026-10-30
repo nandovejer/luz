@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><title>LUZ</title><rect width="48" height="48" rx="11" fill="#0066cf"/><g transform="translate(9 9.6) scale(.9375)"><path fill="#fff" fill-opacity="0.25" d="M20.8 10.46 7.04 17.66 23.36 14.89Z"/><path fill="#fff" fill-opacity="0.45" d="M23.36 14.89 7.04 17.66 25.92 19.33Z"/><path fill="#fff" fill-opacity="0.65" d="M25.92 19.33 7.04 17.66 28.48 23.76Z"/><path fill="#fff" fill-rule="evenodd" d="M20.8 10.46 16 2.14 7.04 17.66ZM32 29.86 28.48 23.76 7.04 17.66 0 29.86Z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><title>LUZ</title><style>
+/* The prism whole, then its three bands of tone come and go, one after another, in a loop (header.css, "site-mark-band", does the same in the header). Firefox plays an animated SVG favicon; Chrome and Safari draw the first frame, the prism whole. Nothing under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .b { animation: band 4.8s ease-in-out infinite backwards; stroke: #fff; stroke-width: .4; stroke-linejoin: round; stroke-opacity: 0; }
+  .b1 { --t: .25; }
+  .b2 { --t: .45; animation-delay: .3s; }
+  .b3 { --t: .65; animation-delay: .6s; }
+}
+@keyframes band {
+  0%, 12% { fill-opacity: 1; stroke-opacity: 1; }
+  32%, 58% { fill-opacity: var(--t); stroke-opacity: 0; }
+  78%, 100% { fill-opacity: 1; stroke-opacity: 1; }
+}
+</style><rect width="48" height="48" rx="11" fill="#0066cf"/><g transform="translate(9 9.6) scale(.9375)"><path class="b b1" fill="#fff" fill-opacity="0.25" d="M20.8 10.46 7.04 17.66 23.36 14.89Z"/><path class="b b2" fill="#fff" fill-opacity="0.45" d="M23.36 14.89 7.04 17.66 25.92 19.33Z"/><path class="b b3" fill="#fff" fill-opacity="0.65" d="M25.92 19.33 7.04 17.66 28.48 23.76Z"/><path fill="#fff" fill-rule="evenodd" d="M20.8 10.46 16 2.14 7.04 17.66ZM32 29.86 28.48 23.76 7.04 17.66 0 29.86Z"/></g></svg>

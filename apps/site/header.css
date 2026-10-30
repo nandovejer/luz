@@ -84,6 +84,34 @@
   inline-size: auto;
 }
 
+/* The prism whole, then its three bands of tone come and go, one after another,
+   in a loop of six lazy durations (4.8 s). It never ends and the page has no
+   control to stop it, so it is a written deviation (PRINCIPLES.md §2, "no
+   infinite loops"; WCAG 2.2.2) listed in the accessibility statement. It plays
+   only when the system does not ask for less motion. The favicon does the same
+   in its own file (favicon.svg). */
+@keyframes site-mark-band {
+  0%, 12% { fill-opacity: 1; stroke-opacity: 1; }
+  32%, 58% { fill-opacity: var(--_tone); stroke-opacity: 0; }
+  78%, 100% { fill-opacity: 1; stroke-opacity: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* A hairline of the same colour, seen only while a band is whole, closes the
+     seams the anti-aliasing leaves between the pieces */
+  .site-header__mark path:nth-child(-n + 3) {
+    stroke: currentcolor;
+    stroke-width: 0.4;
+    stroke-linejoin: round;
+    stroke-opacity: 0;
+    animation: site-mark-band calc(var(--luz-duration-lazy) * 6) ease-in-out infinite backwards;
+  }
+
+  .site-header__mark path:nth-child(1) { --_tone: 0.25; }
+  .site-header__mark path:nth-child(2) { --_tone: 0.45; animation-delay: var(--luz-duration-slow); }
+  .site-header__mark path:nth-child(3) { --_tone: 0.65; animation-delay: calc(var(--luz-duration-slow) * 2); }
+}
+
 .site-header__brand,
 .site-header__brand:hover {
   text-decoration: none;
