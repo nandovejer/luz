@@ -1456,13 +1456,19 @@ test.describe('Documentation site', () => {
           target: a.effect.target.localName,
           // The stars of the header drift with the reader's scroll, not with a clock
           scroll: typeof ScrollTimeline !== 'undefined' && a.timeline instanceof ScrollTimeline,
+          // The prism of the header loops on a clock of its own (a written deviation, tests/site-logo-motion.spec.js)
+          mark: !!a.effect.target.closest?.('.site-header__mark'),
+          iterations: a.effect.getComputedTiming().iterations,
         })));
         const first = await read();
         expect(first.filter((a) => a.name === 'docs-crt-on' && a.target === 'main'), 'the picture switches on (main)').not.toHaveLength(0);
         expect(first.filter((a) => a.name === 'docs-crt-roll' && a.pseudo === '::before'), 'the band rolls (crt::before)').not.toHaveLength(0);
         await expect.poll(async () => (await read()).filter((a) => /^docs-crt-/.test(a.name)).every((a) => a.state === 'finished'), { timeout: 6500 }).toBe(true);
         const running = (await read()).filter((a) => a.state === 'running' || a.state === 'pending');
-        expect(running.filter((a) => a.name !== 'docs-rain' && !a.scroll), 'only the rain is endless (the scroll-driven stars are the reader\'s own motion)').toEqual([]);
+        const others = running.filter((a) => a.name !== 'docs-rain' && !a.scroll);
+        // The header's prism: its three bands, one loop each, endless and nothing else (a different loop would still fail below)
+        expect(others.filter((a) => a.name === 'site-mark-band').map((a) => [a.target, a.mark, a.iterations, a.state]), 'the three bands of the header prism loop').toEqual(Array(3).fill(['path', true, Infinity, 'running']));
+        expect(others.filter((a) => a.name !== 'site-mark-band'), 'only the rain is endless (the scroll-driven stars are the reader\'s own motion, and the header prism\'s three bands are the one other loop)').toEqual([]);
       });
 
       test.describe('under reduced motion', () => {

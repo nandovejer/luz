@@ -452,6 +452,9 @@ test.describe('the stars drift with the scroll, quietly (dark, motion allowed)',
   test('the reader moves them, nothing else does: standing still, the band is the same picture 2 s later', async ({ page }) => {
     await open(page, ROUTE, 'dark');
     const band = await expectBand(page, ROUTE);
+    // The band's picture holds the header's prism, which loops on a clock of its own (a written deviation, tests/site-logo-motion.spec.js):
+    // it is held still here so that what is compared is the stars, and only them
+    await page.addStyleTag({ content: '.site-header__mark path { animation: none !important; }' });
     await scrollToY(page, 800);
     const clip = { x: 0, y: 0, width: 1280, height: Math.ceil(band.box.height) };
     await page.setViewportSize({ width: 1280, height: 800 });
