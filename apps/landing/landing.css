@@ -1926,12 +1926,26 @@ home-light:defined ~ .landing-light__nojs {
   white-space: normal;
 }
 
+/* The AI button: the robot before its words, as large as the text */
+.landing-hero__ai svg {
+  inline-size: 1.25em;
+  block-size: 1.25em;
+  flex: none;
+}
+
 /* .o-actions (640px and below) becomes a column but keeps flex-wrap: wrap.
    A wrapping column nested in grids makes Chromium's layout take tens of
    seconds: the page freezes while it loads. */
 @media (max-width: 640px) {
   .o-page .o-actions {
     flex-wrap: nowrap;
+  }
+
+  /* On a phone the hero's first button is the one for AI: only its place on the
+     screen moves, the markup keeps Get started first (PRINCIPLES.md §7, the
+     written deviation) */
+  .landing-hero__ai {
+    order: -1;
   }
 }
 

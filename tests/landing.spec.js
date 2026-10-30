@@ -457,25 +457,27 @@ test.describe('Landing page', () => {
       await expect(hero.locator('.landing-built')).toHaveCount(0);
       await expect(hero.locator('.luz-hero__lead a')).toHaveCount(0);
 
-      // Three actions: Get started is the primary one and leads to the levels; Get started with AI leads to the prompts; the docs follow
+      // Three actions: Get started leads to the levels, Get started with AI (the primary one) to the prompts, and the docs follow
       // (the buttons themselves are in tests/landing-hero-buttons.spec.js)
       await expect(hero.locator('a.luz-btn')).toHaveCount(3);
       await expect(hero.locator('.luz-btn--primary')).toHaveCount(1);
       const primary = hero.locator('a.luz-btn--primary');
-      await expect(primary).toHaveText('Get started');
-      await expect(primary).toHaveAttribute('href', '#inside');
+      await expect(primary).toHaveText('Get started with AI');
+      await expect(primary).toHaveAttribute('href', '#inside-4');
       await expect(primary).toBeInViewport();
-      const secondary = hero.locator('a.luz-btn--outline');
-      await expect(secondary).toHaveText('Read the docs');
-      await expect(secondary).toHaveAttribute('href', '/docs/');
-      await expect(secondary).toBeInViewport();
+      const outline = hero.locator('a.luz-btn--outline');
+      await expect(outline).toHaveText(['Get started', 'Read the docs']);
+      await expect(outline.nth(0)).toHaveAttribute('href', '#inside');
+      await expect(outline.nth(1)).toHaveAttribute('href', '/docs/');
+      await expect(outline.nth(0)).toBeInViewport();
+      await expect(outline.nth(1)).toBeInViewport();
     });
 
     test('Get started goes to the first level: its section is where the window looks', async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 800 });
       await open(page);
 
-      await page.locator('#hero a.luz-btn--primary').click();
+      await page.locator('#hero a.luz-btn--outline').first().click();
       await expect(page).toHaveURL(/#inside$/);
       await expect(page.locator('#inside h2')).toBeInViewport();
     });
@@ -491,9 +493,10 @@ test.describe('Landing page', () => {
         // The brand is written in capitals in every language; every language stresses the human and the AI
         await expect(hero.locator('h1 .landing-hero__brand .u-sr-only')).toHaveText('LUZ');
         await expect(hero.locator('h1 em')).toHaveCount(2);
-        await expect(hero.locator('a.luz-btn--primary')).toHaveText(words['hero.start']);
-        await expect(hero.locator('a.luz-btn--secondary')).toHaveText(words['hero.start-ai']);
-        await expect(hero.locator('a.luz-btn--outline')).toHaveText(words['hero.docs']);
+        // Get started and Read the docs are outline, the one for AI is the primary (tests/landing-hero-buttons.spec.js)
+        await expect(hero.locator('a.luz-btn--primary')).toHaveText(words['hero.start-ai']);
+        await expect(hero.locator('a.luz-btn--secondary')).toHaveCount(0);
+        await expect(hero.locator('a.luz-btn--outline')).toHaveText([words['hero.start'], words['hero.docs']]);
         if (lang !== 'en') expect(plain(words['hero.title'])).not.toBe(plain(EN['hero.title']));
         // The old keys of the TDD statement and the brand line are gone from the catalog
         expect(Object.keys(words).filter((key) => /^(built|hero\.(eyebrow|github|tdd))/.test(key))).toEqual([]);

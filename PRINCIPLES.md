@@ -106,7 +106,7 @@ Words are a component. A button with the wrong label is a broken button. These r
 
 ## 7. Resilience
 
-- **Works without CSS:** source order is reading order; headings form an outline; no content-bearing pseudo-elements.
+- **Works without CSS:** source order is reading order; headings form an outline; no content-bearing pseudo-elements. One written deviation: on a phone (640 px and below) the hero of the home page shows its AI button before "Get started" with `order`, while the code keeps "Get started" first. The owner chose it on 2026-10-30, knowing it departs from this rule, to bring the AI start to the top of a small screen; it is listed as a known issue in the accessibility statement (WCAG 2.4.3 and 1.3.2) and is the only place the visual order differs from the code.
 - **Works without JS:** see section 3.
 - **Works with user styles:** no `!important` in components (`SR-3`); `rem` for type, never `px`; respect `prefers-color-scheme`, `prefers-contrast`, `prefers-reduced-motion`, `forced-colors`.
 - **Works on slow networks:** bundled fonts are self-hosted with `font-display: swap`; no render-blocking JS; no third-party requests.

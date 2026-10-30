@@ -1,9 +1,15 @@
 // @ts-check
 /**
- * The three buttons of the home's hero, in `.o-actions`: "Get started" (primary, to the levels, #inside), "Get started
- * with AI" (secondary, to the prompts, #inside-4) and "Read the docs" (outline, to /docs/). The third is new, and the
- * order of the source is the order a reader sees, also when they wrap and in the Arabic page. They are anchors:
- * they work with no script. No sideways scroll at 320 px, nor at 400 % zoom.
+ * The three buttons of the home's hero, in `.o-actions`, in this order of the SOURCE: "Get started" (outline, to the
+ * levels, #inside), "Get started with AI" (primary, `.landing-hero__ai`, to the prompts, #inside-4, with a robot icon
+ * that adds no name) and "Read the docs" (outline, to /docs/). They are anchors: they work with no script.
+ *
+ * The source order is not the visual order on a phone, on purpose (owner, 2026-10-30): at 640 px and below the AI
+ * button is placed first on the screen by CSS `order: -1`; from 641 px the visual order is the source order, also in
+ * Arabic (right to left). The keyboard follows the DOM at every width. The deviation is written in PRINCIPLES.md
+ * section 7 and listed as a known issue in the accessibility statement (WCAG 2.4.3 and 1.3.2).
+ *
+ * No sideways scroll at 320 px, nor at 400 % zoom.
  *
  * Runs in `chromium` and `chromium-nojs`.
  */
@@ -17,14 +23,17 @@ const buttons = (page) => page.locator('#hero .o-actions > a.luz-btn');
 
 test.describe('the hero buttons', () => {
   for (const [route, code] of ROUTES) {
-    test(`${route}: three buttons in the order primary, secondary, outline, with their names`, async ({ page }) => {
+    test(`${route}: three buttons in the source order outline, primary (AI), outline, with their names`, async ({ page }) => {
       await page.goto(route);
       const words = CATALOG(code);
       await expect(page.locator('#hero .o-actions')).toHaveCount(1);
       await expect(buttons(page)).toHaveCount(3);
-      await expect(buttons(page).nth(0)).toHaveClass(/\bluz-btn--primary\b/);
-      await expect(buttons(page).nth(1)).toHaveClass(/\bluz-btn--secondary\b/);
+      await expect(buttons(page).nth(0)).toHaveClass(/\bluz-btn--outline\b/);
+      await expect(buttons(page).nth(1)).toHaveClass(/\bluz-btn--primary\b/);
+      await expect(buttons(page).nth(1)).toHaveClass(/\blanding-hero__ai\b/);
       await expect(buttons(page).nth(2)).toHaveClass(/\bluz-btn--outline\b/);
+      await expect(page.locator('#hero .o-actions .landing-hero__ai'), 'only the second button is the AI one').toHaveCount(1);
+      await expect(page.locator('#hero .o-actions .luz-btn--primary'), 'only the AI button is primary').toHaveCount(1);
       for (const index of [0, 1, 2]) await expect(buttons(page).nth(index), `button ${index + 1} is large like the first`).toHaveClass(/\bluz-btn--lg\b/);
       await expect(buttons(page)).toHaveText([words['hero.start'], words['hero.start-ai'], words['hero.docs']]);
     });
@@ -38,29 +47,84 @@ test.describe('the hero buttons', () => {
       await expect(page.locator('#inside-4')).toHaveCount(1);
     });
 
-    test(`${route}: the second button lands on the prompts section from the keyboard, with no script`, async ({ page }) => {
+    test(`${route}: the AI button has a robot icon from the page's sprite that adds no name`, async ({ page }) => {
+      await page.goto(route);
+      const words = CATALOG(code);
+      const ai = buttons(page).nth(1);
+      const svg = ai.locator('svg');
+      await expect(svg).toHaveCount(1);
+      await expect(svg).toHaveAttribute('aria-hidden', 'true');
+      await expect(svg.locator('use')).toHaveAttribute('href', '#i13');
+      await expect(page.locator('symbol#i13'), 'the symbol exists once in the page').toHaveCount(1);
+      const box = await svg.boundingBox();
+      expect(box?.width ?? 0, 'the icon is drawn').toBeGreaterThan(8);
+      expect(box?.height ?? 0, 'the icon is drawn').toBeGreaterThan(8);
+      expect((await ai.evaluate((el) => el.textContent ?? '')).replace(/\s+/g, ' ').trim(), 'the icon adds no text').toBe(words['hero.start-ai']);
+      // The sprite is out of the way: the other buttons have no icon
+      await expect(buttons(page).nth(0).locator('svg')).toHaveCount(0);
+      await expect(buttons(page).nth(2).locator('svg')).toHaveCount(0);
+    });
+
+    test(`${route}: the AI button lands on the prompts section from the keyboard, with no script`, async ({ page }) => {
       await page.goto(route);
       await buttons(page).nth(1).focus();
       await page.keyboard.press('Enter');
       await expect(page).toHaveURL(/#inside-4$/);
       await expect(page.locator('#inside-4')).toBeInViewport();
     });
+
+    test(`${route}: Tab goes through the buttons in the order of the DOM, at any width`, async ({ page }) => {
+      for (const width of [1280, 375]) {
+        await page.setViewportSize({ width, height: 800 });
+        await page.goto(route);
+        await buttons(page).nth(0).focus();
+        const seen = [];
+        for (let step = 0; step < 3; step += 1) {
+          seen.push(await page.evaluate(() => [...document.querySelectorAll('#hero .o-actions > a.luz-btn')].indexOf(/** @type {Element} */ (document.activeElement))));
+          await page.keyboard.press('Tab');
+        }
+        expect(seen, `the focus order at ${width} px`).toEqual([0, 1, 2]);
+      }
+    });
   }
 });
 
-test.describe('the hero buttons: the source order is the visual order', () => {
+test.describe('the hero buttons: the visual order', () => {
+  /** Rows from the top, and along a row from the inline start: the indexes of the DOM, as a reader sees them. */
+  const visualOrder = async (page, dir) => {
+    const rects = await buttons(page).evaluateAll((els) => els.map((el, index) => ({ index, ...el.getBoundingClientRect().toJSON() })));
+    return [...rects].sort((a, b) => (Math.abs(a.top - b.top) > 4 ? a.top - b.top : dir === 'rtl' ? b.right - a.right : a.left - b.left)).map((r) => r.index);
+  };
+
   for (const [route, , dir] of ROUTES) {
-    for (const [width, height] of [[1280, 800], [768, 900], [375, 800], [320, 700]]) {
-      test(`${route} at ${width} px: the buttons are placed ${dir === 'rtl' ? 'from the right' : 'from the left'}, row by row, in the order of the source`, async ({ page }) => {
+    for (const [width, height] of [[375, 800], [320, 700]]) {
+      test(`${route} at ${width} px: one column, the AI button first, then Get started, then the docs`, async ({ page }) => {
         await page.setViewportSize({ width, height });
         await page.goto(route);
-        const rects = await buttons(page).evaluateAll((els) => els.map((el, index) => ({ index, ...el.getBoundingClientRect().toJSON() })));
-        // Read like a page: rows from the top, and along a row from the inline start
-        const rowsFirst = [...rects].sort((a, b) => (Math.abs(a.top - b.top) > 4 ? a.top - b.top : dir === 'rtl' ? b.right - a.right : a.left - b.left));
-        expect(rowsFirst.map((r) => r.index), 'the visual order').toEqual([0, 1, 2]);
+        const rects = await buttons(page).evaluateAll((els) => els.map((el) => el.getBoundingClientRect().toJSON()));
+        const tops = rects.map((r) => r.top);
+        expect(new Set(rects.map((r) => Math.round(r.left))).size, 'one column: the same start edge').toBe(1);
+        expect(tops[1] < tops[0] && tops[0] < tops[2], `top to bottom: AI, Get started, docs (tops ${tops})`).toBe(true);
+        expect(await visualOrder(page, dir), 'the visual order').toEqual([1, 0, 2]);
+      });
+    }
+
+    for (const [width, height] of [[1280, 800], [768, 900]]) {
+      test(`${route} at ${width} px: the visual order is the order of the source${dir === 'rtl' ? ', from the right' : ''}`, async ({ page }) => {
+        await page.setViewportSize({ width, height });
+        await page.goto(route);
+        expect(await visualOrder(page, dir), 'the visual order').toEqual([0, 1, 2]);
       });
     }
   }
+
+  test('the order of the AI button is moved by the style sheet only at 640 px and below', async ({ page }) => {
+    await page.setViewportSize({ width: 640, height: 800 });
+    await page.goto('/');
+    expect(await page.locator('.landing-hero__ai').evaluate((el) => getComputedStyle(el).order)).toBe('-1');
+    await page.setViewportSize({ width: 641, height: 800 });
+    expect(await page.locator('.landing-hero__ai').evaluate((el) => getComputedStyle(el).order)).toBe('0');
+  });
 });
 
 test.describe('the hero buttons: nothing is drawn over them', () => {
