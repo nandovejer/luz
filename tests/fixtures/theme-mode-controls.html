@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Theme mode: the controls that read the radios</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <script type="module" src="/packages/core/dist/luz.min.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Color mode</h1>
+    <div id="slot">
+    <luz-theme-mode id="mode">
+      <fieldset class="luz-theme-mode__group">
+        <legend class="luz-theme-mode__legend">Color mode</legend>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11 7a5 5 0 0 0 0 10ZM23 14A5 5 0 0 1 17 8a5 5 0 1 0 6 6Z"/></svg>Auto</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>Light</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 15A8 8 0 0 1 9 4a8 8 0 1 0 11 11Z"/></svg>Dark</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 0 1 0 18Z"/></svg>High contrast</label>
+      </fieldset>
+    </luz-theme-mode>
+    </div>
+    <form id="controls">
+      <p><label>Bare select <select id="bare-select"><option>One</option><option>Two</option></select></label></p>
+      <p><label>Bare date <input id="bare-date" type="date"></label></p>
+      <p><label>Bare time <input id="bare-time" type="time"></label></p>
+      <p><label>Component select <select id="luz-select" class="luz-select"><option>One</option><option>Two</option></select></label></p>
+      <p><label>Component date <input id="luz-date" class="luz-input" type="date"></label></p>
+      <p><label>Component time <input id="luz-time" class="luz-input" type="time"></label></p>
+    </form>
+  </main>
+</body>
+</html>

@@ -102,6 +102,34 @@ test.describe('the radios', () => {
 });
 
 /**
+ * The controls whose browser parts follow the mode (the arrow of a select, the picker of a date or time field)
+ * choose their dark `color-scheme` from the checked radio too, in the rules of elements/forms.css,
+ * components/form.css and components/select.css. The radios are named `luz-theme-mode`, so those rules must name
+ * that group: with another name, Dark never reached them and a select kept its light arrow.
+ */
+test.describe('the controls that follow the mode', () => {
+  const CONTROLS = '/tests/fixtures/theme-mode-controls.html';
+  const IDS = ['bare-select', 'bare-date', 'bare-time', 'luz-select', 'luz-date', 'luz-time'];
+  const scheme = (page, id) => page.locator(`#${id}`).evaluate((el) => getComputedStyle(el).colorScheme);
+
+  test('start in the light scheme', async ({ page }) => {
+    await page.goto(CONTROLS);
+    for (const id of IDS) expect(await scheme(page, id), id).toBe('light');
+  });
+
+  test('take the dark scheme when Dark is chosen, and the light one again with Light and with Auto', async ({ page }) => {
+    await page.goto(CONTROLS);
+    await option(page, 'Dark').click();
+    for (const id of IDS) expect(await scheme(page, id), `${id} in dark`).toBe('dark');
+    await option(page, 'Light').click();
+    for (const id of IDS) expect(await scheme(page, id), `${id} in light`).toBe('light');
+    await option(page, 'Dark').click();
+    await option(page, 'Auto').click();
+    for (const id of IDS) expect(await scheme(page, id), `${id} in Auto`).toBe('light');
+  });
+});
+
+/**
  * The template a developer copies, as it is published (dist/themes/_template.css, in the layer luz.themes), with
  * only the page colour changed in each of its three blocks, so the blocks can be told apart. Everything else,
  * and above all its selectors, is the template's own: the page links it in place of the fixture's copy.

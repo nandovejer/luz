@@ -8,7 +8,7 @@
    select. What is here needs the class or the browser's base-select.
    -------------------------------------------------------------------------- */
 
-:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme"][value="dark"]:checked)) .luz-select {
+:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) .luz-select {
   color-scheme: dark;
 }
 
