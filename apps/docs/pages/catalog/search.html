@@ -17,7 +17,7 @@ toc: h2,h3
           <div class="docs-demo__stage">
             <a href="/docs/a-z/" data-luz-search-fallback>A–Z index</a>
             <button class="luz-search__trigger" type="button" data-luz-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" hidden>
-              <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <svg class="luz-search__trigger-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
               <span class="luz-search__trigger-label">Search docs…</span>
               <kbd class="luz-search__trigger-key" aria-hidden="true">Ctrl K</kbd>
             </button>
@@ -38,12 +38,12 @@ toc: h2,h3
             <p>Every text is yours: write it in the page’s language.</p>
             <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Search markup"><code>&lt;luz-search&gt;
   &lt;a class=&quot;luz-search__fallback&quot; href=&quot;/a-z/&quot; data-luz-search-fallback&gt;
-    &lt;svg class=&quot;luz-search__trigger-icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+    &lt;svg class=&quot;luz-search__trigger-icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;6.5&quot;/&gt;&lt;path d=&quot;M16 16l4.5 4.5&quot;/&gt;&lt;/svg&gt;
     &lt;span class=&quot;luz-search__fallback-label&quot;&gt;A–Z index&lt;/span&gt;
   &lt;/a&gt;
   &lt;button class=&quot;luz-search__trigger luz-search__trigger--compact&quot; type=&quot;button&quot; data-luz-search-open
           aria-haspopup=&quot;dialog&quot; aria-keyshortcuts=&quot;Control+K Meta+K&quot; hidden&gt;
-    &lt;svg class=&quot;luz-search__trigger-icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+    &lt;svg class=&quot;luz-search__trigger-icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;6.5&quot;/&gt;&lt;path d=&quot;M16 16l4.5 4.5&quot;/&gt;&lt;/svg&gt;
     &lt;span class=&quot;luz-search__trigger-label&quot;&gt;Search docs…&lt;/span&gt;
     &lt;kbd class=&quot;luz-search__trigger-key&quot; aria-hidden=&quot;true&quot;&gt;Ctrl K&lt;/kbd&gt;
   &lt;/button&gt;
@@ -63,7 +63,7 @@ toc: h2,h3
         &lt;/button&gt;&lt;/form&gt;
       &lt;/div&gt;
       &lt;div class=&quot;luz-search__field&quot;&gt;
-        &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-4-4&quot;/&gt;&lt;/svg&gt;
+        &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;6.5&quot;/&gt;&lt;path d=&quot;M16 16l4.5 4.5&quot;/&gt;&lt;/svg&gt;
         &lt;input class=&quot;luz-input&quot; id=&quot;search-q&quot; type=&quot;text&quot; maxlength=&quot;100&quot; autocomplete=&quot;off&quot;
                spellcheck=&quot;false&quot; enterkeyhint=&quot;go&quot; autofocus aria-describedby=&quot;search-hint&quot;&gt;
       &lt;/div&gt;
@@ -141,13 +141,13 @@ toc: h2,h3
               <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say what is searched, in a short label that fits every language.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <span class="luz-search__trigger"><svg class="luz-search__trigger-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="luz-search__trigger-label">Search docs…</span><kbd class="luz-search__trigger-key">Ctrl K</kbd></span>
+                  <span class="luz-search__trigger"><svg class="luz-search__trigger-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="luz-search__trigger-label">Search docs…</span><kbd class="luz-search__trigger-key">Ctrl K</kbd></span>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
                 <figcaption><strong class="luz-do-dont__verdict">Don't</strong> The magnifier alone on a wide screen: the reader has to guess what it searches, and the shortcut hint is gone. Keep the icon-only trigger for narrow screens.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <span class="luz-search__trigger"><svg class="luz-search__trigger-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span>
+                  <span class="luz-search__trigger"><svg class="luz-search__trigger-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span>
                 </div>
               </figure>
             </div>

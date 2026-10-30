@@ -7,9 +7,10 @@
  *   Try it    on the Button page, one `form.docs-try` with `hidden` (JavaScript
  *             shows it, so without JavaScript nothing that does nothing is
  *             shown), a child of `.docs-component`, after the example and before
- *             "Known issues". Three fieldsets, each with a legend:
+ *             "Known issues". Four fieldsets, each with a legend:
  *               Variant     radios name="variant": primary secondary outline ghost danger
  *               Size        radios name="size": sm default lg
+ *               Icon        radios name="icon": none start end only
  *               Full width  one checkbox name="block"
  *             then `.docs-try__preview` (the one live button, with nothing on it
  *             but class and type, so its outerHTML is the code) and a
@@ -46,9 +47,9 @@ describe("Try it, on the Button page", () => {
     expect(after(issues, f), "before Known issues").toBe(true);
   });
 
-  it("has a fieldset with a legend for Variant, Size and Full width, in this order", () => {
+  it("has a fieldset with a legend for Variant, Size, Icon and Full width, in this order", () => {
     const sets = findAll(form[0], (n) => n.name === "fieldset");
-    expect(sets.map((s) => textOf(find(s, (n) => n.name === "legend")))).toEqual(["Variant", "Size", "Full width"]);
+    expect(sets.map((s) => textOf(find(s, (n) => n.name === "legend")))).toEqual(["Variant", "Size", "Icon", "Full width"]);
     for (const s of sets) expect(s.children[0].name, "the legend comes first").toBe("legend");
   });
 
@@ -71,6 +72,32 @@ describe("Try it, on the Button page", () => {
     expect(radios.map((r) => textOf(r.parent))).toEqual(["Small", "Default", "Large"]);
   });
 
+  it("offers the icon as native radios: none, before the label, after the label, icon only; None checked", () => {
+    const radios = inputs("icon");
+    expect(radios.map((r) => r.attrs.get("type"))).toEqual(Array(4).fill("radio"));
+    expect(radios.map((r) => r.attrs.get("value"))).toEqual(["none", "start", "end", "only"]);
+    expect(radios.filter((r) => r.attrs.has("checked")).map((r) => r.attrs.get("value"))).toEqual(["none"]);
+    expect(radios.map((r) => textOf(r.parent))).toEqual(["None", "Before the label", "After the label", "Icon only"]);
+    for (const r of radios) expect(r.parent.name).toBe("label");
+  });
+
+  it("keeps the one icon it draws in a template, so nothing is drawn or announced until a script uses it, and it is the family's", () => {
+    const templates = findAll(form[0], (n) => n.name === "template");
+    expect(templates, "one template").toHaveLength(1);
+    expect(hasClass(templates[0], "docs-try__icon")).toBe(true);
+    const svgs = findAll(templates[0], (n) => n.name === "svg");
+    expect(svgs, "one svg").toHaveLength(1);
+    const svg = svgs[0];
+    expect(svg.attrs.get("viewbox")).toBe("0 0 24 24");
+    expect(svg.attrs.get("stroke-width")).toBe("1.5");
+    expect(svg.attrs.get("fill")).toBe("none");
+    expect(svg.attrs.get("stroke")).toBe("currentColor");
+    expect(svg.attrs.get("aria-hidden")).toBe("true");
+    expect(svg.attrs.get("focusable")).toBe("false");
+    // It is outside the preview and the controls: the preview is a button and nothing else
+    expect(isInside(templates[0], query(form[0], "div.docs-try__preview"))).toBe(false);
+  });
+
   it("offers the full width as one native checkbox, unchecked", () => {
     const boxes = inputs("block");
     expect(boxes).toHaveLength(1);
@@ -85,7 +112,7 @@ describe("Try it, on the Button page", () => {
     const preview = query(form[0], "div.docs-try__preview");
     const controls = findAll(form[0], (n) => ["input", "select", "textarea", "button"].includes(n.name) && !(preview && isInside(n, preview)));
     expect(controls.filter((n) => n.name !== "input").map((n) => `${n.name}.${n.attrs.get("class")}`)).toEqual(["button.luz-copy-btn"]);
-    expect(controls.filter((n) => n.name === "input")).toHaveLength(5 + 3 + 1);
+    expect(controls.filter((n) => n.name === "input")).toHaveLength(5 + 3 + 4 + 1);
     for (const n of descendants(form[0])) expect(n.attrs.get("role") ?? "", `<${n.name}>`).not.toMatch(/^(radio|checkbox|switch|slider|button|tab|listbox|combobox)$/);
   });
 

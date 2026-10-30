@@ -13,7 +13,7 @@
  *     recommended table; only Octicons (an MIT LICENSE with a carve-out for
  *     the GitHub logos) says MIT, with its reason;
  *   - the five-line pattern, the notice that LUZ bundles and tests none of
- *     them, and the link to the Icon grid for the markup.
+ *     them, and the link to the Icons page for the markup.
  *
  * Only the #icons section is read: the rest of the page is another test's.
  */
@@ -189,8 +189,12 @@ describe("what LUZ does and does not do with these sets", () => {
     expect(text).toMatch(/licen[cs]e file/i);
   });
 
-  it("links the Icon grid for the markup, which exists", () => {
-    expect(linksOf(icons()).map((l) => l.href)).toContain("/docs/components/icon-grid/");
-    expect(existsSync(join(repo, "apps/docs/pages/components/icon-grid.html"))).toBe(true);
+  it("links the Icons page for the markup, which exists", () => {
+    expect(linksOf(icons()).map((l) => l.href)).toContain("/docs/components/icons/");
+    expect(existsSync(join(repo, "apps/docs/pages/components/icons.html"))).toBe(true);
+  });
+
+  it("types no number of icons: the Icons page counts its own", () => {
+    expect(textOf(icons())).not.toMatch(/\b\d+\s+icons\b/i);
   });
 });

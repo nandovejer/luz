@@ -1,24 +1,31 @@
 // @ts-check
 /**
- * LUZ's own icons, on the Icon grid page (.claude/plans/specs/icons-charts-data-grid.md,
- * 5a, and its accessibility review: I1, M3). The set is docs only: the page is
- * the contract, so the page is what is tested.
+ * LUZ's own icons, on the Icons page (it replaced the Icon grid page; see
+ * .claude/plans/specs/icons-charts-data-grid.md, 5a, and its accessibility review: I1, M3).
+ * The set is docs only: the page is the contract, so the page is what is tested.
+ * The page carries each icon once: a script fills the copy buttons and builds the whole
+ * sprite from the icons on screen (tests/icons-page.spec.js copies them and counts them).
  *  - every icon is decorative (`aria-hidden="true"`, `focusable="false"`), draws
  *    inside 24 × 24 in `currentColor`, and in forced colors takes the system
  *    text colour;
  *  - each copy button is named by its icon ("Copy SVG Menu"), unique on the
  *    page, and copies the SVG that is shown;
- *  - the sprite snippet has one `<symbol>` for each icon of the grid, with the
- *    same drawing, and each draws through `<use href="#id">`;
+ *  - the sprite snippet is a short sample: its symbols are icons of the grid, with the
+ *    same drawing, an ellipsis says the rest follows, and each draws through `<use href="#id">`;
  *  - the info and warning glyphs always come with visible words (RL-6).
  * Runs in `chromium`: the grid is a catalogue, its copy buttons need script.
  */
 import { test, expect } from '@playwright/test';
 
-const PAGE = '/docs/components/icon-grid/';
+const PAGE = '/docs/components/icons/';
 
-/** The icons of the grid, as the page states them. */
+/**
+ * The icons of the grid, as the page states them. The copy buttons get their `data-copy` from a script
+ * (the page carries each icon once), so wait for the last one before reading it. The logo is on its own
+ * grid and is not an icon of the set: `grid` leaves it out.
+ */
 async function icons(page) {
+  await expect(page.locator('.docs-example .luz-icon-item button').last()).toHaveAttribute('data-copy', /^<svg/);
   return page.locator('.docs-example .luz-icon-item').evaluateAll((items) =>
     items.map((li) => {
       const svg = li.querySelector('.luz-icon-display svg');
@@ -32,6 +39,7 @@ async function icons(page) {
         ariaHidden: svg.getAttribute('aria-hidden'),
         focusable: svg.getAttribute('focusable'),
         stroke: svg.getAttribute('stroke'),
+        strokeWidth: svg.getAttribute('stroke-width'),
         fill: svg.getAttribute('fill'),
         viewBox: svg.getAttribute('viewBox'),
         flip: svg.hasAttribute('data-luz-flip'),
@@ -42,16 +50,22 @@ async function icons(page) {
   );
 }
 
+/** The icons of the set, without the logo. */
+const grid = (list) => list.filter((i) => i.viewBox === '0 0 24 24');
+
 test.describe('icons', () => {
-  test('the grid has the 22 icons, each decorative, named by its words and drawn in currentColor', async ({ page }) => {
+  test('the grid has the icons of the set, each decorative, named by its words and drawn in currentColor with a 1.5 stroke', async ({ page }) => {
     await page.goto(PAGE);
-    const list = await icons(page);
-    expect(list).toHaveLength(22);
-    expect(new Set(list.map((i) => i.id)).size).toBe(22);
+    const all = await icons(page);
+    const list = grid(all);
+    expect(list.length).toBeGreaterThan(0);
+    expect(all.length - list.length, 'the logo is the one item on its own grid').toBe(1);
+    expect(new Set(all.map((i) => i.id)).size, 'unique ids').toBe(all.length);
     for (const icon of list) {
       expect(icon.ariaHidden, icon.id).toBe('true');
       expect(icon.focusable, icon.id).toBe('false');
       expect(icon.stroke, icon.id).toBe('currentColor');
+      expect(icon.strokeWidth, icon.id).toBe('1.5');
       expect(icon.fill, icon.id).toBe('none');
       expect(icon.viewBox, icon.id).toBe('0 0 24 24');
       expect(icon.label.length, icon.id).toBeGreaterThan(2);
@@ -63,6 +77,7 @@ test.describe('icons', () => {
   test('each copy button is named by its icon, unique on the page, and copies the SVG that is shown', async ({ page }) => {
     await page.goto(PAGE);
     const list = await icons(page);
+    expect(list.length).toBeGreaterThan(0);
     const names = list.map((i) => i.buttonName);
     expect(new Set(names).size).toBe(names.length);
     for (const icon of list) {
@@ -86,7 +101,9 @@ test.describe('icons', () => {
         },
         [icon.copy],
       );
-      expect(copied, icon.id).toMatchObject({ count: 1, tag: 'svg', ns: 'http://www.w3.org/2000/svg', ariaHidden: 'true', focusable: 'false', stroke: 'currentColor', viewBox: '0 0 24 24' });
+      // The logo is on its own grid and filled: it copies as it is shown
+      const own = icon.viewBox === '0 0 24 24' ? { stroke: 'currentColor', viewBox: '0 0 24 24' } : { stroke: icon.stroke, viewBox: icon.viewBox };
+      expect(copied, icon.id).toMatchObject({ count: 1, tag: 'svg', ns: 'http://www.w3.org/2000/svg', ariaHidden: 'true', focusable: 'false', ...own });
       expect(copied.inner, icon.id).toBe(icon.inner);
     }
   });
@@ -94,14 +111,15 @@ test.describe('icons', () => {
   test('each icon draws inside 24 × 24 and takes the colour of its text, and the system text colour in forced colors', async ({ page }) => {
     await page.goto(PAGE);
     const draw = () =>
-      page.locator('.docs-example .luz-icon-display svg').evaluateAll((list) =>
+      page.locator('.docs-example .luz-icon-display svg[viewBox="0 0 24 24"]').evaluateAll((list) =>
         list.map((svg) => {
           const box = svg.getBBox();
           return { w: box.width, h: box.height, x: box.x, y: box.y, stroke: getComputedStyle(svg).stroke, color: getComputedStyle(svg.parentElement).color };
         }),
       );
     const normal = await draw();
-    expect(normal).toHaveLength(22);
+    expect(normal.length).toBeGreaterThan(0);
+    expect(normal, 'one drawing for each icon of the set').toHaveLength(grid(await icons(page)).length);
     for (const [i, b] of normal.entries()) {
       // Not empty: a horizontal line (minus) has no height of its own, only its stroke
       expect(b.w + b.h, `icon ${i}`).toBeGreaterThan(0);
@@ -120,13 +138,14 @@ test.describe('icons', () => {
     }
   });
 
-  test('the sprite has one symbol for each icon, with the same drawing, and <use href> draws each', async ({ page }) => {
+  test('the sprite snippet is a short sample of icons of the grid, with their drawing and an ellipsis, and <use href> draws each', async ({ page }) => {
     await page.goto(PAGE);
-    const list = await icons(page);
+    const list = grid(await icons(page));
     const out = await page.evaluate(() => {
+      const source = document.getElementById('code-icon-sprite').textContent;
       const host = document.createElement('div');
       host.id = 'sprite-test';
-      host.innerHTML = document.getElementById('code-icon-sprite').textContent;
+      host.innerHTML = source;
       document.body.append(host);
       const sprite = host.querySelector('svg[width="0"]');
       const symbols = [...sprite.querySelectorAll('symbol')].map((s) => ({ id: s.id, viewBox: s.getAttribute('viewBox'), inner: s.innerHTML }));
@@ -146,13 +165,18 @@ test.describe('icons', () => {
         sprite: { ariaHidden: sprite.getAttribute('aria-hidden'), focusable: sprite.getAttribute('focusable'), width: sprite.getAttribute('width'), height: sprite.getAttribute('height') },
         symbols,
         drawn,
+        ellipsis: /<!--[^>]*(?:…|\.\.\.)[^>]*-->/.test(source),
       };
     });
     expect(out.sprite).toEqual({ ariaHidden: 'true', focusable: 'false', width: '0', height: '0' });
-    expect(out.symbols.map((s) => s.id)).toEqual(list.map((i) => `luz-icon-${i.id}`));
-    for (const [i, symbol] of out.symbols.entries()) {
+    expect(out.symbols.length, 'a sample').toBeGreaterThan(0);
+    expect(out.symbols.length, 'fewer symbols than icons: the Copy button has the rest').toBeLessThan(list.length);
+    expect(out.ellipsis, 'an ellipsis comment says the rest of the set follows').toBe(true);
+    for (const symbol of out.symbols) {
+      const icon = list.find((i) => `luz-icon-${i.id}` === symbol.id);
+      expect(icon, `${symbol.id} is an icon of the grid`).toBeTruthy();
       expect(symbol.viewBox, symbol.id).toBe('0 0 24 24');
-      expect(symbol.inner, symbol.id).toBe(list[i].inner);
+      expect(symbol.inner, symbol.id).toBe(icon.inner);
     }
     for (const d of out.drawn) {
       expect(d.w + d.h, d.id).toBeGreaterThan(0);
@@ -188,6 +212,7 @@ test.describe('icons', () => {
 
   test('the sprite snippet says it works in the same document only', async ({ page }) => {
     await page.goto(PAGE);
+    await expect(page.locator('#c-icons'), `${PAGE} is the Icons page`).toHaveCount(1);
     const text = await page.locator('#markup').evaluate((h) => {
       let out = '';
       for (let el = h.nextElementSibling; el && el.tagName !== 'H3'; el = el.nextElementSibling) out += ` ${el.textContent}`;

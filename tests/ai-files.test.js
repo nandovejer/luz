@@ -533,7 +533,7 @@ describe("llms.txt: the index of the site for an agent", () => {
 // The patterns of the kinds of site are pages of the catalog area since F5b
 const markupAreas = ["components", "catalog"];
 // Pages that print "&lt;tag" as plain text on purpose (counted in apps/docs/pages)
-const PLAIN_TAGS = new Set(["/docs/components/copy-button/", "/docs/components/icon-grid/", "/docs/catalog/classes/"]);
+const PLAIN_TAGS = new Set(["/docs/components/copy-button/", "/docs/catalog/classes/"]);
 
 describe("llms-full.txt: the curated text of the pages, from the real site", () => {
   // read lazily: while ai.js does not exist each test fails on its own, not the whole file
