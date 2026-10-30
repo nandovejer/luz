@@ -97,12 +97,11 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* A hairline of the same colour, seen only while a band is whole, closes the
-     seams the anti-aliasing leaves between the pieces */
+  /* A hairline of the same colour (its width and joins are attributes of the
+     svg), seen only while a band is whole, closes the seams the anti-aliasing
+     leaves between the pieces */
   .site-header__mark path:nth-child(-n + 3) {
     stroke: currentcolor;
-    stroke-width: 0.4;
-    stroke-linejoin: round;
     stroke-opacity: 0;
     animation: site-mark-band calc(var(--luz-duration-lazy) * 6) ease-in-out infinite backwards;
   }
