@@ -148,4 +148,4 @@ pnpm check:pack
 
 ### Dependency ranges between packages
 
-`@luz-ds/core` and `@luz-ds/catalog` declare the layers below them as `peerDependencies` with literal ranges (`^0.1.0 || ^0.2.0`: the range holds the next minor too, or changesets takes every dependent to 1.0.0). Do not use the `workspace:` protocol there; changesets updates the ranges on a major release.
+`@luz-ds/core` and `@luz-ds/catalog` declare the layers below them as `peerDependencies` with literal ranges (`^0.1.0 || ^0.2.0 || ^0.3.0`: the range holds the next minor too, or changesets takes every dependent to 1.0.0). Do not use the `workspace:` protocol there; changesets updates the ranges on a major release.
