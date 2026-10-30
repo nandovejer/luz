@@ -525,4 +525,17 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
   it("each rendered page stays under the 80 KiB the page ceiling allows", () => {
     for (const doc of docs) expect(Buffer.byteLength(written.get(doc.route)), doc.route).toBeLessThanOrEqual(80 * 1024);
   });
+
+  it("keeps /ar/, the heaviest home, no heavier than the icons family left it: 81,800 bytes on disk, 629 of them added by the Pages build", () => {
+    // /ar/ was 81,853 bytes on main (the ceiling is 81,920 and never raised, RL-17) and is 81,734 with the icons of the Icons page.
+    // The generator writes 629 bytes fewer than the file Vite leaves in docs/ (its script and link tags), so 81,800 on disk is 81,171 here.
+    const FIXED_BY_THE_PAGES_BUILD = 629;
+    const ON_DISK = 81_800;
+    expect(Buffer.byteLength(written.get("/ar/"))).toBeLessThanOrEqual(ON_DISK - FIXED_BY_THE_PAGES_BUILD);
+    // The other two are lighter than /ar/ and stay so
+    for (const route of ["/", "/es/"]) expect(Buffer.byteLength(written.get(route)), route).toBeLessThan(Buffer.byteLength(written.get("/ar/")));
+    // Where the Pages build has run, the file itself
+    const built = join(repo, "docs/ar/index.html");
+    if (existsSync(built)) expect(readFileSync(built).length, "docs/ar/index.html").toBeLessThanOrEqual(ON_DISK);
+  });
 });
