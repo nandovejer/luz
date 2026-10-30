@@ -60,13 +60,15 @@ describe("the motion of the logo is a written deviation", () => {
     ["apps/docs/pages/accessibility.html", "Motion of the logo"],
     ["apps/docs/i18n/es/pages/accessibility.html", "Movimiento del logo"],
   ]) {
-    it(`${file}: the known issues hold «${title}», name WCAG 2.2.2 and Firefox`, () => {
+    it(`${file}: the known issues hold «${title}», name WCAG 2.2.2 and the tab icon, and do not say a browser plays it`, () => {
       const section = known(text(file));
       expect(section, "a Known issues section").not.toBe("");
       const item = section.match(new RegExp(`<li><strong>${title}\\.?</strong>[\\s\\S]*?</li>`))?.[0];
       expect(item, `an item whose strong is «${title}»`).toBeTruthy();
       expect(item).toMatch(/\b2\.2\.2\b/);
-      expect(item).toMatch(/Firefox/);
+      // The tab icon carries the loop in its own file; whether a browser plays it was not seen on a real tab, so the text does not claim it
+      expect(item).toMatch(/tab|pesta[ñn]a/i);
+      expect(item).not.toMatch(/\bFirefox\b/);
     });
   }
 });
