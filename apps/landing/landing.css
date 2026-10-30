@@ -3131,12 +3131,12 @@ html[data-native="b"] .landing-typed__modes {
   position: absolute;
 }
 
-/* The outline icons of the page (1.6 wide, round ends): drawn by this class
+/* The outline icons of the page (1.5 wide on 24, round ends, as the Icons page): drawn by this class
    instead of by the same five attributes on each of their paths */
 .ic {
   fill: none;
   stroke: currentcolor;
-  stroke-width: 1.6;
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }

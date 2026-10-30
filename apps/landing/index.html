@@ -297,21 +297,21 @@ a {
           <h2 class="landing-inside__title" id="inside-4-title">{{html:inside.l4.title}}</h2>
           <p class="landing-inside__lead">{{t:inside.l4.lead}}</p>
           <ul class="landing-inside__points">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M4.5 5h15v10.5H10L6 19v-3.5H4.5Z"/></svg><span><strong>{{t:inside.l4.p1.name}}</strong> {{t:inside.l4.p1.text}}</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M4 7h9m4 0h3M4 17h3m4 0h9M15 5v4M9 15v4"/></svg><span><strong>{{t:inside.l4.p2.name}}</strong> {{t:inside.l4.p2.text}}</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5h15v10.5H10L6 19v-3.5H4.5Z"/></svg><span><strong>{{t:inside.l4.p1.name}}</strong> {{t:inside.l4.p1.text}}</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9m4 0h3M4 17h3m4 0h9M15 5v4M9 15v4"/></svg><span><strong>{{t:inside.l4.p2.name}}</strong> {{t:inside.l4.p2.text}}</span></li>
             <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span><strong>{{t:inside.l4.p3.name}}</strong> {{t:inside.l4.p3.text}}</span></li>
           </ul>
         </div>
       <ul class="landing-inside__kinds" aria-label="{{t:inside.l4.panel}}">
           <li class="landing-kind landing-kind--landing">
-            <div class="landing-kind__head"><svg class="landing-kind__icon ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M7 8.5h10M8.5 11.5h7"/><rect x="9" y="14.5" width="6" height="2.5" rx="1.25"/></svg><hgroup class="landing-kind__name"><h3 id="in4-landing">{{t:inside.kind.landing.title}}</h3><p>{{t:inside.kind.landing.text}}</p></hgroup></div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18M8 12.5h8M10 16h4"/></svg><hgroup class="landing-kind__name"><h3 id="in4-landing">{{t:inside.kind.landing.title}}</h3><p>{{t:inside.kind.landing.text}}</p></hgroup></div>
             <div class="o-actions landing-kind__actions">
               <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-landing-prompt" href="/prompts/landing.txt" data-prompt-open data-prompt-title="{{t:inside.kind.landing.prompt}}" aria-labelledby="in4-landing-prompt in4-landing">{{t:inside.kind.open}}</a>
               <a class="landing-kind__docs" id="in4-landing-recipes" href="/docs/kinds/landing/" aria-labelledby="in4-landing-recipes in4-landing">{{t:inside.kind.recipes}}<svg class="ic" aria-hidden="true"><use href="#i7"/></svg></a>
             </div>
           </li>
           <li class="landing-kind landing-kind--blog">
-            <div class="landing-kind__head"><svg class="landing-kind__icon ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11"/><path d="M7.5 9h4M7.5 12.5h7M7.5 16h7"/><path d="m17.5 3.5 3 3-6 6H11.5v-3l6-6Z"/></svg><hgroup class="landing-kind__name"><h3 id="in4-blog">{{t:inside.kind.blog.title}}</h3><p>{{t:inside.kind.blog.text}}</p></hgroup></div>
+            <div class="landing-kind__head"><svg class="landing-kind__icon ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V11M8 9h3M8 13h5M8 16.5h7"/><path d="m17.5 3.5 3 3-6 6h-3v-3l6-6Z"/></svg><hgroup class="landing-kind__name"><h3 id="in4-blog">{{t:inside.kind.blog.title}}</h3><p>{{t:inside.kind.blog.text}}</p></hgroup></div>
             <div class="o-actions landing-kind__actions">
               <a class="luz-btn luz-btn--primary site-prompt-open" id="in4-blog-prompt" href="/prompts/blog.txt" data-prompt-open data-prompt-title="{{t:inside.kind.blog.prompt}}" aria-labelledby="in4-blog-prompt in4-blog">{{t:inside.kind.open}}</a>
               <a class="landing-kind__docs" id="in4-blog-recipes" href="/docs/kinds/blog/" aria-labelledby="in4-blog-recipes in4-blog">{{t:inside.kind.recipes}}<svg class="ic" aria-hidden="true"><use href="#i7"/></svg></a>
@@ -481,7 +481,7 @@ a {
     <!-- ====================== 6. MODES ====================== -->
     <section class="landing-modes" id="modes" aria-labelledby="modes-title">
       <div class="landing-modes__head">
-        <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path fill="currentColor" stroke="none" d="M12 4a8 8 0 0 1 0 16Z"/></g></svg><span>{{t:modes.eyebrow}}</span></p>
+        <p class="landing-inside__eyebrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17Z" fill="currentColor"/></svg><span>{{t:modes.eyebrow}}</span></p>
         <h2 class="landing-inside__title" id="modes-title">{{html:modes.title}}</h2>
         <p class="landing-inside__lead">{{html:modes.lead}}</p>
       </div>
@@ -544,7 +544,7 @@ a {
     <section class="landing-faq" id="faq" aria-labelledby="faq-title">
       <luz-faq lang="{{t:faq.lang}}">
         <div class="landing-modes__head landing-faq__head" lang="{{lang}}">
-          <p class="landing-inside__eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.6a2.4 2.4 0 1 1 3.4 2.2c-.6.3-1 .8-1 1.5v.5"/></g><circle cx="12" cy="16.6" r="1" fill="currentColor"/></svg><span>{{t:faq.eyebrow}}</span></p>
+          <p class="landing-inside__eyebrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.6a2.4 2.4 0 1 1 3.4 2.2c-.6.3-1 .8-1 1.5v.5M12 16.5v.01"/></svg><span>{{t:faq.eyebrow}}</span></p>
           <h2 class="luz-faq__title landing-inside__title" id="faq-title">{{html:faq.title}}</h2>
           <p class="luz-faq__lead landing-inside__lead">{{t:faq.lead}}</p>
           <nav class="luz-faq__nav" aria-label="{{t:faq.nav}}">
@@ -686,16 +686,16 @@ a {
 
     <!-- Icons used more than once, drawn once here and used by reference (<use>) -->
     <svg class="landing-sprite" width="0" height="0" aria-hidden="true">
-      <symbol id="i0" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5"/></symbol>
-      <symbol id="i1" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></symbol>
-      <symbol id="i2" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+      <symbol id="i0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 3.5 8l8.5 4.5L20.5 8 12 3.5ZM3.5 12.5l8.5 4.5 8.5-4.5M3.5 16.5l8.5 4.5 8.5-4.5"/></symbol>
+      <symbol id="i1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></symbol>
+      <symbol id="i2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></symbol>
       <symbol id="i3" viewBox="0 0 24 24"><path d="M20 4C11 4 6 9 6 18M6 18l-2 2M9 15h6M11 11h7"/></symbol>
       <symbol id="i4" viewBox="0 0 24 24"><path d="m5 8 4 4-4 4M12 16h7"/></symbol>
-      <symbol id="i5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+      <symbol id="i5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
       <symbol id="i6" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></symbol>
-      <symbol id="i7" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
-      <symbol id="i8" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
-      <symbol id="i9" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></symbol>
+      <symbol id="i7" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+      <symbol id="i9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
       <symbol id="i10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
       <symbol id="i11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 14.5A8 8 0 1 1 9.5 4.5a6.5 6.5 0 0 0 10 10Z"/></symbol>
       <symbol id="i12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17Z" fill="currentColor"/></symbol>
