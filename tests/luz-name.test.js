@@ -128,11 +128,12 @@ describe("packages", () => {
     }
   });
 
-  it("every peer dependency on @luz-ds/* is exactly ^0.1.0 || ^0.2.0", () => {
+  it("every peer dependency on @luz-ds/* is a literal list of caret ranges that starts at ^0.1.0", () => {
+    // Which versions the list reaches is tests/peer-ranges.test.js's job (it follows the pending changesets)
     for (const p of pkgs) {
       const peers = json(p).peerDependencies ?? {};
       for (const [name, range] of Object.entries(peers)) {
-        if (name.startsWith("@luz-ds/")) expect(range, `${p} peer ${name}`).toBe("^0.1.0 || ^0.2.0");
+        if (name.startsWith("@luz-ds/")) expect(range, `${p} peer ${name}`).toMatch(/^\^0\.1\.0( \|\| \^\d+\.\d+\.\d+)+$/);
       }
     }
   });

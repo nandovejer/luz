@@ -271,8 +271,8 @@ describe("the migration changeset of F8 (decisions 69 and 74)", () => {
     expect(note.text).toContain(`dist/${now}.js`);
   });
 
-  it("maps the event luz-mode:change to luz-color-mode:change", () => {
-    expect(note.text).toMatch(/luz-mode:change`\s*\|\s*`luz-color-mode:change`|event `luz-mode:change`[^|]*\|\s*`luz-color-mode:change`/);
+  it("maps the event luz-mode:change to luz-theme-mode:change", () => {
+    expect(note.text).toMatch(/luz-mode:change`\s*\|\s*`luz-theme-mode:change`|event `luz-mode:change`[^|]*\|\s*`luz-theme-mode:change`/);
   });
 
   it.each(FILES)("table 3 names the stylesheet %s.css, and the one that replaces it", (old, now) => {

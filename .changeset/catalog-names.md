@@ -41,14 +41,14 @@ The look and the markup of each piece are the same, with two unions, below. A pa
 
 | Old | New |
 | --- | --- |
-| `<luz-mode>` | `<luz-color-mode>` |
+| `<luz-mode>` | `<luz-theme-time>` (see `theme-mode-and-time`) |
 | `<luz-consent>` | `<luz-cookie-consent>` (`getConsent()` keeps its name) |
 | `<luz-banner>` | `<luz-announcement>` (in ARIA, "banner" is the landmark of the header) |
-| `@luz-ds/catalog/mode` | `@luz-ds/catalog/color-mode` |
+| `@luz-ds/catalog/mode` | `@luz-ds/catalog/theme-time` |
 | `@luz-ds/catalog/consent` | `@luz-ds/catalog/cookie-consent` |
-| `dist/mode.js`, `dist/mode.min.js` | `dist/color-mode.js`, `dist/color-mode.min.js` |
+| `dist/mode.js`, `dist/mode.min.js` | `dist/theme-time.js`, `dist/theme-time.min.js` |
 | `dist/consent.js`, `dist/consent.min.js` | `dist/cookie-consent.js`, `dist/cookie-consent.min.js` |
-| the event `luz-mode:change` | `luz-color-mode:change` |
+| the event `luz-mode:change` | `luz-theme-mode:change` |
 
 `<luz-search>`, `<luz-lang-switch>`, `<luz-submenu>` and `<luz-timeline>`, and the classes `.luz-navbar`, `.luz-sidebar` (with `__brand`) and `.luz-terminal`, do not change. Nor do `getConsent()`, the `data-luz-label-*` attributes, the `luz-theme` and `luz-consent` keys of `localStorage`, the `data-luz-consent*` attributes, the custom property `--luz-consent-h` and the event `luz:consent`.
 
@@ -68,7 +68,7 @@ The file of a block is `components/<block>.css`, and `dist/components/<block>.mi
 | `docs-shell.css`, `docs-page-head.css`, `docs-rail.css` | `docs-layout.css`, `doc-header.css`, `page-rail.css` |
 | `docs-pager.css`, `docs-page-foot.css` | `pager.css`, `page-footer.css` |
 | `docs-example.css`, `docs-dodont.css` | `example.css`, `do-dont.css` |
-| `consent.css`, `mode.css`, `banner.css` | `cookie-consent.css`, `color-mode.css`, `announcement.css` |
+| `consent.css`, `mode.css`, `banner.css` | `cookie-consent.css`, `theme-time.css`, `announcement.css` |
 
 **4. Custom properties.**
 
@@ -90,7 +90,7 @@ The bar of a landing page and the base bar of a blog were nearly the same, and t
 
 **6. Docs pages.**
 
-The route of a page is `/docs/catalog/<block>/`. There are no redirects. `/docs/catalog/mode/` is `/docs/catalog/color-mode/`, `consent/` is `cookie-consent/`, `banner/` is `announcement/`, `landing-header/` is `site-header/`, `cms-header/` is `site-header/` (and `masthead/` for the masthead), `landing-footer/` and `cms-footer/` are `site-footer/`, `app-header/` is `app-bar/`, `app-dashboard/` is `dashboard/`, `docs-shell/` is `docs-layout/`, `docs-page-head/` is `doc-header/`, `docs-rail/` is `page-rail/`, `docs-page-foot/` is `page-footer/`, `docs-dodont/` is `do-dont/`, and `landing-hero/`, `landing-section/`, `landing-stat/`, `cms-page-header/`, `cms-article-header/`, `cms-toc/`, `docs-pager/` and `docs-example/` lose their prefix.
+The route of a page is `/docs/catalog/<block>/`. There are no redirects. `/docs/catalog/mode/` is `/docs/catalog/theme-time/`, `consent/` is `cookie-consent/`, `banner/` is `announcement/`, `landing-header/` is `site-header/`, `cms-header/` is `site-header/` (and `masthead/` for the masthead), `landing-footer/` and `cms-footer/` are `site-footer/`, `app-header/` is `app-bar/`, `app-dashboard/` is `dashboard/`, `docs-shell/` is `docs-layout/`, `docs-page-head/` is `doc-header/`, `docs-rail/` is `page-rail/`, `docs-page-foot/` is `page-footer/`, `docs-dodont/` is `do-dont/`, and `landing-hero/`, `landing-section/`, `landing-stat/`, `cms-page-header/`, `cms-article-header/`, `cms-toc/`, `docs-pager/` and `docs-example/` lose their prefix.
 
 **7. Check your pages.**
 

@@ -2,7 +2,7 @@
 title: Con un empaquetador o framework
 description: Importa el CSS y el script de LUZ en Astro o en cualquier herramienta que resuelva nombres de paquetes, y conserva el orden de las capas y las fuentes.
 keywords: vite, astro, empaquetador, framework, import
-source: d588b8a81634
+source: d9ee0e70e893
 reviewed: false
 -->
     <section class="docs-block" aria-labelledby="imports">
@@ -215,7 +215,7 @@ import Base from "../layouts/Base.astro";
     <section class="docs-block" aria-labelledby="problems">
       <h2 class="docs-chapter__title" id="problems">Si algo no funciona</h2>
       <ul>
-        <li><strong>Un aviso sobre una dependencia peer.</strong> <code>@luz-ds/core</code> requiere <code>@luz-ds/tokens</code> en la versión <code>^0.1.0 || ^0.2.0</code>. Instala ambos en la misma versión: <code>npm install @luz-ds/tokens @luz-ds/core</code>.</li>
+        <li><strong>Un aviso sobre una dependencia peer.</strong> <code>@luz-ds/core</code> requiere <code>@luz-ds/tokens</code> en la versión <code>^0.1.0 || ^0.2.0 || ^0.3.0</code>. Instala ambos en la misma versión: <code>npm install @luz-ds/tokens @luz-ds/core</code>.</li>
         <li><strong>La herramienta no puede resolver <code>@luz-ds/core/css</code>.</strong> La exportación es <code>./css</code>, sin extensión de archivo. Si la herramienta indica que un import no se puede resolver, añade el paquete a <code>vite.ssr.noExternal</code>, como se explica en la <a href="https://docs.astro.build/en/guides/styling/">guía de estilos de Astro</a>.</li>
         <li><strong>Los estilos aparecen en el orden equivocado.</strong> Dos copias de LUZ en la página, por ejemplo una de una CDN y otra del empaquetador, ponen sus reglas en las mismas capas: cárgalo una sola vez. Un <code>@import</code> con <code>layer(luz)</code> anida los nombres como <code>luz.luz.components</code>: quita <code>layer()</code>. <a href="/docs/get-started/layers/">Capas de cascada</a> explica el orden.</li>
       </ul>
