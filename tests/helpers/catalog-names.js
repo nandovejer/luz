@@ -64,7 +64,7 @@ export const CLASSES = [
 
 /** Table 2 of the changeset, the elements. */
 export const TAGS = [
-  ["luz-mode", "luz-color-mode"],
+  ["luz-mode", "luz-theme-time"],
   ["luz-consent", "luz-cookie-consent"],
   ["luz-banner", "luz-announcement"],
 ];
@@ -93,13 +93,13 @@ export const FILES = [
   ["docs-example", "example"],
   ["docs-dodont", "do-dont"],
   ["consent", "cookie-consent"],
-  ["mode", "color-mode"],
+  ["mode", "theme-time"],
   ["banner", "announcement"],
 ];
 
 /** The chunks of catalog and the subpath of each: [old name, new name]. */
 export const CHUNKS = [
-  ["mode", "color-mode"],
+  ["mode", "theme-time"],
   ["consent", "cookie-consent"],
 ];
 
