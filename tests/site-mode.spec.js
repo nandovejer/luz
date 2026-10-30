@@ -30,14 +30,15 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
+import { NO_CHOICE } from './helpers/site-lights.js';
 
 const FIXTURE = '/tests/fixtures/site-mode.html';
 const WITH_LUZ = '/tests/fixtures/site-mode-luz.html';
 const LOADED = '/tests/fixtures/site-loader-mode-luz.html';
 const KEY = 'luz-theme';
 
-// A fixed zone, so "the local hour" is the same on every machine
-test.use({ timezoneId: 'Europe/Madrid' });
+// A fixed zone, so "the local hour" is the same on every machine; nothing stored, as the config's pinned hour would hide Auto
+test.use({ timezoneId: 'Europe/Madrid', storageState: NO_CHOICE });
 
 /** An ISO time at `hh:mm[:ss]` on a June day in Madrid (UTC+2). */
 const at = (hhmm) => `2026-06-15T${hhmm.length === 5 ? `${hhmm}:00` : hhmm}+02:00`;
