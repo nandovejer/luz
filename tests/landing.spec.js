@@ -145,10 +145,11 @@ test.describe('Landing page', () => {
       // Dark, High contrast, Auto (the hour leads) and Light again
       for (const [mode, label, shown] of [['dark', 'Dark', 'dark'], ['high-contrast', 'High contrast', 'high-contrast'], ['auto', 'Auto', null], ['light', 'Light', 'light']]) {
         await button.click();
+        // First of all: the announcement is cleared 3 s after the change (on purpose), and a slow runner may spend them on the rest
+        await expect(page.locator('footer [role="status"]').first()).toHaveText(`Color mode: ${label}`);
         if (shown) expect(await theme(page)).toBe(shown);
         await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue(mode);
         await expect(button).toHaveAccessibleName(`Color mode: ${label}`);
-        await expect(page.locator('footer [role="status"]').first()).toHaveText(`Color mode: ${label}`);
       }
     });
 
