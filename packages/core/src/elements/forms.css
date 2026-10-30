@@ -137,7 +137,7 @@
   align-items: center;
 }
 
-:where(:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme"][value="dark"]:checked)) input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]):not([class*="luz-"])) {
+:where(:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]):not([class*="luz-"])) {
   color-scheme: dark;
 }
 
@@ -168,7 +168,7 @@
   cursor: pointer;
 }
 
-:where(:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme"][value="dark"]:checked)) select:not([class*="luz-"])) {
+:where(:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) select:not([class*="luz-"])) {
   color-scheme: dark;
 }
 

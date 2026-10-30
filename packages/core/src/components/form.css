@@ -117,7 +117,7 @@
    picker needs the colour mode in front of the field.
    -------------------------------------------------------------------------- */
 
-:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme"][value="dark"]:checked)) .luz-input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]) {
+:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) .luz-input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]) {
   color-scheme: dark;
 }
 
