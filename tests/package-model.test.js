@@ -147,7 +147,9 @@ describe("peers: catalog needs tokens and core, and the four packages for one ki
   const manifest = JSON.parse(readFileSync(`${root}packages/catalog/package.json`, "utf-8"));
 
   it("catalog requires tokens and core with literal ranges, as its only peers", () => {
-    expect(manifest.peerDependencies).toEqual({ "@luz-ds/core": "^0.1.0 || ^0.2.0", "@luz-ds/tokens": "^0.1.0 || ^0.2.0" });
+    // the ranges themselves are checked against the version of the next release in tests/peer-ranges.test.js
+    expect(Object.keys(manifest.peerDependencies).sort()).toEqual(["@luz-ds/core", "@luz-ds/tokens"]);
+    for (const range of Object.values(manifest.peerDependencies)) expect(range).toMatch(/^\^\d+\.\d+\.\d+( \|\| \^\d+\.\d+\.\d+)*$/);
     expect(manifest.peerDependenciesMeta).toBeUndefined();
   });
 
