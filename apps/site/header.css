@@ -39,6 +39,10 @@
 .site-header {
   position: sticky;
   inset-block-start: 0;
+  /* The header's width, in its own em, decides what the brand shows (the
+     container queries on .site-badge and .site-word below), so it follows
+     the size of the text and not only the width of the window */
+  container-type: inline-size;
   z-index: var(--luz-z-overlay);
   background-color: var(--luz-surface-page);
   border-block-end: 1px solid var(--luz-divider);
@@ -77,11 +81,163 @@
   color: var(--luz-brand-primary);
 }
 
-/* The mark is the prism, a square: sized by its height, the width follows */
+/* The mark is the prism, a square: sized by its height, the width follows.
+   The word beside it is sized from the same height */
+.site-header__brand {
+  --site-mark: 1.375rem;
+}
+
+.site-header__mark {
+  flex: none;
+}
+
 .site-header__mark svg {
   flex: none;
-  block-size: 1.375rem;
+  block-size: var(--site-mark);
   inline-size: auto;
+}
+
+/* The word LUZ beside a prism (the header's, the home's footer), drawn as
+   the home's hero draws it (the brand's word, landing.css .landing-imago):
+   ET Book, the capitals trimmed to their own height, squeezed to .86 and
+   stretched to 1.04, each letter its own width. Its capitals (0.679em) stand
+   as tall as the prism's triangle (0.87 of --site-mark, the prism's height
+   where it sits), so it follows the mark's size. It takes the colour of the
+   prism beside it */
+.site-word {
+  display: inline-block;
+  flex: none;
+  white-space: nowrap;
+  font-family: var(--luz-font-serif);
+  font-size: calc(var(--site-mark, 1.375rem) * 0.87 / 0.679);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-box: trim-both cap alphabetic;
+  transform: scale(0.86, 1.04);
+  transform-origin: left center;
+  /* the box gives back what the squeeze takes (natural width 1.5737em) */
+  margin-inline-end: -0.2203em;
+}
+
+/* In the header, the prism's brand colour, and the hero's inner halo alone,
+   at this size */
+.site-header__brand .site-word {
+  color: var(--luz-brand-primary);
+  filter: drop-shadow(0 0 0.25em color-mix(in oklab, var(--luz-brand-primary) 35%, transparent));
+}
+
+.site-word .ch {
+  display: inline-block;
+  transform: scaleX(var(--s));
+  margin-inline: calc((var(--s) - 1) * var(--cw) / 2);
+}
+
+.site-word .ch + .ch {
+  margin-inline-start: calc((var(--s) - 1) * var(--cw) / 2 - 0.1em);
+}
+
+.site-word .ch--l { --s: 0.88; --cw: 0.5947em; }
+.site-word .ch--u { --s: 0.86; --cw: 0.8149em; }
+.site-word .ch--z { --s: 0.78; --cw: 0.7046em; }
+
+/* the Z a little further from the U than the U is from the L, as the hero's */
+.site-word .ch--u + .ch--z {
+  margin-inline-start: calc((var(--s) - 1) * var(--cw) / 2 - 0.1em + 0.06em);
+}
+
+/* "Beta" and the version in one small tag beside the word LUZ (the header,
+   the home's footer), inside the link to the home: one statement of where
+   LUZ stands. The tag is as tall as the word's capitals, so it sits level
+   with their top; its capitals and figures are trimmed to their own height
+   so they sit in its middle (Arabic has no capitals and keeps its line) */
+.site-badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  /* with large text in a narrow footer, "beta" and the version stack */
+  max-inline-size: 100%;
+  gap: var(--luz-space-xs);
+  min-block-size: calc(var(--luz-space-md) + var(--luz-space-2xs));
+  /* the share keeps the tag inside a footer 192px wide at 400 % text */
+  padding: 0 min(var(--luz-space-xs), 4%);
+  border: 1px solid color-mix(in oklab, var(--luz-text-primary) 22%, transparent);
+  border-radius: var(--luz-radius-full);
+  font-family: var(--luz-font-mono);
+  /* a step under the smallest of the scale: a tag, still readable */
+  font-size: calc(var(--luz-text-xs) * 0.9);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  color: var(--luz-text-primary);
+}
+
+.site-badge:not(:lang(ar)) > span {
+  text-box: trim-both cap alphabetic;
+}
+
+/* "Beta" and the version are two words that stay whole: only the pair may wrap */
+.site-badge > span {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+/* The row holds the prism, the word, the badge, search and the menu while
+   the header is wide enough, measured in its own em: the badge leaves first
+   (20.5em: about 349px at the default size, below which the docs' row, with
+   its empty slots, no longer holds it), then the word (14em), so the row
+   stays one row
+   and nothing scrolls sideways at 320px with the text as large as 400 %
+   (WCAG 1.4.4, 1.4.10). In the header the badge never wraps. */
+.site-header__brand .site-badge {
+  flex: none;
+  flex-wrap: nowrap;
+  max-inline-size: none;
+}
+
+@container (max-width: 20.5em) {
+  .site-header__brand .site-badge {
+    display: none;
+  }
+}
+
+@container (max-width: 14em) {
+  .site-header__brand .site-word {
+    display: none;
+  }
+}
+
+/* The version in its own case, in the mono as the number it is */
+.site-badge__version {
+  font-family: var(--luz-font-mono);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--luz-text-primary);
+}
+
+/* Arabic is a joined script: no spacing, no capitals, and the sans */
+.site-badge:lang(ar) {
+  font-family: var(--luz-font-sans);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+@media (forced-colors: active) {
+  .site-badge {
+    border-color: CanvasText;
+  }
+}
+
+:root[data-theme="high-contrast"] .site-header__brand .site-word {
+  filter: none;
+}
+
+@media (forced-colors: active) {
+  .site-header__brand .site-word {
+    filter: none;
+  }
 }
 
 /* The prism whole, then its three bands of tone come and go, one after another,

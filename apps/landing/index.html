@@ -491,10 +491,11 @@ a {
            JavaScript, landing.js) that checks the footer's radio of its mode: <luz-theme-mode> applies
            it, remembers it and moves its button -->
       <div class="landing-modes__figure">
+        <p class="landing-modes__tag">{{t:modes.core}}</p>
         <div class="landing-cuts">
           <div class="landing-cut landing-cut--1" data-theme="light">
             <div class="landing-cut__picture" inert aria-hidden="true">
-              <p class="landing-cut__label">{{t:footer.light}}</p>
+              <p class="landing-cut__label"><svg class="landing-cut__badge-icon" aria-hidden="true"><use href="#i10"/></svg><span class="landing-badge__text">{{t:footer.light}}</span></p>
               <div class="landing-ui">
                 <p class="landing-ui__title">{{t:modes.light.title}}</p>
                 <p class="landing-ui__text">{{t:modes.light.text}}</p>
@@ -507,7 +508,7 @@ a {
           </div>
           <div class="landing-cut landing-cut--2" data-theme="dark">
             <div class="landing-cut__picture" inert aria-hidden="true">
-              <p class="landing-cut__label">{{t:footer.dark}}</p>
+              <p class="landing-cut__label"><svg class="landing-cut__badge-icon" aria-hidden="true"><use href="#i11"/></svg><span class="landing-badge__text">{{t:footer.dark}}</span></p>
               <div class="landing-ui">
                 <p class="landing-ui__title">{{t:modes.dark.title}}</p>
                 <p class="landing-ui__text">{{t:modes.dark.text}}</p>
@@ -520,7 +521,7 @@ a {
           </div>
           <div class="landing-cut landing-cut--3" data-theme="high-contrast">
             <div class="landing-cut__picture" inert aria-hidden="true">
-              <p class="landing-cut__label">{{t:footer.contrast}}</p>
+              <p class="landing-cut__label"><svg class="landing-cut__badge-icon" aria-hidden="true"><use href="#i12"/></svg><span class="landing-badge__text">{{t:footer.contrast}}</span></p>
               <div class="landing-ui">
                 <p class="landing-ui__title">{{t:modes.contrast.title}}</p>
                 <p class="landing-ui__text">{{t:modes.contrast.text}}</p>
@@ -532,6 +533,26 @@ a {
             </button>
           </div>
         </div>
+      </div>
+
+      <!-- The catalog's time of day, under core's three modes. The bar is a
+           <luz-theme-time variant="bar"> with no moments of its own: it follows the hour
+           of the footer's element, which owns the page, and the footer's moments are the
+           ones it shows. Without JavaScript the bar is not built: the text stays -->
+      <div class="landing-day" role="group" aria-labelledby="modes-day-title">
+        <p class="landing-modes__tag landing-day__tag"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18M7 18a5 5 0 0 1 10 0M12 6v3M5.6 10.6l1.8 1.8M18.4 10.6l-1.8 1.8"/></svg><span class="landing-badge__text">{{t:modes.day.tag}}</span></p>
+        <div class="landing-day__head">
+          <div class="landing-day__text">
+            <h3 class="landing-day__title" id="modes-day-title">{{t:modes.day.title}}</h3>
+            <p class="landing-day__lead">{{t:modes.day.text}}</p>
+          </div>
+          <ul class="landing-inside__points landing-day__points">
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17Z" fill="currentColor"/></svg><span><strong>{{t:modes.day.p1.name}}</strong> {{t:modes.day.p1.text}}</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3" stroke-dasharray="3 2.6"/><path d="M12 8.5v7M8.5 12h7"/></svg><span><strong>{{t:modes.day.p2.name}}</strong> {{t:modes.day.p2.text}}</span></li>
+          </ul>
+        </div>
+        <luz-theme-time class="landing-day__bar" variant="bar" show="time place saved" data-luz-label-scrub="{{t:light.scrub}}" data-luz-label-saved="{{t:light.saved}}"></luz-theme-time>
+        <a class="landing-kind__docs landing-day__link" href="/docs/catalog/theme-time/">{{html:modes.day.link}}<svg class="ic" aria-hidden="true"><use href="#i7"/></svg></a>
       </div>
     </section>
 
@@ -550,9 +571,7 @@ a {
           <nav class="luz-faq__nav" aria-label="{{t:faq.nav}}">
             <ul>
               <li><a href="#faq-g-about">{{t:faq.group.about}}</a></li>
-              <li><a href="#faq-g-html">{{t:faq.group.html}}</a></li>
               <li><a href="#faq-g-use">{{t:faq.group.use}}</a></li>
-              <li><a href="#faq-g-existing">{{t:faq.group.existing}}</a></li>
             </ul>
           </nav>
         </div>
@@ -580,39 +599,6 @@ a {
             <summary class="luz-faq__question">{{t:faq.loses.q}}</summary>
             <div class="luz-faq__answer" id="faq-loses">
               <p>{{html:faq.loses.a}}</p>
-            </div>
-          </details>
-        </section>
-        <section class="luz-faq__group" aria-labelledby="faq-g-html">
-          <h3 class="luz-faq__group-title" id="faq-g-html" lang="{{lang}}">{{t:faq.group.html}}</h3>
-          <details class="luz-faq__item">
-            <summary class="luz-faq__question">{{t:faq.classes.q}}</summary>
-            <div class="luz-faq__answer" id="faq-classes">
-              <p>{{html:faq.classes.a}}</p>
-            </div>
-          </details>
-          <details class="luz-faq__item">
-            <summary class="luz-faq__question">{{t:faq.unstyled.q}}</summary>
-            <div class="luz-faq__answer" id="faq-unstyled">
-              <p>{{html:faq.unstyled.a}}</p>
-            </div>
-          </details>
-          <details class="luz-faq__item">
-            <summary class="luz-faq__question">{{t:faq.why-classes.q}}</summary>
-            <div class="luz-faq__answer" id="faq-why-classes">
-              <p>{{html:faq.why-classes.a}}</p>
-            </div>
-          </details>
-          <details class="luz-faq__item">
-            <summary class="luz-faq__question">{{t:faq.same.q}}</summary>
-            <div class="luz-faq__answer" id="faq-same">
-              <p>{{html:faq.same.a}}</p>
-            </div>
-          </details>
-          <details class="luz-faq__item">
-            <summary class="luz-faq__question">{{t:faq.classless.q}}</summary>
-            <div class="luz-faq__answer" id="faq-classless">
-              <p>{{html:faq.classless.a}}</p>
             </div>
           </details>
         </section>
@@ -658,29 +644,7 @@ a {
             </div>
           </details>
         </section>
-        <section class="luz-faq__group" aria-labelledby="faq-g-existing">
-          <h3 class="luz-faq__group-title" id="faq-g-existing" lang="{{lang}}">{{t:faq.group.existing}}</h3>
-          <details class="luz-faq__item">
-            <summary class="luz-faq__question">{{t:faq.new-only.q}}</summary>
-            <div class="luz-faq__answer" id="faq-new-only">
-              <p>{{html:faq.new-only.a}}</p>
-            </div>
-          </details>
-          <details class="luz-faq__item">
-            <summary class="luz-faq__question">{{t:faq.worth.q}}</summary>
-            <div class="luz-faq__answer" id="faq-worth">
-              <p>{{html:faq.worth.a}}</p>
-            </div>
-          </details>
-          <details class="luz-faq__item">
-            <summary class="luz-faq__question">{{t:faq.migrate.q}}</summary>
-            <div class="luz-faq__answer" id="faq-migrate">
-              <p>{{html:faq.migrate.p1}}</p>
-              <p>{{html:faq.migrate.p2}}</p>
-              <p>{{html:faq.migrate.p3}}</p>
-            </div>
-          </details>
-        </section>
+        <p class="luz-faq__more">{{t:faq.more}} <a href="/docs/get-started/faq/">{{t:faq.more.link}}</a></p>
       </luz-faq>
     </section>
 
@@ -708,40 +672,52 @@ a {
   <footer class="luz-site-footer">
     <div class="o-container o-container--inline o-grid">
       <div class="luz-site-footer__brand">
-        <p class="landing-brand"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true"><path fill="currentColor" fill-opacity="0.25" d="M20.8 10.46 7.04 17.66 23.36 14.89Z"/><path fill="currentColor" fill-opacity="0.45" d="M23.36 14.89 7.04 17.66 25.92 19.33Z"/><path fill="currentColor" fill-opacity="0.65" d="M25.92 19.33 7.04 17.66 28.48 23.76Z"/><path fill="currentColor" fill-rule="evenodd" d="M20.8 10.46 16 2.14 7.04 17.66ZM32 29.86 28.48 23.76 7.04 17.66 0 29.86Z"/></svg><strong class="u-sr-only">LUZ</strong> <a class="landing-brand__version" href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">v{{version}}<span class="u-sr-only">, {{t:footer.changelog}}</span></a> <span class="landing-brand__beta">{{t:footer.beta}}</span></p>
+        <p class="landing-brand"><a class="landing-brand__home" href="{{home}}"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true"><path fill="currentColor" fill-opacity="0.25" d="M20.8 10.46 7.04 17.66 23.36 14.89Z"/><path fill="currentColor" fill-opacity="0.45" d="M23.36 14.89 7.04 17.66 25.92 19.33Z"/><path fill="currentColor" fill-opacity="0.65" d="M25.92 19.33 7.04 17.66 28.48 23.76Z"/><path fill="currentColor" fill-rule="evenodd" d="M20.8 10.46 16 2.14 7.04 17.66ZM32 29.86 28.48 23.76 7.04 17.66 0 29.86Z"/></svg><span class="site-word" lang="en" dir="ltr" aria-hidden="true"><span class="ch ch--l">L</span><span class="ch ch--u">U</span><span class="ch ch--z">Z</span></span><strong class="u-sr-only">LUZ</strong> <span class="site-badge"><span>{{t:footer.beta}}</span> <span class="site-badge__version" dir="ltr">v{{version}}</span></span></a></p>
       </div>
-      <!-- The docs: one title over three lists, the guides, under a small label
-           the docs of each package (in the order they stack), and under another
-           the page of each kind of site, with its prompt and its recipes -->
-      <nav class="luz-site-footer__col landing-foot-docs" aria-labelledby="footer-docs">
-        <h2 class="luz-site-footer__col-title" id="footer-docs">{{t:site.docs}}</h2>
-        <ul>
-          <li><a href="/docs/get-started/">{{t:nav.get-started}}</a></li>
-          <li><a href="/docs/catalog/">{{t:footer.patterns}}</a></li>
-          <li><a href="/docs/accessibility/">{{t:footer.accessibility}}</a></li>
-        </ul>
-        <h3 class="landing-foot-label" id="footer-packages">{{t:footer.packages}}</h3>
-        <ul aria-labelledby="footer-packages">
-          <li><a href="/docs/tokens/">{{t:footer.pkg.tokens}}</a></li>
-          <li><a href="/docs/components/">{{t:footer.pkg.core}}</a></li>
-          <li><a href="/docs/catalog/">{{t:footer.pkg.catalog}}</a></li>
-        </ul>
-        <h3 class="landing-foot-label" id="footer-kinds">{{t:footer.kinds}}</h3>
-        <ul aria-labelledby="footer-kinds">
-          <li><a href="/docs/kinds/landing/">{{t:inside.kind.landing.title}}</a></li>
-          <li><a href="/docs/kinds/blog/">{{t:inside.kind.blog.title}}</a></li>
-          <li><a href="/docs/kinds/app/">{{t:inside.kind.app.title}}</a></li>
-          <li><a href="/docs/kinds/docs/">{{t:inside.kind.docs.title}}</a></li>
-        </ul>
-      </nav>
-      <nav class="luz-site-footer__col" aria-labelledby="footer-project">
-        <h2 class="luz-site-footer__col-title" id="footer-project">{{t:footer.project}}</h2>
-        <ul>
-          <li><a href="https://github.com/nandovejer/luz">GitHub</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">{{t:footer.changelog}}</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/CONTRIBUTING.md">{{t:footer.contributing}}</a></li>
-          <li><a href="https://github.com/nandovejer/luz/blob/main/dev/BROWSER-REVIEWS.md">{{t:footer.reviews}}</a></li>
-        </ul>
+      <!-- The site map: four groups, each a title over its list. Documentation
+           to learn LUZ, Reference to look a piece up, Resources to install or
+           copy, Community for what lives on GitHub -->
+      <nav class="landing-foot-nav" aria-label="{{t:footer.nav}}">
+        <div class="landing-foot-group">
+          <h2 class="luz-site-footer__col-title" id="footer-docs">{{t:site.docs}}</h2>
+          <ul aria-labelledby="footer-docs">
+            <li><a href="/docs/get-started/">{{t:nav.get-started}}</a></li>
+            <li><a href="/docs/get-started/migrate/">{{t:footer.migrate}}</a></li>
+            <li><a href="/docs/get-started/make-it-yours/">{{t:footer.make-it-yours}}</a></li>
+            <li><a href="/docs/get-started/ai/">{{t:footer.ai}}</a></li>
+            <li><a href="/docs/a-z/">{{t:footer.a-z}}</a></li>
+          </ul>
+        </div>
+        <div class="landing-foot-group">
+          <h2 class="luz-site-footer__col-title" id="footer-reference">{{t:footer.reference}}</h2>
+          <ul aria-labelledby="footer-reference">
+            <li><a href="/docs/tokens/">{{t:footer.pkg.tokens}}</a></li>
+            <li><a href="/docs/html/">{{t:footer.html}}</a></li>
+            <li><a href="/docs/components/">{{t:footer.pkg.core}}</a></li>
+            <li><a href="/docs/catalog/">{{t:footer.pkg.catalog}}</a></li>
+            <li><a href="/docs/accessibility/">{{t:footer.accessibility}}</a></li>
+          </ul>
+        </div>
+        <div class="landing-foot-group">
+          <h2 class="luz-site-footer__col-title" id="footer-resources">{{t:footer.resources}}</h2>
+          <ul aria-labelledby="footer-resources">
+            <li><a href="https://www.npmjs.com/org/luz-ds">{{t:footer.npm}}</a></li>
+            <li><a href="#inside-4">{{t:footer.prompts}}</a></li>
+            <li><a href="/llms.txt" lang="en" dir="ltr">llms.txt</a></li>
+            <li><a href="https://github.com/nandovejer/luz/blob/main/CHANGELOG.md">{{t:footer.changelog}}</a></li>
+            <li><a href="/docs/get-started/how-luz-is-built/">{{t:footer.built}}</a></li>
+          </ul>
+        </div>
+        <div class="landing-foot-group">
+          <h2 class="luz-site-footer__col-title" id="footer-community">{{t:footer.community}}</h2>
+          <ul aria-labelledby="footer-community">
+            <li><a href="https://github.com/nandovejer/luz">GitHub</a></li>
+            <li><a href="https://github.com/nandovejer/luz/issues/new/choose">{{t:footer.bug}}</a></li>
+            <li><a href="https://github.com/nandovejer/luz/blob/main/CONTRIBUTING.md">{{t:footer.contributing}}</a></li>
+            <li><a href="https://github.com/nandovejer/luz/blob/main/CODE_OF_CONDUCT.md">{{t:footer.conduct}}</a></li>
+            <li><a href="https://github.com/nandovejer/luz/blob/main/SECURITY.md">{{t:footer.security}}</a></li>
+          </ul>
+        </div>
       </nav>
     </div>
     <div class="o-stack landing-foot">
