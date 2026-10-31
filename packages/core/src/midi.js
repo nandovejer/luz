@@ -324,7 +324,7 @@ export class MidiPlayer {
 
   async load(url) {
     try {
-      const res    = await fetch(url);
+      const res    = await fetch(url, { redirect: "error" });
       if (!res.ok) throw new Error(`HTTP ${res.status}: ${url}`);
       // Refuse oversized responses before buffering them
       if (Number(res.headers.get('content-length')) > MAX_FILE_BYTES) {

@@ -28,7 +28,8 @@ Thank you for helping keep LUZ secure!
 
 | Version | Status | Support Until | Security Fixes |
 |---------|--------|---------------|----------------|
-| **0.2.x** | ✅ Active | Current | Yes |
+| **0.3.x** | ✅ Active | Current | Yes |
+| 0.2.x | ❌ Replaced | Superseded by 0.3.0 (2026-10-31) | No |
 | 0.1.x | ❌ Replaced | Superseded by 0.2.0 (2026-10-24) | No |
 
 ---

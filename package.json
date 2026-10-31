@@ -40,7 +40,6 @@
     "check:ai": "node scripts/check-ai.js",
     "media:build": "node scripts/build-demo-media.js"
   },
-  "//": "luz-exception: EX-004 — pnpm.auditConfig.ignoreGhsas lists dev-only advisories with no patched version; see EXCEPTIONS.md",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
@@ -48,12 +47,6 @@
     "overrides": {
       "source-map-js": ">=1.2.2",
       "fast-uri": "^3.1.9"
-    },
-    "auditConfig": {
-      "ignoreGhsas": [
-        "GHSA-vfj7-8cjw-p6xm",
-        "GHSA-hp3w-g68c-fv3c"
-      ]
     }
   },
   "devDependencies": {
