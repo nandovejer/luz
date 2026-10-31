@@ -15,7 +15,7 @@ keywords: llms.txt, agent, claude, copilot, cursor, manifest, check
           <span class="docs-snippet__lang">Prompt</span>
           <button class="luz-copy-btn" type="button" data-copy-from="code-prompt" aria-label="Copy the prompt">Copy</button>
         </div>
-        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Prompt for your agent"><code id="code-prompt">Use LUZ for the markup. Read https://nandovejer.github.io/luz/llms.txt first and use only the classes in each package's classes.json. After you write HTML or CSS, run `npx @luz-ds/check@0.2.1` on the files and fix every finding before you answer.</code></pre>
+        <pre class="luz-code-block" data-lang="text" tabindex="0" role="region" aria-label="Prompt for your agent"><code id="code-prompt">Use LUZ for the markup. Read https://nandovejer.github.io/luz/llms.txt first and use only the classes in each package's classes.json. After you write HTML or CSS, run `npx @luz-ds/check@0.3.0` on the files and fix every finding before you answer.</code></pre>
       </div>
     </section>
 
@@ -35,18 +35,18 @@ keywords: llms.txt, agent, claude, copilot, cursor, manifest, check
 
     <section class="docs-block" aria-labelledby="check">
       <h2 class="docs-chapter__title" id="check">Check what an agent wrote</h2>
-      <p class="docs-lead"><code>npx @luz-ds/check@0.2.1</code> reads the HTML and CSS of a project, offline, and says which LUZ classes, elements, load order and color tokens are wrong. It reads files and writes nothing.</p>
+      <p class="docs-lead"><code>npx @luz-ds/check@0.3.0</code> reads the HTML and CSS of a project, offline, and says which LUZ classes, elements, load order and color tokens are wrong. It reads files and writes nothing.</p>
       <p>It needs Node 20 or later.</p>
       <div class="docs-snippet">
         <div class="docs-snippet__bar">
           <span class="docs-snippet__lang">Shell</span>
           <button class="luz-copy-btn" type="button" data-copy-from="code-check-run" aria-label="Copy the commands">Copy</button>
         </div>
-        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The commands"><code id="code-check-run">npx @luz-ds/check@0.2.1
-npx @luz-ds/check@0.2.1 index.html css/site.css
-npx @luz-ds/check@0.2.1 src --json</code></pre>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The commands"><code id="code-check-run">npx @luz-ds/check@0.3.0
+npx @luz-ds/check@0.3.0 index.html css/site.css
+npx @luz-ds/check@0.3.0 src --json</code></pre>
       </div>
-      <p>Say <code>npx @luz-ds/check@0.2.1</code>, with the scope. A path is a file, a folder (read recursively: <code>.html</code>, <code>.htm</code> and <code>.css</code>) or a quoted glob such as <code>"src/**/*.html"</code>.</p>
+      <p>Say <code>npx @luz-ds/check@0.3.0</code>, with the scope. A path is a file, a folder (read recursively: <code>.html</code>, <code>.htm</code> and <code>.css</code>) or a quoted glob such as <code>"src/**/*.html"</code>.</p>
       <p>With no path it reads the current folder.</p>
       <div class="luz-table-wrap" role="region" aria-label="The options of the command" tabindex="0">
         <table class="luz-table">
@@ -159,7 +159,7 @@ npx @luz-ds/check@0.2.1 src --json</code></pre>
           <span class="docs-snippet__lang">Shell</span>
           <button class="luz-copy-btn" type="button" data-copy-from="code-agent" aria-label="Copy the command">Copy</button>
         </div>
-        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The command that copies the reviewer"><code id="code-agent">npx @luz-ds/check@0.2.1 agent &gt; .claude/agents/luz-accessibility-reviewer.md</code></pre>
+        <pre class="luz-code-block" data-lang="bash" tabindex="0" role="region" aria-label="The command that copies the reviewer"><code id="code-agent">npx @luz-ds/check@0.3.0 agent &gt; .claude/agents/luz-accessibility-reviewer.md</code></pre>
       </div>
       <ul>
         <li><strong>It overwrites.</strong> The <code>&gt;</code> replaces a file that is already there. Use another path, or put your copy under version control first, if you edited it.</li>
