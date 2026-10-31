@@ -64,7 +64,7 @@ keywords: migrate, refactor, existing project, legacy css, bootstrap
       <p>Choose the order, from the simple pages to the complex ones, with the pages that share a template together. Migrate the shared parts (header, footer, menu) once, after the simple pages and before the complex ones, so you do not keep two headers for months. For each page, repeat the same loop:</p>
       <ol>
         <li>The AI, with <a href="/docs/get-started/ai/">the LUZ prompt</a>, puts the page in the region, removes the classes of the old framework, leaves the HTML semantic, and adds a LUZ class only where HTML is not enough. Removing is safer than adding.</li>
-        <li>It runs <code>npx @luz-ds/check@0.2.1</code> and an accessibility check, and shows you what changed and what is left, never the whole file rewritten.</li>
+        <li>It runs <code>npx @luz-ds/check@0.3.0</code> and an accessibility check, and shows you what changed and what is left, never the whole file rewritten.</li>
         <li>You read the diff and the screenshots, and run the smoke tests.</li>
         <li>One commit per page, so you can revert a page and not a month.</li>
       </ol>

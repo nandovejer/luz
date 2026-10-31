@@ -1,6 +1,6 @@
 {
   "name": "@luz-ds/core",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "LUZ Design System — CSS components and vanilla JS behaviors",
   "license": "MIT",
   "type": "module",
