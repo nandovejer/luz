@@ -12,6 +12,10 @@ One row is one `needs-browser-review` issue: the issue repeats the Scope, the Fi
 
 | Scope | Files | What to look at | Browser |
 |---|---|---|---|
+| The word LUZ beside the prism and the "beta v0.3.0" badge, in the header and the footer, and the badges of the home's modes section | `apps/site/header.css` (`.site-word`, `.site-badge`), `apps/site/_partials/header.html`, `apps/landing/landing.css`, `apps/landing/index.html` | `text-box: trim-both cap alphabetic` on the badges' text and on the word (Firefox before 154 lacks it, WebKit has it from 18.2: the capitals sit about 1.75 px high without it), the word's `transform: scale()` and `filter: drop-shadow()`, the badge level with the word's capitals, in LTR and RTL | Safari, Firefox |
+| The footer as a site map: four groups on a subgrid | `apps/landing/landing.css` (`.landing-foot-nav`, `.landing-foot-group`), `apps/landing/index.html` | `grid-template-columns: subgrid` and `grid-template-rows: subgrid` nested in the footer's grid at 320, 375, 700, 900, 1100 and 1440 px, the titles on one row whatever a group's links wrap to, in LTR and RTL | Safari, Firefox |
+| The tabs of the level panels turn by themselves | `apps/landing/landing.js` (`initTabCycle`), `apps/landing/landing.css` (`[data-cycle]`, `landing-tab-cycle`, `landing-pane-in`) | `IntersectionObserver` holding the loop off screen, `animationend` on the `::after` line, `animation-play-state` on hover and focus, the 3 s resume, a click or a key ending it, nothing under `prefers-reduced-motion: reduce`, the line from the right in RTL | Safari, Firefox |
+| The catalog's time of day on the home: a `<luz-theme-time variant="bar">` with no moments, following the footer's | `apps/landing/index.html` (`.landing-day`), `apps/landing/landing.css`, `apps/landing/landing.js` (`initDayBand`) | The bar's hour, place and "Saved" note, the slider's track and thumb (`::-webkit-slider-*`, `::-moz-range-*`) on the transparent band, the band's badge, the three transparent boxes taking the page's ink with their own `data-theme` badges | Safari, Firefox |
 
 
 ## Closed

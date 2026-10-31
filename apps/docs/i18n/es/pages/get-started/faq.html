@@ -1,0 +1,64 @@
+<!-- luz:page
+title: Más preguntas
+description: Respuestas sobre el HTML sin clases y sobre la migración.
+keywords: preguntas, classless, migrar, proyecto existente
+source: 8133b4049a5d
+reviewed: false
+-->
+    <p class="docs-lead">Lo que las <a href="/#faq">preguntas frecuentes de la home</a> dejaron fuera.</p>
+    <luz-faq>
+    <section class="luz-faq__group" aria-labelledby="faq-g-html">
+      <h2 class="luz-faq__group-title" id="faq-g-html">HTML y clases</h2>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Tienen estilo los elementos HTML sin ninguna clase?</summary>
+          <div class="luz-faq__answer" id="faq-classes">
+            <p>Sí: con <code>luz.css</code>, el HTML nativo sale con estilo.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Qué elementos HTML no tienen estilo?</summary>
+          <div class="luz-faq__answer" id="faq-unstyled">
+            <p>Los que solo estructuran la página, como <code>div</code> y <code>nav</code>.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Para qué sirven entonces las clases de LUZ?</summary>
+          <div class="luz-faq__answer" id="faq-why-classes">
+            <p>Para lo que el HTML no puede decir: tamaños, roles y componentes con marcado propio.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Una clase cambia el aspecto de un elemento?</summary>
+          <div class="luz-faq__answer" id="faq-same">
+            <p>Muy poco: añade lo que necesita marcado o un rol.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿LUZ es classless?</summary>
+          <div class="luz-faq__answer" id="faq-classless">
+            <p>Sí, y además tiene componentes y un catálogo.</p>
+          </div>
+        </details>
+    </section>
+    <section class="luz-faq__group" aria-labelledby="faq-g-existing">
+      <h2 class="luz-faq__group-title" id="faq-g-existing">Proyectos que ya existen</h2>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿LUZ es solo para proyectos nuevos?</summary>
+          <div class="luz-faq__answer" id="faq-new-only">
+            <p>No: un proyecto que ya existe se migra página a página con <code>luz.conditional.css</code>.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Merece la pena migrar desde otro sistema?</summary>
+          <div class="luz-faq__answer" id="faq-worth">
+            <p>Para un sitio de contenido, sí; para una app de una sola página sobre una biblioteca de UI, no.</p>
+          </div>
+        </details>
+        <details class="luz-faq__item">
+          <summary class="luz-faq__question">¿Cómo migro, y cómo ayuda la IA?</summary>
+          <div class="luz-faq__answer" id="faq-migrate">
+            <p>Por fases, una página cada vez: la IA hace el trabajo mecánico y tú decides.</p>
+          </div>
+        </details>
+    </section>
+    </luz-faq>
