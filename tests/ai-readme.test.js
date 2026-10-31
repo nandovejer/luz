@@ -46,6 +46,37 @@ const FIRST_RELEASE = `# @luz-ds/core
 - 1a2b3c4: First release of LUZ, formerly CAI.
 `;
 
+const BOLD_BREAKING = `# @luz-ds/core
+
+## 0.3.0
+
+### Minor Changes
+
+- 9d0b91a: The color mode is now two elements.
+
+  A paragraph that tells the story and is not a break.
+
+  | Old | New |
+  | --- | --- |
+  | \`<luz-mode>\` | \`<luz-theme-time>\` |
+
+  **Breaking:** \`<luz-mode>\` is now \`<luz-theme-time>\`; the table above has the rest.
+
+  Another paragraph that is not a break.
+
+- c0572dd: The HTML comes out complete with no class. **Breaking:** \`classless.css\` is gone.
+
+  More about it, not a break.
+
+- 2d895d1: Fix: a quiet change that breaks nothing.
+
+## 0.2.1
+
+### Patch Changes
+
+- 0123456: Older.
+`;
+
 const FIRST_WITH_BREAKING = `# @luz-ds/core
 
 ## 0.1.0
@@ -170,6 +201,14 @@ describe("breakingChanges(changelog) reads the top version of a changelog", () =
     expect(items).toEqual([`Rename every class.\n\nBreaking: every \`.${FORMER}-*\` class is now \`.luz-*\`.`]);
   });
 
+  it("lists a bullet with a bold **Breaking:** in a paragraph (how the changesets of 0.3.0 write it): its first paragraph and the paragraphs that break, not the tables", () => {
+    const { items } = lib().breakingChanges(BOLD_BREAKING);
+    expect(items).toEqual([
+      "The color mode is now two elements.\n\n**Breaking:** `<luz-mode>` is now `<luz-theme-time>`; the table above has the rest.",
+      "The HTML comes out complete with no class. **Breaking:** `classless.css` is gone.",
+    ]);
+  });
+
   it("keeps a multi-line bullet whole, de-indented, and leaves the other bullets and sections out", () => {
     const { version, versions, items } = lib().breakingChanges(TWO_VERSIONS);
     expect(version).toBe("0.2.0");
@@ -198,6 +237,14 @@ describe("breakingChanges(changelog) reads the top version of a changelog", () =
 /* ---- renderAiSection: the text of the block ----------------------------- */
 
 describe("renderAiSection({ name, manifest, changelog, siteUrl })", () => {
+
+  it("never says there are no breaking changes when the top version has a bold **Breaking:**", () => {
+    const block = render("core", { version: "0.3.0" }, BOLD_BREAKING);
+    expect(block).not.toContain("No breaking changes");
+    expect(block).toContain("**Breaking:** `<luz-mode>` is now `<luz-theme-time>`");
+    expect(block).not.toContain("A paragraph that tells the story");
+    expect(block).not.toContain("| Old | New |");
+  });
   it("is a block between the two markers, each on a line of its own, headed 'For AI agents'", () => {
     const block = render("core", CORE, FIRST_RELEASE);
     const lines = block.trimEnd().split("\n");

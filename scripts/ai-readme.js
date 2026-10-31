@@ -44,7 +44,9 @@ const WITH_ELEMENTS = new Set(["catalog"]);
  * `items` are the bullets of that version that are breaking: every bullet of
  * `### Major Changes`, and every bullet of any section with a line that starts
  * `Breaking:` (in 0.x a breaking change ships as a minor, D9). Text as written,
- * de-indented, without the commit hash.
+ * de-indented, without the commit hash. A bullet whose paragraph holds a bold
+ * `**Breaking:**` is listed too, short: its first paragraph and the paragraphs
+ * that break, not the tables and the story between them (the CHANGELOG has them).
  * @returns {{ version: string | null, versions: number, items: string[] }}
  */
 export function breakingChanges(changelog) {
@@ -62,6 +64,10 @@ export function breakingChanges(changelog) {
     if (!bullet) return;
     const text = bullet.join("\n").replace(/\s+$/, "").replace(/^[0-9a-f]{7,40}: /, "");
     if (section === "Major Changes" || /^Breaking:/m.test(text)) items.push(text);
+    else if (/\*\*Breaking:\*\*/.test(text)) {
+      const paragraphs = text.split(/\n{2,}/);
+      items.push(paragraphs.filter((paragraph, i) => i === 0 || paragraph.includes("**Breaking:**")).join("\n\n"));
+    }
     bullet = null;
   };
   for (const line of top) {

@@ -77,8 +77,11 @@ describe("nothing names the bundle that is gone", () => {
   });
 
   it("is not in a docs page, the home page, a prompt or a README", () => {
+    // A README's "Breaking changes" (generated from the CHANGELOG) may say the old name is gone: that is what the reader must learn
+    const withoutBreaking = (file, text) =>
+      /README\.md$/.test(file) ? text.replace(/^### Breaking changes\n[\s\S]*?(?=^### Read first)/m, (block) => block.replace(/[^\n]/g, "")) : text;
     const hits = sources.flatMap((file) =>
-      read(file)
+      withoutBreaking(file, read(file))
         .split("\n")
         .flatMap((line, i) => (GONE.test(line) ? [`${file}:${i + 1}: ${line.trim().slice(0, 100)}`] : [])),
     );
