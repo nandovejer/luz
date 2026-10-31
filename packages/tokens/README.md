@@ -23,7 +23,7 @@ import '@luz-ds/tokens'
 ### Via CDN (jsDelivr)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.0/dist/luz-tokens.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.1/dist/luz-tokens.min.css">
 ```
 
 ## Package exports
@@ -40,8 +40,8 @@ import '@luz-ds/tokens'
 `luz-tokens check-contrast` reads the `--luz-*` overrides of your stylesheet, puts them over LUZ's tokens as the browser would, and measures the pairs LUZ promises to keep readable (WCAG 2.x: 4.5:1 for text, 3:1 for disabled text, focus rings, field borders and icons) in light, dark, high contrast and every `[data-theme]` you define. It needs Node 20 or later and has no dependencies.
 
 ```bash
-npx @luz-ds/tokens@0.3.0 check-contrast my-theme.css
-npx @luz-ds/tokens@0.3.0 check-contrast base.css my-theme.css --json
+npx @luz-ds/tokens@0.3.1 check-contrast my-theme.css
+npx @luz-ds/tokens@0.3.1 check-contrast base.css my-theme.css --json
 ```
 
 Exit code `0` when every pair passes, `1` when one fails or a color could not be read, `2` for a usage or file error. What it reads, and what it reports as not read, is on [the contrast page of the docs](https://nandovejer.github.io/luz/docs/tokens/contrast/).
@@ -113,13 +113,11 @@ ET Book ships roman, italic, semi-bold and bold. Sans and mono are system stacks
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/tokens` 0.3.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/tokens` 0.3.1 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-#### The patterns of a landing page, a blog, a web application and a documentation site are components of `@luz-ds/catalog` now, one stylesheet each. `@luz-ds/landing`, `@luz-ds/cms`, `@luz-ds/app` and `@luz-ds/docs` are not published any more, and the layers `luz.landing`, `luz.cms`, `luz.app` and `luz.docs` are gone. **Breaking:** if you use one of the four packages, follow the steps below.
-
-The patterns are in `luz.catalog`, with the other catalog components. The order of the layers is now `luz.tokens`, `luz.themes`, `luz.settings`, `luz.generic`, `luz.elements`, `luz.objects`, `luz.components`, `luz.utilities`, `luz.catalog`, `luz.print`, and core and tokens repeat that statement in every file. **Breaking:** if your own `@layer` statement names `luz.landing`, `luz.cms`, `luz.app` or `luz.docs`, remove the name.
+No breaking changes in 0.3.1.
 
 Older versions: https://github.com/nandovejer/luz/blob/main/packages/tokens/CHANGELOG.md
 
@@ -136,7 +134,7 @@ Older versions: https://github.com/nandovejer/luz/blob/main/packages/tokens/CHAN
 
 ### Check what you write
 
-Run `npx @luz-ds/check@0.3.0 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.0 agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.3.1 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.1 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 

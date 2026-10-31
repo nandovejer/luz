@@ -38,18 +38,18 @@ import '@luz-ds/catalog'    // the loader: the chunks of the search, the cookie 
 ### Via CDN
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.0/dist/luz-tokens.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.1/dist/luz-tokens.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.1/dist/luz.min.css">
 <!-- One link per component the page uses: here the search and the time of day -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/search.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/theme-time.min.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/components/search.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/components/theme-time.min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.1/dist/luz.min.js"></script>
 <!-- The loader: it loads search.min.js on a page with a <luz-search>,
      cookie-consent.min.js on a page with a <luz-cookie-consent>, theme-time.min.js on a
      page with a <luz-theme-time> (and theme-time-bar.min.js after it for a
      variant="bar"), timeline.min.js on a page with a <luz-timeline> and
      sidebar.min.js on a page with a .luz-sidebar, and nothing else -->
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/catalog.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/catalog.min.js"></script>
 ```
 
 With Subresource Integrity, an `integrity` on the `<script>` covers `catalog.min.js` only. To check each chunk the page may load, put an import map with an `integrity` section before the first module script. It works in Chrome 127 and later, Safari 18 and later and Firefox 138 and later; an older browser ignores the key and loads the chunks unchecked.
@@ -58,16 +58,16 @@ With Subresource Integrity, an `integrity` on the `<script>` covers `catalog.min
 <script type="importmap">
 {
   "integrity": {
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/search.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/cookie-consent.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/theme-time.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/theme-time-bar.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/timeline.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/sidebar.min.js": "sha384-…"
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/search.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/cookie-consent.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/theme-time.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/theme-time-bar.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/timeline.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/sidebar.min.js": "sha384-…"
   }
 }
 </script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/catalog.min.js" integrity="sha384-…" crossorigin></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/catalog.min.js" integrity="sha384-…" crossorigin></script>
 ```
 
 A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari and Firefox do not block a chunk with a wrong hash. Add `modulepreload` only as a performance hint.
@@ -160,7 +160,7 @@ import '@luz-ds/catalog/components/hero.css'
 ```
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/hero.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.1/dist/components/hero.min.css">
 ```
 
 | Fits best | File in `components/` | Block | Docs page |
@@ -197,21 +197,11 @@ This package also holds four components that were core's: the navbar, the sideba
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/catalog` 0.3.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/catalog` 0.3.1 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-#### Catalog has no bundle any more: each component is a stylesheet of its own, and a page links only the ones it uses. **Breaking:** `@luz-ds/catalog/css` (`dist/catalog.css`), `@luz-ds/catalog/css/min` (`dist/catalog.min.css`) and `@luz-ds/catalog/print.css` (`dist/print.css`) are gone.
-
-#### Every component of `@luz-ds/catalog` is named for what it is, with no kind of site in the name: the block of a landing page is `hero`, not `landing-hero`. The classes, the elements, the files, the exports and the docs pages follow the new names. **Breaking:** if you use one of the names in the first column of the tables below, replace it. There are no aliases: the old names do nothing. `luz-check` tells you the new name when it finds an old one.
-
-#### The patterns of a landing page, a blog, a web application and a documentation site are components of `@luz-ds/catalog` now, one stylesheet each. `@luz-ds/landing`, `@luz-ds/cms`, `@luz-ds/app` and `@luz-ds/docs` are not published any more, and the layers `luz.landing`, `luz.cms`, `luz.app` and `luz.docs` are gone. **Breaking:** if you use one of the four packages, follow the steps below.
-
-The patterns are in `luz.catalog`, with the other catalog components. The order of the layers is now `luz.tokens`, `luz.themes`, `luz.settings`, `luz.generic`, `luz.elements`, `luz.objects`, `luz.components`, `luz.utilities`, `luz.catalog`, `luz.print`, and core and tokens repeat that statement in every file. **Breaking:** if your own `@layer` statement names `luz.landing`, `luz.cms`, `luz.app` or `luz.docs`, remove the name.
-
-#### The HTML comes out complete with no class. **Breaking:** `classless.css` (`@luz-ds/core/classless.css`) and the `[data-luz-classless]` attribute are gone, with no alias: what they did is now in `luz.css`, for the whole page.
-
-#### The color mode is now two elements: `<luz-theme-mode>` in core (a round fixed button that cycles Auto, light, dark and high contrast) and `<luz-theme-time>` in catalog (the same button plus the time of day). **Breaking:** the 0.2.1 names below are gone, with no aliases. `luz-check` names the new one when it finds an old one.
+No breaking changes in 0.3.1.
 
 Older versions: https://github.com/nandovejer/luz/blob/main/packages/catalog/CHANGELOG.md
 
@@ -229,7 +219,7 @@ This package needs `@luz-ds/tokens` and `@luz-ds/core` loaded first.
 
 ### Check what you write
 
-Run `npx @luz-ds/check@0.3.0 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.0 agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.3.1 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.1 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 

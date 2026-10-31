@@ -1,6 +1,6 @@
 {
   "name": "@luz-ds/tokens",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "LUZ Design System — design tokens (CSS custom properties) and self-hosted MIT-licensed web fonts",
   "license": "MIT",
   "type": "module",
