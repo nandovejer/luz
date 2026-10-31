@@ -202,6 +202,21 @@ describe("what a prompt says about the system comes from the packages", () => {
     }
   });
 
+  it.each(IDS)("%s: every mention of the command npx @luz-ds/check carries the pinned version of the check package", (id) => {
+    const pinned = `@${versionOf("check")}`;
+    const lines = prompt(id).split("\n");
+    const bare = [];
+    let found = 0;
+    lines.forEach((line, i) => {
+      for (const m of line.matchAll(/npx @luz-ds\/check/g)) {
+        found += 1;
+        if (!line.startsWith(pinned, m.index + m[0].length)) bare.push(`line ${i + 1}: ${line.trim()}`);
+      }
+    });
+    expect(found, `${id}: it names the command npx @luz-ds/check`).toBeGreaterThan(0);
+    expect(bare, `${id}: npx @luz-ds/check without ${pinned}`).toEqual([]);
+  });
+
   it.each(IDS)("%s: catalog is linked a file at a time: components/<name>.min.css of the package, never catalog.min.css", (id) => {
     const text = prompt(id);
     const links = [...text.matchAll(/<link rel="stylesheet" href="https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/catalog@[^/"]+\/dist\/([^"]+)">/g)].map((m) => m[1]);
