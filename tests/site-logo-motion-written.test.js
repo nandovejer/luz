@@ -56,6 +56,37 @@ describe("the motion of the logo is a written deviation", () => {
     expect(near).toMatch(/reduced[- ]motion/i);
   });
 
+  it("PRINCIPLES.md writes a second deviation on the same line: the home's tabs that turn by themselves, WCAG 2.2.2, held by hover and focus, and not started under reduced motion", () => {
+    const line = text("PRINCIPLES.md").split("\n").find((l) => /no infinite loops/i.test(l));
+    expect(line, "the 'no infinite loops' line").toBeTruthy();
+    expect(line, "it counts two deviations").toMatch(/\bTwo written deviations\b/);
+    const second = line.slice(line.search(/\bSecond\b/));
+    expect(second, "the second deviation starts after the first").not.toBe(line);
+    expect(second).toMatch(/home/i);
+    expect(second).toMatch(/\btabs?\b/i);
+    expect(second).toMatch(/\bloop\b/i);
+    expect(second).toMatch(/\b2\.2\.2\b/);
+    expect(second).toMatch(/hover/i);
+    expect(second).toMatch(/focus/i);
+    expect(second).toMatch(/reduced[- ]motion/i);
+    expect(second).toMatch(/2026-10-31/);
+  });
+
+  for (const [file, title] of [
+    ["apps/docs/pages/accessibility.html", "Motion of the tabs on the home page"],
+    ["apps/docs/i18n/es/pages/accessibility.html", "Movimiento de las pestañas de la página de inicio"],
+  ]) {
+    it(`${file}: the known issues hold «${title}», name WCAG 2.2.2, the hold on hover and focus and reduced motion`, () => {
+      const section = known(text(file));
+      const item = section.match(new RegExp(`<li><strong>${title}\\.?</strong>[\\s\\S]*?</li>`))?.[0];
+      expect(item, `an item whose strong is «${title}»`).toBeTruthy();
+      expect(item).toMatch(/\b2\.2\.2\b/);
+      expect(item).toMatch(/\b3(?:\.2)?\b/);
+      expect(item).toMatch(/reduced-motion|movimiento reducido/i);
+      expect(item).toMatch(/31 October 2026|31 de octubre de 2026/);
+    });
+  }
+
   for (const [file, title] of [
     ["apps/docs/pages/accessibility.html", "Motion of the logo"],
     ["apps/docs/i18n/es/pages/accessibility.html", "Movimiento del logo"],

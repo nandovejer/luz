@@ -433,7 +433,7 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
 
   it("the FAQ is in the language of the page, except in Arabic, where its questions and answers are English and the catalog says it", () => {
     const faq = (code) => Object.keys(catalogs[code]).filter((key) => AR_ENGLISH(key) && key !== "faq.lang");
-    expect(faq("en").length, "17 questions with their answers (some in several parts)").toBeGreaterThanOrEqual(34);
+    expect(faq("en").length, "9 questions with their answers (some in several parts)").toBeGreaterThanOrEqual(18);
     expect(catalogs.en["faq.lang"]).toBe("en");
     expect(catalogs.es["faq.lang"]).toBe("es");
     expect(catalogs.ar["faq.lang"], "the FAQ of /ar/ declares what it is written in").toBe("en");
@@ -442,7 +442,7 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
       expect(catalogs.es[key], `es ${key} is translated`).not.toBe(catalogs.en[key]);
     }
     // The title, the lead, the nav's label and the group names are the page's language, also in Arabic
-    for (const key of ["faq.eyebrow", "faq.title", "faq.lead", "faq.nav", "faq.group.about", "faq.group.html", "faq.group.use", "faq.group.existing"]) {
+    for (const key of ["faq.eyebrow", "faq.title", "faq.lead", "faq.nav", "faq.group.about", "faq.group.use", "faq.more", "faq.more.link"]) {
       expect(catalogs.ar[key], `ar ${key}`).toMatch(/[؀-ۿ]/);
     }
   });
@@ -485,14 +485,14 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
     }
   });
 
-  it("the footer is the brand and two columns, the mode switcher and the licence, and the header has the languages, in every language", () => {
+  it("the footer is the brand, a site map of four groups, the mode switcher and the licence, and the header has the languages, in every language", () => {
     for (const doc of docs) {
       const html = rendered.get(doc.route);
       const footer = html.slice(html.indexOf("<footer"), html.indexOf("</footer>"));
       expect(footer, doc.route).toContain("luz-site-footer__brand");
-      // Two columns (the docs, the project), and inside the first two labels: the packages and the kinds of site
-      expect(footer.match(/class="luz-site-footer__col-title"/g), doc.route).toHaveLength(2);
-      expect(footer.match(/class="landing-foot-label"/g), doc.route).toHaveLength(2);
+      // The site map (tests/landing-footer-map.test.js): four groups, each with a title
+      expect(footer.match(/class="?luz-site-footer__col-title"?/g), doc.route).toHaveLength(4);
+      expect(footer, doc.route).not.toMatch(/landing-foot-label/);
       expect(footer, doc.route).toMatch(/<luz-theme-time\b[^>]*>\s*<luz-theme-mode\b/);
       // The languages are the header's switch (not a list in the footer), with a link to each
       const header = html.slice(html.indexOf("<header"), html.indexOf("</header>"));
@@ -501,9 +501,22 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
   });
 
   it("the hero's lead keeps the TDD statement in every language: the lead is one sentence about what works and how it changes", () => {
-    // The sentence says what to do with LUZ (start a project, or migrate it page by page) and keeps the promise of the tests
-    expect(catalogs.en["hero.lead"]).toMatch(/start a project with LUZ, or migrate it page by page/);
+    // The sentence says what to do with LUZ (start a project, or migrate it page by page) and keeps the promise of the tests;
+    // it spells the name: LUZ, the Light, Usable and Zero-dependency design system (the four words are strong)
+    const lead = catalogs.en["hero.lead"];
+    expect(lead.replace(/<[^>]*>/g, "")).toMatch(/start a project with LUZ, the Light, Usable and Zero-dependency design system, or migrate it page by page/);
+    expect(lead).not.toMatch(/\(|\)/);
+    expect([...lead.matchAll(/<strong\b[^>]*>([^<]*)<\/strong>/g)].map((m) => m[1])).toEqual(["LUZ", "Light", "Usable", "Zero-dependency"]);
+    expect(lead).toMatch(/<strong class="landing-nowrap">Zero-dependency<\/strong>/);
     expect(catalogs.en["hero.lead"]).toMatch(/every change starts with a failing test/);
+    // Spanish and Arabic keep LUZ and the three words in English: the three are marked lang="en" (in Arabic inside an isolate)
+    for (const code of ["es", "ar"]) {
+      const text = catalogs[code]["hero.lead"];
+      expect([...text.matchAll(/<strong\b[^>]*>([^<]*)<\/strong>/g)].map((m) => m[1]), code).toEqual(["LUZ", "Light", "Usable", "Zero-dependency"]);
+      expect(text, code).toMatch(/<span lang="en"><strong>Light<\/strong>, <strong>Usable<\/strong> and <strong class="landing-nowrap">Zero-dependency<\/strong><\/span>/);
+      expect(text, code).not.toMatch(/\(|\)/);
+    }
+    expect(catalogs.ar["hero.lead"], "ar: the English words sit in an isolate").toMatch(/[\u2066-\u2068]<span lang="en">[\s\S]*<\/span>\u2069/);
     for (const code of ["en", "es", "ar"]) expect(catalogs[code]["hero.lead"].replace(/<[^>]*>/g, "").length, code).toBeGreaterThan(120);
   });
 

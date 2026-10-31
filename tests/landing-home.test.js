@@ -33,10 +33,18 @@ describe("apps/landing/landing.js: no mode logic", () => {
       /data-moment/,
       /dataset\.(theme|light|moment)\b/,
       /localStorage|sessionStorage/,
-      /matchMedia|prefers-color-scheme|prefers-contrast/,
+      // reduced motion is not a colour preference: the tabs that turn by themselves ask for it
+      /matchMedia\(\s*["'`](?!\(prefers-reduced-motion)|prefers-color-scheme|prefers-contrast/,
       /\.mode\s*=[^=]/,
     ]) {
       expect(js, String(forbidden)).not.toMatch(forbidden);
+    }
+  });
+
+  it("has no switch of the modes section in the address: no ?modes=, ?cuts= or ?svh= anywhere in the home's or the header's sources", () => {
+    expect(js).not.toMatch(/(?:modes|cuts|svh)=/);
+    for (const file of ["apps/landing/landing.js", "apps/landing/landing.css", "apps/landing/index.html", "apps/site/header.js", "apps/site/header.css"]) {
+      expect(read(file), file).not.toMatch(/[?&](?:modes|cuts|svh)=/);
     }
   });
 
@@ -84,7 +92,15 @@ describe("apps/landing/landing.css: the home's own, on tokens", () => {
     const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
     const ofHero = rules.filter((rule) => /\.luz-hero__(title|lead)\b/.test(rule.selector));
     expect(ofHero.length).toBeGreaterThan(0);
-    for (const rule of ofHero) {
+    // The four words that spell the name (LUZ, Light, Usable, Zero-dependency) are <strong>: the one voice that is the home's
+    // is the strong ink at weight 600, and nothing else
+    const ofStrong = ofHero.filter((rule) => /\bstrong\b/.test(rule.selector));
+    expect(ofStrong.length, "the strong words of the lead are drawn").toBeGreaterThan(0);
+    for (const rule of ofStrong) {
+      expect(rule.body, rule.selector).toMatch(/font-weight:\s*600/);
+      expect(rule.body, rule.selector).toMatch(/color:\s*var\(--luz-text-primary\)/);
+    }
+    for (const rule of ofHero.filter((r) => !ofStrong.includes(r))) {
       expect(rule.body, rule.selector).not.toMatch(/(?<![\w-])(?:font-family|font-weight|font-style|line-height|letter-spacing|color|text-transform)\s*:/);
       // A size is a step of the scale
       for (const [, value] of rule.body.matchAll(/(?<![\w-])font-size\s*:\s*([^;]+)/g)) expect(value, rule.selector).toMatch(/^var\(--luz-text-/);
@@ -94,7 +110,8 @@ describe("apps/landing/landing.css: the home's own, on tokens", () => {
   it("does not size the links of the footer's columns: the pattern gives them their block size (24 px)", () => {
     // Every rule whose selector names a footer column, and what it declares
     const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
-    const ofColumn = rules.filter((rule) => rule.selector.includes(".luz-site-footer__col"));
+    // (the title of a group of the site map is the home's own: it is as tall as a link's row, a token, so the titles read across)
+    const ofColumn = rules.filter((rule) => rule.selector.includes(".luz-site-footer__col") && !rule.selector.includes("__col-title"));
     expect(ofColumn.length, "the file still styles the current language in the column").toBeGreaterThan(0);
     for (const rule of ofColumn) {
       expect(rule.body, rule.selector).not.toMatch(/(?<![\w-])(?:min-|max-)?(?:block-size|height)\s*:/);

@@ -32,10 +32,9 @@ describe("no version is typed by hand in the partials, the layouts and the home 
     });
   }
 
-  it("the docs footer and the home's footer use {{version}}; the header shows no version", () => {
-    for (const file of ["apps/docs/_partials/footer-links.html", "apps/landing/index.html"]) {
+  it("the docs footer, the home's footer and the header's beta badge use {{version}}", () => {
+    for (const file of ["apps/docs/_partials/footer-links.html", "apps/landing/index.html", "apps/site/_partials/header.html"]) {
       expect(readFileSync(join(ROOT, file), "utf-8").includes("v{{version}}"), `${file} writes v{{version}}`).toBe(true);
     }
-    expect(readFileSync(join(ROOT, "apps/site/_partials/header.html"), "utf-8"), "the header").not.toContain("{{version}}");
   });
 });

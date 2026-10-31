@@ -810,7 +810,7 @@ describe("the LUZ docs site", () => {
     }
     // F4 (D7) and F5 (f5-ai-ready.md 6): Install, Choose your snippet, organised, how to read,
     // Make it yours, bundler, JavaScript, layers, print, Working with AI, Migrate a project to LUZ, then (F7 step 7,
-    // f7-open-source.md) How LUZ is built last, then the area Kinds of site (the plan ai-and-catalog-only, F3), which follows Get started
+    // f7-open-source.md) How LUZ is built, then More questions (the FAQ the home sends the rest of its questions to), then the area Kinds of site (the plan ai-and-catalog-only, F3), which follows Get started
     expect(order.slice(0, 18)).toEqual([
       "/docs/get-started/",
       "/docs/get-started/snippet/",
@@ -824,17 +824,18 @@ describe("the LUZ docs site", () => {
       "/docs/get-started/ai/",
       "/docs/get-started/migrate/",
       "/docs/get-started/how-luz-is-built/",
+      "/docs/get-started/faq/",
       "/docs/kinds/",
       "/docs/kinds/landing/",
       "/docs/kinds/blog/",
       "/docs/kinds/app/",
       "/docs/kinds/docs/",
-      "/docs/tokens/",
     ]);
+    expect(order.slice(18, 19)).toEqual(["/docs/tokens/"]);
     expect(order.at(-1)).toBe("/docs/accessibility/");
   });
 
-  it("numbers the Get started pages 1 to 12 (11 pages: the number 11 is Migrate a project to LUZ, 12 is How LUZ is built) in the reading order, with these titles", () => {
+  it("numbers the Get started pages 1 to 13 (12 pages: 11 is Migrate a project to LUZ, 12 is How LUZ is built, 13 is More questions) in the reading order, with these titles", () => {
     const pages = readingOrder(site).filter((p) => p.meta.area === "get-started" && p.route !== "/docs/get-started/");
     const all = [site.byRoute.get("/docs/get-started/"), ...pages];
     expect(all.map((p) => [p.meta.order, p.meta.title])).toEqual([
@@ -850,6 +851,7 @@ describe("the LUZ docs site", () => {
       ["10", "Working with AI"],
       ["11", "Migrate a project to LUZ"],
       ["12", "How LUZ is built"],
+      ["13", "More questions"],
     ]);
   });
 
@@ -898,13 +900,15 @@ describe("the LUZ docs site", () => {
     }
     // Get started → Kinds of site → Tokens → Components → Catalog → HTML elements → Accessibility
     expect(endOf(rendered.get("/docs/tokens/")).prev?.[0]).toBe("/docs/kinds/docs/");
-    expect(endOf(rendered.get("/docs/kinds/")).prev?.[0]).toBe("/docs/get-started/how-luz-is-built/");
+    expect(endOf(rendered.get("/docs/kinds/")).prev?.[0]).toBe("/docs/get-started/faq/");
     expect(endOf(rendered.get("/docs/tokens/")).next?.[0]).toBe("/docs/tokens/color/");
     expect(endOf(rendered.get("/docs/get-started/ai/")).next?.[0]).toBe("/docs/get-started/migrate/");
     expect(endOf(rendered.get("/docs/get-started/migrate/")).prev?.[0]).toBe("/docs/get-started/ai/");
     expect(endOf(rendered.get("/docs/get-started/migrate/")).next?.[0]).toBe("/docs/get-started/how-luz-is-built/");
     expect(endOf(rendered.get("/docs/get-started/how-luz-is-built/")).prev?.[0]).toBe("/docs/get-started/migrate/");
-    expect(endOf(rendered.get("/docs/get-started/how-luz-is-built/")).next?.[0]).toBe("/docs/kinds/");
+    expect(endOf(rendered.get("/docs/get-started/how-luz-is-built/")).next?.[0]).toBe("/docs/get-started/faq/");
+    expect(endOf(rendered.get("/docs/get-started/faq/")).prev?.[0]).toBe("/docs/get-started/how-luz-is-built/");
+    expect(endOf(rendered.get("/docs/get-started/faq/")).next?.[0]).toBe("/docs/kinds/");
     expect(endOf(rendered.get("/docs/html/")).prev?.[0]).toMatch(/^\/docs\/catalog\//);
     expect(endOf(rendered.get("/docs/components/")).prev?.[0]).toMatch(/^\/docs\/tokens\//);
     expect(endOf(rendered.get("/docs/accessibility/")).prev?.[0]).toMatch(/^\/docs\/html\//);
