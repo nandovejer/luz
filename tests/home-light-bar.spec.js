@@ -109,7 +109,7 @@ test.describe('the bar is the slider alone', () => {
       await expect(page.locator('home-light .luz-theme-time__moments')).toHaveCount(0);
       await expect(page.locator('home-light .luz-theme-time__moment')).toHaveCount(0);
       const scrub = catalog(lang)['light.scrub'];
-      await expect(page.getByRole('slider', { name: scrub })).toBeVisible();
+      await expect(page.locator('home-light').getByRole('slider', { name: scrub })).toBeVisible();
       // The moment and the hour, for a screen reader: "Afternoon light, 14:00" in the language of the page
       const value = await slider(page).getAttribute('aria-valuetext');
       expect(value, 'moment, hour').toMatch(/^.+, 14:00$/);

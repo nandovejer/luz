@@ -48,9 +48,13 @@ function fallbackBlocks(css) {
 const { inner, rest } = fallbackBlocks(CSS);
 
 test.describe('the hero mark without text-box: the stylesheet', () => {
-  test('landing.css has one @supports not (text-box: trim-both cap alphabetic) block, for the word', () => {
-    expect(inner, 'the block of the engines without text-box').toHaveLength(1);
-    expect(inner[0]).toMatch(/\.landing-imago__word\s*\{[^}]*margin-block\s*:/);
+  test('landing.css has one @supports not (text-box: trim-both cap alphabetic) block for the word (the badges of the modes section have their own, for their padding)', () => {
+    expect(inner.length, 'the blocks of the engines without text-box').toBeGreaterThanOrEqual(1);
+    const ofWord = inner.filter((text) => /\.landing-imago__word\s*\{/.test(text));
+    expect(ofWord, 'one block names the word').toHaveLength(1);
+    expect(ofWord[0]).toMatch(/\.landing-imago__word\s*\{[^}]*margin-block\s*:/);
+    // The other blocks never touch the word
+    for (const text of inner.filter((t) => !ofWord.includes(t))) expect(text).not.toMatch(/landing-imago/);
   });
 
   test('the margins that give the box back are in that block alone', () => {

@@ -145,13 +145,15 @@ test.describe('Modes: a box for each mode switches the page', () => {
     await expect.poll(() => theme(page)).toBe('high-contrast');
   });
 
-  test('a box keeps its own mode when the page is in another: it is a scope, painted with its mode\'s page surface', async ({ page }) => {
+  test('a box keeps its own mode when the page is in another: it is a scope with no paper of its own, and its label badge is painted with its mode\'s page surface', async ({ page }) => {
     await seedMode(page, 'dark');
     await page.goto('/');
     await expect.poll(() => theme(page)).toBe('dark');
     for (const [mode] of MODES) {
-      const background = await page.locator(`#modes .landing-cut[data-theme="${mode}"]`).evaluate((el) => getComputedStyle(el).backgroundColor);
-      expect(channels(background), mode).toEqual(vejer(mode, '--luz-surface-page'));
+      const box = page.locator(`#modes .landing-cut[data-theme="${mode}"]`);
+      expect(channels(await box.evaluate((el) => getComputedStyle(el).backgroundColor)), `${mode} box has no paper`).toEqual([0, 0, 0, 0]);
+      const badge = await box.locator('.landing-cut__label').evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(channels(badge), mode).toEqual(vejer(mode, '--luz-surface-page'));
     }
   });
 });

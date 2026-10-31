@@ -325,11 +325,11 @@ for (const home of ['/', '/es/', '/ar/']) {
     expect(new Set(surfaces).size).toBe(3);
   });
 
-  test(`${home}: the footer lists its two columns, the four colour modes and the legal line, and the three languages are in the header`, async ({ page }) => {
+  test(`${home}: the footer lists its four groups of links, the four colour modes and the legal line, and the three languages are in the header`, async ({ page }) => {
     await page.goto(home);
     const footer = page.locator('footer.luz-site-footer');
-    await expect(footer.locator('.luz-site-footer__col')).toHaveCount(2);
-    await expect(footer.locator('.luz-site-footer__col').nth(1).locator('a')).toHaveCount(4);
+    await expect(footer.locator('.landing-foot-group')).toHaveCount(4);
+    await expect(footer.locator('.landing-foot-nav a')).toHaveCount(20);
     await expect(footer.locator('luz-theme-mode input[name="luz-theme-mode"]')).toHaveCount(4);
     expect((await footer.locator('p').allInnerTexts()).join(' ').length).toBeGreaterThan(40);
     // The languages are links of the header's switch (a popover nav, in the markup without a script)
