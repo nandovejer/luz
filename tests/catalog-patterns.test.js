@@ -934,7 +934,8 @@ describe("the migration changeset", () => {
   });
 
   it("maps each of the 21 files of the four packages to its file in catalog, by the new name of its block, and says the layers luz.landing, cms, app and docs are gone (breaking)", () => {
-    const text = read(".changeset/catalog-patterns.md");
+    // pending in .changeset/ before the Version PR, in the CHANGELOGs after it (where Prettier pads the tables)
+    const text = notes().find((n) => /@luz-ds\/landing\/components\/header\.css/.test(n.text)).text.replace(/[ \t]{2,}/g, " ");
     const MAP = {
       landing: { header: "site-header", hero: "hero", main: "main", section: "section", stat: "stat", footer: "site-footer", glow: "glow" },
       cms: { header: "site-header", "page-header": "page-header", "article-header": "article-header", article: "article", footer: "site-footer" },

@@ -237,7 +237,8 @@ describe("the exports, the loader and the scripts follow the elements", () => {
 /* ---- the changeset ---------------------------------------------------------------------------------- */
 
 describe("the migration changeset of F8 (decisions 69 and 74)", () => {
-  const notes = releaseNotes(root);
+  // the notes are pending in .changeset/ before the Version PR and in the CHANGELOGs after it, where Prettier pads the tables
+  const notes = releaseNotes(root).map((n) => ({ ...n, text: n.text.replace(/[ \t]{2,}/g, " ") }));
   const minor = (note, name) => note.bumps.some((b) => b.name === `@luz-ds/${name}` && b.level === "minor");
   const note = notes.find((n) => /`\.luz-landing-hero` \| `\.luz-hero`/.test(n.text));
 

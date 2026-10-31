@@ -28,6 +28,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { siteNumbers } from "../scripts/docs-site/i18n.js";
 import { builtData, checkJson, removeWorkspaces, workspace } from "./helpers/check-fixtures.js";
 import { checkModule } from "./helpers/check-modules.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 
 const repo = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(join(repo, path), "utf-8");
@@ -344,7 +345,8 @@ describe("EX-010 and the migration changeset", () => {
   const frontMatter = (text) => /^---\n([\s\S]*?)\n---/.exec(text)?.[1] ?? "";
 
   it("a changeset bumps tokens, core, catalog and check by a minor, and says what changed route by route (decision 36)", () => {
-    const found = changesets().find(({ text }) => ["tokens", "core", "catalog", "check"].every((pkg) => new RegExp(`"@luz-ds/${pkg}":\\s*minor`).test(frontMatter(text))) && /@luz-ds\/core\/sidebar/.test(text));
+    // pending changesets, or the same notes in the CHANGELOGs once the Version PR has consumed them
+    const found = releaseNotes(repo).map(({ file, text }) => ({ file, text: text.replace(/[ \t]{2,}/g, " ") })).find(({ text }) => ["tokens", "core", "catalog", "check"].every((pkg) => new RegExp(`"@luz-ds/${pkg}":\\s*minor`).test(frontMatter(text))) && /@luz-ds\/core\/sidebar/.test(text));
     expect(found, "a changeset for the four packages that names @luz-ds/core/sidebar").toBeTruthy();
     const body = found.text.slice(found.text.indexOf("---", 3) + 3);
     for (const route of ["@luz-ds/core/sidebar", "@luz-ds/catalog/sidebar", "@luz-ds/core/timeline", "@luz-ds/catalog/timeline"]) expect(body, route).toContain(route);
