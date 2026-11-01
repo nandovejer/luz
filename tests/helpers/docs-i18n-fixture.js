@@ -216,6 +216,10 @@ export const PAGES = {
     meta: { title: "Accessibility statement", description: "What is checked and what is not.", area: "accessibility", toc: "false" },
     body: (t) => `<h2 id="target">${t("Target")}</h2>\n<p>${t("LUZ aims for level AA.")}</p>`,
   },
+  "privacy.html": {
+    meta: { title: "Privacy and storage", description: "What is stored in your browser.", area: "hub", toc: "false" },
+    body: (t) => `<h2 id="storage">${t("Storage")}</h2>\n<p>${t("Nothing leaves your browser.")}</p>`,
+  },
   "get-started/index.html": {
     meta: { title: "Get started", description: "Start here and install LUZ.", area: "get-started", generate: "gallery" },
     body: (t) =>
@@ -316,6 +320,7 @@ export const TRANSLATED = {
   es: {
     "index.html": { reviewed: false },
     "accessibility.html": { reviewed: false },
+    "privacy.html": { reviewed: false },
     "get-started/index.html": { reviewed: false },
     "get-started/install.html": { reviewed: true, reviewer: "nandovejer" },
     "components/index.html": { reviewed: false },
