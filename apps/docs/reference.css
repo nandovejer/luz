@@ -32,6 +32,20 @@
   --luz-page-rail-top: calc(var(--site-header-h) + var(--luz-space-lg));
 }
 
+/* The sidebar is placed and sized by this layout, whatever the order of
+   catalog's sheets in the page. Catalog's sidebar.css gives every .luz-sidebar
+   `width` and `min-width: var(--luz-sidebar-width)` in the layer luz.catalog;
+   the layout's own rules for .luz-docs-nav (grid-area nav, inline-size auto)
+   are in the same layer with the same specificity, so the later sheet won, and
+   the built site writes the layout's first: the fixed 256px left no room for
+   the padding below, and every title was drawn a letter a line on a window
+   wider than the frame. Here, with no layer, the order does not matter. */
+.docs-page > .luz-docs-nav {
+  grid-area: nav;
+  inline-size: auto;
+  min-inline-size: 0;
+}
+
 @media (min-width: 769px) {
   .docs-page > .luz-sidebar {
     padding-inline-start: calc(var(--site-edge) + var(--luz-space-xl) - var(--luz-space-md) - 3px);
