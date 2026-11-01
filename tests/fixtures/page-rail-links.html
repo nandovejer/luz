@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalog: the page rail's links with the sidebar's stylesheet after</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <!-- tests/page-rail-links.spec.js: the rail's stylesheet FIRST and the sidebar's AFTER (the order of the Pages build) -->
+  <link rel="stylesheet" href="/packages/catalog/dist/components/page-rail.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/sidebar.css">
+</head>
+<body>
+  <main>
+    <h1>Page</h1>
+    <h2 id="one">One</h2>
+    <h2 id="two">Two</h2>
+  </main>
+  <aside class="luz-page-rail" aria-label="Page">
+    <div class="luz-page-rail__inner">
+      <nav class="luz-page-rail__onpage" aria-label="On this page">
+        <details class="luz-page-rail__fold" open>
+          <summary class="luz-page-rail__title">On this page</summary>
+          <ul class="luz-page-rail__list">
+            <li><a id="current" class="luz-sidebar__link luz-page-rail__link is-active" href="#one" aria-current="true">One</a></li>
+            <li><a id="other" class="luz-sidebar__link luz-page-rail__link" href="#two">Two</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </aside>
+</body>
+</html>
