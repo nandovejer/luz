@@ -187,6 +187,34 @@ describe("the agent file", () => {
   });
 });
 
+describe("the qa-release skill runs the legal audit", () => {
+  const skill = readFileSync(resolve(root, ".claude/skills/qa-release/SKILL.md"), "utf-8").toLowerCase();
+  const neverList = () => skill.slice(skill.indexOf("## never")).split(/\n## /)[0];
+
+  it("mentions the legal-auditor", () => {
+    expect(skill).toContain("legal-auditor");
+  });
+
+  it("says the audit is for a release to npm", () => {
+    expect(skill).toContain("release to npm");
+  });
+
+  it("saves the report under .claude/legal/", () => {
+    expect(skill).toContain(".claude/legal/");
+  });
+
+  it("says the audit never blocks the release", () => {
+    expect(skill).toContain("never blocks");
+  });
+
+  it("forbids applying a legal-auditor proposal in its Never list", () => {
+    expect(skill).toContain("## never");
+    const never = neverList();
+    expect(never).toContain("legal-auditor");
+    expect(never).toContain("apply");
+  });
+});
+
 describe("AGENTS.md", () => {
   it("mentions the legal-auditor", () => {
     expect(readFileSync(agentsMd, "utf-8")).toContain("legal-auditor");
