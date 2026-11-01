@@ -1,16 +1,16 @@
 <div align="center">
 
-# LUZ Design System
+<a href="https://nandovejer.github.io/luz/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/readme/banner-dark.svg">
+    <img src=".github/assets/readme/banner-light.svg" alt="LUZ. Light, Usable and Zero-dependency. A design system in plain HTML, CSS and ES modules." width="100%">
+  </picture>
+</a>
 
-**LUZ — Light, Usable & Zero-dependency**
-
-A vanilla design system in plain CSS and ES modules.<br>
-No framework. No build step for consumers.
-
-[![CI](https://github.com/nandovejer/luz/actions/workflows/ci.yml/badge.svg)](https://github.com/nandovejer/luz/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-![Status: beta](https://img.shields.io/badge/status-beta-orange)
-![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)
+[![npm](https://img.shields.io/npm/v/%40luz-ds%2Fcore?label=npm&color=2365a6)](https://www.npmjs.com/package/@luz-ds/core)
+[![Release](https://github.com/nandovejer/luz/actions/workflows/publish.yml/badge.svg)](https://github.com/nandovejer/luz/actions/workflows/publish.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-2365a6)](./LICENSE)
+![Runtime dependencies: 0](https://img.shields.io/badge/runtime%20dependencies-0-2365a6)
 
 [Install](#install-and-load) ·
 [What each package needs](#what-each-package-needs) ·
@@ -30,14 +30,12 @@ No framework. No build step for consumers.
 
 LUZ (formerly CAI) is built with plain CSS, ES modules and native browser APIs. Adopt only the tokens, add the components, or take the catalog: the three layers are independent packages that stack in one direction.
 
-```text
-@luz-ds/tokens
-      │
-      ▼
-@luz-ds/core ─────────────► @luz-ds/catalog
-
-A ──► B  B needs A
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/readme/packages-dark.svg">
+    <img src=".github/assets/readme/packages-light.svg" alt="Light goes into the LUZ prism and comes out as three bands, one per package: @luz-ds/catalog, site-wide pieces and page patterns; @luz-ds/core, bare HTML, layout and components; @luz-ds/tokens, tokens, colour modes and the font. Catalog needs core and tokens; core needs tokens." width="100%">
+  </picture>
+</p>
 
 The name stands for Light, Usable & Zero-dependency: light in weight (plain CSS and ES modules, nothing to build for the people who use it), usable by everyone (native HTML, three color modes, tested for accessibility), and with zero runtime dependencies.
 
