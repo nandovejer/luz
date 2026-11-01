@@ -97,8 +97,10 @@ const LLMS_TXT_MAX = 32 * 1024;
 // goes to ai.js as LLMS_FULL_MAX and to budgets.json in step 6, and it is never
 // raised afterwards (RL-17). The ideal was re-fixed once on 2026-10-15 after the
 // F5 pages (it was 384 KiB, measured before "Working with AI" existed); the
-// ceiling is unchanged and never raised.
-const LLMS_FULL_IDEAL = 400 * 1024;
+// ceiling is unchanged and never raised. It was re-fixed a second time, to 416 KiB,
+// for the Embed page (<luz-embed>): a further move is an edit of this line and of
+// the test that pins it, "keeps its ideal at 416 KiB".
+const LLMS_FULL_IDEAL = 416 * 1024;
 const LLMS_FULL_CEILING = 448 * 1024;
 // Curated, not empty: a floor that only says the sections are really there.
 const LLMS_FULL_FLOOR = 64 * 1024;
@@ -554,6 +556,14 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
     expect(bytes(full())).toBeGreaterThan(LLMS_FULL_FLOOR);
     expect(bytes(full())).toBeLessThanOrEqual(LLMS_FULL_IDEAL);
     expect(LLMS_FULL_IDEAL).toBeLessThan(LLMS_FULL_CEILING);
+  });
+
+  it("keeps its ideal at 416 KiB and its ceiling at 448 KiB, in this file, in budgets.json and in the table of PRINCIPLES.md: moving either is a visible edit", () => {
+    expect(LLMS_FULL_IDEAL).toBe(425984);
+    expect(LLMS_FULL_CEILING).toBe(458752);
+    const row = readJson("budgets.json").budgets.find((b) => b.name === "llms.txt and llms-full.txt (each, uncompressed)");
+    expect(row).toMatchObject({ ideal: 425984, max: 458752 });
+    expect(readFileSync(join(root, "PRINCIPLES.md"), "utf-8")).toMatch(/^\| `llms\.txt` and `llms-full\.txt`[^\n]*\| ≤ 416 kB \| 416 kB \| 448 kB \|$/m);
   });
 
   it("has no \"Contrast and focus\" table and no \"Tokens it uses\" list on any component or pattern page", () => {

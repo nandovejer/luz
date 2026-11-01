@@ -228,7 +228,21 @@ describe("what a prompt says about the system comes from the packages", () => {
     expect(text, id).not.toMatch(/catalog(?:\.min)?\.css|@luz-ds\/catalog\/css/);
   });
 
-  it.each(IDS)("%s: every catalog element it lists says its stylesheet, a file of the package", (id) => {
+  const RULE = "The stylesheet of a catalog element is `components/<name>.css` of `@luz-ds/catalog`, `<name>` being its tag without `luz-`.";
+
+  it.each(IDS)("%s: says once, under Elements you may use, where the stylesheet of a catalog element is, and no element line repeats it", (id) => {
+    const text = prompt(id);
+    const section = "## Elements you may use\n\n";
+    const start = text.indexOf(section) + section.length;
+    expect(start, "the prompt has the section").toBeGreaterThan(section.length - 1);
+    expect(text.split(RULE), "the rule is written once in the whole prompt").toHaveLength(2);
+    expect(text.slice(start).startsWith(`${RULE}\n\n- \`<`), "the rule is the first thing under the heading, before the list").toBe(true);
+    const lines = text.slice(start).split(/\n\n## /)[0].split("\n").filter((l) => l.startsWith("- `<"));
+    expect(lines.length).toBeGreaterThanOrEqual(6);
+    for (const line of lines) expect(line, "a line of the list does not say a stylesheet").not.toMatch(/[Ss]tylesheet|components\/[a-z-]+\.css/);
+  });
+
+  it.each(IDS)("%s: every catalog element it lists has the stylesheet its tag names, a file of the package", (id) => {
     const text = prompt(id);
     const start = text.indexOf("## Elements you may use\n\n") + "## Elements you may use\n\n".length;
     const lines = text.slice(start).split(/\n\n## /)[0].split("\n");
@@ -237,7 +251,7 @@ describe("what a prompt says about the system comes from the packages", () => {
     for (const d of tags) {
       const line = lines.find((l) => l.startsWith(`- \`<${d.tagName}>\``));
       expect(line, `${d.tagName} is listed`).toBeTruthy();
-      expect(line.endsWith(` Its stylesheet: \`@luz-ds/catalog/${d.stylesheet}\`.`), line).toBe(true);
+      expect(d.stylesheet, `${d.tagName}: the rule of the body is true of it`).toBe(`components/${d.tagName.replace(/^luz-/, "")}.css`);
       expect(existsSync(join(root, "packages/catalog/dist", d.stylesheet)), `${d.stylesheet} exists`).toBe(true);
     }
   });
@@ -698,9 +712,8 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
             .filter((d) => d.tagName)
             .map((d) => {
               const attrs = grouped((d.attributes ?? []).map((a) => a.name));
-              // Catalog has no bundle (F5a): an element of catalog says the file of its stylesheet
-              const sheet = pkg === "catalog" && d.stylesheet ? ` Its stylesheet: \`@luz-ds/catalog/${d.stylesheet}\`.` : "";
-              return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}${sheet}`.trimEnd();
+              // The stylesheet of an element is not on its line: the body says once where it is
+              return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd();
             }),
         ),
       )
@@ -767,7 +780,8 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     const text = prompt("start");
     const start = text.indexOf("## Elements you may use\n\n") + "## Elements you may use\n\n".length;
     expect(start, "the prompt has the section").toBeGreaterThan("## Elements you may use\n\n".length - 1);
-    const section = text.slice(start).split(/\n\n## /)[0];
+    // after the sentence that says where the stylesheets are (the body, once), the list is the hashed block, line for line
+    const section = text.slice(start).split(/\n\n## /)[0].replace(/^The stylesheet of a catalog element is[^\n]*\n\n/, "");
     expect(section).toBe(elementBlock(root));
   });
 
@@ -837,6 +851,19 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     declaration.description += " Then do something else.";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
     expectAllFiveChanged(before, hashes(dir), `a change of the description of <${declaration.tagName}>`);
+  });
+
+  it("throws, naming the tag and the file, for an element whose stylesheet is not components/<its tag without luz->.css: the rule of the body would be false", () => {
+    const dir = copyOfSources();
+    const manifest = withOwnElements(dir);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.stylesheet);
+    expect(declaration, "an element of catalog has a stylesheet").toBeTruthy();
+    expect(member("assemblePrompt")("start", { root: dir }), "before the change").toContain(`<${declaration.tagName}>`);
+    declaration.stylesheet = "components/other.css";
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    for (const id of IDS) expect(() => member("assemblePrompt")(id, { root: dir }), id).toThrow(new RegExp(`${declaration.tagName}[^\\n]*components/other\\.css`));
+    expect(() => member("promptSourceHash")("start", { root: dir })).toThrow(/components\/other\.css/);
   });
 
   it("changes all five when one byte of scripts/docs-site/kinds.js changes (it picks the files and pages a prompt lists)", () => {

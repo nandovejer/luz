@@ -31,7 +31,7 @@ const read = (/** @type {string} */ path) => readFileSync(fromRepo(path), 'utf-8
 const GROUPS = [
   { id: 'navigation', en: 'Navigation', pages: ['app-bar', 'lang-switch', 'masthead', 'navbar', 'sidebar', 'site-header', 'submenu'] },
   { id: 'page-structure', en: 'Page structure', pages: ['article-header', 'hero', 'page-header', 'section', 'site-footer'] },
-  { id: 'content', en: 'Content', pages: ['dashboard', 'faq', 'stat', 'terminal', 'timeline', 'toc'] },
+  { id: 'content', en: 'Content', pages: ['dashboard', 'embed', 'faq', 'stat', 'terminal', 'timeline', 'toc'] },
   { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'theme-time', 'cookie-consent', 'search'] },
   { id: 'documentation', en: 'Documentation', pages: ['do-dont', 'doc-header', 'docs-layout', 'example', 'page-footer', 'page-rail', 'pager'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
@@ -49,7 +49,7 @@ const KIND_OF = {
   // F7: the four that came from core (the owner's, decision 35 and the pages they had): a sidebar and a timeline fit two kinds
   navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'],
   // The components with data of the site fit any
-  search: ['any'], 'cookie-consent': ['any'], 'theme-time': ['any'], 'lang-switch': ['any'], submenu: ['any'], announcement: ['any'], faq: ['any'],
+  search: ['any'], 'cookie-consent': ['any'], 'theme-time': ['any'], 'lang-switch': ['any'], submenu: ['any'], announcement: ['any'], faq: ['any'], embed: ['any'],
 };
 const KINDS = (/** @type {string} */ slug) => {
   if (!(slug in KIND_OF)) throw new Error(`tests/docs-catalog-patterns.spec.js: ${slug} has no kinds`);
@@ -206,7 +206,7 @@ test.describe('the four areas of the packages that are gone are not served', () 
     });
   }
 
-  test('the search index lists the 28 pages and the class reference of Catalog, and no page of a gone area', async ({ request }) => {
+  test('the search index lists the 30 pages and the class reference of Catalog, and no page of a gone area', async ({ request }) => {
     const index = await (await request.get('/docs/search-index.json')).json();
     const paths = /** @type {string[]} */ (index.pages.map((/** @type {string[]} */ row) => row[1]));
     for (const slug of [...PATTERNS, 'classes']) expect(paths, slug).toContain(`catalog/${slug}/`);

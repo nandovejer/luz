@@ -113,6 +113,7 @@
   "snippets.when.midi": "a <code>.luz-player</code> with <code>data-type=\"midi\"</code>",
   "snippets.when.table-sort": "a sortable table, with <code>th[data-luz-sort]</code>",
   "snippets.when.luz-timeline": "a <code>&lt;luz-timeline&gt;</code>",
+  "snippets.when.luz-embed": "an <code>&lt;luz-embed&gt;</code>",
   "snippets.when.i18n-es": "an element with <code>lang=\"es\"</code>, on <code>&lt;html&gt;</code> or in the page, outside a link or an option",
   "snippets.when.luz-search": "a <code>&lt;luz-search&gt;</code>",
   "snippets.when.luz-cookie-consent": "a <code>&lt;luz-cookie-consent&gt;</code>",

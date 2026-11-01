@@ -90,13 +90,13 @@ describe("catalog.js, the build and the size guard know the chunks", () => {
     expect(files).toContain("./theme-time-bar.js");
     expect(loader).toMatch(/["']luz-theme-time["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/theme-time\.js["']\s*\)/);
     expect(loader).toMatch(/["']luz-theme-time-bar["']\s*:\s*\(\)\s*=>\s*import\(\s*["']\.\/theme-time-bar\.js["']\s*\)/);
-    expect(code(loader).match(IMPORT_CALL)).toHaveLength(6);
+    expect(code(loader).match(IMPORT_CALL)).toHaveLength(7);
   });
 
   it("scripts/build-catalog.js lists them among the chunks", () => {
     const build = read("scripts/build-catalog.js");
     const chunks = /chunks:\s*\[([^\]]*)\]/.exec(build)?.[1] ?? "";
-    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "theme-time.js", "theme-time-bar.js", "timeline.js", "sidebar.js"]); // timeline and sidebar came from core in F7
+    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "theme-time.js", "theme-time-bar.js", "timeline.js", "embed.js", "sidebar.js"]); // timeline and sidebar came from core in F7
   });
 
   it("scripts/check-size.js expects the two time chunks of the loader, with the other four", () => {
@@ -172,6 +172,7 @@ describe("the budgets of the time chunks", () => {
       { name: "catalog JS lazy chunk: sidebar", ideal: 768, max: 1024 },
       { name: "catalog layout CSS (each)", ideal: 1792, max: 2048 },
       { name: "catalog kind patterns CSS (each)", ideal: 768, max: 1024 },
+      { name: "catalog JS lazy chunk: embed", ideal: 1536, max: 2048 },
     ]);
     expect(rows.find((b) => b.name === "catalog component CSS (each)").glob).toBe("packages/catalog/dist/components/*.min.css");
     expect(rows.find((b) => b.name === "catalog JS").file).toBe("packages/catalog/dist/catalog.min.js");

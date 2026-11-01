@@ -30,6 +30,9 @@ import { initSiteChrome } from "/apps/site/header.js";
 import { initPromptDialogs } from "/apps/site/prompt-dialog.js";
 import { initDocsView } from "./view.js";
 
+// Defines <luz-embed>, for the live example of the Embed page, only where there is one
+if (document.querySelector("luz-embed")) import("/packages/catalog/dist/embed.js");
+
 /* ---- Small enhancements ----------------------------------------------- */
 
 function initFolds() {

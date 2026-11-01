@@ -16,6 +16,9 @@
  *                  theme-time-bar.js, the slider of the day, after it
  *   <luz-timeline> timeline.js, when the page is scanned: the chunk defines
  *                  the element, and the browser upgrades each one
+ *   <luz-embed>    embed.js, when the page is scanned: the chunk defines the
+ *                  element, which turns its link into a button and asks
+ *                  nothing of the player's origin until the visitor acts
  *   .luz-sidebar   sidebar.js, when the page is scanned, with no wait for
  *                  idle, and then initSidebar(): the scroll spy that marks
  *                  the link of the section on screen, and the drawer that
@@ -54,13 +57,14 @@
  * hint in Safari and Firefox.
  */
 
-// SEC-CHUNK-1: the only six files this one loads, each by a literal
+// SEC-CHUNK-1: the only seven files this one loads, each by a literal
 const CHUNKS = {
   "luz-search": () => import("./search.js"),
   "luz-cookie-consent": () => import("./cookie-consent.js"),
   "luz-theme-time": () => import("./theme-time.js"),
   "luz-theme-time-bar": () => import("./theme-time-bar.js"),
   "luz-timeline": () => import("./timeline.js"),
+  "luz-embed": () => import("./embed.js"),
   // Not a tag: the sidebar is a class (and a list marked data-luz-spy); its chunk defines no element, so it is started here
   sidebar: () => import("./sidebar.js").then((m) => m.initSidebar()),
 };
@@ -115,6 +119,8 @@ if (typeof document !== "undefined") {
     if (document.querySelector("luz-theme-time")) idle(() => load("luz-theme-time").then(() => document.querySelector('luz-theme-time[variant="bar"]') && load("luz-theme-time-bar")));
     // The timeline defines its element, which upgrades every instance; the sidebar starts its scroll spy at once, as core's entry did
     if (document.querySelector("luz-timeline")) load("luz-timeline");
+    // The embed defines its element, which upgrades every instance; it asks nothing of the player's origin until the visitor acts
+    if (document.querySelector("luz-embed")) load("luz-embed");
     if (document.querySelector(".luz-sidebar, [data-luz-spy]")) load("sidebar");
   };
 

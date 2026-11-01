@@ -796,7 +796,7 @@ test.describe('Landing page', () => {
       expect(new Set(tops).size, 'one row at 1280px').toBe(1);
     });
 
-    test('Light: a bar for each package with its weight in KB, the longest being core, and a total that adds up', async ({ page }) => {
+    test('Light: a bar for each package with its weight in KB, the longest being the heaviest, and a total that adds up', async ({ page }) => {
       await open(page);
 
       const card = page.locator('#why .landing-why__card--light');
@@ -821,8 +821,12 @@ test.describe('Landing page', () => {
         expect(bar.figure).toMatch(new RegExp(`^[\\d.]+ ${EN['why.weight.unit']}$`));
         expect(bar.value).toBeLessThanOrEqual(bar.max);
       }
+      // The longest bar is the one that fills its meter, and it is the heaviest package whichever that is: the figures
+      // come from the build (budgets and dist), so the test does not name it
       const longest = bars.find((bar) => bar.value === bar.max);
-      expect(longest?.name).toBe('core');
+      expect(longest, 'one bar fills its meter').toBeTruthy();
+      expect(kb(longest?.figure ?? ''), 'and has the largest figure').toBe(Math.max(...bars.map((bar) => kb(bar.figure ?? ''))));
+      for (const bar of bars) expect(bar.max, `${bar.name} has the same scale as the others`).toBe(longest?.max);
       // The total is the sum of the bars (each figure is rounded to a tenth)
       const total = kb(await card.locator('figcaption strong').innerText());
       expect(Math.abs(total - bars.reduce((sum, bar) => sum + kb(bar.figure ?? ''), 0))).toBeLessThanOrEqual(0.5);

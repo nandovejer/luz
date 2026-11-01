@@ -1,0 +1,195 @@
+<!-- luz:page
+title: Contenido incrustado
+description: Un póster y un botón de reproducir en lugar de un reproductor de otro sitio, que se carga solo cuando el visitante lo pide, tras el consentimiento.
+fits: una página que muestra un vídeo o un mapa de otro sitio
+keywords: vídeo, iframe, reproductor de terceros, fachada, incrustado ligero, privacidad, consentimiento
+source: aa52bbda1a81
+reviewed: false
+-->
+    <div class="docs-component" id="p-embed">
+          <h2 id="example">Ejemplo</h2>
+          <p>El vídeo de la NASA del saludo de John Young en la Luna, con un póster de este sitio. No se pide nada al servicio de vídeo hasta que pulsas el botón y aceptas: el ejemplo pregunta primero, como lo haría un sitio que quiere consentimiento, y solo entonces carga el reproductor. Su respuesta se guarda con su propia clave, <code>luz-consent-demo</code>, así que no cuenta como respuesta para este sitio.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <luz-embed src="https://www.youtube-nocookie.com/embed/g5aPoRtF2vw?autoplay=1" consent="external" data-luz-consent-key="luz-consent-demo">
+              <a class="luz-embed__link" href="https://www.youtube.com/watch?v=g5aPoRtF2vw">
+                <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360" loading="lazy">
+                <span class="u-sr-only">Play video: </span>
+                <span class="luz-embed__title">John Young’s Lunar Salute on Apollo 16</span>
+              </a>
+              <div class="luz-embed__ask" data-luz-embed-ask hidden>
+                <p>This video plays from an outside service, which learns your IP address and may set cookies.</p>
+                <div class="o-actions">
+                  <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
+                  <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play outside videos</button>
+                  <button class="luz-btn luz-btn--ghost" type="button" value="cancel">Not now</button>
+                </div>
+              </div>
+            </luz-embed>
+            <p class="docs-demo__note">Sin JavaScript, el póster es un enlace al vídeo.</p>
+            <p class="docs-demo__note">Esta es la única página de este sitio que puede cargar otro sitio, y solo después de que pulses el botón y aceptes: la política de seguridad del sitio permite que esta página, y ninguna otra, muestre en un marco <code>www.youtube-nocookie.com</code>.</p>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Dos cosas que conviene saber antes de fiarse de él.</p>
+          <ul>
+            <li>«Reproducir siempre» escribe la respuesta del aviso de cookies, con su clave <code>luz-consent</code> (o la de <code>data-luz-consent-key</code>), con una caducidad fija de 180 días: no lee el <code>data-luz-consent-days</code> del aviso, así que un aviso con otro periodo sustituye la respuesta por la suya la próxima vez que el visitante la dé.</li>
+            <li>No se ha probado con un lector de pantalla.</li>
+          </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del contenido incrustado">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>El enlace es la página sin JavaScript, así que escríbelo como la página a la que quieres que llegue el lector: apunta al vídeo donde está alojado. <code>src</code> es la dirección del reproductor, completa, tal como la da el otro sitio (aquí, la dirección de incrustación con privacidad reforzada que YouTube da para un vídeo); LUZ no construye ninguna dirección ni nombra a ningún proveedor. El póster es tu propia imagen, en tu propio servidor: un póster pedido al otro sitio lo alcanzaría al cargar la página.</p>
+            <p><code>catalog.min.js</code> carga el archivo propio del elemento, <code>embed.min.js</code>, cuando recorre la página; una página sin <code>catalog.min.js</code> carga ese archivo por su cuenta.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-embed" aria-label="Copy the embed markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Embed markup"><code id="code-embed">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/catalog.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;luz-embed src=&quot;https://www.youtube-nocookie.com/embed/g5aPoRtF2vw?autoplay=1&quot; consent=&quot;external&quot;&gt;
+  &lt;a class=&quot;luz-embed__link&quot; href=&quot;https://www.youtube.com/watch?v=g5aPoRtF2vw&quot;&gt;
+    &lt;img class=&quot;luz-embed__poster&quot; src=&quot;/media/apollo-16-poster.jpg&quot; alt=&quot;&quot; width=&quot;1280&quot; height=&quot;720&quot; loading=&quot;lazy&quot;&gt;
+    &lt;span class=&quot;u-sr-only&quot;&gt;Play video: &lt;/span&gt;
+    &lt;span class=&quot;luz-embed__title&quot;&gt;John Young’s Lunar Salute on Apollo 16&lt;/span&gt;
+  &lt;/a&gt;
+  &lt;div class=&quot;luz-embed__ask&quot; data-luz-embed-ask hidden&gt;
+    &lt;p&gt;This video plays from an outside service, which learns your IP address and may set cookies.&lt;/p&gt;
+    &lt;div class=&quot;o-actions&quot;&gt;
+      &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot; value=&quot;once&quot;&gt;Play this video&lt;/button&gt;
+      &lt;button class=&quot;luz-btn luz-btn--secondary&quot; type=&quot;button&quot; value=&quot;always&quot;&gt;Always play outside videos&lt;/button&gt;
+      &lt;button class=&quot;luz-btn luz-btn--ghost&quot; type=&quot;button&quot; value=&quot;cancel&quot;&gt;Not now&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/luz-embed&gt;</code></pre>
+            </div>
+            <p>Tus scripts pueden preguntar qué cargaría el elemento:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">JS</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-embed-js" aria-label="Copy the script that reads the address">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Script that reads the address"><code id="code-embed-js">import { playerURL } from &quot;@luz-ds/catalog/embed&quot;;
+
+// The address the element would load, or null when it stays a link
+const url = playerURL(document.querySelector(&quot;luz-embed&quot;));</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay variantes. La proporción es una propiedad y los puntos de extensión son atributos.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Clases y atributos del contenido incrustado" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase o atributo"><div><code>&lt;luz-embed&gt;</code></div></td><td data-label="Efecto"><div>El elemento personalizado que define el módulo: un bloque con la proporción del marco. Se conecta solo al añadirse a la página</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>src</code></div></td><td data-label="Efecto"><div>Obligatorio. La dirección completa del reproductor, escrita por ti: <code>https:</code> o del mismo origen que la página. Cualquier otra (<code>javascript:</code>, <code>http:</code> de otro origen, un error de escritura) deja el enlace</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>consent</code></div></td><td data-label="Efecto"><div>El nombre de una categoría del <a href="/docs/catalog/cookie-consent/">consentimiento para cookies</a> (una letra minúscula y después minúsculas, dígitos o guiones, 32 como máximo). Mientras no se conceda no se pide nada al origen del reproductor, y un clic pregunta primero. Sin bloque de pregunta y sin la categoría concedida, se queda como enlace</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-luz-consent-key</code></div></td><td data-label="Efecto"><div>La clave de almacenamiento de la elección, que debe empezar por <code>luz-</code>; por defecto <code>luz-consent</code>, la del aviso</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>--luz-embed-ratio</code></div></td><td data-label="Efecto"><div>La proporción del marco, <code>16 / 9</code> por defecto. Se fija en el elemento: <code>style="--luz-embed-ratio: 4 / 3"</code></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-embed__link</code></div></td><td data-label="Efecto"><div>El enlace de la página sin JavaScript: contiene el póster y el título, y ocupa todo el marco. Con JavaScript pasa a ser un <code>button.luz-embed__play</code> con los mismos hijos, así que su nombre no cambia</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-embed__poster</code>, <code>.luz-embed__title</code></div></td><td data-label="Efecto"><div>Tu imagen, que cubre el marco, y el título, sobre un velo en la parte inferior</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>.luz-embed__ask</code> with <code>data-luz-embed-ask</code></div></td><td data-label="Efecto"><div>Opcional, con <code>hidden</code> en el marcado: la pregunta que se muestra cuando el clic necesita un consentimiento que no está. Sus botones tienen un <code>value</code>: <code>once</code>, <code>always</code> o <code>cancel</code></div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>data-luz-state</code></div></td><td data-label="Efecto"><div>Lo escribe el script: <code>ready</code>, <code>ask</code> o <code>playing</code>. Dale estilo, pero no lo fijes</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>playerURL(el)</code></div></td><td data-label="Efecto"><div>Lo exporta <code>@luz-ds/catalog/embed</code>: la dirección validada del elemento, o <code>null</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>@luz-ds/catalog</code> y un archivo propio, <code>@luz-ds/catalog/embed</code> (<code>dist/embed.min.js</code>, menos de 1,5 kB comprimido), que define <code>&lt;luz-embed&gt;</code>. No usa ninguna biblioteca, y el script del reproductor, si lo tiene, se ejecuta solo dentro del marco, una vez cargado. Un vídeo o un audio nativos no lo necesitan: usa el <a href="/docs/components/player/">reproductor</a>. Esto es para lo que solo otro sitio puede mostrar.</p>
+            <ul>
+              <li><strong>Antes del clic:</strong> la página contiene un póster y un botón, y no pide nada al otro sitio. Cuando el puntero pasa sobre el botón, o el foco llega a él, se avisa al navegador de que abra una conexión con el origen del reproductor (un <code>preconnect</code>, una vez por origen), salvo que el sitio quiera consentimiento y no esté concedido.</li>
+              <li><strong>El clic:</strong> si nada necesita consentimiento, o está concedido, se escribe el marco con permiso de <code>autoplay</code> y el foco entra en él. Si hace falta consentimiento, la pregunta se muestra en su lugar y el foco va a su primer botón.</li>
+              <li><strong>La pregunta:</strong> <code>value="once"</code> reproduce este vídeo. <code>value="always"</code> lo reproduce y guarda la categoría, como hace el aviso de cookies, en <code>localStorage</code> como <code>{"version":1,"expires":…,"asked":[…],"granted":[…]}</code>, emite <code>luz:consent</code> en <code>document</code> y desbloquea todos los demás contenidos incrustados con esa categoría. <code>value="cancel"</code> vuelve al póster, con el foco en su botón. Escape no hace nada; Ahora no es la vuelta atrás.</li>
+              <li><strong>El marco:</strong> tiene el título del vídeo, <code>allow</code> para las funciones que usan los reproductores, <code>allowfullscreen</code> y <code>referrerpolicy="strict-origin-when-cross-origin"</code>, que algunos reproductores necesitan para aceptar la incrustación.</li>
+              <li>El script no escribe ningún texto: cada palabra está en tu marcado, en el idioma de la página.</li>
+            </ul>
+            <p>Un servidor que construya tus páginas puede escribir <code>src</code> y guardar el póster al guardar el contenido, para que el lector nunca contacte con el otro sitio antes de elegirlo.</p>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>El póster es un enlace con un título visible que abre el vídeo donde está alojado, y la pregunta queda oculta. Hace lo mismo cuando <code>src</code> no es válido, y cuando la categoría no está concedida y no hay pregunta que hacer.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Teclas:</strong> Tab llega al botón; Intro o Espacio lo pulsan, como en cualquier botón. En la pregunta, Tab recorre sus botones. Escape no hace nada.</li>
+              <li><strong>Nombre:</strong> el botón tiene el nombre del enlace al que sustituye: las palabras ocultas «Play video:» y luego el título.</li>
+              <li><strong>Foco:</strong> al primer botón de la pregunta cuando se muestra, al marco cuando se carga el reproductor, de vuelta al botón con Ahora no. Cuando el reproductor está en el marco, sus teclas y controles son los del otro sitio, y la página no puede alcanzarlos.</li>
+              <li><strong>Idioma:</strong> la pregunta y los nombres son tuyos, en el idioma de la página. Los del reproductor son los del otro sitio.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Úsalo para un vídeo, un mapa o cualquier reproductor que una página toma de otro sitio. Cargar un marco así envía la dirección del lector a ese sitio, y su script pesa más que el resto de la página; un póster y un botón cuestan una imagen.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses para un vídeo o un sonido que alojas tú: eso es el <a href="/docs/components/player/">reproductor</a>, que tiene controles con estilo de LUZ y un teclado que LUZ prueba.</p>
+            <ul>
+              <li>No lo uses para un enlace a una página que resulta tener un vídeo: eso es una <a href="/docs/components/card/">tarjeta</a> o un enlace.</li>
+              <li>No lo uses para ocultar un marco que el lector nunca pidió: se carga solo tras un clic.</li>
+            </ul>
+            <p>Sustituye al código de iframe que te da el otro sitio y a los scripts de fachada de un proveedor. No se quita nada de LUZ.</p>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Di qué pasa con cada respuesta: que el vídeo viene de un servicio externo y qué hará «Reproducir».</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="o-actions">
+                    <span class="luz-btn luz-btn--primary">Play this video</span>
+                    <span class="luz-btn luz-btn--ghost">Not now</span>
+                  </div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Preguntar con «OK» y «Cancelar»: nadie sabe si OK carga el vídeo o acepta otra cosa.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="o-actions">
+                    <span class="luz-btn luz-btn--primary">OK</span>
+                    <span class="luz-btn luz-btn--ghost">Cancel</span>
+                  </div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>El título es el título del vídeo, como lo diría el lector, y las palabras ocultas que lo preceden dicen qué hace el botón: «Reproducir vídeo:». No repitas el título en el <code>alt</code> del póster, que queda vacío porque el título ya lo nombra.</p>
+            <ul>
+              <li>Di en la pregunta quién es el servicio por lo que es («un servicio externo») y qué conoce («tu dirección IP», «puede instalar cookies»), en una frase.</li>
+              <li>Escribe los botones como la acción y la cosa: «Reproducir este vídeo», «Reproducir siempre los vídeos externos», «Ahora no». Nunca «OK» ni «Sí».</li>
+              <li>Elige un póster cuya parte importante no esté en el centro: la marca de reproducir la cubre.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El título va sobre un velo que es sólido donde está el texto, así que se lee también sobre un póster blanco.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del contenido incrustado en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo necesario</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Título sobre su velo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-scrim</code></div></td><td data-label="Claro"><div>5.2:1</div></td><td data-label="Oscuro"><div>20.1:1</div></td><td data-label="Alto contraste"><div>5.0:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Triángulo de la marca de reproducir</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>4.9:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Disco de la marca de reproducir, sobre el póster más claro</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>3.5:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Borde del disco, sobre el póster más oscuro</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> on <code>--luz-surface-media</code></div></td><td data-label="Claro"><div>21.0:1</div></td><td data-label="Oscuro"><div>21.0:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Texto de la pregunta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo necesario"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco, sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo necesario"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo, redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para la marca de reproducir, los anillos de foco y los bordes. El velo se mide sobre la página, el póster más claro que existe.</p>
+            <ul>
+              <li><strong>Foco:</strong> un contorno de 2 px de <code>--luz-focus-ring</code> alrededor de todo el marco, por fuera y con 2 px de separación, para que el póster nunca lo oculte. Los botones de la pregunta son de core.</li>
+              <li>La marca de reproducir es un disco y un triángulo, no solo color. En colores forzados es un anillo y un triángulo con el color del texto de botón del sistema.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 14 tokens que leen las reglas de <code>components/embed.css</code> del catálogo, agrupados por familia; los botones de la pregunta son de core. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-fill-hover"><code>--luz-brand-fill-hover</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-surface-media"><code>--luz-surface-media</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

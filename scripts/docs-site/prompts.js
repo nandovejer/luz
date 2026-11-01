@@ -22,8 +22,8 @@
  * of the elements and classes the body and the kind's preset name (the
  * manifests say which file each needs), then every pattern of the kind
  * (kinds.js: the catalog pages that fit the kind, or any, by `fits-kinds`;
- * their files after the rest, in the order of the cascade), and each catalog element in the list
- * says its stylesheet, so a site links only what it uses. A placeholder the body does not resolve, or one left in the
+ * their files after the rest, in the order of the cascade); the body says once where a catalog
+ * element's stylesheet is, so a site links only what it uses. A placeholder the body does not resolve, or one left in the
  * text, fails with its file:line. The links are always the published site's:
  * a prompt is pasted somewhere else, so a relative link would lead nowhere.
  * The gate on what a prompt may say is scripts/check-prompts.js.
@@ -127,16 +127,17 @@ function groupAttributes(names) {
 
 /**
  * `<luz-color-mode>` (remember, by…): its description, from each custom-elements.json,
- * and, for an element of a package with no bundle (catalog), the stylesheet it needs.
+ * (its stylesheet, for a package with no bundle, is named once in the body).
  */
 function elementLines(root, pkg) {
   const lines = [];
   for (const module of readJson(root, `packages/${pkg}/dist/custom-elements.json`).modules) {
     for (const d of module.declarations ?? []) {
       if (!d.tagName) continue;
+      // The body says once where an element's stylesheet is: components/<tag without luz->.css; it fails if one is not
+      if (d.stylesheet && d.stylesheet !== `components/${d.tagName.replace(/^luz-/, "")}.css`) throw new Error(`${d.tagName}: its stylesheet ${d.stylesheet} is not components/<name>.css, which the prompts' body says`);
       const attributes = groupAttributes((d.attributes ?? []).map((a) => a.name));
-      const stylesheet = d.stylesheet ? ` Its stylesheet: \`@luz-ds/${pkg}/${d.stylesheet}\`.` : "";
-      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}${stylesheet}`.trimEnd());
+      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd());
     }
   }
   return lines;

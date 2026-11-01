@@ -816,8 +816,11 @@ test.describe('Documentation site', () => {
           // buttons, and the cookie banner of the Cookie consent example with
           // the button that shows it again, and the Try it form and the width
           // selector of the examples (form.docs-try, fieldset.docs-width),
-          // which change the example in the browser and do nothing without JS
-          await expect(page.locator('main [hidden]:not([data-luz-search-open], [data-luz-consent], [data-luz-consent] *, [data-luz-consent-open], form.docs-try, fieldset.docs-width)'), route).toHaveCount(0);
+          // which change the example in the browser and do nothing without JS,
+          // and the question of an Embed ([data-luz-embed-ask]): it stays hidden until
+          // the script finds the player needs a consent, and without JavaScript the
+          // poster is a plain link to the video, so nothing is lost
+          await expect(page.locator('main [hidden]:not([data-luz-search-open], [data-luz-consent], [data-luz-consent] *, [data-luz-consent-open], form.docs-try, fieldset.docs-width, [data-luz-embed-ask], [data-luz-embed-ask] *)'), route).toHaveCount(0);
           expect(
             await page.locator('details[data-fold-narrow]').evaluateAll((all) => all.every((el) => el.open)),
             route,

@@ -21,6 +21,8 @@ dist/components/doc-header.css
 dist/components/doc-header.min.css
 dist/components/docs-layout.css
 dist/components/docs-layout.min.css
+dist/components/embed.css
+dist/components/embed.min.css
 dist/components/example.css
 dist/components/example.min.css
 dist/components/faq.css
@@ -68,6 +70,8 @@ dist/components/timeline.min.css
 dist/cookie-consent.js
 dist/cookie-consent.min.js
 dist/custom-elements.json
+dist/embed.js
+dist/embed.min.js
 dist/search.js
 dist/search.min.js
 dist/sidebar.js
