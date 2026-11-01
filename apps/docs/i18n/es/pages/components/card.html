@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Tarjeta
 description: Agrupa unos pocos datos sobre un elemento en una superficie con borde.
-source: 5433f8f2a2f6
+source: d8073dc9b730
 reviewed: false
 -->
     <div class="docs-component" id="c-card">
@@ -47,7 +47,7 @@ reviewed: false
 &lt;/article&gt;</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
-            <p>Una tarjeta, cuatro clases y un modificador. Un enlace en el título convierte toda la tarjeta en un enlace; cualquier otro enlace o botón queda por encima de él.</p>
+            <p>Una tarjeta, seis clases y dos modificadores. Un enlace en el título convierte toda la tarjeta en un enlace; cualquier otro enlace o botón queda por encima de él.</p>
             <div class="luz-table-wrap" role="region" aria-label="Partes de la tarjeta" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -59,6 +59,9 @@ reviewed: false
                   <tr><td data-label="Clase o marcado"><div><code>.luz-card__body</code></div></td><td data-label="Qué hace"><div>Tamaño mediano y color de texto secundario</div></td></tr>
                   <tr><td data-label="Clase o marcado"><div><code>.luz-card__price</code></div></td><td data-label="Qué hace"><div>El precio: tamaño base, seminegrita, color de texto principal y cifras del mismo ancho. El precio anterior va dentro de <code>&lt;s&gt;</code></div></td></tr>
                   <tr><td data-label="Clase o marcado"><div><code>.luz-card--featured</code></div></td><td data-label="Qué hace"><div>La tarjeta que destaca en el grupo: tiene un borde de 2 px del color de marca y la misma altura que las demás. Indica también el motivo con palabras, por ejemplo, con una etiqueta como «La más elegida»</div></td></tr>
+                  <tr><td data-label="Clase o marcado"><div><code>.luz-card--media</code></div></td><td data-label="Qué hace"><div>Una imagen arriba, un cuerpo y las acciones al pie: una columna flex sin relleno propio, de modo que la imagen llega hasta el borde</div></td></tr>
+                  <tr><td data-label="Clase o marcado"><div><code>.luz-card__media</code></div></td><td data-label="Qué hace"><div>El <code>&lt;img&gt;</code>, a todo el ancho, recortado a <code>--luz-card-ratio</code> (16 / 9 si no lo defines) y redondeado solo arriba</div></td></tr>
+                  <tr><td data-label="Clase o marcado"><div><code>.luz-card__actions</code></div></td><td data-label="Qué hace"><div>Los enlaces o botones, empujados al pie, de modo que los de tarjetas contiguas queden alineados</div></td></tr>
                   <tr><td data-label="Clase o marcado"><div><code>&lt;a&gt;</code> dentro de <code>.luz-card__title</code></div></td><td data-label="Qué hace"><div>Tarjeta con enlace: el enlace cubre la tarjeta, el título pasa a sans, el borde se oscurece y aparece una sombra al pasar el puntero; un anillo de foco rodea la tarjeta</div></td></tr>
                 </tbody>
               </table>
@@ -224,6 +227,70 @@ reviewed: false
               <li><strong>El texto es imprescindible.</strong> El borde de 2 px es una pista adicional para quienes pueden verlo y, en colores forzados, la única pista visual; una etiqueta como «La más elegida» o «La mejor relación calidad-precio» llega a todo el mundo. Ponla en el cuerpo o junto al título.</li>
               <li><strong>Conserva la misma altura que las demás tarjetas:</strong> el píxel adicional del borde se resta del relleno.</li>
             </ul>
+<h4 id="media-card">Tarjeta con imagen</h4>
+            <p>Para un proyecto, un artículo o un lugar: una imagen, unas pocas palabras y una o más acciones. <code>.luz-card--media</code> convierte la tarjeta en una columna, la imagen llega hasta su borde y las acciones quedan al pie, de modo que en una cuadrícula los botones se alinean sea cual sea la longitud del texto.</p>
+            <div class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage">
+            <div class="o-grid o-grid--auto">
+              <article class="luz-card luz-card--media">
+                <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
+                <div class="luz-card__body o-stack">
+                  <span><span class="luz-tag luz-tag--gray">App</span></span>
+                  <h5 class="luz-card__title">Tide table</h5>
+                  <p>Tides for any harbour on the coast, read from a public data set and kept up to date every night, with a chart of the week.</p>
+                </div>
+                <div class="luz-card__actions o-actions">
+                  <a class="luz-btn luz-btn--primary" href="#media-card">Open the demo<span class="u-sr-only"> of Tide table</span></a>
+                  <a class="luz-btn luz-btn--secondary" href="#media-card">View the code<span class="u-sr-only"> of Tide table</span></a>
+                </div>
+              </article>
+              <article class="luz-card luz-card--media">
+                <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
+                <div class="luz-card__body o-stack">
+                  <span><span class="luz-tag luz-tag--gray">Library</span></span>
+                  <h5 class="luz-card__title">Dune</h5>
+                  <p>A small parser.</p>
+                </div>
+                <div class="luz-card__actions o-actions">
+                  <a class="luz-btn luz-btn--primary" href="#media-card">Open the demo<span class="u-sr-only"> of Dune</span></a>
+                  <a class="luz-btn luz-btn--secondary" href="#media-card">View the code<span class="u-sr-only"> of Dune</span></a>
+                </div>
+              </article>
+              <article class="luz-card luz-card--media">
+                <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
+                <div class="luz-card__body o-stack">
+                  <span><span class="luz-tag luz-tag--gray">Site</span></span>
+                  <h5 class="luz-card__title"><a href="#media-card">Dunes</a></h5>
+                  <p>A two-hour walk.</p>
+                </div>
+              </article>
+            </div>
+            </div>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-card-media" aria-label="Copy the media card markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Media card markup"><code id="code-card-media">&lt;article class=&quot;luz-card luz-card--media&quot;&gt;
+  &lt;img class=&quot;luz-card__media&quot; src=&quot;tides.webp&quot; alt=&quot;&quot; width=&quot;1200&quot; height=&quot;675&quot;&gt;
+  &lt;div class=&quot;luz-card__body o-stack&quot;&gt;
+    &lt;h3 class=&quot;luz-card__title&quot;&gt;Tide table&lt;/h3&gt;
+    &lt;p&gt;Tides for any harbour on the coast.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-card__actions o-actions&quot;&gt;
+    &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;/tides/demo/&quot;&gt;Open the demo&lt;span class=&quot;u-sr-only&quot;&gt; of Tide table&lt;/span&gt;&lt;/a&gt;
+    &lt;a class=&quot;luz-btn luz-btn--secondary&quot; href=&quot;/tides/code/&quot;&gt;View the code&lt;span class=&quot;u-sr-only&quot;&gt; of Tide table&lt;/span&gt;&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+            </div>
+            <ul>
+              <li><strong>Un solo destino: enlaza el título.</strong> Toda la tarjeta, imagen incluida, es el enlace, y una tarjeta sin <code>__actions</code> no necesita más. <strong>Varios destinos: ningún enlace en el título.</strong> Pon cada uno en <code>__actions</code>: un enlace alrededor del título cubriría la tarjeta y competiría con los botones.</li>
+              <li><strong>Da a cada acción un nombre único en la página.</strong> Primero las palabras visibles y después el título de la tarjeta en <code>.u-sr-only</code>, para que una lista de enlaces diga qué proyecto abre cada uno.</li>
+              <li><strong>La imagen es lo único que puede ser decoración.</strong> Si el título lo dice todo, deja <code>alt=""</code>; si no, di qué muestra la imagen. Da siempre <code>width</code> y <code>height</code>, para que la tarjeta no salte al cargar la imagen.</li>
+              <li><strong>El recorte es una propiedad.</strong> <code>--luz-card-ratio: 4 / 3</code> en la tarjeta, o en un contenedor, cambia la forma de todas sus tarjetas; la imagen se recorta, nunca se deforma.</li>
+              <li><strong>Dos acciones como máximo,</strong> una junto a la otra cuando caben y apiladas a 640 px o menos (<code>.o-actions</code>).</li>
+            </ul>
             <h3 id="how">Cómo funciona</h3>
             <p>Un contenedor al que da estilo <code>components/card.css</code>. No necesita JavaScript.</p>
             <ul>
@@ -231,18 +298,20 @@ reviewed: false
               <li>Aplica la clase del título al nivel de encabezado que corresponda a la estructura de la página.</li>
               <li>Las esquinas se redondean con <code>--luz-radius-md</code>, como en una figura o un desplegable.</li>
               <li>El último título o cuerpo no tiene espacio debajo: el relleno es el último espacio de la tarjeta.</li>
+              <li><code>.luz-card--media</code> es <code>display: flex</code> en columna con <code>padding: 0</code>: la imagen no tiene relleno; el cuerpo y las acciones llevan <code>--luz-space-md</code>. Las acciones tienen <code>margin-block-start: auto</code>, que las empuja al pie de una tarjeta estirada a la altura de su fila. La imagen mantiene <code>aspect-ratio: var(--luz-card-ratio, 16 / 9)</code> con <code>object-fit: cover</code>, y sus esquinas superiores son el radio de la tarjeta menos el borde de 1 px; la tarjeta no recorta nada, de modo que el anillo de foco se ve entero.</li>
               <li>En una tarjeta con enlace, el <code>::after</code> del enlace se extiende por toda la tarjeta (<code>position: absolute; inset: 0</code>), de modo que al hacer clic en cualquier punto se abre el enlace. La tarjeta usa <code>position: relative</code> para contenerlo. Cualquier otro enlace o control dentro de ella (<code>a</code>, <code>button</code>, <code>input</code>, <code>select</code>, <code>textarea</code>, <code>summary</code>) usa <code>position: relative</code> con <code>z-index: 1</code> para quedar por encima de esa capa y recibir sus propios clics; el enlace del título es el único que nunca se eleva. La etiqueta de un botón ocupa varias líneas dentro de una tarjeta (<code>white-space: normal</code>), así que una etiqueta larga o un texto ampliado no se sale. Al pasar el puntero, el borde cambia a <code>--luz-input-border</code> y aparece una pequeña sombra; al recibir el foco del teclado, un anillo rodea la tarjeta. El título de una tarjeta con enlace usa una fuente sans, como la navegación o una lista de enlaces; una tarjeta sin enlace conserva la tipografía de los encabezados. Ambos casos se detectan con <code>:has()</code>; una tarjeta sin enlace no cambia al pasar el puntero.</li>
               <li><code>.luz-card--featured</code> establece <code>border-width: 2px</code> con <code>--luz-brand-primary</code> y resta el píxel adicional del relleno, por lo que la tarjeta conserva la altura de las demás. En una tarjeta con enlace, el borde cambia a <code>--luz-brand-hover</code> al pasar el puntero y el anillo de foco del teclado queda a 4 px del borde, para que no parezca más grueso.</li>
               <li>Para maquetar tarjetas, usa los <a href="/docs/components/layout/">objetos de cuadrícula</a>, como la <a href="/docs/components/layout/#objects-actions">cuadrícula dividida</a> para colocar dos tarjetas en paralelo.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
-            <p>No cambia nada: una tarjeta, tenga enlace o no, usa HTML y CSS.</p>
+            <p>No cambia nada: una tarjeta, tenga enlace o no, incluida la tarjeta con imagen, usa HTML y CSS.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
             <p>Una tarjeta no es interactiva ni recibe el foco.</p>
             <ul>
               <li>En una tarjeta sin enlace, los enlaces y botones interiores conservan su propio comportamiento.</li>
               <li>En una tarjeta con enlace, los enlaces y botones quedan por encima del enlace del título para que el puntero pueda alcanzarlos. Cada elemento tiene su propia posición en el orden de tabulación y su propio anillo; asígnales un nombre único en la página (consulta Tarjeta de producto).</li>
               <li>Una tarjeta con enlace tiene una posición de tabulación para el enlace del título y otra para cada enlace o botón adicional. Enter abre el enlace del título; Enter o Espacio activa un botón. El anillo aparece alrededor del enlace del título y de toda la tarjeta; un botón solo muestra su propio anillo.</li>
+              <li>Una tarjeta con imagen y acciones tiene una posición de tabulación por acción, en el orden del código, y ninguna ni anillo propios: el título no es un enlace. Con un solo destino es una tarjeta con enlace, como arriba.</li>
               <li>El lector de pantalla identifica el enlace con el título y, después, lee el cuerpo como texto. No añadas <code>role</code>, <code>tabindex</code> ni <code>aria-label</code> a la tarjeta.</li>
               <li>Pon el enlace en el texto del título, nunca alrededor de la tarjeta: un enlace que la rodea usa todas sus palabras como nombre.</li>
             </ul>
@@ -254,6 +323,7 @@ reviewed: false
             <p>Usa una tarjeta para agrupar unos pocos datos que se entienden como una unidad, a menudo en una cuadrícula de elementos similares.</p>
             <ul>
               <li>Usa una tarjeta destacada (<code>.luz-card--featured</code>) para la opción recomendada de un grupo de planes u ofertas.</li>
+              <li>Usa una tarjeta con imagen (<code>.luz-card--media</code>) para un proyecto, un artículo o un lugar con imagen, con un destino o dos acciones.</li>
             </ul>
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No uses una tarjeta para encerrar contenido que no sea un elemento independiente.</p>
@@ -261,7 +331,7 @@ reviewed: false
               <li>Para mostrar filas de registros con los mismos atributos, usa una <a href="/docs/components/table/">tabla</a>.</li>
               <li>Para mostrar un mensaje sobre la página, usa una <a href="/docs/components/alert/">alerta</a>.</li>
               <li>Para mostrar una lista de enlaces con una línea de descripción cada uno, usa una lista normal (<code>&lt;ul&gt;</code>): una tarjeta por enlace solo añade bordes.</li>
-              <li>Si una tarjeta tiene más de una acción además del enlace del título, ya es un formulario o una página: usa la página del elemento, no una tarjeta.</li>
+              <li>Si una tarjeta tiene más de dos acciones, o un formulario, ya es una página: usa la página del elemento, no una tarjeta.</li>
               <li>No pongas una tarjeta dentro de otra.</li>
               <li>No destaques varias tarjetas de un grupo ni uses solo el borde como pista: explica también el motivo con palabras.</li>
             </ul>
@@ -293,6 +363,26 @@ reviewed: false
             </div>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Con dos destinos, deja el título sin enlace y pon ambos en las acciones, cada uno con el nombre de su tarjeta.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-card luz-card--media"><div class="luz-card__body o-stack"><h4 class="luz-card__title">Tide table</h4><p>Tides for any harbour.</p></div><div class="luz-card__actions o-actions"><a class="luz-btn luz-btn--primary" href="/docs/components/card/">Open the demo</a><a class="luz-btn luz-btn--secondary" href="/docs/components/card/">View the code</a></div></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Un título con enlace y acciones en la misma tarjeta: la tarjeta recibe un clic para un tercer destino y el enlace del título repite uno de los botones.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <pre class="luz-code-block" data-lang="html"><code>&lt;h3 class="luz-card__title"&gt;
+  &lt;a href="/tides/"&gt;Tide table&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class="luz-card__actions"&gt;
+  &lt;a href="/tides/demo/"&gt;Open the demo&lt;/a&gt;
+  &lt;a href="/tides/code/"&gt;View the code&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+              </figure>
+            </div>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Destaca una tarjeta y explica el motivo con palabras: el borde atrae la mirada y la etiqueta informa a todo el mundo.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="luz-card luz-card--featured"><h4 class="luz-card__title">Two days</h4><p class="luz-card__body">Both days and lunch. <span class="luz-tag luz-tag--blue">Most chosen</span></p></div>
@@ -315,6 +405,7 @@ reviewed: false
               <li>Mantén el paralelismo entre las tarjetas de un grupo: títulos del mismo tipo y cuerpos de longitud similar.</li>
               <li>En una tarjeta con enlace, el título es el texto del enlace: indica adónde lleva, así que no hace falta «Leer más».</li>
               <li>En una tarjeta destacada, una etiqueta de una a tres palabras explica el motivo: «La más elegida», «La mejor relación calidad-precio». Un botón indica el plan: «Elegir dos días».</li>
+              <li>En una tarjeta con imagen: un título de una a cuatro palabras, un cuerpo de dos líneas como máximo y acciones que empiezan con un verbo («Abrir la demo», «Ver el código»). Las mismas palabras en todas las tarjetas de un grupo.</li>
               <li>Muestra el precio con su moneda, según el formato del idioma de la página. El botón indica qué hace y para qué: «Añadir a la cesta», seguido del nombre del producto para la tecnología de asistencia.</li>
             </ul>
             <h3 id="contrast">Contraste y foco</h3>

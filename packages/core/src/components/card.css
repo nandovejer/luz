@@ -3,8 +3,8 @@
    Card surface. A link in the title makes the whole card one link: the
    link's ::after is stretched over the card, which takes the hover and the
    focus ring; other links and controls in it are raised above that link.
-   One modifier, --featured, for the one card to look at first in a group.
-   No JavaScript.
+   Two modifiers: --featured, for the one card to look at first in a group,
+   and --media, an image on top and actions at the foot. No JavaScript.
    Layer: components (ITCSS 5) · Prefix: .luz-
    Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
    -------------------------------------------------------------------------- */
@@ -127,4 +127,36 @@
    stands off by the border's width and a little more */
 .luz-card--featured .luz-card__title a:focus-visible::after {
   outline-offset: var(--luz-space-2xs);
+}
+
+/* An image on top, a body, actions at the foot. The card has no padding of
+   its own: the image runs to the border and the parts take the padding. The
+   foot is pushed down (margin-block-start: auto), so the actions of cards
+   side by side line up. The image's top corners are the card's, less the
+   border (the curves stay concentric); no overflow clipping, so the ring
+   stays whole. Several destinations: the title has no link, the actions
+   are the links (raised above any stretched link by the rule above). */
+.luz-card--media {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.luz-card__media {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: var(--luz-card-ratio, 16 / 9);
+  object-fit: cover;
+  border-start-start-radius: calc(var(--luz-radius-md) - 1px);
+  border-start-end-radius: calc(var(--luz-radius-md) - 1px);
+}
+
+.luz-card--media .luz-card__body {
+  margin: 0;
+  padding: var(--luz-space-md);
+}
+
+.luz-card--media .luz-card__actions {
+  margin-block-start: auto;
+  padding: 0 var(--luz-space-md) var(--luz-space-md);
 }
