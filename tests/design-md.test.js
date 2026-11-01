@@ -60,4 +60,34 @@ describe("DESIGN.md", () => {
     expect(named.size).toBeGreaterThan(20);
     expect([...named].filter((name) => !defined.has(name)).sort()).toEqual([]);
   });
+
+  // The data palette of a chart (component-gaps plan 4.5, step 1) deviates from three rules; each says so, with the day it was decided
+  const DEVIATIONS = [
+    ["DR-2", "--luz-chart-grid"],
+    ["DR-10", "--luz-chart-1"],
+    ["DR-11", "--luz-chart-track"],
+  ];
+  const exceptionsOf = (text, id) => {
+    const body = text.split(new RegExp(`^### ${id}\\b`, "m"))[1].split(/^#{2,3} /m)[0];
+    return body.split(/^\*\*Exceptions:\*\*/m)[1];
+  };
+
+  it.each(DEVIATIONS)("%s writes the deviation of the chart palette in its Exceptions, with its date", (id, token) => {
+    const exceptions = exceptionsOf(readFileSync(DESIGN, "utf-8"), id);
+    expect(exceptions, `${id} has Exceptions`).toBeTruthy();
+    const at = exceptions.indexOf(`\`${token}\``);
+    expect(at, `${id} names ${token}`).toBeGreaterThanOrEqual(0);
+    expect(exceptions.slice(at), `${id} dates it`).toMatch(/\(decided 20\d\d-\d\d-\d\d\)/);
+    expect(exceptions.trim(), `${id} is not "none" any more`).not.toMatch(/^none\.?$/i);
+  });
+
+  it("holds the deviations as design rules, never as a luz-exception or a row of EXCEPTIONS.md", () => {
+    const text = readFileSync(DESIGN, "utf-8");
+    for (const [id] of DEVIATIONS) expect(exceptionsOf(text, id), id).not.toMatch(/luz-exception|EX-\d+/);
+    const register = existsSync(join(root, "EXCEPTIONS.md")) ? readFileSync(join(root, "EXCEPTIONS.md"), "utf-8") : "";
+    expect(register).not.toMatch(/--luz-chart/);
+    for (const dir of ["packages/tokens/src", "packages/core/src/themes", "apps/site"]) {
+      for (const file of cssUnder(join(root, dir))) expect(readFileSync(file, "utf-8"), file).not.toMatch(/luz-exception:[^\n]*chart/i);
+    }
+  });
 });
