@@ -1015,6 +1015,30 @@ h3.docs-subhead {
   }
 }
 
+/* The picture: dark on the page's black, so a hairline in the divider gives it
+   its edge, and the medium radius makes it a box of its own. It is the main
+   content, so it is never lazy and it shows at once, but it never pushes the
+   buttons out of a short window: its width follows its height cap (the
+   picture is 5:4, so 1.25 times the height), and it shrinks to the column on a
+   narrow one. */
+.docs-not-found__figure {
+  margin-inline: auto;
+  margin-block: 0 var(--luz-space-md);
+  padding: 0;
+  inline-size: min(100%, calc(max(30vh, 12rem) * 1.25));
+}
+
+.docs-not-found__image {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  block-size: auto;
+  max-block-size: max(30vh, 12rem);
+  object-fit: contain;
+  border: 1px solid var(--luz-divider);
+  border-radius: var(--luz-radius-md);
+}
+
 /* The lead is centred, line by line, never justified; no word left alone on
    the last line */
 .docs-not-found .docs-lead {
