@@ -181,6 +181,7 @@ import '@luz-ds/catalog/components/hero.css'
 | Blog or newspaper | `page-header.css` | `.luz-page-header` | [page-header](https://nandovejer.github.io/luz/docs/catalog/page-header/) |
 | Blog or newspaper | `article-header.css` | `.luz-article-header` | [article-header](https://nandovejer.github.io/luz/docs/catalog/article-header/) |
 | Blog or newspaper | `article.css` | `.luz-article`, `.luz-toc` | [toc](https://nandovejer.github.io/luz/docs/catalog/toc/) |
+| Blog or newspaper | `post-list.css` | `.luz-post-list` | [post-list](https://nandovejer.github.io/luz/docs/catalog/post-list/) |
 | Web application | `app-bar.css` | `.luz-app-bar` | [app-bar](https://nandovejer.github.io/luz/docs/catalog/app-bar/) |
 | Web application | `dashboard.css` | `.luz-dashboard` | [dashboard](https://nandovejer.github.io/luz/docs/catalog/dashboard/) |
 | Documentation site | `docs-layout.css` | `.luz-docs-layout` | [docs-layout](https://nandovejer.github.io/luz/docs/catalog/docs-layout/) |
