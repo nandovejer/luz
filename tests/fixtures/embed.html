@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ catalog: the embed, &lt;luz-embed&gt;</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/embed.css">
+  <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
+</head>
+<body>
+  <main id="main">
+    <h1>Videos</h1>
+
+    <!-- Every player is a page of this origin (embed-player.html): no test reaches a third party -->
+
+    <!-- Needs no consent -->
+    <luz-embed id="plain" src="/tests/fixtures/embed-player.html?autoplay=1">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Plain video</span>
+      </a>
+    </luz-embed>
+
+    <!-- A second one, of the same origin -->
+    <luz-embed id="twin" src="/tests/fixtures/embed-player.html?autoplay=1&amp;twin">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Twin video</span>
+      </a>
+    </luz-embed>
+
+    <!-- Asks first: the category external, the key of the cookie banner -->
+    <luz-embed id="asked" src="/tests/fixtures/embed-player.html?autoplay=1&amp;asked" consent="external">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Video that asks</span>
+      </a>
+      <div class="luz-embed__ask" data-luz-embed-ask hidden>
+        <p>This video plays from an outside service, which learns your IP address and may set cookies.</p>
+        <div class="o-actions">
+          <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
+          <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play outside videos</button>
+          <button class="luz-btn luz-btn--ghost" type="button" value="cancel">Not now</button>
+        </div>
+      </div>
+    </luz-embed>
+
+    <!-- Another with the same category: what the first one is given, it has -->
+    <luz-embed id="sibling" src="/tests/fixtures/embed-player.html?autoplay=1&amp;sibling" consent="external">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Sibling video</span>
+      </a>
+      <div class="luz-embed__ask" data-luz-embed-ask hidden>
+        <p>This video plays from an outside service, which learns your IP address and may set cookies.</p>
+        <div class="o-actions">
+          <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
+          <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play outside videos</button>
+          <button class="luz-btn luz-btn--ghost" type="button" value="cancel">Not now</button>
+        </div>
+      </div>
+    </luz-embed>
+
+    <!-- Wants consent and has no question to ask: while it is not granted it stays the link -->
+    <luz-embed id="no-ask" src="/tests/fixtures/embed-player.html?autoplay=1&amp;noask" consent="external">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Video with no question</span>
+      </a>
+    </luz-embed>
+
+    <!-- Addresses it must refuse: they stay the link -->
+    <luz-embed id="script-url" src="javascript:alert(1)">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Script address</span>
+      </a>
+    </luz-embed>
+    <luz-embed id="http-url" src="http://player.invalid/embed/1">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Plain http address</span>
+      </a>
+    </luz-embed>
+    <luz-embed id="no-src">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">No address</span>
+      </a>
+    </luz-embed>
+
+    <!-- The ratio is a property of the element -->
+    <luz-embed id="square" src="/tests/fixtures/embed-player.html?autoplay=1&amp;square" style="--luz-embed-ratio: 4 / 3">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Four to three</span>
+      </a>
+    </luz-embed>
+  </main>
+  <!-- ?none: a page with no <luz-embed>, so the loader has nothing to load. A classic script runs before the module -->
+  <script>
+    if (location.search.includes('none')) document.querySelectorAll('luz-embed').forEach((el) => el.remove());
+  </script>
+</body>
+</html>

@@ -403,11 +403,12 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
     expect(budgets.some((b) => /light\/(?:city|map|puzzle)\.js$/.test(b.file ?? ""))).toBe(false);
   });
 
-  it("puts them after the theme-time-boot script row, the last row that existed, with the prompts row and the debug page row appended after them (no other row moved or raised)", () => {
+  it("puts them after the theme-time-boot script row and the embed chunk row that follows it, with the prompts row and the debug page row appended after them (no other row moved or raised)", () => {
     const names = budgets.map((b) => b.name);
     const mode = names.findIndex((name) => /^catalog theme-time-boot script/.test(name));
     expect(mode, "the theme-time-boot script row").toBeGreaterThanOrEqual(0);
-    expect(names.slice(mode + 1)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)", "debug page HTML (docs/debug/index.html, uncompressed)"]);
+    expect(names[mode + 1], "the embed chunk row comes right after the boot script").toBe("catalog JS lazy chunk: embed");
+    expect(names.slice(mode + 2)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)", "debug page HTML (docs/debug/index.html, uncompressed)"]);
   });
 
   it("repeats them in the PRINCIPLES.md table, with the same ceilings, in the same order", () => {
@@ -417,8 +418,10 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
       .slice(header + 2)
       .filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")))
       .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
-    const at = table.findIndex((cells) => /^`catalog` theme-time boot script/.test(cells[0]));
-    expect(at, "the theme-time boot script row of the table").toBeGreaterThanOrEqual(0);
+    const boot = table.findIndex((cells) => /^`catalog` theme-time boot script/.test(cells[0]));
+    expect(boot, "the theme-time boot script row of the table").toBeGreaterThanOrEqual(0);
+    expect(table[boot + 1][0], "the embed chunk row comes right after the boot script").toMatch(/^`catalog` JS lazy chunk: `embed`/);
+    const at = boot + 1;
     // the prompts row (the kinds plan, F1) comes after them, then the debug page row
     const rows = table.slice(at + 1, at + 1 + ROWS.length);
     expect(table.slice(at + 1)).toHaveLength(ROWS.length + 2);

@@ -237,7 +237,7 @@ describe("what a prompt says about the system comes from the packages", () => {
     for (const d of tags) {
       const line = lines.find((l) => l.startsWith(`- \`<${d.tagName}>\``));
       expect(line, `${d.tagName} is listed`).toBeTruthy();
-      expect(line.endsWith(` Its stylesheet: \`@luz-ds/catalog/${d.stylesheet}\`.`), line).toBe(true);
+      expect(line.endsWith(` Stylesheet: \`${d.stylesheet}\`.`), line).toBe(true);
       expect(existsSync(join(root, "packages/catalog/dist", d.stylesheet)), `${d.stylesheet} exists`).toBe(true);
     }
   });
@@ -699,7 +699,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
             .map((d) => {
               const attrs = grouped((d.attributes ?? []).map((a) => a.name));
               // Catalog has no bundle (F5a): an element of catalog says the file of its stylesheet
-              const sheet = pkg === "catalog" && d.stylesheet ? ` Its stylesheet: \`@luz-ds/catalog/${d.stylesheet}\`.` : "";
+              const sheet = pkg === "catalog" && d.stylesheet ? ` Stylesheet: \`${d.stylesheet}\`.` : "";
               return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}${sheet}`.trimEnd();
             }),
         ),
