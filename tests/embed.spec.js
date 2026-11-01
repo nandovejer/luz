@@ -44,7 +44,7 @@ function playerRequests(page) {
 }
 
 /** Store a granted category before the first script, once per tab. */
-const grant = (page, category = 'external') =>
+const grant = (page, category = 'youtube') =>
   page.addInitScript(([key, name]) => {
     if (!sessionStorage.getItem('seeded')) {
       localStorage.setItem(key, JSON.stringify({ version: 1, asked: [name], granted: [name], expires: Date.now() + 864e5 }));
@@ -235,7 +235,7 @@ test.describe('embed', () => {
 
     test('a consent that has expired, or that is not valid, is no consent', async ({ page }) => {
       await page.addInitScript((key) => {
-        localStorage.setItem(key, JSON.stringify({ version: 1, asked: ['external'], granted: ['external'], expires: Date.now() - 1000 }));
+        localStorage.setItem(key, JSON.stringify({ version: 1, asked: ['youtube'], granted: ['youtube'], expires: Date.now() - 1000 }));
       }, KEY);
       await open(page);
       await play(page, 'asked').click();
@@ -301,7 +301,7 @@ test.describe('embed', () => {
       expect(await preconnects(page)).toEqual([]);
       expect(requests).toEqual([]);
       // The three answers are buttons, in the order of the markup
-      await expect(question.getByRole('button')).toHaveText(['Play this video', 'Always play outside videos', 'Not now']);
+      await expect(question.getByRole('button')).toHaveText(['Play this video', 'Do not play', 'Always play YouTube videos on this site']);
     });
 
     test('Tab goes through the three buttons of the question, and Escape does nothing', async ({ page }) => {
@@ -309,20 +309,20 @@ test.describe('embed', () => {
       await play(page, 'asked').click();
       const question = page.locator('#asked [data-luz-embed-ask]');
       await page.keyboard.press('Tab');
-      await expect(question.getByRole('button', { name: 'Always play outside videos' })).toBeFocused();
+      await expect(question.getByRole('button', { name: 'Do not play' })).toBeFocused();
       await page.keyboard.press('Tab');
-      await expect(question.getByRole('button', { name: 'Not now' })).toBeFocused();
+      await expect(question.getByRole('button', { name: 'Always play YouTube videos on this site' })).toBeFocused();
       await page.keyboard.press('Escape');
       expect(await state(page, 'asked')).toBe('ask');
       await expect(question).toBeVisible();
-      await expect(question.getByRole('button', { name: 'Not now' })).toBeFocused();
+      await expect(question.getByRole('button', { name: 'Always play YouTube videos on this site' })).toBeFocused();
     });
 
-    test('"Not now" goes back to the poster, with focus on its button and nothing loaded', async ({ page }) => {
+    test('"Do not play" goes back to the poster, with focus on its button and nothing loaded', async ({ page }) => {
       const requests = playerRequests(page);
       await open(page);
       await play(page, 'asked').click();
-      await page.locator('#asked').getByRole('button', { name: 'Not now' }).click();
+      await page.locator('#asked').getByRole('button', { name: 'Do not play' }).click();
       expect(await state(page, 'asked')).toBe('ready');
       await expect(page.locator('#asked [data-luz-embed-ask]')).toBeHidden();
       await expect(play(page, 'asked')).toBeVisible();
@@ -347,7 +347,7 @@ test.describe('embed', () => {
       expect(await state(page, 'sibling')).toBe('ask');
     });
 
-    test('"Always" keeps {version, asked, granted, expires}, says luz:consent, plays, and unlocks the other videos of the category', async ({ page }) => {
+    test('"Always" keeps {version, asked, granted, expires, given}, says luz:consent, plays, and unlocks the other videos of the category', async ({ page }) => {
       await page.addInitScript(() => {
         window.__events = [];
         document.addEventListener('luz:consent', (e) => window.__events.push(e.detail));
@@ -355,22 +355,24 @@ test.describe('embed', () => {
       await open(page);
       const before = Date.now();
       await play(page, 'asked').click();
-      await page.locator('#asked').getByRole('button', { name: 'Always play outside videos' }).click();
+      await page.locator('#asked').getByRole('button', { name: 'Always play YouTube videos on this site' }).click();
       await expect(page.locator('#asked > iframe')).toHaveCount(1);
       expect(await state(page, 'asked')).toBe('playing');
 
       const saved = await stored(page);
-      expect(Object.keys(saved).sort()).toEqual(['asked', 'expires', 'granted', 'version']);
+      expect(Object.keys(saved).sort()).toEqual(['asked', 'expires', 'given', 'granted', 'version']);
       expect(saved.version).toBe(1);
-      expect(saved.asked).toEqual(['external']);
-      expect(saved.granted).toEqual(['external']);
+      expect(saved.asked).toEqual(['youtube']);
+      expect(saved.granted).toEqual(['youtube']);
       expect(saved.expires).toBeGreaterThan(before);
 
       const events = await page.evaluate(() => window.__events);
       expect(events).toHaveLength(1);
-      expect(events[0].granted).toEqual(['external']);
-      expect(events[0].asked).toEqual(['external']);
+      expect(events[0].granted).toEqual(['youtube']);
+      expect(events[0].asked).toEqual(['youtube']);
       expect(events[0].expires).toBe(saved.expires);
+      expect(events[0].given).toBe(saved.given);
+      expect(events[0].withdrawn).toEqual([]);
 
       // The sibling needs no question now: it warms up and plays
       await play(page, 'sibling').hover();
@@ -391,7 +393,7 @@ test.describe('embed', () => {
         document.querySelector('#asked').dataset.luzConsentKey = 'luz-consent-test';
       });
       await play(page, 'asked').click();
-      await page.locator('#asked').getByRole('button', { name: 'Always play outside videos' }).click();
+      await page.locator('#asked').getByRole('button', { name: 'Always play YouTube videos on this site' }).click();
       expect(await page.evaluate(() => localStorage.getItem('luz-consent-test') !== null)).toBe(true);
       expect(await stored(page)).toBeNull();
     });
@@ -402,7 +404,7 @@ test.describe('embed', () => {
         document.querySelector('#asked').dataset.luzConsentKey = 'session';
       });
       await play(page, 'asked').click();
-      await page.locator('#asked').getByRole('button', { name: 'Always play outside videos' }).click();
+      await page.locator('#asked').getByRole('button', { name: 'Always play YouTube videos on this site' }).click();
       expect(await page.evaluate(() => localStorage.getItem('session'))).toBeNull();
       expect(await stored(page)).not.toBeNull();
     });
