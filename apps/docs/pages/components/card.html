@@ -49,7 +49,7 @@ toc: h2,h3
 &lt;/article&gt;</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
-            <p>One card, four classes and one modifier. A link in the title makes the whole card one link; any other link or button in it is raised above that link.</p>
+            <p>One card, six classes and two modifiers. A link in the title makes the whole card one link; any other link or button in it is raised above that link.</p>
             <div class="luz-table-wrap" role="region" aria-label="Card parts" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -61,6 +61,9 @@ toc: h2,h3
                   <tr><td data-label="Class or markup"><div><code>.luz-card__body</code></div></td><td data-label="What it does"><div>Medium size, secondary text colour</div></td></tr>
                   <tr><td data-label="Class or markup"><div><code>.luz-card__price</code></div></td><td data-label="What it does"><div>The price: base size, semibold, primary text colour, figures of equal width. A previous price goes in <code>&lt;s&gt;</code></div></td></tr>
                   <tr><td data-label="Class or markup"><div><code>.luz-card--featured</code></div></td><td data-label="What it does"><div>The one card to look at first in a group: a 2 px border in the brand colour, as tall as its neighbours. Say why in words too, with a tag such as “Most chosen”</div></td></tr>
+                  <tr><td data-label="Class or markup"><div><code>.luz-card--media</code></div></td><td data-label="What it does"><div>An image on top, a body and actions at the foot: a flex column with no padding of its own, so the image runs to the border</div></td></tr>
+                  <tr><td data-label="Class or markup"><div><code>.luz-card__media</code></div></td><td data-label="What it does"><div>The <code>&lt;img&gt;</code>, full width, cropped to <code>--luz-card-ratio</code> (16 / 9 unless you set it), rounded on top only</div></td></tr>
+                  <tr><td data-label="Class or markup"><div><code>.luz-card__actions</code></div></td><td data-label="What it does"><div>The links or buttons, pushed to the foot, so those of cards side by side line up</div></td></tr>
                   <tr><td data-label="Class or markup"><div><code>&lt;a&gt;</code> in <code>.luz-card__title</code></div></td><td data-label="What it does"><div>A linked card: the link covers the card, the title turns sans, a darker border and a shadow on hover, a focus ring round the card</div></td></tr>
                 </tbody>
               </table>
@@ -226,6 +229,70 @@ toc: h2,h3
               <li><strong>The words are required.</strong> A 2 px border is a second cue for people who see it, and in forced colors the only one; a tag such as “Most chosen” or “Best value” is the one that reaches everybody. Put it in the body or beside the title.</li>
               <li><strong>It stays as tall as its neighbours:</strong> the extra pixel of border is taken from the padding.</li>
             </ul>
+            <h4 id="media-card">Media card</h4>
+            <p>For a project, a post or a place: an image, a few words and one or more actions. <code>.luz-card--media</code> makes the card a column, the image runs to its edge, and the actions sit at the foot, so in a grid the buttons line up whatever the length of the text.</p>
+            <div class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage">
+            <div class="o-grid o-grid--auto">
+              <article class="luz-card luz-card--media">
+                <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
+                <div class="luz-card__body o-stack">
+                  <span><span class="luz-tag luz-tag--gray">App</span></span>
+                  <h5 class="luz-card__title">Tide table</h5>
+                  <p>Tides for any harbour on the coast, read from a public data set and kept up to date every night, with a chart of the week.</p>
+                </div>
+                <div class="luz-card__actions o-actions">
+                  <a class="luz-btn luz-btn--primary" href="#media-card">Open the demo<span class="u-sr-only"> of Tide table</span></a>
+                  <a class="luz-btn luz-btn--secondary" href="#media-card">View the code<span class="u-sr-only"> of Tide table</span></a>
+                </div>
+              </article>
+              <article class="luz-card luz-card--media">
+                <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
+                <div class="luz-card__body o-stack">
+                  <span><span class="luz-tag luz-tag--gray">Library</span></span>
+                  <h5 class="luz-card__title">Dune</h5>
+                  <p>A small parser.</p>
+                </div>
+                <div class="luz-card__actions o-actions">
+                  <a class="luz-btn luz-btn--primary" href="#media-card">Open the demo<span class="u-sr-only"> of Dune</span></a>
+                  <a class="luz-btn luz-btn--secondary" href="#media-card">View the code<span class="u-sr-only"> of Dune</span></a>
+                </div>
+              </article>
+              <article class="luz-card luz-card--media">
+                <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360" loading="lazy" decoding="async">
+                <div class="luz-card__body o-stack">
+                  <span><span class="luz-tag luz-tag--gray">Site</span></span>
+                  <h5 class="luz-card__title"><a href="#media-card">Dunes</a></h5>
+                  <p>A two-hour walk.</p>
+                </div>
+              </article>
+            </div>
+            </div>
+            </div>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-card-media" aria-label="Copy the media card markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Media card markup"><code id="code-card-media">&lt;article class=&quot;luz-card luz-card--media&quot;&gt;
+  &lt;img class=&quot;luz-card__media&quot; src=&quot;tides.webp&quot; alt=&quot;&quot; width=&quot;1200&quot; height=&quot;675&quot;&gt;
+  &lt;div class=&quot;luz-card__body o-stack&quot;&gt;
+    &lt;h3 class=&quot;luz-card__title&quot;&gt;Tide table&lt;/h3&gt;
+    &lt;p&gt;Tides for any harbour on the coast.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-card__actions o-actions&quot;&gt;
+    &lt;a class=&quot;luz-btn luz-btn--primary&quot; href=&quot;/tides/demo/&quot;&gt;Open the demo&lt;span class=&quot;u-sr-only&quot;&gt; of Tide table&lt;/span&gt;&lt;/a&gt;
+    &lt;a class=&quot;luz-btn luz-btn--secondary&quot; href=&quot;/tides/code/&quot;&gt;View the code&lt;span class=&quot;u-sr-only&quot;&gt; of Tide table&lt;/span&gt;&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+            </div>
+            <ul>
+              <li><strong>One destination: link the title.</strong> The whole card, image included, is the link, and a card with no <code>__actions</code> needs none. <strong>Several destinations: no link in the title.</strong> Put each in <code>__actions</code>: a link round the title would cover the card and compete with the buttons.</li>
+              <li><strong>Name each action once on the page.</strong> The visible words first, then the card's title in <code>.u-sr-only</code>, so a list of links says which project each one opens.</li>
+              <li><strong>The image is the one thing that may be decoration.</strong> When the title says it all, leave <code>alt=""</code>; otherwise say what the picture shows. Always give <code>width</code> and <code>height</code>, so the card does not jump when the image loads.</li>
+              <li><strong>The crop is a property.</strong> <code>--luz-card-ratio: 4 / 3</code> on the card, or on a parent, changes the shape for all its cards; the image is cropped, never stretched.</li>
+              <li><strong>Two actions at most,</strong> side by side when they fit and stacked at 640 px and below (<code>.o-actions</code>).</li>
+            </ul>
             <h3 id="how">How it works</h3>
             <p>A container styled by <code>components/card.css</code>. No JavaScript.</p>
             <ul>
@@ -233,18 +300,20 @@ toc: h2,h3
               <li>The title class goes on the heading level that fits the page outline.</li>
               <li>The corners are rounded with <code>--luz-radius-md</code>, like a figure or a dropdown.</li>
               <li>The last title or body has no space under it: the padding is the card's last space.</li>
+              <li><code>.luz-card--media</code> is <code>display: flex</code> in a column with <code>padding: 0</code>: the image has none, the body and the actions take <code>--luz-space-md</code>. The actions have <code>margin-block-start: auto</code>, which pushes them to the foot of a card stretched to the height of its row. The image keeps <code>aspect-ratio: var(--luz-card-ratio, 16 / 9)</code> with <code>object-fit: cover</code>, and its top corners are the card's radius less the 1 px border; the card clips nothing, so the focus ring is whole.</li>
               <li>A linked card: the link's <code>::after</code> is stretched over the card (<code>position: absolute; inset: 0</code>), so a click anywhere in it follows the link. The card is <code>position: relative</code> to hold it. Any other link or control inside the card (<code>a</code>, <code>button</code>, <code>input</code>, <code>select</code>, <code>textarea</code>, <code>summary</code>) is <code>position: relative</code> with <code>z-index: 1</code>, so it paints above that overlay and takes its own click; the title link is the one thing never raised. A button's label wraps in a card (<code>white-space: normal</code>), so a long label or enlarged text stays inside it. On hover the border turns <code>--luz-input-border</code> and a small shadow shows; on keyboard focus a ring goes round the card. The title of a linked card is in sans, as a nav or a list of links is; a card without a link keeps the heading face. Both are found with <code>:has()</code>; a card without a link does not change on hover.</li>
               <li><code>.luz-card--featured</code> sets <code>border-width: 2px</code> in <code>--luz-brand-primary</code> and takes the extra pixel from the padding, so the card keeps the height of its neighbours. In a linked card the border turns <code>--luz-brand-hover</code> on hover, and the keyboard ring stands 4 px off the border, so it does not read as a thicker border.</li>
               <li>To lay cards out, use the <a href="/docs/components/layout/">grid objects</a>, such as the <a href="/docs/components/layout/#objects-actions">split grid</a> for two cards side by side.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
-            <p>Nothing changes: a card, linked or not, is HTML and CSS.</p>
+            <p>Nothing changes: a card, linked or not, a media card included, is HTML and CSS.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <p>A card is not interactive and takes no focus.</p>
             <ul>
               <li>In a card that is not linked, links and buttons inside keep their own behaviour.</li>
               <li>A link or a button in a linked card is raised above the title link, so the pointer reaches it. It has its own tab stop, in source order, and its own ring; give each a name that is unique on the page (see Product card).</li>
               <li>A linked card has a tab stop for its title link and one for each other link or button. Enter follows the title link; Enter or Space presses a button. The ring shows round the title link and round the whole card; a button shows its own ring only.</li>
+              <li>A media card with actions has one tab stop per action, in source order, and no stop or ring of its own: the title is not a link. With one destination it is a linked card, as above.</li>
               <li>A screen reader names the link with the title, then reads the body as text. Add no <code>role</code>, <code>tabindex</code> or <code>aria-label</code> to the card.</li>
               <li>Put the link on the title text, never round the card: a link round the card takes every word in it as its name.</li>
             </ul>
@@ -256,6 +325,7 @@ toc: h2,h3
             <p>Use a card to group a small set of facts that read as one unit, often in a grid of similar items.</p>
             <ul>
               <li>A featured card (<code>.luz-card--featured</code>) for the one recommended choice in a group of plans or offers.</li>
+              <li>A media card (<code>.luz-card--media</code>) for a project, a post or a place with a picture, one destination or two actions.</li>
             </ul>
             <h3 id="when-not">When not to use</h3>
             <p>Do not use a card to box content that is not a separate thing.</p>
@@ -263,7 +333,7 @@ toc: h2,h3
               <li>For rows of records with the same attributes, use a <a href="/docs/components/table/">table</a>.</li>
               <li>For a message about the page, use an <a href="/docs/components/alert/">alert</a>.</li>
               <li>For a list of links, each with one line of description, use a plain list (<code>&lt;ul&gt;</code>): a card per link adds borders and nothing else.</li>
-              <li>A card with more than one action besides its title link is a form or a page: use the page of the thing, not a card.</li>
+              <li>A card with more than two actions, or a form in it, is a page: use the page of the thing, not a card.</li>
               <li>Do not put a card inside a card.</li>
               <li>Do not feature several cards in a group, or use the border as the only cue: say why in words too.</li>
             </ul>
@@ -295,6 +365,26 @@ toc: h2,h3
             </div>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> With two destinations, leave the title without a link and put both in the actions, each named for its card.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-card luz-card--media"><div class="luz-card__body o-stack"><h4 class="luz-card__title">Tide table</h4><p>Tides for any harbour.</p></div><div class="luz-card__actions o-actions"><a class="luz-btn luz-btn--primary" href="/docs/components/card/">Open the demo</a><a class="luz-btn luz-btn--secondary" href="/docs/components/card/">View the code</a></div></div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A linked title and actions in one card: the card takes a click for a third destination, and the title link repeats one of the buttons.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <pre class="luz-code-block" data-lang="html"><code>&lt;h3 class="luz-card__title"&gt;
+  &lt;a href="/tides/"&gt;Tide table&lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class="luz-card__actions"&gt;
+  &lt;a href="/tides/demo/"&gt;Open the demo&lt;/a&gt;
+  &lt;a href="/tides/code/"&gt;View the code&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+              </figure>
+            </div>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Do</strong> Feature one card, and say why in words: the border draws the eye, the tag tells everybody.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="luz-card luz-card--featured"><h4 class="luz-card__title">Two days</h4><p class="luz-card__body">Both days and lunch. <span class="luz-tag luz-tag--blue">Most chosen</span></p></div>
@@ -317,6 +407,7 @@ toc: h2,h3
               <li>Keep cards in one group parallel: the same kind of title, the same length of body.</li>
               <li>In a linked card, the title is the link text: it says where the link goes, so the card needs no “Read more”.</li>
               <li>On a featured card, a tag of one to three words says why: “Most chosen”, “Best value”. A button names the plan: “Choose Two days”.</li>
+              <li>A media card: a title of one to four words, a body of two lines at most, and actions that start with a verb (“Open the demo”, “View the code”). The same words on every card of a group.</li>
               <li>A price with its currency, in the format of the page's language. A button says what it does and for what: “Add to cart”, then the product's name for assistive technology.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>

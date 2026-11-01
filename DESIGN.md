@@ -26,7 +26,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is every standalone box at the medium radius, and every text field a line? Is an inner or inline part at the small one? Is a pill at the full one? Does a part inside a rounded box use a larger radius than the box? Does a component name a radius token that does not exist?
 
-**Exceptions:** a box that reflows into a plain list on a narrow window (the head of a sortable table) and a dialog that fills the window (the search) are square; a joined group has square corners where its parts touch (the accordion).
+**Exceptions:** a box that reflows into a plain list on a narrow window (the head of a sortable table) and a dialog that fills the window (the search) are square; a joined group has square corners where its parts touch (the accordion). The image of a media card (`.luz-card__media`) takes the card's radius less its 1px border, `calc(var(--luz-radius-md) - 1px)`, on its top corners, so the curves stay concentric with the card's border: the small radius would leave the card's corner showing round it (decided 2026-11-01).
 
 ### DR-2 Lines have one job each
 
