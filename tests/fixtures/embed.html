@@ -33,42 +33,42 @@
       </a>
     </luz-embed>
 
-    <!-- Asks first: the category external, the key of the cookie banner -->
-    <luz-embed id="asked" src="/tests/fixtures/embed-player.html?autoplay=1&amp;asked" consent="external">
+    <!-- Asks first: the category youtube, the key of the cookie banner -->
+    <luz-embed id="asked" src="/tests/fixtures/embed-player.html?autoplay=1&amp;asked" consent="youtube">
       <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
         <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
         <span class="u-sr-only">Play video: </span>
         <span class="luz-embed__title">Video that asks</span>
       </a>
       <div class="luz-embed__ask" data-luz-embed-ask hidden>
-        <p>This video plays from an outside service, which learns your IP address and may set cookies.</p>
+        <p>This video is hosted by YouTube (Google). If you play it, YouTube receives your IP address and details of your browser, and may store information on your device. We receive none of it. <a href="#privacy">Privacy and storage</a></p>
         <div class="o-actions">
           <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
-          <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play outside videos</button>
-          <button class="luz-btn luz-btn--ghost" type="button" value="cancel">Not now</button>
+          <button class="luz-btn luz-btn--primary" type="button" value="cancel">Do not play</button>
+          <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play YouTube videos on this site</button>
         </div>
       </div>
     </luz-embed>
 
     <!-- Another with the same category: what the first one is given, it has -->
-    <luz-embed id="sibling" src="/tests/fixtures/embed-player.html?autoplay=1&amp;sibling" consent="external">
+    <luz-embed id="sibling" src="/tests/fixtures/embed-player.html?autoplay=1&amp;sibling" consent="youtube">
       <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
         <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
         <span class="u-sr-only">Play video: </span>
         <span class="luz-embed__title">Sibling video</span>
       </a>
       <div class="luz-embed__ask" data-luz-embed-ask hidden>
-        <p>This video plays from an outside service, which learns your IP address and may set cookies.</p>
+        <p>This video is hosted by YouTube (Google). If you play it, YouTube receives your IP address and details of your browser, and may store information on your device. We receive none of it. <a href="#privacy">Privacy and storage</a></p>
         <div class="o-actions">
           <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
-          <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play outside videos</button>
-          <button class="luz-btn luz-btn--ghost" type="button" value="cancel">Not now</button>
+          <button class="luz-btn luz-btn--primary" type="button" value="cancel">Do not play</button>
+          <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play YouTube videos on this site</button>
         </div>
       </div>
     </luz-embed>
 
     <!-- Wants consent and has no question to ask: while it is not granted it stays the link -->
-    <luz-embed id="no-ask" src="/tests/fixtures/embed-player.html?autoplay=1&amp;noask" consent="external">
+    <luz-embed id="no-ask" src="/tests/fixtures/embed-player.html?autoplay=1&amp;noask" consent="youtube">
       <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
         <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
         <span class="u-sr-only">Play video: </span>

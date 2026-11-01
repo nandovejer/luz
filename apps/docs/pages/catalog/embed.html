@@ -16,18 +16,18 @@ toc: h2,h3
           <p>NASA’s video of John Young’s salute on the Moon, with a poster of this site. Nothing is requested from the video service until you press the button and agree: the example asks first, as a site that wants consent would, and only then loads the player. Its answer is stored under its own key, <code>luz-consent-demo</code>, so it does not count as an answer for this site.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
-            <luz-embed src="https://www.youtube-nocookie.com/embed/g5aPoRtF2vw?autoplay=1" consent="external" data-luz-consent-key="luz-consent-demo">
+            <luz-embed src="https://www.youtube-nocookie.com/embed/g5aPoRtF2vw?autoplay=1" consent="youtube" data-luz-consent-key="luz-consent-demo">
               <a class="luz-embed__link" href="https://www.youtube.com/watch?v=g5aPoRtF2vw">
                 <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360" loading="lazy">
                 <span class="u-sr-only">Play video: </span>
                 <span class="luz-embed__title">John Young’s Lunar Salute on Apollo 16</span>
               </a>
               <div class="luz-embed__ask" data-luz-embed-ask hidden>
-                <p>This video plays from an outside service, which learns your IP address and may set cookies.</p>
+                <p>This video is hosted by YouTube (Google). If you play it, YouTube receives your IP address and details of your browser, and may store information on your device. We receive none of it. <a href="/docs/privacy/">Privacy and storage</a></p>
                 <div class="o-actions">
                   <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
-                  <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play outside videos</button>
-                  <button class="luz-btn luz-btn--ghost" type="button" value="cancel">Not now</button>
+                  <button class="luz-btn luz-btn--primary" type="button" value="cancel">Do not play</button>
+                  <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play YouTube videos on this site</button>
                 </div>
               </div>
             </luz-embed>
@@ -38,7 +38,7 @@ toc: h2,h3
           <h2 id="known-issues">Known issues</h2>
           <p>Two things to know before you rely on it.</p>
           <ul>
-            <li>“Always play” writes the answer of the cookie banner, under its key <code>luz-consent</code> (or the key of <code>data-luz-consent-key</code>), with a fixed expiry of 180 days: it does not read the banner’s <code>data-luz-consent-days</code>, so a banner set to another period replaces the answer with its own the next time the visitor answers it.</li>
+            <li>The question has no button to take “Always play” back. To let a visitor withdraw it, offer the category as a checkbox in the cookie banner, with its “change” button: the banner’s answer is merged into the same record, and its <code>luz:consent</code> event lists what was withdrawn in <code>detail.withdrawn</code>.</li>
             <li>It has not been tested with a screen reader.</li>
           </ul>
           <nav class="luz-tabs docs-view-tabs" aria-label="Embed documentation">
@@ -57,18 +57,18 @@ toc: h2,h3
               </div>
               <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Embed markup"><code id="code-embed">&lt;script type=&quot;module&quot; src=&quot;https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/catalog.min.js&quot;&gt;&lt;/script&gt;
 
-&lt;luz-embed src=&quot;https://www.youtube-nocookie.com/embed/g5aPoRtF2vw?autoplay=1&quot; consent=&quot;external&quot;&gt;
+&lt;luz-embed src=&quot;https://www.youtube-nocookie.com/embed/g5aPoRtF2vw?autoplay=1&quot; consent=&quot;youtube&quot;&gt;
   &lt;a class=&quot;luz-embed__link&quot; href=&quot;https://www.youtube.com/watch?v=g5aPoRtF2vw&quot;&gt;
     &lt;img class=&quot;luz-embed__poster&quot; src=&quot;/media/apollo-16-poster.jpg&quot; alt=&quot;&quot; width=&quot;1280&quot; height=&quot;720&quot; loading=&quot;lazy&quot;&gt;
     &lt;span class=&quot;u-sr-only&quot;&gt;Play video: &lt;/span&gt;
     &lt;span class=&quot;luz-embed__title&quot;&gt;John Young’s Lunar Salute on Apollo 16&lt;/span&gt;
   &lt;/a&gt;
   &lt;div class=&quot;luz-embed__ask&quot; data-luz-embed-ask hidden&gt;
-    &lt;p&gt;This video plays from an outside service, which learns your IP address and may set cookies.&lt;/p&gt;
+    &lt;p&gt;This video is hosted by YouTube (Google). If you play it, YouTube receives your IP address and details of your browser, and may store information on your device. We receive none of it. &lt;a href=&quot;/docs/privacy/&quot;&gt;Privacy and storage&lt;/a&gt;&lt;/p&gt;
     &lt;div class=&quot;o-actions&quot;&gt;
       &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot; value=&quot;once&quot;&gt;Play this video&lt;/button&gt;
-      &lt;button class=&quot;luz-btn luz-btn--secondary&quot; type=&quot;button&quot; value=&quot;always&quot;&gt;Always play outside videos&lt;/button&gt;
-      &lt;button class=&quot;luz-btn luz-btn--ghost&quot; type=&quot;button&quot; value=&quot;cancel&quot;&gt;Not now&lt;/button&gt;
+      &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;button&quot; value=&quot;cancel&quot;&gt;Do not play&lt;/button&gt;
+      &lt;button class=&quot;luz-btn luz-btn--secondary&quot; type=&quot;button&quot; value=&quot;always&quot;&gt;Always play YouTube videos on this site&lt;/button&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/luz-embed&gt;</code></pre>
@@ -96,6 +96,7 @@ const url = playerURL(document.querySelector(&quot;luz-embed&quot;));</code></pr
                   <tr><td data-label="Class or attribute"><div><code>src</code></div></td><td data-label="Effect"><div>Required. The full address of the player, written by you: <code>https:</code>, or of the page’s own origin. Anything else (<code>javascript:</code>, <code>http:</code> of another origin, a typo) leaves the link</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>consent</code></div></td><td data-label="Effect"><div>The name of a category of the <a href="/docs/catalog/cookie-consent/">cookie consent</a> (a lowercase letter, then lowercase letters, digits or hyphens, 32 at most). Until it is granted nothing is requested from the player’s origin, and a click asks first. Without an ask block and without the category granted, it stays the link</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>data-luz-consent-key</code></div></td><td data-label="Effect"><div>The storage key of the choice, which must start with <code>luz-</code>; <code>luz-consent</code>, the banner’s, by default</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>data-luz-consent-days</code>, <code>data-luz-consent-policy</code></div></td><td data-label="Effect"><div>Read from the <a href="/docs/catalog/cookie-consent/">cookie banner</a> of the page, if there is one: how many days “Always” lasts (180 by default, 395 at most) and the version of the policy shown, stored with the choice</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>--luz-embed-ratio</code></div></td><td data-label="Effect"><div>The ratio of the frame, <code>16 / 9</code> by default. Set it on the element: <code>style="--luz-embed-ratio: 4 / 3"</code></div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-embed__link</code></div></td><td data-label="Effect"><div>The link of the page without JavaScript: it holds the poster and the title, and takes the frame whole. With JavaScript it becomes a <code>button.luz-embed__play</code> with the same children, so its name does not change</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-embed__poster</code>, <code>.luz-embed__title</code></div></td><td data-label="Effect"><div>Your image, which covers the frame, and the title, on a scrim at its foot</div></td></tr>
@@ -110,7 +111,7 @@ const url = playerURL(document.querySelector(&quot;luz-embed&quot;));</code></pr
             <ul>
               <li><strong>Before the click:</strong> the page holds a poster and a button, and requests nothing from the other site. When the pointer goes over the button, or focus reaches it, the browser is told to open a connection to the player’s origin (a <code>preconnect</code>, once per origin), unless the site wants consent and it is not granted.</li>
               <li><strong>The click:</strong> if nothing needs consent, or it is granted, the frame is written with <code>autoplay</code> permission, and focus goes into it. If consent is needed, the question shows in its place and focus goes to its first button.</li>
-              <li><strong>The question:</strong> <code>value="once"</code> plays this video. <code>value="always"</code> plays it and stores the category, as the cookie banner does, in <code>localStorage</code> as <code>{"version":1,"expires":…,"asked":[…],"granted":[…]}</code>, dispatches <code>luz:consent</code> on <code>document</code> and unlocks every other embed with that category. <code>value="cancel"</code> goes back to the poster, with focus on its button. Escape does nothing; Not now is the way back.</li>
+              <li><strong>The question:</strong> <code>value="once"</code> plays this video. <code>value="always"</code> plays it and stores the category, as the cookie banner does, in <code>localStorage</code> as <code>{"version":1,"expires":…,"asked":[…],"granted":[…],"given":"…"}</code>, merged into the record that is there so the banner’s categories stay, dispatches <code>luz:consent</code> on <code>document</code> and unlocks every other embed with that category. <code>value="cancel"</code> goes back to the poster, with focus on its button. Escape does nothing; the button that cancels is the way back.</li>
               <li><strong>The frame:</strong> it has the title of the video, <code>allow</code> for the features players use, <code>allowfullscreen</code> and <code>referrerpolicy="strict-origin-when-cross-origin"</code>, which some players need to accept the embed.</li>
               <li>The script writes no text: every word is in your markup, in the page’s language.</li>
             </ul>
@@ -121,7 +122,7 @@ const url = playerURL(document.querySelector(&quot;luz-embed&quot;));</code></pr
             <ul>
               <li><strong>Keys:</strong> Tab reaches the button; Enter or Space presses it, as on any button. In the question, Tab goes through its buttons. Escape does nothing.</li>
               <li><strong>Name:</strong> the button has the name of the link it replaces: the hidden words “Play video:” then the title.</li>
-              <li><strong>Focus:</strong> to the first button of the question when it shows, into the frame when the player loads, back to the button on Not now. Once the player is in the frame, its own keys and controls are the other site’s, and the page cannot reach them.</li>
+              <li><strong>Focus:</strong> to the first button of the question when it shows, into the frame when the player loads, back to the button on Do not play. Once the player is in the frame, its own keys and controls are the other site’s, and the page cannot reach them.</li>
               <li><strong>Language:</strong> the question and the names are yours, in the page’s language. The player’s are the other site’s.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -140,11 +141,11 @@ const url = playerURL(document.querySelector(&quot;luz-embed&quot;));</code></pr
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
-                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Name what happens in each answer: say that the video comes from an outside service, and what “Play” will do.</figcaption>
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Name what happens in each answer: say who hosts the video and what it learns if you play it, and give “Play” and “Do not play” the same weight.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
                   <div class="o-actions">
                     <span class="luz-btn luz-btn--primary">Play this video</span>
-                    <span class="luz-btn luz-btn--ghost">Not now</span>
+                    <span class="luz-btn luz-btn--primary">Do not play</span>
                   </div>
                 </div>
               </figure>
@@ -161,8 +162,8 @@ const url = playerURL(document.querySelector(&quot;luz-embed&quot;));</code></pr
             <h3 id="content">Writing the content</h3>
             <p>The title is the title of the video, as the reader would say it, and the hidden words before it say what the button does: “Play video:”. Do not repeat the title in the poster’s <code>alt</code>, which stays empty because the title already names it.</p>
             <ul>
-              <li>Say in the question who the service is by what it is (“an outside service”) and what it learns (“your IP address”, “may set cookies”), in a sentence.</li>
-              <li>Write the buttons as the action and the thing: “Play this video”, “Always play outside videos”, “Not now”. Never “OK” or “Yes”.</li>
+              <li>Name the service in the question (“hosted by YouTube (Google)”) and say what it learns (“your IP address and details of your browser”) and what it may do (“store information on your device”), in a few plain sentences, with a link to your privacy page.</li>
+              <li>Write the buttons as the action and the thing: “Play this video”, “Do not play”, “Always play YouTube videos on this site”. Give the first two the same weight. Never “OK” or “Yes”.</li>
               <li>Choose a poster whose important part is in the middle: the play mark covers it.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>

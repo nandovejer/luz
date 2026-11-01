@@ -42,7 +42,7 @@
  * category the stored choice was not asked about. Accept grants every
  * category, Reject none, Save the ones ticked; Escape does nothing. The
  * choice is stored, `luz:consent` is dispatched on document with
- * { asked, granted, expires }, and the confirmation takes the place of the
+ * { asked, granted, withdrawn, expires, given, policy? }, and the confirmation takes the place of the
  * question and takes focus. The confirmation goes away with its
  * [data-luz-consent-close] button (focus goes back to the button that
  * opened the banner, else the first [data-luz-consent-open], else <main>),
@@ -55,8 +55,10 @@
  *
  * Stored in localStorage, under "luz-consent" or the section's
  * data-luz-consent-key (it must start with "luz-"), as JSON:
- *   {"version":1,"expires":<ms since 1970>,"asked":["analytics"],"granted":[]}
- * Categories are the checkboxes' values: a lowercase letter, then letters,
+ *   {"version":1,"expires":<ms since 1970>,"asked":["analytics"],"granted":[],"given":"<ISO time>","policy":"v2"}
+ * The answer is merged into the stored record (an embed's categories keep
+ * their state). `withdrawn` lists what was granted and no longer is, to clean
+ * what it stored. Categories are the checkboxes' values: a lowercase letter, then letters,
  * digits or hyphens, 32 at most. A choice lasts data-luz-consent-days days
  * (180 by default, 395 at most: 13 months).
  *
@@ -68,11 +70,13 @@
  * @attr {boolean} data-luz-consent-open - On a button anywhere on the page: it shows the banner again with the stored choice; hidden until the script works.
  * @attr {string} data-luz-consent-key - On the banner: the storage key, which must start with "luz-"; "luz-consent" by default.
  * @attr {number} data-luz-consent-days - On the banner: days a choice lasts, 180 by default and 395 at most.
- * @fires luz:consent {CustomEvent} - On document when a choice is saved; detail is { asked, granted, expires } (category names and a time in ms).
+ * @attr {string} data-luz-consent-policy - On the banner: version of the policy shown (32 characters of letters, digits, . _ -), stored with the choice.
+ * @fires luz:consent {CustomEvent} - On document when a choice is saved; detail is { asked, granted, withdrawn, expires, given, policy? }.
  */
 
 const KEY = /^luz-[\w-]+$/;
 const NAME = /^[a-z][a-z\d-]{0,31}$/;
+const POLICY = /^[\w.-]{1,32}$/;
 const names = (list) => Array.isArray(list) && list.every((n) => NAME.test(n));
 
 /**
@@ -122,10 +126,17 @@ const wire = (host) => {
     // eslint-disable-next-line no-restricted-syntax -- the forms have nowhere to send the choice: it is stored on this device instead (PRINCIPLES §3, §8)
     e.preventDefault();
     const how = e.submitter?.value;
-    const granted = how === "all" ? offered : how === "none" ? [] : boxes.filter((input) => input.form === e.target && input.checked).map((input) => input.value);
-    const detail = { asked: offered, granted, expires: Date.now() + days * 864e5 };
+    const picked = how === "all" ? offered : how === "none" ? [] : boxes.filter((input) => input.form === e.target && input.checked).map((input) => input.value);
+    // The answer is merged into the stored record: the categories this banner
+    // does not offer (an embed's, say) keep their state
+    const before = getConsent(key) ?? { asked: [], granted: [] };
+    const granted = [...before.granted.filter((n) => !offered.includes(n)), ...picked];
+    const withdrawn = before.granted.filter((n) => !granted.includes(n));
+    const record = { asked: [...new Set([...before.asked, ...offered])], granted, expires: Date.now() + days * 864e5, given: new Date().toISOString() };
+    if (POLICY.test(box.dataset.luzConsentPolicy ?? "")) record.policy = box.dataset.luzConsentPolicy;
+    const detail = { ...record, withdrawn };
     try {
-      localStorage.setItem(key ?? "luz-consent", JSON.stringify({ version: 1, ...detail }));
+      localStorage.setItem(key ?? "luz-consent", JSON.stringify({ version: 1, ...record }));
     } catch {
       // Storage blocked: the choice holds for this page only
     }

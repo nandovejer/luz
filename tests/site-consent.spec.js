@@ -178,7 +178,8 @@ test.describe('cookie consent', () => {
       expect(value).toMatchObject({ version: 1, asked: ['analytics', 'marketing'], granted });
       // 180 days by default
       expect(Math.round((value.expires - Date.now()) / 864e5)).toBe(180);
-      expect(await page.evaluate(() => window.__events)).toEqual([{ asked: ['analytics', 'marketing'], granted, expires: value.expires }]);
+      expect(await page.evaluate(() => window.__events)).toEqual([{ asked: ['analytics', 'marketing'], granted, withdrawn: [], expires: value.expires, given: value.given }]);
+      expect(Object.keys(value).sort()).toEqual(['asked', 'expires', 'given', 'granted', 'version']);
 
       await page.reload();
       await expect(page.locator('#consent')).toBeHidden();

@@ -23,7 +23,7 @@
  *       <p>This video plays from an outside service, which learns your IP address and may set cookies.</p>
  *       <div class="o-actions">
  *         <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
- *         <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play outside videos</button>
+ *         <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play videos from this service</button>
  *         <button class="luz-btn luz-btn--ghost" type="button" value="cancel">Not now</button>
  *       </div>
  *     </div>
@@ -35,18 +35,22 @@
  * the link becomes a button (same children, same name), and data-luz-state
  * says where it is: "ready" (poster and button), "ask" (the question, focus
  * on its first button) and "playing" (the iframe, focus inside it). Escape
- * does nothing: "cancel" is the way back. "always" stores the category in
- * localStorage, under "luz-consent" or data-luz-consent-key (it must start
- * with "luz-"), as the cookie banner does, and dispatches `luz:consent` on
- * document with { asked, granted, expires }, which unlocks every other embed
- * with that category.
+ * does nothing: "cancel" is the way back. "always" merges the category into the
+ * record in localStorage, under "luz-consent" or data-luz-consent-key (it must
+ * start with "luz-"), as the cookie banner does (each keeps the other's
+ * categories), for the days of a [data-luz-consent-days] on the page (180 by
+ * default, 395 at most), and dispatches `luz:consent` on document with
+ * { asked, granted, withdrawn, expires, given, policy? }, which unlocks every
+ * other embed with that category.
  *
  * @element luz-embed - A poster that loads a player on request.
  * @attr {string} src - The full address of the player, https or of the page's origin; anything else leaves the link.
  * @attr {string} consent - The cookie consent category the player needs; without it granted, the click asks first.
  * @attr {string} data-luz-consent-key - Storage key of the choice; it starts with luz-.
+ * @attr {number} data-luz-consent-days - On the cookie banner of the page: days "always" lasts, 180 by default and 395 at most.
+ * @attr {string} data-luz-consent-policy - On the cookie banner of the page: version of the policy shown, stored with "always".
  * @attr {boolean} data-luz-embed-ask - On the block with the question: buttons once, always, cancel.
- * @fires luz:consent {CustomEvent} - On document when "always" is chosen; detail is { asked, granted, expires }.
+ * @fires luz:consent {CustomEvent} - On document when "always" is chosen; detail is { asked, granted, withdrawn, expires, given, policy? }.
  */
 
 const KEY = /^luz-[\w-]+$/;
@@ -84,7 +88,10 @@ const read = (el) => {
 };
 
 // What other embeds and the banner grant in this page, when storage is blocked
-document.addEventListener("luz:consent", (e) => e.detail?.granted?.forEach((n) => given.add(n)));
+document.addEventListener("luz:consent", (e) => {
+  e.detail?.withdrawn?.forEach((n) => given.delete(n));
+  e.detail?.granted?.forEach((n) => given.add(n));
+});
 
 const wire = (host) => {
   const link = host.querySelector(".luz-embed__link");
@@ -148,9 +155,13 @@ const wire = (host) => {
     } else if (how === "once") start();
     else if (how === "always" && NAME.test(need)) {
       const stored = read(host);
-      const detail = { asked: [...new Set([...stored.asked, need])], granted: [...new Set([...stored.granted, need])], expires: Date.now() + 180 * 864e5 };
+      const days = Math.min(+document.querySelector("[data-luz-consent-days]")?.dataset.luzConsentDays || 180, 395);
+      const policy = document.querySelector("[data-luz-consent-policy]")?.dataset.luzConsentPolicy;
+      const record = { asked: [...new Set([...stored.asked, need])], granted: [...new Set([...stored.granted, need])], expires: Date.now() + days * 864e5, given: new Date().toISOString() };
+      if (/^[\w.-]{1,32}$/.test(policy ?? "")) record.policy = policy;
+      const detail = { ...record, withdrawn: [] };
       try {
-        localStorage.setItem(key(host), JSON.stringify({ version: 1, ...detail }));
+        localStorage.setItem(key(host), JSON.stringify({ version: 1, ...record }));
       } catch {
         // Storage blocked: the choice holds for this page only
       }
