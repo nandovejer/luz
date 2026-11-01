@@ -203,12 +203,6 @@ LUZ is open source under the MIT licence. Pick the row that fits; [CONTRIBUTING.
 
 Everyone taking part follows the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
-## License
-
-MIT, including the fonts. Every bundled font is under the MIT License only: ET Book, in `@luz-ds/tokens`. Its notice ships next to the font files (`LICENSE-ETBook.txt`). Controls, labels, tables and code use the system fonts, so nothing else is bundled; `@luz-ds/core` ships no fonts.
-
-Keep the MIT license notice with any copy or substantial part of LUZ. A link back to [the project](https://github.com/nandovejer/luz) is appreciated, not required.
-
 ---
 
 ## Work on LUZ
@@ -387,3 +381,9 @@ Nobody publishes from a local machine. See [VERSIONING.md](./VERSIONING.md#publi
 | **[VERSIONING.md](./VERSIONING.md)** | What is public API, how releases are made, what is supported |
 | **[SECURITY.md](./SECURITY.md)** | Reporting, supply-chain practices, CDN/SRI guidance, audit history |
 | **[CHANGELOG.md](./CHANGELOG.md)** | Version history and migration notes |
+
+## License
+
+MIT, including the fonts. Every bundled font is under the MIT License only: ET Book, in `@luz-ds/tokens`. Its notice ships next to the font files (`LICENSE-ETBook.txt`). Controls, labels, tables and code use the system fonts, so nothing else is bundled; `@luz-ds/core` ships no fonts.
+
+Keep the MIT license notice with any copy or substantial part of LUZ. A link back to [the project](https://github.com/nandovejer/luz) is appreciated, not required.
