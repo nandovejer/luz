@@ -153,15 +153,17 @@
    so they sit in its middle (Arabic has no capitals and keeps its line) */
 .site-badge {
   display: inline-flex;
-  flex-wrap: wrap;
+  /* one line, as wide as its words: it never shrinks (the footer's narrowest
+     case, below, is landing.css) */
+  flex: none;
   align-items: center;
   justify-content: center;
-  /* with large text in a narrow footer, "beta" and the version stack */
-  max-inline-size: 100%;
   gap: var(--luz-space-xs);
   min-block-size: calc(var(--luz-space-md) + var(--luz-space-2xs));
-  /* the share keeps the tag inside a footer 192px wide at 400 % text */
-  padding: 0 min(var(--luz-space-xs), 4%);
+  /* a length, never a share of the box around it: a share is resolved after
+     the box was sized to its content, so it took the room of the text and
+     pushed the badge out of its link */
+  padding: 0 var(--luz-space-xs);
   border: 1px solid color-mix(in oklab, var(--luz-text-primary) 22%, transparent);
   border-radius: var(--luz-radius-full);
   font-family: var(--luz-font-mono);
@@ -178,7 +180,7 @@
   text-box: trim-both cap alphabetic;
 }
 
-/* "Beta" and the version are two words that stay whole: only the pair may wrap */
+/* "Beta" and the version are two words that stay whole */
 .site-badge > span {
   white-space: nowrap;
   overflow-wrap: normal;
@@ -188,15 +190,8 @@
    the header is wide enough, measured in its own em: the badge leaves first
    (20.5em: about 349px at the default size, below which the docs' row, with
    its empty slots, no longer holds it), then the word (14em), so the row
-   stays one row
-   and nothing scrolls sideways at 320px with the text as large as 400 %
-   (WCAG 1.4.4, 1.4.10). In the header the badge never wraps. */
-.site-header__brand .site-badge {
-  flex: none;
-  flex-wrap: nowrap;
-  max-inline-size: none;
-}
-
+   stays one row and nothing scrolls sideways at 320px with the text as large
+   as 400 % (WCAG 1.4.4, 1.4.10). */
 @container (max-width: 20.5em) {
   .site-header__brand .site-badge {
     display: none;
