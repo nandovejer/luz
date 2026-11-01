@@ -28,9 +28,12 @@ Runs the same gates as CI plus the Playwright suites, and writes an evidence rep
    - the components changed since the last tag, which need SR-6 testing: one `tests/manual/SR-6-evidence-template.md` copy each;
    - changesets waiting, uncommitted changes, changed snapshots.
 
+5. **Legal audit, for a release to npm** (not for a QA run that ends in no release): launch the `legal-auditor` agent (read-only, Sonnet 5.5; call it without `model`). If `.claude/legal/` holds a previous report, hand it the latest so it says what is fixed, open and new. Save its report as `.claude/legal/<YYYY-MM-DD>.md` (private, git-ignored) and give the owner the table of findings, with what it marks "consultar abogado" listed apart. It is advisory: it never blocks the release and the skill never applies a fix; the owner chooses which to apply (texts to `docs-writer`, code to `frontend-engineer`, LICENSE, notices and changesets to `chore-runner`). Add one line to the evidence report: the date of the legal report and its count of Critical and High findings.
+
 ## Never
 
 - Run the `firefox` or `webkit` Playwright projects, or launch `firefox-reviewer` or `safari-reviewer`. Report the open rows of the pending list as blocking and ask the owner for permission (OWNER.md §3); do not add rows yourself, `frontend-engineer` does.
+- Apply a legal-auditor proposal, or treat "consultar abogado" text as decided.
 - Say a release is ready. Say which steps passed, which failed, and what still needs a person.
 
 ## Also useful

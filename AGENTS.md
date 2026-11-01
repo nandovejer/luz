@@ -72,6 +72,7 @@ To add a pattern of a kind of site: one file in `packages/catalog/src/components
 - Nothing in `packages/*/src` may reference docs-app hooks (`.docs-*`, `#demo-form`, …). Docs-only behavior lives in `apps/docs/reference.js` (and the modules it imports, such as `apps/docs/view.js`, the remembered Code / Design tab, and `apps/site/header.js`, the header shared with the home page, which both import with `apps/site/header.css`); the image placeholders are docs-only assets in `apps/docs/assets/placeholders/` (MIT `LICENSE` next to them, rendered by `pnpm placeholders:build`), and no package ships or points at them; the docs site generator in `scripts/docs-site/` is development tooling and never ships.
 - `pnpm check:pack` verifies what each tarball ships against `packages/<name>/pack-files.txt`; after intentionally adding or removing a published file run `node scripts/check-pack.js --update`.
 - Releases: add a changeset (`pnpm changeset`); never run `npm publish` by hand.
+- Legal audit: before a release to npm, `legal-auditor` (read-only, Sonnet 5.5) audits the repository, what it publishes and what the site serves (licences, copyright, AI-generated work, privacy, claims of compliance) and proposes fixes as text or diffs. It is advisory: it does not block a merge or a release, its report is private (`.claude/legal/`), and what it marks "consultar abogado" is never applied without a lawyer's read. Its cases are in `.claude/evals/legal/cases.json`.
 
 ---
 

@@ -21,6 +21,7 @@ const EXPECTED = [
   "docs-writer",
   "firefox-reviewer",
   "frontend-engineer",
+  "legal-auditor",
   "outside-reviewer",
   "prompt-injection-auditor",
   "safari-reviewer",
@@ -29,7 +30,7 @@ const EXPECTED = [
   "test-writer",
   "ux-designer",
 ];
-const SONNET_AGENTS = ["test-writer", "chore-runner", "docs-writer", "test-runner"];
+const SONNET_AGENTS = ["test-writer", "chore-runner", "docs-writer", "test-runner", "legal-auditor"];
 const IMPLEMENTERS = ["frontend-engineer", "ux-designer", "accessibility-engineer"];
 const SCHEME = /^[a-z]+(-[a-z0-9]+)*-(engineer|designer|reviewer|auditor|runner|writer)$/;
 
@@ -58,7 +59,7 @@ function run(hook, input, env = {}) {
 }
 
 describe("claude agents: naming scheme", () => {
-  it("has exactly the twelve agents", () => {
+  it("has exactly the thirteen agents", () => {
     expect(files.map((f) => f.replace(/\.md$/, ""))).toEqual(EXPECTED);
   });
 
@@ -95,6 +96,18 @@ describe("claude agents: the prompt-injection-auditor", () => {
     const tools = (fm().tools ?? "").split(",").map((t) => t.trim()).filter(Boolean);
     expect(tools.sort()).toEqual(["Bash", "Glob", "Grep", "Read"]);
     for (const banned of ["Edit", "Write", "NotebookEdit", "WebFetch", "WebSearch", "Agent"]) {
+      expect(tools, `no ${banned}`).not.toContain(banned);
+    }
+  });
+});
+
+describe("claude agents: the legal-auditor", () => {
+  const fm = () => frontmatter("legal-auditor.md");
+
+  it("has exactly the tools Read, Grep, Glob, Bash, WebFetch and WebSearch", () => {
+    const tools = (fm().tools ?? "").split(",").map((t) => t.trim()).filter(Boolean);
+    expect(tools.sort()).toEqual(["Bash", "Glob", "Grep", "Read", "WebFetch", "WebSearch"]);
+    for (const banned of ["Edit", "Write", "NotebookEdit", "Agent"]) {
       expect(tools, `no ${banned}`).not.toContain(banned);
     }
   });

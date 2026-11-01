@@ -56,3 +56,7 @@ playwright.config.js    @nandovejer
 .claude/hooks/injection-auditor-bash.js      @nandovejer
 .claude/settings.json                        @nandovejer
 .claude/evals/                               @nandovejer
+
+# The legal auditor, its read-only shell hook and its cases: a weaker copy protects nothing
+.claude/agents/legal-auditor.md              @nandovejer
+.claude/hooks/legal-auditor-bash.js          @nandovejer
