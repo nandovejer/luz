@@ -127,16 +127,17 @@ function groupAttributes(names) {
 
 /**
  * `<luz-color-mode>` (remember, by…): its description, from each custom-elements.json,
- * and, for an element of a package with no bundle (catalog), the stylesheet it needs.
+ * (its stylesheet, for a package with no bundle, is named once in the body).
  */
 function elementLines(root, pkg) {
   const lines = [];
   for (const module of readJson(root, `packages/${pkg}/dist/custom-elements.json`).modules) {
     for (const d of module.declarations ?? []) {
       if (!d.tagName) continue;
+      // The body says once where an element's stylesheet is: components/<tag without luz->.css; it fails if one is not
+      if (d.stylesheet && d.stylesheet !== `components/${d.tagName.replace(/^luz-/, "")}.css`) throw new Error(`${d.tagName}: its stylesheet ${d.stylesheet} is not components/<name>.css, which the prompts' body says`);
       const attributes = groupAttributes((d.attributes ?? []).map((a) => a.name));
-      const stylesheet = d.stylesheet ? ` Stylesheet: \`${d.stylesheet}\`.` : "";
-      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}${stylesheet}`.trimEnd());
+      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd());
     }
   }
   return lines;

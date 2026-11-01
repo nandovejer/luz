@@ -10,10 +10,8 @@
 :where(luz-embed) {
 	display: block;
 	position: relative;
-	overflow: hidden;
 	aspect-ratio: var(--luz-embed-ratio, 16 / 9);
 	border-radius: var(--luz-radius-md);
-	background: var(--luz-surface-media);
 	color: var(--luz-text-on-fill);
 	font-family: var(--luz-font-sans);
 }
@@ -31,9 +29,11 @@
 	position: absolute;
 	inset: 0;
 	inline-size: 100%;
+	overflow: hidden;
 	padding: 0;
 	border: 0;
-	background: none;
+	border-radius: inherit;
+	background: var(--luz-surface-media);
 	color: inherit;
 	font: inherit;
 	text-align: start;
@@ -108,27 +108,15 @@
 	inline-size: 100%;
 	block-size: 100%;
 	border: 0;
+	border-radius: inherit;
+	background: var(--luz-surface-media);
 }
 
-/* The ring is outside the frame (a transparent one stays for forced colors); where :has() is unknown, a white one inside */
-@supports selector(:has(*)) {
-	:where(luz-embed):has(> :is(.luz-embed__link, .luz-embed__play):focus-visible) {
-		outline: 2px solid var(--luz-focus-ring);
-		outline-offset: 2px;
-	}
-
-	.luz-embed__link:focus-visible,
-	.luz-embed__play:focus-visible {
-		outline: 2px solid transparent;
-	}
-}
-
-@supports not selector(:has(*)) {
-	.luz-embed__link:focus-visible,
-	.luz-embed__play:focus-visible {
-		outline: 2px solid var(--luz-text-on-fill);
-		outline-offset: calc(var(--luz-space-xs) * -1);
-	}
+/* The ring is the control's own, outside the frame: the frame does not clip, the control does */
+.luz-embed__link:focus-visible,
+.luz-embed__play:focus-visible {
+	outline: 2px solid var(--luz-focus-ring);
+	outline-offset: 2px;
 }
 
 @media (forced-colors: active) {

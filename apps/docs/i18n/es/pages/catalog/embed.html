@@ -3,7 +3,7 @@ title: Contenido incrustado
 description: Un póster y un botón de reproducir en lugar de un reproductor de otro sitio, que se carga solo cuando el visitante lo pide, tras el consentimiento.
 fits: una página que muestra un vídeo o un mapa de otro sitio
 keywords: vídeo, iframe, reproductor de terceros, fachada, incrustado ligero, privacidad, consentimiento
-source: fc84bbb8a491
+source: aa52bbda1a81
 reviewed: false
 -->
     <div class="docs-component" id="p-embed">
@@ -179,14 +179,14 @@ const url = playerURL(document.querySelector(&quot;luz-embed&quot;));</code></pr
             </div>
             <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo, redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para la marca de reproducir, los anillos de foco y los bordes. El velo se mide sobre la página, el póster más claro que existe.</p>
             <ul>
-              <li><strong>Foco:</strong> un contorno de 2 px de <code>--luz-focus-ring</code> alrededor de todo el marco, por fuera, para que el póster nunca lo oculte. Donde el navegador no tiene <code>:has()</code>, un anillo blanco dentro del marco. Los botones de la pregunta son de core.</li>
+              <li><strong>Foco:</strong> un contorno de 2 px de <code>--luz-focus-ring</code> alrededor de todo el marco, por fuera y con 2 px de separación, para que el póster nunca lo oculte. Los botones de la pregunta son de core.</li>
               <li>La marca de reproducir es un disco y un triángulo, no solo color. En colores forzados es un anillo y un triángulo con el color del texto de botón del sistema.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 15 tokens que leen las reglas de <code>components/embed.css</code> del catálogo, agrupados por familia; los botones de la pregunta son de core. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 14 tokens que leen las reglas de <code>components/embed.css</code> del catálogo, agrupados por familia; los botones de la pregunta son de core. Cada familia enlaza a su página, con los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
               <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-fill-hover"><code>--luz-brand-fill-hover</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-scrim"><code>--luz-scrim</code></a>, <a href="/docs/tokens/color/#luz-surface-media"><code>--luz-surface-media</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code></dd></div>
               <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
               <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
             </dl>

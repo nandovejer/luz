@@ -103,6 +103,8 @@ Fix every finding before going on. Then report what was done, what the check fou
 
 ## Elements you may use
 
+The stylesheet of a catalog element is `components/<name>.css` of `@luz-ds/catalog`, `<name>` being its tag without `luz-`.
+
 {{elements}}
 
 ## If you can read URLs
