@@ -58,13 +58,26 @@ export const PAGES_CSP = [
   "form-action 'self'",
 ].join("; ");
 
+/**
+ * The one page that may frame another site: the Embed page of the catalog (and
+ * its language variants, /es/docs/catalog/embed/: the source is matched, as the
+ * build hands it over), whose live demo loads a
+ * player after the visitor presses play and agrees. Its policy is PAGES_CSP
+ * with `frame-src 'self' <that service>`; every other directive and every other
+ * page keep `frame-src 'self'`.
+ */
+const EMBED_PAGE = /^\/apps\/docs\/(?:pages|_virtual\/[a-z]{2,3}(?:-[a-z0-9]+)*)\/catalog\/embed\.html$/;
+export const EMBED_FRAME_ORIGIN = "https://www.youtube-nocookie.com";
+
 function pagesCsp() {
   return {
     name: "pages-csp",
     transformIndexHtml: {
       order: "post",
-      handler: (html) =>
-        html.replace(/(<meta charset="[^"]*">)/i, `$1\n  <meta http-equiv="Content-Security-Policy" content="${PAGES_CSP}">`),
+      handler: (html, ctx) => {
+        const csp = EMBED_PAGE.test(ctx?.path ?? "") ? PAGES_CSP.replace("frame-src 'self'", `frame-src 'self' ${EMBED_FRAME_ORIGIN}`) : PAGES_CSP;
+        return html.replace(/(<meta charset="[^"]*">)/i, `$1\n  <meta http-equiv="Content-Security-Policy" content="${csp}">`);
+      },
     },
   };
 }

@@ -135,7 +135,7 @@ function elementLines(root, pkg) {
     for (const d of module.declarations ?? []) {
       if (!d.tagName) continue;
       const attributes = groupAttributes((d.attributes ?? []).map((a) => a.name));
-      const stylesheet = d.stylesheet ? ` Its stylesheet: \`@luz-ds/${pkg}/${d.stylesheet}\`.` : "";
+      const stylesheet = d.stylesheet ? ` Stylesheet: \`${d.stylesheet}\`.` : "";
       lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}${stylesheet}`.trimEnd());
     }
   }

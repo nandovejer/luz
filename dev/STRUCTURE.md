@@ -81,13 +81,13 @@ luz/
 │   │
 │   ├── catalog/                   ← @luz-ds/catalog (publishable)
 │   │   ├── src/                       ← EDIT HERE
-│   │   │   ├── components/{search,cookie-consent,theme-time,lang-switch,submenu,announcement,faq,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
+│   │   │   ├── components/{search,cookie-consent,theme-time,embed,lang-switch,submenu,announcement,faq,navbar,sidebar,terminal,timeline}.css  ← each with its print rules; no bundle (the last four were core's)
 │   │   │   ├── components/<block>.css  ← the patterns of a kind of site (hero, site-header, page-rail, …), one file each, named by what the piece is
 │   │   │   ├── catalog.js                ← the presence loader
-│   │   │   └── search.js, cookie-consent.js, theme-time.js, theme-time-bar.js, timeline.js, sidebar.js  ← lazy chunks; theme-time-boot.js is the script for the <head> (EX-012)
+│   │   │   └── search.js, cookie-consent.js, theme-time.js, theme-time-bar.js, timeline.js, embed.js, sidebar.js  ← lazy chunks; theme-time-boot.js is the script for the <head> (EX-012)
 │   │   └── dist/                      ← GENERATED (do not edit)
 │   │       ├── components/*.css (+ .min)  ← the only CSS: one file per component
-│   │       └── catalog.js, search.js, cookie-consent.js, theme-time.js, theme-time-bar.js, timeline.js, sidebar.js, theme-time-boot.js (+ .min)
+│   │       └── catalog.js, search.js, cookie-consent.js, theme-time.js, theme-time-bar.js, timeline.js, embed.js, sidebar.js, theme-time-boot.js (+ .min)
 │   │
 │   └── check/                     ← @luz-ds/check (publishable tool: a bin, no CSS, no layer; own version, 0.x)
 │       ├── src/                       ← EDIT HERE (Node ESM: main.js is the bin's glue, cli.js is run(argv, env))

@@ -1,7 +1,7 @@
 {
   "name": "@luz-ds/catalog",
   "version": "0.3.0",
-  "description": "LUZ Design System — catalog components, one stylesheet each: the navigation of a site (navbar, sidebar), the light-DOM `<luz-*>` elements (search, cookie consent, time of day, language switch, submenu, announcement, FAQ, timeline), the terminal and the patterns of a landing page, a blog, an app and a documentation site, built on @luz-ds/core",
+  "description": "LUZ Design System — catalog components, one stylesheet each: the navigation of a site (navbar, sidebar), the light-DOM `<luz-*>` elements (search, cookie consent, time of day, language switch, submenu, announcement, FAQ, timeline, embed), the terminal and the patterns of a landing page, a blog, an app and a documentation site, built on @luz-ds/core",
   "license": "MIT",
   "type": "module",
   "main": "dist/catalog.js",
@@ -15,6 +15,7 @@
     "./theme-time-boot": "./dist/theme-time-boot.js",
     "./sidebar": "./dist/sidebar.js",
     "./timeline": "./dist/timeline.js",
+    "./embed": "./dist/embed.js",
     "./components/*": "./dist/components/*",
     "./classes.json": "./dist/classes.json",
     "./custom-elements.json": "./dist/custom-elements.json",
@@ -39,6 +40,7 @@
     "catalog",
     "search",
     "cookie-consent",
+    "embed",
     "custom-elements",
     "vanilla"
   ],
@@ -55,7 +57,9 @@
     "./dist/theme-time-bar.js",
     "./dist/theme-time-bar.min.js",
     "./dist/timeline.js",
-    "./dist/timeline.min.js"
+    "./dist/timeline.min.js",
+    "./dist/embed.js",
+    "./dist/embed.min.js"
   ],
   "publishConfig": {
     "access": "public"

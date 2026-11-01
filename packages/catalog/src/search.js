@@ -59,7 +59,7 @@
  * the raw string; the JSON comes from this origin, without redirects, and
  * has size limits.
  *
- * @element luz-search - A button that opens a dialog which finds a page, a section or an HTML element of the site by name, from a JSON index.
+ * @element luz-search - A button that opens a dialog to find a page, section or HTML element by name, from a JSON index.
  * @attr {string} data-luz-search-src - On the dialog: the JSON index of the site, on the same origin; links in it are relative to the file.
  * @attr {string} data-luz-search-show - On a block of the dialog: the state that shows it (idle, none); the others are hidden.
  * @attr {"pages" | "sections" | "elements"} data-luz-search-list - On a list of the dialog: the group of results it receives.

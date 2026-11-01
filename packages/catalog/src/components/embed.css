@@ -1,0 +1,151 @@
+/* ==========================================================================
+	 LUZ Catalog: embed, <luz-embed>.
+	 A poster and a play button in a frame of a fixed ratio, where a player
+	 of another origin will load once the visitor asks (embed.js). Without
+	 JavaScript the poster is a link to the video. --luz-embed-ratio is the
+	 ratio of the frame (16 / 9 by default). While the question of the
+	 consent shows (data-luz-state="ask") the frame grows to fit it.
+	 ========================================================================== */
+
+:where(luz-embed) {
+	display: block;
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: var(--luz-embed-ratio, 16 / 9);
+	border-radius: var(--luz-radius-md);
+	background: var(--luz-surface-media);
+	color: var(--luz-text-on-fill);
+	font-family: var(--luz-font-sans);
+}
+
+:where(luz-embed[data-luz-state="ask"]) {
+	aspect-ratio: auto;
+	background: var(--luz-surface-muted);
+	color: var(--luz-text-primary);
+}
+
+/* The link without script, and the button that takes its place */
+.luz-embed__link,
+.luz-embed__play {
+	display: block;
+	position: absolute;
+	inset: 0;
+	inline-size: 100%;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: start;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.luz-embed__play[hidden] {
+	display: none;
+}
+
+.luz-embed__poster {
+	display: block;
+	inline-size: 100%;
+	block-size: 100%;
+	object-fit: cover;
+}
+
+/* The mark of play: a disc, edged in white to stand off a dark poster, and a triangle, centred whatever the direction */
+.luz-embed__link::before,
+.luz-embed__link::after,
+.luz-embed__play::before,
+.luz-embed__play::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	margin: auto;
+}
+
+.luz-embed__link::before,
+.luz-embed__play::before {
+	box-sizing: border-box;
+	inline-size: 4rem;
+	block-size: 4rem;
+	border: 2px solid var(--luz-text-on-fill);
+	border-radius: 50%;
+	background: var(--luz-brand-fill);
+}
+
+.luz-embed__link:hover::before,
+.luz-embed__play:hover::before {
+	background: var(--luz-brand-fill-hover);
+}
+
+.luz-embed__link::after,
+.luz-embed__play::after {
+	inline-size: 1.5rem;
+	block-size: 1.5rem;
+	translate: 10% 0;
+	background: var(--luz-text-on-fill);
+	clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* The title rides on the scrim, which is solid where the text is */
+.luz-embed__title {
+	position: absolute;
+	inset-inline: 0;
+	inset-block-end: 0;
+	padding: var(--luz-space-lg) var(--luz-space-md) var(--luz-space-sm);
+	background: linear-gradient(to bottom, transparent, var(--luz-scrim) var(--luz-space-lg));
+	color: var(--luz-text-on-fill);
+	font-size: var(--luz-text-md);
+}
+
+.luz-embed__ask {
+	padding: var(--luz-space-md);
+}
+
+:where(luz-embed > iframe) {
+	position: absolute;
+	inset: 0;
+	inline-size: 100%;
+	block-size: 100%;
+	border: 0;
+}
+
+/* The ring is outside the frame (a transparent one stays for forced colors); where :has() is unknown, a white one inside */
+@supports selector(:has(*)) {
+	:where(luz-embed):has(> :is(.luz-embed__link, .luz-embed__play):focus-visible) {
+		outline: 2px solid var(--luz-focus-ring);
+		outline-offset: 2px;
+	}
+
+	.luz-embed__link:focus-visible,
+	.luz-embed__play:focus-visible {
+		outline: 2px solid transparent;
+	}
+}
+
+@supports not selector(:has(*)) {
+	.luz-embed__link:focus-visible,
+	.luz-embed__play:focus-visible {
+		outline: 2px solid var(--luz-text-on-fill);
+		outline-offset: calc(var(--luz-space-xs) * -1);
+	}
+}
+
+@media (forced-colors: active) {
+	.luz-embed__link::before,
+	.luz-embed__play::before {
+		border-color: ButtonText;
+		background: Canvas;
+	}
+
+	.luz-embed__link::after,
+	.luz-embed__play::after {
+		forced-color-adjust: none;
+		background: ButtonText;
+	}
+
+	.luz-embed__title {
+		background: Canvas;
+		color: CanvasText;
+	}
+}
