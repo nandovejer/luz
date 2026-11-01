@@ -38,7 +38,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is each line the token of its job? Is an accent bar the thin width on a box with its own border and the thick one on a block without? Is a control's edge still visible on the surface it sits on, in the three modes?
 
-**Exceptions:** the two widths of the accent bar (decided 2026-10-24); a transparent border that keeps the box the same size when forced colors paints it is not a line. The round colour-mode button (`.luz-theme-mode__button`) has a hairline edge in `--luz-divider`, about 1.4:1 on the surface, and not `--luz-input-border`: its icon, at 3:1 or more, is what tells the control apart, and the edge only keeps the circle's shape (decided 2026-10-26).
+**Exceptions:** the two widths of the accent bar (decided 2026-10-24); a transparent border that keeps the box the same size when forced colors paints it is not a line. The round colour-mode button (`.luz-theme-mode__button`) has a hairline edge in `--luz-divider`, about 1.4:1 on the surface, and not `--luz-input-border`: its icon, at 3:1 or more, is what tells the control apart, and the edge only keeps the circle's shape (decided 2026-10-26). The grid of a chart (`--luz-chart-grid`) has a value of its own and not `--luz-divider`: the divider is below 1.3:1 on the lightest light of the home, and in high contrast it is a heavy line that would outweigh the data; the grid stays a hairline, decorative because the figures are in the table (decided 2026-11-01).
 
 ### DR-3 Elevation has three steps
 
@@ -140,7 +140,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is a status colour used for something that is not a status? Is a status shown by colour alone? Is the brand colour used for decoration?
 
-**Exceptions:** none.
+**Exceptions:** the first series of a chart (`--luz-chart-1`) is the blue of the brand, and the second (`--luz-chart-2`) the teal of the extended colours: a one-series chart then looks like the meter and the progress bar, and the six series need the hues that are not red, green or yellow. A series is a mark with its figure in text, never an action or a status, and its hue is never red, green or yellow (decided 2026-11-01).
 
 ### DR-11 Surfaces step, they do not mix
 
@@ -152,7 +152,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is a box the same surface as the one it sits on? Is a surface used for a state?
 
-**Exceptions:** in the home, a panel of the demo of `#native` (the "after" of the HTML as LUZ draws it) has the surface of its frame and is told apart by its border alone, as the boxes of the three modes (`.landing-modes`) already were: the demo shows what the page looks like, so it sits on the page's own surface (decided 2026-10-28).
+**Exceptions:** in the home, a panel of the demo of `#native` (the "after" of the HTML as LUZ draws it) has the surface of its frame and is told apart by its border alone, as the boxes of the three modes (`.landing-modes`) already were: the demo shows what the page looks like, so it sits on the page's own surface (decided 2026-10-28). The empty part of a chart bar (`--luz-chart-track`) is a colour of its own and not `--luz-surface-muted`: the muted surface is the page itself in light, so it would give the fill no edge to be told from; the track is a quiet step darker than the surface, and quieter than every series (decided 2026-11-01).
 
 ### DR-12 The current item is told by weight and by a mark
 

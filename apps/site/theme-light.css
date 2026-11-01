@@ -119,6 +119,16 @@
   --luz-code-property: #853bca;
   --luz-code-string: #006b44;
   --luz-code-literal: #7c4d00;
+
+  /* Charts: Vejer's own, which hold on these surfaces */
+  --luz-chart-1: #2365a6;
+  --luz-chart-2: #00736f;
+  --luz-chart-3: #5a248a;
+  --luz-chart-4: #7f004e;
+  --luz-chart-5: #6079c4;
+  --luz-chart-6: #867f7a;
+  --luz-chart-track: #d2c3a9;
+  --luz-chart-grid: #dccdb3;
 }
 
 /* -------------------------------------------------------------------------
@@ -186,6 +196,16 @@
   --luz-code-property: #853bca;
   --luz-code-string: #007749;
   --luz-code-literal: #7c4d00;
+
+  /* Charts: Vejer's own, which hold on these surfaces */
+  --luz-chart-1: #2365a6;
+  --luz-chart-2: #00736f;
+  --luz-chart-3: #5a248a;
+  --luz-chart-4: #7f004e;
+  --luz-chart-5: #6079c4;
+  --luz-chart-6: #867f7a;
+  --luz-chart-track: #d2c3a9;
+  --luz-chart-grid: #dccdb3;
 }
 
 /* -------------------------------------------------------------------------
@@ -252,6 +272,16 @@
   --luz-code-property: #ca9aff;
   --luz-code-string: #52cf92;
   --luz-code-literal: #e2a928;
+
+  /* Charts: Vejer's own, which hold on these surfaces */
+  --luz-chart-1: #6fb1ec;
+  --luz-chart-2: #62c9b5;
+  --luz-chart-3: #dbbeeb;
+  --luz-chart-4: #e8709f;
+  --luz-chart-5: #6784e5;
+  --luz-chart-6: #9a8c78;
+  --luz-chart-track: #54483c;
+  --luz-chart-grid: #4a3e33;
 }
 
 /* -------------------------------------------------------------------------
@@ -319,6 +349,16 @@
   --luz-code-property: #ca9aff;
   --luz-code-string: #52cf92;
   --luz-code-literal: #e2a928;
+
+  /* Charts: Vejer's own, which hold on these surfaces */
+  --luz-chart-1: #6fb1ec;
+  --luz-chart-2: #62c9b5;
+  --luz-chart-3: #dbbeeb;
+  --luz-chart-4: #e8709f;
+  --luz-chart-5: #6784e5;
+  --luz-chart-6: #9a8c78;
+  --luz-chart-track: #54483c;
+  --luz-chart-grid: #4a3e33;
 }
 
 /* -------------------------------------------------------------------------
@@ -637,6 +677,54 @@
   initial-value: #7c4d00;
 }
 
+@property --luz-chart-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #2365a6;
+}
+
+@property --luz-chart-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #00736f;
+}
+
+@property --luz-chart-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #5a248a;
+}
+
+@property --luz-chart-4 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7f004e;
+}
+
+@property --luz-chart-5 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #6079c4;
+}
+
+@property --luz-chart-6 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #867f7a;
+}
+
+@property --luz-chart-track {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d2c3a9;
+}
+
+@property --luz-chart-grid {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #dccdb3;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   :root {
     transition-property:
@@ -691,7 +779,15 @@
       --luz-code-name,
       --luz-code-property,
       --luz-code-string,
-      --luz-code-literal;
+      --luz-code-literal,
+      --luz-chart-1,
+      --luz-chart-2,
+      --luz-chart-3,
+      --luz-chart-4,
+      --luz-chart-5,
+      --luz-chart-6,
+      --luz-chart-track,
+      --luz-chart-grid;
     transition-duration: calc(var(--luz-duration-lazy) * 1.75);
     transition-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
   }

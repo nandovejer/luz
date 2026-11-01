@@ -81,17 +81,59 @@ export const ratio = (x, y) => {
 /** A ratio as the docs print it: rounded down to one decimal, so a printed "4.5" always passes 4.5. */
 export const formatRatio = (value) => `${(Math.floor(value * 10 + 1e-9) / 10).toFixed(1)}:1`;
 
+/* ---- How far apart two colours look ---------------------------------------
+   Distance in OKLab (Euclidean; 0.02 is about the smallest difference a person
+   sees side by side). `vision` simulates a colour vision deficiency on both
+   colours first (Machado, Oliveira and Fernandes 2009, severity 1): "protan"
+   (no red cones), "deutan" (no green cones) or "tritan" (no blue cones). */
+
+const linear = (v) => ((v /= 255) <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+const encode = (v) => 255 * (v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055);
+const DEFICIENCY = {
+  protan: [[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]],
+  deutan: [[0.367322, 0.860646, -0.227968], [0.280085, 0.672501, 0.047413], [-0.01182, 0.04294, 0.968881]],
+  tritan: [[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.3039]],
+};
+
+/** A colour as it looks with a deficiency ("protan", "deutan", "tritan"); the same colour for anything else. */
+export function simulate({ r, g, b }, vision) {
+  const m = DEFICIENCY[vision];
+  if (!m) return { r, g, b };
+  const lin = [r, g, b].map(linear);
+  const [x, y, z] = m.map((row) => encode(clamp(row[0] * lin[0] + row[1] * lin[1] + row[2] * lin[2], 0, 1)));
+  return { r: x, g: y, b: z };
+}
+
+/** A colour in OKLab: [L, a, b]. */
+export function oklab({ r, g, b }) {
+  const [lr, lg, lb] = [r, g, b].map(linear);
+  const l = Math.cbrt(0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb);
+  const m = Math.cbrt(0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb);
+  const s = Math.cbrt(0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb);
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
+}
+
+/** The OKLab distance of two opaque colours, as seen with `vision` (none by default). */
+export function colorDistance(x, y, vision) {
+  const [p, q] = [x, y].map((c) => oklab(vision ? simulate(c, vision) : c));
+  return Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
+}
+
 /* ---- The pairs ------------------------------------------------------------
    { fg: [tokens], bg: [specs], min, kind }. A background written "a > b" is
    token a composited over token b, over the page. kind says what the minimum
    protects: "text" (WCAG 1.4.3), "disabled-text" (LUZ keeps 3:1, red line 7)
-   or "ui" (focus ring, field borders and icons, WCAG 1.4.11). An advisory
+   "ui" (focus ring, field borders and icons, WCAG 1.4.11) or "decorative"
+   (the track and the grid of a chart, and the fill on its track: the figure
+   is text, so WCAG asks nothing, and LUZ keeps a floor so they are still
+   seen). An advisory
    pair is an aim LUZ sets itself, stricter than WCAG: it is reported and
    never fails the check. */
 
 const SURFACES = ["surface-page", "surface", "surface-hover", "surface-muted", "input-bg"];
 const STATUS = ["success", "danger", "warning", "info", "teal", "purple"];
 const CODE = ["comment", "keyword", "name", "property", "string", "literal"].map((t) => `code-${t}`);
+export const CHART = [1, 2, 3, 4, 5, 6].map((n) => `chart-${n}`);
 
 export const PAIRS = [
   // Text and links on the surfaces they sit on
@@ -163,10 +205,22 @@ export const PAIRS = [
   { fg: ["focus-ring"], bg: ["color-warning-bg > surface-page"], min: 3, kind: "ui" },
   { fg: ["brand-fill"], bg: ["surface-muted"], min: 3, kind: "ui" },
   { fg: ["outline"], bg: ["input-bg"], min: 3, kind: "ui" },
+  // Charts: a series is a graphic (WCAG 1.4.11) on every surface a chart can
+  // sit on; the empty part of a bar and the grid are quieter by design, and
+  // the fill is told from the empty part by 2:1
+  { fg: CHART, bg: ["surface-page", "surface", "surface-hover", "surface-muted", "surface-strong"], min: 3, kind: "ui" },
+  { fg: ["chart-track"], bg: ["surface-page", "surface", "surface-muted"], min: 1.5, kind: "decorative" },
+  { fg: ["chart-grid"], bg: ["surface-page", "surface", "surface-muted"], min: 1.3, kind: "decorative" },
+  { fg: CHART, bg: ["chart-track"], min: 2, kind: "decorative" },
 ];
 
 /** LUZ's own high-contrast mode goes beyond AA where it can: syntax colours keep 7:1 (WCAG 1.4.6). */
-export const HIGH_CONTRAST_PAIRS = [{ fg: CODE, bg: ["surface-muted"], min: 7, kind: "text" }];
+export const HIGH_CONTRAST_PAIRS = [
+  { fg: CODE, bg: ["surface-muted"], min: 7, kind: "text" },
+  // ... and the series of a chart keep 4.5:1, the grid 3:1
+  { fg: CHART, bg: ["surface-page", "surface", "surface-hover", "surface-muted", "surface-strong"], min: 4.5, kind: "ui" },
+  { fg: ["chart-grid"], bg: ["surface-page", "surface", "surface-muted"], min: 3, kind: "ui" },
+];
 
 /** The pairs to measure in a mode; `mode` is "high-contrast" for LUZ's own mode only. */
 export const pairsFor = (mode) => (mode === "high-contrast" ? [...PAIRS, ...HIGH_CONTRAST_PAIRS] : PAIRS);

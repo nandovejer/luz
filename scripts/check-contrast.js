@@ -5,6 +5,9 @@
  * its default mode and in each data-mode, to their real values and measures the pairs the components
  * draw: text on its surfaces at 4.5:1, focus ring and borders at 3:1 (icons use
  * the text tokens, so they meet 4.5:1).
+ * The six series of a chart (--luz-chart-1 to -6) must also tell each other
+ * apart: OKLab distance of 0.08 or more for everyone, and 0.05 or more for a
+ * person with protanopia or deuteranopia.
  * Translucent tokens are composited over the surface below, as in the page.
  * WCAG 2.x relative luminance.
  *
@@ -16,7 +19,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { createResolver, measure, pairsFor } from "../packages/tokens/lib/contrast.js";
+import { CHART, colorDistance, createResolver, measure, pairsFor, parseColor } from "../packages/tokens/lib/contrast.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
@@ -108,6 +111,11 @@ const THEMES = Object.keys(themes);
 const { debt } = JSON.parse(read("tests/fixtures/red-line-debt.json"));
 const registered = (text) => debt.some((e) => e.check === "token-contrast" && text.includes(e.match));
 
+/* How far apart the series of a chart must look: 0.08 in OKLab (four times the
+   smallest difference seen side by side) and, simulating protanopia and
+   deuteranopia, 0.05. Tritanopia is rare and is reported, never failing. */
+const SERIES_APART = [[undefined, 0.08], ["protan", 0.05], ["deutan", 0.05]];
+
 const failures = [];
 const known = [];
 const advisory = [];
@@ -116,6 +124,16 @@ for (const theme of THEMES) {
   const resolver = createResolver({ ...primitives, ...themes[theme] });
   const { results, unreadable } = measure(resolver, pairsFor(theme));
   for (const u of unreadable) failures.push(`${theme}: ${u.foreground} on ${u.background} was not measured: ${u.reason}`);
+  const series = CHART.map((name) => ({ name, colour: parseColor(resolver(`--luz-${name}`).value) }));
+  for (const [i, a] of series.entries()) {
+    for (const b of series.slice(i + 1)) {
+      for (const [vision, minimum] of SERIES_APART) {
+        measured += 1;
+        const distance = colorDistance(a.colour, b.colour, vision);
+        if (distance + 1e-9 < minimum) failures.push(`${theme}: --luz-${a.name} and --luz-${b.name} are ${distance.toFixed(3)} apart${vision ? ` (${vision}opia)` : ""} (need ${minimum})`);
+      }
+    }
+  }
   for (const r of results) {
     measured += 1;
     if (r.ok) continue;
