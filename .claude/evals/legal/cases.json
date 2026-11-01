@@ -1,0 +1,46 @@
+{
+  "_warning": "SYNTHETIC FIXTURES. Every `files` entry below is invented test data for legal-auditor, written as if it were in a repository. It is not part of LUZ, is never published and names no real person or product. Do not apply it.",
+  "_use": "For each case, build a scratch directory with the `files` (path -> content) and ask legal-auditor to audit it. Compare its findings with `expected`: `severity` is the lowest severity accepted for a finding on `norm`, and `findings: 0` means a clean case, where any finding is a failure (a false positive). Run by hand after any change to the agent's prompt or model; not run in CI.",
+  "cases": [
+    {
+      "id": "font-without-notice",
+      "axis": "licences",
+      "files": {
+        "packages/tokens/package.json": "{ \"name\": \"@luz-ds/tokens\", \"license\": \"MIT\", \"files\": [\"fonts\"] }",
+        "packages/tokens/fonts/serif/Example-Regular.woff2": "(binary font file, 41 KB; its name table says: Example Foundry, licensed under the SIL Open Font License 1.1)",
+        "packages/tokens/fonts/fonts.css": "@font-face { font-family: \"Example\"; src: url(\"serif/Example-Regular.woff2\"); }"
+      },
+      "expected": { "findings": 1, "severity": "Critical", "norm": "PRINCIPLES.md RL-13 (MIT only, third-party notice next to the file); the font's own OFL 1.1 conditions" }
+    },
+    {
+      "id": "storage-without-notice",
+      "axis": "privacy",
+      "files": {
+        "apps/landing/visitors.js": "const id = localStorage.getItem('visitor-id') ?? crypto.randomUUID();\nlocalStorage.setItem('visitor-id', id);\nnavigator.sendBeacon('https://stats.example.net/hit', JSON.stringify({ id, page: location.pathname, ref: document.referrer }));",
+        "apps/landing/index.html": "<footer><p>Made with LUZ.</p></footer><script type=\"module\" src=\"/visitors.js\"></script>"
+      },
+      "expected": { "findings": 1, "severity": "High", "norm": "LSSI-CE art. 22.2; RGPD arts. 5, 6, 13; ePrivacy art. 5(3): a persistent identifier sent to a third party, not strictly necessary, with no information and no consent" }
+    },
+    {
+      "id": "ai-block-with-foreign-header",
+      "axis": "ai-generated",
+      "files": {
+        "packages/core/src/debounce.js": "/*!\n * debounce-example v2.1.0\n * Copyright (c) 2019 Example Author\n * Licensed under the GNU General Public License v3.0\n */\nexport function debounce(fn, wait = 100) {\n  let t;\n  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };\n}",
+        "packages/core/package.json": "{ \"name\": \"@luz-ds/core\", \"license\": \"MIT\", \"files\": [\"src\"] }",
+        "CONTRIBUTING.md": "Contributions written with an AI assistant are welcome. Nothing else is asked of the author."
+      },
+      "expected": { "findings": 1, "severity": "Critical", "norm": "TRLPI arts. 17-21 and 99 (software); 17 U.S.C. §106; GPL-3.0 incompatible with the MIT-only rule and with the package licence; plus the weak CONTRIBUTING (Medium: no statement that the author may submit the work)" }
+    },
+    {
+      "id": "clean",
+      "axis": "none",
+      "files": {
+        "LICENSE": "MIT License\n\nCopyright (c) 2026 LUZ contributors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction... (the standard MIT text, complete)",
+        "packages/core/package.json": "{ \"name\": \"@luz-ds/core\", \"license\": \"MIT\", \"files\": [\"dist\", \"LICENSE\"], \"dependencies\": {} }",
+        "packages/core/src/theme.js": "const KEY = 'luz-theme';\nexport function setMode(mode) { try { localStorage.setItem(KEY, mode); } catch {} document.documentElement.dataset.mode = mode; }",
+        "apps/docs/pages/accessibility.html": "<h1>Accessibility statement</h1><p>We aim for WCAG 2.2 AA. Known issues are listed below. To report a barrier, write to the address at the end of this page.</p><h2>Known issues</h2><p>None known.</p>"
+      },
+      "expected": { "findings": 0, "note": "A theme preference the visitor chose is strictly necessary storage (LSSI art. 22.2 exemption); the claim is an aim, not a guarantee. Reporting a finding here is a false positive and fails the case." }
+    }
+  ]
+}
