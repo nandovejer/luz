@@ -293,13 +293,21 @@
   }
 }
 
-.luz-timeline__rail::before {
-  content: "";
+/* The line: an SVG of the hump's box, as long as the rail, with the same
+   stroke for its base, so the two meet on the same pixels */
+.luz-timeline__line {
   position: absolute;
-  inset-block-start: var(--luz-timeline-hump);
+  inset-block-start: 0;
   inset-inline: 0;
-  border-block-start: 1px solid var(--luz-outline);
-  translate: 0 -50%;
+  inline-size: 100%;
+  block-size: var(--luz-timeline-hump);
+  overflow: visible;
+  fill: none;
+  stroke: var(--luz-outline);
+}
+
+.luz-timeline__line path {
+  vector-effect: non-scaling-stroke;
 }
 
 .luz-timeline__hump {
@@ -406,6 +414,7 @@
 /* Forced colors flatten backgrounds; the marks are borders, the hump a
    stroke: keep them in system colours */
 @media (forced-colors: active) {
+  .luz-timeline__line,
   .luz-timeline__hump {
     stroke: CanvasText;
   }
