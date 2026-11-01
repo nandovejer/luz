@@ -3,7 +3,7 @@ title: Lista de artículos
 description: Dispone una lista de artículos en cuadrícula, con el último más grande, o como una lista compacta de filas. Cada artículo es una tarjeta.
 fits: una página que lista artículos: la portada, una categoría, un archivo, resultados de búsqueda
 keywords: blog, artículos, archivo, resultados de búsqueda, tarjetas
-source: d4c45c848e0b
+source: 4d24ea15d646
 reviewed: false
 -->
     <div class="docs-component" id="p-post-list">
@@ -177,17 +177,20 @@ reviewed: false
             <h3 id="do-dont">Qué hacer y qué no</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
-                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Haz del título el único enlace: toda la tarjeta lo sigue, con una sola parada de tabulación.</figcaption>
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Deja la fila compacta en el título y sus datos: un archivo largo se recorre de un vistazo.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <ul class="luz-post-list" role="list">
-                    <li><article class="luz-card"><p class="luz-card__title"><a href="#">The last tuna nets of the strait</a></p><p class="luz-card__body">Three families still set the almadraba each spring.</p></article></li>
+                  <ul class="luz-post-list luz-post-list--compact" role="list">
+                    <li><article class="luz-card"><p class="luz-card__title"><a href="#">The last tuna nets of the strait</a></p><p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>Culture</span></p></article></li>
                   </ul>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
-                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> No añadas un enlace «Leer más»: un lector de pantalla lista una docena de enlaces con el mismo nombre.</figcaption>
-                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Tarjeta con un segundo enlace"><code>&lt;p class=&quot;luz-card__title&quot;&gt;The last tuna nets of the strait&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;/tuna/&quot;&gt;Read more&lt;/a&gt;&lt;/p&gt;</code></pre>
+                <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> No pongas un resumen en la fila compacta: la parte en dos y el archivo deja de poder recorrerse de un vistazo.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-post-list luz-post-list--compact" role="list">
+                    <li><article class="luz-card"><p class="luz-card__title"><a href="#">The last tuna nets of the strait</a></p><p class="luz-card__body">Three families still set the almadraba each spring, as they have for centuries.</p><p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>Culture</span></p></article></li>
+                  </ul>
+                </div>
               </figure>
             </div>
             <h3 id="content">Cómo escribir el contenido</h3>
