@@ -94,7 +94,7 @@ Drop the lines for the levels you do not use:
 
 Pin an exact version and add an `integrity` hash in production; see [SECURITY.md](./SECURITY.md). A console warning tells you when a layer is loaded without the one below it.
 
-> **Release status:** LUZ is in beta. `@luz-ds/tokens`, `core` and `check` are published at `0.1.0`, which is also what this repository says. `@luz-ds/landing`, `cms`, `app` and `docs` are not published any more: their patterns are catalog components (see [Kinds of site](#kinds-of-site)). `@luz-ds/catalog` (the package `@luz-ds/site` became) is not published yet: it comes with the next release, `0.2.0`, together with tokens and core, whose layer order now names `luz.catalog`. Until then the level 3 snippets above do not resolve.
+> **Release status:** LUZ is in beta. All four packages are on npm: `@luz-ds/tokens`, `core` and `catalog` share one version, the one in the snippets above, and `@luz-ds/check` has its own. `@luz-ds/landing`, `cms`, `app` and `docs` are not published any more: their patterns are catalog components (see [Kinds of site](#kinds-of-site)). Before 1.0 a minor release may break things; the changelog of each package says what changed.
 
 ### Kinds of site
 
@@ -203,12 +203,6 @@ LUZ is open source under the MIT licence. Pick the row that fits; [CONTRIBUTING.
 
 Everyone taking part follows the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
-## License
-
-MIT, including the fonts. Every bundled font is under the MIT License only: ET Book, in `@luz-ds/tokens`. Its notice ships next to the font files (`LICENSE-ETBook.txt`). Controls, labels, tables and code use the system fonts, so nothing else is bundled; `@luz-ds/core` ships no fonts.
-
-Keep the MIT license notice with any copy or substantial part of LUZ. A link back to [the project](https://github.com/nandovejer/luz) is appreciated, not required.
-
 ---
 
 ## Work on LUZ
@@ -227,10 +221,12 @@ Everything above is for people who install the packages. The rest is for people 
 See [STRUCTURE.md](./dev/STRUCTURE.md) for the full annotated directory layout. Summary:
 
 ```text
-luz-design-system/
+luz/
 ├── apps/                      # Internal apps (not publishable)
 │   ├── landing/               # Home page: what LUZ is for, why, and how to adopt it
-│   └── docs/                  # The documentation: install, tokens, components, catalog patterns, HTML elements
+│   ├── docs/                  # The documentation: install, tokens, components, catalog patterns, HTML elements
+│   ├── site/                  # What the home page and the docs share: header, footer, colour moments, favicon
+│   └── debug/                 # /debug/: every block in light, dark and high contrast, left to right and right to left
 ├── packages/
 │   ├── tokens/                # @luz-ds/tokens
 │   │   ├── tokens.json        # Source of truth for primitives
@@ -335,13 +331,13 @@ pnpm catalog:build
 
 ### GitHub Pages
 
-The public site is the optimized build of the apps, committed in `docs/` (landing at `/`, documentation at `/docs/`). Configure Pages to deploy from the `main` branch, `/docs` folder.
+The public site is the optimized build of the apps (landing at `/`, documentation at `/docs/`). [`pages.yml`](./.github/workflows/pages.yml) builds it on every push to `main` and deploys it with GitHub Actions (Settings > Pages > Source: GitHub Actions). The CI of a pull request builds it too, so a broken page or link fails there.
 
 ```bash
 pnpm pages:build   # packages + Vite build with relative URLs into docs/ (git-ignored; CI deploys it)
 ```
 
-`docs/` is generated: change the sources under `apps/` and `packages/`, then rebuild. URLs are relative, so the site works under `https://<user>.github.io/<repo>/` and on a custom domain.
+`docs/` is generated and git-ignored, so there is nothing to commit: change the sources under `apps/` and `packages/`, and run `pnpm pages:build` to look at the result locally. URLs are relative, so the site works under `https://<user>.github.io/<repo>/` and on a custom domain.
 
 ### Releases
 
@@ -385,3 +381,9 @@ Nobody publishes from a local machine. See [VERSIONING.md](./VERSIONING.md#publi
 | **[VERSIONING.md](./VERSIONING.md)** | What is public API, how releases are made, what is supported |
 | **[SECURITY.md](./SECURITY.md)** | Reporting, supply-chain practices, CDN/SRI guidance, audit history |
 | **[CHANGELOG.md](./CHANGELOG.md)** | Version history and migration notes |
+
+## License
+
+MIT, including the fonts. Every bundled font is under the MIT License only: ET Book, in `@luz-ds/tokens`. Its notice ships next to the font files (`LICENSE-ETBook.txt`). Controls, labels, tables and code use the system fonts, so nothing else is bundled; `@luz-ds/core` ships no fonts.
+
+Keep the MIT license notice with any copy or substantial part of LUZ. A link back to [the project](https://github.com/nandovejer/luz) is appreciated, not required.

@@ -1,7 +1,7 @@
 # LUZ Monorepo Structure
 
 ```
-luz-design-system/
+luz/
 ├── apps/                              ← internal apps (NOT publishable)
 │   ├── docs/                          ← @luz-ds/docs-site (private): the documentation site, built by scripts/docs-site; consumes catalog's patterns of a documentation site (docs-layout, doc-header, page-rail, pager and the others)
 │   │   ├── site.json                  ← the areas of the docs (id, label, slug, groups)
