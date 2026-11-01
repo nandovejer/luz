@@ -22,8 +22,8 @@
  * of the elements and classes the body and the kind's preset name (the
  * manifests say which file each needs), then every pattern of the kind
  * (kinds.js: the catalog pages that fit the kind, or any, by `fits-kinds`;
- * their files after the rest, in the order of the cascade), and each catalog element in the list
- * says its stylesheet, so a site links only what it uses. A placeholder the body does not resolve, or one left in the
+ * their files after the rest, in the order of the cascade); the body says once where a catalog
+ * element's stylesheet is, so a site links only what it uses. A placeholder the body does not resolve, or one left in the
  * text, fails with its file:line. The links are always the published site's:
  * a prompt is pasted somewhere else, so a relative link would lead nowhere.
  * The gate on what a prompt may say is scripts/check-prompts.js.
