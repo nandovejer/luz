@@ -1991,6 +1991,15 @@ home-light:defined ~ .landing-light__nojs {
   .landing-brand__home {
     flex-wrap: wrap;
   }
+
+  /* the badge may then be as narrow as the column: closer padding, and "beta"
+     and the version stack if the column is narrower still */
+  .landing-brand .site-badge {
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    max-inline-size: 100%;
+    padding-inline: var(--luz-space-3xs);
+  }
 }
 
 /* A phone: the brand, then the groups two by two */
