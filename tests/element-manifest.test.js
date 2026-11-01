@@ -357,7 +357,7 @@ describe("the source tags in the header comment (D5-A), cross-checked with the c
       ["autoplay", "data-luz-label-next", "data-luz-label-pause", "data-luz-label-play", "data-luz-label-previous", "interval", "layout"].sort(),
     );
     expect(names("luz-cookie-consent")).toEqual(
-      ["data-luz-consent", "data-luz-consent-ask", "data-luz-consent-close", "data-luz-consent-days", "data-luz-consent-done", "data-luz-consent-key", "data-luz-consent-open"].sort(),
+      ["data-luz-consent", "data-luz-consent-ask", "data-luz-consent-close", "data-luz-consent-days", "data-luz-consent-done", "data-luz-consent-key", "data-luz-consent-open", "data-luz-consent-policy"].sort(),
     );
     expect(names("luz-theme-time")).toEqual(["latitude", "longitude", "no-remember", "place", "show", "variant"]);
     expect(names("luz-theme-mode")).toEqual(["inline", "no-remember"]);
