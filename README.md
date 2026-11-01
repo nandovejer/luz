@@ -92,6 +92,8 @@ Drop the lines for the levels you do not use:
 <script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/catalog.min.js"></script>
 ```
 
+Loading LUZ from a CDN sends your visitors' IP addresses to the CDN. If you do not want that, install from npm and serve the files from your own server.
+
 Pin an exact version and add an `integrity` hash in production; see [SECURITY.md](./SECURITY.md). A console warning tells you when a layer is loaded without the one below it.
 
 > **Release status:** LUZ is in beta. All four packages are on npm: `@luz-ds/tokens`, `core` and `catalog` share one version, the one in the snippets above, and `@luz-ds/check` has its own. `@luz-ds/landing`, `cms`, `app` and `docs` are not published any more: their patterns are catalog components (see [Kinds of site](#kinds-of-site)). Before 1.0 a minor release may break things; the changelog of each package says what changed.

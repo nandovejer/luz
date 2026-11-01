@@ -972,7 +972,7 @@ test.describe('Landing page', () => {
     });
 
     for (const [route, lang] of ROUTES) {
-      test(`${route}: the four groups hold the twenty links of the site map, in order, under their titles (${lang})`, async ({ page }) => {
+      test(`${route}: the four groups hold the twenty-one links of the site map, in order, under their titles (${lang})`, async ({ page }) => {
         const words = catalog(lang);
         await open(page, route);
 
@@ -985,7 +985,7 @@ test.describe('Landing page', () => {
           await expect(group.locator('ul')).toHaveAccessibleName(titles[index]);
           counts.push(await group.locator('a').count());
         }
-        expect(counts).toEqual([5, 5, 5, 5]);
+        expect(counts).toEqual([5, 6, 5, 5]);
         // An Arabic reader is told, in the link, that the docs are English
         if (lang === 'ar') for (const a of await footer(page).locator('.landing-foot-nav a[href^="/docs/"]').all()) await expect(a).toHaveAttribute('hreflang', 'en');
       });

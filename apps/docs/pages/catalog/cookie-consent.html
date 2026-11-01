@@ -14,13 +14,14 @@ toc: h2,h3
     <div class="docs-component" id="p-cookie-consent">
           <h2 id="example">Example</h2>
           <p>The cookie banner of a winery, with its two answers and the choice of which cookies to allow.</p>
+          <p>This component asks and records an answer. It does not make a site compliant: you decide what is stored, you write the information, and your scripts must obey the answer.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <luz-cookie-consent>
               <section class="luz-cookie-consent" data-luz-consent data-luz-consent-key="luz-consent-demo" aria-labelledby="consent-demo-title" hidden>
                 <div data-luz-consent-ask>
                   <h2 class="luz-cookie-consent__title" id="consent-demo-title">Cookies on Bodega Albar</h2>
-                  <p>We use cookies that this site needs to work. We would also like to measure how you use it, to improve it. <a href="#how">Read the cookie policy</a>.</p>
+                  <p>We use cookies that this site needs to work. We would also like to count the visits to each page, to decide which pages to update. <a href="#how">Read the cookie policy</a>.</p>
                   <form class="o-actions">
                     <button class="luz-btn luz-btn--primary" type="submit" value="all">Accept optional cookies</button>
                     <button class="luz-btn luz-btn--primary" type="submit" value="none">Reject optional cookies</button>
@@ -48,7 +49,7 @@ toc: h2,h3
               </section>
             </luz-cookie-consent>
             <p class="o-actions"><button class="luz-btn luz-btn--outline" type="button" data-luz-consent-open hidden>Change cookie settings</button></p>
-            <p class="docs-demo__note">The example is live: until you answer it, it shows as a band at the bottom of this window, as it would on your site. Its answer is stored under its own key, <code>luz-consent-demo</code>, so it does not count as an answer for this site; the button above shows it again.</p>
+            <p class="docs-demo__note">The example is live: until you answer it, it shows as a band at the bottom of this window, as it would on your site. Its answer is stored under its own key, <code>luz-consent-demo</code>, so it does not count as an answer for this site; the button above shows it again. This site lists that key on <a href="/docs/privacy/">Privacy and storage</a>.</p>
             <p class="docs-demo__note">Without JavaScript the banner and its button stay hidden.</p>
           </div>
           </div>
@@ -81,8 +82,8 @@ toc: h2,h3
   &lt;section class=&quot;luz-cookie-consent&quot; data-luz-consent aria-labelledby=&quot;consent-title&quot; hidden&gt;
     &lt;div data-luz-consent-ask&gt;
       &lt;h2 class=&quot;luz-cookie-consent__title&quot; id=&quot;consent-title&quot;&gt;Cookies on Bodega Albar&lt;/h2&gt;
-      &lt;p&gt;We use cookies that this site needs to work. We would also like to measure how you
-        use it, to improve it. &lt;a href=&quot;/cookies/&quot;&gt;Read the cookie policy&lt;/a&gt;.&lt;/p&gt;
+      &lt;p&gt;We use cookies that this site needs to work. We would also like to count the visits
+        to each page, to decide which pages to update. &lt;a href=&quot;/cookies/&quot;&gt;Read the cookie policy&lt;/a&gt;.&lt;/p&gt;
       &lt;form class=&quot;o-actions&quot;&gt;
         &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;submit&quot; value=&quot;all&quot;&gt;Accept optional cookies&lt;/button&gt;
         &lt;button class=&quot;luz-btn luz-btn--primary&quot; type=&quot;submit&quot; value=&quot;none&quot;&gt;Reject optional cookies&lt;/button&gt;
@@ -181,7 +182,7 @@ document.addEventListener(&quot;luz:consent&quot;, (event) =&gt; {
             <h3 id="when">When to use</h3>
             <p>Use it when your site sets cookies, or stores data in the browser, that it does not need to work, such as measuring visits or adverts: the law in the EU and the UK asks for the visitor’s consent before that.</p>
             <h3 id="when-not">When not to use</h3>
-            <p>Do not use it when the site sets only the cookies it needs to work (a session, a basket, a language or colour choice): those need no consent. Say so in the cookie policy and show no banner.</p>
+            <p>Do not use it when the site sets only the cookies it needs to work (a session, a basket) or stores only a choice the visitor made, such as a language or a colour, and uses it for nothing else: those need no consent. Say so in the cookie policy and show no banner.</p>
             <ul>
               <li>Do not use it as a wall that hides or blocks the page until the visitor answers.</li>
               <li>Do not use it for news or a sale: that is a <a href="/docs/catalog/announcement/">announcement</a>.</li>

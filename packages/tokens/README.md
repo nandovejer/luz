@@ -26,6 +26,8 @@ import '@luz-ds/tokens'
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.0/dist/luz-tokens.min.css">
 ```
 
+Loading LUZ from a CDN sends your visitors' IP addresses to the CDN. If you do not want that, install from npm and serve the files from your own server.
+
 ## Package exports
 
 - **`.`**, **`./css`** → `luz-tokens.css` — fonts + primitives + semantic tokens (`./css/min` for the minified twin)

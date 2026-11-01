@@ -5,7 +5,7 @@
  * - The brand is one link to the language's home page: the prism, the drawn word LUZ (hidden from a screen reader) and
  *   a "beta v<version>" badge, named "LUZ beta v<version>". The version is no longer a link to the changelog.
  * - A site map: a nav of four groups (Documentation, Reference, Resources, Community), each an h2 over a list, with
- *   exactly twenty links, in order. No link to the browser reviews, no column of kinds of site, no link twice.
+ *   exactly twenty-one links, in order. No link to the browser reviews, no column of kinds of site, no link twice.
  * - The licence line names Nando Muñoz, as a link to his GitHub, in every language.
  */
 import { readFileSync } from "node:fs";
@@ -26,10 +26,10 @@ const { rendered } = buildSite(site, { extra: landing });
 const CODES = { "/": "en", "/es/": "es", "/ar/": "ar" };
 const catalog = (code) => JSON.parse(read(`apps/landing/i18n/${code}.json`));
 
-/** The twenty links of the site map, as the English home writes them, in order, by group. */
+/** The twenty-one links of the site map, as the English home writes them, in order, by group. */
 const GROUPS = [
   { id: "footer-docs", links: ["/docs/get-started/", "/docs/get-started/migrate/", "/docs/get-started/make-it-yours/", "/docs/get-started/ai/", "/docs/a-z/"] },
-  { id: "footer-reference", links: ["/docs/tokens/", "/docs/html/", "/docs/components/", "/docs/catalog/", "/docs/accessibility/"] },
+  { id: "footer-reference", links: ["/docs/tokens/", "/docs/html/", "/docs/components/", "/docs/catalog/", "/docs/accessibility/", "/docs/privacy/"] },
   { id: "footer-resources", links: ["https://www.npmjs.com/org/luz-ds", "#inside-4", "/llms.txt", `${GITHUB}/blob/main/CHANGELOG.md`, "/docs/get-started/how-luz-is-built/"] },
   { id: "footer-community", links: [GITHUB, `${GITHUB}/issues/new/choose`, `${GITHUB}/blob/main/CONTRIBUTING.md`, `${GITHUB}/blob/main/CODE_OF_CONDUCT.md`, `${GITHUB}/blob/main/SECURITY.md`] },
 ];
@@ -89,19 +89,19 @@ for (const route of Object.keys(CODES)) {
       }
     });
 
-    it("has exactly these twenty links, in this order", () => {
+    it("has exactly these twenty-one links, in this order", () => {
       const nav = query(footer, "nav.landing-foot-nav");
       const groups = queryAll(nav, "div.landing-foot-group");
       for (const [i, expected] of GROUPS.entries()) {
         const hrefs = findAll(groups[i], (n) => n.name === "a").map((a) => a.attrs.get("href"));
         expect(hrefs, `${route} ${expected.id}`).toEqual(expected.links.map((href) => localized(route, href)));
       }
-      expect(findAll(nav, (n) => n.name === "a")).toHaveLength(20);
+      expect(findAll(nav, (n) => n.name === "a")).toHaveLength(21);
     });
 
     it("tells a reader of a language with no docs of its own, with hreflang=\"en\", that the docs behind the /docs links are English", () => {
       const docs = findAll(footer, (n) => n.name === "a" && /^\/(?:es\/)?docs\//.test(n.attrs.get("href") ?? ""));
-      expect(docs.length).toBe(10 + 1);
+      expect(docs.length).toBe(11 + 1);
       for (const a of docs) {
         if (route === "/ar/") expect(a.attrs.get("hreflang"), a.attrs.get("href")).toBe("en");
         else expect(a.attrs.has("hreflang"), a.attrs.get("href")).toBe(false);

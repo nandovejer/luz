@@ -1,0 +1,86 @@
+<!-- luz:page
+title: Privacidad y almacenamiento
+description: Quién gestiona este sitio, qué guarda en tu navegador y qué ocurre cuando reproduces un vídeo de YouTube. Última revisión: 1 de noviembre de 2026.
+keywords: privacidad, cookies, almacenamiento local, RGPD, YouTube, consentimiento
+source: c8f8ca96f999
+reviewed: false
+-->
+    <div data-docs-specimen lang="es">
+      <luz-cookie-consent>
+        <section class="luz-cookie-consent" data-luz-consent aria-labelledby="privacy-consent-title" hidden>
+          <div data-luz-consent-ask>
+            <h2 class="luz-cookie-consent__title" id="privacy-consent-title">Vídeos de YouTube</h2>
+            <p>Una página de este sitio puede reproducir un vídeo alojado en YouTube (Google). Si lo permites, YouTube recibe tu dirección IP y datos de tu navegador, y puede guardar información en tu dispositivo. Nosotros no recibimos nada de eso. <a href="#videos">Lee más sobre los vídeos de fuera</a>.</p>
+            <form class="o-actions">
+              <button class="luz-btn luz-btn--primary" type="submit" value="all">Permitir vídeos de YouTube</button>
+              <button class="luz-btn luz-btn--primary" type="submit" value="none">No permitir vídeos de YouTube</button>
+            </form>
+            <details class="luz-cookie-consent__choices">
+              <summary>Elegir por categoría</summary>
+              <form class="o-stack">
+                <fieldset class="luz-fieldset">
+                  <legend>Servicios de fuera</legend>
+                  <div class="luz-check-group">
+                    <label class="luz-check-item"><input type="checkbox" value="youtube"> Vídeos de YouTube</label>
+                  </div>
+                </fieldset>
+                <div class="o-actions">
+                  <button class="luz-btn luz-btn--secondary" type="submit">Guardar mi elección</button>
+                </div>
+              </form>
+            </details>
+          </div>
+          <div data-luz-consent-done tabindex="-1" hidden>
+            <p>Tu respuesta está guardada. Puedes cambiarla en cualquier momento en la sección <a href="#cookie-settings">Ajustes de cookies</a> de esta página.</p>
+            <button class="luz-btn luz-btn--secondary" type="button" data-luz-consent-close>Cerrar</button>
+          </div>
+        </section>
+      </luz-cookie-consent>
+    </div>
+    <div class="docs-block docs-prose-chapter" id="privacy">
+      <p class="docs-lead">Quién gestiona este sitio, qué guarda en tu navegador y qué ocurre cuando reproduces un vídeo de YouTube. Última revisión: 1 de noviembre de 2026.</p>
+
+      <h2 id="who">Quién gestiona este sitio</h2>
+      <p>Este sitio lo gestiona Fernando Muñoz (GitHub: nandovejer), que también escribe LUZ. No tiene anuncios, ni analítica, ni cuentas, y no te pide datos personales. Este sitio no establece cookies por sí mismo.</p>
+
+      <h2 id="hosting">Dónde está alojado</h2>
+      <p>El sitio está alojado en GitHub Pages. GitHub registra en sus servidores la dirección IP de quienes lo visitan, por seguridad, y nosotros no podemos ver esos registros. <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages">Cómo trata GitHub Pages los datos de los visitantes</a> se explica en GitHub.</p>
+
+      <h2 id="storage">Qué se guarda en tu navegador</h2>
+      <p>El sitio guarda unos pocos datos pequeños en el almacenamiento local de tu navegador. Cada uno se escribe solo después de que hagas algo que lo pide, como elegir un modo de color. Ninguno se envía a un servidor y cada uno se usa solo para lo que dice su fila.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Datos guardados en tu navegador" tabindex="0">
+        <table class="luz-table">
+          <thead>
+            <tr><th scope="col">Clave</th><th scope="col">Qué guarda</th><th scope="col">Cuándo se escribe</th><th scope="col">Cómo quitarla</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Clave"><div><code>luz-theme</code></div></td><td data-label="Qué guarda"><div>El modo de color que elegiste: claro, oscuro o alto contraste</div></td><td data-label="Cuándo se escribe"><div>Eliges un modo con el control del modo de color</div></td><td data-label="Cómo quitarla"><div>Elige Auto en el control del modo de color</div></td></tr>
+            <tr><td data-label="Clave"><div><code>luz-light</code></div></td><td data-label="Qué guarda"><div>La hora del día que fijaste con el control deslizante de la página de inicio</div></td><td data-label="Cuándo se escribe"><div>Fijas una hora con el control deslizante</div></td><td data-label="Cómo quitarla"><div>Elige un modo de color, o Auto, en el control del modo de color</div></td></tr>
+            <tr><td data-label="Clave"><div><code>luz-docs-view</code></div></td><td data-label="Qué guarda"><div>La pestaña que abriste por última vez en una página de componente: Código o Diseño</div></td><td data-label="Cuándo se escribe"><div>Abres una de las dos pestañas</div></td><td data-label="Cómo quitarla"><div>Borra los datos de este sitio en tu navegador</div></td></tr>
+            <tr><td data-label="Clave"><div><code>luz-consent</code></div></td><td data-label="Qué guarda"><div>Tu respuesta sobre los vídeos de YouTube, durante 180 días</div></td><td data-label="Cuándo se escribe"><div>Respondes a la pregunta sobre los vídeos de YouTube</div></td><td data-label="Cómo quitarla"><div>Cambia tu respuesta en <a href="#cookie-settings">Ajustes de cookies</a>, o borra los datos de este sitio en tu navegador</div></td></tr>
+            <tr><td data-label="Clave"><div><code>luz-consent-demo</code></div></td><td data-label="Qué guarda"><div>Tu respuesta a las preguntas de ejemplo de las páginas Consentimiento para cookies y Contenido incrustado, durante 180 días</div></td><td data-label="Cuándo se escribe"><div>Respondes a una pregunta de ejemplo</div></td><td data-label="Cómo quitarla"><div>Borra los datos de este sitio en tu navegador</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="videos">Vídeos de fuera</h2>
+      <p>Una página de este sitio, <a href="/docs/catalog/embed/">Incrustado</a>, puede reproducir un vídeo de YouTube. No se pide nada a YouTube hasta que pulsas reproducir y aceptas.</p>
+      <p>Si reproduces el vídeo, YouTube (Google) recibe tu dirección IP y datos de tu navegador, y puede guardar información en tu dispositivo. Nosotros no recibimos nada de eso. A partir de ese momento se aplica <a href="https://policies.google.com/privacy">la política de privacidad de Google</a>.</p>
+      <p>Sin JavaScript, el vídeo es un enlace a YouTube. Si lo sigues, sales de este sitio.</p>
+
+      <h2 id="cookie-settings">Ajustes de cookies</h2>
+      <p>La única elección que te pregunta este sitio es la de los vídeos de YouTube. Si no has respondido, la pregunta está en la parte inferior de esta ventana. Usa el botón para verla de nuevo y cambiar tu respuesta.</p>
+      <p class="o-actions"><button class="luz-btn luz-btn--outline" type="button" data-luz-consent-open hidden>Cambiar mi respuesta sobre los vídeos de YouTube</button></p>
+      <p>Sin JavaScript, la pregunta y el botón permanecen ocultos, porque el vídeo es solo un enlace y el sitio no guarda nada.</p>
+
+      <h2 id="links">Enlaces</h2>
+      <ul>
+        <li><a href="https://github.com/nandovejer/luz">LUZ en GitHub</a>, donde está el código de este sitio.</li>
+        <li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages">Acerca de GitHub Pages</a>, el servicio que aloja este sitio.</li>
+        <li><a href="https://policies.google.com/privacy">Política de privacidad de Google</a>, para YouTube.</li>
+        <li><a href="/docs/components/">Componentes de LUZ</a>, el sistema de diseño que muestra este sitio.</li>
+      </ul>
+
+      <h2 id="questions">Preguntas</h2>
+      <p>Para preguntar algo sobre esta página, <a href="https://github.com/nandovejer/luz/issues">abre una incidencia en GitHub</a>. Las incidencias son públicas: no escribas datos personales en ellas.</p>
+    </div>
