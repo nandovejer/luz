@@ -5,7 +5,7 @@
  * name, the page says it in `fits-kinds`); `@luz-ds/landing`, `cms`, `app` and `docs` and their layers are gone.
  * Sources are read as text and the docs site is read with the generator; no browser.
  *
- *   - the 20 files: sources, dist (plain and minified), the layer, the tarball list, the size row; the 21 files
+ *   - the 21 files: sources, dist (plain and minified), the layer, the tarball list, the size row; the 21 files
  *     of F5b (`landing-hero.css`…) and the old chunks are gone
  *   - classes.json: each pattern's classes map to its file, in luz.catalog; no class of the old names
  *   - the four packages do not exist, and no list, script or config names them
@@ -21,6 +21,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, 
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createHash } from "node:crypto";
 import { gzipSync } from "node:zlib";
 import { afterEach, describe, expect, it } from "vitest";
 import { LAYER_ORDER } from "../scripts/luz-layers.js";
@@ -51,8 +52,8 @@ const exists = (path) => existsSync(`${root}${path}`);
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
 const json = (path) => JSON.parse(read(path));
 
-/** The 20 stylesheets of the patterns of a kind of site, named for their block, in the order of the cascade (CASCADE of kinds.js without the four of F7). */
-const ALL = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "page-header", "article-header", "article", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
+/** The 21 stylesheets of the patterns of a kind of site, named for their block, in the order of the cascade (CASCADE of kinds.js without the four of F7). */
+const ALL = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "page-header", "article-header", "article", "post-list", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
 /** The 21 files of F5b, `<kind>-<name>.css`, and the two chunks and the three element files that F8 renamed: none of them exists any more. */
 const OLD_ALL = [
   "landing-header", "landing-hero", "landing-main", "landing-section", "landing-stat", "landing-footer", "landing-glow",
@@ -67,9 +68,9 @@ const repoSite = scanSite(join(root, "apps/docs"), root);
 
 /* ---- The 21 files --------------------------------------------------------------------------- */
 
-describe("the 20 patterns are stylesheets of catalog, named for their block", () => {
-  it("are 20 files named <block>.css (the two headers and the two footers are one each, and the masthead is its own)", () => {
-    expect(ALL).toHaveLength(20);
+describe("the 21 patterns are stylesheets of catalog, named for their block", () => {
+  it("are 21 files named <block>.css (the two headers and the two footers are one each, and the masthead is its own)", () => {
+    expect(ALL).toHaveLength(21);
     // `app-bar` and `docs-layout` are the names of their blocks (`.luz-app-bar`, `.luz-docs-layout`), not a kind's prefix on a name
     const sources = readdirSync(`${root}packages/catalog/src/components`).filter((f) => f.endsWith(".css") && !f.startsWith("_")).map((f) => f.replace(/\.css$/, ""));
     expect(sources.filter((f) => !["search", "navbar", "sidebar", "terminal", "timeline", "lang-switch", "submenu", "announcement", "faq", "cookie-consent", "theme-time", "embed"].includes(f)).sort()).toEqual([...ALL].sort());
@@ -122,10 +123,10 @@ describe("the 20 patterns are stylesheets of catalog, named for their block", ()
   });
 });
 
-describe("the budget rows of catalog: a row for the 20 patterns, and the general row leaves them out", () => {
+describe("the budget rows of catalog: a row for the 21 patterns, and the general row leaves them out", () => {
   const budgets = json("budgets.json").budgets;
 
-  it("has `catalog kind patterns CSS (each)`: the 20 blocks by name (F8: no `{landing,cms,app,docs}-*` glob any more), ideal 768 and a ceiling of 1024", () => {
+  it("has `catalog kind patterns CSS (each)`: the 21 blocks by name (F8: no `{landing,cms,app,docs}-*` glob any more), ideal 768 and a ceiling of 1024", () => {
     const row = budgets.find((b) => b.name === "catalog kind patterns CSS (each)");
     expect(row).toMatchObject({ name: "catalog kind patterns CSS (each)", ideal: 768, max: 1024 });
     const list = /^packages\/catalog\/dist\/components\/\{([^}]+)\}\.min\.css$/.exec(row.glob);
@@ -136,7 +137,7 @@ describe("the budget rows of catalog: a row for the 20 patterns, and the general
   it("keeps `catalog component CSS (each)` at 1280 and 1536 (never raised), and says with `except` that the patterns are the other row's", () => {
     const row = budgets.find((b) => b.name === "catalog component CSS (each)");
     expect(row).toMatchObject({ glob: "packages/catalog/dist/components/*.min.css", ideal: 1280, max: 1536 });
-    // `except` names the files of the other rows: the 20 patterns, and (F7) the four layout components that came from core,
+    // `except` names the files of the other rows: the 21 patterns, and (F7) the four layout components that came from core,
     // each by its name (a list of blocks, no prefix glob)
     const list = /\{([^}]+)\}\.min\.css$/.exec(row.except);
     expect(list, row.except).toBeTruthy();
@@ -180,6 +181,7 @@ describe("the classes of the patterns, in classes.json of catalog", () => {
     "luz-article-header": "article-header",
     "luz-article": "article",
     "luz-toc": "article",
+    "luz-post-list": "post-list",
     "luz-app-bar": "app-bar",
     "luz-dashboard": "dashboard",
     "luz-docs-layout": "docs-layout",
@@ -228,7 +230,7 @@ describe("the classes of the patterns, in classes.json of catalog", () => {
     }
   });
 
-  it("every one of the 20 files declares a class, and classes.json says so", () => {
+  it("every one of the 21 files declares a class, and classes.json says so", () => {
     const declared = new Set(manifest.classes.filter((c) => c.defined).flatMap((c) => c.files));
     expect(ALL.filter((name) => !declared.has(`components/${name}.css`))).toEqual([]);
   });
@@ -318,7 +320,7 @@ describe("landing, cms, app and docs are not packages any more", () => {
     expect(exists("apps/docs/catalog-patterns.css"), "apps/docs/catalog-patterns.css").toBe(true);
     const imports = [...read("apps/docs/catalog-patterns.css").matchAll(/@import url\("([^"]+)"\)/g)].map((m) => m[1]);
     const names = imports.map((href) => /components\/([\w-]+)\.css$/.exec(href)?.[1]).filter(Boolean);
-    expect(names.sort(), "the file imports the 20 patterns, by their new names").toEqual([...ALL].sort());
+    expect(names.sort(), "the file imports the 21 patterns, by their new names").toEqual([...ALL].sort());
   });
 });
 
@@ -333,7 +335,7 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
 
   it("the files of a kind are those of the catalog pages that name it (or `any`), in the order of the cascade", () => {
     expect(kindPatterns("landing", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow"].map((n) => `components/${n}.css`));
-    expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article", "post-list"].map((n) => `components/${n}.css`));
     expect(kindPatterns("app", root, null).files).toEqual(["navbar", "sidebar", "app-bar", "dashboard"].map((n) => `components/${n}.css`));
     expect(kindPatterns("docs", root, null).files).toEqual(["navbar", "sidebar", "terminal", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"].map((n) => `components/${n}.css`));
   });
@@ -350,7 +352,7 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
   it("the pages of a kind are the slugs of the pages that name it, `any` left out: the header and the footer are the page of landing and of blog", () => {
     const pages = (kind) => [...kindPatterns(kind, root, null).pages].sort();
     expect(pages("landing")).toEqual(["hero", "section", "site-footer", "site-header", "stat", "timeline"]);
-    expect(pages("blog")).toEqual(["article-header", "masthead", "page-header", "site-footer", "site-header", "timeline", "toc"]);
+    expect(pages("blog")).toEqual(["article-header", "masthead", "page-header", "post-list", "site-footer", "site-header", "timeline", "toc"]);
     expect(pages("app")).toEqual(["app-bar", "dashboard", "sidebar"]);
     expect(pages("docs")).toEqual(["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "pager", "sidebar", "terminal"]);
   });
@@ -429,6 +431,7 @@ const PAGES = [
   ["page-header", ["page-header"], "p-page-header", "blog"],
   ["article-header", ["article-header"], "p-article-header", "blog"],
   ["toc", ["article"], "p-toc", "blog"],
+  ["post-list", ["post-list"], "p-post-list", "blog"],
   ["app-bar", ["app-bar"], "p-app-bar", "app"],
   ["dashboard", ["dashboard"], "p-dashboard", "app"],
   ["docs-layout", ["docs-layout"], "p-docs-layout", "docs"],
@@ -446,9 +449,9 @@ const ELEMENT_PAGES = ["announcement", "faq", "cookie-consent", "embed", "lang-s
 const LAYOUT_PAGES = ["navbar", "sidebar", "terminal", "timeline"];
 const catalogPages = () => repoSite.pages.filter((p) => p.meta.area === "catalog");
 
-describe("the pages of the 18 patterns, at /docs/catalog/<block>/", () => {
-  it("are 18 pages beside the eight elements, the four that came from core (F7), the class reference and the gallery: 32 in the area", () => {
-    expect(PAGES).toHaveLength(18);
+describe("the pages of the 19 patterns, at /docs/catalog/<block>/", () => {
+  it("are 19 pages beside the eight elements, the four that came from core (F7), the class reference and the gallery: 33 in the area", () => {
+    expect(PAGES).toHaveLength(19);
     const routes = catalogPages().map((p) => p.route).sort();
     expect(routes).toEqual(["/docs/catalog/", "/docs/catalog/classes/", ...[...ELEMENT_PAGES, ...LAYOUT_PAGES, ...PAGES.map(([slug]) => slug)].map((slug) => `/docs/catalog/${slug}/`)].sort());
   });
@@ -468,7 +471,7 @@ describe("the pages of the 18 patterns, at /docs/catalog/<block>/", () => {
     expect(page.body, "the id the page had in its area (the specs find the page by it)").toContain(`<div class="docs-component" id="${id}">`);
   });
 
-  it("every one of the 20 files is named by the `files:` of exactly one page", () => {
+  it("every one of the 21 files is named by the `files:` of exactly one page", () => {
     const map = fileKinds(root);
     const named = catalogPages().flatMap((p) => p.meta.files.split(/[,;]/).map((f) => f.trim()).filter((f) => isKindFile(f, map)));
     expect(named.sort()).toEqual(ALL.map((name) => `components/${name}.css`).sort());
@@ -593,7 +596,7 @@ describe("the pages that count the pieces name the patterns as files of catalog"
     expect(structure, "no class of the old names").not.toMatch(/\.luz-(?:landing-|cms-|app-(?:header|dashboard)|docs-(?:shell|page-|rail|pager|example|dodont))/);
   });
 
-  it("get-started/index.html names each of the 20 files in a `<code>`, says there is no package for a kind, and links /docs/catalog/ and /docs/kinds/", () => {
+  it("get-started/index.html names each of the 21 files in a `<code>`, says there is no package for a kind, and links /docs/catalog/ and /docs/kinds/", () => {
     const named = [...start.matchAll(/<code class="luz-code-inline">([a-z-]+)<\/code>/g)].map((m) => m[1]);
     expect(ALL.filter((name) => !named.includes(name))).toEqual([]);
     expect(start).toContain('href="/docs/kinds/"');
@@ -640,7 +643,7 @@ describe("the Catalog area groups its pages by what they do", () => {
   const MEMBERS = {
     navigation: ["app-bar", "masthead", "site-header", "lang-switch", "submenu", "navbar", "sidebar"],
     "page-structure": ["article-header", "site-footer", "page-header", "hero", "section"],
-    content: ["dashboard", "embed", "faq", "stat", "toc", "terminal", "timeline"],
+    content: ["dashboard", "embed", "faq", "post-list", "stat", "toc", "terminal", "timeline"],
     "site-wide": ["theme-time", "announcement", "cookie-consent", "search"],
     documentation: ["do-dont", "example", "page-footer", "doc-header", "pager", "page-rail", "docs-layout"],
     reference: ["classes"],
@@ -664,12 +667,12 @@ describe("the Catalog area groups its pages by what they do", () => {
     for (const g of area.groups) expect(pages.some((p) => p.meta.group === g.id), `group ${g.id}`).toBe(true);
   });
 
-  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 31 at most, no ties", () => {
+  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 32 at most, no ties", () => {
     const orders = catalogPages().map((p) => Number(p.meta.order));
-    expect(catalogPages()).toHaveLength(32);
+    expect(catalogPages()).toHaveLength(33);
     expect(new Set(orders).size, `orders: ${orders.sort((a, b) => a - b).join(" ")}`).toBe(orders.length);
     expect(Math.min(...orders)).toBe(0);
-    expect(Math.max(...orders)).toBeLessThanOrEqual(31);
+    expect(Math.max(...orders)).toBeLessThanOrEqual(32);
     expect(repoSite.byRoute.get("/docs/catalog/").meta.order).toBe("0");
   });
 
@@ -745,7 +748,7 @@ describe("Fits best: the real pages", () => {
   const patterns = () => catalogPages().filter((p) => p.meta.group && p.meta.group !== "reference");
 
   it("every pattern page of catalog has both, and no other page has either", () => {
-    expect(patterns()).toHaveLength(30);
+    expect(patterns()).toHaveLength(31);
     for (const page of patterns()) {
       expect(page.meta["fits-kinds"], page.file).toBeTruthy();
       expect(page.meta.fits.length, page.file).toBeGreaterThan(10);
@@ -826,7 +829,7 @@ describe("Fits best: what a page, a card and the Spanish page say", () => {
   it("the card of the gallery says it too, in plain words (the card is one link): no link inside the line", () => {
     for (const [route, lang] of [["/docs/catalog/", "en"], ["/es/docs/catalog/", "es"]]) {
       const cards = findAll(parse(rendered.get(route)), (n) => n.name === "li" && hasClass(n, "docs-card"));
-      expect(cards, route).toHaveLength(30);
+      expect(cards, route).toHaveLength(31);
       for (const card of cards) {
         const href = query(card, "h3.docs-card__title").children.find((n) => n.name === "a").attrs.get("href");
         const slug = href.split("/").filter(Boolean).at(-1);
@@ -947,5 +950,56 @@ describe("the migration changeset", () => {
     }
     for (const layer of ["luz.landing", "luz.cms", "luz.app", "luz.docs"]) expect(text, layer).toContain(layer);
     expect(text).toMatch(/\*\*Breaking:\*\*/);
+  });
+});
+
+/* ---- The post list (.claude/plans/component-gaps.md, section 3) ------------------------------- */
+
+describe("the post list: a pattern of a blog, after the article in the cascade, with its page in English and Spanish", () => {
+  const page = () => repoSite.byRoute.get("/docs/catalog/post-list/");
+
+  it("is placed after `article` in CASCADE of kinds.js, so a blog links it once the article's rules are there", () => {
+    const cascade = member("CASCADE");
+    expect(cascade).toContain("post-list");
+    expect(cascade.indexOf("post-list")).toBeGreaterThan(cascade.indexOf("article"));
+    expect(cascade.indexOf("post-list"), "before the patterns of a web application").toBeLessThan(cascade.indexOf("app-bar"));
+  });
+
+  it("is the page of components/post-list.css, fits a blog, is in the group content, and has the structure of a pattern page", () => {
+    expect(page(), "apps/docs/pages/catalog/post-list.html").toBeTruthy();
+    expect(page().meta).toMatchObject({ area: "catalog", group: "content", "fits-kinds": "blog", files: "components/post-list.css" });
+    expect(page().meta.fits.length).toBeGreaterThan(10);
+    expect(page().body).toContain('<div class="docs-component" id="p-post-list">');
+    for (const id of ["example", "known-issues", "code-panel", "markup", "variants", "how", "no-js", "keyboard", "design-panel", "when", "when-not", "do-dont", "content", "contrast", "tokens"]) {
+      expect(page().body, `#${id}`).toContain(`id="${id}"`);
+    }
+    expect(fitsKindsOf(page().meta["fits-kinds"])).toEqual(["blog"]);
+    expect(kindPatterns("blog", root, null).files).toContain("components/post-list.css");
+    for (const kind of ["landing", "app", "docs"]) expect(kindPatterns(kind, root, null).files, kind).not.toContain("components/post-list.css");
+  });
+
+  it("documents the three classes and the knob, and keeps role=\"list\" in its markup", () => {
+    for (const name of ["luz-post-list", "luz-post-list--lead", "luz-post-list--compact", "--luz-post-list-min"]) expect(page().body, name).toContain(name);
+    expect(page().body, "keeps role=\"list\" in its markup").toContain('role="list"');
+  });
+
+  it("has a Spanish page whose `source` is the hash of the English body, so it is not stale", () => {
+    const es = read("apps/docs/i18n/es/pages/catalog/post-list.html");
+    const source = /^source: ([0-9a-f]{12})$/m.exec(es)?.[1];
+    expect(source, "apps/docs/i18n/es/pages/catalog/post-list.html has a source").toBeTruthy();
+    expect(source).toBe(createHash("sha256").update(page().body.replace(/\s+/g, " ").trim()).digest("hex").slice(0, 12));
+    expect(es).toMatch(/^reviewed: false$/m);
+  });
+
+  it.each([
+    ["en", "apps/docs/pages/kinds/blog.html"],
+    ["es", "apps/docs/i18n/es/pages/kinds/blog.html"],
+  ])("the Blog kind page (%s) links the post list, and its translation is not stale", (lang, file) => {
+    const text = read(file);
+    expect(text).toContain('href="/docs/catalog/post-list/"');
+    if (lang === "es") {
+      const english = repoSite.byRoute.get("/docs/kinds/blog/").body;
+      expect(/^source: ([0-9a-f]{12})$/m.exec(text)?.[1], "source of kinds/blog.html").toBe(createHash("sha256").update(english.replace(/\s+/g, " ").trim()).digest("hex").slice(0, 12));
+    }
   });
 });

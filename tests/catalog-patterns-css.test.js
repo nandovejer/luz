@@ -1,5 +1,5 @@
 /**
- * What the CSS of the 20 patterns of the kinds of site says (F5b and F8 of .claude/plans/ai-and-catalog-only.md):
+ * What the CSS of the 21 patterns of the kinds of site says (F5b and F8 of .claude/plans/ai-and-catalog-only.md):
  * the checks the four packages had (tests/landing-package.test.js, landing-f4.test.js, app-package.test.js and
  * docs-package.test.js), now on `packages/catalog/src/components/<block>.css`, with their reasons. F8 named each
  * file and class for its block, with no kind of site (`landing-hero.css` is `hero.css`, `.luz-cms-toc` is `.luz-toc`),
@@ -10,7 +10,8 @@
  *   - landing: seven files; core keeps stickiness, the split grid and the row; the head of a section is shared
  *     with the hero; the stat and the section title share their sizes; the glow has one gradient
  *   - blog (cms): the header and the footer of landing, `--publication`, the masthead, four files of its own;
- *     the table of contents is in article.css
+ *     the table of contents is in article.css; the post list
+ *     is a grid of cards with a lead and a compact variant, and nothing else
  *   - app: two files; the dashboard never reorders its panels (accessibility requirement O6)
  *   - docs: seven files, only the classes of the docs layout and its parts, nothing of the docs app
  *   - every file: tokens only (no hex, no named colour), no class of the old names, a header that names its block
@@ -35,7 +36,7 @@ const defines = (css, selector) => new RegExp(`${selector.replace(/[.]/g, "\\.")
 /** The files of each kind of site, by block (F8): the header and the footer are the landing page's and the blog's. */
 const KINDS = {
   landing: ["site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
-  blog: ["site-header", "masthead", "page-header", "article-header", "article", "site-footer"],
+  blog: ["site-header", "masthead", "page-header", "article-header", "article", "post-list", "site-footer"],
   app: ["app-bar", "dashboard"],
   docs: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
 };
@@ -59,7 +60,7 @@ function walk(dir, extensions, out = []) {
 
 /* ---- Every file ------------------------------------------------------------------------------ */
 
-describe("the 20 patterns: tokens only, and nothing of the old names", () => {
+describe("the 21 patterns: tokens only, and nothing of the old names", () => {
   it.each(ALL)("%s uses no hex colour, named colour or literal space (RL-10 reads it too)", (name) => {
     const css = src(name);
     expect(css.length, `${name}.css`).toBeGreaterThan(0);
@@ -264,6 +265,26 @@ describe("blog (cms): the page structure of a blog or a newspaper, with any CMS"
     }
   });
 
+  it("the post list has exactly three rules of its own, .luz-post-list, --lead and --compact, and reads one knob, --luz-post-list-min, with 16rem as its default (as .o-grid--auto)", () => {
+    const css = src("post-list");
+    expect(css.length, "packages/catalog/src/components/post-list.css").toBeGreaterThan(0);
+    const classes = new Set([...css.matchAll(/\.(luz-post-list[\w-]*)/g)].map((m) => m[1]));
+    expect([...classes].sort(), "no other block, element or modifier").toEqual(["luz-post-list", "luz-post-list--compact", "luz-post-list--lead"]);
+    expect(css, "the minimum of a column is a knob with a default").toMatch(/var\(--luz-post-list-min,\s*16rem\)/);
+    expect(css, "the knob is read, never set by the file (the consumer sets it)").not.toMatch(/--luz-post-list-min\s*:/);
+    // Every selector of the file is the list's own (the card and the picture inside it are reached from the list, never styled alone)
+    const selectors = [...css.matchAll(/(?:^|[{};])([^{};]*)\{/g)].map((m) => m[1].trim()).filter((text) => text && !text.startsWith("@"));
+    expect(selectors.length).toBeGreaterThan(0);
+    for (const selector of selectors) expect(selector, "a selector that does not start from the list").toMatch(/\.luz-post-list/);
+  });
+
+  it("the lead looks at the width of the list, not of the window: a container query of 40rem, and no media query for the layout", () => {
+    const css = src("post-list");
+    expect(css).toMatch(/container-type\s*:\s*inline-size/);
+    expect(css).toMatch(/@container\s*\(min-width:\s*40rem\)/);
+    expect(css.replace(/@media\s+print\s*\{[\s\S]*$/, ""), "only print has a media query").not.toMatch(/@media/);
+  });
+
   it("puts the table of contents in article.css: it is the article's, and it has no file of its own", () => {
     expect(defines(src("article"), ".luz-toc")).toBe(true);
     expect(exists("packages/catalog/src/components/toc.css")).toBe(false);
@@ -446,7 +467,7 @@ describe("docs: the patterns left apps/docs/reference.css and the docs app uses 
     for (const name of ["luz-doc-header", "luz-pager", "luz-page-rail__onpage"]) expect(has(generator, name), name).toBe(true);
   });
 
-  it("apps/docs/catalog-patterns.css imports the 20 files, kind by kind (landing, blog, app, docs), each file once, and holds no rule", () => {
+  it("apps/docs/catalog-patterns.css imports the 21 files, kind by kind (landing, blog, app, docs), each file once, and holds no rule", () => {
     const css = read("apps/docs/catalog-patterns.css");
     const imports = [...css.matchAll(/@import url\("\/packages\/catalog\/dist\/components\/([a-z-]+)\.css"\)/g)].map((m) => m[1]);
     expect(imports).toEqual(ALL);

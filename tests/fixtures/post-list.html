@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ catalog: the post list, .luz-post-list</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/post-list.css">
+</head>
+<body>
+  <!-- tests/post-list.spec.js. No script: the post list is CSS. A frame sets the width of a list (the list is its own
+       size container, so the lead follows the width of the list, not the window); max-inline-size keeps a frame inside
+       a window of 320px. -->
+  <main id="main">
+    <h1>Latest from The Bay Post</h1>
+    <h2>Base</h2>
+    <div id="frame-base" style="inline-size:56rem;max-inline-size:100%">
+    <ul class="luz-post-list" id="base" role="list">
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+          <h3 class="luz-card__title"><a id="link-1" href="#1">What ten years of tide records say about the bay</a></h3>
+          <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+          <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+          <h3 class="luz-card__title"><a id="link-2" href="#2">The last tuna nets of the strait</a></h3>
+          <p class="luz-card__body">Three families still set the almadraba each spring.</p>
+          <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Food</p>
+          <h3 class="luz-card__title"><a id="link-3" href="#3">Where the best tortillitas are fried</a></h3>
+          <p class="luz-card__body">A short route through four kitchens.</p>
+          <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>4 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Nature</p>
+          <h3 class="luz-card__title"><a id="link-4" href="#4">Flamingos return to the salt pans</a></h3>
+          <p class="luz-card__body">The count of this autumn is the highest in a decade.</p>
+          <p class="luz-meta"><time datetime="2026-09-28">28 September 2026</time> <span>5 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Town</p>
+          <h3 class="luz-card__title"><a id="link-5" href="#5">A new life for the old market</a></h3>
+          <p class="luz-card__body">The stalls reopen next month, with a bakery and a library.</p>
+          <p class="luz-meta"><time datetime="2026-09-21">21 September 2026</time> <span>3 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Sport</p>
+          <h3 class="luz-card__title"><a id="link-6" href="#6">Windsurfers wait for the levante</a></h3>
+          <p class="luz-card__body">Eleven days of calm have emptied the beach.</p>
+          <p class="luz-meta"><time datetime="2026-09-15">15 September 2026</time> <span>7 min read</span></p>
+        </article>
+      </li>
+    </ul>
+    </div>
+    <h2>Grid minimum</h2>
+    <div id="frame-min" style="inline-size:56rem;max-inline-size:100%;--luz-post-list-min:20rem">
+    <ul class="luz-post-list" id="min" role="list">
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+          <h3 class="luz-card__title"><a id="link-7" href="#7">What ten years of tide records say about the bay</a></h3>
+          <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+          <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+          <h3 class="luz-card__title"><a id="link-8" href="#8">The last tuna nets of the strait</a></h3>
+          <p class="luz-card__body">Three families still set the almadraba each spring.</p>
+          <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Food</p>
+          <h3 class="luz-card__title"><a id="link-9" href="#9">Where the best tortillitas are fried</a></h3>
+          <p class="luz-card__body">A short route through four kitchens.</p>
+          <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>4 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Nature</p>
+          <h3 class="luz-card__title"><a id="link-10" href="#10">Flamingos return to the salt pans</a></h3>
+          <p class="luz-card__body">The count of this autumn is the highest in a decade.</p>
+          <p class="luz-meta"><time datetime="2026-09-28">28 September 2026</time> <span>5 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Town</p>
+          <h3 class="luz-card__title"><a id="link-11" href="#11">A new life for the old market</a></h3>
+          <p class="luz-card__body">The stalls reopen next month, with a bakery and a library.</p>
+          <p class="luz-meta"><time datetime="2026-09-21">21 September 2026</time> <span>3 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Sport</p>
+          <h3 class="luz-card__title"><a id="link-12" href="#12">Windsurfers wait for the levante</a></h3>
+          <p class="luz-card__body">Eleven days of calm have emptied the beach.</p>
+          <p class="luz-meta"><time datetime="2026-09-15">15 September 2026</time> <span>7 min read</span></p>
+        </article>
+      </li>
+    </ul>
+    </div>
+    <div id="frame-min-own" style="inline-size:56rem;max-inline-size:100%">
+    <ul class="luz-post-list" id="min-own" role="list" style="--luz-post-list-min:24rem">
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+          <h3 class="luz-card__title"><a id="link-13" href="#13">What ten years of tide records say about the bay</a></h3>
+          <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+          <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+          <h3 class="luz-card__title"><a id="link-14" href="#14">The last tuna nets of the strait</a></h3>
+          <p class="luz-card__body">Three families still set the almadraba each spring.</p>
+          <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Food</p>
+          <h3 class="luz-card__title"><a id="link-15" href="#15">Where the best tortillitas are fried</a></h3>
+          <p class="luz-card__body">A short route through four kitchens.</p>
+          <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>4 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Nature</p>
+          <h3 class="luz-card__title"><a id="link-16" href="#16">Flamingos return to the salt pans</a></h3>
+          <p class="luz-card__body">The count of this autumn is the highest in a decade.</p>
+          <p class="luz-meta"><time datetime="2026-09-28">28 September 2026</time> <span>5 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Town</p>
+          <h3 class="luz-card__title"><a id="link-17" href="#17">A new life for the old market</a></h3>
+          <p class="luz-card__body">The stalls reopen next month, with a bakery and a library.</p>
+          <p class="luz-meta"><time datetime="2026-09-21">21 September 2026</time> <span>3 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Sport</p>
+          <h3 class="luz-card__title"><a id="link-18" href="#18">Windsurfers wait for the levante</a></h3>
+          <p class="luz-card__body">Eleven days of calm have emptied the beach.</p>
+          <p class="luz-meta"><time datetime="2026-09-15">15 September 2026</time> <span>7 min read</span></p>
+        </article>
+      </li>
+    </ul>
+    </div>
+    <h2>Lead</h2>
+    <div id="frame-lead-39" style="inline-size:39rem;max-inline-size:100%">
+    <ul class="luz-post-list luz-post-list--lead" id="lead-39" role="list">
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <div>
+            <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+            <h3 class="luz-card__title"><a id="link-19" href="#19">What ten years of tide records say about the bay</a></h3>
+            <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+            <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+          </div>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+          <h3 class="luz-card__title"><a id="link-20" href="#20">The last tuna nets of the strait</a></h3>
+          <p class="luz-card__body">Three families still set the almadraba each spring.</p>
+          <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Food</p>
+          <h3 class="luz-card__title"><a id="link-21" href="#21">Where the best tortillitas are fried</a></h3>
+          <p class="luz-card__body">A short route through four kitchens.</p>
+          <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>4 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Nature</p>
+          <h3 class="luz-card__title"><a id="link-22" href="#22">Flamingos return to the salt pans</a></h3>
+          <p class="luz-card__body">The count of this autumn is the highest in a decade.</p>
+          <p class="luz-meta"><time datetime="2026-09-28">28 September 2026</time> <span>5 min read</span></p>
+        </article>
+      </li>
+    </ul>
+    </div>
+    <div id="frame-lead-40" style="inline-size:40rem;max-inline-size:100%">
+    <ul class="luz-post-list luz-post-list--lead" id="lead-40" role="list">
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <div>
+            <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+            <h3 class="luz-card__title"><a id="link-23" href="#23">What ten years of tide records say about the bay</a></h3>
+            <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+            <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+          </div>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+          <h3 class="luz-card__title"><a id="link-24" href="#24">The last tuna nets of the strait</a></h3>
+          <p class="luz-card__body">Three families still set the almadraba each spring.</p>
+          <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Food</p>
+          <h3 class="luz-card__title"><a id="link-25" href="#25">Where the best tortillitas are fried</a></h3>
+          <p class="luz-card__body">A short route through four kitchens.</p>
+          <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>4 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Nature</p>
+          <h3 class="luz-card__title"><a id="link-26" href="#26">Flamingos return to the salt pans</a></h3>
+          <p class="luz-card__body">The count of this autumn is the highest in a decade.</p>
+          <p class="luz-meta"><time datetime="2026-09-28">28 September 2026</time> <span>5 min read</span></p>
+        </article>
+      </li>
+    </ul>
+    </div>
+    <div id="frame-lead-41" style="inline-size:41rem;max-inline-size:100%">
+    <ul class="luz-post-list luz-post-list--lead" id="lead-41" role="list">
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <div>
+            <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+            <h3 class="luz-card__title"><a id="link-27" href="#27">What ten years of tide records say about the bay</a></h3>
+            <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+            <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+          </div>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+          <h3 class="luz-card__title"><a id="link-28" href="#28">The last tuna nets of the strait</a></h3>
+          <p class="luz-card__body">Three families still set the almadraba each spring.</p>
+          <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Food</p>
+          <h3 class="luz-card__title"><a id="link-29" href="#29">Where the best tortillitas are fried</a></h3>
+          <p class="luz-card__body">A short route through four kitchens.</p>
+          <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>4 min read</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <div class="luz-image luz-image--3x2"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='600' height='400' fill='%23888'/%3E%3C/svg%3E" width="600" height="400" alt="" loading="lazy"></div>
+          <p class="luz-tag luz-tag--gray u-mb-sm">Nature</p>
+          <h3 class="luz-card__title"><a id="link-30" href="#30">Flamingos return to the salt pans</a></h3>
+          <p class="luz-card__body">The count of this autumn is the highest in a decade.</p>
+          <p class="luz-meta"><time datetime="2026-09-28">28 September 2026</time> <span>5 min read</span></p>
+        </article>
+      </li>
+    </ul>
+    </div>
+    <h2>Compact</h2>
+    <div id="frame-compact" style="inline-size:48rem;max-inline-size:100%">
+    <ul class="luz-post-list luz-post-list--compact" id="compact" role="list">
+      <li>
+        <article class="luz-card">
+          <h3 class="luz-card__title"><a id="link-31" href="#31">What ten years of tide records say about the bay</a></h3>
+          <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>Coast</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <h3 class="luz-card__title"><a id="link-32" href="#32">The last tuna nets of the strait</a></h3>
+          <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>Culture</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <h3 class="luz-card__title"><a id="link-33" href="#33">Where the best tortillitas are fried</a></h3>
+          <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>Food</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <h3 class="luz-card__title"><a id="link-34" href="#34">Flamingos return to the salt pans</a></h3>
+          <p class="luz-meta"><time datetime="2026-09-28">28 September 2026</time> <span>Nature</span></p>
+        </article>
+      </li>
+    </ul>
+    </div>
+    <div id="frame-compact-narrow" style="inline-size:18rem;max-inline-size:100%">
+    <ul class="luz-post-list luz-post-list--compact" id="compact-narrow" role="list">
+      <li>
+        <article class="luz-card">
+          <h3 class="luz-card__title"><a id="link-35" href="#35">What ten years of tide records say about the bay</a></h3>
+          <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>Coast</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <h3 class="luz-card__title"><a id="link-36" href="#36">The last tuna nets of the strait</a></h3>
+          <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>Culture</span></p>
+        </article>
+      </li>
+      <li>
+        <article class="luz-card">
+          <h3 class="luz-card__title"><a id="link-37" href="#37">Where the best tortillitas are fried</a></h3>
+          <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>Food</span></p>
+        </article>
+      </li>
+    </ul>
+    </div>
+  </main>
+</body>
+</html>

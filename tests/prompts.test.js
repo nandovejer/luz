@@ -263,21 +263,21 @@ describe("what a prompt says about the system comes from the packages", () => {
    */
   const PATTERNS = {
     landing: ["site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
-    blog: ["site-header", "masthead", "site-footer", "page-header", "article-header", "article"],
+    blog: ["site-header", "masthead", "site-footer", "page-header", "article-header", "article", "post-list"],
     app: ["app-bar", "dashboard"],
     docs: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
   };
   /** The pages that name each kind in `fits-kinds`, any of them, as a set: the order is the docs' (the `order` of each page). */
   const PAGES = {
     landing: ["hero", "section", "site-footer", "site-header", "stat", "timeline"],
-    blog: ["article-header", "masthead", "page-header", "site-footer", "site-header", "timeline", "toc"],
+    blog: ["article-header", "masthead", "page-header", "post-list", "site-footer", "site-header", "timeline", "toc"],
     app: ["app-bar", "dashboard", "sidebar"],
     docs: ["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "pager", "sidebar", "terminal"],
   };
   /** The blocks only one kind uses: the classes the other prompts must not list. */
   const EXCLUSIVE = {
     landing: ["luz-hero", "luz-main", "luz-section", "luz-stat", "luz-glow"],
-    blog: ["luz-masthead", "luz-page-header", "luz-article-header", "luz-article", "luz-toc"],
+    blog: ["luz-masthead", "luz-page-header", "luz-article-header", "luz-article", "luz-toc", "luz-post-list"],
     app: ["luz-app-bar", "luz-dashboard"],
     docs: ["luz-docs-layout", "luz-doc-header", "luz-page-rail", "luz-example", "luz-do-dont", "luz-pager", "luz-page-footer"],
   };
@@ -320,6 +320,22 @@ describe("what a prompt says about the system comes from the packages", () => {
       if (other !== id) for (const block of blocks) expect(text, `${id}: no class of ${other} (${block})`).not.toMatch(new RegExp(`\`${block}(?:__[a-z-]+|--[a-z-]+)?\``));
     }
     expect(text, `${id}: no class of before F8`).not.toMatch(/`luz-(?:landing|cms)-|`luz-app-(?:header|dashboard)|`luz-docs-(?:shell|page-|rail|pager|example|dodont)/);
+  });
+
+  it("blog: carries the post list, the lines of its stylesheet, its class with the two variants and its docs page, and the other kinds carry none of them", () => {
+    const text = prompt("blog");
+    expect(catalogLinks(text), "the stylesheet comes after the article's").toContain("post-list");
+    expect(catalogLinks(text).indexOf("post-list")).toBeGreaterThan(catalogLinks(text).indexOf("article"));
+    expect(text).toMatch(/^- `luz-post-list`: .*`--compact`.*`--lead`|^- `luz-post-list`: .*`--lead`.*`--compact`/m);
+    expect(text).toContain(`- ${SITE}docs/catalog/post-list/: markup of the post list.`);
+    for (const id of ["start", "landing", "app", "docs"]) {
+      expect(catalogLinks(prompt(id)), `${id}: no post-list.css`).not.toContain("post-list");
+      expect(prompt(id), `${id}: no post list`).not.toContain("luz-post-list");
+    }
+  });
+
+  it("blog: with the post list it is still at most 16100 bytes (the ceiling of 16 kB leaves room for the skeletons)", () => {
+    expect(Buffer.byteLength(prompt("blog"))).toBeLessThanOrEqual(16100);
   });
 
   it.each(["landing", "blog", "app", "docs"])("%s: links the docs page of each page that fits its kind, one line each, and no area of a package", (id) => {
