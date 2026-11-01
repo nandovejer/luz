@@ -104,7 +104,7 @@ describe("index.md of a localized route", () => {
   it.each(LANGUAGES)("%s: a page that is not translated is the English text, its links to the pages of that language", (code) => {
     ready();
     const translated = new Set(translatedRoutes(withFeature.docsDir, code));
-    const localize = (md) => md.replaceAll(`${SITE_URL}docs/`, `${SITE_URL}${code}/docs/`).replaceAll(`(${SITE_URL})`, `(${SITE_URL}${code}/)`);
+    const localize = (md) => md.replaceAll(`${SITE_URL}docs/`, `${SITE_URL}${code}/docs/`).replaceAll(`(${SITE_URL})`, `(${SITE_URL}${code}/)`).replaceAll(`(${SITE_URL}#`, `(${SITE_URL}${code}/#`);
     const fallbacks = englishRoutes().filter((route) => !translated.has(route));
     expect(fallbacks.length, "pages that fall back to English").toBeGreaterThan(50);
     const different = [];

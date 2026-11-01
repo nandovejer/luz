@@ -19,7 +19,11 @@
  */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { faded } from './helpers/settle.js';
+
+const VERSION = JSON.parse(readFileSync(fileURLToPath(new URL('../packages/core/package.json', import.meta.url)), 'utf-8')).version;
 
 const GITHUB = 'https://github.com/nandovejer/luz';
 const HOME = '/';
@@ -126,21 +130,22 @@ test.describe('the header at the top of a wide screen', () => {
   });
 
   for (const path of [HOME, DOCS]) {
-    test(`${path}: the logo is a link to the home named LUZ, with no visible text`, async ({ page, javaScriptEnabled }) => {
+    test(`${path}: the logo is a link to the home named "LUZ beta v<version>": the badge is its only visible text`, async ({ page, javaScriptEnabled }) => {
       await open(page, path, javaScriptEnabled);
       const { brand, header } = controls(page, javaScriptEnabled);
       await expect(brand).toHaveAttribute('href', '/');
-      await expect(brand).toHaveAccessibleName('LUZ');
-      expect(await visibleText(brand), 'no visible text').toBe('');
+      await expect(brand).toHaveAccessibleName(`LUZ beta v${VERSION}`);
+      expect(await visibleText(brand), 'the drawn word is aria-hidden, its letters are not text; the badge is').toMatch(new RegExp(`beta v${VERSION.replace(/\./g, '\\.')}$`));
       expect(await brand.locator('svg').count(), 'the logo is drawn').toBe(1);
       await expect(header.getByRole('link', { name: 'Home' })).toHaveCount(0);
     });
 
-    test(`${path}: the header shows no version and no tag: the changelog is a link of the footer`, async ({ page, javaScriptEnabled }) => {
+    test(`${path}: the version is in the brand's badge and is not a link: the changelog is a link of the footer`, async ({ page, javaScriptEnabled }) => {
       await open(page, path, javaScriptEnabled);
       const { version: link, header } = controls(page, javaScriptEnabled);
       await expect(link).toHaveCount(0);
-      expect(await visibleText(header)).not.toMatch(/\bv\d+\.\d+\.\d+/);
+      expect(await visibleText(header)).toMatch(new RegExp(`\\bv${VERSION.replace(/\./g, '\\.')}\\b`));
+      await expect(header.locator('.site-badge')).toHaveCount(1);
       await expect(header.locator('.luz-tag')).toHaveCount(0);
       if (path === HOME) await expect(page.locator('footer a[href$="/CHANGELOG.md"]').first()).toBeVisible();
     });
@@ -572,14 +577,14 @@ test.describe('the logo mark', () => {
     }
   }
 
-  test('the mark is decorative: the link is named LUZ by its hidden text, with no visible text', async ({ page, javaScriptEnabled }) => {
+  test('the mark is decorative: the link is named by the hidden LUZ and the badge, and the drawn word is out of the tree', async ({ page, javaScriptEnabled }) => {
     await page.setViewportSize({ width: 1280, height: 700 });
     await open(page, HOME, javaScriptEnabled);
     await expect(mark(page)).toHaveAttribute('aria-hidden', 'true');
     const brand = page.locator('#site-header .site-header__brand');
-    await expect(brand).toHaveAccessibleName('LUZ');
+    await expect(brand).toHaveAccessibleName(`LUZ beta v${VERSION}`);
     await expect(brand.locator('.u-sr-only')).toHaveText('LUZ');
-    expect(await visibleText(brand)).toBe('');
+    await expect(brand.locator('.site-word')).toHaveAttribute('aria-hidden', 'true');
   });
 
   for (const path of [HOME, '/ar/']) {
@@ -608,7 +613,7 @@ test.describe('the logo mark', () => {
       await page.setViewportSize({ width: 1280, height: 700 });
       await open(page, path, javaScriptEnabled);
       const m = await box(mark(page));
-      const others = (await drawnControls(page)).filter((c) => c.name !== 'LUZ' && !/^$/.test(c.name));
+      const others = (await drawnControls(page)).filter((c) => !c.name.startsWith('LUZ') && !/^$/.test(c.name));
       expect(others.length).toBeGreaterThan(0);
       for (const c of others) {
         if (rtl) expect(m.right, `to the right of ${c.name}`).toBeGreaterThanOrEqual(c.right - 1);

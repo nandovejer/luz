@@ -14,13 +14,13 @@ const { version } = JSON.parse(readFileSync(new URL('../packages/core/package.js
 const PAGES = ['/', '/es/', '/ar/', '/docs/', '/docs/components/button/'];
 
 for (const path of PAGES) {
-  test(`${path}: the header shows no version and every "v<digits>" in the footer is v${version}`, async ({ page }) => {
+  test(`${path}: the header shows the version once, in its badge, and every "v<digits>" in the footer is v${version}`, async ({ page }) => {
     await page.goto(path);
     const found = await page.evaluate(() => {
       const read = (selector) => [...document.querySelectorAll(selector)].flatMap((el) => (el.textContent ?? '').match(/v\d+(?:\.\d+)+/g) ?? []);
       return { header: read('header.site-header'), footer: read('footer') };
     });
-    expect(found.header, 'the header shows no version').toEqual([]);
+    expect(found.header, 'the header shows the version once, in the badge beside the word LUZ').toEqual([`v${version}`]);
     expect(found.footer.length, 'the footer shows a version').toBeGreaterThan(0);
     for (const shown of found.footer) expect(shown).toBe(`v${version}`);
   });

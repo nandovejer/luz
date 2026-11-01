@@ -263,9 +263,9 @@ test.describe('landing footer: brand and columns', () => {
 });
 
 test.describe('the footer brand of the home page: the logo mark', () => {
-  /** The mark is the prism, a square: 22 x 22 px beside the version and the beta tag, in every language. */
+  /** The mark is the prism, a square: 22 x 22 px, first in the link of the brand, with the word LUZ and the beta badge after it, in every language. */
   const brand = (page) => page.locator('footer p.landing-brand');
-  const mark = (page) => brand(page).locator('> svg');
+  const mark = (page) => brand(page).locator('> a.landing-brand__home > svg');
 
   for (const [path, rtl] of [['/', false], ['/es/', false], ['/ar/', true]]) {
     for (const width of [1280, 375, 320]) {
@@ -277,8 +277,8 @@ test.describe('the footer brand of the home page: the logo mark', () => {
         expect(Math.abs(m.height - 22), `height ${m.height}`).toBeLessThanOrEqual(1);
         if (rtl) expect(Math.abs(m.right - b.right), 'at the right, the start of Arabic').toBeLessThanOrEqual(1);
         else expect(Math.abs(m.left - b.left), 'at the left').toBeLessThanOrEqual(1);
-        // The version and the tag come after it, on the same line
-        for (const part of ['.landing-brand__version', '.landing-brand__beta']) {
+        // The word and the badge (the beta and the version) come after it, on the same line
+        for (const part of ['.site-word', '.site-badge']) {
           const r = await brand(page).locator(part).evaluate((el) => el.getBoundingClientRect().toJSON());
           if (rtl) expect(r.right, part).toBeLessThanOrEqual(m.left + 1);
           else expect(r.left, part).toBeGreaterThanOrEqual(m.right - 1);
@@ -300,15 +300,21 @@ test.describe('the footer brand of the home page: the logo mark', () => {
     await expect(brand(page).locator('strong.u-sr-only')).toHaveText('LUZ');
   });
 
-  test('in forced colours the mark takes the text colour of the footer', async ({ page }) => {
+  test('in forced colours the mark keeps the colour of the link it is in, the system\'s link colour', async ({ page }) => {
     await page.goto('/');
     await page.emulateMedia({ forcedColors: 'active' });
     const painted = await page.evaluate(() => {
-      const p = document.querySelector('footer p.landing-brand');
-      const shape = p?.querySelector('svg path');
-      return { fill: shape ? getComputedStyle(shape).fill : null, text: p ? getComputedStyle(p).color : null };
+      const link = document.querySelector('footer p.landing-brand a.landing-brand__home');
+      const shape = link?.querySelector('svg path');
+      const probe = document.createElement('span');
+      probe.style.color = 'LinkText';
+      document.body.append(probe);
+      const linkText = getComputedStyle(probe).color;
+      probe.remove();
+      return { fill: shape ? getComputedStyle(shape).fill : null, link: link ? getComputedStyle(link).color : null, linkText };
     });
     expect(painted.fill, 'painted').not.toBe('none');
-    expect(painted.fill).toBe(painted.text);
+    expect(painted.fill, 'with the link\'s colour').toBe(painted.link);
+    expect(painted.link, 'which is the system link colour').toBe(painted.linkText);
   });
 });

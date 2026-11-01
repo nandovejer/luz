@@ -4,8 +4,9 @@
  * not-found page): what the markup says before any browser lays it out. The look and the behaviour
  * are in tests/site-header.spec.js.
  *
- * - Brand: the logo is the link to the home, named "LUZ" for a screen reader with no visible text;
- *   the header shows no version (the changelog is a link of the footer) and no tag.
+ * - Brand: the logo is one link to the home: the prism, the drawn word LUZ (hidden from a screen
+ *   reader) and a "beta v<version>" badge, named "LUZ beta v<version>"; the version is not a link
+ *   to the changelog (that is a link of the footer).
  * - No Home link in the row. The end of the row, in this order: Documentation, GitHub, Search,
  *   Language (the docs have no language switch), then the menu button. Each has an icon.
  * - The colour mode is not in the header.
@@ -38,8 +39,24 @@ const DOCS_PAGES = ["/docs/", "/docs/components/button/"];
 const DOCS_OF = { "/": "/docs/", "/es/": "/es/docs/", "/ar/": "/docs/" };
 const docsHref = (route) => DOCS_OF[route] ?? "/docs/";
 const catalog = (code) => JSON.parse(read(`apps/landing/i18n/${code}.json`));
+const coreVersion = JSON.parse(read("packages/core/package.json")).version;
 
 /** The text a sighted reader sees in a node: its text without the visually hidden parts. */
+/** What a screen reader says for a node: its text without the parts under aria-hidden="true" and the hidden attribute. */
+const spokenText = (node) => {
+  const html = node.html;
+  const cuts = findAll(node, (n) => n.close && n.attrs.get("aria-hidden") === "true").map((n) => [n.open.index, n.close.end]);
+  let out = "";
+  let at = node.open.end;
+  for (const [from, to] of cuts.sort((x, y) => x[0] - y[0])) {
+    if (from < at) continue;
+    out += html.slice(at, from) + " ";
+    at = to;
+  }
+  out += html.slice(at, node.close.index);
+  return out.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+};
+
 const visibleText = (node) => {
   const hidden = findAll(node, (n) => hasClass(n, "u-sr-only")).map((n) => textOf(n));
   let text = textOf(node);
@@ -51,19 +68,29 @@ describe("the header's brand", () => {
   for (const route of [...homes, ...DOCS_PAGES]) {
     const home = homes.includes(route) ? route : "/";
 
-    it(`${route}: the logo links to the home (${home}) and is named LUZ with no visible text`, () => {
+    it(`${route}: the logo links to the home (${home}) and is named LUZ beta v<version>: the prism, the drawn word and the badge in one link`, () => {
       const brand = links(headerOf(route))[0];
       expect(href(brand)).toBe(home);
       expect(find(brand, (n) => n.name === "svg"), "the logo is drawn").toBeTruthy();
-      expect(visibleText(brand), "no visible text").toBe("");
-      const name = brand.attrs.get("aria-label") ?? textOf(brand);
-      expect(name).toBe("LUZ");
+      const word = query(brand, "span.site-word");
+      expect(word, "the drawn word LUZ is in the link").toBeTruthy();
+      expect(word.attrs.get("aria-hidden"), "the drawn word is hidden from a screen reader").toBe("true");
+      expect(word.attrs.get("lang"), "the word is English").toBe("en");
+      expect(word.attrs.get("dir"), "the word reads left to right").toBe("ltr");
+      expect(findAll(word, (n) => hasClass(n, "ch")).map(textOf), "three letters").toEqual(["L", "U", "Z"]);
+      const badge = query(brand, "span.site-badge");
+      expect(badge, "the badge is in the same link").toBeTruthy();
+      const number = query(badge, "span.site-badge__version");
+      expect(textOf(number), "the version of core").toBe(`v${coreVersion}`);
+      expect(number.attrs.get("dir"), "the number reads left to right").toBe("ltr");
+      const beta = catalog(homes.includes(route) ? route.replace(/\//g, "") || "en" : "en")["footer.beta"];
+      expect(textOf(badge)).toBe(`${beta} v${coreVersion}`);
+      expect(brand.attrs.get("aria-label") ?? spokenText(brand)).toBe(`LUZ ${beta} v${coreVersion}`);
     });
 
-    it(`${route}: the header shows no version and no tag: the changelog is the footer's link`, () => {
+    it(`${route}: the version in the header is not a link to the changelog, and it is not a tag of the pattern`, () => {
       const header = headerOf(route);
       expect(links(header).find((a) => /\/CHANGELOG\.md$/.test(href(a) ?? "")), "no link to CHANGELOG.md in the header").toBeUndefined();
-      expect(visibleText(header), "no version badge").not.toMatch(/\bv\d+\.\d+\.\d+/);
       expect(findAll(header, (n) => hasClass(n, "luz-tag")), "no tag in the header").toEqual([]);
       expect(findAll(header, (n) => hasClass(n, "site-header__version")), "no version link").toEqual([]);
     });

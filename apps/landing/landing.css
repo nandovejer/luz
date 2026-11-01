@@ -24,9 +24,9 @@
 .landing-wrap {
   --luz-title-accent: var(--luz-brand-primary);
 
-  /* The big sections stand twice as far apart as the package's gap
+  /* The big sections stand four times as far apart as the package's gap
      (space-3xl), so each one reads as a chapter */
-  row-gap: calc(var(--luz-space-3xl) * 2);
+  row-gap: calc(var(--luz-space-3xl) * 4);
 
   max-inline-size: none;
   padding-inline: calc(var(--site-edge) + var(--luz-space-xl));
@@ -332,7 +332,11 @@
   }
 
   .landing-first .luz-hero__lead {
-    margin-block: var(--luz-space-xs) var(--luz-space-md);
+    margin-block: var(--luz-space-xs);
+    /* the lead names what LUZ stands for, a few lines longer than it was: one
+       step down and a closer foot keep the buttons above the round mode button
+       (Spanish, the longest, ends 5px above it at 320 x 568) */
+    font-size: var(--luz-text-sm);
   }
 
   .landing-first .luz-hero .o-actions {
@@ -365,6 +369,13 @@
   .landing-first > .luz-hero {
     padding-block-start: clamp(var(--luz-space-lg), 4svh, var(--luz-space-4xl));
   }
+
+  /* The lead names what LUZ stands for, a line longer than it was: a column
+     a little wider than the catalog's 48rem keeps it to four lines, so the
+     first screen still ends at the window's bottom */
+  .landing-first .luz-hero__copy {
+    max-inline-size: min(100%, 56rem);
+  }
 }
 
 /* The halo is still: a text-shadow cannot be animated on the compositor, so
@@ -372,6 +383,22 @@
    thread near 70% busy in software rendering */
 :root[data-theme="high-contrast"] .landing-hero__brand {
   text-shadow: none;
+}
+
+/* The lead spells out the name: LUZ and its three words (Light, Usable,
+   Zero-dependency) in the strong ink, so the word reads out of them */
+.luz-hero__lead strong {
+  font-weight: 600;
+  color: var(--luz-text-primary);
+}
+
+/* A compound that is not split at its hyphen ("Zero-dependency"): one box that
+   moves to the next line whole. Only a box wider than its line (400 % text on
+   a phone) breaks inside, as any word that does not fit (WCAG 1.4.10) */
+.landing-nowrap {
+  display: inline-block;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
 }
 
 /* The hero's brand is the word LUZ alone, in ET Book, drawn with CSS (the
@@ -963,6 +990,69 @@ home-light:defined ~ .landing-light__nojs {
   box-shadow: 0 1.5rem 3rem -1.5rem color-mix(in oklab, var(--luz-text-primary) 25%, transparent);
 }
 
+/* The tabs take turns (landing.js, initTabCycle). While the loop
+   runs, the open tab's rule is faint and a line fills it from its start, in
+   the brand colour; full, the next tab opens. Held (the pointer or the focus
+   in the panel, or the panel off screen), the line stops where it is. A
+   transform only, so the compositor draws it. Only when the system allows
+   motion: with less of it the durations are 0 and the loop never starts */
+@media (prefers-reduced-motion: no-preference) {
+  .landing-panel[data-cycle] .luz-tab {
+    position: relative;
+    transition:
+      background-color var(--luz-duration-slow) var(--luz-easing-standard),
+      color var(--luz-duration-slow) var(--luz-easing-standard),
+      border-color var(--luz-duration-slow) var(--luz-easing-standard);
+  }
+
+  .landing-panel[data-cycle] .luz-tab[aria-selected="true"] {
+    border-bottom-color: color-mix(in oklab, var(--luz-brand-primary) 25%, transparent);
+  }
+
+  .landing-panel[data-cycle] .luz-tab[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: -2px;
+    block-size: 2px;
+    background: var(--luz-brand-primary);
+    transform-origin: left center;
+    animation: landing-tab-cycle calc(var(--luz-duration-lazy) * 4) linear both;
+  }
+
+  .landing-panel[data-cycle]:dir(rtl) .luz-tab[aria-selected="true"]::after {
+    transform-origin: right center;
+  }
+
+  .landing-panel[data-cycle="hold"] .luz-tab[aria-selected="true"]::after {
+    animation-play-state: paused;
+  }
+
+  /* The tab the loop opens comes in softly: a short fade, from a little
+     lower. Only after a turn (data-turned), so nothing fades when the panel
+     first comes into view */
+  .landing-panel[data-cycle][data-turned] .landing-panel__pane:not([hidden]) {
+    animation: landing-pane-in var(--luz-duration-slower) var(--luz-easing-enter) both;
+  }
+}
+
+@keyframes landing-pane-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes landing-tab-cycle {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
 /* Every tab of every panel is one height, whatever it holds: the panel does
    not jump when a tab changes, and the panels line up. Code longer than
    that scrolls inside its block */
@@ -1287,9 +1377,16 @@ home-light:defined ~ .landing-light__nojs {
   margin: 0;
 }
 
-/* Three boxes side by side, the same note in each: each box paints the page
-   of its mode (data-theme re-defines the tokens inside it) */
+/* Three boxes side by side, one note each. A box has no paper of its own:
+   its badge is its mode (data-theme re-defines the tokens inside it), and its
+   text takes the page's mode, with the page's colours read once on the row,
+   before each box's data-theme redefines them */
 .landing-cuts {
+  --_ink: var(--luz-text-primary);
+  --_ink-soft: var(--luz-text-secondary);
+  /* the focus ring of a box's button is drawn outside the box, on the page */
+  --_ring: var(--luz-focus-ring);
+
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--luz-space-lg);
@@ -1301,11 +1398,10 @@ home-light:defined ~ .landing-light__nojs {
   min-inline-size: 0;
   /* A share of the width caps the padding at 400 % text; at any usual size the token is the smaller */
   padding: min(var(--luz-space-xl), 12%);
-  border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
+  border: 1px solid color-mix(in oklab, var(--_ink) 14%, transparent);
   border-radius: var(--luz-radius-md);
-  background: var(--luz-surface-page);
-  color: var(--luz-text-primary);
-  box-shadow: 0 1.5rem 3rem -1.5rem color-mix(in oklab, var(--luz-text-primary) 25%, transparent);
+  background: transparent;
+  color: var(--_ink);
 }
 
 .landing-cut__picture {
@@ -1346,7 +1442,7 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 .landing-cut__apply:focus-visible {
-  outline: 2px solid var(--luz-focus-ring);
+  outline: 2px solid var(--_ring);
   outline-offset: 2px;
 }
 
@@ -1463,13 +1559,29 @@ home-light:defined ~ .landing-light__nojs {
 }
 
 /* Each box names its mode */
+/* The mode is told by its badge: the box's own paper and ink (data-theme
+   still holds inside the box), with the mode's icon before the name */
 .landing-cut__label {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: var(--luz-space-2xs);
   margin: 0;
+  padding: var(--luz-space-3xs) var(--luz-space-sm);
+  border: 1px solid color-mix(in oklab, var(--luz-text-primary) 18%, transparent);
+  border-radius: var(--luz-radius-full);
+  background: var(--luz-surface-page);
   font-family: var(--luz-font-mono);
   font-size: var(--luz-text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--luz-text-secondary);
+  color: var(--luz-text-primary);
+}
+
+.landing-cut__badge-icon {
+  flex: none;
+  inline-size: 1.15em;
+  block-size: 1.15em;
 }
 
 /* What the box says of its mode: a title and a sentence or two */
@@ -1490,7 +1602,7 @@ home-light:defined ~ .landing-light__nojs {
   font-family: var(--luz-font-body);
   font-size: var(--luz-text-md);
   line-height: 1.6;
-  color: var(--luz-text-secondary);
+  color: var(--_ink-soft);
 }
 
 /* A tablet: light and dark side by side, high contrast under them, across */
@@ -1508,6 +1620,118 @@ home-light:defined ~ .landing-light__nojs {
   .landing-cuts {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Core's tag over the three boxes, and under them the catalog's band, the
+   time of day: the shape of a box with no paper of its own, on the page's sky */
+.landing-modes__tag {
+  justify-self: center;
+  margin: 0;
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--luz-text-secondary);
+}
+
+.landing-day {
+  position: relative;
+  display: grid;
+  gap: var(--luz-space-lg);
+  padding: min(var(--luz-space-xl), 8%);
+  border: 1px solid color-mix(in oklab, var(--luz-text-primary) 14%, transparent);
+  border-radius: var(--luz-radius-md);
+  background: transparent;
+  color: var(--luz-text-primary);
+}
+
+/* The band's badge: it has no mode of its own, so no paper, only its edge and
+   the page's strongest ink */
+.landing-day__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: var(--luz-space-2xs);
+  padding: var(--luz-space-3xs) var(--luz-space-sm);
+  border: 1px solid color-mix(in oklab, var(--luz-text-primary) 35%, transparent);
+  border-radius: var(--luz-radius-full);
+  background: transparent;
+  color: var(--luz-text-primary);
+}
+
+.landing-day__tag svg {
+  flex: none;
+  inline-size: 1.15em;
+  block-size: 1.15em;
+}
+
+/* A badge's capitals, trimmed to their own height: the mono line box keeps
+   room under them for descenders they never use, so they sat about 1.75px
+   above the icon's middle. The padding gives the badge its height back */
+.landing-badge__text {
+  text-box: trim-both cap alphabetic;
+}
+
+:is(.landing-day__tag, .landing-cut__label):has(> .landing-badge__text) {
+  padding-block: var(--luz-space-2xs);
+}
+
+/* An engine without text-box keeps the line box, and its own padding */
+@supports not (text-box: trim-both cap alphabetic) {
+  :is(.landing-day__tag, .landing-cut__label):has(> .landing-badge__text) {
+    padding-block: var(--luz-space-3xs);
+  }
+}
+
+.landing-day__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: var(--luz-space-xl);
+  align-items: start;
+}
+
+@container inside (max-width: 48rem) {
+  .landing-day__head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--luz-space-lg);
+  }
+}
+
+.landing-day__title {
+  margin: 0;
+  font-family: var(--luz-font-heading);
+  font-size: var(--luz-text-2xl);
+  font-weight: 400;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.landing-day__lead {
+  margin: var(--luz-space-sm) 0 0;
+  max-inline-size: 60ch;
+  font-size: var(--luz-text-md);
+  line-height: 1.6;
+  color: var(--luz-text-secondary);
+}
+
+.landing-day__points {
+  margin: 0;
+}
+
+.landing-day__bar .luz-theme-time__bar {
+  padding-inline: 0;
+}
+
+.landing-day__link {
+  justify-self: start;
+}
+
+/* The element's name in the link: the link's colour, no box */
+.landing-day__link .luz-code-inline {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
 }
 
 @media (forced-colors: active) {
@@ -1694,91 +1918,141 @@ home-light:defined ~ .landing-light__nojs {
    Footer: the brand line and the row of the mode and the privacy line
    -------------------------------------------------------------------------- */
 
-/* The packages' label: the column titles' face, a step smaller and quieter;
-   on a phone the two lists go one under the other, a step apart */
-.landing-foot-label {
+/* Every group's title is the same small label: the mono, in capitals, in
+   the strong ink, as tall as a link's row, so the titles read straight
+   across */
+.luz-site-footer__col-title {
   display: flex;
   align-items: center;
   min-block-size: var(--luz-control-sm);
-  margin: var(--luz-space-md) 0 0;
+  margin: 0;
   font-family: var(--luz-font-mono);
   font-size: var(--luz-text-xs);
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--luz-text-secondary);
+  color: var(--luz-text-primary);
 }
 
-@media (min-width: 768px) {
-  .landing-foot-label {
-    margin-block-start: 0;
+/* The site map: four groups (Documentation, Reference, Resources,
+   Community), each its title over its list. The titles share a row and
+   each list grows on its own, so a link that wraps in one group moves no
+   other. A title's row is as tall as a link's: the rows have no gap of
+   their own, and the space between rows of groups is a margin */
+.luz-site-footer > .o-grid {
+  row-gap: 0;
+}
+
+.landing-foot-nav {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  column-gap: inherit;
+  row-gap: 0;
+  font-family: var(--luz-font-sans);
+  line-height: 1.5;
+}
+
+.landing-foot-group {
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+  align-content: start;
+}
+
+.landing-foot-group > ul {
+  display: grid;
+  align-content: start;
+  gap: var(--luz-space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each link a target of 24px or more (WCAG 2.5.8), as the catalog's columns */
+.landing-foot-group a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--luz-control-sm);
+  text-decoration: none;
+}
+
+.luz-site-footer__brand {
+  /* the brand may be narrower than the prism, the word and the badge side by
+     side; its width, in its own em, says when they stack */
+  container-type: inline-size;
+  min-inline-size: 0;
+  margin-block-end: var(--luz-space-lg);
+}
+
+/* With the text as large as 400 % in a phone's footer the brand is a column of
+   3em: the word and the badge go under the prism, one under the other */
+@container (max-width: 10em) {
+  .landing-brand__home {
+    flex-wrap: wrap;
   }
 }
 
-/* The footer's columns share one set of rows (subgrid): the brand's line
-   sits on the row of the column titles, so the top of the footer reads
-   straight across. The brand takes a little
-   more than a column, not twice one, and the columns have air between
-   them. Ten rows: a title, then the second docs column's nine (the
-   packages' label and their three links, the kinds' label and their four) */
-@media (min-width: 768px) {
+/* A phone: the brand, then the groups two by two */
+@media (max-width: 767px) {
   .luz-site-footer > .o-grid {
-    grid-template-columns: minmax(0, 1.3fr);
-    grid-template-rows: repeat(10, auto);
-    gap: var(--luz-space-xs) var(--luz-space-2xl);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--luz-space-lg);
   }
 
-  .luz-site-footer__brand,
-  .luz-site-footer__col {
-    grid-row: 1 / -1;
-    grid-template-rows: subgrid;
-    gap: inherit;
-  }
-
-  .luz-site-footer__col > ul {
-    grid-row: 2 / -1;
-    grid-template-rows: subgrid;
-    gap: inherit;
-  }
-
-  /* The docs: one title over two lists, side by side, two columns of the
-     footer's grid */
-  .landing-foot-docs {
-    grid-column: span 2;
-    grid-template-columns: subgrid;
-  }
-
-  .landing-foot-docs > .luz-site-footer__col-title {
+  .luz-site-footer__brand {
     grid-column: 1 / -1;
   }
 
-  /* The guides from the first row of links. In the second column, each
-     list under its label, on rows of their own: the packages' label on that
-     first row and their three links, then the kinds' label and their four */
-  .landing-foot-docs > ul:first-of-type {
+  .landing-foot-nav {
+    grid-column: 1 / -1;
+    grid-row: 2 / span 4;
+  }
+
+  /* the second pair of groups, a step under the first */
+  .landing-foot-group:nth-child(n + 3) > .luz-site-footer__col-title {
+    margin-block-start: var(--luz-space-lg);
+  }
+}
+
+/* A tablet and a laptop: the brand on a row of its own, then the four
+   groups side by side */
+@media (min-width: 768px) {
+  .luz-site-footer > .o-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    grid-auto-flow: row;
+    column-gap: var(--luz-space-xl);
+  }
+
+  .luz-site-footer__brand {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .landing-foot-nav {
+    grid-column: 1 / -1;
+    grid-row: 2 / span 2;
+  }
+}
+
+/* A wide window: the brand first, at the height of the titles, then the
+   four groups */
+@media (min-width: 1280px) {
+  .luz-site-footer > .o-grid {
+    grid-template-columns: minmax(0, 1.3fr) repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+  }
+
+  .luz-site-footer__brand {
     grid-column: 1;
-    grid-row: 2 / -1;
+    grid-row: 1 / span 2;
+    margin-block-end: 0;
   }
 
-  .landing-foot-docs > .landing-foot-label {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  .landing-foot-docs > ul:nth-of-type(2) {
-    grid-column: 2;
-    grid-row: 3 / span 3;
-    margin-block-start: 0;
-  }
-
-  .landing-foot-docs > .landing-foot-label ~ .landing-foot-label {
-    grid-row: 6;
-  }
-
-  .landing-foot-docs > ul:last-of-type {
-    grid-column: 2;
-    grid-row: 7 / -1;
-    margin-block-start: 0;
+  .landing-foot-nav {
+    grid-column: 2 / -1;
+    grid-row: 1 / span 2;
   }
 }
 
@@ -1788,42 +2062,25 @@ home-light:defined ~ .landing-light__nojs {
   gap: var(--luz-space-xs);
   font-family: var(--luz-font-sans);
   font-size: var(--luz-text-lg);
+  /* the prism's height; the word LUZ beside it (.site-word) is sized from it */
+  --site-mark: 1.375rem;
+}
+
+/* The prism and the word LUZ: a link to the home, in the text's colour */
+.landing-brand__home {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--luz-space-xs);
+  min-block-size: var(--luz-space-lg); /* 24 px: WCAG 2.5.8 */
+  color: inherit;
+  text-decoration: none;
 }
 
 /* The mark is the prism, a square: sized by its height, the width follows */
-.landing-brand > svg {
+.landing-brand__home > svg {
   flex: none;
-  block-size: 1.375rem;
+  block-size: var(--site-mark);
   inline-size: auto;
-}
-
-/* The version in the footer: the mono, as the number it is, a link to the
-   changelog; then "beta" as a small tag, so the two read as one statement
-   of where LUZ stands */
-.landing-brand__version {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: var(--luz-space-lg); /* 24 px: WCAG 2.5.8 */
-  font-family: var(--luz-font-mono);
-  font-size: var(--luz-text-sm);
-  color: var(--luz-text-secondary);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-}
-
-.landing-brand__version:hover {
-  color: var(--luz-text-primary);
-}
-
-.landing-brand__beta {
-  padding: 0 var(--luz-space-xs);
-  border: 1px solid color-mix(in oklab, var(--luz-text-primary) 22%, transparent);
-  border-radius: var(--luz-radius-full);
-  font-family: var(--luz-font-mono);
-  font-size: var(--luz-text-xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--luz-text-secondary);
 }
 
 /* Arabic is a joined script: every label that spaces its letters (and sets
@@ -1832,17 +2089,10 @@ home-light:defined ~ .landing-light__nojs {
 .landing-bar__name:lang(ar),
 .landing-install__label:lang(ar),
 .landing-cut__label:lang(ar),
-.landing-foot-label:lang(ar),
-.landing-brand__beta:lang(ar) {
+.luz-site-footer__col-title:lang(ar) {
   font-family: var(--luz-font-sans);
   letter-spacing: 0;
   text-transform: none;
-}
-
-@media (forced-colors: active) {
-  .landing-brand__beta {
-    border-color: CanvasText;
-  }
 }
 
 /* The licence line: small, across the whole width. With scripting on, the

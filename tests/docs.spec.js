@@ -1645,7 +1645,7 @@ test.describe('Site header and navigation toggle', () => {
     test(`on a wide screen the site links are in the header row only: ${path}`, async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 800 });
       await page.goto(path);
-      await expect(page.getByRole('navigation', { name: 'Site' })).toHaveCount(1);
+      await expect(page.getByRole('navigation', { name: 'Site', exact: true })).toHaveCount(1);
       await expect(page.locator('.page-nav__site')).toBeHidden();
     });
 

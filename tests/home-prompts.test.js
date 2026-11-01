@@ -49,9 +49,13 @@ describe("the template of level 4", () => {
     expect(level4).not.toContain("{{t:inside.weight}}");
   });
 
-  it("includes the dialog's skeleton once, and the footer lists the four kinds of site", () => {
+  it("includes the dialog's skeleton once, and the footer no longer lists the kinds of site: the site map has no column for them", () => {
     expect(home.match(/<!-- luz:include prompt-dialog -->/g)).toHaveLength(1);
-    for (const id of KINDS) expect(home, id).toContain(`<a href="/docs/kinds/${id}/">`);
+    const footer = home.slice(home.indexOf("<footer"), home.indexOf("</footer>"));
+    for (const id of KINDS) expect(footer, id).not.toContain(`/docs/kinds/${id}/`);
+    expect(footer).not.toContain("footer.kinds");
+    // The prompts stay reachable from the footer: the site map's Resources group links to level 4
+    expect(footer).toContain('<a href="#inside-4">{{t:footer.prompts}}</a>');
     for (const stale of ["footer.pkg.landing", "footer.pkg.cms", "footer.pkg.app", "footer.pkg.docs"]) expect(home, stale).not.toContain(stale);
   });
 });
@@ -70,12 +74,13 @@ describe("apps/landing/landing.js", () => {
 });
 
 describe("the catalogs, in en, es and ar", () => {
-  const level = (lang) => Object.keys(catalogs[lang]).filter((key) => /^(inside\.(kind|start|l4)\.|footer\.kinds$)/.test(key)).sort();
+  const level = (lang) => Object.keys(catalogs[lang]).filter((key) => /^inside\.(kind|start|l4)\./.test(key)).sort();
 
-  it("have the same keys for level 4 and the footer's kinds", () => {
+  it("have the same keys for level 4, and no key for a column of kinds in the footer", () => {
     expect(level("es")).toEqual(level("en"));
     expect(level("ar")).toEqual(level("en"));
-    expect(level("en")).toEqual(expect.arrayContaining(["inside.l4.p3.name", "inside.l4.p3.text", "inside.start.open", "inside.start.prompt", "inside.start.text", "footer.kinds"]));
+    expect(level("en")).toEqual(expect.arrayContaining(["inside.l4.p3.name", "inside.l4.p3.text", "inside.start.open", "inside.start.prompt", "inside.start.text"]));
+    for (const lang of LANGS) expect(Object.keys(catalogs[lang]), lang).not.toContain("footer.kinds");
   });
 
   it("have no weight for level 4 and no template line for the old kinds", () => {

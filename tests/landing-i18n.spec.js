@@ -10,6 +10,11 @@
  * Run with: pnpm test:ui
  */
 import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const read = (path) => readFileSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), 'utf-8');
+const VERSION = JSON.parse(read('packages/core/package.json')).version;
 
 const LANGUAGES = [
   { route: '/', lang: 'en', dir: 'ltr', name: 'English', label: 'Language' },
@@ -118,7 +123,8 @@ for (const { route, lang, dir, name, label } of LANGUAGES) {
       await page.setViewportSize({ width: 1280, height: 800 });
       await open(page, route);
       const logo = page.locator('.site-header__brand');
-      await expect(logo).toHaveAccessibleName('LUZ');
+      // The drawn word is hidden from the tree; the name is LUZ and the badge's words: "LUZ beta v<version>" in this language's word for beta
+      await expect(logo).toHaveAccessibleName(`LUZ ${JSON.parse(read(`apps/landing/i18n/${lang}.json`))['footer.beta']} v${VERSION}`);
       expect(new URL(await logo.evaluate((a) => a.href)).pathname).toBe(route);
       await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveCount(0);
       await expect(page.locator('.site-header__nav a')).toHaveCount(1);
@@ -276,7 +282,7 @@ test.describe('Arabic typography', () => {
     const style = (selector) =>
       page.locator(selector).first().evaluate((el) => ({ font: getComputedStyle(el).fontFamily, spacing: getComputedStyle(el).letterSpacing }));
     const sans = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--luz-font-sans').trim());
-    for (const selector of ['h1', '.luz-section__title', '.luz-section__eyebrow', '.luz-section__lead', '.landing-install__label', '.landing-cut__label', '.landing-foot-label', '.landing-brand__beta']) {
+    for (const selector of ['h1', '.luz-section__title', '.luz-section__eyebrow', '.luz-section__lead', '.landing-install__label', '.landing-cut__label', '.luz-site-footer__col-title', '.site-badge']) {
       await expect(page.locator(selector).first(), selector).toBeAttached();
       const { font, spacing } = await style(selector);
       expect(font, selector).not.toMatch(/ET Book/i);

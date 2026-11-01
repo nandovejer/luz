@@ -49,8 +49,9 @@ describe("the home page says it in three languages", () => {
   it("English says it in the lead, in one sentence", () => {
     // README.md and PRINCIPLES.md keep STATEMENT and LINE
     const lead = catalog("en")["hero.lead"];
-    // It also says what to do with LUZ: start a project, or migrate one page by page
-    expect(textOfHtml(lead)).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does: start a project with LUZ, or migrate it page by page. Every component works before JavaScript loads, and every change starts with a failing test.");
+    // It also says what to do with LUZ: start a project, or migrate one page by page; it spells the name out (four strong words)
+    expect([...lead.matchAll(/<strong\b[^>]*>([^<]*)<\/strong>/g)].map((m) => m[1])).toEqual(["LUZ", "Light", "Usable", "Zero-dependency"]);
+    expect(textOfHtml(lead)).toBe("Tokens, CSS and a little vanilla JavaScript, built on what the browser already does: start a project with LUZ, the Light, Usable and Zero-dependency design system, or migrate it page by page. Every component works before JavaScript loads, and every change starts with a failing test.");
     expect(textOfHtml(lead).toLowerCase()).toContain(LINE.toLowerCase());
   });
 
@@ -62,7 +63,8 @@ describe("the home page says it in three languages", () => {
   });
 
   it("Arabic says it in Arabic: the lead has Arabic letters, and only the names of the technologies in Latin", () => {
-    const lead = textOfHtml(catalog("ar")["hero.lead"]);
+    // The three words of the name stay English, in a span marked lang="en": they are not read as Arabic prose
+    const lead = textOfHtml(catalog("ar")["hero.lead"].replace(/<span\b[^>]*\blang="en"[^>]*>[\s\S]*?<\/span>/g, ""));
     expect(lead).toMatch(/[؀-ۿ]/);
     expect(lead.replace(/\b(?:LUZ|CSS|JavaScript|HTML)\b/g, "")).not.toMatch(/[A-Za-z]/);
   });

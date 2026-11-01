@@ -13,7 +13,7 @@
 
 import { initCopyButtons } from "/packages/core/dist/clipboard.js";
 import { highlightBlock } from "/packages/core/dist/highlight.js";
-import { initTabs } from "/packages/core/dist/tabs.js";
+import { activateTab, initTabs } from "/packages/core/dist/tabs.js";
 // Defines <luz-search> at once, not on idle as catalog.js would: the header's
 // search button wires itself when it connects
 import "/packages/catalog/dist/search.js";
@@ -95,9 +95,109 @@ function initNativePrototype() {
   if (layout) document.documentElement.dataset.native = layout;
 }
 
+/* ---- The time of day under the three modes ---------------------------- */
+
+/**
+ * The bar of the band under the three boxes (<luz-theme-time variant="bar">)
+ * has no moments of its own: it follows the hour of the footer's element,
+ * which owns the page. It only needs the city of the visitor's time zone, as
+ * the globe's bar has.
+ */
+function initDayBand() {
+  const bar = document.querySelector(".landing-day__bar");
+  if (!bar) return;
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? "";
+  const city = tz.includes("/") && !tz.startsWith("Etc/") ? tz.split("/").pop().replace(/_/g, " ") : "";
+  if (city) bar.setAttribute("place", city);
+}
+
+/* ---- The panels' tabs turn by themselves ------------------------------- */
+
+/**
+ * The tabs of a level's panel (install, list, code) take turns
+ * in a loop while the panel is on screen: a line fills under the open tab
+ * (landing.css, [data-cycle]) and, when it is full, the next tab opens. The
+ * pointer over the panel or the focus in it holds the line; three seconds
+ * after both leave, it runs on. A tab chosen by a person (a click, a key, a
+ * link to a panel) ends the loop for good. Nothing turns when the system
+ * asks for less motion, the focus never moves, nothing is announced.
+ *
+ * A written deviation, as the header's prism: an endless loop with no
+ * control of its own (PRINCIPLES.md §2, WCAG 2.2.2), the owner's choice of
+ * 2026-10-31.
+ */
+const RESUME_AFTER = 3000;
+
+function initTabCycle(panel) {
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const tabs = [...panel.querySelectorAll('.luz-tab[role="tab"]')];
+  if (still.matches || tabs.length < 2) return;
+  let visible = false;
+  let held = false;
+  let stopped = false;
+  // The tab the loop opened last: the observer below hears of it later
+  let turned = null;
+  let timer = 0;
+
+  const show = () => {
+    if (stopped) delete panel.dataset.cycle;
+    else panel.dataset.cycle = visible && !held ? "run" : "hold";
+  };
+  const stop = () => {
+    stopped = true;
+    delete panel.dataset.turned;
+    clearTimeout(timer);
+    show();
+  };
+  const hold = () => {
+    clearTimeout(timer);
+    held = true;
+    show();
+  };
+  // Runs on only when neither the pointer nor the focus is in the panel
+  const release = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      held = panel.matches(":hover") || panel.contains(document.activeElement);
+      show();
+    }, RESUME_AFTER);
+  };
+
+  // The line under the open tab is full: the next tab opens
+  panel.addEventListener("animationend", (e) => {
+    if (stopped || e.animationName !== "landing-tab-cycle") return;
+    const open = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+    turned = tabs[(open + 1) % tabs.length];
+    panel.dataset.turned = "";
+    activateTab(turned);
+  });
+
+  // Any other change of tab is a person's choice
+  const watch = new MutationObserver(() => {
+    const open = tabs.find((tab) => tab.getAttribute("aria-selected") === "true");
+    if (open === turned) turned = null;
+    else stop();
+  });
+  for (const tab of tabs) watch.observe(tab, { attributes: true, attributeFilter: ["aria-selected"] });
+  // A click on the open tab changes nothing, and is a choice too
+  for (const tab of tabs) tab.addEventListener("click", stop);
+
+  panel.addEventListener("pointerenter", hold);
+  panel.addEventListener("pointerleave", release);
+  panel.addEventListener("focusin", hold);
+  panel.addEventListener("focusout", (e) => panel.contains(e.relatedTarget) || release());
+  still.addEventListener("change", () => still.matches && stop());
+
+  new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    show();
+  }, { threshold: 0.5 }).observe(panel);
+}
+
 /* ---- Boot -------------------------------------------------------------- */
 
 initNativePrototype();
+initDayBand();
 
 // Color mode, menu drawer and header height (shared with the docs)
 initSiteHeader();
@@ -105,7 +205,10 @@ initCopy();
 initModes();
 initPromptDialogs();
 // The panels of "What's inside": install, code and result
-for (const panel of document.querySelectorAll(".landing-panel")) initTabs(panel);
+for (const panel of document.querySelectorAll(".landing-panel")) {
+  initTabs(panel);
+  initTabCycle(panel);
+}
 // highlightBlock() only: initHighlight() also injects a copy button into each
 // block, and core ships no position for it.
 // Not the typed scene: its lines are spans the scroll reveals, coloured in the markup

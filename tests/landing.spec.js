@@ -451,8 +451,9 @@ test.describe('Landing page', () => {
       // Both ends are stressed: the human and the AI
       await expect(hero.locator('h1 em')).toHaveText(['humans', 'AI']);
       await expect(hero.locator('.luz-hero__lead')).toHaveText(
-        'Tokens, CSS and a little vanilla JavaScript, built on what the browser already does: start a project with LUZ, or migrate it page by page. Every component works before JavaScript loads, and every change starts with a failing test.',
+        'Tokens, CSS and a little vanilla JavaScript, built on what the browser already does: start a project with LUZ, the Light, Usable and Zero-dependency design system, or migrate it page by page. Every component works before JavaScript loads, and every change starts with a failing test.',
       );
+      await expect(hero.locator('.luz-hero__lead strong')).toHaveText(['LUZ', 'Light', 'Usable', 'Zero-dependency']);
       // No eyebrow over the title, no second line under the lead, and the lead carries no link
       await expect(hero.locator('.luz-hero__eyebrow')).toHaveCount(0);
       await expect(hero.locator('.landing-built')).toHaveCount(0);
@@ -933,7 +934,7 @@ test.describe('Landing page', () => {
   test.describe('footer', () => {
     const footer = (page) => page.locator('footer.luz-site-footer');
 
-    test('a brand, then two columns (Documentation, Project) on the landing footer grid', async ({ page }) => {
+    test('a brand, then a site map of four groups (Documentation, Reference, Resources, Community) on the landing footer grid', async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 800 });
       await open(page);
 
@@ -943,70 +944,53 @@ test.describe('Landing page', () => {
       await expect(brand).toContainText('LUZ');
       await expect(brand).toContainText(/\d+\.\d+\.\d+/);
       await expect(brand.locator('svg, img').first()).toBeVisible();
-      // The titles are headings; the second column is the project's, and there is no Language column
-      await expect(footer(page).locator('.luz-site-footer__col-title')).toHaveText([EN['site.docs'], EN['footer.project']]);
-      await expect(footer(page).locator('h2.luz-site-footer__col-title')).toHaveCount(2);
-      await expect(footer(page).locator('.luz-site-footer__col')).toHaveCount(2);
+      // The titles are headings of the groups of the site map; there is no Language column
+      await expect(footer(page).locator('nav.landing-foot-nav')).toHaveAccessibleName(EN['footer.nav']);
+      await expect(footer(page).locator('h2.luz-site-footer__col-title')).toHaveText([EN['site.docs'], EN['footer.reference'], EN['footer.resources'], EN['footer.community']]);
+      await expect(footer(page).locator('.landing-foot-group')).toHaveCount(4);
       await expect(footer(page).locator('a[hreflang]')).toHaveCount(0);
-      // Side by side from 768px: the brand and the two columns in one row
-      const tops = await footer(page).locator('.luz-site-footer__brand, .luz-site-footer__col').evaluateAll((all) => all.map((el) => Math.round(el.getBoundingClientRect().top)));
+      // Side by side from 1280px: the brand and the four groups in one row
+      const tops = await footer(page).locator('.luz-site-footer__brand, .landing-foot-group').evaluateAll((all) => all.map((el) => Math.round(el.getBoundingClientRect().top)));
       expect(new Set(tops).size).toBe(1);
     });
 
-    test('the brand line: the logo, the version as a link to the changelog, and beta', async ({ page }) => {
+    test('the brand line: one link to the home with the logo, the word and the beta badge; the version is no link to the changelog', async ({ page }) => {
       await open(page);
 
-      const brand = footer(page).locator('.landing-brand');
-      await expect(brand.locator('.landing-brand__version')).toContainText(`v${version('core')}`);
-      await expect(brand.locator('.landing-brand__version')).toHaveAttribute('href', 'https://github.com/nandovejer/luz/blob/main/CHANGELOG.md');
-      await expect(brand.locator('.landing-brand__version .u-sr-only')).toContainText(EN['footer.changelog']);
-      await expect(brand.locator('.landing-brand__beta')).toHaveText(EN['footer.beta']);
-      await expect(brand.locator('svg')).toHaveAttribute('aria-hidden', 'true');
+      const home = footer(page).locator('.landing-brand a.landing-brand__home');
+      await expect(home).toHaveCount(1);
+      await expect(home).toHaveAttribute('href', '/');
+      await expect(home).toHaveAccessibleName(`LUZ ${EN['footer.beta']} v${version('core')}`);
+      await expect(home.locator('.site-badge__version')).toHaveText(`v${version('core')}`);
+      await expect(home.locator('svg').first()).toHaveAttribute('aria-hidden', 'true');
+      await expect(footer(page).locator('.landing-brand a')).toHaveCount(1);
+      await expect(footer(page).locator('.landing-brand__version, .landing-brand__beta')).toHaveCount(0);
     });
 
     for (const [route, lang] of ROUTES) {
-      test(`${route}: Documentation holds the guides, then the three packages and the four kinds of site, each under its label; Project holds GitHub and the project's files (${lang})`, async ({ page }) => {
+      test(`${route}: the four groups hold the twenty links of the site map, in order, under their titles (${lang})`, async ({ page }) => {
         const words = catalog(lang);
         await open(page, route);
 
-        const [docs, project] = await footer(page).locator('.luz-site-footer__col').all();
-        await expect(docs.locator('h2')).toHaveText(words['site.docs']);
-        await expect(project.locator('h2')).toHaveText(words['footer.project']);
-        await expect(docs.locator('h3')).toHaveText([words['footer.packages'], words['footer.kinds']]);
-        const guides = docs.locator('ul').first().locator('a');
-        await expect(guides).toHaveText([words['nav.get-started'], words['footer.patterns'], words['footer.accessibility']]);
-        expect(await guides.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(['/docs/get-started/', '/docs/catalog/', '/docs/accessibility/'].map((path) => (lang === 'es' ? `/es${path}` : path)));
-        const packages = docs.locator('ul').nth(1).locator('a');
-        await expect(packages).toHaveText(['tokens', 'core', 'catalog'].map((name) => words[`footer.pkg.${name}`]));
-        expect(await packages.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(
-          ['/docs/tokens/', '/docs/components/', '/docs/catalog/'].map((path) => (lang === 'es' ? `/es${path}` : path)),
-        );
-        // The list of packages is named by its label
-        await expect(docs.locator('ul').nth(1)).toHaveAccessibleName(words['footer.packages']);
-        // The kinds of site: the page of each in the docs, in the order of the cards of level 4
-        const kinds = docs.locator('ul').last().locator('a');
-        await expect(kinds).toHaveText(KINDS.map((id) => words[`inside.kind.${id}.title`]));
-        expect(await kinds.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(KINDS.map((id) => `${lang === 'es' ? '/es' : ''}/docs/kinds/${id}/`));
-        await expect(docs.locator('ul').last()).toHaveAccessibleName(words['footer.kinds']);
-
-        const links = project.locator('a');
-        await expect(links).toHaveText(['GitHub', words['footer.changelog'], words['footer.contributing'], words['footer.reviews']]);
-        expect(await links.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual([
-          'https://github.com/nandovejer/luz',
-          'https://github.com/nandovejer/luz/blob/main/CHANGELOG.md',
-          'https://github.com/nandovejer/luz/blob/main/CONTRIBUTING.md',
-          'https://github.com/nandovejer/luz/blob/main/dev/BROWSER-REVIEWS.md',
-        ]);
+        const groups = await footer(page).locator('.landing-foot-group').all();
+        expect(groups).toHaveLength(4);
+        const titles = ['site.docs', 'footer.reference', 'footer.resources', 'footer.community'].map((key) => words[key]);
+        const counts = [];
+        for (const [index, group] of groups.entries()) {
+          await expect(group.locator('h2')).toHaveText(titles[index]);
+          await expect(group.locator('ul')).toHaveAccessibleName(titles[index]);
+          counts.push(await group.locator('a').count());
+        }
+        expect(counts).toEqual([5, 5, 5, 5]);
         // An Arabic reader is told, in the link, that the docs are English
-        if (lang === 'ar') for (const a of await docs.locator('a').all()) await expect(a).toHaveAttribute('hreflang', 'en');
+        if (lang === 'ar') for (const a of await footer(page).locator('.landing-foot-nav a[href^="/docs/"]').all()) await expect(a).toHaveAttribute('hreflang', 'en');
       });
     }
 
-    test('the links of the columns are targets of 24px or more', async ({ page }) => {
+    test('the links of the site map are targets of 24px or more', async ({ page }) => {
       await open(page);
 
-      const cols = footer(page).locator('.luz-site-footer__col');
-      for (const link of await cols.locator('a').all()) expect((await link.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(24);
+      for (const link of await footer(page).locator('.landing-foot-nav a').all()) expect((await link.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(24);
     });
 
     for (const [route, lang] of ROUTES) {
@@ -1016,6 +1000,8 @@ test.describe('Landing page', () => {
         const legal = footer(page).locator('p.landing-legal');
         await expect(legal).toHaveText(plain(catalog(lang)['footer.legal']));
         await expect(legal.locator('a[href="https://github.com/nandovejer/luz/blob/main/LICENSE"]')).toHaveCount(1);
+        // The author is named, as a link to his GitHub
+        await expect(legal.locator('a[href="https://github.com/nandovejer"]')).toHaveText('Nando Muñoz');
       });
     }
 
@@ -1052,7 +1038,7 @@ test.describe('Landing page', () => {
         const mode = await box('luz-theme-time');
         expect(mode.left).toBeGreaterThanOrEqual(-1);
         expect(mode.right).toBeLessThanOrEqual(width + 1);
-        const others = await footer(page).locator('.luz-site-footer__brand, .luz-site-footer__col').evaluateAll((all) => all.map((el) => el.getBoundingClientRect().toJSON()));
+        const others = await footer(page).locator('.luz-site-footer__brand, .landing-foot-group').evaluateAll((all) => all.map((el) => el.getBoundingClientRect().toJSON()));
         for (const other of others) {
           const apart = mode.left >= other.right - 1 || mode.right <= other.left + 1 || mode.top >= other.bottom - 1 || mode.bottom <= other.top + 1;
           expect(apart).toBe(true);
@@ -1296,11 +1282,13 @@ test.describe('Landing page', () => {
     test('the beta and version tags are text', async ({ page }) => {
       await open(page);
 
-      // The version and "beta" are the footer's brand line, as text; the header shows none
-      await expect(page.locator('footer .landing-brand__version')).toContainText(`v${version('core')}`);
-      await expect(page.locator('footer .landing-brand__beta')).toHaveText('beta');
+      // "beta" and the version are one badge in the link of the brand, in the footer and in the header; neither is a link to the changelog
+      await expect(page.locator('footer .landing-brand .site-badge__version')).toHaveText(`v${version('core')}`);
+      await expect(page.locator('footer .landing-brand .site-badge')).toContainText(/beta/i);
+      await expect(page.locator('.site-header .site-badge__version')).toHaveText(`v${version('core')}`);
       await expect(page.locator('.site-header__version')).toHaveCount(0);
       await expect(page.locator('.site-header .luz-tag')).toHaveCount(0);
+      await expect(page.locator('.site-header a[href$="CHANGELOG.md"], footer .landing-brand a[href$="CHANGELOG.md"]')).toHaveCount(0);
     });
 
     test('the page background is one flat color', async ({ page }) => {

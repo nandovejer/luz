@@ -1,10 +1,10 @@
 // @ts-check
 /**
- * The FAQ of the home (`#faq`, after the modes and before the footer): `<luz-faq>` of @luz-ds/catalog with the 17
- * questions of the plan in four groups, in three languages. The component itself (the item, the marker, the keyboard,
+ * The FAQ of the home (`#faq`, after the modes and before the footer): `<luz-faq>` of @luz-ds/catalog with 9
+ * questions in two groups (About LUZ, Using it), in three languages; the other eight are on /docs/get-started/faq/. The component itself (the item, the marker, the keyboard,
  * the print rules) is in tests/site-faq.spec.js and its type in tests/site-faq-look.spec.js; here:
  *
- * - the content: 17 `details` in 4 groups, each group a real heading over its questions, a row of four links to them,
+ * - the content: 9 `details` in 2 groups, each group a real heading over its questions, a row of two links to them, a line to the docs page of the rest,
  *   and an id on every answer, so a link to it opens its question (native, no script);
  * - the layout: one column, then two from 1024 px with the head pinned at the inline start while the questions go by
  *   (also in right-to-left); no sideways scroll at 320 px;
@@ -22,20 +22,20 @@ import { faded } from './helpers/settle.js';
 const CATALOG = (code) => JSON.parse(readFileSync(new URL(`../apps/landing/i18n/${code}.json`, import.meta.url), 'utf-8'));
 const plain = (html) => html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 const ROUTES = [['/', 'en', 'ltr'], ['/es/', 'es', 'ltr'], ['/ar/', 'ar', 'rtl']];
-const GROUPS = ['about', 'html', 'use', 'existing'];
+const GROUPS = ['about', 'use'];
 
 const items = (page) => page.locator('#faq details.luz-faq__item');
 const isOpen = (locator) => locator.evaluate((el) => /** @type {HTMLDetailsElement} */ (el).open);
 
 test.describe('the FAQ of the home: the content', () => {
   for (const [route, code] of ROUTES) {
-    test(`${route}: 17 questions in four groups, each group a heading over its questions`, async ({ page }) => {
+    test(`${route}: 9 questions in two groups, each group a heading over its questions`, async ({ page }) => {
       const words = CATALOG(code);
       await page.goto(route);
       await expect(page.locator('#faq luz-faq')).toHaveCount(1);
-      await expect(items(page)).toHaveCount(17);
+      await expect(items(page)).toHaveCount(9);
       const groups = page.locator('#faq section.luz-faq__group');
-      await expect(groups).toHaveCount(4);
+      await expect(groups).toHaveCount(2);
       for (const [index, group] of GROUPS.entries()) {
         const title = groups.nth(index).locator('h3.luz-faq__group-title');
         await expect(title, group).toHaveText(plain(words[`faq.group.${group}`]));
@@ -49,13 +49,13 @@ test.describe('the FAQ of the home: the content', () => {
       for (const item of await items(page).all()) expect(await isOpen(item)).toBe(false);
     });
 
-    test(`${route}: the FAQ is headed like the other sections, and its row of links names the four groups`, async ({ page }) => {
+    test(`${route}: the FAQ is headed like the other sections, and its row of links names the two groups`, async ({ page }) => {
       const words = CATALOG(code);
       await page.goto(route);
       await expect(page.locator('#faq h2#faq-title')).toHaveText(plain(words['faq.title']));
       await expect(page.locator('#faq')).toHaveAttribute('aria-labelledby', 'faq-title');
       const links = page.locator('#faq nav.luz-faq__nav a');
-      await expect(links).toHaveCount(4);
+      await expect(links).toHaveCount(2);
       await expect(page.locator('#faq nav.luz-faq__nav')).toHaveAttribute('aria-label', words['faq.nav']);
       const titles = await page.locator('#faq h3.luz-faq__group-title').evaluateAll((all) => all.map((el) => [el.id, el.textContent?.trim()]));
       const targets = await links.evaluateAll((all) => all.map((a) => [decodeURIComponent(new URL(/** @type {HTMLAnchorElement} */ (a).href).hash.slice(1)), a.textContent?.trim()]));
@@ -66,16 +66,16 @@ test.describe('the FAQ of the home: the content', () => {
   test('every answer has an id of its own, and the page has no id twice', async ({ page }) => {
     await page.goto('/');
     const ids = await page.locator('#faq .luz-faq__answer').evaluateAll((all) => all.map((el) => el.id));
-    expect(ids).toHaveLength(17);
+    expect(ids).toHaveLength(9);
     for (const id of ids) expect(id, 'an id').toBeTruthy();
-    expect(new Set(ids).size).toBe(17);
+    expect(new Set(ids).size).toBe(9);
     const all = await page.evaluate(() => [...document.querySelectorAll('[id]')].map((el) => el.id));
     expect(all.length - new Set(all).size, 'ids repeated in the page').toBe(0);
     // The id is on the answer, not on the details: the question stays above it when the link lands
     expect(await page.locator('#faq details[id]').count()).toBe(0);
   });
 
-  test('a link to the id of an answer opens its question: all seventeen, with or without a script', async ({ page }) => {
+  test('a link to the id of an answer opens its question: all nine, with or without a script', async ({ page }) => {
     await page.goto('/');
     const ids = await page.locator('#faq .luz-faq__answer').evaluateAll((all) => all.map((el) => el.id));
     for (const id of ids) {

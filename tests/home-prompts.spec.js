@@ -135,16 +135,16 @@ for (const [route, lang] of ROUTES) {
       }
     });
 
-    test('the footer lists the four kinds of site, and the packages are tokens, core and catalog', async ({ page }) => {
+    test('the footer has no column of the kinds of site; its site map still links the prompts (level 4) and the three packages', async ({ page }) => {
       await open(page, route);
 
       const footer = page.locator('footer.luz-site-footer');
-      await expect(footer.getByRole('heading', { level: 3, name: words['footer.kinds'] })).toHaveCount(1);
-      const kinds = footer.getByRole('list', { name: words['footer.kinds'] }).getByRole('link');
-      await expect(kinds).toHaveText(KINDS.map((id) => words[`inside.kind.${id}.title`]));
-      expect(await kinds.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(KINDS.map((id) => recipesPath(lang, id)));
-      const packages = footer.getByRole('list', { name: words['footer.packages'] }).getByRole('link');
-      await expect(packages).toHaveText(['tokens', 'core', 'catalog'].map((name) => words[`footer.pkg.${name}`]));
+      await expect(footer.locator('a[href*="/docs/kinds/"]')).toHaveCount(0);
+      await expect(footer.getByRole('link', { name: words['footer.prompts'], exact: true })).toHaveAttribute('href', '#inside-4');
+      const reference = footer.getByRole('list', { name: words['footer.reference'] }).getByRole('link');
+      await expect(reference.filter({ hasText: words['footer.pkg.tokens'] })).toHaveCount(1);
+      await expect(reference.filter({ hasText: words['footer.pkg.core'] })).toHaveCount(1);
+      await expect(reference.filter({ hasText: words['footer.pkg.catalog'] })).toHaveCount(1);
     });
   });
 

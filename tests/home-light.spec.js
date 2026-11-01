@@ -282,7 +282,7 @@ test.describe('with JavaScript', () => {
     await page.setViewportSize(NARROW);
     await open(page, '/', { time: '14:00' });
     await openBar(page);
-    const range = page.getByRole('slider', { name: text('en', 'Scrub the day') });
+    const range = page.locator('home-light').getByRole('slider', { name: text('en', 'Scrub the day') });
     await expect(range).toHaveCount(1);
     await range.focus();
     await page.keyboard.press('End');
@@ -482,7 +482,7 @@ test.describe('with JavaScript', () => {
       await expect(page.locator('home-light .home-light__q')).toHaveText(catalog(lang)['light.fact.1']);
       await openBar(page);
       await scrub(page, '10:00');
-      await expect(page.getByRole('slider', { name: text(lang, 'Scrub the day') })).toHaveCount(1);
+      await expect(page.locator('home-light').getByRole('slider', { name: text(lang, 'Scrub the day') })).toHaveCount(1);
       await expect(page.locator('home-light .home-light__line')).toHaveAccessibleName(new RegExp(text(lang, 'Show the light bar').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     });
   }
