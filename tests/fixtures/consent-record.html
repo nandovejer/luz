@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ consent: the banner and two embeds on one record</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/cookie-consent.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/embed.css">
+  <script type="module" src="/packages/catalog/dist/cookie-consent.min.js"></script>
+  <script type="module" src="/packages/catalog/dist/embed.min.js"></script>
+</head>
+<body>
+  <main id="main">
+    <h1>One record, two writers</h1>
+
+    <!-- Every player is a page of this origin (embed-player.html): no test reaches a third party -->
+    <luz-embed id="first" src="/tests/fixtures/embed-player.html?autoplay=1&amp;first" consent="youtube" style="max-inline-size: 20rem">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">First video</span>
+      </a>
+      <div class="luz-embed__ask" data-luz-embed-ask hidden>
+        <p>This video is hosted by an outside service.</p>
+        <div class="o-actions">
+          <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
+          <button class="luz-btn luz-btn--primary" type="button" value="cancel">Do not play</button>
+          <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play these videos</button>
+        </div>
+      </div>
+    </luz-embed>
+    <luz-embed id="second" src="/tests/fixtures/embed-player.html?autoplay=1&amp;second" consent="youtube" style="max-inline-size: 20rem">
+      <a class="luz-embed__link" href="/tests/fixtures/embed-player.html">
+        <img class="luz-embed__poster" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <span class="u-sr-only">Play video: </span>
+        <span class="luz-embed__title">Second video</span>
+      </a>
+      <div class="luz-embed__ask" data-luz-embed-ask hidden>
+        <p>This video is hosted by an outside service.</p>
+        <div class="o-actions">
+          <button class="luz-btn luz-btn--primary" type="button" value="once">Play this video</button>
+          <button class="luz-btn luz-btn--primary" type="button" value="cancel">Do not play</button>
+          <button class="luz-btn luz-btn--secondary" type="button" value="always">Always play these videos</button>
+        </div>
+      </div>
+    </luz-embed>
+  </main>
+
+  <!-- The banner offers analytics and marketing; with ?offer=youtube it offers the embeds' category too -->
+  <luz-cookie-consent>
+    <section class="luz-cookie-consent" id="consent" data-luz-consent aria-labelledby="consent-title" hidden>
+      <div data-luz-consent-ask>
+        <h2 class="luz-cookie-consent__title" id="consent-title">Cookies</h2>
+        <p>We would like to measure how you use this site.</p>
+        <form class="o-actions">
+          <button class="luz-btn luz-btn--primary" id="accept" type="submit" value="all">Accept</button>
+          <button class="luz-btn luz-btn--primary" id="reject" type="submit" value="none">Reject</button>
+        </form>
+        <details class="luz-cookie-consent__choices" id="choices">
+          <summary>Choose</summary>
+          <form class="o-stack">
+            <fieldset class="luz-fieldset">
+              <legend>Optional cookies</legend>
+              <div class="luz-check-group">
+                <label class="luz-check-item"><input type="checkbox" id="c-analytics" value="analytics"> Measuring visits</label>
+                <label class="luz-check-item"><input type="checkbox" id="c-marketing" value="marketing"> Adverts</label>
+                <label class="luz-check-item" id="youtube-row"><input type="checkbox" id="c-youtube" value="youtube"> Videos</label>
+              </div>
+            </fieldset>
+            <div class="o-actions">
+              <button class="luz-btn luz-btn--secondary" id="save" type="submit">Save my choices</button>
+            </div>
+          </form>
+        </details>
+      </div>
+      <div id="done" data-luz-consent-done tabindex="-1" hidden>
+        <p>Your choice is saved.</p>
+        <button class="luz-btn luz-btn--secondary" id="close" type="button" data-luz-consent-close>Close</button>
+      </div>
+    </section>
+  </luz-cookie-consent>
+
+  <!-- The query sets what a test varies, before the modules run (a classic script runs first):
+       ?days=…, ?policy=… on the banner (the embed reads them from there), ?offer=youtube -->
+  <script>
+    const query = new URLSearchParams(location.search);
+    const banner = document.querySelector('#consent');
+    if (query.has('days')) banner.dataset.luzConsentDays = query.get('days');
+    if (query.has('policy')) banner.dataset.luzConsentPolicy = query.get('policy');
+    if (query.get('offer') !== 'youtube') document.querySelector('#youtube-row').remove();
+  </script>
+</body>
+</html>

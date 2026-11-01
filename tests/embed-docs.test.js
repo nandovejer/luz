@@ -6,7 +6,7 @@
  *     asks nothing of a third party, and no other page names one);
  *   - the live demo agrees with the policy: its player is on the one origin the
  *     policy allows, its poster is a file of this site, it asks before it loads
- *     anything (consent="external" and the ask block), and its words are in the markup.
+ *     anything (consent="youtube" and the ask block), and its words are in the markup.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -44,6 +44,32 @@ function demo(rel) {
   return { html, markup, tag: markup.slice(0, markup.indexOf(">") + 1) };
 }
 const attr = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
+
+/** The text between the tags of a fragment, with the entities of a snippet written out. */
+const decode = (text) => text.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+
+/** The question of an embed's ask block: its words, its link and its buttons in order. */
+function ask(markup) {
+  const block = markup.slice(markup.indexOf("data-luz-embed-ask"));
+  const paragraph = block.match(/<p>([\s\S]*?)<\/p>/)?.[1] ?? "";
+  const link = paragraph.match(/<a\b([^>]*)>([^<]*)<\/a>/);
+  const buttons = [...block.matchAll(/<button\b([^>]*)>([^<]*)<\/button>/g)].map((m) => ({ value: attr(m[1], "value"), level: m[1].match(/luz-btn--(\w+)/)?.[1], label: m[2] }));
+  return {
+    text: paragraph.replace(/<a\b[^>]*>[^<]*<\/a>/, "").replace(/\s+/g, " ").trim(),
+    // the privacy page is a page of this site, written as a root-absolute path
+    link: link && { local: /^\/(?!\/)/.test(attr(` ${link[1]}`, "href") ?? ""), label: link[2] },
+    buttons,
+  };
+}
+const ASK = {
+  text: "This video is hosted by YouTube (Google). If you play it, YouTube receives your IP address and details of your browser, and may store information on your device. We receive none of it.",
+  link: { local: true, label: "Privacy and storage" },
+  buttons: [
+    { value: "once", level: "primary", label: "Play this video" },
+    { value: "cancel", level: "primary", label: "Do not play" },
+    { value: "always", level: "secondary", label: "Always play YouTube videos on this site" },
+  ],
+};
 
 describe("the video service is named by the Embed page only", () => {
   it("is named by the Embed page, in English and in Spanish", () => {
@@ -89,12 +115,23 @@ describe.each(EMBED_PAGES)("the live demo of %s", (rel) => {
     expect(attr(img, "alt"), "a poster is decoration: the title is the name").toBe("");
   });
 
-  it("asks before it loads anything: consent=\"external\" and the ask block with its three answers", () => {
+  it("asks before it loads anything: consent=\"youtube\" and the ask block with its three answers", () => {
     const { tag, markup } = demo(rel);
-    expect(attr(tag, "consent")).toBe("external");
+    expect(attr(tag, "consent")).toBe("youtube");
     expect(markup).toMatch(/<div class="luz-embed__ask" data-luz-embed-ask hidden>/);
     const values = [...markup.slice(markup.indexOf("data-luz-embed-ask")).matchAll(/<button\b[^>]*\bvalue="([^"]+)"/g)].map((m) => m[1]);
-    expect(values).toEqual(["once", "always", "cancel"]);
+    expect(values).toEqual(["once", "cancel", "always"]);
+  });
+
+  it("names the service, says what it learns and what it may do, and links to the privacy page; the answers weigh the same except the standing one", () => {
+    expect(ask(demo(rel).markup)).toEqual(ASK);
+  });
+
+  it("is the same question in the markup snippet of the page", () => {
+    const code = decode(read(rel).match(/<code id="code-embed">([\s\S]*?)<\/code>/)?.[1] ?? "");
+    expect(code, "a snippet with a <luz-embed>").toMatch(/<luz-embed\s/);
+    expect(attr(code.slice(code.indexOf("<luz-embed")), "consent")).toBe("youtube");
+    expect(ask(code)).toEqual(ASK);
   });
 
   it("keeps its answer under a key of its own, so the demo does not count as an answer for this site", () => {
