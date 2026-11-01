@@ -90,9 +90,12 @@
 	border-inline-start: 1px solid var(--luz-divider);
 }
 
-/* Catalog's sidebar link is drawn for the sidebar's own surface: here it is
-   text on the page */
-.luz-page-rail__link {
+/* Catalog's sidebar link is drawn for the sidebar's own surface (light text,
+   an active fill): here it is text on the page. The selectors are one class
+   deeper than the sidebar's (`.luz-sidebar__link`, `.is-active`, `:hover`) so
+   the rail wins in any order the stylesheets are linked or bundled in: with
+   the sidebar's after the rail's the text was 1.3:1 on the page. */
+.luz-page-rail .luz-page-rail__link {
 	display: flex;
 	align-items: center;
 	min-block-size: var(--luz-control-sm);
@@ -109,16 +112,16 @@
 	overflow-wrap: anywhere;
 }
 
-.luz-page-rail__sub .luz-page-rail__link {
+.luz-page-rail .luz-page-rail__sub .luz-page-rail__link {
 	padding-inline-start: var(--luz-space-lg);
 }
 
-.luz-page-rail__link:hover {
+.luz-page-rail .luz-page-rail__link:hover {
 	background: var(--luz-surface-muted);
 	color: var(--luz-text-primary);
 }
 
-.luz-page-rail__link[aria-current="true"] {
+.luz-page-rail .luz-page-rail__link[aria-current="true"] {
 	border-inline-start-color: var(--luz-brand-primary);
 	background: none;
 	color: var(--luz-text-primary);
@@ -161,11 +164,11 @@
 /* Forced colours drop the transparent start border to the text colour: the
    current section is the only one with a border of its own */
 @media (forced-colors: active) {
-	.luz-page-rail__link {
+	.luz-page-rail .luz-page-rail__link {
 		border-inline-start-color: Canvas;
 	}
 
-	.luz-page-rail__link[aria-current="true"] {
+	.luz-page-rail .luz-page-rail__link[aria-current="true"] {
 		border-inline-start-color: Highlight;
 	}
 }
