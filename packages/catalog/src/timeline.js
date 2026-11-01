@@ -81,23 +81,36 @@ function make(tag, name) {
   return el;
 }
 
-/** The hump: a flat line that rises to the current dot and falls back, over a
- * stroke of the ground that hides the rail's line beneath it. */
-function hump() {
+/** The drawing of the rail: an SVG of the box of the hump, one path a stroke. The
+ * line and the hump are two of them, with the same viewBox and the same ground
+ * stroke `M0 40H160`, so the line and the base of the hump land on the same
+ * rows of pixels in every engine (a border is snapped to the device pixel and a
+ * stroke is anti-aliased: the line was one crisp row and the base of the hump
+ * two soft ones, half a pixel higher). */
+function drawing(name, paths) {
   // eslint-disable-next-line no-restricted-syntax -- RL-12: the SVG namespace name, an identifier that is never fetched
   const NS = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(NS, "svg");
-  svg.setAttribute("class", "luz-timeline__hump");
+  svg.setAttribute("class", `luz-timeline__${name}`);
   svg.setAttribute("viewBox", "0 0 160 40");
   svg.setAttribute("preserveAspectRatio", "none");
   svg.setAttribute("aria-hidden", "true");
-  for (const d of ["M0 40H160", "M0 40H30C55 40 60 1 80 1S105 40 130 40H160"]) {
+  for (const d of paths) {
     const path = document.createElementNS(NS, "path");
     path.setAttribute("d", d);
     svg.append(path);
   }
   return svg;
 }
+
+const GROUND = "M0 40H160";
+
+/** The line of the rail: the length of the rail, under the hump. */
+const line = () => drawing("line", [GROUND]);
+
+/** The hump: a flat line that rises to the current dot and falls back, over a
+ * stroke of the ground that hides the rail's line beneath it. */
+const hump = () => drawing("hump", [GROUND, "M0 40H30C55 40 60 1 80 1S105 40 130 40H160"]);
 
 /** The item crossing the middle of the viewport is active, the ones before it past. */
 function vertical(items) {
@@ -274,7 +287,7 @@ function horizontal(host, list, items) {
 
   list.replaceWith(stage);
   stage.append(previous, list, next);
-  rail.append(hump(), track);
+  rail.append(line(), hump(), track);
   host.append(rail);
   if (toggle) host.append(toggle);
   host.setAttribute("data-luz-ready", "");
