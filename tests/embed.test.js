@@ -172,4 +172,16 @@ describe("the package exports, declares and ships it", () => {
     expect(css).toMatch(/:where\(luz-embed\)/);
     expect(css).toMatch(/--luz-embed-ratio/);
   });
+
+  it("draws the keyboard focus on the control, 2px in the focus colour and offset outside the frame, not on the host with :has()", () => {
+    const css = read("packages/catalog/src/components/embed.css").replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(css).not.toMatch(/:has\(/);
+    const ring = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(([, selector]) => /\.luz-embed__link:focus-visible/.test(selector) && /\.luz-embed__play:focus-visible/.test(selector));
+    expect(ring, "a rule for the focus of the link and of the button").toBeTruthy();
+    expect(ring[2]).toMatch(/outline:\s*2px solid var\(--luz-focus-ring\)/);
+    expect(ring[2]).toMatch(/outline-offset:\s*2px/);
+    // The host does not clip (its ring would go with it); the control does
+    const host = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(([, selector]) => selector.trim() === ":where(luz-embed)");
+    expect(host[2]).not.toMatch(/overflow\s*:/);
+  });
 });

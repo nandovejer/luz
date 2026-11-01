@@ -81,6 +81,12 @@ test.describe('embed without JavaScript', () => {
     expect(link?.width).toBeCloseTo(frame?.width ?? 0, 0);
     expect(link?.height).toBeCloseTo(frame?.height ?? 0, 0);
     await expect(page.locator('#plain .luz-embed__title')).toBeVisible();
+    // The keyboard reaches the link and draws the ring on it
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#plain a.luz-embed__link')).toBeFocused();
+    const ring = await page.locator('#plain a.luz-embed__link').evaluate((el) => ({ style: getComputedStyle(el).outlineStyle, width: parseFloat(getComputedStyle(el).outlineWidth) }));
+    expect(ring.style).toBe('solid');
+    expect(ring.width).toBeGreaterThanOrEqual(2);
   });
 });
 
@@ -403,17 +409,24 @@ test.describe('embed', () => {
   });
 
   test.describe('the look', () => {
-    test('a visible ring outside the frame on the keyboard focus, and the host does not clip it', async ({ page }) => {
+    test('the keyboard focus is a ring on the control itself, 2px in the focus colour, outside the frame, and the host does not clip it', async ({ page }) => {
       await open(page);
       await page.keyboard.press('Tab');
       await expect(play(page, 'plain')).toBeFocused();
-      const ring = await page.locator('#plain').evaluate((el) => {
+      const ring = await play(page, 'plain').evaluate((el) => {
         const style = getComputedStyle(el);
-        return { width: parseFloat(style.outlineWidth), style: style.outlineStyle, offset: parseFloat(style.outlineOffset) };
+        return { width: parseFloat(style.outlineWidth), style: style.outlineStyle, offset: parseFloat(style.outlineOffset), color: style.outlineColor };
       });
       expect(ring.style).toBe('solid');
       expect(ring.width).toBeGreaterThanOrEqual(2);
       expect(ring.offset).toBeGreaterThanOrEqual(0);
+      expect(channels(ring.color).slice(0, 3)).toEqual(vejer('light', 'focus-ring').slice(0, 3));
+      // The ring is not drawn on the host, and the host leaves what is outside its box visible (the control clips its own poster)
+      const host = await page.locator('#plain').evaluate((el) => ({ outline: getComputedStyle(el).outlineStyle, overflow: getComputedStyle(el).overflow }));
+      expect(host.outline).toBe('none');
+      expect(host.overflow).toBe('visible');
+      const control = await play(page, 'plain').evaluate((el) => getComputedStyle(el).overflow);
+      expect(control).toBe('hidden');
     });
 
     for (const mode of MODES) {
