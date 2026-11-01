@@ -329,7 +329,7 @@ for (const home of ['/', '/es/', '/ar/']) {
     await page.goto(home);
     const footer = page.locator('footer.luz-site-footer');
     await expect(footer.locator('.landing-foot-group')).toHaveCount(4);
-    await expect(footer.locator('.landing-foot-nav a')).toHaveCount(20);
+    await expect(footer.locator('.landing-foot-nav a')).toHaveCount(21);
     await expect(footer.locator('luz-theme-mode input[name="luz-theme-mode"]')).toHaveCount(4);
     expect((await footer.locator('p').allInnerTexts()).join(' ').length).toBeGreaterThan(40);
     // The languages are links of the header's switch (a popover nav, in the markup without a script)

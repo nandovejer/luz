@@ -52,6 +52,8 @@ import '@luz-ds/catalog'    // the loader: the chunks of the search, the cookie 
 <script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/catalog.min.js"></script>
 ```
 
+Loading LUZ from a CDN sends your visitors' IP addresses to the CDN. If you do not want that, install from npm and serve the files from your own server.
+
 With Subresource Integrity, an `integrity` on the `<script>` covers `catalog.min.js` only. To check each chunk the page may load, put an import map with an `integrity` section before the first module script. It works in Chrome 127 and later, Safari 18 and later and Firefox 138 and later; an older browser ignores the key and loads the chunks unchecked.
 
 ```html

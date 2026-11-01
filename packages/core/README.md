@@ -44,6 +44,8 @@ import '@luz-ds/core'   // optional: the JavaScript, starts every behavior
 <html data-theme="my-brand" data-luz-themes="my-brand">
 ```
 
+Loading LUZ from a CDN sends your visitors' IP addresses to the CDN. If you do not want that, install from npm and serve the files from your own server.
+
 ### Bare HTML elements
 
 The HTML comes out styled with no class: text, links, lists, buttons, fields, `select`, `fieldset`, tables, `details` and `dialog`. A `button` with no `type`, or with `type="submit"`, is the primary action; `type="button"` is the secondary one. The tags that only structure a page (`div`, `section`, `header`, `nav` and the rest) have no style: the layout is yours. A class adds what HTML cannot say, such as `.luz-btn` on an `a`, a danger role, a size or a card. Every rule has zero specificity, so any rule of yours wins. [Which elements have a style with no class](https://nandovejer.github.io/luz/docs/html/#html-styled).

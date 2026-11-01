@@ -92,7 +92,7 @@ for (const route of ROUTES) {
         await page.setViewportSize({ width, height: 900 });
         await page.goto(route);
         const links = page.locator('footer .landing-foot-nav a');
-        await expect(links).toHaveCount(20);
+        await expect(links).toHaveCount(21);
         const heights = await links.evaluateAll((all) => all.map((a) => ({ text: a.textContent, height: a.getBoundingClientRect().height })));
         for (const link of heights) expect(link.height, link.text ?? '').toBeGreaterThanOrEqual(24);
       });
@@ -115,7 +115,7 @@ test.describe('without JavaScript', () => {
   test('the site map is there, two by two at 375 px and in four columns at 1100 px', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 900 });
     await page.goto('/');
-    await expect(page.locator('footer .landing-foot-nav a')).toHaveCount(20);
+    await expect(page.locator('footer .landing-foot-nav a')).toHaveCount(21);
     const narrow = await tops(page);
     expect(Math.abs(narrow[0] - narrow[1])).toBeLessThanOrEqual(1);
     expect(narrow[2]).toBeGreaterThan(narrow[0] + 1);

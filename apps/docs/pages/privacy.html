@@ -1,0 +1,86 @@
+<!-- luz:page
+title: Privacy and storage
+description: Who runs this site, what it stores in your browser and what happens when you play a video from YouTube. Last reviewed on 1 November 2026.
+keywords: privacy, cookies, local storage, GDPR, YouTube, consent
+area: hub
+lead: false
+-->
+    <div data-docs-specimen>
+      <luz-cookie-consent>
+        <section class="luz-cookie-consent" data-luz-consent aria-labelledby="privacy-consent-title" hidden>
+          <div data-luz-consent-ask>
+            <h2 class="luz-cookie-consent__title" id="privacy-consent-title">Videos from YouTube</h2>
+            <p>One page of this site can play a video hosted by YouTube (Google). If you allow it, YouTube receives your IP address and details of your browser, and may store information on your device. We receive none of it. <a href="#videos">Read more about videos from outside</a>.</p>
+            <form class="o-actions">
+              <button class="luz-btn luz-btn--primary" type="submit" value="all">Allow YouTube videos</button>
+              <button class="luz-btn luz-btn--primary" type="submit" value="none">Do not allow YouTube videos</button>
+            </form>
+            <details class="luz-cookie-consent__choices">
+              <summary>Choose by category</summary>
+              <form class="o-stack">
+                <fieldset class="luz-fieldset">
+                  <legend>Outside services</legend>
+                  <div class="luz-check-group">
+                    <label class="luz-check-item"><input type="checkbox" value="youtube"> Videos from YouTube</label>
+                  </div>
+                </fieldset>
+                <div class="o-actions">
+                  <button class="luz-btn luz-btn--secondary" type="submit">Save my choice</button>
+                </div>
+              </form>
+            </details>
+          </div>
+          <div data-luz-consent-done tabindex="-1" hidden>
+            <p>Your answer is saved. You can change it at any time under <a href="#cookie-settings">Cookie settings</a> on this page.</p>
+            <button class="luz-btn luz-btn--secondary" type="button" data-luz-consent-close>Close</button>
+          </div>
+        </section>
+      </luz-cookie-consent>
+    </div>
+    <div class="docs-block docs-prose-chapter" id="privacy">
+      <p class="docs-lead">Who runs this site, what it stores in your browser and what happens when you play a video from YouTube. Last reviewed on 1 November 2026.</p>
+
+      <h2 id="who">Who runs this site</h2>
+      <p>This site is run by Fernando Muñoz (GitHub: nandovejer), who also writes LUZ. It has no ads, no analytics and no accounts, and it does not ask you for personal data. This site does not set cookies itself.</p>
+
+      <h2 id="hosting">Where it is hosted</h2>
+      <p>The site is hosted on GitHub Pages. GitHub records the IP address of visitors to its servers for security, and we cannot see those records. <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages">How GitHub Pages treats visitor data</a> is explained on GitHub.</p>
+
+      <h2 id="storage">What is stored in your browser</h2>
+      <p>The site keeps a few small items in your browser’s local storage. Each one is written only after you do something that asks for it, such as choosing a color mode. None is sent to a server, and each is used only for what its row says.</p>
+      <div class="luz-table-wrap" role="region" aria-label="Items stored in your browser" tabindex="0">
+        <table class="luz-table">
+          <thead>
+            <tr><th scope="col">Key</th><th scope="col">What it keeps</th><th scope="col">Written when</th><th scope="col">How to remove it</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="Key"><div><code>luz-theme</code></div></td><td data-label="What it keeps"><div>The color mode you chose: light, dark or high contrast</div></td><td data-label="Written when"><div>You choose a mode with the color mode control</div></td><td data-label="How to remove it"><div>Choose Auto in the color mode control</div></td></tr>
+            <tr><td data-label="Key"><div><code>luz-light</code></div></td><td data-label="What it keeps"><div>The time of day you fixed with the slider on the home page</div></td><td data-label="Written when"><div>You fix a time with the slider</div></td><td data-label="How to remove it"><div>Choose a color mode, or Auto, in the color mode control</div></td></tr>
+            <tr><td data-label="Key"><div><code>luz-docs-view</code></div></td><td data-label="What it keeps"><div>The tab you last opened on a component page: Code or Design</div></td><td data-label="Written when"><div>You open one of the two tabs</div></td><td data-label="How to remove it"><div>Clear the data of this site in your browser</div></td></tr>
+            <tr><td data-label="Key"><div><code>luz-consent</code></div></td><td data-label="What it keeps"><div>Your answer about YouTube videos, for 180 days</div></td><td data-label="Written when"><div>You answer the question about YouTube videos</div></td><td data-label="How to remove it"><div>Change your answer under <a href="#cookie-settings">Cookie settings</a>, or clear the data of this site in your browser</div></td></tr>
+            <tr><td data-label="Key"><div><code>luz-consent-demo</code></div></td><td data-label="What it keeps"><div>Your answer to the example questions on the Cookie consent and Embed pages, for 180 days</div></td><td data-label="Written when"><div>You answer an example question</div></td><td data-label="How to remove it"><div>Clear the data of this site in your browser</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="videos">Videos from outside</h2>
+      <p>One page of this site, <a href="/docs/catalog/embed/">Embed</a>, can play a video from YouTube. Nothing is requested from YouTube until you press play and agree.</p>
+      <p>If you play the video, YouTube (Google) receives your IP address and details of your browser, and may store information on your device. We receive none of it. From then on, <a href="https://policies.google.com/privacy">the privacy policy of Google</a> applies.</p>
+      <p>Without JavaScript, the video is a link to YouTube. If you follow it, you leave this site.</p>
+
+      <h2 id="cookie-settings">Cookie settings</h2>
+      <p>The only choice this site asks you about is the one for YouTube videos. If you have not answered, the question is at the bottom of this window. Use the button to see it again and change your answer.</p>
+      <p class="o-actions"><button class="luz-btn luz-btn--outline" type="button" data-luz-consent-open hidden>Change my answer about YouTube videos</button></p>
+      <p>Without JavaScript the question and the button stay hidden, because the video is only a link and the site stores nothing.</p>
+
+      <h2 id="links">Links</h2>
+      <ul>
+        <li><a href="https://github.com/nandovejer/luz">LUZ on GitHub</a>, where the code of this site is.</li>
+        <li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages">About GitHub Pages</a>, the host of this site.</li>
+        <li><a href="https://policies.google.com/privacy">Privacy policy of Google</a>, for YouTube.</li>
+        <li><a href="/docs/components/">LUZ components</a>, the design system that this site shows.</li>
+      </ul>
+
+      <h2 id="questions">Questions</h2>
+      <p>To ask something about this page, <a href="https://github.com/nandovejer/luz/issues">open an issue on GitHub</a>. Issues are public: do not write personal data in one.</p>
+    </div>
