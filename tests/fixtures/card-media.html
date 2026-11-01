@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Media card</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <style>
+    /* The layout of the test, not of the card: three equal columns */
+    .test-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .test-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  </style>
+</head>
+<body>
+  <!-- tests/card-media.spec.js: media cards in a grid with texts of different length; no script -->
+  <main>
+    <h1>Projects</h1>
+
+    <h2>Two actions, the title is not a link</h2>
+    <div class="o-grid test-three" id="row">
+      <article class="luz-card luz-card--media" id="long">
+        <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <div class="luz-card__body o-stack">
+          <span><span class="luz-tag luz-tag--gray">App</span></span>
+          <h3 class="luz-card__title">Tide table</h3>
+          <p>Tides for any harbour on the coast, read from a public data set and kept up to date every night, with a chart of the week, a list of the next high and low waters, and a note on the moon that the harbour master adds by hand when the weather turns.</p>
+        </div>
+        <div class="luz-card__actions o-actions">
+          <a class="luz-btn luz-btn--primary" href="#long-demo">Open the demo<span class="u-sr-only"> of Tide table</span></a>
+          <a class="luz-btn luz-btn--secondary" href="#long-code">View the code<span class="u-sr-only"> of Tide table</span></a>
+        </div>
+      </article>
+      <article class="luz-card luz-card--media" id="short">
+        <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <div class="luz-card__body o-stack">
+          <span><span class="luz-tag luz-tag--gray">Library</span></span>
+          <h3 class="luz-card__title">Dune</h3>
+          <p>A small parser.</p>
+        </div>
+        <div class="luz-card__actions o-actions">
+          <a class="luz-btn luz-btn--primary" href="#short-demo">Open the demo<span class="u-sr-only"> of Dune</span></a>
+          <a class="luz-btn luz-btn--secondary" href="#short-code">View the code<span class="u-sr-only"> of Dune</span></a>
+        </div>
+      </article>
+      <article class="luz-card luz-card--media" id="middle">
+        <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <div class="luz-card__body o-stack">
+          <span><span class="luz-tag luz-tag--gray">Site</span></span>
+          <h3 class="luz-card__title">Oasis</h3>
+          <p>A guide to the walks of the oasis, with the length and the shade of each one.</p>
+        </div>
+        <div class="luz-card__actions o-actions">
+          <a class="luz-btn luz-btn--primary" href="#middle-demo">Open the demo<span class="u-sr-only"> of Oasis</span></a>
+          <a class="luz-btn luz-btn--secondary" href="#middle-code">View the code<span class="u-sr-only"> of Oasis</span></a>
+        </div>
+      </article>
+    </div>
+
+    <h2>The crop is a property</h2>
+    <div class="o-grid test-two" id="ratios" style="--luz-card-ratio: 4 / 3">
+      <article class="luz-card luz-card--media" id="inherits">
+        <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <div class="luz-card__body o-stack"><h3 class="luz-card__title">Square-ish</h3></div>
+      </article>
+      <article class="luz-card luz-card--media" id="own" style="--luz-card-ratio: 1 / 1">
+        <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <div class="luz-card__body o-stack"><h3 class="luz-card__title">Square</h3></div>
+      </article>
+    </div>
+
+    <h2>One destination: the title is the link</h2>
+    <div class="o-grid test-two" id="linked-row">
+      <article class="luz-card luz-card--media" id="linked">
+        <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <div class="luz-card__body o-stack">
+          <h3 class="luz-card__title"><a href="#linked-page">Dunes</a></h3>
+          <p>A two-hour walk.</p>
+        </div>
+      </article>
+      <article class="luz-card luz-card--media" id="linked-actions">
+        <img class="luz-card__media" src="/apps/docs/assets/desert-640.jpg" alt="" width="640" height="360">
+        <div class="luz-card__body o-stack">
+          <h3 class="luz-card__title"><a href="#linked-actions-page">Canyons</a></h3>
+          <p>A day out.</p>
+        </div>
+        <div class="luz-card__actions o-actions">
+          <a class="luz-btn luz-btn--secondary" href="#canyons-map">Map<span class="u-sr-only"> of Canyons</span></a>
+          <button class="luz-btn luz-btn--primary" type="button">Save<span class="u-sr-only"> Canyons</span></button>
+        </div>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

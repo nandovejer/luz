@@ -112,7 +112,9 @@ function sourceOf(page) {
   if (page.meta.area === "components") {
     const files = page.meta.files.split(";").map((f) => f.trim());
     const own = files.map((f) => read(`packages/core/src/${f}`)).join("\n");
-    return { css: `${own}\n${sharedWithElements(files)}`, classes: null, tags: [] };
+    // The component's own name (components/card.css: card), for the knobs it reads with a fallback (--luz-card-ratio)
+    const names = files.map((f) => f.match(/^components\/([\w-]+)\.css$/)?.[1]).filter(Boolean);
+    return { css: `${own}\n${sharedWithElements(files)}`, classes: null, tags: [], componentNames: names };
   }
   if (page.meta.module === "search.js") return { css: read("packages/catalog/src/components/search.css"), classes: null, tags: [] };
   const entries = page.meta.files.split(",").map((f) => f.trim());
@@ -149,7 +151,7 @@ function sourceOf(page) {
 
 /** The --luz-* tokens the component's CSS reads with var(), minus the ones it declares itself. */
 export function tokensUsedBy(page) {
-  const { css, whole = "", classes, tags = [] } = sourceOf(page);
+  const { css, whole = "", classes, tags = [], componentNames = [] } = sourceOf(page);
   const byClass = classes?.length ? `\\.(?:${classes.join("|")})(?:(?:--|__)[\\w-]+)?(?![\\w-])` : null;
   // The tag as a type selector: not after a dot, a dash or a word character (.luz-announcement__x, [data-luz-announcement])
   const byTag = tags.length ? `(?<![\\w.-])(?:${tags.join("|")})(?![\\w-])` : null;
@@ -159,12 +161,19 @@ export function tokensUsedBy(page) {
   const ownProperty = names.length ? new RegExp(`^--luz-(?:${names.join("|")})-`) : null;
   const used = new Set();
   const local = new Set();
+  // A property of a core component's own, --luz-<name>-* read only with a fallback (var(--luz-card-ratio, 16 / 9)): a knob
+  // the consumer may set, not a design token. A token is read bare.
+  const knobName = componentNames.length ? new RegExp(`^--luz-(?:${componentNames.join("|")})-`) : null;
+  const bare = new Set();
   const wholeRules = new Set(rules(whole));
   for (const rule of [...wholeRules, ...rules(css)]) {
     const { selector, body } = rule;
     if (!wholeRules.has(rule) && own && !own.test(selector)) continue;
     for (const [, name] of body.matchAll(/(--luz-[\w-]+)\s*:/g)) local.add(name);
-    for (const [, name] of body.matchAll(/var\(\s*(--luz-[\w-]+)/g)) used.add(name);
+    for (const [, name, after] of body.matchAll(/var\(\s*(--luz-[\w-]+)\s*([,)])/g)) {
+      used.add(name);
+      if (after === ")") bare.add(name);
+    }
   }
   // --luz-catalog-*, the knobs of a pattern a consumer sets (--luz-glow-*, --luz-title-accent, --luz-toc-top,
   // --luz-page-rail-*, --luz-example-w: the old --luz-<kind>-* of F8's table 4) and the docs layout's own (--luz-docs-measure,
@@ -174,7 +183,7 @@ export function tokensUsedBy(page) {
   // other patterns that must leave room for it (the docs rail): a property a script publishes, not a design token
   // with a page of its own, so it belongs to no token family
   const publishedByScript = new Set(["--luz-consent-h"]);
-  return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !ownProperty?.test(t) && !publishedByScript.has(t)).sort();
+  return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !ownProperty?.test(t) && !(knobName?.test(t) && !bare.has(t)) && !publishedByScript.has(t)).sort();
 }
 
 /* ---- Token families and their pages --------------------------------------- */
