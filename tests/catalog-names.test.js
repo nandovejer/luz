@@ -19,7 +19,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { CHUNKS, CHUNK_NOW, CLASSES, DOCS_KEPT, ELEMENTS, FILES, LAYOUT, OLD_PAGES, PATTERNS, PROPERTIES, TAGS, THEME_MODE } from "./helpers/catalog-names.js";
+import { CHUNKS, CHUNK_NOW, CLASSES, DOCS_KEPT, ELEMENTS, FILES, LAYOUT, OLD_PAGES, PATTERNS, PROPERTIES, SHEETS_ONLY, TAGS, THEME_MODE } from "./helpers/catalog-names.js";
 import { releaseNotes } from "./helpers/release-notes.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -148,7 +148,7 @@ describe("custom-elements.json of catalog has the new elements and none of the o
 /* ---- files ----------------------------------------------------------------------------------------- */
 
 describe("components/<block>.css and its .min.css exist for every new block, and the old files do not", () => {
-  const NEW = [...PATTERNS, ...LAYOUT, ...ELEMENTS.map((e) => e.css)];
+  const NEW = [...PATTERNS, ...LAYOUT, ...ELEMENTS.map((e) => e.css), ...SHEETS_ONLY];
 
   it.each(NEW)("components/%s.css has its source, its built file and its minified file", (name) => {
     expect(exists(`packages/catalog/src/components/${name}.css`), `src/components/${name}.css`).toBe(true);
@@ -156,10 +156,10 @@ describe("components/<block>.css and its .min.css exist for every new block, and
     expect(exists(`packages/catalog/dist/components/${name}.min.css`), `dist/components/${name}.min.css`).toBe(true);
   });
 
-  it("holds exactly the 34 components of the catalog: the 22 patterns, the four of F7 and the eight elements (theme-time is the color mode's successor), plain and minified", () => {
+  it("holds exactly the 35 components of the catalog: the 22 patterns, the four of F7, the eight elements and the page transition (theme-time is the color mode's successor), plain and minified", () => {
     const built = readdirSync(`${root}packages/catalog/dist/components`).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, "")).sort();
     expect(built).toEqual([...new Set(NEW)].sort());
-    expect(built).toHaveLength(34);
+    expect(built).toHaveLength(35);
   });
 
   it.each(FILES.map(([old]) => old))("components/%s.css is gone, in src, dist and the tarball list", (old) => {

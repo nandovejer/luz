@@ -1,0 +1,33 @@
+/* ==========================================================================
+	 LUZ Catalog: page transition.
+	 Layer: catalog · No class, no tag, no attribute: link this file and the
+	 pages that link it fade into one another when the visitor follows a link
+	 from one to the next (cross-document view transitions). It acts for the
+	 site as a whole, and only when both pages link it.
+
+	 One fixed transition: the page before fades out while the page after fades
+	 in, over the base duration and the standard easing of the motion tokens.
+	 No slide, no scale, no name on the header or the sidebar. The visitor
+	 asked for the change by following the link; nothing moves on its own.
+
+	 All of it is inside prefers-reduced-motion: no-preference, the at-rule
+	 included: under reduce, or when the browser does not say, no view
+	 transition starts and the page changes as it always did. Forced colours
+	 and paper are not touched. The same-origin, same-kind navigations a
+	 browser allows are the only ones that play, and a first load, a reload
+	 and a browser without support (Firefox) just navigate.
+	 ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+
+	/* The group is the box that moves and resizes; it is the same size on both pages, so only its time matters: the page stays inert until it ends */
+	:where(:root)::view-transition-group(root),
+	:where(:root)::view-transition-old(root),
+	:where(:root)::view-transition-new(root) {
+		animation-duration: var(--luz-duration-base);
+		animation-timing-function: var(--luz-easing-standard);
+	}
+}

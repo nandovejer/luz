@@ -340,7 +340,10 @@ describe("what a prompt says about the system comes from the packages", () => {
     // which is among the patterns of the kind but is not one of them
     expect(all.filter((n) => n === "social"), `${id}: links social.min.css once`).toHaveLength(1);
     for (const name of PATTERNS[id]) expect(all.indexOf(name) < all.indexOf("social"), `${id}: social comes ${CASCADE.indexOf(name) < CASCADE.indexOf("social") ? "after" : "before"} ${name}, as in CASCADE`).toBe(CASCADE.indexOf(name) < CASCADE.indexOf("social"));
-    const links = all.filter((n) => n !== "social");
+    // The page transition (a stylesheet with no class and no tag, for any site) ends the cascade: every kind links it, after its patterns
+    expect(all.filter((name) => name === "page-transition"), `${id}: links the page transition once`).toHaveLength(1);
+    expect(all.at(-1), `${id}: the page transition is the last of the cascade`).toBe("page-transition");
+    const links = all.slice(0, -1).filter((n) => n !== "social");
     expect(links.filter(isPattern), `${id}: its patterns, and no other kind's`).toEqual(PATTERNS[id]);
     // The patterns come last: what they refine is linked before them
     expect(links.slice(links.length - PATTERNS[id].length), id).toEqual(PATTERNS[id]);
@@ -354,7 +357,7 @@ describe("what a prompt says about the system comes from the packages", () => {
     const header = { landing: "site-header", blog: "site-header", app: "app-bar", docs: "docs-layout" }[id];
     expect(links.indexOf("sidebar"), `${id}: sidebar before ${header}`).toBeLessThan(links.indexOf(header));
     if (id === "blog") expect(links.indexOf("sidebar"), "blog: sidebar before masthead").toBeLessThan(links.indexOf("masthead"));
-    expect(new Set(links).size, `${id}: each file once`).toBe(links.length);
+    expect(new Set(all).size, `${id}: each file once`).toBe(all.length);
     expect(text, `${id}: no package of a kind`).not.toMatch(/@luz-ds\/(?:landing|cms|app|docs)(?![\w-])/);
     expect(text, `${id}: the load order names no package of a kind`).not.toMatch(/then @luz-ds\//);
     expect(text, `${id}: its npm line`).toMatch(new RegExp(`npm install @luz-ds/tokens@${versionOf("tokens").replace(/\./g, "\\.")} @luz-ds/core@\\S+ @luz-ds/catalog@\\S+(?: @luz-ds/check@\\S+)?\\n`));

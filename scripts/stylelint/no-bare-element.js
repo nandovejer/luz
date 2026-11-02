@@ -23,8 +23,9 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 function stripWhere(selector) {
   let s = selector
     .replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, '""')
-    // Arguments that are not selectors: :lang(en), :dir(rtl), :nth-child(2n of …)
-    .replace(/:(lang|dir|nth-[\w-]+|state)\([^)]*\)/g, ":$1")
+    // Arguments that are not selectors: :lang(en), :dir(rtl), :nth-child(2n of …), and the name of a view transition
+    // (::view-transition-old(root): a name, not a type)
+    .replace(/:(lang|dir|nth-[\w-]+|state|view-transition-(?:group|image-pair|old|new))\([^)]*\)/g, ":$1")
     .replace(/\[[^\]]*\]/g, "[]");
   for (let i = s.search(/:(where|not)\(/); i !== -1; i = s.search(/:(where|not)\(/)) {
     let depth = 0;

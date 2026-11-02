@@ -28,6 +28,8 @@ const fromRepo = (path) => fileURLToPath(new URL(`../${path}`, import.meta.url))
 const PACKAGES = {
   catalog: {
     label: 'Catalog',
+    // A page whose stylesheet has no class and no tag (page-transition.css is one at-rule): it is a page, and no block names it
+    pagesWithoutBlock: ['page-transition'],
     patternOf: {
       // The six components with data of the site: each a `<luz-*>` tag that is the block (`.luz-<tag>__<part>`, D5)
       search: 'search',
@@ -95,8 +97,8 @@ function blocksOf(name) {
 // Code tab, then Design tab; Known issues is above them (ia.md §6)
 const sections = ['known-issues', 'how', 'keyboard', 'when', 'when-not', 'content'];
 
-for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
-  const patterns = new Set(Object.values(patternOf));
+for (const [name, { label, patternOf, pagesWithoutBlock = [] }] of Object.entries(PACKAGES)) {
+  const patterns = new Set([...Object.values(patternOf), ...pagesWithoutBlock]);
   const area = name;
 
   test.describe(`${label} docs`, () => {

@@ -72,7 +72,7 @@ describe("the 22 patterns are stylesheets of catalog, named for their block", ()
     expect(ALL).toHaveLength(22);
     // `app-bar` and `docs-layout` are the names of their blocks (`.luz-app-bar`, `.luz-docs-layout`), not a kind's prefix on a name
     const sources = readdirSync(`${root}packages/catalog/src/components`).filter((f) => f.endsWith(".css") && !f.startsWith("_")).map((f) => f.replace(/\.css$/, ""));
-    expect(sources.filter((f) => !["search", "navbar", "sidebar", "terminal", "timeline", "lang-switch", "submenu", "announcement", "faq", "cookie-consent", "theme-time", "embed"].includes(f)).sort()).toEqual([...ALL].sort());
+    expect(sources.filter((f) => !["search", "navbar", "sidebar", "terminal", "timeline", "lang-switch", "submenu", "announcement", "faq", "cookie-consent", "theme-time", "embed", "page-transition"].includes(f)).sort()).toEqual([...ALL].sort());
   });
 
   it.each([...OLD_ALL, ...OLD_ELEMENT_FILES])("the F5b file %s is gone from src, dist (plain and minified) and the tarball list", (name) => {
@@ -307,13 +307,15 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
     for (const gone of ["KIND_PATTERNS", "kindFiles", "kindOfFile"]) expect(kinds[gone], gone).toBeUndefined();
     expect(member("CASCADE")).toEqual(expect.arrayContaining(ALL));
     expect(new Set(member("CASCADE")).size, "no block twice").toBe(member("CASCADE").length);
+    // The page transition is the one sheet with no class and no tag, and a fixed at-rule: it ends the cascade, after every pattern
+    expect(member("CASCADE").at(-1), "page-transition ends the cascade").toBe("page-transition");
   });
 
   it("the files of a kind are those of the catalog pages that name it (or `any`), in the order of the cascade", () => {
-    expect(kindPatterns("landing", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social"].map((n) => `components/${n}.css`));
-    expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list"].map((n) => `components/${n}.css`));
-    expect(kindPatterns("app", root, null).files).toEqual(["navbar", "sidebar", "social", "app-bar", "dashboard"].map((n) => `components/${n}.css`));
-    expect(kindPatterns("docs", root, null).files).toEqual(["navbar", "sidebar", "terminal", "social", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("landing", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-transition"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list", "page-transition"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("app", root, null).files).toEqual(["navbar", "sidebar", "social", "app-bar", "dashboard", "page-transition"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("docs", root, null).files).toEqual(["navbar", "sidebar", "terminal", "social", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer", "page-transition"].map((n) => `components/${n}.css`));
   });
 
   it("landing and blog link the sidebar's file though no page of theirs lists it: the nav toggle of the site header and of the masthead is defined there, and it comes before the headers", () => {
@@ -344,6 +346,7 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
     expect(isKindFile("components/lang-switch.css", map)).toBe(false);
     expect(isKindFile("components/announcement.css", map)).toBe(false);
     for (const base of ["sidebar", "terminal", "timeline"]) expect(isKindFile(`components/${base}.css`, map), base).toBe(false);
+    expect(isKindFile("components/page-transition.css", map), "page-transition fits any site").toBe(false);
     for (const old of [...OLD_ALL, ...OLD_ELEMENT_FILES]) expect(isKindFile(`components/${old}.css`, map), old).toBe(false);
   });
 
@@ -423,15 +426,17 @@ const PAGES = [
 /** The pages of the old routes of F5b (`<kind>-<name>`) and of the pieces F8 renamed: none is a page now, in English or Spanish. */
 const OLD_SLUGS = [...OLD_ALL, "cms-toc", "consent", "mode", "color-mode", "banner"];
 const ELEMENT_PAGES = ["announcement", "faq", "cookie-consent", "embed", "lang-switch", "theme-time", "search", "submenu"];
+/** A page whose stylesheet has no class and no tag (one at-rule): it fits any site, and no kind names its file. */
+const SITE_WIDE_SHEET_PAGES = ["page-transition"];
 /** F7: the pages that came from core, in `pages/components/` until then. */
 const LAYOUT_PAGES = ["navbar", "sidebar", "terminal", "timeline"];
 const catalogPages = () => repoSite.pages.filter((p) => p.meta.area === "catalog");
 
 describe("the pages of the 20 patterns, at /docs/catalog/<block>/", () => {
-  it("are 20 pages beside the eight elements, the four that came from core (F7), the class reference and the gallery: 34 in the area", () => {
+  it("are 20 pages beside the eight elements, the four that came from core (F7), the class reference and the gallery: 35 in the area, with the page transition", () => {
     expect(PAGES).toHaveLength(20);
     const routes = catalogPages().map((p) => p.route).sort();
-    expect(routes).toEqual(["/docs/catalog/", "/docs/catalog/classes/", ...[...ELEMENT_PAGES, ...LAYOUT_PAGES, ...PAGES.map(([slug]) => slug)].map((slug) => `/docs/catalog/${slug}/`)].sort());
+    expect(routes).toEqual(["/docs/catalog/", "/docs/catalog/classes/", ...[...ELEMENT_PAGES, ...LAYOUT_PAGES, ...SITE_WIDE_SHEET_PAGES, ...PAGES.map(([slug]) => slug)].map((slug) => `/docs/catalog/${slug}/`)].sort());
   });
 
   it.each(OLD_SLUGS)("there is no page at /docs/catalog/%s/, in English or in Spanish, and no redirect (decision 69)", (slug) => {
@@ -622,7 +627,7 @@ describe("the Catalog area groups its pages by what they do", () => {
     navigation: ["app-bar", "masthead", "site-header", "lang-switch", "submenu", "navbar", "sidebar"],
     "page-structure": ["article-header", "site-footer", "page-header", "hero", "section"],
     content: ["dashboard", "embed", "faq", "post-list", "social", "stat", "toc", "terminal", "timeline"],
-    "site-wide": ["theme-time", "announcement", "cookie-consent", "search"],
+    "site-wide": ["theme-time", "announcement", "cookie-consent", "search", "page-transition"],
     documentation: ["do-dont", "example", "page-footer", "doc-header", "pager", "page-rail", "docs-layout"],
     reference: ["classes"],
   };
@@ -645,12 +650,12 @@ describe("the Catalog area groups its pages by what they do", () => {
     for (const g of area.groups) expect(pages.some((p) => p.meta.group === g.id), `group ${g.id}`).toBe(true);
   });
 
-  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 33 at most, no ties", () => {
+  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 34 at most, no ties", () => {
     const orders = catalogPages().map((p) => Number(p.meta.order));
-    expect(catalogPages()).toHaveLength(34);
+    expect(catalogPages()).toHaveLength(35);
     expect(new Set(orders).size, `orders: ${orders.sort((a, b) => a - b).join(" ")}`).toBe(orders.length);
     expect(Math.min(...orders)).toBe(0);
-    expect(Math.max(...orders)).toBeLessThanOrEqual(33);
+    expect(Math.max(...orders)).toBeLessThanOrEqual(34);
     expect(repoSite.byRoute.get("/docs/catalog/").meta.order).toBe("0");
   });
 
@@ -726,7 +731,7 @@ describe("Fits best: the real pages", () => {
   const patterns = () => catalogPages().filter((p) => p.meta.group && p.meta.group !== "reference");
 
   it("every pattern page of catalog has both, and no other page has either", () => {
-    expect(patterns()).toHaveLength(32);
+    expect(patterns()).toHaveLength(33);
     for (const page of patterns()) {
       expect(page.meta["fits-kinds"], page.file).toBeTruthy();
       expect(page.meta.fits.length, page.file).toBeGreaterThan(10);
@@ -807,7 +812,7 @@ describe("Fits best: what a page, a card and the Spanish page say", () => {
   it("the card of the gallery says it too, in plain words (the card is one link): no link inside the line", () => {
     for (const [route, lang] of [["/docs/catalog/", "en"], ["/es/docs/catalog/", "es"]]) {
       const cards = findAll(parse(rendered.get(route)), (n) => n.name === "li" && hasClass(n, "docs-card"));
-      expect(cards, route).toHaveLength(32);
+      expect(cards, route).toHaveLength(33);
       for (const card of cards) {
         const href = query(card, "h3.docs-card__title").children.find((n) => n.name === "a").attrs.get("href");
         const slug = href.split("/").filter(Boolean).at(-1);

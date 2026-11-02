@@ -22,6 +22,12 @@ export const PATTERNS = ["site-header", "masthead", "hero", "main", "section", "
 /** The four of F7 (core to catalog), whose names F8 keeps. */
 export const LAYOUT = ["navbar", "sidebar", "terminal", "timeline"];
 
+/**
+ * Stylesheets of catalog with no class, no tag and no script: a rule of the browser's own and nothing more (page-transition.css is one
+ * at-rule). They fit any site, have a page of their own and are in no list of classes or elements.
+ */
+export const SHEETS_ONLY = ["page-transition"];
+
 /** The eight elements: tag (or class) of each, its stylesheet and its chunk. */
 export const ELEMENTS = [
   { name: "search", tag: "luz-search", css: "search", chunk: "search" },
