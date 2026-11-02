@@ -19,7 +19,7 @@ import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, describe, expect, it } from "vitest";
-import { renderSnippets, snippetData } from "../scripts/docs-site/snippets.js";
+import { catalogComponents, catalogFilesIn, renderSnippets, snippetData } from "../scripts/docs-site/snippets.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -32,10 +32,10 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * Landing and blog link the sidebar's file too, before their headers: the nav toggle of the site header and of the masthead is defined there.
  */
 const KIND_FILES = {
-  landing: ["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social"],
-  blog: ["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list"],
-  app: ["navbar", "sidebar", "social", "app-bar", "dashboard"],
-  docs: ["navbar", "sidebar", "terminal", "social", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
+  landing: ["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-transition"],
+  blog: ["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list", "page-transition"],
+  app: ["navbar", "sidebar", "social", "app-bar", "dashboard", "page-transition"],
+  docs: ["navbar", "sidebar", "terminal", "social", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer", "page-transition"],
 };
 const FILES = {
   tokens: ["luz-tokens.min.css"],
@@ -54,6 +54,9 @@ const KIND_PATTERNS = { atoms: null, landing: "landing", blog: "blog", app: "app
 const KINDS = Object.keys(KIND_PATTERNS);
 const IDS = KINDS.flatMap((k) => [`${k}-npm`, `${k}-cdn`]);
 
+/** The stylesheets of catalog with no class and no tag: one at-rule, in no manifest. */
+const SHEETS_WITHOUT_CLASS = ["page-transition"];
+
 /** The manifests of catalog's dist: the stylesheet of each element and the files of each class. */
 const CATALOG_MANIFESTS = {
   "classes.json": {
@@ -64,7 +67,8 @@ const CATALOG_MANIFESTS = {
       { name: "luz-search", kind: "component", layer: "luz.catalog", files: ["components/search.css"], defined: true, block: "luz-search" },
       { name: "luz-cookie-consent", kind: "component", layer: "luz.catalog", files: ["components/cookie-consent.css"], defined: true, block: "luz-cookie-consent" },
       // the patterns of the four kinds of site: one file each (the generator reads the pages of catalog, kinds.js, and checks the files against these)
-      ...[...new Set(Object.values(KIND_FILES).flat())].map((name) => ({ name: `luz-${name}`, kind: "component", layer: "luz.catalog", files: [`components/${name}.css`], defined: true, block: `luz-${name}` })),
+      // (page-transition.css has no class: it is in neither manifest, and the generator finds it in the folder of the build)
+      ...[...new Set(Object.values(KIND_FILES).flat())].filter((name) => !SHEETS_WITHOUT_CLASS.includes(name)).map((name) => ({ name: `luz-${name}`, kind: "component", layer: "luz.catalog", files: [`components/${name}.css`], defined: true, block: `luz-${name}` })),
     ],
     properties: [],
   },
@@ -355,7 +359,7 @@ describe("the snippet generator", () => {
 
   it("links one file of a catalog component as the example, then the files of the kind's patterns, all of them files its manifests list, never catalog.min.css", () => {
     const html = build(fixture);
-    const known = new Set(CATALOG_MANIFESTS["custom-elements.json"].modules.flatMap((m) => m.declarations.map((d) => d.stylesheet)).concat(CATALOG_MANIFESTS["classes.json"].classes.flatMap((c) => c.files)));
+    const known = new Set(CATALOG_MANIFESTS["custom-elements.json"].modules.flatMap((m) => m.declarations.map((d) => d.stylesheet)).concat(CATALOG_MANIFESTS["classes.json"].classes.flatMap((c) => c.files), SHEETS_WITHOUT_CLASS.map((name) => `components/${name}.css`)));
     for (const kind of KINDS.filter((k) => KIND_PATTERNS[k])) {
       const catalog = tagsOf(codeOf(html, `${kind}-cdn`)).filter((t) => t.tag === "link" && parts(t.url).pkg === "catalog");
       const files = catalog.map((t) => parts(t.url).file);
@@ -476,5 +480,46 @@ describe("the hashes and URLs of the docs are never typed", () => {
         expect(snippetOf(html, `${kind}-npm`)).toContain(`data-copy="${add}"`);
       }
     });
+  });
+});
+
+describe("catalogComponents lists a stylesheet with no class and no tag", () => {
+  /** A catalog dist with two manifests (one class, one element) and the folder of the build: a sheet of each kind, a private one and a file that is no sheet. */
+  function dist(sheets) {
+    const dir = mkdtempSync(join(tmpdir(), "luz-catalog-dist-"));
+    temps.push(dir);
+    const out = join(dir, "packages/catalog/dist");
+    mkdirSync(join(out, "components"), { recursive: true });
+    writeFileSync(join(out, "classes.json"), JSON.stringify({ classes: [{ name: "luz-box", defined: true, files: ["components/box.css"] }] }));
+    writeFileSync(join(out, "custom-elements.json"), JSON.stringify({ modules: [{ declarations: [{ tagName: "luz-ping", stylesheet: "components/ping.css" }] }] }));
+    for (const name of sheets) writeFileSync(join(out, "components", name), "/* x */\n");
+    return dir;
+  }
+  const files = (dir) => catalogComponents({ root: dir }).map((c) => c.file);
+
+  it("adds the file of the build that no manifest names, with no tag and no class", () => {
+    const dir = dist(["box.css", "box.min.css", "ping.css", "ping.min.css", "fade-only.css", "fade-only.min.css"]);
+    const list = catalogComponents({ root: dir });
+    expect(list.map((c) => c.file)).toEqual(["components/box.css", "components/fade-only.css", "components/ping.css"]);
+    expect(list.find((c) => c.file === "components/fade-only.css")).toEqual({ file: "components/fade-only.css", tags: [], classes: [] });
+    expect(list.find((c) => c.file === "components/box.css")).toMatchObject({ classes: ["luz-box"], tags: [] });
+    expect(list.find((c) => c.file === "components/ping.css")).toMatchObject({ tags: ["luz-ping"], classes: [] });
+  });
+
+  it("lists a file once, and leaves out the minified file, a private file (_name.css) and what is not a stylesheet", () => {
+    const dir = dist(["box.css", "box.min.css", "_print.css", "notes.txt", "map.css.map", "fade-only.min.css"]);
+    expect(files(dir)).toEqual(["components/box.css", "components/ping.css"]);
+  });
+
+  it("does not make the sheet a match of any text: nothing names it by a tag or a class", () => {
+    const dir = dist(["fade-only.css"]);
+    const list = catalogComponents({ root: dir });
+    expect(catalogFilesIn('<luz-ping></luz-ping><p class="luz-box luz-fade-only">x</p>', list)).toEqual(["components/box.css", "components/ping.css"]);
+  });
+
+  it("still throws when a manifest is missing, and says to build", () => {
+    const dir = dist([]);
+    rmSync(join(dir, "packages/catalog/dist/classes.json"));
+    expect(() => catalogComponents({ root: dir })).toThrow(/classes\.json is missing or unreadable.*pnpm build/);
   });
 });

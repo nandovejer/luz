@@ -21,7 +21,7 @@ import { describe, expect, it } from "vitest";
 import { JPEG_LONG_SIDES, LONG_SIDES, RATIOS, VARIANTS, sizeOf } from "../scripts/build-placeholders.js";
 import { LAYER_ORDER } from "../scripts/luz-layers.js";
 import { blocksOfCss } from "./helpers/css-blocks.js";
-import { LAYOUT, PATTERNS } from "./helpers/catalog-names.js";
+import { LAYOUT, PATTERNS, SHEETS_ONLY } from "./helpers/catalog-names.js";
 import { isNpmOrReleased } from "./helpers/versions.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -175,7 +175,7 @@ describe("peers: catalog needs tokens and core, and the four packages for one ki
 describe("catalog after F8: eight `<luz-*>` elements, the 22 patterns of the four kinds of site and the four layout components of core", () => {
   const read = (path) => readFileSync(`${root}${path}`, "utf-8");
   const manifest = JSON.parse(read("packages/catalog/package.json"));
-  const components = [...SITE_COMPONENTS, ...LAYOUT, ...PATTERNS].map((name) => `${name}.css`).sort();
+  const components = [...SITE_COMPONENTS, ...LAYOUT, ...PATTERNS, ...SHEETS_ONLY].map((name) => `${name}.css`).sort();
   const minified = components.map((f) => f.replace(/\.css$/, ".min.css"));
   const list = (dir, keep) => (existsSync(`${root}${dir}`) ? readdirSync(`${root}${dir}`).filter(keep).sort() : []);
   const isCss = (f) => f.endsWith(".css") && !f.endsWith(".min.css");

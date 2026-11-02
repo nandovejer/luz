@@ -30,6 +30,9 @@ const components = readdirSync(join(repo, "packages/catalog/dist/components"))
 const version = JSON.parse(read("packages/catalog/package.json")).version;
 const sri = (file) => `sha384-${createHash("sha384").update(readFileSync(join(repo, "packages/catalog/dist", file))).digest("base64")}`;
 
+/** The one sheet with no class and no tag (an at-rule): its "Copy the markup" is the load line and a plain link, with nothing of luz after it. */
+const NO_LUZ_MARKUP = ["page-transition"];
+
 describe("the page of each catalog component starts its markup with the line that loads its file", () => {
   const site = scanSite(join(repo, "apps/docs"), repo);
   const pages = components.map((name) => site.byRoute.get(`/docs/catalog/${name}/`)).filter(Boolean);
@@ -52,6 +55,11 @@ describe("the page of each catalog component starts its markup with the line tha
       const link = new RegExp(`<link rel="stylesheet" href="https://cdn\\.jsdelivr\\.net/npm/@luz-ds/catalog@${version.replace(/\./g, "\\.")}/dist/components/${name}\\.min\\.css" integrity="([^"]+)" crossorigin="anonymous">`).exec(section);
       expect(link, `the <link> of components/${name}.min.css from the CDN, at the version of catalog`).not.toBeNull();
       expect(link[1]).toBe(sri(`components/${name}.min.css`));
+      if (NO_LUZ_MARKUP.includes(name)) {
+        // A stylesheet with no class and no tag has no luz markup to come before: the markup it teaches is an ordinary link
+        expect(section, `${name} has no luz element or class to teach`).not.toMatch(/<luz-|class="luz-/);
+        return;
+      }
       // the line comes before the markup the page teaches
       expect(section.indexOf(`components/${name}`)).toBeLessThan(section.search(/<luz-|class="luz-/));
     });
