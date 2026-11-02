@@ -337,7 +337,7 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     expect(found[0]).toContain("blog");
   });
 
-  it("reports a prompt over its ceiling, naming the prompt and the ceiling (a tiny budget in a copy)", () => {
+  it("warns, and does not fail, on a prompt over its ceiling: it is in `warnings` (naming the prompt and the ceiling) and `problems` stays empty (owner, 2026-11-02; a tiny budget in a copy)", () => {
     const dir = copyOfRepo();
     edit(dir, "budgets.json", (text) => {
       const budgets = JSON.parse(text);
@@ -346,13 +346,36 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
       row.max = 100;
       return JSON.stringify(budgets, null, 2);
     });
-    const problems = member("checkPrompts")(dir);
+    const warnings = [];
+    const problems = member("checkPrompts")(dir, warnings);
+    expect(problems, "a prompt over its ceiling is not a problem").toEqual([]);
     for (const id of IDS) {
-      const found = problems.filter((p) => p.includes(`prompts/${id}.txt`));
+      const found = warnings.filter((w) => w.includes(`prompts/${id}.txt`));
       expect(found.length, `${id} is over a ceiling of 100 B`).toBeGreaterThan(0);
-      expect(found.join("\n")).toMatch(/ceiling/i);
+      expect(found.join("\n")).toMatch(/over its ceiling/);
       expect(found.join("\n")).toContain("100");
     }
+  });
+
+  it("is silent about the ceiling when every prompt fits it: `warnings` stays empty", () => {
+    const warnings = [];
+    member("checkPrompts")(root, warnings);
+    expect(warnings.filter((w) => /ceiling/.test(w))).toEqual([]);
+  });
+
+  it("still fails a hidden character in a prompt that is also over its ceiling: the warning does not hide a problem", () => {
+    const dir = copyOfRepo();
+    edit(dir, "budgets.json", (text) => {
+      const budgets = JSON.parse(text);
+      budgets.budgets.find((b) => b.glob === "docs/prompts/**/*.txt").max = 100;
+      return JSON.stringify(budgets, null, 2);
+    });
+    edit(dir, "apps/site/prompts/body.md", (text) => `${text}\nA hidden\u200b character.\n`);
+    const warnings = [];
+    const problems = member("checkPrompts")(dir, warnings);
+    expect(problems.length).toBeGreaterThan(0);
+    expect(problems.join("\n")).toMatch(/body\.md/);
+    expect(warnings.length).toBeGreaterThan(0);
   });
 
   it("reports a hidden character in the body with its file and line", () => {

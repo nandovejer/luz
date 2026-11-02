@@ -31,6 +31,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import { readHtml } from "../scripts/docs-site/html.js";
 import { LLMS_FULL_MAX, renderLlmsFull } from "../scripts/docs-site/ai.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 import { docsSite } from "../scripts/docs-site/plugin.js";
 import {
   areaOf,
@@ -360,7 +361,7 @@ describe("the sidebar: every area a fold, only the current one open, every page 
     }
   });
 
-  it("keeps every generated page under the 'docs page HTML' ceiling of budgets.json, measured as the Pages build writes it", () => {
+  it("warns, and never fails, on a generated page over the 'docs page HTML' ceiling of budgets.json (owner, 2026-11-02: to optimise), measured as the Pages build writes it", () => {
     const { budgets } = JSON.parse(readFileSync(join(repo, "budgets.json"), "utf-8"));
     const row = budgets.find((b) => b.glob === "docs/**/*.html");
     expect(row, "the docs page HTML row").toBeTruthy();
@@ -371,31 +372,31 @@ describe("the sidebar: every area a fold, only the current one open, every page 
     const fileOf = (route) => (route.endsWith("/") ? `docs${route}index.html` : `docs${route}`);
     const exceptRe = row.except ? new RegExp(`^${row.except.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^/]*")}$`) : null;
     const skipped = [];
-    const over = [];
     for (const [route, html] of rendered) {
       if (exceptRe?.test(fileOf(route))) {
         skipped.push(route);
         continue;
       }
       const bytes = Buffer.byteLength(relativizeLinks(html, route, routes)) + ASSET_TAGS;
-      if (bytes > row.max) over.push(`${route}: ${bytes} > ${row.max}`);
+      warnIfOver(`docs page ${route}`, bytes, row.max);
     }
-    expect(over).toEqual([]);
     // Only /debug/ is excepted from this row: it has a row of its own (below), not a larger ceiling here
     expect(skipped).toEqual(["/debug/"]);
-    expect(row.max, "the docs page ceiling is not raised").toBe(81920);
+    expect(row.max, "the docs page target is not raised").toBe(81920);
+    expect(row.warn, "the row only warns").toBe(true);
   });
 
-  it("keeps /debug/ under the ceiling of its own row of budgets.json, measured as the Pages build writes it", () => {
+  it("warns, and never fails, when /debug/ is over the ceiling of its own row of budgets.json, measured as the Pages build writes it", () => {
     const { budgets } = JSON.parse(readFileSync(join(repo, "budgets.json"), "utf-8"));
     const row = budgets.find((b) => b.glob === "docs/debug/*.html");
     expect(row, "the debug page HTML row").toBeTruthy();
     expect(row.max).toBe(245760);
+    expect(row.warn, "the row only warns").toBe(true);
     expect(row.compression).toBe("none");
     const html = rendered.get("/debug/");
     expect(html, "/debug/ is rendered").toBeTruthy();
     const bytes = Buffer.byteLength(relativizeLinks(html, "/debug/", new Set(rendered.keys()))) + 256;
-    expect(bytes).toBeLessThanOrEqual(row.max);
+    warnIfOver("docs page /debug/", bytes, row.max);
   });
 });
 
@@ -944,8 +945,9 @@ describe("index.md: every page also published as Markdown, from the same text as
     expect(compared).toBeGreaterThan(0);
   });
 
-  it("does not make llms-full.txt grow: the files are separate, one entry per page, one # LUZ, under its ceiling", () => {
-    expect(Buffer.byteLength(full)).toBeLessThanOrEqual(LLMS_FULL_MAX);
+  it("does not make llms-full.txt grow: the files are separate, one entry per page, one # LUZ, and only a warning over its ceiling", () => {
+    warnIfOver("llms-full.txt", Buffer.byteLength(full), LLMS_FULL_MAX);
+    expect(LLMS_FULL_MAX, "the target is not raised").toBe(448 * 1024);
     expect(full.split("\n").filter((l) => /^# /.test(l))).toEqual(["# LUZ"]);
     const lines = full.split("\n");
     const entries = lines.filter((line, i) => line.startsWith("## ") && lines[i + 1]?.startsWith("URL: "));

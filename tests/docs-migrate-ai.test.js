@@ -14,6 +14,7 @@ import { describe, expect, it } from "vitest";
 import { renderLlmsFull, renderLlmsTxt, renderPageMarkdown } from "../scripts/docs-site/ai.js";
 import { scanSite } from "../scripts/docs-site/site.js";
 import { SITE_URL } from "../vite.config.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const site = scanSite(join(root, "apps/docs"), root);
@@ -77,7 +78,8 @@ describe("llms-full.txt and index.md carry the migration page as a summary with 
   });
 
   it("keeps llms-full.txt under its ideal with the page in", () => {
-    expect(bytes(full())).toBeLessThanOrEqual(LLMS_FULL_IDEAL);
+    warnIfOver("llms-full.txt", bytes(full()), LLMS_FULL_IDEAL);
+    expect(LLMS_FULL_IDEAL).toBe(416 * 1024);
   });
 
   it("writes the same summary to the index.md of the page", () => {

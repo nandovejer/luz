@@ -20,6 +20,7 @@ import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 import { buildSearchIndex, buildSite, indexData, indexEntries, relativizeLinks, renderAZ, scanSite } from "../scripts/docs-site/site.js";
 import { decodeEntities } from "../scripts/docs-site/html.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const FIRST = "/docs/a-z/";
@@ -312,7 +313,7 @@ describe("the row of letters", () => {
   });
 });
 
-describe("each page stays under the ceiling of a docs page (RL-17, never raised)", () => {
+describe("each page should stay under the ceiling of a docs page (never raised; a warning, to optimise, when over: owner, 2026-11-02)", () => {
   const { budgets } = JSON.parse(readFileSync(`${root}budgets.json`, "utf-8"));
   const ceiling = budgets.find((b) => b.glob === "docs/**/*.html")?.max;
 
@@ -320,10 +321,10 @@ describe("each page stays under the ceiling of a docs page (RL-17, never raised)
     expect(ceiling).toBe(80 * 1024);
   });
 
-  it.each(ROUTES)("%s renders, with relative links as the Pages build writes it, in at most the ceiling", (route) => {
+  it.each(ROUTES)("%s renders, with relative links as the Pages build writes it, and warns when over the ceiling", (route) => {
     expect(rendered.has(route), `${route} is rendered`).toBe(true);
     const html = relativizeLinks(htmlOf(route), route, new Set(rendered.keys()));
-    expect(Buffer.byteLength(html) + ASSET_TAGS, `${route} is ${Buffer.byteLength(html)} bytes`).toBeLessThanOrEqual(ceiling);
+    warnIfOver(`docs page ${route}`, Buffer.byteLength(html) + ASSET_TAGS, ceiling);
   });
 });
 

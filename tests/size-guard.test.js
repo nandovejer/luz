@@ -159,7 +159,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
 
   it("measures the debug page by a row of its own: docs/debug/*.html, uncompressed, ideal 230 KiB, ceiling 240 KiB, and takes it out of the docs page row, whose ceiling stays 80 KiB (RL-17)", () => {
     const docs = budgets.find((b) => b.name === last);
-    expect(docs).toMatchObject({ glob: "docs/**/*.html", except: "docs/debug/*.html", compression: "none", max: 80 * KiB });
+    expect(docs).toMatchObject({ glob: "docs/**/*.html", except: "docs/debug/*.html", compression: "none", max: 80 * KiB, warn: true });
     // the row of the debug page is the last one, and the only one with that glob
     expect(budgets.at(-1)).toEqual({
       name: "debug page HTML (docs/debug/index.html, uncompressed)",
@@ -167,6 +167,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
       compression: "none",
       ideal: 230 * KiB,
       max: 240 * KiB,
+      warn: true,
     });
     expect(budgets.filter((b) => b.glob === "docs/debug/*.html")).toHaveLength(1);
     // the exception names exactly the glob of the row that measures what it takes out: one file is in one row
@@ -176,6 +177,24 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(cells[0]).toContain("docs/debug/index.html");
     expect(kib(cells.at(-1))).toBe(240 * KiB);
     expect(kib(cells[2])).toBe(230 * KiB);
+  });
+
+  it("keeps the numbers of the page and AI-reading rows and marks them `warn: true` (owner, 2026-11-02): they are warnings to optimise, and no number moved", () => {
+    const WARN = [last, "llms.txt and llms-full.txt (each, uncompressed)", "prompts (each, uncompressed)", "debug page HTML (docs/debug/index.html, uncompressed)"];
+    expect(budgets.filter((b) => b.warn).map((b) => b.name)).toEqual(WARN);
+    for (const name of WARN) expect(budgets.find((b) => b.name === name).warn, name).toBe(true);
+    expect(budgets.filter((b) => b.warn).map((b) => [b.ideal, b.max])).toEqual([
+      [60 * KiB, 80 * KiB],
+      [416 * KiB, 448 * KiB],
+      [14 * KiB, 16 * KiB],
+      [230 * KiB, 240 * KiB],
+    ]);
+  });
+
+  it("leaves the rows of tokens, core, the check CLI and the home's light as hard limits: no `warn`", () => {
+    const hard = budgets.filter((b) => /^(tokens CSS|core |check CLI|home light)/.test(b.name));
+    expect(hard.length).toBeGreaterThanOrEqual(10);
+    for (const row of hard) expect(row, row.name).not.toHaveProperty("warn");
   });
 
   it("budgets the check CLI bundle, gzipped: ideal 36 KiB, ceiling 40 KiB", () => {
@@ -197,6 +216,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
       compression: "none",
       ideal: 416 * KiB,
       max: 448 * KiB,
+      warn: true,
     });
   });
 
@@ -837,5 +857,86 @@ describe("scripts/check-size.js reports the size of catalog and never fails on i
     for (const name of components) expect(section, name).toContain(name);
     expect(output).not.toMatch(/✗/);
     expect(run.status).toBe(0);
+  });
+});
+
+/* ---- the page and AI-reading rows only warn (owner, 2026-11-02) ------------ */
+
+describe("scripts/check-size.js: a row with `warn: true` over its max warns and exits 0; tokens and core over their max still exit 1", () => {
+  let dir;
+  const hex = (n) => randomBytes(Math.ceil(n / 2)).toString("hex");
+
+  /**
+   * A repository with the given rows of budgets.json and files (path -> content), tokens and core "created"
+   * (a package.json each, so their rows are measured) and no catalog dist. Runs the real script from the copy.
+   */
+  function build(rows, files) {
+    mkdirSync(join(dir, "scripts"), { recursive: true });
+    cpSync(join(repo, "scripts/check-size.js"), join(dir, "scripts/check-size.js"));
+    writeFileSync(join(dir, "budgets.json"), JSON.stringify({ budgets: rows }));
+    // the table of PRINCIPLES.md section 8 the guard compares: one row per budget, with the ceiling in kB
+    const table = rows.map((row) => `| ${row.name} | - | - | - | ${row.max / 1024} kB |`);
+    writeFileSync(join(dir, "PRINCIPLES.md"), ["| Artifact | Warns below | Ideal | Warns above | Ceiling |", "| --- | --- | --- | --- | --- |", ...table].join("\n") + "\n");
+    for (const pkg of ["tokens", "core"]) {
+      mkdirSync(join(dir, "packages", pkg, "dist"), { recursive: true });
+      writeFileSync(join(dir, "packages", pkg, "package.json"), "{}");
+    }
+    for (const [path, content] of Object.entries(files)) {
+      mkdirSync(join(dir, path, ".."), { recursive: true });
+      writeFileSync(join(dir, path), content);
+    }
+    const run = spawnSync(process.execPath, [join(dir, "scripts/check-size.js")], { encoding: "utf-8" });
+    return { status: run.status, output: run.stdout + run.stderr };
+  }
+
+  const PAGES = { name: "docs page HTML (each, uncompressed)", glob: "docs/**/*.html", compression: "none", ideal: 100, max: 200 };
+  const PROMPTS = { name: "prompts (each, uncompressed)", glob: "docs/prompts/**/*.txt", compression: "none", ideal: 100, max: 200 };
+  const TOKENS = { name: "tokens CSS", file: "packages/tokens/dist/luz-tokens.min.css", ideal: 1024, max: 2048 };
+  const CORE = { name: "core CSS", file: "packages/core/dist/luz.min.css", ideal: 1024, max: 2048 };
+  const WITHIN = { "packages/tokens/dist/luz-tokens.min.css": hex(100), "packages/core/dist/luz.min.css": hex(100) };
+
+  beforeEach(() => {
+    dir = mkdtempSync(join(tmpdir(), "luz-size-guard-warn-"));
+  });
+  afterEach(() => {
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it("a page row with warn over its max prints a '!' line saying it is over its ceiling (warning, to optimise), names the page, and exits 0", () => {
+    const { status, output } = build([TOKENS, CORE, { ...PAGES, warn: true }], { ...WITHIN, "docs/big/index.html": "x".repeat(900) });
+    expect(output).toMatch(/^! docs page HTML[^\n]*docs\/big\/index\.html[^\n]*over its ceiling \(warning, to optimise\)/m);
+    expect(output).not.toMatch(/✗/);
+    expect(status).toBe(0);
+  });
+
+  it("the same row without warn fails on the same page: the warning is the row's, not a change of the guard", () => {
+    const { status, output } = build([TOKENS, CORE, PAGES], { ...WITHIN, "docs/big/index.html": "x".repeat(900) });
+    expect(output).toMatch(/✗ docs page HTML[^\n]*over the ceiling/);
+    expect(status).toBe(1);
+  });
+
+  it("the prompts row with warn warns on a prompt over its max and exits 0", () => {
+    const { status, output } = build([TOKENS, CORE, { ...PROMPTS, warn: true }], { ...WITHIN, "docs/prompts/blog.txt": "x".repeat(900) });
+    expect(output).toMatch(/^! prompts[^\n]*blog\.txt[^\n]*over its ceiling \(warning, to optimise\)/m);
+    expect(status).toBe(0);
+  });
+
+  it("a `file` row with warn over its max warns and exits 0 too", () => {
+    const row = { name: "a warned file", file: "packages/core/dist/other.min.css", ideal: 512, max: 1024, warn: true };
+    const { status, output } = build([TOKENS, CORE, row], { ...WITHIN, "packages/core/dist/other.min.css": hex(8 * 1024) });
+    expect(output).toMatch(/^! a warned file[^\n]*over its ceiling \(warning, to optimise\)/m);
+    expect(status).toBe(0);
+  });
+
+  it("a tokens row over its max still fails, even with a warned row in the same run", () => {
+    const { status, output } = build([TOKENS, CORE, { ...PAGES, warn: true }], { ...WITHIN, "packages/tokens/dist/luz-tokens.min.css": hex(20 * 1024), "docs/big/index.html": "x".repeat(900) });
+    expect(output).toMatch(/✗ tokens CSS[^\n]*over the ceiling/);
+    expect(status).toBe(1);
+  });
+
+  it("a core row over its max still fails", () => {
+    const { status, output } = build([TOKENS, CORE], { ...WITHIN, "packages/core/dist/luz.min.css": hex(20 * 1024) });
+    expect(output).toMatch(/✗ core CSS[^\n]*over the ceiling/);
+    expect(status).toBe(1);
   });
 });

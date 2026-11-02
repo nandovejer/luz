@@ -14,8 +14,9 @@
  *     AI_ROUTES      { llms: "/llms.txt", llmsFull: "/llms-full.txt",
  *                      examples: "/examples/", manifests: "/manifests/" }
  *     LLMS_FULL_MAX  the ceiling in bytes (448 KiB; fixed once, never raised)
+ *     LLMS_FULL_RUNAWAY  twice LLMS_FULL_MAX
  *     renderLlmsTxt(site, { siteUrl = "" })
- *     renderLlmsFull(site, { siteUrl = "" })   throws over LLMS_FULL_MAX
+ *     renderLlmsFull(site, { siteUrl = "" })   warns (console.warn) over LLMS_FULL_MAX, throws over LLMS_FULL_RUNAWAY (owner, 2026-11-02: the size is a warning to optimise)
  *     htmlToText(fragment, { file })           throws `<file>:<line>` on an
  *                                              element it does not know
  *   `siteUrl` is the site's root URL with its trailing slash (SITE_URL), or ""
@@ -54,13 +55,14 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, 
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { decodeEntities, readHtml, tags } from "../scripts/docs-site/html.js";
 import { docsSite } from "../scripts/docs-site/plugin.js";
 import { indexData, readingOrder, scanSite } from "../scripts/docs-site/site.js";
 import { PACKAGES } from "../scripts/luz-packages.js";
 import { FILES } from "../scripts/docs-site/snippets.js";
 import { PAGES_CSP, SITE_URL } from "../vite.config.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 
@@ -347,6 +349,7 @@ describe("scripts/docs-site/ai.js: the contract", () => {
   it("exports the pure functions, and the ceiling of llms-full.txt the test fixes", () => {
     for (const name of ["renderLlmsTxt", "renderLlmsFull", "htmlToText"]) expect(typeof member(name), name).toBe("function");
     expect(member("LLMS_FULL_MAX")).toBe(LLMS_FULL_CEILING);
+    expect(member("LLMS_FULL_RUNAWAY"), "the build stops only at twice the ceiling").toBe(2 * LLMS_FULL_CEILING);
   });
 });
 
@@ -513,8 +516,9 @@ describe("llms.txt: the index of the site for an agent", () => {
     expect(renderLlmsTxt(scanSite(docsDir, root), { siteUrl: SITE_URL })).toBe(txt());
   });
 
-  it("stays under 32 KiB, with the longest URLs", () => {
-    expect(bytes(txt())).toBeLessThan(LLMS_TXT_MAX);
+  it("stays under 32 KiB, with the longest URLs (a warning, to optimise, when over)", () => {
+    warnIfOver("llms.txt", bytes(txt()), LLMS_TXT_MAX);
+    expect(LLMS_TXT_MAX).toBe(32 * 1024);
   });
 
   it("names nothing that is not on a human page: no private path, no secret, a route behind every title", () => {
@@ -552,9 +556,10 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
     expect(entry("/docs/")).toBeUndefined();
   });
 
-  it("is fixed in size: under the ideal, over a floor, and its ceiling is the one ai.js throws at", () => {
+  it("is fixed in size: over a floor, a warning (never a failure) over the ideal, and its ceiling is the one ai.js warns at", () => {
     expect(bytes(full())).toBeGreaterThan(LLMS_FULL_FLOOR);
-    expect(bytes(full())).toBeLessThanOrEqual(LLMS_FULL_IDEAL);
+    warnIfOver("llms-full.txt (ideal)", bytes(full()), LLMS_FULL_IDEAL);
+    warnIfOver("llms-full.txt (ceiling)", bytes(full()), LLMS_FULL_CEILING);
     expect(LLMS_FULL_IDEAL).toBeLessThan(LLMS_FULL_CEILING);
   });
 
@@ -562,7 +567,7 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
     expect(LLMS_FULL_IDEAL).toBe(425984);
     expect(LLMS_FULL_CEILING).toBe(458752);
     const row = readJson("budgets.json").budgets.find((b) => b.name === "llms.txt and llms-full.txt (each, uncompressed)");
-    expect(row).toMatchObject({ ideal: 425984, max: 458752 });
+    expect(row).toMatchObject({ ideal: 425984, max: 458752, warn: true });
     expect(readFileSync(join(root, "PRINCIPLES.md"), "utf-8")).toMatch(/^\| `llms\.txt` and `llms-full\.txt`[^\n]*\| ≤ 416 kB \| 416 kB \| 448 kB \|$/m);
   });
 
@@ -797,8 +802,9 @@ describe("llms-full.txt and index.md: a page of Kinds of site is a summary, the 
     }
   });
 
-  it("keeps llms-full.txt under its ideal with the area in", () => {
-    expect(bytes(full())).toBeLessThanOrEqual(LLMS_FULL_IDEAL);
+  it("keeps llms-full.txt under its ideal with the area in (a warning, to optimise, when over)", () => {
+    warnIfOver("llms-full.txt", bytes(full()), LLMS_FULL_IDEAL);
+    expect(LLMS_FULL_IDEAL).toBe(416 * 1024);
   });
 
   it("lists the area in llms.txt: the hub and the four kinds, in order, and the five prompts after", () => {
@@ -879,16 +885,52 @@ describe("llms-full.txt: what a page contributes, on a fixture", () => {
     expect(message).toMatch(/marquee/);
   });
 
-  it("throws at the ceiling, naming the file, so the build fails before check:size", () => {
+  const pageOf = (target) => {
     const paragraph = `<p>${"lorem ipsum dolor ".repeat(60)}</p>\n`;
-    const count = Math.ceil(LLMS_FULL_CEILING / paragraph.length) + 20;
-    const big = widgetPage({ how: paragraph.repeat(count) });
-    const { scan } = fixtureSite(fixtureFiles({ "pages/components/widget.html": big }));
-    const message = thrownBy(() => renderLlmsFull(scan(), options));
-    expect(message, "renderLlmsFull must throw over the ceiling").toMatch(/llms-full\.txt/);
-    // and the same pages with a short section are fine
-    const small = fixtureSite(fixtureFiles());
-    expect(thrownBy(() => renderLlmsFull(small.scan(), options))).toBe("");
+    return widgetPage({ how: paragraph.repeat(Math.ceil(target / paragraph.length) + 20) });
+  };
+
+  it("warns over the ceiling, naming the file and the numbers, and still returns the text (owner, 2026-11-02: to optimise, not a failure)", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { scan } = fixtureSite(fixtureFiles({ "pages/components/widget.html": pageOf(LLMS_FULL_CEILING) }));
+      let text = "";
+      const message = thrownBy(() => {
+        text = renderLlmsFull(scan(), options);
+      });
+      expect(message, "renderLlmsFull must not throw between the ceiling and twice the ceiling").toBe("");
+      expect(bytes(text)).toBeGreaterThan(LLMS_FULL_CEILING);
+      expect(bytes(text)).toBeLessThanOrEqual(2 * LLMS_FULL_CEILING);
+      const lines = warn.mock.calls.map((call) => call.join(" ")).filter((line) => /llms-full\.txt/.test(line));
+      expect(lines.length, "a console.warn about llms-full.txt").toBeGreaterThan(0);
+      expect(lines.join("\n")).toContain(String(LLMS_FULL_CEILING));
+      expect(lines.join("\n")).toContain(String(bytes(text)));
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it("does not warn under the ceiling", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const small = fixtureSite(fixtureFiles());
+      expect(thrownBy(() => renderLlmsFull(small.scan(), options))).toBe("");
+      expect(warn.mock.calls.map((call) => call.join(" ")).filter((line) => /llms-full\.txt/.test(line))).toEqual([]);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it("throws over twice the ceiling, naming the file, so a runaway page still fails the build", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { scan } = fixtureSite(fixtureFiles({ "pages/components/widget.html": pageOf(2 * LLMS_FULL_CEILING) }));
+      const message = thrownBy(() => renderLlmsFull(scan(), options));
+      expect(message, "renderLlmsFull must throw over twice the ceiling").toMatch(/llms-full\.txt/);
+      expect(message).toMatch(/twice|2x|runaway/i);
+    } finally {
+      warn.mockRestore();
+    }
   });
 });
 

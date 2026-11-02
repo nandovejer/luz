@@ -18,6 +18,7 @@ import { addDocsLanguage } from "./helpers/docs-i18n-size-fixture.js";
 import { generatorStrings, giveHomeSources } from "./helpers/home-sources.js";
 import { findAll, parse, query, textOf } from "./helpers/html-dom.js";
 import { quoted } from "./helpers/quoted-attributes.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 
 // The home is written without the quotes a value does not need: these tests read it with them restored
 const renderQuoted = (...args) => quoted(renderDocument(...args));
@@ -535,20 +536,21 @@ describe("the new home page: catalogs and rendered pages (F5)", () => {
     });
   });
 
-  it("each rendered page stays under the 80 KiB the page ceiling allows", () => {
-    for (const doc of docs) expect(Buffer.byteLength(written.get(doc.route)), doc.route).toBeLessThanOrEqual(80 * 1024);
+  it("each rendered page should stay under the 80 KiB the page ceiling allows (a warning, to optimise, when over: owner, 2026-11-02)", () => {
+    for (const doc of docs) warnIfOver(`home page ${doc.route}`, Buffer.byteLength(written.get(doc.route)), 80 * 1024);
   });
 
-  it("keeps /ar/, the heaviest home, no heavier than the icons family left it: 81,800 bytes on disk, 629 of them added by the Pages build", () => {
+  it("keeps /ar/, the heaviest home, no heavier than the icons family left it, 81,800 bytes on disk (629 of them added by the Pages build): a warning, to optimise, when heavier", () => {
     // /ar/ was 81,853 bytes on main (the ceiling is 81,920 and never raised, RL-17) and is 81,734 with the icons of the Icons page.
     // The generator writes 629 bytes fewer than the file Vite leaves in docs/ (its script and link tags), so 81,800 on disk is 81,171 here.
     const FIXED_BY_THE_PAGES_BUILD = 629;
     const ON_DISK = 81_800;
-    expect(Buffer.byteLength(written.get("/ar/"))).toBeLessThanOrEqual(ON_DISK - FIXED_BY_THE_PAGES_BUILD);
+    warnIfOver("home page /ar/", Buffer.byteLength(written.get("/ar/")), ON_DISK - FIXED_BY_THE_PAGES_BUILD);
+    expect(ON_DISK, "the target is not raised").toBe(81_800);
     // The other two are lighter than /ar/ and stay so
     for (const route of ["/", "/es/"]) expect(Buffer.byteLength(written.get(route)), route).toBeLessThan(Buffer.byteLength(written.get("/ar/")));
     // Where the Pages build has run, the file itself
     const built = join(repo, "docs/ar/index.html");
-    if (existsSync(built)) expect(readFileSync(built).length, "docs/ar/index.html").toBeLessThanOrEqual(ON_DISK);
+    if (existsSync(built)) warnIfOver("docs/ar/index.html", readFileSync(built).length, ON_DISK);
   });
 });
