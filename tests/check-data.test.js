@@ -335,7 +335,8 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
       expect(declaration.stylesheet, declaration.tagName).toBe(declarations(source)[i].stylesheet);
       expect(declaration.attributes).toEqual((declarations(source)[i].attributes ?? []).map(({ name: attribute }) => ({ name: attribute })));
     });
-    expect(JSON.stringify(copy)).not.toMatch(/"(?:description|demos|type|default|exports|readme|superclass)"/);
+    // A key, not a value: an attribute may be named `type` ({"name":"type"}), but no member of the copy has a `type` of its own
+    expect(JSON.stringify(copy)).not.toMatch(/"(?:description|demos|type|default|exports|readme|superclass)":/);
   });
 
   it("core's custom-elements.json in the snapshot holds luz-theme-mode and its two attributes, and catalog's holds luz-timeline with its stylesheet", () => {

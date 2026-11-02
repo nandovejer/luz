@@ -76,6 +76,7 @@ Thank you for helping keep LUZ secure!
     "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/theme-time-bar.min.js": "sha384-<hash>",
     "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/timeline.min.js": "sha384-<hash>",
     "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/embed.min.js": "sha384-<hash>",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/chart.min.js": "sha384-<hash>",
     "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/sidebar.min.js": "sha384-<hash>"
   }
 }
@@ -109,7 +110,7 @@ Compute each hash from the file you are pinning:
 curl -s <url> | openssl dgst -sha384 -binary | openssl base64 -A
 ```
 
-`luz.js` and `catalog.js` are ES modules and must be loaded with `type="module"`. SRI on an entry file does not cover the lazy chunks it imports on demand: core's `midi.js`, `table-sort.js`, `theme-mode.js` (on a page with a `<luz-theme-mode>`) and one language file per language a page declares (`i18n-es.min.js`), and the catalog's `search.js` (on a page with a `<luz-search>`), `cookie-consent.js` (on a page with a `<luz-cookie-consent>`), `theme-time.js` (on a page with a `<luz-theme-time>`), `theme-time-bar.js` (on one with `<luz-theme-time variant="bar">`), `timeline.js` (on a page with a `<luz-timeline>`), `embed.js` (on a page with a `<luz-embed>`) and `sidebar.js` (on a page with a `.luz-sidebar`). Each chunk imports nothing, and each entry imports its chunks by fixed names next to it, never a URL built from the page.
+`luz.js` and `catalog.js` are ES modules and must be loaded with `type="module"`. SRI on an entry file does not cover the lazy chunks it imports on demand: core's `midi.js`, `table-sort.js`, `theme-mode.js` (on a page with a `<luz-theme-mode>`) and one language file per language a page declares (`i18n-es.min.js`), and the catalog's `search.js` (on a page with a `<luz-search>`), `cookie-consent.js` (on a page with a `<luz-cookie-consent>`), `theme-time.js` (on a page with a `<luz-theme-time>`), `theme-time-bar.js` (on one with `<luz-theme-time variant="bar">`), `timeline.js` (on a page with a `<luz-timeline>`), `embed.js` (on a page with a `<luz-embed>`), `chart.js` (on a page with a `<luz-chart>`) and `sidebar.js` (on a page with a `.luz-sidebar`). Each chunk imports nothing, and each entry imports its chunks by fixed names next to it, never a URL built from the page.
 
 To check the chunks, use an import map with an `integrity` section, placed before the first module script, as above: the browser checks each file at the URL listed, whenever the entry imports it. It works in Chrome 127 and later, Safari 18 and later and Firefox 138 and later. An older browser ignores the `integrity` key and loads the chunks unchecked, so there is no protection there. A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari (WebKit) runs the file it preloaded without checking the hash, and Firefox fetches the file again without it, so a wrong hash does not block the file in either. Use `modulepreload` as a performance hint only. For browsers without import map integrity, self-hosting the files or installing from npm are the safe options.
 

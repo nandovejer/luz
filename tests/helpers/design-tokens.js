@@ -12,6 +12,7 @@
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { knownTokens } from "./known-tokens.js";
 import { formatRatio as format, over, parseColor as parse, ratio } from "../../packages/tokens/lib/contrast.js";
 
 const repo = fileURLToPath(new URL("../../", import.meta.url));
@@ -142,8 +143,8 @@ function sourceOf(page) {
     };
   }
   // The shell patterns, and the patterns with a file of their own (the language switcher, the submenu, the announcement, the FAQ and the cookie consent)
-  // (renamed in F8: banner.css to announcement.css, consent.css to cookie-consent.css; theme-time.css is the time of day, 2026-10-29; embed.css is the embed; whichever exist)
-  const files = ["_components.css", "lang-switcher.css", "lang-switch.css", "submenu.css", "banners.css", "announcement.css", "faq.css", "cookie-consent.css", "theme-time.css", "embed.css"]
+  // (renamed in F8: banner.css to announcement.css, consent.css to cookie-consent.css; theme-time.css is the time of day, 2026-10-29; embed.css is the embed; chart.css is the chart; whichever exist)
+  const files = ["_components.css", "lang-switcher.css", "lang-switch.css", "submenu.css", "banners.css", "announcement.css", "faq.css", "cookie-consent.css", "theme-time.css", "embed.css", "chart.css"]
     .filter((f) => existsSync(`${repo}packages/catalog/src/components/${f}`))
     .map((f) => read(`packages/catalog/src/components/${f}`));
   return { css: files.join("\n"), classes, tags };
@@ -159,6 +160,9 @@ export function tokensUsedBy(page) {
   // The properties a component sets for its own parts: --luz-<name>-*, from <luz-name> and .luz-name
   const names = [...tags, ...classes ?? []].map((n) => n.replace(/^luz-/, "").replace(/^\.?/, ""));
   const ownProperty = names.length ? new RegExp(`^--luz-(?:${names.join("|")})-`) : null;
+  // ...unless the tokens package declares it: <luz-chart> reads --luz-chart-1 to -6, -track and -grid, which are tokens (a colour of the
+  // mode), and sets --luz-chart-color and reads --luz-chart-ratio for itself, which are not
+  const declared = knownTokens();
   const used = new Set();
   const local = new Set();
   // A property of a core component's own, --luz-<name>-* read only with a fallback (var(--luz-card-ratio, 16 / 9)): a knob
@@ -183,7 +187,7 @@ export function tokensUsedBy(page) {
   // other patterns that must leave room for it (the docs rail): a property a script publishes, not a design token
   // with a page of its own, so it belongs to no token family
   const publishedByScript = new Set(["--luz-consent-h"]);
-  return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !ownProperty?.test(t) && !(knobName?.test(t) && !bare.has(t)) && !publishedByScript.has(t)).sort();
+  return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !(ownProperty?.test(t) && !declared.has(t)) && !(knobName?.test(t) && !bare.has(t)) && !publishedByScript.has(t)).sort();
 }
 
 /* ---- Token families and their pages --------------------------------------- */

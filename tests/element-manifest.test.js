@@ -129,6 +129,8 @@ const TAGS = [
   { tag: "luz-theme-time", pkg: "catalog", file: "theme-time.js", script: true },
   // The facade of a player of another origin: the attributes are src, consent and data-luz-consent-key, and a boolean hook only ever read with hasAttribute
   { tag: "luz-embed", pkg: "catalog", file: "embed.js", script: true },
+  // A chart drawn from the author's own table: type, variant and the two button labels (data-luz-label-table, data-luz-label-chart)
+  { tag: "luz-chart", pkg: "catalog", file: "chart.js", script: true },
   { tag: "luz-lang-switch", pkg: "catalog", file: "components/lang-switch.css", script: false },
   { tag: "luz-submenu", pkg: "catalog", file: "components/submenu.css", script: false },
   { tag: "luz-announcement", pkg: "catalog", file: "components/announcement.css", script: false },
@@ -299,7 +301,7 @@ function firstColumnCodes(html) {
 /* ---- tests ------------------------------------------------------------------ */
 
 describe("which tags exist (the scan of the sources agrees with the spec)", () => {
-  it("the tags a script defines are timeline, search, cookie consent, theme time and embed in catalog, and theme mode in core", () => {
+  it("the tags a script defines are timeline, search, cookie consent, theme time, embed and chart in catalog, and theme mode in core", () => {
     const defined = definedTags();
     expect([...defined].sort()).toEqual(TAGS.filter((t) => t.script).map((t) => [t.tag, t.pkg]).sort());
   });

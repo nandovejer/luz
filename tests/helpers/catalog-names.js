@@ -5,7 +5,7 @@
  * other way round.
  *
  *   PATTERNS      the 20 stylesheets of the patterns of a kind of site, `components/<block>.css`
- *   ELEMENTS      the eight elements, with their stylesheet and, if they have one, their chunk
+ *   ELEMENTS      the nine elements, with their stylesheet and, if they have one, their chunk
  *   LAYOUT        the four that came from core in F7 (unchanged by F8)
  *   CLASSES       old class -> new class, row by row of table 1 of the changeset
  *   TAGS          old element -> new element
@@ -28,7 +28,7 @@ export const LAYOUT = ["navbar", "sidebar", "terminal", "timeline"];
  */
 export const SHEETS_ONLY = ["page-transition"];
 
-/** The eight elements: tag (or class) of each, its stylesheet and its chunk. */
+/** The nine elements: tag (or class) of each, its stylesheet and its chunk. */
 export const ELEMENTS = [
   { name: "search", tag: "luz-search", css: "search", chunk: "search" },
   { name: "cookie-consent", tag: "luz-cookie-consent", css: "cookie-consent", chunk: "cookie-consent" },
@@ -40,6 +40,8 @@ export const ELEMENTS = [
   { name: "faq", tag: "luz-faq", css: "faq", chunk: null },
   // The facade of a player of another origin, 2026-11 (the component-gaps plan)
   { name: "embed", tag: "luz-embed", css: "embed", chunk: "embed" },
+  // A line chart drawn from the author's own table, 2026-11
+  { name: "chart", tag: "luz-chart", css: "chart", chunk: "chart" },
 ];
 
 /** Table 1 of the changeset: [old class, new class, the old class is `--publication` of the new one]. A part and a modifier keep their name. */

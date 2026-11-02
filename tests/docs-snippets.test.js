@@ -46,7 +46,7 @@ const FILES = {
     "components/search.css", "components/search.min.css", "components/cookie-consent.css", "components/cookie-consent.min.css", "components/announcement.css", "components/announcement.min.css",
     // the sheets of the pages of catalog that name a kind (the four layout components of F7 are among them) and the three more the docs' own pages list
     ...[...new Set(Object.values(KIND_FILES).flat())].flatMap((name) => [`components/${name}.css`, `components/${name}.min.css`]),
-    "catalog.min.js", "search.min.js", "cookie-consent.min.js", "theme-time.min.js", "theme-time-bar.min.js", "timeline.min.js", "embed.min.js", "sidebar.min.js",
+    "catalog.min.js", "search.min.js", "cookie-consent.min.js", "theme-time.min.js", "theme-time-bar.min.js", "timeline.min.js", "embed.min.js", "chart.min.js", "sidebar.min.js",
   ],
 };
 /** The kind a snippet is for, and the kind of its patterns (F8: the same word, `blog` for a blog): null for the one with none. */
@@ -290,7 +290,7 @@ describe("the snippet generator", () => {
 
       it("gives, in the chunks section, one import map whose integrity lists exactly the lazy chunks (core's rows in budgets.json, the ones catalog.min.js imports), each with its version and sha384", () => {
         const budgeted = budgetedChunks();
-        expect(budgeted.length).toBe(11); // core: midi, table-sort, theme-mode, i18n-es; catalog: search, cookie-consent, theme-time, theme-time-bar, timeline, embed, sidebar (the timeline and the sidebar came from core in F7)
+        expect(budgeted.length).toBe(12); // core: midi, table-sort, theme-mode, i18n-es; catalog: search, cookie-consent, theme-time, theme-time-bar, timeline, embed, chart, sidebar (the timeline and the sidebar came from core in F7)
         expect(budgeted).toContain("catalog/dist/timeline.min.js");
         expect(budgeted).toContain("catalog/dist/sidebar.min.js");
         expect(budgeted).not.toContain("core/dist/timeline.min.js");
@@ -328,7 +328,7 @@ describe("the snippet generator", () => {
           expect(hash, rel).toBe(sri(root, pkg, file));
         }
         // each row says when to add the line
-        for (const element of ["luz-timeline", "luz-search", "luz-cookie-consent", "luz-theme-mode", "luz-theme-time", "luz-embed", "luz-sidebar"]) expect(section, element).toContain(element);
+        for (const element of ["luz-timeline", "luz-search", "luz-cookie-consent", "luz-theme-mode", "luz-theme-time", "luz-embed", "luz-chart", "luz-sidebar"]) expect(section, element).toContain(element);
       });
 
       it("calls the import map the way to check a chunk, and modulepreload only a performance hint (it does not block a bad file in Safari and Firefox)", () => {

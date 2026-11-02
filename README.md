@@ -136,7 +136,7 @@ import { initTabs } from "@luz-ds/core/tabs";
 import { copyToClipboard } from "@luz-ds/core/clipboard";
 ```
 
-Published modules of core: `theme`, `theme-mode`, `clipboard`, `modal`, `highlight`, `player`, `tabs`, `utils`, `i18n`, `midi`, `table-sort`. Those of catalog are `search`, `cookie-consent`, `theme-time`, `theme-time-bar`, `sidebar`, `timeline` and `embed`. Importing one has no side effects until you call its `init*()`. Every page works without JavaScript.
+Published modules of core: `theme`, `theme-mode`, `clipboard`, `modal`, `highlight`, `player`, `tabs`, `utils`, `i18n`, `midi`, `table-sort`. Those of catalog are `search`, `cookie-consent`, `theme-time`, `theme-time-bar`, `sidebar`, `timeline`, `embed` and `chart`. Importing one has no side effects until you call its `init*()`. Every page works without JavaScript.
 
 ## What each package needs
 

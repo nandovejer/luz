@@ -37,18 +37,18 @@ const dynamicTargets = (code) => [...code.matchAll(LITERAL_IMPORT)].map((m) => m
 const sizeOf = (path) => gzipSync(readFileSync(join(repo, path)), { level: 9 }).length;
 
 describe("the built catalog files", () => {
-  it("catalog.min.js has no static import and loads exactly the seven chunks, each by a literal specifier", () => {
+  it("catalog.min.js has no static import and loads exactly the eight chunks, each by a literal specifier", () => {
     const code = read("packages/catalog/dist/catalog.min.js");
     expect(STATIC.test(code), "a static import or export-from").toBe(false);
-    expect(dynamicTargets(code)).toEqual(["./cookie-consent.min.js", "./embed.min.js", "./search.min.js", "./sidebar.min.js", "./theme-time-bar.min.js", "./theme-time.min.js", "./timeline.min.js"]);
-    expect(code.match(IMPORT_CALL)).toHaveLength(7);
+    expect(dynamicTargets(code)).toEqual(["./chart.min.js", "./cookie-consent.min.js", "./embed.min.js", "./search.min.js", "./sidebar.min.js", "./theme-time-bar.min.js", "./theme-time.min.js", "./timeline.min.js"]);
+    expect(code.match(IMPORT_CALL)).toHaveLength(8);
   });
 
   it.each(["consent", "mode", "color-mode"])("the F5b chunk %s.js is gone from src and dist, plain and minified", (name) => {
     for (const file of [`src/${name}.js`, `dist/${name}.js`, `dist/${name}.min.js`]) expect(existsSync(join(repo, "packages/catalog", file)), file).toBe(false);
   });
 
-  it.each(["search", "cookie-consent", "theme-time", "theme-time-bar", "timeline", "embed", "sidebar"])("%s.min.js imports nothing, static or dynamic", (name) => {
+  it.each(["search", "cookie-consent", "theme-time", "theme-time-bar", "timeline", "embed", "chart", "sidebar"])("%s.min.js imports nothing, static or dynamic", (name) => {
     const code = read(`packages/catalog/dist/${name}.min.js`);
     expect(STATIC.test(code), "a static import or export-from").toBe(false);
     expect(code.match(IMPORT_CALL)).toBeNull();
@@ -56,10 +56,10 @@ describe("the built catalog files", () => {
 
   it("the sources follow: catalog.js names the chunks as literals, and the chunks import nothing (SEC-CHUNK-1)", () => {
     const loader = read("packages/catalog/src/catalog.js");
-    expect(dynamicTargets(loader)).toEqual(["./cookie-consent.js", "./embed.js", "./search.js", "./sidebar.js", "./theme-time-bar.js", "./theme-time.js", "./timeline.js"]);
-    expect(loader.match(IMPORT_CALL)).toHaveLength(7);
+    expect(dynamicTargets(loader)).toEqual(["./chart.js", "./cookie-consent.js", "./embed.js", "./search.js", "./sidebar.js", "./theme-time-bar.js", "./theme-time.js", "./timeline.js"]);
+    expect(loader.match(IMPORT_CALL)).toHaveLength(8);
     expect(loader).not.toMatch(/import\.meta/);
-    for (const name of ["search", "cookie-consent", "theme-time", "theme-time-bar", "timeline", "embed", "sidebar"]) {
+    for (const name of ["search", "cookie-consent", "theme-time", "theme-time-bar", "timeline", "embed", "chart", "sidebar"]) {
       const source = read(`packages/catalog/src/${name}.js`);
       expect(STATIC.test(source), `${name}.js static import`).toBe(false);
       expect(source.match(IMPORT_CALL), `${name}.js dynamic import`).toBeNull();
@@ -357,15 +357,15 @@ describe("the language chunks of core", () => {
 
 const LOADER =
   'document.querySelector("luz-search")&&import("./search.min.js");document.querySelector("luz-cookie-consent")&&import("./cookie-consent.min.js");document.querySelector("luz-theme-time")&&import("./theme-time.min.js");document.querySelector("luz-theme-time[variant=bar]")&&import("./theme-time-bar.min.js");' +
-  'document.querySelector("luz-timeline")&&import("./timeline.min.js");document.querySelector("luz-embed")&&import("./embed.min.js");document.querySelector(".luz-sidebar")&&import("./sidebar.min.js");';
+  'document.querySelector("luz-timeline")&&import("./timeline.min.js");document.querySelector("luz-embed")&&import("./embed.min.js");document.querySelector("luz-chart")&&import("./chart.min.js");document.querySelector(".luz-sidebar")&&import("./sidebar.min.js");';
 const CHUNK = (tag) => `customElements.get("${tag}")||customElements.define("${tag}",class extends HTMLElement{});`;
 
 describe("scripts/check-size.js on a copy of the repository", () => {
   let dir;
 
-  /** A repository with the seven catalog files; `files` overrides the content of any of them. */
+  /** A repository with the eight catalog files; `files` overrides the content of any of them. */
   function build(files = {}) {
-    const content = { "catalog.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "cookie-consent.min.js": CHUNK("luz-cookie-consent"), "theme-time.min.js": CHUNK("luz-theme-time"), "theme-time-bar.min.js": "/* a chunk with no element */", "timeline.min.js": CHUNK("luz-timeline"), "embed.min.js": CHUNK("luz-embed"), "sidebar.min.js": "/* a chunk with no element */", ...files };
+    const content = { "catalog.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "cookie-consent.min.js": CHUNK("luz-cookie-consent"), "theme-time.min.js": CHUNK("luz-theme-time"), "theme-time-bar.min.js": "/* a chunk with no element */", "timeline.min.js": CHUNK("luz-timeline"), "embed.min.js": CHUNK("luz-embed"), "chart.min.js": CHUNK("luz-chart"), "sidebar.min.js": "/* a chunk with no element */", ...files };
     mkdirSync(join(dir, "scripts"), { recursive: true });
     mkdirSync(join(dir, "packages/catalog/dist"), { recursive: true });
     cpSync(join(repo, "scripts/check-size.js"), join(dir, "scripts/check-size.js"));
@@ -387,7 +387,7 @@ describe("scripts/check-size.js on a copy of the repository", () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it("passes a loader that imports only its seven chunks by literal specifiers, and chunks that import nothing", () => {
+  it("passes a loader that imports only its eight chunks by literal specifiers, and chunks that import nothing", () => {
     const { status, output } = build();
     expect(output).not.toMatch(/✗/);
     expect(status).toBe(0);
@@ -405,13 +405,13 @@ describe("scripts/check-size.js on a copy of the repository", () => {
     expect(output).toContain(old.slice(2));
   });
 
-  it("fails a loader that imports a file other than the seven chunks", () => {
+  it("fails a loader that imports a file other than the eight chunks", () => {
     const { status, output } = build({ "catalog.min.js": `${LOADER}import("./other.min.js");` });
     expect(status).toBe(1);
     expect(output).toMatch(/other\.min\.js/);
   });
 
-  it.each(["search", "cookie-consent", "theme-time", "theme-time-bar", "timeline", "embed", "sidebar"])("fails a loader that is missing the %s chunk", (missing) => {
+  it.each(["search", "cookie-consent", "theme-time", "theme-time-bar", "timeline", "embed", "chart", "sidebar"])("fails a loader that is missing the %s chunk", (missing) => {
     const loader = LOADER.split(";").filter((part) => part && !part.includes(`./${missing}.min.js`)).join(";") + ";";
     expect(loader).not.toContain(`./${missing}.min.js`);
     const { status, output } = build({ "catalog.min.js": loader });
@@ -439,7 +439,7 @@ describe("scripts/check-size.js on a copy of the repository", () => {
     expect(output).toMatch(/search\.min\.js/);
   });
 
-  it.each(["theme-time", "theme-time-bar", "timeline", "embed", "sidebar"])("fails the %s chunk with an import, as any other chunk", (name) => {
+  it.each(["theme-time", "theme-time-bar", "timeline", "embed", "chart", "sidebar"])("fails the %s chunk with an import, as any other chunk", (name) => {
     const { status, output } = build({ [`${name}.min.js`]: `${CHUNK(`luz-${name}`)}import("./x.min.js");` });
     expect(status).toBe(1);
     expect(output).toContain(`${name}.min.js`);
@@ -756,12 +756,12 @@ describe("scripts/check-size.js reports the size of catalog and never fails on i
   const HUGE = 400 * 1024;
 
   /**
-   * A repository with core's CSS row, a catalog with the seven chunks of the loader and one component, and
+   * A repository with core's CSS row, a catalog with the eight chunks of the loader and one component, and
    * NO catalog row in budgets.json (the new rule); `catalog` overrides any file of catalog/dist, `coreBytes`
    * is the size of core's one budgeted file against a ceiling of 2 kB.
    */
   function build({ catalog = {}, coreBytes = 100, withCatalog = true } = {}) {
-    const files = { "catalog.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "cookie-consent.min.js": CHUNK("luz-cookie-consent"), "theme-time.min.js": CHUNK("luz-theme-time"), "theme-time-bar.min.js": "/* a chunk with no element */", "timeline.min.js": CHUNK("luz-timeline"), "embed.min.js": CHUNK("luz-embed"), "sidebar.min.js": "/* a chunk with no element */", ...catalog };
+    const files = { "catalog.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "cookie-consent.min.js": CHUNK("luz-cookie-consent"), "theme-time.min.js": CHUNK("luz-theme-time"), "theme-time-bar.min.js": "/* a chunk with no element */", "timeline.min.js": CHUNK("luz-timeline"), "embed.min.js": CHUNK("luz-embed"), "chart.min.js": CHUNK("luz-chart"), "sidebar.min.js": "/* a chunk with no element */", ...catalog };
     mkdirSync(join(dir, "scripts"), { recursive: true });
     mkdirSync(join(dir, "packages/core/dist"), { recursive: true });
     cpSync(join(repo, "scripts/check-size.js"), join(dir, "scripts/check-size.js"));

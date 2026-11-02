@@ -48,7 +48,7 @@ import { englishT } from "./strings.js";
 export const FILES = {
   tokens: { css: "luz-tokens.min.css", js: null, chunks: [] },
   core: { css: "luz.min.css", conditional: "luz.conditional.min.css", js: "luz.min.js", chunks: ["midi.min.js", "table-sort.min.js", "theme-mode.min.js", "i18n-es.min.js"] },
-  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "cookie-consent.min.js", "theme-time.min.js", "theme-time-bar.min.js", "timeline.min.js", "embed.min.js", "sidebar.min.js"] },
+  catalog: { css: null, js: "catalog.min.js", chunks: ["search.min.js", "cookie-consent.min.js", "theme-time.min.js", "theme-time-bar.min.js", "timeline.min.js", "embed.min.js", "chart.min.js", "sidebar.min.js"] },
 };
 
 /** The catalog component the snippet of a kind of site links, as the example of one link per component. */
@@ -146,6 +146,7 @@ const CHUNK_WHEN = {
   "theme-time-bar.min.js": ["catalog", "snippets.when.luz-theme-time-bar"],
   "timeline.min.js": ["catalog", "snippets.when.luz-timeline"],
   "embed.min.js": ["catalog", "snippets.when.luz-embed"],
+  "chart.min.js": ["catalog", "snippets.when.luz-chart"],
   "sidebar.min.js": ["catalog", "snippets.when.luz-sidebar"],
 };
 

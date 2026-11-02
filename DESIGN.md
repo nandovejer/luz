@@ -64,7 +64,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is every font size a token (or `inherit`)? Is a text field at the control step?
 
-**Exceptions:** the caption of a figure is sized from the text it captions, a little under it, and not from the scale (decided 2026-10-24: a step of the scale would change its look by a pixel; `tests/css-tokens-defined.test.js` names it). The word LUZ in the hero of the home (`.landing-imago`, `apps/landing`) is sized in `em` by media query and not from the scale, because the mark is a drawing and not text: its letters are squeezed and stretched one by one to fit a prism, so a step of the scale would not size it (decided 2026-10-28).
+**Exceptions:** the caption of a figure is sized from the text it captions, a little under it, and not from the scale (decided 2026-10-24: a step of the scale would change its look by a pixel; `tests/css-tokens-defined.test.js` names it). The word LUZ in the hero of the home (`.landing-imago`, `apps/landing`) is sized in `em` by media query and not from the scale, because the mark is a drawing and not text: its letters are squeezed and stretched one by one to fit a prism, so a step of the scale would not size it (decided 2026-10-28). The title of a chart (`.luz-chart__title`) takes the small step, the step of the caption of a table in core and of the caption of a figure, because it is the caption of the chart and not a heading of its own (proposed 2026-11-02, for the owner to read).
 
 ### DR-5 Headings are light, tight and in their own face
 
@@ -152,7 +152,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is a box the same surface as the one it sits on? Is a surface used for a state?
 
-**Exceptions:** in the home, a panel of the demo of `#native` (the "after" of the HTML as LUZ draws it) has the surface of its frame and is told apart by its border alone, as the boxes of the three modes (`.landing-modes`) already were: the demo shows what the page looks like, so it sits on the page's own surface (decided 2026-10-28). The empty part of a chart bar (`--luz-chart-track`) is a colour of its own and not `--luz-surface-muted`: the muted surface is the page itself in light, so it would give the fill no edge to be told from; the track is a quiet step darker than the surface, and quieter than every series (decided 2026-11-01).
+**Exceptions:** in the home, a panel of the demo of `#native` (the "after" of the HTML as LUZ draws it) has the surface of its frame and is told apart by its border alone, as the boxes of the three modes (`.landing-modes`) already were: the demo shows what the page looks like, so it sits on the page's own surface (decided 2026-10-28). The empty part of a chart bar (`--luz-chart-track`) is a colour of its own and not `--luz-surface-muted`: the muted surface is the page itself in light, so it would give the fill no edge to be told from; the track is a quiet step darker than the surface, and quieter than every series (decided 2026-11-01). The fill under a line (`.luz-chart__area`) is its series colour at 16 % over the surface: a wash that makes the area read as one, not a surface step, and the figures are in the table (proposed 2026-11-02, for the owner to read).
 
 ### DR-12 The current item is told by weight and by a mark
 

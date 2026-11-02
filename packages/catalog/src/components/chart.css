@@ -1,0 +1,260 @@
+/* --------------------------------------------------------------------------
+   LUZ Catalog: chart
+   <luz-chart> around a native table (type="line", the default) or a list of
+   <data> elements (type="spark"): chart.js reads the author's numbers and
+   draws an SVG, aria-hidden, beside them. Parts: .luz-chart__bar (the title
+   and the button), __title, __toggle, __figure, __plot, __legend, __key,
+   __swatch, __spark, __values; the drawing: __grid, __tick, __series (with
+   data-n="1" to "6"), __line, __area, __marker.
+
+   Without JavaScript, and before the element is defined, the table (or the
+   list) is all there is: nothing here applies until chart.js sets
+   data-luz-ready. With it, data-luz-view says what shows: "chart" (the
+   drawing, with the table left for assistive technology), "table" (the
+   table, the drawing hidden) or "both" (the page gave no labels for the
+   button, so nothing is hidden). Series n is --luz-chart-n, read through
+   --luz-chart-color, so they follow the mode with no repaint, and each ends
+   in a marker of its own shape. On paper the table prints and the drawing
+   does not.
+   The plot is drawn left to right in every language, as a time axis is.
+   Layer: catalog · Prefix: .luz-
+   Requires: @luz-ds/tokens and @luz-ds/core (luz.css), loaded first.
+   -------------------------------------------------------------------------- */
+
+:where(luz-chart) {
+	display: block;
+}
+
+:where(luz-chart[type="spark"]) {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--luz-space-xs);
+}
+
+/* The chart shows: the table stays in the page for assistive technology, off screen.
+   Fixed, not absolute: a table box ignores a 1px width and would widen the page, and
+   a fixed one takes no room in any scrolling ancestor. This rule is in the chart view
+   only, so the table view and the print rules below have the table in the flow. */
+@media screen {
+	:where(luz-chart[data-luz-ready]:not([data-luz-view="table"], [data-luz-view="both"], [type="spark"]) > :is(table, .luz-table-wrap)) {
+		position: fixed;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+}
+
+/* The table shows: a bare table wider than the screen scrolls here and does not widen the page (a wrapper of its own does the same, inside) */
+luz-chart:is([data-luz-view="table"], [data-luz-view="both"]) {
+	overflow-x: auto;
+}
+
+/* The table shows: the drawing and its title go */
+luz-chart[data-luz-view="table"] :is(.luz-chart__figure, .luz-chart__title) {
+	display: none;
+}
+
+.luz-chart__bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--luz-space-xs);
+	margin-block-end: var(--luz-space-xs);
+}
+
+.luz-chart__toggle {
+	/* At the end of the bar, and still at the end when the title leaves with the chart: it does not jump to the start */
+	margin-inline-start: auto;
+	max-inline-size: 100%;
+	white-space: normal;
+}
+
+.luz-chart__bar:empty {
+	display: none;
+}
+
+.luz-chart__title {
+	margin: 0;
+	color: var(--luz-text-primary);
+	font-size: var(--luz-text-sm);
+	font-weight: 500;
+}
+
+.luz-chart__figure {
+	display: flex;
+	flex-direction: column;
+	gap: var(--luz-space-xs);
+	margin-block-end: var(--luz-space-xs);
+}
+
+/* The size of the drawing is its own box: the script reads it and draws at that size in pixels */
+.luz-chart__plot {
+	display: block;
+	inline-size: 100%;
+	min-block-size: calc(var(--luz-space-2xl) * 3);
+	aspect-ratio: var(--luz-chart-ratio, 2 / 1);
+	direction: ltr;
+	overflow: visible;
+	font-family: var(--luz-font-mono);
+	font-size: var(--luz-text-xs);
+}
+
+.luz-chart__grid {
+	fill: none;
+	stroke: var(--luz-chart-grid);
+	stroke-width: 1px;
+	vector-effect: non-scaling-stroke;
+}
+
+.luz-chart__tick {
+	fill: var(--luz-text-secondary);
+	font-variant-numeric: tabular-nums;
+}
+
+/* One series, one colour and one mark; the colour is a token, so the mode repaints it */
+.luz-chart__series,
+.luz-chart__key {
+	--luz-chart-color: var(--luz-chart-1);
+}
+
+:where(.luz-chart__series, .luz-chart__key)[data-n="2"] { --luz-chart-color: var(--luz-chart-2); }
+:where(.luz-chart__series, .luz-chart__key)[data-n="3"] { --luz-chart-color: var(--luz-chart-3); }
+:where(.luz-chart__series, .luz-chart__key)[data-n="4"] { --luz-chart-color: var(--luz-chart-4); }
+:where(.luz-chart__series, .luz-chart__key)[data-n="5"] { --luz-chart-color: var(--luz-chart-5); }
+:where(.luz-chart__series, .luz-chart__key)[data-n="6"] { --luz-chart-color: var(--luz-chart-6); }
+
+.luz-chart__line,
+.luz-chart__spark path {
+	fill: none;
+	stroke: var(--luz-chart-color, var(--luz-chart-1));
+	stroke-width: 2px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	vector-effect: non-scaling-stroke;
+}
+
+.luz-chart__area {
+	fill: var(--luz-chart-color);
+	fill-opacity: 0.16;
+	stroke: none;
+}
+
+.luz-chart__marker {
+	fill: var(--luz-chart-color);
+	stroke: var(--luz-chart-color);
+	stroke-width: 2px;
+	stroke-linejoin: round;
+	vector-effect: non-scaling-stroke;
+}
+
+.luz-chart__legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--luz-space-xs);
+	margin: 0;
+	padding: 0;
+	color: var(--luz-text-secondary);
+	font-size: var(--luz-text-xs);
+	list-style: none;
+}
+
+.luz-chart__key {
+	display: flex;
+	align-items: center;
+	gap: var(--luz-space-2xs);
+}
+
+.luz-chart__swatch {
+	inline-size: 1.5em;
+	block-size: 1em;
+	flex: none;
+	overflow: visible;
+}
+
+/* The small line: a sparkline, and its last figure as text, the rest for a screen reader */
+.luz-chart__spark {
+	inline-size: calc(var(--luz-space-2xl) * 2);
+	block-size: var(--luz-space-lg);
+	flex: none;
+	overflow: visible;
+}
+
+.luz-chart__values {
+	display: inline;
+	flex: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.luz-chart__values > li {
+	display: inline;
+}
+
+:where(luz-chart[data-luz-ready][type="spark"] data) {
+	font-variant-numeric: tabular-nums;
+}
+
+:where(luz-chart[data-luz-ready][type="spark"] data:not([data-luz-end])) {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* Forced colors flatten the palette to one: a series is told by its dashes, its mark and the legend */
+@media (forced-colors: active) {
+	.luz-chart__line,
+	.luz-chart__spark path,
+	.luz-chart__marker {
+		stroke: CanvasText;
+	}
+
+	.luz-chart__marker {
+		fill: CanvasText;
+	}
+
+	.luz-chart__area {
+		fill: none;
+	}
+
+	.luz-chart__grid {
+		stroke: GrayText;
+	}
+
+	.luz-chart__tick {
+		fill: CanvasText;
+	}
+
+	:where(.luz-chart__series, .luz-chart__key)[data-n="2"] .luz-chart__line { stroke-dasharray: 8 4; }
+	:where(.luz-chart__series, .luz-chart__key)[data-n="3"] .luz-chart__line { stroke-dasharray: 2 4; }
+	:where(.luz-chart__series, .luz-chart__key)[data-n="4"] .luz-chart__line { stroke-dasharray: 8 4 2 4; }
+	:where(.luz-chart__series, .luz-chart__key)[data-n="5"] .luz-chart__line { stroke-dasharray: 14 4; }
+	:where(.luz-chart__series, .luz-chart__key)[data-n="6"] .luz-chart__line { stroke-dasharray: 2 2; }
+}
+
+/* On paper the table prints, and the drawing, its title and its button do not */
+@media print {
+	luz-chart[data-luz-ready] > :is(.luz-chart__bar, .luz-chart__figure) {
+		display: none;
+	}
+
+	luz-chart[data-luz-ready][type="spark"] > .luz-chart__spark {
+		display: none;
+	}
+
+	luz-chart[data-luz-ready][type="spark"] data:not([data-luz-end]) {
+		position: static;
+		inline-size: auto;
+		block-size: auto;
+		overflow: visible;
+		clip-path: none;
+		white-space: normal;
+	}
+}
