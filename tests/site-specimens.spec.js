@@ -11,7 +11,7 @@
  * light and the no-JS radios still re-scope them (tests/nojs.spec.js).
  */
 import { test, expect } from '@playwright/test';
-import { gotoId } from './helpers/docs-site.js';
+import { routeOf } from './helpers/docs-site.js';
 import { faded } from './helpers/settle.js';
 import { LIGHTS, NO_CHOICE, TIMEZONE, atTime, channels, colorOf, lightToken, seedMode, vejer } from './helpers/site-lights.js';
 
@@ -112,12 +112,24 @@ test.describe('a specimen follows the mode when the visitor changes it', () => {
 test.describe('the canvas of the HTML reference is painted with the tokens of the mode the page ends in', () => {
   const pixel = (page) => page.evaluate(() => [...document.getElementById('d-canvas').getContext('2d').getImageData(60, 60, 1, 1).data].join());
 
+  /**
+   * Open the page of the canvas and wait for what the test reads, not for the network: `networkidle`
+   * is not a promise (tests/helpers/settle.js), and on the loaded runner it stayed unreported on the second
+   * page until the test timed out. The page is ready when the site's element has upgraded (the footer's
+   * switcher can be clicked, the clock moves the page) and the canvas has been painted.
+   */
+  async function openCanvas(page) {
+    await page.goto(routeOf('d-canvas'));
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
+    await expect.poll(() => pixel(page)).not.toBe('0,0,0,0');
+    await faded(page);
+  }
+
   /** The pixel of a fresh load of the page in Dark, with nothing fading. */
   async function darkPixel(page) {
     const other = await page.context().newPage();
     await seedMode(other, 'dark');
-    await gotoId(other, 'd-canvas');
-    await expect.poll(() => other.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
+    await openCanvas(other);
     const value = await pixel(other);
     await other.close();
     return value;
@@ -125,8 +137,7 @@ test.describe('the canvas of the HTML reference is painted with the tokens of th
 
   test('a choice repaints it, and after the fade it is the colour of a page loaded in that mode', async ({ page }) => {
     await seedMode(page, 'light');
-    await gotoId(page, 'd-canvas');
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
+    await openCanvas(page);
     const dark = await darkPixel(page);
     const light = await pixel(page);
     expect(light).not.toBe('0,0,0,0');
@@ -140,8 +151,7 @@ test.describe('the canvas of the HTML reference is painted with the tokens of th
 
   test('the clock repaints it when it moves the page from the afternoon to the night', async ({ page }) => {
     await atTime(page, '14:00');
-    await gotoId(page, 'd-canvas');
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
+    await openCanvas(page);
     const dark = await darkPixel(page);
     const afternoon = await pixel(page);
     expect(afternoon).not.toBe(dark);
