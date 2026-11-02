@@ -158,6 +158,12 @@ for (const [file, code] of published) {
     console.error(`✗ ${file} is a lazy chunk and imports a file: a chunk imports nothing, static or dynamic (SEC-CHUNK-2)`);
     failed = true;
   }
+  // A catalog script that is neither the loader nor a chunk (theme-time-boot, a <head> script) imports nothing:
+  // it had a budget row, and with the rows gone this keeps its structural rule (SEC-CHUNK-2)
+  if (file.startsWith("packages/catalog/dist/") && !LOADERS[file] && !chunks.has(file) && (calls || STATIC_IMPORT.test(code))) {
+    console.error(`✗ ${file} is a catalog script that is neither the loader nor a lazy chunk, and it imports a file: it imports nothing (SEC-CHUNK-2)`);
+    failed = true;
+  }
   const expected = LOADERS[file];
   if (expected) {
     if (STATIC_IMPORT.test(code)) {
