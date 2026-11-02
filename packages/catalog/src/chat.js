@@ -60,9 +60,9 @@
  * `data-luz-label-<key>` on the element or an ancestor (EX-014).
  *
  * @element luz-chat - A messaging-style chat that talks to a provider: the language model of the browser, an API, anything. Experimental.
- * @attr {"send"|"newline"} [enter=send] - What Enter does in the field: send (Shift+Enter breaks the line), or break the line (the button sends).
+ * @attr {"send"|"newline"} enter - What Enter does in the field: send (the default; Shift+Enter breaks the line), or break the line (the button sends).
  * @attr {number} maxlength - The longest message; the count shows only near the limit.
- * @attr {"markdown"|"text"} [format=markdown] - How an answer is shown: as Markdown, or as plain text.
+ * @attr {"text"} format - Set to "text" to show an answer as plain text; as Markdown by default.
  * @attr {string} assistant-name - The name of the assistant; the provider's by default.
  * @attr {string} user-name - The name of the visitor; "You" by default.
  * @attr {string} data-luz-chat-suggestions - On a <ul> of buttons: questions to try, each button sends its text.
@@ -249,8 +249,15 @@ class LuzChat extends HTMLElement {
       const attr = `data-luz-label-${name}`;
       return this.closest(`[${attr}]`)?.getAttribute(attr) ?? words[name] ?? DICT.en[name] ?? "";
     };
+    // A provider set from JavaScript before this element was defined is an own property that hides the setter
+    let early = null;
+    if (Object.hasOwn(this, "provider")) {
+      early = this.provider;
+      delete this.provider;
+    }
     this.#build();
-    this.#find();
+    if (early) this.provider = early;
+    else this.#find();
   }
 
   disconnectedCallback() {

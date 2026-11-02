@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ catalog: the chat, &lt;luz-chat&gt;</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/chat.css">
+  <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
+  <script type="module">
+    // The provider of the tests: no model and no network. It follows the contract of <luz-chat> (ask, state, settings,
+    // info, note, persona, reset, a `change` event) and answers by what the question says. The test drives it through
+    // window.fake: what it was asked, a gate it releases, a failure it can switch off.
+    const fake = (window.fake = { asked: [], resets: 0, fail: false, release: null, pwned: 0 });
+
+    class FakeProvider extends HTMLElement {
+      state = { status: this.dataset.state || "ready" };
+      settings = [{ label: "Fake setting", run: () => (fake.settingRun = (fake.settingRun || 0) + 1) }];
+      info = [{ label: "Provider", text: "A fake, in this page's script." }];
+      note = "Fake answers can be wrong.";
+      persona = { name: "Fake persona" };
+
+      set(state) {
+        this.state = state;
+        this.dispatchEvent(new Event("change"));
+      }
+
+      reset() {
+        fake.resets++;
+      }
+
+      async *ask(messages, { signal }) {
+        fake.asked.push(messages.map((m) => ({ ...m })));
+        const question = messages.at(-1).content;
+        if (question === "gate") {
+          // Held until the test releases it, or the visitor stops it
+          await new Promise((resolve, reject) => {
+            fake.release = resolve;
+            signal.addEventListener("abort", () => reject(new DOMException("Aborted", "AbortError")));
+          });
+          yield "Gate open.";
+        } else if (question === "slow") {
+          yield "Start of a slow answer ";
+          await new Promise((resolve, reject) => signal.addEventListener("abort", () => reject(new DOMException("Aborted", "AbortError"))));
+        } else if (question === "error") {
+          if (fake.fail) throw Object.assign(new Error("the fake was told to fail"), { name: "FakeError" });
+          yield "It works now.";
+        } else if (question === "rich") {
+          yield "**bold words** and *slanted words* and `inline code`\n\n- first item\n- second item\n\n1. step one\n2. step two\n\n> a quoted line\n\n```\nlet less = 1 < 2;\n```\n";
+        } else if (question === "html") {
+          yield '<img src=x onerror="window.fake.pwned=1"> <b>not bold</b> <script>window.fake.pwned=1<\/script>\n\n[bad](javascript:window.fake.pwned=1) <a href="https://example.test/raw/">raw anchor</a>';
+        } else if (question === "links") {
+          yield { sources: [{ title: "The allowed page", url: "/tests/fixtures/chat.html?allowed" }] };
+          yield "Read [the allowed page](/tests/fixtures/chat.html?allowed) and not [the stranger](https://example.test/stranger/).";
+        } else if (question === "typed") {
+          yield "word ".repeat(80).trim();
+        } else {
+          yield "Hello ";
+          yield "there, " + question + ".";
+        }
+      }
+    }
+    customElements.define("fake-provider", FakeProvider);
+
+    // A second kind of provider: an object given to chat.provider, not a child
+    window.objectProvider = () => ({ state: { status: "ready" }, async *ask() { yield "From an object."; } });
+  </script>
+</head>
+<body>
+  <main id="main">
+    <h1>Chat</h1>
+
+    <!-- The provider is the first child that has ask(); the other children are what the page shows without it -->
+    <luz-chat id="main-chat" maxlength="40">
+      <p id="main-fallback">The chat needs JavaScript. <a href="/tests/fixtures/chat.html?docs">Read the documentation</a>.</p>
+      <fake-provider id="provider"></fake-provider>
+      <ul data-luz-chat-suggestions>
+        <li><button type="button">Say hello</button></li>
+        <li><button type="button">rich</button></li>
+      </ul>
+    </luz-chat>
+
+    <!-- The names, the labels and the note come from the page -->
+    <div data-luz-label-send="Go" data-luz-label-placeholder="Type here">
+      <luz-chat id="labelled" assistant-name="Ada" user-name="Visitor">
+        <p>Labelled fallback.</p>
+        <fake-provider></fake-provider>
+        <template data-luz-chat-note>The page's own note.</template>
+      </luz-chat>
+    </div>
+
+    <!-- Enter breaks the line -->
+    <luz-chat id="newline" enter="newline">
+      <p>Newline fallback.</p>
+      <fake-provider></fake-provider>
+    </luz-chat>
+
+    <!-- A language of its own, and a direction of its own -->
+    <div lang="es">
+      <luz-chat id="spanish">
+        <p>Alternativa.</p>
+        <fake-provider></fake-provider>
+      </luz-chat>
+    </div>
+    <div lang="es" dir="rtl">
+      <luz-chat id="rtl">
+        <p>Alternativa.</p>
+        <fake-provider></fake-provider>
+      </luz-chat>
+    </div>
+
+    <!-- A provider that is given from JavaScript, not written in the markup -->
+    <luz-chat id="by-property">
+      <p>Property fallback.</p>
+    </luz-chat>
+
+    <!-- A provider that has nothing to answer with -->
+    <luz-chat id="unavailable">
+      <p id="unavailable-fallback">No provider here.</p>
+      <fake-provider id="unavailable-provider" data-state="unavailable"></fake-provider>
+    </luz-chat>
+  </main>
+  <!-- ?none: a page with no <luz-chat>, so the loader has nothing to load. A classic script runs before the module -->
+  <script>
+    if (location.search.includes('none')) document.querySelectorAll('luz-chat').forEach((el) => el.remove());
+  </script>
+  <script type="module">
+    // #by-property gets its provider from here, once the element is defined
+    customElements.whenDefined("luz-chat").then(() => {
+      document.querySelector("#by-property").provider = window.objectProvider();
+    });
+  </script>
+</body>
+</html>

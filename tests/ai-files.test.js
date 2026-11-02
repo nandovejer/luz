@@ -545,7 +545,8 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
   it("starts with the H1 and is one entry per page in the reading order of llms.txt, none for the hub", () => {
     expect(full().startsWith("# LUZ\n")).toBe(true);
     const entries = all();
-    const pages = expectedSections().filter((s) => !s.hub).flatMap((s) => s.pages);
+    // An experimental piece (`status: experimental`) is in llms.txt, which lists every page, and not here
+    const pages = expectedSections().filter((s) => !s.hub).flatMap((s) => s.pages).filter((p) => p.meta.status !== "experimental");
     const guided = entries.filter((e) => e.url);
     expect(guided.map((e) => e.url)).toEqual(pages.map((p) => urlOf(p.route)));
     for (const e of guided) expect(e.title, e.url).toBe(site.byRoute.get(`/${e.url.slice(SITE_URL.length)}`).meta.title);
@@ -647,6 +648,11 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
       const end = rest.search(/<h[23]\b/);
       const section = rest.slice(0, end === -1 ? undefined : end);
       const e = entry(page.route);
+      // An experimental piece is left out of llms-full.txt (llms.txt and its example still have it): it has no entry, so no block to match
+      if (page.meta.status === "experimental") {
+        expect(e, `no entry for the experimental ${page.route}`).toBeUndefined();
+        continue;
+      }
       expect(e, `an entry for ${page.route}`).toBeTruthy();
       for (const [, code] of section.matchAll(/<pre\b[^>]*\bdata-lang="html"[^>]*>\s*<code[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/g)) {
         blocks += 1;
@@ -859,6 +865,22 @@ describe("llms-full.txt: what a page contributes, on a fixture", () => {
     expect(after).toContain("A changed description.");
     expect(after).not.toContain("HOW-TEXT");
     expect(renderLlmsTxt(fixture.scan(), options)).toContain(`- [Widget](${FIXTURE_URL}docs/components/widget/): A changed description.`);
+  });
+
+  it("leaves a page that says `status: experimental` out of llms-full.txt, and still lists it in llms.txt", () => {
+    const experimental = widgetPage().replace("files: components/widget.css\n", "files: components/widget.css\nstatus: experimental\n");
+    expect(experimental).toContain("status: experimental");
+    const { scan } = fixtureSite(fixtureFiles({ "pages/components/widget.html": experimental }));
+    const out = renderLlmsFull(scan(), options);
+    expect(entriesOf(out).map((e) => e.title)).not.toContain("Widget");
+    expect(out).not.toContain("HOW-TEXT");
+    expect(out).not.toContain(`${FIXTURE_URL}docs/components/widget/`);
+    // The other pages are still there, and so is the piece in the index of the pages
+    expect(entriesOf(out).map((e) => e.title)).toContain("Color");
+    expect(renderLlmsTxt(scan(), options)).toContain(`- [Widget](${FIXTURE_URL}docs/components/widget/): A widget that does one thing, for the tests.`);
+    // Without the key the same page is in llms-full.txt
+    const plain = fixtureSite(fixtureFiles());
+    expect(entriesOf(renderLlmsFull(plain.scan(), options)).map((e) => e.title)).toContain("Widget");
   });
 
   it("lists the fixture's areas in order, the hub under Documentation, and each description in llms.txt", () => {
@@ -1512,7 +1534,8 @@ describe("llms.txt and llms-full.txt name the examples and the manifests", () =>
   });
 
   it("gives each entry of a page that has an example an `Example:` line between URL and Files, and the others none", () => {
-    const withExample = new Set(markupPages().map((p) => urlOf(p.route)));
+    // llms-full.txt has no entry for an experimental page, so it has no Example line to find there either
+    const withExample = new Set(markupPages().filter((p) => p.meta.status !== "experimental").map((p) => urlOf(p.route)));
     let seen = 0;
     for (const e of entriesOf(full()).filter((x) => x.url)) {
       const head = e.text.split(/\n\s*\n/)[0].split("\n").filter(Boolean);
@@ -1528,6 +1551,9 @@ describe("llms.txt and llms-full.txt name the examples and the manifests", () =>
       }
     }
     expect(seen).toBe(withExample.size);
+    for (const page of site.pages.filter((p) => p.meta.status === "experimental")) {
+      expect(entriesOf(full()).some((x) => x.url === urlOf(page.route)), `no llms-full entry for ${page.route}`).toBe(false);
+    }
   });
 
   it("writes the example URL root-absolute in dev, absolute under the site URL in the build", () => {

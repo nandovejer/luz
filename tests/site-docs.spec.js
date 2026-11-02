@@ -39,6 +39,8 @@ const PACKAGES = {
       faq: 'faq',
       // The facade of a player of another origin: a `<luz-embed>` tag that is the block, `.luz-embed__<part>`
       embed: 'embed',
+      // The experimental chat: a `<luz-chat>` tag that is the block, `.luz-chat__<part>`
+      chat: 'chat',
       // F8: the blocks are named for what they are, not for the kind of site that uses them. The glow and the main are the
       // page's own and have no page: they are on the section's. The bar of a landing page, the bar of a blog (--publication)
       // and the two footers are one page each; the masthead has a page of its own

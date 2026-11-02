@@ -46,7 +46,7 @@ const FILES = {
     "components/search.css", "components/search.min.css", "components/cookie-consent.css", "components/cookie-consent.min.css", "components/announcement.css", "components/announcement.min.css",
     // the sheets of the pages of catalog that name a kind (the four layout components of F7 are among them) and the three more the docs' own pages list
     ...[...new Set(Object.values(KIND_FILES).flat())].flatMap((name) => [`components/${name}.css`, `components/${name}.min.css`]),
-    "catalog.min.js", "search.min.js", "cookie-consent.min.js", "theme-time.min.js", "theme-time-bar.min.js", "timeline.min.js", "embed.min.js", "sidebar.min.js",
+    "catalog.min.js", "search.min.js", "cookie-consent.min.js", "theme-time.min.js", "theme-time-bar.min.js", "timeline.min.js", "embed.min.js", "chat.min.js", "sidebar.min.js",
   ],
 };
 /** The kind a snippet is for, and the kind of its patterns (F8: the same word, `blog` for a blog): null for the one with none. */
@@ -271,14 +271,33 @@ describe("the snippet generator", () => {
       // `integrity` is not a guard in WebKit and Firefox. The full-SRI path is an import map
       // with an `integrity` section, which blocks a tampered chunk in all three engines.
       const chunkSection = () => html.slice(html.search(/\bid="chunks"/));
-      const budgetedChunks = () => {
+      // An experimental element's chunk (its page says `status: experimental`, and so does its declaration in
+      // custom-elements.json) is budgeted but is no row of the chunks table and no member of the import map: the page
+      // is at its size ceiling, and the chunk is not what a site is told to load yet
+      const experimentalChunks = () =>
+        JSON.parse(readFileSync(join(repo, "packages/catalog/dist/custom-elements.json"), "utf-8"))
+          .modules.filter((m) => (m.declarations ?? []).some((d) => d.status === "experimental") && /\.js$/.test(m.path))
+          .map((m) => `catalog/dist/${m.path.replace(/\.js$/, ".min.js")}`);
+      const allBudgetedChunks = () => {
         const budgets = JSON.parse(readFileSync(join(repo, "budgets.json"), "utf-8")).budgets;
         return budgets.filter((b) => /lazy chunk:/.test(b.name)).map((b) => b.file.replace(/^packages\//, ""));
       };
+      const budgetedChunks = () => allBudgetedChunks().filter((rel) => !experimentalChunks().includes(rel));
+
+      it("leaves the experimental chunk, chat.min.js, out of both the chunks table and the import map, though it is budgeted", () => {
+        expect(experimentalChunks(), "the experimental chunks of the catalog").toEqual(["catalog/dist/chat.min.js"]);
+        expect(allBudgetedChunks()).toContain("catalog/dist/chat.min.js");
+        expect(budgetedChunks()).not.toContain("catalog/dist/chat.min.js");
+        const section = chunkSection();
+        expect(section).not.toContain("chat.min.js");
+        expect(section).not.toContain("luz-chat");
+        expect(codeOf(html, "chunk-catalog-chat")).toBeNull();
+        expect(codeOf(html, "chunks-importmap")).not.toContain("chat.min.js");
+      });
 
       it("gives, in the chunks section, one import map whose integrity lists exactly the lazy chunks that budgets.json budgets, each with its version and sha384", () => {
         const budgeted = budgetedChunks();
-        expect(budgeted.length).toBe(11); // core: midi, table-sort, theme-mode, i18n-es; catalog: search, cookie-consent, theme-time, theme-time-bar, timeline, embed, sidebar (the timeline and the sidebar came from core in F7)
+        expect(budgeted.length).toBe(11); // core: midi, table-sort, theme-mode, i18n-es; catalog: search, cookie-consent, theme-time, theme-time-bar, timeline, embed, sidebar (the experimental chat is budgeted and left out) (the timeline and the sidebar came from core in F7)
         expect(budgeted).toContain("catalog/dist/timeline.min.js");
         expect(budgeted).toContain("catalog/dist/sidebar.min.js");
         expect(budgeted).not.toContain("core/dist/timeline.min.js");

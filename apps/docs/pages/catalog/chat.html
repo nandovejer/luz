@@ -2,13 +2,13 @@
 title: Chat
 description: A conversation in the style of a messaging app that talks to a provider, the language model of the browser, an API of your own or anything else; it does not know who answers.
 area: catalog
-order: 90
+order: 33
 group: site-wide
 fits-kinds: any
 fits: a page where visitors ask something, from a help panel to the docs
-files: <luz-chat>, .luz-chat__panel, .luz-chat__log, .luz-chat__msg, .luz-chat__bubble
+files: components/chat.css
 module: chat.js
-keywords: chat, messaging, assistant, conversation, bubbles, provider, experimental
+keywords: messaging, assistant, conversation, bubbles, provider, experimental
 status: experimental
 toc: h2,h3
 -->
@@ -29,8 +29,271 @@ toc: h2,h3
           </div>
           </div>
           <h2 id="known-issues">Known issues</h2>
+          <p>This piece is experimental: its provider contract and its texts can change in a minor release.</p>
           <ul>
-            <li>It is experimental: its provider contract can change in a minor release.</li>
-            <li>It has not been tested with a screen reader.</li>
+            <li>It has not been tested with a screen reader. The names, the log and the status line are written by the script; how a screen reader reads them has not been checked.</li>
+            <li>No provider ships with the chat. A provider is yours: the chat is the look and the keyboard of a conversation, and it does not know who answers. The example on this page answers from a few canned texts.</li>
+            <li>Without JavaScript, the list of suggested questions shows as plain buttons that do nothing.</li>
+            <li>The edge of the assistant's bubble is below 3:1 against the conversation in light and dark. The bubble is also told apart by its fill and its place, and its text meets its minimum in every mode: see <a href="#contrast">Contrast and focus</a>.</li>
+            <li>The conversation, which can be scrolled and focused, has the browser's own focus outline, not the ring of LUZ.</li>
+            <li>The texts the script writes are in English and Spanish. Any other language needs a <code>data-luz-label-*</code> attribute for each text.</li>
           </ul>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Chat documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>One <code>&lt;luz-chat&gt;</code> holds what the page shows without JavaScript, the questions to try, and, if you like, the provider. Put it where the conversation goes. Everything but the provider, a template and the list of questions is the fallback: it shows when the script has not run, or when no provider can answer.</p>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Chat markup"><code>&lt;luz-chat assistant-name=&quot;Ask the docs&quot; enter=&quot;send&quot; maxlength=&quot;500&quot;&gt;
+  &lt;p&gt;The chat needs JavaScript. &lt;a href=&quot;/docs/&quot;&gt;Read the documentation&lt;/a&gt;.&lt;/p&gt;
+  &lt;ul data-luz-chat-suggestions&gt;
+    &lt;li&gt;&lt;button type=&quot;button&quot;&gt;How do I install it?&lt;/button&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;button type=&quot;button&quot;&gt;How do I change the colours?&lt;/button&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;template data-luz-chat-note&gt;Answers can be wrong. Check what matters.&lt;/template&gt;
+&lt;/luz-chat&gt;</code></pre>
+            <p>The provider is a script of yours. Give it to the element from JavaScript:</p>
+            <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Chat provider"><code>import &quot;@luz-ds/catalog/chat&quot;;
+
+const chat = document.querySelector(&quot;luz-chat&quot;);
+
+chat.provider = {
+  // messages: [{ role: &quot;user&quot; | &quot;assistant&quot;, content }], the whole conversation
+  async *ask(messages, { signal }) {
+    const reply = await fetch(&quot;/your-endpoint&quot;, {
+      method: &quot;POST&quot;,
+      headers: { &quot;content-type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify({ messages }),
+      signal,
+    });
+    if (!reply.ok) throw Object.assign(new Error(`Status ${reply.status}`), { name: &quot;ServiceError&quot; });
+    const { text, sources } = await reply.json();
+    yield { sources };
+    yield text;
+  },
+};</code></pre>
+            <p><code>/your-endpoint</code> stands for a service you run or trust. LUZ does not provide one.</p>
+            <h3 id="variants">Variants and options</h3>
+            <p>Every option is an attribute of <code>&lt;luz-chat&gt;</code> or a child of it.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Chat attributes" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Name</th><th scope="col">On</th><th scope="col">What it does</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Name"><div><code>enter</code></div></td><td data-label="On"><div><code>&lt;luz-chat&gt;</code></div></td><td data-label="What it does"><div><code>send</code> (the default): Enter sends and Shift + Enter breaks the line. <code>newline</code>: Enter breaks the line and only the Send button sends.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>maxlength</code></div></td><td data-label="On"><div><code>&lt;luz-chat&gt;</code></div></td><td data-label="What it does"><div>The longest message, in characters. A count such as 410/500 shows from 80 percent of it.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>format</code></div></td><td data-label="On"><div><code>&lt;luz-chat&gt;</code></div></td><td data-label="What it does"><div><code>markdown</code> (the default): an answer is shown as Markdown. <code>text</code>: it is shown as plain text.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>assistant-name</code></div></td><td data-label="On"><div><code>&lt;luz-chat&gt;</code></div></td><td data-label="What it does"><div>The name of the assistant, read before each of its answers. Without it, the provider's <code>persona.name</code>, then the text for <code>assistant</code>.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>user-name</code></div></td><td data-label="On"><div><code>&lt;luz-chat&gt;</code></div></td><td data-label="What it does"><div>The name of the visitor, read before each of their messages. Without it, the text for <code>you</code>.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>data-luz-chat-suggestions</code></div></td><td data-label="On"><div>A <code>&lt;ul&gt;</code> of buttons</div></td><td data-label="What it does"><div>Questions to try. Each button sends its text. They are off until the provider is ready, and while an answer is being written.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>data-luz-chat-note</code></div></td><td data-label="On"><div>A <code>&lt;template&gt;</code></div></td><td data-label="What it does"><div>The line under the field, in place of the provider's <code>note</code>. An empty template shows no line.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>data-luz-state</code></div></td><td data-label="On"><div><code>&lt;luz-chat&gt;</code></div></td><td data-label="What it does"><div>Written by the script: the <code>status</code> of the provider, such as <code>ready</code> or <code>busy</code>. Use it to style or to test; do not set it.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>The texts the script writes are the <code>data-luz-label-*</code> attributes, on the element or on any ancestor. Write <code>data-luz-label-</code> and the key, for example <code>data-luz-label-send</code>. The script has English and Spanish and picks one from the nearest <code>lang</code>; any other language gets English until you give it the texts.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Chat texts" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Key</th><th scope="col">Where it shows</th><th scope="col">English</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Key"><div><code>title</code></div></td><td data-label="Where it shows"><div>The heading of the chat</div></td><td data-label="English"><div>Chat</div></td></tr>
+                  <tr><td data-label="Key"><div><code>assistant</code></div></td><td data-label="Where it shows"><div>The assistant's name, when nothing else gives one</div></td><td data-label="English"><div>Assistant</div></td></tr>
+                  <tr><td data-label="Key"><div><code>you</code></div></td><td data-label="Where it shows"><div>The visitor's name, when <code>user-name</code> is not set</div></td><td data-label="English"><div>You</div></td></tr>
+                  <tr><td data-label="Key"><div><code>question</code></div></td><td data-label="Where it shows"><div>The label of the field, for a screen reader</div></td><td data-label="English"><div>Your message</div></td></tr>
+                  <tr><td data-label="Key"><div><code>placeholder</code></div></td><td data-label="Where it shows"><div>The hint in the empty field</div></td><td data-label="English"><div>Write a message</div></td></tr>
+                  <tr><td data-label="Key"><div><code>send</code></div></td><td data-label="Where it shows"><div>The Send button</div></td><td data-label="English"><div>Send</div></td></tr>
+                  <tr><td data-label="Key"><div><code>stop</code></div></td><td data-label="Where it shows"><div>The button that stops an answer</div></td><td data-label="English"><div>Stop</div></td></tr>
+                  <tr><td data-label="Key"><div><code>copy</code></div></td><td data-label="Where it shows"><div>The button under an answer</div></td><td data-label="English"><div>Copy answer</div></td></tr>
+                  <tr><td data-label="Key"><div><code>copied</code></div></td><td data-label="Where it shows"><div>The same button for 2 seconds after it copied, and the status line</div></td><td data-label="English"><div>Copied</div></td></tr>
+                  <tr><td data-label="Key"><div><code>sources</code></div></td><td data-label="Where it shows"><div>The name of the list of sources of an answer</div></td><td data-label="English"><div>Sources</div></td></tr>
+                  <tr><td data-label="Key"><div><code>suggestions</code></div></td><td data-label="Where it shows"><div>The name of the list of questions to try</div></td><td data-label="English"><div>Try asking</div></td></tr>
+                  <tr><td data-label="Key"><div><code>conversation</code></div></td><td data-label="Where it shows"><div>The name of the conversation</div></td><td data-label="English"><div>Conversation</div></td></tr>
+                  <tr><td data-label="Key"><div><code>thinking</code></div></td><td data-label="Where it shows"><div>The status line while the provider works</div></td><td data-label="English"><div>Thinking…</div></td></tr>
+                  <tr><td data-label="Key"><div><code>done</code></div></td><td data-label="Where it shows"><div>The status line when an answer is complete</div></td><td data-label="English"><div>Answer ready</div></td></tr>
+                  <tr><td data-label="Key"><div><code>stopped</code></div></td><td data-label="Where it shows"><div>An answer the visitor stopped before any words came</div></td><td data-label="English"><div>Stopped</div></td></tr>
+                  <tr><td data-label="Key"><div><code>error</code></div></td><td data-label="Where it shows"><div>An answer that failed</div></td><td data-label="English"><div>No answer. Try again.</div></td></tr>
+                  <tr><td data-label="Key"><div><code>retry</code></div></td><td data-label="Where it shows"><div>The button that sends a failed message again</div></td><td data-label="English"><div>Try again</div></td></tr>
+                  <tr><td data-label="Key"><div><code>settings</code></div></td><td data-label="Where it shows"><div>The name of the settings button and its heading</div></td><td data-label="English"><div>Settings</div></td></tr>
+                  <tr><td data-label="Key"><div><code>clear</code></div></td><td data-label="Where it shows"><div>The button that clears the conversation</div></td><td data-label="English"><div>Clear the conversation</div></td></tr>
+                  <tr><td data-label="Key"><div><code>empty</code></div></td><td data-label="Where it shows"><div>The conversation before the first message</div></td><td data-label="English"><div>Write a message to start.</div></td></tr>
+                  <tr><td data-label="Key"><div><code>latest</code></div></td><td data-label="Where it shows"><div>The button that takes the reader to the end</div></td><td data-label="English"><div>New messages</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>Load <code>catalog.min.js</code>, as a module. On a page with a <code>&lt;luz-chat&gt;</code> it loads the chat's own file, <code>chat.min.js</code>, when the page is scanned. That file defines <code>&lt;luz-chat&gt;</code>, a custom element in the light DOM (no Shadow DOM). A page may also import <code>@luz-ds/catalog/chat</code> itself, and must for a chat added after the page has loaded.</p>
+            <p>The chat builds its parts after the fallback: a header with the title and the settings (a native <code>&lt;details&gt;</code>), the conversation, the questions to try, the field with Send, a line under it and a status line for screen readers. The chat stays hidden while no provider can answer and none has anything to say.</p>
+            <h4 id="provider">The provider</h4>
+            <p>The provider is the first child of the chat that has an <code>ask()</code> method, or whatever you give to <code>chat.provider</code>. A child that is a custom element is waited for until it is defined, up to 5 seconds. A provider set from JavaScript before the chat is defined still works.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contract of a provider" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Member</th><th scope="col">Required</th><th scope="col">What it is</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Member"><div><code>ask(messages, { signal })</code></div></td><td data-label="Required"><div>Yes</div></td><td data-label="What it is"><div>Returns an async iterable. <code>messages</code> is the whole conversation. Yield text for what is new, not the answer so far. Yield <code>{ sources: [{ title, url }] }</code> once for the pages the answer comes from. Throw an error with a <code>name</code> and a <code>message</code> when it cannot answer. Stop when <code>signal</code> is aborted.</div></td></tr>
+                  <tr><td data-label="Member"><div><code>reset()</code></div></td><td data-label="Required"><div>No</div></td><td data-label="What it is"><div>Called when the visitor clears the conversation.</div></td></tr>
+                  <tr><td data-label="Member"><div><code>state</code></div></td><td data-label="Required"><div>No</div></td><td data-label="What it is"><div><code>{ status, message?, body?, progress?, action? }</code>. Without it, the status is <code>ready</code>. The statuses are below.</div></td></tr>
+                  <tr><td data-label="Member"><div><code>settings</code></div></td><td data-label="Required"><div>No</div></td><td data-label="What it is"><div>A list of <code>{ label, run }</code>: buttons that join the settings.</div></td></tr>
+                  <tr><td data-label="Member"><div><code>info</code></div></td><td data-label="Required"><div>No</div></td><td data-label="What it is"><div>A list of what the settings tell the visitor: <code>{ label?, text?, node?, meter?: { value, max } }</code>. A <code>node</code> is cloned each time.</div></td></tr>
+                  <tr><td data-label="Member"><div><code>note</code></div></td><td data-label="Required"><div>No</div></td><td data-label="What it is"><div>The line under the field, such as “Answers can be wrong”.</div></td></tr>
+                  <tr><td data-label="Member"><div><code>persona</code></div></td><td data-label="Required"><div>No</div></td><td data-label="What it is"><div><code>{ name }</code>: who the assistant is, when <code>assistant-name</code> is not set.</div></td></tr>
+                  <tr><td data-label="Member"><div><code>change</code></div></td><td data-label="Required"><div>No</div></td><td data-label="What it is"><div>If the provider is an <code>EventTarget</code>, dispatch a <code>change</code> event when any member above has changed. The chat then redraws.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>The <code>status</code> of <code>state</code> says what the visitor can do. The chat tells it in the conversation, as a message of the system.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Statuses of a provider" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Status</th><th scope="col">What the chat does</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Status"><div><code>ready</code></div></td><td data-label="What the chat does"><div>The field and the questions work.</div></td></tr>
+                  <tr><td data-label="Status"><div><code>pending</code></div></td><td data-label="What the chat does"><div>The provider is finding out. Two quiet bars show where the message will be, with no words.</div></td></tr>
+                  <tr><td data-label="Status"><div><code>unavailable</code></div></td><td data-label="What the chat does"><div>Without a <code>message</code>, the chat is hidden and the fallback children show. With one, the message is told in the conversation.</div></td></tr>
+                  <tr><td data-label="Status"><div><code>action</code></div></td><td data-label="What the chat does"><div>A step is needed. The <code>action</code> is <code>{ label, run }</code>, and <code>run</code> is called from the visitor's click, which some browsers need before a download.</div></td></tr>
+                  <tr><td data-label="Status"><div><code>busy</code></div></td><td data-label="What the chat does"><div>Shows a progress bar: <code>progress</code> from 0 to 1, or none while unknown. The <code>action</code> may be Cancel.</div></td></tr>
+                  <tr><td data-label="Status"><div><code>off</code></div></td><td data-label="What the chat does"><div>The provider is turned off. The <code>action</code> turns it on.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>A <code>message</code> is text. A <code>body</code> is text or a node, and is cloned each time it is shown.</p>
+            <h4 id="answers">Sending and answers</h4>
+            <ul>
+              <li>Sending adds the visitor's message, then the assistant's bubble, with three typing dots until the first words arrive. Words are typed a few at a time; the further behind they fall, the faster, so a long answer does not lag. With reduced motion, or in a hidden tab, they show at once.</li>
+              <li>An answer is shown as Markdown built from DOM nodes, never HTML, so nothing the model writes can add an element, an attribute or a script. It reads paragraphs, headings, bulleted and numbered lists, quotes, code (inline and fenced), bold, italic and struck-through text, and links. Other syntax shows as written.</li>
+              <li><strong>A link in an answer is a link only if it goes to one of the sources of that answer.</strong> Any other address shows as its text. A source needs a title and an <code>http</code> or <code>https</code> address; any other is left out.</li>
+              <li>Under a complete answer: its sources, as a list of links, and a button to copy the answer.</li>
+              <li>Stop aborts the <code>signal</code>. What was written stays and joins the history; if nothing had been written, the bubble says “Stopped”.</li>
+              <li>When <code>ask()</code> throws, the bubble says that there was no answer, with the error's <code>name</code> and <code>message</code> after it, and a button sends the same message again. The message that got no answer is not in the history the provider sees next time. Write error messages a visitor can read.</li>
+              <li>The conversation follows the end while the reader is there. If the reader has scrolled up, it stays put and a button says there are new messages. A message the visitor sends is always brought into view.</li>
+              <li>A message by the same writer on the same day sits close to the one before. Each message has the time beside it, and a new day starts with its date.</li>
+            </ul>
+            <h4 id="memory">Where the conversation lives</h4>
+            <p>The conversation lives in memory, in the page, and nowhere else. The chat stores nothing: no cookie, no <code>localStorage</code>, no request of its own. Reloading, leaving the page or clearing the conversation in the settings removes it. Clearing also calls <code>reset()</code> on the provider.</p>
+            <p>Each call to <code>ask()</code> gets the whole conversation. What the provider does with it, such as sending it to a service, is the provider's, and so is telling your visitors.</p>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>Nothing of the chat is built. The element is its children: the paragraph and the link you wrote, so write a way to the same help, such as a link to the documentation. The list of suggested questions also shows, as plain buttons that do nothing: this is a known issue. A chat with no provider that can answer, or whose script did not load, shows the same.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <p>Everything works from the keyboard.</p>
+            <ul>
+              <li><kbd>Tab</kbd> goes to the settings button, the conversation (it can be scrolled with the arrow keys), the questions to try, the field, Send, and Stop while an answer is being written.</li>
+              <li><kbd>Enter</kbd> in the field sends, and <kbd>Shift</kbd> + <kbd>Enter</kbd> breaks the line. With <code>enter=&quot;newline&quot;</code>, Enter breaks the line and Send sends. Enter never sends while an input method editor is composing text.</li>
+              <li>The settings are a native <code>&lt;details&gt;</code>: <kbd>Enter</kbd> or <kbd>Space</kbd> on its button opens and closes it.</li>
+              <li>When an answer ends, fails or is stopped, the focus goes back to the field. After clearing the conversation, it goes to the field too.</li>
+              <li>The chat is a <code>&lt;section&gt;</code> named by its heading. The conversation is <code>role=&quot;log&quot;</code>, named by the text for <code>conversation</code>, with <code>aria-live=&quot;off&quot;</code>: an answer is not read word by word.</li>
+              <li>A status line (<code>role=&quot;status&quot;</code>, hidden from the eye) says “Thinking…” when a message is sent and “Answer ready” at the end; it also says “Stopped”, “Copied”, the text for <code>error</code>, and the <code>message</code> of the provider when its status changes.</li>
+              <li>Each message starts with the name of its writer, hidden from the eye. The time is a <code>&lt;time&gt;</code> with a date. The typing dots are hidden from a screen reader.</li>
+              <li>The field has a label (the text for <code>question</code>). The lists of questions and of sources have names. The settings button is named by an <code>aria-label</code>, and a progress bar or a meter has one.</li>
+              <li>The behaviour above is set by the code. It has not been tested with a screen reader.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use the chat where a visitor asks in their own words and expects an answer in a few lines: a help panel, the documentation, a product that explains itself. It fits when you have a provider you trust to answer well, and where a wrong answer costs little.</p>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use the chat instead of navigation, search or a page that says the thing plainly. A visitor who can find it by reading does not need to ask.</p>
+            <ul>
+              <li>Do not use it where a wrong answer can hurt, such as health, money or the law, unless a person checks the answers.</li>
+              <li>Do not use it to collect data a form should collect. A form says what it asks for, and a conversation does not.</li>
+              <li>Do not use it without a provider, or as a mock-up of a person who is not there.</li>
+            </ul>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Offer questions the provider can answer, written as a visitor would say them.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-chat__suggestions">
+                    <li><span class="luz-btn luz-btn--ghost">How do I install it?</span></li>
+                    <li><span class="luz-btn luz-btn--ghost">How do I change the colours?</span></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Offer buttons that say nothing about the answer: the visitor cannot tell what they will get.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-chat__suggestions">
+                    <li><span class="luz-btn luz-btn--ghost">Click here</span></li>
+                    <li><span class="luz-btn luz-btn--ghost">More</span></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say what is needed and what it costs, and name the action by what it does.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-chat__system">
+                    <p>Answers are written on this device. Download the model first. It is large, so use Wi-Fi if you can.</p>
+                    <div class="o-actions"><span class="luz-btn luz-btn--primary">Download the model</span></div>
+                  </div>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Ask for a step without saying why, or what it will do.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <div class="luz-chat__system">
+                    <p>Action required.</p>
+                    <div class="o-actions"><span class="luz-btn luz-btn--primary">OK</span></div>
+                  </div>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>The visitor is talking to software. Say so, and say what it can and cannot do.</p>
+            <ul>
+              <li>Name the assistant for what it is, such as “Ask the docs”, in <code>assistant-name</code>. Do not give it a human name or a face.</li>
+              <li>Use the line under the field (<code>data-luz-chat-note</code>) to say that answers can be wrong, in plain words: “Answers can be wrong. Check what matters.”</li>
+              <li>Write the questions to try as questions, in the visitor's words and the page's language.</li>
+              <li>Write the <code>message</code> of a state in one or two short sentences: what is needed, why, and what the button does. Start the button with a verb: “Start the demo”, “Download the model”.</li>
+              <li>The <code>name</code> and the <code>message</code> of a thrown error are shown to the visitor. Never put a secret, an address of your own or a stack in them.</li>
+              <li>Tell your visitors where their messages go. The chat cannot know.</li>
+            </ul>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>The visitor's bubble is the brand fill, and the assistant's is a muted surface with a border. Times and dates are muted text on the conversation.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Chat contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Visitor’s bubble</div></td><td data-label="Colour on background"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Light"><div>6.0:1</div></td><td data-label="Dark"><div>4.9:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Assistant’s bubble</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Code in an answer</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>14.4:1</div></td><td data-label="Dark"><div>12.6:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Quote, error detail and settings notes</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>18.4:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Time and date</div></td><td data-label="Colour on background"><div><code>--luz-text-muted</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>5.1:1</div></td><td data-label="Dark"><div>5.2:1</div></td><td data-label="High contrast"><div>9.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Empty conversation</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>6.4:1</div></td><td data-label="Dark"><div>6.9:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Count and note under the field</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>6.4:1</div></td><td data-label="Dark"><div>6.9:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Typing dots</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>18.4:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Settings icon</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Settings icon, hover and open</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>14.4:1</div></td><td data-label="Dark"><div>12.6:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Edge of the conversation and the field</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>3.9:1</div></td><td data-label="Dark"><div>3.9:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Edge of the assistant’s bubble</div></td><td data-label="Colour on background"><div><code>--luz-divider</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div><strong>1.3:1, fails</strong></div></td><td data-label="Dark"><div><strong>1.5:1, fails</strong></div></td><td data-label="High contrast"><div>8.7:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for icons and the edges of controls.</p>
+            <ul>
+              <li><strong>Focus:</strong> the field and the buttons have the ring of LUZ, a 2 px <code>--luz-focus-ring</code> outline. So does the settings button. The conversation, which is focusable so it can be scrolled with the keyboard, has the browser's own outline.</li>
+              <li><strong>Edges:</strong> the conversation and the field have a 1 px border of <code>--luz-input-border</code>. The assistant's bubble has a border of <code>--luz-divider</code>, which is below 3:1 in light and dark: this is a known issue.</li>
+              <li><strong>Motion:</strong> the typing dots and the typed answer use the motion tokens. With reduced motion the dots do not move and an answer shows at once.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 32 tokens that <code>components/chat.css</code> of catalog reads, by family. The buttons, the field, the progress bar and the meter are core's. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-muted"><code>--luz-text-muted</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-lg</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-slower</code>, <code>--luz-easing-standard</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
     </div>

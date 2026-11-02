@@ -281,10 +281,10 @@ describe("catalog.js, the presence loader, loads the two chunks that came from c
   const loader = () => read("packages/catalog/src/catalog.js");
   const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'\\])\/\/.*$/gm, "$1");
 
-  it("names seven chunks as literals (SEC-CHUNK-1), search, cookie-consent, theme-time, theme-time-bar, timeline, embed and sidebar, and nothing else (F8 named the chunks for their elements)", () => {
+  it("names eight chunks as literals (SEC-CHUNK-1), search, cookie-consent, theme-time, theme-time-bar, timeline, embed, chat and sidebar, and nothing else (F8 named the chunks for their elements)", () => {
     const targets = [...code(loader()).matchAll(/\bimport\s*\(\s*(["'])(\.\/[\w.-]+\.js)\1\s*\)/g)].map((m) => m[2]).sort();
-    expect(targets).toEqual(["./cookie-consent.js", "./embed.js", "./search.js", "./sidebar.js", "./theme-time-bar.js", "./theme-time.js", "./timeline.js"]);
-    expect(code(loader()).match(/\bimport\s*\(/g)).toHaveLength(7);
+    expect(targets).toEqual(["./chat.js", "./cookie-consent.js", "./embed.js", "./search.js", "./sidebar.js", "./theme-time-bar.js", "./theme-time.js", "./timeline.js"]);
+    expect(code(loader()).match(/\bimport\s*\(/g)).toHaveLength(8);
   });
 
   it("<luz-timeline> loads timeline.js", () => {
@@ -315,9 +315,9 @@ describe("catalog.js, the presence loader, loads the two chunks that came from c
     expect(loader()).toMatch(/\.luz-sidebar[\s\S]{0,800}not a tag|not a tag[\s\S]{0,800}\.luz-sidebar/i);
   });
 
-  it("the build lists the seven chunks and the size guard expects them", () => {
+  it("the build lists the eight chunks and the size guard expects them", () => {
     const chunks = /chunks:\s*\[([^\]]*)\]/.exec(read("scripts/build-catalog.js"))?.[1] ?? "";
-    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "theme-time.js", "theme-time-bar.js", "timeline.js", "embed.js", "sidebar.js"]);
+    expect([...chunks.matchAll(/["']([\w.-]+\.js)["']/g)].map((m) => m[1])).toEqual(["search.js", "cookie-consent.js", "theme-time.js", "theme-time-bar.js", "timeline.js", "embed.js", "chat.js", "sidebar.js"]);
     const loaders = /const LOADERS = \{([^;]*)\};/.exec(read("scripts/check-size.js"))?.[1] ?? "";
     expect(loaders).toContain("./sidebar.min.js");
     expect(loaders).toContain("./timeline.min.js");

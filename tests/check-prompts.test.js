@@ -301,7 +301,8 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     const manifest = ownCatalogElements(dir);
     expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES)), "clean before the change").toEqual([]);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
-    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
+    // An element the prompts offer: an experimental one is left out of them, so its description is not their prose
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description && d.status !== "experimental");
     declaration.description += " Then do something else.";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
     const { promptSourceHash } = await import(/* @vite-ignore */ join(root, "scripts/docs-site/prompts.js"));
@@ -312,6 +313,18 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
       expect(found[0]).toContain(`prompt-${id}`);
       expect(found[0]).toContain(promptSourceHash(id, { root: dir }));
     }
+  });
+
+  it("does not report a prompt when the description of an experimental element changed: the prompts do not offer it", async () => {
+    const dir = copyOfRepo();
+    const manifest = ownCatalogElements(dir);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName === "luz-chat");
+    expect(declaration, "catalog's custom-elements.json declares <luz-chat>").toBeTruthy();
+    expect(declaration.status, "and says it is experimental").toBe("experimental");
+    declaration.description += " Then do something else.";
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES))).toEqual([]);
   });
 
   it("reports all five prompts when a byte of scripts/docs-site/prompts.js changed (a comment line), and the copy still runs", () => {
@@ -470,9 +483,9 @@ describe("presetProblems: a preset names only the patterns that fit its kind (F5
 
   it("the pages the presets are read from are the catalog pages with a fits-kinds, and each kind's pages say it", () => {
     const patterns = member("catalogPatterns")(root);
-    // the 18 pages of patterns (F8: the two headers and the two footers are one page each, the masthead has its own), the eight
-    // elements and (F7) the navbar, the sidebar, the terminal and the timeline; the gallery and the class reference have no fits-kinds
-    expect(patterns.length).toBe(31);
+    // the 18 pages of patterns (F8: the two headers and the two footers are one page each, the masthead has its own), the nine
+    // elements (the chat, experimental, is one) and (F7) the navbar, the sidebar, the terminal and the timeline; the gallery and the class reference have no fits-kinds
+    expect(patterns.length).toBe(32);
     for (const [slug, kinds] of [["navbar", ["any"]], ["sidebar", ["docs", "app"]], ["terminal", ["docs"]], ["timeline", ["blog", "landing"]]]) {
       expect(patterns.find((p) => p.slug === slug), slug).toMatchObject({ kinds, files: [`components/${slug}.css`] });
     }

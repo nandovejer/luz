@@ -103,10 +103,14 @@ export const namesIn = (node) => luzNamesIn(node);
 /** The component pages of a folder of the docs with a live demo: [{ slug, route, page, specimen }], in route order. */
 function demoPages(folder) {
   return site.pages
-    .filter((p) => p.route.startsWith(`/docs/${folder}/`) && p.route !== `/docs/${folder}/`)
+    // An experimental piece (`status: experimental`) has no block: the debug page is what a design is judged by
+    .filter((p) => p.route.startsWith(`/docs/${folder}/`) && p.route !== `/docs/${folder}/` && p.meta.status !== "experimental")
     .map((page) => ({ slug: page.route.split("/").filter(Boolean).pop(), route: page.route, page, title: page.meta.title, files: page.meta.files ?? "", specimen: specimenOf(page) }))
     .filter((p) => p.specimen);
 }
+
+/** The slugs of the pages of the docs that say `status: experimental`. */
+export const experimentalSlugs = () => site.pages.filter((p) => p.meta.status === "experimental").map((p) => p.route.split("/").filter(Boolean).pop());
 
 /** Core's components (the layout page is the layout objects') and catalog's, each with a demo on its page. */
 export const corePages = () => demoPages("components");

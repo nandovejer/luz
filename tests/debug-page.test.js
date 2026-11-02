@@ -38,6 +38,7 @@ import {
   debugTree,
   descendants,
   elementCards,
+  experimentalSlugs,
   findAll,
   groupNamed,
   groupsOf,
@@ -212,6 +213,14 @@ function componentGroup(name, pages) {
       const missing = pages().map((p) => p.slug).filter((slug) => !names.includes(slug));
       expect(missing, `pages of the docs without a block in ${name}`).toEqual([]);
       expect(pages().length).toBeGreaterThan(0);
+    });
+
+    it("has no block for a page that says `status: experimental`, and has one for the pages around it", () => {
+      const names = blocksOf(group()).map((b) => b.attrs.get("data-debug-name"));
+      const experimental = experimentalSlugs();
+      expect(experimental.length, "the docs have an experimental page").toBeGreaterThan(0);
+      for (const slug of experimental) expect(names, slug).not.toContain(slug);
+      expect(names.length).toBeGreaterThan(0);
     });
 
     it("shows in each block the classes and the elements of the Example of its page", () => {

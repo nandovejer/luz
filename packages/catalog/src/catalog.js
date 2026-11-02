@@ -122,7 +122,7 @@ if (typeof document !== "undefined") {
     if (document.querySelector("luz-timeline")) load("luz-timeline");
     // The embed defines its element, which upgrades every instance; it asks nothing of the player's origin until the visitor acts
     if (document.querySelector("luz-embed")) load("luz-embed");
-    // The chat and the engine of the browser's model define their elements, which upgrade every instance; the engine asks nothing of the model until the visitor agrees
+    // The chat defines its element, which upgrades every instance; it asks its provider nothing until the visitor writes
     if (document.querySelector("luz-chat")) load("luz-chat");
     if (document.querySelector(".luz-sidebar, [data-luz-spy]")) load("sidebar");
   };

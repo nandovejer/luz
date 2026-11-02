@@ -88,7 +88,7 @@ describe("the files of <luz-theme-time> are built and held to a budget", () => {
 
 describe("the presence loader, catalog.min.js", () => {
   const code = () => read(dist("catalog.min.js"));
-  const CHUNKS = ["./cookie-consent.min.js", "./embed.min.js", "./search.min.js", "./sidebar.min.js", "./theme-time-bar.min.js", "./theme-time.min.js", "./timeline.min.js"];
+  const CHUNKS = ["./chat.min.js", "./cookie-consent.min.js", "./embed.min.js", "./search.min.js", "./sidebar.min.js", "./theme-time-bar.min.js", "./theme-time.min.js", "./timeline.min.js"];
 
   it("has no static import", () => {
     expect(code()).not.toMatch(/(?:^|[;}\s])import\b(?!\s*[(.])/);

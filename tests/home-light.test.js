@@ -403,12 +403,13 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
     expect(budgets.some((b) => /light\/(?:city|map|puzzle)\.js$/.test(b.file ?? ""))).toBe(false);
   });
 
-  it("puts them after the theme-time-boot script row and the embed chunk row that follows it, with the prompts row and the debug page row appended after them (no other row moved or raised)", () => {
+  it("puts them after the theme-time-boot script row, the embed chunk row and the two rows of the experimental chat that follow it, with the prompts row and the debug page row appended after them (no other row moved or raised)", () => {
     const names = budgets.map((b) => b.name);
     const mode = names.findIndex((name) => /^catalog theme-time-boot script/.test(name));
     expect(mode, "the theme-time-boot script row").toBeGreaterThanOrEqual(0);
     expect(names[mode + 1], "the embed chunk row comes right after the boot script").toBe("catalog JS lazy chunk: embed");
-    expect(names.slice(mode + 2)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)", "debug page HTML (docs/debug/index.html, uncompressed)"]);
+    expect(names.slice(mode + 2, mode + 4), "the two rows of the chat come right after the embed chunk").toEqual(["catalog component CSS: chat (experimental)", "catalog JS lazy chunk: chat"]);
+    expect(names.slice(mode + 4)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)", "debug page HTML (docs/debug/index.html, uncompressed)"]);
   });
 
   it("repeats them in the PRINCIPLES.md table, with the same ceilings, in the same order", () => {
@@ -421,7 +422,9 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
     const boot = table.findIndex((cells) => /^`catalog` theme-time boot script/.test(cells[0]));
     expect(boot, "the theme-time boot script row of the table").toBeGreaterThanOrEqual(0);
     expect(table[boot + 1][0], "the embed chunk row comes right after the boot script").toMatch(/^`catalog` JS lazy chunk: `embed`/);
-    const at = boot + 1;
+    expect(table[boot + 2][0], "the chat's stylesheet row follows the embed row").toMatch(/^`catalog` component CSS: `chat`/);
+    expect(table[boot + 3][0], "and its chunk row").toMatch(/^`catalog` JS lazy chunk: `chat`/);
+    const at = boot + 3;
     // the prompts row (the kinds plan, F1) comes after them, then the debug page row
     const rows = table.slice(at + 1, at + 1 + ROWS.length);
     expect(table.slice(at + 1)).toHaveLength(ROWS.length + 2);

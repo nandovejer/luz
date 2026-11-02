@@ -28,6 +28,11 @@
 	background: var(--luz-surface);
 }
 
+/* display: grid above would otherwise win over the hidden attribute: a provider that cannot answer shows no field */
+.luz-chat__panel[hidden] {
+	display: none;
+}
+
 .luz-chat__head {
 	position: relative;
 	display: flex;

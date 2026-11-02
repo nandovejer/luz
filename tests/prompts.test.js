@@ -246,7 +246,7 @@ describe("what a prompt says about the system comes from the packages", () => {
     const text = prompt(id);
     const start = text.indexOf("## Elements you may use\n\n") + "## Elements you may use\n\n".length;
     const lines = text.slice(start).split(/\n\n## /)[0].split("\n");
-    const tags = json("packages/catalog/dist/custom-elements.json").modules.flatMap((m) => m.declarations ?? []).filter((d) => d.tagName);
+    const tags = json("packages/catalog/dist/custom-elements.json").modules.flatMap((m) => m.declarations ?? []).filter((d) => d.tagName && d.status !== "experimental");
     expect(tags.length).toBeGreaterThanOrEqual(6);
     for (const d of tags) {
       const line = lines.find((l) => l.startsWith(`- \`<${d.tagName}>\``));
@@ -725,7 +725,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
       .flatMap((pkg) =>
         JSON.parse(readFileSync(join(dir, `packages/${pkg}/dist/custom-elements.json`), "utf-8")).modules.flatMap((m) =>
           (m.declarations ?? [])
-            .filter((d) => d.tagName)
+            .filter((d) => d.tagName && d.status !== "experimental")
             .map((d) => {
               const attrs = grouped((d.attributes ?? []).map((a) => a.name));
               // The stylesheet of an element is not on its line: the body says once where it is
@@ -842,11 +842,46 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     }
   });
 
+  it("offers no experimental element: <luz-chat> is in no prompt, nor its classes nor its stylesheet, and it is not in the hash either", () => {
+    const manifest = json("packages/catalog/dist/custom-elements.json");
+    const chat = manifest.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName === "luz-chat");
+    expect(chat?.status, "custom-elements.json says <luz-chat> is experimental").toBe("experimental");
+    for (const id of IDS) {
+      const text = prompt(id);
+      expect(text, id).not.toContain("<luz-chat>");
+      expect(text, id).not.toMatch(/luz-chat/);
+      expect(text, id).not.toContain("components/chat.css");
+    }
+  });
+
+  it("an element is offered as soon as its page stops saying `status: experimental`: the flag decides, not the name", () => {
+    const dir = copyOfSources();
+    const manifest = withOwnElements(dir);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const chat = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName === "luz-chat");
+    delete chat.status;
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    const text = member("assemblePrompt")("start", { root: dir });
+    expect(text.split("\n").some((l) => l.startsWith("- `<luz-chat>`")), "its line").toBe(true);
+    expect(text, "its classes").toContain("(prefix luz-chat)");
+  });
+
+  it("the description of an experimental element is not prose of a prompt: changing it changes no hash", () => {
+    const dir = copyOfSources();
+    const manifest = withOwnElements(dir);
+    const before = hashes(dir);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const chat = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName === "luz-chat");
+    chat.description += " Then do something else.";
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    expect(hashes(dir)).toEqual(before);
+  });
+
   it("lists the attributes of an element grouped by prefix: three or more `data-luz-<group>-…` are one `data-luz-<group>-*`, two stay as they are, the tag and the description do not change", () => {
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
-    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description && d.status !== "experimental");
     const names = ["remember", "data-luz-pair-a", "data-luz-pair-b", "data-luz-trio-a", "data-luz-trio-b", "data-luz-trio-c", "data-luz-trio-d"];
     declaration.attributes = names.map((name) => ({ name }));
     writeFileSync(manifest, JSON.stringify(data, null, 2));
@@ -862,7 +897,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     const manifest = withOwnElements(dir);
     const before = hashes(dir);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
-    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description && d.status !== "experimental");
     expect(declaration, "an element of catalog has a description").toBeTruthy();
     declaration.description += " Then do something else.";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
@@ -873,7 +908,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
-    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.stylesheet);
+    const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.stylesheet && d.status !== "experimental");
     expect(declaration, "an element of catalog has a stylesheet").toBeTruthy();
     expect(member("assemblePrompt")("start", { root: dir }), "before the change").toContain(`<${declaration.tagName}>`);
     declaration.stylesheet = "components/other.css";

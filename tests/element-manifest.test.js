@@ -129,6 +129,8 @@ const TAGS = [
   { tag: "luz-theme-time", pkg: "catalog", file: "theme-time.js", script: true },
   // The facade of a player of another origin: the attributes are src, consent and data-luz-consent-key, and a boolean hook only ever read with hasAttribute
   { tag: "luz-embed", pkg: "catalog", file: "embed.js", script: true },
+  // Experimental: its page says `status: experimental`, so its declaration does (the prompts for agents leave it out)
+  { tag: "luz-chat", pkg: "catalog", file: "chat.js", script: true },
   { tag: "luz-lang-switch", pkg: "catalog", file: "components/lang-switch.css", script: false },
   { tag: "luz-submenu", pkg: "catalog", file: "components/submenu.css", script: false },
   { tag: "luz-announcement", pkg: "catalog", file: "components/announcement.css", script: false },
@@ -539,6 +541,40 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
     expect(search.exports).toStrictEqual([{ kind: "custom-element-definition", name: "luz-search", declaration: { name: "LuzSearch", module: "search.js" } }]);
   });
 
+  describe("a page that says `status: experimental`", () => {
+    /** The fixture root with a docs app of one page, which documents the tag by its `files` or by its `module`. */
+    function withPage(front) {
+      const dir = fixtureRoot("catalog", { "search.js": SEARCH, "components/search.css": SEARCH_CSS });
+      const put = (path, text) => {
+        mkdirSync(dirname(join(dir, path)), { recursive: true });
+        writeFileSync(join(dir, path), text);
+      };
+      put("apps/docs/site.json", JSON.stringify({ areas: [{ id: "catalog", label: "Catalog", slug: "catalog" }] }));
+      put("apps/docs/pages/index.html", "<!-- luz:page\ntitle: Docs\ndescription: The hub.\narea: hub\n-->\n<p>x</p>\n");
+      put("apps/docs/pages/catalog/search.html", `<!-- luz:page\ntitle: Search\ndescription: A search.\narea: catalog\n${front}-->\n<p>x</p>\n`);
+      return dir;
+    }
+    const declarationOf = (dir) => buildElementManifest("catalog", { root: dir }).modules.find((m) => m.path === "search.js").declarations[0];
+
+    it("makes the declaration of the tag it lists in `files` experimental", () => {
+      const declaration = declarationOf(withPage("files: <luz-search>\nstatus: experimental\n"));
+      expect(declaration.status).toBe("experimental");
+      expect(declaration.demos).toStrictEqual([{ url: "/docs/catalog/search/" }]);
+    });
+
+    it("makes the declaration of the tag it names as its `module` experimental", () => {
+      expect(declarationOf(withPage("module: search.js\nstatus: experimental\n")).status).toBe("experimental");
+    });
+
+    it("leaves a tag whose page does not say so with no status at all", () => {
+      expect(declarationOf(withPage("files: <luz-search>\n"))).not.toHaveProperty("status");
+    });
+
+    it("leaves the other tags alone: a page about another tag does not make this one experimental", () => {
+      expect(declarationOf(withPage("files: <luz-other>\nstatus: experimental\n"))).not.toHaveProperty("status");
+    });
+  });
+
   it("declares a CSS-only tag as a custom element with no definition export, and reads the attribute selector written on the tag", () => {
     const dir = fixtureRoot("catalog", { "components/announcement.css": BANNER });
     const [module] = buildElementManifest("catalog", { root: dir }).modules;
@@ -622,7 +658,7 @@ if (typeof customElements < "u" && !customElements.get("luz-search")) {
 });
 
 describe("the built packages: custom-elements.json", () => {
-  const ALLOWED_DECLARATION = ["kind", "name", "customElement", "tagName", "superclass", "stylesheet", "description", "attributes", "events", "demos"];
+  const ALLOWED_DECLARATION = ["kind", "name", "customElement", "tagName", "superclass", "stylesheet", "description", "attributes", "events", "demos", "status"];
   const manifestOf = (pkg) => readJson(`packages/${pkg}/dist/custom-elements.json`);
   const declarationsOf = (pkg) => manifestOf(pkg).modules.flatMap((m) => m.declarations.map((d) => ({ module: m, declaration: d })));
 

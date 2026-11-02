@@ -109,7 +109,7 @@ export const KINDS = [
 /** How it is loaded; its words are `snippets.way.<id>` and `snippets.way-heading.<id>`. */
 export const WAYS = [{ id: "npm" }, { id: "cdn" }];
 
-/** The chunks: where each is loaded from, and the catalog key that says when a page needs its line. */
+/** The chunks: where each is loaded from, and the catalog key that says when a page needs its line. An experimental one (chat.min.js) has none: its own page says how to load it, and the snippet page keeps to what is stable. */
 const CHUNK_WHEN = {
   "midi.min.js": ["core", "snippets.when.midi"],
   "table-sort.min.js": ["core", "snippets.when.table-sort"],
@@ -121,7 +121,6 @@ const CHUNK_WHEN = {
   "theme-time-bar.min.js": ["catalog", "snippets.when.luz-theme-time-bar"],
   "timeline.min.js": ["catalog", "snippets.when.luz-timeline"],
   "embed.min.js": ["catalog", "snippets.when.luz-embed"],
-  "chat.min.js": ["catalog", "snippets.when.luz-chat"],
   "sidebar.min.js": ["catalog", "snippets.when.luz-sidebar"],
 };
 

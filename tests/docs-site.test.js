@@ -174,6 +174,14 @@ describe("front matter", () => {
     expect(() => parseFrontMatter(PAGE("A", "", "layout: ../evil\n"), "x.html")).toThrow(/layout/);
   });
 
+  // A piece whose API may change in a minor release says so, and the files for agents leave it out
+  it("allows status: experimental, or none, and nothing else", () => {
+    expect(parseFrontMatter(PAGE("A", "", "status: experimental\n"), "x.html", areas).meta.status).toBe("experimental");
+    expect(parseFrontMatter(PAGE("A"), "x.html", areas).meta.status).toBe("");
+    expect(() => parseFrontMatter(PAGE("A", "", "status: beta\n"), "x.html", areas)).toThrow(/status/);
+    expect(() => parseFrontMatter(PAGE("A", "", "status: Experimental\n"), "x.html", areas)).toThrow(/status/);
+  });
+
   // "notfound" is the 404: the generator writes, at <!-- luz:generated -->, one block per other docs language
   it("allows generate: gallery, a-z, snippets, ai and notfound, and nothing else", () => {
     for (const value of ["gallery", "a-z", "snippets", "ai", "notfound"]) {
@@ -649,7 +657,7 @@ describe("the LUZ docs site", () => {
     const viewPages = site.pages.filter(
       (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group && p.meta.group !== "reference"),
     );
-    expect(viewPages).toHaveLength(60);
+    expect(viewPages).toHaveLength(61);
     const CODE = ["markup", "variants", "how", "no-js", "keyboard"];
     const DESIGN = ["when", "when-not", "do-dont", "content", "contrast", "tokens"];
     for (const page of viewPages) {
@@ -944,11 +952,11 @@ describe("the LUZ docs site", () => {
   // catalog again, under the names of their blocks), so a link to /docs/catalog/hero/ is not a link to a page that left
   const LEFT_SITE = ["actions", "footer", "image", "lang-switcher", "notice", "shell", "skip-link", "templates"];
 
-  it("the Catalog area holds its eight components, the navbar, sidebar, terminal and timeline that came from core (F7), the 19 pages of the patterns of the kinds of site, named for their blocks (F8), and its class reference", () => {
+  it("the Catalog area holds its nine components (the chat, experimental, is one), the navbar, sidebar, terminal and timeline that came from core (F7), the 19 pages of the patterns of the kinds of site, named for their blocks (F8), and its class reference", () => {
     const routes = site.pages.filter((p) => p.meta.area === "catalog").map((p) => p.route).sort();
     const patterns = ["site-header", "masthead", "hero", "section", "stat", "site-footer", "page-header", "article-header", "toc", "post-list", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
     const layout = ["navbar", "sidebar", "terminal", "timeline"];
-    const elements = ["announcement", "cookie-consent", "embed", "theme-time", "faq", "lang-switch", "search", "submenu"];
+    const elements = ["announcement", "chat", "cookie-consent", "embed", "theme-time", "faq", "lang-switch", "search", "submenu"];
     expect(routes).toEqual(["/docs/catalog/", ...["classes", ...elements, ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`)]);
     const groups = site.pages.filter((p) => p.meta.area === "catalog" && p.meta.group && p.meta.group !== "reference").map((p) => p.route);
     expect(groups.sort()).toEqual([...elements, ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`));

@@ -28,7 +28,7 @@ function inline(parent, text, link) {
     if (m.index > last) parent.append(text.slice(last, m.index));
     last = m.index + m[0].length;
     const [, code, strong, strong2, del, em, label, url] = m;
-    if (code) parent.append(Object.assign(node("code", "luz-ai__code-inline"), { textContent: code }));
+    if (code) parent.append(Object.assign(node("code", "luz-chat__code-inline"), { textContent: code }));
     else if (strong || strong2) inline(parent.appendChild(node("strong")), strong || strong2, link);
     else if (del) inline(parent.appendChild(node("del")), del, link);
     else if (em) inline(parent.appendChild(node("em")), em, link);
@@ -63,7 +63,7 @@ export function renderMarkdown(markdown, link) {
       const code = [];
       for (i++; i < lines.length && !FENCE.test(lines[i]); i++) code.push(lines[i]);
       i++;
-      const pre = out.appendChild(node("pre", "luz-ai__code"));
+      const pre = out.appendChild(node("pre", "luz-chat__code"));
       pre.tabIndex = 0;
       pre.appendChild(node("code")).textContent = code.join("\n");
     } else if (QUOTE.test(line)) {
@@ -72,7 +72,7 @@ export function renderMarkdown(markdown, link) {
       for (; i < lines.length && (m = QUOTE.exec(lines[i])); i++) rows.push(m[1]);
       inline(out.appendChild(node("blockquote")).appendChild(node("p")), rows.join("\n"), link);
     } else if ((m = HEADING.exec(line))) {
-      inline(out.appendChild(node("p", "luz-ai__h")), m[2], link);
+      inline(out.appendChild(node("p", "luz-chat__h")), m[2], link);
       i++;
     } else if (BULLET.test(line) || NUMBER.test(line)) {
       const ordered = NUMBER.test(line);

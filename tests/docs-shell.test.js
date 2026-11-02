@@ -457,7 +457,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
     }
   });
 
-  it("a component or pattern page ends its head with the chips, in this order: files, module or No JavaScript, modes, Tested, known issues", () => {
+  it("a component or pattern page ends its head with the chips, in this order: Experimental (only for a page that says so), files, module or No JavaScript, modes, Tested, known issues", () => {
     const views = site.pages.filter(isView);
     expect(views.length).toBeGreaterThan(40);
     for (const p of views) {
@@ -471,6 +471,7 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
       const issues = listedIssues(p.body);
       expect(issues, `${p.route} has a Known issues section`).not.toBeUndefined();
       const expected = [
+        ...(p.meta.status === "experimental" ? ["Experimental"] : []),
         ...filesOf(p),
         ...(p.meta.module ? [new RegExp(escapeRe(p.meta.module))] : ["No JavaScript"]),
         "Light · Dark · High contrast",
@@ -597,6 +598,17 @@ describe("the page head: eyebrow, h1, lead, then the chips", () => {
       expect(chips[2]).toMatch(/widget\.js/);
       expect(chips[2]).not.toMatch(/No JavaScript/);
       expect(chips.slice(3)).toEqual(["Light · Dark · High contrast", "Tested", "2 known issues"]);
+    });
+
+    it("a page that says `status: experimental` starts its chips with a yellow Experimental one, and no other page has it", () => {
+      const { root, docs } = repository({ ...PAGES, "components/prototype.html": COMPONENT("Prototype", { files: "components/prototype.css", status: "experimental" }, "<p>None known.</p>") }, { specs: ["prototype"] });
+      const fixture = { root, site: scanSite(docs, root) };
+      expect(chipsOf(fixture, "/docs/components/prototype/")).toEqual(["Experimental", "components/prototype.css", "No JavaScript", "Light · Dark · High contrast", "Tested", "No known issues"]);
+      const first = chipsNodes(fixture, "/docs/components/prototype/")[0];
+      const mark = query(first, "strong");
+      expect(mark && hasClass(mark, "luz-tag"), "the chip is a tag").toBe(true);
+      expect(mark && hasClass(mark, "luz-tag--yellow"), "the tag is yellow").toBe(true);
+      for (const route of ["/docs/components/widget/", "/docs/components/gadget/"]) expect(chipsOf(fixtureSite(), route), route).not.toContain("Experimental");
     });
 
     it("a comma-separated list of classes is one chip", () => {
@@ -938,9 +950,19 @@ describe("index.md: every page also published as Markdown, from the same text as
       compared += 1;
       expect(flat(String(files.get(mdFileOf(p.route)))), p.route).toContain(flat(body));
     }
-    // Every listed page has an entry: the count is the site's, not a number typed here
-    expect(compared).toBe(site.pages.filter((p) => areaOf(site, p) && p.meta.search !== "false").length);
+    // Every listed page has an entry, but an experimental one: the count is the site's, not a number typed here
+    expect(compared).toBe(site.pages.filter((p) => areaOf(site, p) && p.meta.search !== "false" && p.meta.status !== "experimental").length);
     expect(compared).toBeGreaterThan(0);
+  });
+
+  it("an experimental page has its index.md, though llms-full.txt has no entry for it", () => {
+    const experimental = site.pages.filter((p) => p.meta.status === "experimental");
+    expect(experimental.length, "the repository has an experimental page").toBeGreaterThan(0);
+    for (const p of experimental) {
+      expect(files.has(mdFileOf(p.route)), `${mdFileOf(p.route)} is emitted`).toBe(true);
+      expect(entryBodyOf(full, p), p.route).toBeNull();
+      expect(full, p.route).not.toContain(`URL: ${p.route}\n`);
+    }
   });
 
   it("does not make llms-full.txt grow: the files are separate, one entry per page, one # LUZ, under its ceiling", () => {
@@ -948,7 +970,7 @@ describe("index.md: every page also published as Markdown, from the same text as
     expect(full.split("\n").filter((l) => /^# /.test(l))).toEqual(["# LUZ"]);
     const lines = full.split("\n");
     const entries = lines.filter((line, i) => line.startsWith("## ") && lines[i + 1]?.startsWith("URL: "));
-    expect(entries, "one entry per listed page of an area, none for the index.md of a page").toHaveLength(site.pages.filter((p) => areaOf(site, p) && p.meta.search !== "false").length);
+    expect(entries, "one entry per listed page of an area but the experimental ones, none for the index.md of a page").toHaveLength(site.pages.filter((p) => areaOf(site, p) && p.meta.search !== "false" && p.meta.status !== "experimental").length);
     expect(lines.filter((l) => /^URL: .*index\.md$/.test(l))).toEqual([]);
   });
 
