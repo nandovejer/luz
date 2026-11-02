@@ -32,7 +32,7 @@ const DIR = "apps/landing/light";
 const FILES = ["light", "globe", "globe-data"].map((name) => `${DIR}/${name}.js`);
 /** The files that define an element (globe-data.js is data). */
 const ELEMENTS = { light: "home-light", globe: "home-globe" };
-const isLoose = (name) => /loose sheet:? `?bar-list/.test(name);
+const isLoose = (name) => /loose sheet:? `?(?:bar-list|column-chart|stacked-bar|heat-map)\b/.test(name);
 
 /** The code without its comments: a rule may be explained in a comment that names what it forbids. */
 const code = (path) =>
@@ -405,9 +405,11 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
   });
 
   it("puts them after the theme-boot script row of core, with the prompts row and the debug page row appended after them (no catalog row in between: no weight limit, 2026-11-02; no other row moved or raised)", () => {
-    // the loose sheet of the bar list is a row of its own (tests/bar-list.test.js, tests/size-guard.test.js): one, with its ceilings, left out of this order
+    // the loose sheets are a row each (tests/bar-list.test.js, tests/chart-sheets.test.js, tests/size-guard.test.js): four, with their ceilings, left out of this order
     const loose = budgets.filter((b) => isLoose(b.name));
-    expect(loose).toEqual([{ name: "core component CSS, a loose sheet: bar-list", file: "packages/core/dist/components/bar-list.min.css", ideal: 768, max: 1024 }]);
+    expect(loose).toEqual(
+      ["bar-list", "column-chart", "stacked-bar", "heat-map"].map((name) => ({ name: `core component CSS, a loose sheet: ${name}`, file: `packages/core/dist/components/${name}.min.css`, ideal: 768, max: 1024 })),
+    );
     const names = budgets.filter((b) => !isLoose(b.name)).map((b) => b.name);
     const boot = names.findIndex((name) => /^core theme-boot script/.test(name));
     expect(boot, "the theme-boot script row").toBeGreaterThanOrEqual(0);
@@ -421,8 +423,8 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
       .slice(header + 2)
       .filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")))
       .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
-    // the loose sheet of the bar list has its own row (one), left out of this order
-    expect(all.filter((cells) => isLoose(cells[0]))).toHaveLength(1);
+    // the loose sheets have their own row each (four), left out of this order
+    expect(all.filter((cells) => isLoose(cells[0]))).toHaveLength(4);
     const table = all.filter((cells) => !isLoose(cells[0]));
     const boot = table.findIndex((cells) => /^`core` theme boot script/.test(cells[0]));
     expect(boot, "the theme boot script row of the table").toBeGreaterThanOrEqual(0);

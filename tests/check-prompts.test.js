@@ -357,10 +357,24 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     }
   });
 
-  it("is silent about the ceiling when every prompt fits it: `warnings` stays empty", () => {
+  it("warns about exactly the prompts that are over the ceiling of budgets.json, names it and its number, never fails (owner, 2026-11-02), and never raises the ceiling", async () => {
+    const { assemblePrompt } = await import(/* @vite-ignore */ join(root, "scripts/docs-site/prompts.js"));
     const warnings = [];
-    member("checkPrompts")(root, warnings);
-    expect(warnings.filter((w) => /ceiling/.test(w))).toEqual([]);
+    const problems = member("checkPrompts")(root, warnings);
+    expect(problems, "a prompt over its ceiling is a warning, not a problem").toEqual([]);
+    const ceiling = JSON.parse(readFileSync(join(root, "budgets.json"), "utf-8")).budgets.find((b) => b.glob === "docs/prompts/**/*.txt");
+    expect(ceiling, "the ceiling stays the target: 16 KiB").toMatchObject({ max: 16 * 1024 });
+    for (const id of IDS) {
+      const size = Buffer.byteLength(assemblePrompt(id, { root }));
+      const found = warnings.filter((w) => w.includes(`prompts/${id}.txt`));
+      if (size > ceiling.max) {
+        expect(found, `${id} is ${size} B, over ${ceiling.max} B: one warning`).toHaveLength(1);
+        expect(found[0]).toMatch(/over its ceiling/);
+        expect(found[0]).toContain(String(ceiling.max));
+      } else {
+        expect(found, `${id} is ${size} B, under its ceiling: no warning`).toEqual([]);
+      }
+    }
   });
 
   it("still fails a hidden character in a prompt that is also over its ceiling: the warning does not hide a problem", () => {

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ core: the column chart, .luz-column-chart</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <!-- A loose sheet: it is not in luz.css, a page links it after it -->
+  <link rel="stylesheet" href="/packages/core/dist/components/column-chart.css">
+</head>
+<body>
+  <!-- tests/column-chart.spec.js. No script: the column chart is CSS over a native table. Every cell holds its figure as
+       text and --v, from 0 to 1, is its share of the top of the scale (here 200, for every column). -->
+  <main id="main">
+    <h1>Parcels</h1>
+
+    <div id="frame-base" style="inline-size:30rem;max-inline-size:100%">
+      <div class="luz-table-wrap" role="region" aria-label="Parcels per day" tabindex="0">
+        <table class="luz-column-chart" id="base">
+          <caption>Parcels per day, this week</caption>
+          <thead>
+            <tr><th scope="col">Mon</th><th scope="col">Tue</th><th scope="col">Wed</th><th scope="col">Thu</th><th scope="col">Fri</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="--v: 1">200</td><td style="--v: 0.5">100</td><td style="--v: 0.25">50</td><td style="--v: 0">0</td><td style="--v: 0.8">160</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Another series for a whole table, and for a cell of a table of the default one -->
+    <div id="frame-colors" style="inline-size:30rem;max-inline-size:100%">
+      <div class="luz-table-wrap" role="region" aria-label="Another series" tabindex="0">
+        <table class="luz-column-chart" id="series" style="--luz-column-chart-color: var(--luz-chart-2)">
+          <caption>Returned parcels, this week</caption>
+          <thead>
+            <tr><th scope="col">Mon</th><th scope="col">Tue</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="--v: 1">20</td><td style="--v: 1">20</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="luz-table-wrap" role="region" aria-label="A cell of another series" tabindex="0">
+        <table class="luz-column-chart" id="cell">
+          <caption>One column of another series</caption>
+          <thead>
+            <tr><th scope="col">Mon</th><th scope="col">Tue</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="--v: 1">20</td><td style="--v: 1; --luz-column-chart-color: var(--luz-chart-3)">20</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- The height of the columns -->
+    <div id="frame-tall" style="inline-size:30rem;max-inline-size:100%">
+      <div class="luz-table-wrap" role="region" aria-label="Taller columns" tabindex="0">
+        <table class="luz-column-chart" id="tall" style="--luz-column-chart-h: 10rem">
+          <caption>Taller columns</caption>
+          <thead>
+            <tr><th scope="col">A</th><th scope="col">B</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="--v: 1">8</td><td style="--v: 0.5">4</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- More columns than a phone has room for: the wrap scrolls, the page does not, and no figure is cut -->
+    <div class="luz-table-wrap" role="region" aria-label="Parcels per month" tabindex="0" id="wrap-wide">
+      <table class="luz-column-chart" id="wide">
+        <caption>Parcels per month, this year</caption>
+        <thead>
+          <tr><th scope="col">Jan</th><th scope="col">Feb</th><th scope="col">Mar</th><th scope="col">Apr</th><th scope="col">May</th><th scope="col">Jun</th><th scope="col">Jul</th><th scope="col">Aug</th><th scope="col">Sep</th><th scope="col">Oct</th><th scope="col">Nov</th><th scope="col">Dec</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="--v: 0.2">12,000</td><td style="--v: 0.3">18,000</td><td style="--v: 0.4">24,000</td><td style="--v: 0.5">30,000</td><td style="--v: 0.6">36,000</td><td style="--v: 0.7">42,000</td><td style="--v: 0.8">48,000</td><td style="--v: 0.9">54,000</td><td style="--v: 1">60,000</td><td style="--v: 0.9">54,000</td><td style="--v: 0.8">48,000</td><td style="--v: 0.7">42,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

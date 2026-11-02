@@ -142,13 +142,14 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(budgets.slice(0, BEFORE.length).map((b) => [b.name, b.max])).toEqual(BEFORE);
   });
 
-  // The loose sheet of the bar list is a row of its own (tests/bar-list.test.js); where it sits among the others depends on the rows
-  // around it, so these tests count and order the rest without it
-  const isLoose = (name) => /loose sheet:? `?bar-list/.test(name);
+  // The loose sheets (the bar list and the column chart, the stacked bar and the heat map, tests/bar-list.test.js and
+  // tests/chart-sheets.test.js) are a row each; where they sit among the others depends on the rows around them, so these tests
+  // count and order the rest without them
+  const isLoose = (name) => /loose sheet:? `?(?:bar-list|column-chart|stacked-bar|heat-map)\b/.test(name);
 
   it("appends the three AI-ready rows after the docs page row, then the language chunk row (F6), core's rows of the color mode (the chunk and the boot script), the three rows of the home's light (F3), then the prompts row, then the debug page row, and nothing else (catalog has no row: no weight limit, 2026-11-02)", () => {
     const rest = budgets.filter((b) => !isLoose(b.name));
-    expect(budgets.length - rest.length, "one row for the loose sheet of the bar list").toBe(1);
+    expect(budgets.length - rest.length, "one row for each of the four loose sheets").toBe(4);
     expect(rest).toHaveLength(BEFORE.length + 11);
     expect(rest.at(BEFORE.length - 1).name).toBe(last);
     expect(rest.slice(BEFORE.length + 3).map((b) => b.name)).toEqual([
@@ -248,7 +249,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
   });
 
   it("repeats the rows in the PRINCIPLES.md table, in the same order, after \"Each docs page\"", () => {
-    expect(table.filter((cells) => isLoose(cells[0]))).toHaveLength(1);
+    expect(table.filter((cells) => isLoose(cells[0]))).toHaveLength(4);
     expect(table.filter((cells) => !isLoose(cells[0]))).toHaveLength(BEFORE.length + 11);
     expect(table[BEFORE.length - 1][0]).toMatch(/^Each docs page/);
     const [cli, text, manifests] = table.slice(BEFORE.length);
