@@ -578,8 +578,8 @@ describe("no old path is left in the sources, the docs, the specs or the fixture
 
 /* ---- The counts typed in the docs pages follow the sources --------------------------------- */
 
-describe("the figures the docs pages type in a <span data-count> are the ones of the sources (33 components became 30 of core, the loose bar list among them)", () => {
-  // Nothing computes these spans: the page says "30" because someone typed it. This is the check that it stays true.
+describe("the figures the docs pages type in a <span data-count> are the ones of the sources (33 components became 33 of core, the loose bar list and the three charts among them)", () => {
+  // Nothing computes these spans: the page says "33" because someone typed it. This is the check that it stays true.
   const pages = () => walk("apps/docs", (f) => f.endsWith(".html") && /\/pages\//.test(f));
   const spans = (name) => pages().flatMap((file) => [...read(file).matchAll(new RegExp(`<span data-count="${name}">(\\d+)</span>`, "g"))].map((m) => ({ file, value: Number(m[1]) })));
 
@@ -588,7 +588,7 @@ describe("the figures the docs pages type in a <span data-count> are the ones of
     const found = spans("components");
     expect(found.length, "pages that say how many components there are").toBeGreaterThanOrEqual(4);
     expect(found.filter((s) => s.value !== expected).map((s) => `${s.file}: ${s.value}, not ${expected}`)).toEqual([]);
-    expect(expected, "core has 33 stylesheets less the navbar, the sidebar, the terminal and the timeline, plus the bar list").toBe(30);
+    expect(expected, "core has 33 stylesheets less the navbar, the sidebar, the terminal and the timeline, plus the bar list, the column chart, the stacked bar and the heat map").toBe(33);
   });
 
   it("semantic: the tokens of the light block of semantic.css", () => {

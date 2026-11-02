@@ -134,6 +134,9 @@ Words are a component. A button with the wrong label is a broken button. These r
 | `core` JS lazy chunk: `theme-mode` (loaded by `luz.js` when the page has a `<luz-theme-mode>`) | — | ≤ 1 kB | 1 kB | 1.25 kB |
 | `core` theme boot script, `theme-boot.min.js` (a classic script for the `<head>`) | — | ≤ 0.25 kB | 0.25 kB | 0.5 kB |
 | `core` component CSS, a loose sheet: `bar-list` (`packages/core/dist/components/bar-list.min.css`; it is not in `luz.css`, which has no room: a page links it after `luz.css`; new file, new row, fixed once) | — | ≤ 0.75 kB | 0.75 kB | 1 kB |
+| `core` component CSS, a loose sheet: `column-chart` (`packages/core/dist/components/column-chart.min.css`; not in `luz.css`, which has no room: a page links it after `luz.css`; new file, new row, fixed once) | — | ≤ 0.75 kB | 0.75 kB | 1 kB |
+| `core` component CSS, a loose sheet: `stacked-bar` (`packages/core/dist/components/stacked-bar.min.css`; not in `luz.css`, which has no room: a page links it after `luz.css`; new file, new row, fixed once) | — | ≤ 0.75 kB | 0.75 kB | 1 kB |
+| `core` component CSS, a loose sheet: `heat-map` (`packages/core/dist/components/heat-map.min.css`; not in `luz.css`, which has no room: a page links it after `luz.css`; new file, new row, fixed once) | — | ≤ 0.75 kB | 0.75 kB | 1 kB |
 | The home light controller JS, `apps/landing/light/light.js` (gzip of the source; the LUZ website only, not a package) | — | ≤ 7.25 kB | 7.25 kB | 7.5 kB |
 | The home light visual: `globe`, `apps/landing/light/globe.js` (loaded by `light.js` once the element is built; the code only) | — | ≤ 9.25 kB | 9.25 kB | 9.5 kB |
 | The home light data: `globe`, `apps/landing/light/globe-data.js` (the land, Natural Earth 1:110m countries: loaded by `globe.js` once the globe is on screen and the browser is idle) | — | ≤ 9.5 kB | 9.5 kB | 9.75 kB |

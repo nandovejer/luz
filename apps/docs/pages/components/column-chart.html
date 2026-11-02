@@ -1,0 +1,146 @@
+<!-- luz:page
+title: Column chart
+description: Compares a few values as columns of one height scale, drawn from a native table that keeps every figure as text.
+area: components
+group: data
+files: components/column-chart.css
+toc: h2,h3
+-->
+    <div class="docs-component" id="c-column-chart">
+          <h2 id="example">Example</h2>
+          <p>Parcels per day this week: the day, then its figure, then the column.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-table-wrap" role="region" aria-label="Parcels per day" tabindex="0">
+              <table class="luz-column-chart">
+                <caption>Parcels per day, this week</caption>
+                <thead>
+                  <tr><th scope="col">Mon</th><th scope="col">Tue</th><th scope="col">Wed</th><th scope="col">Thu</th><th scope="col">Fri</th><th scope="col">Sat</th><th scope="col">Sun</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td style="--v: .8">1,204</td><td style="--v: .55">830</td><td style="--v: .6">901</td><td style="--v: .95">1,420</td><td style="--v: 1">1,500</td><td style="--v: .25">377</td><td style="--v: 0">0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>None known.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Column chart documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>A separate stylesheet: link <code>components/column-chart.css</code> after <code>luz.css</code>.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-column-chart" aria-label="Copy the column chart markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Column chart markup"><code id="code-column-chart">&lt;table class=&quot;luz-column-chart&quot;&gt;
+  &lt;caption&gt;Parcels per day, this week&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Mon&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Tue&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Wed&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Thu&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Fri&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Sat&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Sun&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td style=&quot;--v: .8&quot;&gt;1,204&lt;/td&gt;&lt;td style=&quot;--v: .55&quot;&gt;830&lt;/td&gt;&lt;td style=&quot;--v: .6&quot;&gt;901&lt;/td&gt;&lt;td style=&quot;--v: .95&quot;&gt;1,420&lt;/td&gt;&lt;td style=&quot;--v: 1&quot;&gt;1,500&lt;/td&gt;&lt;td style=&quot;--v: .25&quot;&gt;377&lt;/td&gt;&lt;td style=&quot;--v: 0&quot;&gt;0&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variants and options</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Column chart options" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Option</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Option"><div><code>--v</code></div></td><td data-label="Effect"><div>On each cell, from 0 to 1: its value over the top of the scale, the same for every column</div></td></tr>
+                  <tr><td data-label="Option"><div><code>--luz-column-chart-color</code></div></td><td data-label="Effect"><div>Another chart colour for a table or a cell, such as <code>var(--luz-chart-2)</code></div></td></tr>
+                  <tr><td data-label="Option"><div><code>--luz-column-chart-h</code></div></td><td data-label="Effect"><div>The height of the columns</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>A table of one head row of names and one row of figures. Each figure is the text of its cell, and the cell draws its column under it, from the foot up to <code>--v</code>, in <code>--luz-chart-1</code>, with the track in <code>--luz-chart-track</code>. The columns share the width evenly.</p>
+            <p>Work out <code>--v</code> from your data: the value divided by the top of the scale, and the same top for every cell. The inline <code>style</code> sets only that. With a strict <code>style-src</code>, set it in a rule of your own, such as <code>.sat { --v: .25 }</code>.</p>
+            <p>At the default text size, up to seven columns fit a 320 px screen. For more, or with larger text, put the table in a <code>luz-table-wrap</code>: when a figure does not fit, the table scrolls inside it.</p>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>It needs none. Without the stylesheet it reads as a table: a head row of names, then the figures.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <p>Nothing takes focus. A table keeps its roles, so a screen reader reads each figure with its name. The caption names the table and says the unit.</p>
+            <p>Do not hide the table: it is the data. The columns are a picture of it and carry no text of their own.</p>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use it to compare a few values that have an order or a name, such as the days of a week or the months of a year, on one scale.</p>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use it for one value (use a <a href="/docs/components/meter/">meter</a>), for long names (use a <a href="/docs/components/bar-list/">bar list</a>), or for a trend over many points. Keep a <a href="/docs/components/table/">table</a> when exact values matter most.</p>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Work every <code>--v</code> from one top of the scale, and write each figure in its cell: the height compares, the number says how much.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <table class="luz-column-chart">
+                    <caption>Parcels per day, this week</caption>
+                    <thead>
+                      <tr><th scope="col">Mon</th><th scope="col">Tue</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td style="--v: .8">1,204</td><td style="--v: .21">312</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Give each column a scale of its own: 312 fills its column as 1,204 does.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <table class="luz-column-chart">
+                    <caption>Parcels per day, this week</caption>
+                    <thead>
+                      <tr><th scope="col">Mon</th><th scope="col">Tue</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td style="--v: 1">1,204</td><td style="--v: 1">312</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>Name the unit and the period in the caption (“Parcels per day, this week”), keep each name to a word or two, and write the figure with its unit when it is not obvious. The data and the labels are yours: the component only draws them.</p>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>The column is a chart colour; the track is quieter on purpose, because the figure carries the value.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Column chart contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Column against its track</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-chart-track</code></div></td><td data-label="Light"><div>3.4:1</div></td><td data-label="Dark"><div>3.8:1</div></td><td data-label="High contrast"><div>6.8:1</div></td><td data-label="Needs"><div>2:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Column on the page</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Column on a card</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>7.2:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Figure</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Name</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons; a quiet decorative part keeps 2:1 against what it is drawn on.</p>
+            <ul>
+              <li><strong>Focus:</strong> nothing takes it.</li>
+              <li><strong>Not colour alone:</strong> every column has its figure in text, and in forced colors the column is drawn in the system highlight with an edge around its track.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 9 tokens that <code>components/column-chart.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-track"><code>--luz-chart-track</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

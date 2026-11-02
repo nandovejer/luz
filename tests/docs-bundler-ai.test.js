@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest";
 import { renderLlmsFull, renderLlmsTxt, renderPageMarkdown } from "../scripts/docs-site/ai.js";
 import { scanSite } from "../scripts/docs-site/site.js";
 import { SITE_URL } from "../vite.config.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const site = scanSite(join(root, "apps/docs"), root);
@@ -65,8 +66,9 @@ describe("llms-full.txt and index.md carry the bundler page as a summary with a 
     expect(bytes(entry), "a summary, not the page").toBeLessThan(1500);
   });
 
-  it("keeps llms-full.txt under its ideal with the page in", () => {
-    expect(bytes(full())).toBeLessThanOrEqual(LLMS_FULL_IDEAL);
+  it("keeps llms-full.txt under its ideal with the page in (a warning, to optimise, when over: owner, 2026-11-02)", () => {
+    warnIfOver("llms-full.txt", bytes(full()), LLMS_FULL_IDEAL);
+    expect(bytes(full()), "the file is built").toBeGreaterThan(0);
   });
 
   it("writes the same summary to the index.md of the page", () => {

@@ -43,10 +43,12 @@ describe("the sheet of the bar list is a loose file of core", () => {
   const source = () => read("packages/core/src/components/bar-list.css");
 
   it("is a source of core's components that the index does not import", () => {
+    // the bar list and the three charts (tests/chart-sheets.test.js) are the loose sheets
+    const LOOSE = ["bar-list.css", "column-chart.css", "stacked-bar.css", "heat-map.css"];
     expect(existsSync(join(root, "packages/core/src/components/bar-list.css"))).toBe(true);
     expect(read("packages/core/src/components/index.css")).not.toMatch(/bar-list/);
-    for (const file of readdirSync(join(root, "packages/core/src/components")).filter((f) => /^[a-z]/.test(f) && f !== "index.css" && f !== "bar-list.css")) {
-      expect(read("packages/core/src/components/index.css"), `${file} is imported, only the bar list is loose`).toContain(`./${file}`);
+    for (const file of readdirSync(join(root, "packages/core/src/components")).filter((f) => /^[a-z]/.test(f) && f !== "index.css" && !LOOSE.includes(f))) {
+      expect(read("packages/core/src/components/index.css"), `${file} is imported, only the loose sheets are not`).toContain(`./${file}`);
     }
   });
 
@@ -116,7 +118,7 @@ describe("the budget of the loose sheet", () => {
     expect(bytes(ideal)).toBe(768);
     expect(bytes(warn)).toBe(768);
     expect(bytes(ceiling)).toBe(1024);
-    expect(table.filter(([cell]) => /loose sheet/.test(cell)), "one row").toHaveLength(1);
+    expect(table.filter(([cell]) => /loose sheet:? `?bar-list/.test(cell)), "one row").toHaveLength(1);
   });
 
   it("has the ceilings of the table equal to budgets.json, row for row", () => {
@@ -177,11 +179,11 @@ describe("the gallery of the components", () => {
   it.each([
     ["/docs/components/", "Data", "/docs/components/bar-list/"],
     ["/es/docs/components/", "Datos", "/es/docs/components/bar-list/"],
-  ])("%s has a section %s with one card, to the bar list", (route, heading, href) => {
+  ])("%s has a section %s with a card to the bar list (and one to each of the three charts: four in all)", (route, heading, href) => {
     const html = rendered().get(route);
     const section = html.split('aria-labelledby="group-data"')[1]?.split("</section>")[0] ?? "";
     expect(section, `${route} has the group`).toContain(`<h2 id="group-data">${heading}</h2>`);
-    expect(section.match(/<li class="luz-card docs-card">/g)).toHaveLength(1);
+    expect(section.match(/<li class="luz-card docs-card">/g)).toHaveLength(4);
     expect(section).toContain(`href="${href}"`);
   });
 });
@@ -204,8 +206,8 @@ describe("looseCoreSheets(): the sheets of core that luz.css does not hold", () 
     return dir;
   }
 
-  it("returns the real one: components/bar-list.css, read from the sources", () => {
-    expect(looseCoreSheets(root)).toEqual([SHEET]);
+  it("returns the real ones: the bar list and the three charts, read from the sources", () => {
+    expect(looseCoreSheets(root)).toEqual([SHEET, "components/column-chart.css", "components/heat-map.css", "components/stacked-bar.css"]);
   });
 
   it("returns the files of src/components that the index does not import, sorted, as components/<file>", () => {
@@ -265,10 +267,12 @@ describe("{{loose}}: the link of a loose sheet, written in the head of the pages
     }
   });
 
-  it("is linked by the debug page after luz.css, before the catalog's sheets: it shows every component", () => {
+  it("is linked by the debug page after luz.css, with the three charts' sheets, before the catalog's sheets: it shows every component", () => {
     const links = sheets(renderedDebug());
-    expect(links.slice(0, 3)).toEqual(["/packages/tokens/dist/luz-tokens.css", "/packages/core/dist/luz.css", LINK]);
-    expect(links.findIndex((href) => href.startsWith("/packages/catalog/"))).toBe(3);
+    const loose = ["bar-list", "column-chart", "heat-map", "stacked-bar"].map((name) => `/packages/core/dist/components/${name}.css`);
+    expect(loose[0]).toBe(LINK);
+    expect(links.slice(0, 6)).toEqual(["/packages/tokens/dist/luz-tokens.css", "/packages/core/dist/luz.css", ...loose]);
+    expect(links.findIndex((href) => href.startsWith("/packages/catalog/"))).toBe(6);
   });
 
   it("is in the page layout of the docs as a placeholder right after luz.css, never typed", () => {

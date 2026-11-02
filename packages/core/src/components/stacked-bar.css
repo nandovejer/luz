@@ -1,0 +1,137 @@
+/* --------------------------------------------------------------------------
+   LUZ Component: stacked-bar
+   Stacked bar — the shares of a whole, in one bar and a legend that says them in text:
+   <figure class="luz-stacked-bar"> <div class="luz-stacked-bar__bar" aria-hidden="true">
+   with one <span class="luz-stacked-bar__part" style="--v: 62"> per share, and a
+   <ul class="luz-stacked-bar__legend"> with one <li class="luz-stacked-bar__item">
+   (<span class="luz-stacked-bar__name">, <span class="luz-stacked-bar__figure">) per
+   share, in the same order. --v is the share's weight: the bar always fills its width,
+   and a part takes --v of the sum, so the values themselves (62, 25, 13) do. The
+   legend is the data; the bar is a picture of it, hidden from assistive technology.
+   Without this file the figure reads as the legend, a list of names and figures.
+   The series take --luz-chart-1 to -6 in the order of the markup; a part and its item
+   take another with --luz-stacked-bar-color. --luz-stacked-bar-h sets the height.
+   Contrast: every series is 3:1 on the surfaces in every mode and the six are told
+   apart by hue and lightness; in forced colors the parts and the marks of the legend
+   carry the same number.
+   Layer: components (ITCSS 5) · Prefix: .luz-
+   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Loose sheet: not in luz.css (core CSS has no room); link
+   @luz-ds/core/components/stacked-bar.css after luz.css.
+   -------------------------------------------------------------------------- */
+
+/* A figure that is a layout box, not the surface the bare element is */
+.luz-stacked-bar {
+  --luz-stacked-bar-h: var(--luz-space-md);
+
+  display: grid;
+  gap: var(--luz-space-sm);
+  margin: 0;
+  padding: 0;
+  background: none;
+}
+
+.luz-stacked-bar :where(figcaption) {
+  font-size: var(--luz-text-sm);
+}
+
+/* The surface shows through the gap, so the parts are told apart without colour */
+.luz-stacked-bar__bar {
+  display: flex;
+  gap: var(--luz-space-3xs);
+  block-size: var(--luz-stacked-bar-h);
+  overflow: hidden;
+  border-radius: var(--luz-radius-sm);
+}
+
+.luz-stacked-bar__part {
+  flex: var(--v, 1) 1 0%;
+  min-inline-size: var(--luz-space-3xs);
+  background: var(--luz-stacked-bar-color, var(--luz-chart-1));
+}
+
+.luz-stacked-bar__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--luz-space-xs) var(--luz-space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.luz-stacked-bar__item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--luz-space-2xs);
+}
+
+.luz-stacked-bar__item::before {
+  content: "";
+  flex: none;
+  inline-size: var(--luz-space-xs);
+  block-size: var(--luz-space-xs);
+  border-radius: var(--luz-radius-sm);
+  background: var(--luz-stacked-bar-color, var(--luz-chart-1));
+}
+
+.luz-stacked-bar__name {
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-xs);
+  letter-spacing: 0.04em;
+  color: var(--luz-text-secondary);
+}
+
+/* A joined script takes no letter spacing, and the sans */
+.luz-stacked-bar__name:is(:lang(ar), :lang(fa), :lang(ur)) {
+  font-family: var(--luz-font-sans);
+  letter-spacing: 0;
+}
+
+.luz-stacked-bar__figure {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--luz-text-sm);
+}
+
+/* The series, in the order of the markup */
+:is(.luz-stacked-bar__part, .luz-stacked-bar__item):nth-child(2) { --luz-stacked-bar-color: var(--luz-chart-2); }
+:is(.luz-stacked-bar__part, .luz-stacked-bar__item):nth-child(3) { --luz-stacked-bar-color: var(--luz-chart-3); }
+:is(.luz-stacked-bar__part, .luz-stacked-bar__item):nth-child(4) { --luz-stacked-bar-color: var(--luz-chart-4); }
+:is(.luz-stacked-bar__part, .luz-stacked-bar__item):nth-child(5) { --luz-stacked-bar-color: var(--luz-chart-5); }
+:is(.luz-stacked-bar__part, .luz-stacked-bar__item):nth-child(6) { --luz-stacked-bar-color: var(--luz-chart-6); }
+
+/* Forced colors flatten backgrounds to Canvas: every part has an edge and
+   the number of its item, and the mark of the item shows the same number */
+@media (forced-colors: active) {
+  .luz-stacked-bar__bar,
+  .luz-stacked-bar__legend {
+    counter-reset: luz-series;
+  }
+
+  .luz-stacked-bar__part,
+  .luz-stacked-bar__item::before {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    font-size: var(--luz-text-xs);
+    counter-increment: luz-series;
+    forced-color-adjust: none;
+  }
+
+  .luz-stacked-bar__part::before,
+  .luz-stacked-bar__item::before {
+    content: counter(luz-series);
+  }
+
+  .luz-stacked-bar__part::before {
+    line-height: 1;
+  }
+
+  .luz-stacked-bar__item::before {
+    inline-size: auto;
+    min-inline-size: var(--luz-space-md);
+    block-size: auto;
+  }
+}

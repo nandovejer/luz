@@ -125,7 +125,7 @@ const looseSheetsOf = (dir) => {
  * components/extra-bars.css, not imported by the index, and its class in core's classes.json. Everything else is the real
  * package, linked.
  */
-function copyWithExtraLooseSheet({ extra = true, importBarList = false } = {}) {
+function copyWithExtraLooseSheet({ extra = true, importLoose = false } = {}) {
   const dir = copyOfSources();
   rmSync(join(dir, "packages"), { force: true });
   mkdirSync(join(dir, "packages"));
@@ -138,7 +138,10 @@ function copyWithExtraLooseSheet({ extra = true, importBarList = false } = {}) {
   link(join(root, "packages/core/src"), join(dir, "packages/core/src"), "components");
   cpSync(join(root, "packages/core/src/components"), join(dir, "packages/core/src/components"), { recursive: true });
   if (extra) writeFileSync(join(dir, "packages/core/src/components/extra-bars.css"), "/* a loose sheet of the test */\n.luz-extra-bars { display: grid; }\n");
-  if (importBarList) writeFileSync(join(dir, "packages/core/src/components/index.css"), `${readFileSync(join(root, "packages/core/src/components/index.css"), "utf-8")}\n@import url("./bar-list.css");\n`);
+  if (importLoose) {
+    const imports = ["bar-list", "column-chart", "stacked-bar", "heat-map"].map((name) => `@import url("./${name}.css");`).join("\n");
+    writeFileSync(join(dir, "packages/core/src/components/index.css"), `${readFileSync(join(root, "packages/core/src/components/index.css"), "utf-8")}\n${imports}\n`);
+  }
   rmSync(join(dir, "packages/core/dist"), { force: true });
   link(join(root, "packages/core/dist"), join(dir, "packages/core/dist"), "classes.json");
   const manifest = JSON.parse(readFileSync(join(root, "packages/core/dist/classes.json"), "utf-8"));
@@ -459,7 +462,7 @@ describe("what a prompt says about the system comes from the packages", () => {
 
   it.each(IDS)("%s: says on the line of each class of a loose core sheet to link it after luz.css, and on no other line", (id) => {
     const loose = looseSheetsOf(root);
-    expect(loose, "core has a loose sheet: the bar list").toContain("components/bar-list.css");
+    expect(loose, "core has loose sheets: the bar list and the three charts").toEqual(["components/bar-list.css", "components/column-chart.css", "components/heat-map.css", "components/stacked-bar.css"]);
     const manifest = json("packages/core/dist/classes.json").classes;
     const lines = prompt(id).split("\n").filter((l) => l.startsWith("- `luz-") || l.startsWith("- the parts of"));
     const clause = (file) => ` (link \`${file}\` after \`luz.css\`)`;
@@ -481,12 +484,12 @@ describe("what a prompt says about the system comes from the packages", () => {
 
   it("a loose sheet of core that no prompt source names gets its clause too: the generator reads it from the sources, nothing is typed", () => {
     const dir = copyWithExtraLooseSheet();
-    expect(looseSheetsOf(dir)).toEqual(["components/bar-list.css", "components/extra-bars.css"]);
+    expect(looseSheetsOf(dir)).toEqual(["components/bar-list.css", "components/column-chart.css", "components/extra-bars.css", "components/heat-map.css", "components/stacked-bar.css"]);
     for (const id of IDS) {
       const text = assemble(id, { root: dir });
       expect(text, `${id}: the new sheet`).toContain("\n- `luz-extra-bars` (link `components/extra-bars.css` after `luz.css`): `--wide`\n");
       expect(text, `${id}: the bar list still has its own`).toContain("\n- `luz-bar-list` (link `components/bar-list.css` after `luz.css`): ");
-      expect(text.match(/\(link `components\//g), `${id}: a clause each, no more`).toHaveLength(2);
+      expect(text.match(/\(link `components\//g), `${id}: a clause each, no more`).toHaveLength(5);
     }
     for (const file of readdirSync(join(root, "apps/site/prompts"), { recursive: true }).filter((f) => /\.(md|json)$/.test(f))) {
       expect(read(`apps/site/prompts/${file}`), `${file} names no loose sheet`).not.toMatch(/bar-list|extra-bars/);
@@ -495,7 +498,7 @@ describe("what a prompt says about the system comes from the packages", () => {
   });
 
   it("when luz.css holds every sheet of core, no line has a clause: the clause follows the sources, not the bar list", () => {
-    const dir = copyWithExtraLooseSheet({ extra: false, importBarList: true });
+    const dir = copyWithExtraLooseSheet({ extra: false, importLoose: true });
     expect(looseSheetsOf(dir)).toEqual([]);
     for (const id of IDS) {
       const text = assemble(id, { root: dir });

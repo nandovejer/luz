@@ -1,0 +1,89 @@
+/* --------------------------------------------------------------------------
+   LUZ Component: column-chart
+   Column chart — a native table, drawn as columns: <table class="luz-column-chart">
+   with a caption, one head row of names (<th scope="col">) and one row of cells, each
+   <td style="--v: 0.8"> holding its figure as text. --v is the share of the column
+   (0 to 1: the value over the scale's top); every cell uses the same scale, so the
+   columns compare. Without this file it reads as a table, the head row then the figures.
+   The column is the first chart colour on the chart track (--luz-chart-1,
+   --luz-chart-track); --luz-column-chart-color sets another series for a table or a
+   cell, --luz-column-chart-h the height of the columns. The name is above the figure
+   and the figure above its column, as the markup reads. Columns share the width evenly and a figure is
+   never cut, so a table too narrow for its figures scrolls: put it in a
+   .luz-table-wrap.
+   Contrast: the fill is 3:1 on the surfaces in every mode; the track is a quiet
+   1.5:1, decorative, because the figure carries the value.
+   Layer: components (ITCSS 5) · Prefix: .luz-
+   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Loose sheet: not in luz.css (core CSS has no room); link
+   @luz-ds/core/components/column-chart.css after luz.css.
+   -------------------------------------------------------------------------- */
+
+.luz-column-chart {
+  --luz-column-chart-track: var(--luz-chart-track);
+  --luz-column-chart-h: calc(var(--luz-space-2xl) * 3);
+}
+
+/* The bare table gives a head surface, a rule and a hover to its cells: a chart has none */
+.luz-column-chart :is(th, td) {
+  inline-size: 1%;
+  padding: 0 var(--luz-space-2xs);
+  border: 0;
+  background: none;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.luz-column-chart th {
+  padding-block-end: var(--luz-space-2xs);
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-xs);
+  letter-spacing: 0.04em;
+  color: var(--luz-text-secondary);
+}
+
+/* A joined script takes no letter spacing, and the sans */
+.luz-column-chart th:is(:lang(ar), :lang(fa), :lang(ur)) {
+  font-family: var(--luz-font-sans);
+  letter-spacing: 0;
+}
+
+.luz-column-chart td {
+  /* Resolved on the cell, so a cell may set its own --luz-column-chart-color */
+  --luz-column-chart-fill: var(--luz-column-chart-color, var(--luz-chart-1));
+
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--luz-text-xs);
+}
+
+/* The column: a track of --luz-column-chart-h, filled from the foot up to --v */
+.luz-column-chart td::after {
+  content: "";
+  display: block;
+  block-size: var(--luz-column-chart-h);
+  margin-block-start: var(--luz-space-2xs);
+  border-radius: var(--luz-radius-sm) var(--luz-radius-sm) 0 0;
+  background: linear-gradient(
+    to top,
+    var(--luz-column-chart-fill) calc(var(--v, 0) * 100%),
+    var(--luz-column-chart-track) 0
+  );
+}
+
+/* Forced colors flatten backgrounds to Canvas: keep the track's edge and draw
+   the fill in the system highlight colour */
+@media (forced-colors: active) {
+  .luz-column-chart {
+    --luz-column-chart-track: Canvas;
+  }
+
+  .luz-column-chart td {
+    --luz-column-chart-fill: Highlight;
+  }
+
+  .luz-column-chart td::after {
+    border: 1px solid CanvasText;
+    forced-color-adjust: none;
+  }
+}

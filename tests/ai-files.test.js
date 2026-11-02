@@ -1249,18 +1249,21 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
     }
   });
 
-  it("links core's loose sheet after luz.css on the page of the bar list, and on no other page", () => {
-    expect(LOOSE_CORE, "the bar list is the sheet core's luz.css has no room for").toContain("components/bar-list.css");
+  it("links core's loose sheet after luz.css on the page of its own component (the bar list and the three charts), and on no other page", () => {
+    const OWNERS = { "components/bar-list.css": "bar-list", "components/column-chart.css": "column-chart", "components/heat-map.css": "heat-map", "components/stacked-bar.css": "stacked-bar" };
+    expect(LOOSE_CORE, "the bar list and the three charts are the sheets core's luz.css has no room for").toEqual(Object.keys(OWNERS));
     const linkedBy = [];
     for (const e of examples()) {
       const hrefs = inspect(e.html, e.route).links.map((l) => l.href);
       const loose = hrefs.filter((h) => LOOSE_CORE.some((f) => h.endsWith(`/${minifiedOf(f)}`)));
       if (!loose.length) continue;
       linkedBy.push(e.route);
-      expect(loose, e.route).toEqual(["../dist/core/components/bar-list.min.css"]);
+      const own = e.route.split("/").at(-1).replace(/\.html$/, "");
+      expect(loose, e.route).toEqual([`../dist/core/components/${own}.min.css`]);
+      expect(Object.values(OWNERS), e.route).toContain(own);
       expect(hrefs.indexOf(loose[0]), `${e.route}: right after luz.min.css`).toBe(hrefs.indexOf(`../dist/core/${cssOf("core")}`) + 1);
     }
-    expect(linkedBy).toEqual(["/examples/components/bar-list.html"]);
+    expect(linkedBy).toEqual(["/examples/components/bar-list.html", "/examples/components/column-chart.html", "/examples/components/heat-map.html", "/examples/components/stacked-bar.html"]);
   });
 
   it("links the four components that moved from core first among catalog's files, in the order sidebar, navbar, terminal, timeline", () => {

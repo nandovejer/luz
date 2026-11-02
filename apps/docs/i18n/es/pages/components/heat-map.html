@@ -1,0 +1,149 @@
+<!-- luz:page
+title: Mapa de calor
+description: Muestra cuánto hay en cada celda de una cuadrícula con color y con cifra, desde una tabla nativa; un calendario es uno.
+source: f4fd903b5764
+reviewed: false
+-->
+    <div class="docs-component" id="c-heat-map">
+          <h2 id="example">Ejemplo</h2>
+          <p>Paquetes en cada momento del día, durante los cinco días laborables.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-table-wrap" role="region" aria-label="Parcels per part of the day" tabindex="0">
+              <table class="luz-heat-map">
+                <caption>Parcels per part of the day, this week. The stronger the colour, the more parcels.</caption>
+                <thead>
+                  <tr><td></td><th scope="col">Mon</th><th scope="col">Tue</th><th scope="col">Wed</th><th scope="col">Thu</th><th scope="col">Fri</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Morning</th><td style="--v: .2">120</td><td style="--v: .4">240</td><td style="--v: .6">360</td><td style="--v: .8">480</td><td style="--v: 1">600</td></tr>
+                  <tr><th scope="row">Afternoon</th><td style="--v: 0">0</td><td style="--v: .1">60</td><td style="--v: .5">300</td><td style="--v: .3">180</td><td style="--v: .9">540</td></tr>
+                  <tr><th scope="row">Evening</th><td style="--v: .05">30</td><td style="--v: .15">90</td><td style="--v: .25">150</td><td style="--v: .45">270</td><td style="--v: .7">420</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del mapa de calor">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Una hoja de estilos aparte: enlaza <code>components/heat-map.css</code> después de <code>luz.css</code>.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-heat-map" aria-label="Copy the heat map markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Heat map markup"><code id="code-heat-map">&lt;table class=&quot;luz-heat-map&quot;&gt;
+  &lt;caption&gt;Parcels per part of the day, this week. The stronger the colour, the more parcels.&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;th scope=&quot;col&quot;&gt;Mon&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Tue&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Wed&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Thu&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Fri&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Morning&lt;/th&gt;&lt;td style=&quot;--v: .2&quot;&gt;120&lt;/td&gt;&lt;td style=&quot;--v: .4&quot;&gt;240&lt;/td&gt;&lt;td style=&quot;--v: .6&quot;&gt;360&lt;/td&gt;&lt;td style=&quot;--v: .8&quot;&gt;480&lt;/td&gt;&lt;td style=&quot;--v: 1&quot;&gt;600&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Afternoon&lt;/th&gt;&lt;td style=&quot;--v: 0&quot;&gt;0&lt;/td&gt;&lt;td style=&quot;--v: .1&quot;&gt;60&lt;/td&gt;&lt;td style=&quot;--v: .5&quot;&gt;300&lt;/td&gt;&lt;td style=&quot;--v: .3&quot;&gt;180&lt;/td&gt;&lt;td style=&quot;--v: .9&quot;&gt;540&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Evening&lt;/th&gt;&lt;td style=&quot;--v: .05&quot;&gt;30&lt;/td&gt;&lt;td style=&quot;--v: .15&quot;&gt;90&lt;/td&gt;&lt;td style=&quot;--v: .25&quot;&gt;150&lt;/td&gt;&lt;td style=&quot;--v: .45&quot;&gt;270&lt;/td&gt;&lt;td style=&quot;--v: .7&quot;&gt;420&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones del mapa de calor" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Opción</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Opción"><div><code>--v</code></div></td><td data-label="Efecto"><div>En cada celda, de 0 a 1: su valor entre el valor más fuerte de toda la tabla</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-heat-map-color</code></div></td><td data-label="Efecto"><div>Otro color de gráfico para una tabla o una celda, como <code>var(--luz-chart-2)</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Una tabla con una fila de encabezado de nombres y un nombre al principio de cada fila. Cada celda es su cifra en texto, con una muestra encima que mezcla <code>--luz-chart-1</code> en <code>--luz-chart-track</code> en proporción a <code>--v</code>: la pista en 0, la serie en 1. La cifra queda sobre la superficie con el color del texto, así que se lee sea cual sea el valor.</p>
+            <p>Calcula <code>--v</code> a partir de tus datos: el valor dividido entre el valor más fuerte de la tabla, el mismo para todas las celdas. Un calendario es un mapa de calor con los días de la semana como columnas y las semanas como filas. El <code>style</code> en línea solo da <code>--v</code>; con un <code>style-src</code> estricto, ponlo en una regla propia.</p>
+            <p>La celda de la esquina de la fila de encabezado es un <code>td</code> vacío. Quédate en unas pocas columnas: con más de seis hace falta un <code>luz-table-wrap</code>.</p>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No lo necesita. Sin la hoja de estilos se lee como una tabla de cifras.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Nada recibe el foco. Una tabla conserva sus roles, así que un lector de pantalla lee cada cifra con los nombres de su fila y su columna. El título de la tabla la nombra e indica en qué sentido hay más.</p>
+            <p>La muestra no lleva texto ni nombre: la cifra es el valor.</p>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Úsalo para ver dónde están los valores altos y bajos de una cuadrícula: una semana por horas, un mes de días, un equipo por trimestre.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses para unos pocos valores (usa una <a href="/docs/components/bar-list/">lista de barras</a> o un <a href="/docs/components/column-chart/">gráfico de columnas</a>) ni cuando importen más los valores exactos que el patrón (usa una <a href="/docs/components/table/">tabla</a>).</p>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Calcula todos los <code>--v</code> con el valor más fuerte de toda la tabla, para que un mismo color signifique siempre la misma cifra.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <table class="luz-heat-map">
+                    <caption>Parcels per part of the day. The stronger the colour, the more parcels.</caption>
+                    <thead>
+                      <tr><td></td><th scope="col">Mon</th><th scope="col">Tue</th><th scope="col">Wed</th><th scope="col">Thu</th><th scope="col">Fri</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th scope="row">Morning</th><td style="--v: .2">120</td><td style="--v: .4">240</td><td style="--v: .6">360</td><td style="--v: .8">480</td><td style="--v: 1">600</td></tr>
+                      <tr><th scope="row">Night</th><td style="--v: .01">6</td><td style="--v: .02">12</td><td style="--v: .03">18</td><td style="--v: .04">24</td><td style="--v: .05">30</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Una escala propia en cada fila: la fila de la noche, con 30 como máximo, parece tan fuerte como la de la mañana, con 600, y el color deja de comparar.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <table class="luz-heat-map">
+                    <caption>Parcels per part of the day. The stronger the colour, the more parcels.</caption>
+                    <thead>
+                      <tr><td></td><th scope="col">Mon</th><th scope="col">Tue</th><th scope="col">Wed</th><th scope="col">Thu</th><th scope="col">Fri</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th scope="row">Morning</th><td style="--v: .2">120</td><td style="--v: .4">240</td><td style="--v: .6">360</td><td style="--v: .8">480</td><td style="--v: 1">600</td></tr>
+                      <tr><th scope="row">Night</th><td style="--v: .2">6</td><td style="--v: .4">12</td><td style="--v: .6">18</td><td style="--v: .8">24</td><td style="--v: 1">30</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Indica en el título qué cuenta la cuadrícula y en qué sentido hay más. El color es más claro para más en modo oscuro y más oscuro en modo claro, así que escribe «cuanto más fuerte el color» y no «cuanto más oscuro». Los datos y las etiquetas son tuyos: el componente solo los dibuja.</p>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>La muestra es un color de gráfico sobre la superficie; la vacía es la pista, discreta a propósito, porque la cifra lleva el valor.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del mapa de calor en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Muestra más fuerte sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Muestra más fuerte frente a la vacía</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-chart-track</code></div></td><td data-label="Claro"><div>3.4:1</div></td><td data-label="Oscuro"><div>3.8:1</div></td><td data-label="Alto contraste"><div>6.8:1</div></td><td data-label="Requisitos"><div>2:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Muestra vacía sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-track</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>1.6:1</div></td><td data-label="Oscuro"><div>2.0:1</div></td><td data-label="Alto contraste"><div>2.0:1</div></td><td data-label="Requisitos"><div>1.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cifra</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Nombre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos; una parte decorativa discreta mantiene 2:1 con aquello sobre lo que se dibuja.</p>
+            <ul>
+              <li><strong>Foco:</strong> nada lo recibe.</li>
+              <li><strong>No solo color:</strong> cada muestra tiene su cifra debajo en texto, y en colores forzados la muestra es el resalte del sistema mezclado en el fondo, con un borde.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 12 tokens que lee <code>components/heat-map.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-track"><code>--luz-chart-track</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-lg</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

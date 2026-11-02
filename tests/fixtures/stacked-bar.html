@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ core: the stacked bar, .luz-stacked-bar</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <!-- A loose sheet: it is not in luz.css, a page links it after it -->
+  <link rel="stylesheet" href="/packages/core/dist/components/stacked-bar.css">
+</head>
+<body>
+  <!-- tests/stacked-bar.spec.js. No script: the stacked bar is CSS. The bar is a picture and is hidden; the legend is the
+       data: one item for each part, in the same order, with its name and its figure in text. -->
+  <main id="main">
+    <h1>Parcels</h1>
+
+    <!-- Parts of 50, 30 and 20: the bar is filled whatever the sum -->
+    <div id="frame-base" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-stacked-bar" id="base">
+        <figcaption>Parcels by status</figcaption>
+        <div class="luz-stacked-bar__bar" aria-hidden="true">
+          <span class="luz-stacked-bar__part" style="--v: 50"></span>
+          <span class="luz-stacked-bar__part" style="--v: 30"></span>
+          <span class="luz-stacked-bar__part" style="--v: 20"></span>
+        </div>
+        <ul class="luz-stacked-bar__legend">
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delivered</span> <span class="luz-stacked-bar__figure">50 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">In transit</span> <span class="luz-stacked-bar__figure">30 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">At depot</span> <span class="luz-stacked-bar__figure">20 %</span></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- The six series, in the order of the markup, with parts of a share small enough to want the minimum -->
+    <div id="frame-six" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-stacked-bar" id="six">
+        <figcaption>Parcels by status, six series</figcaption>
+        <div class="luz-stacked-bar__bar" aria-hidden="true">
+          <span class="luz-stacked-bar__part" style="--v: 62"></span>
+          <span class="luz-stacked-bar__part" style="--v: 21"></span>
+          <span class="luz-stacked-bar__part" style="--v: 9"></span>
+          <span class="luz-stacked-bar__part" style="--v: 5"></span>
+          <span class="luz-stacked-bar__part" style="--v: 2"></span>
+          <span class="luz-stacked-bar__part" style="--v: 1"></span>
+        </div>
+        <ul class="luz-stacked-bar__legend">
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delivered</span> <span class="luz-stacked-bar__figure">62 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">In transit</span> <span class="luz-stacked-bar__figure">21 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">At depot</span> <span class="luz-stacked-bar__figure">9 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delayed</span> <span class="luz-stacked-bar__figure">5 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Returned</span> <span class="luz-stacked-bar__figure">2 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Lost</span> <span class="luz-stacked-bar__figure">1 %</span></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- Another colour for a part and its item, and another height -->
+    <div id="frame-own" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-stacked-bar" id="own" style="--luz-stacked-bar-h: 3rem">
+        <figcaption>One colour of its own</figcaption>
+        <div class="luz-stacked-bar__bar" aria-hidden="true">
+          <span class="luz-stacked-bar__part" style="--v: 1"></span>
+          <span class="luz-stacked-bar__part" style="--v: 1; --luz-stacked-bar-color: var(--luz-chart-6)"></span>
+        </div>
+        <ul class="luz-stacked-bar__legend">
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">First</span> <span class="luz-stacked-bar__figure">1</span></li>
+          <li class="luz-stacked-bar__item" style="--luz-stacked-bar-color: var(--luz-chart-6)"><span class="luz-stacked-bar__name">Second</span> <span class="luz-stacked-bar__figure">1</span></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- Five parts of one share each, wide enough to hold a number in forced colors -->
+    <div id="frame-five" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-stacked-bar" id="five">
+        <figcaption>Five equal parts</figcaption>
+        <div class="luz-stacked-bar__bar" aria-hidden="true">
+          <span class="luz-stacked-bar__part" style="--v: 1"></span>
+          <span class="luz-stacked-bar__part" style="--v: 1"></span>
+          <span class="luz-stacked-bar__part" style="--v: 1"></span>
+          <span class="luz-stacked-bar__part" style="--v: 1"></span>
+          <span class="luz-stacked-bar__part" style="--v: 1"></span>
+        </div>
+        <ul class="luz-stacked-bar__legend">
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">One</span> <span class="luz-stacked-bar__figure">20 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Two</span> <span class="luz-stacked-bar__figure">20 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Three</span> <span class="luz-stacked-bar__figure">20 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Four</span> <span class="luz-stacked-bar__figure">20 %</span></li>
+          <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Five</span> <span class="luz-stacked-bar__figure">20 %</span></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- The whole width of the window, with a long legend: it wraps -->
+    <figure class="luz-stacked-bar" id="long">
+      <figcaption>A legend longer than a phone is wide</figcaption>
+      <div class="luz-stacked-bar__bar" aria-hidden="true">
+        <span class="luz-stacked-bar__part" style="--v: 40"></span>
+        <span class="luz-stacked-bar__part" style="--v: 30"></span>
+        <span class="luz-stacked-bar__part" style="--v: 30"></span>
+      </div>
+      <ul class="luz-stacked-bar__legend">
+        <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delivered to the address on the parcel</span> <span class="luz-stacked-bar__figure">40 %</span></li>
+        <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delivered to a neighbour or a pick-up point</span> <span class="luz-stacked-bar__figure">30 %</span></li>
+        <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Still on its way to the depot of its region</span> <span class="luz-stacked-bar__figure">30 %</span></li>
+      </ul>
+    </figure>
+  </main>
+</body>
+</html>
