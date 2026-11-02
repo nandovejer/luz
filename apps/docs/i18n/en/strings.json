@@ -61,7 +61,7 @@
   "notice.pending": "An AI wrote this translation and no person has reviewed it yet.",
   "notice.pending-statement": "Until a person reviews it, the English text prevails.",
   "notice.english": "Read this page in English",
-  "notfound.text": "We could not find that page. It may have moved or the address may be wrong.",
+  "notfound.lead": "What you are looking for is not here. Do not try to bend the page... that is impossible. Instead, only try to realize the truth: There is no page.",
   "notfound.home": "Go to the documentation home",
   "snippets.kind.atoms": "Components only",
   "snippets.kind.landing": "Landing page",

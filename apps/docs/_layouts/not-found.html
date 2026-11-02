@@ -21,8 +21,10 @@
 <!-- GitHub Pages serves this page at any missing URL, so its URLs start
      at the site's path (PAGES_BASE in vite.config.js), never relative to
      the page, and no base element: it would send the skip link's
-     #main-content to the home page. No script: it never runs code and never
-     repeats the URL (security.md SEC-MISC-5). -->
+     #main-content to the home page. One script, apps/docs/not-found.js: it
+     reads only the browser's languages (navigator.languages) to show the
+     lead in the reader's language. It never reads or repeats the URL and it
+     sends nothing (security.md SEC-MISC-5). Without it the page is English. -->
 <body class="o-shell luz-docs-layout docs-page docs-page--static docs-not-found">
   <a class="luz-skip-link" href="#main-content">{{t:chrome.skip}}</a>
 
@@ -82,5 +84,7 @@
   </footer>
 
   <div class="docs-not-found__crt" aria-hidden="true"></div>
+
+  <script type="module" src="/apps/docs/not-found.js"></script>
 </body>
 </html>

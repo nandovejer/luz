@@ -1015,28 +1015,40 @@ h3.docs-subhead {
   }
 }
 
-/* The picture: dark on the page's black, so a hairline in the divider gives it
-   its edge, and the medium radius makes it a box of its own. It is the main
-   content, so it is never lazy and it shows at once, but it never pushes the
-   buttons out of a short window: its width follows its height cap (the
-   picture is 5:4, so 1.25 times the height), and it shrinks to the column on a
-   narrow one. */
-.docs-not-found__figure {
-  margin-inline: auto;
-  margin-block: 0 var(--luz-space-md);
-  padding: 0;
-  inline-size: min(100%, calc(max(30vh, 12rem) * 1.25));
+/* The picture is a watermark: the whole window's background, behind the rain
+   (z-index -2, the rain is -1), faint and with its edges faded out so it has no
+   frame. Decoration only (a background, no alt): the headline and the lead say
+   the page. The mask is soft, never a hard edge; the opacity keeps the text over
+   it above 4.5:1. */
+.docs-not-found::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: url("./assets/not-found/404-matrix-1000.webp") center / contain no-repeat;
+  opacity: 0.22;
+  mask-image: radial-gradient(ellipse at center, #000 45%, transparent 72%);
 }
 
-.docs-not-found__image {
-  display: block;
-  inline-size: 100%;
-  max-inline-size: 100%;
-  block-size: auto;
-  max-block-size: max(30vh, 12rem);
-  object-fit: contain;
-  border: 1px solid var(--luz-divider);
-  border-radius: var(--luz-radius-md);
+:root[data-theme="high-contrast"] .docs-not-found::before {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  .docs-not-found::before {
+    display: none;
+  }
+}
+
+/* The footer has the header's frame. The docs' rule above leaves the start
+   side at the content column's edge (the sidebar's width is not here), so on
+   this page, which has no sidebar, the row would sit to the left of the
+   centred column and of the header's brand. Same gutter on both sides. */
+@media (min-width: 769px) {
+  .docs-not-found > .docs-footer {
+    margin-inline-start: calc(var(--site-edge) + var(--luz-space-xl));
+  }
 }
 
 /* The lead is centred, line by line, never justified; no word left alone on
