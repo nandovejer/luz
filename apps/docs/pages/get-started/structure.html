@@ -77,7 +77,7 @@ order: 3
   components/*.css            luz.components  the components: .luz-*
   utilities/_utilities.css    luz.utilities   single-purpose helpers: .u-*</code></pre>
           <ul>
-            <li>The components layer holds <span data-count="components">29</span> components.</li>
+            <li>The components layer holds <span data-count="components">30</span> components.</li>
             <li><code>dist/luz.css</code> holds these six layers and <code>luz.print</code>. Tokens are in <code>luz.tokens</code>, catalog, with the navbar, the sidebar, the terminal, the timeline and the patterns of a kind of site, in <code>luz.catalog</code>; <code>luz.themes</code> is empty, kept for a look of your own. For a page that needs a few components only, load <code>dist/base.css</code> (settings, reset and elements), then <code>dist/components/&lt;name&gt;.css</code> for each one.</li>
             <li>Rules for bare elements are wrapped in <code>:where()</code>, so any class wins over them.</li>
           </ul>
