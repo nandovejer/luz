@@ -573,7 +573,8 @@ test.describe('chart', () => {
           // What the script adds (the author's table has its own hover colour, and the button is core's, below)
           const own = [el, ...el.querySelectorAll('.luz-chart__figure, .luz-chart__figure *, .luz-chart__title')];
           return {
-            running: el.getAnimations({ subtree: true }).length,
+            // The button is core's, and the pointer is still on it after the click: its hover transition is not the chart's
+            running: el.getAnimations({ subtree: true }).filter((a) => !/** @type {Element} */ (a.effect?.target)?.closest('.luz-chart__toggle')).length,
             animated: own.filter((node) => getComputedStyle(node).animationName !== 'none').length,
             transitions: own.filter((node) => getComputedStyle(node).transitionDuration.split(',').some((d) => parseFloat(d) > 0)).length,
           };
@@ -586,6 +587,34 @@ test.describe('chart', () => {
         }
       }
     });
+
+    for (const dir of ['ltr', 'rtl']) {
+      test(`${dir}: the button keeps its end of the bar between the chart view and the table view`, async ({ page }) => {
+        await open(page, 'lines');
+        await page.evaluate((d) => {
+          document.documentElement.dir = d;
+        }, dir);
+        await settled(page);
+        const host = page.locator('#lines');
+        const button = toggleOf(host);
+        /** The button's edge on the side of the end of the bar, and its distance from the end of the host. */
+        const place = () => host.evaluate((el) => {
+          const box = el.querySelector('button').getBoundingClientRect();
+          const bar = el.getBoundingClientRect();
+          return getComputedStyle(el).direction === 'rtl' ? { fromEnd: box.left - bar.left, fromStart: bar.right - box.right } : { fromEnd: bar.right - box.right, fromStart: box.left - bar.left };
+        });
+        const chart = await place();
+        expect(chart.fromEnd, 'at the inline end of the bar in the chart view').toBeLessThanOrEqual(EPS);
+        expect(chart.fromStart, 'with the title before it').toBeGreaterThan(EPS);
+        await button.click();
+        await expect(host).toHaveAttribute('data-luz-view', 'table');
+        const table = await place();
+        expect(table.fromEnd, 'still at the inline end in the table view, with the title gone').toBeLessThanOrEqual(EPS);
+        expect(Math.abs(table.fromEnd - chart.fromEnd), 'it did not move to the other end').toBeLessThanOrEqual(EPS);
+        await button.click();
+        expect((await place()).fromEnd, 'and back').toBeLessThanOrEqual(EPS);
+      });
+    }
 
     test('right to left: the plot is still drawn left to right, the title, the button and the legend follow the page', async ({ page }) => {
       await open(page, 'lines');
