@@ -625,85 +625,6 @@ home-light:defined ~ .landing-light__nojs {
   box-shadow: none;
 }
 
-/* The bar charts of "Light" (a bar per package, its published weight) and of
-   "Zero-dependency" (a bar per kind of library, the ones LUZ asks for: none):
-   a name, a figure and a bar under them, the rows spread over the figures'
-   height */
-.landing-chart {
-  display: grid;
-  align-content: start;
-  gap: var(--luz-space-sm);
-  margin: 0;
-  padding: 0;
-  background: none;
-}
-
-.landing-bars {
-  display: grid;
-  /* Rows of one height in every chart, so the three line up bar by bar */
-  grid-auto-rows: 1fr;
-  gap: var(--luz-space-xs);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.landing-bar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-content: end;
-  align-items: baseline;
-  gap: var(--luz-space-3xs) var(--luz-space-sm);
-}
-
-/* One line: a name that would wrap is cut, and its whole text stays readable */
-.landing-bar__name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: var(--luz-font-mono);
-  font-size: var(--luz-text-xs);
-  letter-spacing: 0.04em;
-  color: var(--luz-text-secondary);
-}
-
-.landing-bar__figure {
-  font-variant-numeric: tabular-nums;
-  font-size: var(--luz-text-sm);
-}
-
-/* The bar is a row of small upright cells: a mask cuts the native meter (its
-   track and its fill) into cells 6px wide and 12px tall with 3px between, so
-   the filled ones are the brand colour and the rest the track's; no edge,
-   each cell is its own */
-.landing-bar__meter {
-  grid-column: 1 / -1;
-  /* Core's meter is never narrower than 8rem: 512px at 400 % text */
-  min-inline-size: 0;
-  block-size: 12px;
-  border: 0;
-  border-radius: 0;
-  mask-image: repeating-linear-gradient(to right, #000 0 6px, transparent 6px 9px);
-  /* The empty cells a little darker than the meter's track, so the row of
-     cells reads whole on the page's surface */
-  --_track: color-mix(in oklab, var(--luz-text-primary) 12%, transparent);
-
-  background: var(--_track);
-}
-
-.landing-bar__meter::-webkit-meter-bar {
-  background: var(--_track);
-}
-
-/* A count of none: every cell empty, the figure in the brand colour */
-.landing-bar--zero .landing-bar__figure {
-  color: var(--luz-brand-primary);
-}
-
-.landing-chart figcaption {
-  font-size: var(--luz-text-sm);
-}
-
 .landing-why__note {
   margin: 0;
   font-size: var(--luz-text-sm);
@@ -2095,7 +2016,6 @@ home-light:defined ~ .landing-light__nojs {
 /* Arabic is a joined script: every label that spaces its letters (and sets
    them in capitals, in the mono) takes none of that in Arabic, and the sans */
 .landing-eyebrow:lang(ar),
-.landing-bar__name:lang(ar),
 .landing-install__label:lang(ar),
 .landing-cut__label:lang(ar),
 .luz-site-footer__col-title:lang(ar) {

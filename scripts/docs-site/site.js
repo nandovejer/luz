@@ -44,7 +44,7 @@ import { BASE, PACKAGES } from "../luz-packages.js";
 import { fileKinds, fitsKindsOf, isKindFile } from "./kinds.js";
 import { fillAiMarkers } from "./ai.js";
 import { DEBUG_FILE, DEBUG_ROUTE, hasDebugPage, renderDebug } from "./debug.js";
-import { catalogComponents, catalogFilesIn, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
+import { catalogComponents, catalogFilesIn, looseCoreSheets, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
 import { isDemo, loadDocsLocales, localizeLinks, localize } from "./docs-i18n.js";
 import { bundledEnglish, englishT, makeT } from "./strings.js";
@@ -101,6 +101,8 @@ const PLACEHOLDERS = new Set([
   // The page's language (i18n.js): its code and direction, its home page, the
   // <link rel="alternate"> of every language, the language switcher
   "lang", "dir", "home", "alternates", "langswitch", "langlinks",
+  // The <link> of a core sheet that luz.css does not hold, for a page whose `files` names it ("" for the others)
+  "loose",
   // ` dir="ltr"` in a right-to-left page, "" otherwise: for the English lists a partial writes
   "endir",
   // A docs page in a language: the notice before its content (a translation not
@@ -120,7 +122,7 @@ const PLACEHOLDERS = new Set([
   "list1", "list2", "list3",
 ]);
 /** Values inserted as HTML, not escaped. Only the generator produces them. */
-const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "endir", "notice", "contentattrs", "weights", "packages", "checks", "list1", "list2", "list3"]);
+const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "loose", "endir", "notice", "contentattrs", "weights", "packages", "checks", "list1", "list2", "list3"]);
 
 /** Where the home page's languages live, from the repository root. */
 export const I18N_DIR = "apps/landing/i18n";
@@ -1572,6 +1574,11 @@ function languageValues(site, locale, { home = false, siteUrl = "", page = null,
     ...(translated ? levelWeights(site, locale, used ?? site.usage?.used) : {}),
     ...(translated ? levelLists(site, locale, used ?? site.usage?.used) : {}),
   };
+  // A page that names a core sheet outside luz.css links it right after luz.css (before every catalog sheet: load/order)
+  values.loose = looseCoreSheets(site.repoRoot)
+    .filter((file) => (page?.meta.files ?? "").includes(file))
+    .map((file) => `\n  <link rel="stylesheet" href="/packages/core/dist/${file}">`)
+    .join("");
   if (page && page.route !== NOT_FOUND_ROUTE) {
     values.alternates = renderDocsAlternates(site, page, siteUrl);
     values.langswitch = renderDocsSwitcher(site, page, locale);
@@ -1590,10 +1597,10 @@ function languageValues(site, locale, { home = false, siteUrl = "", page = null,
  */
 function barRow(name, figure, value, max, kind = "") {
   return [
-    `  <li class="landing-bar${kind ? ` landing-bar--${kind}` : ""}">`,
-    `    <span class="landing-bar__name">${escapeHtml(name)}</span>`,
-    `    <span class="landing-bar__figure"><strong>${escapeHtml(figure)}</strong></span>`,
-    `    <meter class="luz-meter landing-bar__meter" min="0" max="${max}" value="${value}" aria-hidden="true">${escapeHtml(figure)}</meter>`,
+    `  <li class="luz-bar-list__row${kind ? ` luz-bar-list__row--${kind}` : ""}">`,
+    `    <span class="luz-bar-list__name">${escapeHtml(name)}</span>`,
+    `    <span class="luz-bar-list__figure"><strong>${escapeHtml(figure)}</strong></span>`,
+    `    <meter class="luz-bar-list__meter" min="0" max="${max}" value="${value}" aria-hidden="true">${escapeHtml(figure)}</meter>`,
     "  </li>",
   ].join("\n");
 }
@@ -1697,8 +1704,8 @@ function renderWeights(site, locale, used) {
   const total = packages.reduce((sum, p) => sum + p.size, 0);
   const max = Math.max(...packages.map((p) => p.size));
   return [
-    '<figure class="landing-chart">',
-    `  <ul class="landing-bars" aria-label="${escapeHtml(say("why.weight.list"))}">`,
+    '<figure class="luz-bar-list luz-bar-list--cells">',
+    `  <ul class="luz-bar-list__rows" aria-label="${escapeHtml(say("why.weight.list"))}">`,
     ...packages.map((p) => barRow(p.name, kb(p.size), p.size, max)),
     "  </ul>",
     `  <figcaption class="u-text-muted"><strong>${escapeHtml(say("why.weight.total").replace("{total}", kb(total)))}</strong> ${escapeHtml(say("why.weight.caption"))}</figcaption>`,
@@ -1749,8 +1756,8 @@ function renderPackages(site, locale, used) {
   const rows = ZERO_KINDS.map(([kind, names]) => ({ name: say(`why.zero.cat.${kind}`), count: runtime.filter((dep) => matches(dep, names)).length }));
   const max = Math.max(1, ...rows.map((r) => r.count));
   return [
-    '<figure class="landing-chart">',
-    `  <ul class="landing-bars" aria-label="${escapeHtml(say("why.zero.list"))}">`,
+    '<figure class="luz-bar-list luz-bar-list--cells">',
+    `  <ul class="luz-bar-list__rows" aria-label="${escapeHtml(say("why.zero.list"))}">`,
     ...rows.map((r) => barRow(r.name, number.format(r.count), r.count, max, r.count ? "" : "zero")),
     "  </ul>",
     `  <figcaption class="u-text-muted"><strong>${escapeHtml(say("why.zero.total").replace("{n}", number.format(runtime.length)))}</strong> ${escapeHtml(say("why.zero.caption"))}</figcaption>`,
@@ -1819,8 +1826,8 @@ function renderChecks(site, locale, used) {
     .replace("{tests}", number.format(tests.length))
     .replace("{pairs}", number.format(pairs));
   return [
-    '<figure class="landing-chart">',
-    `  <ul class="landing-bars" aria-label="${escapeHtml(say("why.usable.list"))}">`,
+    '<figure class="luz-bar-list luz-bar-list--cells">',
+    `  <ul class="luz-bar-list__rows" aria-label="${escapeHtml(say("why.usable.list"))}">`,
     ...rows.map(([kind, s]) => barRow(say(`why.usable.m.${kind}`), percent.format(s.pct / 100), s.pct, 100)),
     "  </ul>",
     `  <figcaption class="u-text-muted"><strong>${escapeHtml(total)}</strong> ${escapeHtml(say("why.usable.caption"))}</figcaption>`,

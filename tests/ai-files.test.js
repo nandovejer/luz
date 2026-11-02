@@ -1098,6 +1098,20 @@ const CATALOG_FILES = new Set(CATALOG_STYLESHEETS.map(({ file }) => file));
  * of site has no stylesheet of its own: its patterns are the catalog files.
  */
 const LAYOUT_FIRST = ["sidebar", "navbar", "terminal", "timeline"].map((name) => `components/${name}.css`);
+
+/**
+ * The sheets of core that luz.css does not hold (a file of src/components that components/index.css does not @import): a
+ * page whose `files` names one links it right after core's luz.css. Read from the sources, as the generator reads them.
+ */
+const LOOSE_CORE = (() => {
+  const dir = join(root, "packages/core/src/components");
+  const index = readFileSync(join(dir, "index.css"), "utf-8");
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".css") && f !== "index.css" && !f.startsWith("_") && !index.includes(`./${f}`))
+    .sort()
+    .map((f) => `components/${f}`);
+})();
+
 function stylesheetsFor(page) {
   const area = areaOf(page.route);
   const { kept } = blocksOf(page);
@@ -1111,7 +1125,8 @@ function stylesheetsFor(page) {
   // catalog files (which follow by name): all are in luz.catalog, so source order decides, and a pattern or the search must
   // never be overridden by the sidebar's link colours
   const catalog = [...LAYOUT_FIRST.filter((f) => files.has(f)), ...[...files].filter((f) => !LAYOUT_FIRST.includes(f)).sort()].map((file) => ["catalog", minifiedOf(file)]);
-  return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...catalog];
+  const loose = LOOSE_CORE.filter((file) => (page.meta.files ?? "").includes(file)).map((file) => ["core", minifiedOf(file)]);
+  return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...loose, ...catalog];
 }
 
 /* ---- reading a generated document ------------------------------------------- */
@@ -1232,6 +1247,20 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
       const bodyAt = e.html.search(/<body\b/i);
       for (const script of doc.scripts) expect(script.index, e.route).toBeGreaterThan(bodyAt);
     }
+  });
+
+  it("links core's loose sheet after luz.css on the page of the bar list, and on no other page", () => {
+    expect(LOOSE_CORE, "the bar list is the sheet core's luz.css has no room for").toContain("components/bar-list.css");
+    const linkedBy = [];
+    for (const e of examples()) {
+      const hrefs = inspect(e.html, e.route).links.map((l) => l.href);
+      const loose = hrefs.filter((h) => LOOSE_CORE.some((f) => h.endsWith(`/${minifiedOf(f)}`)));
+      if (!loose.length) continue;
+      linkedBy.push(e.route);
+      expect(loose, e.route).toEqual(["../dist/core/components/bar-list.min.css"]);
+      expect(hrefs.indexOf(loose[0]), `${e.route}: right after luz.min.css`).toBe(hrefs.indexOf(`../dist/core/${cssOf("core")}`) + 1);
+    }
+    expect(linkedBy).toEqual(["/examples/components/bar-list.html"]);
   });
 
   it("links the four components that moved from core first among catalog's files, in the order sidebar, navbar, terminal, timeline", () => {
@@ -1483,7 +1512,8 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
     // catalog has a stylesheet per component and no bundle: every components/<name>.min.css of its dist
     const catalogSheets = readdirSync(join(root, "packages/catalog/dist/components")).filter((f) => f.endsWith(".min.css")).map((f) => `components/${f}`);
     expect(catalogSheets.length).toBeGreaterThan(0);
-    const expected = PACKAGES.flatMap((pkg) => [...(pkg === "catalog" ? catalogSheets : [cssOf(pkg)]), FILES[pkg].js, ...FILES[pkg].chunks].filter(Boolean).map((file) => `/examples/dist/${pkg}/${file}`));
+    // and core's loose sheets (the ones luz.css does not hold), which an example links after luz.css
+    const expected = PACKAGES.flatMap((pkg) => [...(pkg === "catalog" ? catalogSheets : [cssOf(pkg)]), ...(pkg === "core" ? LOOSE_CORE.map(minifiedOf) : []), FILES[pkg].js, ...FILES[pkg].chunks].filter(Boolean).map((file) => `/examples/dist/${pkg}/${file}`));
     expect(assets().map((a) => a.route).sort()).toEqual(expected.sort());
     const routes = assets().map((a) => a.route);
     expect(routes).toContain("/examples/dist/tokens/tokens.min.css");

@@ -142,10 +142,16 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(budgets.slice(0, BEFORE.length).map((b) => [b.name, b.max])).toEqual(BEFORE);
   });
 
+  // The loose sheet of the bar list is a row of its own (tests/bar-list.test.js); where it sits among the others depends on the rows
+  // around it, so these tests count and order the rest without it
+  const isLoose = (name) => /loose sheet:? `?bar-list/.test(name);
+
   it("appends the three AI-ready rows after the docs page row, then the language chunk row (F6), core's rows of the color mode (the chunk and the boot script), the three rows of the home's light (F3), then the prompts row, then the debug page row, and nothing else (catalog has no row: no weight limit, 2026-11-02)", () => {
-    expect(budgets).toHaveLength(BEFORE.length + 11);
-    expect(budgets.at(BEFORE.length - 1).name).toBe(last);
-    expect(budgets.slice(BEFORE.length + 3).map((b) => b.name)).toEqual([
+    const rest = budgets.filter((b) => !isLoose(b.name));
+    expect(budgets.length - rest.length, "one row for the loose sheet of the bar list").toBe(1);
+    expect(rest).toHaveLength(BEFORE.length + 11);
+    expect(rest.at(BEFORE.length - 1).name).toBe(last);
+    expect(rest.slice(BEFORE.length + 3).map((b) => b.name)).toEqual([
       "core JS lazy chunk: i18n-es",
       "core JS lazy chunk: theme-mode",
       "core theme-boot script (packages/core/dist/theme-boot.min.js)",
@@ -242,7 +248,8 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
   });
 
   it("repeats the rows in the PRINCIPLES.md table, in the same order, after \"Each docs page\"", () => {
-    expect(table).toHaveLength(BEFORE.length + 11);
+    expect(table.filter((cells) => isLoose(cells[0]))).toHaveLength(1);
+    expect(table.filter((cells) => !isLoose(cells[0]))).toHaveLength(BEFORE.length + 11);
     expect(table[BEFORE.length - 1][0]).toMatch(/^Each docs page/);
     const [cli, text, manifests] = table.slice(BEFORE.length);
     expect(cli[0]).toMatch(/check/);

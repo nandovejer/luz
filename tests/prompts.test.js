@@ -396,6 +396,20 @@ describe("what a prompt says about the system comes from the packages", () => {
     expect(missing, `${id}: names no package has`).toEqual([]);
   });
 
+  it.each(IDS)("%s: lists the bar list among core's classes, with the options and the parts the manifest of core has for it", (id) => {
+    const classes = json("packages/core/dist/classes.json").classes.filter((c) => c.block === "luz-bar-list");
+    expect(classes.length, "core's manifest has the bar list").toBeGreaterThan(5);
+    expect(classes.find((c) => c.name === "luz-bar-list")?.files, "its stylesheet is a file of core").toEqual(["components/bar-list.css"]);
+    const own = classes.filter((c) => c.name !== "luz-bar-list").map((c) => (c.part ? `__${c.part}${c.modifier ? `--${c.modifier}` : ""}` : `--${c.modifier}`));
+    const line = prompt(id).split("\n").find((l) => l.startsWith("- `luz-bar-list`"));
+    expect(line, `${id}: a line for luz-bar-list`).toBeTruthy();
+    const listed = [...line.matchAll(/`((?:--|__)[a-z0-9_-]+)`/g)].map((m) => m[1]);
+    expect(listed.sort(), id).toEqual(own.sort());
+    // it is core's: between the classes of core, before the catalog's
+    const text = prompt(id);
+    expect(text.indexOf("- `luz-bar-list`"), id).toBeLessThan(text.indexOf("From `@luz-ds/catalog`") === -1 ? Infinity : text.indexOf("From `@luz-ds/catalog`"));
+  });
+
   it.each(IDS)("%s: every <luz-*> element it names exists in the custom-elements.json of some package", (id) => {
     const named = [...prompt(id).matchAll(/<(luz-[a-z0-9-]+)[\s>/]/g)].map((m) => m[1]);
     expect(named.length, `${id} names elements`).toBeGreaterThan(0);
