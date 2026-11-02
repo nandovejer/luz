@@ -30,6 +30,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { createResolver, measure, pairsFor, parseColor } from "../packages/tokens/lib/contrast.js";
 import { resolveColor } from "./helpers/design-tokens.js";
+import { PAIR_COUNT, TOKENS as CHART, pairsOf } from "./helpers/chart-palette.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => readFileSync(join(repo, rel), "utf-8");
@@ -155,6 +156,15 @@ describe("theme-light.css has the four lights and nothing else", () => {
     expect(scheme).toBe(mode);
   });
 
+  it.each(LIGHTS)("%s declares the eight chart tokens (the six series, the track and the grid), in literal colours", (light, mode, selector) => {
+    const found = block(selector);
+    expect(found, `a block for ${selector}`).toBeTruthy();
+    for (const token of CHART) {
+      expect(found.props[token], `${selector} ${token}`).toBeTruthy();
+      expect(() => parseColor(found.props[token]), `${selector} ${token}`).not.toThrow();
+    }
+  });
+
   it.each(LIGHTS)("%s declares no --luz-color-* token: the status colours keep Vejer's values (RL-15)", (light, mode, selector) => {
     const found = block(selector);
     expect(found, `a block for ${selector}`).toBeTruthy();
@@ -183,6 +193,17 @@ describe("every contrast pair passes in each light, layered over its base mode",
     expect(results.length).toBeGreaterThan(50);
     const failing = results.filter((r) => !r.ok && !r.advisory).map((r) => `${r.foreground} on ${r.background} is ${r.ratio.toFixed(2)}:1 (needs ${r.minimum}:1)`);
     expect(failing, `${light}`).toEqual([]);
+  });
+
+  // The pairs of the data palette, from the brief and not from PAIRS: the series on every surface, the track, the grid and the series on the track
+  it.each(LIGHTS)("%s over %s: the chart tokens meet their pairs", (light, mode, selector) => {
+    const found = block(selector);
+    expect(found, `a block for ${selector}`).toBeTruthy();
+    const values = { ...primitives, ...base.light, ...(mode === "dark" ? base.dark : {}), ...found.props };
+    const { results, unreadable } = measure(createResolver(values), pairsOf(mode));
+    expect(unreadable.map((u) => `${u.foreground} on ${u.background}: ${u.reason}`)).toEqual([]);
+    expect(results).toHaveLength(PAIR_COUNT);
+    expect(results.filter((r) => !r.ok).map((r) => `${r.foreground} on ${r.background} is ${r.ratio.toFixed(2)}:1 (needs ${r.minimum}:1)`), `${light}`).toEqual([]);
   });
 
 });
@@ -271,6 +292,22 @@ describe("the light cross-fades", () => {
       expect(props["initial-value"], `${name} initial-value`).toBeTruthy();
       expect(same(props["initial-value"], resolveColor("light", name)), `${name}: ${props["initial-value"]} is Vejer's light ${resolveColor("light", name)}`).toBe(true);
     }
+  });
+
+  it("registers the eight chart tokens, and the Vejer light value is each one's initial value", () => {
+    const registered = new Map(properties().map((p) => [p.name, p.props]));
+    for (const token of CHART) {
+      expect(registered.has(token), `@property ${token}`).toBe(true);
+      expect(registered.get(token).syntax, token).toMatch(/^["']<color>["']$/);
+      expect(registered.get(token).inherits, token).toBe("true");
+      expect(same(registered.get(token)["initial-value"], resolveColor("light", token)), `${token}: ${registered.get(token)["initial-value"]} is Vejer's light ${resolveColor("light", token)}`).toBe(true);
+    }
+  });
+
+  it("transitions the eight chart tokens with the other colours", () => {
+    const groups = motion().flatMap((m) => m.items.filter((r) => r.selector === ":root"));
+    const text = groups.map((g) => [g.props.transition, g.props["transition-property"]].join(" ")).join(" ");
+    for (const token of CHART) expect(text, token).toContain(token);
   });
 
   it("transitions those tokens on :root over 1.4s", () => {

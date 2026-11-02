@@ -118,6 +118,22 @@
   --luz-code-property: var(--luz-purple-60); /* 5.8:1 */
   --luz-code-string: var(--luz-green-70); /* 8.2:1 */
   --luz-code-literal: var(--luz-yellow-60); /* 6.9:1 */
+
+  /* Charts: the series of a chart in the order they are used, then the
+     unfilled part of a bar and the grid. Six hues away from the status ones
+     (no red, green or yellow): blue and teal are the brand and the teal tag,
+     the rest purple, berry, periwinkle and stone. Each series is 3:1 or more
+     on every surface and 0.08 or more apart from the others in OKLab, also
+     as a person with protanopia or deuteranopia sees them. Colour is never
+     the only sign: the figure is text, and the table stays. */
+  --luz-chart-1: #2365a6; /* the brand blue, 5.7:1 on the page */
+  --luz-chart-2: #00736f; /* teal */
+  --luz-chart-3: #5a248a; /* purple */
+  --luz-chart-4: #7f004e; /* berry */
+  --luz-chart-5: #6079c4; /* periwinkle */
+  --luz-chart-6: #867f7a; /* stone */
+  --luz-chart-track: #d2c3a9; /* the unfilled part of a bar: 1.5:1 on the surfaces, quieter than every series */
+  --luz-chart-grid: #dccdb3; /* hairlines, 1.3:1 or more: decorative, the figures are in the table */
 }
 
 /* -------------------------------------------------------------------------
@@ -205,6 +221,16 @@
   --luz-code-property: var(--luz-purple-40);
   --luz-code-string: var(--luz-green-40);
   --luz-code-literal: var(--luz-yellow-40);
+
+  /* Charts: the same six hues, lighter, 3:1 or more on every dark surface */
+  --luz-chart-1: #6fb1ec; /* the brand blue */
+  --luz-chart-2: #62c9b5; /* teal */
+  --luz-chart-3: #dbbeeb; /* purple */
+  --luz-chart-4: #e8709f; /* berry */
+  --luz-chart-5: #6784e5; /* periwinkle */
+  --luz-chart-6: #9a8c78; /* stone */
+  --luz-chart-track: #54483c;
+  --luz-chart-grid: #4a3e33;
 }
 
 /* -------------------------------------------------------------------------
@@ -292,4 +318,14 @@
   --luz-code-property: var(--luz-purple-70); /* 9.7:1 */
   --luz-code-string: var(--luz-green-70); /* 8.3:1 */
   --luz-code-literal: var(--luz-yellow-70); /* 11.1:1 */
+
+  /* Charts: the same six hues, darker, 4.5:1 or more on every surface */
+  --luz-chart-1: #00256c; /* the brand blue */
+  --luz-chart-2: #00504d; /* teal */
+  --luz-chart-3: #550b9d; /* purple */
+  --luz-chart-4: #9e2e81; /* berry */
+  --luz-chart-5: #4459b8; /* periwinkle */
+  --luz-chart-6: #342516; /* stone, darkened */
+  --luz-chart-track: var(--luz-gray-40);
+  --luz-chart-grid: var(--luz-gray-50); /* the divider is too heavy for a grid here: this one is 3:1 */
 }

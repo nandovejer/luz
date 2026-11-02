@@ -69,6 +69,18 @@ describe("theme template", () => {
     });
   }
 
+  // The data palette of a chart (component-gaps plan 4.1): a theme sets it with its surfaces, so a consumer's check can measure it
+  const CHART = [1, 2, 3, 4, 5, 6].map((n) => `--luz-chart-${n}`).concat(["--luz-chart-track", "--luz-chart-grid"]);
+  for (const [mode, , isTemplate] of MODES) {
+    it(`${mode}: names the eight chart tokens (the six series, the track and the grid), in the block of data-mode and in the one of the checked radio`, () => {
+      const got = template.find(isTemplate);
+      expect(got, `${mode} block of the template`).toBeTruthy();
+      for (const token of CHART) expect(got.props, `${mode}: ${token}`).toContain(token);
+      const carrying = template.filter((b) => selectorsOf(b.selector).some((x) => unwrapped(x) === NOJS(mode)));
+      for (const token of CHART) expect(carrying.flatMap((b) => b.props), `${mode} without JavaScript: ${token}`).toContain(token);
+    });
+  }
+
   it("the radios' name is the one <luz-theme-mode> documents, and none of the old color-mode switcher's", () => {
     const names = [...readFileSync(resolve(root, "packages/core/src/themes/_template.css"), "utf-8").matchAll(/input\[name="([^"]+)"\]/g)].map((m) => m[1]);
     expect(names.length).toBeGreaterThan(0);
