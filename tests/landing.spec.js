@@ -127,6 +127,9 @@ test.describe('Landing page', () => {
     });
 
     test('the footer switcher is a radio group that becomes one round button: Auto, Light, Dark and High contrast', async ({ page }) => {
+      // Auto follows the hour, and this file starts from no choice (NO_CHOICE): the test walks through Auto, so it pins
+      // its own hour, the afternoon, and runs the same at any hour of the real clock (it failed in CI at dusk and at night)
+      await atTime(page, '14:00');
       await seedMode(page, 'light');
       await open(page);
 
