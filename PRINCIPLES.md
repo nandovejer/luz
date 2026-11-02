@@ -116,7 +116,7 @@ Words are a component. A button with the wrong label is a broken button. These r
 
 - **No tracking, no analytics, no third-party domains.** The only things stored are the visitor's own display preferences — the color mode or theme, and on the docs site the last Code or Design tab — and, where a site uses the catalog's cookie consent, the visitor's answer to it (the categories asked, the ones granted and when the answer expires), in `localStorage`, under a `luz-` key, with the value checked against the allowed list and no personal data. Every read and write is in `try`/`catch`: the page works the same if storage is blocked or throws.
 - **Zero runtime dependencies**, forever.
-- **Size budgets**, min+gzip, in [budgets.json](./budgets.json) and checked by `pnpm check:size`. The ceiling is red line 17; the other bands are warnings. `@luz-ds/catalog` has no row: it has no weight limit (below).
+- **Size budgets**, min+gzip, in [budgets.json](./budgets.json) and checked by `pnpm check:size`. The ceiling is red line 17; the other bands are warnings. `@luz-ds/catalog` has no row: it has no weight limit (below). Four rows are warnings even over their ceiling, for now (below): the docs pages, `llms.txt` and `llms-full.txt`, the prompts and the debug page.
 
 | Artifact | Warns below | Ideal | Warns above | Ceiling |
 | --- | --- | --- | --- | --- |
@@ -138,6 +138,8 @@ Words are a component. A button with the wrong label is a broken button. These r
 | The home light data: `globe`, `apps/landing/light/globe-data.js` (the land, Natural Earth 1:110m countries: loaded by `globe.js` once the globe is on screen and the browser is idle) | — | ≤ 9.5 kB | 9.5 kB | 9.75 kB |
 | Each prompt for AI on Pages (`docs/prompts/**/*.txt`), uncompressed | — | ≤ 14 kB | 14 kB | 16 kB |
 | The debug page, `docs/debug/index.html` (a review tool: every tag, object and component on one page, so it is as long as the system; it is not indexed and no reader is sent to it), HTML uncompressed | — | ≤ 230 kB | 230 kB | 240 kB |
+
+**The page and AI-reading limits are warnings for now (owner, 2026-11-02: "don't fight the limits, make it a warning for now and we will try to optimise it in the future").** In `budgets.json` the rows of the docs pages, of `llms.txt` and `llms-full.txt`, of the five prompts and of the debug page carry `"warn": true`: over its ceiling, `pnpm check:size` prints the file with `!` ("over its ceiling (warning, to optimise)"), `pnpm check:prompts` and the `llms-full.txt` build warn the same way, and none of them fails or exits 1. Nothing is raised or deleted: every number in the table stays, as the target to optimise. The ceilings of `tokens` CSS, `core` CSS and JS, the language and color-mode chunks of core, the `check` CLI, the manifests and the home light stay hard; `llms-full.txt` stops the build only at twice its ceiling, which only a runaway page reaches. Catalog has no limit.
 
 Docs pages are measured as the raw bytes of each built `docs/**/*.html`, without compression and without CSS or JS. A page that reaches the ceiling is split into two pages; the ceiling is never raised (red line 17).
 
@@ -177,7 +179,7 @@ Absolute. A PR that crosses one is closed, not reviewed.
 14. **No hand edits to `dist/` or `docs/`.**
 15. **No new status colour, no new meaning for an existing one.**
 16. **No browser sniffing.** Feature detection only.
-17. **No artifact over its size ceiling** in budgets.json. Ceilings are never raised: optimise or remove instead. `@luz-ds/catalog` has no ceiling (owner, 2026-11-02): it has no bundle, a site links only what it uses, and its sizes are reported, not limited (§8).
+17. **No artifact over its size ceiling** in budgets.json. Ceilings are never raised: optimise or remove instead. `@luz-ds/catalog` has no ceiling (owner, 2026-11-02): it has no bundle, a site links only what it uses, and its sizes are reported, not limited (§8). The ceilings of the docs pages, the AI-reading files (`llms.txt`, `llms-full.txt`), the five prompts for AI and the debug page are warnings for now (owner, 2026-11-02): over one, the check prints it and does not fail, and the number stays as the target to optimise. The ceilings of `tokens`, `core` and `check` and of the other rows stay hard (§8).
 18. **No component or pattern merged without its docs page, and that page says *When to use* and *When not to use*.**
 19. **Nothing only for AI agents.** What LUZ publishes for an agent to read (`llms.txt`, manifests of classes and elements, examples, the "For AI agents" section of a README) is generated from the docs and the source a person reads, never written by hand on the side. An agent and a person always get the same facts.
 

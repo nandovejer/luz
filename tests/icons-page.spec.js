@@ -20,6 +20,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { copiedText, recordCopies } from './helpers/clipboard.js';
 import { faded, idle } from './helpers/settle.js';
+import { warnIfOver } from './helpers/warn-if-over.js';
 
 const PAGES = { en: '/docs/components/icons/', es: '/es/docs/components/icons/' };
 const THEMES = ['light', 'dark', 'high-contrast'];
@@ -219,12 +220,12 @@ test.describe('the Icons page, with JavaScript', () => {
         expect(outside).toBe(0);
       });
 
-      test('is under the docs page row of the size budget (uncompressed HTML)', async ({ page }) => {
+      test('warns, and never fails, over the docs page row of the size budget (uncompressed HTML; owner, 2026-11-02)', async ({ page }) => {
         expect(DOCS_ROW?.max, 'the row "docs page HTML (each, uncompressed)" of budgets.json').toBeGreaterThan(0);
         const response = await page.request.get(route);
         const body = await response.body();
         expect(body.toString('utf-8'), `${route} is the Icons page, with its grid`).toContain('luz-icon-grid');
-        expect(body.length, `${route}: ${body.length} bytes, the ceiling is ${DOCS_ROW.max}`).toBeLessThanOrEqual(DOCS_ROW.max);
+        warnIfOver(`docs page ${route}`, body.length, DOCS_ROW.max);
       });
 
       for (const theme of THEMES) {

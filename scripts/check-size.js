@@ -17,6 +17,12 @@
  * never compared with a ceiling; the structural checks on its chunks
  * (SEC-CHUNK-1, SEC-CHUNK-2) still fail.
  *
+ * A row with `"warn": true` (the docs pages, llms.txt and llms-full.txt, the
+ * five prompts, the debug page; owner, 2026-11-02) is a warning for now: over
+ * its `max` it prints "!" and never fails. Its numbers stay as the targets to
+ * optimise; nothing is raised or deleted. The rows of tokens, core and check
+ * stay hard.
+ *
  * A `file` budget of a package that does not exist yet (no
  * packages/<name>/package.json) passes vacuously with a note; once the package
  * exists, a missing file fails ("run pnpm build first").
@@ -226,7 +232,7 @@ const rowFiles = ({ glob, except }) => {
 
 const sizeOf = (path, compression) => (compression === "none" ? readFileSync(path).length : gzipSync(readFileSync(path), { level: 9 }).length);
 
-for (const { name, glob, except, compression, floor, ideal, max } of budgets.filter((b) => b.glob)) {
+for (const { name, glob, except, compression, floor, ideal, max, warn } of budgets.filter((b) => b.glob)) {
   const sizes = rowFiles({ glob, except }).map((f) => [f, sizeOf(resolve(root, f), compression)]).sort((a, b) => b[1] - a[1]);
   if (!sizes.length) {
     console.error(`✗ ${name}: nothing matches ${glob} — run ${glob.startsWith("packages/") ? "pnpm build" : "pnpm pages:build"} first`);
@@ -235,6 +241,10 @@ for (const { name, glob, except, compression, floor, ideal, max } of budgets.fil
   }
   const over = sizes.filter(([, size]) => size > max);
   for (const [f, size] of over) {
+    if (warn) {
+      console.warn(`! ${name}: ${f} ${kB(size)} (max ${kB(max)}) — over its ceiling (warning, to optimise): ${f.endsWith(".html") ? "split the page" : "make it smaller"}, never raise it`);
+      continue;
+    }
     console.error(`✗ ${name}: ${f} ${kB(size)} (max ${kB(max)}) — over the ceiling: ${f.endsWith(".html") ? "split the page" : "make it smaller"}, never raise it`);
     failed = true;
   }
@@ -246,7 +256,7 @@ for (const { name, glob, except, compression, floor, ideal, max } of budgets.fil
   else console.log(`✓ ${line}`);
 }
 
-for (const { name, file, floor, ideal, max } of budgets.filter((b) => b.file)) {
+for (const { name, file, floor, ideal, max, warn } of budgets.filter((b) => b.file)) {
   const path = resolve(root, file);
   // A package that is not created yet has nothing to measure: its row passes
   // vacuously, with a note, until packages/<name>/package.json exists. From
@@ -263,7 +273,9 @@ for (const { name, file, floor, ideal, max } of budgets.filter((b) => b.file)) {
   }
   const size = gzipSync(readFileSync(path), { level: 9 }).length;
   const line = `${name}: ${kB(size)} (max ${kB(max)})`;
-  if (size > max) {
+  if (size > max && warn) {
+    console.warn(`! ${line} — over its ceiling (warning, to optimise)`);
+  } else if (size > max) {
     console.error(`✗ ${line} — over the ceiling: optimise or remove, never raise it`);
     failed = true;
   } else if (ideal && size > ideal) {
