@@ -6,8 +6,8 @@
  *     cookie-consent.js: they import nothing (SEC-CHUNK-2), catalog.js loads
  *     them by a literal specifier (SEC-CHUNK-1), scripts/build-catalog.js and
  *     scripts/check-size.js know them;
- *   - their rows in budgets.json and in the table of PRINCIPLES.md section 8,
- *     and no other catalog row moves;
+ *   - they have no row in budgets.json nor in the table of PRINCIPLES.md
+ *     section 8: catalog has no weight limit (owner, 2026-11-02);
  *   - their header comments feed custom-elements.json (@element, @attr, @fires).
  *
  * The phase of the day (phaseOf(hour), six fixed boundaries) is gone from the
@@ -144,45 +144,24 @@ describe("catalog.js, the build and the size guard know the chunks", () => {
 
 /* ---- The budgets -------------------------------------------------------------- */
 
-describe("the budgets of the time chunks", () => {
+describe("the time chunks have no budget row: catalog has no weight limit (owner, 2026-11-02)", () => {
   const budgets = JSON.parse(read("budgets.json")).budgets;
-  const ROWS = [
-    { name: "catalog JS lazy chunk: theme-time", file: "packages/catalog/dist/theme-time.min.js", ideal: 2048, max: 2560 },
-    { name: "catalog JS lazy chunk: theme-time-bar", file: "packages/catalog/dist/theme-time-bar.min.js", ideal: 1280, max: 1536 },
-  ];
 
-  it.each(ROWS)("has the row `$name`: $file, ideal $ideal, ceiling $max", (row) => {
-    expect(budgets.find((b) => b.name === row.name)).toEqual(row);
+  it.each(["theme-time", "theme-time-bar", "theme-time-boot"])("has no row for %s, by file or by name", (name) => {
+    expect(budgets.filter((b) => (b.file ?? b.glob ?? "").includes(name) || b.name.includes(name)).map((b) => b.name)).toEqual([]);
   });
 
-  it("has no row for the old `catalog JS lazy chunk: color-mode`", () => {
+  it("has no row for the old `catalog JS lazy chunk: color-mode`, nor any row of catalog", () => {
     expect(budgets.find((b) => /color-mode/.test(b.name))).toBeUndefined();
+    expect(budgets.filter((b) => /^catalog /.test(b.name)).map((b) => b.name)).toEqual([]);
   });
 
-  it("leaves the other catalog rows as they were (a new row, never a raised ceiling)", () => {
-    const rows = budgets.filter((b) => /^catalog /.test(b.name) && !ROWS.some((r) => r.name === b.name) && !/theme-time-boot/.test(b.name));
-    // F5b: the 21 patterns of the four kinds of site have a row, and the general one leaves them out; F7: the four layout
-    // components (and the timeline and sidebar chunks) came from core with a row of their own, and the general row leaves the CSS out
-    expect(rows.map(({ name, ideal, max }) => ({ name, ideal, max }))).toEqual([
-      { name: "catalog component CSS (each)", ideal: 1280, max: 1536 },
-      { name: "catalog JS", ideal: 1024, max: 2048 },
-      { name: "catalog JS lazy chunk: search", ideal: 2048, max: 2560 },
-      { name: "catalog JS lazy chunk: cookie-consent", ideal: 1024, max: 1536 },
-      { name: "catalog JS lazy chunk: timeline", ideal: 2048, max: 3072 },
-      { name: "catalog JS lazy chunk: sidebar", ideal: 768, max: 1024 },
-      { name: "catalog layout CSS (each)", ideal: 1792, max: 2048 },
-      { name: "catalog kind patterns CSS (each)", ideal: 768, max: 1024 },
-      { name: "catalog JS lazy chunk: embed", ideal: 1536, max: 2048 },
-    ]);
-    expect(rows.find((b) => b.name === "catalog component CSS (each)").glob).toBe("packages/catalog/dist/components/*.min.css");
-    expect(rows.find((b) => b.name === "catalog JS").file).toBe("packages/catalog/dist/catalog.min.js");
-  });
-
-  it("repeats the rows in the table of PRINCIPLES.md section 8, with the ceilings of 2.5 kB and 1.5 kB", () => {
+  it("has no row of them in the table of PRINCIPLES.md section 8, and the chunks are still built and reported by check-size", () => {
     const principles = read("PRINCIPLES.md");
-    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `theme-time` [^\n]*\| ≤ 2 kB \| 2 kB \| 2\.5 kB \|$/m);
-    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `theme-time-bar` [^\n]*\| ≤ 1\.25 kB \| 1\.25 kB \| 1\.5 kB \|$/m);
+    expect(principles).not.toMatch(/JS lazy chunk: `theme-time(?:-bar)?`/);
+    expect(principles).not.toMatch(/theme-time boot script/);
     expect(principles).not.toMatch(/JS lazy chunk: `color-mode`/);
+    for (const name of ["theme-time.min.js", "theme-time-bar.min.js", "theme-time-boot.min.js"]) expect(existsSync(join(repo, "packages/catalog/dist", name)), name).toBe(true);
   });
 });
 

@@ -271,12 +271,20 @@ describe("the snippet generator", () => {
       // `integrity` is not a guard in WebKit and Firefox. The full-SRI path is an import map
       // with an `integrity` section, which blocks a tampered chunk in all three engines.
       const chunkSection = () => html.slice(html.search(/\bid="chunks"/));
+      // Catalog has no budget row (no weight limit, owner 2026-11-02): its lazy chunks are the ones its loader
+      // imports, in its dist; core's are still the lazy-chunk rows of budgets.json.
       const budgetedChunks = () => {
         const budgets = JSON.parse(readFileSync(join(repo, "budgets.json"), "utf-8")).budgets;
-        return budgets.filter((b) => /lazy chunk:/.test(b.name)).map((b) => b.file.replace(/^packages\//, ""));
+        const core = budgets.filter((b) => /^core JS lazy chunk:/.test(b.name)).map((b) => b.file.replace(/^packages\//, ""));
+        expect(budgets.filter((b) => /^catalog /.test(b.name)), "no catalog row in budgets.json").toEqual([]);
+        const loader = readFileSync(join(repo, "packages/catalog/dist/catalog.min.js"), "utf-8");
+        const catalog = [...loader.matchAll(/\bimport\(\s*["']\.\/([\w.-]+\.min\.js)["']\s*\)/g)].map((m) => `catalog/dist/${m[1]}`);
+        const packed = readFileSync(join(repo, "packages/catalog/pack-files.txt"), "utf-8").split("\n");
+        for (const file of catalog) expect(packed, `${file} is shipped`).toContain(file.replace("catalog/", ""));
+        return [...core, ...catalog];
       };
 
-      it("gives, in the chunks section, one import map whose integrity lists exactly the lazy chunks that budgets.json budgets, each with its version and sha384", () => {
+      it("gives, in the chunks section, one import map whose integrity lists exactly the lazy chunks (core's rows in budgets.json, the ones catalog.min.js imports), each with its version and sha384", () => {
         const budgeted = budgetedChunks();
         expect(budgeted.length).toBe(11); // core: midi, table-sort, theme-mode, i18n-es; catalog: search, cookie-consent, theme-time, theme-time-bar, timeline, embed, sidebar (the timeline and the sidebar came from core in F7)
         expect(budgeted).toContain("catalog/dist/timeline.min.js");

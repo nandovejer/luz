@@ -101,7 +101,7 @@
   "why.zero.list": "Runtime dependencies, by kind",
   "why.zero.total": "Runtime dependencies: {n}.",
   "why.zero.caption": "Counted in every package’s package.json when this page is built.",
-  "why.light.text": "Plain CSS and small ES modules, from a CDN or from npm. No preprocessor, no compiler and no build step: what you read in the files is exactly what the browser runs, and each package has a size ceiling that never goes up.",
+  "why.light.text": "Plain CSS and small ES modules, from a CDN or from npm. No preprocessor, no compiler and no build step: what you read in the files is exactly what the browser runs. Tokens and core stay as small as we can keep them, and their size ceiling never goes up. Catalog is light because it comes in pieces: each component is its own file, and a page loads only the ones it uses.",
   "why.zero.text": "LUZ’s packages ship with no dependencies: only CSS and ES modules over what the browser already offers. Nothing to install to try it, no framework to keep up with, and nothing that breaks when another library ships a new major version.",
 
   "inside.eyebrow": "What’s inside",

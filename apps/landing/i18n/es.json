@@ -93,7 +93,7 @@
   "why.zero.list": "Dependencias en tiempo de ejecución, por tipo",
   "why.zero.total": "Dependencias en tiempo de ejecución: {n}.",
   "why.zero.caption": "Contado en el package.json de cada paquete al construir esta página.",
-  "why.light.text": "CSS sin más y módulos ES pequeños, desde un CDN o desde npm. Sin preprocesador, sin compilador y sin paso de build: lo que lees en los archivos es justo lo que ejecuta el navegador, y cada paquete tiene un techo de peso que nunca sube.",
+  "why.light.text": "CSS sin más y módulos ES pequeños, desde un CDN o desde npm. Sin preprocesador, sin compilador y sin paso de build: lo que lees en los archivos es justo lo que ejecuta el navegador. Tokens y core se mantienen tan pequeños como se puede, y su techo de peso nunca sube. Catalog es ligero porque viene en piezas: cada componente es su propio archivo y una página carga solo los que usa.",
   "why.zero.text": "Los paquetes de LUZ se publican sin dependencias: solo CSS y módulos ES sobre lo que el navegador ya ofrece. Nada que instalar para probarlo, ningún framework que seguir y nada que se rompa cuando otra librería publica una versión mayor.",
   "inside.eyebrow": "Qué incluye",
   "inside.kind.landing.title": "Landing page",

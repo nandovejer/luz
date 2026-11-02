@@ -6,12 +6,16 @@
  * A budget with a `glob` instead of a `file` applies to each file it
  * matches ("dir/**\/*.ext", or "dir/*.ext" for one folder): the docs pages,
  * each measured as raw bytes (`"compression": "none"`) in docs/, the Pages
- * build (`pnpm pages:build`; git-ignored output), and each component of
- * catalog, which has no bundle (packages/catalog/dist/components/*.min.css).
+ * build (`pnpm pages:build`; git-ignored output).
  * The file part of a glob may start with a list of prefixes
- * ("dir/{hero,section,…}.min.css": a list of names, as the patterns of a kind of site in catalog),
- * and a row may have an `except` glob, so a file is in one row only: the
- * general row of catalog leaves those patterns to the stricter row of theirs.
+ * ("dir/{a,b}-*.ext": a list of names),
+ * and a row may have an `except` glob, so a file is in one row only.
+ *
+ * @luz-ds/catalog has NO weight limit (PRINCIPLES.md red line 17, owner,
+ * 2026-11-02): it has no bundle, and a site links only what it uses. Its
+ * files are only reported, at the end ("catalog (no limit, reported)"),
+ * never compared with a ceiling; the structural checks on its chunks
+ * (SEC-CHUNK-1, SEC-CHUNK-2) still fail.
  *
  * A `file` budget of a package that does not exist yet (no
  * packages/<name>/package.json) passes vacuously with a note; once the package
@@ -22,7 +26,7 @@
  *     which changes only with its own changeset, so budgets.json cannot be
  *     raised quietly;
  *   - every chunk a budgeted JS file imports lazily is budgeted too, and it
- *     imports no other file statically;
+ *     imports no other file statically (the home's light; catalog is not budgeted);
  *   - no published packages/*\/dist/*.min.js imports a bare specifier (an
  *     inlined or missing dependency would escape its budget);
  *   - the lazy chunks (SEC-CHUNK-1, SEC-CHUNK-2): every import() of a
@@ -30,7 +34,7 @@
  *     one imports lazily, in any package, and catalog's search, consent,
  *     mode, timeline, embed and sidebar) imports nothing, static or dynamic; catalog.min.js, the presence
  *     loader, has no static import, and its dynamic imports are exactly its
- *     five chunks. The same holds for the home's light, which no build
+ *     chunks (the LOADERS map). The same holds for the home's light, which no build
  *     touches: apps/landing/light/light.js loads exactly globe.js, globe.js
  *     loads exactly globe-data.js, and globe-data.js imports nothing (a file
  *     that is a loader may import its own chunks, lazily, and nothing else).
@@ -154,6 +158,12 @@ for (const [file, code] of published) {
     console.error(`✗ ${file} is a lazy chunk and imports a file: a chunk imports nothing, static or dynamic (SEC-CHUNK-2)`);
     failed = true;
   }
+  // A catalog script that is neither the loader nor a chunk (theme-time-boot, a <head> script) imports nothing:
+  // it had a budget row, and with the rows gone this keeps its structural rule (SEC-CHUNK-2)
+  if (file.startsWith("packages/catalog/dist/") && !LOADERS[file] && !chunks.has(file) && (calls || STATIC_IMPORT.test(code))) {
+    console.error(`✗ ${file} is a catalog script that is neither the loader nor a lazy chunk, and it imports a file: it imports nothing (SEC-CHUNK-2)`);
+    failed = true;
+  }
   const expected = LOADERS[file];
   if (expected) {
     if (STATIC_IMPORT.test(code)) {
@@ -177,10 +187,10 @@ for (const [file, code] of published) {
  * Files matched by "dir/**\/*.ext" (any depth) or "dir/*.ext" (that folder only; `ext` may be `.min.css`),
  * repo-relative, sorted. The file part may start with a list of prefixes, "dir/{a,b}-*.ext": the files
  * named "a-…" or "b-…" (a family of files), or
- * `dir/{a-*,b}.ext`: named "a-…" or exactly "b.ext" (the patterns of a kind of site in catalog are a list of exact names).
+ * `dir/{a-*,b}.ext`: named "a-…" or exactly "b.ext" (a list of exact names).
  */
 function globFiles(glob) {
-  // "dir/{a-*,b,c}.ext": files named "a-…", "b.ext" or "c.ext" (catalog's layout components and kind patterns in one list)
+  // "dir/{a-*,b,c}.ext": files named "a-…", "b.ext" or "c.ext"
   const list = /^(.*?)\/\{([a-z*,-]+)\}(\.[a-z.]+)$/.exec(glob);
   if (list) {
     const [, folder, names, suffix] = list;
@@ -263,5 +273,22 @@ for (const { name, file, floor, ideal, max } of budgets.filter((b) => b.file)) {
   } else {
     console.log(`✓ ${line}`);
   }
+}
+
+// --- catalog (no limit, reported) ---
+// @luz-ds/catalog has no weight limit (PRINCIPLES.md red line 17, 2026-11-02):
+// no ceiling, no ideal, no failure. The sizes are printed so growth stays visible.
+const catalogDist = "packages/catalog/dist";
+if (existsSync(resolve(root, catalogDist))) {
+  const files = [
+    ...readdirSync(resolve(root, catalogDist)).filter((f) => f.endsWith(".min.js")).map((f) => `${catalogDist}/${f}`),
+    ...globFiles(`${catalogDist}/components/*.min.css`),
+  ];
+  const sizes = files.map((f) => [f, sizeOf(resolve(root, f))]).sort((a, b) => b[1] - a[1]);
+  const total = sizes.reduce((sum, [, size]) => sum + size, 0);
+  console.log(`\ncatalog (no limit, reported): ${sizes.length} files, ${kB(total)} min+gzip in all`);
+  for (const [f, size] of sizes) console.log(`  ${kB(size).padStart(9)}  ${relative(catalogDist, f)}`);
+} else {
+  console.log("- catalog (no limit, reported): packages/catalog/dist not built, not measured");
 }
 process.exit(failed ? 1 : 0);
