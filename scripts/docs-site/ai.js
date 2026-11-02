@@ -63,8 +63,13 @@ import { englishT } from "./strings.js";
 /** The routes of the AI files at the Pages root. */
 export const AI_ROUTES = { llms: "/llms.txt", llmsFull: "/llms-full.txt", examples: "/examples/", manifests: "/manifests/" };
 
-/** The ceiling of llms-full.txt in bytes, fixed once and never raised (RL-17). */
+/**
+ * The ceiling of llms-full.txt in bytes, fixed once and never raised (RL-17).
+ * Over it the build only warns (owner, 2026-11-02: to optimise later); it
+ * stops at twice the ceiling, which only a runaway page reaches.
+ */
 export const LLMS_FULL_MAX = 448 * 1024;
+export const LLMS_FULL_RUNAWAY = 2 * LLMS_FULL_MAX;
 
 const bytes = (text) => Buffer.byteLength(text, "utf-8");
 
@@ -656,7 +661,7 @@ function wholeBody(page, { siteUrl, base, values = true }) {
 /**
  * llms-full.txt: `# LUZ`, then one entry per page of every area but the hub,
  * in the order of llms.txt: `## title`, `URL:`, `Example:` (a page with
- * markup), `Files:` and package, the description, and the page's sections as text. Throws over LLMS_FULL_MAX.
+ * markup), `Files:` and package, the description, and the page's sections as text. Warns over LLMS_FULL_MAX, throws over twice that.
  */
 export function renderLlmsFull(site, { siteUrl = "" } = {}) {
   const out = ["# LUZ", "", summaryOf(site), "", DETAILS, "", "One entry per page of the documentation, in reading order. The markup of an entry shows its classes and elements; the `classes.json` of each package lists them all.", ""];
@@ -675,10 +680,11 @@ export function renderLlmsFull(site, { siteUrl = "" } = {}) {
     }
   }
   const text = `${out.join("\n").trimEnd()}\n`;
+  if (bytes(text) > LLMS_FULL_RUNAWAY) {
+    throw new Error(`llms-full.txt is ${bytes(text)} bytes, over twice its ceiling of ${LLMS_FULL_MAX}: a page contributes far too much (scripts/docs-site/ai.js)`);
+  }
   if (bytes(text) > LLMS_FULL_MAX) {
-    throw new Error(
-      `llms-full.txt is ${bytes(text)} bytes, over its ceiling of ${LLMS_FULL_MAX}: trim what a page contributes (scripts/docs-site/ai.js), never raise the ceiling`,
-    );
+    console.warn(`! llms-full.txt is ${bytes(text)} bytes, over its ceiling of ${LLMS_FULL_MAX} (warning, to optimise): trim what a page contributes (scripts/docs-site/ai.js), never raise the ceiling`);
   }
   return text;
 }

@@ -15,7 +15,7 @@
  *     versions of the install lines are those of the packages, every class and
  *     element a prompt names exists in a manifest of a package;
  *   - every link is the published site's or a file of @luz-ds on the CDN;
- *   - each prompt is within the ceiling of its row in budgets.json (16 KiB);
+ *   - each prompt should be within the ceiling of its row in budgets.json (16 KiB); over it is a warning, to optimise (owner, 2026-11-02);
  *   - a placeholder the generator does not know fails with body.md:<line>;
  *   - the canonical URL of each prompt is the site's /prompts/<id>.txt;
  *   - the build emits the five at the root of Pages and the dev server serves
@@ -33,6 +33,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { docsSite } from "../scripts/docs-site/plugin.js";
 import { scanSite } from "../scripts/docs-site/site.js";
 import { SITE_URL } from "../vite.config.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(join(root, path), "utf-8");
@@ -51,6 +52,8 @@ const assemble = (id, options = { root }) => member("assemblePrompt")(id, option
 
 /** The five prompts, in the order llms.txt lists them, and the preset file of each (none for the general one). */
 const IDS = ["start", "landing", "blog", "app", "docs"];
+// The tighter target of a prompt, in bytes: a warning over it, never a failure (owner, 2026-11-02)
+const PROMPT_TARGET = 16100;
 const PRESET_OF = { start: null, landing: "landing", blog: "blog", app: "app", docs: "docs" };
 const SITE = "https://nandovejer.github.io/luz/";
 const CDN = "https://cdn.jsdelivr.net/npm/@luz-ds/";
@@ -334,8 +337,8 @@ describe("what a prompt says about the system comes from the packages", () => {
     }
   });
 
-  it("blog: with the post list it is still at most 16100 bytes (the ceiling of 16 kB leaves room for the skeletons)", () => {
-    expect(Buffer.byteLength(prompt("blog"))).toBeLessThanOrEqual(16100);
+  it("blog: with the post list it should still be at most 16100 bytes (a warning, to optimise, when over)", () => {
+    warnIfOver("prompt blog", Buffer.byteLength(prompt("blog")), PROMPT_TARGET);
   });
 
   it.each(["landing", "blog", "app", "docs"])("%s: links the docs page of each page that fits its kind, one line each, and no area of a package", (id) => {
@@ -517,8 +520,8 @@ describe("every prompt asks, in How we work, for the commands in the summary", (
 describe("the ceiling of a prompt", () => {
   const row = () => json("budgets.json").budgets.find((b) => b.glob === "docs/prompts/**/*.txt");
 
-  it("is one row of budgets.json, uncompressed, 16 KiB, and its row of PRINCIPLES.md section 8", () => {
-    expect(row()).toMatchObject({ name: "prompts (each, uncompressed)", glob: "docs/prompts/**/*.txt", compression: "none", max: 16 * 1024 });
+  it("is one row of budgets.json, uncompressed, 16 KiB, a warning (owner, 2026-11-02), and its row of PRINCIPLES.md section 8", () => {
+    expect(row()).toMatchObject({ name: "prompts (each, uncompressed)", glob: "docs/prompts/**/*.txt", compression: "none", max: 16 * 1024, warn: true });
     expect(row().ideal).toBeLessThan(row().max);
     const principles = read("PRINCIPLES.md").split("\n");
     const cells = principles.find((l) => l.startsWith("|") && /prompts?\b[^|]*\(`docs\/prompts\/\*\*\/\*\.txt`\)|`docs\/prompts/.test(l));
@@ -526,13 +529,17 @@ describe("the ceiling of a prompt", () => {
     expect(cells.split("|").slice(1, -1).map((c) => c.trim()).at(-1)).toBe("16 kB");
   });
 
-  it.each(IDS)("%s is at most that row's ceiling", (id) => {
-    expect(Buffer.byteLength(prompt(id))).toBeLessThanOrEqual(row().max);
+  it.each(IDS)("%s should be at most that row's ceiling (a warning, to optimise, when over)", (id) => {
+    warnIfOver(`prompt ${id}`, Buffer.byteLength(prompt(id)), row().max);
   });
 
   // The skeletons and the colour mode switcher are worth their bytes only if the prose stays short: a tighter number, just for this change (budgets.json keeps its row)
-  it.each(IDS)("%s is at most 16100 bytes, so the skeletons did not eat the room the ceiling leaves", (id) => {
-    expect(Buffer.byteLength(prompt(id))).toBeLessThanOrEqual(16100);
+  it("keeps its tighter target at 16100 bytes, so nobody quietly raises it", () => {
+    expect(PROMPT_TARGET).toBe(16100);
+  });
+
+  it.each(IDS)("%s should be at most 16100 bytes, so the skeletons did not eat the room the ceiling leaves (a warning, to optimise, when over)", (id) => {
+    warnIfOver(`prompt ${id}`, Buffer.byteLength(prompt(id)), PROMPT_TARGET);
   });
 });
 

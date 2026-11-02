@@ -27,6 +27,7 @@ import { buildSite, relativizeLinks, scanSite } from "../scripts/docs-site/site.
 import { decodeEntities, readHtml } from "../scripts/docs-site/html.js";
 import { readPage } from "./helpers/page-facts.js";
 import { enDictionary, readCore } from "./helpers/i18n-source.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 import { releaseNotes } from "./helpers/release-notes.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -435,12 +436,12 @@ describe("SECURITY.md, the CSP", () => {
 
 /* ---- the A-Z page ----------------------------------------------------------- */
 
-describe("the A-Z pages stay under the page ceiling", () => {
+describe("the A-Z pages should stay under the page ceiling (a warning, to optimise, when over: owner, 2026-11-02)", () => {
   // The site is built once for both routes: the build renders every page in every language, so it is slow.
   let built;
   const buildOnce = () => (built ??= buildSite(scanSite(`${root}apps/docs`, root)));
   // The timeout is long on purpose: the first test to run pays for the whole build, and a loaded machine makes it slower.
-  it.each(["/docs/a-z/", "/docs/a-z/m-z/"])("%s renders, with relative links as the Pages build writes it, in less than the 'docs page HTML' ceiling of budgets.json (less a margin for the asset tags Vite adds)", { timeout: 60_000 }, (route) => {
+  it.each(["/docs/a-z/", "/docs/a-z/m-z/"])("%s renders, with relative links as the Pages build writes it, and warns when over the 'docs page HTML' ceiling of budgets.json (less a margin for the asset tags Vite adds)", { timeout: 60_000 }, (route) => {
     const { budgets } = JSON.parse(read("budgets.json"));
     const row = budgets.find((b) => b.glob === "docs/**/*.html");
     expect(row, "the docs page HTML row of budgets.json").toBeTruthy();
@@ -449,7 +450,8 @@ describe("the A-Z pages stay under the page ceiling", () => {
     const html = relativizeLinks(rendered.get(route), route, new Set(rendered.keys()));
     // The built file is a little larger than the generator's: Vite writes the script and link tags (96 bytes in 2026-10)
     const ASSET_TAGS = 256;
-    expect(Buffer.byteLength(html) + ASSET_TAGS, `the A-Z page ${route} is ${Buffer.byteLength(html)} bytes`).toBeLessThanOrEqual(row.max);
+    warnIfOver(`docs page ${route}`, Buffer.byteLength(html) + ASSET_TAGS, row.max);
+    expect(row.max, "the docs page target is not raised").toBe(80 * 1024);
   });
 });
 

@@ -1,6 +1,6 @@
 /**
- * The docs in three languages stay under the ceiling of a docs page (RL-17: 80 KiB, never raised;
- * docs-i18n-design.md section g).
+ * The docs in three languages should stay under the ceiling of a docs page (80 KiB, never raised;
+ * docs-i18n-design.md section g). Over it is a warning, to optimise, and never a failure (owner, 2026-11-02).
  *
  * Every page, in every language, rendered with buildSite(site, { languages: true }) and measured the way
  * tests/az-split.test.js and tests/i18n-docs.test.js measure the A-Z pages: with its links relative, as the
@@ -24,6 +24,7 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { buildSite, relativizeLinks, scanSite } from "../scripts/docs-site/site.js";
 import { makeSite } from "./helpers/docs-i18n-size-fixture.js";
+import { warnIfOver } from "./helpers/warn-if-over.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 /** The room the Pages build needs for the asset tags Vite adds (az-split.test.js reserves the same). */
@@ -71,6 +72,7 @@ function measure(code) {
 describe("the docs build in three languages", () => {
   it("reads the ceiling from budgets.json: 80 KiB", () => {
     expect(ceiling).toBe(80 * 1024);
+    expect(budgets.find((b) => b.glob === "docs/**/*.html")?.warn, "the row only warns").toBe(true);
   });
 
   it("builds without an error", () => {
@@ -94,7 +96,7 @@ describe("the docs build in three languages", () => {
   });
 });
 
-describe("every page of every language is under the ceiling, with the room for the asset tags", () => {
+describe("every page of every language should be under the ceiling, with the room for the asset tags (a warning, to optimise, when over)", () => {
   it.each(["en", ...LANGUAGES])("%s: all pages, the English ones with the new chrome", (code) => {
     expect(failure?.message ?? "", "the three languages build").toBe("");
     const pages = measure(code);
@@ -106,8 +108,7 @@ describe("every page of every language is under the ceiling, with the room for t
       expect(bare.map((p) => p.route), "English pages measured without the new chrome").toEqual([]);
     }
     const limit = ceiling - ASSET_TAGS;
-    const over = pages.filter((p) => p.bytes > limit).map((p) => `${p.route} ${p.bytes} B (${p.bytes - limit} over)`);
-    expect(over, `pages over ${limit} B (${ceiling} B less ${ASSET_TAGS} B for the asset tags)`).toEqual([]);
+    for (const p of pages) warnIfOver(`docs page ${code}${p.route}`, p.bytes, limit);
   });
 
   it("prints the five largest pages of each language and of all of them", () => {

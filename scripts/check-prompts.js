@@ -19,7 +19,8 @@
  *   - a pattern of the catalog that a preset names (`luz-hero`,
  *     `<luz-search>`) whose page does not say it fits that kind (`fits-kinds`
  *     in apps/docs/pages/catalog/, or `any`);
- *   - a prompt over its ceiling, the row "prompts" of budgets.json;
+ *   - (a warning, not a failure, for now: owner, 2026-11-02) a prompt over its
+ *     ceiling, the row "prompts" of budgets.json, to optimise;
  *   - a prompt whose sources (body, preset, stacks.json) changed since the
  *     sentinel's case for it was confirmed: its `source` in
  *     .claude/evals/prompt-injection/cases.json is not their hash.
@@ -156,8 +157,12 @@ export function presetProblems(root = ROOT) {
   return problems;
 }
 
-/** Every problem of the sources and of the five prompts. */
-export function checkPrompts(root = ROOT) {
+/**
+ * Every problem of the sources and of the five prompts. A prompt over its
+ * ceiling is a warning for now (owner, 2026-11-02): it goes into `warnings`
+ * (an array the caller may pass), never into the problems.
+ */
+export function checkPrompts(root = ROOT, warnings = []) {
   const problems = [];
   const sources = [`${SOURCE}/body.md`, `${SOURCE}/stacks.json`, ...readdirSync(join(root, SOURCE, "presets")).map((f) => `${SOURCE}/presets/${f}`)];
   for (const file of sources) problems.push(...checkText(readFileSync(join(root, file), "utf-8"), file));
@@ -184,17 +189,19 @@ export function checkPrompts(root = ROOT) {
     problems.push(...checkText(text, file, { known }));
     for (const line of fixed) if (!text.includes(line)) problems.push(`${file}: does not hold the body's line "${line.slice(0, 60)}"`);
     const bytes = Buffer.byteLength(text);
-    if (bytes > ceiling) problems.push(`${file}: ${bytes} B, over its ceiling of ${ceiling} B (budgets.json): say less, never raise the ceiling`);
+    if (bytes > ceiling) warnings.push(`${file}: ${bytes} B, over its ceiling of ${ceiling} B (budgets.json; warning, to optimise): say less, never raise the ceiling`);
   }
   return problems;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const problems = checkPrompts();
+  const warnings = [];
+  const problems = checkPrompts(ROOT, warnings);
+  for (const w of warnings) console.warn(`! ${w}`);
   for (const p of problems) console.error(p);
   if (problems.length) {
     console.error(`\n✗ ${problems.length} problem${problems.length === 1 ? "" : "s"} in the prompts`);
     process.exit(1);
   }
-  console.log(`✓ The ${PROMPT_KINDS.length} prompts are clean: no hidden text, only the site's URLs, every class known, each under its ceiling`);
+  console.log(`✓ The ${PROMPT_KINDS.length} prompts are clean: no hidden text, only the site's URLs, every class known${warnings.length ? `; ${warnings.length} over its ceiling (warning, to optimise)` : ", each under its ceiling"}`);
 }

@@ -245,7 +245,7 @@ familyOf('--luz-text-muted'); // [label, route] of the token page that documents
 
 ## Size budgets
 
-`budgets.json` holds the ceiling of every built file (minified, then gzipped). It is a red line: never raise a ceiling. If a file does not fit, make it smaller or remove something. `@luz-ds/catalog` is the exception (owner, 2026-11-02): it has no weight limit and no row; `check:size` prints the size of each of its files under "catalog (no limit, reported)" and fails only on its structural checks (SEC-CHUNK-1/2).
+`budgets.json` holds the ceiling of every built file (minified, then gzipped). It is a red line: never raise a ceiling. The rows with `"warn": true` (the docs pages, `llms.txt` and `llms-full.txt`, the five prompts, the debug page; owner, 2026-11-02) only print a `!` warning over their ceiling and never fail; the numbers stay as the targets to optimise. If a file does not fit, make it smaller or remove something. `@luz-ds/catalog` is the exception (owner, 2026-11-02): it has no weight limit and no row; `check:size` prints the size of each of its files under "catalog (no limit, reported)" and fails only on its structural checks (SEC-CHUNK-1/2).
 
 ```bash
 pnpm build
