@@ -2,7 +2,7 @@
 title: Enlaces sociales
 description: Enlaces a los perfiles y canales de un sitio, cada uno con un icono y un nombre.
 fits: el pie de un sitio, la página de un autor o una página de contacto
-source: 831546440bf6
+source: 6098f3d31e0b
 reviewed: false
 -->
     <div class="docs-component" id="p-social">
@@ -97,13 +97,12 @@ reviewed: false
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
                 <figcaption><strong class="luz-do-dont__verdict">No</strong> Dejes un icono solo sin nombre: el enlace no tiene nombre para un lector de pantalla y nadie lo distingue del siguiente.</figcaption>
-                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Icon with no name"><code>&lt;ul class=&quot;luz-social luz-social--icons&quot;&gt;
-  &lt;li&gt;
-    &lt;a href=&quot;https://example.org/@luz&quot;&gt;
-      &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;8&quot; r=&quot;4&quot;/&gt;&lt;path d=&quot;M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6&quot;/&gt;&lt;/svg&gt;
-    &lt;/a&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</code></pre>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social luz-social--icons">
+                    <li><a href="https://example.org/@luz"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg></a></li>
+                    <li><a href="https://example.org/@luz-news"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg></a></li>
+                  </ul>
+                </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Sí</strong> El mismo nombre con las mismas palabras en todas partes: «Mastodon», como se llama el lugar.</figcaption>

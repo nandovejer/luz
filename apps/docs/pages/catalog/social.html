@@ -102,13 +102,12 @@ toc: h2,h3
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
                 <figcaption><strong class="luz-do-dont__verdict">Don't</strong> An icon alone with no name: the link has no name for a screen reader, and nobody can tell it from the next.</figcaption>
-                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Icon with no name"><code>&lt;ul class=&quot;luz-social luz-social--icons&quot;&gt;
-  &lt;li&gt;
-    &lt;a href=&quot;https://example.org/@luz&quot;&gt;
-      &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;8&quot; r=&quot;4&quot;/&gt;&lt;path d=&quot;M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6&quot;/&gt;&lt;/svg&gt;
-    &lt;/a&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</code></pre>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social luz-social--icons">
+                    <li><a href="https://example.org/@luz"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg></a></li>
+                    <li><a href="https://example.org/@luz-news"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg></a></li>
+                  </ul>
+                </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Do</strong> The same name in the same words everywhere: “Mastodon”, as the place calls itself.</figcaption>
