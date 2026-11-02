@@ -5,16 +5,16 @@
  *     (SEC-CHUNK-2), catalog.js loads it by a literal specifier when the page
  *     has a <luz-embed> (SEC-CHUNK-1), scripts/build-catalog.js and
  *     scripts/check-size.js know it;
- *   - its row in budgets.json and in the table of PRINCIPLES.md section 8,
- *     after the theme-time-boot row, a new row and no ceiling raised;
+ *   - no row in budgets.json nor in the table of PRINCIPLES.md section 8:
+ *     catalog has no weight limit (owner, 2026-11-02);
  *   - the package exports it, declares it a side effect and ships it;
  *   - it builds no address and names no provider (RL-12), writes no HTML
  *     (SEC-IDX-2), and leaves Escape alone (RL-3).
  */
+import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { gzipSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
 
 const repo = fileURLToPath(new URL("../", import.meta.url));
@@ -30,7 +30,12 @@ const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'\\
 
 const budgets = JSON.parse(read("budgets.json")).budgets;
 const principles = read("PRINCIPLES.md");
-const ROW = "catalog JS lazy chunk: embed";
+const budgetTable = (text) => {
+  const lines = text.split("\n");
+  const header = lines.findIndex((line) => /^\|\s*Artifact\s*\|.*\|\s*Ceiling\s*\|$/.test(line));
+  expect(header, "the budget table of section 8").toBeGreaterThan(-1);
+  return lines.slice(header + 2).filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")));
+};
 
 describe("embed.js is a lazy chunk that imports nothing and defines its element once", () => {
   it("has no static import or export-from, no import() and no import.meta (SEC-CHUNK-2)", () => {
@@ -97,33 +102,23 @@ describe("embed.js writes no HTML, no text and no Escape", () => {
   });
 });
 
-describe("the budget of the chunk", () => {
-  it("has a row after the theme-time-boot row, new, at 1.5 kB with a ceiling of 2 kB", () => {
-    const names = budgets.map((b) => b.name);
-    const boot = names.findIndex((n) => /^catalog theme-time-boot script/.test(n));
-    expect(boot).toBeGreaterThan(-1);
-    expect(names[boot + 1]).toBe(ROW);
-    expect(budgets[boot + 1]).toEqual({ name: ROW, file: "packages/catalog/dist/embed.min.js", ideal: 1536, max: 2048 });
+describe("the chunk has no budget: catalog has no weight limit (owner, 2026-11-02)", () => {
+  it("has no row in budgets.json, by file or by name", () => {
+    expect(budgets.filter((b) => (b.file ?? b.glob ?? "").includes("embed") || /embed/i.test(b.name)).map((b) => b.name)).toEqual([]);
+    expect(budgets.filter((b) => (b.file ?? b.glob ?? "").includes("packages/catalog/")).map((b) => b.name)).toEqual([]);
   });
 
-  it("is in the table of PRINCIPLES.md section 8, after the theme-time boot script, with the same ceiling", () => {
-    const rows = principles.split("\n").filter((line) => line.startsWith("| "));
-    const boot = rows.findIndex((row) => /^\| `catalog` theme-time boot script/.test(row));
-    expect(boot).toBeGreaterThan(-1);
-    expect(rows[boot + 1]).toMatch(/^\| `catalog` JS lazy chunk: `embed` \(loaded by `catalog\.js` when the page has a `<luz-embed>`\) \| — \| ≤ 1\.5 kB \| 1\.5 kB \| 2 kB \|$/);
+  it("is not in the table of PRINCIPLES.md section 8", () => {
+    expect(budgetTable(principles).filter((row) => /embed/i.test(row))).toEqual([]);
   });
 
-  it("raises no ceiling: the catalog entry and the other chunks keep theirs", () => {
-    expect(budgets.find((b) => b.name === "catalog JS")).toMatchObject({ ideal: 1024, max: 2048 });
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: timeline")).toBeDefined();
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: theme-time")).toMatchObject({ ideal: 2048, max: 2560 });
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: theme-time-bar")).toMatchObject({ ideal: 1280, max: 1536 });
-  });
-
-  it("is met by the built chunk (needs pnpm build)", () => {
+  it("is built, and check-size reports its size without a ceiling", () => {
     const file = "packages/catalog/dist/embed.min.js";
     expect(existsSync(join(repo, file)), `${file} exists`).toBe(true);
-    expect(gzipSync(readFileSync(join(repo, file)), { level: 9 }).length).toBeLessThanOrEqual(2048);
+    const run = spawnSync(process.execPath, [join(repo, "scripts/check-size.js")], { encoding: "utf-8" });
+    const out = run.stdout + run.stderr;
+    expect(out.slice(out.search(/catalog \(no limit, reported\)/))).toContain("embed.min.js");
+    expect(run.status, out).toBe(0);
   });
 });
 

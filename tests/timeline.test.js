@@ -1,7 +1,7 @@
 /**
  * <luz-timeline> as a piece of @luz-ds/catalog (F7, decisions 27, 32 and 61 of
- * the plan ai-and-catalog-only; it was core's): its budget row, its published
- * export, its row in PRINCIPLES.md section 8, its CSS in the catalog layer, the
+ * the plan ai-and-catalog-only; it was core's): its published
+ * export, no budget row (catalog has no weight limit, 2026-11-02), its CSS in the catalog layer, the
  * loader line in catalog.js. The behaviour is in tests/timeline.spec.js.
  */
 import { describe, expect, it } from "vitest";
@@ -10,18 +10,20 @@ import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(resolve(root, path), "utf-8");
+const budgetTable = (text) => {
+  const lines = text.split("\n");
+  const header = lines.findIndex((line) => /^\|\s*Artifact\s*\|.*\|\s*Ceiling\s*\|$/.test(line));
+  expect(header, "the budget table of section 8").toBeGreaterThan(-1);
+  return lines.slice(header + 2).filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")));
+};
 const catalogDist = resolve(root, "packages/catalog/dist");
 const distBuilt = existsSync(resolve(catalogDist, "catalog.js"));
 
 describe("timeline: size and publication", () => {
   const budgets = JSON.parse(read("budgets.json")).budgets;
 
-  it("has its own budget row: ideal 2 kB, ceiling 3 kB", () => {
-    const row = budgets.find((b) => b.file === "packages/catalog/dist/timeline.min.js");
-    expect(row, "a row for timeline.min.js in budgets.json").toBeDefined();
-    expect(row.name).toBe("catalog JS lazy chunk: timeline");
-    expect(row.ideal).toBe(2048);
-    expect(row.max).toBe(3072);
+  it("has no budget row: catalog has no weight limit (owner, 2026-11-02)", () => {
+    expect(budgets.filter((b) => (b.file ?? b.glob ?? "").includes("timeline") || /timeline/i.test(b.name)).map((b) => b.name)).toEqual([]);
   });
 
   it("leaves no row for a timeline chunk of core", () => {
@@ -33,8 +35,8 @@ describe("timeline: size and publication", () => {
     expect(budgets.find((b) => b.file === "packages/core/dist/luz.min.js").max).toBe(8192);
   });
 
-  it("has its row in PRINCIPLES.md section 8", () => {
-    expect(/\| `catalog` JS lazy chunk: `timeline`[^|]*\| — \| ≤ 2 kB \| 2 kB \| 3 kB \|/.test(read("PRINCIPLES.md")), "the timeline row in section 8").toBe(true);
+  it("has no row in PRINCIPLES.md section 8", () => {
+    expect(budgetTable(read("PRINCIPLES.md")).filter((line) => /timeline/i.test(line)), "a timeline row in section 8").toEqual([]);
   });
 
   it("is exported as @luz-ds/catalog/timeline, and no longer as @luz-ds/core/timeline", () => {

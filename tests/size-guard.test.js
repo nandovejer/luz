@@ -65,11 +65,6 @@ describe("the built catalog files", () => {
       expect(source.match(IMPORT_CALL), `${name}.js dynamic import`).toBeNull();
     }
   });
-
-  it("the entry is much smaller than before (it no longer bundles the search), and the search chunk fits its ceiling", () => {
-    expect(sizeOf("packages/catalog/dist/catalog.min.js")).toBeLessThanOrEqual(1024);
-    expect(sizeOf("packages/catalog/dist/search.min.js")).toBeLessThanOrEqual(2560);
-  });
 });
 
 /* ---- The budgets ------------------------------------------------------- */
@@ -78,68 +73,11 @@ describe("budgets.json and PRINCIPLES.md section 8", () => {
   const budgets = JSON.parse(read("budgets.json")).budgets;
   const principles = read("PRINCIPLES.md");
 
-  it("has a row for the search chunk, with a ceiling of 2.5 kB", () => {
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: search")).toMatchObject({ file: "packages/catalog/dist/search.min.js", ideal: 2048, max: 2560 });
-    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `search`[^\n]*\| 2\.5 kB \|$/m);
-  });
-
-  it("calls the cookie consent file a lazy chunk, with the same ideal and ceiling as the row of F5 had under its old name (renamed, not raised)", () => {
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: cookie-consent")).toEqual({ name: "catalog JS lazy chunk: cookie-consent", file: "packages/catalog/dist/cookie-consent.min.js", ideal: 1024, max: 1536 });
-    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `cookie-consent`[^\n]*\| 1\.5 kB \|$/m);
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: consent"), "the row under the old name is gone").toBeUndefined();
-    expect(principles).not.toMatch(/JS lazy chunk: `consent`/);
-  });
-
-  it("has a row for each of the two time chunks, bigger than the cookie consent one because it holds the clock and the sun (new files, fixed once; no ceiling raised)", () => {
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: theme-time")).toEqual({ name: "catalog JS lazy chunk: theme-time", file: "packages/catalog/dist/theme-time.min.js", ideal: 2048, max: 2560 });
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: theme-time-bar")).toEqual({ name: "catalog JS lazy chunk: theme-time-bar", file: "packages/catalog/dist/theme-time-bar.min.js", ideal: 1280, max: 1536 });
-    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `theme-time` [^\n]*\| 2\.5 kB \|$/m);
-    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `theme-time-bar` [^\n]*\| 1\.5 kB \|$/m);
-    for (const gone of ["color-mode", "mode"]) {
-      expect(budgets.find((b) => b.name === `catalog JS lazy chunk: ${gone}`), `the row under the old name ${gone} is gone`).toBeUndefined();
-      expect(principles).not.toMatch(new RegExp(`JS lazy chunk: \`${gone}\``));
-    }
-  });
-
-  it("has a row for each of the two boot scripts and for core's mode chunk, each new, with a ceiling no bigger than the chunk it serves", () => {
+  it("keeps core's mode chunk and its boot script, with the ceilings they had", () => {
     expect(budgets.find((b) => b.name === "core JS lazy chunk: theme-mode")).toEqual({ name: "core JS lazy chunk: theme-mode", file: "packages/core/dist/theme-mode.min.js", ideal: 1024, max: 1280 });
     expect(budgets.find((b) => /^core theme-boot script/.test(b.name))).toMatchObject({ file: "packages/core/dist/theme-boot.min.js", ideal: 256, max: 512 });
-    expect(budgets.find((b) => /^catalog theme-time-boot script/.test(b.name))).toMatchObject({ file: "packages/catalog/dist/theme-time-boot.min.js", ideal: 512, max: 768 });
     expect(principles).toMatch(/^\| `core` JS lazy chunk: `theme-mode` [^\n]*\| 1\.25 kB \|$/m);
     expect(principles).toMatch(/^\| `core` theme boot script, `theme-boot\.min\.js` [^\n]*\| 0\.5 kB \|$/m);
-    expect(principles).toMatch(/^\| `catalog` theme-time boot script, `theme-time-boot\.min\.js` [^\n]*\| 0\.75 kB \|$/m);
-  });
-
-  it("keeps the catalog entry row, with its ceiling of 2 kB unchanged", () => {
-    expect(budgets.find((b) => b.name === "catalog JS")).toMatchObject({ file: "packages/catalog/dist/catalog.min.js", ideal: 1024, max: 2048 });
-  });
-
-  it("has no `catalog CSS` row: catalog has no bundle, each component file has its own row by glob (F5a)", () => {
-    expect(budgets.find((b) => b.name === "catalog CSS")).toBeUndefined();
-    expect(budgets.some((b) => /catalog\.min\.css/.test(b.file ?? ""))).toBe(false);
-    expect(budgets.find((b) => b.name === "catalog component CSS (each)")).toMatchObject({
-      glob: "packages/catalog/dist/components/*.min.css",
-      ideal: 1280,
-      max: 1536,
-    });
-    expect(principles).toMatch(/^\| Each `catalog` component CSS[^\n]*\| 1\.5 kB \|$/m);
-    expect(principles).not.toMatch(/^\| `catalog` CSS \|/m);
-  });
-
-  it("has a row of its own for the four layout components that came from core (F7, decision 61): ideal 1.75 kB, ceiling 2 kB, a new row and no other ceiling raised", () => {
-    expect(budgets.find((b) => b.name === "catalog layout CSS (each)")).toMatchObject({ ideal: 1792, max: 2048 });
-    expect(principles).toMatch(/^\| Each `catalog` layout component CSS[^\n]*\| \u2264 1\.75 kB \| 1\.75 kB \| 2 kB \|$/m);
-    // a ceiling that went up is a red line: the largest of the four fits under its own ceiling, which is below the 4 KiB bundle
-    expect(budgets.find((b) => b.name === "catalog layout CSS (each)").max).toBeLessThan(4096);
-  });
-
-  it("has a row for the timeline chunk (it was core's, the same ideal and ceiling) and a new one for the sidebar chunk (decision 32), and none for a timeline chunk of core", () => {
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: timeline")).toEqual({ name: "catalog JS lazy chunk: timeline", file: "packages/catalog/dist/timeline.min.js", ideal: 2048, max: 3072 });
-    expect(budgets.find((b) => b.name === "catalog JS lazy chunk: sidebar")).toEqual({ name: "catalog JS lazy chunk: sidebar", file: "packages/catalog/dist/sidebar.min.js", ideal: 768, max: 1024 });
-    expect(budgets.find((b) => /core JS lazy chunk: timeline/.test(b.name))).toBeUndefined();
-    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `timeline`[^\n]*\| 3 kB \|$/m);
-    expect(principles).toMatch(/^\| `catalog` JS lazy chunk: `sidebar`[^\n]*\| 1 kB \|$/m);
-    expect(principles).not.toMatch(/^\| `core` JS lazy chunk: `timeline`/m);
   });
 
   it("brings the ceiling of core's CSS down with the four components (12 kB and 15 kB to 8.75 kB and 11.5 kB), and the core entry keeps its 8 kB", () => {
@@ -148,42 +86,23 @@ describe("budgets.json and PRINCIPLES.md section 8", () => {
     expect(budgets.find((b) => b.file === "packages/core/dist/luz.min.js").max).toBe(8192);
   });
 
-  it("the ceiling of a catalog component is below the 4 KiB the bundle had: no ceiling went up (RL-17)", () => {
-    expect(budgets.find((b) => b.name === "catalog component CSS (each)").max).toBeLessThan(4096);
+  it("has no catalog row of any kind: @luz-ds/catalog has no weight limit (owner, 2026-11-02)", () => {
+    const under = (value) => typeof value === "string" && value.includes("packages/catalog/");
+    expect(budgets.filter((b) => under(b.file) || under(b.glob) || under(b.except)).map((b) => b.name), "a row whose file, glob or except is under packages/catalog/").toEqual([]);
+    expect(budgets.filter((b) => /catalog/i.test(b.name)).map((b) => b.name), "a row named for catalog").toEqual([]);
+    expect(principles).not.toMatch(/^\|[^\n]*`catalog`/m);
+    expect(principles).not.toMatch(/^\| Each `catalog`/m);
   });
 
-  /** Whether a repo-relative file is named by a budget glob: `dir/*.ext`, `dir/{a,b}-*.ext` or `dir/{a-*,b}.ext`. */
-  const named = (file, glob) => {
-    const [, dir, list, ext] = /^(.*)\/(?:\{([^}]+)\}|\*)(\.[a-z.]+|-\*\.[a-z.]+)$/.exec(glob) ?? [];
-    if (!dir || file.slice(0, dir.length + 1) !== `${dir}/`) return false;
-    const name = file.slice(dir.length + 1);
-    if (list === undefined) return name.endsWith(ext.replace(/^-\*/, ""));
-    const dashed = ext.startsWith("-*"); // {a,b}-*.ext: a name starting "a-" or "b-"
-    const suffix = ext.replace(/^-\*/, "");
-    return list.split(",").some((item) => (dashed ? name.startsWith(`${item}-`) && name.endsWith(suffix) : item.endsWith("-*") ? name.startsWith(item.slice(0, -1)) && name.endsWith(suffix) : name === `${item}${suffix}`));
-  };
-
-  it("every built catalog component is in exactly one row, and fits that row's ceiling, gzipped and minified", () => {
-    const dir = join(repo, "packages/catalog/dist/components");
-    const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".min.css")) : [];
-    expect(files.length).toBeGreaterThan(0);
-    const rows = budgets.filter((b) => b.glob?.startsWith("packages/catalog/dist/components/"));
-    for (const f of files) {
-      const path = `packages/catalog/dist/components/${f}`;
-      const mine = rows.filter((row) => named(path, row.glob) && !(row.except && named(path, row.except)));
-      expect(mine.map((row) => row.name), `${f} is in one row only`).toHaveLength(1);
-      expect(sizeOf(path), `${f} against ${mine[0].name}`).toBeLessThanOrEqual(mine[0].max);
-    }
-  });
-
-  it("puts navbar, sidebar, terminal and timeline in the layout row, the 20 patterns in theirs, and the six elements in the general one", () => {
-    const rows = budgets.filter((b) => b.glob?.startsWith("packages/catalog/dist/components/"));
-    const rowOf = (name) => rows.find((row) => named(`packages/catalog/dist/components/${name}.min.css`, row.glob) && !(row.except && named(`packages/catalog/dist/components/${name}.min.css`, row.except)))?.name;
-    for (const name of ["navbar", "sidebar", "terminal", "timeline"]) expect(rowOf(name), name).toBe("catalog layout CSS (each)");
-    for (const name of ["hero", "site-header", "masthead", "site-footer", "app-bar", "page-rail", "article"]) expect(rowOf(name), name).toBe("catalog kind patterns CSS (each)");
-    for (const name of ["search", "cookie-consent", "theme-time", "lang-switch", "submenu", "announcement"]) expect(rowOf(name), name).toBe("catalog component CSS (each)");
-    // the old file names are in no row at all
-    for (const name of ["landing-hero", "cms-header", "app-header", "docs-rail", "consent", "mode", "color-mode", "banner"]) expect(rowOf(name) === "catalog kind patterns CSS (each)", `${name} is not a pattern file`).toBe(false);
+  it("keeps the rows of tokens and core in the order they were, with the ceilings they had: nothing went up", () => {
+    expect(budgets.slice(0, 6).map((b) => [b.name, b.max])).toEqual([
+      ["tokens CSS", 5120],
+      ["core CSS", 11776],
+      ["core conditional CSS (luz.css with the reset and the elements inside [data-luz])", 11776],
+      ["core JS (entry, lazy chunks excluded)", 8192],
+      ["core JS lazy chunk: midi", 4096],
+      ["core JS lazy chunk: table-sort", 2048],
+    ]);
   });
 
   it("keeps the budgets and the PRINCIPLES table in step, as check-size does", () => {
@@ -206,7 +125,7 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
   const last = "docs page HTML (each, uncompressed)";
 
-  /** The ceilings committed before F5: RL-17, never raised, never removed. */
+  /** The ceilings of tokens, core and the docs page: RL-17, never raised, never removed. Catalog has none (owner, 2026-11-02). */
   const BEFORE = [
     ["tokens CSS", 5 * KiB],
     // F7: the four layout components left core, and its ceiling went down with them (15 KiB to 11.5 KiB); a ceiling that only goes down
@@ -216,18 +135,6 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     ["core JS (entry, lazy chunks excluded)", 8 * KiB],
     ["core JS lazy chunk: midi", 4 * KiB],
     ["core JS lazy chunk: table-sort", 2 * KiB],
-    // F5a: catalog has no bundle, so the 4 KiB row that limited its total goes and each file gets a ceiling below it
-    ["catalog component CSS (each)", 1.5 * KiB],
-    ["catalog JS", 2 * KiB],
-    ["catalog JS lazy chunk: search", 2.5 * KiB],
-    ["catalog JS lazy chunk: cookie-consent", 1.5 * KiB],
-    // F7: the timeline chunk is catalog's now, with core's ideal and ceiling; the sidebar chunk and the row of the four layout stylesheets are new
-    ["catalog JS lazy chunk: timeline", 3 * KiB],
-    ["catalog JS lazy chunk: sidebar", 1 * KiB],
-    ["catalog layout CSS (each)", 2 * KiB],
-    // F5b: the rows `landing CSS` (2 KiB), `cms CSS` (4 KiB), `app CSS` (2 KiB) and `docs CSS` (4 KiB) went with their
-    // packages; each of the 21 patterns has a ceiling of 1 KiB, below the smallest of them (a ceiling that goes down, never up)
-    ["catalog kind patterns CSS (each)", 1 * KiB],
     [last, 80 * KiB],
   ];
 
@@ -235,17 +142,13 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     expect(budgets.slice(0, BEFORE.length).map((b) => [b.name, b.max])).toEqual(BEFORE);
   });
 
-  it("appends the three AI-ready rows after the docs page row, then the language chunk row (F6), the rows of the color mode (core's chunk and boot script, catalog's time chunk, bar chunk and boot script), the three rows of the home's light (F3), then the prompts row (F1 of the kinds plan), then the debug page row, and nothing else (no docs CSS row since F5b)", () => {
-    expect(budgets).toHaveLength(BEFORE.length + 15);
+  it("appends the three AI-ready rows after the docs page row, then the language chunk row (F6), core's rows of the color mode (the chunk and the boot script), the three rows of the home's light (F3), then the prompts row, then the debug page row, and nothing else (catalog has no row: no weight limit, 2026-11-02)", () => {
+    expect(budgets).toHaveLength(BEFORE.length + 11);
     expect(budgets.at(BEFORE.length - 1).name).toBe(last);
     expect(budgets.slice(BEFORE.length + 3).map((b) => b.name)).toEqual([
       "core JS lazy chunk: i18n-es",
       "core JS lazy chunk: theme-mode",
       "core theme-boot script (packages/core/dist/theme-boot.min.js)",
-      "catalog JS lazy chunk: theme-time",
-      "catalog JS lazy chunk: theme-time-bar",
-      "catalog theme-time-boot script (packages/catalog/dist/theme-time-boot.min.js)",
-      "catalog JS lazy chunk: embed",
       "home light controller JS",
       "home light visual: globe",
       "home light data: globe",
@@ -307,28 +210,19 @@ describe("the AI-ready rows of budgets.json and PRINCIPLES.md section 8", () => 
     });
   });
 
-  it("has no row of the docs package, and no row of landing, cms or app: their packages are gone, and the patterns share one row", () => {
+  it("has no row of the docs package, and no row of landing, cms or app: their packages are gone", () => {
     for (const name of ["docs CSS", "landing CSS", "cms CSS", "app CSS"]) expect(budgets.find((b) => b.name === name), name).toBeUndefined();
-    expect(budgets[BEFORE.length - 2]).toMatchObject({ name: "catalog kind patterns CSS (each)", ideal: 768, max: 1024 });
-    expect(budgets[BEFORE.length - 2].glob, "the 20 blocks by name, no `{landing,cms,app,docs}-*` prefix list (F8)").toMatch(/^packages\/catalog\/dist\/components\/\{[a-z,-]+\}\.min\.css$/);
-    expect(budgets[BEFORE.length - 2].glob).not.toContain("*");
   });
 
-  it("has the row of the patterns in the PRINCIPLES.md table right after the layout row, with the same ideal and ceiling, and no row of the four packages", () => {
-    expect(table[BEFORE.length - 3][0], "the row before it").toMatch(/^Each `catalog` layout component CSS/);
-    expect(table[BEFORE.length - 6][0], "three rows before that").toMatch(/^`catalog` JS lazy chunk: `cookie-consent`/);
-    expect(table[BEFORE.length - 5][0]).toMatch(/^`catalog` JS lazy chunk: `timeline`/);
-    expect(table[BEFORE.length - 4][0]).toMatch(/^`catalog` JS lazy chunk: `sidebar`/);
-    const [name, floor, ideal, , ceiling] = table[BEFORE.length - 2];
-    expect(name).toMatch(/^Each pattern of a kind of site in `catalog`/);
-    expect(floor).toBe("\u2014");
-    expect(ideal).toBe("\u2264 0.75 kB");
-    expect(ceiling).toBe("1 kB");
+  it("has the table of PRINCIPLES.md section 8 with the same rows as budgets.json, in the same order, and no row of the four packages or of catalog", () => {
+    expect(table).toHaveLength(budgets.length);
+    expect(table[BEFORE.length - 1][0], "the docs page row is where the last pinned row is").toMatch(/^Each docs page/);
     expect(table.filter(([cell]) => /^`(?:landing|cms|app|docs)` CSS/.test(cell))).toEqual([]);
+    expect(table.filter(([cell]) => /catalog/i.test(cell)), "no row of the table is about catalog").toEqual([]);
   });
 
   it("repeats the rows in the PRINCIPLES.md table, in the same order, after \"Each docs page\"", () => {
-    expect(table).toHaveLength(BEFORE.length + 15);
+    expect(table).toHaveLength(BEFORE.length + 11);
     expect(table[BEFORE.length - 1][0]).toMatch(/^Each docs page/);
     const [cli, text, manifests] = table.slice(BEFORE.length);
     expect(cli[0]).toMatch(/check/);
@@ -821,5 +715,109 @@ describe("scripts/check-size.js on a copy of the repository, with the home's lig
     const { status, output } = build({ "globe-data.js": `import "lit";${DATA}` });
     expect(status).toBe(1);
     expect(output).toMatch(/globe-data\.js/);
+  });
+});
+
+/* ---- @luz-ds/catalog has no weight limit (owner, 2026-11-02) ------------- */
+
+describe("scripts/check-size.js reports the size of catalog and never fails on it", () => {
+  const REPORT = /catalog \(no limit, reported\)/;
+  let dir;
+  /** `n` bytes of hex that do not compress much: the gzip size of the file is about `n / 2`, whatever the zlib. */
+  const hex = (n) => randomBytes(Math.ceil(n / 2)).toString("hex");
+  const HUGE = 400 * 1024;
+
+  /**
+   * A repository with core's CSS row, a catalog with the seven chunks of the loader and one component, and
+   * NO catalog row in budgets.json (the new rule); `catalog` overrides any file of catalog/dist, `coreBytes`
+   * is the size of core's one budgeted file against a ceiling of 2 kB.
+   */
+  function build({ catalog = {}, coreBytes = 100, withCatalog = true } = {}) {
+    const files = { "catalog.min.js": LOADER, "search.min.js": CHUNK("luz-search"), "cookie-consent.min.js": CHUNK("luz-cookie-consent"), "theme-time.min.js": CHUNK("luz-theme-time"), "theme-time-bar.min.js": "/* a chunk with no element */", "timeline.min.js": CHUNK("luz-timeline"), "embed.min.js": CHUNK("luz-embed"), "sidebar.min.js": "/* a chunk with no element */", ...catalog };
+    mkdirSync(join(dir, "scripts"), { recursive: true });
+    mkdirSync(join(dir, "packages/core/dist"), { recursive: true });
+    cpSync(join(repo, "scripts/check-size.js"), join(dir, "scripts/check-size.js"));
+    const rows = [{ name: "core CSS", file: "packages/core/dist/luz.min.css", ideal: 1024, max: 2048 }];
+    writeFileSync(join(dir, "budgets.json"), JSON.stringify({ budgets: rows }));
+    writeFileSync(join(dir, "PRINCIPLES.md"), ["| Artifact | Warns below | Ideal | Warns above | Ceiling |", "| --- | --- | --- | --- | --- |", "| `core` CSS | - | - | - | 2 kB |"].join("\n") + "\n");
+    writeFileSync(join(dir, "packages/core/package.json"), "{}"); // without it the row passes vacuously, "package not created yet"
+    writeFileSync(join(dir, "packages/core/dist/luz.min.css"), hex(coreBytes));
+    if (withCatalog) {
+      mkdirSync(join(dir, "packages/catalog/dist/components"), { recursive: true });
+      for (const [name, code] of Object.entries(files)) writeFileSync(join(dir, "packages/catalog/dist", name), code);
+      writeFileSync(join(dir, "packages/catalog/dist/components/huge.min.css"), hex(HUGE));
+    }
+    const run = spawnSync(process.execPath, [join(dir, "scripts/check-size.js")], { encoding: "utf-8" });
+    return { status: run.status, output: run.stdout + run.stderr };
+  }
+
+  beforeEach(() => {
+    dir = mkdtempSync(join(tmpdir(), "luz-size-guard-nolimit-"));
+  });
+  afterEach(() => {
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it("prints the section 'catalog (no limit, reported)' with each file, and exits 0 when a catalog stylesheet is far over what any ceiling was", () => {
+    const { status, output } = build();
+    expect(output).toMatch(REPORT);
+    expect(output).toContain("huge.min.css");
+    expect(output).toContain("search.min.js");
+    expect(output).not.toMatch(/✗/);
+    expect(status).toBe(0);
+  });
+
+  it("exits 0 when a catalog chunk is huge too: no ceiling, no 'no budget' failure for a catalog file", () => {
+    const { status, output } = build({ catalog: { "search.min.js": `${CHUNK("luz-search")}/*${hex(HUGE)}*/` } });
+    expect(output).toMatch(REPORT);
+    expect(output).not.toMatch(/no budget/);
+    expect(output).not.toMatch(/over the ceiling/);
+    expect(status).toBe(0);
+  });
+
+  it("says it is not measured, and still exits 0, when catalog is not built", () => {
+    const { status, output } = build({ withCatalog: false });
+    expect(output).toMatch(REPORT);
+    expect(output).toMatch(/not built|not measured/);
+    expect(status).toBe(0);
+  });
+
+  it("still FAILS on a file of core over its ceiling, in the same run that reports catalog", () => {
+    const { status, output } = build({ coreBytes: 20 * 1024 });
+    expect(output).toMatch(/core CSS[^\n]*over the ceiling/);
+    expect(status).toBe(1);
+  });
+
+  it("still fails a loader with a static import, and names the file (SEC-CHUNK-2), with no catalog row", () => {
+    const { status, output } = build({ catalog: { "catalog.min.js": `import "./search.min.js";${LOADER}` } });
+    expect(output).toMatch(/catalog\.min\.js[^\n]*static import/);
+    expect(status).toBe(1);
+  });
+
+  it("still fails a chunk that imports anything, static or dynamic (SEC-CHUNK-2), with no catalog row", () => {
+    for (const code of ['import "./x.min.js";', 'import("./cookie-consent.min.js");', 'export * from "./x.min.js";']) {
+      const { status, output } = build({ catalog: { "search.min.js": `${CHUNK("luz-search")}${code}` } });
+      expect(output, code).toMatch(/search\.min\.js[^\n]*(?:lazy chunk and imports a file|SEC-CHUNK-2)/);
+      expect(status, code).toBe(1);
+    }
+  });
+
+  it("still fails an import() whose argument is not a literal (SEC-CHUNK-1), with no catalog row", () => {
+    const { status, output } = build({ catalog: { "catalog.min.js": `${LOADER}import(location.hash.slice(1));` } });
+    expect(output).toMatch(/literal/i);
+    expect(status).toBe(1);
+  });
+
+  it("the real run: pnpm check:size exits 0 and lists every built catalog file in the section", () => {
+    const run = spawnSync(process.execPath, [join(repo, "scripts/check-size.js")], { encoding: "utf-8" });
+    const output = run.stdout + run.stderr;
+    expect(output).toMatch(REPORT);
+    const section = output.slice(output.search(REPORT));
+    for (const name of ["catalog.min.js", "search.min.js", "embed.min.js", "theme-time-boot.min.js"]) expect(section, name).toContain(name);
+    const components = readdirSync(join(repo, "packages/catalog/dist/components")).filter((f) => f.endsWith(".min.css"));
+    expect(components.length).toBeGreaterThan(0);
+    for (const name of components) expect(section, name).toContain(name);
+    expect(output).not.toMatch(/✗/);
+    expect(run.status).toBe(0);
   });
 });

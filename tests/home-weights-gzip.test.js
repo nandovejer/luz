@@ -40,8 +40,8 @@ describe("scripts/docs-site/site.js: the weights are measured with the system gz
   it("measures every weight of the home through that one function", () => {
     const calls = js.match(/\bgzipSync\(/g) ?? [];
     expect(calls).toHaveLength(1);
-    // a package weighs the sum of its budgeted files, and of the files a glob row matches (catalog has no
-    // bundle: it weighs its components), both measured by gzipBytes
+    // a package weighs the sum of its budgeted files, and of the files a glob row matches; catalog has no row
+    // and no bundle: it weighs the files of its dist, all measured by gzipBytes
     expect(js).toMatch(/function renderWeights[\s\S]*?\b(?:gzipBytes|packageBytes)\(/);
     expect(js).toMatch(/function levelWeights[\s\S]*?\b(?:gzipBytes|packageBytes)\(/);
     expect(js).toMatch(/function packageBytes[\s\S]*?\bgzipBytes\(/);
@@ -71,10 +71,20 @@ const globbed = (glob) => {
 // luz.conditional.css is luz.css for one region of a page: a page links one of the two, so it is not a weight
 // on top of core's (its row is budgeted, and left out of the bar)
 const CONDITIONAL = "packages/core/dist/luz.conditional.min.css";
-const files = (name) => [
-  ...budgets.filter((b) => b.file?.startsWith(`packages/${name}/dist/`) && b.file !== CONDITIONAL).map((b) => b.file),
-  ...budgets.filter((b) => b.glob?.startsWith(`packages/${name}/dist/`)).flatMap((b) => globbed(b.glob)),
-];
+// Catalog has no budget row (no weight limit, owner 2026-11-02), so its figure is not read from budgets.json: it is
+// every .min.js of its dist and every .min.css of its components folder, less the patterns of the kinds of site.
+const catalogFiles = () => {
+  const dist = "packages/catalog/dist";
+  const own = existsSync(join(repo, dist)) ? readdirSync(join(repo, dist)).filter((f) => f.endsWith(".min.js")).sort().map((f) => `${dist}/${f}`) : [];
+  return [...own, ...globbed(`${dist}/components/*.min.css`)];
+};
+const files = (name) =>
+  name === "catalog"
+    ? catalogFiles()
+    : [
+        ...budgets.filter((b) => b.file?.startsWith(`packages/${name}/dist/`) && b.file !== CONDITIONAL).map((b) => b.file),
+        ...budgets.filter((b) => b.glob?.startsWith(`packages/${name}/dist/`)).flatMap((b) => globbed(b.glob)),
+      ];
 const built = BASE.every((name) => files(name).length > 0 && files(name).every((f) => existsSync(join(repo, f))));
 
 describe.skipIf(!built || !hasGzip() || !existsSync(join(repo, "docs/index.html")))("docs/index.html: the weights equal gzip -9 -n", () => {
@@ -88,9 +98,11 @@ describe.skipIf(!built || !hasGzip() || !existsSync(join(repo, "docs/index.html"
     return meter ? Number(meter.attrs.get("value")) : null;
   };
 
-  it("catalog weighs the sum of its component files, not a bundle, and not the 20 patterns of the kinds of site", () => {
+  it("catalog weighs the sum of its files in dist, not of a budgets.json row (it has none), not a bundle, and not the 20 patterns of the kinds of site", () => {
+    expect(budgets.filter((b) => [b.file, b.glob].some((v) => v?.startsWith("packages/catalog/"))), "catalog has no row to read").toEqual([]);
     const parts = files("catalog").filter((f) => f.startsWith("packages/catalog/dist/components/"));
-    expect(parts.length, "the components are budgeted by the glob row").toBeGreaterThanOrEqual(6);
+    expect(parts.length, "the components are summed from the dist folder").toBeGreaterThanOrEqual(6);
+    expect(files("catalog").filter((f) => f.endsWith(".js")).length, "the loader and its chunks are in the figure").toBeGreaterThanOrEqual(8);
     expect(parts.filter((f) => KIND_PATTERN.test(f)), "the patterns of the kinds are not in the figure").toEqual([]);
     expect(files("catalog").some((f) => /catalog\.min\.css$/.test(f))).toBe(false);
   });

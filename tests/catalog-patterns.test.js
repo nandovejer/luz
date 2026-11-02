@@ -22,7 +22,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
-import { gzipSync } from "node:zlib";
 import { afterEach, describe, expect, it } from "vitest";
 import { LAYER_ORDER } from "../scripts/luz-layers.js";
 import * as packages from "../scripts/luz-packages.js";
@@ -114,38 +113,15 @@ describe("the 21 patterns are stylesheets of catalog, named for their block", ()
     }
     expect(exists("packages/catalog/src/index.css"), "catalog has no index.css").toBe(false);
   });
-
-  it("each minified file is under the ceiling of the row `catalog kind patterns CSS (each)` (min + gzip)", () => {
-    const row = json("budgets.json").budgets.find((b) => b.name === "catalog kind patterns CSS (each)");
-    expect(row).toBeTruthy();
-    const over = ALL.filter((name) => gzipSync(readFileSync(`${root}packages/catalog/dist/components/${name}.min.css`)).length > row.max).map((name) => name);
-    expect(over).toEqual([]);
-  });
 });
 
-describe("the budget rows of catalog: a row for the 21 patterns, and the general row leaves them out", () => {
+describe("the budget of catalog: none (owner, 2026-11-02), whatever its patterns weigh", () => {
   const budgets = json("budgets.json").budgets;
 
-  it("has `catalog kind patterns CSS (each)`: the 21 blocks by name (F8: no `{landing,cms,app,docs}-*` glob any more), ideal 768 and a ceiling of 1024", () => {
-    const row = budgets.find((b) => b.name === "catalog kind patterns CSS (each)");
-    expect(row).toMatchObject({ name: "catalog kind patterns CSS (each)", ideal: 768, max: 1024 });
-    const list = /^packages\/catalog\/dist\/components\/\{([^}]+)\}\.min\.css$/.exec(row.glob);
-    expect(list, row.glob).toBeTruthy();
-    expect(list[1].split(",").sort(), "the blocks by name").toEqual([...ALL].sort());
-  });
-
-  it("keeps `catalog component CSS (each)` at 1280 and 1536 (never raised), and says with `except` that the patterns are the other row's", () => {
-    const row = budgets.find((b) => b.name === "catalog component CSS (each)");
-    expect(row).toMatchObject({ glob: "packages/catalog/dist/components/*.min.css", ideal: 1280, max: 1536 });
-    // `except` names the files of the other rows: the 21 patterns, and (F7) the four layout components that came from core,
-    // each by its name (a list of blocks, no prefix glob)
-    const list = /\{([^}]+)\}\.min\.css$/.exec(row.except);
-    expect(list, row.except).toBeTruthy();
-    expect(list[1], "no `-*` prefix: the blocks are named").not.toContain("*");
-    const excluded = (name) => list[1].split(",").includes(name);
-    for (const name of ALL) expect(excluded(name), `${name} is the patterns' row`).toBe(true);
-    for (const slug of ["navbar", "sidebar", "terminal", "timeline"]) expect(excluded(slug), `${slug} is the layout row`).toBe(true);
-    for (const slug of ["search", "cookie-consent", "theme-time", "lang-switch", "submenu", "announcement", "faq"]) expect(excluded(slug), `${slug} stays in the general row`).toBe(false);
+  it("has no row for the 20 patterns, none for the general component, none for the layout components: no row names a file under packages/catalog/", () => {
+    const rows = budgets.filter((b) => [b.file, b.glob, b.except].some((value) => typeof value === "string" && value.includes("packages/catalog/")));
+    expect(rows.map((b) => b.name)).toEqual([]);
+    for (const name of ["catalog kind patterns CSS (each)", "catalog component CSS (each)", "catalog layout CSS (each)"]) expect(budgets.find((b) => b.name === name), name).toBeUndefined();
   });
 
   it("has no row of the four packages: landing CSS, cms CSS, app CSS, docs CSS", () => {
@@ -153,9 +129,9 @@ describe("the budget rows of catalog: a row for the 21 patterns, and the general
     expect(budgets.filter((b) => /packages\/(?:landing|cms|app|docs)\//.test(b.file ?? b.glob ?? ""))).toEqual([]);
   });
 
-  it("is in the PRINCIPLES.md table of section 8, with the same ceiling and no `{landing,cms,app,docs}-*` glob, and the table has no row of the four packages", () => {
+  it("is not in the PRINCIPLES.md table of section 8: no row of the patterns, no row of the four packages, no glob of the four kinds", () => {
     const principles = read("PRINCIPLES.md");
-    expect(principles).toMatch(/^\| Each pattern of a kind of site in `catalog` \([^\n]*scripts\/docs-site\/kinds\.js[^\n]*\| — \| ≤ 0\.75 kB \| 0\.75 kB \| 1 kB \|$/m);
+    expect(principles).not.toMatch(/^\| Each pattern of a kind of site in `catalog`/m);
     for (const name of ["landing", "cms", "app", "docs"]) expect(principles, `${name} CSS`).not.toMatch(new RegExp(`^\\| \`${name}\` CSS \\|`, "m"));
     expect(principles, "no glob of the four kinds").not.toContain("{landing,cms,app,docs}-*");
   });
