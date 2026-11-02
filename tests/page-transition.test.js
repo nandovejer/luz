@@ -171,10 +171,10 @@ describe("the page /docs/catalog/page-transition/", () => {
     expect(page.meta.fits.length).toBeGreaterThan(10);
   });
 
-  it("has the order 33, the last of the area, and no other page of the area has it", () => {
-    expect(Number(page.meta.order)).toBe(33);
+  it("has the order 34, the last of the area, and no other page of the area has it", () => {
+    expect(Number(page.meta.order)).toBe(34);
     expect(catalog.filter((p) => p.meta.order === page.meta.order).map((p) => p.route)).toEqual([page.route]);
-    expect(Math.max(...catalog.map((p) => Number(p.meta.order)))).toBe(33);
+    expect(Math.max(...catalog.map((p) => Number(p.meta.order)))).toBe(34);
   });
 
   it("is the docs-component p-page-transition, as the specs find a page by its id", () => {

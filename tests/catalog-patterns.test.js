@@ -650,12 +650,12 @@ describe("the Catalog area groups its pages by what they do", () => {
     for (const g of area.groups) expect(pages.some((p) => p.meta.group === g.id), `group ${g.id}`).toBe(true);
   });
 
-  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 33 at most, no ties", () => {
+  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 34 at most, no ties", () => {
     const orders = catalogPages().map((p) => Number(p.meta.order));
     expect(catalogPages()).toHaveLength(35);
     expect(new Set(orders).size, `orders: ${orders.sort((a, b) => a - b).join(" ")}`).toBe(orders.length);
     expect(Math.min(...orders)).toBe(0);
-    expect(Math.max(...orders)).toBeLessThanOrEqual(33);
+    expect(Math.max(...orders)).toBeLessThanOrEqual(34);
     expect(repoSite.byRoute.get("/docs/catalog/").meta.order).toBe("0");
   });
 
@@ -731,7 +731,7 @@ describe("Fits best: the real pages", () => {
   const patterns = () => catalogPages().filter((p) => p.meta.group && p.meta.group !== "reference");
 
   it("every pattern page of catalog has both, and no other page has either", () => {
-    expect(patterns()).toHaveLength(32);
+    expect(patterns()).toHaveLength(33);
     for (const page of patterns()) {
       expect(page.meta["fits-kinds"], page.file).toBeTruthy();
       expect(page.meta.fits.length, page.file).toBeGreaterThan(10);
@@ -812,7 +812,7 @@ describe("Fits best: what a page, a card and the Spanish page say", () => {
   it("the card of the gallery says it too, in plain words (the card is one link): no link inside the line", () => {
     for (const [route, lang] of [["/docs/catalog/", "en"], ["/es/docs/catalog/", "es"]]) {
       const cards = findAll(parse(rendered.get(route)), (n) => n.name === "li" && hasClass(n, "docs-card"));
-      expect(cards, route).toHaveLength(32);
+      expect(cards, route).toHaveLength(33);
       for (const card of cards) {
         const href = query(card, "h3.docs-card__title").children.find((n) => n.name === "a").attrs.get("href");
         const slug = href.split("/").filter(Boolean).at(-1);
