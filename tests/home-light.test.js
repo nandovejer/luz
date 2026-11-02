@@ -32,6 +32,7 @@ const DIR = "apps/landing/light";
 const FILES = ["light", "globe", "globe-data"].map((name) => `${DIR}/${name}.js`);
 /** The files that define an element (globe-data.js is data). */
 const ELEMENTS = { light: "home-light", globe: "home-globe" };
+const isLoose = (name) => /loose sheet:? `?bar-list/.test(name);
 
 /** The code without its comments: a rule may be explained in a comment that names what it forbids. */
 const code = (path) =>
@@ -404,7 +405,10 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
   });
 
   it("puts them after the theme-boot script row of core, with the prompts row and the debug page row appended after them (no catalog row in between: no weight limit, 2026-11-02; no other row moved or raised)", () => {
-    const names = budgets.map((b) => b.name);
+    // the loose sheet of the bar list is a row of its own (tests/bar-list.test.js, tests/size-guard.test.js): one, with its ceilings, left out of this order
+    const loose = budgets.filter((b) => isLoose(b.name));
+    expect(loose).toEqual([{ name: "core component CSS, a loose sheet: bar-list", file: "packages/core/dist/components/bar-list.min.css", ideal: 768, max: 1024 }]);
+    const names = budgets.filter((b) => !isLoose(b.name)).map((b) => b.name);
     const boot = names.findIndex((name) => /^core theme-boot script/.test(name));
     expect(boot, "the theme-boot script row").toBeGreaterThanOrEqual(0);
     expect(names.slice(boot + 1)).toEqual([...ROWS.map(([name]) => name), "prompts (each, uncompressed)", "debug page HTML (docs/debug/index.html, uncompressed)"]);
@@ -413,10 +417,13 @@ describe("budgets.json and PRINCIPLES.md section 8: the three rows of the home's
   it("repeats them in the PRINCIPLES.md table, with the same ceilings, in the same order", () => {
     const lines = read("PRINCIPLES.md").split("\n");
     const header = lines.findIndex((line) => /^\|\s*Artifact\s*\|.*\|\s*Ceiling\s*\|$/.test(line));
-    const table = lines
+    const all = lines
       .slice(header + 2)
       .filter((line, i, all) => all.slice(0, i + 1).every((l) => l.startsWith("|")))
       .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
+    // the loose sheet of the bar list has its own row (one), left out of this order
+    expect(all.filter((cells) => isLoose(cells[0]))).toHaveLength(1);
+    const table = all.filter((cells) => !isLoose(cells[0]));
     const boot = table.findIndex((cells) => /^`core` theme boot script/.test(cells[0]));
     expect(boot, "the theme boot script row of the table").toBeGreaterThanOrEqual(0);
     const at = boot;
