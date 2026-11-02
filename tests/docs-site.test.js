@@ -1197,10 +1197,19 @@ describe("the LUZ docs site", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("renders the not-found page with no <base> and no script (SEC-MISC-3/5)", () => {
+  it("renders the not-found page with no <base>, one external module script and no other script (SEC-MISC-3/5)", () => {
     const html = rendered.get("/404.html");
     expect(html).not.toMatch(/<base\b/);
-    expect(html).not.toMatch(/<script/i);
+    const scripts = findAll(parse(html, "/404.html"), (n) => n.name === "script");
+    expect(scripts, "one script element").toHaveLength(1);
+    expect(scripts[0].attrs.get("type")).toBe("module");
+    expect(scripts[0].attrs.get("src") ?? "", "the app's not-found.js").toMatch(/(^|\/)not-found\.js$/);
+    // No inline body, no inline event handler
+    expect(html.slice(scripts[0].open.end, scripts[0].close?.index ?? scripts[0].open.end).trim()).toBe("");
+    expect(html).not.toMatch(/\son[a-z]+\s*=/i);
+    // It stays dark whatever the hour: none of the boot scripts of the other pages
+    expect(html).not.toContain("theme-boot");
+    expect(html).not.toContain("theme-time-boot");
     expect(html).toContain("<h1 class=\"docs-title\">Page not found</h1>");
   });
 
@@ -1267,6 +1276,63 @@ describe("the LUZ docs site", () => {
     expect(textOf(lead)).toBe("SYSTEM FAILURE. What you are looking for is not here. Do not try to bend the page... that is impossible. Instead, only try to realize the truth: There is no page. (opens in a new tab)");
     expect(findAll(query(dom, "main"), (n) => n.name === "input")).toEqual([]);
     expect(rendered.get("/404.html")).not.toContain("docs-not-found-pause");
+  });
+
+  it("the not-found page has no picture in its main: the image is a background, not an img or a figure", () => {
+    const html = rendered.get("/404.html");
+    const main = query(parse(html, "/404.html"), "main");
+    expect(findAll(main, (n) => n.name === "img")).toEqual([]);
+    expect(findAll(main, (n) => n.name === "figure")).toEqual([]);
+    expect(html).not.toContain("docs-not-found__image");
+    expect(html).not.toContain("docs-not-found__figure");
+    expect(html).not.toContain("404-matrix");
+  });
+
+  it("the not-found page shows English by default and carries one hidden block per docs language, for the script to reveal", () => {
+    const html = rendered.get("/404.html");
+    const dom = parse(html, "/404.html");
+    const main = query(dom, "main");
+    // The English lead is the default: the only thing shown without JavaScript
+    const defaults = findAll(main, (n) => n.attrs.has("data-not-found-default"));
+    expect(defaults).toHaveLength(1);
+    expect(defaults[0].name).toBe("p");
+    expect(classesOf(defaults[0])).toContain("docs-lead");
+    expect(defaults[0].attrs.has("hidden")).toBe(false);
+    // Spanish: hidden, named for the script, holding the lead and the link to its docs home and nothing else
+    const blocks = findAll(main, (n) => n.name === "section" && classesOf(n).includes("docs-not-found__lang"));
+    expect(blocks).toHaveLength(1);
+    const es = blocks[0];
+    expect(es.attrs.get("lang")).toBe("es");
+    expect(es.attrs.get("data-not-found-lang")).toBe("es");
+    expect(es.attrs.has("hidden")).toBe(true);
+    const leads = findAll(es, (n) => n.name === "p" && classesOf(n).includes("docs-lead"));
+    expect(leads).toHaveLength(1);
+    const spans = findAll(leads[0], (n) => n.name === "span");
+    expect(spans).toHaveLength(1);
+    expect(spans[0].attrs.get("lang"), "SYSTEM FAILURE. stays English").toBe("en");
+    expect(textOf(spans[0])).toBe("SYSTEM FAILURE.");
+    const strings = JSON.parse(readFileSync(join(repo, "apps/docs/i18n/es/strings.json"), "utf-8"));
+    expect(textOf(leads[0]).replace(/\s+/g, " ").trim()).toBe(`SYSTEM FAILURE. ${strings["notfound.lead"]}`);
+    const links = findAll(es, (n) => n.name === "a");
+    expect(links).toHaveLength(1);
+    expect(links[0].attrs.get("href")).toBe("/es/docs/");
+    expect(textOf(links[0])).toBe("Ir al inicio de la documentación");
+    expect(textOf(es).replace(/\s+/g, " ").trim()).toBe(`SYSTEM FAILURE. ${strings["notfound.lead"]} Ir al inicio de la documentación`);
+    expect(html).not.toContain("No hemos encontrado");
+    expect(html).not.toContain("We could not find that page");
+  });
+
+  it("the docs catalogs have notfound.lead and notfound.home, no longer notfound.text, and Spanish says the Matrix line in Spanish", () => {
+    for (const code of ["en", "es"]) {
+      const strings = JSON.parse(readFileSync(join(repo, `apps/docs/i18n/${code}/strings.json`), "utf-8"));
+      expect(Object.hasOwn(strings, "notfound.text"), `${code}: notfound.text`).toBe(false);
+      expect(typeof strings["notfound.home"], `${code}: notfound.home`).toBe("string");
+      expect(typeof strings["notfound.lead"], `${code}: notfound.lead`).toBe("string");
+      expect(strings["notfound.lead"].length, `${code}: notfound.lead`).toBeGreaterThan(20);
+    }
+    const es = JSON.parse(readFileSync(join(repo, "apps/docs/i18n/es/strings.json"), "utf-8"));
+    expect(es["notfound.lead"]).toBe("Lo que buscas no está aquí. No intentes doblar la página… eso es imposible. En cambio, solo trata de darte cuenta de la verdad: no hay página.");
+    expect(es["notfound.home"]).toBe("Ir al inicio de la documentación");
   });
 
   it("the not-found page has 28 columns of rain behind it and ends with an empty scanlines div, both decorative", () => {

@@ -1,70 +1,117 @@
 // @ts-check
 /**
  * The picture on the docs 404 page (apps/docs/404.html, styled in apps/docs/reference.css): the Earth and the Sun
- * with a plug, in the page's neon green, the main content of the page and so never lazy.
+ * with a plug, in the page's neon green, is a decorative watermark and no longer part of the content.
  *
- *  - `img.docs-not-found__image` has a real alt, its width and height (1000 x 800) so the page does not jump,
- *    `decoding="async"` and no `loading="lazy"`;
- *  - it is drawn (naturalWidth > 0), also with JavaScript off: the page has no script of its own;
- *  - at 320 px the page does not scroll sideways, and at 1024 x 700 the last of the three links is still inside
- *    the window: the picture is capped at max(30vh, 12rem) tall and never pushes the buttons out of view;
- *  - axe finds nothing serious in the dark mode the layout hard-codes and in high contrast.
- * Reduced motion is asked for, as the other specs of this page do, so the CRT switch-on (about 4 s) is already
- * over when the geometry is read. Runs in `chromium`; the no-JS describe sets `javaScriptEnabled: false` itself.
+ *  - there is no `img` and no `figure` in the main: the picture is the background of `.docs-not-found::before`;
+ *  - that pseudo-element is fixed to the window (inset 0, as large as the window), sits behind the code rain
+ *    (z-index lower than the rain's), takes no pointer events, paints `404-matrix-1000.webp` and is faint (opacity
+ *    0.1 to 0.3), so the text over it keeps its contrast;
+ *  - it is not painted in high contrast (`data-theme="high-contrast"`) nor under forced colors;
+ *  - the page still has its one h1, does not scroll sideways at 320 px, keeps the three buttons in the window
+ *    at 1024 x 700, and axe finds nothing serious in the dark mode the layout hard-codes and in high contrast;
+ *  - the same holds with JavaScript off: the page has no script of its own.
+ * Reduced motion is asked for where the geometry is read, as the other specs of this page do, so the CRT switch-on
+ * (about 4 s) is over; the rain is drawn only without it, so the z-index test asks for no preference. Runs in
+ * `chromium`; the no-JS describe sets `javaScriptEnabled: false` itself.
  */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const IMAGE = 'img.docs-not-found__image';
 const LAST_LINK = 'main .docs-not-found__links li:last-child a';
 
-/** @param {import('@playwright/test').Page} page */
-async function open(page) {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
+/** @param {import('@playwright/test').Page} page @param {'reduce' | 'no-preference'} [motion] */
+async function open(page, motion = 'reduce') {
+  await page.emulateMedia({ reducedMotion: motion });
   await page.goto('/404.html');
-  await expect(page.locator(IMAGE)).toHaveCount(1);
+  await expect(page.locator('h1')).toHaveCount(1);
 }
 
-/** @param {import('@playwright/test').Page} page */
-const drawn = (page) => page.locator(IMAGE).evaluate((img) => /** @type {HTMLImageElement} */ (img).complete && /** @type {HTMLImageElement} */ (img).naturalWidth);
-
-test.describe('the picture on the not-found page', () => {
-  test('is an img with a real alt, its dimensions, async decoding and no lazy loading', async ({ page }) => {
-    await open(page);
-    const img = page.locator(IMAGE);
-    const alt = await img.getAttribute('alt');
-    expect(alt?.trim().length ?? 0, 'a descriptive alt').toBeGreaterThan(20);
-    await expect(img).toHaveAttribute('width', '1000');
-    await expect(img).toHaveAttribute('height', '800');
-    await expect(img).toHaveAttribute('decoding', 'async');
-    expect(await img.getAttribute('loading'), 'the main content is never lazy').not.toBe('lazy');
+/** The computed style of the watermark, the pseudo-element of the body. @param {import('@playwright/test').Page} page */
+const watermark = (page) =>
+  page.evaluate(() => {
+    const s = getComputedStyle(document.body, '::before');
+    return {
+      display: s.display,
+      position: s.position,
+      top: s.top,
+      right: s.right,
+      bottom: s.bottom,
+      left: s.left,
+      width: parseFloat(s.width),
+      height: parseFloat(s.height),
+      zIndex: s.zIndex,
+      pointerEvents: s.pointerEvents,
+      opacity: parseFloat(s.opacity),
+      image: s.backgroundImage,
+      inner: [document.documentElement.clientWidth, window.innerHeight],
+    };
   });
 
-  test('is loaded and drawn', async ({ page }) => {
+test.describe('the picture on the not-found page is a watermark', () => {
+  test('is no img and no figure in the main, and the page keeps its one h1 and its lead', async ({ page }) => {
     await open(page);
-    await expect.poll(() => drawn(page)).toBeGreaterThan(0);
+    await expect(page.locator('main img, main figure')).toHaveCount(0);
+    await expect(page.locator('h1')).toHaveText('Page not found');
+    await expect(page.locator('main .docs-lead a')).toHaveCount(1);
+  });
+
+  test('covers the window, takes no pointer events and paints the published 404-matrix-1000.webp', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await open(page);
+    const w = await watermark(page);
+    expect(w.position).toBe('fixed');
+    expect([w.top, w.right, w.bottom, w.left], 'inset 0').toEqual(['0px', '0px', '0px', '0px']);
+    expect(w.width, 'as wide as the window').toBeCloseTo(w.inner[0], 0);
+    expect(w.height, 'as tall as the window').toBeCloseTo(w.inner[1], 0);
+    expect(w.pointerEvents).toBe('none');
+    expect(w.image).toMatch(/url\(.*404-matrix-1000[^)]*\.webp/);
+    const file = w.image.match(/url\("?([^")]+)"?\)/)?.[1] ?? '';
+    const res = await page.request.get(new URL(file, page.url()).href);
+    expect(res.ok(), 'the picture is served').toBe(true);
+  });
+
+  test('is faint: opacity between 0.1 and 0.3', async ({ page }) => {
+    await open(page);
+    const { opacity } = await watermark(page);
+    expect(opacity).toBeGreaterThanOrEqual(0.1);
+    expect(opacity).toBeLessThanOrEqual(0.3);
+  });
+
+  test('sits behind the code rain', async ({ page }) => {
+    await open(page, 'no-preference');
+    const facts = await page.evaluate(() => ({
+      mark: getComputedStyle(document.body, '::before').zIndex,
+      rain: getComputedStyle(/** @type {Element} */ (document.querySelector('.docs-not-found__rain'))).zIndex,
+    }));
+    expect(facts.rain, 'the rain is drawn with motion allowed').toBe('-1');
+    expect(Number(facts.mark), 'z-index lower than the rain').toBeLessThan(Number(facts.rain));
+    expect(facts.mark).toBe('-2');
+  });
+
+  test('is not painted in high contrast', async ({ page }) => {
+    await open(page);
+    expect((await watermark(page)).display, 'painted in dark').not.toBe('none');
+    await page.evaluate(() => { document.documentElement.dataset.theme = 'high-contrast'; });
+    expect((await watermark(page)).display).toBe('none');
+  });
+
+  test('is not painted under forced colors', async ({ page }) => {
+    await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+    await page.goto('/404.html');
+    expect((await watermark(page)).display).toBe('none');
   });
 
   test('does not scroll sideways at 320px', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 640 });
     await open(page);
-    await expect.poll(() => drawn(page)).toBeGreaterThan(0);
-    const facts = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, inner: window.innerWidth, right: document.querySelector('img.docs-not-found__image')?.getBoundingClientRect().right ?? 0 }));
+    const facts = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, inner: window.innerWidth }));
     expect(facts.scroll, 'no sideways scroll').toBeLessThanOrEqual(facts.inner);
-    expect(facts.right, 'the picture ends inside the window').toBeLessThanOrEqual(facts.inner);
   });
 
-  test('is no taller than max(30vh, 12rem), so at 1024 x 700 the last link is still in the window', async ({ page }) => {
+  test('leaves the last of the three links inside the window at 1024 x 700', async ({ page }) => {
     await page.setViewportSize({ width: 1024, height: 700 });
     await open(page);
-    await expect.poll(() => drawn(page)).toBeGreaterThan(0);
-    const facts = await page.evaluate(() => {
-      const img = /** @type {HTMLElement} */ (document.querySelector('img.docs-not-found__image'));
-      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-      return { cap: getComputedStyle(img).maxBlockSize, expected: Math.max(window.innerHeight * 0.3, 12 * rem), height: img.getBoundingClientRect().height };
-    });
-    expect(parseFloat(facts.cap), 'max-block-size is max(30vh, 12rem)').toBeCloseTo(facts.expected, 0);
-    expect(facts.height, 'drawn within its cap').toBeLessThanOrEqual(facts.expected + 0.5);
     const link = await page.locator(LAST_LINK).boundingBox();
     expect(link, 'the last link is drawn').not.toBeNull();
     expect((link?.y ?? 0) + (link?.height ?? 0), 'the last link ends inside 700px').toBeLessThanOrEqual(700);
@@ -73,7 +120,6 @@ test.describe('the picture on the not-found page', () => {
   for (const theme of ['dark', 'high-contrast']) {
     test(`has no serious or critical axe violation in ${theme}`, async ({ page }) => {
       await open(page);
-      await expect.poll(() => drawn(page)).toBeGreaterThan(0);
       // The layout fixes data-theme="dark"; the other mode is set by hand
       await page.evaluate((t) => { document.documentElement.dataset.theme = t; }, theme);
       await page.waitForTimeout(400);
@@ -84,12 +130,17 @@ test.describe('the picture on the not-found page', () => {
   }
 });
 
-test.describe('without JavaScript the picture is still drawn', () => {
+test.describe('without JavaScript the watermark is still there', () => {
   test.use({ javaScriptEnabled: false });
 
-  test('loads, with its alt', async ({ page }) => {
+  test('is a faint fixed background behind the rain and the page has no img', async ({ page }) => {
     await open(page);
-    await expect.poll(() => drawn(page)).toBeGreaterThan(0);
-    expect((await page.locator(IMAGE).getAttribute('alt'))?.trim().length ?? 0).toBeGreaterThan(20);
+    await expect(page.locator('main img, main figure')).toHaveCount(0);
+    const w = await watermark(page);
+    expect(w.position).toBe('fixed');
+    expect(w.pointerEvents).toBe('none');
+    expect(w.opacity).toBeGreaterThanOrEqual(0.1);
+    expect(w.opacity).toBeLessThanOrEqual(0.3);
+    expect(w.image).toMatch(/url\(.*404-matrix-1000[^)]*\.webp/);
   });
 });

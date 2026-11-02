@@ -285,10 +285,11 @@ describe("the shell: body.o-shell.luz-docs-layout, the sidebar, the rail, then m
     expect(checked).toBeGreaterThan(0);
   });
 
-  it("the not-found page is unchanged: no script, no rail, its old head", () => {
+  it("the not-found page is unchanged: one module script and no other, no rail, its old head", () => {
     const html = rendered.get("/404.html");
     const root = parse(html, "/404.html");
-    expect(findAll(root, (n) => n.name === "script"), "no script").toEqual([]);
+    const scripts = findAll(root, (n) => n.name === "script");
+    expect(scripts.map((n) => [n.attrs.get("type"), /(^|\/)not-found\.js$/.test(n.attrs.get("src") ?? "")]), "its one module script").toEqual([["module", true]]);
     expect(findAll(root, (n) => n.name === "aside"), "no aside").toEqual([]);
     expect(html).not.toContain("luz-page-rail");
     expect(queryAll(root, "h1.docs-title"), "one h1, with its old class").toHaveLength(1);

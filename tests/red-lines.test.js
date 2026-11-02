@@ -288,8 +288,11 @@ describe("Pages site: the not-found page (docs-redesign SEC-MISC-3/4/5)", () => 
     expect(html).not.toMatch(/["'(\s]\.\.?\//);
   });
 
-  it("runs no script", () => {
-    expect(html).not.toMatch(/<script/i);
+  it("runs one script, the language picker: a module from the site's own assets, with no inline code", () => {
+    const scripts = html.match(/<script\b[^>]*>[\s\S]*?<\/script>/gi) ?? [];
+    expect(scripts).toHaveLength(1);
+    expect(scripts[0]).toMatch(/^<script type="module"(?: crossorigin)? src="[^"]+\.js"><\/script>$/);
+    expect(scripts[0].match(/src="([^"]+)"/)[1].startsWith(base)).toBe(true);
   });
 });
 
