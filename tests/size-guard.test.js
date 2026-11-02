@@ -808,6 +808,24 @@ describe("scripts/check-size.js reports the size of catalog and never fails on i
     expect(status).toBe(1);
   });
 
+  it.each([
+    ["theme-time-boot.min.js", "a relative static import", 'import "./x.js";'],
+    ["theme-time-boot.min.js", "a literal import()", 'import("./x.js");'],
+    ["theme-time-boot.min.js", "a re-export", 'export * from "./x.js";'],
+    ["extra.min.js", "a relative static import", 'import "./x.js";'],
+    ["extra.min.js", "a literal import()", 'import("./x.js");'],
+  ])("fails a catalog script that is neither the loader nor a lazy chunk (%s) with %s, and says it imports nothing (SEC-CHUNK-2)", (name, _, code) => {
+    const { status, output } = build({ catalog: { [name]: `/* a head script */\n${code}` } });
+    expect(output).toMatch(new RegExp(`${name.replace(/\./g, "\\.")}[^\\n]*neither the loader nor a lazy chunk[^\\n]*imports nothing \\(SEC-CHUNK-2\\)`));
+    expect(status).toBe(1);
+  });
+
+  it("passes the same two scripts when they import nothing", () => {
+    const { status, output } = build({ catalog: { "theme-time-boot.min.js": "document.documentElement.dataset.moment='night';", "extra.min.js": "/* nothing */" } });
+    expect(output).not.toMatch(/neither the loader nor a lazy chunk/);
+    expect(status).toBe(0);
+  });
+
   it("the real run: pnpm check:size exits 0 and lists every built catalog file in the section", () => {
     const run = spawnSync(process.execPath, [join(repo, "scripts/check-size.js")], { encoding: "utf-8" });
     const output = run.stdout + run.stderr;
