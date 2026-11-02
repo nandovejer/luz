@@ -67,6 +67,8 @@ luz-chart[data-luz-view="table"] :is(.luz-chart__figure, .luz-chart__title) {
 }
 
 .luz-chart__toggle {
+	/* At the end of the bar, and still at the end when the title leaves with the chart: it does not jump to the start */
+	margin-inline-start: auto;
 	max-inline-size: 100%;
 	white-space: normal;
 }
