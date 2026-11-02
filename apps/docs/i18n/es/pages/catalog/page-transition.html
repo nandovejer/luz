@@ -1,0 +1,108 @@
+<!-- luz:page
+title: Transición de página
+description: Una página se desvanece en la siguiente cuando alguien sigue un enlace, en los navegadores que lo admiten, sin más que enlazar una hoja de estilos.
+fits: un sitio por el que se pasa de página en página y donde quieres que el cambio resulte más suave
+keywords: transición de vista, entre documentos, fundido, navegación, animación, movimiento reducido
+source: bd0130253d45
+reviewed: false
+-->
+    <div class="docs-component" id="p-page-transition">
+          <h2 id="example">Ejemplo</h2>
+          <p>Este sitio la usa. Sigue un enlace a otra página: la página que dejas se desvanece mientras aparece la siguiente, en 0,2 segundos.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <p><a href="/docs/catalog/announcement/">Open the announcement page</a> or <a href="/docs/catalog/search/">the search page</a>, then come back with the Back button.</p>
+          </div>
+          <p class="docs-demo__note">Nothing happens if your reader asked for reduced motion, in Firefox, or on the first load of a page.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Navegadores que la reproducen: Chrome y Edge 126 o posterior, y Safari 18.2 o posterior. Firefox todavía no la reproduce (comprobado en Firefox 155): la página cambia de golpe, como antes.</p>
+          <p>Solo se reproduce entre dos páginas del mismo sitio que enlacen la hoja de estilos, cuando alguien sigue un enlace o pulsa Atrás o Adelante. No se reproduce en la primera visita, al recargar ni al escribir una dirección.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la transición de página">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Enlaza la hoja de estilos en el <code>&lt;head&gt;</code> de todas las páginas, después de core: las líneas de arriba. En el cuerpo no cambia nada; basta un enlace normal a otra página del sitio.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-page-transition" aria-label="Copy the link markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Link markup"><code id="code-page-transition">&lt;a href=&quot;/docs/&quot;&gt;Documentation&lt;/a&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <p>No hay ninguna: una transición fija, sin ajustes ni control.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Reglas de la transición de página" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Regla</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Regla"><div><code>@view-transition</code></div></td><td data-label="Regla"><div>Con <code>navigation: auto</code>, la página se suma. Las dos páginas de una navegación deben tenerla.</div></td></tr>
+                  <tr><td data-label="Regla"><div><code>::view-transition-old(root)</code>, <code>::view-transition-new(root)</code></div></td><td data-label="Regla"><div>La página anterior y la siguiente se funden. Su duración es <code>--luz-duration-base</code> y su curva <code>--luz-easing-standard</code>.</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>@luz-ds/catalog</code>, sin JavaScript. El navegador toma una imagen de la página que dejas y de la página a la que llegas, y pasa de una a otra con un fundido.</p>
+            <ul>
+              <li>Todo va dentro de <code>@media (prefers-reduced-motion: no-preference)</code>, también la regla <code>@view-transition</code>. Si el lector pide movimiento reducido, no empieza ninguna transición.</li>
+              <li>Se desvanece la página entera. Nada se desliza, y la cabecera y la barra lateral no tienen nombre propio.</li>
+              <li>El modo de color del lector se fija antes del primer pintado de cada página, así que el fundido nunca muestra otro modo.</li>
+              <li>La página no se puede usar durante los 0,2 segundos que dura el fundido.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada: no hay ningún script.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <ul>
+              <li><strong>Foco:</strong> aterriza donde lo haría sin la transición, al principio de la página nueva. Los enlaces para saltar al contenido y las anclas funcionan como siempre.</li>
+              <li><strong>Lectores de pantalla:</strong> no se añade ni se anuncia nada; el título y el contenido de la página nueva se leen como en cualquier navegación.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarla</h3>
+            <p>Úsala en un sitio por el que se pasa por varias páginas y donde quieres que el cambio resulte más suave, sin más trabajo que un enlace.</p>
+            <h3 id="when-not">Cuándo no usarla</h3>
+            <p>No la uses para animar una parte de la página, como una cabecera que se queda quieta o una imagen que crece hasta la página siguiente: eso necesita un <code>view-transition-name</code> en cada una y lo escribes tú.</p>
+            <ul>
+              <li>No la uses donde el cambio de página deba verse instantáneo, como en un formulario que se rellena muchas veces.</li>
+              <li>No ofrezcas un interruptor para ella. Quien quiere menos movimiento ya lo ha dicho, y la transición se detiene.</li>
+            </ul>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> Enlaza la hoja de estilos desde todas las páginas del sitio: el fundido se reproduce entre dos páginas que la tienen.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <pre class="luz-code-block" data-lang="text"><code>/        page-transition.css
+/docs/   page-transition.css</code></pre>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> La enlaces solo desde algunas páginas: una visita que va de una a una página sin ella cambia de golpe, y el sitio parece irregular.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <pre class="luz-code-block" data-lang="text"><code>/        page-transition.css
+/docs/   (not linked)</code></pre>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Redactar el contenido</h3>
+            <p>No tiene texto. Describe un cambio de página con tus palabras, como siempre: un enlace dice adónde lleva, y el título de la página nueva dice dónde estás.</p>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>No pinta ningún color propio, así que no hay ningún par que medir. Las imágenes que funde son las propias páginas, cada una en el modo del lector.</p>
+            <ul>
+              <li><strong>Foco:</strong> el contorno de 2 px de <code>--luz-focus-ring</code> de la página forma parte de la imagen y se desvanece con ella.</li>
+              <li>En colores forzados y en papel no cambia nada.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 2 tokens que leen las reglas de <code>components/page-transition.css</code> del catálogo, agrupados por familia. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-easing-standard</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

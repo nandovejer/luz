@@ -35,6 +35,7 @@ export const CASCADE = [
   "page-header", "article-header", "article", "post-list",
   "app-bar", "dashboard",
   "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer",
+  "page-transition",
 ];
 
 /**

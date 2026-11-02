@@ -45,6 +45,8 @@ dist/components/page-header.css
 dist/components/page-header.min.css
 dist/components/page-rail.css
 dist/components/page-rail.min.css
+dist/components/page-transition.css
+dist/components/page-transition.min.css
 dist/components/pager.css
 dist/components/pager.min.css
 dist/components/post-list.css

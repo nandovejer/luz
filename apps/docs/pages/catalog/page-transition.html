@@ -1,0 +1,112 @@
+<!-- luz:page
+title: Page transition
+description: One page fades into the next when a visitor follows a link, in browsers that support it, with nothing to write but a link to one stylesheet.
+area: catalog
+order: 33
+group: site-wide
+fits-kinds: any
+fits: a site where visitors move from page to page and you want the change to feel softer
+files: components/page-transition.css
+keywords: view transition, cross-document, fade, navigation, animation, reduced motion
+toc: h2,h3
+-->
+    <div class="docs-component" id="p-page-transition">
+          <h2 id="example">Example</h2>
+          <p>This site uses it. Follow a link to another page: the page you leave fades out while the next fades in, in 0.2 seconds.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <p><a href="/docs/catalog/announcement/">Open the announcement page</a> or <a href="/docs/catalog/search/">the search page</a>, then come back with the Back button.</p>
+          </div>
+          <p class="docs-demo__note">Nothing happens if your reader asked for reduced motion, in Firefox, or on the first load of a page.</p>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>Browsers that play it: Chrome and Edge 126 or later, and Safari 18.2 or later. Firefox does not play it yet (checked in Firefox 155): the page changes at once, as it did before.</p>
+          <p>It plays only between two pages of the same site that both link the stylesheet, when the visitor follows a link or presses Back or Forward. It does not play on a first visit, on a reload or when the visitor types an address.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Page transition documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>Link the stylesheet in the <code>&lt;head&gt;</code> of every page, after core: the lines above. Nothing in the body changes; an ordinary link to another page of the site is enough.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-page-transition" aria-label="Copy the link markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Link markup"><code id="code-page-transition">&lt;a href=&quot;/docs/&quot;&gt;Documentation&lt;/a&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variants and options</h3>
+            <p>There are none: one fixed transition, with no setting and no control.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Page transition rules" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Rule</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Rule"><div><code>@view-transition</code></div></td><td data-label="Rule"><div>With <code>navigation: auto</code>, the page opts in. Both pages of a navigation must have it</div></td></tr>
+                  <tr><td data-label="Rule"><div><code>::view-transition-old(root)</code>, <code>::view-transition-new(root)</code></div></td><td data-label="Rule"><div>The page before and the page after cross-fade. Their duration is <code>--luz-duration-base</code> and their easing <code>--luz-easing-standard</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>CSS from <code>@luz-ds/catalog</code>, with no JavaScript. The browser takes a picture of the page you leave and of the page you arrive at, and fades from one to the other.</p>
+            <ul>
+              <li>Everything is inside <code>@media (prefers-reduced-motion: no-preference)</code>, the <code>@view-transition</code> rule too. When a reader asks for reduced motion, no transition starts.</li>
+              <li>It is the whole page that fades. Nothing slides, and the header and the sidebar have no name of their own.</li>
+              <li>The reader’s colour mode is set before the first paint of every page, so the fade never shows another mode.</li>
+              <li>The page cannot be used for the 0.2 seconds the fade lasts.</li>
+            </ul>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>Nothing changes: there is no script.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <ul>
+              <li><strong>Focus:</strong> it lands where it would without the transition, at the start of the new page. Skip links and anchors work as before.</li>
+              <li><strong>Screen readers:</strong> nothing is added or announced; the new page’s title and content are read as on any navigation.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use it on a site where visitors go through several pages and you want the change to feel softer, with no work beyond one link.</p>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use it to animate a part of the page, such as a header that stays still or a picture that grows into the next page: that needs a <code>view-transition-name</code> on each, and is yours to write.</p>
+            <ul>
+              <li>Do not use it where a page change should look instant, such as a form you fill in many times.</li>
+              <li>Do not offer a switch for it. A reader who wants no motion has already said so, and the transition stops.</li>
+            </ul>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Link the stylesheet from every page of the site: the fade plays between two pages that both have it.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <pre class="luz-code-block" data-lang="text"><code>/        page-transition.css
+/docs/   page-transition.css</code></pre>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Link it from some pages only: a visit that goes from one to a page without it changes at once, and the site feels uneven.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <pre class="luz-code-block" data-lang="text"><code>/        page-transition.css
+/docs/   (not linked)</code></pre>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>It has no text. Describe a page change in your own words as you always did: a link says where it goes, and the title of the new page says where you are.</p>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>It paints no colour of its own, so there is no pair to measure. The pictures it fades are the pages themselves, each in the reader’s mode.</p>
+            <ul>
+              <li><strong>Focus:</strong> the 2 px <code>--luz-focus-ring</code> outline of the page is part of the picture and fades with it.</li>
+              <li>In forced colours and on paper it changes nothing.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 2 tokens that the rules of catalog’s <code>components/page-transition.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-easing-standard</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

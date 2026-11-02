@@ -33,7 +33,7 @@
  *                                          of "Copy the markup" on its page
  */
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { FITS_KINDS, kindPatterns } from "./kinds.js";
 import { englishT } from "./strings.js";
@@ -82,7 +82,9 @@ export const minified = (file) => file.replace(/\.css$/, ".min.css");
  * The stylesheets of catalog, from the manifests its build writes: the
  * `stylesheet` of each element of custom-elements.json and the `files` of each
  * class of classes.json. [{ file, tags, classes }], sorted by file; the files
- * share no selector, so a page links them in any order, after core.
+ * share no selector, so a page links them in any order, after core. A
+ * stylesheet with no class and no tag (page-transition.css: one at-rule) is in
+ * neither manifest, so the folder of the build adds it, with no tag and no class.
  */
 export function catalogComponents({ root, readFile = readFileSync }) {
   const read = (name) => {
@@ -103,6 +105,8 @@ export function catalogComponents({ root, readFile = readFileSync }) {
     for (const d of module.declarations ?? []) if (d.tagName && d.stylesheet) entry(d.stylesheet).tags.push(d.tagName);
   }
   for (const c of read("classes.json").classes ?? []) if (c.defined) for (const file of c.files ?? []) entry(file).classes.push(c.name);
+  const folder = join(root, "packages", "catalog", "dist", "components");
+  if (existsSync(folder)) for (const name of readdirSync(folder)) if (/^[a-z0-9-]+\.css$/.test(name) && !name.startsWith("_")) entry(`components/${name}`);
   return [...byFile.values()].sort((a, b) => (a.file < b.file ? -1 : 1));
 }
 

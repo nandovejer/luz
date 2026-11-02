@@ -32,7 +32,7 @@ const GROUPS = [
   { id: 'navigation', en: 'Navigation', pages: ['app-bar', 'lang-switch', 'masthead', 'navbar', 'sidebar', 'site-header', 'submenu'] },
   { id: 'page-structure', en: 'Page structure', pages: ['article-header', 'hero', 'page-header', 'section', 'site-footer'] },
   { id: 'content', en: 'Content', pages: ['dashboard', 'embed', 'faq', 'post-list', 'social', 'stat', 'terminal', 'timeline', 'toc'] },
-  { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'theme-time', 'cookie-consent', 'search'] },
+  { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'theme-time', 'cookie-consent', 'search', 'page-transition'] },
   { id: 'documentation', en: 'Documentation', pages: ['do-dont', 'doc-header', 'docs-layout', 'example', 'page-footer', 'page-rail', 'pager'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
 ];
@@ -52,6 +52,8 @@ const KIND_OF = {
   navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'],
   // The components with data of the site fit any
   search: ['any'], 'cookie-consent': ['any'], 'theme-time': ['any'], 'lang-switch': ['any'], submenu: ['any'], announcement: ['any'], faq: ['any'], embed: ['any'],
+  // Link a stylesheet and the pages fade into one another: no class, no tag, any site
+  'page-transition': ['any'],
 };
 const KINDS = (/** @type {string} */ slug) => {
   if (!(slug in KIND_OF)) throw new Error(`tests/docs-catalog-patterns.spec.js: ${slug} has no kinds`);
@@ -208,7 +210,7 @@ test.describe('the four areas of the packages that are gone are not served', () 
     });
   }
 
-  test('the search index lists the 31 pages and the class reference of Catalog, and no page of a gone area', async ({ request }) => {
+  test('the search index lists the 32 pages and the class reference of Catalog, and no page of a gone area', async ({ request }) => {
     const index = await (await request.get('/docs/search-index.json')).json();
     const paths = /** @type {string[]} */ (index.pages.map((/** @type {string[]} */ row) => row[1]));
     for (const slug of [...PATTERNS, 'classes']) expect(paths, slug).toContain(`catalog/${slug}/`);
