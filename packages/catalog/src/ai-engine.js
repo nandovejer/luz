@@ -181,7 +181,7 @@ export async function measure(session, text) {
 }
 
 /**
- * Asks the model and yields the answer piece by piece. Aborting `signal`
+ * Asks the model and yields the answer piece by piece, always the new part (never the whole answer again). Aborting `signal`
  * stops it, with an AbortError.
  * @param {object} session from createSession()
  * @param {string} text the question, with whatever context goes with it
@@ -190,7 +190,17 @@ export async function measure(session, text) {
  */
 export async function* ask(session, text, signal) {
   const stream = session.promptStreaming(text, { signal });
-  for await (const piece of stream) yield String(piece);
+  let soFar = "";
+  // The pieces are what is new, but a browser may send the whole answer so far each time. That is told once, by the second piece starting with the first; the mode then holds
+  let whole;
+  let index = 0;
+  for await (const chunk of stream) {
+    const piece = String(chunk);
+    if (index++ === 1) whole = soFar !== "" && piece.length > soFar.length && piece.startsWith(soFar);
+    const fresh = whole ? piece.slice(soFar.length) : piece;
+    soFar = whole ? piece : soFar + piece;
+    if (fresh) yield fresh;
+  }
 }
 
 /** Frees the model's memory for the session. */

@@ -287,3 +287,30 @@
 	color: var(--luz-text-secondary);
 	font-size: var(--luz-text-sm);
 }
+
+/* "Thinking…" while nothing has arrived: the words breathe (the motion tokens go to nothing with reduced motion) */
+.luz-ai__thinking {
+	color: var(--luz-text-secondary);
+	animation: luz-ai-thinking calc(var(--luz-duration-slower) * 2) var(--luz-easing-standard) infinite alternate;
+}
+
+@keyframes luz-ai-thinking {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0.35;
+	}
+}
+
+/* The answer is being typed: a bar after its last word, which is not text, so a reader never hears it */
+.luz-ai__answer[data-luz-typing] > :last-child:not(pre)::after {
+	content: "";
+	display: inline-block;
+	inline-size: 0.12em;
+	block-size: 1em;
+	margin-inline-start: 0.1em;
+	vertical-align: text-bottom;
+	background: currentcolor;
+}

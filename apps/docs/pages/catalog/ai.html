@@ -34,5 +34,6 @@ toc: h2,h3
             <li>The model is small: it can invent or miss things. Check what matters on the page.</li>
             <li>A page cannot delete the model Chrome downloaded; Chrome does it, at <code>chrome://on-device-internals</code>.</li>
             <li>It has not been tested with a screen reader.</li>
+            <li>If the chat says it is not available on a computer that should run it, check three things: hardware acceleration is on (<code>chrome://settings/system</code>), the disk where Chrome keeps your profile has about 22 GB free, and the state of the model in <code>chrome://on-device-internals</code>. Chrome removes the model when the free space falls below about 10 GB, and a company policy can turn it off.</li>
           </ul>
     </div>

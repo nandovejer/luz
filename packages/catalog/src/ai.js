@@ -220,9 +220,12 @@ const DICT = {
 };
 
 const NAMES = { en: "English", es: "Spanish", ja: "Japanese", de: "German", fr: "French" };
+/** What it says, and only that, when the pages do not answer: "Sorry, but I don't think I know" in each language the model speaks. */
+const UNKNOWN = { en: "Sorry, but I don't think I know.", es: "Lo siento, pero creo que no lo sé.", fr: "Désolé, mais je crois que je ne sais pas.", de: "Tut mir leid, aber ich glaube, das weiß ich nicht.", ja: "申し訳ありませんが、わからないと思います。" };
+
 /** The instructions every session gets; the site adds its own after them. */
 const base = (lang) =>
-  `You are the assistant of this website. Answer the question using only the pages of the site that come with it. Answer at once, with no greeting and no preamble, in at most five short sentences (a short list when it lists steps): never copy the pages and never repeat the question. If the pages do not say, say that you do not know and suggest using the search. Never invent pages, links, commands or numbers. Answer in ${NAMES[lang]}.`;
+  `You are the assistant of this website. Be direct, clear and concrete: no greeting, no preamble, no filler, no apologies, at most five short sentences (a short list when it lists steps). Base every statement on the pages of the site that come with the question and name the page it comes from by its title. Never copy the pages or repeat the question. Never invent pages, links, commands, options or numbers. If the pages do not answer the question, reply only with this sentence: "${UNKNOWN[lang]}" Answer in ${NAMES[lang]}.`;
 
 // eslint-disable-next-line no-restricted-syntax -- RL-12: the SVG namespace name, an identifier that is never fetched
 const SVG = "http://www.w3.org/2000/svg";
@@ -247,6 +250,46 @@ function icon() {
   path.setAttribute("d", "M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1M15 5v4M9 10v4M17 15v4");
   svg.append(path);
   return svg;
+}
+
+/**
+ * Types an answer: `push(text)` gives it all that has arrived so far, and `show(shown, finished)` is
+ * called with the part to draw, a few characters a frame (more the further behind it falls, so a long
+ * answer never lags). With reduced motion, or in a hidden tab, it shows what has arrived at once.
+ * `finish()` waits for the typing to catch up; `flush()` shows everything now (the answer was stopped).
+ */
+function typewriter(show) {
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let target = "";
+  let shown = 0;
+  let timer = 0;
+  let waiting;
+  const tick = () => {
+    timer = 0;
+    const behind = target.length - shown;
+    shown += still || document.hidden ? behind : Math.min(behind, Math.max(2, Math.ceil(behind / 8)));
+    show(target.slice(0, shown), false);
+    if (shown < target.length) timer = setTimeout(tick, 16);
+    else waiting?.();
+  };
+  return {
+    push(text) {
+      target = text;
+      if (!timer) timer = setTimeout(tick, 0);
+    },
+    finish: () =>
+      new Promise((resolve) => {
+        if (timer) waiting = resolve;
+        else resolve();
+      }).then(() => show(target, true)),
+    flush() {
+      clearTimeout(timer);
+      timer = 0;
+      shown = target.length;
+      show(target, true);
+      waiting?.();
+    },
+  };
 }
 
 class LuzAi extends HTMLElement {
@@ -546,9 +589,16 @@ class LuzAi extends HTMLElement {
     n.log.append(turn);
     n.log.scrollTop = n.log.scrollHeight;
     n.status.textContent = t("thinking");
+    // Until the first words arrive (the pages are searched and read, then the model starts), the bubble says it is thinking
+    answer.replaceChildren(h("span", { class: "luz-ai__thinking" }, t("thinking")));
     let text = "";
     // A link the model writes is a link only when it goes to a page of the site's own index; any other address is shown as its text
     const link = (url) => this.#page(url);
+    const typing = typewriter((shown, finished) => {
+      answer.toggleAttribute("data-luz-typing", !finished);
+      if (shown.trim()) answer.replaceChildren(renderMarkdown(shown, link));
+      n.log.scrollTop = n.log.scrollHeight;
+    });
     try {
       this.#session ??= await this.#create(this.#newLife().signal);
       this.#entries ??= (await loadIndex(this.dataset.luzAiIndex || document.querySelector("luz-search")?.dataset.luzSearchSrc || "", controller.signal)) || [];
@@ -559,6 +609,12 @@ class LuzAi extends HTMLElement {
       let found;
       for (let attempt = 0; ; attempt++) {
         found = this.#entries.length ? await retrieve(this.#entries, question, { room, signal: controller.signal }) : { context: "", sources: [] };
+        // Nothing in the index is about it: it says so at once, without asking the model, which would invent
+        if (this.#entries.length && !found.sources.length) {
+          text = UNKNOWN[this.#lang];
+          typing.push(text);
+          break;
+        }
         const context = found.context || (document.querySelector("main")?.innerText || "").slice(0, room);
         const prompt = `Pages of the site:\n\n${context}\n\nMy question: ${question}`;
         const info = contextInfo(this.#session);
@@ -571,8 +627,7 @@ class LuzAi extends HTMLElement {
         try {
           for await (const piece of ask(this.#session, prompt, controller.signal)) {
             text += piece;
-            answer.replaceChildren(renderMarkdown(text, link));
-            n.log.scrollTop = n.log.scrollHeight;
+            typing.push(text);
           }
           break;
         } catch (error) {
@@ -581,9 +636,11 @@ class LuzAi extends HTMLElement {
           room = Math.max(400, Math.floor(room * (requested > 0 && contextWindow > 0 ? Math.min(0.8, (0.6 * contextWindow) / requested) : 0.5)));
         }
       }
+      await typing.finish();
       turn.append(...this.#after(text, found.sources));
       n.status.textContent = t("done");
     } catch (error) {
+      typing.flush();
       if (controller.signal.aborted) {
         if (!text) answer.textContent = t("stopped");
         else turn.append(...this.#after(text, []));
