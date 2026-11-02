@@ -1054,8 +1054,10 @@ test.describe('Documentation site', () => {
       await expect(links).toHaveText(['A–Z index', 'Components', 'Docs home']);
       // root-absolute in the source (the Pages build makes them relative), in this order
       expect(await links.evaluateAll((all) => all.map((a) => a.getAttribute('href')))).toEqual(['/docs/a-z/', '/docs/components/', '/docs/']);
-      // The layout has no script of its own (the dev server adds its client)
-      expect(readFileSync(fromRepo('apps/docs/_layouts/not-found.html'), 'utf-8')).not.toMatch(/<script/);
+      // The layout has one script of its own: the module that picks the language (tests/not-found-lang.spec.js)
+      const layout = readFileSync(fromRepo('apps/docs/_layouts/not-found.html'), 'utf-8').replace(/<!--[\s\S]*?-->/g, '');
+      expect(layout.match(/<script\b[^>]*>/g)).toHaveLength(1);
+      expect(layout).toMatch(/<script type="module" src="[^"]*not-found\.js"><\/script>/);
       expect(await page.title()).toMatch(/^Page not found/);
     });
 
@@ -1131,6 +1133,28 @@ test.describe('Documentation site', () => {
         }
       }
     });
+
+    test('has no picture in the main: no img and no figure', async ({ page }) => {
+      await page.goto('/404.html');
+      await expect(page.locator('main img, main figure')).toHaveCount(0);
+    });
+
+    for (const width of [1848, 1280, 770]) {
+      test(`at ${width}px the footer has the header's frame: the brand's left edge on the left, the same gutter on the right`, async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.setViewportSize({ width, height: 800 });
+        await page.goto('/404.html');
+        const facts = await page.evaluate(() => {
+          const brand = /** @type {HTMLElement} */ (document.querySelector('.site-header__brand')).getBoundingClientRect();
+          const footer = /** @type {HTMLElement} */ (document.querySelector('#site-footer')).getBoundingClientRect();
+          return { brandLeft: brand.left, left: footer.left, right: footer.right, width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth };
+        });
+        expect(facts.brandLeft, 'the brand is not at the edge of the window').toBeGreaterThan(0);
+        expect(facts.left, 'footer left == brand left').toBeCloseTo(facts.brandLeft, 0);
+        expect(facts.right, 'footer right == window width - brand left').toBeCloseTo(facts.width - facts.brandLeft, 0);
+        expect(facts.scroll, 'no sideways scroll').toBeLessThanOrEqual(facts.width);
+      });
+    }
 
     test.describe('black and green, whatever the reader\'s mode', () => {
       /** @param {import('@playwright/test').Page} page */
@@ -1252,7 +1276,7 @@ test.describe('Documentation site', () => {
     test.describe('the lead', () => {
       test('reads the message, and is one link to the video that opens in a new tab', async ({ page }) => {
         await page.goto('/404.html');
-        const lead = page.locator('main p.docs-lead');
+        const lead = page.locator('main p.docs-lead[data-not-found-default]');
         await expect(lead).toHaveCount(1);
         expect(await lead.evaluate((el) => el.textContent.trim())).toBe(`${LEAD} (opens in a new tab)`);
         const link = lead.locator('a');
@@ -1377,7 +1401,8 @@ test.describe('Documentation site', () => {
       const names = (page) => page.evaluate(() => document.getAnimations().map((a) => a.animationName).filter(Boolean));
       /** What is painted once the page's own content is out of the way: the share of black pixels, and how many are green (the rain). */
       async function painted(page) {
-        await page.addStyleTag({ content: 'header, main, footer { visibility: hidden !important; }' });
+        // The watermark (the picture behind the rain, tests/not-found-image.spec.js) is not the rain: it is out of the way too
+        await page.addStyleTag({ content: 'header, main, footer { visibility: hidden !important; } .docs-not-found::before { display: none !important; }' });
         const png = await page.screenshot({ animations: 'allow' });
         return page.evaluate(async (b64) => {
           const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));

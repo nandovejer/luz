@@ -61,13 +61,14 @@ describe("the footer has Auto first (2026-10-29): <luz-theme-time> around core's
 });
 
 describe("the 404 page has no switcher: its button would need the script", () => {
-  it("is the links alone: no <luz-theme-mode>, no <luz-theme-time>, no mode radios, no button, no script", () => {
+  it("is the links alone: no <luz-theme-mode>, no <luz-theme-time>, no mode radios, no button, and no script but the one that picks the language", () => {
     const html = read("apps/docs/_layouts/not-found.html");
     expect(html.includes("<luz-theme-mode")).toBe(false);
     expect(html.includes("<luz-theme-time")).toBe(false);
     expect(html.includes('name="luz-theme-mode"')).toBe(false);
     expect(html.includes("luz-theme-mode__button")).toBe(false);
-    expect(/<script/.test(html)).toBe(false);
+    // Its one script is the language picker (tests/not-found-lang.spec.js): not a boot script, not the theme's
+    expect(html.match(/<script\b[^>]*>/g) ?? []).toEqual(['<script type="module" src="/apps/docs/not-found.js">']);
     expect(html).toContain("footer-links");
   });
 });

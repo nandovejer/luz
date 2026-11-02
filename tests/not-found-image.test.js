@@ -3,10 +3,7 @@
  *
  *  - it is a WebP (RIFF....WEBP), at most 120,000 B, and the PNG it came from is not published;
  *  - its LICENSE is the repository's, MIT and only MIT (RL-13): no OFL, no Creative Commons, no dual licence;
- *  - the page's source has an img with an alt;
- *  - the Pages build serves it from /assets/ with a hashed name, not from /apps/. That is read from docs/404.html,
- *    and only when that file is newer than the page's source: docs/ is generated and git-ignored, and a stale one
- *    says nothing. (`pnpm pages:build` writes it.)
+ *  - the page's source has no img and no figure: the picture is the background of `.docs-not-found::before`.
  * The rendering is tests/not-found-image.spec.js.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -17,12 +14,10 @@ import { describe, expect, it } from "vitest";
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dir = join(repo, "apps/docs/assets/not-found");
 const source = join(repo, "apps/docs/404.html");
-const built = join(repo, "docs/404.html");
 const CEILING = 120_000;
 
 const files = () => (existsSync(dir) ? readdirSync(dir) : []);
 const webps = () => files().filter((f) => f.endsWith(".webp"));
-const builtIsFresh = existsSync(built) && existsSync(source) && statSync(built).mtimeMs >= statSync(source).mtimeMs;
 
 describe("the 404 picture is a small WebP", () => {
   it("has at least one .webp in apps/docs/assets/not-found/", () => {
@@ -59,20 +54,19 @@ describe("the 404 picture has the repository's licence, and only that", () => {
   });
 });
 
-describe("the 404 page uses it", () => {
-  it("apps/docs/404.html has an img with a non-empty alt", () => {
-    const html = readFileSync(source, "utf-8");
-    const img = html.match(/<img\b[^>]*>/i)?.[0] ?? "";
-    expect(img, "an img").not.toBe("");
-    expect(img).toMatch(/\balt="[^"]{10,}"/);
-    expect(img).toMatch(/\.webp"/);
+describe("the 404 page uses it as a decorative background, not as a picture", () => {
+  const html = () => readFileSync(source, "utf-8");
+  const css = () => readFileSync(join(repo, "apps/docs/reference.css"), "utf-8");
+
+  it("apps/docs/404.html has no img and no figure", () => {
+    expect(html()).not.toMatch(/<img\b/i);
+    expect(html()).not.toMatch(/<figure\b/i);
   });
 
-  it.skipIf(!builtIsFresh)("the built docs/404.html serves a hashed .webp from /assets/, not from /apps/", () => {
-    const img = readFileSync(built, "utf-8").match(/<img\b[^>]*>/i)?.[0] ?? "";
-    const src = img.match(/\bsrc="([^"]+)"/)?.[1] ?? "";
-    expect(src, "src").toMatch(/assets\/[^/"]+-[A-Za-z0-9_-]{8}\.webp$/);
-    expect(src).not.toContain("/apps/");
-    expect(existsSync(join(repo, "docs/assets", src.split("/assets/")[1] ?? "none"))).toBe(true);
+  it("the stylesheet paints 404-matrix-1000.webp as the background of .docs-not-found::before, and that file is published", () => {
+    const rule = css().match(/\.docs-not-found::before\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(rule, "a .docs-not-found::before rule").not.toBe("");
+    expect(rule).toMatch(/url\(["']?[^)"']*404-matrix-1000\.webp["']?\)/);
+    expect(webps()).toContain("404-matrix-1000.webp");
   });
 });

@@ -1391,8 +1391,10 @@ function renderGenerated(page, site, options) {
 }
 
 /**
- * The block of the not-found page for each other docs language (D15): a
- * sentence in that language, with its own lang and dir, and a link to the
+ * The block of the not-found page for each other docs language (D15), hidden
+ * until apps/docs/not-found.js finds the language among the browser's
+ * (navigator.languages): the Matrix line in that language (its "SYSTEM
+ * FAILURE." stays in English), with its own lang and dir, and a link to the
  * language's docs. The page is one static file for every address.
  */
 function renderNotFoundLanguages(site) {
@@ -1402,8 +1404,8 @@ function renderNotFoundLanguages(site) {
   return docs.languages
     .map(
       (language) =>
-        `    <section class="docs-not-found__lang" lang="${escapeHtml(language.code)}" dir="${escapeHtml(language.dir)}">\n` +
-        `      <p>${escapeHtml(language.docsStrings["notfound.text"])}</p>\n` +
+        `    <section class="docs-not-found__lang" lang="${escapeHtml(language.code)}" dir="${escapeHtml(language.dir)}" data-not-found-lang="${escapeHtml(language.code)}" hidden>\n` +
+        `      <p class="docs-lead"><span lang="en">SYSTEM FAILURE.</span> ${escapeHtml(language.docsStrings["notfound.lead"])}</p>\n` +
         `      <p>${link(language.docsRoute, language.docsStrings["notfound.home"], ' class="luz-btn luz-btn--outline"')}</p>\n` +
         "    </section>",
     )

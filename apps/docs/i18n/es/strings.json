@@ -62,7 +62,7 @@
   "notice.pending": "Esta traducción la ha escrito una IA y todavía no la ha revisado ninguna persona.",
   "notice.pending-statement": "Hasta que la revise una persona, prevalece el texto en inglés.",
   "notice.english": "Leer esta página en inglés",
-  "notfound.text": "No hemos encontrado esa página. Puede que se haya movido o que la dirección sea incorrecta.",
+  "notfound.lead": "Lo que buscas no está aquí. No intentes doblar la página… eso es imposible. En cambio, solo trata de darte cuenta de la verdad: no hay página.",
   "notfound.home": "Ir al inicio de la documentación",
   "snippets.kind.atoms": "Solo componentes",
   "snippets.kind.landing": "Página de landing",

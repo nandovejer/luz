@@ -318,8 +318,11 @@ describe("the pages load them from the packages, in <head>, as classic scripts, 
     expect(html).not.toContain("apps/site/boot.js");
   });
 
-  it("the not-found page keeps its promise of no script", () => {
-    expect(read("apps/docs/_layouts/not-found.html")).not.toMatch(/<script/);
+  it("the not-found page has no boot script: its one script is the module that picks the language", () => {
+    const html = read("apps/docs/_layouts/not-found.html");
+    expect(html.match(/<script\b[^>]*>/g) ?? []).toEqual(['<script type="module" src="/apps/docs/not-found.js">']);
+    expect(html).not.toContain("theme-boot");
+    expect(html).not.toContain("theme-time-boot");
   });
 
   it("the Pages build emits them unhashed, as theme-boot.js and theme-time-boot.js", () => {
