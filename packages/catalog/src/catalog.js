@@ -19,6 +19,8 @@
  *   <luz-embed>    embed.js, when the page is scanned: the chunk defines the
  *                  element, which turns its link into a button and asks
  *                  nothing of the player's origin until the visitor acts
+ *   <luz-chart>    chart.js, when the page is scanned: the chunk defines the
+ *                  element, which draws the author's table beside it
  *   .luz-sidebar   sidebar.js, when the page is scanned, with no wait for
  *                  idle, and then initSidebar(): the scroll spy that marks
  *                  the link of the section on screen, and the drawer that
@@ -57,7 +59,7 @@
  * hint in Safari and Firefox.
  */
 
-// SEC-CHUNK-1: the only seven files this one loads, each by a literal
+// SEC-CHUNK-1: the only eight files this one loads, each by a literal
 const CHUNKS = {
   "luz-search": () => import("./search.js"),
   "luz-cookie-consent": () => import("./cookie-consent.js"),
@@ -65,6 +67,7 @@ const CHUNKS = {
   "luz-theme-time-bar": () => import("./theme-time-bar.js"),
   "luz-timeline": () => import("./timeline.js"),
   "luz-embed": () => import("./embed.js"),
+  "luz-chart": () => import("./chart.js"),
   // Not a tag: the sidebar is a class (and a list marked data-luz-spy); its chunk defines no element, so it is started here
   sidebar: () => import("./sidebar.js").then((m) => m.initSidebar()),
 };
@@ -121,6 +124,8 @@ if (typeof document !== "undefined") {
     if (document.querySelector("luz-timeline")) load("luz-timeline");
     // The embed defines its element, which upgrades every instance; it asks nothing of the player's origin until the visitor acts
     if (document.querySelector("luz-embed")) load("luz-embed");
+    // The chart defines its element, which draws the table it holds; until then, and without script, the table is all there is
+    if (document.querySelector("luz-chart")) load("luz-chart");
     if (document.querySelector(".luz-sidebar, [data-luz-spy]")) load("sidebar");
   };
 

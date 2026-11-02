@@ -38,7 +38,7 @@
  *   - the lazy chunks (SEC-CHUNK-1, SEC-CHUNK-2): every import() of a
  *     published .min.js names a string literal; every chunk (a file another
  *     one imports lazily, in any package, and catalog's search, consent,
- *     mode, timeline, embed and sidebar) imports nothing, static or dynamic; catalog.min.js, the presence
+ *     mode, timeline, embed, chart and sidebar) imports nothing, static or dynamic; catalog.min.js, the presence
  *     loader, has no static import, and its dynamic imports are exactly its
  *     chunks (the LOADERS map). The same holds for the home's light, which no build
  *     touches: apps/landing/light/light.js loads exactly globe.js, globe.js
@@ -119,7 +119,7 @@ const IMPORT_CALL = /\bimport\s*\(/g;
 const LITERAL_IMPORT = /\bimport\s*\(\s*(["'])([^"'`]+)\1\s*\)/g;
 const STATIC_IMPORT = /(?:^|[;}\s])(?:import\b(?!\s*[(.])|export\b[^"'();]*?\bfrom\b)/;
 const LOADERS = {
-  "packages/catalog/dist/catalog.min.js": ["./cookie-consent.min.js", "./theme-time.min.js", "./theme-time-bar.min.js", "./search.min.js", "./sidebar.min.js", "./timeline.min.js", "./embed.min.js"],
+  "packages/catalog/dist/catalog.min.js": ["./cookie-consent.min.js", "./theme-time.min.js", "./theme-time-bar.min.js", "./search.min.js", "./sidebar.min.js", "./timeline.min.js", "./embed.min.js", "./chart.min.js"],
   // The home's light (apps/landing/light/): served as written, no build, so the same rules hold for its sources
   "apps/landing/light/light.js": ["./globe.js"],
   "apps/landing/light/globe.js": ["./globe-data.js"],

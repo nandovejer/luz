@@ -32,6 +32,8 @@ import { initDocsView } from "./view.js";
 
 // Defines <luz-embed>, for the live example of the Embed page, only where there is one
 if (document.querySelector("luz-embed")) import("/packages/catalog/dist/embed.js");
+// Defines <luz-chart>, for the live examples of the Chart page, only where there is one
+if (document.querySelector("luz-chart")) import("/packages/catalog/dist/chart.js");
 
 /* ---- Small enhancements ----------------------------------------------- */
 
