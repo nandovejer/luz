@@ -114,7 +114,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is a component's gap larger than the space between two components next to it?
 
-**Exceptions:** the gap between the parts of a stacked bar (`.luz-stacked-bar__bar`) is the half step, `--luz-space-3xs`, and not the extra small: it is the hairline of the surface that tells two marks of a picture apart when their colours are near, and a wider one would take a share from a part that is already thin (proposed 2026-11-02, for the owner to read).
+**Exceptions:** the gap between the parts of a stacked bar (`.luz-stacked-bar__bar`) is the half step, `--luz-space-3xs`, and not the extra small: it is the hairline of the surface that tells two marks of a picture apart when their colours are near, and a wider one would take a share from a part that is already thin; the cells of a heat map (`.luz-heat-map :is(th, td)`, padding `--luz-space-3xs`, so `--luz-space-2xs` between two swatches) are the same case, marks of one picture that read as one grid (proposed 2026-11-02, for the owner to read).
 
 ### DR-9 Space between blocks follows a ladder
 
