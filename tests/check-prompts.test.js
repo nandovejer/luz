@@ -493,9 +493,9 @@ describe("presetProblems: a preset names only the patterns that fit its kind (F5
 
   it("the pages the presets are read from are the catalog pages with a fits-kinds, and each kind's pages say it", () => {
     const patterns = member("catalogPatterns")(root);
-    // the 18 pages of patterns (F8: the two headers and the two footers are one page each, the masthead has its own), the eight
+    // the 20 pages of patterns (F8: the two headers and the two footers are one page each, the masthead has its own), the eight
     // elements and (F7) the navbar, the sidebar, the terminal and the timeline; the gallery and the class reference have no fits-kinds
-    expect(patterns.length).toBe(31);
+    expect(patterns.length).toBe(32);
     for (const [slug, kinds] of [["navbar", ["any"]], ["sidebar", ["docs", "app"]], ["terminal", ["docs"]], ["timeline", ["blog", "landing"]]]) {
       expect(patterns.find((p) => p.slug === slug), slug).toMatchObject({ kinds, files: [`components/${slug}.css`] });
     }
@@ -503,6 +503,7 @@ describe("presetProblems: a preset names only the patterns that fit its kind (F5
     expect(patterns.find((p) => p.slug === "site-header")).toMatchObject({ kinds: ["landing", "blog"], files: ["components/site-header.css"] });
     expect(patterns.find((p) => p.slug === "masthead")).toMatchObject({ kinds: ["blog"], files: ["components/masthead.css"] });
     expect(patterns.find((p) => p.slug === "announcement").kinds).toEqual(["any"]);
+    expect(patterns.find((p) => p.slug === "social")).toMatchObject({ kinds: ["any"], files: ["components/social.css"] });
     for (const old of ["landing-hero", "banner", "cms-header", "landing-header", "docs-shell"]) expect(patterns.some((p) => p.slug === old), `${old} is not a page any more`).toBe(false);
     expect(patterns.some((p) => p.slug === "classes" || p.slug === "index"), "the gallery and the class reference have no fits-kinds").toBe(false);
   });
