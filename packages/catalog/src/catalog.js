@@ -65,6 +65,7 @@ const CHUNKS = {
   "luz-theme-time-bar": () => import("./theme-time-bar.js"),
   "luz-timeline": () => import("./timeline.js"),
   "luz-embed": () => import("./embed.js"),
+  "luz-ai": () => import("./ai.js"),
   // Not a tag: the sidebar is a class (and a list marked data-luz-spy); its chunk defines no element, so it is started here
   sidebar: () => import("./sidebar.js").then((m) => m.initSidebar()),
 };
@@ -121,6 +122,8 @@ if (typeof document !== "undefined") {
     if (document.querySelector("luz-timeline")) load("luz-timeline");
     // The embed defines its element, which upgrades every instance; it asks nothing of the player's origin until the visitor acts
     if (document.querySelector("luz-embed")) load("luz-embed");
+    // The chat defines its element, which upgrades every instance; it asks nothing of the model until the visitor agrees
+    if (document.querySelector("luz-ai")) load("luz-ai");
     if (document.querySelector(".luz-sidebar, [data-luz-spy]")) load("sidebar");
   };
 

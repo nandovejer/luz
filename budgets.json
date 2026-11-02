@@ -26,6 +26,7 @@
     { "name": "catalog JS lazy chunk: theme-time-bar", "file": "packages/catalog/dist/theme-time-bar.min.js", "ideal": 1280, "max": 1536 },
     { "name": "catalog theme-time-boot script (packages/catalog/dist/theme-time-boot.min.js)", "file": "packages/catalog/dist/theme-time-boot.min.js", "ideal": 512, "max": 768 },
     { "name": "catalog JS lazy chunk: embed", "file": "packages/catalog/dist/embed.min.js", "ideal": 1536, "max": 2048 },
+    { "name": "catalog JS lazy chunk: ai", "file": "packages/catalog/dist/ai.min.js", "ideal": 8704, "max": 9216 },
     { "name": "home light controller JS", "file": "apps/landing/light/light.js", "ideal": 7424, "max": 7680 },
     { "name": "home light visual: globe", "file": "apps/landing/light/globe.js", "ideal": 9472, "max": 9728 },
     { "name": "home light data: globe", "file": "apps/landing/light/globe-data.js", "ideal": 9728, "max": 9984 },

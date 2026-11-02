@@ -33,6 +33,9 @@ import { initDocsView } from "./view.js";
 // Defines <luz-embed>, for the live example of the Embed page, only where there is one
 if (document.querySelector("luz-embed")) import("/packages/catalog/dist/embed.js");
 
+// Defines <luz-ai>, the experimental chat, for the live example of its page, only where there is one
+if (document.querySelector("luz-ai")) import("/packages/catalog/dist/ai.js");
+
 /* ---- Small enhancements ----------------------------------------------- */
 
 function initFolds() {

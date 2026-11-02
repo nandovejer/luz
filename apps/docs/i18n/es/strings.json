@@ -115,6 +115,7 @@
   "snippets.when.table-sort": "una tabla ordenable, con <code>th[data-luz-sort]</code>",
   "snippets.when.luz-timeline": "un <code>&lt;luz-timeline&gt;</code>",
   "snippets.when.luz-embed": "un <code>&lt;luz-embed&gt;</code>",
+  "snippets.when.luz-ai": "un <code>&lt;luz-ai&gt;</code>",
   "snippets.when.i18n-es": "un elemento con <code>lang=\"es\"</code>, en <code>&lt;html&gt;</code> o en la página, fuera de un enlace o una opción",
   "snippets.when.luz-search": "un <code>&lt;luz-search&gt;</code>",
   "snippets.when.luz-cookie-consent": "un <code>&lt;luz-cookie-consent&gt;</code>",

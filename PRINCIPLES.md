@@ -114,7 +114,7 @@ Words are a component. A button with the wrong label is a broken button. These r
 
 ## 8. Privacy and performance
 
-- **No tracking, no analytics, no third-party domains.** The only things stored are the visitor's own display preferences — the color mode or theme, and on the docs site the last Code or Design tab — and, where a site uses the catalog's cookie consent, the visitor's answer to it (the categories asked, the ones granted and when the answer expires), in `localStorage`, under a `luz-` key, with the value checked against the allowed list and no personal data. Every read and write is in `try`/`catch`: the page works the same if storage is blocked or throws.
+- **No tracking, no analytics, no third-party domains.** The only things stored are the visitor's own display preferences — the color mode or theme, and on the docs site the last Code or Design tab — and, where a site uses the catalog's cookie consent, the visitor's answer to it (the categories asked, the ones granted and when the answer expires) and, where it uses the experimental `<luz-ai>`, the visitor's answer to its notice (whether they accepted it and whether they turned it off, never the conversation), in `localStorage`, under a `luz-` key, with the value checked against the allowed list and no personal data. Every read and write is in `try`/`catch`: the page works the same if storage is blocked or throws.
 - **Zero runtime dependencies**, forever.
 - **Size budgets**, min+gzip, in [budgets.json](./budgets.json) and checked by `pnpm check:size`. The ceiling is red line 17; the other bands are warnings.
 
@@ -145,6 +145,7 @@ Words are a component. A button with the wrong label is a broken button. These r
 | `catalog` JS lazy chunk: `theme-time-bar` (loaded by `catalog.js` when the page has a `<luz-theme-time variant="bar">`) | — | ≤ 1.25 kB | 1.25 kB | 1.5 kB |
 | `catalog` theme-time boot script, `theme-time-boot.min.js` (a classic script for the `<head>`) | — | ≤ 0.5 kB | 0.5 kB | 0.75 kB |
 | `catalog` JS lazy chunk: `embed` (loaded by `catalog.js` when the page has a `<luz-embed>`) | — | ≤ 1.5 kB | 1.5 kB | 2 kB |
+| `catalog` JS lazy chunk: `ai` (loaded by `catalog.js` when the page has a `<luz-ai>`; experimental) | — | ≤ 8.5 kB | 8.5 kB | 9 kB |
 | The home light controller JS, `apps/landing/light/light.js` (gzip of the source; the LUZ website only, not a package) | — | ≤ 7.25 kB | 7.25 kB | 7.5 kB |
 | The home light visual: `globe`, `apps/landing/light/globe.js` (loaded by `light.js` once the element is built; the code only) | — | ≤ 9.25 kB | 9.25 kB | 9.5 kB |
 | The home light data: `globe`, `apps/landing/light/globe-data.js` (the land, Natural Earth 1:110m countries: loaded by `globe.js` once the globe is on screen and the browser is idle) | — | ≤ 9.5 kB | 9.5 kB | 9.75 kB |
