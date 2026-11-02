@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ core: the bar list, .luz-bar-list</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <!-- A loose sheet: it is not in luz.css, a page links it after it -->
+  <link rel="stylesheet" href="/packages/core/dist/components/bar-list.css">
+</head>
+<body>
+  <!-- tests/bar-list.spec.js. No script: the bar list is CSS over a native <meter>. A frame sets the width of a list.
+       Every meter is aria-hidden: the name and the figure are the text. -->
+  <main id="main">
+    <h1>Published weight</h1>
+
+    <div id="frame-base" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-bar-list" id="base">
+        <figcaption>Weight, min + gzip</figcaption>
+        <ul class="luz-bar-list__rows" aria-label="Packages by size">
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">tokens</span><span class="luz-bar-list__figure">100 KB</span><meter class="luz-bar-list__meter" min="0" max="200" value="100" aria-hidden="true">100 KB of 200</meter></li>
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">core</span><span class="luz-bar-list__figure">200 KB</span><meter class="luz-bar-list__meter" min="0" max="200" value="200" aria-hidden="true">200 KB of 200</meter></li>
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">catalog</span><span class="luz-bar-list__figure">50 KB</span><meter class="luz-bar-list__meter" min="0" max="200" value="50" aria-hidden="true">50 KB of 200</meter></li>
+        </ul>
+      </figure>
+    </div>
+
+    <div id="frame-cells" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-bar-list luz-bar-list--cells" id="cells">
+        <figcaption>Weight, in cells</figcaption>
+        <ul class="luz-bar-list__rows" aria-label="Packages by size, in cells">
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">tokens</span><span class="luz-bar-list__figure">100 KB</span><meter class="luz-bar-list__meter" min="0" max="100" value="100" aria-hidden="true">100 KB of 100</meter></li>
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">core</span><span class="luz-bar-list__figure">50 KB</span><meter class="luz-bar-list__meter" min="0" max="100" value="50" aria-hidden="true">50 KB of 100</meter></li>
+        </ul>
+      </figure>
+    </div>
+
+    <div id="frame-zero" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-bar-list luz-bar-list--cells" id="zero">
+        <figcaption>Dependencies of each kind</figcaption>
+        <ul class="luz-bar-list__rows" aria-label="Dependencies by kind">
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">frameworks</span><span class="luz-bar-list__figure">3</span><meter class="luz-bar-list__meter" min="0" max="3" value="3" aria-hidden="true">3 of 3</meter></li>
+          <li class="luz-bar-list__row luz-bar-list__row--zero"><span class="luz-bar-list__name">icon libraries</span><span class="luz-bar-list__figure">0</span><meter class="luz-bar-list__meter" min="0" max="3" value="0" aria-hidden="true">0 of 3</meter></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- low, high and optimum: the three states of the engine are one colour (the chart colour), never red or green -->
+    <div id="frame-states" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-bar-list" id="states">
+        <figcaption>States of the engine</figcaption>
+        <ul class="luz-bar-list__rows" aria-label="Three states">
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">optimum</span><span class="luz-bar-list__figure">80</span><meter class="luz-bar-list__meter" min="0" max="100" low="30" high="70" optimum="90" value="80" aria-hidden="true">80</meter></li>
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">sub-optimum</span><span class="luz-bar-list__figure">50</span><meter class="luz-bar-list__meter" min="0" max="100" low="30" high="70" optimum="90" value="50" aria-hidden="true">50</meter></li>
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">even less good</span><span class="luz-bar-list__figure">10</span><meter class="luz-bar-list__meter" min="0" max="100" low="30" high="70" optimum="90" value="10" aria-hidden="true">10</meter></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- One row height for two lists side by side with a different number of rows -->
+    <div id="side" style="display:flex;gap:1rem;inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-bar-list" id="side-a" style="--luz-bar-list-row-h:3rem;flex:1 1 0;min-inline-size:0">
+        <ul class="luz-bar-list__rows" aria-label="Side A">
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">a1</span><span class="luz-bar-list__figure">10</span><meter class="luz-bar-list__meter" min="0" max="10" value="10" aria-hidden="true">10</meter></li>
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">a2</span><span class="luz-bar-list__figure">5</span><meter class="luz-bar-list__meter" min="0" max="10" value="5" aria-hidden="true">5</meter></li>
+        </ul>
+      </figure>
+      <figure class="luz-bar-list" id="side-b" style="--luz-bar-list-row-h:3rem;flex:1 1 0;min-inline-size:0">
+        <ul class="luz-bar-list__rows" aria-label="Side B">
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">b1</span><span class="luz-bar-list__figure">8</span><meter class="luz-bar-list__meter" min="0" max="10" value="8" aria-hidden="true">8</meter></li>
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">b2</span><span class="luz-bar-list__figure">4</span><meter class="luz-bar-list__meter" min="0" max="10" value="4" aria-hidden="true">4</meter></li>
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">b3</span><span class="luz-bar-list__figure">2</span><meter class="luz-bar-list__meter" min="0" max="10" value="2" aria-hidden="true">2</meter></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- A container narrower than the 8rem a bare meter asks for, with a long name -->
+    <div id="frame-narrow" style="inline-size:120px">
+      <figure class="luz-bar-list" id="narrow">
+        <ul class="luz-bar-list__rows" aria-label="Narrow">
+          <li class="luz-bar-list__row"><span class="luz-bar-list__name">a name far too long for a column this narrow</span><span class="luz-bar-list__figure">1,204</span><meter class="luz-bar-list__meter" min="0" max="1500" value="1204" aria-hidden="true">1,204 of 1,500</meter></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- Not a flex or grid child with a width of its own: the list in a plain column, to measure the window -->
+    <figure class="luz-bar-list" id="wide">
+      <figcaption>The whole width</figcaption>
+      <ul class="luz-bar-list__rows" aria-label="Whole width">
+        <li class="luz-bar-list__row"><span class="luz-bar-list__name">a long name that would wrap if it were allowed to, with its unit and its period</span><span class="luz-bar-list__figure">1,204 parcels</span><meter class="luz-bar-list__meter" min="0" max="1500" value="1204" aria-hidden="true">1,204 of 1,500</meter></li>
+        <li class="luz-bar-list__row"><span class="luz-bar-list__name">short</span><span class="luz-bar-list__figure">312</span><meter class="luz-bar-list__meter" min="0" max="1500" value="312" aria-hidden="true">312 of 1,500</meter></li>
+      </ul>
+    </figure>
+  </main>
+</body>
+</html>
