@@ -531,27 +531,27 @@ const filesOf = (page, packageName) => {
 // A page of whole-page templates (landing, cms, app): llms.txt lists it, an entry points at it. Its
 // markup is the longest text of the site (about 35 kB for three pages) and an agent opens the one it needs.
 const TEMPLATES_ROUTE = /\/templates\/$/;
-const TEMPLATES_POINTER = "This page is a library of whole-page templates: open its URL for the markup of each.";
+const TEMPLATES_POINTER = "Whole-page templates: open its URL for the markup of each.";
 
 // A page of a kind of site (/docs/kinds/<kind>/): the h2 of its recipes and a pointer; the area index, a pointer.
 // Its prompt is in llms.txt, and the markup of each recipe is on the pattern page the recipe links to.
 const KIND_PAGE = /^\/docs\/kinds\/[a-z-]+\/$/;
-const KINDS_POINTER = "Its prompt is in llms.txt; open its URL for the markup of each recipe.";
+const KINDS_POINTER = "Prompt: llms.txt. Markup of each recipe: its URL.";
 // The area index: llms.txt lists its pages and the general prompt
-const KINDS_INDEX_POINTER = "Each kind of site has a page of this area; llms.txt lists them, and the general prompt.";
+const KINDS_INDEX_POINTER = "A page for each kind of site; llms.txt lists them and the general prompt.";
 
 // A page about a workflow outside the markup (importing the tokens file into a design tool), whose steps
 // an agent that writes HTML does not need: its summary, its files and a pointer, so the file keeps its ideal.
 const SUMMARY_POINTERS = new Map([
-  ["/docs/tokens/figma/", "This page explains how to import the tokens file into Figma and other design tools, step by step: open its URL for the steps."],
-  ["/docs/get-started/migrate/", "This page moves a project that has its own CSS to LUZ one page at a time, in five steps: open its URL for the steps."],
+  ["/docs/tokens/figma/", "How to import the tokens file into Figma and other design tools, step by step: open its URL."],
+  ["/docs/get-started/migrate/", "Moves a project that has its own CSS to LUZ one page at a time, in five steps: open its URL."],
 ]);
 
 // The accessibility statement is about LUZ, not about the markup an agent writes (what is checked, what has
 // not been tested, the known issues, how to report a problem): its summary, its headings and a pointer.
 // The known issues of each component are in its own entry.
 const OUTLINE_POINTERS = new Map([
-  ["/docs/accessibility/", "This is the accessibility statement of LUZ: open its URL for what is checked, what has not been tested and the known issues. The known issues of each component are in its entry."],
+  ["/docs/accessibility/", "LUZ's accessibility statement: open its URL for what is checked, what has not been tested and the known issues. Each component's known issues are in its entry."],
 ]);
 
 // The page "Working with AI" (generate: ai): most of it is data. The files are in llms.txt and its
@@ -561,7 +561,7 @@ const OUTLINE_POINTERS = new Map([
 // is not trimmed.
 const AI_ROUTE = "/docs/get-started/ai/";
 const AI_POINTER =
-  "The files an agent can read are linked from `llms.txt`. The commands with paths, the options and exit codes (`npx @luz-ds/check@" + CHECK + " --help`), a sample of the output, the fields of `--json` and the tables of the files and of the rules are on the page at the URL above.";
+  "The files an agent can read are in `llms.txt`. The commands, options and exit codes (`npx @luz-ds/check@" + CHECK + " --help`), a sample of the output, the fields of `--json` and the tables of files and rules are on the page.";
 
 /** The first `<p>` of a piece of markup, as markup. */
 const firstParagraph = (html) => /<p\b[\s\S]*?<\/p>/.exec(html)?.[0] ?? "";
@@ -599,8 +599,7 @@ function aiBodyOf(body, headings) {
   return parts.join("\n");
 }
 
-const TOKENS_POINTER =
-  "The values are not repeated here: the primitives are in `tokens.json` of @luz-ds/tokens, and every custom property of a package, with the file that declares it, is in the `properties` of its `classes.json`.";
+const TOKENS_POINTER = "Values: `tokens.json`, `classes.json`.";
 
 /** The text of a page's body, by the kind of page. */
 function bodyOf(page, options) {
@@ -664,7 +663,7 @@ function wholeBody(page, { siteUrl, base, values = true }) {
  * markup), `Files:` and package, the description, and the page's sections as text. Warns over LLMS_FULL_MAX, throws over twice that.
  */
 export function renderLlmsFull(site, { siteUrl = "" } = {}) {
-  const out = ["# LUZ", "", summaryOf(site), "", DETAILS, "", "One entry per page of the documentation, in reading order. The markup of an entry shows its classes and elements; the `classes.json` of each package lists them all.", ""];
+  const out = ["# LUZ", "", summaryOf(site), "", DETAILS, "", "One entry per page, in reading order. An entry's markup shows its classes and elements; each package's `classes.json` lists them all.", ""];
   for (const { area, pages } of sectionsOfSite(site)) {
     if (!area) continue;
     const packageName = PACKAGE_OF_AREA[area.id] ?? null;

@@ -189,8 +189,8 @@ const escText = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").re
 const text = (lines) => lines.map((l) => (l === null ? "" : escText(l))).join("\n");
 
 // The comments inside a snippet are code: English in every language (D7)
-const OPTIONAL_SITE = "Optional: one line per catalog component the page uses (here the search), then the patterns of the kind of site. Delete the ones the page does not use.";
-const OPTIONAL_SITE_SCRIPT = "Optional, with the search, the cookie banner or the color mode: the script that loads each one";
+const OPTIONAL_SITE = "Optional: the search, then the site's patterns";
+const OPTIONAL_SITE_SCRIPT = "Optional: the script of the search, cookie banner or color mode";
 
 const linkTag = (e) => `<link rel="stylesheet" href="${e.url}" integrity="${e.integrity}" crossorigin="anonymous">`;
 const importLine = (pkg, file) => `import "@luz-ds/${pkg}/${file}";`;

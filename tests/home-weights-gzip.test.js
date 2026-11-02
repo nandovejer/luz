@@ -62,7 +62,8 @@ const budgets = JSON.parse(read("budgets.json")).budgets;
 // (`dir/*.ext`): catalog has no bundle, so its weight is the sum of its components. The patterns of the
 // kinds of site (the 20 blocks `components/{hero,site-header,…}.min.css`, F8; `{landing,cms,app,docs}-*` before) are catalog files too, but the home
 // weighs the pieces every site can use: they are left out, as they were when each kind was a package of its own
-const KIND_PATTERN = new RegExp(`/components/(?:${PATTERNS.join("|")})(?:\\.min)?\\.css$`);
+// The social links fit any site, as the navbar does: they are one of the pieces every site can use, so the home weighs them
+const KIND_PATTERN = new RegExp(`/components/(?:${PATTERNS.filter((name) => name !== "social").join("|")})(?:\\.min)?\\.css$`);
 const globbed = (glob) => {
   // A row of the patterns of the kinds (a list of block names) matches nothing the home weighs
   const [, dir, ext] = /^(.*)\/\*(\.[a-z.]+)$/.exec(glob) ?? [];

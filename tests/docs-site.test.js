@@ -649,7 +649,7 @@ describe("the LUZ docs site", () => {
     const viewPages = site.pages.filter(
       (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group && p.meta.group !== "reference"),
     );
-    expect(viewPages).toHaveLength(60);
+    expect(viewPages).toHaveLength(61);
     const CODE = ["markup", "variants", "how", "no-js", "keyboard"];
     const DESIGN = ["when", "when-not", "do-dont", "content", "contrast", "tokens"];
     for (const page of viewPages) {
@@ -944,9 +944,9 @@ describe("the LUZ docs site", () => {
   // catalog again, under the names of their blocks), so a link to /docs/catalog/hero/ is not a link to a page that left
   const LEFT_SITE = ["actions", "footer", "image", "lang-switcher", "notice", "shell", "skip-link", "templates"];
 
-  it("the Catalog area holds its eight components, the navbar, sidebar, terminal and timeline that came from core (F7), the 19 pages of the patterns of the kinds of site, named for their blocks (F8), and its class reference", () => {
+  it("the Catalog area holds its eight components, the navbar, sidebar, terminal and timeline that came from core (F7), the 20 pages of the patterns of the kinds of site, named for their blocks (F8), and its class reference", () => {
     const routes = site.pages.filter((p) => p.meta.area === "catalog").map((p) => p.route).sort();
-    const patterns = ["site-header", "masthead", "hero", "section", "stat", "site-footer", "page-header", "article-header", "toc", "post-list", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
+    const patterns = ["site-header", "masthead", "hero", "section", "stat", "site-footer", "social", "page-header", "article-header", "toc", "post-list", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
     const layout = ["navbar", "sidebar", "terminal", "timeline"];
     const elements = ["announcement", "cookie-consent", "embed", "theme-time", "faq", "lang-switch", "search", "submenu"];
     expect(routes).toEqual(["/docs/catalog/", ...["classes", ...elements, ...layout, ...patterns].sort().map((slug) => `/docs/catalog/${slug}/`)]);

@@ -156,10 +156,10 @@ describe("components/<block>.css and its .min.css exist for every new block, and
     expect(exists(`packages/catalog/dist/components/${name}.min.css`), `dist/components/${name}.min.css`).toBe(true);
   });
 
-  it("holds exactly the 33 components of the catalog: the 21 patterns, the four of F7 and the eight elements (theme-time is the color mode's successor), plain and minified", () => {
+  it("holds exactly the 34 components of the catalog: the 22 patterns, the four of F7 and the eight elements (theme-time is the color mode's successor), plain and minified", () => {
     const built = readdirSync(`${root}packages/catalog/dist/components`).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, "")).sort();
     expect(built).toEqual([...new Set(NEW)].sort());
-    expect(built).toHaveLength(33);
+    expect(built).toHaveLength(34);
   });
 
   it.each(FILES.map(([old]) => old))("components/%s.css is gone, in src, dist and the tarball list", (old) => {

@@ -1,0 +1,170 @@
+<!-- luz:page
+title: Enlaces sociales
+description: Enlaces a los perfiles y canales de un sitio, cada uno con un icono y un nombre.
+fits: el pie de un sitio, la página de un autor o una página de contacto
+source: fc0bbab392bb
+reviewed: false
+-->
+    <div class="docs-component" id="p-social">
+          <h2 id="example">Ejemplo</h2>
+          <p>Tres lugares, cada uno con un icono y su nombre; después dos solo con el icono, donde el nombre se lee en voz alta pero no se muestra.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage" id="demo-social">
+            <div class="o-stack">
+              <ul class="luz-social">
+                <li><a href="https://example.org/luz/code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="7" cy="5.5" r="2.25"/><circle cx="7" cy="18.5" r="2.25"/><circle cx="17" cy="7" r="2.25"/><path d="M7 7.75v8.5M17 9.25c0 4.5-10 3-10 7"/></svg><span>GitHub</span></a></li>
+                <li><a href="https://example.org/@luz"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Mastodon</span></a></li>
+                <li><a href="https://example.org/feed.xml"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="6" cy="18" r="1"/><path d="M6 11a7 7 0 0 1 7 7M6 4a14 14 0 0 1 14 14"/></svg><span>RSS feed</span></a></li>
+              </ul>
+              <ul class="luz-social luz-social--icons">
+                <li><a href="https://example.org/luz/code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="7" cy="5.5" r="2.25"/><circle cx="7" cy="18.5" r="2.25"/><circle cx="17" cy="7" r="2.25"/><path d="M7 7.75v8.5M17 9.25c0 4.5-10 3-10 7"/></svg><span class="u-sr-only">GitHub</span></a></li>
+                <li><a href="https://example.org/feed.xml"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="6" cy="18" r="1"/><path d="M6 11a7 7 0 0 1 7 7M6 4a14 14 0 0 1 14 14"/></svg><span class="u-sr-only">RSS feed</span></a></li>
+              </ul>
+            </div>
+          </div>
+          <p class="docs-demo__note">LUZ no incluye logotipos de marcas: el nombre indica de qué lugar se trata. Los iconos son los de la página <a href="/docs/components/icons/">Iconos</a> o los tuyos.</p>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>Ninguno conocido.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Social links documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-social" aria-label="Copy the social links markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Social links markup"><code id="code-social">&lt;ul class=&quot;luz-social&quot;&gt;
+  &lt;li&gt;
+    &lt;a href=&quot;https://example.org/@luz&quot;&gt;
+      &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;…&lt;/svg&gt;
+      &lt;span&gt;Mastodon&lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/li&gt;
+  &lt;!-- one li for each place --&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Clases de los enlaces sociales" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Clase</th><th scope="col">Qué hace</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Clase"><div><code>.luz-social</code></div></td><td data-label="Qué hace"><div>La lista: enlaces en una fila que salta de línea</div></td></tr>
+                  <tr><td data-label="Clase"><div><code>.luz-social--icons</code></div></td><td data-label="Qué hace"><div>Solo iconos, cada uno un cuadrado de <code>--luz-control-md</code>; pon <code>.u-sr-only</code> en cada nombre</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>CSS de <code>components/social.css</code> de <code>@luz-ds/catalog</code>. No usa JavaScript.</p>
+            <ul>
+              <li>Basta un <code>svg</code> con un <code>viewBox</code> y sus trazados. En un pie, enlázala después de <a href="/docs/catalog/site-footer/">site-footer</a>.</li>
+            </ul>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No cambia nada.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Los enlaces son nativos.</p>
+            <ul>
+              <li>El icono es <code>aria-hidden</code>: el texto, visible o en <code>.u-sr-only</code>, da nombre al enlace.</li>
+              <li>Envuélvela en un <code>&lt;nav aria-label="…"&gt;</code> solo si los lectores la buscan por sí sola.</li>
+              <li>Los objetivos miden 36 px (solo iconos) o 28 px de alto, más de los 24 px de WCAG 2.5.8.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Úsalos para llevar al lector a tus perfiles y canales: en el pie de un sitio, bajo el nombre de un autor o en una página de contacto.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No los uses para las páginas de tu propio sitio ni para compartir la página actual.</p>
+            <ul>
+              <li>Para los enlaces del sitio, usa <a href="/docs/catalog/site-footer/">site-footer</a> o la <a href="/docs/catalog/navbar/">barra de navegación</a>.</li>
+            </ul>
+            <h3 id="do-dont">Buenas y malas prácticas</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> El nombre del lugar con cada icono, o en <code>.u-sr-only</code> junto a un icono solo.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social luz-social--icons">
+                    <li><a href="https://example.org/@luz"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span class="u-sr-only">Mastodon</span></a></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> Pongas todas las redes en las que tienes cuenta: elige las dos o tres que mantienes al día y la fila seguirá siendo útil para quien lee.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social">
+                    <li><a href="https://example.org/@mastodon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Mastodon</span></a></li>
+                    <li><a href="https://example.org/@bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Bluesky</span></a></li>
+                    <li><a href="https://example.org/@github"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>GitHub</span></a></li>
+                    <li><a href="https://example.org/@feed"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Feed</span></a></li>
+                    <li><a href="https://example.org/@matrix"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Matrix</span></a></li>
+                    <li><a href="https://example.org/@telegram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Telegram</span></a></li>
+                    <li><a href="https://example.org/@signal"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Signal</span></a></li>
+                    <li><a href="https://example.org/@reddit"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Reddit</span></a></li>
+                    <li><a href="https://example.org/@twitch"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Twitch</span></a></li>
+                    <li><a href="https://example.org/@youtube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>YouTube</span></a></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Sí</strong> El mismo nombre con las mismas palabras en todas partes: «Mastodon», como se llama el lugar.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social">
+                    <li><a href="https://example.org/@luz"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Mastodon</span></a></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No</strong> Una llamada a la acción como nombre: «Follow us» en cuatro enlaces no dice adónde va cada uno.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social">
+                    <li><a href="#">Follow us</a></li>
+                    <li><a href="#">Follow us</a></li>
+                  </ul>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Redacción del contenido</h3>
+            <p>El nombre es el lugar tal como se llama a sí mismo, en una o dos palabras. El enlace lleva a tu perfil allí, no a su página de inicio.</p>
+            <ul>
+              <li>Escribe «Mastodon», «GitHub», «Canal RSS», «Correo»: un sustantivo, no «Síguenos en…».</li>
+              <li>Da una dirección como enlace <code>mailto:</code> y llámala «Correo».</li>
+              <li>Usa seis enlaces como máximo; con más, los lectores se saltan la lista.</li>
+            </ul>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>El nombre y el icono usan el color de texto secundario y, bajo el puntero, el principal. Los iconos solos ganan además la superficie de hover.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de los enlaces sociales en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Enlace e icono</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace bajo el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace con icono bajo el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> sobre <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>14.4:1</div></td><td data-label="Oscuro"><div>12.6:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Enlace en una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> sobre <code>--luz-surface</code></div></td><td data-label="Claro"><div>6.4:1</div></td><td data-label="Oscuro"><div>6.9:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Mínimo"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Calculado a partir de los valores de los tokens de cada modo, redondeado hacia abajo. El mínimo es el de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> cada enlace conserva el anillo de core, 2 px de <code>--luz-focus-ring</code>, dibujado alrededor de su borde redondeado.</li>
+            </ul>
+            <h3 id="tokens">Tokens que utiliza</h3>
+            <p>Los 12 tokens que leen, por familia, las reglas de <code>.luz-social</code> en <code>components/social.css</code>. Cada familia enlaza a su página, donde están los valores de todos los modos. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Espaciado y tamaños</a></dt><dd><code>--luz-control-md</code>, <code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Tipografía</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radio</a></dt><dd><code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

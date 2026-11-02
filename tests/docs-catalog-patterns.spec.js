@@ -31,7 +31,7 @@ const read = (/** @type {string} */ path) => readFileSync(fromRepo(path), 'utf-8
 const GROUPS = [
   { id: 'navigation', en: 'Navigation', pages: ['app-bar', 'lang-switch', 'masthead', 'navbar', 'sidebar', 'site-header', 'submenu'] },
   { id: 'page-structure', en: 'Page structure', pages: ['article-header', 'hero', 'page-header', 'section', 'site-footer'] },
-  { id: 'content', en: 'Content', pages: ['dashboard', 'embed', 'faq', 'post-list', 'stat', 'terminal', 'timeline', 'toc'] },
+  { id: 'content', en: 'Content', pages: ['dashboard', 'embed', 'faq', 'post-list', 'social', 'stat', 'terminal', 'timeline', 'toc'] },
   { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'theme-time', 'cookie-consent', 'search'] },
   { id: 'documentation', en: 'Documentation', pages: ['do-dont', 'doc-header', 'docs-layout', 'example', 'page-footer', 'page-rail', 'pager'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
@@ -43,6 +43,8 @@ const KIND_OF = {
   // F8: the kind of site a pattern fits is no longer in its name. The two unions fit both kinds that had one of them; the masthead is the blog's
   'site-header': ['landing', 'blog'], 'site-footer': ['landing', 'blog'], masthead: ['blog'],
   hero: ['landing'], section: ['landing'], stat: ['landing'],
+  // The social links fit any site: a list of links to the profiles and feeds, at the foot or on a page of contact
+  social: ['any'],
   'page-header': ['blog'], 'article-header': ['blog'], toc: ['blog'], 'post-list': ['blog'],
   'app-bar': ['app'], dashboard: ['app'],
   'docs-layout': ['docs'], 'doc-header': ['docs'], 'page-rail': ['docs'], pager: ['docs'], 'page-footer': ['docs'], example: ['docs'], 'do-dont': ['docs'],

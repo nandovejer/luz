@@ -16,8 +16,8 @@
  *   KEPT          what does not change, and a test must not take for old
  */
 
-/** The 21 patterns, in the order of the cascade (CASCADE of scripts/docs-site/kinds.js, without the four of F7). */
-export const PATTERNS = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "page-header", "article-header", "article", "post-list", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
+/** The 22 patterns, in the order of the cascade (CASCADE of scripts/docs-site/kinds.js, without the four of F7). */
+export const PATTERNS = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-header", "article-header", "article", "post-list", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
 
 /** The four of F7 (core to catalog), whose names F8 keeps. */
 export const LAYOUT = ["navbar", "sidebar", "terminal", "timeline"];

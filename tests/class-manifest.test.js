@@ -780,9 +780,9 @@ describe("the three built packages", () => {
     for (const c of shared) for (const file of c.files) expect(PATTERN_FILES.has(file), `${c.name} in ${file}`).toBe(true);
   });
 
-  it("catalog: the classes of the patterns are in luz.catalog, defined in the 20 files of the patterns and in no other file, and have the new names only", () => {
+  it("catalog: the classes of the patterns are in luz.catalog, defined in the 22 files of the patterns and in no other file, and have the new names only", () => {
     const PATTERN_FILES = new Set(PATTERNS.map((name) => `components/${name}.css`));
-    const blocks = ["luz-site-header", "luz-masthead", "luz-hero", "luz-main", "luz-section", "luz-stat", "luz-site-footer", "luz-glow", "luz-page-header", "luz-article-header", "luz-article", "luz-toc", "luz-app-bar", "luz-dashboard", "luz-docs-layout", "luz-doc-header", "luz-page-rail", "luz-example", "luz-do-dont", "luz-pager", "luz-page-footer"];
+    const blocks = ["luz-site-header", "luz-masthead", "luz-hero", "luz-main", "luz-section", "luz-stat", "luz-site-footer", "luz-glow", "luz-social", "luz-page-header", "luz-article-header", "luz-article", "luz-toc", "luz-app-bar", "luz-dashboard", "luz-docs-layout", "luz-doc-header", "luz-page-rail", "luz-example", "luz-do-dont", "luz-pager", "luz-page-footer"];
     for (const block of blocks) {
       const own = manifests.catalog.classes.filter((c) => c.block === block);
       expect(own.length, `${block}* classes`).toBeGreaterThan(0);

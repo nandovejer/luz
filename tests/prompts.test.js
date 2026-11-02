@@ -31,6 +31,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import { docsSite } from "../scripts/docs-site/plugin.js";
+import { CASCADE } from "../scripts/docs-site/kinds.js";
 import { scanSite } from "../scripts/docs-site/site.js";
 import { SITE_URL } from "../vite.config.js";
 import { warnIfOver } from "./helpers/warn-if-over.js";
@@ -290,7 +291,12 @@ describe("what a prompt says about the system comes from the packages", () => {
 
   it.each(["landing", "blog", "app", "docs"])("%s: the install lines are tokens, core and catalog, and link every pattern of its kind, in the order of the cascade, after the other catalog files (the kind's patterns come from `fits-kinds`: no package of a kind)", (id) => {
     const text = prompt(id);
-    const links = catalogLinks(text);
+    const all = catalogLinks(text);
+    // The social links fit any site: every kind links them, once, at their place in the cascade (after the glow, before the page header),
+    // which is among the patterns of the kind but is not one of them
+    expect(all.filter((n) => n === "social"), `${id}: links social.min.css once`).toHaveLength(1);
+    for (const name of PATTERNS[id]) expect(all.indexOf(name) < all.indexOf("social"), `${id}: social comes ${CASCADE.indexOf(name) < CASCADE.indexOf("social") ? "after" : "before"} ${name}, as in CASCADE`).toBe(CASCADE.indexOf(name) < CASCADE.indexOf("social"));
+    const links = all.filter((n) => n !== "social");
     expect(links.filter(isPattern), `${id}: its patterns, and no other kind's`).toEqual(PATTERNS[id]);
     // The patterns come last: what they refine is linked before them
     expect(links.slice(links.length - PATTERNS[id].length), id).toEqual(PATTERNS[id]);
@@ -429,6 +435,10 @@ describe("what a prompt says about the system comes from the packages", () => {
     const navbar = join(dir, "apps/docs/pages/catalog/navbar.html");
     expect(readFileSync(navbar, "utf-8")).toMatch(/^fits-kinds: any$/m);
     for (const id of ["landing", "blog", "app", "docs"]) expect(catalogLinks(member("assemblePrompt")(id, { root: dir })), id).toContain("navbar");
+    // the social links fit any site too: their file is in the four prompts that link patterns, and their class is listed in the five
+    expect(readFileSync(join(dir, "apps/docs/pages/catalog/social.html"), "utf-8")).toMatch(/^fits-kinds: any$/m);
+    for (const id of ["landing", "blog", "app", "docs"]) expect(catalogLinks(member("assemblePrompt")(id, { root: dir })), `${id} links social`).toContain("social");
+    for (const id of ["start", "landing", "blog", "app", "docs"]) expect(member("assemblePrompt")(id, { root: dir }), `${id} lists luz-social`).toMatch(/^- `luz-social`: `--icons`$/m);
     // the terminal fits docs: when its page adds app, the app prompt links its file, and the landing page's still does not
     const terminal = join(dir, "apps/docs/pages/catalog/terminal.html");
     expect(catalogLinks(member("assemblePrompt")("app", { root: dir })), "before").not.toContain("terminal");

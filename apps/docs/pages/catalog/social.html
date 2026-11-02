@@ -1,0 +1,175 @@
+<!-- luz:page
+title: Social links
+description: Links to a site's profiles and feeds, each an icon and a name.
+area: catalog
+order: 33
+group: content
+fits-kinds: any
+fits: the foot of a site, an author's page or a contact page
+files: components/social.css
+keywords: social media, profiles, follow, RSS feed
+toc: h2,h3
+-->
+    <div class="docs-component" id="p-social">
+          <h2 id="example">Example</h2>
+          <p>Three places, each with an icon and its name; then two as icons alone, where the name is read aloud but not shown.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage" id="demo-social">
+            <div class="o-stack">
+              <ul class="luz-social">
+                <li><a href="https://example.org/luz/code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="7" cy="5.5" r="2.25"/><circle cx="7" cy="18.5" r="2.25"/><circle cx="17" cy="7" r="2.25"/><path d="M7 7.75v8.5M17 9.25c0 4.5-10 3-10 7"/></svg><span>GitHub</span></a></li>
+                <li><a href="https://example.org/@luz"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Mastodon</span></a></li>
+                <li><a href="https://example.org/feed.xml"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="6" cy="18" r="1"/><path d="M6 11a7 7 0 0 1 7 7M6 4a14 14 0 0 1 14 14"/></svg><span>RSS feed</span></a></li>
+              </ul>
+              <ul class="luz-social luz-social--icons">
+                <li><a href="https://example.org/luz/code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="7" cy="5.5" r="2.25"/><circle cx="7" cy="18.5" r="2.25"/><circle cx="17" cy="7" r="2.25"/><path d="M7 7.75v8.5M17 9.25c0 4.5-10 3-10 7"/></svg><span class="u-sr-only">GitHub</span></a></li>
+                <li><a href="https://example.org/feed.xml"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="6" cy="18" r="1"/><path d="M6 11a7 7 0 0 1 7 7M6 4a14 14 0 0 1 14 14"/></svg><span class="u-sr-only">RSS feed</span></a></li>
+              </ul>
+            </div>
+          </div>
+          <p class="docs-demo__note">LUZ ships no brand logos: the name says which place. The icons are those of the <a href="/docs/components/icons/">Icons</a> page, or yours.</p>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>None known.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Social links documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-social" aria-label="Copy the social links markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Social links markup"><code id="code-social">&lt;ul class=&quot;luz-social&quot;&gt;
+  &lt;li&gt;
+    &lt;a href=&quot;https://example.org/@luz&quot;&gt;
+      &lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;…&lt;/svg&gt;
+      &lt;span&gt;Mastodon&lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/li&gt;
+  &lt;!-- one li for each place --&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variants and options</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Social links classes" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Class</th><th scope="col">What it does</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Class"><div><code>.luz-social</code></div></td><td data-label="What it does"><div>The list: links in a row that wraps</div></td></tr>
+                  <tr><td data-label="Class"><div><code>.luz-social--icons</code></div></td><td data-label="What it does"><div>Icons alone, each a <code>--luz-control-md</code> square; put <code>.u-sr-only</code> on each name</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>CSS from <code>components/social.css</code> of <code>@luz-ds/catalog</code>. No JavaScript.</p>
+            <ul>
+              <li>An <code>svg</code> with a <code>viewBox</code> and its paths is enough. In a footer, link it after <a href="/docs/catalog/site-footer/">site-footer</a>.</li>
+            </ul>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>Nothing changes.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <p>The links are native.</p>
+            <ul>
+              <li>The icon is <code>aria-hidden</code>: the text, shown or in <code>.u-sr-only</code>, names the link.</li>
+              <li>Wrap it in <code>&lt;nav aria-label="…"&gt;</code> only if readers look for it alone.</li>
+              <li>Targets are 36 px (icons alone) or 28 px high, over WCAG 2.5.8's 24 px.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use them to send a reader to your profiles and feeds: in the foot of a site, under an author's name or on a contact page.</p>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use them for the pages of your own site or to share the current page.</p>
+            <ul>
+              <li>For the site's links, use <a href="/docs/catalog/site-footer/">site-footer</a> or the <a href="/docs/catalog/navbar/">navbar</a>.</li>
+            </ul>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> The name of the place with each icon, or in <code>.u-sr-only</code> beside an icon alone.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social luz-social--icons">
+                    <li><a href="https://example.org/@luz"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span class="u-sr-only">Mastodon</span></a></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Every network you have an account on: pick the two or three you keep up to date, and the row stays something a reader can use.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social">
+                    <li><a href="https://example.org/@mastodon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Mastodon</span></a></li>
+                    <li><a href="https://example.org/@bluesky"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Bluesky</span></a></li>
+                    <li><a href="https://example.org/@github"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>GitHub</span></a></li>
+                    <li><a href="https://example.org/@feed"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Feed</span></a></li>
+                    <li><a href="https://example.org/@matrix"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Matrix</span></a></li>
+                    <li><a href="https://example.org/@telegram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Telegram</span></a></li>
+                    <li><a href="https://example.org/@signal"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Signal</span></a></li>
+                    <li><a href="https://example.org/@reddit"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Reddit</span></a></li>
+                    <li><a href="https://example.org/@twitch"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Twitch</span></a></li>
+                    <li><a href="https://example.org/@youtube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>YouTube</span></a></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> The same name in the same words everywhere: “Mastodon”, as the place calls itself.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social">
+                    <li><a href="https://example.org/@luz"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6 7.5-6s6.9 2 7.5 6"/></svg><span>Mastodon</span></a></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A call to action as the name: “Follow us” on four links says nothing about where each goes.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-social">
+                    <li><a href="#">Follow us</a></li>
+                    <li><a href="#">Follow us</a></li>
+                  </ul>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>The name is the place as it calls itself, in one or two words. The link goes to your profile there, not to its home page.</p>
+            <ul>
+              <li>Write “Mastodon”, “GitHub”, “RSS feed”, “Email”: a noun, not “Follow us on…”.</li>
+              <li>Give an address as a <code>mailto:</code> link and call it “Email”.</li>
+              <li>Keep to six links at most; more is a list readers skip.</li>
+            </ul>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>The name and the icon take the secondary text colour, and the primary one under the pointer. Icons alone gain the hover surface.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Social links contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Link and icon</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Link under the pointer</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Icon link under the pointer</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>14.4:1</div></td><td data-label="Dark"><div>12.6:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Link in a card</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>6.4:1</div></td><td data-label="Dark"><div>6.9:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings and icons.</p>
+            <ul>
+              <li><strong>Focus:</strong> each link keeps core’s ring, 2 px of <code>--luz-focus-ring</code>, drawn around its rounded edge.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 12 tokens that the <code>.luz-social</code> rules of catalog’s <code>components/social.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-md</code>, <code>--luz-control-sm</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

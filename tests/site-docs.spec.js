@@ -49,6 +49,8 @@ const PACKAGES = {
       main: 'section',
       section: 'section',
       glow: 'section',
+      // The links to a site's profiles and feeds: a block of its own (`.luz-social`, with `--icons`), and its own page
+      social: 'social',
       stat: 'stat',
       // A blog or a newspaper. The contents of an article have a page of their own, `toc` (its CSS is in article.css)
       'article-header': 'article-header',
@@ -104,11 +106,11 @@ for (const [name, { label, patternOf }] of Object.entries(PACKAGES)) {
       for (const block of blocks) expect(patternOf[block], `luz-${block} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
     });
 
-    test('catalog ships exactly its 36 blocks: the eight components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
+    test('catalog ships exactly its 38 blocks: the eight components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
       expect(blocksOf('catalog').sort()).toEqual(Object.keys(patternOf).sort());
     });
 
-    test('the Catalog gallery lists the 30 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
+    test('the Catalog gallery lists the 32 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
       await page.goto('/docs/catalog/');
       const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
       expect(cards.filter((href) => href.startsWith('/docs/catalog/')).sort()).toEqual(

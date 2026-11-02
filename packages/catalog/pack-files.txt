@@ -59,6 +59,8 @@ dist/components/site-footer.css
 dist/components/site-footer.min.css
 dist/components/site-header.css
 dist/components/site-header.min.css
+dist/components/social.css
+dist/components/social.min.css
 dist/components/stat.css
 dist/components/stat.min.css
 dist/components/submenu.css

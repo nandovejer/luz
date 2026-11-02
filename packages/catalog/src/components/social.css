@@ -1,0 +1,61 @@
+/* ==========================================================================
+	 LUZ Catalog: social links.
+	 Layer: catalog · Prefix: .luz-social
+	 ul.luz-social > li > a[href] > svg + span: links to the site's profiles
+	 and feeds, an icon and the name of the place in a row that wraps. With
+	 .luz-social--icons the span is .u-sr-only (the name is still the link's
+	 name) and each link is a square target of 36px (WCAG 2.5.8 asks 24px).
+	 The icon is any inline svg of the 24 grid, decorative; LUZ ships no
+	 brand logos, so the name in the span is what says which place.
+	 ========================================================================== */
+
+.luz-social {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--luz-space-3xs) var(--luz-space-sm);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-sm);
+}
+
+.luz-social--icons {
+	column-gap: var(--luz-space-xs);
+}
+
+.luz-social :where(a) {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--luz-space-2xs);
+	min-block-size: var(--luz-control-sm);
+	border-radius: var(--luz-radius-md);
+	color: var(--luz-text-secondary);
+	text-decoration: none;
+}
+
+.luz-social :where(a:hover) {
+	color: var(--luz-text-primary);
+	text-decoration: underline;
+}
+
+.luz-social--icons :where(a) {
+	justify-content: center;
+	inline-size: var(--luz-control-md);
+	block-size: var(--luz-control-md);
+}
+
+.luz-social--icons :where(a:hover) {
+	background: var(--luz-surface-hover);
+}
+
+.luz-social :where(svg) {
+	flex: none;
+	inline-size: 1.25em;
+	block-size: 1.25em;
+	fill: none;
+	stroke: currentcolor;
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
