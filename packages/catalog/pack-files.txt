@@ -2,6 +2,10 @@ LICENSE
 README.md
 dist/catalog.js
 dist/catalog.min.js
+dist/chat-markdown.js
+dist/chat-markdown.min.js
+dist/chat.js
+dist/chat.min.js
 dist/classes.json
 dist/components/announcement.css
 dist/components/announcement.min.css
@@ -11,6 +15,8 @@ dist/components/article-header.css
 dist/components/article-header.min.css
 dist/components/article.css
 dist/components/article.min.css
+dist/components/chat.css
+dist/components/chat.min.css
 dist/components/cookie-consent.css
 dist/components/cookie-consent.min.css
 dist/components/dashboard.css

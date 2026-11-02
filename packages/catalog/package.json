@@ -16,8 +16,7 @@
     "./sidebar": "./dist/sidebar.js",
     "./timeline": "./dist/timeline.js",
     "./embed": "./dist/embed.js",
-    "./ai": "./dist/ai.js",
-    "./ai-engine": "./dist/ai-engine.js",
+    "./chat": "./dist/chat.js",
     "./components/*": "./dist/components/*",
     "./classes.json": "./dist/classes.json",
     "./custom-elements.json": "./dist/custom-elements.json",
@@ -62,8 +61,8 @@
     "./dist/timeline.min.js",
     "./dist/embed.js",
     "./dist/embed.min.js",
-    "./dist/ai.js",
-    "./dist/ai.min.js"
+    "./dist/chat.js",
+    "./dist/chat.min.js"
   ],
   "publishConfig": {
     "access": "public"

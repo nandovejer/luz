@@ -246,6 +246,8 @@ function catalogFiles(site, page) {
 /** The block of each page of a folder with an Example. */
 function componentBlocks(site, folder) {
   return pagesIn(site, folder).flatMap((page) => {
+    // Experimental pieces are left out, as from llms-full.txt: the page has a ceiling and they are not what a design is judged by yet
+    if (page.meta.status === "experimental") return [];
     const examples = elementsOf(page.body, (tag) => tag.name === "div" && hasClass(tag, "docs-example") && tag.attrs.has("data-docs-specimen"), page.file);
     if (!examples.length) return [];
     const files = folder === "catalog" ? catalogFiles(site, page) : (page.meta.files ?? "").split(";").map((f) => f.trim()).filter(Boolean);

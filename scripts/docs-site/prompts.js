@@ -133,7 +133,7 @@ function elementLines(root, pkg) {
   const lines = [];
   for (const module of readJson(root, `packages/${pkg}/dist/custom-elements.json`).modules) {
     for (const d of module.declarations ?? []) {
-      if (!d.tagName) continue;
+      if (!d.tagName || d.status === "experimental") continue;
       // The body says once where an element's stylesheet is: components/<tag without luz->.css; it fails if one is not
       if (d.stylesheet && d.stylesheet !== `components/${d.tagName.replace(/^luz-/, "")}.css`) throw new Error(`${d.tagName}: its stylesheet ${d.stylesheet} is not components/<name>.css, which the prompts' body says`);
       const attributes = groupAttributes((d.attributes ?? []).map((a) => a.name));
@@ -141,6 +141,17 @@ function elementLines(root, pkg) {
     }
   }
   return lines;
+}
+
+/** The stylesheets (`components/<name>.css`) of the elements whose pages say `status: experimental`. */
+function experimentalSheets(root) {
+  const out = new Set();
+  for (const pkg of ELEMENT_PACKAGES) {
+    for (const module of readJson(root, `packages/${pkg}/dist/custom-elements.json`).modules) {
+      for (const d of module.declarations ?? []) if (d.status === "experimental" && d.stylesheet) out.add(d.stylesheet);
+    }
+  }
+  return out;
 }
 
 const lineOf = (text, index) => text.slice(0, index).split("\n").length;
@@ -186,11 +197,13 @@ export function assemblePrompt(id, { root }) {
     "check-ext": stacks.filter((s) => s.ext).map((s) => `${s.name} \`--ext ${s.ext}\``).join(", "),
     classes: (() => {
       const seen = new Set();
+      // The stylesheets of the experimental elements: their classes are not offered either
+      const experimental = experimentalSheets(root);
       const listed = new Set(["core", "catalog"].flatMap((pkg) => readJson(root, `packages/${pkg}/dist/classes.json`).classes.map((c) => c.name)));
       for (const name of SCRIPT_PARTS) if (!listed.has(name)) throw new Error(`${MODULE}: SCRIPT_PARTS names ${name}, which no classes.json lists`);
       return packages
         // Catalog lists its own classes and the patterns of the kind, not those of the other kinds of site
-        .map((pkg) => [pkg, classLines(root, pkg, seen, (c) => !(c.files ?? []).some((f) => isKindFile(f, kinds) && !own.includes(f)))])
+        .map((pkg) => [pkg, classLines(root, pkg, seen, (c) => !(c.files ?? []).some((f) => (isKindFile(f, kinds) && !own.includes(f)) || experimental.has(f)))])
         .filter(([, lines]) => lines.length)
         .map(([pkg, lines]) => [`From \`@luz-ds/${pkg}\`:`, "", ...lines].join("\n"))
         .join("\n\n");

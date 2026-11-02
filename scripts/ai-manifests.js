@@ -678,6 +678,8 @@ export function buildElementManifest(name, { root = repoRoot } = {}) {
       if (header.fires.length) declaration.events = header.fires;
       const demos = demosOf(pages, tag, script ? path : null);
       if (demos.length) declaration.demos = demos;
+      // An element whose pages say `status: experimental` is experimental: the prompts for agents do not offer it
+      if (pages.some((p) => p.meta.status === "experimental" && (String(p.meta.files ?? "").includes(`<${tag}>`) || (script && p.meta.module === basename(path))))) declaration.status = "experimental";
 
       const module = { kind: "javascript-module", path, declarations: [declaration] };
       if (script) module.exports = [{ kind: "custom-element-definition", name: tag, declaration: { name: className, module: path } }];

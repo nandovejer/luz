@@ -84,6 +84,8 @@ const FRONT_MATTER = {
   // them as "Fits best: …" under the lead and on the card of the gallery. `fits` is translatable
   "fits-kinds": { default: "" },
   fits: { default: "" },
+  // "experimental": a piece whose API may change in a minor release. It has a badge, and the files that agents read (llms-full.txt, the prompts, the debug page) leave it out
+  status: { default: "" },
   // Shown next to the h1: the CSS files and the JS module of a component
   files: { default: "" },
   module: { default: "" },
@@ -281,6 +283,7 @@ export function parseFrontMatter(source, file, areas = null) {
   }
   if (!["h2", "h2,h3", "false"].includes(meta.toc)) throw new Error(`${file}: toc is "h2", "h2,h3" or "false"`);
   if (!["", "gallery", "a-z", "snippets", "ai", "notfound"].includes(meta.generate)) throw new Error(`${file}: generate is "gallery", "a-z", "snippets", "ai" or "notfound"`);
+  if (!["", "experimental"].includes(meta.status)) throw new Error(`${file}: status is "experimental" or empty`);
   if (meta.group && !NAME.test(meta.group)) throw new Error(`${file}: group "${meta.group}" is not a valid name`);
   // "Fits best" (decision 71): both keys on a pattern page of catalog, on no other page
   const fitsPage = isCatalogPattern(meta);
@@ -690,6 +693,7 @@ function chipsOf(site, page) {
   // The count is the English page's: a translation cannot change what the chip says
   const issues = knownIssuesOf(englishOf(page).body) ?? 0;
   return [
+    ...(page.meta.status === "experimental" ? [`<strong class="luz-tag luz-tag--yellow">${escapeHtml(t("chip.experimental"))}</strong>`] : []),
     ...files.map((f) => `<code class="docs-demo__file">${escapeHtml(f)}</code>`),
     page.meta.module ? escapeHtml(t("chip.js", { module: page.meta.module })) : say(t, "chip.nojs"),
     say(t, "chip.modes"),

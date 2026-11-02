@@ -71,7 +71,7 @@ export function catalogPatterns(root) {
     const key = (k) => new RegExp(`^${k}: (.*)$`, "m").exec(head)?.[1].trim();
     if (!key("fits-kinds")) continue;
     const files = (key("files") ?? "").split(/[;,]/).map((f) => f.trim());
-    pages.push({ slug: name.slice(0, -5), kinds: fitsKindsOf(key("fits-kinds")), files, order: Number(key("order") ?? 0), file: `${CATALOG_PAGES}/${name}` });
+    pages.push({ slug: name.slice(0, -5), kinds: fitsKindsOf(key("fits-kinds")), files, order: Number(key("order") ?? 0), file: `${CATALOG_PAGES}/${name}`, experimental: key("status") === "experimental" });
   }
   return pages.sort((a, b) => a.order - b.order);
 }
@@ -116,7 +116,8 @@ const NAV_TOGGLE_KINDS = ["landing", "blog"];
  */
 export function kindPatterns(kind, root, components) {
   if (!FITS_KINDS.includes(kind)) throw new Error(`${kind} is not a kind of site with patterns (${FITS_KINDS.join(", ")})`);
-  const pages = catalogPatterns(root).filter((p) => p.kinds.includes(kind) || p.kinds.includes("any"));
+  // An experimental piece (`status: experimental`) is not offered by a prompt, nor are its files linked
+  const pages = catalogPatterns(root).filter((p) => !p.experimental && (p.kinds.includes(kind) || p.kinds.includes("any")));
   const built = new Set((components ?? []).map(({ file }) => file));
   // The nav toggle of the site header and of the masthead (landing, blog) is defined in the sidebar's file
   const files = [...new Set([...pages.flatMap(stylesheetsOf), ...(NAV_TOGGLE_KINDS.includes(kind) ? ["components/sidebar.css"] : [])])];

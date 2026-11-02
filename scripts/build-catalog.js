@@ -18,4 +18,4 @@
 
 import { buildPackage } from "./build-package.js";
 
-await buildPackage({ name: "catalog", bundle: false, js: ["catalog.js", "theme-time-boot.js", "ai-engine.js", "ai-retrieve.js", "ai-markdown.js"], chunks: ["search.js", "cookie-consent.js", "theme-time.js", "theme-time-bar.js", "timeline.js", "embed.js", "ai.js", "sidebar.js"] });
+await buildPackage({ name: "catalog", bundle: false, js: ["catalog.js", "theme-time-boot.js", "chat-markdown.js"], chunks: ["search.js", "cookie-consent.js", "theme-time.js", "theme-time-bar.js", "timeline.js", "embed.js", "chat.js", "sidebar.js"] });

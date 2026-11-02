@@ -664,6 +664,8 @@ export function renderLlmsFull(site, { siteUrl = "" } = {}) {
     if (!area) continue;
     const packageName = PACKAGE_OF_AREA[area.id] ?? null;
     for (const page of pages) {
+      // An experimental piece is on the site, in its search and in its own index.md, but not in the text an agent reads of everything
+      if (page.meta.status === "experimental") continue;
       const url = urlOf(page.route, siteUrl);
       const header = [`## ${page.meta.title}`, `URL: ${url}`];
       if (hasMarkup(page)) header.push(`Example: ${urlOf(exampleRouteOf(page), siteUrl)}`);

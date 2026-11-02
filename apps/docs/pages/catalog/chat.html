@@ -1,0 +1,36 @@
+<!-- luz:page
+title: Chat
+description: A conversation in the style of a messaging app that talks to a provider, the language model of the browser, an API of your own or anything else; it does not know who answers.
+area: catalog
+order: 90
+group: site-wide
+fits-kinds: any
+fits: a page where visitors ask something, from a help panel to the docs
+files: <luz-chat>, .luz-chat__panel, .luz-chat__log, .luz-chat__msg, .luz-chat__bubble
+module: chat.js
+keywords: chat, messaging, assistant, conversation, bubbles, provider, experimental
+status: experimental
+toc: h2,h3
+-->
+    <div class="docs-component" id="p-chat">
+          <h2 id="example">Example</h2>
+          <p><strong>Experimental.</strong> A conversation in the style of a messaging app: tight bubbles, a time beside what was said, and the writer's name for a screen reader. It does not know who answers; this example has a provider of the page's own, with canned answers.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <luz-chat data-docs-demo assistant-name="Demo" enter="send" maxlength="500">
+              <p>The chat needs JavaScript. <a href="/docs/">Read the documentation</a>.</p>
+              <ul data-luz-chat-suggestions>
+                <li><button type="button">How do I install it?</button></li>
+                <li><button type="button">How do I change the colours?</button></li>
+                <li><button type="button">Give me a long answer</button></li>
+                <li><button type="button">Show me an error</button></li>
+              </ul>
+            </luz-chat>
+          </div>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <ul>
+            <li>It is experimental: its provider contract can change in a minor release.</li>
+            <li>It has not been tested with a screen reader.</li>
+          </ul>
+    </div>

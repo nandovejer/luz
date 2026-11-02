@@ -33,8 +33,12 @@ import { initDocsView } from "./view.js";
 // Defines <luz-embed>, for the live example of the Embed page, only where there is one
 if (document.querySelector("luz-embed")) import("/packages/catalog/dist/embed.js");
 
-// Defines <luz-ai>, the experimental chat, for the live example of its page, only where there is one
-if (document.querySelector("luz-ai")) import("/packages/catalog/dist/ai.js");
+// Defines <luz-chat>, the experimental chat, for the live examples of its page, only where there is one
+if (document.querySelector("luz-chat")) {
+  const chat = import("/packages/catalog/dist/chat.js");
+  // The examples that have no model get a provider of the page's own (apps/docs/chat-demo.js)
+  if (document.querySelector("luz-chat[data-docs-demo]")) Promise.all([chat, import("./chat-demo.js")]).then(([, demo]) => demo.attachDemos());
+}
 
 /* ---- Small enhancements ----------------------------------------------- */
 
