@@ -25,6 +25,8 @@ dist/components/card.css
 dist/components/card.min.css
 dist/components/code.css
 dist/components/code.min.css
+dist/components/column-chart.css
+dist/components/column-chart.min.css
 dist/components/copy-btn.css
 dist/components/copy-btn.min.css
 dist/components/dropdown.css
@@ -33,6 +35,8 @@ dist/components/figure.css
 dist/components/figure.min.css
 dist/components/form.css
 dist/components/form.min.css
+dist/components/heat-map.css
+dist/components/heat-map.min.css
 dist/components/icon-grid.css
 dist/components/icon-grid.min.css
 dist/components/image.css
@@ -55,6 +59,8 @@ dist/components/select.css
 dist/components/select.min.css
 dist/components/skip-link.css
 dist/components/skip-link.min.css
+dist/components/stacked-bar.css
+dist/components/stacked-bar.min.css
 dist/components/table.css
 dist/components/table.min.css
 dist/components/tabs.css

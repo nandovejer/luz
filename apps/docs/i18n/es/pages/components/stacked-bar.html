@@ -1,0 +1,187 @@
+<!-- luz:page
+title: Barra apilada
+description: Muestra las partes de un todo en una sola barra, con una leyenda que dice cada nombre y cada cifra en texto.
+source: 1ee1c22339a8
+reviewed: false
+-->
+    <div class="docs-component" id="c-stacked-bar">
+          <h2 id="example">Ejemplo</h2>
+          <p>Cómo acabaron los paquetes de esta semana: la barra muestra las partes y la leyenda las dice.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-stacked-bar">
+              <figcaption>Parcels by status, this week</figcaption>
+              <div class="luz-stacked-bar__bar" aria-hidden="true">
+                <span class="luz-stacked-bar__part" style="--v: 62"></span>
+                <span class="luz-stacked-bar__part" style="--v: 21"></span>
+                <span class="luz-stacked-bar__part" style="--v: 9"></span>
+                <span class="luz-stacked-bar__part" style="--v: 5"></span>
+                <span class="luz-stacked-bar__part" style="--v: 2"></span>
+                <span class="luz-stacked-bar__part" style="--v: 1"></span>
+              </div>
+              <ul class="luz-stacked-bar__legend">
+                <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delivered</span> <span class="luz-stacked-bar__figure">62 %</span></li>
+                <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">In transit</span> <span class="luz-stacked-bar__figure">21 %</span></li>
+                <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">At depot</span> <span class="luz-stacked-bar__figure">9 %</span></li>
+                <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delayed</span> <span class="luz-stacked-bar__figure">5 %</span></li>
+                <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Returned</span> <span class="luz-stacked-bar__figure">2 %</span></li>
+                <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Lost</span> <span class="luz-stacked-bar__figure">1 %</span></li>
+              </ul>
+            </figure>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de la barra apilada">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Una hoja de estilos aparte: enlaza <code>components/stacked-bar.css</code> después de <code>luz.css</code>.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-stacked-bar" aria-label="Copy the stacked bar markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Stacked bar markup"><code id="code-stacked-bar">&lt;figure class=&quot;luz-stacked-bar&quot;&gt;
+  &lt;figcaption&gt;Parcels by status, this week&lt;/figcaption&gt;
+  &lt;div class=&quot;luz-stacked-bar__bar&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 62&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 21&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 9&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 5&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 2&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 1&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;ul class=&quot;luz-stacked-bar__legend&quot;&gt;
+    &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Delivered&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;62 %&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;In transit&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;21 %&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;At depot&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;9 %&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Delayed&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;5 %&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Returned&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;2 %&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Lost&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;1 %&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones de la barra apilada" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Opción</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Opción"><div><code>--v</code></div></td><td data-label="Efecto"><div>En cada parte, su peso: la barra siempre llena su ancho y cada parte toma su <code>--v</code> de la suma, de modo que 62, 21 y 9 sirven igual que .62, .21 y .09</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-stacked-bar-color</code></div></td><td data-label="Efecto"><div>Otro color de gráfico para una parte y su elemento, como <code>var(--luz-chart-4)</code></div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-stacked-bar-h</code></div></td><td data-label="Efecto"><div>La altura de la barra</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Una figura con dos listas de las mismas partes en el mismo orden. La leyenda son los datos: un nombre y una cifra en texto por parte, con una muestra de su color. La barra es un dibujo de ella, una fila de partes que se reparten el ancho en proporción a su <code>--v</code>, con la superficie asomando por un hueco fino entre ellas.</p>
+            <p>Las series toman de <code>--luz-chart-1</code> a <code>--luz-chart-6</code> en el orden del marcado, así que hasta seis partes conservan su propio color. Pon la mayor primero y agrupa las más pequeñas como «Otros». El <code>style</code> en línea solo da <code>--v</code>. Con un <code>style-src</code> estricto, ponlo en una regla propia.</p>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No lo necesita. Sin la hoja de estilos la figura se lee como su título y la leyenda, una lista de nombres y cifras; la barra queda vacía.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Nada recibe el foco. El título y la leyenda son texto: oculta la barra con <code>aria-hidden="true"</code>, como en el ejemplo.</p>
+            <p>En colores forzados las partes y las muestras de la leyenda llevan el mismo número, así que se empareja cada parte con su elemento por el número. Puede que el número no quepa en una parte muy estrecha; la leyenda sigue el mismo orden que la barra.</p>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Úsala para mostrar cómo se reparte un todo, cuando las partes suman un total: estados, orígenes, partes de un presupuesto.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No la uses para comparar muchos valores (usa una <a href="/docs/components/bar-list/">lista de barras</a> o un <a href="/docs/components/column-chart/">gráfico de columnas</a>), para más de seis partes ni para una sola (usa un <a href="/docs/components/meter/">medidor</a>).</p>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Quédate en seis partes o menos, la mayor primero y las más pequeñas agrupadas como «Otros»: cada una conserva su color y una parte lo bastante ancha para verse.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-stacked-bar">
+                    <figcaption>Parcels by status, this week</figcaption>
+                    <div class="luz-stacked-bar__bar" aria-hidden="true">
+                      <span class="luz-stacked-bar__part" style="--v: 62"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 21"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 9"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 5"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 3"></span>
+                    </div>
+                    <ul class="luz-stacked-bar__legend">
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delivered</span> <span class="luz-stacked-bar__figure">62 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">In transit</span> <span class="luz-stacked-bar__figure">21 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">At depot</span> <span class="luz-stacked-bar__figure">9 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delayed</span> <span class="luz-stacked-bar__figure">5 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Other</span> <span class="luz-stacked-bar__figure">3 %</span></li>
+                    </ul>
+                  </figure>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Dibujar más de seis partes: desde la séptima los colores se repiten y las partes finas no se distinguen.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-stacked-bar">
+                    <figcaption>Parcels by status, this week</figcaption>
+                    <div class="luz-stacked-bar__bar" aria-hidden="true">
+                      <span class="luz-stacked-bar__part" style="--v: 58"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 20"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 8"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 5"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 3"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 2"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 2"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 2"></span>
+                    </div>
+                    <ul class="luz-stacked-bar__legend">
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delivered</span> <span class="luz-stacked-bar__figure">58 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">In transit</span> <span class="luz-stacked-bar__figure">20 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">At depot</span> <span class="luz-stacked-bar__figure">8 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delayed</span> <span class="luz-stacked-bar__figure">5 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Returned</span> <span class="luz-stacked-bar__figure">3 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Lost</span> <span class="luz-stacked-bar__figure">2 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Damaged</span> <span class="luz-stacked-bar__figure">2 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Held at customs</span> <span class="luz-stacked-bar__figure">2 %</span></li>
+                    </ul>
+                  </figure>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Indica el todo y el periodo en el título de la figura («Paquetes por estado, esta semana»), mantén cada nombre en una o dos palabras y escribe cada cifra con su unidad. Los datos y las etiquetas son tuyos: el componente solo los dibuja.</p>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Cada serie es un color de gráfico sobre la superficie; las seis también se distinguen entre sí por tono y luminosidad, comprobado en cada modo.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste de la barra apilada en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Serie 1 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 2 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-2</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>8.9:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 3 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-3</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>9.6:1</div></td><td data-label="Oscuro"><div>10.6:1</div></td><td data-label="Alto contraste"><div>10.9:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 4 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-4</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>9.8:1</div></td><td data-label="Oscuro"><div>6.1:1</div></td><td data-label="Alto contraste"><div>6.6:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 5 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-5</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3.9:1</div></td><td data-label="Oscuro"><div>5.0:1</div></td><td data-label="Alto contraste"><div>6.2:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 6 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-6</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3.7:1</div></td><td data-label="Oscuro"><div>5.4:1</div></td><td data-label="Alto contraste"><div>14.7:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 1 sobre una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Nombre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cifra</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos; una parte decorativa discreta mantiene 2:1 con aquello sobre lo que se dibuja.</p>
+            <ul>
+              <li><strong>Foco:</strong> nada lo recibe.</li>
+              <li><strong>No solo color:</strong> cada parte tiene su nombre y su cifra en texto, un hueco separa las partes y, en colores forzados, cada parte y su elemento muestran el mismo número.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 17 tokens que lee <code>components/stacked-bar.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-2"><code>--luz-chart-2</code></a>, <a href="/docs/tokens/color/#luz-chart-3"><code>--luz-chart-3</code></a>, <a href="/docs/tokens/color/#luz-chart-4"><code>--luz-chart-4</code></a>, <a href="/docs/tokens/color/#luz-chart-5"><code>--luz-chart-5</code></a>, <a href="/docs/tokens/color/#luz-chart-6"><code>--luz-chart-6</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

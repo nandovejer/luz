@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Cómo se organiza LUZ
 description: Paquetes con dependencias en una sola dirección, CSS en capas de cascada dentro de una llamada luz y un script opcional.
-source: 140a602aa3ba
+source: 26a19b4e6fa6
 reviewed: false
 -->
     <section class="docs-block" id="packages" aria-labelledby="packages-title">
@@ -77,7 +77,7 @@ reviewed: false
   components/*.css            luz.components  the components: .luz-*
   utilities/_utilities.css    luz.utilities   single-purpose helpers: .u-*</code></pre>
           <ul>
-            <li>La capa de componentes contiene <span data-count="components">30</span> componentes.</li>
+            <li>La capa de componentes contiene <span data-count="components">33</span> componentes.</li>
             <li><code>dist/luz.css</code> contiene estas seis capas y <code>luz.print</code>. Tokens está en <code>luz.tokens</code>, catalog, con la barra de navegación, la barra lateral, el terminal, la línea de tiempo y los patrones de un tipo de sitio, en <code>luz.catalog</code>; <code>luz.themes</code> está vacía, reservada para un tema propio. Si una página solo necesita unos pocos componentes, carga <code>dist/base.css</code> (ajustes, restablecimiento y elementos) y luego <code>dist/components/&lt;name&gt;.css</code> para cada uno.</li>
             <li>Las reglas de los elementos sin clase están dentro de <code>:where()</code>, así que cualquier clase prevalece sobre ellas.</li>
           </ul>

@@ -1,0 +1,91 @@
+/* --------------------------------------------------------------------------
+   LUZ Component: heat-map
+   Heat map — a native table whose cells show how much, by colour and by figure:
+   <table class="luz-heat-map"> with a caption, a head row of names (<th scope="col">)
+   and one row per name (<th scope="row">), each cell <td style="--v: 0.4"> holding its
+   figure as text. --v is the share of the strongest value (0 to 1) and the same scale
+   serves every cell. A calendar is a heat map with the days of the week as columns and
+   the weeks as rows. Without this file it reads as a table of figures.
+   The mark is a swatch above the figure: the first chart colour mixed into the chart
+   track in proportion to --v (--luz-chart-1, --luz-chart-track); --luz-heat-map-color
+   sets another series for a table or a cell. The figure stays on the surface, in the
+   text colour, so it is 4.5:1 whatever the cell's value. Say in the caption that the
+   stronger colour is more: it is darker in light and lighter in dark.
+   Contrast: the strongest swatch is 3:1 on the surfaces in every mode; the empty one is
+   the chart track, a quiet 1.5:1, decorative, because the figure carries the value.
+   Layer: components (ITCSS 5) · Prefix: .luz-
+   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Loose sheet: not in luz.css (core CSS has no room); link
+   @luz-ds/core/components/heat-map.css after luz.css.
+   -------------------------------------------------------------------------- */
+
+.luz-heat-map {
+  --luz-heat-map-track: var(--luz-chart-track);
+}
+
+/* The column of the names takes more than a cell, so a name is not cut short */
+.luz-heat-map thead tr > :first-child {
+  inline-size: calc(var(--luz-space-2xl) * 2);
+}
+
+/* The bare table gives a head surface, a rule and a hover to its cells: a heat map has none */
+.luz-heat-map :is(th, td) {
+  inline-size: 1%;
+  padding: var(--luz-space-3xs);
+  border: 0;
+  background: none;
+  text-align: center;
+}
+
+.luz-heat-map th {
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-xs);
+  letter-spacing: 0.04em;
+  color: var(--luz-text-secondary);
+}
+
+/* A joined script takes no letter spacing, and the sans */
+.luz-heat-map th:is(:lang(ar), :lang(fa), :lang(ur)) {
+  font-family: var(--luz-font-sans);
+  letter-spacing: 0;
+}
+
+.luz-heat-map tbody th {
+  text-align: start;
+}
+
+.luz-heat-map td {
+  /* Resolved on the cell, so a cell may set its own --luz-heat-map-color */
+  --luz-heat-map-fill: var(--luz-heat-map-color, var(--luz-chart-1));
+
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--luz-text-sm);
+}
+
+/* The swatch: the track at 0, the series at 1 */
+.luz-heat-map tbody td::before {
+  content: "";
+  display: block;
+  block-size: var(--luz-space-lg);
+  margin-block-end: var(--luz-space-2xs);
+  border-radius: var(--luz-radius-sm);
+  background: color-mix(in oklab, var(--luz-heat-map-fill) calc(var(--v, 0) * 100%), var(--luz-heat-map-track));
+}
+
+/* Forced colors flatten backgrounds to Canvas: the same mix of the system
+   colours, and an edge on every swatch */
+@media (forced-colors: active) {
+  .luz-heat-map {
+    --luz-heat-map-track: Canvas;
+  }
+
+  .luz-heat-map td {
+    --luz-heat-map-fill: Highlight;
+  }
+
+  .luz-heat-map tbody td::before {
+    border: 1px solid CanvasText;
+    forced-color-adjust: none;
+  }
+}
