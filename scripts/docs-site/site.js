@@ -1616,8 +1616,10 @@ function gzipBytes(path) {
  * The min+gzip size of everything a package publishes that budgets.json
  * holds: every `file` budget under packages/<name>/dist/, and every file a
  * `glob` budget under it matches (`dir/*.ext`, `dir/**\/*.ext` or
- * `dir/{a,b}-*.ext`, less the row's `except` glob: catalog's components,
- * which have no bundle, so a site that links them all pays each). The
+ * `dir/{a,b}-*.ext`, less the row's `except` glob). Catalog has no weight
+ * limit and so no row (PRINCIPLES.md red line 17): its figure is every
+ * `.min.js` of its dist and every `.min.css` of its components folder, which have no
+ * bundle, so a site that links them all pays each. The
  * patterns of a kind of site (landing, cms, app and docs, files of catalog
  * since F5b) are not in the figure, as they never were when each kind was a
  * package of its own: the home speaks of the pieces every site can use.
@@ -1650,6 +1652,15 @@ function packageBytes(root, budgets, name, what) {
         : [];
     return walk(dir);
   };
+  if (name === "catalog") {
+    const dist = resolve(root, under);
+    if (!existsSync(dist)) throw new Error(`${under} is missing: run pnpm build before ${what} can be read`);
+    const own = readdirSync(dist).filter((f) => f.endsWith(".min.js")).map((f) => `${under}${f}`);
+    const folder = `${under}components`;
+    const sheets = existsSync(resolve(root, folder)) ? readdirSync(resolve(root, folder)).filter((f) => f.endsWith(".min.css")).map((f) => `${folder}/${f}`) : [];
+    if (!sheets.length) throw new Error(`${under}components matches nothing: run pnpm build before ${what} can be read`);
+    files.push(...own, ...sheets.filter((file) => !isKindFile(file.slice(under.length), kindsOf)));
+  }
   for (const b of budgets) {
     // luz.conditional.css is luz.css for one region of a page: a page links one of the two, so it is not a weight on top
     if (b.file?.startsWith(under) && /\/luz\.conditional\.min\.css$/.test(b.file)) continue;

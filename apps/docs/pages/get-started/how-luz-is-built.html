@@ -27,7 +27,7 @@ toc: false
         <li><strong>Browser tests</strong>, with Playwright in Chromium, once with JavaScript and once without. They cover behaviour, the keyboard and the state of a page when the script does not run.</li>
         <li><strong>Accessibility tests.</strong> axe scans every page in the light, dark and high contrast modes. A serious or critical problem fails the build.</li>
         <li><strong>Docs tests.</strong> The contrast ratios and token lists on the docs pages are computed from the CSS and recomputed by a test, so they cannot drift from the code.</li>
-        <li><strong>Size budgets.</strong> A file that grows past its ceiling fails, and nobody raises a ceiling.</li>
+        <li><strong>Size budgets.</strong> A tokens or core file past its ceiling fails; nobody raises one. Catalog has no limit.</li>
         <li><strong>Checks</strong> on the shipped strings, the licences and the contents of each package.</li>
       </ul>
       <p>One command, <code>pnpm check:all</code>, runs all of them.</p>
@@ -38,6 +38,6 @@ toc: false
     <section class="docs-block" id="zero-dependencies" aria-labelledby="zero-dependencies-title">
       <h2 class="docs-chapter__title" id="zero-dependencies-title">Zero dependencies</h2>
       <p>The packages have no runtime dependency. They ship plain CSS and small ES modules that need no build step, and they use the browser's own elements and APIs before any script.</p>
-      <p>Size budgets are a red line: a check fails when a file grows past its ceiling, and nobody raises a ceiling to make it pass. Everything LUZ ships is under the MIT licence, and only the MIT licence.</p>
+      <p>Size budgets are a red line for tokens and core: nobody raises a ceiling to make a check pass. Everything LUZ ships is under the MIT licence, and only the MIT licence.</p>
       <p><a href="/docs/get-started/">Get started</a> shows how to load it.</p>
     </section>
