@@ -1,13 +1,13 @@
 ## The kind of site: a blog
 
-A blog is a site of articles: a newspaper, magazine, company news. Ask:
+A blog is a site of articles, such as a newspaper. Ask:
 
-1. The CMS or generator, and its templates folder. Ask before you change one.
+1. The CMS or generator, and its templates folder: ask before you change one.
 2. The templates: home, post list, article, plain page, search, 404 (all advised for a new site).
 3. The header: one row with sections and a search, or a masthead.
 4. The article: contents, author box, related posts, comments.
 
-Start from this skeleton: a list page or an article page in one `main`. The one-row header: `luz-site-header luz-site-header--publication`.
+Start from this skeleton: a list or an article page in one `main`. One-row header: `luz-site-header luz-site-header--publication`.
 
 ```html
 <body class="o-page">
@@ -26,7 +26,7 @@ Start from this skeleton: a list page or an article page in one `main`. The one-
  <main id="main-content" class="o-container o-stack" tabindex="-1">
   <div class="luz-page-header"><h1 class="luz-page-header__title">…</h1></div>
   <ul class="o-grid o-grid--auto"><li class="luz-card"><h2 class="luz-card__title"><a href="./">…</a></h2><p class="luz-card__body">…</p></li></ul>
-  <!-- or, on an article page: -->
+  <!-- or: -->
   <article class="luz-article">
   <header class="luz-article-header"><h1 class="luz-article-header__title">…</h1></header>
   <div class="luz-article__layout">

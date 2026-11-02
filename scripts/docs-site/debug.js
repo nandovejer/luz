@@ -276,6 +276,9 @@ const MODES = [
   ["high-contrast", "High contrast"],
 ];
 
+// One letter for the group in the ids of a demo: the page joins every demo, and the long names were a tenth of its weight in ids
+const ID_PREFIX = { html: "h", objects: "o", core: "c", catalog: "g" };
+
 /** The blocks of each group, with the ids the page and its index are made of. */
 function groupsOf(site) {
   const sources = { html: htmlBlocks(site), objects: objectBlocks(site), core: componentBlocks(site, "components"), catalog: componentBlocks(site, "catalog") };
@@ -284,7 +287,7 @@ function groupsOf(site) {
     anchor: `debug-group-${group.id}`,
     blocks: sources[group.id].map((block) => {
       const anchor = `debug-${group.id}-${block.name}`;
-      const prefix = `${group.id}-${block.name}`;
+      const prefix = `${ID_PREFIX[group.id]}-${block.name}`;
       return { ...block, anchor, demo: scopeDemo(prefixIds(block.demo, prefix), { prefix, blockId: anchor }) };
     }),
   }));
