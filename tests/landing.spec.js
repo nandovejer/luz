@@ -803,14 +803,14 @@ test.describe('Landing page', () => {
       await open(page);
 
       const card = page.locator('#why .landing-why__card--light');
-      const chart = card.locator('ul.landing-bars');
+      const chart = card.locator('ul.luz-bar-list__rows');
       await expect(chart).toHaveAccessibleName(EN['why.weight.list']);
-      const bars = await chart.locator('li.landing-bar').evaluateAll((all) =>
+      const bars = await chart.locator('li.luz-bar-list__row').evaluateAll((all) =>
         all.map((li) => {
           const meter = li.querySelector('meter');
           return {
-            name: li.querySelector('.landing-bar__name')?.textContent?.trim(),
-            figure: li.querySelector('.landing-bar__figure')?.textContent?.trim(),
+            name: li.querySelector('.luz-bar-list__name')?.textContent?.trim(),
+            figure: li.querySelector('.luz-bar-list__figure')?.textContent?.trim(),
             hidden: meter?.getAttribute('aria-hidden'),
             value: Number(meter?.getAttribute('value')),
             max: Number(meter?.getAttribute('max')),
@@ -848,7 +848,7 @@ test.describe('Landing page', () => {
         const card = page.locator('#why .landing-why__card--light');
         const total = card.locator('figcaption strong');
         expect((await total.innerText()).trim().startsWith(words), `"${await total.innerText()}" starts with "${words}"`).toBe(true);
-        const figures = await card.locator('li.landing-bar .landing-bar__figure').allInnerTexts();
+        const figures = await card.locator('li.luz-bar-list__row .luz-bar-list__figure').allInnerTexts();
         expect(figures).toHaveLength(3);
         // The decimal separator is the language's (a comma in Spanish)
         const first = (text) => Number((/(\d+(?:[.,]\d+)?)/.exec(text)?.[1] ?? '').replace(',', '.'));
@@ -862,10 +862,10 @@ test.describe('Landing page', () => {
       await open(page);
 
       const card = page.locator('#why .landing-why__card').nth(1);
-      await expect(card.locator('ul.landing-bars')).toHaveAccessibleName(EN['why.usable.list']);
+      await expect(card.locator('ul.luz-bar-list__rows')).toHaveAccessibleName(EN['why.usable.list']);
       const names = ['contrast', 'rtl', 'no-js', 'focus', 'forced', 'issues', 'tests'].map((key) => EN[`why.usable.m.${key}`]);
-      await expect(card.locator('.landing-bar__name')).toHaveText(names);
-      const shares = await card.locator('.landing-bar__figure').evaluateAll((all) => all.map((el) => el.textContent?.trim()));
+      await expect(card.locator('.luz-bar-list__name')).toHaveText(names);
+      const shares = await card.locator('.luz-bar-list__figure').evaluateAll((all) => all.map((el) => el.textContent?.trim()));
       for (const share of shares) {
         expect(share).toMatch(/^\d+%$/);
         expect(parseInt(share ?? '0', 10)).toBeLessThanOrEqual(100);
@@ -881,11 +881,11 @@ test.describe('Landing page', () => {
       await open(page);
 
       const card = page.locator('#why .landing-why__card--zero');
-      await expect(card.locator('ul.landing-bars')).toHaveAccessibleName(EN['why.zero.list']);
+      await expect(card.locator('ul.luz-bar-list__rows')).toHaveAccessibleName(EN['why.zero.list']);
       const kinds = ['css-frameworks', 'css-preprocessors', 'js-frameworks', 'highlighters', 'icon-libraries', 'utilities', 'search-and-motion'];
-      await expect(card.locator('.landing-bar__name')).toHaveText(kinds.map((kind) => EN[`why.zero.cat.${kind}`]));
-      await expect(card.locator('.landing-bar__figure')).toHaveText(kinds.map(() => '0'));
-      await expect(card.locator('li.landing-bar--zero')).toHaveCount(kinds.length);
+      await expect(card.locator('.luz-bar-list__name')).toHaveText(kinds.map((kind) => EN[`why.zero.cat.${kind}`]));
+      await expect(card.locator('.luz-bar-list__figure')).toHaveText(kinds.map(() => '0'));
+      await expect(card.locator('li.luz-bar-list__row--zero')).toHaveCount(kinds.length);
       await expect(card.locator('figcaption strong')).toHaveText(EN['why.zero.total'].replace('{n}', '0'));
     });
 
@@ -899,7 +899,11 @@ test.describe('Landing page', () => {
           await expect(page.locator(`#why-${word} + .landing-word__sub`)).toHaveText(words[`why.${word}.sub`]);
         }
         // A reader gets the share as text: the chart's bars are pictures
-        for (const meter of await page.locator('#why .landing-bar__meter').all()) await expect(meter).toHaveAttribute('aria-hidden', 'true');
+        for (const meter of await page.locator('#why .luz-bar-list__meter').all()) await expect(meter).toHaveAttribute('aria-hidden', 'true');
+        // The three charts are core's bar list, in cells; the home keeps no class of its own for them
+        await expect(page.locator('#why figure.luz-bar-list.luz-bar-list--cells')).toHaveCount(3);
+        await expect(page.locator('#why .luz-bar-list__meter')).toHaveCount(await page.locator('#why .luz-bar-list__row').count());
+        await expect(page.locator('[class*="landing-bar"], [class*="landing-chart"]')).toHaveCount(0);
       });
     }
   });

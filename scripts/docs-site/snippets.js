@@ -33,7 +33,7 @@
  *                                          of "Copy the markup" on its page
  */
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { FITS_KINDS, kindPatterns } from "./kinds.js";
 import { englishT } from "./strings.js";
@@ -53,6 +53,27 @@ export const FILES = {
 
 /** The catalog component the snippet of a kind of site links, as the example of one link per component. */
 export const EXAMPLE_COMPONENT = "components/search.css";
+
+/**
+ * The stylesheets of core that luz.css does not hold: the files of `src/components` (not `_` ones) that
+ * `components/index.css` does not @import, because the core CSS has no room for them (budgets.json has a row
+ * each). A page links them after luz.css. ["components/bar-list.css"], sorted; read from the sources, never typed.
+ */
+export function looseCoreSheets(root, readFile = readFileSync) {
+  const dir = join(root, "packages", "core", "src", "components");
+  let imported;
+  let names;
+  try {
+    imported = new Set([...readFile(join(dir, "index.css"), "utf-8").matchAll(/@import url\("\.\/([a-z0-9-]+\.css)"\)/g)].map((m) => m[1]));
+    names = readdirSync(dir);
+  } catch {
+    return []; // no core sources beside this root (a fixture): nothing is loose
+  }
+  return names
+    .filter((name) => /^[a-z0-9-]+\.css$/.test(name) && name !== "index.css" && !imported.has(name))
+    .sort()
+    .map((name) => `components/${name}`);
+}
 
 /** `components/x.css` → `components/x.min.css`, the file a CDN link names. */
 export const minified = (file) => file.replace(/\.css$/, ".min.css");

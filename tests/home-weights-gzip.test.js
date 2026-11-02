@@ -92,9 +92,9 @@ describe.skipIf(!built || !hasGzip() || !existsSync(join(repo, "docs/index.html"
   const gz = (file) => execFileSync("gzip", ["-9", "-n", "-c"], { input: readFileSync(join(repo, file)), maxBuffer: 64 * 1024 * 1024 }).length;
   const html = read("docs/index.html");
   // The page is written without the quotes a value does not need: read it as a tree, not with a regex of quotes
-  const bars = queryAll(parse(html, "docs/index.html"), "ul.landing-bars").find((ul) => ul.attrs.get("aria-label") === "Packages by size");
+  const bars = queryAll(parse(html, "docs/index.html"), "ul.luz-bar-list__rows").find((ul) => ul.attrs.get("aria-label") === "Packages by size");
   const barOf = (name) => {
-    const row = bars && queryAll(bars, "li").find((li) => textOf(query(li, "span.landing-bar__name")) === name);
+    const row = bars && queryAll(bars, "li").find((li) => textOf(query(li, "span.luz-bar-list__name")) === name);
     const meter = row && findAll(row, (node) => node.name === "meter")[0];
     return meter ? Number(meter.attrs.get("value")) : null;
   };

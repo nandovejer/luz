@@ -1,0 +1,136 @@
+<!-- luz:page
+title: Bar list
+description: Compares a few values as a list of names, figures and bars, with the native meter element.
+area: components
+group: data
+files: components/bar-list.css
+toc: h2,h3
+-->
+    <div class="docs-component" id="c-bar-list">
+          <h2 id="example">Example</h2>
+          <p>Parcels per route this week.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-bar-list">
+              <ul class="luz-bar-list__rows">
+                <li class="luz-bar-list__row"><span class="luz-bar-list__name">Sevilla</span><span class="luz-bar-list__figure">1,204</span><meter class="luz-bar-list__meter" max="1500" value="1204" aria-hidden="true">1,204 of 1,500</meter></li>
+                <li class="luz-bar-list__row"><span class="luz-bar-list__name">Cádiz</span><span class="luz-bar-list__figure">312</span><meter class="luz-bar-list__meter" max="1500" value="312" aria-hidden="true">312 of 1,500</meter></li>
+              </ul>
+              <figcaption>Parcels per route, this week</figcaption>
+            </figure>
+          </div>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>None known.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Bar list documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>A separate stylesheet: link <code>components/bar-list.css</code> after <code>luz.css</code>.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-bar-list" aria-label="Copy the bar list markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bar list markup"><code id="code-bar-list">&lt;figure class=&quot;luz-bar-list&quot;&gt;
+  &lt;ul class=&quot;luz-bar-list__rows&quot;&gt;
+    &lt;li class=&quot;luz-bar-list__row&quot;&gt;
+      &lt;span class=&quot;luz-bar-list__name&quot;&gt;Sevilla to Madrid&lt;/span&gt;
+      &lt;span class=&quot;luz-bar-list__figure&quot;&gt;1,204&lt;/span&gt;
+      &lt;meter class=&quot;luz-bar-list__meter&quot; max=&quot;1500&quot; value=&quot;1204&quot; aria-hidden=&quot;true&quot;&gt;1,204 of 1,500&lt;/meter&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;figcaption&gt;Parcels per route, this week&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variants and options</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Bar list options" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Option</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Option"><div><code>luz-bar-list--cells</code></div></td><td data-label="Effect"><div>Small cells instead of a continuous bar</div></td></tr>
+                  <tr><td data-label="Option"><div><code>luz-bar-list__row--zero</code></div></td><td data-label="Effect"><div>Figure in the brand colour, for a row at 0</div></td></tr>
+                  <tr><td data-label="Option"><div><code>--luz-bar-list-color</code></div></td><td data-label="Effect"><div>Another chart colour for a list or a row, such as <code>var(--luz-chart-2)</code></div></td></tr>
+                  <tr><td data-label="Option"><div><code>--luz-bar-list-row-h</code></div></td><td data-label="Effect"><div>One row height, to line up lists side by side</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>A list in a <code>figure</code>: each row is a name, a figure and a native <code>meter</code>, drawn in <code>--luz-chart-1</code> with the track in <code>--luz-chart-track</code>. Give every row the same <code>max</code>. A long name is cut to one line. Unlike <code>.luz-meter</code>, the meter has no minimum width, so it never widens a narrow card.</p>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>It needs none. Without the stylesheet it reads as a list of names and figures.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <p>Nothing takes focus. The name and the figure are text: hide the bar with <code>aria-hidden="true"</code>. A meter left visible needs a name.</p>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use it to compare a few values on one scale: sizes, counts, shares.</p>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use it for one value (use a <a href="/docs/components/meter/">meter</a>) or for a trend over time. Keep a <a href="/docs/components/table/">table</a> when exact values matter most.</p>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Give every row the same <code>max</code> and its figure in text: the length compares, the number says how much.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-bar-list luz-bar-list--cells">
+                    <ul class="luz-bar-list__rows">
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Sevilla to Madrid</span><span class="luz-bar-list__figure">1,204</span><meter class="luz-bar-list__meter" min="0" max="1500" value="1204"></meter></li>
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Cádiz to Málaga</span><span class="luz-bar-list__figure">312</span><meter class="luz-bar-list__meter" min="0" max="1500" value="312"></meter></li>
+                      <li class="luz-bar-list__row luz-bar-list__row--zero"><span class="luz-bar-list__name">Huelva to Faro</span><span class="luz-bar-list__figure">0</span><meter class="luz-bar-list__meter" min="0" max="1500" value="0"></meter></li>
+                    </ul>
+                  </figure>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A scale of its own in each row: 312 of 400 looks longer than 1,204 of 1,500.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-bar-list luz-bar-list--cells">
+                    <ul class="luz-bar-list__rows">
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Sevilla to Madrid</span><span class="luz-bar-list__figure">1,204</span><meter class="luz-bar-list__meter" min="0" max="1500" value="1204"></meter></li>
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Cádiz to Málaga</span><span class="luz-bar-list__figure">312</span><meter class="luz-bar-list__meter" min="0" max="400" value="312"></meter></li>
+                    </ul>
+                  </figure>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>Name the unit and the period in the caption (“Parcels per route, this week”), keep each name short, and write the figure with its unit.</p>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>The fill is a chart colour; the track is quieter on purpose, because the figure carries the value.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Bar list contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Bar against its track</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-chart-track</code></div></td><td data-label="Light"><div>3.4:1</div></td><td data-label="Dark"><div>3.8:1</div></td><td data-label="High contrast"><div>6.8:1</div></td><td data-label="Needs"><div>2:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Bar on the page</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Bar on a card</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>7.2:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Name</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Figure of a row at 0</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+            <ul>
+              <li><strong>Focus:</strong> nothing takes it.</li>
+              <li><strong>Not colour alone:</strong> every bar has its figure in text.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 12 tokens that <code>components/bar-list.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-track"><code>--luz-chart-track</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

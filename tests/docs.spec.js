@@ -451,10 +451,10 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('galleries and the A–Z index', () => {
-    test('a gallery card is one link, named like its heading (HUB-1; 29 since the navbar, sidebar, terminal and timeline went to Catalog)', async ({ page }) => {
+    test('a gallery card is one link, named like its heading (HUB-1; 30: 29 since the navbar, sidebar, terminal and timeline went to Catalog, and the bar list)', async ({ page }) => {
       await open(page, '/docs/components/');
       const cards = page.locator('.docs-card');
-      await expect(cards).toHaveCount(29);
+      await expect(cards).toHaveCount(30);
       for (const card of await cards.all()) {
         await expect(card.getByRole('link')).toHaveCount(1);
       }

@@ -28,7 +28,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { VOID, compactHtml, tags } from "./html.js";
-import { catalogComponents, catalogFilesIn } from "./snippets.js";
+import { catalogComponents, catalogFilesIn, looseCoreSheets } from "./snippets.js";
 
 /** The route of the page, and the file the build and the dev server give it (it never exists on disk). */
 export const DEBUG_ROUTE = "/debug/";
@@ -263,11 +263,16 @@ function componentBlocks(site, folder) {
 
 /* ---- The page ------------------------------------------------------------- */
 
-/** The published stylesheets the page links, in the order of the cascade: tokens, core, then every catalog component. */
+/** The published stylesheets the page links, in the order of the cascade: tokens, core (and its sheets outside luz.css), then every catalog component. */
 function stylesheets(root) {
   const dir = join(root, "packages/catalog/src/components");
   const catalog = readdirSync(dir).filter((f) => f.endsWith(".css") && !f.startsWith("_")).sort();
-  return ["/packages/tokens/dist/luz-tokens.css", "/packages/core/dist/luz.css", ...catalog.map((f) => `/packages/catalog/dist/components/${f}`)];
+  return [
+    "/packages/tokens/dist/luz-tokens.css",
+    "/packages/core/dist/luz.css",
+    ...looseCoreSheets(root).map((file) => `/packages/core/dist/${file}`),
+    ...catalog.map((f) => `/packages/catalog/dist/components/${f}`),
+  ];
 }
 
 const MODES = [

@@ -1,0 +1,133 @@
+/* --------------------------------------------------------------------------
+   LUZ Component: bar-list
+   Bar list — a figure that holds a list of rows, each a name, its figure and
+   a bar under them: <figure class="luz-bar-list"><ul class="luz-bar-list__rows">
+   <li class="luz-bar-list__row"> <span class="luz-bar-list__name"> <span
+   class="luz-bar-list__figure"> <meter class="luz-bar-list__meter">. The name
+   and the figure are text and the bar is a native <meter>, a picture of the
+   figure: hide it with aria-hidden="true", or name it. Without this file the
+   figure reads as a list.
+   The bar is the first chart colour on the chart track (--luz-chart-1,
+   --luz-chart-track); --luz-bar-list-color sets another series for a list or
+   a row. --luz-bar-list-row-h gives every row the same height, to line up
+   lists side by side. .luz-bar-list--cells cuts the bar into small cells.
+   The meter is never narrower than 8rem in core's meter element; here it takes
+   the width of its row (min-inline-size: 0), so it never pushes a narrow
+   card wider at a large text size.
+   Contrast: the fill is 3:1 on the surfaces in every mode; the track is a
+   quiet 1.5:1, decorative, because the figure carries the value.
+   Layer: components (ITCSS 5) · Prefix: .luz-
+   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
+   Loose sheet: not in luz.css (core CSS has no room); link
+   @luz-ds/core/components/bar-list.css after luz.css.
+   -------------------------------------------------------------------------- */
+
+
+/* A figure that is a layout box, not the surface the bare element is */
+.luz-bar-list {
+  display: grid;
+  align-content: start;
+  gap: var(--luz-space-sm);
+  margin: 0;
+  padding: 0;
+  background: none;
+}
+
+/* The caption is one step small, as the figures are */
+.luz-bar-list :where(figcaption) {
+  font-size: var(--luz-text-sm);
+}
+
+.luz-bar-list__rows {
+  display: grid;
+  grid-auto-rows: var(--luz-bar-list-row-h, 1fr);
+  gap: var(--luz-space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.luz-bar-list__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: end;
+  align-items: baseline;
+  gap: var(--luz-space-3xs) var(--luz-space-sm);
+}
+
+/* One line: a name that would wrap is cut, and its whole text stays readable */
+.luz-bar-list__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-xs);
+  letter-spacing: 0.04em;
+  color: var(--luz-text-secondary);
+}
+
+/* A joined script takes no letter spacing, and the sans */
+.luz-bar-list__name:is(:lang(ar), :lang(fa), :lang(ur)) {
+  font-family: var(--luz-font-sans);
+  letter-spacing: 0;
+}
+
+.luz-bar-list__figure {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--luz-text-sm);
+}
+
+/* A count of none: the bar is empty, so the figure takes the brand colour */
+.luz-bar-list__row--zero .luz-bar-list__figure {
+  color: var(--luz-brand-primary);
+}
+
+.luz-bar-list__meter {
+  --luz-bar-list-fill: var(--luz-bar-list-color, var(--luz-chart-1));
+  --luz-bar-list-track: var(--luz-chart-track);
+
+  appearance: none;
+  grid-column: 1 / -1;
+  min-inline-size: 0;
+  border: 0;
+  border-radius: var(--luz-radius-sm);
+  background: var(--luz-bar-list-track);
+  overflow: hidden;
+}
+
+.luz-bar-list__meter::-webkit-meter-bar {
+  background: var(--luz-bar-list-track);
+  border: 0;
+}
+
+/* The three states of the engine, one colour (one rule per engine: a list
+   with a pseudo-element the browser does not know is dropped whole) */
+.luz-bar-list__meter::-webkit-meter-optimum-value,
+.luz-bar-list__meter::-webkit-meter-suboptimum-value,
+.luz-bar-list__meter::-webkit-meter-even-less-good-value {
+  background: var(--luz-bar-list-fill);
+}
+
+.luz-bar-list__meter::-moz-meter-bar {
+  background: var(--luz-bar-list-fill);
+}
+
+/* Small upright cells: a mask cuts the native meter, its track and its fill,
+   into cells 6px wide and 12px tall with 3px between */
+.luz-bar-list--cells .luz-bar-list__meter {
+  block-size: 12px;
+  border-radius: 0;
+  mask-image: repeating-linear-gradient(to right, CanvasText 0 6px, transparent 6px 9px);
+}
+
+/* Forced colors flatten backgrounds to Canvas: keep the track's edge and draw
+   the fill in the system highlight colour */
+@media (forced-colors: active) {
+  .luz-bar-list__meter {
+    --luz-bar-list-fill: Highlight;
+    --luz-bar-list-track: Canvas;
+
+    border: 1px solid CanvasText;
+    forced-color-adjust: none;
+  }
+}
