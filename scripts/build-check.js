@@ -83,20 +83,42 @@ const readJson = (path) => {
  */
 const ownFile = (entry) => `components/${(entry.block ?? entry.name).replace(/^luz-/, "")}.css`;
 
-/** classes.json reduced to what a rule reads; `unbundled` keeps the files of each class (a package with no bundle), but not the one its block names. */
+/**
+ * What the reader of packages/check/src/manifests.js derives from a name when the snapshot leaves a field out (the two stay in step:
+ * the same rule is written there). A `luz-` or `o-` name is BEM: the block, then `__part`, then `--modifier`; the prefix tells the kind.
+ */
+const KIND_OF_PREFIX = { "is-": "state", "luz-": "component", "o-": "object", "u-": "utility" };
+const kindOf = (name) => KIND_OF_PREFIX[Object.keys(KIND_OF_PREFIX).find((prefix) => name.startsWith(prefix))];
+const isBem = (name) => name.startsWith("luz-") || name.startsWith("o-");
+const bemOf = (name) => {
+  const [, block, part, modifier] = name.match(/^(.+?)(?:__(.+?))?(?:--(.+))?$/);
+  return { block, part, modifier };
+};
+
+/**
+ * classes.json reduced to what a rule reads; `unbundled` keeps the files of each class (a package with no bundle), but not the one its block names.
+ * A field the reader derives from the name is left out: `kind` when the prefix tells it, `block`, `part` and `modifier` when the name splits
+ * into them (written, as `null` where the name has none, only where the split says otherwise). The properties are names: `properties` the
+ * root ones and `componentProperties` the others, so the scope is the key and not a field of every entry.
+ */
 function reduceClasses(manifest, unbundled) {
   const out = { schema: manifest.schema, package: manifest.package, version: manifest.version };
   out.classes = manifest.classes.map((entry) => {
     // `defined` is written only where it is false: a class no stylesheet defines (a script names it). Absent means true (the reader of packages/check/src/manifests.js)
-    const kept = { name: entry.name, kind: entry.kind, ...(entry.defined === true ? {} : { defined: entry.defined }) };
-    for (const key of ["block", "modifier", "part", "hosts"]) if (entry[key] !== undefined) kept[key] = entry[key];
+    const kept = { name: entry.name };
+    if (entry.kind !== kindOf(entry.name)) kept.kind = entry.kind;
+    if (entry.defined !== true) kept.defined = entry.defined;
+    const derived = isBem(entry.name) ? bemOf(entry.name) : {};
+    for (const key of ["block", "modifier", "part"]) if (entry[key] !== derived[key]) kept[key] = entry[key] ?? null;
+    if (entry.hosts !== undefined) kept.hosts = entry.hosts;
     if (unbundled && entry.defined) {
       const files = entry.files ?? [];
       if (files.length !== 1 || files[0] !== ownFile(entry)) kept.files = files;
     }
     return kept;
   });
-  out.properties = manifest.properties.map(({ name, scope }) => ({ name, scope }));
+  out.properties = manifest.properties.filter(({ scope }) => scope === "root").map(({ name }) => name);
+  out.componentProperties = manifest.properties.filter(({ scope }) => scope !== "root").map(({ name }) => name);
   if (manifest.hooks !== undefined) out.hooks = manifest.hooks;
   return out;
 }
@@ -122,7 +144,7 @@ function reduceElements(manifest) {
 
 /**
  * One class or element per line, so a change to the data is a readable diff,
- * and no indentation: the folder stays under its 56 KiB with seven packages.
+ * and no indentation, and what a reader derives from a name is left out (reduceClasses).
  */
 function format(manifest) {
   const lines = [];

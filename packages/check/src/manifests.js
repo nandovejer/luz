@@ -80,32 +80,50 @@ function readJson(path, max) {
   }
 }
 
+// What the snapshot leaves out of a class because its name says it (scripts/build-check.js writes the same rule)
+const KIND_OF_PREFIX = { "is-": "state", "luz-": "component", "o-": "object", "u-": "utility" };
+const kindOf = (name) => KIND_OF_PREFIX[Object.keys(KIND_OF_PREFIX).find((prefix) => name.startsWith(prefix))];
+const isBem = (name) => name.startsWith("luz-") || name.startsWith("o-");
+const bemOf = (name) => {
+  const [, block, part, modifier] = name.match(/^(.+?)(?:__(.+?))?(?:--(.+))?$/);
+  return { block, part, modifier };
+};
+
 /**
  * classes.json of schema 1 -> { version, classes: [{ name, block, kind, defined, modifier, part, hosts, files }], hooks } or null.
  * `files` is kept only when `unbundled` (a package whose page links one file per component), and only the components/<name>.css ones.
  * `derive`: the data is the snapshot beside the bundle, which leaves `files` out of a defined class that is in the file its block names,
  * and `defined` out of a class that is defined (it is written only as false).
+ * `snapshot`: the data is the snapshot beside the bundle, which leaves out the `kind` the prefix tells and the `block`, `part` and `modifier` the name
+ * splits into (`null` means none where the split says one), and lists the properties as names: `properties` the root ones, `componentProperties` the rest.
  */
-function parseClasses(data, pkg, unbundled, derive = false) {
+function parseClasses(data, pkg, unbundled, derive = false, snapshot = false) {
   if (!isObject(data) || data.schema !== 1 || data.package !== `@luz-ds/${pkg}`) return null;
   if (typeof data.version !== "string" || !VERSION.test(data.version)) return null;
   if (!Array.isArray(data.classes) || data.classes.length > MAX_CLASSES) return null;
   const classes = [];
   for (const entry of data.classes) {
     if (!isObject(entry) || !isName(entry.name)) return null;
-    for (const key of ["block", "modifier", "part"]) if (entry[key] !== undefined && !isName(entry[key])) return null;
+    for (const key of ["block", "modifier", "part"]) if (entry[key] !== undefined && entry[key] !== null && !isName(entry[key])) return null;
+    const derived = snapshot && isBem(entry.name) ? bemOf(entry.name) : {};
+    const field = (key) => (snapshot && entry[key] === undefined ? derived[key] : (entry[key] ?? undefined));
+    const kind = snapshot && entry.kind === undefined ? kindOf(entry.name) : entry.kind;
     const { hosts } = entry;
     if (hosts !== undefined && !(Array.isArray(hosts) && hosts.length > 0 && hosts.length <= MAX_HOSTS && hosts.every((host) => typeof host === "string" && HOST.test(host)))) return null;
     // The snapshot of a package with no bundle (`derive`) leaves out the file a defined class has when it is the one its block names
     // `defined` is absent in the snapshot where it is true (scripts/build-check.js writes it only where it is false)
     const defined = derive && entry.defined === undefined ? true : entry.defined;
-    const own = derive && defined === true && entry.files === undefined ? [`components/${(entry.block ?? entry.name).replace(/^luz-/, "")}.css`] : entry.files;
+    const own = derive && defined === true && entry.files === undefined ? [`components/${(field("block") ?? entry.name).replace(/^luz-/, "")}.css`] : entry.files;
     const files = unbundled && Array.isArray(own) ? own.filter((file) => typeof file === "string" && FILE.test(file)).slice(0, MAX_FILES) : [];
-    classes.push({ name: entry.name, block: entry.block, kind: entry.kind, defined, modifier: entry.modifier, part: entry.part, hosts, files: files.length ? files : undefined });
+    classes.push({ name: entry.name, block: field("block"), kind, defined, modifier: field("modifier"), part: field("part"), hosts, files: files.length ? files : undefined });
   }
   if (data.properties !== undefined && !Array.isArray(data.properties)) return null;
+  if (snapshot && data.componentProperties !== undefined && !Array.isArray(data.componentProperties)) return null;
   // An entry that is not a name with a scope is left out; the rest of the manifest stands
-  const properties = (data.properties ?? []).slice(0, MAX_PROPERTIES).filter((entry) => isObject(entry) && isName(entry.name) && (entry.scope === "root" || entry.scope === "component"));
+  // The snapshot lists a root property as its name and the others in `componentProperties`; an entry with a scope is read as in a manifest
+  const listed = (data.properties ?? []).slice(0, MAX_PROPERTIES).map((entry) => (snapshot && typeof entry === "string" ? { name: entry, scope: "root" } : entry));
+  const others = snapshot ? (data.componentProperties ?? []).slice(0, MAX_PROPERTIES).map((name) => ({ name, scope: "component" })) : [];
+  const properties = [...listed, ...others].filter((entry) => isObject(entry) && isName(entry.name) && (entry.scope === "root" || entry.scope === "component"));
   let hooks = [];
   if (data.hooks !== undefined) {
     if (!Array.isArray(data.hooks) || data.hooks.length > MAX_HOOKS || !data.hooks.every((hook) => typeof hook === "string" && HOOK.test(hook))) return null;
@@ -145,10 +163,10 @@ function parseElements(data) {
  * The two files of a package in one folder layout -> { version, classes, hooks, elements } or null.
  * `unbundled`: the package has no bundle, so a class keeps the files that define it.
  */
-function readPackage(classesPath, elementsPath, pkg, unbundled, derive = false) {
+function readPackage(classesPath, elementsPath, pkg, unbundled, derive = false, snapshot = false) {
   const data = readJson(classesPath, MAX_MANIFEST_BYTES);
   if (data === null) return null;
-  const classes = parseClasses(data, pkg, unbundled, derive);
+  const classes = parseClasses(data, pkg, unbundled, derive, snapshot);
   if (classes === null) return null;
   let elements = [];
   const present = readLimited(elementsPath, MAX_MANIFEST_BYTES);
@@ -231,7 +249,7 @@ export function createFacts({ data }) {
     if (typeof data === "string" && data !== "") {
       const folder = join(data, pkg);
       // The snapshot keeps the files of a class only for a package with no bundle (scripts/build-check.js)
-      const read = readPackage(join(folder, "classes.json"), join(folder, "custom-elements.json"), pkg, true, pkg === "catalog");
+      const read = readPackage(join(folder, "classes.json"), join(folder, "custom-elements.json"), pkg, true, pkg === "catalog", true);
       if (read !== null) part = { name: pkg, source: "bundled", ...read };
     }
     bundled.set(pkg, part);

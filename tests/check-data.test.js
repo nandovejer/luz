@@ -30,11 +30,15 @@
  *      dist/data/<pkg>/classes.json          for each of tokens, core, catalog
  *          { schema, package, version, classes, properties, hooks? }
  *          the package's dist/classes.json with only what a rule reads:
- *          classes [{ name, kind, defined?, block?, modifier?, part?, hosts? }]; `defined`
+ *          classes [{ name, kind?, defined?, block?, modifier?, part?, hosts?, files? }]; `defined`
  *          is written only where it is false: absent means true (F7, to keep the folder
- *          under its cap with the four components that came from core),
- *          properties [{ name, scope }], hooks as in the manifest. No layer,
- *          no files, no text.
+ *          under its cap with the four components that came from core); `kind` is
+ *          absent where the prefix tells it (is- state, luz- component, o- object,
+ *          u- utility) and `block`, `part` and `modifier` where a luz- or o- name
+ *          splits into them (BLOCK__PART--MODIFIER); where the split disagrees with the
+ *          manifest the key is written, `null` for none (the data is lossless),
+ *          properties [name] for the root ones and componentProperties [name] for the
+ *          rest, hooks as in the manifest. No layer, no text.
  *      dist/data/<pkg>/custom-elements.json           only the packages that have one (catalog, and core since <luz-theme-mode>, 2026-10-29)
  *          the Custom Elements Manifest reduced to { schemaVersion, modules:
  *          [{ kind, path, declarations: [{ kind, name, customElement, tagName,
@@ -46,10 +50,10 @@
  *          the colour ones at least), in the shape its parser reads; the
  *          tests/check-theme.test.js proves the verdicts are the engine's on
  *          the full dist/tokens.css. No comments and nothing it does not
- *          read: with the full file the folder would pass 56 KiB.
+ *          read: with the full file the folder would be far over its cap.
  *
  *    The same parser reads it and the package's own dist/ files. Two builds
- *    write the same bytes; the folder is under 56 KiB; packages/check/
+ *    write the same bytes; the folder is under 40 KiB; packages/check/
  *    pack-files.txt lists every file of it.
  */
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
@@ -71,6 +75,17 @@ const ownFile = (entry) => `components/${(entry.block ?? entry.name).replace(/^l
 // landing, cms, app and docs are files of catalog since F5b (their classes are in catalog's classes.json)
 const LIBRARIES = ["tokens", "core", "catalog"];
 const readJson = (path) => JSON.parse(readFileSync(path, "utf-8"));
+
+/** What a reader derives from a class name when the snapshot leaves a field out (the rule of the header above, written again here on purpose). */
+const KIND_BY_PREFIX = [["is-", "state"], ["luz-", "component"], ["o-", "object"], ["u-", "utility"]];
+const prefixKind = (name) => KIND_BY_PREFIX.find(([prefix]) => name.startsWith(prefix))?.[1];
+const splitName = (name) => {
+  if (!name.startsWith("luz-") && !name.startsWith("o-")) return {};
+  const [, block, part, modifier] = /^(.+?)(?:__(.+?))?(?:--(.+))?$/.exec(name);
+  return { block, part, modifier };
+};
+/** A field of a snapshot entry once derived: written (null = none) or what the name says; `undefined` for none. */
+const resolved = (entry, key) => (key in entry ? (entry[key] ?? undefined) : (key === "kind" ? prefixKind(entry.name) : splitName(entry.name)[key]));
 
 /* ---- hooks in classes.json ------------------------------------------------------------------- */
 
@@ -216,19 +231,21 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(index.packages).toEqual(LIBRARIES.map((name) => ({ package: `@luz-ds/${name}`, version: readJson(`${root}packages/${name}/package.json`).version })));
   });
 
-  it.each(LIBRARIES)("%s/classes.json has the names, kinds, definitions and BEM split of the package's manifest, and nothing else", (name) => {
+  it.each(LIBRARIES)("%s/classes.json has the names, kinds, definitions and BEM split of the package's manifest once derived, and nothing else", (name) => {
     expect(built.error).toBeNull();
     const source = manifestOf(name);
     const copy = snapshot(name, "classes.json");
     expect(copy.schema).toBe(1);
     expect(copy.package).toBe(source.package);
     expect(copy.version).toBe(source.version);
-    expect(Object.keys(copy).every((k) => ["schema", "package", "version", "classes", "properties", "hooks"].includes(k)), Object.keys(copy).join()).toBe(true);
+    expect(Object.keys(copy).every((k) => ["schema", "package", "version", "classes", "properties", "componentProperties", "hooks"].includes(k)), Object.keys(copy).join()).toBe(true);
     expect(copy.classes.map((c) => c.name)).toEqual(source.classes.map((c) => c.name));
     copy.classes.forEach((entry, i) => {
       const from = source.classes[i];
       expect(Object.keys(entry).every((k) => ["name", "kind", "defined", "block", "modifier", "part", "hosts", "files"].includes(k)), entry.name).toBe(true);
-      for (const field of ["kind", "block", "modifier", "part", "hosts"]) expect(entry[field], `${entry.name}.${field}`).toEqual(from[field]);
+      // `kind`, `block`, `modifier` and `part` may be absent: what a reader derives from the name is compared, `null` meaning none
+      for (const field of ["kind", "block", "modifier", "part"]) expect(resolved(entry, field), `${entry.name}.${field}`).toEqual(from[field]);
+      expect(entry.hosts, `${entry.name}.hosts`).toEqual(from.hosts);
       // `defined` is written only where it is false: absent means true
       expect(entry.defined ?? true, `${entry.name}.defined`).toBe(from.defined);
       if (from.defined) expect(entry, `${entry.name} is defined: no \`defined\` key`).not.toHaveProperty("defined");
@@ -242,8 +259,29 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
         expect(entry.files ?? [ownFile(from)], `${entry.name}: the file a reader derives`).toEqual(from.files);
       } else expect(entry, `${entry.name} (${name} keeps its bundle)`).not.toHaveProperty("files");
     });
-    expect(copy.properties).toEqual(source.properties.map(({ name: property, scope }) => ({ name: property, scope })));
+    // The scope is the key, not a field of every entry: names only
+    const names = (scope) => source.properties.filter((p) => (scope === "root" ? p.scope === "root" : p.scope !== "root")).map((p) => p.name);
+    expect(copy.properties).toEqual(names("root"));
+    expect(copy.componentProperties ?? []).toEqual(names("component"));
+    for (const list of [copy.properties, copy.componentProperties ?? []]) expect(list.every((p) => typeof p === "string"), `${name}: properties are names`).toBe(true);
     expect(copy.hooks).toEqual(source.hooks);
+  });
+
+  it.each(LIBRARIES)("%s/classes.json writes no field a reader derives from the name: kind only off the prefix, block, part and modifier only off the split", (name) => {
+    expect(built.error).toBeNull();
+    const source = manifestOf(name).classes;
+    const copy = snapshot(name, "classes.json").classes;
+    let derivedKinds = 0;
+    copy.forEach((entry, i) => {
+      if ("kind" in entry) expect(entry.kind, `${entry.name}: kind written, so the prefix must not say it`).not.toBe(prefixKind(entry.name));
+      else derivedKinds += 1;
+      const split = splitName(entry.name);
+      for (const key of ["block", "part", "modifier"]) {
+        if (key in entry) expect(entry[key] ?? undefined, `${entry.name}.${key} is written, so the name's split must disagree`).not.toBe(split[key]);
+        else expect(source[i][key], `${entry.name}.${key} is left out, so the split must say it`).toBe(split[key]);
+      }
+    });
+    if (copy.length > 0) expect(derivedKinds, `${name}: the kind is left out of the entries it can be derived for`).toBeGreaterThan(0);
   });
 
   it("keeps the file of every catalog class where the data is read: the default is the file of the block, the rest is written (luz-toc is in article.css)", async () => {
@@ -309,13 +347,13 @@ describe("dist/data: the snapshot of this release, beside the bundle", () => {
     expect(timeline?.stylesheet).toBe("components/timeline.css");
   });
 
-  it("is small: each classes.json is smaller than its manifest, and the whole folder is under 56 KiB", () => {
+  it("is small: each classes.json is smaller than its manifest, and the whole folder is under 40 KiB", () => {
     expect(built.error).toBeNull();
     for (const name of LIBRARIES) {
       expect(statSync(join(dataDir(), name, "classes.json")).size, name).toBeLessThan(statSync(`${root}packages/${name}/dist/classes.json`).size);
     }
     const total = filesUnder(dataDir()).reduce((sum, file) => sum + statSync(join(dataDir(), file)).size, 0);
-    expect(total).toBeLessThanOrEqual(56 * 1024);
+    expect(total).toBeLessThanOrEqual(40 * 1024);
   });
 
   it("is the same bytes in two builds", async () => {
