@@ -1,0 +1,236 @@
+<!-- luz:page
+title: Post list
+description: Lays out a list of posts as a grid, with the latest one larger, or as a compact list of rows. Each post is a card.
+area: catalog
+order: 19
+group: content
+fits-kinds: blog
+fits: a page that lists posts: the home, a category, an archive, search results
+files: components/post-list.css
+keywords: blog, posts, articles, archive, search results, cards
+toc: h2,h3
+-->
+    <div class="docs-component" id="p-post-list">
+          <h2 id="example">Example</h2>
+          <p>The same posts in the three layouts. Each one is a <a href="/docs/components/card/">card</a>.</p>
+          <div class="docs-example" data-docs-specimen>
+            <div class="docs-demo__stage">
+              <ul class="luz-post-list" role="list">
+                <li>
+                  <article class="luz-card">
+                    <div class="luz-image luz-image--3x2"></div>
+                    <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+                    <p class="luz-card__title"><a href="#example">What ten years of tide records say about the bay</a></p>
+                    <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+                    <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <div class="luz-image luz-image--3x2"></div>
+                    <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+                    <p class="luz-card__title"><a href="#example">The last tuna nets of the strait</a></p>
+                    <p class="luz-card__body">Three families still set the almadraba each spring.</p>
+                    <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <div class="luz-image luz-image--3x2"></div>
+                    <p class="luz-tag luz-tag--gray u-mb-sm">Food</p>
+                    <p class="luz-card__title"><a href="#example">Where the best tortillitas are fried</a></p>
+                    <p class="luz-card__body">A short route through four kitchens.</p>
+                    <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>4 min read</span></p>
+                  </article>
+                </li>
+              </ul>
+              <p class="docs-demo__note">The base: as many columns as fit, none under 16rem.</p>
+            </div>
+            <div class="docs-demo__stage">
+              <ul class="luz-post-list luz-post-list--lead" role="list">
+                <li>
+                  <article class="luz-card">
+                    <div class="luz-image luz-image--3x2"></div>
+                    <div>
+                      <p class="luz-tag luz-tag--gray u-mb-sm">Coast</p>
+                      <p class="luz-card__title"><a href="#example">What ten years of tide records say about the bay</a></p>
+                      <p class="luz-card__body">Volunteers have read the gauge in the port twice a day since 2016.</p>
+                      <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+                    </div>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <div class="luz-image luz-image--3x2"></div>
+                    <p class="luz-tag luz-tag--gray u-mb-sm">Culture</p>
+                    <p class="luz-card__title"><a href="#example">The last tuna nets of the strait</a></p>
+                    <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>8 min read</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <div class="luz-image luz-image--3x2"></div>
+                    <p class="luz-tag luz-tag--gray u-mb-sm">Food</p>
+                    <p class="luz-card__title"><a href="#example">Where the best tortillitas are fried</a></p>
+                    <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>4 min read</span></p>
+                  </article>
+                </li>
+              </ul>
+              <p class="docs-demo__note"><code class="luz-code-inline">luz-post-list--lead</code>: the first post spans two columns with its picture beside it, when the list is 40rem wide or more. Narrower, it is a card like the rest.</p>
+            </div>
+            <div class="docs-demo__stage">
+              <ul class="luz-post-list luz-post-list--compact" role="list">
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">What ten years of tide records say about the bay</a></p>
+                    <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>Coast</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">The last tuna nets of the strait</a></p>
+                    <p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>Culture</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">Where the best tortillitas are fried</a></p>
+                    <p class="luz-meta"><time datetime="2026-10-04">4 October 2026</time> <span>Food</span></p>
+                  </article>
+                </li>
+              </ul>
+              <p class="docs-demo__note"><code class="luz-code-inline">luz-post-list--compact</code>: one row for each post, the title and the facts, with no picture.</p>
+            </div>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>None known.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Post list documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>A list, one card in each item. The first item of the lead list has its text in a <code>&lt;div&gt;</code> beside the picture:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-post-list" aria-label="Copy the post list markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Post list markup"><code id="code-post-list">&lt;ul class=&quot;luz-post-list luz-post-list--lead&quot; role=&quot;list&quot;&gt;
+  &lt;li&gt;
+    &lt;article class=&quot;luz-card&quot;&gt;
+      &lt;div class=&quot;luz-image luz-image--3x2&quot;&gt;&lt;img src=&quot;/media/tide.jpg&quot; width=&quot;600&quot; height=&quot;400&quot; alt=&quot;&quot; loading=&quot;lazy&quot;&gt;&lt;/div&gt;
+      &lt;div&gt;
+        &lt;p class=&quot;luz-tag luz-tag--gray u-mb-sm&quot;&gt;Coast&lt;/p&gt;
+        &lt;h2 class=&quot;luz-card__title&quot;&gt;&lt;a href=&quot;/2026/10/tide-records/&quot;&gt;What ten years of tide records say about the bay&lt;/a&gt;&lt;/h2&gt;
+        &lt;p class=&quot;luz-card__body&quot;&gt;Volunteers have read the gauge in the port twice a day since 2016.&lt;/p&gt;
+        &lt;p class=&quot;luz-meta&quot;&gt;&lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt; &lt;span&gt;6 min read&lt;/span&gt;&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/article&gt;
+  &lt;/li&gt;
+  &lt;!-- one li for each post; the others have no div around their text --&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variants and options</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Post list classes" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Class</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                <tr><td data-label="Class"><div><code>.luz-post-list</code></div></td><td data-label="Effect"><div>On a <code>&lt;ul&gt;</code>: as many equal columns as fit, none under <code>--luz-post-list-min</code> (16rem), no bullets. Each card is as tall as the tallest in its row</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-post-list--lead</code></div></td><td data-label="Effect"><div>From 40rem of list width, the first item spans two columns and its card puts the picture beside the text, with a larger title</div></td></tr>
+                <tr><td data-label="Class"><div><code>.luz-post-list--compact</code></div></td><td data-label="Effect"><div>One column, a row for each post: the title, and the facts at its end when there is room. Leave out the picture and the summary</div></td></tr>
+                <tr><td data-label="Class"><div><code>--luz-post-list-min</code></div></td><td data-label="Effect"><div>The narrowest a column may be. Set it on the list or an ancestor</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>CSS from <code>components/post-list.css</code> of <code>@luz-ds/catalog</code>. It sets the layout; the post is core's card, with the picture, tag, title, summary and <a href="/docs/components/meta/">meta line</a> you choose.</p>
+            <ul>
+              <li>The list is its own size container, so the lead follows the room it has and not the window. Give it a parent that sets its width: a flex or grid item sized by its content leaves it no width.</li>
+              <li>Under 40rem the lead is a card like the rest, with its picture above.</li>
+              <li>The link on the title makes the whole card one link, as in any card.</li>
+            </ul>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>Nothing changes. It is a list of cards, and the package has no script.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <ul>
+              <li><strong>Order:</strong> the source order, which is the reading order. In the lead the picture comes before the text; each card is one tab stop, on its title link.</li>
+              <li><strong>List:</strong> the <code>&lt;ul&gt;</code> is announced with its count ("list, 12 items"). Keep <code>role="list"</code>: some browsers drop the list from a <code>&lt;ul&gt;</code> without bullets.</li>
+              <li><strong>Names:</strong> each link is named by its post title. A picture that only decorates the post has <code>alt=""</code>. Give the list a heading, or an <code>aria-label</code>, when the page has more than one.</li>
+            </ul>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use it whenever a page shows several posts, so every list on the site is laid out alike.</p>
+            <ul>
+              <li>Base: the posts of a category or a tag.</li>
+              <li>Lead: the home, when one post should be read first.</li>
+              <li>Compact: an archive by date, or the results of a search.</li>
+            </ul>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use it for a single card, or for items that are not posts.</p>
+            <ul>
+              <li>One post is a <a href="/docs/components/card/">card</a>. Products, people and plans are cards in a <code>.o-grid--auto</code>.</li>
+              <li>For the pages of a long list, add <a href="/docs/components/pagination/">pagination</a> after it.</li>
+            </ul>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Keep a compact row to the title and its facts: a long archive can be scanned at a glance.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-post-list luz-post-list--compact" role="list">
+                    <li><article class="luz-card"><p class="luz-card__title"><a href="#">The last tuna nets of the strait</a></p><p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>Culture</span></p></article></li>
+                  </ul>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Put a summary in a compact row: it breaks the row in two and the archive stops being scannable.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <ul class="luz-post-list luz-post-list--compact" role="list">
+                    <li><article class="luz-card"><p class="luz-card__title"><a href="#">The last tuna nets of the strait</a></p><p class="luz-card__body">Three families still set the almadraba each spring, as they have for centuries.</p><p class="luz-meta"><time datetime="2026-10-09">9 October 2026</time> <span>Culture</span></p></article></li>
+                  </ul>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <ul>
+              <li>Title: the title of the post, as on the post. Wrap, never cut.</li>
+              <li>Summary: one sentence, up to about 120 characters. Leave it out in the lead's side posts and in the compact list.</li>
+              <li>Facts: the date, as a <code>&lt;time&gt;</code>, then the reading time or the section. Same order in every card.</li>
+              <li>Heading level: the card title is a heading one level under the heading of the list's page or section.</li>
+            </ul>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>The cards sit on the page surface, with the same colours as any card.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Post list contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Title</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>7.2:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Facts</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>6.4:1</div></td><td data-label="Dark"><div>6.9:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Border under the pointer</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>3.7:1</div></td><td data-label="Dark"><div>4.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>7.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+            <ul>
+              <li><strong>Focus:</strong> the ring is the card's: 2 px of <code>--luz-focus-ring</code> around the whole card, from the link on the title.</li>
+              <li><strong>Target:</strong> the whole card is the link, far over 24 px.</li>
+              <li><strong>Edges:</strong> the border at rest (<code>--luz-divider</code>) is decorative and has no minimum.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 5 tokens that the <code>.luz-post-list</code> rules of catalog’s <code>components/post-list.css</code> read, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-text-xl</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>

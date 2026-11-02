@@ -47,6 +47,8 @@ dist/components/page-rail.css
 dist/components/page-rail.min.css
 dist/components/pager.css
 dist/components/pager.min.css
+dist/components/post-list.css
+dist/components/post-list.min.css
 dist/components/search.css
 dist/components/search.min.css
 dist/components/section.css

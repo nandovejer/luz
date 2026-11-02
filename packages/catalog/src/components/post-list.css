@@ -1,0 +1,81 @@
+/* ==========================================================================
+	 LUZ Catalog: post list.
+	 Layer: catalog · Prefix: .luz-post-list
+	 ul.luz-post-list > li > article.luz-card: the layout of a list of posts.
+	 The post is core's card; this sets the rows and columns around it. Base:
+	 as many columns as fit, none under --luz-post-list-min (16rem, as .o-grid--auto).
+	 --lead: the first post spans two columns, its image beside its text, when
+	 the list is 40rem or wider (its own width, like .luz-article). --compact: a
+	 row for each post, for an archive or search results. The text of a post
+	 goes in one div beside its image. The list keeps its
+	 own width, so its parent must give it one (not a flex or grid item sized
+	 by content). No JavaScript.
+	 ========================================================================== */
+
+.luz-post-list {
+	container-type: inline-size;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--luz-post-list-min, 16rem)), 1fr));
+	gap: var(--luz-space-md);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* Cards of a row are as tall as the tallest */
+.luz-post-list > :where(li) > .luz-card {
+	block-size: 100%;
+}
+
+.luz-post-list > :where(li) > .luz-card > .luz-image {
+	margin-block-end: var(--luz-space-sm);
+}
+
+/* The lead: the first post bigger, the image beside the text */
+@container (min-width: 40rem) {
+	.luz-post-list--lead > :where(li:first-child) {
+		grid-column: span 2;
+	}
+
+	.luz-post-list--lead > :where(li:first-child) > .luz-card {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--luz-space-md);
+		align-items: center;
+	}
+
+	.luz-post-list--lead > :where(li:first-child) > .luz-card > .luz-image {
+		margin-block-end: 0;
+	}
+
+	.luz-post-list--lead > :where(li:first-child) .luz-card__title {
+		font-size: var(--luz-text-xl);
+	}
+}
+
+/* A row for each post: the title, and the facts at its end when there is
+   room. No image: leave it out. */
+.luz-post-list--compact {
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--luz-space-xs);
+}
+
+.luz-post-list--compact > :where(li) > .luz-card {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--luz-space-3xs) var(--luz-space-md);
+	padding: var(--luz-space-sm) var(--luz-space-md);
+}
+
+.luz-post-list--compact .luz-card__title {
+	flex: 1 1 16rem;
+	margin-block-end: 0;
+}
+
+@media print {
+	.luz-post-list > :where(li) {
+		break-inside: avoid;
+	}
+}

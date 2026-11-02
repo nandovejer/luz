@@ -55,6 +55,8 @@ const PACKAGES = {
       article: 'toc',
       toc: 'toc',
       'page-header': 'page-header',
+      // The layout of a list of posts: its own page, whose CSS is post-list.css
+      'post-list': 'post-list',
       // An application: the bar and the dashboard; the sidebar is catalog's too since F7 (below)
       'app-bar': 'app-bar',
       dashboard: 'dashboard',

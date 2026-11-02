@@ -33,7 +33,7 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  */
 const KIND_FILES = {
   landing: ["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
-  blog: ["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article"],
+  blog: ["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "page-header", "article-header", "article", "post-list"],
   app: ["navbar", "sidebar", "app-bar", "dashboard"],
   docs: ["navbar", "sidebar", "terminal", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
 };

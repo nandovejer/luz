@@ -105,7 +105,7 @@ There are no packages for one kind of site. The patterns of a landing page, a bl
 | Kind | Files, in this order |
 | --- | --- |
 | Landing page | `site-header`, `hero`, `main`, `section`, `stat`, `site-footer`, `glow` |
-| Blog or newspaper, any CMS | `site-header` or `masthead`, `page-header`, `article-header`, `article`, `site-footer` |
+| Blog or newspaper, any CMS | `site-header` or `masthead`, `page-header`, `article-header`, `article`, `post-list`, `site-footer` |
 | Web application | `app-bar`, `dashboard` |
 | Documentation site | `docs-layout`, `doc-header`, `page-rail`, `example`, `do-dont`, `pager`, `page-footer` |
 
