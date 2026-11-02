@@ -101,8 +101,8 @@ describe("classes.json of catalog has the new names and none of the old", () => 
 describe("custom-elements.json of catalog has the new elements and none of the old", () => {
   const tags = declarations.map((d) => d.tagName).sort();
 
-  it("holds the nine tags: search, cookie consent, theme time, language switch, submenu, announcement, the FAQ, the embed and the timeline", () => {
-    expect(tags).toEqual(["luz-announcement", "luz-cookie-consent", "luz-embed", "luz-faq", "luz-lang-switch", "luz-search", "luz-submenu", "luz-theme-time", "luz-timeline"]);
+  it("holds the ten tags: search, cookie consent, theme time, language switch, submenu, announcement, the FAQ, the embed, the chart and the timeline", () => {
+    expect(tags).toEqual(["luz-announcement", "luz-chart", "luz-cookie-consent", "luz-embed", "luz-faq", "luz-lang-switch", "luz-search", "luz-submenu", "luz-theme-time", "luz-timeline"]);
     expect(tags).not.toContain("luz-color-mode");
   });
 
@@ -156,10 +156,10 @@ describe("components/<block>.css and its .min.css exist for every new block, and
     expect(exists(`packages/catalog/dist/components/${name}.min.css`), `dist/components/${name}.min.css`).toBe(true);
   });
 
-  it("holds exactly the 35 components of the catalog: the 22 patterns, the four of F7, the eight elements and the page transition (theme-time is the color mode's successor), plain and minified", () => {
+  it("holds exactly the 36 components of the catalog: the 22 patterns, the four of F7, the nine elements and the page transition (theme-time is the color mode's successor), plain and minified", () => {
     const built = readdirSync(`${root}packages/catalog/dist/components`).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, "")).sort();
     expect(built).toEqual([...new Set(NEW)].sort());
-    expect(built).toHaveLength(35);
+    expect(built).toHaveLength(36);
   });
 
   it.each(FILES.map(([old]) => old))("components/%s.css is gone, in src, dist and the tarball list", (old) => {

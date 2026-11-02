@@ -41,6 +41,8 @@ const PACKAGES = {
       faq: 'faq',
       // The facade of a player of another origin: a `<luz-embed>` tag that is the block, `.luz-embed__<part>`
       embed: 'embed',
+      // A chart drawn from the author's own table: a `<luz-chart>` tag that is the block, `.luz-chart__<part>`
+      chart: 'chart',
       // F8: the blocks are named for what they are, not for the kind of site that uses them. The glow and the main are the
       // page's own and have no page: they are on the section's. The bar of a landing page, the bar of a blog (--publication)
       // and the two footers are one page each; the masthead has a page of its own
@@ -108,11 +110,11 @@ for (const [name, { label, patternOf, pagesWithoutBlock = [] }] of Object.entrie
       for (const block of blocks) expect(patternOf[block], `luz-${block} has no pattern in tests/site-docs.spec.js`).toBeTruthy();
     });
 
-    test('catalog ships exactly its 38 blocks: the eight components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
+    test('catalog ships exactly its 39 blocks: the nine components of the site, the navbar, the sidebar with its drawer button, the terminal, the timeline and the patterns of the four kinds of site', () => {
       expect(blocksOf('catalog').sort()).toEqual(Object.keys(patternOf).sort());
     });
 
-    test('the Catalog gallery lists the 32 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
+    test('the Catalog gallery lists the 33 pattern pages and the class reference, in /docs/catalog/, and no page of an area that is gone', async ({ page }) => {
       await page.goto('/docs/catalog/');
       const cards = await page.locator('.docs-gallery a').evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
       expect(cards.filter((href) => href.startsWith('/docs/catalog/')).sort()).toEqual(

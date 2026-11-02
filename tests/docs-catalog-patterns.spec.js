@@ -31,7 +31,7 @@ const read = (/** @type {string} */ path) => readFileSync(fromRepo(path), 'utf-8
 const GROUPS = [
   { id: 'navigation', en: 'Navigation', pages: ['app-bar', 'lang-switch', 'masthead', 'navbar', 'sidebar', 'site-header', 'submenu'] },
   { id: 'page-structure', en: 'Page structure', pages: ['article-header', 'hero', 'page-header', 'section', 'site-footer'] },
-  { id: 'content', en: 'Content', pages: ['dashboard', 'embed', 'faq', 'post-list', 'social', 'stat', 'terminal', 'timeline', 'toc'] },
+  { id: 'content', en: 'Content', pages: ['chart', 'dashboard', 'embed', 'faq', 'post-list', 'social', 'stat', 'terminal', 'timeline', 'toc'] },
   { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'theme-time', 'cookie-consent', 'search', 'page-transition'] },
   { id: 'documentation', en: 'Documentation', pages: ['do-dont', 'doc-header', 'docs-layout', 'example', 'page-footer', 'page-rail', 'pager'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
@@ -51,7 +51,7 @@ const KIND_OF = {
   // F7: the four that came from core (the owner's, decision 35 and the pages they had): a sidebar and a timeline fit two kinds
   navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'],
   // The components with data of the site fit any
-  search: ['any'], 'cookie-consent': ['any'], 'theme-time': ['any'], 'lang-switch': ['any'], submenu: ['any'], announcement: ['any'], faq: ['any'], embed: ['any'],
+  search: ['any'], 'cookie-consent': ['any'], 'theme-time': ['any'], 'lang-switch': ['any'], submenu: ['any'], announcement: ['any'], faq: ['any'], embed: ['any'], chart: ['any'],
   // Link a stylesheet and the pages fade into one another: no class, no tag, any site
   'page-transition': ['any'],
 };

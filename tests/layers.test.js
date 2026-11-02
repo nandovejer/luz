@@ -90,8 +90,8 @@ describe.skipIf(files.length === 0)("published stylesheets and the luz layers", 
       .filter((f) => /^@media\s+print\b/m.test(readFileSync(dist(`packages/catalog/src/components/${f}`), "utf-8")))
       .map((f) => f.replace(/\.css$/, ""))
       .sort();
-    // F7: the sidebar and the timeline brought their print rules from core's _print.css; the theme-time bar hides on paper, in its own file
-    expect(printing).toEqual(["cookie-consent", "docs-layout", "faq", "glow", "post-list", "search", "sidebar", "theme-time", "timeline"]);
+    // F7: the sidebar and the timeline brought their print rules from core's _print.css; the theme-time bar hides on paper, in its own file; the chart prints its table and not the drawing
+    expect(printing).toEqual(["chart", "cookie-consent", "docs-layout", "faq", "glow", "post-list", "search", "sidebar", "theme-time", "timeline"]);
     const all = readdirSync(dist("packages/catalog/dist/components")).filter((f) => f.endsWith(".css") && !f.endsWith(".min.css")).map((f) => f.replace(/\.css$/, ""));
     for (const name of all) {
       const items = topLevel(readFileSync(dist(`packages/catalog/dist/components/${name}.css`), "utf-8"));
