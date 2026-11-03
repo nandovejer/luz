@@ -11,8 +11,8 @@
  *   promptFiles({ root })           Map route → () => text, for the plugin
  *   promptSourceHash(id, { root })  SHA-256 of all the prose of that prompt:
  *                                   the body, its preset, stacks.json, this
- *                                   module and the elements' descriptions
- *                                   (not the versions or the class names)
+ *                                   module and the kinds of site (not the
+ *                                   versions, the class names or the elements)
  *
  * Nothing in a prompt that names the system is typed by hand: the versions
  * come from each package.json, the classes and elements from the
@@ -90,7 +90,8 @@ function classLines(root, pkg, seen, keep = () => true) {
   for (const c of classes) {
     if (seen.has(c.name) || !keep(c)) continue;
     seen.add(c.name);
-    if (SCRIPT_PARTS.has(c.name)) continue;
+    // A state class (`is-active`) is set by LUZ's scripts, which the body says; a script-only part is never typed
+    if (c.kind === "state" || SCRIPT_PARTS.has(c.name)) continue;
     const block = c.block ?? c.name;
     if (!blocks.has(block)) blocks.set(block, []);
     if (c.name !== block) blocks.get(block).push(c.name.slice(block.length));
@@ -126,8 +127,9 @@ function groupAttributes(names) {
 }
 
 /**
- * `<luz-color-mode>` (remember, by…): its description, from each custom-elements.json,
- * (its stylesheet, for a package with no bundle, is named once in the body).
+ * `<luz-search>` (data-luz-search-*, data-luz-label-*): the tag and its attributes, no prose. The
+ * description of each element is in the manifest the prompt points at.
+ * (The stylesheet, for a package with no bundle, is named once in the body.)
  */
 function elementLines(root, pkg) {
   const lines = [];
@@ -137,7 +139,7 @@ function elementLines(root, pkg) {
       // The body says once where an element's stylesheet is: components/<tag without luz->.css; it fails if one is not
       if (d.stylesheet && d.stylesheet !== `components/${d.tagName.replace(/^luz-/, "")}.css`) throw new Error(`${d.tagName}: its stylesheet ${d.stylesheet} is not components/<name>.css, which the prompts' body says`);
       const attributes = groupAttributes((d.attributes ?? []).map((a) => a.name));
-      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd());
+      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}`);
     }
   }
   return lines;
@@ -199,6 +201,7 @@ export function assemblePrompt(id, { root }) {
         .join("\n\n");
     })(),
     elements: ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n"),
+    manifest: `${CDN}/${at("catalog")}/dist/custom-elements.json`,
     "kind-links": kind.docs
       ? patterns.pages
           .map((page) => `- ${PROMPT_SITE}${kind.docs}${page}/: markup of the ${page.replace(/-/g, " ")}.`)
@@ -230,13 +233,13 @@ export function assemblePrompt(id, { root }) {
  * The SHA-256, in hex, of every piece of prose that reaches one prompt:
  * body.md, its preset (none for start), stacks.json, this module (the titles
  * and the sentences it writes), kinds.js (which patterns a kind lists, and in
- * what order), the lines of the elements as the prompt has them (their names,
- * attributes and descriptions, from the packages' custom-elements.json) and
+ * what order) and
  * the `fits-kinds`, `files` and `order` of each catalog page (which pages and
  * files a kind lists; never a page's body), each followed by a NUL. The sentinel's case for the
  * prompt holds it (`source`), so an edit of any of them voids its SAFE until
- * the sentinel reads the prompt again. The versions and the class names are
- * left out: they change with every release and every class, carry no prose,
+ * the sentinel reads the prompt again. The versions, the class names and the
+ * elements (names and attributes, no description) are left out: they change with every release, every class and
+ * every element, carry no prose,
  * and check:prompts holds each name against the manifests.
  */
 export function promptSourceHash(id, { root }) {
@@ -245,7 +248,6 @@ export function promptSourceHash(id, { root }) {
   const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`, MODULE, KINDS];
   const hash = createHash("sha256");
   for (const file of files) hash.update(readFileSync(join(root, file))).update("\0");
-  hash.update(ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n")).update("\0");
   hash.update(catalogPatterns(root).map((page) => `${page.slug}|${page.kinds.join(",")}|${page.files.join(",")}|${page.order}`).join("\n")).update("\0");
   return hash.digest("hex");
 }

@@ -99,6 +99,8 @@ Fix every finding before going on. Then report what was done, what the check fou
 
 ## Classes you may use
 
+Names only. What each is for is in the sources under "If you can read URLs".
+
 {{classes}}
 
 ## Elements you may use
@@ -111,4 +113,5 @@ The stylesheet of a catalog element is `components/<name>.css` of `@luz-ds/catal
 
 - {{site}}llms.txt: every page of the docs, linked.
 - {{site}}llms-full.txt: the docs as text, with each component's markup.
+- {{manifest}}: each element, described.
 {{kind-links}}
