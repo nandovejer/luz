@@ -1,11 +1,11 @@
 // @ts-check
 /**
- * `.luz-heat-map` of @luz-ds/core (`components/heat-map.css`, a loose sheet that a page links after luz.css): a native table
+ * `.luz-heat-map` of @luz-ds/catalog (`components/heat-map.css`, a sheet that a page links after luz.css): a native table
  * whose cells show how much by colour and by figure. A cell holds its figure as text and `--v` (0 to 1) is its share of the
  * strongest value; the cell draws a swatch above the figure, the chart colour mixed into the chart track in proportion to
  * `--v`. The figure stays on the surface of the page, in the text colour, so it is as readable at 1 as at 0.
  *
- * tests/fixtures/heat-map.html: tokens, core's luz.css and the loose sheet, no script. Everything is CSS, so it runs in
+ * tests/fixtures/heat-map.html: tokens, core's luz.css and catalog's sheet, no script. Everything is CSS, so it runs in
  * `chromium` and in `chromium-nojs` (playwright.config.js: `'**\/heat-map.spec.js'` in the `testMatch` of `chromium-nojs`).
  * Axe needs script and is skipped there.
  */
@@ -288,11 +288,12 @@ test.describe('heat map: axe', () => {
 });
 
 test.describe('heat map: no script', () => {
-  test('it needs none: the fixture has no script, links the loose sheet after luz.css, and the swatches are drawn', async ({ page }) => {
+  test('it needs none: the fixture has no script, links the sheet of catalog after luz.css, and no sheet of core but luz.css, and the swatches are drawn', async ({ page }) => {
     const source = readFileSync(new URL('./fixtures/heat-map.html', import.meta.url), 'utf-8');
     expect(source).not.toMatch(/<script/i);
     const links = [...source.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m) => m[1]);
-    expect(links.indexOf('/packages/core/dist/components/heat-map.css')).toBe(links.indexOf('/packages/core/dist/luz.css') + 1);
+    expect(links.indexOf('/packages/catalog/dist/components/heat-map.css')).toBe(links.indexOf('/packages/core/dist/luz.css') + 1);
+    expect(links.filter((href) => href.startsWith('/packages/core/')), 'core has no sheet of it').toEqual(['/packages/core/dist/luz.css']);
     await open(page);
     const fill = await paintOf(page, 'var(--luz-chart-1)', hostOf(page, 'base'));
     expect(near(await swatchOf(page, row(page, 'base').nth(4)), fill, 2)).toBe(true);

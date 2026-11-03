@@ -2,8 +2,8 @@
 /**
  * The example "With data" of the Dashboard page (/docs/catalog/dashboard/): four panels in `ul.o-grid > li.luz-card.luz-dashboard__panel`,
  * a figure (`.luz-stat`), a bar list, a `<luz-chart type="line">` in the wide panel over a native table, and a stacked bar.
- * What the unit test cannot see: that each piece is drawn, that the sheets of the bar list and the stacked bar (the page's
- * `loose` key) are linked right after luz.css, the colours in the three modes, the reflow at 320 px and at 200% text, the equal
+ * What the unit test cannot see: that each piece is drawn, that the sheets of the bar list and the stacked bar (sheets of
+ * catalog, which the docs link through catalog-patterns.css) are loaded and core has no sheet of them, the colours in the three modes, the reflow at 320 px and at 200% text, the equal
  * height of the panels in a row, the order, and the width of the wide panel (tests/dashboard-data.test.js has the markup, the
  * sums and the prompt).
  *
@@ -119,19 +119,29 @@ test.describe('dashboard with data: four panels, each piece drawn', () => {
   });
 });
 
-test.describe('dashboard with data: the sheets of the loose key', () => {
-  test('the bar list and the stacked bar are linked right after luz.css, before the catalog\'s sheets, and the page loads them', async ({ page }) => {
-    const loaded = new Set();
-    page.on('response', (res) => { if (res.status() < 400 && /\.css(\?|$)/.test(res.url())) loaded.add(new URL(res.url()).pathname); });
+test.describe('dashboard with data: the sheets of the bar list and the stacked bar', () => {
+  test('are sheets of catalog that the page loads (through catalog-patterns.css), and core has no sheet of them', async ({ page }) => {
     await page.goto(PAGE);
-    const links = await page.evaluate(() => [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => new URL(/** @type {HTMLLinkElement} */ (l).href).pathname));
-    const at = links.indexOf('/packages/core/dist/luz.css');
-    expect(at).toBeGreaterThan(-1);
-    expect(links.slice(at + 1, at + 3)).toEqual(['/packages/core/dist/components/bar-list.css', '/packages/core/dist/components/stacked-bar.css']);
-    expect(links.findIndex((href) => href.startsWith('/packages/catalog/'))).toBeGreaterThan(at + 2);
     await page.waitForLoadState('load');
-    expect([...loaded]).toEqual(expect.arrayContaining(['/packages/core/dist/components/bar-list.css', '/packages/core/dist/components/stacked-bar.css']));
-    expect(links, 'the sheets the page does not use stay out').not.toContain('/packages/core/dist/components/heat-map.css');
+    const links = await page.evaluate(() => [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => new URL(/** @type {HTMLLinkElement} */ (l).href).pathname));
+    expect(links.filter((href) => href.startsWith('/packages/core/')), 'core\'s one stylesheet').toEqual(['/packages/core/dist/luz.css']);
+    expect(links, 'the docs\' catalog sheets').toContain('/apps/docs/catalog-patterns.css');
+    // the rules of the page, whatever sheet holds them (the dev server inlines the @import rules of catalog-patterns.css): the
+    // selectors of the bar list and of the stacked bar are there, and so is the layer of catalog that holds them
+    const selectors = await page.evaluate(() => {
+      const out = [];
+      const walk = (rules) => {
+        for (const rule of rules) {
+          if (/** @type {CSSStyleRule} */ (rule).selectorText) out.push(/** @type {CSSStyleRule} */ (rule).selectorText);
+          if (/** @type {CSSGroupingRule} */ (rule).cssRules) walk(/** @type {CSSGroupingRule} */ (rule).cssRules);
+        }
+      };
+      for (const sheet of document.styleSheets) {
+        try { walk(sheet.cssRules); } catch { /* a sheet of another origin */ }
+      }
+      return out;
+    });
+    for (const block of ['.luz-bar-list__meter', '.luz-stacked-bar__part']) expect(selectors.some((s) => s.includes(block)), `${block} is styled on the page`).toBe(true);
   });
 });
 
@@ -239,7 +249,8 @@ test.describe('dashboard with data: without JavaScript', () => {
   test('the sheets are linked, so the page does not depend on the script for them', async ({ page }) => {
     await page.goto(PAGE);
     const hrefs = await page.evaluate(() => [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => new URL(/** @type {HTMLLinkElement} */ (l).href).pathname));
-    const at = hrefs.indexOf('/packages/core/dist/luz.css');
-    expect(hrefs.slice(at + 1, at + 3)).toEqual(['/packages/core/dist/components/bar-list.css', '/packages/core/dist/components/stacked-bar.css']);
+    expect(hrefs.filter((href) => href.startsWith('/packages/core/')), 'core has no sheet of the pieces').toEqual(['/packages/core/dist/luz.css']);
+    expect(hrefs, 'the sheets of catalog come through catalog-patterns.css').toContain('/apps/docs/catalog-patterns.css');
+    expect(hrefs.indexOf('/apps/docs/catalog-patterns.css')).toBeGreaterThan(hrefs.indexOf('/packages/core/dist/luz.css'));
   });
 });

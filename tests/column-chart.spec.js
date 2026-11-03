@@ -1,10 +1,10 @@
 // @ts-check
 /**
- * `.luz-column-chart` of @luz-ds/core (`components/column-chart.css`, a loose sheet that a page links after luz.css): a native
+ * `.luz-column-chart` of @luz-ds/catalog (`components/column-chart.css`, a sheet that a page links after luz.css): a native
  * table drawn as columns. A cell holds its figure as text, `--v` (0 to 1) is the share of the top of the scale, and the cell
  * draws a column under its figure, from the foot up to that share, on the chart track.
  *
- * tests/fixtures/column-chart.html: tokens, core's luz.css and the loose sheet, no script. Everything is CSS, so it runs in
+ * tests/fixtures/column-chart.html: tokens, core's luz.css and catalog's sheet, no script. Everything is CSS, so it runs in
  * `chromium` and in `chromium-nojs` (playwright.config.js: `'**\/column-chart.spec.js'` in the `testMatch` of
  * `chromium-nojs`). Axe needs script and is skipped there.
  */
@@ -280,11 +280,12 @@ test.describe('column chart: axe', () => {
 });
 
 test.describe('column chart: no script', () => {
-  test('it needs none: the fixture has no script, links the loose sheet after luz.css, and the columns are drawn', async ({ page }) => {
+  test('it needs none: the fixture has no script, links the sheet of catalog after luz.css, and no sheet of core but luz.css, and the columns are drawn', async ({ page }) => {
     const source = readFileSync(new URL('./fixtures/column-chart.html', import.meta.url), 'utf-8');
     expect(source).not.toMatch(/<script/i);
     const links = [...source.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m) => m[1]);
-    expect(links.indexOf('/packages/core/dist/components/column-chart.css')).toBe(links.indexOf('/packages/core/dist/luz.css') + 1);
+    expect(links.indexOf('/packages/catalog/dist/components/column-chart.css')).toBe(links.indexOf('/packages/core/dist/luz.css') + 1);
+    expect(links.filter((href) => href.startsWith('/packages/core/')), 'core has no sheet of it').toEqual(['/packages/core/dist/luz.css']);
     await open(page);
     expect(await columnHeight(page.locator('#base tbody td').first())).toBeGreaterThan(40);
     const fill = await paintOf(page, 'var(--luz-chart-1)', hostOf(page, 'base'));

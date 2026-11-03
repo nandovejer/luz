@@ -107,53 +107,6 @@ function copyOfSources() {
   return dir;
 }
 
-/**
- * The sheets of core that luz.css does not hold, read as the build reads them: a file of src/components that the index does
- * not @import. A clause of the prompts is written for each; none is typed in the prompt sources.
- */
-const looseSheetsOf = (dir) => {
-  const components = join(dir, "packages/core/src/components");
-  const index = readFileSync(join(components, "index.css"), "utf-8");
-  return readdirSync(components)
-    .filter((f) => f.endsWith(".css") && f !== "index.css" && !f.startsWith("_") && !index.includes(`./${f}`))
-    .sort()
-    .map((f) => `components/${f}`);
-};
-
-/**
- * A throwaway repository like copyOfSources(), whose core also has a loose sheet that no prompt source names:
- * components/extra-bars.css, not imported by the index, and its class in core's classes.json. Everything else is the real
- * package, linked.
- */
-function copyWithExtraLooseSheet({ extra = true, importLoose = false } = {}) {
-  const dir = copyOfSources();
-  rmSync(join(dir, "packages"), { force: true });
-  mkdirSync(join(dir, "packages"));
-  for (const entry of readdirSync(join(root, "packages"))) if (entry !== "core") symlinkSync(join(root, "packages", entry), join(dir, "packages", entry));
-  const link = (from, to, except) => {
-    mkdirSync(to, { recursive: true });
-    for (const entry of readdirSync(from)) if (entry !== except) symlinkSync(join(from, entry), join(to, entry));
-  };
-  link(join(root, "packages/core"), join(dir, "packages/core"), "src");
-  link(join(root, "packages/core/src"), join(dir, "packages/core/src"), "components");
-  cpSync(join(root, "packages/core/src/components"), join(dir, "packages/core/src/components"), { recursive: true });
-  if (extra) writeFileSync(join(dir, "packages/core/src/components/extra-bars.css"), "/* a loose sheet of the test */\n.luz-extra-bars { display: grid; }\n");
-  if (importLoose) {
-    const imports = ["bar-list", "column-chart", "stacked-bar", "heat-map"].map((name) => `@import url("./${name}.css");`).join("\n");
-    writeFileSync(join(dir, "packages/core/src/components/index.css"), `${readFileSync(join(root, "packages/core/src/components/index.css"), "utf-8")}\n${imports}\n`);
-  }
-  rmSync(join(dir, "packages/core/dist"), { force: true });
-  link(join(root, "packages/core/dist"), join(dir, "packages/core/dist"), "classes.json");
-  const manifest = JSON.parse(readFileSync(join(root, "packages/core/dist/classes.json"), "utf-8"));
-  const file = ["components/extra-bars.css"];
-  if (extra) manifest.classes.push(
-    { name: "luz-extra-bars", kind: "component", layer: "luz.components", files: file, defined: true, block: "luz-extra-bars" },
-    { name: "luz-extra-bars--wide", kind: "component", layer: "luz.components", files: file, defined: false, block: "luz-extra-bars", modifier: "wide" },
-  );
-  writeFileSync(join(dir, "packages/core/dist/classes.json"), JSON.stringify(manifest));
-  return dir;
-}
-
 /* ---- the sources ------------------------------------------------------------ */
 
 describe("the sources of the prompts: one body, a preset per kind, the stacks", () => {
@@ -315,7 +268,7 @@ describe("what a prompt says about the system comes from the packages", () => {
   const PATTERNS = {
     landing: ["site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
     blog: ["site-header", "masthead", "site-footer", "page-header", "article-header", "article", "post-list"],
-    app: ["app-bar", "dashboard"],
+    app: ["app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map"],
     docs: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "page-footer"],
   };
   /** The pieces that fit `any` site among the patterns (the social links, and the pager since the minor tweaks): every prompt lists their classes, the four kinds link their files once. */
@@ -324,14 +277,14 @@ describe("what a prompt says about the system comes from the packages", () => {
   const PAGES = {
     landing: ["hero", "section", "site-footer", "site-header", "stat", "timeline"],
     blog: ["article-header", "masthead", "page-header", "post-list", "site-footer", "site-header", "timeline", "toc"],
-    app: ["app-bar", "dashboard", "sidebar"],
+    app: ["app-bar", "bar-list", "column-chart", "dashboard", "heat-map", "sidebar", "stacked-bar"],
     docs: ["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "sidebar", "terminal"],
   };
   /** The blocks only one kind uses: the classes the other prompts must not list. */
   const EXCLUSIVE = {
     landing: ["luz-hero", "luz-main", "luz-section", "luz-stat", "luz-glow"],
     blog: ["luz-masthead", "luz-page-header", "luz-article-header", "luz-article", "luz-toc", "luz-post-list"],
-    app: ["luz-app-bar", "luz-dashboard"],
+    app: ["luz-app-bar", "luz-dashboard", "luz-bar-list", "luz-column-chart", "luz-stacked-bar", "luz-heat-map"],
     docs: ["luz-docs-layout", "luz-doc-header", "luz-page-rail", "luz-example", "luz-do-dont", "luz-page-footer"],
   };
   const catalogLinks = (text) => [...text.matchAll(/<link rel="stylesheet" href="https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/catalog@[^/"]+\/dist\/components\/([a-z0-9-]+)\.min\.css">/g)].map((m) => m[1]);
@@ -450,65 +403,33 @@ describe("what a prompt says about the system comes from the packages", () => {
     expect(missing, `${id}: names no package has`).toEqual([]);
   });
 
-  it.each(IDS)("%s: lists the bar list among core's classes, with the options and the parts the manifest of core has for it", (id) => {
-    const classes = json("packages/core/dist/classes.json").classes.filter((c) => c.block === "luz-bar-list");
-    expect(classes.length, "core's manifest has the bar list").toBeGreaterThan(5);
-    expect(classes.find((c) => c.name === "luz-bar-list")?.files, "its stylesheet is a file of core").toEqual(["components/bar-list.css"]);
-    const own = classes.filter((c) => c.name !== "luz-bar-list").map((c) => (c.part ? `__${c.part}${c.modifier ? `--${c.modifier}` : ""}` : `--${c.modifier}`));
-    const line = prompt(id).split("\n").find((l) => l.startsWith("- `luz-bar-list`"));
-    expect(line, `${id}: a line for luz-bar-list`).toBeTruthy();
-    const listed = [...line.matchAll(/`((?:--|__)[a-z0-9_-]+)`/g)].map((m) => m[1]);
-    expect(listed.sort(), id).toEqual(own.sort());
-    // it is core's: between the classes of core, before the catalog's
+  it.each(IDS)("%s: has no clause that sends a sheet to be linked after luz.css: core has no loose sheet, the four charts are catalog's (2026-11-03)", (id) => {
     const text = prompt(id);
-    expect(text.indexOf("- `luz-bar-list`"), id).toBeLessThan(text.indexOf("From `@luz-ds/catalog`") === -1 ? Infinity : text.indexOf("From `@luz-ds/catalog`"));
+    expect(text, id).not.toMatch(/\(link `/);
+    expect(text, id).not.toMatch(/after `luz\.css`\)/);
+    expect(text, id).not.toContain("components/bar-list.css");
+    for (const name of ["bar-list", "column-chart", "stacked-bar", "heat-map"]) expect(json("packages/core/dist/classes.json").classes.filter((c) => (c.files ?? []).includes(`components/${name}.css`)), `core's manifest has no class of ${name}`).toEqual([]);
   });
 
-  it.each(IDS)("%s: says on the line of each class of a loose core sheet to link it after luz.css, and on no other line", (id) => {
-    const loose = looseSheetsOf(root);
-    expect(loose, "core has loose sheets: the bar list and the three charts").toEqual(["components/bar-list.css", "components/column-chart.css", "components/heat-map.css", "components/stacked-bar.css"]);
-    const manifest = json("packages/core/dist/classes.json").classes;
-    const lines = prompt(id).split("\n").filter((l) => l.startsWith("- `luz-") || l.startsWith("- the parts of"));
-    const clause = (file) => ` (link \`${file}\` after \`luz.css\`)`;
-    // the line of the bar list carries the clause, between the class and its options
-    const bar = lines.find((l) => l.startsWith("- `luz-bar-list`"));
-    expect(bar, `${id}: the line of the bar list`).toMatch(/^- `luz-bar-list` \(link `components\/bar-list\.css` after `luz\.css`\): `--cells`/);
-    // each block whose own class is in a loose sheet has the clause; a class of luz.css has none
-    for (const c of manifest.filter((k) => k.name === (k.block ?? k.name))) {
-      const own = (c.files ?? []).find((f) => loose.includes(f));
-      const line = lines.find((l) => l.startsWith(`- \`${c.name}\``));
-      if (!line) continue;
-      if (own) expect(line.startsWith(`- \`${c.name}\`${clause(own)}`), `${id}: ${c.name} says where its sheet is`).toBe(true);
-      else expect(line, `${id}: ${c.name} is in luz.css and says nothing of a sheet`).not.toContain("(link ");
-    }
-    expect(lines.filter((l) => l.includes("(link ")).length, `${id}: one clause for each loose sheet`).toBe(loose.length);
-    // and catalog's lines (its sheets are the ones the prompt links one by one) have none
-    expect(prompt(id).split("From `@luz-ds/catalog`:")[1] ?? "", id).not.toMatch(/^- `luz-[a-z0-9-]+` \(link /m);
+  it("app: lists the bar list among catalog's classes, with the options and the parts the manifest of catalog has for it, and the other four prompts do not list it", () => {
+    const classes = json("packages/catalog/dist/classes.json").classes.filter((c) => c.block === "luz-bar-list");
+    expect(classes.length, "catalog's manifest has the bar list").toBeGreaterThan(5);
+    expect(classes.find((c) => c.name === "luz-bar-list")?.files, "its stylesheet is a file of catalog").toEqual(["components/bar-list.css"]);
+    const own = classes.filter((c) => c.name !== "luz-bar-list").map((c) => (c.part ? `__${c.part}${c.modifier ? `--${c.modifier}` : ""}` : `--${c.modifier}`));
+    const text = prompt("app");
+    const line = text.split("\n").find((l) => l.startsWith("- `luz-bar-list`"));
+    expect(line, "a line for luz-bar-list").toBeTruthy();
+    expect([...line.matchAll(/`((?:--|__)[a-z0-9_-]+)`/g)].map((m) => m[1]).sort()).toEqual(own.sort());
+    expect(text.indexOf("- `luz-bar-list`"), "it is among catalog's classes, after core's").toBeGreaterThan(text.indexOf("From `@luz-ds/catalog`"));
+    for (const id of ["start", "landing", "blog", "docs"]) expect(prompt(id), id).not.toContain("`luz-bar-list`");
   });
 
-  it("a loose sheet of core that no prompt source names gets its clause too: the generator reads it from the sources, nothing is typed", () => {
-    const dir = copyWithExtraLooseSheet();
-    expect(looseSheetsOf(dir)).toEqual(["components/bar-list.css", "components/column-chart.css", "components/extra-bars.css", "components/heat-map.css", "components/stacked-bar.css"]);
-    for (const id of IDS) {
-      const text = assemble(id, { root: dir });
-      expect(text, `${id}: the new sheet`).toContain("\n- `luz-extra-bars` (link `components/extra-bars.css` after `luz.css`): `--wide`\n");
-      expect(text, `${id}: the bar list still has its own`).toContain("\n- `luz-bar-list` (link `components/bar-list.css` after `luz.css`): ");
-      expect(text.match(/\(link `components\//g), `${id}: a clause each, no more`).toHaveLength(5);
-    }
-    for (const file of readdirSync(join(root, "apps/site/prompts"), { recursive: true }).filter((f) => /\.(md|json)$/.test(f))) {
-      expect(read(`apps/site/prompts/${file}`), `${file} names no loose sheet`).not.toMatch(/bar-list|extra-bars/);
-    }
-    expect(assemble("start", { root: dir }).replace(/\n- `luz-extra-bars`[^\n]*/, ""), "the rest of the prompt is the real one").toBe(prompt("start"));
-  });
-
-  it("when luz.css holds every sheet of core, no line has a clause: the clause follows the sources, not the bar list", () => {
-    const dir = copyWithExtraLooseSheet({ extra: false, importLoose: true });
-    expect(looseSheetsOf(dir)).toEqual([]);
-    for (const id of IDS) {
-      const text = assemble(id, { root: dir });
-      expect(text, id).not.toContain("(link `");
-      expect(text, id).toContain("\n- `luz-bar-list`: `--cells`");
-    }
+  it("app: links the four charts as catalog files, after the dashboard and in the order of the cascade, and the other four prompts link none of them", () => {
+    const links = catalogLinks(prompt("app"));
+    const charts = ["bar-list", "column-chart", "stacked-bar", "heat-map"];
+    expect(links.filter((n) => charts.includes(n)), "in the order of CASCADE").toEqual(charts);
+    expect(links.indexOf("bar-list")).toBe(links.indexOf("dashboard") + 1);
+    for (const id of ["start", "landing", "blog", "docs"]) expect(catalogLinks(prompt(id)).filter((n) => charts.includes(n)), id).toEqual([]);
   });
 
   it.each(IDS)("%s: every <luz-*> element it names exists in the custom-elements.json of some package", (id) => {
