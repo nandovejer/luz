@@ -219,3 +219,100 @@ test.describe('axe on the landing 0.2 page', () => {
     });
   }
 });
+
+/* ---- .luz-section__more: a link at the end of the head, in a row with the title (tests/fixtures/section-more.html) ---- */
+
+const MORE = '/tests/fixtures/section-more.html';
+
+async function openMore(page, width = 1280, dir = 'ltr') {
+  await page.setViewportSize({ width, height: 900 });
+  await page.goto(MORE);
+  await page.waitForLoadState('load');
+  if (dir === 'rtl') await page.evaluate(() => { document.documentElement.dir = 'rtl'; document.documentElement.lang = 'ar'; });
+}
+
+const box = (page, selector) => page.locator(selector).evaluate((el) => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom }; });
+
+/** Where the text of an element sits on its line: an empty inline-block at its end rests on the baseline, and its bottom edge is the baseline. */
+const baseline = (page, selector) =>
+  page.locator(selector).evaluate((el) => {
+    const probe = document.createElement('span');
+    probe.style.cssText = 'display:inline-block;inline-size:0;block-size:0';
+    el.append(probe);
+    const y = probe.getBoundingClientRect().bottom;
+    probe.remove();
+    return y;
+  });
+
+test.describe('section head link: .luz-section__more', () => {
+  test('in left-to-right the link is at the end of the head, level with the title, and the title stays at the start', async ({ page }) => {
+    await openMore(page);
+    const [row, title, more] = [await box(page, '#short-head'), await box(page, '#short-title'), await box(page, '#short-more')];
+    expect(Math.abs(more.right - row.right), 'the link ends where the row ends').toBeLessThanOrEqual(1);
+    expect(more.left, 'the link is after the title').toBeGreaterThan(title.right);
+    expect(Math.abs(title.left - row.left), 'the title starts where the row starts').toBeLessThanOrEqual(1);
+    expect(more.left - title.right, 'the auto margin leaves room between them').toBeGreaterThan(20);
+  });
+
+  test('in right-to-left the link is at the end, which is the left, and the title at the right', async ({ page }) => {
+    await openMore(page, 1280, 'rtl');
+    const [row, title, more] = [await box(page, '#short-head'), await box(page, '#short-title'), await box(page, '#short-more')];
+    expect(Math.abs(more.left - row.left), 'the link starts at the row\'s left edge').toBeLessThanOrEqual(1);
+    expect(more.right, 'the link is after the title, to its left').toBeLessThan(title.left);
+    expect(Math.abs(title.right - row.right), 'the title starts at the right').toBeLessThanOrEqual(1);
+  });
+
+  test('the link sits on the baseline of the title, not at the top or the bottom of its line', async ({ page }) => {
+    await openMore(page);
+    const [title, more] = [await baseline(page, '#short-title'), await baseline(page, '#short-more')];
+    expect(Math.abs(title - more), `title ${title}, link ${more}`).toBeLessThanOrEqual(1.5);
+    // …and the title is the taller of the two, so a link centred or stretched would be somewhere else
+    expect((await box(page, '#short-title')).bottom - (await box(page, '#short-title')).top).toBeGreaterThan((await box(page, '#short-more')).bottom - (await box(page, '#short-more')).top);
+  });
+
+  test('it is an ordinary link, in the link colour and not the title\'s', async ({ page }) => {
+    await openMore(page);
+    const color = (selector) => page.locator(selector).evaluate((el) => getComputedStyle(el).color);
+    const token = await page.evaluate(() => {
+      const probe = document.createElement('a');
+      probe.href = '#';
+      document.body.append(probe);
+      const resolved = getComputedStyle(probe).color;
+      probe.remove();
+      return resolved;
+    });
+    expect(await color('#short-more')).toBe(token);
+    expect(await color('#short-more')).not.toBe(await color('#short-title'));
+  });
+
+  for (const [dir, label] of [['ltr', 'left-to-right'], ['rtl', 'right-to-left']]) {
+    test(`with a long title at 320 px (${label}) the link wraps under it, at the end, and nothing scrolls sideways`, async ({ page }) => {
+      await openMore(page, 320, dir);
+      const [row, title, more] = [await box(page, '#long-head'), await box(page, '#long-title'), await box(page, '#long-more')];
+      expect(more.top, 'under the title').toBeGreaterThanOrEqual(title.bottom - 1);
+      if (dir === 'ltr') expect(Math.abs(more.right - row.right), 'still at the end').toBeLessThanOrEqual(1);
+      else expect(Math.abs(more.left - row.left), 'still at the end').toBeLessThanOrEqual(1);
+      expect(more.left).toBeGreaterThanOrEqual(-1);
+      expect(more.right).toBeLessThanOrEqual(320 + 1);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+    });
+  }
+
+  test('with 200 % text at 320 px the head wraps and nothing scrolls sideways', async ({ page }) => {
+    await openMore(page, 320);
+    await page.evaluate(() => document.head.append(Object.assign(document.createElement('style'), { textContent: 'html { font-size: 200% }' })));
+    const [title, more] = [await box(page, '#short-title'), await box(page, '#short-more')];
+    expect(more.top).toBeGreaterThanOrEqual(title.bottom - 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+  });
+
+  for (const theme of ['light', 'dark', 'high-contrast']) {
+    test(`axe finds nothing serious in ${theme}`, async ({ page }, testInfo) => {
+      test.skip(testInfo.project.name === 'chromium-nojs', 'axe needs JavaScript');
+      await openMore(page);
+      await page.evaluate((t) => { document.documentElement.dataset.theme = t; }, theme);
+      const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(violations.filter((v) => ['serious', 'critical'].includes(v.impact)).map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+    });
+  }
+});

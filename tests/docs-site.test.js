@@ -1072,7 +1072,8 @@ describe("the LUZ docs site", () => {
         expect(ids.every(Boolean), `${kind.id}: every recipe has an id`).toBe(true);
         expect(new Set(ids).size, `${kind.id}: ids are unique`).toBe(ids.length);
         // F8: a page of a kind is a catalog page that names the kind in its `fits-kinds`, whatever its name
-        const fitting = new Set(site.pages.filter((p) => p.meta.area === "catalog" && (p.meta["fits-kinds"] ?? "").split(/,\s*/).includes(kind.id)).map((p) => p.route));
+        // A page that fits `any` site (the pager, since the minor tweaks) fits this kind too: a recipe may link it
+        const fitting = new Set(site.pages.filter((p) => p.meta.area === "catalog" && (p.meta["fits-kinds"] ?? "").split(/,\s*/).some((k) => k === kind.id || k === "any")).map((p) => p.route));
         h2.forEach((heading, i) => {
           const end = h2[i + 1]?.open.index ?? Infinity;
           const within = (node) => node.open.index > heading.open.index && node.open.index < end;

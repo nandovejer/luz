@@ -316,21 +316,23 @@ describe("what a prompt says about the system comes from the packages", () => {
     landing: ["site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
     blog: ["site-header", "masthead", "site-footer", "page-header", "article-header", "article", "post-list"],
     app: ["app-bar", "dashboard"],
-    docs: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
+    docs: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "page-footer"],
   };
+  /** The pieces that fit `any` site among the patterns (the social links, and the pager since the minor tweaks): every prompt lists their classes, the four kinds link their files once. */
+  const ANY_PATTERNS = ["social", "pager"];
   /** The pages that name each kind in `fits-kinds`, any of them, as a set: the order is the docs' (the `order` of each page). */
   const PAGES = {
     landing: ["hero", "section", "site-footer", "site-header", "stat", "timeline"],
     blog: ["article-header", "masthead", "page-header", "post-list", "site-footer", "site-header", "timeline", "toc"],
     app: ["app-bar", "dashboard", "sidebar"],
-    docs: ["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "pager", "sidebar", "terminal"],
+    docs: ["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "sidebar", "terminal"],
   };
   /** The blocks only one kind uses: the classes the other prompts must not list. */
   const EXCLUSIVE = {
     landing: ["luz-hero", "luz-main", "luz-section", "luz-stat", "luz-glow"],
     blog: ["luz-masthead", "luz-page-header", "luz-article-header", "luz-article", "luz-toc", "luz-post-list"],
     app: ["luz-app-bar", "luz-dashboard"],
-    docs: ["luz-docs-layout", "luz-doc-header", "luz-page-rail", "luz-example", "luz-do-dont", "luz-pager", "luz-page-footer"],
+    docs: ["luz-docs-layout", "luz-doc-header", "luz-page-rail", "luz-example", "luz-do-dont", "luz-page-footer"],
   };
   const catalogLinks = (text) => [...text.matchAll(/<link rel="stylesheet" href="https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/catalog@[^/"]+\/dist\/components\/([a-z0-9-]+)\.min\.css">/g)].map((m) => m[1]);
   const ALL_PATTERN_FILES = [...new Set(Object.values(PATTERNS).flat())];
@@ -339,14 +341,16 @@ describe("what a prompt says about the system comes from the packages", () => {
   it.each(["landing", "blog", "app", "docs"])("%s: the install lines are tokens, core and catalog, and link every pattern of its kind, in the order of the cascade, after the other catalog files (the kind's patterns come from `fits-kinds`: no package of a kind)", (id) => {
     const text = prompt(id);
     const all = catalogLinks(text);
-    // The social links fit any site: every kind links them, once, at their place in the cascade (after the glow, before the page header),
-    // which is among the patterns of the kind but is not one of them
-    expect(all.filter((n) => n === "social"), `${id}: links social.min.css once`).toHaveLength(1);
-    for (const name of PATTERNS[id]) expect(all.indexOf(name) < all.indexOf("social"), `${id}: social comes ${CASCADE.indexOf(name) < CASCADE.indexOf("social") ? "after" : "before"} ${name}, as in CASCADE`).toBe(CASCADE.indexOf(name) < CASCADE.indexOf("social"));
+    // The social links and the pager fit any site: every kind links them, once, at their place in the cascade (social after the glow, before the page header;
+    // the pager after the do and don't, before the page footer), which is among the patterns of the kind but is not one of them
+    for (const any of ANY_PATTERNS) {
+      expect(all.filter((n) => n === any), `${id}: links ${any}.min.css once`).toHaveLength(1);
+      for (const name of PATTERNS[id]) expect(all.indexOf(name) < all.indexOf(any), `${id}: ${any} comes ${CASCADE.indexOf(name) < CASCADE.indexOf(any) ? "after" : "before"} ${name}, as in CASCADE`).toBe(CASCADE.indexOf(name) < CASCADE.indexOf(any));
+    }
     // The page transition (a stylesheet with no class and no tag, for any site) ends the cascade: every kind links it, after its patterns
     expect(all.filter((name) => name === "page-transition"), `${id}: links the page transition once`).toHaveLength(1);
     expect(all.at(-1), `${id}: the page transition is the last of the cascade`).toBe("page-transition");
-    const links = all.slice(0, -1).filter((n) => n !== "social");
+    const links = all.slice(0, -1).filter((n) => !ANY_PATTERNS.includes(n));
     expect(links.filter(isPattern), `${id}: its patterns, and no other kind's`).toEqual(PATTERNS[id]);
     // The patterns come last: what they refine is linked before them
     expect(links.slice(links.length - PATTERNS[id].length), id).toEqual(PATTERNS[id]);
@@ -550,6 +554,10 @@ describe("what a prompt says about the system comes from the packages", () => {
     expect(readFileSync(join(dir, "apps/docs/pages/catalog/social.html"), "utf-8")).toMatch(/^fits-kinds: any$/m);
     for (const id of ["landing", "blog", "app", "docs"]) expect(catalogLinks(member("assemblePrompt")(id, { root: dir })), `${id} links social`).toContain("social");
     for (const id of ["start", "landing", "blog", "app", "docs"]) expect(member("assemblePrompt")(id, { root: dir }), `${id} lists luz-social`).toMatch(/^- `luz-social`: `--icons`$/m);
+    // …and so does the pager (since the minor tweaks): its file is in the four prompts that link patterns, and its class, with its parts, in the five
+    expect(readFileSync(join(dir, "apps/docs/pages/catalog/pager.html"), "utf-8")).toMatch(/^fits-kinds: any$/m);
+    for (const id of ["landing", "blog", "app", "docs"]) expect(catalogLinks(member("assemblePrompt")(id, { root: dir })), `${id} links pager`).toContain("pager");
+    for (const id of ["start", "landing", "blog", "app", "docs"]) expect(member("assemblePrompt")(id, { root: dir }), `${id} lists luz-pager`).toMatch(/^- `luz-pager`: `__label`/m);
     // the terminal fits docs: when its page adds app, the app prompt links its file, and the landing page's still does not
     const terminal = join(dir, "apps/docs/pages/catalog/terminal.html");
     expect(catalogLinks(member("assemblePrompt")("app", { root: dir })), "before").not.toContain("terminal");

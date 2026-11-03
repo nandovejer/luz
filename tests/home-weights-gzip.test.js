@@ -17,7 +17,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { BASE } from "../scripts/luz-packages.js";
-import { PATTERNS } from "./helpers/catalog-names.js";
+import { ANY_SITE, PATTERNS } from "./helpers/catalog-names.js";
 import { findAll, parse, query, queryAll, textOf } from "./helpers/html-dom.js";
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -62,8 +62,8 @@ const budgets = JSON.parse(read("budgets.json")).budgets;
 // (`dir/*.ext`): catalog has no bundle, so its weight is the sum of its components. The patterns of the
 // kinds of site (the 20 blocks `components/{hero,site-header,…}.min.css`, F8; `{landing,cms,app,docs}-*` before) are catalog files too, but the home
 // weighs the pieces every site can use: they are left out, as they were when each kind was a package of its own
-// The social links fit any site, as the navbar does: they are one of the pieces every site can use, so the home weighs them
-const KIND_PATTERN = new RegExp(`/components/(?:${PATTERNS.filter((name) => name !== "social").join("|")})(?:\\.min)?\\.css$`);
+// The social links and the pager fit any site, as the navbar does: they are pieces every site can use, so the home weighs them
+const KIND_PATTERN = new RegExp(`/components/(?:${PATTERNS.filter((name) => !ANY_SITE.includes(name)).join("|")})(?:\\.min)?\\.css$`);
 const globbed = (glob) => {
   // A row of the patterns of the kinds (a list of block names) matches nothing the home weighs
   const [, dir, ext] = /^(.*)\/\*(\.[a-z.]+)$/.exec(glob) ?? [];
