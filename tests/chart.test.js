@@ -542,7 +542,7 @@ describe("the changeset and the review record", () => {
 
   it("dev/BROWSER-REVIEWS.md has an Open row for the chart: its files, what to look at, and both browsers", () => {
     const open = read("dev/BROWSER-REVIEWS.md").split(/^## Closed/m)[0];
-    const row = open.split("\n").find((line) => line.startsWith("|") && line.includes("<luz-chart>"));
+    const row = open.split("\n").find((line) => line.startsWith("|") && line.includes("<luz-chart>") && line.includes("packages/catalog/src/chart.js"));
     expect(row, "a row of <luz-chart> in the Open section").toBeTruthy();
     const cells = row.split("|").map((c) => c.trim());
     expect(cells[2]).toContain("chart.js");

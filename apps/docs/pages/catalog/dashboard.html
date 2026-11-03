@@ -7,6 +7,7 @@ group: content
 fits-kinds: app
 fits: the first view of an application
 files: components/dashboard.css
+loose: components/bar-list.css; components/stacked-bar.css
 keywords: panels, widgets, overview, cards grid
 toc: h2,h3
 -->
@@ -45,6 +46,73 @@ toc: h2,h3
           <p class="docs-demo__note">The dashboard at the width of this column. In a page it is the <code class="luz-code-inline">&lt;main&gt;</code>, and the title is the page's <code class="luz-code-inline">&lt;h1&gt;</code>: here this page already has its own, so the title is a paragraph and the panels' titles are <code class="luz-code-inline">&lt;h3&gt;</code>.</p>
           <p class="docs-demo__note">The grid answers to the room of the dashboard, not to the window's.</p>
           </div>
+          <h3 id="example-data">With data</h3>
+          <p>The same view with four panels that show data: a figure, a bar list, a line chart and a stacked bar, each over a native list or table that stays in the page. The titles, the panels and the figures are made up for this example. What a panel shows, what it is called and where its numbers come from are yours to write: LUZ gives the pieces, not a finished dashboard.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-dashboard">
+              <div class="luz-dashboard__head">
+                <p class="luz-dashboard__title">Overview (sample data)</p>
+              </div>
+              <ul class="o-grid o-grid--auto">
+                <li class="luz-card luz-dashboard__panel">
+                  <h3 class="luz-card__title">Orders this month</h3>
+                  <div class="luz-stat">
+                    <p class="luz-stat__value">1,204</p>
+                    <p class="luz-stat__label">12 % more than last month</p>
+                  </div>
+                </li>
+                <li class="luz-card luz-dashboard__panel">
+                  <h3 class="luz-card__title" id="dash-channel">Orders by channel</h3>
+                  <figure class="luz-bar-list" aria-labelledby="dash-channel">
+                    <ul class="luz-bar-list__rows">
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Online</span><span class="luz-bar-list__figure">640</span><meter class="luz-bar-list__meter" min="0" max="1204" value="640" aria-hidden="true">640 of 1,204</meter></li>
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">In store</span><span class="luz-bar-list__figure">410</span><meter class="luz-bar-list__meter" min="0" max="1204" value="410" aria-hidden="true">410 of 1,204</meter></li>
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Phone</span><span class="luz-bar-list__figure">154</span><meter class="luz-bar-list__meter" min="0" max="1204" value="154" aria-hidden="true">154 of 1,204</meter></li>
+                    </ul>
+                  </figure>
+                </li>
+                <li class="luz-card luz-dashboard__panel luz-dashboard__panel--wide">
+                  <h3 class="luz-card__title">Orders over time</h3>
+                  <luz-chart type="line" data-luz-label-table="Show table" data-luz-label-chart="Show chart">
+                    <table class="luz-table">
+                      <caption>Orders per month, January to June</caption>
+                      <thead>
+                        <tr><th scope="col">Month</th><th scope="col">Orders</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><th scope="row">Jan</th><td data-label="Orders"><data value="820">820</data></td></tr>
+                        <tr><th scope="row">Feb</th><td data-label="Orders"><data value="905">905</data></td></tr>
+                        <tr><th scope="row">Mar</th><td data-label="Orders"><data value="870">870</data></td></tr>
+                        <tr><th scope="row">Apr</th><td data-label="Orders"><data value="1010">1,010</data></td></tr>
+                        <tr><th scope="row">May</th><td data-label="Orders"><data value="1075">1,075</data></td></tr>
+                        <tr><th scope="row">Jun</th><td data-label="Orders"><data value="1204">1,204</data></td></tr>
+                      </tbody>
+                    </table>
+                  </luz-chart>
+                </li>
+                <li class="luz-card luz-dashboard__panel">
+                  <h3 class="luz-card__title" id="dash-status">Orders by status</h3>
+                  <figure class="luz-stacked-bar" aria-labelledby="dash-status">
+                    <div class="luz-stacked-bar__bar" aria-hidden="true">
+                      <span class="luz-stacked-bar__part" style="--v: 62"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 21"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 9"></span>
+                      <span class="luz-stacked-bar__part" style="--v: 8"></span>
+                    </div>
+                    <ul class="luz-stacked-bar__legend">
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delivered</span> <span class="luz-stacked-bar__figure">62 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">In transit</span> <span class="luz-stacked-bar__figure">21 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Delayed</span> <span class="luz-stacked-bar__figure">9 %</span></li>
+                      <li class="luz-stacked-bar__item"><span class="luz-stacked-bar__name">Returned</span> <span class="luz-stacked-bar__figure">8 %</span></li>
+                    </ul>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p class="docs-demo__note">The wide panel is the line chart: it takes two columns when the view has the room.</p>
+          </div>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Dashboard documentation">
@@ -80,6 +148,62 @@ toc: h2,h3
   &lt;/ul&gt;
 &lt;/main&gt;</code></pre>
             </div>
+            <p>A panel that shows data holds one of core's data pieces or <a href="/docs/catalog/chart/">the chart</a>, each over a native list or table that stays in the page. The figures here are samples: the numbers, the titles and the panels are yours.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-dashboard-data" aria-label="Copy the data panels markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Data panels markup"><code id="code-dashboard-data">&lt;!-- Sample figures: write your own --&gt;
+&lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot;&gt;Orders this month&lt;/h2&gt;
+    &lt;div class=&quot;luz-stat&quot;&gt;
+      &lt;p class=&quot;luz-stat__value&quot;&gt;1,204&lt;/p&gt;
+      &lt;p class=&quot;luz-stat__label&quot;&gt;12 % more than last month&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-channel&quot;&gt;Orders by channel&lt;/h2&gt;
+    &lt;figure class=&quot;luz-bar-list&quot; aria-labelledby=&quot;by-channel&quot;&gt;
+      &lt;ul class=&quot;luz-bar-list__rows&quot;&gt;
+        &lt;li class=&quot;luz-bar-list__row&quot;&gt;
+          &lt;span class=&quot;luz-bar-list__name&quot;&gt;Online&lt;/span&gt;
+          &lt;span class=&quot;luz-bar-list__figure&quot;&gt;640&lt;/span&gt;
+          &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;1204&quot; value=&quot;640&quot; aria-hidden=&quot;true&quot;&gt;640 of 1,204&lt;/meter&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/figure&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel luz-dashboard__panel--wide&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot;&gt;Orders over time&lt;/h2&gt;
+    &lt;luz-chart type=&quot;line&quot; data-luz-label-table=&quot;Show table&quot; data-luz-label-chart=&quot;Show chart&quot;&gt;
+      &lt;table class=&quot;luz-table&quot;&gt;
+        &lt;caption&gt;Orders per month, January to June&lt;/caption&gt;
+        &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Month&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Orders&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Jan&lt;/th&gt;&lt;td data-label=&quot;Orders&quot;&gt;&lt;data value=&quot;820&quot;&gt;820&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;!-- one tr for each month --&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/luz-chart&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-status&quot;&gt;Orders by status&lt;/h2&gt;
+    &lt;figure class=&quot;luz-stacked-bar&quot; aria-labelledby=&quot;by-status&quot;&gt;
+      &lt;div class=&quot;luz-stacked-bar__bar&quot; aria-hidden=&quot;true&quot;&gt;
+        &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 62&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 38&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;ul class=&quot;luz-stacked-bar__legend&quot;&gt;
+        &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Delivered&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;62 %&lt;/span&gt;&lt;/li&gt;
+        &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Other&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;38 %&lt;/span&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/figure&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </div>
             <h3 id="variants">Variants and options</h3>
             <p>One modifier, for the panel. The dashboard is a class of app on a native <code>&lt;main&gt;</code>; the grid and the card are core's.</p>
             <div class="luz-table-wrap" role="region" aria-label="Dashboard classes" tabindex="0">
@@ -105,6 +229,8 @@ toc: h2,h3
               <li>The dashboard is a size container. The wide panel asks how wide the dashboard is, not the window, so it fits with a sidebar and without one. From 40 rem two columns always exist (two of 18 rem and a gap), and at 200% text both are in rem, so it never overflows.</li>
               <li>The panels keep the order of the markup. There is no dense packing and no <code>order</code>: a wide panel that does not fit in what is left of a row starts the next one, and the gap stays. Reading order, focus order and what is drawn are the same.</li>
               <li>A panel can shrink, so a long line of code or a table inside it scrolls in its own wrapper and does not widen the column.</li>
+              <li>A panel with data uses the pieces that already exist: the <a href="/docs/catalog/stat/">stat</a> for one figure, core's <a href="/docs/components/bar-list/">bar list</a>, <a href="/docs/components/column-chart/">column chart</a>, <a href="/docs/components/stacked-bar/">stacked bar</a> and <a href="/docs/components/heat-map/">heat map</a>, and <a href="/docs/catalog/chart/">the chart</a> for a trend. Each draws a list or a table you wrote, and that list or table stays in the page. The bar list, the column chart, the stacked bar and the heat map are separate stylesheets: link each one you use after <code>luz.css</code>.</li>
+              <li>The data is yours. LUZ does not fetch, count or invent figures, and the example's titles and numbers are samples to replace.</li>
               <li>Empty, loading and failed panels are the panel's own content: a sentence and a link, core's <a href="/docs/components/progress/">progress</a> or <a href="/docs/components/alert/">alert</a>. There is no skeleton class in 0.1.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
@@ -115,6 +241,7 @@ toc: h2,h3
               <li><strong>Headings:</strong> the view has one <code>&lt;h1&gt;</code>, in the title row, and each panel starts with an <code>&lt;h2&gt;</code>. The title row is a <code>&lt;div&gt;</code>, not a <code>&lt;header&gt;</code>.</li>
               <li><strong>List:</strong> the panels are a <code>&lt;ul&gt;</code> of <code>&lt;li&gt;</code>: a screen reader says how many there are. Safari can drop the list role from a list without markers; the headings still lead through the panels.</li>
               <li><strong>Actions:</strong> an action that goes somewhere is a link (<code>&lt;a href&gt;</code>); one that does something on this page is a <code>&lt;button type="button"&gt;</code>. Never an <code>&lt;a&gt;</code> without <code>href</code>.</li>
+              <li><strong>Data:</strong> a panel's figures are text first (a name and a number, or a table), so every panel reads with no picture. The chart's own button swaps the drawing for its table, and a change is never told by colour alone: a comparison says "12 % more than last month" in words.</li>
               <li><strong>Landmarks:</strong> the dashboard is the page's <code>&lt;main&gt;</code>, the sibling of the <a href="/docs/catalog/app-bar/">header</a>. It takes the skip link's target, with <code>tabindex="-1"</code>.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -156,6 +283,7 @@ toc: h2,h3
               <li>Main action: a verb and what it makes, "New report". One per view.</li>
               <li>Panel title: the subject, "Stock alerts". Under it, one sentence with the number: "Three products are below their minimum."</li>
               <li>Link: where it goes, "Review stock", not "More" or "Click here".</li>
+              <li>Figures: only real ones. A sample is marked as a sample in the page that shows it, and a made-up number never ships as a finished dashboard.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
             <p>The title sits on the page surface and the panels' text on the card's surface.</p>

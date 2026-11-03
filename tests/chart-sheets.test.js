@@ -228,7 +228,7 @@ describe.each(CHARTS)("the page of the $name", ({ name, block, title }) => {
     expect(html).toContain(json("apps/docs/i18n/es/strings.json")["notice.pending"]);
   });
 
-  it("links the sheet right after luz.css and before every catalog sheet, in English and in Spanish, and on no other page of the docs", () => {
+  it("links the sheet right after luz.css and before every catalog sheet, in English and in Spanish, and on no other page of the docs than the Dashboard's when its `loose` key names it", () => {
     for (const r of [route, `/es${route}`]) {
       expect(rendered().get(r), `${r} is rendered`).toBeTruthy();
       const links = sheets(rendered().get(r));
@@ -237,8 +237,17 @@ describe.each(CHARTS)("the page of the $name", ({ name, block, title }) => {
       const firstCatalog = links.findIndex((href) => href.startsWith("/packages/catalog/"));
       if (firstCatalog > -1) expect(firstCatalog, r).toBeGreaterThan(links.indexOf(LINK));
     }
+    // The Dashboard page uses the stacked bar without documenting it: its `loose` key names the sheet, in every language
+    const dashboard = (site.byRoute.get("/docs/catalog/dashboard/").meta.loose ?? "").split(";").map((f) => f.trim());
+    const onDashboard = dashboard.includes(SHEET_OF(name));
+    if (name === "stacked-bar") expect(dashboard, "the Dashboard page names the stacked bar in `loose`").toContain(SHEET_OF(name));
+    else expect(onDashboard, `${name} is not on the Dashboard page`).toBe(false);
+    for (const r of ["/docs/catalog/dashboard/", "/es/docs/catalog/dashboard/"]) {
+      expect(sheets(rendered().get(r)).filter((href) => href === LINK), `${r}`).toHaveLength(onDashboard ? 1 : 0);
+    }
     for (const [r, html] of rendered()) {
       if (typeof html !== "string" || r === route || r === `/es${route}`) continue;
+      if (onDashboard && (r === "/docs/catalog/dashboard/" || r === "/es/docs/catalog/dashboard/")) continue;
       if (r.startsWith("/docs/") || r.startsWith("/es/docs/") || r.startsWith("/ar/docs/") || r === "/404.html") expect(sheets(html), r).not.toContain(LINK);
     }
   });
