@@ -7,7 +7,7 @@ An app is a web application: a dashboard, a back office, a tool the person signs
 3. What the data comes from (an API, a store) and who renders it (server or client). LUZ is the markup either way.
 4. The empty, loading and error states of each view: what each says.
 
-Start from this skeleton. A menu is a `luz-dropdown` with a `popover`, like the account menu; `luz-btn` goes on a `button` or an `a`, never a `summary`. Numbers are cards; tables, forms, dialogs, tabs and alerts are core's.
+Start from this skeleton. A menu is a `luz-dropdown` with a `popover`, like the account menu; `luz-btn` goes on a `button` or an `a`, never a `summary`. Numbers are cards; tables, forms, dialogs, tabs and alerts are core's. Data views (bar list, column chart, stacked bar, heat map, line chart) each draw a native table or list that stays in the page; the author supplies the data.
 
 ```html
 <body>

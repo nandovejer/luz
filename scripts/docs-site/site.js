@@ -86,6 +86,9 @@ const FRONT_MATTER = {
   fits: { default: "" },
   // Shown next to the h1: the CSS files and the JS module of a component
   files: { default: "" },
+  // Sheets of core outside luz.css that a page uses without documenting them, `;` apart (a dashboard
+  // that holds a bar list): the head links them after luz.css like the ones of `files`
+  loose: { default: "" },
   module: { default: "" },
   // "false" when the page's content starts with its own lead paragraph
   lead: { default: "true" },
@@ -1576,7 +1579,7 @@ function languageValues(site, locale, { home = false, siteUrl = "", page = null,
   };
   // A page that names a core sheet outside luz.css links it right after luz.css (before every catalog sheet: load/order)
   values.loose = looseCoreSheets(site.repoRoot)
-    .filter((file) => (page?.meta.files ?? "").includes(file))
+    .filter((file) => `${page?.meta.files ?? ""};${page?.meta.loose ?? ""}`.includes(file))
     .map((file) => `\n  <link rel="stylesheet" href="/packages/core/dist/${file}">`)
     .join("");
   if (page && page.route !== NOT_FOUND_ROUTE) {
