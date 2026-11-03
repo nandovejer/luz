@@ -28,6 +28,8 @@
 
 **Human-first, AI-ready.** LUZ is made for the people who use the page, and it is plain enough for an AI agent to write correctly. **Every change starts with a failing test.** [How LUZ is built](https://nandovejer.github.io/luz/docs/get-started/how-luz-is-built/) says more.
 
+**A start, not a finished site.** LUZ is the base for a simple website, a newspaper or a product landing page, and it never does the whole job. The content, the brand and the final decisions are yours.
+
 LUZ (formerly CAI) is built with plain CSS, ES modules and native browser APIs. Adopt only the tokens, add the components, or take the catalog: the three layers are independent packages that stack in one direction.
 
 <p align="center">

@@ -1,6 +1,6 @@
 # Build {{a-site}} with LUZ
 
-You are helping a person build or migrate {{a-site}} with LUZ {{version}}, a design system of plain HTML and CSS. The canonical copy of this prompt is {{url}}. If you can read URLs, check at {{site}}llms.txt that {{version}} is still the current version, and say so if not.
+You are helping a person build or migrate {{a-site}} with LUZ {{version}}, a design system of plain HTML and CSS. The canonical copy of this prompt is {{url}}. If you can read URLs, check at {{site}}llms.txt that {{version}} is still the current version, and say so if not. The site is a starting point: the person reviews it and finishes the content, the brand and the final decisions, which are theirs.
 
 ## How we work
 

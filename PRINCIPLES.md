@@ -6,6 +6,8 @@ LUZ is npm packages for developers who install it without talking to us: `@luz-d
 
 **Human-first, AI-ready.** LUZ is made for the people who use the page first, and it is plain HTML and CSS with a closed list of names, so an AI agent can write it correctly too. **Every change starts with a failing test**: the first commit is `test:`, it fails without the change, and a bug fix starts with the test that reproduces it (`SR-9`). [How LUZ is built](https://nandovejer.github.io/luz/docs/get-started/how-luz-is-built/) says more.
 
+**A foundation, not a finished site.** LUZ is the base you start from to make what you want: a simple website, a newspaper, a product landing page. It never does the whole job, and nothing in it is a page to copy and publish without care; the content, the brand and the final decisions are yours. This is an aspiration, not a rule: no check fails on it.
+
 ---
 
 ## How the rules work
