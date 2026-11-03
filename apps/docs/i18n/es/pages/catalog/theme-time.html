@@ -3,7 +3,7 @@ title: Modo de color según la hora del día
 description: Da a Automático la hora del día: el modo sigue el reloj o el sol en los momentos que declares, y una barra opcional deja probar cualquier hora.
 fits: cuando el sitio tiene un selector de modo y quiere un aspecto para cada momento del día
 keywords: momento del día, amanecer, atardecer, hora, reloj, modo oscuro automático
-source: aa53dd6d3bb3
+source: 09802507c05f
 reviewed: false
 -->
     <div class="docs-component" id="p-theme-time">
@@ -116,7 +116,7 @@ reviewed: false
               <li><strong>Dos archivos:</strong> <code>theme-time.min.js</code> y <code>theme-time-bar.min.js</code>, que solo carga <code>variant="bar"</code>. Para una barra añadida después del análisis, importa <code>@luz-ds/catalog/theme-time-bar</code> y llama a <code>initThemeTimeBar(root)</code>.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
-            <p>No hay barra y los momentos no se muestran. Los botones de opción de core siguen cambiando el modo; Automático es claro y no se escribe <code>data-moment</code>.</p>
+            <p>No hay barra y los momentos no se muestran. Los botones de opción de core siguen cambiando el modo; Automático sigue al sistema y no se escribe <code>data-moment</code>.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
             <ul>
               <li><strong>Deslizador:</strong> un rango nativo en pasos de 5 minutos: se llega con Tab, las flechas mueven un paso, Inicio va a las 00:00 y Fin a las 23:55. Cada pulsación previsualiza la hora.</li>

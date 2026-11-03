@@ -3,10 +3,16 @@
    Theme-aware tokens. Components ONLY consume these (never Layer 1 primitives).
    Base color modes are activated via data-theme on <html> (<luz-theme-mode>
    writes it, and data-mode with it, when the page names no brand):
-     <html>                            → default (light)
+     <html>                            → follows the system (below)
      <html data-theme="light">         → light (explicit)
      <html data-theme="dark">          → dark
      <html data-theme="high-contrast"> → high contrast
+   With no data-mode, no data-theme and no radio of <luz-theme-mode> checked
+   but Auto, the page follows the system with no script: dark under
+   prefers-color-scheme: dark, high contrast under prefers-contrast: more
+   (which wins), light otherwise. The build writes those two @media blocks
+   from the dark and high-contrast blocks below (scripts/build-tokens.js), so
+   there is one copy of the values to edit. Any explicit choice wins.
    The values here are the Vejer look. A theme of your own overrides them
    under its own [data-theme="<name>"] scope and uses data-mode for the dark
    and high-contrast variants; start from packages/core/src/themes/_template.css.

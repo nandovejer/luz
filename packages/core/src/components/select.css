@@ -8,10 +8,6 @@
    select. What is here needs the class or the browser's base-select.
    -------------------------------------------------------------------------- */
 
-:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) .luz-select {
-  color-scheme: dark;
-}
-
 .luz-select[multiple] option,
 .luz-select[size]:not([size="1"]) option {
   padding: var(--luz-space-2xs) var(--luz-space-xs);

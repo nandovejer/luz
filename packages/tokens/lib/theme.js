@@ -21,6 +21,22 @@ export const BASE_MODES = ["light", "dark", "high-contrast"];
 /** Replace comments by spaces of the same length, so line numbers stay true. */
 const stripComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
 
+/** A selector list split at its top-level commas: the ones inside :is(), :not() or [] belong to one selector. */
+function splitSelectors(prelude) {
+  const out = [];
+  let depth = 0;
+  let current = "";
+  for (const c of prelude) {
+    if (c === "(" || c === "[") depth++;
+    else if (c === ")" || c === "]") depth--;
+    if (c === "," && depth === 0) {
+      out.push(current.trim());
+      current = "";
+    } else current += c;
+  }
+  return [...out, current.trim()].filter(Boolean);
+}
+
 /**
  * The --luz-* declarations of a stylesheet as flat rules, in source order:
  * { selectors, conditions, declarations: [{ name, value, line }], line }.
@@ -71,7 +87,7 @@ export function parseRules(css) {
         if (prelude.startsWith("@")) {
           readBlockInto(prelude, conditions, selectors);
         } else {
-          const inner = readBlock(conditions, prelude.split(",").map((s) => s.trim()).filter(Boolean), startLine);
+          const inner = readBlock(conditions, splitSelectors(prelude), startLine);
           void inner;
         }
       } else {
@@ -148,6 +164,14 @@ const schemeOf = (prelude) => prelude.match(/^@media\s*\(\s*prefers-color-scheme
 /** Whether a condition is one we take as true without evaluating. */
 const transparent = (prelude) => /^@(layer|supports)\b/i.test(prelude);
 
+/**
+ * LUZ's own system blocks (semantic.css, written by the tokens build): the dark
+ * and high-contrast values again under prefers-color-scheme and prefers-contrast,
+ * for a page with no mode. They repeat the explicit blocks, which are read, so
+ * they add nothing and are not an ignored rule.
+ */
+const systemMode = (rule) => rule.selectors.join(",").replace(/\s+/g, "").startsWith(":is(:root:not([data-mode],[data-theme],:has(");
+
 /** LUZ's reduced-motion switch: durations only, so no colour depends on it. */
 const motionSwitch = (condition, rule) =>
   /^@media\s*\(\s*prefers-reduced-motion\s*:/i.test(condition) &&
@@ -191,6 +215,7 @@ export function valuesFor(target, sources) {
   for (const { file, rules } of sources) {
     for (const rule of rules) {
       order++;
+      if (file === "tokens" && systemMode(rule)) continue;
       let scheme = "any";
       let skip = null;
       for (const condition of rule.conditions) {

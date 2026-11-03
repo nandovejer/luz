@@ -10,7 +10,7 @@ files: themes/_template.css
       <h2 id="what">What a theme is</h2>
       <p>A <strong>color mode</strong> says how light or dark the page is: <code>light</code>, <code>dark</code> or <code>high-contrast</code>. A <strong>theme</strong> is a whole identity: colors, and optionally the fonts, radii and shadows. Every theme has the three modes.</p>
       <ul>
-        <li>LUZ ships <strong>one look</strong>, Vejer, in the three modes. It is the default: with no attribute you get its light mode.</li>
+        <li>LUZ ships <strong>one look</strong>, Vejer, in the three modes. It is the default: with no attribute the page follows the system, dark, high contrast or light.</li>
         <li>A theme of your own overrides <strong>semantic tokens</strong> only. It never changes a primitive, and it never touches a component's CSS.</li>
         <li>You name it with <code>data-theme</code> and pick its mode with <code>data-mode</code>.</li>
         <li>Overriding tokens and making a theme are the same thing: a theme is a named set of overrides, with a mode for each of its looks.</li>
@@ -108,7 +108,7 @@ files: themes/_template.css
         <li><strong>One zone.</strong> <code>data-theme</code> works on any element: the theme applies to that element and what is inside it. A date or time picker and a select take their color scheme from an ancestor <code>data-theme</code>, so for those put the attribute on <code>&lt;html&gt;</code>.</li>
         <li><strong>Forced colors.</strong> A reader who forces colors sees system colors, not your theme. Nothing to do: the components handle it.</li>
         <li><strong>Print.</strong> The <code>luz.print</code> layer sets paper colors whatever the theme.</li>
-        <li><strong>The OS preference.</strong> With no stored choice and no attribute, the page is light. To follow <code>prefers-color-scheme</code>, use <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> and, to avoid a flash, its <a href="/docs/components/theme-mode/#boot">script for the head</a>.</li>
+        <li><strong>The OS preference.</strong> With no stored choice and no attribute, the page follows the system, but only for LUZ's own look: a theme of yours stays in its first (light) block unless you repeat its dark block under <code>@media (prefers-color-scheme: dark)</code>. To follow the system without copying the block, use <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> and, to avoid a flash, its <a href="/docs/components/theme-mode/#boot">script for the head</a>.</li>
       </ul>
 
       <h2 id="limits">Limits</h2>
