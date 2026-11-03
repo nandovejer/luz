@@ -2,7 +2,7 @@
 title: Lista de barras
 description: Compara unos pocos valores con una lista de nombres, cifras y barras, mediante el elemento meter nativo.
 fits: un informe o un resumen que compara unos pocos tamaños, recuentos o proporciones
-source: dfb56e005602
+source: f096e1da4ca8
 reviewed: false
 -->
     <div class="docs-component" id="p-bar-list">
@@ -16,6 +16,20 @@ reviewed: false
                 <li class="luz-bar-list__row"><span class="luz-bar-list__name">Cádiz</span><span class="luz-bar-list__figure">312</span><meter class="luz-bar-list__meter" max="1500" value="312" aria-hidden="true">312 of 1,500</meter></li>
               </ul>
               <figcaption>Parcels per route, this week</figcaption>
+            </figure>
+          </div>
+          </div>
+          <h3 id="example-cells">En celdas</h3>
+          <p>La misma lista con el medidor cortado en celdas pequeñas, una cifra en negrita y un pie que lleva un total en negrita y una nota: el patrón de la tarjeta Light de la página de inicio, que compara el tamaño de tres paquetes. Los nombres, los tamaños y la nota de aquí son inventados; las cifras, las palabras y la unidad las escribes tú.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-bar-list luz-bar-list--cells">
+              <ul class="luz-bar-list__rows" aria-label="Pages by size, sample data">
+                <li class="luz-bar-list__row"><span class="luz-bar-list__name">Home</span><span class="luz-bar-list__figure"><strong>42 KB</strong></span><meter class="luz-bar-list__meter" min="0" max="42" value="42" aria-hidden="true">42 KB</meter></li>
+                <li class="luz-bar-list__row"><span class="luz-bar-list__name">Docs</span><span class="luz-bar-list__figure"><strong>28 KB</strong></span><meter class="luz-bar-list__meter" min="0" max="42" value="28" aria-hidden="true">28 KB</meter></li>
+                <li class="luz-bar-list__row"><span class="luz-bar-list__name">Blog</span><span class="luz-bar-list__figure"><strong>14 KB</strong></span><meter class="luz-bar-list__meter" min="0" max="42" value="14" aria-hidden="true">14 KB</meter></li>
+              </ul>
+              <figcaption class="u-text-muted"><strong>84 KB</strong> in all, sample data.</figcaption>
             </figure>
           </div>
           </div>
@@ -45,6 +59,23 @@ reviewed: false
   &lt;figcaption&gt;Parcels per route, this week&lt;/figcaption&gt;
 &lt;/figure&gt;</code></pre>
             </div>
+            <p>La variante en celdas, como la usa la página de inicio para los tamaños:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-bar-list-cells" aria-label="Copy the bar list in cells markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bar list in cells markup"><code id="code-bar-list-cells">&lt;figure class=&quot;luz-bar-list luz-bar-list--cells&quot;&gt;
+  &lt;ul class=&quot;luz-bar-list__rows&quot; aria-label=&quot;Pages by size&quot;&gt;
+    &lt;li class=&quot;luz-bar-list__row&quot;&gt;
+      &lt;span class=&quot;luz-bar-list__name&quot;&gt;Home&lt;/span&gt;
+      &lt;span class=&quot;luz-bar-list__figure&quot;&gt;&lt;strong&gt;42 KB&lt;/strong&gt;&lt;/span&gt;
+      &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;42&quot; value=&quot;42&quot; aria-hidden=&quot;true&quot;&gt;42 KB&lt;/meter&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;figcaption class=&quot;u-text-muted&quot;&gt;&lt;strong&gt;84 KB&lt;/strong&gt; in all.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
             <h3 id="variants">Variantes y opciones</h3>
             <div class="luz-table-wrap" role="region" aria-label="Opciones de la lista de barras" tabindex="0">
               <table class="luz-table">
@@ -52,7 +83,7 @@ reviewed: false
                   <tr><th scope="col">Opción</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Opción"><div><code>luz-bar-list--cells</code></div></td><td data-label="Efecto"><div>Celdas pequeñas en lugar de una barra continua</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>luz-bar-list--cells</code></div></td><td data-label="Efecto"><div>Celdas pequeñas en lugar de una barra continua, como en el segundo ejemplo: la que usa la página de inicio para los tamaños</div></td></tr>
                   <tr><td data-label="Opción"><div><code>luz-bar-list__row--zero</code></div></td><td data-label="Efecto"><div>Cifra en el color de marca, para una fila en 0</div></td></tr>
                   <tr><td data-label="Opción"><div><code>--luz-bar-list-color</code></div></td><td data-label="Efecto"><div>Otro color de gráfico para una lista o una fila, como <code>var(--luz-chart-2)</code></div></td></tr>
                   <tr><td data-label="Opción"><div><code>--luz-bar-list-row-h</code></div></td><td data-label="Efecto"><div>Una misma altura de fila, para alinear listas una junto a otra</div></td></tr>
@@ -70,7 +101,7 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="design-panel">
             <h2 class="docs-view__title" id="design">Diseño</h2>
             <h3 id="when">Cuándo usarla</h3>
-            <p>Úsala para comparar unos pocos valores en una misma escala: tamaños, recuentos, partes.</p>
+            <p>Úsala para comparar unos pocos valores en una misma escala: tamaños, recuentos, partes. Las celdas sirven para pocas comparaciones breves, como el tamaño de tres archivos o la parte de tres fuentes.</p>
             <h3 id="when-not">Cuándo no usarla</h3>
             <p>No la uses para un solo valor (usa un <a href="/docs/components/meter/">medidor</a>) ni para una tendencia en el tiempo. Conserva una <a href="/docs/components/table/">tabla</a> cuando importen más los valores exactos.</p>
             <h3 id="do-dont">Qué hacer y qué no</h3>

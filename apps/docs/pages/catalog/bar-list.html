@@ -23,6 +23,20 @@ toc: h2,h3
             </figure>
           </div>
           </div>
+          <h3 id="example-cells">In cells</h3>
+          <p>The same list with the meter cut into small cells, a bold figure and a caption that carries a bold total and a note: the pattern of the Light card on the home page, which compares the size of three packages. The names, sizes and note here are made up; the figures, the words and the unit are yours to write.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-bar-list luz-bar-list--cells">
+              <ul class="luz-bar-list__rows" aria-label="Pages by size, sample data">
+                <li class="luz-bar-list__row"><span class="luz-bar-list__name">Home</span><span class="luz-bar-list__figure"><strong>42 KB</strong></span><meter class="luz-bar-list__meter" min="0" max="42" value="42" aria-hidden="true">42 KB</meter></li>
+                <li class="luz-bar-list__row"><span class="luz-bar-list__name">Docs</span><span class="luz-bar-list__figure"><strong>28 KB</strong></span><meter class="luz-bar-list__meter" min="0" max="42" value="28" aria-hidden="true">28 KB</meter></li>
+                <li class="luz-bar-list__row"><span class="luz-bar-list__name">Blog</span><span class="luz-bar-list__figure"><strong>14 KB</strong></span><meter class="luz-bar-list__meter" min="0" max="42" value="14" aria-hidden="true">14 KB</meter></li>
+              </ul>
+              <figcaption class="u-text-muted"><strong>84 KB</strong> in all, sample data.</figcaption>
+            </figure>
+          </div>
+          </div>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Bar list documentation">
@@ -49,6 +63,23 @@ toc: h2,h3
   &lt;figcaption&gt;Parcels per route, this week&lt;/figcaption&gt;
 &lt;/figure&gt;</code></pre>
             </div>
+            <p>The cells variant, as the home page uses it for sizes:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-bar-list-cells" aria-label="Copy the bar list in cells markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bar list in cells markup"><code id="code-bar-list-cells">&lt;figure class=&quot;luz-bar-list luz-bar-list--cells&quot;&gt;
+  &lt;ul class=&quot;luz-bar-list__rows&quot; aria-label=&quot;Pages by size&quot;&gt;
+    &lt;li class=&quot;luz-bar-list__row&quot;&gt;
+      &lt;span class=&quot;luz-bar-list__name&quot;&gt;Home&lt;/span&gt;
+      &lt;span class=&quot;luz-bar-list__figure&quot;&gt;&lt;strong&gt;42 KB&lt;/strong&gt;&lt;/span&gt;
+      &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;42&quot; value=&quot;42&quot; aria-hidden=&quot;true&quot;&gt;42 KB&lt;/meter&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;figcaption class=&quot;u-text-muted&quot;&gt;&lt;strong&gt;84 KB&lt;/strong&gt; in all.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
             <h3 id="variants">Variants and options</h3>
             <div class="luz-table-wrap" role="region" aria-label="Bar list options" tabindex="0">
               <table class="luz-table">
@@ -56,7 +87,7 @@ toc: h2,h3
                   <tr><th scope="col">Option</th><th scope="col">Effect</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Option"><div><code>luz-bar-list--cells</code></div></td><td data-label="Effect"><div>Small cells instead of a continuous bar</div></td></tr>
+                  <tr><td data-label="Option"><div><code>luz-bar-list--cells</code></div></td><td data-label="Effect"><div>Small cells instead of a continuous bar, as in the second example: the one the home page uses for sizes</div></td></tr>
                   <tr><td data-label="Option"><div><code>luz-bar-list__row--zero</code></div></td><td data-label="Effect"><div>Figure in the brand colour, for a row at 0</div></td></tr>
                   <tr><td data-label="Option"><div><code>--luz-bar-list-color</code></div></td><td data-label="Effect"><div>Another chart colour for a list or a row, such as <code>var(--luz-chart-2)</code></div></td></tr>
                   <tr><td data-label="Option"><div><code>--luz-bar-list-row-h</code></div></td><td data-label="Effect"><div>One row height, to line up lists side by side</div></td></tr>
@@ -74,7 +105,7 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="design-panel">
             <h2 class="docs-view__title" id="design">Design</h2>
             <h3 id="when">When to use</h3>
-            <p>Use it to compare a few values on one scale: sizes, counts, shares.</p>
+            <p>Use it to compare a few values on one scale: sizes, counts, shares. The cells suit a few short comparisons, such as the size of three files or the share of three sources.</p>
             <h3 id="when-not">When not to use</h3>
             <p>Do not use it for one value (use a <a href="/docs/components/meter/">meter</a>) or for a trend over time. Keep a <a href="/docs/components/table/">table</a> when exact values matter most.</p>
             <h3 id="do-dont">Do and don't</h3>
