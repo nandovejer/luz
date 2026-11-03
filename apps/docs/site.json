@@ -23,7 +23,6 @@
       { "id": "feedback", "label": "Feedback and status" },
       { "id": "navigation", "label": "Navigation" },
       { "id": "media", "label": "Media" },
-      { "id": "charts", "label": "Charts" },
       { "id": "helpers", "label": "Helpers", "sidebar": true, "list": true }
     ], "essentials": [
       { "href": "/docs/get-started/" },

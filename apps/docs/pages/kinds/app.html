@@ -148,6 +148,46 @@ keywords: web app, admin, back office, saas
         </div>
       </div>
       <div class="docs-block">
+        <h2 id="charts">Data in a panel</h2>
+        <p>A panel that shows data holds one of four pieces, each over a native list or table that stays in the page: the <a href="/docs/catalog/bar-list/">bar list</a> compares a few values on one scale, the <a href="/docs/catalog/column-chart/">column chart</a> compares values that have an order, the <a href="/docs/catalog/stacked-bar/">stacked bar</a> shows how a whole is split and the <a href="/docs/catalog/heat-map/">heat map</a> shows where a grid is high or low. Put one in the card of a panel, after its heading, and link the stylesheet of each one you use after <code>luz.css</code>. The numbers and the titles are yours.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-dashboard">
+              <ul class="o-grid o-grid--auto">
+                <li class="luz-card luz-dashboard__panel">
+                  <h3 class="luz-card__title" id="k-app-channel">Orders by channel</h3>
+                  <figure class="luz-bar-list" aria-labelledby="k-app-channel">
+                    <ul class="luz-bar-list__rows">
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Online</span><span class="luz-bar-list__figure">640</span><meter class="luz-bar-list__meter" min="0" max="1204" value="640" aria-hidden="true">640 of 1,204</meter></li>
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">In store</span><span class="luz-bar-list__figure">410</span><meter class="luz-bar-list__meter" min="0" max="1204" value="410" aria-hidden="true">410 of 1,204</meter></li>
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Phone</span><span class="luz-bar-list__figure">154</span><meter class="luz-bar-list__meter" min="0" max="1204" value="154" aria-hidden="true">154 of 1,204</meter></li>
+                    </ul>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-app-charts" aria-label="Copy the data panel markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Data panel markup"><code id="code-k-app-charts">&lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+  &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-channel&quot;&gt;Orders by channel&lt;/h2&gt;
+  &lt;figure class=&quot;luz-bar-list&quot; aria-labelledby=&quot;by-channel&quot;&gt;
+    &lt;ul class=&quot;luz-bar-list__rows&quot;&gt;
+      &lt;li class=&quot;luz-bar-list__row&quot;&gt;
+        &lt;span class=&quot;luz-bar-list__name&quot;&gt;Online&lt;/span&gt;
+        &lt;span class=&quot;luz-bar-list__figure&quot;&gt;640&lt;/span&gt;
+        &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;1204&quot; value=&quot;640&quot; aria-hidden=&quot;true&quot;&gt;640 of 1,204&lt;/meter&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/figure&gt;
+&lt;/li&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
         <h2 id="empty">Empty view</h2>
         <p>A view with nothing in it yet, on the <a href="/docs/catalog/dashboard/">dashboard</a>: one wide panel that says what is missing and what to do, with the action. The title row keeps its place, so the view does not jump when the first panel arrives. The action in the panel is the view's one primary action: leave it out of the title row while the panel holds it.</p>
         <div class="docs-example" data-docs-specimen>

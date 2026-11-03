@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------------
-   LUZ Component: heat-map
+   LUZ Catalog: heat-map
    Heat map — a native table whose cells show how much, by colour and by figure:
    <table class="luz-heat-map"> with a caption, a head row of names (<th scope="col">)
    and one row per name (<th scope="row">), each cell <td style="--v: 0.4"> holding its
@@ -13,10 +13,8 @@
    stronger colour is more: it is darker in light and lighter in dark.
    Contrast: the strongest swatch is 3:1 on the surfaces in every mode; the empty one is
    the chart track, a quiet 1.5:1, decorative, because the figure carries the value.
-   Layer: components (ITCSS 5) · Prefix: .luz-
-   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
-   Loose sheet: not in luz.css (core CSS has no room); link
-   @luz-ds/core/components/heat-map.css after luz.css.
+   Layer: catalog · Prefix: .luz-
+   Requires: @luz-ds/tokens and @luz-ds/core (luz.css), loaded first.
    -------------------------------------------------------------------------- */
 
 .luz-heat-map {

@@ -3,15 +3,15 @@
  * stacked bar), each over a native list or table. What these tests pin (the look, the keyboard and the no-JS state are in
  * tests/dashboard-data.spec.js):
  *
- *   - the front matter key `loose`: optional (default empty), a list of core sheets outside luz.css, `;` apart, that a page uses
- *     without documenting them; `{{loose}}` in the head links them right after luz.css, on the page that names them and on no
- *     other, once each, in English and in Spanish;
+ *   - the sheets: the bar list and the stacked bar of its panels are catalog's (2026-11-03), so the docs link them through
+ *     `apps/docs/catalog-patterns.css` like the Dashboard's own, the example document links them as catalog sheets, and the front
+ *     matter key `loose` (core sheets outside luz.css) no longer exists;
  *   - the page: the example is real markup of four panels in the order figure, bar list, line chart, stacked bar; the sample
  *     data is told as made up in plain words (English and Spanish) and in the code snippet; the numbers add up (the rows of the
  *     bar list are the figure, the parts of the stacked bar are 100); the Spanish page is a translation of this body and the
  *     demo stays English;
  *   - the prompt for an app says that a data view draws a native table or list, and the other four prompts do not;
- *   - dev/DOCS-SITE.md documents the key and dev/BROWSER-REVIEWS.md has the row of the panels.
+ *   - dev/DOCS-SITE.md no longer documents the key and dev/BROWSER-REVIEWS.md has the row of the panels.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -19,6 +19,7 @@ import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 import { exampleDocuments } from "../scripts/docs-site/ai.js";
 import { decodeEntities } from "../scripts/docs-site/html.js";
+import { parseFrontMatter } from "../scripts/docs-site/site.js";
 import { sourceHash } from "../scripts/docs-site/docs-i18n.js";
 import { assemblePrompt } from "../scripts/docs-site/prompts.js";
 import { PAGES_CSP } from "../vite.config.js";
@@ -35,8 +36,8 @@ beforeAll(() => {
 
 const ROUTE = "/docs/catalog/dashboard/";
 const ES_ROUTE = "/es/docs/catalog/dashboard/";
-const LOOSE = ["components/bar-list.css", "components/stacked-bar.css"];
-const link = (file) => `/packages/core/dist/${file}`;
+/** The charts the Dashboard's panels hold, which are catalog sheets. */
+const CHARTS = ["components/bar-list.css", "components/stacked-bar.css"];
 const rendered = () => buildReal().rendered;
 const sheets = (html) => [...html.matchAll(/<link\b[^>]*rel="?stylesheet"?[^>]*>/g)].map((m) => m[0].match(/href="?([^" >]+)/)?.[1]);
 const page = () => {
@@ -61,39 +62,32 @@ const number = (text) => Number(text.replace(/[^\d.]/g, ""));
 
 /* ---- The front matter key ---------------------------------------------------------------------------------------------- */
 
-describe("the front matter key `loose`", () => {
-  it("is the list of core sheets the Dashboard page uses without documenting them, and is optional (empty by default)", () => {
-    expect(page().meta.loose.split(";").map((f) => f.trim())).toEqual(LOOSE);
-    expect(page().meta.files, "the page still documents only its own sheet").toBe("components/dashboard.css");
-    const others = [...site.byRoute.values()].filter((p) => p.route !== ROUTE);
-    expect(others.length).toBeGreaterThan(100);
-    for (const p of others) expect(p.meta.loose, p.route).toBe("");
+describe("the front matter key `loose` is gone", () => {
+  const FRONT = (extra) => `<!-- luz:page\ntitle: T\ndescription: A page.\narea: components\ngroup: actions\n${extra}\n-->\n<p>x</p>\n`;
+  const AREAS = [{ id: "components", label: "Components", slug: "components", groups: [{ id: "actions", label: "Actions" }] }];
+
+  it("is an unknown key: a page that sets it fails the build with its file and line", () => {
+    expect(() => parseFrontMatter(FRONT("loose: components/bar-list.css"), "apps/docs/pages/components/x.html", AREAS)).toThrow(/x\.html:\d+: unknown front matter key "loose"/);
   });
 
-  it("is not a key of the Spanish page: the translation takes it from the English one", () => {
+  it("is on no page of the docs, in English or in Spanish, and the meta of a page has no `loose`", () => {
+    for (const p of site.byRoute.values()) expect(p.meta, p.route).not.toHaveProperty("loose");
+    expect(page().meta.files, "the page documents only its own sheet").toBe("components/dashboard.css");
     expect(esSource()).not.toMatch(/^loose:/m);
+    expect(read("apps/docs/pages/catalog/dashboard.html")).not.toMatch(/^loose:/m);
   });
 
-  it.each([ROUTE, ES_ROUTE])("%s links each sheet of it once, right after luz.css and before every catalog sheet", (route) => {
+  it("is not a placeholder: the page layout has no {{loose}} and no page of the docs is left with one", () => {
+    expect(read("apps/docs/_layouts/page.html")).not.toContain("{{loose}}");
+    for (const [route, html] of rendered()) if (typeof html === "string") expect(html, route).not.toContain("{{loose}}");
+  });
+
+  it.each([ROUTE, ES_ROUTE])("%s links no sheet of core's but luz.css: the bar list and the stacked bar come from catalog-patterns.css", (route) => {
     const links = sheets(rendered().get(route));
-    const at = links.indexOf(link("luz.css"));
-    for (const [i, file] of LOOSE.entries()) {
-      expect(links.filter((href) => href === link(file)), `${route}: ${file}`).toHaveLength(1);
-      expect(links.indexOf(link(file)), `${route}: ${file} comes after luz.css, in the order of the key`).toBe(at + 1 + i);
-    }
-    expect(links.findIndex((href) => href.startsWith("/packages/catalog/")), route).toBeGreaterThan(at + LOOSE.length);
-    // the sheets it does not name stay out
-    for (const other of ["components/column-chart.css", "components/heat-map.css"]) expect(links, `${route}: ${other}`).not.toContain(link(other));
-  });
-
-  it("links a sheet it names on no other page of the docs, in any language", () => {
-    const docs = [...rendered()].filter(([route]) => route.startsWith("/docs/") || route.startsWith("/es/docs/") || route.startsWith("/ar/docs/") || route === "/404.html");
-    expect(docs.length, "the docs are rendered").toBeGreaterThan(100);
-    for (const [route, html] of docs) {
-      if (route === ROUTE || route === ES_ROUTE) continue;
-      const own = [...(site.byRoute.get(route.replace(/^\/(?:es|ar)/, ""))?.meta.files ?? "").matchAll(/components\/[a-z0-9-]+\.css/g)].map((m) => m[0]);
-      for (const file of LOOSE) if (!own.includes(file)) expect(sheets(html), `${route}: ${file}`).not.toContain(link(file));
-    }
+    expect(links.filter((href) => href.startsWith("/packages/core/")), route).toEqual(["/packages/core/dist/luz.css"]);
+    expect(links, route).toContain("/apps/docs/catalog-patterns.css");
+    const imports = read("apps/docs/catalog-patterns.css");
+    for (const file of CHARTS) expect(imports, file).toContain(`/packages/catalog/dist/${file}`);
   });
 });
 
@@ -291,14 +285,16 @@ describe("the example document made from the Dashboard page", () => {
     expect(orphans).toEqual([]);
   });
 
-  it("links the sheets of the loose key after luz.css and before every catalog sheet, and no other loose sheet", () => {
+  it("links the bar list and the stacked bar as sheets of catalog, after luz.css, and no sheet of core's but luz.css", () => {
     const hrefs = [...example().html.matchAll(/<link\b[^>]*rel="?stylesheet"?[^>]*>/g)].map((m) => m[0].match(/href="?([^" >]+)/)?.[1]);
     const core = hrefs.findIndex((h) => /\/core\/luz(?:\.min)?\.css$/.test(h));
     expect(core, "luz.css is linked").toBeGreaterThan(-1);
-    expect(hrefs.slice(core + 1, core + 3), "the two sheets of the loose key, in its order").toEqual(LOOSE.map((f) => `../dist/core/${f.replace(/\.css$/, ".min.css")}`));
-    const firstCatalog = hrefs.findIndex((h) => h.includes("/catalog/"));
-    expect(firstCatalog, "the catalog's sheets come after").toBeGreaterThan(core + 2);
-    expect(hrefs.filter((h) => /heat-map|column-chart/.test(h))).toEqual([]);
+    expect(hrefs.filter((h) => h.includes("/core/")), "core's one stylesheet").toHaveLength(1);
+    for (const file of CHARTS) {
+      const at = hrefs.indexOf(`../dist/catalog/${file.replace(/\.css$/, ".min.css")}`);
+      expect(at, `${file} is a sheet of catalog`).toBeGreaterThan(core);
+    }
+    expect(hrefs.filter((h) => /heat-map|column-chart/.test(h)), "the sheets the markup does not use stay out").toEqual([]);
   });
 });
 
@@ -330,14 +326,10 @@ describe("the prompts for AI: data views", () => {
 /* ---- The contributor guides --------------------------------------------------------------------------------------------- */
 
 describe("dev/DOCS-SITE.md and dev/BROWSER-REVIEWS.md", () => {
-  it("DOCS-SITE.md documents `loose`: an optional front matter key of core sheets outside luz.css, `;` apart, linked after luz.css", () => {
-    const item = read("dev/DOCS-SITE.md").split("\n").find((line) => line.startsWith("- `loose`"));
-    expect(item, "a bullet that starts with `loose`").toBeTruthy();
-    expect(item).toMatch(/optional/);
-    expect(item).toMatch(/front matter/);
-    expect(item).toMatch(/luz\.css/);
-    expect(item).toContain("`files`");
-    expect(item).toContain("{{loose}}");
+  it("DOCS-SITE.md no longer documents `loose`: the key is gone with the loose sheets of core", () => {
+    const text = read("dev/DOCS-SITE.md");
+    expect(text.split("\n").find((line) => line.startsWith("- `loose`"))).toBeUndefined();
+    expect(text).not.toContain("{{loose}}");
   });
 
   it("BROWSER-REVIEWS.md has an Open row for the data panels of the Dashboard: its files, what to look at and both browsers", () => {
@@ -346,8 +338,8 @@ describe("dev/DOCS-SITE.md and dev/BROWSER-REVIEWS.md", () => {
     expect(row, "a row of the Dashboard page in the Open section").toBeTruthy();
     const cells = row.split("|").map((c) => c.trim());
     expect(cells[1], "the scope").toMatch(/Dashboard/);
-    expect(cells[2]).toContain("site.js");
-    expect(cells[2]).toContain("loose");
+    expect(cells[2], "the file that links the sheets now").toContain("apps/docs/catalog-patterns.css");
+    expect(cells[2], "the key is gone").not.toContain("loose");
     expect(cells[3], "what to look at").toMatch(/luz-chart/);
     expect(cells[4]).toMatch(/Safari/);
     expect(cells[4]).toMatch(/Firefox/);

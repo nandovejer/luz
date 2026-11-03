@@ -57,7 +57,7 @@ import { SITE_URL } from "../../packages/check/src/messages.js";
 import { ruleRows } from "./ai-rules.js";
 import { PROMPT_KINDS, promptRoute } from "./prompts.js";
 import { readingOrder } from "./site.js";
-import { FILES, catalogComponents, catalogFilesIn, looseCoreSheets, minified } from "./snippets.js";
+import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 import { englishT } from "./strings.js";
 
 /** The routes of the AI files at the Pages root. */
@@ -715,7 +715,6 @@ const REPO_ROOT = fileURLToPath(new URL("../../", import.meta.url));
  */
 const exampleFilesOf = (pkg, root) => [
   ...(pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? catalogComponents({ root }).map(({ file }) => minified(file)) : [FILES[pkg].css]),
-  ...(pkg === "core" ? looseCoreSheets(root).map(minified) : []),
   FILES[pkg].js,
   ...FILES[pkg].chunks,
 ].filter(Boolean);
@@ -802,14 +801,14 @@ const inComment = (text) => text.replace(/-{2,}/g, "-");
  * `packages` are the packages to link (load order), `catalog` the files of
  * catalog's components among them (it has no bundle); catalog adds its script.
  */
-function exampleDocument(page, { csp, versions, packages, catalog = [], loose = [] }) {
+function exampleDocument(page, { csp, versions, packages, catalog = [] }) {
   const { kept, skipped } = markupBlocks(page);
   const title = page.meta.title;
   const route = exampleRouteOf(page);
   // `../dist/` and `../../docs/`: the document is at /examples/<area>/<slug>.html
   const docsUrl = `../..${page.route}#markup`;
   const snippetUrl = "../../docs/get-started/snippet/";
-  const css = (pkg) => (pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? inCascadeOrder(catalog).map(minified) : pkg === "core" ? [FILES.core.css, ...loose.map(minified)] : [FILES[pkg].css]);
+  const css = (pkg) => (pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? inCascadeOrder(catalog).map(minified) : [FILES[pkg].css]);
   const links = packages.flatMap((pkg) => css(pkg).map((file) => `  <link rel="stylesheet" href="../dist/${pkg}/${file}">`));
   const scripts = ["core", ...packages.filter((pkg) => pkg === "catalog")].map((pkg) => `  <script type="module" src="../dist/${pkg}/${exampleJsOf(pkg)}"></script>`);
   const sections = kept.map(
@@ -870,10 +869,7 @@ export function exampleDocuments(site, { csp, versions, root = REPO_ROOT }) {
     const named = `${kept.map((b) => b.code).join("\n")}\n${PACKAGE_OF_AREA[area] === "catalog" ? (page.meta.files ?? "") : ""}`;
     const catalog = catalogFilesIn(named, components);
     const packages = ["tokens", "core", ...(catalog.length ? ["catalog"] : [])];
-    // A core sheet that luz.css does not hold (a page's `files` names it) is linked after luz.css
-    // and so is one the page names in `loose` (it uses it without documenting it), as the docs head does with {{loose}}
-    const loose = looseCoreSheets(root).filter((file) => `${page.meta.files ?? ""};${page.meta.loose ?? ""}`.includes(file));
-    documents.push(exampleDocument(page, { csp, versions, packages, catalog, loose }));
+    documents.push(exampleDocument(page, { csp, versions, packages, catalog }));
   }
   return documents;
 }

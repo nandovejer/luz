@@ -161,7 +161,7 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/catalog</code> and a file of its own, <code>@luz-ds/catalog/chart</code> (<code>dist/chart.min.js</code>, under 3 kB compressed), which defines <code>&lt;luz-chart&gt;</code>. It uses no library and draws with DOM calls only, so a page that forbids inline scripts and styles runs it as it is. A bar of values compared by length does not need it: use the <a href="/docs/components/bar-list/">bar list</a>, the <a href="/docs/components/column-chart/">column chart</a>, the <a href="/docs/components/stacked-bar/">stacked bar</a> or the <a href="/docs/components/heat-map/">heat map</a>, which are CSS on a table or a list.</p>
+            <p>CSS from <code>@luz-ds/catalog</code> and a file of its own, <code>@luz-ds/catalog/chart</code> (<code>dist/chart.min.js</code>, under 3 kB compressed), which defines <code>&lt;luz-chart&gt;</code>. It uses no library and draws with DOM calls only, so a page that forbids inline scripts and styles runs it as it is. A bar of values compared by length does not need it: use the <a href="/docs/catalog/bar-list/">bar list</a>, the <a href="/docs/catalog/column-chart/">column chart</a>, the <a href="/docs/catalog/stacked-bar/">stacked bar</a> or the <a href="/docs/catalog/heat-map/">heat map</a>, which are CSS on a table or a list.</p>
             <ul>
               <li><strong>The table:</strong> it stays in the page. While the chart shows, the table is moved off screen, not hidden, so a screen reader reads it as it always did; when the button shows the table, the drawing goes. On paper, the table prints and the drawing does not.</li>
               <li><strong>The drawing:</strong> an SVG marked <code>aria-hidden</code>, drawn at its own size in pixels and again when the box changes size or the table changes. It has no animation, so there is nothing to stop under reduced motion. Series are <code>--luz-chart-1</code> to <code>--luz-chart-6</code>, so a change of mode repaints nothing.</li>
@@ -184,9 +184,9 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
             <h3 id="when">When to use</h3>
             <p>Use it to show how a few series change along an ordered axis, such as months, when the shape of the change is what the reader should see and you already have the numbers in a table. The small line (<code>type="spark"</code>) is for a figure that needs its trend beside it.</p>
             <h3 id="when-not">When not to use</h3>
-            <p>Do not use it when exact values matter more than the shape: a <a href="/docs/components/table/">table</a> says them better. For a few values compared on one scale, use a <a href="/docs/components/column-chart/">column chart</a> or a <a href="/docs/components/bar-list/">bar list</a>, which need no script.</p>
+            <p>Do not use it when exact values matter more than the shape: a <a href="/docs/components/table/">table</a> says them better. For a few values compared on one scale, use a <a href="/docs/catalog/column-chart/">column chart</a> or a <a href="/docs/catalog/bar-list/">bar list</a>, which need no script.</p>
             <ul>
-              <li>Do not use it for parts of a whole: use a <a href="/docs/components/stacked-bar/">stacked bar</a>. There is no pie or donut.</li>
+              <li>Do not use it for parts of a whole: use a <a href="/docs/catalog/stacked-bar/">stacked bar</a>. There is no pie or donut.</li>
               <li>Do not use it for more than six series, or for series that cannot share a scale: split them into two charts.</li>
             </ul>
             <p>It replaces a charting library that draws a canvas with no text beside it. Nothing in LUZ is removed.</p>

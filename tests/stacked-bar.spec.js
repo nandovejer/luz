@@ -1,12 +1,12 @@
 // @ts-check
 /**
- * `.luz-stacked-bar` of @luz-ds/core (`components/stacked-bar.css`, a loose sheet that a page links after luz.css): the shares
+ * `.luz-stacked-bar` of @luz-ds/catalog (`components/stacked-bar.css`, a sheet that a page links after luz.css): the shares
  * of a whole in one bar, and a legend that says them in text. The bar is a picture, hidden from assistive technology, one
  * `__part` for each share, whose `--v` is its weight (the bar always fills its width and a part takes `--v` of the sum). The
  * legend is the data: one `__item` for each part, in the same order, with its name and its figure. The series take
  * `--luz-chart-1` to `-6` in the order of the markup.
  *
- * tests/fixtures/stacked-bar.html: tokens, core's luz.css and the loose sheet, no script. Everything is CSS, so it runs in
+ * tests/fixtures/stacked-bar.html: tokens, core's luz.css and catalog's sheet, no script. Everything is CSS, so it runs in
  * `chromium` and in `chromium-nojs` (playwright.config.js: `'**\/stacked-bar.spec.js'` in the `testMatch` of
  * `chromium-nojs`). Axe needs script and is skipped there.
  */
@@ -334,11 +334,12 @@ test.describe('stacked bar: axe', () => {
 });
 
 test.describe('stacked bar: no script', () => {
-  test('it needs none: the fixture has no script, links the loose sheet after luz.css, and the bar is drawn', async ({ page }) => {
+  test('it needs none: the fixture has no script, links the sheet of catalog after luz.css, and no sheet of core but luz.css, and the bar is drawn', async ({ page }) => {
     const source = readFileSync(new URL('./fixtures/stacked-bar.html', import.meta.url), 'utf-8');
     expect(source).not.toMatch(/<script/i);
     const links = [...source.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m) => m[1]);
-    expect(links.indexOf('/packages/core/dist/components/stacked-bar.css')).toBe(links.indexOf('/packages/core/dist/luz.css') + 1);
+    expect(links.indexOf('/packages/catalog/dist/components/stacked-bar.css')).toBe(links.indexOf('/packages/core/dist/luz.css') + 1);
+    expect(links.filter((href) => href.startsWith('/packages/core/')), 'core has no sheet of it').toEqual(['/packages/core/dist/luz.css']);
     await open(page);
     const { bar, parts } = await partsOf(page, 'base');
     expect(bar.height).toBeGreaterThan(0);

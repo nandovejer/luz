@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------------
-   LUZ Component: bar-list
+   LUZ Catalog: bar-list
    Bar list — a figure that holds a list of rows, each a name, its figure and
    a bar under them: <figure class="luz-bar-list"><ul class="luz-bar-list__rows">
    <li class="luz-bar-list__row"> <span class="luz-bar-list__name"> <span
@@ -16,10 +16,8 @@
    card wider at a large text size.
    Contrast: the fill is 3:1 on the surfaces in every mode; the track is a
    quiet 1.5:1, decorative, because the figure carries the value.
-   Layer: components (ITCSS 5) · Prefix: .luz-
-   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
-   Loose sheet: not in luz.css (core CSS has no room); link
-   @luz-ds/core/components/bar-list.css after luz.css.
+   Layer: catalog · Prefix: .luz-
+   Requires: @luz-ds/tokens and @luz-ds/core (luz.css), loaded first.
    -------------------------------------------------------------------------- */
 
 

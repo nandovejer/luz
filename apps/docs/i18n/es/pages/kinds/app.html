@@ -2,7 +2,7 @@
 title: Aplicación web
 description: Una aplicación web: un prompt para un LLM y recetas para su estructura con barra lateral, su cabecera y su panel de control.
 keywords: aplicación web, app, administración, backoffice, saas
-source: 0fea2b231830
+source: d671eb43fbc1
 reviewed: false
 -->
     <div class="docs-block" id="k-app">
@@ -145,6 +145,46 @@ reviewed: false
     &lt;/li&gt;
   &lt;/ul&gt;
 &lt;/main&gt;</code></pre>
+        </div>
+      </div>
+      <div class="docs-block">
+        <h2 id="charts">Datos en un panel</h2>
+        <p>Un panel que muestra datos contiene una de cuatro piezas, cada una sobre una lista o una tabla nativa que se queda en la página: la <a href="/docs/catalog/bar-list/">lista de barras</a> compara unos pocos valores en una escala, el <a href="/docs/catalog/column-chart/">gráfico de columnas</a> compara valores que tienen un orden, la <a href="/docs/catalog/stacked-bar/">barra apilada</a> muestra cómo se reparte un todo y el <a href="/docs/catalog/heat-map/">mapa de calor</a> muestra dónde una cuadrícula es alta o baja. Ponla en la tarjeta de un panel, después de su encabezado, y enlaza después de <code>luz.css</code> la hoja de estilos de cada una que uses. Los números y los títulos son tuyos.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-dashboard">
+              <ul class="o-grid o-grid--auto">
+                <li class="luz-card luz-dashboard__panel">
+                  <h3 class="luz-card__title" id="k-app-channel">Orders by channel</h3>
+                  <figure class="luz-bar-list" aria-labelledby="k-app-channel">
+                    <ul class="luz-bar-list__rows">
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Online</span><span class="luz-bar-list__figure">640</span><meter class="luz-bar-list__meter" min="0" max="1204" value="640" aria-hidden="true">640 of 1,204</meter></li>
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">In store</span><span class="luz-bar-list__figure">410</span><meter class="luz-bar-list__meter" min="0" max="1204" value="410" aria-hidden="true">410 of 1,204</meter></li>
+                      <li class="luz-bar-list__row"><span class="luz-bar-list__name">Phone</span><span class="luz-bar-list__figure">154</span><meter class="luz-bar-list__meter" min="0" max="1204" value="154" aria-hidden="true">154 of 1,204</meter></li>
+                    </ul>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="docs-snippet">
+          <div class="docs-snippet__bar">
+            <span class="docs-snippet__lang">HTML</span>
+            <button class="luz-copy-btn" type="button" data-copy-from="code-k-app-charts" aria-label="Copy the data panel markup">Copy</button>
+          </div>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Data panel markup"><code id="code-k-app-charts">&lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+  &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-channel&quot;&gt;Orders by channel&lt;/h2&gt;
+  &lt;figure class=&quot;luz-bar-list&quot; aria-labelledby=&quot;by-channel&quot;&gt;
+    &lt;ul class=&quot;luz-bar-list__rows&quot;&gt;
+      &lt;li class=&quot;luz-bar-list__row&quot;&gt;
+        &lt;span class=&quot;luz-bar-list__name&quot;&gt;Online&lt;/span&gt;
+        &lt;span class=&quot;luz-bar-list__figure&quot;&gt;640&lt;/span&gt;
+        &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;1204&quot; value=&quot;640&quot; aria-hidden=&quot;true&quot;&gt;640 of 1,204&lt;/meter&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/figure&gt;
+&lt;/li&gt;</code></pre>
         </div>
       </div>
       <div class="docs-block">

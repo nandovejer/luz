@@ -3,7 +3,7 @@ title: Panel de control
 description: La vista general de una aplicación: el título y la acción principal, seguidos de una cuadrícula de paneles que aprovecha el espacio disponible.
 fits: la primera vista de una aplicación
 keywords: paneles, widgets, resumen, cuadrícula de tarjetas
-source: bd51e8adf7e2
+source: 225ccae10394
 reviewed: false
 -->
     <div class="docs-component" id="p-dashboard">
@@ -143,7 +143,7 @@ reviewed: false
   &lt;/ul&gt;
 &lt;/main&gt;</code></pre>
             </div>
-            <p>Un panel que muestra datos contiene una de las piezas de datos de core o <a href="/docs/catalog/chart/">el gráfico</a>, cada una sobre una lista o una tabla nativa que se queda en la página. Las cifras de aquí son de ejemplo: los números, los títulos y los paneles son tuyos.</p>
+            <p>Un panel que muestra datos contiene una de las piezas de datos (una lista de barras, un gráfico de columnas, una barra apilada o un mapa de calor) o <a href="/docs/catalog/chart/">el gráfico</a>, cada una sobre una lista o una tabla nativa que se queda en la página. Las cifras de aquí son de ejemplo: los números, los títulos y los paneles son tuyos.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -224,7 +224,7 @@ reviewed: false
               <li>El panel de control es un contenedor de tamaño. El panel ancho consulta el ancho del panel de control, no el de la ventana, así que cabe tanto con barra lateral como sin ella. A partir de 40 rem siempre caben dos columnas (dos de 18 rem y un espacio); al ampliar el texto al 200 %, ambas siguen medidas en rem y no se desbordan.</li>
               <li>Los paneles conservan el orden del marcado. No hay empaquetado denso ni se usa <code>order</code>: si un panel ancho no cabe en el espacio restante de una fila, empieza en la siguiente y se mantiene la separación. El orden de lectura, el del foco y el visual coinciden.</li>
               <li>Un panel puede encogerse, así que una línea larga de código o una tabla se desplaza dentro de su propio contenedor y no ensancha la columna.</li>
-              <li>Un panel con datos usa las piezas que ya existen: la <a href="/docs/catalog/stat/">cifra destacada</a> para una cifra, la <a href="/docs/components/bar-list/">lista de barras</a>, el <a href="/docs/components/column-chart/">gráfico de columnas</a>, la <a href="/docs/components/stacked-bar/">barra apilada</a> y el <a href="/docs/components/heat-map/">mapa de calor</a> de core, y <a href="/docs/catalog/chart/">el gráfico</a> para una tendencia. Cada una dibuja una lista o una tabla que tú escribiste, y esa lista o tabla se queda en la página. La lista de barras, el gráfico de columnas, la barra apilada y el mapa de calor son hojas de estilo aparte: enlaza después de <code>luz.css</code> cada una que uses.</li>
+              <li>Un panel con datos usa las piezas que ya existen: la <a href="/docs/catalog/stat/">cifra destacada</a> para una cifra, la <a href="/docs/catalog/bar-list/">lista de barras</a>, el <a href="/docs/catalog/column-chart/">gráfico de columnas</a>, la <a href="/docs/catalog/stacked-bar/">barra apilada</a> y el <a href="/docs/catalog/heat-map/">mapa de calor</a>, y <a href="/docs/catalog/chart/">el gráfico</a> para una tendencia. Cada una dibuja una lista o una tabla que tú escribiste, y esa lista o tabla se queda en la página. La lista de barras, el gráfico de columnas, la barra apilada y el mapa de calor son hojas de estilo aparte: enlaza después de <code>luz.css</code> cada una que uses.</li>
               <li>Los datos son tuyos. LUZ no los obtiene, no los cuenta ni los inventa, y los títulos y números del ejemplo son de muestra, para sustituir.</li>
               <li>Los paneles vacíos, en carga o con errores forman parte del contenido del panel: una frase y un enlace, el <a href="/docs/components/progress/">indicador de progreso</a> o la <a href="/docs/components/alert/">alerta</a> de core. En 0.1 no hay una clase para esqueletos de carga.</li>
             </ul>

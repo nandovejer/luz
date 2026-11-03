@@ -42,8 +42,10 @@ const between = (text, from, until) => {
 describe("the core / site rule (spec §7)", () => {
   const layering = between(read("AGENTS.md"), "## Package layering", /\n---\n/);
 
-  it("AGENTS.md's package layering says catalog is the navigation of the site and the pieces with JS or an identity of their own, and core everything else (F7)", () => {
-    expect(layering).toMatch(/catalog is the navigation of the site and the pieces with JS or an identity of their own; core, everything else/i);
+  it("AGENTS.md's package layering says core is what every page needs and fits in luz.css, and what a page links on its own when it uses it (the charts, the data views, the navigation, the pieces with JS or an identity of their own) is catalog (2026-11-03)", () => {
+    expect(layering).toMatch(/core is what every page needs and fits in `luz\.css`; what a page links on its own when it uses it \([^)]*\) is catalog/i);
+    expect(layering, "the charts are named in the rule").toMatch(/what a page links on its own when it uses it \(the charts/i);
+    expect(layering, "the old rule, which sorted by navigation and identity alone, is gone").not.toMatch(/catalog is the navigation of the site and the pieces with JS or an identity of their own; core, everything else/i);
     expect(layering).not.toMatch(/catalog is what can go in any section/i);
   });
 
@@ -57,6 +59,11 @@ describe("the core / site rule (spec §7)", () => {
   it("AGENTS.md no longer sorts site by the data it needs or the page structure it holds", () => {
     expect(layering).not.toMatch(/needs data of the site/);
     expect(layering).not.toMatch(/page structure that holds other pieces/);
+  });
+
+  it("AGENTS.md puts the pieces that draw data in catalog: the chart, the bar list, the column chart, the stacked bar and the heat map, a stylesheet each over a native list, table or meter; a piece every page may need is proposed for core (2026-11-03)", () => {
+    expect(layering).toMatch(/when it draws data \(the chart, the bar list, the column chart, the stacked bar, the heat map: a stylesheet each, over a native list, table or `meter` that stays in the page\)/);
+    expect(layering).toMatch(/a piece that knows nothing about the site and that every page may need, so that it fits in `luz\.css`, is proposed for core instead/);
   });
 
   it("AGENTS.md says there are no packages for one kind of site: landing, cms, app and docs were four, and their patterns are catalog components", () => {
@@ -93,8 +100,10 @@ describe("the core / site rule (spec §7)", () => {
 
     it("says the same: catalog is what can go in any section, and the patterns of a kind of site are catalog too, one file each", () => {
       expect(bullet, "the bullet exists").toBeTruthy();
-      expect(bullet).toMatch(/`catalog` is the navigation of the site and the pieces with JS or an identity of their own/i);
-      expect(bullet).toMatch(/`core` is everything else/i);
+      expect(bullet).toMatch(/`catalog` is what a page links on its own when it uses it/i);
+      expect(bullet).toMatch(/the pieces that draw data \(the chart, the bar list, the column chart, the stacked bar, the heat map\)/i);
+      expect(bullet).toMatch(/`core` is what every page needs and fits in `luz\.css`/i);
+      expect(bullet).not.toMatch(/`core` is everything else/i);
       expect(bullet).toMatch(/core names nothing of catalog/i);
       expect(bullet).not.toMatch(/can go in any section/i);
       expect(bullet).toMatch(/patterns of a kind of site[^.]*are catalog too, one file each/i);
@@ -119,7 +128,9 @@ describe("@luz-ds/catalog's README says what site is now", () => {
   const readme = read("packages/catalog/README.md");
 
   it("sorts its pieces by the new rule, not by the data they need", () => {
-    expect(readme).toMatch(/catalog is the navigation of the site and the pieces with JS or an identity of their own/i);
+    expect(readme).toMatch(/catalog is what a page links on its own when it uses it/i);
+    expect(readme).toMatch(/what every page needs and fits in `luz\.css` is in `@luz-ds\/core`/i);
+    expect(readme, "the charts are catalog's").toMatch(/bar list, column chart, stacked bar and heat map/i);
     expect(readme).not.toMatch(/any section/i);
     expect(readme).not.toMatch(/needs data of the site/i);
   });

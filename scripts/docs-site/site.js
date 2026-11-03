@@ -44,7 +44,7 @@ import { BASE, PACKAGES } from "../luz-packages.js";
 import { fileKinds, fitsKindsOf, isKindFile } from "./kinds.js";
 import { fillAiMarkers } from "./ai.js";
 import { DEBUG_FILE, DEBUG_ROUTE, hasDebugPage, renderDebug } from "./debug.js";
-import { catalogComponents, catalogFilesIn, looseCoreSheets, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
+import { catalogComponents, catalogFilesIn, renderComponentLinks, renderSnippets, snippetData } from "./snippets.js";
 import { assertInlineHtml, loadLocales, localizeDocsLinks, lookup, markDocsLinks, renderAlternates, renderLangLinks, renderPageLinks, renderSwitcher, unusedKeys } from "./i18n.js";
 import { isDemo, loadDocsLocales, localizeLinks, localize } from "./docs-i18n.js";
 import { bundledEnglish, englishT, makeT } from "./strings.js";
@@ -86,9 +86,6 @@ const FRONT_MATTER = {
   fits: { default: "" },
   // Shown next to the h1: the CSS files and the JS module of a component
   files: { default: "" },
-  // Sheets of core outside luz.css that a page uses without documenting them, `;` apart (a dashboard
-  // that holds a bar list): the head links them after luz.css like the ones of `files`
-  loose: { default: "" },
   module: { default: "" },
   // "false" when the page's content starts with its own lead paragraph
   lead: { default: "true" },
@@ -104,8 +101,6 @@ const PLACEHOLDERS = new Set([
   // The page's language (i18n.js): its code and direction, its home page, the
   // <link rel="alternate"> of every language, the language switcher
   "lang", "dir", "home", "alternates", "langswitch", "langlinks",
-  // The <link> of a core sheet that luz.css does not hold, for a page whose `files` names it ("" for the others)
-  "loose",
   // ` dir="ltr"` in a right-to-left page, "" otherwise: for the English lists a partial writes
   "endir",
   // A docs page in a language: the notice before its content (a translation not
@@ -125,7 +120,7 @@ const PLACEHOLDERS = new Set([
   "list1", "list2", "list3",
 ]);
 /** Values inserted as HTML, not escaped. Only the generator produces them. */
-const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "loose", "endir", "notice", "contentattrs", "weights", "packages", "checks", "list1", "list2", "list3"]);
+const RAW_VALUES = new Set(["content", "nav", "pagehead", "rail", "endnav", "pagefoot", "generated", "alternates", "langswitch", "langlinks", "endir", "notice", "contentattrs", "weights", "packages", "checks", "list1", "list2", "list3"]);
 
 /** Where the home page's languages live, from the repository root. */
 export const I18N_DIR = "apps/landing/i18n";
@@ -1577,11 +1572,6 @@ function languageValues(site, locale, { home = false, siteUrl = "", page = null,
     ...(translated ? levelWeights(site, locale, used ?? site.usage?.used) : {}),
     ...(translated ? levelLists(site, locale, used ?? site.usage?.used) : {}),
   };
-  // A page that names a core sheet outside luz.css links it right after luz.css (before every catalog sheet: load/order)
-  values.loose = looseCoreSheets(site.repoRoot)
-    .filter((file) => `${page?.meta.files ?? ""};${page?.meta.loose ?? ""}`.includes(file))
-    .map((file) => `\n  <link rel="stylesheet" href="/packages/core/dist/${file}">`)
-    .join("");
   if (page && page.route !== NOT_FOUND_ROUTE) {
     values.alternates = renderDocsAlternates(site, page, siteUrl);
     values.langswitch = renderDocsSwitcher(site, page, locale);

@@ -610,9 +610,9 @@ describe("the LUZ docs site", () => {
     // links are in the closed drawer on a phone, "On this page" is closed).
     // A page in a language (/es/, /es/docs/…) must reach the component's page
     // in that language (/es/docs/components/…): the English one is not its target.
-    // F7: the navbar, the sidebar, the terminal and the timeline are pages of the Catalog area now (33 components became 29 of core)
+    // F7: the navbar, the sidebar, the terminal and the timeline are pages of the Catalog area now; so are the bar list and the three charts since 2026-11-03: 29 pages of components
     const components = site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers");
-    expect(components).toHaveLength(33);
+    expect(components).toHaveLength(29);
     const withLanguages = buildSite(site, { extra: landing, languages: true, unchecked: homes });
     // Every language of the home page is a start page; only Spanish has docs, so a link from the Arabic home goes to the English docs
     const homeCodes = homes.filter((h) => h !== "/").map((h) => h.replaceAll("/", ""));
@@ -944,9 +944,9 @@ describe("the LUZ docs site", () => {
   // catalog again, under the names of their blocks), so a link to /docs/catalog/hero/ is not a link to a page that left
   const LEFT_SITE = ["actions", "footer", "image", "lang-switcher", "notice", "shell", "skip-link", "templates"];
 
-  it("the Catalog area holds its nine components, the navbar, sidebar, terminal and timeline that came from core (F7), the 20 pages of the patterns of the kinds of site, named for their blocks (F8), the page transition (a stylesheet with no class) and its class reference", () => {
+  it("the Catalog area holds its nine components, the navbar, sidebar, terminal and timeline that came from core (F7), the 24 pages of the patterns of the kinds of site, named for their blocks (F8), the page transition (a stylesheet with no class) and its class reference", () => {
     const routes = site.pages.filter((p) => p.meta.area === "catalog").map((p) => p.route).sort();
-    const patterns = ["site-header", "masthead", "hero", "section", "stat", "site-footer", "social", "page-header", "article-header", "toc", "post-list", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
+    const patterns = ["site-header", "masthead", "hero", "section", "stat", "site-footer", "social", "page-header", "article-header", "toc", "post-list", "app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
     // A stylesheet with no class and no tag (one at-rule) has a page of its own, in the group site-wide
     const sheets = ["page-transition"];
     const layout = ["navbar", "sidebar", "terminal", "timeline"];

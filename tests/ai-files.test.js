@@ -1099,19 +1099,6 @@ const CATALOG_FILES = new Set(CATALOG_STYLESHEETS.map(({ file }) => file));
  */
 const LAYOUT_FIRST = ["sidebar", "navbar", "terminal", "timeline"].map((name) => `components/${name}.css`);
 
-/**
- * The sheets of core that luz.css does not hold (a file of src/components that components/index.css does not @import): a
- * page whose `files` names one links it right after core's luz.css. Read from the sources, as the generator reads them.
- */
-const LOOSE_CORE = (() => {
-  const dir = join(root, "packages/core/src/components");
-  const index = readFileSync(join(dir, "index.css"), "utf-8");
-  return readdirSync(dir)
-    .filter((f) => f.endsWith(".css") && f !== "index.css" && !f.startsWith("_") && !index.includes(`./${f}`))
-    .sort()
-    .map((f) => `components/${f}`);
-})();
-
 function stylesheetsFor(page) {
   const area = areaOf(page.route);
   const { kept } = blocksOf(page);
@@ -1125,10 +1112,7 @@ function stylesheetsFor(page) {
   // catalog files (which follow by name): all are in luz.catalog, so source order decides, and a pattern or the search must
   // never be overridden by the sidebar's link colours
   const catalog = [...LAYOUT_FIRST.filter((f) => files.has(f)), ...[...files].filter((f) => !LAYOUT_FIRST.includes(f)).sort()].map((file) => ["catalog", minifiedOf(file)]);
-  // `files` names the sheets a page documents, `loose` the ones it uses without documenting them (the Dashboard's bar list and stacked bar)
-  const named = `${page.meta.files ?? ""};${page.meta.loose ?? ""}`;
-  const loose = LOOSE_CORE.filter((file) => named.includes(file)).map((file) => ["core", minifiedOf(file)]);
-  return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...loose, ...catalog];
+  return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...catalog];
 }
 
 /* ---- reading a generated document ------------------------------------------- */
@@ -1251,32 +1235,28 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
     }
   });
 
-  it("links core's loose sheet after luz.css on the page of its own component (the bar list and the three charts) and on the pages whose `loose` key names it, and on no other page", () => {
-    const OWNERS = { "components/bar-list.css": "bar-list", "components/column-chart.css": "column-chart", "components/heat-map.css": "heat-map", "components/stacked-bar.css": "stacked-bar" };
-    expect(LOOSE_CORE, "the bar list and the three charts are the sheets core's luz.css has no room for").toEqual(Object.keys(OWNERS));
-    const dashboard = site.byRoute.get("/docs/catalog/dashboard/");
-    const dashboardLoose = dashboard.meta.loose.split(";").map((f) => f.trim()).filter(Boolean);
-    expect(dashboardLoose, "the Dashboard page names the sheets of its data panels").toEqual(["components/bar-list.css", "components/stacked-bar.css"]);
+  it("links the bar list and the three charts as sheets of catalog, on the page of their own and on the Dashboard's, and core's luz.css is the only core sheet of any example (core has no loose sheet)", () => {
+    const CHARTS = ["bar-list", "column-chart", "heat-map", "stacked-bar"];
     const linkedBy = [];
     for (const e of examples()) {
       const hrefs = inspect(e.html, e.route).links.map((l) => l.href);
-      const loose = hrefs.filter((h) => LOOSE_CORE.some((f) => h.endsWith(`/${minifiedOf(f)}`)));
-      if (!loose.length) continue;
+      expect(hrefs.filter((h) => h.includes("/core/")), `${e.route}: core's one stylesheet`).toEqual([`../dist/core/${cssOf("core")}`]);
+      const charts = hrefs.filter((h) => CHARTS.some((name) => h.endsWith(`/catalog/components/${name}.min.css`)));
+      if (!charts.length) continue;
       linkedBy.push(e.route);
-      const own = e.route.split("/").at(-1).replace(/\.html$/, "");
-      if (e.route === "/examples/catalog/dashboard.html") {
-        // not its own component's page: the sheets are those of its `loose` key, in the order of the key
-        expect(loose, e.route).toEqual(dashboardLoose.map((f) => `../dist/core/${minifiedOf(f)}`));
-      } else {
-        expect(loose, e.route).toEqual([`../dist/core/components/${own}.min.css`]);
-        expect(Object.values(OWNERS), e.route).toContain(own);
-      }
-      expect(hrefs.indexOf(loose[0]), `${e.route}: right after luz.min.css`).toBe(hrefs.indexOf(`../dist/core/${cssOf("core")}`) + 1);
-      expect(hrefs.indexOf(loose.at(-1)), `${e.route}: the loose sheets are together`).toBe(hrefs.indexOf(loose[0]) + loose.length - 1);
-      const firstCatalog = hrefs.findIndex((h) => h.includes("/catalog/components/"));
-      if (firstCatalog > -1) expect(firstCatalog, `${e.route}: before every catalog sheet`).toBeGreaterThan(hrefs.indexOf(loose.at(-1)));
+      for (const href of charts) expect(hrefs.indexOf(href), `${e.route}: after luz.min.css`).toBeGreaterThan(hrefs.indexOf(`../dist/core/${cssOf("core")}`));
     }
-    expect(linkedBy).toEqual(["/examples/catalog/dashboard.html", "/examples/components/bar-list.html", "/examples/components/column-chart.html", "/examples/components/heat-map.html", "/examples/components/stacked-bar.html"]);
+    // each of the four documents its sheet; the Dashboard holds a bar list and a stacked bar
+    expect(linkedBy).toEqual(["/examples/catalog/bar-list.html", "/examples/catalog/column-chart.html", "/examples/catalog/dashboard.html", "/examples/catalog/heat-map.html", "/examples/catalog/stacked-bar.html"]);
+    for (const name of CHARTS) {
+      const own = examples().find((e) => e.route === `/examples/catalog/${name}.html`);
+      expect(own, `${name} has an example page in the catalog area`).toBeTruthy();
+      expect(inspect(own.html, own.route).links.map((l) => l.href), name).toContain(`../dist/catalog/components/${name}.min.css`);
+    }
+    const dashboard = examples().find((e) => e.route === "/examples/catalog/dashboard.html");
+    const dashboardLinks = inspect(dashboard.html, dashboard.route).links.map((l) => l.href);
+    for (const name of ["bar-list", "stacked-bar"]) expect(dashboardLinks, `the Dashboard holds a ${name}`).toContain(`../dist/catalog/components/${name}.min.css`);
+    expect(examples().some((e) => e.route.startsWith("/examples/components/") && CHARTS.some((name) => e.route.endsWith(`/${name}.html`))), "no example page is left in the components area").toBe(false);
   });
 
   it("links the four components that moved from core first among catalog's files, in the order sidebar, navbar, terminal, timeline", () => {
@@ -1528,8 +1508,7 @@ describe("exampleAssets: the CSS and JS an example loads, copied beside the exam
     // catalog has a stylesheet per component and no bundle: every components/<name>.min.css of its dist
     const catalogSheets = readdirSync(join(root, "packages/catalog/dist/components")).filter((f) => f.endsWith(".min.css")).map((f) => `components/${f}`);
     expect(catalogSheets.length).toBeGreaterThan(0);
-    // and core's loose sheets (the ones luz.css does not hold), which an example links after luz.css
-    const expected = PACKAGES.flatMap((pkg) => [...(pkg === "catalog" ? catalogSheets : [cssOf(pkg)]), ...(pkg === "core" ? LOOSE_CORE.map(minifiedOf) : []), FILES[pkg].js, ...FILES[pkg].chunks].filter(Boolean).map((file) => `/examples/dist/${pkg}/${file}`));
+    const expected = PACKAGES.flatMap((pkg) => [...(pkg === "catalog" ? catalogSheets : [cssOf(pkg)]), FILES[pkg].js, ...FILES[pkg].chunks].filter(Boolean).map((file) => `/examples/dist/${pkg}/${file}`));
     expect(assets().map((a) => a.route).sort()).toEqual(expected.sort());
     const routes = assets().map((a) => a.route);
     expect(routes).toContain("/examples/dist/tokens/tokens.min.css");

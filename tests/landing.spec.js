@@ -900,7 +900,7 @@ test.describe('Landing page', () => {
         }
         // A reader gets the share as text: the chart's bars are pictures
         for (const meter of await page.locator('#why .luz-bar-list__meter').all()) await expect(meter).toHaveAttribute('aria-hidden', 'true');
-        // The three charts are core's bar list, in cells; the home keeps no class of its own for them
+        // The three charts are catalog's bar list, in cells; the home keeps no class of its own for them
         await expect(page.locator('#why figure.luz-bar-list.luz-bar-list--cells')).toHaveCount(3);
         await expect(page.locator('#why .luz-bar-list__meter')).toHaveCount(await page.locator('#why .luz-bar-list__row').count());
         await expect(page.locator('[class*="landing-bar"], [class*="landing-chart"]')).toHaveCount(0);
