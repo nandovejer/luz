@@ -101,6 +101,37 @@ toc: h2,h3
               </ul>
               <p class="docs-demo__note"><code class="luz-code-inline">luz-post-list--compact</code>: one row for each post, the title and the facts, with no picture.</p>
             </div>
+            <div class="docs-demo__stage">
+              <search>
+                <form action="#example">
+                  <label for="demo-post-search">Search the blog</label>
+                  <input type="search" id="demo-post-search" name="q" value="tide">
+                  <button type="submit">Search</button>
+                </form>
+              </search>
+              <p id="demo-post-results">3 results for "tide"</p>
+              <ul class="luz-post-list luz-post-list--compact" role="list" aria-labelledby="demo-post-results">
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">What ten years of tide records say about the bay</a></p>
+                    <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>Coast</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">Reading the tide table before a walk on the beach</a></p>
+                    <p class="luz-meta"><time datetime="2026-08-21">21 August 2026</time> <span>Coast</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">The tide mill that grinds again</a></p>
+                    <p class="luz-meta"><time datetime="2026-05-30">30 May 2026</time> <span>Culture</span></p>
+                  </article>
+                </li>
+              </ul>
+              <p class="docs-demo__note">Search results: the search box, then a heading that says how many, then the compact list. The posts, the word searched and the counts are placeholders: your search fills them in.</p>
+            </div>
           </div>
           <h2 id="known-issues">Known issues</h2>
           <p>None known.</p>
@@ -132,6 +163,30 @@ toc: h2,h3
   &lt;!-- one li for each post; the others have no div around their text --&gt;
 &lt;/ul&gt;</code></pre>
             </div>
+            <p>A template for the results page of a search: a <code>&lt;search&gt;</code> with its form, a heading that says how many results there are, and the compact list. Your site's search fills in the results; the text here is a placeholder.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-post-list-search" aria-label="Copy the search results markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Search results markup"><code id="code-post-list-search">&lt;search&gt;
+  &lt;form action=&quot;/search/&quot;&gt;
+    &lt;label for=&quot;q&quot;&gt;Search the blog&lt;/label&gt;
+    &lt;input type=&quot;search&quot; id=&quot;q&quot; name=&quot;q&quot; value=&quot;tide&quot;&gt;
+    &lt;button type=&quot;submit&quot;&gt;Search&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/search&gt;
+&lt;h2 id=&quot;results-title&quot;&gt;3 results for &quot;tide&quot;&lt;/h2&gt;
+&lt;ul class=&quot;luz-post-list luz-post-list--compact&quot; role=&quot;list&quot; aria-labelledby=&quot;results-title&quot;&gt;
+  &lt;li&gt;
+    &lt;article class=&quot;luz-card&quot;&gt;
+      &lt;h3 class=&quot;luz-card__title&quot;&gt;&lt;a href=&quot;/2026/10/tide-records/&quot;&gt;What ten years of tide records say about the bay&lt;/a&gt;&lt;/h3&gt;
+      &lt;p class=&quot;luz-meta&quot;&gt;&lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt; &lt;span&gt;Coast&lt;/span&gt;&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/li&gt;
+  &lt;!-- one li for each result --&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
             <h3 id="variants">Variants and options</h3>
             <div class="luz-table-wrap" role="region" aria-label="Post list classes" tabindex="0">
               <table class="luz-table">
@@ -160,6 +215,8 @@ toc: h2,h3
               <li><strong>Order:</strong> the source order, which is the reading order. In the lead the picture comes before the text; each card is one tab stop, on its title link.</li>
               <li><strong>List:</strong> the <code>&lt;ul&gt;</code> is announced with its count ("list, 12 items"). Keep <code>role="list"</code>: some browsers drop the list from a <code>&lt;ul&gt;</code> without bullets.</li>
               <li><strong>Names:</strong> each link is named by its post title. A picture that only decorates the post has <code>alt=""</code>. Give the list a heading, or an <code>aria-label</code>, when the page has more than one.</li>
+              <li><strong>Search results:</strong> <code>&lt;search&gt;</code> is the search landmark, so the form inside it needs no <code>role="search"</code>: adding one would nest a second landmark. Put the results outside <code>&lt;search&gt;</code>, in the <code>&lt;main&gt;</code>. If the page has more than one <code>&lt;search&gt;</code>, name each with <code>aria-label</code>. Name the list with the heading that counts the results, with <code>aria-labelledby</code>.</li>
+              <li><strong>Announcing the results:</strong> a results page that loads whole needs no live region: put the count and the query in the <code>&lt;title&gt;</code> and in the <code>&lt;h1&gt;</code>. If your site filters the list in place, put the count in a separate element with <code>role="status"</code>: a heading is not live, so a screen reader does not say it changed.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
@@ -203,6 +260,7 @@ toc: h2,h3
               <li>Summary: one sentence, up to about 120 characters. Leave it out in the lead's side posts and in the compact list.</li>
               <li>Facts: the date, as a <code>&lt;time&gt;</code>, then the reading time or the section. Same order in every card.</li>
               <li>Heading level: the card title is a heading one level under the heading of the list's page or section.</li>
+              <li>Search results: say how many results there are and for what (<code>3 results for "tide"</code>), in the heading, the <code>&lt;title&gt;</code> and the <code>&lt;h1&gt;</code> of a page that loads whole. With none, say so and how to go on: check the spelling, or try a shorter word.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
             <p>The cards sit on the page surface, with the same colours as any card.</p>

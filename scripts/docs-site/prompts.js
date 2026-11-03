@@ -33,7 +33,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { expandNumbers, siteNumbers } from "./i18n.js";
-import { catalogPatterns, fileKinds, isKindFile, kindPatterns } from "./kinds.js";
+import { CASCADE, catalogPatterns, fileKinds, isKindFile, kindPatterns } from "./kinds.js";
 import { FILES, catalogComponents, catalogFilesIn, looseCoreSheets, minified } from "./snippets.js";
 
 /** The published site: every link of a prompt starts here. */
@@ -169,7 +169,10 @@ export function assemblePrompt(id, { root }) {
   const kinds = fileKinds(root);
   const patterns = kind.patterns ? kindPatterns(kind.patterns, root, components) : { files: [], pages: [] };
   const own = patterns.files;
-  const catalogFiles = [...new Set([...catalogFilesIn(named, components).filter((file) => !isKindFile(file, kinds)), ...own])];
+  // A piece that fits any site (the pager) may be named by the preset and so come first: the files in CASCADE are
+  // finally put in its order, after the ones it does not list
+  const place = (file) => CASCADE.indexOf(file.replace(/^components\/|\.css$/g, ""));
+  const catalogFiles = [...new Set([...catalogFilesIn(named, components).filter((file) => !isKindFile(file, kinds)), ...own])].sort((a, b) => place(a) - place(b));
   const stylesheets = (pkg) => (pkg === "catalog" ? catalogFiles.map(minified) : [FILES[pkg].css]);
 
   const values = {

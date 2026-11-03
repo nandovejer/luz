@@ -11,6 +11,9 @@
      negative margin of the same size keeps the text where it was.
    - Nothing is positioned, so the line stays under the link of a card that
      covers the card (.luz-card__title a).
+   - .luz-meta--facts is a <dl> of labelled facts (Location, Date, Price) for a
+     hero: each fact is a <div> of a <dt> and a <dd>, the label above its
+     value, the facts in a row that wraps, with no dots.
    Layer: components (ITCSS 5) · Prefix: .luz-
    Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
    -------------------------------------------------------------------------- */
@@ -40,4 +43,33 @@
   font-style: normal;
   font-weight: 400;
   color: var(--luz-text-secondary);
+}
+
+/* A description list of facts: no dots, the label (secondary) above its value */
+.luz-meta--facts {
+  row-gap: var(--luz-space-xs);
+}
+
+.luz-meta--facts > * {
+  margin-block-start: 0;
+}
+
+.luz-meta--facts > * + *::before {
+  content: none;
+}
+
+.luz-meta--facts dt {
+  font-weight: 400;
+}
+
+.luz-meta--facts dd {
+  padding-inline-start: 0;
+  font-weight: 600;
+  color: var(--luz-text-primary);
+}
+
+/* A date in a value reads as the value, not as the bare <time> */
+.luz-meta--facts time {
+  font-size: inherit;
+  color: inherit;
 }
