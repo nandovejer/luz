@@ -108,3 +108,109 @@ test.describe('<luz-search> loaded from two copies of the module (R7)', () => {
     expect(await page.evaluate(() => window.__keydown)).toEqual({ dialog: 1, document: 1 });
   });
 });
+
+// A <luz-search> whose dialog lacks the field, the status or the results is
+// not wired: the fallback link stays, the trigger stays hidden, Ctrl+K does
+// nothing, and nothing throws (it used to throw reading null.addEventListener)
+const PARTS = { 'the field': 'input', 'the status': '[role=status]', 'the results': '[data-luz-search-results]' };
+
+/** Add a copy of the fixture's markup, tagged `data-case`, without what `drop` selects. */
+const addSearch = (page, tag, drop) =>
+  page.evaluate(
+    ([tag, drop]) => {
+      const copy = document.getElementById('markup').content.cloneNode(true);
+      if (drop) copy.querySelector('dialog').querySelector(drop).remove();
+      copy.querySelector('luz-search').dataset.case = tag;
+      document.getElementById('slot').append(copy);
+    },
+    [tag, drop],
+  );
+
+/** Collect what the page reports as an error, and whether a keydown reaches the window default-prevented. */
+async function watch(page) {
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`));
+  await page.evaluate(() => {
+    window.__prevented = [];
+    window.addEventListener('keydown', (e) => e.key === 'k' && window.__prevented.push(e.defaultPrevented));
+  });
+  return errors;
+}
+
+const dialogs = (page) => page.locator('dialog[open]');
+
+test.describe('<luz-search> with an incomplete dialog', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(FIXTURE);
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-search'))).toBe(true);
+  });
+
+  for (const [name, drop] of Object.entries(PARTS)) {
+    test(`a dialog without ${name} throws nothing, keeps the fallback, keeps the trigger hidden and leaves Ctrl+K alone`, async ({ page }) => {
+      const errors = await watch(page);
+      await addSearch(page, 'bad', drop);
+      await page.waitForTimeout(100);
+      expect(errors).toEqual([]);
+      await expect(page.locator('[data-case=bad] #fallback')).toBeVisible();
+      await expect(page.locator('[data-case=bad] #trigger')).toBeHidden();
+      await expect(page.locator('#external')).toBeHidden();
+      await page.keyboard.press('Control+k');
+      await expect(dialogs(page)).toHaveCount(0);
+      expect(await page.evaluate(() => window.__prevented)).toEqual([false]);
+      expect(errors).toEqual([]);
+    });
+  }
+
+  test('a complete search and an incomplete one on the same page: the first works, the second is left as it is', async ({ page }) => {
+    const errors = await watch(page);
+    await addSearch(page, 'good');
+    await addSearch(page, 'bad', '[data-luz-search-results]');
+    await expect(page.locator('[data-case=good] #trigger')).toBeVisible();
+    await expect(page.locator('[data-case=good] #fallback')).toBeHidden();
+    await expect(page.locator('[data-case=bad] #fallback')).toBeVisible();
+    await expect(page.locator('[data-case=bad] #trigger')).toBeHidden();
+    // The button outside belongs to the one that is wired
+    await expect(page.locator('#external')).toBeVisible();
+    await page.keyboard.press('Control+k');
+    const good = page.locator('[data-case=good] dialog');
+    await expect(good).toBeVisible();
+    await expect(page.locator('[data-case=bad] dialog')).toBeHidden();
+    await good.getByRole('textbox', { name: 'Query' }).fill('butt');
+    await expect(good.locator('[data-luz-search-list="pages"] a')).toHaveText(['Button']);
+    await page.keyboard.press('Escape');
+    await expect(good).toBeHidden();
+    expect(errors).toEqual([]);
+  });
+
+  test('a button outside any <luz-search> stays hidden when the only dialog is incomplete, and its click throws nothing', async ({ page }) => {
+    const errors = await watch(page);
+    await addSearch(page, 'bad', 'input');
+    await page.waitForTimeout(100);
+    await expect(page.locator('#external')).toBeHidden();
+    await page.evaluate(() => document.getElementById('external').click());
+    await page.waitForTimeout(100);
+    await expect(dialogs(page)).toHaveCount(0);
+    expect(errors).toEqual([]);
+  });
+
+  test('an incomplete dialog is not marked as wired: once completed, connecting the element again wires it', async ({ page }) => {
+    const errors = await watch(page);
+    await addSearch(page, 'late', 'input');
+    await expect(page.locator('[data-case=late] #trigger')).toBeHidden();
+    await page.evaluate(() => {
+      const host = document.querySelector('[data-case=late]');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.setAttribute('aria-label', 'Query');
+      host.querySelector('dialog').prepend(input);
+      // Moving the element disconnects and connects it again
+      document.body.append(host);
+    });
+    await expect(page.locator('[data-case=late] #trigger')).toBeVisible();
+    await expect(page.locator('[data-case=late] #fallback')).toBeHidden();
+    await page.keyboard.press('Control+k');
+    await expect(page.locator('[data-case=late] dialog')).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+});
