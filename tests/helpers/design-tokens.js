@@ -182,12 +182,17 @@ export function tokensUsedBy(page) {
   // --luz-catalog-*, the knobs of a pattern a consumer sets (--luz-glow-*, --luz-title-accent, --luz-toc-top,
   // --luz-page-rail-*, --luz-example-w: the old --luz-<kind>-* of F8's table 4) and the docs layout's own (--luz-docs-measure,
   // --luz-docs-nav-w) are properties a pattern sets for its own parts, not design tokens
+  // A hook a core file sets for another to read (--luz-scheme: elements/forms.css sets it by colour mode, the form and select
+  // components read it as color-scheme: var(--luz-scheme, light)): read only with a fallback and declared by no file of the
+  // tokens package, so it is a switch between two files of core, not a design token. Nothing in packages/tokens defines it,
+  // so no token page can document it; a token is declared there, or read bare.
+  const hook = (t) => !declared.has(t) && !bare.has(t);
   const patternProperty = /^--luz-(?:catalog-|docs-|glow-|title-accent$|toc-|page-rail-|example-w$)/;
   // --luz-consent-h is the height of the cookie banner, which the <luz-cookie-consent> script sets on :root for the parts of
   // other patterns that must leave room for it (the docs rail): a property a script publishes, not a design token
   // with a page of its own, so it belongs to no token family
   const publishedByScript = new Set(["--luz-consent-h"]);
-  return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !(ownProperty?.test(t) && !declared.has(t)) && !(knobName?.test(t) && !bare.has(t)) && !publishedByScript.has(t)).sort();
+  return [...used].filter((t) => !local.has(t) && !patternProperty.test(t) && !(ownProperty?.test(t) && !declared.has(t)) && !(knobName?.test(t) && !bare.has(t)) && !publishedByScript.has(t) && !hook(t)).sort();
 }
 
 /* ---- Token families and their pages --------------------------------------- */

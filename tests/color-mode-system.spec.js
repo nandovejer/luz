@@ -149,7 +149,7 @@ test.describe('every explicit choice wins over the system', () => {
       });
       await expectMode(page, mode, `a checked radio with no value, ${name}`);
 
-      await page.evaluate(() => document.querySelector('luz-theme-mode')?.remove());
+      await page.evaluate(() => document.getElementById('mode')?.remove());
       await expectMode(page, mode, `no radio at all, ${name}`);
     });
   }
