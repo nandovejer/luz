@@ -7,6 +7,16 @@ import { docsSite } from "./scripts/docs-site/plugin.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const distRoot = resolve(__dirname, "dist");
+/**
+ * The private folder of a checkout, `<root>/.claude/**`, as a glob Vite matches
+ * against the absolute path of a file (picomatch, forward slashes). It is anchored
+ * at the root: a worktree lives under <main checkout>/.claude/luz-worktree/, so
+ * "**\/.claude/**" would match every file of it. The path is escaped, so a "[", "(" or
+ * "{" in a folder's name is a letter and not a glob.
+ * @param {string} root absolute path of the checkout
+ */
+export const ownClaudeDeny = (root) =>
+  `${root.replace(/\\/g, "/").replace(/\/$/, "").replace(/[\\()[\]{}*?!+@]/g, "\\$&")}/.claude/**`;
 // `vite build --mode pages` builds the GitHub Pages site into docs/.
 // docs/ is git-ignored build output: CI builds it and pages.yml deploys it (red line 14).
 // LUZ_PAGES_OUT builds it elsewhere (a folder inside the OS temp dir).
@@ -144,8 +154,9 @@ export default defineConfig(({ mode }) => {
         // root is the repository, so every file under it is a URL: keep the
         // secrets, the git store and the private Claude files out of it (F8, L1).
         // Vite's default is [".env", ".env.*", "*.{crt,pem}", "**/.git/**"];
-        // setting deny replaces it, so the list repeats it
-        deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "**/.claude/**"],
+        // setting deny replaces it, so the list repeats it. The last one is this
+        // checkout's own .claude/ (see ownClaudeDeny), never any .claude/ in the path
+        deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", ownClaudeDeny(__dirname)],
       },
     },
     build: {
