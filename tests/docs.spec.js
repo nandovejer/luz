@@ -852,6 +852,7 @@ test.describe('Documentation site', () => {
 
   test.describe('copy and accessibility of the pages themselves', () => {
     test('labels say "color mode", never "theme", outside code', async ({ page }) => {
+      test.slow(); // loops over every page of the docs, so its time grows with them: over the 30 s default on a busy shard (CI #131, #135, #137)
       // The custom themes are the subject of their own page, the palette is
       // for theme authors, and the accessibility statement names the shipped themes
       const THEMES_PAGE = routeOf('themes');
