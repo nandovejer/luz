@@ -17,8 +17,11 @@ import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
+import { exampleDocuments } from "../scripts/docs-site/ai.js";
+import { decodeEntities } from "../scripts/docs-site/html.js";
 import { sourceHash } from "../scripts/docs-site/docs-i18n.js";
 import { assemblePrompt } from "../scripts/docs-site/prompts.js";
+import { PAGES_CSP } from "../vite.config.js";
 import { buildReal, site } from "./helpers/debug-page.js";
 import { find, findAll, hasClass, matcher, parse, query, queryAll, textOf } from "./helpers/html-dom.js";
 
@@ -244,6 +247,58 @@ describe("the Spanish Dashboard page: a translation of this body, with the demo 
     const specimens = [...html.matchAll(/<div\b[^>]*data-docs-specimen[^>]*>/g)].map((m) => m[0]);
     expect(specimens.length).toBeGreaterThanOrEqual(2);
     for (const tag of specimens) expect(tag, "a demo is English inside the translated page").toContain('lang="en"');
+  });
+});
+
+/* ---- The snippets and the generated example ------------------------------------------------------------------------------ */
+
+describe("the snippets of the Dashboard page are valid markup on their own", () => {
+  /** The html blocks of a page (the code of every `pre > code`), decoded. */
+  const blocksOf = (source) => [...source.matchAll(/<pre\b[^>]*\bdata-lang="html"[^>]*>\s*<code[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/g)].map((m) => decodeEntities(m[1]));
+  const PARENTS = new Set(["ul", "ol", "menu"]);
+
+  it.each([["English", () => page().body], ["Spanish", () => esSource()]])("%s: every li of a snippet has a ul or ol around it, so the example made from it is a valid document", (_, source) => {
+    const blocks = blocksOf(source());
+    expect(blocks.length, "the page has snippets").toBeGreaterThanOrEqual(2);
+    const withItems = blocks.filter((code) => /<li\b/.test(code));
+    expect(withItems.length, "and some hold li elements").toBeGreaterThanOrEqual(1);
+    for (const code of withItems) {
+      const orphans = findAll(parse(code, "dashboard.html"), (n) => n.name === "li" && !PARENTS.has(n.parent.name));
+      expect(orphans.map((n) => textOf(n).slice(0, 40)), `an li with no list: ${code.slice(0, 60)}`).toEqual([]);
+    }
+  });
+
+  it("the data panels snippet is the list of the grid: ul.o-grid around the four panels", () => {
+    const code = blocksOf(page().body).find((c) => c.includes("Sample figures"));
+    const grid = find(parse(code, "dashboard.html"), (n) => n.name === "ul" && hasClass(n, "o-grid"));
+    expect(grid, "a ul.o-grid in the snippet").toBeTruthy();
+    expect(grid.children.filter((n) => n.name === "li" && hasClass(n, "luz-dashboard__panel")).length, "the panels are its items").toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe("the example document made from the Dashboard page", () => {
+  const VERSIONS = { tokens: "1.2.3", core: "1.2.3", catalog: "1.2.3", check: "1.2.3" };
+  const example = () => {
+    const doc = exampleDocuments(site, { csp: PAGES_CSP, versions: VERSIONS }).find((d) => d.route === "/examples/catalog/dashboard.html");
+    expect(doc, "an example for the Dashboard page").toBeTruthy();
+    return doc;
+  };
+
+  it("is a valid document: no li outside a ul, ol or menu, and no tr, dt or dd without its table or list", () => {
+    const tree = parse(example().html, "dashboard.html");
+    const allowed = { li: ["ul", "ol", "menu"], dt: ["dl", "div"], dd: ["dl", "div"], tr: ["table", "thead", "tbody", "tfoot"] };
+    const orphans = findAll(tree, (n) => allowed[n.name] && !allowed[n.name].includes(n.parent.name)).map((n) => `${n.name} in ${n.parent.name}`);
+    expect(orphans).toEqual([]);
+  });
+
+  it("links the sheets of the loose key after luz.css and before every catalog sheet, and no other loose sheet", () => {
+    const hrefs = [...example().html.matchAll(/<link\b[^>]*rel="?stylesheet"?[^>]*>/g)].map((m) => m[0].match(/href="?([^" >]+)/)?.[1]);
+    const core = hrefs.findIndex((h) => /\/core\/luz(?:\.min)?\.css$/.test(h));
+    expect(core, "luz.css is linked").toBeGreaterThan(-1);
+    expect(hrefs.slice(core + 1, core + 3), "the two sheets of the loose key, in its order").toEqual(LOOSE.map((f) => `../dist/core/${f.replace(/\.css$/, ".min.css")}`));
+    const firstCatalog = hrefs.findIndex((h) => h.includes("/catalog/"));
+    expect(firstCatalog, "the catalog's sheets come after").toBeGreaterThan(core + 2);
+    expect(hrefs.filter((h) => /heat-map|column-chart/.test(h))).toEqual([]);
   });
 });
 

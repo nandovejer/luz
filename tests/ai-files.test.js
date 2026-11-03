@@ -1125,7 +1125,9 @@ function stylesheetsFor(page) {
   // catalog files (which follow by name): all are in luz.catalog, so source order decides, and a pattern or the search must
   // never be overridden by the sidebar's link colours
   const catalog = [...LAYOUT_FIRST.filter((f) => files.has(f)), ...[...files].filter((f) => !LAYOUT_FIRST.includes(f)).sort()].map((file) => ["catalog", minifiedOf(file)]);
-  const loose = LOOSE_CORE.filter((file) => (page.meta.files ?? "").includes(file)).map((file) => ["core", minifiedOf(file)]);
+  // `files` names the sheets a page documents, `loose` the ones it uses without documenting them (the Dashboard's bar list and stacked bar)
+  const named = `${page.meta.files ?? ""};${page.meta.loose ?? ""}`;
+  const loose = LOOSE_CORE.filter((file) => named.includes(file)).map((file) => ["core", minifiedOf(file)]);
   return [["tokens", cssOf("tokens")], ["core", cssOf("core")], ...loose, ...catalog];
 }
 
@@ -1249,9 +1251,12 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
     }
   });
 
-  it("links core's loose sheet after luz.css on the page of its own component (the bar list and the three charts), and on no other page", () => {
+  it("links core's loose sheet after luz.css on the page of its own component (the bar list and the three charts) and on the pages whose `loose` key names it, and on no other page", () => {
     const OWNERS = { "components/bar-list.css": "bar-list", "components/column-chart.css": "column-chart", "components/heat-map.css": "heat-map", "components/stacked-bar.css": "stacked-bar" };
     expect(LOOSE_CORE, "the bar list and the three charts are the sheets core's luz.css has no room for").toEqual(Object.keys(OWNERS));
+    const dashboard = site.byRoute.get("/docs/catalog/dashboard/");
+    const dashboardLoose = dashboard.meta.loose.split(";").map((f) => f.trim()).filter(Boolean);
+    expect(dashboardLoose, "the Dashboard page names the sheets of its data panels").toEqual(["components/bar-list.css", "components/stacked-bar.css"]);
     const linkedBy = [];
     for (const e of examples()) {
       const hrefs = inspect(e.html, e.route).links.map((l) => l.href);
@@ -1259,11 +1264,19 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
       if (!loose.length) continue;
       linkedBy.push(e.route);
       const own = e.route.split("/").at(-1).replace(/\.html$/, "");
-      expect(loose, e.route).toEqual([`../dist/core/components/${own}.min.css`]);
-      expect(Object.values(OWNERS), e.route).toContain(own);
+      if (e.route === "/examples/catalog/dashboard.html") {
+        // not its own component's page: the sheets are those of its `loose` key, in the order of the key
+        expect(loose, e.route).toEqual(dashboardLoose.map((f) => `../dist/core/${minifiedOf(f)}`));
+      } else {
+        expect(loose, e.route).toEqual([`../dist/core/components/${own}.min.css`]);
+        expect(Object.values(OWNERS), e.route).toContain(own);
+      }
       expect(hrefs.indexOf(loose[0]), `${e.route}: right after luz.min.css`).toBe(hrefs.indexOf(`../dist/core/${cssOf("core")}`) + 1);
+      expect(hrefs.indexOf(loose.at(-1)), `${e.route}: the loose sheets are together`).toBe(hrefs.indexOf(loose[0]) + loose.length - 1);
+      const firstCatalog = hrefs.findIndex((h) => h.includes("/catalog/components/"));
+      if (firstCatalog > -1) expect(firstCatalog, `${e.route}: before every catalog sheet`).toBeGreaterThan(hrefs.indexOf(loose.at(-1)));
     }
-    expect(linkedBy).toEqual(["/examples/components/bar-list.html", "/examples/components/column-chart.html", "/examples/components/heat-map.html", "/examples/components/stacked-bar.html"]);
+    expect(linkedBy).toEqual(["/examples/catalog/dashboard.html", "/examples/components/bar-list.html", "/examples/components/column-chart.html", "/examples/components/heat-map.html", "/examples/components/stacked-bar.html"]);
   });
 
   it("links the four components that moved from core first among catalog's files, in the order sidebar, navbar, terminal, timeline", () => {
