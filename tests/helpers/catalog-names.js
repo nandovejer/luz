@@ -5,6 +5,7 @@
  * other way round.
  *
  *   PATTERNS      the 20 stylesheets of the patterns of a kind of site, `components/<block>.css`
+ *   ANY_SITE      the patterns whose page says `fits-kinds: any`: no kind owns their file
  *   ELEMENTS      the nine elements, with their stylesheet and, if they have one, their chunk
  *   LAYOUT        the four that came from core in F7 (unchanged by F8)
  *   CLASSES       old class -> new class, row by row of table 1 of the changeset
@@ -18,6 +19,9 @@
 
 /** The 22 patterns, in the order of the cascade (CASCADE of scripts/docs-site/kinds.js, without the four of F7). */
 export const PATTERNS = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-header", "article-header", "article", "post-list", "app-bar", "dashboard", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
+
+/** The patterns that fit any kind of site (`fits-kinds: any`): every kind links their file, and the home weighs them. The pager joined the social links with the minor tweaks. */
+export const ANY_SITE = ["social", "pager"];
 
 /** The four of F7 (core to catalog), whose names F8 keeps. */
 export const LAYOUT = ["navbar", "sidebar", "terminal", "timeline"];

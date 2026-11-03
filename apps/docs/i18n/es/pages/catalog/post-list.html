@@ -3,7 +3,7 @@ title: Lista de artículos
 description: Dispone una lista de artículos en cuadrícula, con el último más grande, o como una lista compacta de filas. Cada artículo es una tarjeta.
 fits: una página que lista artículos: la portada, una categoría, un archivo, resultados de búsqueda
 keywords: blog, artículos, archivo, resultados de búsqueda, tarjetas
-source: 4d24ea15d646
+source: 712f8249f7d8
 reviewed: false
 -->
     <div class="docs-component" id="p-post-list">
@@ -97,6 +97,37 @@ reviewed: false
               </ul>
               <p class="docs-demo__note"><code class="luz-code-inline">luz-post-list--compact</code>: una fila por artículo, con el título y los datos, sin imagen.</p>
             </div>
+            <div class="docs-demo__stage">
+              <search>
+                <form action="#example">
+                  <label for="demo-post-search">Search the blog</label>
+                  <input type="search" id="demo-post-search" name="q" value="tide">
+                  <button type="submit">Search</button>
+                </form>
+              </search>
+              <p id="demo-post-results">3 results for "tide"</p>
+              <ul class="luz-post-list luz-post-list--compact" role="list" aria-labelledby="demo-post-results">
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">What ten years of tide records say about the bay</a></p>
+                    <p class="luz-meta"><time datetime="2026-10-12">12 October 2026</time> <span>Coast</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">Reading the tide table before a walk on the beach</a></p>
+                    <p class="luz-meta"><time datetime="2026-08-21">21 August 2026</time> <span>Coast</span></p>
+                  </article>
+                </li>
+                <li>
+                  <article class="luz-card">
+                    <p class="luz-card__title"><a href="#example">The tide mill that grinds again</a></p>
+                    <p class="luz-meta"><time datetime="2026-05-30">30 May 2026</time> <span>Culture</span></p>
+                  </article>
+                </li>
+              </ul>
+              <p class="docs-demo__note">Search results: the search box, then a heading that says how many, then the compact list. The posts, the word searched and the counts are placeholders: your search fills them in.</p>
+            </div>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
           <p>No se conocen.</p>
@@ -128,6 +159,30 @@ reviewed: false
   &lt;!-- one li for each post; the others have no div around their text --&gt;
 &lt;/ul&gt;</code></pre>
             </div>
+            <p>Una plantilla para la página de resultados de una búsqueda: un <code>&lt;search&gt;</code> con su formulario, un encabezado que dice cuántos resultados hay y la lista compacta. La búsqueda de tu sitio rellena los resultados; el texto de aquí es de ejemplo.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-post-list-search" aria-label="Copy the search results markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Search results markup"><code id="code-post-list-search">&lt;search&gt;
+  &lt;form action=&quot;/search/&quot;&gt;
+    &lt;label for=&quot;q&quot;&gt;Search the blog&lt;/label&gt;
+    &lt;input type=&quot;search&quot; id=&quot;q&quot; name=&quot;q&quot; value=&quot;tide&quot;&gt;
+    &lt;button type=&quot;submit&quot;&gt;Search&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/search&gt;
+&lt;h2 id=&quot;results-title&quot;&gt;3 results for &quot;tide&quot;&lt;/h2&gt;
+&lt;ul class=&quot;luz-post-list luz-post-list--compact&quot; role=&quot;list&quot; aria-labelledby=&quot;results-title&quot;&gt;
+  &lt;li&gt;
+    &lt;article class=&quot;luz-card&quot;&gt;
+      &lt;h3 class=&quot;luz-card__title&quot;&gt;&lt;a href=&quot;/2026/10/tide-records/&quot;&gt;What ten years of tide records say about the bay&lt;/a&gt;&lt;/h3&gt;
+      &lt;p class=&quot;luz-meta&quot;&gt;&lt;time datetime=&quot;2026-10-12&quot;&gt;12 October 2026&lt;/time&gt; &lt;span&gt;Coast&lt;/span&gt;&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/li&gt;
+  &lt;!-- one li for each result --&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
             <h3 id="variants">Variantes y opciones</h3>
             <div class="luz-table-wrap" role="region" aria-label="Clases de la lista de artículos" tabindex="0">
               <table class="luz-table">
@@ -156,6 +211,8 @@ reviewed: false
               <li><strong>Orden:</strong> el del código, que es el de lectura. En la destacada la imagen va antes del texto; cada tarjeta es una sola parada de tabulación, en el enlace del título.</li>
               <li><strong>Lista:</strong> el <code>&lt;ul&gt;</code> se anuncia con su número de elementos («lista, 12 elementos»). Conserva <code>role="list"</code>: algunos navegadores quitan la semántica de lista a un <code>&lt;ul&gt;</code> sin viñetas.</li>
               <li><strong>Nombres:</strong> cada enlace se llama como el título de su artículo. Una imagen que solo decora el artículo lleva <code>alt=""</code>. Da a la lista un encabezado, o un <code>aria-label</code>, cuando la página tenga más de una.</li>
+              <li><strong>Resultados de búsqueda:</strong> <code>&lt;search&gt;</code> es el punto de referencia de búsqueda, así que el formulario que contiene no necesita <code>role="search"</code>: añadirlo anidaría un segundo punto de referencia. Pon los resultados fuera de <code>&lt;search&gt;</code>, en el <code>&lt;main&gt;</code>. Si la página tiene más de un <code>&lt;search&gt;</code>, da nombre a cada uno con <code>aria-label</code>. Da nombre a la lista con el encabezado que cuenta los resultados, mediante <code>aria-labelledby</code>.</li>
+              <li><strong>Anunciar los resultados:</strong> una página de resultados que se carga entera no necesita una región en vivo: pon el número y la consulta en el <code>&lt;title&gt;</code> y en el <code>&lt;h1&gt;</code>. Si tu sitio filtra la lista en el mismo sitio, pon el número en un elemento aparte con <code>role="status"</code>: un encabezado no es en vivo, así que el lector de pantalla no avisa del cambio.</li>
             </ul>
             <p class="docs-view__xref">La pestaña Diseño incluye <a href="#contrast">Contraste y foco</a>.</p>
           </div>
@@ -199,6 +256,7 @@ reviewed: false
               <li>Resumen: una frase, de unos 120 caracteres como máximo. Omítelo en los artículos que acompañan a la destacada y en la lista compacta.</li>
               <li>Datos: la fecha, en un <code>&lt;time&gt;</code>, y después el tiempo de lectura o la sección. El mismo orden en todas las tarjetas.</li>
               <li>Nivel de encabezado: el título de la tarjeta es un encabezado un nivel por debajo del de la página o sección de la lista.</li>
+              <li>Resultados de búsqueda: di cuántos resultados hay y de qué (<code>3 results for "tide"</code>), en el encabezado, el <code>&lt;title&gt;</code> y el <code>&lt;h1&gt;</code> de una página que se carga entera. Si no hay ninguno, dilo y explica cómo seguir: revisa la ortografía o prueba una palabra más corta.</li>
             </ul>
             <h3 id="contrast">Contraste y foco</h3>
             <p>Las tarjetas aparecen sobre la superficie de la página, con los mismos colores que cualquier tarjeta.</p>

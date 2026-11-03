@@ -6,6 +6,9 @@
 	 The head: __eyebrow, __title and __lead share the rules of the hero's
 	 (one selector list, in hero.css, so load it with this file); the title
 	 is one step smaller.
+	 __more: a link ("See all talks") at the end of the head, in a row
+	 (core's .o-row) with the title; an auto margin on the inline start
+	 pushes it to the end in both directions.
 	 ========================================================================== */
 
 .luz-section {
@@ -30,6 +33,17 @@
 
 .luz-section__lead {
 	font-size: var(--luz-text-lg);
+}
+
+.luz-section__more {
+	margin-inline-start: auto;
+}
+
+/* In a row with the link, the title and the link share a baseline (the
+   row centres its items otherwise); outside a row it changes nothing */
+.luz-section__title,
+.luz-section__more {
+	align-self: baseline;
 }
 
 @media (max-width: 1023px) {

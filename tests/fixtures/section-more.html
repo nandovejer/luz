@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Section link · LUZ test page</title>
+  <!-- tests/landing-section.spec.js: .luz-section__more, a link at the end of the head of a section (tokens, core and catalog's section.css).
+       #short has a title that fits on a line with its link; #long has a title that does not -->
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/section.css">
+</head>
+<body>
+  <main class="o-container" id="main">
+    <h1>Acme Summit</h1>
+    <section class="o-stack luz-section" id="short" aria-labelledby="short-title">
+      <div class="o-row" id="short-head">
+        <h2 class="luz-section__title" id="short-title">Upcoming talks</h2>
+        <a class="luz-section__more" id="short-more" href="#short">See all talks</a>
+      </div>
+      <p>The content of the section.</p>
+    </section>
+    <section class="o-stack luz-section" id="long" aria-labelledby="long-title">
+      <div class="o-row" id="long-head">
+        <h2 class="luz-section__title" id="long-title">Every talk, workshop and panel of the three days of the summit, in the order they happen</h2>
+        <a class="luz-section__more" id="long-more" href="#long">See the whole programme</a>
+      </div>
+      <p>The content of the section.</p>
+    </section>
+  </main>
+</body>
+</html>

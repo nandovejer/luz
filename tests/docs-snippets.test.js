@@ -32,9 +32,9 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * Landing and blog link the sidebar's file too, before their headers: the nav toggle of the site header and of the masthead is defined there.
  */
 const KIND_FILES = {
-  landing: ["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-transition"],
-  blog: ["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list", "page-transition"],
-  app: ["navbar", "sidebar", "social", "app-bar", "dashboard", "page-transition"],
+  landing: ["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social", "pager", "page-transition"],
+  blog: ["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list", "pager", "page-transition"],
+  app: ["navbar", "sidebar", "social", "app-bar", "dashboard", "pager", "page-transition"],
   docs: ["navbar", "sidebar", "terminal", "social", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer", "page-transition"],
 };
 const FILES = {

@@ -46,9 +46,11 @@ const KIND_OF = {
   hero: ['landing'], section: ['landing'], stat: ['landing'],
   // The social links fit any site: a list of links to the profiles and feeds, at the foot or on a page of contact
   social: ['any'],
+  // The pager fits any site: the steps of a course or a series of posts read in a sequence too, not only a guide
+  pager: ['any'],
   'page-header': ['blog'], 'article-header': ['blog'], toc: ['blog'], 'post-list': ['blog'],
   'app-bar': ['app'], dashboard: ['app'],
-  'docs-layout': ['docs'], 'doc-header': ['docs'], 'page-rail': ['docs'], pager: ['docs'], 'page-footer': ['docs'], example: ['docs'], 'do-dont': ['docs'],
+  'docs-layout': ['docs'], 'doc-header': ['docs'], 'page-rail': ['docs'], 'page-footer': ['docs'], example: ['docs'], 'do-dont': ['docs'],
   // F7: the four that came from core (the owner's, decision 35 and the pages they had): a sidebar and a timeline fit two kinds
   navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'],
   // The components with data of the site fit any

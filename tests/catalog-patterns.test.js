@@ -312,9 +312,9 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
   });
 
   it("the files of a kind are those of the catalog pages that name it (or `any`), in the order of the cascade", () => {
-    expect(kindPatterns("landing", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-transition"].map((n) => `components/${n}.css`));
-    expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list", "page-transition"].map((n) => `components/${n}.css`));
-    expect(kindPatterns("app", root, null).files).toEqual(["navbar", "sidebar", "social", "app-bar", "dashboard", "page-transition"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("landing", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social", "pager", "page-transition"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list", "pager", "page-transition"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("app", root, null).files).toEqual(["navbar", "sidebar", "social", "app-bar", "dashboard", "pager", "page-transition"].map((n) => `components/${n}.css`));
     expect(kindPatterns("docs", root, null).files).toEqual(["navbar", "sidebar", "terminal", "social", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer", "page-transition"].map((n) => `components/${n}.css`));
   });
 
@@ -332,13 +332,14 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
     expect(pages("landing")).toEqual(["hero", "section", "site-footer", "site-header", "stat", "timeline"]);
     expect(pages("blog")).toEqual(["article-header", "masthead", "page-header", "post-list", "site-footer", "site-header", "timeline", "toc"]);
     expect(pages("app")).toEqual(["app-bar", "dashboard", "sidebar"]);
-    expect(pages("docs")).toEqual(["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "pager", "sidebar", "terminal"]);
+    expect(pages("docs")).toEqual(["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "sidebar", "terminal"]);
   });
 
   it("knows a file of a pattern by its page, plain or minified: a page that fits some kinds and not `any`, and not the sidebar, the terminal or the timeline", () => {
     const map = fileKinds(root);
     expect(isKindFile("components/hero.css", map)).toBe(true);
-    expect(isKindFile("components/pager.min.css", map)).toBe(true);
+    expect(isKindFile("components/page-rail.min.css", map)).toBe(true);
+    expect(isKindFile("components/pager.min.css", map), "the pager fits any site since the minor tweaks").toBe(false);
     expect(isKindFile("components/site-header.css", map)).toBe(true);
     expect(isKindFile("components/search.css", map)).toBe(false);
     expect(isKindFile("components/navbar.css", map), "navbar fits any site").toBe(false);
@@ -420,7 +421,7 @@ const PAGES = [
   ["page-rail", ["page-rail"], "p-page-rail", "docs"],
   ["example", ["example"], "p-example", "docs"],
   ["do-dont", ["do-dont"], "p-do-dont", "docs"],
-  ["pager", ["pager"], "p-pager", "docs"],
+  ["pager", ["pager"], "p-pager", "any"],
   ["page-footer", ["page-footer"], "p-page-footer", "docs"],
 ];
 /** The pages of the old routes of F5b (`<kind>-<name>`) and of the pieces F8 renamed: none is a page now, in English or Spanish. */
@@ -744,7 +745,7 @@ describe("Fits best: the real pages", () => {
     }
   });
 
-  it("a pattern fits the kinds its page says (the header and the footer fit landing and blog; the masthead blog), and the eight elements fit any site", () => {
+  it("a pattern fits the kinds its page says (the header and the footer fit landing and blog; the masthead blog), and the nine elements fit any site, as the pager does", () => {
     for (const [slug, , , fits] of PAGES) {
       expect(repoSite.byRoute.get(`/docs/catalog/${slug}/`).meta["fits-kinds"], slug).toBe(fits);
     }

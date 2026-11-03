@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meta line facts · LUZ test page</title>
+  <!-- tests/meta.spec.js: .luz-meta--facts, labelled facts in a hero (tokens and core only).
+       #facts is the variant (a dl of div pairs); #plain is the ordinary meta line beside it; #loose-time is a bare <time> outside both -->
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+</head>
+<body>
+  <main class="o-container" id="main">
+    <h1>Seville spring meetup</h1>
+    <dl class="luz-meta luz-meta--facts" id="facts">
+      <div id="f-location"><dt id="t-location">Location</dt><dd id="d-location">Plaza Mayor, Seville</dd></div>
+      <div id="f-date"><dt id="t-date">Date</dt><dd id="d-date"><time datetime="2027-03-20" id="f-time">20 March 2027</time></dd></div>
+      <div id="f-price"><dt id="t-price">Price</dt><dd id="d-price">From 45 euros</dd></div>
+    </dl>
+    <p class="luz-meta" id="plain"><span>By Ana Ruiz</span> <time datetime="2026-10-12" id="plain-time">12 October 2026</time> <span>6 min read</span></p>
+    <p>Bare time: <time datetime="2027-03-20" id="loose-time">20 March 2027</time></p>
+  </main>
+</body>
+</html>

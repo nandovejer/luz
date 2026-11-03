@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Línea de metadatos
 description: Muestra en una línea algunos datos sobre un elemento, como la fecha, el tiempo de lectura y el autor, separados por puntos.
-source: 46ad85a8a373
+source: 72bd359d11c9
 reviewed: false
 -->
     <div class="docs-component" id="c-meta">
@@ -10,6 +10,16 @@ reviewed: false
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <p class="luz-meta"><span>By <a href="#example">Ana Ruiz</a></span> <time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
+          </div>
+          </div>
+          <p>En una portada, datos con etiqueta como dónde, cuándo y cuánto, con la etiqueta sobre su valor. Los datos son de ejemplo: cámbialos por los tuyos.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <dl class="luz-meta luz-meta--facts">
+              <div><dt>Location</dt><dd>Plaza Mayor, Seville</dd></div>
+              <div><dt>Date</dt><dd><time datetime="2027-03-20">20 March 2027</time></dd></div>
+              <div><dt>Price</dt><dd>From 45 euros</dd></div>
+            </dl>
           </div>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
@@ -33,8 +43,20 @@ reviewed: false
   &lt;span&gt;6 min read&lt;/span&gt;
 &lt;/p&gt;</code></pre>
             </div>
+            <p>Para datos con etiqueta en una portada, una lista de descripciones con un <code>&lt;div&gt;</code> por dato. El texto es de ejemplo: escribe el tuyo.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-meta-facts" aria-label="Copy the meta line facts markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meta line facts markup"><code id="code-meta-facts">&lt;dl class=&quot;luz-meta luz-meta--facts&quot;&gt;
+  &lt;div&gt;&lt;dt&gt;Location&lt;/dt&gt;&lt;dd&gt;Plaza Mayor, Seville&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Date&lt;/dt&gt;&lt;dd&gt;&lt;time datetime=&quot;2027-03-20&quot;&gt;20 March 2027&lt;/time&gt;&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Price&lt;/dt&gt;&lt;dd&gt;From 45 euros&lt;/dd&gt;&lt;/div&gt;
+&lt;/dl&gt;</code></pre>
+            </div>
             <h3 id="variants">Variantes y opciones</h3>
-            <p>No hay modificadores.</p>
+            <p>Un modificador: <code>.luz-meta--facts</code>.</p>
             <div class="luz-table-wrap" role="region" aria-label="Elementos de la línea de metadatos" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -43,14 +65,16 @@ reviewed: false
                 <tbody>
                   <tr><td data-label="Clase o elemento"><div><code>.luz-meta</code></div></td><td data-label="Qué hace"><div>La línea: datos en una fila que salta de línea, con tipografía sans y el color de texto secundario</div></td></tr>
                   <tr><td data-label="Clase o elemento"><div>Cada elemento secundario</div></td><td data-label="Qué hace"><div>Un dato: un elemento <code>&lt;time&gt;</code>, un enlace o un <code>&lt;span&gt;</code> de texto. Antes de cada elemento, salvo el primero, aparece un punto</div></td></tr>
+                  <tr><td data-label="Clase o elemento"><div><code>.luz-meta--facts</code></div></td><td data-label="Qué hace"><div>En un <code>&lt;dl&gt;</code>: los datos como pares con etiqueta, sin puntos. Cada elemento secundario es un <code>&lt;div&gt;</code> con un <code>&lt;dt&gt;</code> (la etiqueta, en el color de texto secundario) sobre su <code>&lt;dd&gt;</code> (el valor, en el color primario y en seminegrita)</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Solo CSS, en <code>components/meta.css</code>: una fila flexible que salta de línea y un punto dibujado con <code>::before</code> en cada dato después del primero.</p>
+            <p>Solo CSS, en <code>components/meta.css</code>: una fila flexible que salta de línea y un punto dibujado con <code>::before</code> en cada dato después del primero. <code>.luz-meta--facts</code> quita los puntos y da estilo a la etiqueta y al valor de cada par.</p>
             <ul>
               <li>El punto queda en el espacio anterior al dato. La línea recorta los bordes inicial y final, de modo que, si un dato salta al principio de una línea nueva, su punto queda fuera: ninguna línea empieza con un punto.</li>
               <li>La línea tiene 4 px de relleno en cada extremo, espacio para el anillo de foco de un enlace dentro del recorte y un margen negativo del mismo tamaño, para que sus líneas de texto queden alineadas con el texto anterior.</li>
+              <li>Los datos con etiqueta son la misma fila que salta de línea: cada par se mantiene unido y el que no cabe pasa a la línea siguiente, así que nada se corta a 320 px ni con un tamaño de texto grande.</li>
               <li>El punto se escribe como <code>content: "·" / ""</code>: un texto alternativo vacío para que los lectores de pantalla no lo lean.</li>
               <li>No hay ningún elemento posicionado, así que, en una tarjeta cuyo enlace de título cubra toda la tarjeta, esta sigue siendo un único enlace.</li>
             </ul>
@@ -61,6 +85,7 @@ reviewed: false
             <ul>
               <li>El lector de pantalla lee los datos uno tras otro, sin los puntos. Escribe cada dato para que tenga sentido por sí solo: «6 min de lectura», no «6».</li>
               <li>Asigna a las fechas un elemento <code>&lt;time datetime&gt;</code> para que el software pueda leerlas.</li>
+              <li>Los datos con etiqueta son una lista de descripciones, así que el lector de pantalla dice cada etiqueta con su valor («Location, Plaza Mayor, Seville»). Envolver cada par en un <code>&lt;div&gt;</code> es HTML válido y mantiene los pares unidos.</li>
             </ul>
             <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
           </div>
@@ -71,7 +96,7 @@ reviewed: false
             <h3 id="when-not">Cuándo no usarlo</h3>
             <p>No la uses para una frase ni para datos que haya que comparar entre varios elementos.</p>
             <ul>
-              <li>Los datos con etiquetas, como un precio y una talla, van en una lista de descripciones (<code>&lt;dl&gt;</code>) o en una <a href="/docs/components/table/">tabla</a>.</li>
+              <li>Datos con etiqueta en una portada: usa <code>.luz-meta--facts</code>. Los datos que se comparan entre varios elementos van en una <a href="/docs/components/table/">tabla</a>.</li>
               <li>Una ruta de páginas es una <a href="/docs/components/breadcrumb/">miga de pan</a>; un conjunto de etiquetas es una fila de <a href="/docs/components/tag/">etiquetas</a>.</li>
             </ul>
             <h3 id="do-dont">Qué hacer y qué no</h3>
@@ -96,7 +121,7 @@ reviewed: false
               <li>Incluye entre dos y cuatro datos. Si hay más, forma una lista, no una línea.</li>
             </ul>
             <h3 id="contrast">Contraste y foco</h3>
-            <p>Los datos y los puntos usan el color de texto secundario; los enlaces de la línea conservan el color de los enlaces.</p>
+            <p>Los datos y los puntos usan el color de texto secundario; en la variante de datos con etiqueta, la etiqueta usa el texto secundario y el valor el texto primario; los enlaces de la línea conservan el color de los enlaces.</p>
             <div class="luz-table-wrap" role="region" aria-label="Contraste de la línea de metadatos en cada modo" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>
@@ -104,6 +129,7 @@ reviewed: false
                 </thead>
                 <tbody>
                   <tr><td data-label="Parte"><div>Dato y punto</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Valor de un par (variante de datos)</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Parte"><div>Enlace</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
                 </tbody>
@@ -114,10 +140,10 @@ reviewed: false
               <li><strong>Foco:</strong> un enlace conserva el contorno de 2 px <code>--luz-focus-ring</code> de core, dentro del recorte de la línea.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 5 tokens que lee <code>components/meta.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 7 tokens que lee <code>components/meta.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
               <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
             </dl>
             <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>

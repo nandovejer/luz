@@ -487,11 +487,18 @@ describe("presetProblems: a preset names only the patterns that fit its kind (F5
 
   it("follows the front matter: when a page adds the kind to its fits-kinds, the preset may name it", () => {
     const dir = copyOfRepo();
-    appended(dir, "landing", "Also `luz-pager`.");
+    // The page rail fits docs alone (the pager fits any site since the minor tweaks, so a preset may name it with no edit)
+    appended(dir, "landing", "Also `luz-page-rail`.");
     expect(member("presetProblems")(dir)).toHaveLength(1);
-    edit(dir, "apps/docs/pages/catalog/pager.html", (text) => text.replace(/^fits-kinds: .*$/m, "fits-kinds: landing, docs"));
+    edit(dir, "apps/docs/pages/catalog/page-rail.html", (text) => text.replace(/^fits-kinds: .*$/m, "fits-kinds: landing, docs"));
     expect(member("presetProblems")(dir)).toEqual([]);
-    edit(dir, "apps/docs/pages/catalog/pager.html", (text) => text.replace(/^fits-kinds: .*$/m, "fits-kinds: any"));
+    edit(dir, "apps/docs/pages/catalog/page-rail.html", (text) => text.replace(/^fits-kinds: .*$/m, "fits-kinds: any"));
+    expect(member("presetProblems")(dir)).toEqual([]);
+  });
+
+  it("lets a preset name the pager, which fits any site, with no change to its page", () => {
+    const dir = copyOfRepo();
+    appended(dir, "landing", "Also `luz-pager`.");
     expect(member("presetProblems")(dir)).toEqual([]);
   });
 
@@ -518,6 +525,7 @@ describe("presetProblems: a preset names only the patterns that fit its kind (F5
     expect(patterns.find((p) => p.slug === "masthead")).toMatchObject({ kinds: ["blog"], files: ["components/masthead.css"] });
     expect(patterns.find((p) => p.slug === "announcement").kinds).toEqual(["any"]);
     expect(patterns.find((p) => p.slug === "social")).toMatchObject({ kinds: ["any"], files: ["components/social.css"] });
+    expect(patterns.find((p) => p.slug === "pager"), "the pager fits any site: a pager at the end of a series of posts, a course or a guide").toMatchObject({ kinds: ["any"], files: ["components/pager.css"] });
     for (const old of ["landing-hero", "banner", "cms-header", "landing-header", "docs-shell"]) expect(patterns.some((p) => p.slug === old), `${old} is not a page any more`).toBe(false);
     expect(patterns.some((p) => p.slug === "classes" || p.slug === "index"), "the gallery and the class reference have no fits-kinds").toBe(false);
   });

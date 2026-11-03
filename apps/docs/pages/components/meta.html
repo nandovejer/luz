@@ -14,6 +14,16 @@ toc: h2,h3
             <p class="luz-meta"><span>By <a href="#example">Ana Ruiz</a></span> <time datetime="2026-10-12">12 October 2026</time> <span>6 min read</span></p>
           </div>
           </div>
+          <p>In a hero, labelled facts such as where, when and how much, with the label above its value. The facts are placeholders: replace them with yours.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <dl class="luz-meta luz-meta--facts">
+              <div><dt>Location</dt><dd>Plaza Mayor, Seville</dd></div>
+              <div><dt>Date</dt><dd><time datetime="2027-03-20">20 March 2027</time></dd></div>
+              <div><dt>Price</dt><dd>From 45 euros</dd></div>
+            </dl>
+          </div>
+          </div>
           <h2 id="known-issues">Known issues</h2>
           <p>The dots are hidden from screen readers with alternative text for generated content, which Firefox has since version 128 and Safari since 17.4. An older browser lets a screen reader read each dot.</p>
           <p>Not yet tested with a screen reader.</p>
@@ -35,8 +45,20 @@ toc: h2,h3
   &lt;span&gt;6 min read&lt;/span&gt;
 &lt;/p&gt;</code></pre>
             </div>
+            <p>For labelled facts in a hero, a description list with one <code>&lt;div&gt;</code> per fact. The text is a placeholder: write your own.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-meta-facts" aria-label="Copy the meta line facts markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meta line facts markup"><code id="code-meta-facts">&lt;dl class=&quot;luz-meta luz-meta--facts&quot;&gt;
+  &lt;div&gt;&lt;dt&gt;Location&lt;/dt&gt;&lt;dd&gt;Plaza Mayor, Seville&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Date&lt;/dt&gt;&lt;dd&gt;&lt;time datetime=&quot;2027-03-20&quot;&gt;20 March 2027&lt;/time&gt;&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Price&lt;/dt&gt;&lt;dd&gt;From 45 euros&lt;/dd&gt;&lt;/div&gt;
+&lt;/dl&gt;</code></pre>
+            </div>
             <h3 id="variants">Variants and options</h3>
-            <p>There are no modifiers.</p>
+            <p>One modifier: <code>.luz-meta--facts</code>.</p>
             <div class="luz-table-wrap" role="region" aria-label="Meta line parts" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -45,14 +67,16 @@ toc: h2,h3
                 <tbody>
                   <tr><td data-label="Class or element"><div><code>.luz-meta</code></div></td><td data-label="What it does"><div>The line: facts in a row that wraps, in the sans, in the secondary text colour</div></td></tr>
                   <tr><td data-label="Class or element"><div>Each child</div></td><td data-label="What it does"><div>One fact: a <code>&lt;time&gt;</code>, a link, or a <code>&lt;span&gt;</code> of text. Every child after the first gets a dot before it</div></td></tr>
+                  <tr><td data-label="Class or element"><div><code>.luz-meta--facts</code></div></td><td data-label="What it does"><div>On a <code>&lt;dl&gt;</code>: the facts as labelled pairs, with no dots. Each child is a <code>&lt;div&gt;</code> that holds a <code>&lt;dt&gt;</code> (the label, in the secondary text colour) above its <code>&lt;dd&gt;</code> (the value, in the primary colour and semibold)</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS only, in <code>components/meta.css</code>: a flex row that wraps, and a dot drawn by <code>::before</code> on each fact after the first.</p>
+            <p>CSS only, in <code>components/meta.css</code>: a flex row that wraps, and a dot drawn by <code>::before</code> on each fact after the first. <code>.luz-meta--facts</code> turns the dots off and sets the label and the value of each pair.</p>
             <ul>
               <li>The dot sits in the gap before its fact. The line clips its start and end edges, so a fact that wraps to the start of a new line leaves its dot outside: no line starts with a dot.</li>
               <li>The line has 4 px of padding at each end, room for a link's focus ring inside the clip, and a negative margin of the same size, so its text lines up with the text above it.</li>
+              <li>The labelled facts are the same wrapping row: each pair stays together and a pair that does not fit moves to the next line, so nothing is cut at 320 px or at a large text size.</li>
               <li>The dot is written <code>content: "·" / ""</code>: an empty alternative text, so screen readers do not read it.</li>
               <li>Nothing in it is positioned, so in a card whose title link covers the card, the whole card stays one link.</li>
             </ul>
@@ -63,6 +87,7 @@ toc: h2,h3
             <ul>
               <li>A screen reader reads the facts one after another, without the dots. Write each fact so it makes sense alone: "6 min read", not "6".</li>
               <li>Give a date a <code>&lt;time datetime&gt;</code>, so software can read it.</li>
+              <li>The labelled facts are a description list, so a screen reader says each label with its value ("Location, Plaza Mayor, Seville"). Wrapping each pair in a <code>&lt;div&gt;</code> is valid HTML and keeps the pairs together.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
@@ -73,7 +98,7 @@ toc: h2,h3
             <h3 id="when-not">When not to use</h3>
             <p>Do not use it for a sentence, or for facts the reader needs to compare across items.</p>
             <ul>
-              <li>Facts with labels, such as a price and a size, are a description list (<code>&lt;dl&gt;</code>) or a <a href="/docs/components/table/">table</a>.</li>
+              <li>Facts with labels in a hero: use <code>.luz-meta--facts</code>. Facts the reader compares across items are a <a href="/docs/components/table/">table</a>.</li>
               <li>A path of pages is a <a href="/docs/components/breadcrumb/">breadcrumb</a>; a set of labels is a row of <a href="/docs/components/tag/">tags</a>.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
@@ -98,7 +123,7 @@ toc: h2,h3
               <li>Two to four facts. More than that is a list, not a line.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
-            <p>The facts and the dots are secondary text; a link in the line keeps the link colour.</p>
+            <p>The facts and the dots are secondary text; in the facts variant the label is secondary text and the value is primary text; a link in the line keeps the link colour.</p>
             <div class="luz-table-wrap" role="region" aria-label="Meta line contrast in each mode" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>
@@ -106,6 +131,7 @@ toc: h2,h3
                 </thead>
                 <tbody>
                   <tr><td data-label="Part"><div>Fact and dot</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Value of a pair (facts variant)</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Link</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
                 </tbody>
@@ -116,10 +142,10 @@ toc: h2,h3
               <li><strong>Focus:</strong> a link keeps core's 2 px <code>--luz-focus-ring</code> outline, inside the line's clip.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 5 tokens that <code>components/meta.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 7 tokens that <code>components/meta.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
               <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code></dd></div>
             </dl>
             <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
