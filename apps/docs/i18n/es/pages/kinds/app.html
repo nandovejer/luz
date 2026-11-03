@@ -2,7 +2,7 @@
 title: Aplicación web
 description: Una aplicación web: un prompt para un LLM y recetas para su estructura con barra lateral, su cabecera y su panel de control.
 keywords: aplicación web, app, administración, backoffice, saas
-source: d671eb43fbc1
+source: 697a189f4122
 reviewed: false
 -->
     <div class="docs-block" id="k-app">
@@ -173,18 +173,20 @@ reviewed: false
             <span class="docs-snippet__lang">HTML</span>
             <button class="luz-copy-btn" type="button" data-copy-from="code-k-app-charts" aria-label="Copy the data panel markup">Copy</button>
           </div>
-          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Data panel markup"><code id="code-k-app-charts">&lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
-  &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-channel&quot;&gt;Orders by channel&lt;/h2&gt;
-  &lt;figure class=&quot;luz-bar-list&quot; aria-labelledby=&quot;by-channel&quot;&gt;
-    &lt;ul class=&quot;luz-bar-list__rows&quot;&gt;
-      &lt;li class=&quot;luz-bar-list__row&quot;&gt;
-        &lt;span class=&quot;luz-bar-list__name&quot;&gt;Online&lt;/span&gt;
-        &lt;span class=&quot;luz-bar-list__figure&quot;&gt;640&lt;/span&gt;
-        &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;1204&quot; value=&quot;640&quot; aria-hidden=&quot;true&quot;&gt;640 of 1,204&lt;/meter&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/figure&gt;
-&lt;/li&gt;</code></pre>
+          <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Data panel markup"><code id="code-k-app-charts">&lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-channel&quot;&gt;Orders by channel&lt;/h2&gt;
+    &lt;figure class=&quot;luz-bar-list&quot; aria-labelledby=&quot;by-channel&quot;&gt;
+      &lt;ul class=&quot;luz-bar-list__rows&quot;&gt;
+        &lt;li class=&quot;luz-bar-list__row&quot;&gt;
+          &lt;span class=&quot;luz-bar-list__name&quot;&gt;Online&lt;/span&gt;
+          &lt;span class=&quot;luz-bar-list__figure&quot;&gt;640&lt;/span&gt;
+          &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;1204&quot; value=&quot;640&quot; aria-hidden=&quot;true&quot;&gt;640 of 1,204&lt;/meter&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/figure&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
         </div>
       </div>
       <div class="docs-block">

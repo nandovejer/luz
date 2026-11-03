@@ -51,7 +51,22 @@ toc: h2,h3
                 <span class="docs-snippet__lang">HTML</span>
                 <button class="luz-copy-btn" type="button" data-copy-from="code-meter-table" aria-label="Copy the meter in a table cell markup">Copy</button>
               </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meter in a table cell markup"><code id="code-meter-table">&lt;td class=&quot;luz-table__numeric&quot; data-label=&quot;Parcels&quot;&gt;1,204&lt;meter class=&quot;luz-meter&quot; value=&quot;1204&quot; min=&quot;0&quot; max=&quot;1500&quot; aria-hidden=&quot;true&quot;&gt;1,204 of 1,500&lt;/meter&gt;&lt;/td&gt;</code></pre>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meter in a table cell markup"><code id="code-meter-table">&lt;table class=&quot;luz-table&quot;&gt;
+  &lt;caption&gt;Parcels per route&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Route&lt;/th&gt;&lt;th scope=&quot;col&quot; class=&quot;luz-table__numeric&quot;&gt;Parcels&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-label=&quot;Route&quot;&gt;Sevilla to Madrid&lt;/td&gt;
+      &lt;td class=&quot;luz-table__numeric&quot; data-label=&quot;Parcels&quot;&gt;1,204&lt;meter class=&quot;luz-meter&quot; value=&quot;1204&quot; min=&quot;0&quot; max=&quot;1500&quot; aria-hidden=&quot;true&quot;&gt;1,204 of 1,500&lt;/meter&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td data-label=&quot;Route&quot;&gt;Cádiz to Málaga&lt;/td&gt;
+      &lt;td class=&quot;luz-table__numeric&quot; data-label=&quot;Parcels&quot;&gt;312&lt;meter class=&quot;luz-meter&quot; value=&quot;312&quot; min=&quot;0&quot; max=&quot;1500&quot; aria-hidden=&quot;true&quot;&gt;312 of 1,500&lt;/meter&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
             </div>
             <p>A bar on its own, with a visible name and the figure in it:</p>
             <div class="docs-snippet">
