@@ -175,11 +175,14 @@ const wired = new WeakSet();
 const wire = (host) => {
   const box = host.querySelector("dialog");
   if (!box || wired.has(box)) return;
-  wired.add(box);
   const $ = (selector) => box.querySelector(selector);
   const input = $("input");
   const status = $("[role=status]");
   const results = $("[data-luz-search-results]");
+  // A dialog without its field, status or results is not wired: the fallback
+  // link stays, the trigger stays hidden, and nothing throws
+  if (!input || !status || !results) return;
+  wired.add(box);
   // luz-exception: EX-005 — what the script writes is read from the
   // dialog's data-luz-label-<key> attributes, authored in the page's
   // language. Split and joined, never String.replace() with the query
