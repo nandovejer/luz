@@ -232,6 +232,9 @@ describe("{{loose}}: the link of a loose sheet, written in the head of the pages
   const sheets = (html) => [...html.matchAll(/<link\b[^>]*rel="?stylesheet"?[^>]*>/g)].map((m) => m[0].match(/href="?([^" >]+)/)?.[1]);
   /** The pages whose `files` names a loose sheet: the bar list, in every language. */
   const NAMED = [ROUTE, ES_ROUTE];
+  /** The Dashboard page uses the bar list without documenting it: its `loose` key names the sheet, in every language. */
+  const DASHBOARD = ["/docs/catalog/dashboard/", "/es/docs/catalog/dashboard/"];
+  const looseOfDashboard = () => (site.byRoute.get("/docs/catalog/dashboard/").meta.loose ?? "").split(";").map((f) => f.trim());
   /** The home and the debug page link every core sheet, the docs pages the ones they name. */
   const HOMES = ["/", "/es/", "/ar/"];
 
@@ -245,13 +248,15 @@ describe("{{loose}}: the link of a loose sheet, written in the head of the pages
     }
   });
 
-  it("links it on no other page of the docs, in any language, and leaves no placeholder behind", () => {
+  it("links it on no other page of the docs than the Dashboard's (its `loose` key), in any language, and leaves no placeholder behind", () => {
     const others = [...rendered()].filter(([route]) => route.startsWith("/docs/") || route.startsWith("/es/docs/") || route.startsWith("/ar/docs/") || route === "/404.html");
     expect(others.length, "the docs are rendered").toBeGreaterThan(100);
+    expect(looseOfDashboard(), "the Dashboard page names the bar list in `loose`").toContain(SHEET);
     for (const [route, html] of others) {
-      if (NAMED.includes(route)) continue;
+      if (NAMED.includes(route) || DASHBOARD.includes(route)) continue;
       expect(sheets(html), route).not.toContain(LINK);
     }
+    for (const route of DASHBOARD) expect(sheets(rendered().get(route)).filter((href) => href === LINK), `${route}: once`).toHaveLength(1);
     for (const [route, html] of rendered()) {
       if (typeof html === "string") expect(html, route).not.toContain("{{loose}}");
     }
