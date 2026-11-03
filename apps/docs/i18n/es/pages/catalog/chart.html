@@ -3,7 +3,7 @@ title: Gráfico
 description: Dibuja una línea, un área o una línea de tendencia pequeña a partir de una tabla o de una lista de números que ya escribiste, y que sigue en la página a su lado.
 fits: una página que muestra una tendencia: un informe, un panel, una entrada con algunas cifras
 keywords: gráfico de líneas, gráfico de área, sparkline, svg, visualización de datos, tendencia
-source: f947c2a0b5eb
+source: e89e321abcb8
 reviewed: false
 -->
     <div class="docs-component" id="p-chart">
@@ -156,7 +156,7 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/catalog</code> y un archivo propio, <code>@luz-ds/catalog/chart</code> (<code>dist/chart.min.js</code>, menos de 3 kB comprimido), que define <code>&lt;luz-chart&gt;</code>. No usa ninguna biblioteca y dibuja solo con llamadas al DOM, así que una página que prohíbe scripts y estilos en línea lo ejecuta tal cual. Valores comparados por longitud no lo necesitan: usa la <a href="/docs/components/bar-list/">lista de barras</a>, el <a href="/docs/components/column-chart/">gráfico de columnas</a>, la <a href="/docs/components/stacked-bar/">barra apilada</a> o el <a href="/docs/components/heat-map/">mapa de calor</a>, que son CSS sobre una tabla o una lista.</p>
+            <p>CSS de <code>@luz-ds/catalog</code> y un archivo propio, <code>@luz-ds/catalog/chart</code> (<code>dist/chart.min.js</code>, menos de 3 kB comprimido), que define <code>&lt;luz-chart&gt;</code>. No usa ninguna biblioteca y dibuja solo con llamadas al DOM, así que una página que prohíbe scripts y estilos en línea lo ejecuta tal cual. Valores comparados por longitud no lo necesitan: usa la <a href="/docs/catalog/bar-list/">lista de barras</a>, el <a href="/docs/catalog/column-chart/">gráfico de columnas</a>, la <a href="/docs/catalog/stacked-bar/">barra apilada</a> o el <a href="/docs/catalog/heat-map/">mapa de calor</a>, que son CSS sobre una tabla o una lista.</p>
             <ul>
               <li><strong>La tabla:</strong> sigue en la página. Mientras se muestra el gráfico, la tabla se saca de la pantalla, no se oculta, así que un lector de pantalla la lee como siempre; cuando el botón muestra la tabla, el dibujo desaparece. En papel se imprime la tabla y no el dibujo.</li>
               <li><strong>El dibujo:</strong> un SVG marcado con <code>aria-hidden</code>, dibujado a su propio tamaño en píxeles y de nuevo cuando la caja cambia de tamaño o la tabla cambia. No tiene animación, así que no hay nada que detener con movimiento reducido. Las series son <code>--luz-chart-1</code> a <code>--luz-chart-6</code>, de modo que un cambio de modo no repinta nada.</li>
@@ -179,9 +179,9 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
             <h3 id="when">Cuándo usarlo</h3>
             <p>Úsalo para mostrar cómo cambian unas pocas series a lo largo de un eje ordenado, como los meses, cuando la forma del cambio es lo que el lector debe ver y ya tienes los números en una tabla. La línea pequeña (<code>type="spark"</code>) es para una cifra que necesita su tendencia a su lado.</p>
             <h3 id="when-not">Cuándo no usarlo</h3>
-            <p>No lo uses cuando importan más los valores exactos que la forma: una <a href="/docs/components/table/">tabla</a> los dice mejor. Para comparar unos pocos valores en una sola escala, usa un <a href="/docs/components/column-chart/">gráfico de columnas</a> o una <a href="/docs/components/bar-list/">lista de barras</a>, que no necesitan script.</p>
+            <p>No lo uses cuando importan más los valores exactos que la forma: una <a href="/docs/components/table/">tabla</a> los dice mejor. Para comparar unos pocos valores en una sola escala, usa un <a href="/docs/catalog/column-chart/">gráfico de columnas</a> o una <a href="/docs/catalog/bar-list/">lista de barras</a>, que no necesitan script.</p>
             <ul>
-              <li>No lo uses para partes de un todo: usa una <a href="/docs/components/stacked-bar/">barra apilada</a>. No hay gráficos circulares ni de anillo.</li>
+              <li>No lo uses para partes de un todo: usa una <a href="/docs/catalog/stacked-bar/">barra apilada</a>. No hay gráficos circulares ni de anillo.</li>
               <li>No lo uses para más de seis series, ni para series que no pueden compartir escala: sepáralas en dos gráficos.</li>
             </ul>
             <p>Sustituye a una biblioteca de gráficos que dibuja un lienzo sin texto a su lado. No se elimina nada de LUZ.</p>

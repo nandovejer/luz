@@ -1,12 +1,15 @@
 <!-- luz:page
 title: Heat map
 description: Shows how much in each cell of a grid by colour and by figure, from a native table; a calendar is one.
-area: components
+area: catalog
+order: 39
 group: charts
+fits-kinds: app
+fits: a page that shows where a grid is high or low: a week by hours, a month of days
 files: components/heat-map.css
 toc: h2,h3
 -->
-    <div class="docs-component" id="c-heat-map">
+    <div class="docs-component" id="p-heat-map">
           <h2 id="example">Example</h2>
           <p>Parcels in each part of the day, for the five working days.</p>
           <div class="docs-example" data-docs-specimen>
@@ -35,7 +38,7 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>A separate stylesheet: link <code>components/heat-map.css</code> after <code>luz.css</code>.</p>
+            <p>A stylesheet of <code>@luz-ds/catalog</code>: link <code>components/heat-map.css</code> after <code>luz.css</code>.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -81,7 +84,7 @@ toc: h2,h3
             <h3 id="when">When to use</h3>
             <p>Use it to see where the high and low values of a grid are: a week by hours, a month of days, a team by quarter.</p>
             <h3 id="when-not">When not to use</h3>
-            <p>Do not use it for a few values (use a <a href="/docs/components/bar-list/">bar list</a> or a <a href="/docs/components/column-chart/">column chart</a>) or when the exact values matter more than the pattern (use a <a href="/docs/components/table/">table</a>).</p>
+            <p>Do not use it for a few values (use a <a href="/docs/catalog/bar-list/">bar list</a> or a <a href="/docs/catalog/column-chart/">column chart</a>) or when the exact values matter more than the pattern (use a <a href="/docs/components/table/">table</a>).</p>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">

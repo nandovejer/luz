@@ -3,7 +3,8 @@
  * LUZ — visual regression of the component demos.
  * Every `[data-docs-specimen]` of a component page, and of the four pages that
  * came from core to catalog in F7 (navbar, sidebar, terminal, timeline, at
- * /docs/catalog/<slug>/; their references keep the names `<slug>-<theme>`), in
+ * /docs/catalog/<slug>/) and of the four charts that came on 2026-11-03 (bar-list, column-chart,
+ * stacked-bar, heat-map; their references keep the names `<slug>-<theme>`), in
  * light, dark and high contrast, compared with the PNG kept in `visual.spec.js-snapshots/`.
  *
  * Chromium on Linux only: text is drawn by the system's fonts (LUZ ships the
@@ -24,8 +25,8 @@ import { site } from './helpers/docs-site.js';
 const THEMES = ['light', 'dark', 'high-contrast'];
 const SKIP = new Set(['/docs/components/player/']);
 
-/** Catalog's pages that were core's components until F7: they stay in the regression, with the same snapshot names. */
-const MOVED = new Set(['/docs/catalog/navbar/', '/docs/catalog/sidebar/', '/docs/catalog/terminal/', '/docs/catalog/timeline/']);
+/** Catalog's pages that were core's components (F7, then the four charts): they stay in the regression, with the same snapshot names. */
+const MOVED = new Set(['/docs/catalog/navbar/', '/docs/catalog/sidebar/', '/docs/catalog/terminal/', '/docs/catalog/timeline/', '/docs/catalog/bar-list/', '/docs/catalog/column-chart/', '/docs/catalog/stacked-bar/', '/docs/catalog/heat-map/']);
 
 const pages = site.pages
   .filter((p) => (p.meta.area === 'components' || MOVED.has(p.route)) && p.body.includes('data-docs-specimen') && !SKIP.has(p.route))

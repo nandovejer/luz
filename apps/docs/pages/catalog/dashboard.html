@@ -7,7 +7,6 @@ group: charts
 fits-kinds: app
 fits: the first view of an application
 files: components/dashboard.css
-loose: components/bar-list.css; components/stacked-bar.css
 keywords: panels, widgets, overview, cards grid
 toc: h2,h3
 -->
@@ -148,7 +147,7 @@ toc: h2,h3
   &lt;/ul&gt;
 &lt;/main&gt;</code></pre>
             </div>
-            <p>A panel that shows data holds one of core's data pieces or <a href="/docs/catalog/chart/">the chart</a>, each over a native list or table that stays in the page. The figures here are samples: the numbers, the titles and the panels are yours.</p>
+            <p>A panel that shows data holds one of the data pieces (a bar list, a column chart, a stacked bar, a heat map) or <a href="/docs/catalog/chart/">the chart</a>, each over a native list or table that stays in the page. The figures here are samples: the numbers, the titles and the panels are yours.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -229,7 +228,7 @@ toc: h2,h3
               <li>The dashboard is a size container. The wide panel asks how wide the dashboard is, not the window, so it fits with a sidebar and without one. From 40 rem two columns always exist (two of 18 rem and a gap), and at 200% text both are in rem, so it never overflows.</li>
               <li>The panels keep the order of the markup. There is no dense packing and no <code>order</code>: a wide panel that does not fit in what is left of a row starts the next one, and the gap stays. Reading order, focus order and what is drawn are the same.</li>
               <li>A panel can shrink, so a long line of code or a table inside it scrolls in its own wrapper and does not widen the column.</li>
-              <li>A panel with data uses the pieces that already exist: the <a href="/docs/catalog/stat/">stat</a> for one figure, core's <a href="/docs/components/bar-list/">bar list</a>, <a href="/docs/components/column-chart/">column chart</a>, <a href="/docs/components/stacked-bar/">stacked bar</a> and <a href="/docs/components/heat-map/">heat map</a>, and <a href="/docs/catalog/chart/">the chart</a> for a trend. Each draws a list or a table you wrote, and that list or table stays in the page. The bar list, the column chart, the stacked bar and the heat map are separate stylesheets: link each one you use after <code>luz.css</code>.</li>
+              <li>A panel with data uses the pieces that already exist: the <a href="/docs/catalog/stat/">stat</a> for one figure, <a href="/docs/catalog/bar-list/">bar list</a>, <a href="/docs/catalog/column-chart/">column chart</a>, <a href="/docs/catalog/stacked-bar/">stacked bar</a> and <a href="/docs/catalog/heat-map/">heat map</a>, and <a href="/docs/catalog/chart/">the chart</a> for a trend. Each draws a list or a table you wrote, and that list or table stays in the page. The bar list, the column chart, the stacked bar and the heat map are separate stylesheets: link each one you use after <code>luz.css</code>.</li>
               <li>The data is yours. LUZ does not fetch, count or invent figures, and the example's titles and numbers are samples to replace.</li>
               <li>Empty, loading and failed panels are the panel's own content: a sentence and a link, core's <a href="/docs/components/progress/">progress</a> or <a href="/docs/components/alert/">alert</a>. There is no skeleton class in 0.1.</li>
             </ul>

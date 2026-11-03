@@ -13,8 +13,12 @@ dist/components/article-header.css
 dist/components/article-header.min.css
 dist/components/article.css
 dist/components/article.min.css
+dist/components/bar-list.css
+dist/components/bar-list.min.css
 dist/components/chart.css
 dist/components/chart.min.css
+dist/components/column-chart.css
+dist/components/column-chart.min.css
 dist/components/cookie-consent.css
 dist/components/cookie-consent.min.css
 dist/components/dashboard.css
@@ -33,6 +37,8 @@ dist/components/faq.css
 dist/components/faq.min.css
 dist/components/glow.css
 dist/components/glow.min.css
+dist/components/heat-map.css
+dist/components/heat-map.min.css
 dist/components/hero.css
 dist/components/hero.min.css
 dist/components/lang-switch.css
@@ -67,6 +73,8 @@ dist/components/site-header.css
 dist/components/site-header.min.css
 dist/components/social.css
 dist/components/social.min.css
+dist/components/stacked-bar.css
+dist/components/stacked-bar.min.css
 dist/components/stat.css
 dist/components/stat.min.css
 dist/components/submenu.css

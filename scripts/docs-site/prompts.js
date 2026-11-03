@@ -34,7 +34,7 @@ import { join } from "node:path";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { expandNumbers, siteNumbers } from "./i18n.js";
 import { CASCADE, catalogPatterns, fileKinds, isKindFile, kindPatterns } from "./kinds.js";
-import { FILES, catalogComponents, catalogFilesIn, looseCoreSheets, minified } from "./snippets.js";
+import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 
 /** The published site: every link of a prompt starts here. */
 export const PROMPT_SITE = SITE_URL;
@@ -82,21 +82,16 @@ const SCRIPT_PARTS = new Set([
 /**
  * `luz-alert`: `--error`, `__title`…, one line per block, in the manifest's
  * order; a class an earlier package already listed (`seen`) is left out, and
- * so is one `keep` says no to (the patterns of the other kinds of site). A
- * block of a core sheet that luz.css does not hold (`loose`, from
- * looseCoreSheets) says so: (link components/bar-list.css after luz.css).
+ * so is one `keep` says no to (the patterns of the other kinds of site).
  */
-function classLines(root, pkg, seen, keep = () => true, loose = new Set()) {
+function classLines(root, pkg, seen, keep = () => true) {
   const { classes } = readJson(root, `packages/${pkg}/dist/classes.json`);
   const blocks = new Map();
-  const files = new Map();
   for (const c of classes) {
     if (seen.has(c.name) || !keep(c)) continue;
     seen.add(c.name);
     if (SCRIPT_PARTS.has(c.name)) continue;
     const block = c.block ?? c.name;
-    const own = (c.files ?? []).find((f) => loose.has(f));
-    if (own && c.name === block) files.set(block, own);
     if (!blocks.has(block)) blocks.set(block, []);
     if (c.name !== block) blocks.get(block).push(c.name.slice(block.length));
   }
@@ -104,7 +99,7 @@ function classLines(root, pkg, seen, keep = () => true, loose = new Set()) {
   const names = new Set(classes.map((c) => c.name));
   return [...blocks].map(([block, parts]) =>
     names.has(block)
-      ? `- \`${block}\`${files.has(block) ? ` (link \`${files.get(block)}\` after \`luz.css\`)` : ""}${parts.length ? `: ${parts.map((p) => `\`${p}\``).join(", ")}` : ""}`
+      ? `- \`${block}\`${parts.length ? `: ${parts.map((p) => `\`${p}\``).join(", ")}` : ""}`
       : `- the parts of \`<${block}>\` (prefix ${block}): ${parts.map((p) => `\`${p}\``).join(", ")}`,
   );
 }
@@ -194,12 +189,11 @@ export function assemblePrompt(id, { root }) {
     "check-ext": stacks.filter((s) => s.ext).map((s) => `${s.name} \`--ext ${s.ext}\``).join(", "),
     classes: (() => {
       const seen = new Set();
-      const loose = new Set(looseCoreSheets(root));
       const listed = new Set(["core", "catalog"].flatMap((pkg) => readJson(root, `packages/${pkg}/dist/classes.json`).classes.map((c) => c.name)));
       for (const name of SCRIPT_PARTS) if (!listed.has(name)) throw new Error(`${MODULE}: SCRIPT_PARTS names ${name}, which no classes.json lists`);
       return packages
         // Catalog lists its own classes and the patterns of the kind, not those of the other kinds of site
-        .map((pkg) => [pkg, classLines(root, pkg, seen, (c) => !(c.files ?? []).some((f) => isKindFile(f, kinds) && !own.includes(f)), pkg === "core" ? loose : undefined)])
+        .map((pkg) => [pkg, classLines(root, pkg, seen, (c) => !(c.files ?? []).some((f) => isKindFile(f, kinds) && !own.includes(f)))])
         .filter(([, lines]) => lines.length)
         .map(([pkg, lines]) => [`From \`@luz-ds/${pkg}\`:`, "", ...lines].join("\n"))
         .join("\n\n");

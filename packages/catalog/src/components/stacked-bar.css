@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------------
-   LUZ Component: stacked-bar
+   LUZ Catalog: stacked-bar
    Stacked bar — the shares of a whole, in one bar and a legend that says them in text:
    <figure class="luz-stacked-bar"> <div class="luz-stacked-bar__bar" aria-hidden="true">
    with one <span class="luz-stacked-bar__part" style="--v: 62"> per share, and a
@@ -14,10 +14,8 @@
    Contrast: every series is 3:1 on the surfaces in every mode and the six are told
    apart by hue and lightness; in forced colors the parts and the marks of the legend
    carry the same number.
-   Layer: components (ITCSS 5) · Prefix: .luz-
-   Requires: @luz-ds/tokens (luz-tokens.css), then base.css, loaded first.
-   Loose sheet: not in luz.css (core CSS has no room); link
-   @luz-ds/core/components/stacked-bar.css after luz.css.
+   Layer: catalog · Prefix: .luz-
+   Requires: @luz-ds/tokens and @luz-ds/core (luz.css), loaded first.
    -------------------------------------------------------------------------- */
 
 /* A figure that is a layout box, not the surface the bare element is */

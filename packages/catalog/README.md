@@ -1,6 +1,6 @@
 # @luz-ds/catalog
 
-Components that are not core's, each one stylesheet: light-DOM `<luz-*>` tags (search, cookie consent, theme time, language switch, submenu, announcement, FAQ, timeline, embed and chart), the navigation of a site (the navbar and the sidebar, which are classes with no tag), the terminal, the page transition (one stylesheet, no markup), and the patterns of a landing page, a blog, an app and a documentation site. Catalog is the navigation of the site and the pieces with JS or an identity of their own; everything else is in `@luz-ds/core`, which names nothing of catalog.
+Components that are not core's, each one stylesheet: light-DOM `<luz-*>` tags (search, cookie consent, theme time, language switch, submenu, announcement, FAQ, timeline, embed and chart), the charts drawn from a native list, table or `meter` (bar list, column chart, stacked bar and heat map: no script), the navigation of a site (the navbar and the sidebar, which are classes with no tag), the terminal, the page transition (one stylesheet, no markup), and the patterns of a landing page, a blog, an app and a documentation site. Catalog is what a page links on its own when it uses it (the navigation of the site, the charts, the pieces with JS or an identity of their own); what every page needs and fits in `luz.css` is in `@luz-ds/core`, which names nothing of catalog.
 
 The rest are the patterns of a kind of site: the page structure of a landing page, a blog or newspaper, a web application and a documentation site. They are catalog components too, one file each, `<block>.css`. The name says what the piece is, with no kind of site in it, and its docs page says which kinds of site it fits best. See [Patterns of a kind of site](#patterns-of-a-kind-of-site).
 
@@ -190,6 +190,10 @@ import '@luz-ds/catalog/components/hero.css'
 | Blog or newspaper | `post-list.css` | `.luz-post-list` | [post-list](https://nandovejer.github.io/luz/docs/catalog/post-list/) |
 | Web application | `app-bar.css` | `.luz-app-bar` | [app-bar](https://nandovejer.github.io/luz/docs/catalog/app-bar/) |
 | Web application | `dashboard.css` | `.luz-dashboard` | [dashboard](https://nandovejer.github.io/luz/docs/catalog/dashboard/) |
+| Web application | `bar-list.css` | `.luz-bar-list` | [bar-list](https://nandovejer.github.io/luz/docs/catalog/bar-list/) |
+| Web application | `column-chart.css` | `.luz-column-chart` | [column-chart](https://nandovejer.github.io/luz/docs/catalog/column-chart/) |
+| Web application | `stacked-bar.css` | `.luz-stacked-bar` | [stacked-bar](https://nandovejer.github.io/luz/docs/catalog/stacked-bar/) |
+| Web application | `heat-map.css` | `.luz-heat-map` | [heat-map](https://nandovejer.github.io/luz/docs/catalog/heat-map/) |
 | Documentation site | `docs-layout.css` | `.luz-docs-layout` | [docs-layout](https://nandovejer.github.io/luz/docs/catalog/docs-layout/) |
 | Documentation site | `doc-header.css` | `.luz-doc-header` | [doc-header](https://nandovejer.github.io/luz/docs/catalog/doc-header/) |
 | Documentation site | `page-rail.css` | `.luz-page-rail` | [page-rail](https://nandovejer.github.io/luz/docs/catalog/page-rail/) |

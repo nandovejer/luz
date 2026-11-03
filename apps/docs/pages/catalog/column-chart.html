@@ -1,12 +1,15 @@
 <!-- luz:page
 title: Column chart
 description: Compares a few values as columns of one height scale, drawn from a native table that keeps every figure as text.
-area: components
+area: catalog
+order: 37
 group: charts
+fits-kinds: app
+fits: a report that compares a few values with an order, such as days or months
 files: components/column-chart.css
 toc: h2,h3
 -->
-    <div class="docs-component" id="c-column-chart">
+    <div class="docs-component" id="p-column-chart">
           <h2 id="example">Example</h2>
           <p>Parcels per day this week: the day, then its figure, then the column.</p>
           <div class="docs-example" data-docs-specimen>
@@ -33,7 +36,7 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>A separate stylesheet: link <code>components/column-chart.css</code> after <code>luz.css</code>.</p>
+            <p>A stylesheet of <code>@luz-ds/catalog</code>: link <code>components/column-chart.css</code> after <code>luz.css</code>.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -78,7 +81,7 @@ toc: h2,h3
             <h3 id="when">When to use</h3>
             <p>Use it to compare a few values that have an order or a name, such as the days of a week or the months of a year, on one scale.</p>
             <h3 id="when-not">When not to use</h3>
-            <p>Do not use it for one value (use a <a href="/docs/components/meter/">meter</a>), for long names (use a <a href="/docs/components/bar-list/">bar list</a>), or for a trend over many points. Keep a <a href="/docs/components/table/">table</a> when exact values matter most.</p>
+            <p>Do not use it for one value (use a <a href="/docs/components/meter/">meter</a>), for long names (use a <a href="/docs/catalog/bar-list/">bar list</a>), or for a trend over many points. Keep a <a href="/docs/components/table/">table</a> when exact values matter most.</p>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
