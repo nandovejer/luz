@@ -6,7 +6,7 @@
  *   - the sources and the package: the file exists, luz.css does not hold it, pack-files.txt lists it plain and minified;
  *   - the budgets: core's rows are unchanged and the loose sheet has a row of its own (ideal 768 B, ceiling 1024 B), the same in
  *     budgets.json and in the PRINCIPLES.md table (its place among the other rows is not pinned: other rows come and go);
- *   - the docs: the page in the new group "Data" (Spanish "Datos"), its translation, the line that says it is a separate sheet;
+ *   - the docs: the page in the group "Charts" (Spanish "Gráficos"), its translation, the line that says it is a separate sheet;
  *   - the generator: `looseCoreSheets()` finds the loose sheets, the `{{loose}}` placeholder links them on the pages that name
  *     them and nowhere else, the examples page and the debug page link them;
  *   - the home uses the component and keeps no class of its own for its bar charts;
@@ -136,18 +136,21 @@ describe("the budget of the loose sheet", () => {
 describe("the page of the bar list", () => {
   const page = site.byRoute.get(ROUTE);
 
-  it("is a page of Components, in the group Data, and names the loose sheet as its file", () => {
+  it("is a page of Components, in the group Charts, and names the loose sheet as its file", () => {
     expect(page, `${ROUTE} is a page`).toBeTruthy();
-    expect(page.meta).toMatchObject({ area: "components", group: "data", files: SHEET, title: "Bar list" });
+    expect(page.meta).toMatchObject({ area: "components", group: "charts", files: SHEET, title: "Bar list" });
   });
 
-  it("has the group Data in the components area, between Media and Helpers, and Spanish says Datos", () => {
+  it("has the group Charts in the components area, between Media and Helpers, and Spanish says Gráficos", () => {
     const area = json("apps/docs/site.json").areas.find((a) => a.id === "components");
     const ids = area.groups.map((g) => g.id);
-    expect(area.groups.find((g) => g.id === "data")).toMatchObject({ label: "Data" });
-    expect(ids.indexOf("data")).toBe(ids.indexOf("media") + 1);
-    expect(ids.indexOf("helpers")).toBe(ids.indexOf("data") + 1);
-    expect(json("apps/docs/i18n/es/strings.json")["group.components.data"]).toBe("Datos");
+    expect(area.groups.find((g) => g.id === "charts")).toMatchObject({ label: "Charts" });
+    expect(ids.indexOf("charts")).toBe(ids.indexOf("media") + 1);
+    expect(ids.indexOf("helpers")).toBe(ids.indexOf("charts") + 1);
+    expect(ids, "the group Data was renamed, not kept").not.toContain("data");
+    const es = json("apps/docs/i18n/es/strings.json");
+    expect(es["group.components.charts"]).toBe("Gráficos");
+    expect(es["group.components.data"]).toBeUndefined();
   });
 
   it("tells that the stylesheet is separate: link components/bar-list.css after luz.css", () => {
@@ -177,12 +180,12 @@ describe("the gallery of the components", () => {
   const rendered = () => buildReal().rendered;
 
   it.each([
-    ["/docs/components/", "Data", "/docs/components/bar-list/"],
-    ["/es/docs/components/", "Datos", "/es/docs/components/bar-list/"],
+    ["/docs/components/", "Charts", "/docs/components/bar-list/"],
+    ["/es/docs/components/", "Gráficos", "/es/docs/components/bar-list/"],
   ])("%s has a section %s with a card to the bar list (and one to each of the three charts: four in all)", (route, heading, href) => {
     const html = rendered().get(route);
-    const section = html.split('aria-labelledby="group-data"')[1]?.split("</section>")[0] ?? "";
-    expect(section, `${route} has the group`).toContain(`<h2 id="group-data">${heading}</h2>`);
+    const section = html.split('aria-labelledby="group-charts"')[1]?.split("</section>")[0] ?? "";
+    expect(section, `${route} has the group`).toContain(`<h2 id="group-charts">${heading}</h2>`);
     expect(section.match(/<li class="luz-card docs-card">/g)).toHaveLength(4);
     expect(section).toContain(`href="${href}"`);
   });

@@ -4,8 +4,8 @@
  * The patterns of a landing page, a blog, an app and a documentation site are pages of one area, /docs/catalog/
  * (F5b of .claude/plans/ai-and-catalog-only.md, decisions 55, 71 to 73), what a reader sees of it in a browser:
  *
- *   1  the sidebar and the gallery of Catalog have six groups, in this order: Navigation, Page structure, Content,
- *      Site-wide, Documentation and Reference, each with its pages (in English and in Spanish); since F7 the navbar and
+ *   1  the sidebar and the gallery of Catalog have seven groups, in this order: Navigation, Page structure, Content,
+ *      Charts, Site-wide, Documentation and Reference, each with its pages (in English and in Spanish); since F7 the navbar and
  *      the sidebar are in Navigation, and the terminal and the timeline in Content (they came from core)
  *   2  a pattern page says where it fits best, "Fits best: <kinds> - <sentence>", under the lead and above the
  *      chips, each kind a link to /docs/kinds/<kind>/ and "any site" no link; the card of the gallery says it too;
@@ -31,7 +31,8 @@ const read = (/** @type {string} */ path) => readFileSync(fromRepo(path), 'utf-8
 const GROUPS = [
   { id: 'navigation', en: 'Navigation', pages: ['app-bar', 'lang-switch', 'masthead', 'navbar', 'sidebar', 'site-header', 'submenu'] },
   { id: 'page-structure', en: 'Page structure', pages: ['article-header', 'hero', 'page-header', 'section', 'site-footer'] },
-  { id: 'content', en: 'Content', pages: ['chart', 'dashboard', 'embed', 'faq', 'post-list', 'social', 'stat', 'terminal', 'timeline', 'toc'] },
+  { id: 'content', en: 'Content', pages: ['embed', 'faq', 'post-list', 'social', 'stat', 'terminal', 'timeline', 'toc'] },
+  { id: 'charts', en: 'Charts', pages: ['chart', 'dashboard'] },
   { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'theme-time', 'cookie-consent', 'search', 'page-transition'] },
   { id: 'documentation', en: 'Documentation', pages: ['do-dont', 'doc-header', 'docs-layout', 'example', 'page-footer', 'page-rail', 'pager'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
@@ -82,7 +83,7 @@ const norm = (/** @type {string | null} */ text) => (text ?? '').replace(/\s+/g,
 
 /* ---- 1. The groups ------------------------------------------------------------------------------ */
 
-test.describe('Catalog has six groups, in the sidebar and in the gallery', () => {
+test.describe('Catalog has seven groups, in the sidebar and in the gallery', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   for (const { code, prefix } of LANGUAGES) {
@@ -104,7 +105,7 @@ test.describe('Catalog has six groups, in the sidebar and in the gallery', () =>
       expect(all.length).toBe(PATTERNS.length + 1);
     });
 
-    test(`${code}: the gallery of Catalog is six sections, one under the other, each under its label, with its pages`, async ({ page }) => {
+    test(`${code}: the gallery of Catalog is seven sections, one under the other, each under its label, with its pages`, async ({ page }) => {
       await page.goto(`${prefix}/docs/catalog/`);
       const sections = page.locator('main section.docs-gallery');
       await expect(sections.locator('h2')).toHaveText(GROUPS.map((group) => groupLabel(code, group)));

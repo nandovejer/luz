@@ -423,10 +423,10 @@ describe("the page, in English and in Spanish", () => {
     return page;
   };
 
-  it("is /docs/catalog/chart/, in the group content, for any site, the last of the area (order 35), with its own file", () => {
+  it("is /docs/catalog/chart/, in the group charts, for any site, the last of the area (order 35), with its own file", () => {
     expect(english(), PAGE).toBeTruthy();
     expect(english().file).toBe(PAGE);
-    expect(english().meta).toMatchObject({ area: "catalog", group: "content", order: "35", "fits-kinds": "any", module: "chart.js", toc: "h2,h3" });
+    expect(english().meta).toMatchObject({ area: "catalog", group: "charts", order: "35", "fits-kinds": "any", module: "chart.js", toc: "h2,h3" });
     expect(english().meta.title).toBe("Chart");
     expect(english().meta.fits.length).toBeGreaterThan(10);
     expect(english().meta.description).toMatch(/^[A-Z][^\n]*\.$/);

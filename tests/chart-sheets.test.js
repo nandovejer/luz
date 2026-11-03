@@ -200,9 +200,9 @@ describe.each(CHARTS)("the page of the $name", ({ name, block, title }) => {
   const sheets = (html) => [...html.matchAll(/<link\b[^>]*rel="?stylesheet"?[^>]*>/g)].map((m) => m[0].match(/href="?([^" >]+)/)?.[1]);
   const LINK = `/packages/core/dist/components/${name}.css`;
 
-  it("is a page of Components, in the group Data, and names the loose sheet as its file", () => {
+  it("is a page of Components, in the group Charts, and names the loose sheet as its file", () => {
     expect(page(), `${route} is a page`).toBeTruthy();
-    expect(page().meta).toMatchObject({ area: "components", group: "data", files: SHEET_OF(name), title });
+    expect(page().meta).toMatchObject({ area: "components", group: "charts", files: SHEET_OF(name), title });
   });
 
   it("tells that the stylesheet is separate: link components/<name>.css after luz.css", () => {
@@ -253,14 +253,14 @@ describe.each(CHARTS)("the page of the $name", ({ name, block, title }) => {
   });
 });
 
-describe("the gallery of the components: the group Data has the four charts", () => {
+describe("the gallery of the components: the group Charts has the four charts", () => {
   it.each([
-    ["/docs/components/", "Data", ""],
-    ["/es/docs/components/", "Datos", "/es"],
+    ["/docs/components/", "Charts", ""],
+    ["/es/docs/components/", "Gráficos", "/es"],
   ])("%s has the section %s with a card to each of bar-list, column-chart, heat-map and stacked-bar", (route, heading, prefix) => {
     const html = buildReal().rendered.get(route);
-    const section = html.split('aria-labelledby="group-data"')[1]?.split("</section>")[0] ?? "";
-    expect(section).toContain(`<h2 id="group-data">${heading}</h2>`);
+    const section = html.split('aria-labelledby="group-charts"')[1]?.split("</section>")[0] ?? "";
+    expect(section).toContain(`<h2 id="group-charts">${heading}</h2>`);
     for (const name of ["bar-list", ...CHARTS.map((c) => c.name)]) expect(section, name).toContain(`href="${prefix}/docs/components/${name}/"`);
   });
 });

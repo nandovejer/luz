@@ -608,7 +608,7 @@ describe("the pages that count the pieces name the patterns as files of catalog"
   it("the English and Spanish strings of the docs have the words of Fits best and none of the removed areas, the old kind labels or the site note", () => {
     for (const code of ["en", "es"]) {
       const strings = json(`apps/docs/i18n/${code}/strings.json`);
-      for (const key of ["fits.label", "fits.any", "kind.landing", "kind.blog", "kind.app", "kind.docs", ...["navigation", "page-structure", "content", "site-wide", "documentation", "reference"].map((id) => `group.catalog.${id}`)]) {
+      for (const key of ["fits.label", "fits.any", "kind.landing", "kind.blog", "kind.app", "kind.docs", ...["navigation", "page-structure", "content", "charts", "site-wide", "documentation", "reference"].map((id) => `group.catalog.${id}`)]) {
         if (code === "en" && key.startsWith("group.")) continue; // the English labels are site.json's own
         expect(strings[key], `${code} ${key}`).toBeTruthy();
       }
@@ -626,14 +626,15 @@ describe("the Catalog area groups its pages by what they do", () => {
   const MEMBERS = {
     navigation: ["app-bar", "masthead", "site-header", "lang-switch", "submenu", "navbar", "sidebar"],
     "page-structure": ["article-header", "site-footer", "page-header", "hero", "section"],
-    content: ["chart", "dashboard", "embed", "faq", "post-list", "social", "stat", "toc", "terminal", "timeline"],
+    content: ["embed", "faq", "post-list", "social", "stat", "toc", "terminal", "timeline"],
+    charts: ["chart", "dashboard"],
     "site-wide": ["theme-time", "announcement", "cookie-consent", "search", "page-transition"],
     documentation: ["do-dont", "example", "page-footer", "doc-header", "pager", "page-rail", "docs-layout"],
     reference: ["classes"],
   };
 
-  it("has the groups navigation, page-structure, content, site-wide, documentation and reference, in that order, shown in the sidebar", () => {
-    expect(area.groups.map((g) => g.id)).toEqual(["navigation", "page-structure", "content", "site-wide", "documentation", "reference"]);
+  it("has the groups navigation, page-structure, content, charts, site-wide, documentation and reference, in that order, shown in the sidebar", () => {
+    expect(area.groups.map((g) => g.id)).toEqual(["navigation", "page-structure", "content", "charts", "site-wide", "documentation", "reference"]);
     for (const g of area.groups) expect(g.sidebar, g.id).toBe(true);
     expect(area.groups.find((g) => g.id === "reference").list, "the class reference is a list, not a gallery").toBe(true);
     expect(area.groups.find((g) => g.id === "patterns"), "the old group `patterns` is gone").toBeUndefined();
@@ -664,7 +665,7 @@ describe("the Catalog area groups its pages by what they do", () => {
     const html = rendered.get("/docs/catalog/");
     const sections = [...html.matchAll(/<section class="docs-gallery" aria-labelledby="group-([a-z-]+)">/g)].map((m) => m[1]);
     // The class reference is a list, not a gallery of cards, in its own section
-    expect(sections).toEqual(["navigation", "page-structure", "content", "site-wide", "documentation", "reference"]);
+    expect(sections).toEqual(["navigation", "page-structure", "content", "charts", "site-wide", "documentation", "reference"]);
     for (const [id, slugs] of Object.entries(MEMBERS)) {
       if (id === "reference") continue;
       const start = html.indexOf(`aria-labelledby="group-${id}"`);

@@ -176,9 +176,9 @@ test.describe('docs shell, with JavaScript', () => {
     await expect(page.locator('.luz-pager').getByRole('link', { name: 'Previous Breadcrumb', exact: true })).toBeVisible();
   });
 
-  test('on the catalog index the gallery is the six groups, one under the other in the order of the sidebar, under the lead', async ({ page }) => {
+  test('on the catalog index the gallery is the seven groups, one under the other in the order of the sidebar, under the lead', async ({ page }) => {
     await page.goto('/docs/catalog/');
-    const groups = ['navigation', 'page-structure', 'content', 'site-wide', 'documentation', 'reference'];
+    const groups = ['navigation', 'page-structure', 'content', 'charts', 'site-wide', 'documentation', 'reference'];
     const boxes = [];
     for (const id of groups) boxes.push(await box(page, `#group-${id}`));
     for (let i = 1; i < boxes.length; i++) expect(boxes[i].y, `${groups[i]} is under ${groups[i - 1]}`).toBeGreaterThanOrEqual(boxes[i - 1].bottom - 1);
