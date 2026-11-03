@@ -3,7 +3,7 @@ title: Panel de control
 description: La vista general de una aplicación: el título y la acción principal, seguidos de una cuadrícula de paneles que aprovecha el espacio disponible.
 fits: la primera vista de una aplicación
 keywords: paneles, widgets, resumen, cuadrícula de tarjetas
-source: 7d9ababd786b
+source: bd51e8adf7e2
 reviewed: false
 -->
     <div class="docs-component" id="p-dashboard">
@@ -150,51 +150,54 @@ reviewed: false
                 <button class="luz-copy-btn" type="button" data-copy-from="code-dashboard-data" aria-label="Copy the data panels markup">Copy</button>
               </div>
               <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Data panels markup"><code id="code-dashboard-data">&lt;!-- Sample figures: write your own --&gt;
-&lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
-  &lt;h2 class=&quot;luz-card__title&quot;&gt;Orders this month&lt;/h2&gt;
-  &lt;div class=&quot;luz-stat&quot;&gt;
-    &lt;p class=&quot;luz-stat__value&quot;&gt;1,204&lt;/p&gt;
-    &lt;p class=&quot;luz-stat__label&quot;&gt;12 % more than last month&lt;/p&gt;
-  &lt;/div&gt;
-&lt;/li&gt;
-&lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
-  &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-channel&quot;&gt;Orders by channel&lt;/h2&gt;
-  &lt;figure class=&quot;luz-bar-list&quot; aria-labelledby=&quot;by-channel&quot;&gt;
-    &lt;ul class=&quot;luz-bar-list__rows&quot;&gt;
-      &lt;li class=&quot;luz-bar-list__row&quot;&gt;
-        &lt;span class=&quot;luz-bar-list__name&quot;&gt;Online&lt;/span&gt;
-        &lt;span class=&quot;luz-bar-list__figure&quot;&gt;640&lt;/span&gt;
-        &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;1204&quot; value=&quot;640&quot; aria-hidden=&quot;true&quot;&gt;640 of 1,204&lt;/meter&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/figure&gt;
-&lt;/li&gt;
-&lt;li class=&quot;luz-card luz-dashboard__panel luz-dashboard__panel--wide&quot;&gt;
-  &lt;h2 class=&quot;luz-card__title&quot;&gt;Orders over time&lt;/h2&gt;
-  &lt;luz-chart type=&quot;line&quot; data-luz-label-table=&quot;Show table&quot; data-luz-label-chart=&quot;Show chart&quot;&gt;
-    &lt;table class=&quot;luz-table&quot;&gt;
-      &lt;caption&gt;Orders per month, January to June&lt;/caption&gt;
-      &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Month&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Orders&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-      &lt;tbody&gt;
-        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Jan&lt;/th&gt;&lt;td data-label=&quot;Orders&quot;&gt;&lt;data value=&quot;820&quot;&gt;820&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-        &lt;!-- one tr for each month --&gt;
-      &lt;/tbody&gt;
-    &lt;/table&gt;
-  &lt;/luz-chart&gt;
-&lt;/li&gt;
-&lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
-  &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-status&quot;&gt;Orders by status&lt;/h2&gt;
-  &lt;figure class=&quot;luz-stacked-bar&quot; aria-labelledby=&quot;by-status&quot;&gt;
-    &lt;div class=&quot;luz-stacked-bar__bar&quot; aria-hidden=&quot;true&quot;&gt;
-      &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 62&quot;&gt;&lt;/span&gt;
-      &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 38&quot;&gt;&lt;/span&gt;
+&lt;ul class=&quot;o-grid o-grid--auto&quot;&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot;&gt;Orders this month&lt;/h2&gt;
+    &lt;div class=&quot;luz-stat&quot;&gt;
+      &lt;p class=&quot;luz-stat__value&quot;&gt;1,204&lt;/p&gt;
+      &lt;p class=&quot;luz-stat__label&quot;&gt;12 % more than last month&lt;/p&gt;
     &lt;/div&gt;
-    &lt;ul class=&quot;luz-stacked-bar__legend&quot;&gt;
-      &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Delivered&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;62 %&lt;/span&gt;&lt;/li&gt;
-      &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Other&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;38 %&lt;/span&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/figure&gt;
-&lt;/li&gt;</code></pre>
+  &lt;/li&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-channel&quot;&gt;Orders by channel&lt;/h2&gt;
+    &lt;figure class=&quot;luz-bar-list&quot; aria-labelledby=&quot;by-channel&quot;&gt;
+      &lt;ul class=&quot;luz-bar-list__rows&quot;&gt;
+        &lt;li class=&quot;luz-bar-list__row&quot;&gt;
+          &lt;span class=&quot;luz-bar-list__name&quot;&gt;Online&lt;/span&gt;
+          &lt;span class=&quot;luz-bar-list__figure&quot;&gt;640&lt;/span&gt;
+          &lt;meter class=&quot;luz-bar-list__meter&quot; min=&quot;0&quot; max=&quot;1204&quot; value=&quot;640&quot; aria-hidden=&quot;true&quot;&gt;640 of 1,204&lt;/meter&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/figure&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel luz-dashboard__panel--wide&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot;&gt;Orders over time&lt;/h2&gt;
+    &lt;luz-chart type=&quot;line&quot; data-luz-label-table=&quot;Show table&quot; data-luz-label-chart=&quot;Show chart&quot;&gt;
+      &lt;table class=&quot;luz-table&quot;&gt;
+        &lt;caption&gt;Orders per month, January to June&lt;/caption&gt;
+        &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Month&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Orders&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Jan&lt;/th&gt;&lt;td data-label=&quot;Orders&quot;&gt;&lt;data value=&quot;820&quot;&gt;820&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;!-- one tr for each month --&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/luz-chart&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;luz-card luz-dashboard__panel&quot;&gt;
+    &lt;h2 class=&quot;luz-card__title&quot; id=&quot;by-status&quot;&gt;Orders by status&lt;/h2&gt;
+    &lt;figure class=&quot;luz-stacked-bar&quot; aria-labelledby=&quot;by-status&quot;&gt;
+      &lt;div class=&quot;luz-stacked-bar__bar&quot; aria-hidden=&quot;true&quot;&gt;
+        &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 62&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;luz-stacked-bar__part&quot; style=&quot;--v: 38&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;ul class=&quot;luz-stacked-bar__legend&quot;&gt;
+        &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Delivered&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;62 %&lt;/span&gt;&lt;/li&gt;
+        &lt;li class=&quot;luz-stacked-bar__item&quot;&gt;&lt;span class=&quot;luz-stacked-bar__name&quot;&gt;Other&lt;/span&gt; &lt;span class=&quot;luz-stacked-bar__figure&quot;&gt;38 %&lt;/span&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/figure&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
             <p>Un modificador para el panel. El panel de control es una clase de app aplicada a un <code>&lt;main&gt;</code> nativo; la cuadrícula y la tarjeta son de core.</p>

@@ -871,7 +871,8 @@ export function exampleDocuments(site, { csp, versions, root = REPO_ROOT }) {
     const catalog = catalogFilesIn(named, components);
     const packages = ["tokens", "core", ...(catalog.length ? ["catalog"] : [])];
     // A core sheet that luz.css does not hold (a page's `files` names it) is linked after luz.css
-    const loose = looseCoreSheets(root).filter((file) => (page.meta.files ?? "").includes(file));
+    // and so is one the page names in `loose` (it uses it without documenting it), as the docs head does with {{loose}}
+    const loose = looseCoreSheets(root).filter((file) => `${page.meta.files ?? ""};${page.meta.loose ?? ""}`.includes(file));
     documents.push(exampleDocument(page, { csp, versions, packages, catalog, loose }));
   }
   return documents;
