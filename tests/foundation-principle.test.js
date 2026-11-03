@@ -18,7 +18,6 @@ import { assemblePrompt } from "../scripts/docs-site/prompts.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
-const bytes = (text) => Buffer.byteLength(text, "utf-8");
 const IDS = ["start", "landing", "blog", "app", "docs"];
 
 /* ---- PRINCIPLES.md ------------------------------------------------------- */
@@ -98,10 +97,6 @@ describe("Get started: a place to start, not a finished site", () => {
 
 /* ---- The five prompts ---------------------------------------------------- */
 
-// The assembled prompts on main (origin/main 5fc63ec8), in bytes, before the sentence:
-// `assemblePrompt(id, { root })` of a build of that commit.
-const BASELINE = { start: 12560, landing: 16653, blog: 16820, app: 17576, docs: 16434 };
-const SENTENCE_LIMIT = 200;
 const PROMPT_SENTENCE =
   "The site is a starting point: the person reviews it and finishes the content, the brand and the final decisions, which are theirs.";
 // The Trust section of apps/site/prompts/body.md on main, byte for byte
@@ -136,11 +131,7 @@ describe("the prompts for AI say the site is a starting point", () => {
         expect(prompt.indexOf(PROMPT_SENTENCE)).toBeLessThan(prompt.indexOf("## How we work"));
       });
 
-      it(`grows by no more than ${SENTENCE_LIMIT} bytes over main, and by at least the sentence`, () => {
-        const grown = bytes(prompt) - BASELINE[id];
-        expect(grown).toBeGreaterThanOrEqual(bytes(PROMPT_SENTENCE));
-        expect(grown).toBeLessThanOrEqual(SENTENCE_LIMIT);
-      });
+      // The size of each prompt, against main, is in tests/prompts-concise.test.js: the prompts are shorter now, whatever the sentence adds
 
       it("keeps the Trust section as on main, after the sentence", () => {
         expect(prompt).toContain(PROMPT_SENTENCE);

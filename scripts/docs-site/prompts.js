@@ -90,7 +90,8 @@ function classLines(root, pkg, seen, keep = () => true) {
   for (const c of classes) {
     if (seen.has(c.name) || !keep(c)) continue;
     seen.add(c.name);
-    if (SCRIPT_PARTS.has(c.name)) continue;
+    // A state class (`is-active`) is set by LUZ's scripts, which the body says; a script-only part is never typed
+    if (c.kind === "state" || SCRIPT_PARTS.has(c.name)) continue;
     const block = c.block ?? c.name;
     if (!blocks.has(block)) blocks.set(block, []);
     if (c.name !== block) blocks.get(block).push(c.name.slice(block.length));
@@ -126,10 +127,26 @@ function groupAttributes(names) {
 }
 
 /**
- * `<luz-color-mode>` (remember, by…): its description, from each custom-elements.json,
- * (its stylesheet, for a package with no bundle, is named once in the body).
+ * `<luz-search>` (data-luz-search-*, data-luz-label-*): the tag and its attributes, no prose: what
+ * the prompt prints. The description of each element is in the manifest the prompt points at, and
+ * elementSourceLines() holds it for the hash.
+ * (The stylesheet, for a package with no bundle, is named once in the body.)
  */
 function elementLines(root, pkg) {
+  return elementEntries(root, pkg).map(({ tagName, attributes }) => `- \`<${tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}`);
+}
+
+/**
+ * `<luz-color-mode>` (remember, by…): its description, from each custom-elements.json. Not printed
+ * in the prompt (a model may read it in the manifest the prompt points at): only the hash reads it,
+ * so a change to a description needs the sentinel.
+ */
+function elementSourceLines(root, pkg) {
+  return elementEntries(root, pkg).map(({ tagName, attributes, description }) => `- \`<${tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${description ?? ""}`.trimEnd());
+}
+
+/** Every custom element of a package's custom-elements.json: its tag, its attributes (grouped) and its description. */
+function elementEntries(root, pkg) {
   const lines = [];
   for (const module of readJson(root, `packages/${pkg}/dist/custom-elements.json`).modules) {
     for (const d of module.declarations ?? []) {
@@ -137,7 +154,7 @@ function elementLines(root, pkg) {
       // The body says once where an element's stylesheet is: components/<tag without luz->.css; it fails if one is not
       if (d.stylesheet && d.stylesheet !== `components/${d.tagName.replace(/^luz-/, "")}.css`) throw new Error(`${d.tagName}: its stylesheet ${d.stylesheet} is not components/<name>.css, which the prompts' body says`);
       const attributes = groupAttributes((d.attributes ?? []).map((a) => a.name));
-      lines.push(`- \`<${d.tagName}>\`${attributes.length ? ` (${attributes.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd());
+      lines.push({ tagName: d.tagName, attributes, description: d.description });
     }
   }
   return lines;
@@ -199,6 +216,7 @@ export function assemblePrompt(id, { root }) {
         .join("\n\n");
     })(),
     elements: ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n"),
+    manifest: `${CDN}/${at("catalog")}/dist/custom-elements.json`,
     "kind-links": kind.docs
       ? patterns.pages
           .map((page) => `- ${PROMPT_SITE}${kind.docs}${page}/: markup of the ${page.replace(/-/g, " ")}.`)
@@ -230,8 +248,9 @@ export function assemblePrompt(id, { root }) {
  * The SHA-256, in hex, of every piece of prose that reaches one prompt:
  * body.md, its preset (none for start), stacks.json, this module (the titles
  * and the sentences it writes), kinds.js (which patterns a kind lists, and in
- * what order), the lines of the elements as the prompt has them (their names,
- * attributes and descriptions, from the packages' custom-elements.json) and
+ * what order), the lines of the elements with their descriptions (their names,
+ * attributes and descriptions, from the packages' custom-elements.json: the prompt
+ * prints the names and attributes and points to the manifest for the descriptions) and
  * the `fits-kinds`, `files` and `order` of each catalog page (which pages and
  * files a kind lists; never a page's body), each followed by a NUL. The sentinel's case for the
  * prompt holds it (`source`), so an edit of any of them voids its SAFE until
@@ -245,7 +264,7 @@ export function promptSourceHash(id, { root }) {
   const files = [`${SOURCE}/body.md`, ...(kind.preset ? [`${SOURCE}/presets/${kind.preset}.md`] : []), `${SOURCE}/stacks.json`, MODULE, KINDS];
   const hash = createHash("sha256");
   for (const file of files) hash.update(readFileSync(join(root, file))).update("\0");
-  hash.update(ELEMENT_PACKAGES.flatMap((pkg) => elementLines(root, pkg)).join("\n")).update("\0");
+  hash.update(ELEMENT_PACKAGES.flatMap((pkg) => elementSourceLines(root, pkg)).join("\n")).update("\0");
   hash.update(catalogPatterns(root).map((page) => `${page.slug}|${page.kinds.join(",")}|${page.files.join(",")}|${page.order}`).join("\n")).update("\0");
   return hash.digest("hex");
 }

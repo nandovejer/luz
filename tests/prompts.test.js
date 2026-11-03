@@ -776,7 +776,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
       return [`${key}*`];
     });
   };
-  /** The element lines as the prompt lists them: catalog's (core defines no tag since F7), `- `<tag>` (attr, attr): description`, joined by a newline. */
+  /** The element lines as the prompt prints them: catalog's (core's one tag is not listed), `- `<tag>` (attr, attr)`, no description (it is in the manifest the prompt links), joined by a newline. */
   const elementBlock = (dir) =>
     ["catalog"]
       .flatMap((pkg) =>
@@ -786,6 +786,20 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
             .map((d) => {
               const attrs = grouped((d.attributes ?? []).map((a) => a.name));
               // The stylesheet of an element is not on its line: the body says once where it is
+              return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}`;
+            }),
+        ),
+      )
+      .join("\n");
+  /** The element lines as the hash reads them: the printed line, then `: description`. The sentinel reads the prose of a description in the manifest, so a change to one voids its SAFE. */
+  const hashedElementBlock = (dir) =>
+    ["catalog"]
+      .flatMap((pkg) =>
+        JSON.parse(readFileSync(join(dir, `packages/${pkg}/dist/custom-elements.json`), "utf-8")).modules.flatMap((m) =>
+          (m.declarations ?? [])
+            .filter((d) => d.tagName)
+            .map((d) => {
+              const attrs = grouped((d.attributes ?? []).map((a) => a.name));
               return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd();
             }),
         ),
@@ -812,7 +826,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
   const sha = (dir, id) => {
     const hash = createHash("sha256");
     for (const file of [...filesOf(id), KINDS_FILE]) hash.update(readFileSync(join(dir, file))).update("\0");
-    hash.update(elementBlock(dir)).update("\0");
+    hash.update(hashedElementBlock(dir)).update("\0");
     hash.update(patternBlock(dir)).update("\0");
     return hash.digest("hex");
   };
@@ -840,7 +854,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     return join(dir, "packages/catalog/dist/custom-elements.json");
   }
 
-  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, prompts.js, kinds.js, the element lines of the prompt and the fits-kinds, files and order of each catalog page, each followed by a NUL byte", () => {
+  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, prompts.js, kinds.js, the element lines of the prompt with their descriptions and the fits-kinds, files and order of each catalog page, each followed by a NUL byte", () => {
     for (const id of IDS) {
       const hash = member("promptSourceHash")(id, { root });
       expect(hash, id).toMatch(/^[0-9a-f]{64}$/);
@@ -849,7 +863,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     expect(new Set(IDS.map((id) => member("promptSourceHash")(id, { root }))).size, "five different hashes").toBe(5);
   });
 
-  it("hashes the element lines exactly as the prompt lists them under ## Elements you may use", () => {
+  it("lists the elements under ## Elements you may use as the tag and its attributes, line for line, with no description", () => {
     const text = prompt("start");
     const start = text.indexOf("## Elements you may use\n\n") + "## Elements you may use\n\n".length;
     expect(start, "the prompt has the section").toBeGreaterThan("## Elements you may use\n\n".length - 1);
@@ -899,7 +913,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     }
   });
 
-  it("lists the attributes of an element grouped by prefix: three or more `data-luz-<group>-…` are one `data-luz-<group>-*`, two stay as they are, the tag and the description do not change", () => {
+  it("lists the attributes of an element grouped by prefix: three or more `data-luz-<group>-…` are one `data-luz-<group>-*`, two stay as they are, and the line ends there: the description is not on it", () => {
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
@@ -910,23 +924,45 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release or 
     const text = member("assemblePrompt")("start", { root: dir });
     const line = text.split("\n").find((l) => l.startsWith(`- \`<${declaration.tagName}>\``));
     expect(line, `<${declaration.tagName}> is listed`).toBeTruthy();
-    expect(line.startsWith(`- \`<${declaration.tagName}>\` (remember, data-luz-pair-a, data-luz-pair-b, data-luz-trio-*): ${declaration.description}`), line).toBe(true);
+    expect(line).toBe(`- \`<${declaration.tagName}>\` (remember, data-luz-pair-a, data-luz-pair-b, data-luz-trio-*)`);
+    expect(text, "the description of the element is not in the prompt").not.toContain(declaration.description);
     expect(line).not.toContain("data-luz-trio-a");
   });
 
-  it("changes all five when the description of an element changes in custom-elements.json", () => {
+  it("changes all five when the description of an element changes in custom-elements.json, though the prompt does not print it: the sentinel reads the manifest", () => {
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
     const before = hashes(dir);
+    const textsBefore = Object.fromEntries(IDS.map((id) => [id, member("assemblePrompt")(id, { root: dir })]));
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
     const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
     expect(declaration, "an element of catalog has a description").toBeTruthy();
     declaration.description += " Then do something else.";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
     expectAllFiveChanged(before, hashes(dir), `a change of the description of <${declaration.tagName}>`);
+    // The point of the gate: the text of the prompt is the same, the hash is not
+    for (const id of IDS) expect(member("assemblePrompt")(id, { root: dir }), `${id}: the prompt prints no description`).toBe(textsBefore[id]);
   });
 
-  it("throws, naming the tag and the file, for an element whose stylesheet is not components/<its tag without luz->.css: the rule of the body would be false", () => {
+  it("changes all five when an element is added or an attribute changes, and the prompt lists them", () => {
+    const dir = copyOfSources();
+    const manifest = withOwnElements(dir);
+    const before = hashes(dir);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const module = data.modules.find((m) => (m.declarations ?? []).some((d) => d.tagName));
+    const first = module.declarations.find((d) => d.tagName);
+    first.attributes = [...(first.attributes ?? []), { name: "brand-new-attribute" }];
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    const afterAttribute = hashes(dir);
+    expectAllFiveChanged(before, afterAttribute, "a new attribute");
+    expect(member("assemblePrompt")("start", { root: dir })).toContain("brand-new-attribute");
+    module.declarations.push({ kind: "class", name: "LuzNewThing", tagName: "luz-new-thing", description: "Something new.", attributes: [{ name: "tone" }] });
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    expectAllFiveChanged(afterAttribute, hashes(dir), "a new element");
+    expect(member("assemblePrompt")("start", { root: dir })).toContain("`<luz-new-thing>` (tone)");
+  });
+
+  it("throws, naming the tag and the file, in assemblePrompt and in promptSourceHash, for an element whose stylesheet is not components/<its tag without luz->.css: the rule of the body would be false", () => {
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));

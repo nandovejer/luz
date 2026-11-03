@@ -277,6 +277,18 @@ function ownCatalogElements(dir) {
   cpSync(join(root, "packages/catalog/dist/custom-elements.json"), join(dir, "packages/catalog/dist/custom-elements.json"));
   return join(dir, "packages/catalog/dist/custom-elements.json");
 }
+/**
+ * Write into the copy's cases the `source` the five prompts have there now, as the owner does after the sentinel's SAFE:
+ * a copy that is clean, whatever the repository's own cases say while a change to a prompt waits for the sentinel.
+ */
+async function confirmCases(dir) {
+  const { promptSourceHash } = await import(/* @vite-ignore */ join(root, "scripts/docs-site/prompts.js"));
+  edit(dir, CASES, (text) => {
+    const data = JSON.parse(text);
+    for (const c of data.cases) if (c.assemble) c.source = promptSourceHash(c.assemble, { root: dir });
+    return JSON.stringify(data, null, 2);
+  });
+}
 const run = (cwd, script) => spawnSync(process.execPath, [script], { cwd, encoding: "utf-8", timeout: 60_000 });
 
 describe("checkPrompts: the sources and the five prompts of the repository", () => {
@@ -296,9 +308,10 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     expect(found[0]).toContain(hash);
   });
 
-  it("reports all five prompts when the description of an element changed since the sentinel's cases were confirmed, naming each case and its new hash", async () => {
+  it("reports all five prompts when the description of an element changed in custom-elements.json since the sentinel's cases were confirmed, naming each case and its new hash", async () => {
     const dir = copyOfRepo();
     const manifest = ownCatalogElements(dir);
+    await confirmCases(dir);
     expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES)), "clean before the change").toEqual([]);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
     const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
@@ -314,8 +327,39 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     }
   });
 
-  it("reports all five prompts when a byte of scripts/docs-site/prompts.js changed (a comment line), and the copy still runs", () => {
+  it("reports all five prompts when an element is added or an attribute changes since the sentinel's cases were confirmed", async () => {
+    const dir = copyOfRepo();
+    const manifest = ownCatalogElements(dir);
+    await confirmCases(dir);
+    expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES)), "clean before the change").toEqual([]);
+    const data = JSON.parse(readFileSync(manifest, "utf-8"));
+    const module = data.modules.find((m) => (m.declarations ?? []).some((d) => d.tagName));
+    const first = module.declarations.find((d) => d.tagName);
+    first.attributes = [...(first.attributes ?? []), { name: "brand-new-attribute" }];
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    const problems = member("checkPrompts")(dir).filter((p) => p.startsWith(CASES));
+    expect(problems.length, problems.join("\n")).toBe(5);
+    for (const id of IDS) expect(problems.some((p) => p.includes(`prompt-${id}`)), id).toBe(true);
+  });
+
+  it("reports all five prompts when the body changed since the sentinel's cases were confirmed, naming each case and its new hash", async () => {
+    const dir = copyOfRepo();
+    await confirmCases(dir);
+    expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES)), "clean before the change").toEqual([]);
+    edit(dir, "apps/site/prompts/body.md", (text) => `${text.trimEnd()}\n\nOne more sentence.\n`);
+    const { promptSourceHash } = await import(/* @vite-ignore */ join(root, "scripts/docs-site/prompts.js"));
+    const problems = member("checkPrompts")(dir);
+    for (const id of IDS) {
+      const found = problems.filter((p) => p.startsWith(CASES) && p.includes(`prompts/${id}.txt`));
+      expect(found.length, `${id}: ${problems.join("\n")}`).toBe(1);
+      expect(found[0]).toContain(`prompt-${id}`);
+      expect(found[0]).toContain(promptSourceHash(id, { root: dir }));
+    }
+  });
+
+  it("reports all five prompts when a byte of scripts/docs-site/prompts.js changed (a comment line), and the copy still runs", async () => {
     const dir = copyOfRepo({ withScripts: true });
+    await confirmCases(dir);
     expect(run(dir, join(dir, "scripts/check-prompts.js")).status, "clean before the change").toBe(0);
     edit(dir, "scripts/docs-site/prompts.js", (text) => `${text}\n// x\n`);
     const result = run(dir, join(dir, "scripts/check-prompts.js"));
