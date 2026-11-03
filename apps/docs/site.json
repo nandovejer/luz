@@ -23,7 +23,7 @@
       { "id": "feedback", "label": "Feedback and status" },
       { "id": "navigation", "label": "Navigation" },
       { "id": "media", "label": "Media" },
-      { "id": "data", "label": "Data" },
+      { "id": "charts", "label": "Charts" },
       { "id": "helpers", "label": "Helpers", "sidebar": true, "list": true }
     ], "essentials": [
       { "href": "/docs/get-started/" },
@@ -34,6 +34,7 @@
       { "id": "navigation", "label": "Navigation", "sidebar": true },
       { "id": "page-structure", "label": "Page structure", "sidebar": true },
       { "id": "content", "label": "Content", "sidebar": true },
+      { "id": "charts", "label": "Charts", "sidebar": true },
       { "id": "site-wide", "label": "Site-wide", "sidebar": true },
       { "id": "documentation", "label": "Documentation", "sidebar": true },
       { "id": "reference", "label": "Reference", "list": true, "sidebar": true }
