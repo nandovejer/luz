@@ -2,7 +2,7 @@
 title: Búsqueda
 description: Permite encontrar por su nombre una página, sección o elemento HTML del sitio, mediante un botón de la cabecera.
 fits: cuando el sitio tiene más páginas de las que se pueden recorrer a simple vista
-source: d63eb90a9ad6
+source: 97add6563c8d
 reviewed: false
 -->
     <div class="docs-component" id="p-search">
@@ -92,6 +92,7 @@ reviewed: false
               <li>El botón abre el <code>&lt;dialog&gt;</code> nativo con <code>showModal()</code>: el navegador mantiene el foco dentro, lo cierra con Escape y devuelve el foco a su origen.</li>
               <li>La primera vez que se abre el diálogo, el script lee el índice.</li>
               <li>Si no se puede cargar <code>search.min.js</code>, la página conserva el comportamiento sin JavaScript: el enlace funciona y el botón permanece oculto.</li>
+              <li>Si el diálogo no tiene campo, <code>role=&quot;status&quot;</code> o bloque <code>[data-luz-search-results]</code>, la búsqueda no se conecta: el enlace permanece y el botón sigue oculto.</li>
               <li>Si un router o framework añade un <code>&lt;luz-search&gt;</code> después de cargar la página, <code>catalog.min.js</code> no lo detecta: importa <code>@luz-ds/catalog/search</code> (o <code>search.min.js</code>) a mano y se conectará al elemento cuando este se inserte. Aunque haya dos copias del archivo en una página, el elemento solo se define una vez.</li>
             </ul>
             <p>El índice es un archivo JSON de la versión 1. Cada lista contiene <code>[text, url, meta, lang]</code>; <code>meta</code> (que se muestra atenuado después del texto) y <code>lang</code> son opcionales, y las URL son relativas al archivo:</p>

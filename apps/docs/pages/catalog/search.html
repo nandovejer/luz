@@ -97,6 +97,7 @@ toc: h2,h3
               <li>The button opens the native <code>&lt;dialog&gt;</code> with <code>showModal()</code>: the browser keeps the focus inside, closes it with Escape and returns the focus.</li>
               <li>The first time the dialog opens, the script reads the index.</li>
               <li>If <code>search.min.js</code> cannot load, the page stays as it is without JavaScript: the link works and the button stays hidden.</li>
+              <li>If the dialog has no field, no <code>role=&quot;status&quot;</code> or no <code>[data-luz-search-results]</code> block, the search is not wired: the link stays and the button stays hidden.</li>
               <li>A <code>&lt;luz-search&gt;</code> added after the page has loaded, by a router or a framework, is not seen by <code>catalog.min.js</code>: import <code>@luz-ds/catalog/search</code> (or <code>search.min.js</code>) yourself, and it wires itself when it connects. Two copies of the file on one page define the element once.</li>
             </ul>
             <p>The index is a JSON file, version 1. Each list holds <code>[text, url, meta, lang]</code>; <code>meta</code> (shown muted after the text) and <code>lang</code> are optional, and URLs are relative to the file:</p>
