@@ -758,7 +758,7 @@ describe("the five are emitted by the build, served in dev and listed in llms.tx
 
 /* ---- the hash of what a person reviews for a prompt ---------------------------------- */
 
-describe("promptSourceHash: all the prose of a prompt, and nothing a release, a class or an element adds", () => {
+describe("promptSourceHash: all the prose of a prompt, and nothing a release or a class adds", () => {
   const SRC = "apps/site/prompts";
   const MODULE_FILE = "scripts/docs-site/prompts.js";
   const KINDS_FILE = "scripts/docs-site/kinds.js";
@@ -776,7 +776,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release, a 
       return [`${key}*`];
     });
   };
-  /** The element lines as the prompt lists them: catalog's (core's one tag is not listed), `- `<tag>` (attr, attr)`, no description (it is in the manifest the prompt links), joined by a newline. */
+  /** The element lines as the prompt prints them: catalog's (core's one tag is not listed), `- `<tag>` (attr, attr)`, no description (it is in the manifest the prompt links), joined by a newline. */
   const elementBlock = (dir) =>
     ["catalog"]
       .flatMap((pkg) =>
@@ -787,6 +787,20 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release, a 
               const attrs = grouped((d.attributes ?? []).map((a) => a.name));
               // The stylesheet of an element is not on its line: the body says once where it is
               return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}`;
+            }),
+        ),
+      )
+      .join("\n");
+  /** The element lines as the hash reads them: the printed line, then `: description`. The sentinel reads the prose of a description in the manifest, so a change to one voids its SAFE. */
+  const hashedElementBlock = (dir) =>
+    ["catalog"]
+      .flatMap((pkg) =>
+        JSON.parse(readFileSync(join(dir, `packages/${pkg}/dist/custom-elements.json`), "utf-8")).modules.flatMap((m) =>
+          (m.declarations ?? [])
+            .filter((d) => d.tagName)
+            .map((d) => {
+              const attrs = grouped((d.attributes ?? []).map((a) => a.name));
+              return `- \`<${d.tagName}>\`${attrs.length ? ` (${attrs.join(", ")})` : ""}: ${d.description ?? ""}`.trimEnd();
             }),
         ),
       )
@@ -812,6 +826,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release, a 
   const sha = (dir, id) => {
     const hash = createHash("sha256");
     for (const file of [...filesOf(id), KINDS_FILE]) hash.update(readFileSync(join(dir, file))).update("\0");
+    hash.update(hashedElementBlock(dir)).update("\0");
     hash.update(patternBlock(dir)).update("\0");
     return hash.digest("hex");
   };
@@ -839,7 +854,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release, a 
     return join(dir, "packages/catalog/dist/custom-elements.json");
   }
 
-  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, prompts.js, kinds.js and the fits-kinds, files and order of each catalog page, each followed by a NUL byte: no element line, they carry names and attributes, no prose", () => {
+  it("is the hex SHA-256 of body.md, the preset (none for start), stacks.json, prompts.js, kinds.js, the element lines of the prompt with their descriptions and the fits-kinds, files and order of each catalog page, each followed by a NUL byte", () => {
     for (const id of IDS) {
       const hash = member("promptSourceHash")(id, { root });
       expect(hash, id).toMatch(/^[0-9a-f]{64}$/);
@@ -914,39 +929,40 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release, a 
     expect(line).not.toContain("data-luz-trio-a");
   });
 
-  it("leaves all five unchanged when the description of an element changes in custom-elements.json: the prompt does not hold it", () => {
+  it("changes all five when the description of an element changes in custom-elements.json, though the prompt does not print it: the sentinel reads the manifest", () => {
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
     const before = hashes(dir);
+    const textsBefore = Object.fromEntries(IDS.map((id) => [id, member("assemblePrompt")(id, { root: dir })]));
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
     const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
     expect(declaration, "an element of catalog has a description").toBeTruthy();
     declaration.description += " Then do something else.";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
-    expect(hashes(dir)).toEqual(before);
-    // …and the text of the prompt did not need it either
-    for (const id of IDS) expect(member("assemblePrompt")(id, { root: dir }), id).not.toContain("Then do something else.");
+    expectAllFiveChanged(before, hashes(dir), `a change of the description of <${declaration.tagName}>`);
+    // The point of the gate: the text of the prompt is the same, the hash is not
+    for (const id of IDS) expect(member("assemblePrompt")(id, { root: dir }), `${id}: the prompt prints no description`).toBe(textsBefore[id]);
   });
 
-  it("leaves all five unchanged when an element is added or an attribute changes: a new element line is names, not prose, and needs no run of the sentinel", () => {
+  it("changes all five when an element is added or an attribute changes, and the prompt lists them", () => {
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
     const before = hashes(dir);
-    const textBefore = member("assemblePrompt")("start", { root: dir });
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
     const module = data.modules.find((m) => (m.declarations ?? []).some((d) => d.tagName));
     const first = module.declarations.find((d) => d.tagName);
     first.attributes = [...(first.attributes ?? []), { name: "brand-new-attribute" }];
+    writeFileSync(manifest, JSON.stringify(data, null, 2));
+    const afterAttribute = hashes(dir);
+    expectAllFiveChanged(before, afterAttribute, "a new attribute");
+    expect(member("assemblePrompt")("start", { root: dir })).toContain("brand-new-attribute");
     module.declarations.push({ kind: "class", name: "LuzNewThing", tagName: "luz-new-thing", description: "Something new.", attributes: [{ name: "tone" }] });
     writeFileSync(manifest, JSON.stringify(data, null, 2));
-    expect(hashes(dir)).toEqual(before);
-    const textAfter = member("assemblePrompt")("start", { root: dir });
-    expect(textAfter, "the prompt lists the new element and the new attribute").toContain("`<luz-new-thing>` (tone)");
-    expect(textAfter).toContain("brand-new-attribute");
-    expect(textAfter).not.toBe(textBefore);
+    expectAllFiveChanged(afterAttribute, hashes(dir), "a new element");
+    expect(member("assemblePrompt")("start", { root: dir })).toContain("`<luz-new-thing>` (tone)");
   });
 
-  it("assemblePrompt throws, naming the tag and the file, for an element whose stylesheet is not components/<its tag without luz->.css: the rule of the body would be false", () => {
+  it("throws, naming the tag and the file, in assemblePrompt and in promptSourceHash, for an element whose stylesheet is not components/<its tag without luz->.css: the rule of the body would be false", () => {
     const dir = copyOfSources();
     const manifest = withOwnElements(dir);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
@@ -956,8 +972,7 @@ describe("promptSourceHash: all the prose of a prompt, and nothing a release, a 
     declaration.stylesheet = "components/other.css";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
     for (const id of IDS) expect(() => member("assemblePrompt")(id, { root: dir }), id).toThrow(new RegExp(`${declaration.tagName}[^\\n]*components/other\\.css`));
-    // The hash does not read the elements any more: the prompt is what refuses a stylesheet the body would misstate
-    expect(() => member("promptSourceHash")("start", { root: dir })).not.toThrow();
+    expect(() => member("promptSourceHash")("start", { root: dir })).toThrow(/components\/other\.css/);
   });
 
   it("changes all five when one byte of scripts/docs-site/kinds.js changes (it picks the files and pages a prompt lists)", () => {

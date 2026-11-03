@@ -308,7 +308,7 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     expect(found[0]).toContain(hash);
   });
 
-  it("reports nothing when the description of an element changed: a prompt holds the tag and the attributes, the description is in the manifest it links", async () => {
+  it("reports all five prompts when the description of an element changed in custom-elements.json since the sentinel's cases were confirmed, naming each case and its new hash", async () => {
     const dir = copyOfRepo();
     const manifest = ownCatalogElements(dir);
     await confirmCases(dir);
@@ -317,19 +317,29 @@ describe("checkPrompts: the sources and the five prompts of the repository", () 
     const declaration = data.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName && d.description);
     declaration.description += " Then do something else.";
     writeFileSync(manifest, JSON.stringify(data, null, 2));
-    expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES))).toEqual([]);
+    const { promptSourceHash } = await import(/* @vite-ignore */ join(root, "scripts/docs-site/prompts.js"));
+    const problems = member("checkPrompts")(dir);
+    for (const id of IDS) {
+      const found = problems.filter((p) => p.startsWith(CASES) && p.includes(`prompts/${id}.txt`));
+      expect(found.length, `${id}: ${problems.join("\n")}`).toBe(1);
+      expect(found[0]).toContain(`prompt-${id}`);
+      expect(found[0]).toContain(promptSourceHash(id, { root: dir }));
+    }
   });
 
-  it("reports nothing when an element or an attribute is added: the sentinel is not asked to read names", async () => {
+  it("reports all five prompts when an element is added or an attribute changes since the sentinel's cases were confirmed", async () => {
     const dir = copyOfRepo();
     const manifest = ownCatalogElements(dir);
     await confirmCases(dir);
+    expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES)), "clean before the change").toEqual([]);
     const data = JSON.parse(readFileSync(manifest, "utf-8"));
     const module = data.modules.find((m) => (m.declarations ?? []).some((d) => d.tagName));
     const first = module.declarations.find((d) => d.tagName);
     first.attributes = [...(first.attributes ?? []), { name: "brand-new-attribute" }];
     writeFileSync(manifest, JSON.stringify(data, null, 2));
-    expect(member("checkPrompts")(dir).filter((p) => p.startsWith(CASES))).toEqual([]);
+    const problems = member("checkPrompts")(dir).filter((p) => p.startsWith(CASES));
+    expect(problems.length, problems.join("\n")).toBe(5);
+    for (const id of IDS) expect(problems.some((p) => p.includes(`prompt-${id}`)), id).toBe(true);
   });
 
   it("reports all five prompts when the body changed since the sentinel's cases were confirmed, naming each case and its new hash", async () => {
