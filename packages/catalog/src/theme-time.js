@@ -1,6 +1,7 @@
 /**
  * LUZ Catalog — the time of day: <luz-theme-time> (light DOM, no Shadow DOM)
- * wraps core's <luz-theme-mode> and gives its Auto the hour. A lazy chunk:
+ * wraps core's <luz-theme-mode> and adds the moments of the day to it, as a
+ * choice a reader makes. A lazy chunk:
  * catalog.js loads this file (dist/theme-time.min.js, one file with its own
  * budget, which loads nothing else) on idle when the page has a
  * <luz-theme-time>; a page may also load it on its own
@@ -26,10 +27,14 @@
  *     </fieldset>
  *   </luz-theme-time>
  *
- * In Auto the mode is the base of the moment now (the system's contrast
- * request, prefers-contrast: more, still wins), written as data-mode and
- * data-theme by <luz-theme-mode> and the moment's name as data-moment on <html>,
- * checked again at every minute. LUZ gives the mechanism; the colours of each
+ * Auto is the system's, as in core: the mode is the system's (dark, or high
+ * contrast), and the moment is the data-default one of that mode, written as
+ * data-moment on <html>. The hour of the day moves the page only when the
+ * reader asks for it: dragging the slider, choosing a moment or calling
+ * pin(hour) sets a moment, whose base goes to data-mode and data-theme by
+ * <luz-theme-mode> (the system's contrast request, prefers-contrast: more,
+ * still wins), and the page stays on it until a mode or Auto is chosen (an
+ * hour pinned is stored). LUZ gives the mechanism; the colours of each
  * moment are the site's (a rule on :root[data-moment="dawn"]). A chosen mode
  * shows its data-default moment. With latitude and longitude the two turns of
  * the day, from dark to light and back, follow that place's real sunrise and
@@ -40,15 +45,17 @@
  *
  * Only one <luz-theme-time> owns the page: the first one that has moments.
  *
- * API: `hour` (the hour in use, 0 to 24, a fraction for minutes), `moments` (the declared ones),
- * `moment`
- * (its name), `pinned` (the hour pinned, or null), `place`, `preview(hour)`
- * (the page follows that hour, in Auto; preview(null) goes back), `pin(hour)`
- * (Auto, at that hour for good instead of now, stored under "luz-light" in
- * minutes of the day) and `unpin()`. Choosing a mode, or Auto, in
- * <luz-theme-mode> unpins. Each returns false when it does nothing.
+ * API: `hour` (the hour the slider shows, 0 to 24, a fraction for minutes: the
+ * hour pinned or previewed, else the clock's), `moments` (the declared ones),
+ * `moment` (the name of the one the page shows), `dayMoment` (the name of the
+ * one at `hour`, whether the page shows it or not), `pinned` (the hour pinned,
+ * or null), `place`, `preview(hour)` (the page shows the moment at that hour;
+ * preview(null) goes back), `pin(hour)` (the page keeps the moment at that
+ * hour, stored under "luz-light" in minutes of the day) and `unpin()` (back to
+ * the system). Choosing a mode, or Auto, in <luz-theme-mode> unpins. Each
+ * returns false when it does nothing.
  *
- * @element luz-theme-time - Core's color mode, with Auto following the hour of the day.
+ * @element luz-theme-time - Core's color mode, plus the moments of the day as a choice.
  * @attr {"bar"} variant - Add the slider of the 24 hours.
  * @attr {string} show - With variant="bar", the parts of the bar to show: time, place, saved, moments.
  * @attr {string} latitude - Degrees north of the place, for its real sunrise and sunset.
@@ -143,19 +150,26 @@ function read(owner) {
 
 const coreOf = () => S.owner?.querySelector("luz-theme-mode");
 
-/** The moment the page shows: the hour's in Auto, else the default of the mode chosen. */
+/** The hour decides only when a reader asked for it: previewed or pinned, in Auto. */
+const timed = () => inAuto() && (S.p !== null || S.n !== null);
+
+/** The moment the page shows: the hour's when it decides, else the default of the mode in use (the system's in Auto). */
 function shown() {
-  return inAuto() ? momentNow() : defaultOf(coreOf().mode);
+  const core = coreOf();
+  return core && !timed() ? defaultOf(core.mode) : momentNow();
 }
 
-/** Bring <html> and the elements to the moment: the base for the mode in Auto, data-moment, the event. */
+/** Bring <html> and the elements to the moment: data-moment, the event. */
 function update(refresh) {
   if (refresh) coreOf()?.refresh?.();
   const name = shown()?.name;
   const html = document.documentElement;
   if (name) html.dataset.moment = name;
   else delete html.dataset.moment;
-  for (const el of S.els) for (const input of el.querySelectorAll("input[data-from]")) input.checked = input.value === name;
+  // A moment is checked only when the reader chose the hour: the default of a mode is not a choice
+  const chosen = timed();
+  for (const el of S.els) for (const input of el.querySelectorAll("input[data-from]")) input.checked = chosen && input.value === name;
+  show();
   const detail = { moment: name ?? null, pinned: S.n };
   const key = JSON.stringify(detail);
   if (key !== S.k) {
@@ -164,7 +178,28 @@ function update(refresh) {
   }
 }
 
-/** Auto, so that the hour decides; the change this makes in core is not a person's choice. */
+/**
+ * Core checks Auto whenever nothing is stored. Here Auto is the hour a reader
+ * chose, so otherwise the radio checked, and the button's icon and name, are
+ * those of the mode in use (the system's): the choice is still Auto, and
+ * nothing is stored.
+ */
+function show() {
+  const core = coreOf();
+  const button = core?.querySelector(".luz-theme-mode__button");
+  const radio = button && core.choice === "auto" && core.querySelector(`input[value="${timed() ? "auto" : core.mode}"]`);
+  if (!radio) return;
+  radio.checked = true;
+  const label = radio.closest("label");
+  const icon = label?.querySelector(".luz-theme-mode__icon");
+  const name = [core.querySelector("legend")?.textContent.trim(), label?.textContent.trim()].filter(Boolean).join(": ");
+  button.replaceChildren(...(icon ? [icon.cloneNode(true)] : []));
+  button.setAttribute("aria-label", name);
+  const status = core.querySelector(".luz-theme-mode__status");
+  if (status?.textContent) status.replaceChildren(name);
+}
+
+/** Auto, so that the hour decides over the system; the change this makes in core is not a person's choice. */
 function auto() {
   const core = coreOf();
   if (!core || core.choice === "auto") return;
@@ -199,15 +234,6 @@ function pin(hour) {
 /** The clock only moves the page in Auto: a chosen mode is left as it is. */
 const inAuto = () => (coreOf()?.choice ?? "auto") === "auto";
 
-/** Once a minute, at the minute: one timeout, never an interval. */
-function tick() {
-  const d = new Date();
-  S.i = setTimeout(() => {
-    if (S.p === null && S.n === null && inAuto()) update(true);
-    tick();
-  }, 6e4 - d.getSeconds() * 1e3 - d.getMilliseconds());
-}
-
 if (typeof customElements !== "undefined" && !customElements.get("luz-theme-time")) {
   customElements.define(
     "luz-theme-time",
@@ -228,6 +254,18 @@ if (typeof customElements !== "undefined" && !customElements.get("luz-theme-time
           },
           options,
         );
+        // The button steps from Auto to Light: when the system is light that is the mode already shown, so it goes on to Dark
+        this.addEventListener(
+          "click",
+          (e) => {
+            const core = coreOf();
+            if (core?.choice === "auto" && !timed() && core.mode === "light" && e.target.closest?.(".luz-theme-mode__button")) {
+              e.stopPropagation();
+              core.choice = "dark";
+            }
+          },
+          { ...options, capture: true },
+        );
         // The moments as options (show="moments" on a bar): choosing one pins its first hour
         if (this.getAttribute("variant") === "bar" && /\bmoments\b/.test(this.getAttribute("show") ?? "")) {
           this.addEventListener("change", (e) => e.target.matches?.("input[data-from]") && pin(warp(fromOf(e.target), true)), options);
@@ -240,20 +278,17 @@ if (typeof customElements !== "undefined" && !customElements.get("luz-theme-time
         const core = this.querySelector("luz-theme-mode");
         // A pinned hour stands only in Auto, as the boot script applied it
         S.n = minutes !== null && (core?.choice ?? "auto") === "auto" ? minutes : null;
-        // Auto asks the hour what it is: the base of the moment now
-        if (core) core.autoMode = () => momentNow()?.theme;
+        // Auto is the system's, unless an hour is previewed or pinned: then it is the base of that moment
+        if (core) core.autoMode = () => (timed() ? momentNow()?.theme : undefined);
         update(true);
-        tick();
-        document.addEventListener("visibilitychange", () => inAuto() && update(true), options);
+        // Core draws Auto again when the system changes, even when the mode in use does not
+        for (const q of ["(prefers-contrast: more)", "(prefers-color-scheme: dark)"]) window.matchMedia(q).addEventListener("change", () => setTimeout(update), options);
       }
 
       disconnectedCallback() {
         this.x.abort();
         S.els = S.els.filter((el) => el !== this);
-        if (S.owner === this) {
-          clearTimeout(S.i);
-          S.owner = null;
-        }
+        if (S.owner === this) S.owner = null;
       }
 
       get hour() {
@@ -262,6 +297,11 @@ if (typeof customElements !== "undefined" && !customElements.get("luz-theme-time
 
       get moment() {
         return shown()?.name ?? null;
+      }
+
+      /** The moment at the hour shown: what the slider says it is, even when the page follows the system. */
+      get dayMoment() {
+        return momentNow()?.name ?? null;
       }
 
       get pinned() {

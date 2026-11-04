@@ -98,7 +98,7 @@ function build(host) {
 
   const sync = () => {
     const now = host.hour;
-    const name = host.moment;
+    const name = host.dayMoment;
     const time = format.format(new Date(2000, 0, 1, Math.floor(now), Math.floor(now * 60) % 60));
     const moment = labelOf(host, name);
     slider.value = Math.min(1435, Math.round(now * 12) * 5);

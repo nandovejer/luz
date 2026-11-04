@@ -1,14 +1,21 @@
 // @ts-check
 /**
- * <luz-theme-time> (catalog): core's color mode with the hour. It wraps a
- * <luz-theme-mode>; the moments of the day are options inside it with their
- * `data-from` (HH:MM) and the `data-theme` they are painted over; with moments
- * declared, the Auto of core's button follows the visitor's LOCAL clock.
+ * <luz-theme-time> (catalog): core's color mode with the moments of the day. It
+ * wraps a <luz-theme-mode>; the moments are options inside it with their
+ * `data-from` (HH:MM) and the `data-theme` they are painted over.
+ *
+ * Auto is the visitor's system (prefers-color-scheme, and prefers-contrast: more
+ * for high contrast) and the clock decides nothing (owner, 2026-11-04). The hour
+ * counts only when it is pinned or previewed (`pin(hour)`, `preview(hour)`, a
+ * stored `luz-light`): then the page shows the moment at that hour, in Auto, and
+ * Auto is the radio checked and the name of the button. With nothing pinned, the
+ * radio checked is the mode in use (Light, Dark or High contrast) and nothing is
+ * stored; data-moment is the default moment of the mode in use.
  *
  * The page is tests/fixtures/theme-time.html (the moments, core's inline
  * button, no bar): dawn 05:00 dark, morning 07:30 light, afternoon 12:00 light
- * (the default of a chosen light), sunset 17:30 light, dusk 20:30 dark, night
- * 22:30 dark (the default of a chosen dark or high contrast). The clock is the
+ * (the default of a light mode), sunset 17:30 light, dusk 20:30 dark, night
+ * 22:30 dark (the default of a dark or high contrast mode). The clock is the
  * page's own (a June day in Madrid); the bar has tests/theme-time-bar.spec.js
  * and the boot script tests/theme-time-boot.spec.js.
  *
@@ -19,7 +26,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
-import { NO_CHOICE, TIMEZONE, atTime, seedMode, vejer } from './helpers/site-lights.js';
+import { NO_CHOICE, TIMEZONE, atTime, pinHour, seedMode, vejer } from './helpers/site-lights.js';
 import { ABSENT, BAR, HOURS, PLAIN, open, rootState } from './helpers/theme-time.js';
 
 const jsOff = () => test.info().project.use.javaScriptEnabled === false;
@@ -30,59 +37,70 @@ const WCAG = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 /** The core button, the element and its API, from the page. */
 const element = (page) => page.locator('luz-theme-time').first();
+const button = (page) => page.locator('.luz-theme-mode__button');
+/** The values of core's radios that are checked (one, or none): the mode in use, or Auto while an hour is chosen. */
+const checked = (page) => page.evaluate(() => [...document.querySelectorAll('luz-theme-mode input[type=radio]:checked')].map((i) => i.value));
+/** The moments of the day that are checked: only while the hour is a choice. */
+const momentsChecked = (page) => page.evaluate(() => [...document.querySelectorAll('luz-theme-time input[data-from]:checked')].map((i) => i.value));
+const stored = (page, key) => page.evaluate((k) => localStorage.getItem(k), key);
+const LIGHT = { moment: 'afternoon', mode: 'light', theme: 'light' };
+const DARK = { moment: 'night', mode: 'dark', theme: 'dark' };
+const CONTRAST = { moment: 'night', mode: 'high-contrast', theme: 'high-contrast' };
 
-test.describe('Auto follows the local clock', () => {
+test.describe('Auto is the visitor\'s system, and the clock decides nothing', () => {
   test.skip(jsOff, 'needs JavaScript');
 
-  for (const [hhmm, moment, base] of HOURS) {
-    test(`${hhmm} is ${moment}, over ${base}`, async ({ page }) => {
+  for (const [hhmm] of HOURS) {
+    test(`a light system at ${hhmm} is the afternoon over light`, async ({ page }) => {
       await open(page, PLAIN, { time: hhmm });
-      expect(await rootState(page)).toEqual({ moment, mode: base, theme: base });
-      await expect(element(page)).toHaveJSProperty('moment', moment);
+      expect(await rootState(page)).toEqual(LIGHT);
+      await expect(element(page)).toHaveJSProperty('moment', 'afternoon');
     });
   }
 
-  test('the clock decides, not the system: a dark system at 14:00 is the afternoon over light', async ({ browser }) => {
-    const context = await browser.newContext({ colorScheme: 'dark', timezoneId: TIMEZONE, storageState: NO_CHOICE });
-    const page = await context.newPage();
-    await open(page, PLAIN, { time: '14:00' });
-    expect(await rootState(page)).toEqual({ moment: 'afternoon', mode: 'light', theme: 'light' });
-    await context.close();
-  });
+  for (const hhmm of ['02:00', '09:00', '14:00', '21:00']) {
+    test(`a dark system at ${hhmm} is the night over dark`, async ({ browser }) => {
+      const context = await browser.newContext({ colorScheme: 'dark', timezoneId: TIMEZONE, storageState: NO_CHOICE });
+      const page = await context.newPage();
+      await open(page, PLAIN, { time: hhmm });
+      expect(await rootState(page)).toEqual(DARK);
+      await context.close();
+    });
+  }
 
-  test('a light system at dusk is the dusk over dark', async ({ browser }) => {
-    const context = await browser.newContext({ colorScheme: 'light', timezoneId: TIMEZONE, storageState: NO_CHOICE });
-    const page = await context.newPage();
-    await open(page, PLAIN, { time: '21:00' });
-    expect(await rootState(page)).toEqual({ moment: 'dusk', mode: 'dark', theme: 'dark' });
-    await context.close();
-  });
-
-  test('the page moves to the next moment when the minute comes, with no reload', async ({ page }) => {
+  test('the page does not move when the minute or the hour comes: no timer follows the clock', async ({ page }) => {
     await page.clock.install({ time: new Date('2026-06-15T17:29:30+02:00') });
     await page.goto(PLAIN);
     await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
-    expect((await rootState(page)).moment).toBe('afternoon');
+    expect(await rootState(page)).toEqual(LIGHT);
     await page.clock.runFor(31_000);
-    await expect(page.locator('html')).toHaveAttribute('data-moment', 'sunset');
+    expect(await page.evaluate(() => new Date().getMinutes())).toBe(30);
+    expect(await rootState(page), 'sunset has begun by the clock').toEqual(LIGHT);
+    await page.clock.runFor(6 * 3600 * 1000);
+    expect(await rootState(page), 'and it is the night by the clock').toEqual(LIGHT);
   });
 
-  test('past midnight the night goes on: the moment that starts last also runs back from midnight', async ({ page }) => {
-    await page.clock.install({ time: new Date('2026-06-15T23:59:30+02:00') });
-    await page.goto(PLAIN);
-    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
-    await page.clock.runFor(31_000);
-    expect(await page.evaluate(() => new Date().getHours())).toBe(0);
-    expect(await rootState(page)).toEqual({ moment: 'night', mode: 'dark', theme: 'dark' });
-  });
-
-  test('high contrast asked by the system wins over every moment, and the moment is still told', async ({ page }) => {
+  test('a system that asks for more contrast is the high contrast mode with the night, at any hour', async ({ page }) => {
     await page.emulateMedia({ contrast: 'more' });
     await open(page, PLAIN, { time: '14:00' });
-    expect(await rootState(page)).toEqual({ moment: 'afternoon', mode: 'high-contrast', theme: 'high-contrast' });
+    expect(await rootState(page)).toEqual(CONTRAST);
   });
 
-  test('high contrast chosen in core\'s button wins too, over a morning that is light', async ({ page }) => {
+  test('the system changing while the page is open is followed, the moment and the button with it', async ({ page }) => {
+    await open(page, PLAIN, { time: '14:00' });
+    expect(await rootState(page)).toEqual(LIGHT);
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await expect.poll(() => rootState(page)).toEqual(DARK);
+    expect(await checked(page)).toEqual(['dark']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Dark');
+    await page.emulateMedia({ colorScheme: 'light' });
+    await expect.poll(() => rootState(page)).toEqual(LIGHT);
+    expect(await checked(page)).toEqual(['light']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Light');
+    expect(await stored(page, 'luz-theme'), 'the system is not a choice').toBeNull();
+  });
+
+  test('high contrast chosen in core\'s button wins too, over a light system', async ({ page }) => {
     await open(page, PLAIN, { time: '09:00' });
     await element(page).evaluate((el) => {
       el.querySelector('luz-theme-mode').choice = 'high-contrast';
@@ -93,10 +111,155 @@ test.describe('Auto follows the local clock', () => {
   });
 });
 
-test.describe('a chosen mode shows its default moment; Auto goes back to the clock', () => {
+test.describe('the radio checked and the button are the mode in use; Auto only while an hour is chosen', () => {
   test.skip(jsOff, 'needs JavaScript');
 
-  test('light is the afternoon, dark and high contrast are the night, whatever the hour', async ({ page }) => {
+  for (const [name, scheme, contrast, value, label] of [
+    ['a light system', 'light', 'no-preference', 'light', 'Color mode: Light'],
+    ['a dark system', 'dark', 'no-preference', 'dark', 'Color mode: Dark'],
+    ['a system that asks for more contrast', 'light', 'more', 'high-contrast', 'Color mode: High contrast'],
+  ]) {
+    test(`${name}, with nothing stored: ${value} is checked, the button is named "${label}", and nothing is stored`, async ({ browser }) => {
+      const context = await browser.newContext({ colorScheme: scheme, contrast, timezoneId: TIMEZONE, storageState: NO_CHOICE });
+      const page = await context.newPage();
+      await open(page, PLAIN);
+      expect(await checked(page)).toEqual([value]);
+      await expect(button(page)).toHaveAccessibleName(label);
+      expect(await stored(page, 'luz-theme')).toBeNull();
+      expect(await stored(page, 'luz-light')).toBeNull();
+      expect(await momentsChecked(page), 'no moment is a choice').toEqual([]);
+      await context.close();
+    });
+  }
+
+  test('pin(8) checks Auto and names the button "Color mode: Auto", with the morning checked; nothing is stored under luz-theme', async ({ page }) => {
+    await open(page, PLAIN);
+    await element(page).evaluate((node) => node.pin(8));
+    expect(await rootState(page)).toMatchObject({ moment: 'morning', mode: 'light' });
+    expect(await checked(page)).toEqual(['auto']);
+    expect(await momentsChecked(page)).toEqual(['morning']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Auto');
+    expect(await stored(page, 'luz-light')).toBe('480');
+    expect(await stored(page, 'luz-theme')).toBeNull();
+  });
+
+  test('an hour pinned survives a reload: Auto is checked, the moment is the hour\'s', async ({ page }) => {
+    await open(page, PLAIN);
+    await element(page).evaluate((node) => node.pin(8));
+    await page.reload();
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
+    expect(await rootState(page)).toMatchObject({ moment: 'morning', mode: 'light' });
+    expect(await checked(page)).toEqual(['auto']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Auto');
+  });
+
+  test('preview(21) checks Auto while it lasts, and preview(null) gives the system\'s radio back', async ({ page }) => {
+    await open(page, PLAIN);
+    await element(page).evaluate((node) => node.preview(21));
+    expect(await rootState(page)).toMatchObject({ moment: 'dusk', mode: 'dark' });
+    expect(await checked(page)).toEqual(['auto']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Auto');
+    await element(page).evaluate((node) => node.preview(null));
+    expect(await rootState(page)).toEqual(LIGHT);
+    expect(await checked(page)).toEqual(['light']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Light');
+    expect(await momentsChecked(page)).toEqual([]);
+  });
+
+  test('unpin() gives the system\'s radio back and stores nothing', async ({ page }) => {
+    await open(page, PLAIN);
+    await element(page).evaluate((node) => node.pin(8));
+    await element(page).evaluate((node) => node.unpin());
+    expect(await checked(page)).toEqual(['light']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Light');
+    expect(await stored(page, 'luz-light')).toBeNull();
+    expect(await stored(page, 'luz-theme')).toBeNull();
+  });
+
+  test('a pinned hour wins over a dark system: Auto is checked and the morning is light', async ({ browser }) => {
+    const context = await browser.newContext({ colorScheme: 'dark', timezoneId: TIMEZONE, storageState: NO_CHOICE });
+    const page = await context.newPage();
+    await open(page, PLAIN);
+    expect(await checked(page)).toEqual(['dark']);
+    await element(page).evaluate((node) => node.pin(8));
+    expect(await rootState(page)).toMatchObject({ moment: 'morning', mode: 'light' });
+    expect(await checked(page)).toEqual(['auto']);
+    await context.close();
+  });
+
+  test('the status text follows the radio shown: back in Auto it names the system\'s mode, not the word Auto', async ({ page }) => {
+    await open(page, PLAIN);
+    const status = page.locator('luz-theme-mode').first().getByRole('status');
+    await button(page).click();
+    await expect(status).toHaveText('Color mode: Dark');
+    await button(page).click();
+    await expect(status).toHaveText('Color mode: High contrast');
+    // The third press is Auto: the page shows the system's Light, and so do the button and the status
+    await button(page).click();
+    await expect(button(page)).toHaveAccessibleName('Color mode: Light');
+    await expect(status).toHaveText('Color mode: Light');
+    expect(await checked(page)).toEqual(['light']);
+  });
+});
+
+test.describe('the button\'s first step: a light system goes to Dark, a dark one to Light', () => {
+  test.skip(jsOff, 'needs JavaScript');
+
+  test('a light system, untimed Auto: the first press is Dark, then High contrast, then Auto again (Light, the system\'s)', async ({ page }) => {
+    await open(page, PLAIN);
+    expect(await checked(page)).toEqual(['light']);
+    await button(page).click();
+    expect(await rootState(page)).toEqual(DARK);
+    expect(await checked(page)).toEqual(['dark']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Dark');
+    expect(await stored(page, 'luz-theme')).toBe('dark');
+    await button(page).click();
+    expect(await rootState(page)).toEqual(CONTRAST);
+    expect(await checked(page)).toEqual(['high-contrast']);
+    expect(await stored(page, 'luz-theme')).toBe('high-contrast');
+    await button(page).click();
+    expect(await rootState(page), 'Auto shows the system\'s mode again').toEqual(LIGHT);
+    expect(await checked(page)).toEqual(['light']);
+    await expect(button(page)).toHaveAccessibleName('Color mode: Light');
+    expect(await stored(page, 'luz-theme'), 'Auto is the absence of a choice').toBeNull();
+  });
+
+  test('a dark system: Dark (the system\'s) goes to Light, then Dark, High contrast and Auto', async ({ browser }) => {
+    const context = await browser.newContext({ colorScheme: 'dark', timezoneId: TIMEZONE, storageState: NO_CHOICE });
+    const page = await context.newPage();
+    await open(page, PLAIN);
+    expect(await checked(page)).toEqual(['dark']);
+    const steps = [];
+    for (let i = 0; i < 4; i++) {
+      await button(page).click();
+      steps.push([(await rootState(page)).mode, (await checked(page))[0]]);
+    }
+    expect(steps).toEqual([
+      ['light', 'light'],
+      ['dark', 'dark'],
+      ['high-contrast', 'high-contrast'],
+      ['dark', 'dark'],
+    ]);
+    expect(await stored(page, 'luz-theme'), 'back in Auto').toBeNull();
+    await context.close();
+  });
+
+  test('while an hour is chosen the button steps from Auto to Light as it always did', async ({ page }) => {
+    await open(page, PLAIN);
+    await element(page).evaluate((node) => node.pin(21));
+    expect(await checked(page)).toEqual(['auto']);
+    await button(page).click();
+    expect(await rootState(page)).toEqual(LIGHT);
+    expect(await checked(page)).toEqual(['light']);
+    expect(await stored(page, 'luz-theme')).toBe('light');
+    expect(await stored(page, 'luz-light'), 'the button lets go of the hour').toBeNull();
+  });
+});
+
+test.describe('a chosen mode shows its default moment; Auto goes back to the system', () => {
+  test.skip(jsOff, 'needs JavaScript');
+
+  test('light is the afternoon, dark and high contrast are the night, whatever the hour; Auto is the system\'s', async ({ page }) => {
     await open(page, PLAIN, { time: '06:00' });
     const core = page.locator('luz-theme-mode');
     for (const [choice, moment, mode] of [
@@ -108,32 +271,53 @@ test.describe('a chosen mode shows its default moment; Auto goes back to the clo
       expect(await rootState(page), choice).toMatchObject({ moment, mode });
     }
     await core.evaluate((el) => (el.choice = 'auto'));
-    expect(await rootState(page), 'Auto at 06:00').toEqual({ moment: 'dawn', mode: 'dark', theme: 'dark' });
+    expect(await rootState(page), 'Auto at 06:00 with a light system').toEqual(LIGHT);
   });
 
-  test('the button of core steps through them and the page follows', async ({ page }) => {
+  test('Auto with a dark system goes back to the night over dark', async ({ browser }) => {
+    const context = await browser.newContext({ colorScheme: 'dark', timezoneId: TIMEZONE, storageState: NO_CHOICE });
+    const page = await context.newPage();
+    await open(page, PLAIN, { time: '14:00' });
+    const core = page.locator('luz-theme-mode');
+    await core.evaluate((el) => (el.choice = 'light'));
+    expect(await rootState(page)).toEqual(LIGHT);
+    await core.evaluate((el) => (el.choice = 'auto'));
+    expect(await rootState(page)).toEqual(DARK);
+    await context.close();
+  });
+
+  test('the button of core steps through them and the page follows; the fourth step is the system again', async ({ page }) => {
     await open(page, PLAIN, { time: '06:00' });
-    const button = page.locator('.luz-theme-mode__button');
-    await button.click();
-    expect(await rootState(page)).toMatchObject({ moment: 'afternoon', mode: 'light' });
-    await button.click();
+    await button(page).click();
     expect(await rootState(page)).toMatchObject({ moment: 'night', mode: 'dark' });
-    await button.click();
-    await button.click();
-    expect(await rootState(page), 'back to Auto after four').toMatchObject({ moment: 'dawn', mode: 'dark' });
+    await button(page).click();
+    expect(await rootState(page)).toMatchObject({ moment: 'night', mode: 'high-contrast' });
+    await button(page).click();
+    expect(await rootState(page), 'back to Auto after three, from a light system').toEqual(LIGHT);
+    await button(page).click();
+    expect(await rootState(page), 'and Dark again, not Light, which is what is shown').toMatchObject({ mode: 'dark' });
   });
 
   test('a mode that is stored is the one the next visit starts in', async ({ page }) => {
     await seedMode(page, 'light');
     await open(page, PLAIN, { time: '23:00' });
     expect(await rootState(page)).toMatchObject({ moment: 'afternoon', mode: 'light' });
+    expect(await checked(page)).toEqual(['light']);
+  });
+
+  test('a mode that is stored wins over a pinned hour', async ({ page }) => {
+    await seedMode(page, 'dark');
+    await page.addInitScript(() => localStorage.setItem('luz-light', '480'));
+    await open(page, PLAIN);
+    expect(await rootState(page)).toEqual(DARK);
+    expect(await checked(page)).toEqual(['dark']);
   });
 });
 
 test.describe('the API and the event', () => {
   test.skip(jsOff, 'needs JavaScript');
 
-  test('preview(hour) shows that hour in Auto without storing it, and preview(null) goes back to the clock', async ({ page }) => {
+  test('preview(hour) shows that hour in Auto without storing it, and preview(null) goes back to the system', async ({ page }) => {
     await open(page, PLAIN, { time: '14:00' });
     const el = element(page);
     expect(await el.evaluate((node) => node.preview(21))).toBe(true);
@@ -157,7 +341,7 @@ test.describe('the API and the event', () => {
     expect(await element(page).evaluate((node) => node.pinned)).toBe(6.5);
   });
 
-  test('unpin() lets go of the hour: the clock again, and nothing stored', async ({ page }) => {
+  test('unpin() lets go of the hour: the system again, and nothing stored', async ({ page }) => {
     await open(page, PLAIN, { time: '14:00' });
     const el = element(page);
     await el.evaluate((node) => node.pin(6.5));
@@ -226,10 +410,15 @@ test.describe('the API and the event', () => {
   });
 });
 
-test.describe('latitude and longitude: the real sunrise and sunset of a place, asked of nobody', () => {
+test.describe('latitude and longitude: the real sunrise and sunset of a place, when an hour is pinned, asked of nobody', () => {
   test.skip(jsOff, 'needs JavaScript');
 
   const MADRID = '?latitude=40.42&longitude=-3.7';
+  /** The hour pinned as the slider leaves it, on a fixed June day (the sun of a place depends on the date). */
+  const pinnedAt = async (page, hhmm) => {
+    await atTime(page, '12:00');
+    await pinHour(page, hhmm);
+  };
 
   // 15 June: the sun rises in Madrid about 06:50 and sets about 21:40 (CEST). The declared hours say 07:30 and 20:30.
   for (const [hhmm, declared, real] of [
@@ -239,19 +428,29 @@ test.describe('latitude and longitude: the real sunrise and sunset of a place, a
     ['21:00', 'dusk', 'sunset'],
     ['21:55', 'dusk', 'dusk'],
   ]) {
-    test(`${hhmm}: ${declared} by the declared hours`, async ({ page }) => {
-      await open(page, PLAIN, { time: hhmm });
+    test(`${hhmm} pinned: ${declared} by the declared hours`, async ({ page }) => {
+      await pinnedAt(page, hhmm);
+      await open(page, PLAIN);
       expect((await rootState(page)).moment).toBe(declared);
+      expect(await checked(page), 'Auto, while an hour is pinned').toEqual(['auto']);
     });
 
-    test(`${hhmm}: ${real} by the sun of Madrid`, async ({ page }) => {
-      await open(page, `${PLAIN}${MADRID}`, { time: hhmm });
+    test(`${hhmm} pinned: ${real} by the sun of Madrid`, async ({ page }) => {
+      await pinnedAt(page, hhmm);
+      await open(page, `${PLAIN}${MADRID}`);
       expect((await rootState(page)).moment).toBe(real);
     });
   }
 
-  test('the base follows the moment the sun sets: 21:00 in Madrid in June is still light', async ({ page }) => {
+  test('with nothing pinned the sun moves nothing: the system\'s mode and its default moment, at 21:00 in Madrid', async ({ page }) => {
     await open(page, `${PLAIN}${MADRID}`, { time: '21:00' });
+    expect(await rootState(page)).toEqual(LIGHT);
+    expect(await checked(page)).toEqual(['light']);
+  });
+
+  test('the base follows the moment the sun sets: 21:00 pinned in Madrid in June is still light', async ({ page }) => {
+    await pinnedAt(page, '21:00');
+    await open(page, `${PLAIN}${MADRID}`);
     expect(await rootState(page)).toMatchObject({ moment: 'sunset', mode: 'light' });
   });
 
@@ -277,7 +476,8 @@ test.describe('latitude and longitude: the real sunrise and sunset of a place, a
     });
     const requests = [];
     page.on('request', (request) => requests.push({ url: request.url(), type: request.resourceType() }));
-    await open(page, `${PLAIN}${MADRID}`, { time: '21:00' });
+    await pinnedAt(page, '21:00');
+    await open(page, `${PLAIN}${MADRID}`);
     expect((await rootState(page)).moment).toBe('sunset');
     await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     expect(await page.evaluate(() => window.__asked), 'geolocation and its permission').toEqual([]);
@@ -324,13 +524,13 @@ test.describe('two chunks: the tag loads one, a bar loads the other', () => {
     expect(chunks(urls)).not.toContain('theme-time-bar');
   });
 
-  test('if the chunk never arrives, core\'s button still works (the clock is an addition)', async ({ page }) => {
+  test('if the chunk never arrives, core\'s button still works (the moments are an addition)', async ({ page }) => {
     await page.route(/theme-time(-bar)?\.min\.js/, (route) => route.abort());
-    await atTime(page, '23:00');
     await page.goto(PLAIN);
     await expect(page.locator('.luz-theme-mode__button')).toBeVisible();
     await page.locator('.luz-theme-mode__button').click();
-    await expect(page.locator('html')).toHaveAttribute('data-mode', 'light');
+    await page.locator('.luz-theme-mode__button').click();
+    await expect(page.locator('html')).toHaveAttribute('data-mode', 'dark');
   });
 });
 

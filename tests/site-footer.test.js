@@ -22,13 +22,14 @@ const catalog = (code) => JSON.parse(read(`apps/landing/i18n/${code}.json`));
 /** The label of the radio with value="auto" in a footer. */
 const autoLabel = (html) => html.match(/<label\b[^>]*>(?:(?!<\/label>)[\s\S])*?\bvalue="auto"[\s\S]*?<\/label>/)?.[0] ?? "";
 
-describe("the footer has Auto first (2026-10-29): <luz-theme-time> around core's <luz-theme-mode>, the light follows the hour until a mode is chosen", () => {
+describe("the footer has Auto first (2026-10-29): <luz-theme-time> around core's <luz-theme-mode>, Auto is the system's and no radio is checked in the markup", () => {
   const radios = (html) => [...html.matchAll(/<input\b[^>]*type="radio"[^>]*name="luz-theme-mode"[^>]*>/g)].map((m) => m[0]);
   for (const file of ["apps/landing/index.html", "apps/site/_partials/footer.html"]) {
-    it(`${file}: Auto, Light, Dark and High contrast in that order, Auto checked in the markup`, () => {
+    it(`${file}: Auto, Light, Dark and High contrast in that order, no radio checked: without JavaScript the page follows the system`, () => {
       const all = radios(read(file));
       expect(all.map((r) => r.match(/value="([^"]+)"/)?.[1])).toEqual(["auto", "light", "dark", "high-contrast"]);
-      expect(all.filter((r) => /\schecked\b/.test(r)).map((r) => r.match(/value="([^"]+)"/)?.[1])).toEqual(["auto"]);
+      // Auto is first and not checked, so none is: the page follows the system until a radio is picked
+      expect(all.filter((r) => /\schecked\b/.test(r)).map((r) => r.match(/value="([^"]+)"/)?.[1])).toEqual([]);
       expect(autoLabel(read(file)), "a label for the auto radio").toContain("{{t:footer.auto}}");
     });
 
@@ -57,6 +58,19 @@ describe("the footer has Auto first (2026-10-29): <luz-theme-time> around core's
     expect(catalog("en")["footer.auto"]).toBe("Auto");
     expect(catalog("es")["footer.auto"]).not.toBe("Auto");
     expect(catalog("ar")["footer.auto"]).toMatch(/^[\u0600-\u06FF\s]+$/);
+  });
+});
+
+describe("the templates do not name light on <html>: the page is Vejer light only when the system is light", () => {
+  const htmlTag = (rel) => read(rel).match(/<html\b[^>]*>/)?.[0] ?? "";
+  it.each(["apps/landing/index.html", "apps/docs/_layouts/page.html"])("%s has no data-theme and no data-mode on <html>", (file) => {
+    expect(htmlTag(file)).toMatch(/^<html\b/);
+    expect(htmlTag(file)).not.toMatch(/\bdata-theme\b/);
+    expect(htmlTag(file)).not.toMatch(/\bdata-mode\b/);
+  });
+
+  it("the 404 page stays dark: it has no boot script and no switcher, so it names its mode itself", () => {
+    expect(htmlTag("apps/docs/_layouts/not-found.html")).toMatch(/\bdata-theme="dark"/);
   });
 });
 

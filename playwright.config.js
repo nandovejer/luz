@@ -2,12 +2,10 @@ import { defineConfig, devices } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:5173';
 
-// Every page of the site boots in Auto, from the local hour (catalog's theme-time-boot.js: dusk, night and dawn are
-// dark), so a run at 23:00 would not be a run at 14:00. Every context starts with the hour pinned at 14:00 (840
-// minutes under "luz-light", the afternoon: light, Vejer), whatever the clock of the machine or of CI (UTC). A spec
-// that tests Auto, the moments or the clock itself starts from nothing instead: `test.use({ storageState: NO_CHOICE })`
-// (tests/helpers/site-lights.js). The origin is the base URL's, which is where the page's localStorage is.
-const PINNED_HOUR = { cookies: [], origins: [{ origin: new URL(BASE_URL).origin, localStorage: [{ name: 'luz-light', value: '840' }] }] };
+// Every page of the site boots in Auto, which is the system's colour mode (catalog's theme-time-boot.js, no clock), and
+// Chromium's default scheme is light, so a run is Vejer light whatever the hour of the machine or of CI (UTC). The hour
+// only counts when it is pinned: a spec that tests the moments or the slider pins it itself (`luz-light` in
+// localStorage, or `pin(hour)` on <luz-theme-time>), and one that tests the system emulates `colorScheme`.
 
 export default defineConfig({
   testDir: './tests',
@@ -32,7 +30,6 @@ export default defineConfig({
   },
   use: {
     baseURL: BASE_URL,
-    storageState: PINNED_HOUR,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },

@@ -24,18 +24,21 @@
  *  - Never in high contrast or forced colours; under prefers-reduced-motion the
  *    stars are drawn and nothing moves.
  *
- * The tests set the light with the clock (no stored choice), as
- * tests/helpers/site-lights.js does, and read the computed style of the layers.
+ * The sky comes from the moment on <html>: the hour a reader pinned (`luz-light`, the
+ * slider of the home) or, with nothing pinned, the default moment of the colour mode in
+ * use (night over dark or high contrast, afternoon over light), so the system's dark
+ * mode shows the stars as Dark chosen does. It never comes from the clock of the day.
+ * The tests pin the hour (`pinHour` in tests/helpers/site-lights.js) or emulate the
+ * system, and read the computed style of the layers.
  * It needs JavaScript (boot.js writes data-moment), so it runs in `chromium`.
  */
 /* global atob, Blob, createImageBitmap, innerHeight, OffscreenCanvas, ScrollTimeline -- these run in the page, inside page.evaluate() */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
-import { LIGHTS, NO_CHOICE, TIMEZONE, atTime, seedMode } from './helpers/site-lights.js';
+import { LIGHTS, atTime, pinHour, seedMode } from './helpers/site-lights.js';
 
 test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'boot.js writes data-moment: the sky needs JavaScript');
-test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
 
 /** [name, route, the host of the sky] */
 const PAGES = [
@@ -47,13 +50,13 @@ const LIGHT = LIGHTS.filter(([, , mode]) => mode === 'light');
 const HOURS = { dawn: '06:00', morning: '09:00', afternoon: '14:00', sunset: '19:00', dusk: '21:00', night: '23:30' };
 
 /**
- * Open a page at the hour of a light, with nothing stored.
+ * Open a page with the hour of a light pinned, as the slider of the home leaves it.
  * @param {import('@playwright/test').Page} page
  * @param {string} route
  * @param {string} light
  */
 async function open(page, route, light) {
-  await atTime(page, HOURS[/** @type {keyof typeof HOURS} */ (light)]);
+  await pinHour(page, HOURS[/** @type {keyof typeof HOURS} */ (light)]);
   await page.goto(route);
   await expect(page.locator('html')).toHaveAttribute('data-moment', light);
   await faded(page);
@@ -254,10 +257,39 @@ for (const [name, route, host] of PAGES) {
       await expect.poll(async () => (await layers(page, host))?.map((l) => [l.stars, l.shadow])).toEqual([[true, 'none'], [true, 'none']]);
     });
 
+    test.describe("Auto is the system's: the sky comes from the mode in use, never from the hour", () => {
+      test('a dark system, nothing pinned, at two in the afternoon: the stars of night are drawn', async ({ page }) => {
+        await page.emulateMedia({ colorScheme: 'dark' });
+        await atTime(page, HOURS.afternoon);
+        await page.goto(route);
+        await expect(page.locator('html')).toHaveAttribute('data-moment', 'night');
+        await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+        await faded(page);
+        await expect.poll(async () => (await layers(page, host))?.every(drawn)).toBe(true);
+        for (const l of /** @type {NonNullable<Awaited<ReturnType<typeof layers>>>} */ (await layers(page, host))) expect(l.stars, 'stars, as with Dark chosen').toBe(true);
+      });
+
+      test('a light system, nothing pinned, at half past eleven at night: no stars, the afternoon is what the page shows', async ({ page }) => {
+        await page.emulateMedia({ colorScheme: 'light' });
+        await atTime(page, HOURS.night);
+        await page.goto(route);
+        await expect(page.locator('html')).toHaveAttribute('data-moment', 'afternoon');
+        await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+        await faded(page);
+        await expect.poll(async () => (await layers(page, host))?.every((l) => l.display === 'none')).toBe(true);
+      });
+
+      test('a pinned hour over a light system: the dark hour is the one that decides (23:30 shows the stars)', async ({ page }) => {
+        await page.emulateMedia({ colorScheme: 'light' });
+        await open(page, route, 'night');
+        await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+        await expect.poll(async () => (await layers(page, host))?.every(drawn)).toBe(true);
+      });
+    });
+
     test.describe('where the sky is not', () => {
       test('high contrast: nothing is drawn, in the dark light or the light ones', async ({ page }) => {
         await seedMode(page, 'high-contrast');
-        await atTime(page, HOURS.night);
         await page.goto(route);
         await expect(page.locator('html')).toHaveAttribute('data-theme', 'high-contrast');
         await faded(page);
@@ -374,7 +406,6 @@ test.describe('the docs keep their text readable over the stars (measured on the
 test.describe('the home glow is not in high contrast', () => {
   test('.o-page::before is not drawn', async ({ page }) => {
     await seedMode(page, 'high-contrast');
-    await atTime(page, HOURS.afternoon);
     await page.goto('/');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'high-contrast');
     expect(await page.evaluate(() => getComputedStyle(document.querySelector('.o-page'), '::before').display)).toBe('none');

@@ -11,8 +11,9 @@
  *    flow (`position: absolute` or `fixed`), starting at the top of the page,
  *    across the width, at least as tall as the site header.
  *  - Shown when `<html data-theme="dark">` (so the dusk and dawn lights that sit
- *    over dark too), never in light and never in high contrast; not under forced
- *    colours.
+ *    over dark too, and Auto when the visitor's system is dark), never in light and
+ *    never in high contrast; not under forced colours. The hour of the day never
+ *    shows them: only an hour the reader pinned does.
  *  - Decorative: no text, not in the accessibility tree, `pointer-events: none`.
  *  - Nothing moves on a clock: no time-based animation lasts more than 5 s (WCAG
  *    2.2.2: the docs have no pause control). The one motion it has is the reader's
@@ -35,22 +36,19 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
-import { LIGHTS, NO_CHOICE, TIMEZONE, atTime, seedMode } from './helpers/site-lights.js';
+import { LIGHTS, atTime, pinHour, seedMode } from './helpers/site-lights.js';
 
 test.skip(({ javaScriptEnabled }) => javaScriptEnabled === false, 'boot.js sets data-theme: the band needs JavaScript to know the mode');
-test.use({ timezoneId: TIMEZONE });
 
 const ROUTES = ['/docs/', '/docs/components/button/'];
-const NIGHT = '23:30';
 
 /**
- * Open a page in a colour mode, at a clock that does not vary, with the colour fade finished.
+ * Open a page in a colour mode, with the colour fade finished.
  * @param {import('@playwright/test').Page} page
  * @param {string} route
  * @param {string} mode light, dark or high-contrast (stored under core's key)
  */
-async function open(page, route, mode, hhmm = NIGHT) {
-  await atTime(page, hhmm);
+async function open(page, route, mode) {
   await seedMode(page, mode);
   await page.goto(route);
   await expect(page.locator('html')).toHaveAttribute('data-theme', mode);
@@ -513,7 +511,7 @@ test.describe('the stars drift with the scroll, quietly (dark, motion allowed)',
 
 test.describe('where the stars are not', () => {
   test('light: no band, and the same page in dark has it', async ({ page }) => {
-    await open(page, '/docs/', 'light', '14:00');
+    await open(page, '/docs/', 'light');
     expect(await findBand(page), 'no band of stars in light').toBeNull();
     await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
     await expectBand(page, 'the same page with data-theme switched to dark (the band is keyed on data-theme)');
@@ -542,12 +540,10 @@ test.describe('where the stars are not', () => {
   });
 });
 
-test.describe('the lights of the hour (no stored choice)', () => {
-  test.use({ storageState: NO_CHOICE });
-
+test.describe('the lights of an hour pinned (the slider of the home leaves it under luz-light)', () => {
   for (const [light, hhmm, mode] of LIGHTS) {
-    test(`${light} (${mode}): ${mode === 'dark' ? 'the band of stars is drawn' : 'no band'}`, async ({ page }) => {
-      await atTime(page, hhmm);
+    test(`${light} (${hhmm} pinned, ${mode}): ${mode === 'dark' ? 'the band of stars is drawn' : 'no band'}`, async ({ page }) => {
+      await pinHour(page, hhmm);
       await page.goto('/docs/');
       await expect(page.locator('html')).toHaveAttribute('data-moment', light);
       await expect(page.locator('html')).toHaveAttribute('data-theme', mode);
@@ -557,4 +553,24 @@ test.describe('the lights of the hour (no stored choice)', () => {
       else expect(band, `${light} sits over light: no stars`).toBeNull();
     });
   }
+});
+
+test.describe("Auto is the system's: the stars come from the mode in use, never from the hour", () => {
+  test('a dark system, nothing pinned, at two in the afternoon: the band of stars is drawn', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await atTime(page, '14:00');
+    await page.goto('/docs/');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await faded(page);
+    await expectBand(page, 'Auto over a dark system');
+  });
+
+  test('a light system, nothing pinned, at half past eleven at night: no band', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    await atTime(page, '23:30');
+    await page.goto('/docs/');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await faded(page);
+    expect(await findBand(page), 'the night of the clock shows no stars over a light system').toBeNull();
+  });
 });

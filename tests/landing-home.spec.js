@@ -15,7 +15,7 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { KEY as MODE_KEY, NO_CHOICE, TIMEZONE, channels, seedMode, vejer } from './helpers/site-lights.js';
+import { KEY as MODE_KEY, NO_CHOICE, TIMEZONE, channels, pinHour, seedMode, vejer } from './helpers/site-lights.js';
 
 const catalog = (lang) => JSON.parse(readFileSync(fileURLToPath(new URL(`../apps/landing/i18n/${lang}.json`, import.meta.url)), 'utf-8'));
 const EN = catalog('en');
@@ -131,6 +131,98 @@ test.describe('Modes: a box for each mode switches the page', () => {
     await expect(page.locator('#modes [data-apply-mode="dark"]')).toHaveAttribute('aria-pressed', 'true');
   });
 
+  test('the box of the mode in use works too: with a light system and Auto, the box of Light presses and stores Light, though its radio was checked', async ({ page }) => {
+    await page.goto('/');
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
+    await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue('light');
+    expect(await page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBeNull();
+    await page.locator('#modes [data-apply-mode="light"]').click();
+    await expect(page.locator('#modes [data-apply-mode="light"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBe('light');
+    await page.reload();
+    expect(await theme(page)).toBe('light');
+    await expect(page.locator('#modes [data-apply-mode="light"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue('light');
+  });
+
+  test('the box of the mode in use works with a dark system as well: Dark is stored and pressed', async ({ browser }) => {
+    const context = await browser.newContext({ colorScheme: 'dark', timezoneId: TIMEZONE, storageState: NO_CHOICE });
+    const page = await context.newPage();
+    await page.goto('/');
+    await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
+    await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue('dark');
+    await page.locator('#modes [data-apply-mode="dark"]').click();
+    await expect(page.locator('#modes [data-apply-mode="dark"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBe('dark');
+    await context.close();
+  });
+
+  /** The values of the boxes that are pressed, and of the footer's radios that are checked. */
+  const pressed = (page) => page.evaluate(() => [...document.querySelectorAll('#modes [data-apply-mode]')].filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.getAttribute('data-apply-mode')));
+  const checkedRadios = (page) => page.evaluate(() => [...document.querySelectorAll('footer input[name="luz-theme-mode"]:checked')].map((r) => r.value));
+  const ready = (page) => expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
+
+  for (const [name, options, mode] of [
+    ['a light system', { colorScheme: 'light' }, 'light'],
+    ['a dark system', { colorScheme: 'dark' }, 'dark'],
+    ['a system that asks for more contrast', { colorScheme: 'light', contrast: 'more' }, 'high-contrast'],
+  ]) {
+    test(`${name}, nothing stored: the box of ${mode} is pressed at load, the others are not, and the footer checks ${mode}`, async ({ browser }) => {
+      const context = await browser.newContext({ timezoneId: TIMEZONE, storageState: NO_CHOICE, ...options });
+      const page = await context.newPage();
+      await page.goto('/');
+      await ready(page);
+      for (const [other] of MODES) await expect(page.locator(`#modes [data-apply-mode="${other}"]`)).toHaveAttribute('aria-pressed', String(other === mode));
+      expect(await checkedRadios(page)).toEqual([mode]);
+      expect(await page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBeNull();
+      await context.close();
+    });
+  }
+
+  test('a change of the system with the page open moves the pressed box', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.goto('/');
+    await ready(page);
+    await expect.poll(() => pressed(page)).toEqual(['light']);
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await expect.poll(() => pressed(page)).toEqual(['dark']);
+    await page.emulateMedia({ colorScheme: 'light', contrast: 'more' });
+    await expect.poll(() => pressed(page)).toEqual(['high-contrast']);
+    await page.emulateMedia({ colorScheme: 'light', contrast: 'no-preference' });
+    await expect.poll(() => pressed(page)).toEqual(['light']);
+  });
+
+  test('an hour pinned (stored luz-light): no box is pressed and Auto is checked and named', async ({ page }) => {
+    await pinHour(page, '09:00');
+    await page.goto('/');
+    await ready(page);
+    await expect.poll(() => pressed(page)).toEqual([]);
+    expect(await checkedRadios(page)).toEqual(['auto']);
+    await expect(page.locator('footer .luz-theme-mode__button')).toHaveAccessibleName(/Auto$/);
+  });
+
+  test('pin(8) presses no box, and unpin() gives the box of the system\'s mode back', async ({ page }) => {
+    await page.goto('/');
+    await ready(page);
+    await expect.poll(() => pressed(page)).toEqual(['light']);
+    await page.evaluate(() => document.querySelector('footer luz-theme-time').pin(8));
+    await expect.poll(() => pressed(page)).toEqual([]);
+    expect(await checkedRadios(page)).toEqual(['auto']);
+    await page.evaluate(() => document.querySelector('footer luz-theme-time').unpin());
+    await expect.poll(() => pressed(page)).toEqual(['light']);
+    expect(await checkedRadios(page)).toEqual(['light']);
+  });
+
+  test('a click on a box leaves a pinned hour: its box is pressed and its mode is stored', async ({ page }) => {
+    await pinHour(page, '09:00');
+    await page.goto('/');
+    await ready(page);
+    await page.locator('#modes [data-apply-mode="dark"]').click();
+    await expect.poll(() => pressed(page)).toEqual(['dark']);
+    await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBe('dark');
+    expect(await page.evaluate(() => localStorage.getItem('luz-light'))).toBeNull();
+  });
+
   test('the buttons are keyboard controls: Enter and Space press them', async ({ page }) => {
     await seedMode(page, 'light');
     await page.goto('/');
@@ -172,6 +264,8 @@ test.describe('Modes without JavaScript', () => {
     }
     // The body is transparent over the sky: what the radios change is the page's surface token
     const surface = () => page.evaluate(() => getComputedStyle(document.body).getPropertyValue('--luz-surface-page').trim());
+    // Auto is the system's: no radio is checked until one is picked
+    await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveCount(0);
     const before = await surface();
     await page.click('footer .luz-theme-mode__option:has(input[value="dark"])');
     await expect(page.locator('footer input[name="luz-theme-mode"][value="dark"]')).toBeChecked();

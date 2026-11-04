@@ -1,6 +1,6 @@
 <!-- luz:page
 title: Color mode by time of day
-description: Gives Auto the time of day: the mode follows the clock or the sun in the moments you declare, and an optional slider lets a reader try any hour.
+description: Adds the time of day to the color mode: a reader picks a moment you declare, or drags a slider through the hours, and Auto stays the system's.
 area: catalog
 order: 20
 group: site-wide
@@ -13,7 +13,7 @@ keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
 -->
     <div class="docs-component" id="p-theme-time">
           <h2 id="example">Example</h2>
-          <p>The slider of the day as the bar builds it: alone, which is the default, and with every optional part (<code>show="time place saved moments"</code>). They are pictures: they are inert and no script runs on them, so they do not change this page. The working bar is on the <a href="/">home page</a>, and the moments of this site are the ones its footer declares: in Auto, the page follows them.</p>
+          <p>The slider of the day as the bar builds it: alone, which is the default, and with every optional part (<code>show="time place saved moments"</code>). They are pictures: they are inert and no script runs on them, so they do not change this page. The working bar is on the <a href="/">home page</a>, and the moments of this site are the ones its footer declares: the working bar picks one, while Auto stays the system's.</p>
           <div class="docs-example" data-docs-specimen>
           <p class="docs-stage__label">The slider alone</p>
           <div class="docs-demo__stage" inert aria-hidden="true">
@@ -103,20 +103,21 @@ keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
                   <tr><th scope="col">Name</th><th scope="col">What it does</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Name"><div><code>el.hour</code>, <code>el.moments</code>, <code>el.moment</code>, <code>el.pinned</code>, <code>el.place</code></div></td><td data-label="What it does"><div>Read-only: the hour in use (0 to 24); the declared moments, <code>{ name, from, theme, input }</code>; the name of the moment shown and the pinned hour (each <code>null</code> if none); the <code>place</code> attribute.</div></td></tr>
-                  <tr><td data-label="Name"><div><code>preview(hour)</code>, <code>pin(hour)</code>, <code>unpin()</code></div></td><td data-label="What it does"><div>The page follows that hour, in Auto, and nothing is stored (<code>preview(null)</code> goes back); Auto at that hour instead of now, stored under <code>luz-light</code> unless <code>no-remember</code>; lets go of the pinned hour.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>el.hour</code>, <code>el.moments</code>, <code>el.moment</code>, <code>el.dayMoment</code>, <code>el.pinned</code>, <code>el.place</code></div></td><td data-label="What it does"><div>Read-only: the hour the slider shows (0 to 24: the pinned or previewed one, else the clock's); the declared moments, <code>{ name, from, theme, input }</code>; the name of the moment the page shows; the name of the moment at that hour, shown or not; the pinned hour (<code>null</code> if none); the <code>place</code> attribute.</div></td></tr>
+                  <tr><td data-label="Name"><div><code>preview(hour)</code>, <code>pin(hour)</code>, <code>unpin()</code></div></td><td data-label="What it does"><div>The page shows the moment at that hour, and nothing is stored (<code>preview(null)</code> goes back); the page keeps the moment at that hour, stored under <code>luz-light</code> unless <code>no-remember</code>; lets go of the pinned hour, back to the system.</div></td></tr>
                   <tr><td data-label="Name"><div><code>luz-theme-time:change</code></div></td><td data-label="What it does"><div>Bubbles after the upgrade and when the moment or the pinned hour changes. <code>detail</code>: <code>moment</code> and <code>pinned</code> (each <code>null</code> if none).</div></td></tr>
                 </tbody>
               </table>
             </div>
             <p>A method returns false when it does nothing: no moments, or an hour outside 0 to 24.</p>
             <h3 id="how">How it works</h3>
-            <p><code>theme-time.js</code> gives Auto of <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> the hour. Core does the rest, and the button alone if the catalog does not load.</p>
+            <p><code>theme-time.js</code> adds the moments of the day to <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a>, as a choice the reader makes. Core does the rest, and the button alone if the catalog does not load.</p>
             <ul>
-              <li><strong>Auto by the clock:</strong> the mode is the base of the moment now, by the visitor's local hour, checked every minute. The moment now is the last one that has started (night runs through midnight): its name goes to <code>data-moment</code> and its radio is checked. The visitor's location is never asked.</li>
+              <li><strong>Auto is the system's,</strong> as in core: dark, high contrast, or light. The clock moves nothing. <code>data-moment</code> takes the default moment of that mode (<code>data-default</code>), and no moment radio is checked. The mode radio checked is the one in use, Light or Dark, and the button is named after it; nothing is stored, and the choice is still Auto. Auto itself is checked only while an hour or a moment is chosen. Auto does not follow the hour: a page that wants a moment sets it, with the slider, a moment option or <code>pin(hour)</code>.</li>
+              <li><strong>A moment the reader chose</strong> is the last one that has started at that hour (night runs through midnight): its name goes to <code>data-moment</code>, its radio is checked and the page takes its base. The visitor's location is never asked.</li>
               <li><strong>A mode the reader chose</strong> shows its default moment. <strong>High contrast always wins:</strong> <code>data-theme</code> is <code>high-contrast</code>, so a rule for <code>"light"</code> or <code>"dark"</code> does not match.</li>
               <li><strong>With a place,</strong> <code>latitude</code> and <code>longitude</code> give today's real sunrise and sunset, worked out in the page with no network, in place of the two turns of the day; if the sun does not rise or set there, the declared hours stand.</li>
-              <li><strong>A pinned hour</strong> is Auto at that hour, stored under <code>luz-light</code> to five minutes; choosing a mode, or Auto, in <code>&lt;luz-theme-mode&gt;</code> lets it go.</li>
+              <li><strong>A pinned hour</strong> is the moment at that hour kept in Auto, stored under <code>luz-light</code> to five minutes; choosing a mode, or Auto, in <code>&lt;luz-theme-mode&gt;</code> lets it go, back to the system.</li>
               <li><strong>The slider</strong> (<code>variant="bar"</code>): dragging previews the hour; letting go pins and stores it and writes the note “Saved”. Its track is painted with <code>--luz-theme-time-sky-&lt;value&gt;</code>, one for each moment: <a href="#sky">Paint the track</a>.</li>
               <li><strong>Two files:</strong> <code>theme-time.min.js</code> and <code>theme-time-bar.min.js</code>, which only <code>variant="bar"</code> loads. For a bar added after the scan, import <code>@luz-ds/catalog/theme-time-bar</code> and call <code>initThemeTimeBar(root)</code>.</li>
             </ul>
@@ -127,7 +128,7 @@ keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
               <li><strong>Slider:</strong> a native range in steps of 5 minutes: Tab reaches it, the arrow keys move one step, Home goes to 00:00 and End to 23:55. Each press previews the hour.</li>
               <li><strong>Escape</strong> on the slider lets go of a pinned hour, and then does not close a dialog around the bar.</li>
               <li><strong>Name and value:</strong> the name is <code>data-luz-label-scrub</code>; <code>aria-valuetext</code> is the moment and the hour, “Afternoon, 13:00”. When an hour is pinned a <code>role="status"</code> region says your <code>data-luz-label-saved</code>, shown or not.</li>
-              <li><strong>Moments as options</strong> (<code>show="moments"</code>) are radios in a fieldset: the arrow keys choose one. The mode button is core's: <a href="/docs/components/theme-mode/#keyboard">its keyboard and ARIA</a>.</li>
+              <li><strong>Moments as options</strong> (<code>show="moments"</code>) are radios in a fieldset: the arrow keys choose one. The mode button is core's: <a href="/docs/components/theme-mode/#keyboard">its keyboard and ARIA</a>. With the system in use it steps on from the mode shown, so the first press never repeats it.</li>
             </ul>
             <h3 id="boot">Script for the head</h3>
             <p>Optional, after <a href="/docs/components/theme-mode/#boot">core's</a>. It writes the moment before the first paint. Copy <code>node_modules/@luz-ds/catalog/dist/theme-time-boot.min.js</code> to your own origin. The moments travel on its tag, as <code>data-moments</code>: the body is not read yet.</p>
@@ -145,7 +146,7 @@ keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
             </div>
             <ul>
               <li><strong><code>data-moments</code>:</strong> <code>value@HH:MM=base</code> for each moment, in markup order; <code>*</code> marks <code>data-default</code>.</li>
-              <li><strong>What it writes:</strong> <code>data-moment</code> on <code>&lt;html&gt;</code> and, in Auto, <code>data-mode</code> (and <code>data-theme</code>, with no brand) of that moment's base. A stored mode shows its default moment; a pinned hour (<code>luz-light</code>) replaces the clock; <code>prefers-contrast: more</code> wins. It never writes the storage. It blocks rendering as core's does, under the same exception (EX-012).</li>
+              <li><strong>What it writes:</strong> <code>data-moment</code> on <code>&lt;html&gt;</code> and, for a pinned hour (<code>luz-light</code>), <code>data-mode</code> (and <code>data-theme</code>, with no brand) of that moment's base. A stored mode, or Auto with no pinned hour, shows the default moment of its mode; <code>prefers-contrast: more</code> wins. It never writes the storage. It blocks rendering as core's does, under the same exception (EX-012).</li>
             </ul>
             <h3 id="moments">The six example moments</h3>
             <p>By the visitor's clock, as the markup above and the footer of this site declare them. Night runs through midnight, and <code>data-moment</code> on <code>&lt;html&gt;</code> takes the name.</p>
@@ -251,7 +252,7 @@ keywords: time of day, dawn, sunset, hour, clock, automatic dark mode
             <ul>
               <li>The labels are in the language of the page: the slider reads them with the hour.</li>
               <li>Name the slider for what it does, “Hour of the day”, and the note “Saved”.</li>
-              <li>Say near the control what Auto follows: “Auto follows the time of day”.</li>
+              <li>Say near the control what Auto follows: “Auto follows your system”, and that a moment is a choice.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
             <p>The bar reads the semantic tokens of the page. The colours you give each moment are yours to measure, in the light and in the dark.</p>

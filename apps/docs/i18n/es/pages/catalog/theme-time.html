@@ -1,14 +1,14 @@
 <!-- luz:page
 title: Modo de color según la hora del día
-description: Da a Automático la hora del día: el modo sigue el reloj o el sol en los momentos que declares, y una barra opcional deja probar cualquier hora.
+description: Añade la hora del día al modo de color: quien lee elige un momento que declaras o arrastra un deslizador por las horas, y Automático sigue al sistema.
 fits: cuando el sitio tiene un selector de modo y quiere un aspecto para cada momento del día
 keywords: momento del día, amanecer, atardecer, hora, reloj, modo oscuro automático
-source: 09802507c05f
+source: c4e9a898ae9f
 reviewed: false
 -->
     <div class="docs-component" id="p-theme-time">
           <h2 id="example">Ejemplo</h2>
-          <p>El deslizador del día tal como lo construye la barra: solo, que es lo predeterminado, y con todas las partes opcionales (<code>show="time place saved moments"</code>). Son imágenes: son inertes y ningún script se ejecuta en ellas, así que no cambian esta página. La barra que funciona está en la <a href="/">página de inicio</a>, y los momentos de este sitio son los que declara su pie de página: en Automático, la página los sigue.</p>
+          <p>El deslizador del día tal como lo construye la barra: solo, que es lo predeterminado, y con todas las partes opcionales (<code>show="time place saved moments"</code>). Son imágenes: son inertes y ningún script se ejecuta en ellas, así que no cambian esta página. La barra que funciona está en la <a href="/">página de inicio</a>, y los momentos de este sitio son los que declara su pie de página: la barra que funciona elige uno, mientras Automático sigue al sistema.</p>
           <div class="docs-example" data-docs-specimen>
           <p class="docs-stage__label">The slider alone</p>
           <div class="docs-demo__stage" inert aria-hidden="true">
@@ -98,20 +98,21 @@ reviewed: false
                   <tr><th scope="col">Nombre</th><th scope="col">Qué hace</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Nombre"><div><code>el.hour</code>, <code>el.moments</code>, <code>el.moment</code>, <code>el.pinned</code>, <code>el.place</code></div></td><td data-label="Qué hace"><div>Solo lectura: la hora en uso (0 a 24); los momentos declarados, <code>{ name, from, theme, input }</code>; el nombre del momento mostrado y la hora fijada (cada uno <code>null</code> si no hay); el atributo <code>place</code>.</div></td></tr>
-                  <tr><td data-label="Nombre"><div><code>preview(hour)</code>, <code>pin(hour)</code>, <code>unpin()</code></div></td><td data-label="Qué hace"><div>La página sigue esa hora, en Automático, y no se guarda nada (<code>preview(null)</code> vuelve); Automático a esa hora en lugar de la actual, guardado en <code>luz-light</code> salvo con <code>no-remember</code>; suelta la hora fijada.</div></td></tr>
+                  <tr><td data-label="Nombre"><div><code>el.hour</code>, <code>el.moments</code>, <code>el.moment</code>, <code>el.dayMoment</code>, <code>el.pinned</code>, <code>el.place</code></div></td><td data-label="Qué hace"><div>Solo lectura: la hora que muestra el deslizador (0 a 24: la fijada o previsualizada, si no la del reloj); los momentos declarados, <code>{ name, from, theme, input }</code>; el nombre del momento que muestra la página; el nombre del momento a esa hora, se muestre o no; la hora fijada (<code>null</code> si no hay); el atributo <code>place</code>.</div></td></tr>
+                  <tr><td data-label="Nombre"><div><code>preview(hour)</code>, <code>pin(hour)</code>, <code>unpin()</code></div></td><td data-label="Qué hace"><div>La página muestra el momento de esa hora, y no se guarda nada (<code>preview(null)</code> vuelve); la página conserva el momento de esa hora, guardado en <code>luz-light</code> salvo con <code>no-remember</code>; suelta la hora fijada y vuelve al sistema.</div></td></tr>
                   <tr><td data-label="Nombre"><div><code>luz-theme-time:change</code></div></td><td data-label="Qué hace"><div>Sube por el árbol tras la mejora y cuando cambia el momento o la hora fijada. <code>detail</code>: <code>moment</code> y <code>pinned</code> (cada uno <code>null</code> si no hay).</div></td></tr>
                 </tbody>
               </table>
             </div>
             <p>Un método devuelve false cuando no hace nada: no hay momentos, o la hora está fuera de 0 a 24.</p>
             <h3 id="how">Cómo funciona</h3>
-            <p><code>theme-time.js</code> da a Automático de <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> la hora. Core hace el resto, y el botón solo si el catálogo no carga.</p>
+            <p><code>theme-time.js</code> añade a <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> los momentos del día, como una elección de quien lee. Core hace el resto, y el botón solo si el catálogo no carga.</p>
             <ul>
-              <li><strong>Automático según el reloj:</strong> el modo es la base del momento actual, según la hora local de quien visita, revisada cada minuto. El momento actual es el último que ha empezado (la noche pasa por la medianoche): su nombre va a <code>data-moment</code> y se marca su botón de opción. Nunca se pide la ubicación.</li>
+              <li><strong>Automático es el del sistema,</strong> como en core: oscuro, alto contraste o claro. El reloj no mueve nada. <code>data-moment</code> toma el momento por defecto de ese modo (<code>data-default</code>) y no se marca ningún botón de opción de momento. El botón de opción de modo marcado es el que está en uso, Claro u Oscuro, y el botón lleva su nombre; no se guarda nada, y la elección sigue siendo Automático. Automático solo se marca mientras hay una hora o un momento elegido. Automático no sigue la hora: la página que quiere un momento lo fija, con el deslizador, una opción de momento o <code>pin(hour)</code>.</li>
+              <li><strong>Un momento elegido</strong> es el último que ha empezado a esa hora (la noche pasa por la medianoche): su nombre va a <code>data-moment</code>, se marca su botón de opción y la página toma su base. Nunca se pide la ubicación.</li>
               <li><strong>Un modo elegido</strong> muestra su momento por defecto. <strong>El alto contraste siempre gana:</strong> <code>data-theme</code> es <code>high-contrast</code>, así que una regla para <code>"light"</code> o <code>"dark"</code> no coincide.</li>
               <li><strong>Con un lugar,</strong> <code>latitude</code> y <code>longitude</code> dan el amanecer y el atardecer reales de hoy, calculados en la página sin red, en lugar de los dos cambios del día; si el sol no sale o no se pone allí, valen las horas declaradas.</li>
-              <li><strong>Una hora fijada</strong> es Automático a esa hora, guardada en <code>luz-light</code> con precisión de cinco minutos; elegir un modo, o Automático, en <code>&lt;luz-theme-mode&gt;</code> la suelta.</li>
+              <li><strong>Una hora fijada</strong> es el momento de esa hora conservado en Automático, guardado en <code>luz-light</code> con precisión de cinco minutos; elegir un modo, o Automático, en <code>&lt;luz-theme-mode&gt;</code> la suelta y vuelve al sistema.</li>
               <li><strong>El deslizador</strong> (<code>variant="bar"</code>): al arrastrar se previsualiza la hora; al soltar se fija, se guarda y se escribe la nota «Guardado». Su pista se pinta con <code>--luz-theme-time-sky-&lt;value&gt;</code>, una por momento: <a href="#sky">Pintar la pista</a>.</li>
               <li><strong>Dos archivos:</strong> <code>theme-time.min.js</code> y <code>theme-time-bar.min.js</code>, que solo carga <code>variant="bar"</code>. Para una barra añadida después del análisis, importa <code>@luz-ds/catalog/theme-time-bar</code> y llama a <code>initThemeTimeBar(root)</code>.</li>
             </ul>
@@ -122,7 +123,7 @@ reviewed: false
               <li><strong>Deslizador:</strong> un rango nativo en pasos de 5 minutos: se llega con Tab, las flechas mueven un paso, Inicio va a las 00:00 y Fin a las 23:55. Cada pulsación previsualiza la hora.</li>
               <li><strong>Escape</strong> en el deslizador suelta una hora fijada y entonces no cierra un diálogo que rodee la barra.</li>
               <li><strong>Nombre y valor:</strong> el nombre es <code>data-luz-label-scrub</code>; <code>aria-valuetext</code> es el momento y la hora, «Tarde, 13:00». Cuando hay una hora fijada, una región <code>role="status"</code> dice tu <code>data-luz-label-saved</code>, se vea o no.</li>
-              <li><strong>Los momentos como opciones</strong> (<code>show="moments"</code>) son botones de opción en un fieldset: las flechas eligen uno. El botón de modo es el de core: <a href="/docs/components/theme-mode/#keyboard">su teclado y ARIA</a>.</li>
+              <li><strong>Los momentos como opciones</strong> (<code>show="moments"</code>) son botones de opción en un fieldset: las flechas eligen uno. El botón de modo es el de core: <a href="/docs/components/theme-mode/#keyboard">su teclado y ARIA</a>. Con el sistema en uso, avanza desde el modo mostrado, de modo que la primera pulsación nunca lo repite.</li>
             </ul>
             <h3 id="boot">Script para la cabecera</h3>
             <p>Opcional, después del de <a href="/docs/components/theme-mode/#boot">core</a>. Escribe el momento antes del primer pintado. Copia <code>node_modules/@luz-ds/catalog/dist/theme-time-boot.min.js</code> a tu propio origen. Los momentos viajan en su etiqueta, como <code>data-moments</code>: el cuerpo aún no se ha leído.</p>
@@ -140,7 +141,7 @@ reviewed: false
             </div>
             <ul>
               <li><strong><code>data-moments</code>:</strong> <code>value@HH:MM=base</code> por cada momento, en el orden del marcado; <code>*</code> marca <code>data-default</code>.</li>
-              <li><strong>Qué escribe:</strong> <code>data-moment</code> en <code>&lt;html&gt;</code> y, en Automático, <code>data-mode</code> (y <code>data-theme</code>, sin marca) con la base de ese momento. Un modo guardado muestra su momento por defecto; una hora fijada (<code>luz-light</code>) sustituye al reloj; <code>prefers-contrast: more</code> gana. Nunca escribe en el almacenamiento. Bloquea el renderizado como el de core, bajo la misma excepción (EX-012).</li>
+              <li><strong>Qué escribe:</strong> <code>data-moment</code> en <code>&lt;html&gt;</code> y, con una hora fijada (<code>luz-light</code>), <code>data-mode</code> (y <code>data-theme</code>, sin marca) con la base de ese momento. Un modo guardado, o Automático sin hora fijada, muestra el momento por defecto de su modo; <code>prefers-contrast: more</code> gana. Nunca escribe en el almacenamiento. Bloquea el renderizado como el de core, bajo la misma excepción (EX-012).</li>
             </ul>
             <h3 id="moments">Los seis momentos de ejemplo</h3>
             <p>Según el reloj de quien visita la página, como los declaran el marcado de arriba y el pie de este sitio. La noche pasa por la medianoche, y <code>data-moment</code> en <code>&lt;html&gt;</code> toma el nombre.</p>
@@ -246,7 +247,7 @@ reviewed: false
             <ul>
               <li>Las etiquetas están en el idioma de la página: el deslizador las lee junto con la hora.</li>
               <li>Da al deslizador un nombre que diga lo que hace, «Hora del día», y a la nota «Guardado».</li>
-              <li>Di cerca del control qué sigue Automático: «Automático sigue la hora del día».</li>
+              <li>Di cerca del control qué sigue Automático: «Automático sigue a tu sistema», y que un momento es una elección.</li>
             </ul>
             <h3 id="contrast">Contraste y foco</h3>
             <p>La barra lee los tokens semánticos de la página. Los colores que des a cada momento los mides tú, en claro y en oscuro.</p>

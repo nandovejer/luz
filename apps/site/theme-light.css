@@ -1,8 +1,10 @@
 /* ==========================================================================
    LUZ website — the light by the hour (apps/site/theme-light.css)
 
-   The site follows the clock in Auto (catalog's theme-time-boot.js and
-   <luz-theme-time> write data-moment on <html>). Afternoon and night are
+   The site shows a light by the hour when the reader chooses one with the
+   slider of the home; Auto is the system's (catalog's theme-time-boot.js and
+   <luz-theme-time> write data-moment on <html>: the hour chosen, else the
+   default moment of the mode). Afternoon and night are
    Vejer itself, the light and dark modes LUZ ships, so they have no block
    here; high contrast
    is never overridden. Four lights override the colour tokens over the mode

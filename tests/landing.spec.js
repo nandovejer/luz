@@ -23,7 +23,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { faded } from './helpers/settle.js';
 import { copiedText, recordCopies } from './helpers/clipboard.js';
-import { KEY as MODE_KEY, LIGHTS, NO_CHOICE, TIMEZONE, atTime, seedMode } from './helpers/site-lights.js';
+import { KEY as MODE_KEY, LIGHTS, NO_CHOICE, TIMEZONE, atTime, channels, colorOf, pinHour, seedMode, vejer } from './helpers/site-lights.js';
 
 const fromRepo = (path) => fileURLToPath(new URL(`../${path}`, import.meta.url));
 
@@ -93,9 +93,9 @@ async function open(page, path = '/') {
   return { requests, failed, problems };
 }
 
-/** Open the home with JavaScript on and wait until <luz-theme-time> (a lazy chunk) has upgraded. */
+/** Open the home with JavaScript on and wait until <luz-theme-time> (a lazy chunk) has upgraded; `time` pins that hour (the light of it). */
 async function openLive(page, path = '/?look=city', time) {
-  if (time) await atTime(page, time);
+  if (time) await pinHour(page, time);
   const seen = await open(page, path);
   await expect.poll(() => page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(true);
   return seen;
@@ -126,10 +126,9 @@ test.describe('Landing page', () => {
       expect(requests.filter((url) => /\/luz(\.min)?\.js/.test(url))).toEqual([]);
     });
 
-    test('the footer switcher is a radio group that becomes one round button: Auto, Light, Dark and High contrast', async ({ page }) => {
-      // Auto follows the hour, and this file starts from no choice (NO_CHOICE): the test walks through Auto, so it pins
-      // its own hour, the afternoon, and runs the same at any hour of the real clock (it failed in CI at dusk and at night)
-      await atTime(page, '14:00');
+    test('the footer switcher is a radio group that becomes one round button: Auto (the system\'s), Light, Dark and High contrast', async ({ page }) => {
+      // Auto is the system's mode, shown checked, and the hour counts only when it is pinned: this file starts from no
+      // choice (NO_CHOICE), and the system is light (Chromium's default), so Auto reads as Light
       await seedMode(page, 'light');
       await open(page);
 
@@ -145,12 +144,12 @@ test.describe('Landing page', () => {
       await expect(button).toHaveAccessibleName('Color mode: Light');
       await expect(switcher.locator('.luz-theme-mode__option').first()).toBeHidden();
 
-      // Dark, High contrast, Auto (the hour leads) and Light again
-      for (const [mode, label, shown] of [['dark', 'Dark', 'dark'], ['high-contrast', 'High contrast', 'high-contrast'], ['auto', 'Auto', null], ['light', 'Light', 'light']]) {
+      // Dark, High contrast, Auto (the system's, light) and then Dark again: Light is the mode Auto already shows
+      for (const [mode, label, shown] of [['dark', 'Dark', 'dark'], ['high-contrast', 'High contrast', 'high-contrast'], ['light', 'Light', 'light'], ['dark', 'Dark', 'dark']]) {
         await button.click();
         // First of all: the announcement is cleared 3 s after the change (on purpose), and a slow runner may spend them on the rest
         await expect(page.locator('footer [role="status"]').first()).toHaveText(`Color mode: ${label}`);
-        if (shown) expect(await theme(page)).toBe(shown);
+        expect(await theme(page)).toBe(shown);
         await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue(mode);
         await expect(button).toHaveAccessibleName(`Color mode: ${label}`);
       }
@@ -334,21 +333,27 @@ test.describe('Landing page', () => {
       }
     });
 
-    test('footer: the round button shows one icon, the checked label\'s: Auto\'s first, then each mode\'s own', async ({ page }) => {
+    test('footer: the round button shows one icon, the checked label\'s: the system\'s mode first, then each mode\'s own, and Auto\'s once an hour is pinned', async ({ page }) => {
       await open(page);
       const button = page.locator('footer .luz-theme-mode__button');
       const icon = () => button.locator('svg').evaluateAll((all) => all.map((svg) => svg.innerHTML));
       const labelIcon = (value) => page.locator(`footer input[value="${value}"]`).locator('xpath=..').locator('svg').evaluate((svg) => svg.innerHTML);
-      // A first visit: Auto is checked, and its icon is the one on the button
-      await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveValue('auto');
-      expect(await icon()).toEqual([await labelIcon('auto')]);
-      const seen = [await labelIcon('auto')];
-      for (const mode of ['light', 'dark', 'high-contrast']) {
+      // A first visit follows the system (light): Light is checked, and its icon is the one on the button
+      await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveValue('light');
+      expect(await icon()).toEqual([await labelIcon('light')]);
+      const seen = [await labelIcon('light')];
+      // The first press from a light system goes to Dark
+      for (const mode of ['dark', 'high-contrast']) {
         await button.click();
         await expect(page.locator(`footer input[value="${mode}"]`)).toBeChecked();
         expect(await icon()).toEqual([await labelIcon(mode)]);
         seen.push(await labelIcon(mode));
       }
+      // Auto is checked only while an hour is pinned: its own icon
+      await page.locator('footer luz-theme-time').evaluate((node) => /** @type {any} */ (node).pin(14));
+      await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveValue('auto');
+      expect(await icon()).toEqual([await labelIcon('auto')]);
+      seen.push(await labelIcon('auto'));
       expect(new Set(seen).size, 'four icons, all different').toBe(4);
     });
 
@@ -1110,7 +1115,9 @@ test.describe('Landing page', () => {
         await page.goto('/');
         await page.waitForLoadState('networkidle');
 
-        await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+        // The markup names no mode: the page is Vejer light because the system is light
+        expect(await page.evaluate(() => document.documentElement.hasAttribute('data-theme'))).toBe(false);
+        expect(channels(await colorOf(page.locator('html'), '--luz-surface-page'))).toEqual(vejer('light', '--luz-surface-page'));
         // Every section has words to read and nothing is hidden waiting for a script
         for (const id of SECTIONS) {
           const section = page.locator(`main section#${id}`);

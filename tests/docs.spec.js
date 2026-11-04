@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 import { gotoId, routeOf, routes, routesOf, routesWith, site } from './helpers/docs-site.js';
 import { indexEntries, readingOrder } from '../scripts/docs-site/site.js';
 import { PATTERN_AREAS, areaOfPackage } from './helpers/package-areas.js';
-import { KEY as MODE_KEY, seedMode } from './helpers/site-lights.js';
+import { KEY as MODE_KEY, channels, colorOf, seedMode, vejer } from './helpers/site-lights.js';
 import { faded } from './helpers/settle.js';
 import { over, parseColor, ratio } from '../packages/tokens/lib/contrast.js';
 import { resolveColor } from './helpers/design-tokens.js';
@@ -186,7 +186,7 @@ test.describe('Documentation site', () => {
       await expect(page.locator('.site-header__nav a[aria-current="page"]')).toHaveCount(0);
     });
 
-    test('the round button in the footer steps through Auto and the three modes, under core\'s key', async ({ page }) => {
+    test('the round button in the footer steps through the three modes and Auto (the system\'s), under core\'s key', async ({ page }) => {
       await seedMode(page, 'light');
       await open(page);
       expect(await theme(page)).toBe('light');
@@ -198,12 +198,13 @@ test.describe('Documentation site', () => {
         expect(await theme(page)).toBe(mode);
         await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue(mode);
       }
-      // Auto is in the footer (2026-10-29): after High contrast comes Auto, then Light again
+      // Auto is in the cycle: after High contrast comes Auto, which is the system's mode (light here), shown checked
       await button.click();
-      await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue('auto');
-      expect(await page.evaluate((key) => localStorage.getItem(key), MODE_KEY), 'Auto removes the key').toBeNull();
-      await button.click();
+      await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue('light');
+      await expect(button).toHaveAccessibleName('Color mode: Light');
       expect(await theme(page)).toBe('light');
+      expect(await page.evaluate((key) => localStorage.getItem(key), MODE_KEY), 'Auto removes the key').toBeNull();
+      // From a light system the next press goes on to Dark: Light is the mode already shown
       await button.click();
       expect(await page.evaluate((key) => localStorage.getItem(key), MODE_KEY)).toBe('dark');
       // The site has no key of its own
@@ -811,7 +812,9 @@ test.describe('Documentation site', () => {
         await page.setViewportSize({ width, height: 800 });
         for (const route of ALL) {
           await page.goto(route);
-          await expect(page.locator('html'), route).toHaveAttribute('data-theme', 'light');
+          // The markup names no mode: the page is Vejer light because the system is light
+          expect(await page.evaluate(() => document.documentElement.hasAttribute('data-theme')), route).toBe(false);
+          expect(channels(await colorOf(page.locator('html'), '--luz-surface-page')), route).toEqual(vejer('light', '--luz-surface-page'));
           // Nothing is hidden but what only works with JavaScript: the search
           // buttons, and the cookie banner of the Cookie consent example with
           // the button that shows it again, and the Try it form and the width
