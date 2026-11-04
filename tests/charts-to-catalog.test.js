@@ -259,7 +259,7 @@ describe("the rule between core and catalog", () => {
 
   it("PRINCIPLES.md and catalog's README say the same, in their words", () => {
     expect(read("PRINCIPLES.md")).toMatch(/\*\*Core or catalog\.\*\*[^\n]*the pieces that draw data \(the chart, the bar list, the column chart, the stacked bar, the heat map\)/);
-    expect(read("packages/catalog/README.md")).toMatch(/bar list, column chart, stacked bar and heat map/);
+    expect(read("packages/catalog/README.md")).toMatch(/bar list, column chart, stacked bar, ring and heat map/);
     expect(read("packages/core/README.md")).not.toMatch(/bar list|column chart|stacked bar|heat map/i);
   });
 });
