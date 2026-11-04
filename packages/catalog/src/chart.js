@@ -282,10 +282,15 @@ function frame(host, table) {
  * a header with a toggle button per series (its name and its total, from the
  * table) that turns its picture off and on, and a readout of a row (its name and
  * the figure of each series shown, copied from its cells) while the pointer is
- * on it or the row has the focus. The rows of the table take the focus, one Tab
- * stop, and the arrow keys, Home and End move it; each row is named by its own
+ * on it or the row has the focus. One Tab stop, and the arrow keys, Home and End
+ * move between the rows: the rows of the table take the focus (a column chart,
+ * whose rows are on screen and show the ring), or, when the rows are hidden (a
+ * line chart), a visible `stop`, the picture, has it, so the ring is always the
+ * focused element's own, and a status inside it (a polite live region, hidden
+ * from the eye) says the label of the day on each key. Each row is named by its own
  * cells ("Apr 1, Desktop 252, Mobile 148": the author's text, every series,
- * turned off or not), so a screen reader says what the picture shows. Escape
+ * turned off or not), so a screen reader says what the picture shows; the status
+ * says that same text, and is emptied when the stop loses the focus. Escape
  * puts the readout away while the pointer and the focus stay where they are
  * (WCAG 1.4.13); it comes back on another row. The readout is aria-hidden,
  * because the focused row is read as it is. The roles of the table are written
@@ -295,12 +300,13 @@ function frame(host, table) {
  * left to right for the plot of a line.
  * @param {Element} host
  * @param {HTMLTableElement} table
- * @param {{ area: Element, at: (e: PointerEvent) => number, anchor: (row: number) => { x: number, y: number, w: number }, mark?: (row: number, off: Set<number>) => void }} o
- *   the part that follows the pointer, the row under a pointer event (-1 for none), a row's box in the host, and what draws the row's mark (with the series turned off)
+ * @param {{ area: Element, stop?: HTMLElement, at: (e: PointerEvent) => number, anchor: (row: number) => { x: number, y: number, w: number }, mark?: (row: number, off: Set<number>) => void }} o
+ *   the part that follows the pointer, the visible element that takes the focus for hidden rows (a group, not aria-hidden), the row under a pointer event (-1 for none), a row's box in the host, and what draws the row's mark (with the series turned off)
  * @returns {HTMLElement} the header, for the caller to place
  */
 function interact(host, table, o) {
   const data = readChart(host);
+  const { stop } = o;
   const off = new Set();
   const rows = [...table.tBodies].flatMap((body) => [...body.rows]);
   const picker = html("div", "luz-chart__picker");
@@ -319,6 +325,10 @@ function interact(host, table, o) {
   let focused = -1;
   // The row whose readout Escape put away: it stays away until another row has the pointer or the focus
   let dismissed = -2;
+  // With a stop: the row the keys are on, and the status that says its label
+  let cur = 0;
+  const status = stop && html("div", "", stop);
+  status?.setAttribute("role", "status");
   // Read when it is used: the page may set its direction after the chart is drawn
   const rtl = () => getComputedStyle(host).direction === "rtl";
   // The keys follow the drawing: the columns follow the page, the plot of a line is always left to right
@@ -379,10 +389,11 @@ function interact(host, table, o) {
     });
   });
 
-  // One Tab stop for the rows: the active one
+  // One Tab stop: the active row, or the stop
   rows.forEach((r, k) => {
-    r.tabIndex = k ? -1 : 0;
     if (data) r.setAttribute("aria-label", [data.rows[k], ...data.series.map((s) => `${s.name} ${s.texts[k]}`)].join(", "));
+    if (stop) return;
+    r.tabIndex = k ? -1 : 0;
     r.addEventListener("focus", () => {
       rows.forEach((other) => (other.tabIndex = other === r ? 0 : -1));
       dismissed = -2;
@@ -393,8 +404,29 @@ function interact(host, table, o) {
       Promise.resolve().then(() => focused < 0 && show(-1));
     });
   });
-  table.addEventListener("keydown", (e) => {
-    const k = rows.indexOf(e.target);
+  // Moving to a row: the focus goes to it, or the status says its label (once: the same text is no news)
+  const go = (k) => {
+    dismissed = -2;
+    if (!stop) return rows[k].focus();
+    const label = rows[k].getAttribute("aria-label") ?? "";
+    if (status.textContent !== label) status.textContent = label;
+    show((focused = cur = k));
+  };
+  if (stop) {
+    stop.tabIndex = 0;
+    // Entering says the name of the group and nothing else: the status speaks on a key; leaving empties it
+    stop.addEventListener("focus", () => {
+      dismissed = -2;
+      show((focused = cur));
+    });
+    stop.addEventListener("blur", () => {
+      focused = -1;
+      status.textContent = "";
+      show(-1);
+    });
+  }
+  (stop ?? table).addEventListener("keydown", (e) => {
+    const k = stop ? cur : rows.indexOf(e.target);
     if (k < 0 || e.altKey || e.ctrlKey || e.metaKey) return;
     // Down and Up go to the next and the previous row, as in a table; Right and Left follow the drawing
     const step = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 1, ArrowUp: -1 }[e.key] * (backwards() && /Left|Right/.test(e.key) ? -1 : 1);
@@ -402,7 +434,7 @@ function interact(host, table, o) {
     if (to < 0) return;
     // eslint-disable-next-line no-restricted-syntax -- RL-3: a table has no native arrow keys for a row that has the focus; the arrows, Home and End move between the rows of an interactive chart (roving focus) instead of scrolling the page
     e.preventDefault();
-    rows[to].focus();
+    go(to);
   });
   o.area.addEventListener("pointermove", (e) => {
     const i = o.at(e);
@@ -420,10 +452,16 @@ function line(host) {
   if (!table) return () => () => {};
   const { caption, bar, title } = frame(host, table);
   const figure = html("div", "luz-chart__figure");
-  figure.setAttribute("aria-hidden", "true");
   const box = svg("svg", { class: "luz-chart__plot" }, figure);
   const legend = html("ul", "luz-chart__legend", figure);
   host.prepend(bar, figure);
+  // Interactive: the figure takes the focus and says the day on each key (a named group, so it is not aria-hidden; the drawing and the legend in it are); else all of it is a picture of the table
+  if (host.hasAttribute("interactive")) {
+    figure.setAttribute("role", "group");
+    if (caption) figure.setAttribute("aria-labelledby", caption.id ||= `luz-chart-${++count}`);
+    box.setAttribute("aria-hidden", "true");
+    legend.setAttribute("aria-hidden", "true");
+  } else figure.setAttribute("aria-hidden", "true");
 
   const toTable = say("table", host);
   const toChart = say("chart", host);
@@ -466,9 +504,10 @@ function line(host) {
     paint();
   };
   if (host.hasAttribute("interactive")) {
-    // The rows of the table, read or not, take the focus; the plot follows the pointer and is drawn left to right
+    // The figure takes the focus and points at the rows of the table; the plot follows the pointer and is drawn left to right
     const picker = interact(host, table, {
       area: box,
+      stop: figure,
       at: (e) => (at ? Math.round((e.clientX - box.getBoundingClientRect().left - at.x(0)) / at.step) : -1),
       anchor: (i) => {
         const b = box.getBoundingClientRect();

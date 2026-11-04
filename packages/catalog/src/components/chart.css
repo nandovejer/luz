@@ -304,15 +304,20 @@ luz-chart[interactive][data-luz-ready] .luz-chart__legend {
 	fill: var(--luz-surface-hover);
 }
 
-/* The focus is on a row of the table, which the chart hides: the ring is drawn on the plot */
-luz-chart[data-luz-view="chart"]:has(tbody tr:focus-visible) .luz-chart__plot {
+/* The figure of an interactive line chart takes the focus (the rows of its table are off screen): the ring is its own */
+.luz-chart__figure:focus-visible {
 	outline: 2px solid var(--luz-focus-ring);
 	outline-offset: 2px;
 }
 
-luz-chart[interactive] tbody tr:focus-visible {
-	outline: 2px solid var(--luz-focus-ring);
-	outline-offset: -2px;
+/* The words of the day the keys are on, for a screen reader: the status chart.js writes in the figure, off screen */
+luz-chart[data-luz-ready] .luz-chart__figure :where([role="status"]) {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
 }
 
 /* --- Inside <luz-chart type="column" interactive>, once chart.js has run ---
