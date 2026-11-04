@@ -3,10 +3,12 @@
 Documentation is a site of pages to look up. Ask:
 
 1. The generator, if any (Starlight, VitePress, Eleventy…), and its layouts folder.
-2. The areas and the first pages, by name, and what each has: head, "On this page", live examples, do and don't, previous and next.
+2. The areas and the first pages, by name, and what each has (head, "On this page", examples, previous and next).
 3. The search needs a JSON index from the build: can it write one?
 
-Start from this skeleton:
+Start from this skeleton. `luz-nav-toggle` needs `{{nav-toggle-css}}`.
+
+`<luz-search>`: `a[data-luz-search-fallback]`, `button.luz-search__trigger[data-luz-search-open][hidden]` and `dialog.luz-modal.luz-search[data-luz-search-src]` (the JSON index) with an `input`, `[role=status]` and `[data-luz-search-results]`.
 
 ```html
 <body class="o-shell luz-docs-layout">
@@ -26,10 +28,6 @@ Start from this skeleton:
  </aside>
  <main class="o-main luz-docs-main" id="main-content" tabindex="-1">
   <header class="luz-doc-header"><h1>…</h1></header>
-  <figure class="luz-example">
-   <div class="luz-example__preview"><div class="luz-example__frame">…</div></div>
-   <div class="luz-example__code"><pre class="luz-code-block" tabindex="0"><code>…</code></pre></div>
-  </figure>
   <nav aria-label="Previous and next page"><ul class="luz-pager">
    <li class="luz-pager__next"><a class="luz-pager__link" rel="next" href="b/"><span class="luz-pager__label">Next</span> <span class="luz-pager__title">…</span></a></li>
   </ul></nav>

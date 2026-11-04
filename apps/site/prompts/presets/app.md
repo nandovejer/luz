@@ -7,7 +7,7 @@ An app is a web application: a dashboard, a back office, a tool the person signs
 3. What the data comes from (an API, a store) and who renders it (server or client). LUZ is the markup either way.
 4. The empty, loading and error states of each view: what each says.
 
-Start from this skeleton. A menu is a `luz-dropdown` with a `popover`, like the account menu; `luz-btn` goes on a `button` or an `a`, never a `summary`. Numbers are cards; tables, forms, dialogs, tabs and alerts are core's. Data views (bar list, column chart, stacked bar, heat map, line chart) each draw a native table or list that stays in the page; the author supplies the data.
+Start from this skeleton. `luz-nav-toggle` needs `{{nav-toggle-css}}`. A menu is a `luz-dropdown` with a `popover`; `luz-btn` goes on a `button` or an `a`, not a `summary`. Data views (bar list, column chart, stacked bar, heat map, line chart `<luz-chart>`) each keep a native table or list. A part of a stacked bar, column chart or heat map is sized by `style="--v: 62"`, the one `style` allowed.
 
 ```html
 <body>
@@ -30,7 +30,6 @@ Start from this skeleton. A menu is a `luz-dropdown` with a `popover`, like the 
        <button class="luz-btn luz-btn--ghost luz-app-bar__account" type="button" popovertarget="account-menu"><span class="luz-avatar luz-avatar--sm">AR</span> <span class="luz-app-bar__account-name">Ana Ruiz</span></button>
        <div class="luz-dropdown__menu" id="account-menu" popover>
         <ul class="luz-dropdown__list">
-         <li><a class="luz-dropdown__item" href="account/">Account settings</a></li>
          <li><a class="luz-dropdown__item" href="logout/">Sign out</a></li>
         </ul>
        </div>
