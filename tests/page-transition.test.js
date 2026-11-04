@@ -171,12 +171,12 @@ describe("the page /docs/catalog/page-transition/", () => {
     expect(page.meta.fits.length).toBeGreaterThan(10);
   });
 
-  it("has the order 34, and no other page of the area has it; the chart, 35, and the four charts that came from core, 36 to 39, follow it", () => {
+  it("has the order 34, and no other page of the area has it; the chart, 35, and the four charts that came from core, 36 to 39, and the ring, 40, follow it", () => {
     expect(Number(page.meta.order)).toBe(34);
     expect(catalog.filter((p) => p.meta.order === page.meta.order).map((p) => p.route)).toEqual([page.route]);
-    expect(Math.max(...catalog.map((p) => Number(p.meta.order)))).toBe(39);
+    expect(Math.max(...catalog.map((p) => Number(p.meta.order)))).toBe(40);
     expect(catalog.find((p) => p.meta.order === "35")?.route).toBe("/docs/catalog/chart/");
-    expect(["36", "37", "38", "39"].map((order) => catalog.find((p) => p.meta.order === order)?.route)).toEqual(["bar-list", "column-chart", "stacked-bar", "heat-map"].map((slug) => `/docs/catalog/${slug}/`));
+    expect(["36", "37", "38", "39", "40"].map((order) => catalog.find((p) => p.meta.order === order)?.route)).toEqual(["bar-list", "column-chart", "stacked-bar", "heat-map", "ring"].map((slug) => `/docs/catalog/${slug}/`));
   });
 
   it("is the docs-component p-page-transition, as the specs find a page by its id", () => {

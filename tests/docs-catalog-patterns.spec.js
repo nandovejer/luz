@@ -32,7 +32,7 @@ const GROUPS = [
   { id: 'navigation', en: 'Navigation', pages: ['app-bar', 'lang-switch', 'masthead', 'navbar', 'sidebar', 'site-header', 'submenu'] },
   { id: 'page-structure', en: 'Page structure', pages: ['article-header', 'hero', 'page-header', 'section', 'site-footer'] },
   { id: 'content', en: 'Content', pages: ['embed', 'faq', 'post-list', 'social', 'stat', 'terminal', 'timeline', 'toc'] },
-  { id: 'charts', en: 'Charts', pages: ['bar-list', 'chart', 'column-chart', 'dashboard', 'heat-map', 'stacked-bar'] },
+  { id: 'charts', en: 'Charts', pages: ['bar-list', 'chart', 'column-chart', 'dashboard', 'heat-map', 'ring', 'stacked-bar'] },
   { id: 'site-wide', en: 'Site-wide', pages: ['announcement', 'theme-time', 'cookie-consent', 'search', 'page-transition'] },
   { id: 'documentation', en: 'Documentation', pages: ['do-dont', 'doc-header', 'docs-layout', 'example', 'page-footer', 'page-rail', 'pager'] },
   { id: 'reference', en: 'Reference', pages: ['classes'] },
@@ -51,7 +51,7 @@ const KIND_OF = {
   'page-header': ['blog'], 'article-header': ['blog'], toc: ['blog'], 'post-list': ['blog'],
   'app-bar': ['app'], dashboard: ['app'],
   // The four charts that came from core (2026-11-03): sheets of catalog that an application's reports use
-  'bar-list': ['app'], 'column-chart': ['app'], 'stacked-bar': ['app'], 'heat-map': ['app'],
+  'bar-list': ['app'], 'column-chart': ['app'], 'stacked-bar': ['app'], 'heat-map': ['app'], ring: ['app'],
   'docs-layout': ['docs'], 'doc-header': ['docs'], 'page-rail': ['docs'], 'page-footer': ['docs'], example: ['docs'], 'do-dont': ['docs'],
   // F7: the four that came from core (the owner's, decision 35 and the pages they had): a sidebar and a timeline fit two kinds
   navbar: ['any'], sidebar: ['docs', 'app'], terminal: ['docs'], timeline: ['blog', 'landing'],

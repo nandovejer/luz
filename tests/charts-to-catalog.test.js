@@ -147,9 +147,9 @@ describe("the pages of the four", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("has the Components area with the 29 components, and the Catalog gallery with 40 pages", () => {
+  it("has the Components area with the 29 components, and the Catalog gallery with 41 pages", () => {
     expect(site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers")).toHaveLength(29);
-    expect(site.pages.filter((p) => p.meta.area === "catalog")).toHaveLength(40);
+    expect(site.pages.filter((p) => p.meta.area === "catalog")).toHaveLength(41);
   });
 });
 

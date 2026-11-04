@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ catalog: the ring, .luz-ring</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <!-- A sheet of catalog: it is not in luz.css, a page links it after it -->
+  <link rel="stylesheet" href="/packages/catalog/dist/components/ring.css">
+</head>
+<body>
+  <!-- tests/ring.spec.js. No script: the ring is CSS. The text is the data (the caption, the figure and its label, the
+       legend); the ring is a picture of it, drawn by pseudo-elements of the paragraph, so it has no node to hide. -->
+  <main id="main">
+    <h1>Visitors</h1>
+
+    <!-- One value over a goal: 1,260 of 2,000 stops at 63 % of the half ring -->
+    <div id="frame-base" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-ring" id="base" style="--v1: 1260; --max: 2000">
+        <figcaption>Visitors this month</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">1,260</span>
+          <span class="luz-ring__label">of 2,000 visitors</span>
+        </p>
+      </figure>
+    </div>
+
+    <!-- Two series and no goal: they fill the half ring -->
+    <div id="frame-stacked" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-ring" id="stacked" style="--v1: 1260; --v2: 570">
+        <figcaption>Visitors by device, this month</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">1,830</span>
+          <span class="luz-ring__label">visitors</span>
+        </p>
+        <ul class="luz-ring__legend">
+          <li class="luz-ring__item"><span class="luz-ring__name">Desktop</span> <span class="luz-ring__figure">1,260</span></li>
+          <li class="luz-ring__item"><span class="luz-ring__name">Mobile</span> <span class="luz-ring__figure">570</span></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- Four series, 40, 30, 20 and 10 of 100: the four colours, in order -->
+    <div id="frame-four" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-ring" id="four" style="--v1: 40; --v2: 30; --v3: 20; --v4: 10">
+        <figcaption>Visitors by browser, this month</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">100 %</span>
+          <span class="luz-ring__label">of visitors</span>
+        </p>
+        <ul class="luz-ring__legend">
+          <li class="luz-ring__item"><span class="luz-ring__name">Chrome</span> <span class="luz-ring__figure">40 %</span></li>
+          <li class="luz-ring__item"><span class="luz-ring__name">Safari</span> <span class="luz-ring__figure">30 %</span></li>
+          <li class="luz-ring__item"><span class="luz-ring__name">Firefox</span> <span class="luz-ring__figure">20 %</span></li>
+          <li class="luz-ring__item"><span class="luz-ring__name">Other</span> <span class="luz-ring__figure">10 %</span></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- The series add up to more than the goal: the half ring is full -->
+    <div id="frame-over" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-ring" id="over" style="--v1: 1500; --v2: 900; --max: 2000">
+        <figcaption>Visitors over the goal</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">2,400</span>
+          <span class="luz-ring__label">of 2,000 visitors</span>
+        </p>
+      </figure>
+    </div>
+
+    <!-- An empty value: no series, and the track is still there -->
+    <div id="frame-empty" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-ring" id="empty" style="--v1: 0; --max: 2000">
+        <figcaption>Visitors so far</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">0</span>
+          <span class="luz-ring__label">of 2,000 visitors</span>
+        </p>
+      </figure>
+    </div>
+
+    <!-- Nothing set at all: no value and no goal -->
+    <div id="frame-zero" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-ring" id="zero" style="--v1: 0">
+        <figcaption>Visitors, no goal</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">0</span>
+          <span class="luz-ring__label">visitors</span>
+        </p>
+      </figure>
+    </div>
+
+    <!-- Another colour for the first series and its swatch -->
+    <div id="frame-own" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-ring" id="own" style="--v1: 1; --v2: 1; --luz-ring-color: var(--luz-chart-5)">
+        <figcaption>One colour of its own</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">2</span>
+          <span class="luz-ring__label">in all</span>
+        </p>
+        <ul class="luz-ring__legend">
+          <li class="luz-ring__item"><span class="luz-ring__name">First</span> <span class="luz-ring__figure">1</span></li>
+          <li class="luz-ring__item"><span class="luz-ring__name">Second</span> <span class="luz-ring__figure">1</span></li>
+        </ul>
+      </figure>
+    </div>
+
+    <!-- A narrow column: the text has no room in the hole -->
+    <div id="frame-narrow" style="inline-size:9rem;max-inline-size:100%">
+      <figure class="luz-ring" id="narrow" style="--v1: 1260; --max: 2000">
+        <figcaption>Visitors this month</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">1,260</span>
+          <span class="luz-ring__label">of 2,000 visitors</span>
+        </p>
+      </figure>
+    </div>
+
+    <!-- Long names in the legend, which wrap -->
+    <div id="frame-long" style="inline-size:30rem;max-inline-size:100%">
+      <figure class="luz-ring" id="long" style="--v1: 5; --v2: 3; --v3: 2">
+        <figcaption>Parcels by delivery status, the first quarter of the year</figcaption>
+        <p class="luz-ring__value">
+          <span class="luz-ring__figure">1,000</span>
+          <span class="luz-ring__label">parcels in the quarter</span>
+        </p>
+        <ul class="luz-ring__legend">
+          <li class="luz-ring__item"><span class="luz-ring__name">Delivered to the door</span> <span class="luz-ring__figure">500</span></li>
+          <li class="luz-ring__item"><span class="luz-ring__name">Left at a collection point</span> <span class="luz-ring__figure">300</span></li>
+          <li class="luz-ring__item"><span class="luz-ring__name">Returned to the sender</span> <span class="luz-ring__figure">200</span></li>
+        </ul>
+      </figure>
+    </div>
+  </main>
+</body>
+</html>

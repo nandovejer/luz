@@ -1,5 +1,5 @@
 /**
- * What the CSS of the 26 patterns of the kinds of site says (F5b and F8 of .claude/plans/ai-and-catalog-only.md):
+ * What the CSS of the 27 patterns of the kinds of site says (F5b and F8 of .claude/plans/ai-and-catalog-only.md):
  * the checks the four packages had (tests/landing-package.test.js, landing-f4.test.js, app-package.test.js and
  * docs-package.test.js), now on `packages/catalog/src/components/<block>.css`, with their reasons. F8 named each
  * file and class for its block, with no kind of site (`landing-hero.css` is `hero.css`, `.luz-cms-toc` is `.luz-toc`),
@@ -37,7 +37,7 @@ const defines = (css, selector) => new RegExp(`${selector.replace(/[.]/g, "\\.")
 const KINDS = {
   landing: ["site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
   blog: ["site-header", "masthead", "page-header", "article-header", "article", "post-list", "site-footer"],
-  app: ["app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map"],
+  app: ["app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "ring"],
   docs: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"],
 };
 /** The patterns no kind of site owns: they fit any, so they are linked in the order of the cascade (after the glow). */
@@ -62,7 +62,7 @@ function walk(dir, extensions, out = []) {
 
 /* ---- Every file ------------------------------------------------------------------------------ */
 
-describe("the 26 patterns: tokens only, and nothing of the old names", () => {
+describe("the 27 patterns: tokens only, and nothing of the old names", () => {
   it.each(ALL)("%s uses no hex colour, named colour or literal space (RL-10 reads it too)", (name) => {
     const css = src(name);
     expect(css.length, `${name}.css`).toBeGreaterThan(0);
@@ -469,7 +469,7 @@ describe("docs: the patterns left apps/docs/reference.css and the docs app uses 
     for (const name of ["luz-doc-header", "luz-pager", "luz-page-rail__onpage"]) expect(has(generator, name), name).toBe(true);
   });
 
-  it("apps/docs/catalog-patterns.css imports the 26 files, kind by kind (landing, blog, app, docs) and those that fit any, each file once, and holds no rule", () => {
+  it("apps/docs/catalog-patterns.css imports the 27 files, kind by kind (landing, blog, app, docs) and those that fit any, each file once, and holds no rule", () => {
     const css = read("apps/docs/catalog-patterns.css");
     const imports = [...css.matchAll(/@import url\("\/packages\/catalog\/dist\/components\/([a-z-]+)\.css"\)/g)].map((m) => m[1]);
     expect(imports).toEqual(ALL);

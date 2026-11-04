@@ -268,7 +268,7 @@ describe("what a prompt says about the system comes from the packages", () => {
   const PATTERNS = {
     landing: ["site-header", "hero", "main", "section", "stat", "site-footer", "glow"],
     blog: ["site-header", "masthead", "site-footer", "page-header", "article-header", "article", "post-list"],
-    app: ["app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map"],
+    app: ["app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "ring"],
     docs: ["docs-layout", "doc-header", "page-rail", "example", "do-dont", "page-footer"],
   };
   /** The pieces that fit `any` site among the patterns (the social links, and the pager since the minor tweaks): every prompt lists their classes, the four kinds link their files once. */
@@ -277,14 +277,14 @@ describe("what a prompt says about the system comes from the packages", () => {
   const PAGES = {
     landing: ["hero", "section", "site-footer", "site-header", "stat", "timeline"],
     blog: ["article-header", "masthead", "page-header", "post-list", "site-footer", "site-header", "timeline", "toc"],
-    app: ["app-bar", "bar-list", "column-chart", "dashboard", "heat-map", "sidebar", "stacked-bar"],
+    app: ["app-bar", "bar-list", "column-chart", "dashboard", "heat-map", "ring", "sidebar", "stacked-bar"],
     docs: ["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "sidebar", "terminal"],
   };
   /** The blocks only one kind uses: the classes the other prompts must not list. */
   const EXCLUSIVE = {
     landing: ["luz-hero", "luz-main", "luz-section", "luz-stat", "luz-glow"],
     blog: ["luz-masthead", "luz-page-header", "luz-article-header", "luz-article", "luz-toc", "luz-post-list"],
-    app: ["luz-app-bar", "luz-dashboard", "luz-bar-list", "luz-column-chart", "luz-stacked-bar", "luz-heat-map"],
+    app: ["luz-app-bar", "luz-dashboard", "luz-bar-list", "luz-column-chart", "luz-stacked-bar", "luz-heat-map", "luz-ring"],
     docs: ["luz-docs-layout", "luz-doc-header", "luz-page-rail", "luz-example", "luz-do-dont", "luz-page-footer"],
   };
   const catalogLinks = (text) => [...text.matchAll(/<link rel="stylesheet" href="https:\/\/cdn\.jsdelivr\.net\/npm\/@luz-ds\/catalog@[^/"]+\/dist\/components\/([a-z0-9-]+)\.min\.css">/g)].map((m) => m[1]);

@@ -71,6 +71,8 @@ const PACKAGES = {
       'column-chart': 'column-chart',
       'stacked-bar': 'stacked-bar',
       'heat-map': 'heat-map',
+      // The ring (2026-11-04): a sheet of catalog, a page with the id `p-ring`
+      ring: 'ring',
       // A documentation site. The layout is also `.luz-docs-nav` and `.luz-docs-main`
       'docs-layout': 'docs-layout',
       'docs-nav': 'docs-layout',
