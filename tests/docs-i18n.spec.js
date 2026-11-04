@@ -207,19 +207,20 @@ test.describe("the colour-mode button is named in the language of the page at lo
     ["/ar/docs/", "ar"],
   ])) {
     test(`names it in ${code} on ${url}, with no click`, async ({ page }) => {
-      // The name is the page's own text: the legend of the footer's radios and the label of the checked one
+      // The name is the page's own text: the legend of the footer's radios and the label of the checked one,
+      // which is the system's mode (Chromium's default is light), not Auto
       const legend = catalog(code)["footer.mode"];
-      const auto = catalog(code)["footer.auto"];
+      const light = catalog(code)["footer.light"];
       expect(legend, `footer.mode in apps/landing/i18n/${code}.json`).toBeTruthy();
-      expect(auto, `footer.auto in apps/landing/i18n/${code}.json`).toBeTruthy();
+      expect(light, `footer.light in apps/landing/i18n/${code}.json`).toBeTruthy();
       await page.goto(url);
       await page.waitForSelector("html[data-luz-js]");
       await page.waitForTimeout(1000);
       const button = page.locator(".luz-theme-mode__button");
       await expect(button).toHaveCount(1);
-      // The footer ships Auto checked: the name says so in the page's language
+      // The footer shows the system's mode checked: the name says so in the page's language
       const label = (await button.getAttribute("aria-label")) ?? "";
-      expect(label, `aria-label "${label}"`).toBe(`${legend}: ${auto}`);
+      expect(label, `aria-label "${label}"`).toBe(`${legend}: ${light}`);
       if (code !== "en")
         expect(label, "no English left in the name").not.toMatch(
           /Change color mode|Current|Color mode|\bAuto\b/
