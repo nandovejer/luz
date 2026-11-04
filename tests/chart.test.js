@@ -138,7 +138,10 @@ describe("chart.js draws with DOM calls and writes no HTML (SEC-IDX-2)", () => {
     expect(source, "the keys of an interactive chart").toMatch(/["']keydown["']/);
     // Where the keydown is heard: the table (the arrows, Home and End on a row) and the document (the Escape of the readout, while it shows)
     const listened = [...source.matchAll(/(\w+(?:\.\w+)*|\w+\[[^\]]*\])\s*\(\s*["']keydown["']/g)].map((m) => m[1]);
-    expect(listened.length, "a keydown on the table and on the document, no more").toBeGreaterThanOrEqual(1);
+    expect(listened, "exactly two keydown listeners: the arrows on the table and the Escape of the readout on the document, no more").toHaveLength(2);
+    expect(listened.filter((where) => /^document\b/.test(where)), "one on the document").toHaveLength(1);
+    expect(listened.filter((where) => /^table\b/.test(where)), "one on the table").toHaveLength(1);
+    expect(source.match(/["']keydown["']/g), "and the word keydown nowhere else").toHaveLength(2);
     expect(source).not.toMatch(/["']keydown["']\s*,[^)]*\bbutton\b/);
     // The only keys it reads are the arrows, Home and End (the roving focus) and Escape (the readout); every Escape and every preventDefault cites RL-3 on the line before
     const keys = new Set([...source.matchAll(/["'](Arrow\w+|Home|End|Escape|Enter|Space|Tab|PageUp|PageDown| )["']/g)].map((m) => m[1]));
