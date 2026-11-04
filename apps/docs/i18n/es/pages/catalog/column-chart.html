@@ -2,12 +2,12 @@
 title: Gráfico de columnas
 description: Compara unos pocos valores como columnas de una misma escala de altura, dibujadas desde una tabla nativa que conserva cada cifra como texto.
 fits: un informe que compara unos pocos valores con un orden, como días o meses
-source: 0844de27c11f
+source: 7131f4ffd63d
 reviewed: false
 -->
     <div class="docs-component" id="p-column-chart">
           <h2 id="example">Ejemplo</h2>
-          <p>Paquetes por día esta semana: el día, luego su cifra y después la columna.</p>
+          <p>Paquetes por día esta semana: la cifra, su columna y después el día.</p>
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage">
             <div class="luz-table-wrap" role="region" aria-label="Parcels per day" tabindex="0">
@@ -21,6 +21,71 @@ reviewed: false
                 </tbody>
               </table>
             </div>
+          </div>
+          </div>
+          <h3 id="example-several">Varias series</h3>
+          <p>Visitantes por mes, por dispositivo, durante tres meses: una fila por mes y una columna por serie, sin script. Cada mes es un grupo de columnas, y la fila de encabezado es la leyenda. Los datos son de ejemplo: sustitúyelos por los tuyos.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-table-wrap" role="region" aria-label="Visitors per month, by device" tabindex="0">
+              <table class="luz-column-chart" role="table">
+                <caption>Visitors per month, by device, January to March</caption>
+                <thead role="rowgroup">
+                  <tr role="row"><th scope="col" role="columnheader">Month</th><th scope="col" role="columnheader">Desktop</th><th scope="col" role="columnheader">Mobile</th></tr>
+                </thead>
+                <tbody role="rowgroup">
+                  <tr role="row"><th scope="row" role="rowheader">Jan</th><td role="cell" style="--v: .58">186</td><td role="cell" style="--v: .25">80</td></tr>
+                  <tr role="row"><th scope="row" role="rowheader">Feb</th><td role="cell" style="--v: .95">305</td><td role="cell" style="--v: .62">200</td></tr>
+                  <tr role="row"><th scope="row" role="rowheader">Mar</th><td role="cell" style="--v: .74">237</td><td role="cell" style="--v: .38">120</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+          <h3 id="example-interactive">Interactivo</h3>
+          <p>Visitantes por día durante cuatro semanas, en <code>&lt;luz-chart type="column" interactive&gt;</code>. Cada serie y su total es un botón que apaga y enciende sus columnas (la última que se muestra sigue encendida); apunta a un día, o ve con Tab al gráfico y usa las flechas, para ver sus cifras. Sin JavaScript es la tabla. Los datos son de ejemplo: sustitúyelos por los tuyos.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <luz-chart type="column" interactive>
+              <div class="luz-table-wrap" role="region" aria-label="Visitors per day, April 1 to 28" tabindex="0">
+                <table>
+                  <caption>Visitors per day, April 1 to 28</caption>
+                  <thead>
+                    <tr><th scope="col">Day</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row">Apr 1</th><td style="--v: .5"><data value="252">252</data></td><td style="--v: .3"><data value="148">148</data></td></tr>
+                    <tr><th scope="row">Apr 2</th><td style="--v: .54"><data value="271">271</data></td><td style="--v: .55"><data value="276">276</data></td></tr>
+                    <tr><th scope="row">Apr 3</th><td style="--v: .36"><data value="182">182</data></td><td style="--v: .26"><data value="128">128</data></td></tr>
+                    <tr><th scope="row">Apr 4</th><td style="--v: .76"><data value="380">380</data></td><td style="--v: .49"><data value="247">247</data></td></tr>
+                    <tr><th scope="row">Apr 5</th><td style="--v: .39"><data value="194">194</data></td><td style="--v: .41"><data value="203">203</data></td></tr>
+                    <tr><th scope="row">Apr 6</th><td style="--v: .38"><data value="191">191</data></td><td style="--v: .15"><data value="74">74</data></td></tr>
+                    <tr><th scope="row">Apr 7</th><td style="--v: .36"><data value="179">179</data></td><td style="--v: .2"><data value="98">98</data></td></tr>
+                    <tr><th scope="row">Apr 8</th><td style="--v: .36"><data value="179">179</data></td><td style="--v: .26"><data value="132">132</data></td></tr>
+                    <tr><th scope="row">Apr 9</th><td style="--v: .56"><data value="281">281</data></td><td style="--v: .43"><data value="217">217</data></td></tr>
+                    <tr><th scope="row">Apr 10</th><td style="--v: .37"><data value="187">187</data></td><td style="--v: .34"><data value="171">171</data></td></tr>
+                    <tr><th scope="row">Apr 11</th><td style="--v: .39"><data value="193">193</data></td><td style="--v: .5"><data value="251">251</data></td></tr>
+                    <tr><th scope="row">Apr 12</th><td style="--v: .56"><data value="278">278</data></td><td style="--v: .25"><data value="125">125</data></td></tr>
+                    <tr><th scope="row">Apr 13</th><td style="--v: .46"><data value="228">228</data></td><td style="--v: .3"><data value="152">152</data></td></tr>
+                    <tr><th scope="row">Apr 14</th><td style="--v: .24"><data value="120">120</data></td><td style="--v: .2"><data value="100">100</data></td></tr>
+                    <tr><th scope="row">Apr 15</th><td style="--v: .66"><data value="331">331</data></td><td style="--v: .54"><data value="270">270</data></td></tr>
+                    <tr><th scope="row">Apr 16</th><td style="--v: .64"><data value="319">319</data></td><td style="--v: .25"><data value="125">125</data></td></tr>
+                    <tr><th scope="row">Apr 17</th><td style="--v: .63"><data value="317">317</data></td><td style="--v: .52"><data value="259">259</data></td></tr>
+                    <tr><th scope="row">Apr 18</th><td style="--v: .54"><data value="271">271</data></td><td style="--v: .24"><data value="122">122</data></td></tr>
+                    <tr><th scope="row">Apr 19</th><td style="--v: .45"><data value="226">226</data></td><td style="--v: .24"><data value="121">121</data></td></tr>
+                    <tr><th scope="row">Apr 20</th><td style="--v: .37"><data value="187">187</data></td><td style="--v: .17"><data value="86">86</data></td></tr>
+                    <tr><th scope="row">Apr 21</th><td style="--v: .29"><data value="146">146</data></td><td style="--v: .26"><data value="130">130</data></td></tr>
+                    <tr><th scope="row">Apr 22</th><td style="--v: .41"><data value="206">206</data></td><td style="--v: .5"><data value="248">248</data></td></tr>
+                    <tr><th scope="row">Apr 23</th><td style="--v: .4"><data value="200">200</data></td><td style="--v: .51"><data value="256">256</data></td></tr>
+                    <tr><th scope="row">Apr 24</th><td style="--v: .5"><data value="248">248</data></td><td style="--v: .51"><data value="253">253</data></td></tr>
+                    <tr><th scope="row">Apr 25</th><td style="--v: .76"><data value="378">378</data></td><td style="--v: .57"><data value="284">284</data></td></tr>
+                    <tr><th scope="row">Apr 26</th><td style="--v: .43"><data value="216">216</data></td><td style="--v: .27"><data value="136">136</data></td></tr>
+                    <tr><th scope="row">Apr 27</th><td style="--v: .38"><data value="190">190</data></td><td style="--v: .31"><data value="153">153</data></td></tr>
+                    <tr><th scope="row">Apr 28</th><td style="--v: .4"><data value="199">199</data></td><td style="--v: .19"><data value="94">94</data></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </luz-chart>
           </div>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
@@ -48,6 +113,50 @@ reviewed: false
   &lt;/tbody&gt;
 &lt;/table&gt;</code></pre>
             </div>
+            <p>Con varias series, sin script: una fila por categoría, su nombre en un <code>&lt;th scope="row"&gt;</code>, y una celda por serie, hasta seis. La fila de encabezado da nombre a las series. Las filas se disponen una junto a otra, y algunos navegadores (Safari con VoiceOver) dejan entonces de distinguir la tabla de un montón de cajas: escribe sus roles, como aquí, para conservarlos. <code>&lt;luz-chart interactive&gt;</code> los escribe por ti.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-column-chart-several" aria-label="Copiar el marcado del gráfico de columnas con varias series">Copiar</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Marcado del gráfico de columnas con varias series"><code id="code-column-chart-several">&lt;table class=&quot;luz-column-chart&quot; role=&quot;table&quot;&gt;
+  &lt;caption&gt;Visitors per month, by device, January to March&lt;/caption&gt;
+  &lt;thead role=&quot;rowgroup&quot;&gt;
+    &lt;tr role=&quot;row&quot;&gt;&lt;th scope=&quot;col&quot; role=&quot;columnheader&quot;&gt;Month&lt;/th&gt;&lt;th scope=&quot;col&quot; role=&quot;columnheader&quot;&gt;Desktop&lt;/th&gt;&lt;th scope=&quot;col&quot; role=&quot;columnheader&quot;&gt;Mobile&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody role=&quot;rowgroup&quot;&gt;
+    &lt;tr role=&quot;row&quot;&gt;&lt;th scope=&quot;row&quot; role=&quot;rowheader&quot;&gt;Jan&lt;/th&gt;&lt;td role=&quot;cell&quot; style=&quot;--v: .58&quot;&gt;186&lt;/td&gt;&lt;td role=&quot;cell&quot; style=&quot;--v: .25&quot;&gt;80&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr role=&quot;row&quot;&gt;&lt;th scope=&quot;row&quot; role=&quot;rowheader&quot;&gt;Feb&lt;/th&gt;&lt;td role=&quot;cell&quot; style=&quot;--v: .95&quot;&gt;305&lt;/td&gt;&lt;td role=&quot;cell&quot; style=&quot;--v: .62&quot;&gt;200&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr role=&quot;row&quot;&gt;&lt;th scope=&quot;row&quot; role=&quot;rowheader&quot;&gt;Mar&lt;/th&gt;&lt;td role=&quot;cell&quot; style=&quot;--v: .74&quot;&gt;237&lt;/td&gt;&lt;td role=&quot;cell&quot; style=&quot;--v: .38&quot;&gt;120&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <p>Interactivo, con la cabecera de las series: enlaza también <code>components/chart.css</code> y carga <code>catalog.js</code>, que carga <code>chart.js</code> cuando la página tiene un <code>&lt;luz-chart&gt;</code>. Una fila por día, su nombre en un <code>&lt;th scope="row"&gt;</code>, y una columna por serie. La tabla no lleva clase: el script le da <code>luz-column-chart</code> cuando la dibuja, así que sin el script es una tabla que cabe en cualquier ancho.</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-column-chart-interactive" aria-label="Copiar el marcado del gráfico de columnas interactivo">Copiar</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Marcado del gráfico de columnas interactivo"><code id="code-column-chart-interactive">&lt;luz-chart type=&quot;column&quot; interactive&gt;
+  &lt;div class=&quot;luz-table-wrap&quot; role=&quot;region&quot; aria-label=&quot;Visitors per day, April 1 to 7&quot; tabindex=&quot;0&quot;&gt;
+    &lt;table&gt;
+      &lt;caption&gt;Visitors per day, April 1 to 7&lt;/caption&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Day&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Desktop&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mobile&lt;/th&gt;&lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 1&lt;/th&gt;&lt;td style=&quot;--v: .5&quot;&gt;&lt;data value=&quot;252&quot;&gt;252&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .3&quot;&gt;&lt;data value=&quot;148&quot;&gt;148&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 2&lt;/th&gt;&lt;td style=&quot;--v: .54&quot;&gt;&lt;data value=&quot;271&quot;&gt;271&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .55&quot;&gt;&lt;data value=&quot;276&quot;&gt;276&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 3&lt;/th&gt;&lt;td style=&quot;--v: .36&quot;&gt;&lt;data value=&quot;182&quot;&gt;182&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .26&quot;&gt;&lt;data value=&quot;128&quot;&gt;128&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 4&lt;/th&gt;&lt;td style=&quot;--v: .76&quot;&gt;&lt;data value=&quot;380&quot;&gt;380&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .49&quot;&gt;&lt;data value=&quot;247&quot;&gt;247&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 5&lt;/th&gt;&lt;td style=&quot;--v: .39&quot;&gt;&lt;data value=&quot;194&quot;&gt;194&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .41&quot;&gt;&lt;data value=&quot;203&quot;&gt;203&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 6&lt;/th&gt;&lt;td style=&quot;--v: .38&quot;&gt;&lt;data value=&quot;191&quot;&gt;191&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .15&quot;&gt;&lt;data value=&quot;74&quot;&gt;74&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 7&lt;/th&gt;&lt;td style=&quot;--v: .36&quot;&gt;&lt;data value=&quot;179&quot;&gt;179&lt;/data&gt;&lt;/td&gt;&lt;td style=&quot;--v: .2&quot;&gt;&lt;data value=&quot;98&quot;&gt;98&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/luz-chart&gt;</code></pre>
+            </div>
             <h3 id="variants">Variantes y opciones</h3>
             <div class="luz-table-wrap" role="region" aria-label="Opciones del gráfico de columnas" tabindex="0">
               <table class="luz-table">
@@ -58,26 +167,34 @@ reviewed: false
                   <tr><td data-label="Opción"><div><code>--v</code></div></td><td data-label="Efecto"><div>En cada celda, de 0 a 1: su valor entre el máximo de la escala, el mismo para todas las columnas</div></td></tr>
                   <tr><td data-label="Opción"><div><code>--luz-column-chart-color</code></div></td><td data-label="Efecto"><div>Otro color de gráfico para una tabla o una celda, como <code>var(--luz-chart-2)</code></div></td></tr>
                   <tr><td data-label="Opción"><div><code>--luz-column-chart-h</code></div></td><td data-label="Efecto"><div>La altura de las columnas</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-column-chart-bar</code></div></td><td data-label="Efecto"><div>El ancho de una columna, <code>var(--luz-space-lg)</code> por defecto; nunca mayor que su parte de la tabla</div></td></tr>
+                  <tr><td data-label="Opción"><div>Una fila por categoría</div></td><td data-label="Efecto"><div>Varias series: un <code>&lt;th scope="row"&gt;</code> y después una celda por serie en cada fila, hasta seis. Cada fila es un grupo de columnas, la serie n en <code>--luz-chart-n</code>, con su nombre debajo, y la fila de encabezado es la leyenda</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-column-chart-gap</code></div></td><td data-label="Efecto"><div>En el gráfico de varias series solo con CSS, el espacio entre las columnas de un grupo, <code>var(--luz-space-xs)</code> por defecto; los grupos se reparten el espacio que queda. <code>&lt;luz-chart interactive&gt;</code> reparte el ancho entre sus días y no tiene separación que definir</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>&lt;luz-chart type="column" interactive&gt;</code></div></td><td data-label="Efecto"><div>Alrededor de una tabla de varias series sin clase: el script la dibuja como columnas, con un botón por serie y su total, que apaga y enciende sus columnas, y una lectura del día bajo el puntero o el foco</div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
             <p>Una tabla con una fila de encabezado de nombres y una fila de cifras. Cada cifra es el texto de su celda, y la celda dibuja su columna debajo, desde la base hasta <code>--v</code>, en <code>--luz-chart-1</code>, con la pista en <code>--luz-chart-track</code>. Las columnas se reparten el ancho por igual.</p>
             <p>Calcula <code>--v</code> a partir de tus datos: el valor dividido entre el máximo de la escala, el mismo para todas las celdas. El <code>style</code> en línea solo da ese valor. Con un <code>style-src</code> estricto, ponlo en una regla propia, como <code>.sat { --v: .25 }</code>.</p>
-            <p>Con el tamaño de texto por defecto, siete columnas caben en una pantalla de 320 px. Si hay más, o con un texto mayor, mete la tabla en un <code>luz-table-wrap</code>: cuando una cifra no cabe, la tabla se desplaza dentro de él.</p>
+            <p>Con el tamaño de texto por defecto, hasta siete columnas, o tres grupos de dos, caben en una pantalla de 320 px. Si hay más, o con un texto mayor, mete la tabla en un <code>luz-table-wrap</code>: cuando una cifra no cabe, la tabla se desplaza dentro de él.</p>
+            <p>La cifra de cada celda está sobre su columna y el nombre debajo, como en un eje: la fila de encabezado se dibuja después del cuerpo. Con varias series, cada fila es un grupo de columnas, separadas por <code>--luz-column-chart-gap</code> (en el gráfico solo con CSS; el interactivo reparte el ancho entre sus días), y los grupos se reparten el ancho. La fila de encabezado es la leyenda: el nombre de cada serie tras un punto de su color, en una fila sobre una línea fina.</p>
+            <p>Dentro de <code>&lt;luz-chart type="column" interactive&gt;</code>, el script añade una cabecera sobre la tabla: un botón por serie, su nombre y la suma de sus cifras, escrita con el idioma de la página. Una suma sirve para recuentos e importes, como visitantes o euros; no sirve para tasas, proporciones ni medias, cuyo total no dice nada: no uses <code>interactive</code> para ellas, o déjalas fuera. El título de la tabla pasa a ser el título del gráfico. Las columnas pierden su pista: el día bajo el puntero o el foco recibe una banda clara, y las cifras salen de las columnas a una lectura a su lado. Solo se muestran los nombres de los días que caben uno junto a otro. Las columnas conservan la escala de su <code>--v</code> cuando se apaga una serie, y la última serie mostrada no se puede apagar: un gráfico sin ninguna no dice nada. El script no escribe ninguna palabra propia: los nombres, las cifras y el título son tuyos.</p>
             <h3 id="no-js">Sin JavaScript</h3>
-            <p>No lo necesita. Sin la hoja de estilos se lee como una tabla: una fila de encabezado con los nombres y luego las cifras.</p>
+            <p>No lo necesita. Sin la hoja de estilos se lee como una tabla: una fila de encabezado con los nombres y luego las cifras. El gráfico interactivo es, hasta que se ejecuta su script o sin él, una tabla simple: sin columnas, una fila por día con todas sus cifras, que cabe en la pantalla más estrecha sea cual sea el número de días. Una tabla de pocas categorías que deba ser de columnas sin script lleva ella misma la clase <code>luz-column-chart</code>.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
-            <p>Nada recibe el foco. Una tabla conserva sus roles, así que un lector de pantalla lee cada cifra con su nombre. El título de la tabla la nombra e indica la unidad.</p>
+            <p>El gráfico simple no recibe el foco. Una tabla conserva sus roles, así que un lector de pantalla lee cada cifra con su nombre. El título de la tabla la nombra e indica la unidad. Con varias series las filas se disponen una junto a otra: escribe los roles de la tabla en su marcado, como hace el fragmento, para que Safari con VoiceOver siga leyendo una tabla.</p>
+            <p>El gráfico interactivo es un grupo con el nombre del título, y el script escribe los roles de su tabla (<code>table</code>, <code>rowgroup</code>, <code>row</code>, <code>columnheader</code>, <code>rowheader</code> y <code>cell</code>). Sus botones son botones de alternancia (<code>aria-pressed</code>): Enter o Espacio apagan y encienden una serie, y la última serie mostrada sigue encendida. Sus filas reciben el foco, en una sola parada de Tab, y cada fila se nombra con sus propias celdas, a partir de tu texto: «Apr 1, Desktop 252, Mobile 148», con todas las series, mostradas o no. Las flechas pasan al día siguiente o al anterior (izquierda y derecha siguen la dirección de la página), e Inicio y Fin al primero y al último, cuando el foco está en una fila; las teclas del modo de exploración de un lector de pantalla, que tiene las suyas para una tabla, son suyas.</p>
+            <p>La lectura tiene el nombre del día como título, así que la banda nunca es la única señal de dónde estás; repite las cifras para la vista y está oculta para la tecnología de asistencia. Se muestra mientras el puntero está sobre un día o una fila tiene el foco, y Escape la guarda sin mover el puntero ni el foco (vuelve en otro día). Una serie apagada pierde sus columnas pero conserva sus celdas en la tabla, así que un lector de pantalla sigue leyendo todas las cifras.</p>
             <p>No ocultes la tabla: son los datos. Las columnas son un dibujo de ella y no llevan texto propio.</p>
             <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
           </div>
           <div class="luz-tabpanel docs-view" id="design-panel">
             <h2 class="docs-view__title" id="design">Diseño</h2>
             <h3 id="when">Cuándo usarlo</h3>
-            <p>Úsalo para comparar unos pocos valores que tienen un orden o un nombre, como los días de una semana o los meses de un año, en una misma escala.</p>
+            <p>Úsalo para comparar unos pocos valores que tienen un orden o un nombre, como los días de una semana o los meses de un año, en una misma escala. Con varias series, compara unas pocas series categoría a categoría, como dos dispositivos mes a mes. Usa el gráfico interactivo para dos o más series a lo largo de muchos días, cuando importan los totales y cada día se lee de uno en uno.</p>
             <h3 id="when-not">Cuándo no usarlo</h3>
-            <p>No lo uses para un solo valor (usa un <a href="/docs/components/meter/">medidor</a>), para nombres largos (usa una <a href="/docs/catalog/bar-list/">lista de barras</a>) ni para una tendencia de muchos puntos. Conserva una <a href="/docs/components/table/">tabla</a> cuando importen más los valores exactos.</p>
+            <p>No uses el gráfico interactivo cuando haya que ver todas las cifras a la vez: sus cifras están en la lectura, ni para tasas, proporciones ni medias: el total de una serie es una suma. No lo uses para un solo valor (usa un <a href="/docs/components/meter/">medidor</a>), para nombres largos (usa una <a href="/docs/catalog/bar-list/">lista de barras</a>) ni para una tendencia de muchos puntos. Conserva una <a href="/docs/components/table/">tabla</a> cuando importen más los valores exactos.</p>
             <h3 id="do-dont">Qué hacer y qué no</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
@@ -110,9 +227,9 @@ reviewed: false
               </figure>
             </div>
             <h3 id="content">Cómo escribir el contenido</h3>
-            <p>Indica la unidad y el periodo en el título de la tabla («Paquetes por día, esta semana»), mantén cada nombre en una o dos palabras y escribe la cifra con su unidad cuando no sea evidente. Los datos y las etiquetas son tuyos: el componente solo los dibuja.</p>
+            <p>Indica la unidad y el periodo en el título de la tabla («Paquetes por día, esta semana»), mantén cada nombre en una o dos palabras y escribe la cifra con su unidad cuando no sea evidente. Nombra cada serie en una o dos palabras: su celda de encabezado es el nombre de su botón. Los datos y las etiquetas son tuyos: el componente solo los dibuja.</p>
             <h3 id="contrast">Contraste y foco</h3>
-            <p>La columna es un color de gráfico; la pista es más discreta a propósito, porque la cifra lleva el valor.</p>
+            <p>La columna es un color de gráfico; la pista es más discreta a propósito, porque la cifra lleva el valor. El gráfico interactivo no tiene pista: el día bajo el puntero o el foco tiene una banda clara.</p>
             <div class="luz-table-wrap" role="region" aria-label="Contraste del gráfico de columnas en cada modo" tabindex="0">
               <table class="luz-table docs-contrast">
                 <thead>
@@ -122,23 +239,35 @@ reviewed: false
                   <tr><td data-label="Parte"><div>Columna sobre su pista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-chart-track</code></div></td><td data-label="Claro"><div>3.4:1</div></td><td data-label="Oscuro"><div>3.8:1</div></td><td data-label="Alto contraste"><div>6.8:1</div></td><td data-label="Requisitos"><div>2:1</div></td></tr>
                   <tr><td data-label="Parte"><div>Columna sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
                   <tr><td data-label="Parte"><div>Columna sobre una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Segunda serie sobre su pista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-2</code> on <code>--luz-chart-track</code></div></td><td data-label="Claro"><div>3.2:1</div></td><td data-label="Oscuro"><div>4.4:1</div></td><td data-label="Alto contraste"><div>4.4:1</div></td><td data-label="Requisitos"><div>2:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Segunda serie sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-2</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>8.9:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Columna sobre la banda del día bajo el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>5.1:1</div></td><td data-label="Oscuro"><div>6.4:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Segunda serie sobre la banda</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-2</code> on <code>--luz-surface-hover</code></div></td><td data-label="Claro"><div>4.8:1</div></td><td data-label="Oscuro"><div>7.4:1</div></td><td data-label="Alto contraste"><div>8.9:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
                   <tr><td data-label="Parte"><div>Cifra</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
-                  <tr><td data-label="Parte"><div>Nombre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Nombre de una columna o de un grupo</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Nombre de una serie en la leyenda</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie mostrada: su nombre y su total</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>20.1:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie mostrada: la línea bajo ella</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>13.5:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Lectura: la cifra</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>13.5:1</div></td><td data-label="Oscuro"><div>10.9:1</div></td><td data-label="Alto contraste"><div>18.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Lectura: el nombre de la serie</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>5.4:1</div></td><td data-label="Alto contraste"><div>16.5:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
                 </tbody>
               </table>
             </div>
             <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos; una parte decorativa discreta mantiene 2:1 con aquello sobre lo que se dibuja.</p>
             <ul>
-              <li><strong>Foco:</strong> nada lo recibe.</li>
-              <li><strong>No solo color:</strong> cada columna tiene su cifra en texto, y en colores forzados la columna se dibuja con el resalte del sistema y un borde alrededor de su pista.</li>
+              <li><strong>Foco:</strong> el gráfico simple no recibe ninguno. En el interactivo, un botón y una fila reciben el anillo de foco, <code>--luz-focus-ring</code>, de 2px: dentro del borde de un botón, y alrededor del grupo de columnas de una fila.</li>
+              <li><strong>Objetivo y foco:</strong> cada botón de la cabecera interactiva mide más de 24 por 24 px (WCAG 2.2, 2.5.8), y la lectura se coloca junto al día que tiene el foco y nunca sobre él (2.4.11). Ambos criterios son nuevos en WCAG 2.2 y todavía no los exige EN 301 549 v3.2.1.</li>
+              <li><strong>No solo color:</strong> cada columna tiene su cifra en texto, y en colores forzados la columna se dibuja con el resalte del sistema y un borde alrededor de su pista, una segunda serie con el color del texto; en el gráfico interactivo, sin pista, el día bajo el puntero o el foco tiene un borde discontinuo para su banda. Una serie apagada tiene un punto hueco y un nombre más claro, no solo otro color.</li>
             </ul>
             <h3 id="tokens">Tokens que usa</h3>
-            <p>Los 9 tokens que lee <code>components/column-chart.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <p>Los 26 tokens que lee <code>components/column-chart.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
             <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-track"><code>--luz-chart-track</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code></dd></div>
-              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-xs</code></dd></div>
-              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-2"><code>--luz-chart-2</code></a>, <a href="/docs/tokens/color/#luz-chart-3"><code>--luz-chart-3</code></a>, <a href="/docs/tokens/color/#luz-chart-4"><code>--luz-chart-4</code></a>, <a href="/docs/tokens/color/#luz-chart-5"><code>--luz-chart-5</code></a>, <a href="/docs/tokens/color/#luz-chart-6"><code>--luz-chart-6</code></a>, <a href="/docs/tokens/color/#luz-chart-track"><code>--luz-chart-track</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Espaciado y tamaños</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Tipografía</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radio</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/layers/">Capas</a></dt><dd><code>--luz-z-raised</code></dd></div>
             </dl>
             <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
           </div>

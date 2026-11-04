@@ -7,10 +7,19 @@
    columns compare. Without this file it reads as a table, the head row then the figures.
    The column is the first chart colour on the chart track (--luz-chart-1,
    --luz-chart-track); --luz-column-chart-color sets another series for a table or a
-   cell, --luz-column-chart-h the height of the columns. The name is above the figure
-   and the figure above its column, as the markup reads. Columns share the width evenly and a figure is
-   never cut, so a table too narrow for its figures scrolls: put it in a
-   .luz-table-wrap.
+   cell, --luz-column-chart-h the height of the columns, --luz-column-chart-bar the width
+   of a bar (never wider than its column). The figure is above its column and the name
+   below it, as an axis (the head row is drawn after the body). Columns share the width
+   evenly and a figure is never cut, so a table too narrow for its figures scrolls: put
+   it in a .luz-table-wrap.
+   Several series: the shape of <luz-chart>'s table (a row per category, its name in a
+   <th scope="row">, a column per series, up to six): each row is a group of columns,
+   --luz-column-chart-gap apart (--luz-space-xs; the knob of this CSS-only chart: the
+   interactive one shares the width of its rows and has none), series n in --luz-chart-n,
+   the name of the row below it, and the head row is the legend, a row of names on a
+   hairline. <luz-chart type="column" interactive> takes a table with no class: chart.js
+   gives it this one, and chart.css its states once it is drawn; with no script it is
+   a table.
    Contrast: the fill is 3:1 on the surfaces in every mode; the track is a quiet
    1.5:1, decorative, because the figure carries the value.
    Layer: catalog · Prefix: .luz-
@@ -20,10 +29,14 @@
 .luz-column-chart {
   --luz-column-chart-track: var(--luz-chart-track);
   --luz-column-chart-h: calc(var(--luz-space-2xl) * 3);
+  --luz-column-chart-bar: var(--luz-space-lg);
 }
 
 /* The bare table gives a head surface, a rule and a hover to its cells: a chart has none */
 .luz-column-chart :is(th, td) {
+  /* Resolved on the cell, so a cell may set its own --luz-column-chart-color */
+  --luz-column-chart-fill: var(--luz-column-chart-color, var(--luz-chart-1));
+
   inline-size: 1%;
   padding: 0 var(--luz-space-2xs);
   border: 0;
@@ -33,11 +46,16 @@
 }
 
 .luz-column-chart th {
-  padding-block-end: var(--luz-space-2xs);
+  padding-block-start: var(--luz-space-2xs);
   font-family: var(--luz-font-mono);
   font-size: var(--luz-text-xs);
   letter-spacing: 0.04em;
   color: var(--luz-text-secondary);
+}
+
+/* One series: the head row of names is drawn under the columns, as an axis */
+.luz-column-chart:not(:has(tbody th)) thead {
+  display: table-footer-group;
 }
 
 /* A joined script takes no letter spacing, and the sans */
@@ -47,9 +65,6 @@
 }
 
 .luz-column-chart td {
-  /* Resolved on the cell, so a cell may set its own --luz-column-chart-color */
-  --luz-column-chart-fill: var(--luz-column-chart-color, var(--luz-chart-1));
-
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
   font-size: var(--luz-text-xs);
@@ -59,8 +74,10 @@
 .luz-column-chart td::after {
   content: "";
   display: block;
+  inline-size: min(var(--luz-column-chart-bar), 100%);
   block-size: var(--luz-column-chart-h);
   margin-block-start: var(--luz-space-2xs);
+  margin-inline: auto;
   border-radius: var(--luz-radius-sm) var(--luz-radius-sm) 0 0;
   background: linear-gradient(
     to top,
@@ -69,18 +86,106 @@
   );
 }
 
+/* --- Several series: a row per category, a group of columns per row ---
+   The rows are laid out as boxes so a category's columns stand side by side, and
+   a table laid out so keeps its roles in Chromium and Firefox but not in every
+   browser: write them, as the docs' markup does (role="table", "rowgroup", "row",
+   "columnheader", "rowheader" and "cell"), or let <luz-chart interactive> write them.
+   Each figure is above its column, and the category's name below its group, as an
+   axis. The columns of a group stand
+   together, --luz-column-chart-gap apart, and the groups share the width, so the
+   space between two groups is what is left (--luz-space-xs at the least). */
+.luz-column-chart:has(tbody th) tbody {
+  display: flex;
+}
+
+.luz-column-chart:has(tbody th) tbody tr {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--luz-column-chart-gap, var(--luz-space-xs));
+  padding-block-end: calc(1lh + var(--luz-space-2xs));
+  padding-inline: var(--luz-space-xs);
+  font-size: var(--luz-text-xs);
+}
+
+/* A cell is at least as wide as its column, whatever the width of its figure */
+.luz-column-chart:has(tbody th) tbody :is(th, td) {
+  inline-size: auto;
+  min-inline-size: var(--luz-column-chart-bar);
+  padding: 0;
+}
+
+/* The category: under its columns, centred on them and free to be wider than the
+   group, so the group is only as wide as its figures */
+.luz-column-chart:has(tbody th) tbody th {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+}
+
+/* The head row is the legend, as the header of the interactive chart without its
+   buttons: each series' name, after a dot of its colour, on a hairline. The head of
+   the categories' column says nothing a sighted reader needs, so it is only read */
+.luz-column-chart:has(tbody th) thead tr {
+  display: flex;
+  flex-wrap: wrap;
+  margin-block-end: var(--luz-space-sm);
+  border-block-end: thin solid var(--luz-divider);
+}
+
+.luz-column-chart:has(tbody th) thead th {
+  display: flex;
+  align-items: center;
+  gap: var(--luz-space-2xs);
+  inline-size: auto;
+  padding: var(--luz-space-xs) var(--luz-space-md);
+  color: var(--luz-text-primary);
+  font-family: var(--luz-font-sans);
+  font-size: var(--luz-text-sm);
+}
+
+.luz-column-chart:has(tbody th) thead th:first-child {
+  position: absolute;
+  clip-path: inset(50%);
+}
+
+.luz-column-chart:has(tbody th) thead th + th::before {
+  content: "";
+  inline-size: var(--luz-space-xs);
+  block-size: var(--luz-space-xs);
+  border-radius: var(--luz-radius-full);
+  background: var(--luz-column-chart-fill);
+}
+
+.luz-column-chart:has(tbody th) :is(th, td):nth-child(3) { --luz-column-chart-color: var(--luz-chart-2); }
+.luz-column-chart:has(tbody th) :is(th, td):nth-child(4) { --luz-column-chart-color: var(--luz-chart-3); }
+.luz-column-chart:has(tbody th) :is(th, td):nth-child(5) { --luz-column-chart-color: var(--luz-chart-4); }
+.luz-column-chart:has(tbody th) :is(th, td):nth-child(6) { --luz-column-chart-color: var(--luz-chart-5); }
+.luz-column-chart:has(tbody th) :is(th, td):nth-child(7) { --luz-column-chart-color: var(--luz-chart-6); }
+
+/* Drawn by <luz-chart type="column" interactive> (chart.css has its other states): no track */
+luz-chart[type="column"][data-luz-ready] .luz-column-chart {
+  --luz-column-chart-track: transparent;
+}
+
 /* Forced colors flatten backgrounds to Canvas: keep the track's edge and draw
    the fill in the system highlight colour */
 @media (forced-colors: active) {
-  .luz-column-chart {
+  .luz-column-chart :is(td, thead th) {
     --luz-column-chart-track: Canvas;
-  }
-
-  .luz-column-chart td {
     --luz-column-chart-fill: Highlight;
   }
 
-  .luz-column-chart td::after {
+  /* Series after the first: the text colour, so two series are told apart by more than order */
+  .luz-column-chart:has(tbody th) :is(td, thead th):nth-child(n + 3) {
+    --luz-column-chart-fill: CanvasText;
+  }
+
+  .luz-column-chart td::after,
+  .luz-column-chart:has(tbody th) thead th + th::before {
     border: 1px solid CanvasText;
     forced-color-adjust: none;
   }
