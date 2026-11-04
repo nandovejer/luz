@@ -227,8 +227,9 @@ test.describe('the band of the time of day', () => {
     await page.goto('/');
     const slider = page.locator('#modes .landing-day__bar .luz-theme-time__slider');
     await slider.scrollIntoViewIfNeeded();
+    // At rest the page follows the system: the default moment of light, and no moment is checked (none was chosen)
     await expect(page.locator('html')).toHaveAttribute('data-moment', 'afternoon');
-    await expect(page.locator('footer input[name="luz-theme-moment"]:checked')).toHaveValue('afternoon');
+    await expect(page.locator('footer input[name="luz-theme-moment"]:checked')).toHaveCount(0);
     // 21:30 is dusk
     await slider.fill('1290');
     await expect(page.locator('html')).toHaveAttribute('data-moment', 'dusk');

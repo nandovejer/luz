@@ -235,15 +235,16 @@ test.describe('HTML elements reference, in the documentation', () => {
     await seedMode(page, 'light');
     await open(page, CATEGORY_PAGES[0]);
     await expect(page.locator(`.docs-nav a[href="${OVERVIEW}"]`)).toHaveCount(1);
-    // The footer's round button: light, then dark and high contrast; the next step is Auto, then Light again
+    // The footer's round button: light, then dark and high contrast; the next step is Auto, which is the system's mode (light), then Dark again (a light system's first press skips Light)
     for (const mode of ['dark', 'high-contrast']) {
       await page.click('footer .luz-theme-mode__button');
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
     }
     await page.click('footer .luz-theme-mode__button');
-    await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveValue('auto');
-    await page.click('footer .luz-theme-mode__button');
     await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveValue('light');
+    expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe('light');
+    await page.click('footer .luz-theme-mode__button');
+    await expect(page.locator('footer input[name="luz-theme-mode"]:checked')).toHaveValue('dark');
   });
 
   test('the demos that need a script are wired', async ({ page }) => {
