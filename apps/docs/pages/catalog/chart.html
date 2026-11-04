@@ -6,7 +6,7 @@ order: 35
 group: charts
 fits-kinds: any
 fits: a page that shows a trend: a report, a dashboard, a post with a few figures
-files: <luz-chart>, .luz-chart__bar, .luz-chart__title, .luz-chart__toggle, .luz-chart__figure, .luz-chart__plot, .luz-chart__grid, .luz-chart__tick, .luz-chart__series, .luz-chart__line, .luz-chart__area, .luz-chart__marker, .luz-chart__legend, .luz-chart__key, .luz-chart__swatch, .luz-chart__spark, .luz-chart__values
+files: <luz-chart>, .luz-chart__bar, .luz-chart__title, .luz-chart__toggle, .luz-chart__figure, .luz-chart__plot, .luz-chart__grid, .luz-chart__tick, .luz-chart__series, .luz-chart__line, .luz-chart__area, .luz-chart__marker, .luz-chart__legend, .luz-chart__key, .luz-chart__swatch, .luz-chart__spark, .luz-chart__values, .luz-chart__picker, .luz-chart__pick, .luz-chart__total, .luz-chart__readout, .luz-chart__band
 module: chart.js
 keywords: line chart, area chart, sparkline, svg, data visualization, trend
 toc: h2,h3
@@ -67,10 +67,56 @@ toc: h2,h3
             <p class="docs-demo__note"><code>type="spark"</code>: a small line, and its last figure as text. The other six stay in the list for a screen reader.</p>
           </div>
           </div>
+          <h3 id="example-interactive">Interactive</h3>
+          <p>Visitors per day over four weeks, with <code>interactive</code>: each series and its total is a button that turns its line off and on, on the same scale. Point at a day, or Tab to the chart and use the arrow keys, for its figures and a band over it. Without JavaScript it is the table. The data is a sample: replace it with yours.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <luz-chart type="line" interactive data-luz-label-table="Show table" data-luz-label-chart="Show chart">
+              <div class="luz-table-wrap" role="region" aria-label="Visitors per day, April 1 to 28" tabindex="0">
+                <table class="luz-table">
+                  <caption>Visitors per day, April 1 to 28</caption>
+                  <thead>
+                    <tr><th scope="col">Day</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row">Apr 1</th><td data-label="Desktop"><data value="252">252</data></td><td data-label="Mobile"><data value="148">148</data></td></tr>
+                    <tr><th scope="row">Apr 2</th><td data-label="Desktop"><data value="271">271</data></td><td data-label="Mobile"><data value="276">276</data></td></tr>
+                    <tr><th scope="row">Apr 3</th><td data-label="Desktop"><data value="182">182</data></td><td data-label="Mobile"><data value="128">128</data></td></tr>
+                    <tr><th scope="row">Apr 4</th><td data-label="Desktop"><data value="380">380</data></td><td data-label="Mobile"><data value="247">247</data></td></tr>
+                    <tr><th scope="row">Apr 5</th><td data-label="Desktop"><data value="194">194</data></td><td data-label="Mobile"><data value="203">203</data></td></tr>
+                    <tr><th scope="row">Apr 6</th><td data-label="Desktop"><data value="191">191</data></td><td data-label="Mobile"><data value="74">74</data></td></tr>
+                    <tr><th scope="row">Apr 7</th><td data-label="Desktop"><data value="179">179</data></td><td data-label="Mobile"><data value="98">98</data></td></tr>
+                    <tr><th scope="row">Apr 8</th><td data-label="Desktop"><data value="179">179</data></td><td data-label="Mobile"><data value="132">132</data></td></tr>
+                    <tr><th scope="row">Apr 9</th><td data-label="Desktop"><data value="281">281</data></td><td data-label="Mobile"><data value="217">217</data></td></tr>
+                    <tr><th scope="row">Apr 10</th><td data-label="Desktop"><data value="187">187</data></td><td data-label="Mobile"><data value="171">171</data></td></tr>
+                    <tr><th scope="row">Apr 11</th><td data-label="Desktop"><data value="193">193</data></td><td data-label="Mobile"><data value="251">251</data></td></tr>
+                    <tr><th scope="row">Apr 12</th><td data-label="Desktop"><data value="278">278</data></td><td data-label="Mobile"><data value="125">125</data></td></tr>
+                    <tr><th scope="row">Apr 13</th><td data-label="Desktop"><data value="228">228</data></td><td data-label="Mobile"><data value="152">152</data></td></tr>
+                    <tr><th scope="row">Apr 14</th><td data-label="Desktop"><data value="120">120</data></td><td data-label="Mobile"><data value="100">100</data></td></tr>
+                    <tr><th scope="row">Apr 15</th><td data-label="Desktop"><data value="331">331</data></td><td data-label="Mobile"><data value="270">270</data></td></tr>
+                    <tr><th scope="row">Apr 16</th><td data-label="Desktop"><data value="319">319</data></td><td data-label="Mobile"><data value="125">125</data></td></tr>
+                    <tr><th scope="row">Apr 17</th><td data-label="Desktop"><data value="317">317</data></td><td data-label="Mobile"><data value="259">259</data></td></tr>
+                    <tr><th scope="row">Apr 18</th><td data-label="Desktop"><data value="271">271</data></td><td data-label="Mobile"><data value="122">122</data></td></tr>
+                    <tr><th scope="row">Apr 19</th><td data-label="Desktop"><data value="226">226</data></td><td data-label="Mobile"><data value="121">121</data></td></tr>
+                    <tr><th scope="row">Apr 20</th><td data-label="Desktop"><data value="187">187</data></td><td data-label="Mobile"><data value="86">86</data></td></tr>
+                    <tr><th scope="row">Apr 21</th><td data-label="Desktop"><data value="146">146</data></td><td data-label="Mobile"><data value="130">130</data></td></tr>
+                    <tr><th scope="row">Apr 22</th><td data-label="Desktop"><data value="206">206</data></td><td data-label="Mobile"><data value="248">248</data></td></tr>
+                    <tr><th scope="row">Apr 23</th><td data-label="Desktop"><data value="200">200</data></td><td data-label="Mobile"><data value="256">256</data></td></tr>
+                    <tr><th scope="row">Apr 24</th><td data-label="Desktop"><data value="248">248</data></td><td data-label="Mobile"><data value="253">253</data></td></tr>
+                    <tr><th scope="row">Apr 25</th><td data-label="Desktop"><data value="378">378</data></td><td data-label="Mobile"><data value="284">284</data></td></tr>
+                    <tr><th scope="row">Apr 26</th><td data-label="Desktop"><data value="216">216</data></td><td data-label="Mobile"><data value="136">136</data></td></tr>
+                    <tr><th scope="row">Apr 27</th><td data-label="Desktop"><data value="190">190</data></td><td data-label="Mobile"><data value="153">153</data></td></tr>
+                    <tr><th scope="row">Apr 28</th><td data-label="Desktop"><data value="199">199</data></td><td data-label="Mobile"><data value="94">94</data></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </luz-chart>
+          </div>
+          </div>
           <h2 id="known-issues">Known issues</h2>
           <p>Four things to know before you rely on it.</p>
           <ul>
-            <li>There is no readout on hover or focus. The figures are in the table, which the button shows; a value that only a pointer could reach would not be reachable by keyboard.</li>
+            <li>Without <code>interactive</code> there is no readout on hover or focus: the figures are in the table, which the button shows. With it, the readout follows the pointer and the focus alike.</li>
             <li>It reads the table when it connects, when the table changes and when the box changes size. A table added to the page later, after the page loaded the script, needs the element to be added with it.</li>
             <li>The plot is drawn left to right in every language, as a time axis is; the table, the title, the legend and the button follow the page’s direction.</li>
             <li>It has not been tested with a screen reader.</li>
@@ -108,6 +154,30 @@ toc: h2,h3
   &lt;/table&gt;
 &lt;/luz-chart&gt;</code></pre>
             </div>
+            <p>With <code>interactive</code>, a header of the series and their totals, and a readout of a day:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-chart-interactive" aria-label="Copy the interactive chart markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Interactive chart markup"><code id="code-chart-interactive">&lt;luz-chart type=&quot;line&quot; interactive data-luz-label-table=&quot;Show table&quot; data-luz-label-chart=&quot;Show chart&quot;&gt;
+  &lt;table class=&quot;luz-table&quot;&gt;
+    &lt;caption&gt;Visitors per day, April 1 to 7&lt;/caption&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Day&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Desktop&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mobile&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 1&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;252&quot;&gt;252&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;148&quot;&gt;148&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 2&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;271&quot;&gt;271&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;276&quot;&gt;276&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 3&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;182&quot;&gt;182&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;128&quot;&gt;128&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 4&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;380&quot;&gt;380&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;247&quot;&gt;247&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 5&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;194&quot;&gt;194&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;203&quot;&gt;203&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 6&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;191&quot;&gt;191&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;74&quot;&gt;74&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 7&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;179&quot;&gt;179&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;98&quot;&gt;98&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/luz-chart&gt;</code></pre>
+            </div>
             <p>A small line takes a list of <code>&lt;data&gt;</code> elements, in any markup, and shows the last of them:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
@@ -139,7 +209,7 @@ toc: h2,h3
 const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;));</code></pre>
             </div>
             <h3 id="variants">Variants and options</h3>
-            <p>The two types are an attribute, and so is the fill. The ratio is a property.</p>
+            <p>The two types are an attribute, and so are the fill and the interactive header. The ratio is a property.</p>
             <div class="luz-table-wrap" role="region" aria-label="Chart classes and attributes" tabindex="0">
               <table class="luz-table">
                 <thead>
@@ -149,6 +219,7 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
                   <tr><td data-label="Class or attribute"><div><code>&lt;luz-chart&gt;</code></div></td><td data-label="Effect"><div>The custom element the module defines: a block around the table or the list. It wires itself when it connects</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>type</code></div></td><td data-label="Effect"><div><code>line</code> (the default) draws the table’s columns; <code>spark</code> draws one small line from the <code>&lt;data&gt;</code> elements inside. Anything else leaves the table</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>variant="area"</code></div></td><td data-label="Effect"><div>Fills the area under each line, a light tint of the series colour</div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>interactive</code></div></td><td data-label="Effect"><div>With <code>type="line"</code> (or <code>type="column"</code> on a <a href="/docs/catalog/column-chart/">column chart</a>): a header with a button per series, its name and total, which turns its line off and on, and a readout of the day under the pointer or the focus, with a band over it. It takes the place of the legend</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>data-luz-label-table</code>, <code>data-luz-label-chart</code></div></td><td data-label="Effect"><div>The two words of the button: “Show table” and “Show chart”, in the page’s language, on the element or an ancestor (once on <code>&lt;body&gt;</code> serves every chart). LUZ has no English fallback: with either missing there is no button, and the table shows under the chart</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>--luz-chart-ratio</code></div></td><td data-label="Effect"><div>The shape of the drawing, <code>2 / 1</code> by default. Set it on the element: <code>style="--luz-chart-ratio: 3 / 1"</code></div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>caption</code></div></td><td data-label="Effect"><div>The title: the table’s own caption names the group for a screen reader and is copied above the drawing</div></td></tr>
@@ -161,19 +232,22 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>CSS from <code>@luz-ds/catalog</code> and a file of its own, <code>@luz-ds/catalog/chart</code> (<code>dist/chart.min.js</code>, under 3 kB compressed), which defines <code>&lt;luz-chart&gt;</code>. It uses no library and draws with DOM calls only, so a page that forbids inline scripts and styles runs it as it is. A bar of values compared by length does not need it: use the <a href="/docs/catalog/bar-list/">bar list</a>, the <a href="/docs/catalog/column-chart/">column chart</a>, the <a href="/docs/catalog/stacked-bar/">stacked bar</a> or the <a href="/docs/catalog/heat-map/">heat map</a>, which are CSS on a table or a list.</p>
+            <p>CSS from <code>@luz-ds/catalog</code> and a file of its own, <code>@luz-ds/catalog/chart</code> (<code>dist/chart.min.js</code>, under 5 kB compressed), which defines <code>&lt;luz-chart&gt;</code>. It uses no library and draws with DOM calls only, so a page that forbids inline scripts and styles runs it as it is. A bar of values compared by length does not need it: use the <a href="/docs/catalog/bar-list/">bar list</a>, the <a href="/docs/catalog/column-chart/">column chart</a>, the <a href="/docs/catalog/stacked-bar/">stacked bar</a> or the <a href="/docs/catalog/heat-map/">heat map</a>, which are CSS on a table or a list.</p>
             <ul>
               <li><strong>The table:</strong> it stays in the page. While the chart shows, the table is moved off screen, not hidden, so a screen reader reads it as it always did; when the button shows the table, the drawing goes. On paper, the table prints and the drawing does not.</li>
               <li><strong>The drawing:</strong> an SVG marked <code>aria-hidden</code>, drawn at its own size in pixels and again when the box changes size or the table changes. It has no animation, so there is nothing to stop under reduced motion. Series are <code>--luz-chart-1</code> to <code>--luz-chart-6</code>, so a change of mode repaints nothing.</li>
               <li><strong>Telling series apart:</strong> each line ends in a mark of its own shape (a circle, a square, a triangle, a diamond, a plus and a cross) and the legend repeats it. In forced colors every line is the text colour, and each has its own dashes.</li>
               <li><strong>The numbers:</strong> the scale starts at zero, or lower when a figure is negative, and its steps are round (1, 2 or 5 times a power of ten). The figures on the axes are written with <code>Intl.NumberFormat</code> in the page’s language, such as 1.2K.</li>
+              <li><strong>Interactive:</strong> the header above the drawing has a toggle button per series, with its name and the sum of its figures written with the page’s language. The total is a sum: it suits counts and amounts, such as visitors or euros, and not rates, shares or averages, whose total says nothing. A line turned off is drawn no more, on the same scale, and the last line shown cannot be turned off: a chart with none says nothing. The day under the pointer, or the row of the table that has the focus, gets a light band on the plot and a readout beside it with its name and the figure of each line shown, copied from the cells.</li>
               <li><strong>The words:</strong> the script writes none of its own. The button’s two words are yours, in <code>data-luz-label-*</code>; the title and the legend are copies of your caption and your column heads.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
-            <p>The table, or the list, is all there is, and it is complete: the caption, every figure, every name. The element is a block, the button does not exist and nothing is hidden. It does the same when the page lacks the table, and when <code>type</code> is not one of the two.</p>
+            <p>The table, or the list, is all there is, and it is complete: the caption, every figure, every name. The element is a block, the button does not exist and nothing is hidden. With <code>interactive</code> there is no header and no readout either: every figure is in the table. It does the same when the page lacks the table, and when <code>type</code> is not one of the two.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
             <ul>
-              <li><strong>Keys:</strong> Tab reaches the button; Enter or Space presses it, as on any button. The drawing takes no focus.</li>
+              <li><strong>Keys:</strong> Tab reaches the “Show table” button; Enter or Space presses it, as on any button. Without <code>interactive</code> the picture is not a control: nothing in it takes the focus.</li>
+              <li><strong>Interactive:</strong> the buttons of the header are toggle buttons (<code>aria-pressed</code>): Enter or Space turns a line off and on, and the last line shown stays on. Then the picture takes the focus, one Tab stop, and the ring is drawn around it. It is a group named by the caption, and it holds a status, a polite live region hidden from the eye: on each key it says the label of the day, the same text as the row of the table, which the chart hides but a screen reader still reads. Each row is named by its own cells, from your text, “Apr 1, Desktop 252, Mobile 148”, every series, shown or not. With the focus on the picture, the arrow keys move to the next or the previous day (Right is always the next, as the plot is left to right), and Home and End to the first and the last; the keys of a screen reader’s browse mode, which has its own for a table, are its own. Entering the picture says its name and nothing else, a key at the end of the row says nothing again, and leaving it empties the status. The day gets its band and its readout.</li>
+              <li><strong>The readout:</strong> its title is the name of the day, so the band is never the only sign of where you are. It shows while the pointer is on a day or a row has the focus, and Escape puts it away without moving the pointer or the focus; it comes back on another day. It is hidden from assistive technology, which reads the row. A line turned off is not drawn, but its cells stay in the table, read as before. The script writes the roles of the table (<code>table</code>, <code>rowgroup</code>, <code>row</code>, <code>columnheader</code>, <code>rowheader</code> and <code>cell</code>) so that the rows keep them in every browser.</li>
               <li><strong>Name:</strong> the element is a group named by the table’s caption, and the button is described by it, so “Show table” is heard with what it shows. The drawing, its title and its legend are <code>aria-hidden</code>: the table says all of it.</li>
               <li><strong>Language:</strong> the words of the button, the caption and the names are yours. The numbers on the axes follow the language of the page.</li>
             </ul>
@@ -182,11 +256,12 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
           <div class="luz-tabpanel docs-view" id="design-panel">
             <h2 class="docs-view__title" id="design">Design</h2>
             <h3 id="when">When to use</h3>
-            <p>Use it to show how a few series change along an ordered axis, such as months, when the shape of the change is what the reader should see and you already have the numbers in a table. The small line (<code>type="spark"</code>) is for a figure that needs its trend beside it.</p>
+            <p>Use it to show how a few series change along an ordered axis, such as months, when the shape of the change is what the reader should see and you already have the numbers in a table. Add <code>interactive</code> for many days and two or more series, when the totals matter and a day is read one at a time. The small line (<code>type="spark"</code>) is for a figure that needs its trend beside it.</p>
             <h3 id="when-not">When not to use</h3>
             <p>Do not use it when exact values matter more than the shape: a <a href="/docs/components/table/">table</a> says them better. For a few values compared on one scale, use a <a href="/docs/catalog/column-chart/">column chart</a> or a <a href="/docs/catalog/bar-list/">bar list</a>, which need no script.</p>
             <ul>
               <li>Do not use it for parts of a whole: use a <a href="/docs/catalog/stacked-bar/">stacked bar</a>. There is no pie or donut.</li>
+              <li>Do not use <code>interactive</code> for rates, shares or averages: the total in its header is a sum.</li>
               <li>Do not use it for more than six series, or for series that cannot share a scale: split them into two charts.</li>
             </ul>
             <p>It replaces a charting library that draws a canvas with no text beside it. Nothing in LUZ is removed.</p>
@@ -240,6 +315,7 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
             <ul>
               <li>Name each column as the legend should read, with its unit if it has one, and write each figure in its cell as you want it read: <code>1,204</code>, not <code>1204</code>, with the plain number in the <code>value</code>.</li>
               <li>Write the button as the action and the thing: “Show table”, “Show chart”. Set both on the page, once, in its language.</li>
+              <li>With <code>interactive</code>, the head of each column is also the name of its button: a word or two.</li>
               <li>Keep the names of the rows short: they are the labels of the X axis, and some are dropped when they do not fit.</li>
             </ul>
             <h3 id="contrast">Contrast and focus</h3>
@@ -260,20 +336,32 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
                   <tr><td data-label="Part"><div>Figures of the axes and legend</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Title</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
                   <tr><td data-label="Part"><div>Grid, on the page</div></td><td data-label="Colour on background"><div><code>--luz-chart-grid</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>1.4:1</div></td><td data-label="Dark"><div>1.7:1</div></td><td data-label="High contrast"><div>3.2:1</div></td><td data-label="Needs"><div>1.3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 1 on the band of a day</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>5.1:1</div></td><td data-label="Dark"><div>6.4:1</div></td><td data-label="High contrast"><div>13.5:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 2 on the band of a day</div></td><td data-label="Colour on background"><div><code>--luz-chart-2</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>4.8:1</div></td><td data-label="Dark"><div>7.4:1</div></td><td data-label="High contrast"><div>8.9:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series shown: its name and total</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series shown: the line under it</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>13.5:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series turned off: its name and total</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Readout: the figure</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Light"><div>13.5:1</div></td><td data-label="Dark"><div>10.9:1</div></td><td data-label="High contrast"><div>18.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Readout: the series' name</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Light"><div>5.3:1</div></td><td data-label="Dark"><div>5.4:1</div></td><td data-label="High contrast"><div>16.5:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
                 </tbody>
               </table>
             </div>
             <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for the lines and marks; the grid is decorative and keeps a hairline of 1.3:1 or more.</p>
             <ul>
-              <li><strong>Focus:</strong> the button is core’s ghost button and takes its focus ring. The drawing takes none.</li>
-              <li>A series is told by its colour, by the mark it ends in and by the legend; in forced colors every line is the text colour, with its own dashes, the area is not filled and the grid is the grey text colour.</li>
+              <li><strong>Focus:</strong> the “Show table” button is core’s ghost button and takes its focus ring. The picture takes none. With <code>interactive</code>, a button of the header takes the focus ring, <code>--luz-focus-ring</code>, 2px, inside its edge, and so does the picture: the ring is drawn around it, 2px from its edge, because it is the picture that has the focus.</li>
+              <li><strong>Target and focus:</strong> each button of the interactive header is more than 24 by 24 px (WCAG 2.2, 2.5.8), and the readout is placed beside the day that has the focus and never over it (2.4.11). Both criteria are new in WCAG 2.2 and not yet required by EN 301 549 v3.2.1.</li>
+              <li>A series is told by its colour, by the mark it ends in and by the legend; in forced colors every line is the text colour, with its own dashes, the area is not filled and the grid is the grey text colour. A series turned off has a hollow dot and a lighter name, and the band of a day is a dashed edge in forced colors.</li>
             </ul>
             <h3 id="tokens">Tokens it uses</h3>
-            <p>The 16 tokens that <code>components/chart.css</code> reads, by family; the button is core’s. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <p>The 33 tokens that <code>components/chart.css</code> reads, by family; the button is core’s. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
             <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-2"><code>--luz-chart-2</code></a>, <a href="/docs/tokens/color/#luz-chart-3"><code>--luz-chart-3</code></a>, <a href="/docs/tokens/color/#luz-chart-4"><code>--luz-chart-4</code></a>, <a href="/docs/tokens/color/#luz-chart-5"><code>--luz-chart-5</code></a>, <a href="/docs/tokens/color/#luz-chart-6"><code>--luz-chart-6</code></a>, <a href="/docs/tokens/color/#luz-chart-grid"><code>--luz-chart-grid</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-xs</code></dd></div>
-              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-2"><code>--luz-chart-2</code></a>, <a href="/docs/tokens/color/#luz-chart-3"><code>--luz-chart-3</code></a>, <a href="/docs/tokens/color/#luz-chart-4"><code>--luz-chart-4</code></a>, <a href="/docs/tokens/color/#luz-chart-5"><code>--luz-chart-5</code></a>, <a href="/docs/tokens/color/#luz-chart-6"><code>--luz-chart-6</code></a>, <a href="/docs/tokens/color/#luz-chart-grid"><code>--luz-chart-grid</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xl</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-sm</code>, <code>--luz-text-xl</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+              <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+              <div><dt><a href="/docs/tokens/layers/">Layers</a></dt><dd><code>--luz-z-raised</code></dd></div>
             </dl>
             <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
           </div>

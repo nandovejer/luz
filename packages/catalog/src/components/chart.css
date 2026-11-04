@@ -37,7 +37,7 @@
    a fixed one takes no room in any scrolling ancestor. This rule is in the chart view
    only, so the table view and the print rules below have the table in the flow. */
 @media screen {
-	:where(luz-chart[data-luz-ready]:not([data-luz-view="table"], [data-luz-view="both"], [type="spark"]) > :is(table, .luz-table-wrap)) {
+	:where(luz-chart[data-luz-ready]:not([data-luz-view="table"], [data-luz-view="both"], [type="spark"], [type="column"]) > :is(table, .luz-table-wrap)) {
 		position: fixed;
 		inline-size: 1px;
 		block-size: 1px;
@@ -80,6 +80,7 @@ luz-chart[data-luz-view="table"] :is(.luz-chart__figure, .luz-chart__title) {
 .luz-chart__title {
 	margin: 0;
 	color: var(--luz-text-primary);
+	font-family: var(--luz-font-sans);
 	font-size: var(--luz-text-sm);
 	font-weight: 500;
 }
@@ -117,15 +118,16 @@ luz-chart[data-luz-view="table"] :is(.luz-chart__figure, .luz-chart__title) {
 
 /* One series, one colour and one mark; the colour is a token, so the mode repaints it */
 .luz-chart__series,
-.luz-chart__key {
+.luz-chart__key,
+.luz-chart__pick {
 	--luz-chart-color: var(--luz-chart-1);
 }
 
-:where(.luz-chart__series, .luz-chart__key)[data-n="2"] { --luz-chart-color: var(--luz-chart-2); }
-:where(.luz-chart__series, .luz-chart__key)[data-n="3"] { --luz-chart-color: var(--luz-chart-3); }
-:where(.luz-chart__series, .luz-chart__key)[data-n="4"] { --luz-chart-color: var(--luz-chart-4); }
-:where(.luz-chart__series, .luz-chart__key)[data-n="5"] { --luz-chart-color: var(--luz-chart-5); }
-:where(.luz-chart__series, .luz-chart__key)[data-n="6"] { --luz-chart-color: var(--luz-chart-6); }
+:where(.luz-chart__series, .luz-chart__key, .luz-chart__pick)[data-n="2"] { --luz-chart-color: var(--luz-chart-2); }
+:where(.luz-chart__series, .luz-chart__key, .luz-chart__pick)[data-n="3"] { --luz-chart-color: var(--luz-chart-3); }
+:where(.luz-chart__series, .luz-chart__key, .luz-chart__pick)[data-n="4"] { --luz-chart-color: var(--luz-chart-4); }
+:where(.luz-chart__series, .luz-chart__key, .luz-chart__pick)[data-n="5"] { --luz-chart-color: var(--luz-chart-5); }
+:where(.luz-chart__series, .luz-chart__key, .luz-chart__pick)[data-n="6"] { --luz-chart-color: var(--luz-chart-6); }
 
 .luz-chart__line,
 .luz-chart__spark path {
@@ -208,6 +210,237 @@ luz-chart[data-luz-view="table"] :is(.luz-chart__figure, .luz-chart__title) {
 	white-space: nowrap;
 }
 
+/* --- interactive (type="line" or "column") ---
+   A header of toggle buttons, one per series (.luz-chart__picker, __pick, __total:
+   the dot before a name is the button's ::before, and the name a plain span), and
+   a readout of the row under the pointer or the focus (.luz-chart__readout: a title
+   and a list of series, a plain p and ul, each series a .luz-chart__key); on a
+   line chart, the band of that row (.luz-chart__band) behind the lines. */
+:where(luz-chart[interactive]) {
+	position: relative;
+}
+
+/* Each series and its total as a large figure; the ones shown on a surface step with a line, as a tab */
+.luz-chart__picker {
+	display: flex;
+	flex-wrap: wrap;
+	margin-block-end: var(--luz-space-sm);
+	border-block-end: thin solid var(--luz-divider);
+}
+
+.luz-chart__pick {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	gap: var(--luz-space-3xs) var(--luz-space-2xs);
+	min-inline-size: calc(var(--luz-space-2xl) * 2.5);
+	margin: 0;
+	padding: var(--luz-space-xs) var(--luz-space-md);
+	border: 0;
+	border-block-end: 2px solid transparent;
+	background: none;
+	color: var(--luz-text-secondary);
+	font: inherit;
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-xs);
+	text-align: start;
+	cursor: pointer;
+	/* A long name wraps inside its button and never widens it past the page */
+	overflow-wrap: anywhere;
+}
+
+.luz-chart__pick + .luz-chart__pick {
+	border-inline-start: thin solid var(--luz-divider);
+}
+
+.luz-chart__pick:hover {
+	background-color: var(--luz-surface-hover);
+	color: var(--luz-text-primary);
+}
+
+.luz-chart__pick:focus-visible {
+	outline: 2px solid var(--luz-focus-ring);
+	outline-offset: -2px;
+}
+
+.luz-chart__pick[aria-pressed="true"] {
+	border-block-end-color: var(--luz-brand-primary);
+	background-color: var(--luz-surface-muted);
+	color: var(--luz-text-primary);
+	font-weight: 600;
+}
+
+/* The dot of a series, in the button and in the readout. Off: a hollow dot, so the state is told by a shape as well as by the weight */
+.luz-chart__pick::before,
+.luz-chart__readout .luz-chart__key::before {
+	content: "";
+	inline-size: var(--luz-space-xs);
+	block-size: var(--luz-space-xs);
+	border: 1px solid var(--luz-chart-color);
+	border-radius: var(--luz-radius-full);
+	background: var(--luz-chart-color);
+}
+
+.luz-chart__pick[aria-pressed="false"]::before {
+	background: none;
+}
+
+.luz-chart__total {
+	grid-column: 1 / -1;
+	font-family: var(--luz-font-heading);
+	font-size: var(--luz-text-xl);
+	font-weight: 300;
+	font-variant-numeric: tabular-nums;
+	line-height: 1.1;
+}
+
+/* A line chart: the header is the legend */
+luz-chart[interactive][data-luz-ready] .luz-chart__legend {
+	display: none;
+}
+
+/* The band of the row under the pointer or the focus, on a line chart */
+.luz-chart__band {
+	fill: var(--luz-surface-hover);
+}
+
+/* The figure of an interactive line chart takes the focus (the rows of its table are off screen): the ring is its own */
+.luz-chart__figure:focus-visible {
+	outline: 2px solid var(--luz-focus-ring);
+	outline-offset: 2px;
+}
+
+/* The words of the day the keys are on, for a screen reader: the status chart.js writes in the figure, off screen */
+luz-chart[data-luz-ready] .luz-chart__figure :where([role="status"]) {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* --- Inside <luz-chart type="column" interactive>, once chart.js has run ---
+	The caption is the chart's title and the header the legend: both stay for a reader.
+	The figures go to the readout and stay in their cells for a reader; a series the
+	header turned off keeps its cells, for a reader, and loses its columns. */
+luz-chart[type="column"][data-luz-ready] .luz-column-chart > :is(caption, thead),
+luz-chart[type="column"][data-luz-ready] .luz-column-chart [data-luz-off] {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* The rows share the width of the box, however many: the readout has the figures.
+	No track behind the columns: the band of the row under the pointer or the focus is
+	the only surface */
+luz-chart[type="column"][data-luz-ready] .luz-column-chart {
+	table-layout: fixed;
+}
+
+/* Many rows in a narrow box: the gaps shrink with the width, so a bar keeps some */
+luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody tr {
+	min-inline-size: 0;
+	gap: 0;
+	/* The gap shrinks with the width: an exception of DR-8, written in DESIGN.md */
+	padding-inline: min(var(--luz-space-3xs), 0.4%);
+	border-radius: var(--luz-radius-sm);
+}
+
+luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody td {
+	flex: 1 1 0;
+	min-inline-size: 0;
+	padding-inline: min(var(--luz-space-3xs) / 2, 0.2%);
+	/* The figure is read, not shown: its line takes no height and its text is out of the cell */
+	overflow: hidden;
+	line-height: 0;
+	text-indent: -100vw;
+}
+
+/* The categories' names: only those the script marks fit side by side; a name left
+	out is clipped to its row, so it takes no room past the last one */
+luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody th:not([data-luz-tick]) {
+	overflow: hidden;
+	clip-path: inset(50%);
+}
+
+/* A name wider than its row overflows both sides evenly, above the next row's band; the first starts at the edge */
+luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody th {
+	z-index: var(--luz-z-raised);
+	display: flex;
+	min-inline-size: 0;
+	justify-content: center;
+}
+
+luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody tr:first-child th {
+	justify-content: flex-start;
+}
+
+luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody tr:is(:hover, [data-luz-active]) {
+	background-color: var(--luz-surface-hover);
+}
+
+luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody tr:focus-visible {
+	outline: 2px solid var(--luz-focus-ring);
+	outline-offset: 2px;
+}
+
+/* The readout: a tooltip's surface and shadow (it floats over the chart), placed by chart.js, which writes it */
+.luz-chart__readout {
+	padding: var(--luz-space-2xs) var(--luz-space-xs);
+	border: 1px solid var(--luz-divider);
+	border-radius: var(--luz-radius-md);
+	background: var(--luz-surface-strong);
+	box-shadow: var(--luz-shadow-md);
+	color: var(--luz-text-primary);
+	font-family: var(--luz-font-sans);
+	font-size: var(--luz-text-sm);
+	white-space: nowrap;
+	pointer-events: none;
+}
+
+luz-chart[data-luz-ready] .luz-chart__readout {
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline-start: 0;
+	z-index: var(--luz-z-raised);
+}
+
+luz-chart[data-luz-ready] .luz-chart__readout[hidden] {
+	display: none;
+}
+
+.luz-chart__readout :where(p) {
+	margin: 0;
+	font-weight: 500;
+}
+
+.luz-chart__readout :where(ul) {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	align-items: center;
+	gap: 0 var(--luz-space-xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.luz-chart__readout .luz-chart__key {
+	display: contents;
+}
+
+.luz-chart__readout :where(li > :first-child) {
+	color: var(--luz-text-secondary);
+}
+
+.luz-chart__readout :where(li > :last-child) {
+	font-variant-numeric: tabular-nums;
+	text-align: end;
+}
+
 /* Forced colors flatten the palette to one: a series is told by its dashes, its mark and the legend */
 @media (forced-colors: active) {
 	.luz-chart__line,
@@ -232,6 +465,39 @@ luz-chart[data-luz-view="table"] :is(.luz-chart__figure, .luz-chart__title) {
 		fill: CanvasText;
 	}
 
+	.luz-chart__band {
+		fill: none;
+		stroke: CanvasText;
+		stroke-dasharray: 4 2;
+	}
+
+	/* With no track there is no box to edge: the fill alone */
+	luz-chart[type="column"][data-luz-ready] .luz-column-chart td::after {
+		border: 0;
+	}
+
+	/* The band of the row under the pointer or the focus: a background is Canvas here, so a dashed edge */
+	luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody tr:is(:hover, [data-luz-active]) {
+		outline: 1px dashed CanvasText;
+		outline-offset: -1px;
+	}
+
+	luz-chart[type="column"][data-luz-ready] .luz-column-chart tbody tr:focus-visible {
+		outline: 2px solid CanvasText;
+		outline-offset: 2px;
+	}
+
+	.luz-chart__pick::before,
+	.luz-chart__readout .luz-chart__key::before {
+		forced-color-adjust: none;
+		border-color: CanvasText;
+		background: CanvasText;
+	}
+
+	.luz-chart__pick[aria-pressed="false"]::before {
+		background: Canvas;
+	}
+
 	:where(.luz-chart__series, .luz-chart__key)[data-n="2"] .luz-chart__line { stroke-dasharray: 8 4; }
 	:where(.luz-chart__series, .luz-chart__key)[data-n="3"] .luz-chart__line { stroke-dasharray: 2 4; }
 	:where(.luz-chart__series, .luz-chart__key)[data-n="4"] .luz-chart__line { stroke-dasharray: 8 4 2 4; }
@@ -241,7 +507,7 @@ luz-chart[data-luz-view="table"] :is(.luz-chart__figure, .luz-chart__title) {
 
 /* On paper the table prints, and the drawing, its title and its button do not */
 @media print {
-	luz-chart[data-luz-ready] > :is(.luz-chart__bar, .luz-chart__figure) {
+	luz-chart[data-luz-ready] > :is(.luz-chart__bar, .luz-chart__figure, .luz-chart__picker, .luz-chart__readout) {
 		display: none;
 	}
 

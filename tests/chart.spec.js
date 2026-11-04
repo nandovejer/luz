@@ -120,6 +120,58 @@ test.describe('the page scripts blocked: the stylesheet alone hides nothing', ()
   });
 });
 
+/**
+ * `interactive` (tests/fixtures/chart-interactive.html; the behaviour with the script is tests/chart-interactive.spec.js): with no
+ * script the table is a plain table, complete, in the flow, with no picker, no readout, no roles and no columns, and it fits
+ * any width however many days it has. The column chart is drawn only once the script gives its table the class.
+ */
+const INTERACTIVE = '/tests/fixtures/chart-interactive.html';
+const PLAIN = [{ name: 'column', id: 'column', days: 7 }, { name: 'line', id: 'line', days: 7 }, { name: 'column28', id: 'column28', days: 28 }];
+
+async function expectPlainInteractive(page) {
+  for (const { name, id, days } of PLAIN) {
+    for (const width of [320, 360, 768, 1280]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`${INTERACTIVE}?only=${name}`);
+      const host = page.locator(`#${id}`);
+      await expect(host.locator('caption'), `${id}: the caption is a caption, in the flow`).toBeVisible();
+      await expect(host.locator('.luz-chart__picker, .luz-chart__readout, .luz-chart__title, .luz-chart__figure, button'), `${id}: no picker, no readout, no title, no drawing, no button`).toHaveCount(0);
+      await expect(host).not.toHaveAttribute('data-luz-ready', '');
+      const table = await host.locator('table').evaluate((t) => ({
+        drawn: t.classList.contains('luz-column-chart'),
+        role: t.getAttribute('role'),
+        display: getComputedStyle(t).display,
+        position: getComputedStyle(t).position,
+        touched: [...t.querySelectorAll('tr, th, td')].some((n) => n.hasAttribute('tabindex') || n.hasAttribute('role') || n.hasAttribute('aria-label') || n.hasAttribute('data-luz-off') || n.hasAttribute('data-luz-tick') || n.hasAttribute('data-luz-active')),
+      }));
+      expect(table, `${id}: a table as the author wrote it`).toEqual({ drawn: false, role: null, display: 'table', position: 'static', touched: false });
+      await expect(host.getByRole('rowheader')).toHaveCount(days);
+      await expect(host.getByRole('cell')).toHaveCount(days * 2);
+      for (const cell of await host.getByRole('cell').all()) await expect(cell, `${id}: every figure is on screen`).toBeVisible();
+      const widths = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+      expect(widths.scroll, `${id} at ${width}px: the page does not scroll sideways`).toBeLessThanOrEqual(widths.client);
+      const wrap = host.locator('.luz-table-wrap');
+      if (await wrap.count()) {
+        const inner = await wrap.evaluate((el) => ({ scroll: el.scrollWidth, client: el.clientWidth }));
+        expect(inner.scroll, `${id} at ${width}px: nor does its frame`).toBeLessThanOrEqual(inner.client + 1);
+      }
+    }
+  }
+}
+
+test.describe('interactive charts without JavaScript', () => {
+  test('the tables are plain tables that fit 320, 360 and 768 px: no picker, no readout, no roles, no columns', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium-nojs', 'the state without JavaScript');
+    await expectPlainInteractive(page);
+  });
+
+  test('with the module blocked they are the same', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'chromium-nojs', 'the project without JavaScript has the test above');
+    await page.route(/\/(packages|apps)\/.*\.js(\?.*)?$/, (route) => route.abort());
+    await expectPlainInteractive(page);
+  });
+});
+
 test.describe('chart', () => {
   test.skip(() => jsOff(), 'needs JavaScript: the state without it is above');
 

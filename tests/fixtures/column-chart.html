@@ -82,6 +82,87 @@
         </tbody>
       </table>
     </div>
+
+    <!-- A bar wider than a column's room: it is never wider than its column -->
+    <div id="frame-bar" style="inline-size:15rem;max-inline-size:100%">
+      <div class="luz-table-wrap" role="region" aria-label="Wide bars" tabindex="0">
+        <table class="luz-column-chart" id="bar" style="--luz-column-chart-bar: 10rem">
+          <caption>Bars wider than their column</caption>
+          <thead>
+            <tr><th scope="col">A</th><th scope="col">B</th><th scope="col">C</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="--v: 1">8</td><td style="--v: 0.5">4</td><td style="--v: 0.25">2</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Several series: a row per category (its name in a th scope="row") and a cell per series. The rows are laid out as boxes, so the
+         roles of the table are written out, as the docs' markup does -->
+    <div id="frame-groups" style="inline-size:30rem;max-inline-size:100%">
+      <div class="luz-table-wrap" role="region" aria-label="Visitors per month, by device" tabindex="0">
+        <table class="luz-column-chart" id="groups" role="table">
+          <caption>Visitors per month, by device, January to March</caption>
+          <thead role="rowgroup">
+            <tr role="row"><th scope="col" role="columnheader">Month</th><th scope="col" role="columnheader">Desktop</th><th scope="col" role="columnheader">Mobile</th></tr>
+          </thead>
+          <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Jan</th><td role="cell" style="--v: 1">186</td><td role="cell" style="--v: 0.25">80</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Feb</th><td role="cell" style="--v: 0.5">305</td><td role="cell" style="--v: 1">200</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Mar</th><td role="cell" style="--v: 0.74">237</td><td role="cell" style="--v: 0.4">120</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- The gap between the columns of a group is a knob -->
+    <div id="frame-gap" style="inline-size:30rem;max-inline-size:100%">
+      <div class="luz-table-wrap" role="region" aria-label="Wider gap" tabindex="0">
+        <table class="luz-column-chart" id="gap" role="table" style="--luz-column-chart-gap: 2rem">
+          <caption>A wider gap between the columns of a group</caption>
+          <thead role="rowgroup">
+            <tr role="row"><th scope="col" role="columnheader">Month</th><th scope="col" role="columnheader">Desktop</th><th scope="col" role="columnheader">Mobile</th></tr>
+          </thead>
+          <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Jan</th><td role="cell" style="--v: 1">186</td><td role="cell" style="--v: 0.25">80</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Six series, the most there are -->
+    <div id="frame-six" style="inline-size:30rem;max-inline-size:100%">
+      <div class="luz-table-wrap" role="region" aria-label="Six series" tabindex="0">
+        <table class="luz-column-chart" id="six" role="table">
+          <caption>Six series, two categories</caption>
+          <thead role="rowgroup">
+            <tr role="row"><th scope="col" role="columnheader">Step</th><th scope="col" role="columnheader">A</th><th scope="col" role="columnheader">B</th><th scope="col" role="columnheader">C</th><th scope="col" role="columnheader">D</th><th scope="col" role="columnheader">E</th><th scope="col" role="columnheader">F</th></tr>
+          </thead>
+          <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">One</th><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Two</th><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td><td role="cell" style="--v: 1">10</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Three groups of two, in a frame as wide as the window: they fit 320 px with no scroll at all -->
+    <div id="frame-small">
+      <div class="luz-table-wrap" role="region" aria-label="Visitors per month, by device, in a small frame" tabindex="0">
+        <table class="luz-column-chart" id="small" role="table">
+          <caption>Visitors per month, by device, in a small frame</caption>
+          <thead role="rowgroup">
+            <tr role="row"><th scope="col" role="columnheader">Month</th><th scope="col" role="columnheader">Desktop</th><th scope="col" role="columnheader">Mobile</th></tr>
+          </thead>
+          <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Jan</th><td role="cell" style="--v: 0.6">186</td><td role="cell" style="--v: 0.25">80</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Feb</th><td role="cell" style="--v: 0.95">305</td><td role="cell" style="--v: 0.6">200</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Mar</th><td role="cell" style="--v: 0.7">237</td><td role="cell" style="--v: 0.4">120</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </main>
 </body>
 </html>
