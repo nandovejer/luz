@@ -7,7 +7,7 @@ An app is a web application: a dashboard, a back office, a tool the person signs
 3. What the data comes from (an API, a store) and who renders it (server or client). LUZ is the markup either way.
 4. The empty, loading and error states of each view: what each says.
 
-Start from this skeleton. `luz-nav-toggle` needs `{{nav-toggle-css}}`. A menu is a `luz-dropdown` with a `popover`; `luz-btn` goes on a `button` or an `a`, not a `summary`. Data views (bar list, column chart, stacked bar, heat map, line chart `<luz-chart>`) each keep a native table or list. A part of a stacked bar, column chart or heat map is sized by `style="--v: 62"`, the one `style` allowed.
+Start from this skeleton. `luz-nav-toggle` needs `{{nav-toggle-css}}`. A menu is a `luz-dropdown` with a `popover`; `luz-btn` goes on a `button` or an `a`, not a `summary`. Data views (bar list, column chart, stacked bar, heat map, line chart `<luz-chart>`) each keep a native table or list. A stacked bar part is sized by `style="--v: 62"`, a column or heat map cell by `--v: 0.8` (0 to 1): the one `style` allowed.
 
 ```html
 <body>
