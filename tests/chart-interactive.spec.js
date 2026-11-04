@@ -13,7 +13,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 import { MODES } from './helpers/design-tokens.js';
 import { paintOf } from './helpers/pixels.js';
-import { sideways } from './helpers/chart-probes.js';
+import { ratio as ratioOf, sideways } from './helpers/chart-probes.js';
 import { settled } from './helpers/settle.js';
 
 const PAGE = '/tests/fixtures/chart-interactive.html';
@@ -52,6 +52,23 @@ const boxOf = (locator) => locator.evaluate((el) => {
   return { left: b.left, right: b.right, top: b.top, bottom: b.bottom, width: b.width, height: b.height };
 });
 const focusedRow = (page, host) => host.locator('tbody tr').evaluateAll((rows) => rows.indexOf(/** @type {any} */ (document.activeElement)));
+/**
+ * What takes the focus: the first row for a column chart (its rows are on screen), the figure for a line chart (its rows are hidden,
+ * so the figure is the one Tab stop and a live region says the label of the day the arrows reach).
+ */
+const stopOf = (host, kind) => (kind === 'column' ? host.locator('tbody tr').first() : host.locator('.luz-chart__figure'));
+/** The day that has the focus: the focused row, or the active day (data-luz-active) of the focused figure; -2 when the focus is not on the stop. */
+const dayOf = (page, host, kind) => (kind === 'column' ? focusedRow(page, host) : host.locator('.luz-chart__figure').evaluate((figure) => {
+  if (document.activeElement !== figure) return -2;
+  return [...(figure.closest('luz-chart')?.querySelectorAll('tbody tr') ?? [])].findIndex((r) => r.hasAttribute('data-luz-active'));
+}));
+/** The visually hidden live region of the figure of a line chart: it says the label of the day the arrows reach. */
+const statusOf = (host) => host.locator('.luz-chart__figure [role="status"]');
+/** Show a day from the keyboard: the focus goes to the stop, then the arrow moves `index` days on. */
+async function showDay(page, host, kind, index) {
+  await stopOf(host, kind).focus();
+  for (let i = 0; i < index; i++) await page.keyboard.press('ArrowRight');
+}
 /** The number of `keydown` listeners the page has on `document` (see the init script of the tests that read it). */
 const documentKeydowns = (page) => page.evaluate(() => /** @type {any} */ (window).__documentKeydown());
 
@@ -124,36 +141,66 @@ for (const { kind, id } of KINDS) {
       await expect(host.locator('tr > :nth-child(3)[data-luz-off]')).toHaveCount(0);
     });
 
-    test('the rows are one Tab stop: Tab reaches the first row, Tab again leaves the chart, and the arrows, Home and End move between them', async ({ page }) => {
+    test('there is one Tab stop, and the arrows, Home and End move between the days: the first row of a column chart, the figure of a line chart, whose live region says the day', async ({ page }) => {
       const host = page.locator(`#${id}`);
       const rows = host.locator('tbody tr');
+      const stop = stopOf(host, kind);
       await expect(rows).toHaveCount(7);
-      expect(await rows.evaluateAll((all) => all.filter((r) => /** @type {any} */ (r).tabIndex === 0).length), 'one row is in the Tab order').toBe(1);
+      if (kind === 'column') {
+        expect(await rows.evaluateAll((all) => all.filter((r) => /** @type {any} */ (r).tabIndex === 0).length), 'one row is in the Tab order').toBe(1);
+      } else {
+        // The rows of a line chart are hidden: none takes the focus, and the figure is the only stop
+        expect(await rows.evaluateAll((all) => all.filter((r) => /** @type {any} */ (r).tabIndex >= 0 || r.hasAttribute('tabindex')).length), 'no row takes the focus').toBe(0);
+        const figure = await stop.evaluate((el) => ({ role: el.getAttribute('role'), tabindex: el.getAttribute('tabindex'), hidden: el.getAttribute('aria-hidden'), labelledby: el.getAttribute('aria-labelledby') }));
+        expect(figure).toMatchObject({ role: 'group', tabindex: '0', hidden: null });
+        await expect(stop, 'named by the caption').toHaveAccessibleName(/^Visitors per day, April 1 to 7/);
+        expect(await stop.evaluate((el) => [...el.querySelectorAll(':scope > svg, :scope > ul')].map((n) => n.getAttribute('aria-hidden'))), 'the drawing and the legend inside it are not read').toEqual(['true', 'true']);
+        expect(await stop.evaluate((el) => el.hasAttribute('aria-activedescendant')), 'it points at no row: the rows are not focusable').toBe(false);
+        // A polite live region inside it, out of sight, says the day: no aria-hidden on it or on the figure
+        const status = statusOf(host);
+        await expect(status).toHaveCount(1);
+        expect(await status.evaluate((el) => ({ hidden: el.closest('[aria-hidden="true"]') !== null, live: el.getAttribute('aria-live'), box: el.getBoundingClientRect().width * el.getBoundingClientRect().height, clip: getComputedStyle(el).clipPath, display: getComputedStyle(el).display, visibility: getComputedStyle(el).visibility })), 'read by a screen reader and not seen').toMatchObject({ hidden: false, display: expect.not.stringMatching(/^none$/), visibility: 'visible' });
+        expect(await status.evaluate((el) => el.getAttribute('aria-live') ?? 'polite'), 'polite').toBe('polite');
+        const look = await status.evaluate((el) => { const b = el.getBoundingClientRect(); return { w: b.width, h: b.height, clip: getComputedStyle(el).clipPath }; });
+        expect(look.clip !== 'none' || (look.w <= 1.5 && look.h <= 1.5), 'visually hidden: clipped or one pixel').toBe(true);
+        await expect(status, 'empty until the figure has the focus').toHaveText('');
+      }
       await host.locator('.luz-chart__pick').last().focus();
       await page.keyboard.press('Tab');
-      await expect(rows.nth(0), 'the table\'s frame is no Tab stop between the header and the rows').toBeFocused();
+      await expect(stop, 'the table\'s frame is no Tab stop between the header and the chart').toBeFocused();
+      expect(await dayOf(page, host, kind)).toBe(0);
       await page.keyboard.press('ArrowRight');
-      expect(await focusedRow(page, host)).toBe(1);
-      expect(await rows.evaluateAll((all) => all.map((r) => /** @type {any} */ (r).tabIndex)), 'the Tab stop moves with the focus').toEqual([-1, 0, -1, -1, -1, -1, -1]);
+      expect(await dayOf(page, host, kind)).toBe(1);
+      if (kind === 'column') expect(await rows.evaluateAll((all) => all.map((r) => /** @type {any} */ (r).tabIndex)), 'the Tab stop moves with the focus').toEqual([-1, 0, -1, -1, -1, -1, -1]);
+      else await expect(statusOf(host), 'the live region says the day, as the row is named').toHaveText(LABELS[1]);
       await page.keyboard.press('ArrowDown');
-      expect(await focusedRow(page, host)).toBe(2);
+      expect(await dayOf(page, host, kind)).toBe(2);
+      if (kind === 'line') await expect(statusOf(host)).toHaveText(LABELS[2]);
       await page.keyboard.press('ArrowUp');
-      expect(await focusedRow(page, host)).toBe(1);
+      expect(await dayOf(page, host, kind)).toBe(1);
+      if (kind === 'line') await expect(statusOf(host)).toHaveText(LABELS[1]);
       await page.keyboard.press('End');
-      expect(await focusedRow(page, host)).toBe(6);
+      expect(await dayOf(page, host, kind)).toBe(6);
+      if (kind === 'line') await expect(statusOf(host)).toHaveText(LABELS[6]);
       await page.keyboard.press('Home');
-      expect(await focusedRow(page, host)).toBe(0);
+      expect(await dayOf(page, host, kind)).toBe(0);
+      if (kind === 'line') await expect(statusOf(host)).toHaveText(LABELS[0]);
       await page.keyboard.press('ArrowLeft');
-      expect(await focusedRow(page, host), 'Left goes back (the page is left to right)').toBe(0);
+      expect(await dayOf(page, host, kind), 'Left goes back (the page is left to right)').toBe(0);
       await page.keyboard.press('ArrowRight');
       await page.keyboard.press('ArrowRight');
-      expect(await focusedRow(page, host)).toBe(2);
+      expect(await dayOf(page, host, kind)).toBe(2);
       await page.keyboard.press('ArrowLeft');
-      expect(await focusedRow(page, host)).toBe(1);
+      expect(await dayOf(page, host, kind)).toBe(1);
       await page.keyboard.press('Tab');
       await expect(page.locator('#after'), 'the next Tab leaves the chart').toBeFocused();
+      if (kind === 'line') {
+        await expect(statusOf(host), 'emptied when the figure loses the focus').toHaveText('');
+        expect(await stop.evaluate((el) => el.hasAttribute('aria-activedescendant'))).toBe(false);
+      }
       await page.keyboard.press('Shift+Tab');
-      await expect(rows.nth(1), 'Shift+Tab comes back to the row that was the Tab stop').toBeFocused();
+      await expect(kind === 'column' ? rows.nth(1) : stop, 'Shift+Tab comes back to the Tab stop').toBeFocused();
+      if (kind === 'column') expect(await dayOf(page, host, kind), 'on the day it left').toBe(1);
       await page.keyboard.press('Shift+Tab');
       await expect(host.locator('.luz-chart__pick').last()).toBeFocused();
     });
@@ -211,27 +258,32 @@ for (const { kind, id } of KINDS) {
       expect(r.right, 'inside the chart, at the end').toBeLessThanOrEqual(hostBox.right + EPS);
     });
 
-    test('Escape puts the readout away and takes the band off while the focus stays in the row, with no preventDefault; another row brings it back', async ({ page }) => {
+    test('Escape puts the readout away and takes the band off while the focus stays where it is (the row, or the figure of a line), with no preventDefault; another day brings it back', async ({ page }) => {
       const host = page.locator(`#${id}`);
       const rows = host.locator('tbody tr');
       const readout = host.locator('.luz-chart__readout');
       const band = kind === 'line' ? host.locator('rect.luz-chart__band') : host.locator('tbody tr[data-luz-active]');
-      await rows.nth(1).focus();
+      await showDay(page, host, kind, 1);
+      expect(await dayOf(page, host, kind)).toBe(1);
       await expect(readout).toBeVisible();
       await expect(band).toHaveCount(1);
+      if (kind === 'line') await expect(statusOf(host)).toHaveText(LABELS[1]);
       await page.keyboard.press('Escape');
       await expect(readout).toBeHidden();
       await expect(band, 'no band, no active day').toHaveCount(0);
       await expect(host.locator('[data-luz-active]')).toHaveCount(0);
-      await expect(rows.nth(1), 'the focus stays').toBeFocused();
+      await expect(kind === 'column' ? rows.nth(1) : stopOf(host, kind), 'the focus stays').toBeFocused();
+      // the status is not said twice: Escape leaves its text as it is
+      if (kind === 'line') await expect(statusOf(host), 'Escape does not make it announce again').toHaveText(LABELS[1]);
       await page.keyboard.press('ArrowRight');
+      if (kind === 'line') await expect(statusOf(host)).toHaveText(LABELS[2]);
       await expect(readout, 'it comes back on another row').toBeVisible();
       await expect(readout).toContainText('Apr 3');
       await expect(band).toHaveCount(1);
       // the keydown is not cancelled: an Escape that closes a dialog around the chart still does
-      const prevented = await rows.nth(2).evaluate((row) => {
+      const prevented = await page.evaluate(() => {
         const event = new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
-        row.dispatchEvent(event);
+        document.activeElement?.dispatchEvent(event);
         return event.defaultPrevented;
       });
       expect(prevented).toBe(false);
@@ -336,10 +388,9 @@ for (const { kind, id } of KINDS) {
       });
       await open(page, kind, id);
       const host = page.locator(`#${id}`);
-      const rows = host.locator('tbody tr');
       const readout = host.locator('.luz-chart__readout');
       const before = await documentKeydowns(page);
-      await rows.nth(0).focus();
+      await stopOf(host, kind).focus();
       await expect(readout).toBeVisible();
       expect(await documentKeydowns(page), 'listening while it shows').toBe(before + 1);
       await page.keyboard.press('Escape');
@@ -494,13 +545,17 @@ test.describe('right to left', () => {
 
   test('the plot of a line is always left to right: Right goes to the next day, whatever the page', async ({ page }) => {
     const host = page.locator('#line-rtl');
-    await host.locator('tbody tr').nth(0).focus();
+    await stopOf(host, 'line').focus();
+    expect(await dayOf(page, host, 'line')).toBe(0);
     await page.keyboard.press('ArrowRight');
-    expect(await focusedRow(page, host)).toBe(1);
+    expect(await dayOf(page, host, 'line')).toBe(1);
+    await expect(statusOf(host)).toHaveText(LABELS[1]);
     await page.keyboard.press('ArrowRight');
-    expect(await focusedRow(page, host)).toBe(2);
+    expect(await dayOf(page, host, 'line')).toBe(2);
+    await expect(statusOf(host)).toHaveText(LABELS[2]);
     await page.keyboard.press('ArrowLeft');
-    expect(await focusedRow(page, host)).toBe(1);
+    expect(await dayOf(page, host, 'line')).toBe(1);
+    await expect(statusOf(host)).toHaveText(LABELS[1]);
     const x = (i) => host.locator('.luz-chart__tick').evaluateAll((all, name) => all.find((t) => t.textContent?.trim() === name)?.getBoundingClientRect().left ?? NaN, `Apr ${i}`);
     const [a, b] = [await x(1), await x(3)];
     if (Number.isFinite(a) && Number.isFinite(b)) expect(a, 'Apr 1 is at the left of Apr 3').toBeLessThan(b);
@@ -544,7 +599,7 @@ test.describe('forced colors', () => {
   test('line: the band is a dashed outline in the text colour, with no fill', async ({ page }) => {
     await open(page, 'line', 'line');
     const host = page.locator('#line');
-    await host.locator('tbody tr').nth(2).focus();
+    await showDay(page, host, 'line', 2);
     const band = host.locator('rect.luz-chart__band');
     await expect(band).toHaveCount(1);
     const look = await band.evaluate((rect) => {
@@ -565,7 +620,7 @@ test.describe('axe', () => {
         await page.evaluate((m) => { document.documentElement.dataset.theme = m; }, mode);
         const host = page.locator(`#${id}`);
         await host.locator('.luz-chart__pick').nth(1).click();
-        await host.locator('tbody tr').nth(2).focus();
+        await showDay(page, host, id === 'column' ? 'column' : 'line', 2);
         await expect(host.locator('.luz-chart__readout')).toBeVisible();
         await settled(page);
         const { violations } = await new AxeBuilder({ page }).withTags(WCAG).analyze();
@@ -584,6 +639,42 @@ test.describe('axe', () => {
         await settled(page);
         const { violations } = await new AxeBuilder({ page }).withTags(WCAG).analyze();
         expect(violations.filter((v) => ['serious', 'critical'].includes(v.impact ?? '')).map((v) => v.id)).toEqual([]);
+      });
+    }
+  }
+});
+
+test.describe('RL-5: the focused element draws its own ring', () => {
+  for (const { kind, id } of KINDS) {
+    for (const mode of MODES) {
+      test(`${kind}: the element that has the focus changes its own outline to 2px or more, 3:1 against what is behind it, in ${mode}`, async ({ page }) => {
+        await open(page, kind, id);
+        await page.evaluate((m) => { document.documentElement.dataset.theme = m; }, mode);
+        await settled(page);
+        const host = page.locator(`#${id}`);
+        const stop = stopOf(host, kind);
+        const ring = () => stop.evaluate((el) => {
+          const s = getComputedStyle(el);
+          // what is behind the ring: the first ancestor with a background, else the page's canvas
+          let behind = 'rgb(255, 255, 255)';
+          for (let n = el.parentElement; n; n = n.parentElement) {
+            const bg = getComputedStyle(n).backgroundColor;
+            if (bg && !/rgba\(\s*0,\s*0,\s*0,\s*0\s*\)|transparent/.test(bg)) { behind = bg; break; }
+          }
+          return { focused: document.activeElement === el, style: s.outlineStyle, width: parseFloat(s.outlineWidth) || 0, color: s.outlineColor, behind };
+        });
+        const before = await ring();
+        expect(before.focused).toBe(false);
+        expect(before.style === 'none' || before.width === 0, 'no ring before the focus').toBe(true);
+        // keyboard modality, so :focus-visible applies
+        await host.locator('.luz-chart__pick').last().focus();
+        await page.keyboard.press('Tab');
+        const after = await ring();
+        expect(after.focused, 'the stop itself has the focus').toBe(true);
+        expect(after.style).not.toBe('none');
+        expect(after.width, 'a ring of 2px at least').toBeGreaterThanOrEqual(2);
+        expect(ratioOf(rgb(after.color), rgb(after.behind)), 'against what is behind it').toBeGreaterThanOrEqual(3);
+        expect(rgb(after.color), 'in the focus-ring token').toEqual(await paintOf(page, 'var(--luz-focus-ring)', host));
       });
     }
   }
