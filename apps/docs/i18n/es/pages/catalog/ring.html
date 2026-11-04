@@ -2,7 +2,7 @@
 title: Anillo
 description: Muestra un valor frente a una meta, o las partes de un total, como medio anillo sobre la cifra que lo dice.
 fits: un panel que muestra el avance hacia una meta o cómo se reparte un total
-source: d043fe429b7a
+source: 33ebe3231e66
 reviewed: false
 -->
     <div class="docs-component" id="p-ring">
@@ -45,7 +45,7 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copiar el marcado</h3>
-            <p>Una hoja de estilos de <code>@luz-ds/catalog</code>: enlaza <code>components/ring.css</code> después de <code>luz.css</code>. Un valor frente a una meta:</p>
+            <p>Enlaza <code>components/ring.css</code> de <code>@luz-ds/catalog</code> después de <code>luz.css</code>. Un valor frente a una meta:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -59,7 +59,7 @@ reviewed: false
   &lt;/p&gt;
 &lt;/figure&gt;</code></pre>
             </div>
-            <p>Dos o más series que suman un total, con una leyenda:</p>
+            <p>Series que suman un total, con una leyenda:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -84,30 +84,30 @@ reviewed: false
                   <tr><th scope="col">Opción</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Opción"><div><code>--v1</code></div></td><td data-label="Efecto"><div>En la figura, el valor de la primera serie, como un número simple: 1260, no 1.260. <code>--v2</code> a <code>--v4</code> son las series siguientes, hasta cuatro, en el orden de la leyenda</div></td></tr>
-                  <tr><td data-label="Opción"><div><code>--max</code></div></td><td data-label="Efecto"><div>La meta de la que los valores son una parte. Sin ella, o cuando las series suman más, las series llenan el anillo</div></td></tr>
-                  <tr><td data-label="Opción"><div><code>--luz-ring-size</code></div></td><td data-label="Efecto"><div>El ancho máximo del medio anillo, 18rem por defecto; se reduce al ancho de su caja</div></td></tr>
-                  <tr><td data-label="Opción"><div><code>--luz-ring-color</code></div></td><td data-label="Efecto"><div>Otro color para la primera serie, como <code>var(--luz-chart-5)</code>; las demás conservan de <code>--luz-chart-2</code> a <code>--luz-chart-4</code></div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--v1</code></div></td><td data-label="Efecto"><div>La primera serie, un número simple (1260, no 1.260). <code>--v2</code> a <code>--v4</code> añaden hasta tres más, en el orden de la leyenda</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--max</code></div></td><td data-label="Efecto"><div>La meta. Sin ella, o cuando las series suman más, llenan el anillo</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-ring-size</code></div></td><td data-label="Efecto"><div>Lo más ancho que llega el medio anillo, 18rem por defecto; se reduce a su caja</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-ring-color</code></div></td><td data-label="Efecto"><div>El color de la primera serie, como <code>var(--luz-chart-5)</code>; las demás conservan de <code>--luz-chart-2</code> a <code>--luz-chart-4</code></div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>Una figura con su título, la cifra y su etiqueta en un párrafo y, para las series, una leyenda. El texto son los datos. El anillo es un dibujo de ellos, hecho por los dos pseudoelementos del párrafo, medio anillo sobre la cifra: uno pinta la pista y el otro las series, cada uno recortado en una banda por una máscara, de modo que la tecnología de apoyo nunca lo encuentra.</p>
-            <p>Cada serie toma su parte del recorrido: su <code>--v</code> sobre <code>--max</code>, o sobre la suma de los valores cuando no hay <code>--max</code>. Las series toman de <code>--luz-chart-1</code> a <code>--luz-chart-4</code> en orden, los colores de las muestras de la leyenda. El anillo es medio anillo, con una banda del grosor aproximado de la barra de una lista de barras y los extremos cortados en recto. Corre desde la izquierda, en el sentido de las agujas del reloj, en todos los idiomas, como un reloj. El <code>style</code> en línea solo da números; con un <code>style-src</code> estricto, ponlos en una regla propia.</p>
-            <p>La figura es un contenedor de tamaño: cuando es más estrecha que 14em, en una columna estrecha o con un tamaño de texto grande, el texto pasa debajo del arco en lugar de ir dentro. En papel el anillo se omite y se imprime el texto.</p>
+            <p>El texto son los datos: el título, la cifra y su etiqueta y, para las series, una leyenda. El anillo es un dibujo de ellos, hecho por los dos pseudoelementos del párrafo (la pista y las series, cada uno recortado en una banda por una máscara), de modo que la tecnología de apoyo nunca lo encuentra.</p>
+            <p>Cada serie toma su <code>--v</code> sobre <code>--max</code>, o sobre la suma de los valores si no hay <code>--max</code>, y de <code>--luz-chart-1</code> a <code>--luz-chart-4</code> en orden, los colores de las muestras de la leyenda. Corre desde la izquierda, en el sentido de las agujas del reloj, en todos los idiomas, como un reloj. El <code>style</code> en línea solo da números; con un <code>style-src</code> estricto, ponlos en una regla propia.</p>
+            <p>La figura es un contenedor de tamaño: por debajo de 14em el texto pasa debajo del arco, no dentro. En papel el anillo se omite y se imprime el texto.</p>
             <h3 id="no-js">Sin JavaScript</h3>
-            <p>No lo necesita. Sin la hoja de estilos la figura se lee como su título, la cifra con su etiqueta y la leyenda, una lista de nombres y cifras; no hay anillo.</p>
+            <p>No lo necesita. Sin la hoja de estilos se lee como su título, la cifra con su etiqueta y la leyenda; no hay anillo.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
-            <p>Nada recibe el foco y no hay ARIA: el anillo lo dibujan pseudoelementos sin texto, así que un lector de pantalla lee el título, la cifra, su etiqueta y la leyenda, en ese orden. Escribe la meta en la etiqueta («de 2000 visitas»), porque el anillo solo no la dice.</p>
-            <p>En colores forzados la pista es el fondo, así que los huecos entre las series también lo son; las series y las muestras de la leyenda toman los mismos colores del sistema, y cada muestra enseña el número de su serie, en el orden del anillo desde la izquierda.</p>
+            <p>Nada recibe el foco y no hay ARIA: un lector de pantalla lee el título, la cifra, su etiqueta y la leyenda, en ese orden. Escribe la meta en la etiqueta («de 2000 visitas»): el anillo solo no la dice.</p>
+            <p>En colores forzados la pista es el fondo, así que los huecos entre series también lo son; las series y las muestras toman los mismos colores del sistema, y cada muestra enseña el número de su serie.</p>
             <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
           </div>
           <div class="luz-tabpanel docs-view" id="design-panel">
             <h2 class="docs-view__title" id="design">Diseño</h2>
             <h3 id="when">Cuándo usarlo</h3>
-            <p>Úsalo en un panel para mostrar cuánto falta a un valor para su meta (una cuota, un presupuesto, un límite de almacenamiento), o cómo se reparte un total en dos o tres partes, cuando la cifra es lo importante y el anillo una ojeada a ella.</p>
+            <p>Úsalo en un panel para cuánto falta a un valor para su meta (una cuota, un presupuesto, un límite de almacenamiento), o cómo se reparte un total en dos o tres partes, cuando la cifra es lo importante y el anillo una ojeada a ella.</p>
             <h3 id="when-not">Cuándo no usarlo</h3>
-            <p>No lo uses para comparar valores entre sí (usa una <a href="/docs/catalog/bar-list/">lista de barras</a> o un <a href="/docs/catalog/column-chart/">gráfico de columnas</a>: una longitud se lee mejor que un ángulo), para más de cuatro series (usa una <a href="/docs/catalog/stacked-bar/">barra apilada</a>) ni para un valor en un texto corrido o en un formulario (usa un <a href="/docs/components/meter/">medidor</a>).</p>
+            <p>No lo uses para comparar valores (usa una <a href="/docs/catalog/bar-list/">lista de barras</a> o un <a href="/docs/catalog/column-chart/">gráfico de columnas</a>: una longitud se lee mejor que un ángulo), para más de cuatro series (usa una <a href="/docs/catalog/stacked-bar/">barra apilada</a>) ni para un valor en un texto corrido o en un formulario (usa un <a href="/docs/components/meter/">medidor</a>).</p>
             <h3 id="do-dont">Qué hacer y qué no</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
@@ -136,7 +136,7 @@ reviewed: false
               </figure>
             </div>
             <h3 id="content">Cómo escribir el contenido</h3>
-            <p>Indica qué se cuenta y el periodo en el título («Visitas este mes»), escribe la cifra como se lee, con sus separadores, y di la meta o la unidad en la etiqueta. Mantén los nombres de la leyenda en una o dos palabras. Los datos y las etiquetas son tuyos: el componente solo los dibuja.</p>
+            <p>Indica qué se cuenta y el periodo en el título («Visitas este mes»), escribe la cifra como se lee, con sus separadores, y di la meta o la unidad en la etiqueta. Mantén los nombres de la leyenda en una o dos palabras.</p>
             <h3 id="contrast">Contraste y foco</h3>
             <p>Cada serie es un color de gráfico sobre la superficie y sobre la pista; la pista es decorativa, porque la cifra dice el valor.</p>
             <div class="luz-table-wrap" role="region" aria-label="Contraste del anillo en cada modo" tabindex="0">

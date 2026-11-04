@@ -49,7 +49,7 @@ toc: h2,h3
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Code</h2>
             <h3 id="markup">Copy the markup</h3>
-            <p>A stylesheet of <code>@luz-ds/catalog</code>: link <code>components/ring.css</code> after <code>luz.css</code>. One value over a goal:</p>
+            <p>Link <code>components/ring.css</code> of <code>@luz-ds/catalog</code> after <code>luz.css</code>. One value over a goal:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -63,7 +63,7 @@ toc: h2,h3
   &lt;/p&gt;
 &lt;/figure&gt;</code></pre>
             </div>
-            <p>Two or more series that add up to a total, with a legend:</p>
+            <p>Series that add up to a total, with a legend:</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
                 <span class="docs-snippet__lang">HTML</span>
@@ -88,30 +88,30 @@ toc: h2,h3
                   <tr><th scope="col">Option</th><th scope="col">Effect</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Option"><div><code>--v1</code></div></td><td data-label="Effect"><div>On the figure, the value of the first series, as a plain number: 1260, not 1,260. <code>--v2</code> to <code>--v4</code> are the next series, up to four, in the order of the legend</div></td></tr>
-                  <tr><td data-label="Option"><div><code>--max</code></div></td><td data-label="Effect"><div>The goal the values are a part of. Without it, or when the series add up to more, the series fill the ring</div></td></tr>
-                  <tr><td data-label="Option"><div><code>--luz-ring-size</code></div></td><td data-label="Effect"><div>The largest width of the half ring, 18rem by default; it shrinks to the width of its box</div></td></tr>
-                  <tr><td data-label="Option"><div><code>--luz-ring-color</code></div></td><td data-label="Effect"><div>Another colour for the first series, such as <code>var(--luz-chart-5)</code>; the others keep <code>--luz-chart-2</code> to <code>--luz-chart-4</code></div></td></tr>
+                  <tr><td data-label="Option"><div><code>--v1</code></div></td><td data-label="Effect"><div>The first series, a plain number (1260, not 1,260). <code>--v2</code> to <code>--v4</code> add up to three more, in the order of the legend</div></td></tr>
+                  <tr><td data-label="Option"><div><code>--max</code></div></td><td data-label="Effect"><div>The goal. Without it, or when the series add up to more, they fill the ring</div></td></tr>
+                  <tr><td data-label="Option"><div><code>--luz-ring-size</code></div></td><td data-label="Effect"><div>The widest the half ring gets, 18rem by default; it shrinks to its box</div></td></tr>
+                  <tr><td data-label="Option"><div><code>--luz-ring-color</code></div></td><td data-label="Effect"><div>The colour of the first series, such as <code>var(--luz-chart-5)</code>; the others keep <code>--luz-chart-2</code> to <code>--luz-chart-4</code></div></td></tr>
                 </tbody>
               </table>
             </div>
             <h3 id="how">How it works</h3>
-            <p>A figure with its caption, the figure and its label in a paragraph, and, for series, a legend. The text is the data. The ring is a picture of it, drawn by the paragraph's two pseudo-elements, half a ring over the figure: one paints the track, the other the series, each cut to a band by a mask, so assistive technology never meets it.</p>
-            <p>Each series takes its share of the sweep: its <code>--v</code> over <code>--max</code>, or over the sum of the values when there is no <code>--max</code>. The series take <code>--luz-chart-1</code> to <code>--luz-chart-4</code> in order, the colours of the legend's swatches. The ring is half a ring, its band about the weight of a bar list's bar, its ends cut square. It runs from the left, clockwise, in every language, as a clock does. The inline <code>style</code> sets only numbers; with a strict <code>style-src</code>, set them in a rule of your own.</p>
-            <p>The figure is a size container: when it is narrower than 14em, in a narrow column or at a large text size, the text goes under the arc instead of inside it. On paper the ring is left out and the text prints.</p>
+            <p>The text is the data: the caption, the figure and its label, and for series a legend. The ring is a picture of it, drawn by the two pseudo-elements of the paragraph (the track and the series, each cut to a band by a mask), so assistive technology never meets it.</p>
+            <p>Each series takes its <code>--v</code> over <code>--max</code>, or over the sum of the values with no <code>--max</code>, and <code>--luz-chart-1</code> to <code>--luz-chart-4</code> in order, the colours of the legend's swatches. It runs from the left, clockwise, in every language, as a clock does. The inline <code>style</code> sets only numbers; with a strict <code>style-src</code>, set them in a rule of your own.</p>
+            <p>The figure is a size container: under 14em the text goes under the arc, not inside it. On paper the ring is left out and the text prints.</p>
             <h3 id="no-js">Without JavaScript</h3>
-            <p>It needs none. Without the stylesheet the figure reads as its caption, the figure and its label, and the legend, a list of names and figures; there is no ring.</p>
+            <p>It needs none. Without the stylesheet it reads as its caption, the figure and its label, and the legend; there is no ring.</p>
             <h3 id="keyboard">Keyboard and ARIA</h3>
-            <p>Nothing takes focus and there is no ARIA: the ring is drawn by pseudo-elements with no text, so a screen reader reads the caption, the figure, its label and the legend, in that order. Write the goal into the label (“of 2,000 visitors”), since the ring alone does not say it.</p>
-            <p>In forced colors the track is the background, so the gaps between the series are too; the series and the swatches of the legend take the same system colours, and each swatch shows the number of its series, in the order of the ring from the left.</p>
+            <p>Nothing takes focus and there is no ARIA: a screen reader reads the caption, the figure, its label and the legend, in that order. Write the goal into the label (“of 2,000 visitors”): the ring alone does not say it.</p>
+            <p>In forced colors the track is the background, so the gaps between series are too; the series and the swatches take the same system colours, and each swatch shows its series number.</p>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
           <div class="luz-tabpanel docs-view" id="design-panel">
             <h2 class="docs-view__title" id="design">Design</h2>
             <h3 id="when">When to use</h3>
-            <p>Use it in a panel to show how far one value is to its goal (a quota, a budget, a storage limit), or how one total is split into two or three parts, when the figure is the point and the ring a glance at it.</p>
+            <p>Use it in a panel for how far one value is to its goal (a quota, a budget, a storage limit), or how a total splits in two or three parts, when the figure is the point and the ring a glance at it.</p>
             <h3 id="when-not">When not to use</h3>
-            <p>Do not use it to compare values with each other (use a <a href="/docs/catalog/bar-list/">bar list</a> or a <a href="/docs/catalog/column-chart/">column chart</a>: a length is read better than an angle), for more than four series (use a <a href="/docs/catalog/stacked-bar/">stacked bar</a>), or for a value in running text or a form (use a <a href="/docs/components/meter/">meter</a>).</p>
+            <p>Do not use it to compare values (use a <a href="/docs/catalog/bar-list/">bar list</a> or a <a href="/docs/catalog/column-chart/">column chart</a>: a length reads better than an angle), for more than four series (use a <a href="/docs/catalog/stacked-bar/">stacked bar</a>), or for a value in running text or a form (use a <a href="/docs/components/meter/">meter</a>).</p>
             <h3 id="do-dont">Do and don't</h3>
             <div class="luz-do-dont">
               <figure class="luz-do-dont__item luz-do-dont__item--do">
@@ -140,7 +140,7 @@ toc: h2,h3
               </figure>
             </div>
             <h3 id="content">Writing the content</h3>
-            <p>Name what is counted and the period in the caption (“Visitors this month”), write the figure as it is read, with its separators, and say the goal or the unit in the label. Keep the names of the legend to a word or two. The data and the labels are yours: the component only draws them.</p>
+            <p>Name what is counted and the period in the caption (“Visitors this month”), write the figure as it is read, with its separators, and say the goal or the unit in the label. Keep legend names to a word or two.</p>
             <h3 id="contrast">Contrast and focus</h3>
             <p>Each series is a chart colour on the surface and on the track; the track is decorative, because the figure says the value.</p>
             <div class="luz-table-wrap" role="region" aria-label="Ring contrast in each mode" tabindex="0">
