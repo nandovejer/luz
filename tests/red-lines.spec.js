@@ -329,8 +329,22 @@ for (const app of APPS) {
             ['disabled', 'button:disabled, input:disabled, select:disabled, textarea:disabled', (p) => !p.matches(':disabled')],
           ];
           // A visually hidden radio or checkbox shows its state on its label
+          // An invisible button that fills its container (a veil shown on hover) shows its state on that container: it is
+          // the face the user sees, and its box is compared in place of the button's own
+          const fills = (el) => {
+            const box = el.getBoundingClientRect();
+            const outer = el.parentElement?.getBoundingClientRect();
+            // (inside the container's border: it covers all but a few pixels of it)
+            return !!outer && box.width >= outer.width * 0.95 && box.height >= outer.height * 0.95;
+          };
           const face = (el) =>
-            el.matches('input') && el.closest('label') && getComputedStyle(el).opacity === '0' ? el.closest('label') : el;
+            el.matches('input') && el.closest('label') && getComputedStyle(el).opacity === '0'
+              ? el.closest('label')
+              : el.matches('button') && getComputedStyle(el).opacity === '0' && fills(el)
+                ? el.parentElement
+                : el;
+          // What the face shows: its shape, and its own fill when it is a container standing in for the control
+          const look = (el) => `${shape(face(el))}|${face(el) === el ? '-' : getComputedStyle(face(el)).backgroundColor}`;
           const kind = (el) => `${el.tagName}|${el.type ?? ''}|${[...el.classList].filter((c) => !/^is-|--error$/.test(c)).sort().join('.')}`;
           const offenders = [];
           for (const [name, selector, isPeer] of STATES) {
@@ -339,7 +353,7 @@ for (const app of APPS) {
               const peer = [...document.querySelectorAll(el.tagName)].find(
                 (p) => p !== el && isPeer(p) && kind(p) === kind(el) && p.checkVisibility({ visibilityProperty: true }),
               );
-              if (peer && shape(face(peer)) === shape(face(el))) {
+              if (peer && look(peer) === look(el)) {
                 offenders.push(`${name} ${el.tagName.toLowerCase()}.${[...el.classList].join('.')} "${(el.textContent || el.value || '').trim().slice(0, 30)}"`);
               }
             }
