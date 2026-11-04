@@ -310,11 +310,22 @@ describe("components/theme-mode.html: the icons are in the labels (the button sh
 describe("what Auto does that a reader would not expect: in the accessibility statement", () => {
   const statement = () => text(page(`${PAGES}/accessibility.html`).split(/Theme mode and theme time/)[1] ?? "");
 
-  it("on this site Auto is dark from 20:30 to 07:30 even when the device is set to light", () => {
+  it("on this site Auto is the system's: the clock decides nothing, so no hour of the night or the morning is named", () => {
     const t = statement();
-    expect(t).toMatch(/20:30/);
-    expect(t).toMatch(/07:30/);
-    expect(t).toMatch(/\b(device|system)\b[^.]{0,60}\b(light|says)\b|\blight\b[^.]{0,60}\b(device|system)\b/i);
+    expect(t).not.toMatch(/20:30|07:30/);
+    expect(t).toMatch(/\bAuto\b[^.]{0,80}\bsystem\b/i);
+    expect(t).not.toMatch(/whatever the (?:device|system) says/i);
+  });
+
+  it("the radio checked is the mode in use, named after it (\"Color mode: Dark\"); Auto is checked only while an hour is chosen; without JavaScript none is checked", () => {
+    const t = statement();
+    expect(t).toMatch(/Color mode: Dark/);
+    expect(t).toMatch(/\bAuto\b[^.]*\bchecked\b[^.]*\bonly while\b[^.]*\bhour/i);
+    expect(t).toMatch(/without JavaScript[^.]*\bno radio\b[^.]*\bchecked\b/i);
+  });
+
+  it("the hour of the day applies only when the slider of the home page picks it", () => {
+    expect(statement()).toMatch(/\bhour\b[^.]*\bonly when\b[^.]*\bslider\b/i);
   });
 
   it("prefers-contrast: more gives high contrast in Auto", () => {

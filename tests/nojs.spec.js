@@ -150,32 +150,73 @@ test('docs: the home shows the A–Z link in place of the big search button', as
   await expect(page.getByRole('main').getByRole('button', { name: /^Search/ })).toBeHidden();
 });
 
-test('docs: the color mode switcher is four radios, Auto checked, that set the mode', async ({ page }) => {
+test('docs: the color mode switcher is four radios, none checked (Auto is the system), that set the mode', async ({ page }) => {
   await page.goto('/docs/');
   const switcher = page.locator('footer luz-theme-mode .luz-theme-mode__group');
   await expect(switcher.locator('.luz-theme-mode__option')).toHaveCount(4);
   await expect(switcher.locator('input[name="luz-theme-mode"]')).toHaveCount(4);
   expect(await switcher.locator('input[name="luz-theme-mode"]').evaluateAll((all) => all.map((r) => r.value))).toEqual(['auto', 'light', 'dark', 'high-contrast']);
-  await expect(switcher.locator('input:checked')).toHaveCount(1);
-  await expect(switcher.locator('input[value="auto"]')).toBeChecked();
+  // Auto is first and not checked, so no radio is: the page follows the system until one is picked
+  await expect(switcher.locator('input:checked')).toHaveCount(0);
   for (const label of await switcher.locator('.luz-theme-mode__option').all()) await expect(label).toBeVisible();
   await expect(page.locator('.luz-theme-mode__button')).toHaveCount(0);
   // The moments of <luz-theme-time> are a declaration: nothing of them is shown without the script
   await expect(page.locator('footer .luz-theme-time__moments')).toBeHidden();
   const background = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  // Auto is Vejer light without JavaScript: the clock is followed only by the script
+  // Without JavaScript the page is the system's, which here is light
   const light = await background();
   await switcher.locator('.luz-theme-mode__option:has(input[value="dark"])').click();
   await expect.poll(background).not.toBe(light);
   await switcher.locator('.luz-theme-mode__option:has(input[value="light"])').click();
   await expect.poll(background).toBe(light);
+  // Auto goes back to the system
+  await switcher.locator('.luz-theme-mode__option:has(input[value="dark"])').click();
+  await expect.poll(background).not.toBe(light);
+  await switcher.locator('.luz-theme-mode__option:has(input[value="auto"])').click();
+  await expect(switcher.locator('input[value="auto"]')).toBeChecked();
+  await expect.poll(background).toBe(light);
 });
 
+for (const app of ['/', '/docs/']) {
+  test(`${app}: without JavaScript a dark system is Vejer dark and more contrast is high contrast, with no radio checked; a radio overrides the system and Auto gives it back`, async ({ browser }) => {
+    const surfaceOf = (page) => page.evaluate(() => getComputedStyle(document.body).getPropertyValue('--luz-surface-page').trim());
+    const open = async (options) => {
+      const context = await browser.newContext({ javaScriptEnabled: false, ...options });
+      const page = await context.newPage();
+      await page.goto(app);
+      return [context, page];
+    };
+    const [lightContext, lightPage] = await open({ colorScheme: 'light' });
+    const lightSurface = await surfaceOf(lightPage);
+    await lightContext.close();
+    const [contrastContext, contrastPage] = await open({ colorScheme: 'light', contrast: 'more' });
+    const contrastSurface = await surfaceOf(contrastPage);
+    await contrastContext.close();
+
+    const [context, page] = await open({ colorScheme: 'dark' });
+    await expect(page.locator('footer luz-theme-mode input[name="luz-theme-mode"]:checked')).toHaveCount(0);
+    const darkSurface = await surfaceOf(page);
+    expect(channels(await colorOf(page.locator('html'), '--luz-surface-page')), 'a dark system is Vejer dark').toEqual(vejer('dark', '--luz-surface-page'));
+    expect(channels(await colorOf(page.locator('html'), '--luz-text-primary'))).toEqual(vejer('dark', '--luz-text-primary'));
+    expect(darkSurface).not.toBe(lightSurface);
+    expect(contrastSurface, 'more contrast is not the light either').not.toBe(lightSurface);
+    expect(contrastSurface).not.toBe(darkSurface);
+    await page.locator('footer .luz-theme-mode__option:has(input[value="light"])').click();
+    await expect.poll(() => surfaceOf(page), 'Light overrides the dark system').toBe(lightSurface);
+    await page.locator('footer .luz-theme-mode__option:has(input[value="auto"])').click();
+    await expect.poll(() => surfaceOf(page), 'Auto gives the system back').toBe(darkSurface);
+    await context.close();
+  });
+}
+
 for (const app of ['/', '/docs/', '/docs/components/button/']) {
-  test(`${app}: nothing is served about the light, and the page is Vejer light`, async ({ page }) => {
+  test(`${app}: nothing is served about the light, and the page is Vejer light when the system is light`, async ({ page }) => {
     await page.goto(app);
     expect(await page.evaluate(() => document.documentElement.hasAttribute('data-moment'))).toBe(false);
-    expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe('light');
+    // The markup names no mode: the page is light only because the system is
+    expect(await page.evaluate(() => document.documentElement.hasAttribute('data-theme'))).toBe(false);
+    expect(await page.evaluate(() => document.documentElement.hasAttribute('data-mode'))).toBe(false);
+    expect(channels(await colorOf(page.locator('html'), '--luz-surface-page'))).toEqual(vejer('light', '--luz-surface-page'));
   });
 }
 
@@ -186,7 +227,7 @@ test('docs: the specimens carry no data-theme without JavaScript, and the radios
   expect(await specimens.evaluateAll((all) => all.filter((el) => el.hasAttribute('data-theme')).length)).toBe(0);
   const specimen = page.locator('[data-docs-specimen]').first();
   const background = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  // Light first: Vejer's, whatever the hour (nothing is served about the light)
+  // Light first: Vejer's, because the system is light (nothing is served about the light)
   expect(channels(await colorOf(specimen, '--luz-surface-page'))).toEqual(vejer('light', '--luz-surface-page'));
   const before = await background();
   await page.locator('footer .luz-theme-mode__option:has(input[value="dark"])').click();

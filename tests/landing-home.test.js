@@ -4,7 +4,7 @@
  * hold. The page itself is tests/landing.spec.js; the numbers in its copy are
  * tests/landing-numbers.test.js; the catalogs are tests/landing-i18n.test.js.
  *
- *  - landing.js has no mode logic: <luz-color-mode> is the only writer of the colour
+ *  - landing.js has no mode logic: <luz-theme-mode> is the only writer of the colour
  *    mode and of the light (F2); the page asks it to preview, and listens to it.
  *  - landing.css is the home's own and tokens only: no literal colour, no
  *    primitive colour token, and none of the rules the head of a section,
@@ -48,16 +48,17 @@ describe("apps/landing/landing.js: no mode logic", () => {
     }
   });
 
-  it("names the colour mode only as the radio of <luz-theme-mode>, which it clicks, and listens to luz-theme-mode:change", () => {
-    // The page never writes the mode: a box clicks the footer's radio, and <luz-theme-mode> applies and remembers it
+  it("names the colour mode only as the element <luz-theme-mode>, whose choice it sets, and listens to luz-theme-mode:change", () => {
+    // The page never writes the mode: a box sets the choice of the footer's element, and <luz-theme-mode> applies and remembers it
     const bare = [...js.matchAll(/\bluz-theme\b(?!-)/g)].map((m) => js.slice(Math.max(0, m.index - 24), m.index + 14));
     expect(bare, "luz-theme alone is core's storage key: this script never names it").toEqual([]);
     const names = [...js.matchAll(/\bluz-theme-mode\b(?![:_-])/g)].map((m) => js.slice(Math.max(0, m.index - 24), m.index + 14));
     expect(names.length).toBeGreaterThan(0);
-    const radios = names.filter((around) => /input\[name=\\?["']luz-theme-mode/.test(around));
-    expect(radios.length, "the radio's name is luz-theme-mode").toBeGreaterThan(0);
-    for (const around of names) expect(around, "luz-theme-mode is the element or the radio's name, never a key").toMatch(/input\[name=\\?["']luz-theme-mode|querySelector\(["']luz-theme-mode/);
-    expect(js).toMatch(/\.click\(\)/);
+    for (const around of names) expect(around, "luz-theme-mode is the element, never a key or a radio's name").toMatch(/querySelector\(["']luz-theme-mode/);
+    // Setting the choice, not clicking the radio: the radio of the mode in use is already checked, and a click on it changes nothing
+    expect(js).toMatch(/\.choice\s*=[^=]/);
+    expect(js).not.toMatch(/\.click\(\)/);
+    expect(js).not.toMatch(/input\[name=/);
     expect(js).toContain("luz-theme-mode:change");
     expect(js, "the old element and event are gone").not.toMatch(/luz-color-mode/);
   });

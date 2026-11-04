@@ -9,16 +9,19 @@
  * <html>, storage, media queries and clock, core's first and then catalog's,
  * with the moments of the site on the second one's tag (data-moments).
  *
- * The rules, in order:
+ * The rules, in order (owner, 2026-11-04: Auto is the visitor's system, the
+ * hour counts only when it is pinned):
  *   1. a stored choice under core's "luz-theme" key (light, dark or
  *      high-contrast) is that mode, with its moment pinned: light shows the
  *      moment marked with `*` among the light ones (the afternoon), dark and
  *      high contrast the one among the dark ones (the night);
- *   2. else prefers-contrast: more is the high contrast mode, with the moment of
- *      the local hour (what <luz-theme-time> writes after it upgrades);
- *   3. else the moment of the local hour is data-moment, and its base (dark or
- *      light) is the mode. The system's colour scheme is not read by the
- *      second script (core's alone follows it, and the hour overrides it).
+ *   2. else an hour pinned under "luz-light" (minutes of the day) is the moment
+ *      of that hour, and its base (dark or light) the mode, with
+ *      prefers-contrast: more still giving high contrast;
+ *   3. else Auto is the system's: the mode is the one core's script wrote
+ *      (high contrast, dark or light), and the moment is the default one of its
+ *      base (afternoon over light, night over dark and high contrast). The
+ *      script never reads the clock.
  * Storage may throw. Both scripts are classic (no import) and write nothing.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -36,17 +39,6 @@ const code = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'\\
 
 /** The moments the site declares, as they travel on the tag of the second script. */
 const MOMENTS_ATTR = "dawn@05:00=dark morning@07:30=light afternoon@12:00=light* sunset@17:30=light dusk@20:30=dark night@22:30=dark*";
-/** The same moments, written out: the oracle of the hour (the last one that has started; before the first, the last of the day). */
-const LIST = [
-  { name: "dawn", from: 5, theme: "dark" },
-  { name: "morning", from: 7.5, theme: "light" },
-  { name: "afternoon", from: 12, theme: "light" },
-  { name: "sunset", from: 17.5, theme: "light" },
-  { name: "dusk", from: 20.5, theme: "dark" },
-  { name: "night", from: 22.5, theme: "dark" },
-];
-const momentAt = (hour) => LIST.filter((m) => m.from <= hour).at(-1) ?? LIST.at(-1);
-const DARK = LIST.filter((m) => m.theme === "dark").map((m) => m.name);
 const kebab = (name) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
 const scripts = {};
@@ -210,18 +202,22 @@ describe("a stored choice wins, with its moment pinned", () => {
 
   it("a page that names a brand keeps its data-theme, and the moment follows the mode", () => {
     expect(run({ stored: "dark", brand: "my-brand" })).toMatchObject({ theme: "my-brand", mode: "dark", moment: "night" });
-    expect(run({ hour: 9, brand: "my-brand" })).toMatchObject({ theme: "my-brand", mode: "light", moment: "morning" });
+    expect(run({ brand: "my-brand" })).toMatchObject({ theme: "my-brand", mode: "light", moment: "afternoon" });
+    expect(run({ schemeDark: true, brand: "my-brand" })).toMatchObject({ theme: "my-brand", mode: "dark", moment: "night" });
+    expect(run({ pinned: "570", brand: "my-brand" })).toMatchObject({ theme: "my-brand", mode: "light", moment: "morning" });
   });
 });
 
 describe("a stored value that is not a mode is not a choice", () => {
-  it.each(["auto", "Dark", "purple", "", " dark", "dark ", "midnight", "1", "null", "undefined", "[object Object]", "__proto__", "light,dark"])("%j falls through to the clock", (stored) => {
-    expect(run({ stored, hour: 9 })).toMatchObject({ theme: "light", moment: "morning" });
-    expect(run({ stored, hour: 21, minute: 30 })).toMatchObject({ theme: "dark", moment: "dusk" });
+  it.each(["auto", "Dark", "purple", "", " dark", "dark ", "midnight", "1", "null", "undefined", "[object Object]", "__proto__", "light,dark"])("%j falls through to the system, whatever the hour", (stored) => {
+    for (const hour of [3, 9, 14, 21, 23]) {
+      expect(run({ stored, hour }), `light system at ${hour}h`).toMatchObject({ theme: "light", moment: "afternoon" });
+      expect(run({ stored, hour, schemeDark: true }), `dark system at ${hour}h`).toMatchObject({ theme: "dark", moment: "night" });
+    }
   });
 
   it("falls through to prefers-contrast: more as well", () => {
-    expect(run({ stored: "auto", hour: 9, contrastMore: true })).toMatchObject({ theme: "high-contrast", moment: "morning" });
+    expect(run({ stored: "auto", hour: 9, contrastMore: true })).toMatchObject({ theme: "high-contrast", moment: "night" });
   });
 
   it("the old key is not read: a value under luz-site-mode changes nothing", () => {
@@ -241,50 +237,66 @@ describe("an hour pinned by the bar (luz-light, minutes of the day) is the momen
     for (const hour of [3, 9, 14, 21]) expect(run({ pinned, hour }), `pinned ${pinned} at ${hour}h`).toMatchObject({ theme, moment });
   });
 
+  it("a pinned hour wins over the system's scheme: a light moment over a dark system, a dark one over a light system", () => {
+    expect(run({ pinned: "570", schemeDark: true })).toMatchObject({ theme: "light", mode: "light", moment: "morning" });
+    expect(run({ pinned: "1290", schemeDark: false })).toMatchObject({ theme: "dark", mode: "dark", moment: "dusk" });
+  });
+
   it("prefers-contrast: more is still the high contrast mode, with the pinned moment", () => {
     expect(run({ pinned: "1170", hour: 9, contrastMore: true })).toMatchObject({ theme: "high-contrast", moment: "sunset" });
   });
 
-  it.each(["", "abc", "-1", "1440", "12.5", "1170px", " 1170"])("%j is not an hour: the clock decides", (pinned) => {
-    expect(run({ pinned, hour: 9 })).toMatchObject({ theme: "light", moment: "morning" });
+  it("a pinned hour is rounded to five minutes and the moment turns at its minute", () => {
+    // 07:30 is 450 minutes: 448 rounds to 450 (morning), 447 to 445 (dawn)
+    expect(run({ pinned: "448" }).moment).toBe("morning");
+    expect(run({ pinned: "447" }).moment).toBe("dawn");
+  });
+
+  it("a pinned hour never reads the clock: the same at every hour of the day", () => {
+    for (const hour of [0, 5, 9, 12, 18, 21, 23]) expect(run({ pinned: "1170", hour }), `at ${hour}h`).toMatchObject({ theme: "light", moment: "sunset" });
+  });
+
+  it.each(["", "abc", "-1", "1440", "12.5", "1170px", " 1170"])("%j is not an hour: Auto is the system's, with the default moment", (pinned) => {
+    expect(run({ pinned, hour: 9 })).toMatchObject({ theme: "light", moment: "afternoon" });
+    expect(run({ pinned, hour: 14, schemeDark: true })).toMatchObject({ theme: "dark", moment: "night" });
   });
 });
 
-describe("with no choice", () => {
-  it("prefers-contrast: more is the high contrast mode, with the moment of the local hour, at every minute of the day", () => {
+describe("with no choice, Auto is the system's and the hour moves nothing", () => {
+  /** Every minute of the day: the answer is the same, so a page opened at any hour is drawn alike. */
+  const everyMinute = (options, wanted) => {
     const wrong = [];
-    for (let minute = 0; minute < 24 * 60; minute++) {
-      const got = run({ hour: Math.floor(minute / 60), minute: minute % 60, contrastMore: true });
-      const moment = momentAt(minute / 60).name;
-      if (got.theme !== "high-contrast" || got.mode !== "high-contrast" || got.moment !== moment) wrong.push(`${Math.floor(minute / 60)}:${minute % 60} ${got.theme}/${got.moment}, wanted high-contrast/${moment}`);
+    for (let minute = 0; minute < 24 * 60; minute += 1) {
+      const got = run({ ...options, hour: Math.floor(minute / 60), minute: minute % 60 });
+      if (got.theme !== wanted.theme || got.mode !== wanted.theme || got.moment !== wanted.moment) wrong.push(`${Math.floor(minute / 60)}:${minute % 60} ${got.theme}/${got.moment}, wanted ${wanted.theme}/${wanted.moment}`);
     }
-    expect(wrong.slice(0, 10)).toEqual([]);
+    return wrong.slice(0, 10);
+  };
+
+  it("a light system is light with the afternoon, at every minute of the day", () => {
+    expect(everyMinute({}, { theme: "light", moment: "afternoon" })).toEqual([]);
   });
 
-  it("a stored high-contrast still pins the night, whatever the hour", () => {
-    expect(run({ stored: "high-contrast", hour: 9, contrastMore: true })).toMatchObject({ theme: "high-contrast", moment: "night" });
+  it("a dark system is dark with the night, at every minute of the day (the stars show as with Dark chosen)", () => {
+    expect(everyMinute({ schemeDark: true }, { theme: "dark", moment: "night" })).toEqual([]);
   });
 
-  it("the moment is the one of the local hour at every minute of the day, and dawn, dusk and night are dark", () => {
-    const wrong = [];
-    for (let minute = 0; minute < 24 * 60; minute++) {
-      const hour = Math.floor(minute / 60);
-      const got = run({ hour, minute: minute % 60 });
-      const moment = momentAt(minute / 60).name;
-      const theme = DARK.includes(moment) ? "dark" : "light";
-      if (got.moment !== moment || got.theme !== theme || got.mode !== theme) wrong.push(`${String(hour).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")} ${got.theme}/${got.moment}, wanted ${theme}/${moment}`);
-    }
-    expect(wrong.slice(0, 10)).toEqual([]);
+  it("prefers-contrast: more is the high contrast mode, with the night, at every minute of the day", () => {
+    expect(everyMinute({ contrastMore: true }, { theme: "high-contrast", moment: "night" })).toEqual([]);
   });
 
-  it("turns at the minute: 04:59 night, 05:00 dawn, 07:30 morning, 20:30 dusk, 22:30 night", () => {
-    const at = (hour, minute) => run({ hour, minute }).moment;
-    expect([at(4, 59), at(5, 0), at(7, 29), at(7, 30), at(20, 29), at(20, 30), at(22, 29), at(22, 30)]).toEqual(["night", "dawn", "dawn", "morning", "sunset", "dusk", "dusk", "night"]);
+  it("prefers-contrast: more wins over a dark system", () => {
+    expect(run({ contrastMore: true, schemeDark: true })).toMatchObject({ theme: "high-contrast", mode: "high-contrast", moment: "night" });
   });
 
-  it("does not read the system's colour scheme for the moment: the clock decides", () => {
-    expect(run({ hour: 14, schemeDark: true })).toMatchObject({ theme: "light", moment: "afternoon" });
-    expect(run({ hour: 23, schemeDark: false })).toMatchObject({ theme: "dark", moment: "night" });
+  it("the morning, the dawn, the sunset and the dusk are never the moment of Auto", () => {
+    const seen = new Set();
+    for (const options of [{}, { schemeDark: true }, { contrastMore: true }]) for (const hour of [5, 8, 12, 18, 21, 23]) seen.add(run({ ...options, hour }).moment);
+    expect([...seen].sort()).toEqual(["afternoon", "night"]);
+  });
+
+  it("the script does not read the clock", () => {
+    expect(code(read(TIME_BOOT))).not.toMatch(/\bDate\b|getHours|getMinutes/);
   });
 
   it("writes nothing to storage", () => {
@@ -297,10 +309,11 @@ describe("with no choice", () => {
 });
 
 describe("storage that throws (a sandboxed frame)", () => {
-  it.each(["getItem throws", "localStorage throws"])("%s: the clock decides, and the scripts do not throw", (storage) => {
-    expect(run({ storage, hour: 9 })).toMatchObject({ theme: "light", moment: "morning" });
-    expect(run({ storage, hour: 23 })).toMatchObject({ theme: "dark", moment: "night" });
-    expect(run({ storage, hour: 9, contrastMore: true })).toMatchObject({ theme: "high-contrast", moment: "morning" });
+  it.each(["getItem throws", "localStorage throws"])("%s: Auto is the system's, and the scripts do not throw", (storage) => {
+    expect(run({ storage, hour: 9 })).toMatchObject({ theme: "light", moment: "afternoon" });
+    expect(run({ storage, hour: 9, schemeDark: true })).toMatchObject({ theme: "dark", moment: "night" });
+    expect(run({ storage, hour: 23 })).toMatchObject({ theme: "light", moment: "afternoon" });
+    expect(run({ storage, hour: 9, contrastMore: true })).toMatchObject({ theme: "high-contrast", moment: "night" });
   });
 });
 
@@ -363,7 +376,7 @@ describe("the old key and the old paths are gone from the apps", () => {
   });
 });
 
-describe("the texts that say how the site follows the clock", () => {
+describe("the texts that say how the site follows the system", () => {
   it("AGENTS.md says where the header and the shared partials are, and no longer names the old files", () => {
     const agents = read("AGENTS.md");
     const docsSite = read("dev/DOCS-SITE.md");
@@ -406,15 +419,25 @@ describe("the texts that say how the site follows the clock", () => {
     expect(ex12).toContain("data-moment");
   });
 
-  it("the accessibility statement says that the site follows the clock in Auto, dark from 20:30 to 07:30, and that its four lights meet the same contrast", () => {
+  it("the accessibility statement says which radio is checked, that none is without JavaScript, and that the hour counts only from the slider", () => {
     const page = read("apps/docs/pages/accessibility.html");
-    expect(page).toMatch(/\bAuto\b/);
-    expect(page).toContain("20:30");
-    expect(page).toContain("07:30");
-    // In the same item: the four lights and the contrast they meet
-    const items = page.split(/<\/li>|<\/p>/);
-    expect(items.some((item) => /four lights/i.test(item) && /contrast/i.test(item)), "an item that says the four lights meet the contrast").toBe(true);
-    // The clock and the Auto radio about the site itself (not only about <luz-theme-time>)
-    expect(items.some((item) => /20:30/.test(item) && /\bAuto\b/.test(item) && /\bsite\b/i.test(item)), "an item that says the site follows the clock in Auto").toBe(true);
+    const item = page.split(/<\/li>/).find((li) => li.includes("Theme mode and theme time")) ?? "";
+    const t = item.replace(/<[^>]+>/g, " ").replace(/&[a-z]+;/g, " ").replace(/\s+/g, " ");
+    expect(item, "the item about theme mode and theme time").not.toBe("");
+    // The old behaviour: the clock decided Auto
+    expect(page, "no more Auto dark from 20:30").not.toContain("20:30");
+    expect(page, "no more Auto dark until 07:30").not.toContain("07:30");
+    expect(t).not.toMatch(/gives Auto the hour/i);
+    // Auto is the system's
+    expect(t).toMatch(/\bAuto\b[^.]*\bsystem/i);
+    // The radio checked is the mode in use, and the button is named after it
+    expect(t).toMatch(/Color mode: Dark/);
+    expect(t).toMatch(/\bAuto\b[^.]*\bchecked\b[^.]*\bonly while\b[^.]*\bhour/i);
+    // Without JavaScript no radio is checked
+    expect(t).toMatch(/without JavaScript[^.]*\bno radio\b[^.]*\bchecked\b/i);
+    // The hour applies only when the slider picks it
+    expect(t).toMatch(/\bhour\b[^.]*\bonly when\b[^.]*\bslider\b/i);
+    // Its four lights meet the contrast of the modes
+    expect(item.split(/<\/p>/).some((x) => /four lights/i.test(x) && /contrast/i.test(x))).toBe(true);
   });
 });

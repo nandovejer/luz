@@ -5,7 +5,9 @@
  * the footer are catalog's <luz-theme-time> and core's <luz-theme-mode> since
  * 2026-10-29):
  *
- *   - a first visit takes the moment of the local hour;
+ *   - a first visit is Auto, which is the visitor's system (owner, 2026-11-04):
+ *     the radio checked is the mode in use (Light or Dark), nothing is stored and
+ *     the clock decides nothing;
  *   - moving the globe's slider pins that hour: the page takes its moment,
  *     keeps it after a reload and on the docs, and the bar says it is saved
  *     (a status region that a screen reader hears; it is not shown unless the
@@ -13,8 +15,8 @@
  *     (minutes of the day) and the footer's choice is removed;
  *   - choosing Light, Dark or High contrast in the footer wins and removes
  *     the pinned hour, until the slider is moved again;
- *   - the footer has Auto first, checked while the moment follows the clock
- *     or the globe.
+ *   - the footer has Auto first, checked only while the hour is the globe's:
+ *     the slider is what gives Auto an hour.
  *
  * The bar is the slider alone (the hour, the place and the note are not
  * drawn: tests/home-light-bar.spec.js). It is closed at rest at every width and
@@ -59,13 +61,24 @@ async function chooseInFooter(page, value) {
   await page.locator(`footer luz-theme-mode input[value="${value}"]`).evaluate((r) => /** @type {HTMLInputElement} */ (r).click());
 }
 
-test('the footer has Auto first: Auto, Light, Dark and High contrast, Auto checked on a first visit, and the light is the hour\'s', async ({ page }) => {
+test('the footer has Auto first: Auto, Light, Dark and High contrast, and on a first visit the radio checked is the system\'s Light, with nothing stored', async ({ page }) => {
   await atTime(page, '10:05');
   await page.goto('/');
   await expect(page.locator('home-light .home-light__line')).toBeVisible();
   const values = await page.locator('footer luz-theme-mode input[type="radio"]').evaluateAll((rs) => rs.map((r) => /** @type {HTMLInputElement} */ (r).value));
   expect(values).toEqual(['auto', 'light', 'dark', 'high-contrast']);
-  await expect.poll(() => state(page)).toMatchObject({ theme: 'light', light: 'morning', pinned: null, mode: null, checked: ['auto'] });
+  // The clock says morning and decides nothing: afternoon is the default moment of the light mode
+  await expect.poll(() => state(page)).toMatchObject({ theme: 'light', light: 'afternoon', pinned: null, mode: null, checked: ['light'] });
+});
+
+test('on a first visit with a dark system the radio checked is Dark and the night shows, whatever the hour', async ({ browser }) => {
+  const context = await browser.newContext({ colorScheme: 'dark', timezoneId: TIMEZONE, storageState: NO_CHOICE, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await atTime(page, '10:05');
+  await page.goto('/');
+  await expect(page.locator('home-light .home-light__line')).toBeVisible();
+  await expect.poll(() => state(page)).toMatchObject({ theme: 'dark', light: 'night', pinned: null, mode: null, checked: ['dark'] });
+  await context.close();
 });
 
 test('the docs footer has the same four', async ({ page }) => {
@@ -126,4 +139,18 @@ test('the footer wins over the globe, and the globe wins back when the slider is
 
   await chooseInFooter(page, 'high-contrast');
   await expect.poll(() => state(page)).toMatchObject({ theme: 'high-contrast', pinned: null, mode: 'high-contrast', checked: ['high-contrast'] });
+});
+
+test('the slider gives Auto an hour over the system: Auto is checked while it is pinned, and the system\'s radio is back when the hour is let go', async ({ browser }) => {
+  const context = await browser.newContext({ colorScheme: 'dark', timezoneId: TIMEZONE, storageState: NO_CHOICE, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.goto('/');
+  await expect.poll(() => state(page)).toMatchObject({ theme: 'dark', checked: ['dark'] });
+  await slideTo(page, '09:00');
+  await expect.poll(() => state(page)).toMatchObject({ theme: 'light', light: 'morning', pinned: '540', mode: null, checked: ['auto'] });
+  await expect(page.locator('footer luz-theme-mode .luz-theme-mode__button')).toHaveAccessibleName(/Auto$/);
+  // Escape on the slider lets the hour go: the system's mode is back
+  await page.locator('home-light input[type="range"]').press('Escape');
+  await expect.poll(() => state(page)).toMatchObject({ theme: 'dark', light: 'night', pinned: null, mode: null, checked: ['dark'] });
+  await context.close();
 });

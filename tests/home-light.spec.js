@@ -30,12 +30,17 @@
  * Without JavaScript the element is empty and light.css reserves its height.
  * That block turns JavaScript off for itself, so it runs in the chromium
  * project; every other test needs JavaScript and skips itself where it is off.
+ *
+ * The light of the page is the system's (Auto: Chromium's scheme is light, so Vejer and
+ * the afternoon) until the reader pins an hour with the slider; a test that needs another
+ * light pins it before the page loads (`pinned`, the `luz-light` the slider stores) or
+ * scrubs to it. The clock of the day moves nothing.
  */
 import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
-import { LIGHTS, NO_CHOICE, TIMEZONE, atTime } from './helpers/site-lights.js';
+import { LIGHTS, atTime, pinHour } from './helpers/site-lights.js';
 
 const jsOff = () => test.info().project.use.javaScriptEnabled === false;
 
@@ -57,16 +62,14 @@ const NARROW = { width: 800, height: 900 };
 /** The origin of the server under test, whatever its port (the project's baseURL). */
 const origin = () => new URL(test.info().project.use.baseURL).origin;
 
-test.use({ timezoneId: TIMEZONE, storageState: NO_CHOICE });
-
 /**
  * Open the home and wait until the visual is there.
  * @param {import('@playwright/test').Page} page
  * @param {string} [path]
- * @param {{ time?: string }} [options] time: the clock (hh:mm, Madrid)
+ * @param {{ pinned?: string }} [options] pinned: an hour (hh:mm) the reader pinned before the page loads (`luz-light`, what the slider leaves); with none the page is the system's (Chromium's is light: Vejer, the afternoon)
  */
-async function open(page, path = '/', { time } = {}) {
-  if (time) await atTime(page, time);
+async function open(page, path = '/', { pinned } = {}) {
+  if (pinned) await pinHour(page, pinned);
   await page.goto(path);
   await expect(page.locator('home-light .home-light__line')).toBeVisible();
   await expect(page.locator('home-light').locator('home-globe').filter({ visible: true })).toHaveCount(1);
@@ -209,7 +212,7 @@ test.describe('with JavaScript', () => {
   /* -- The page reads the light ------------------------------------------ */
 
   test('writes --sun-x, --sun-alt on <html>; the sun moves from the east side to the west side over the day', async ({ page }) => {
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     await scrub(page, '07:30');
     await expect.poll(async () => (await html(page)).sunX).toMatch(/^\d+(\.\d+)?%$/);
     const morning = await html(page);
@@ -223,15 +226,16 @@ test.describe('with JavaScript', () => {
   });
 
   test('--sun-x follows the globe\'s own sun', async ({ page }) => {
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     await expect.poll(async () => (await html(page)).sunX).toMatch(/^\d+(\.\d+)?%$/);
   });
 
   /* -- The slider and Live call <luz-theme-time>.preview() --------------------- */
 
-  test('in Auto the slider scrubs the page: data-moment and data-theme follow the hour, and closing the bar keeps the hour it was let go at', async ({ page }) => {
+  test('in Auto, the system\'s, the slider scrubs the page: data-moment and data-theme follow the hour, and closing the bar keeps the hour it was let go at', async ({ page }) => {
     await still(page);
-    await open(page, '/', { time: '14:00' });
+    await atTime(page, '23:30'); // the clock is not the light: nothing is pinned, so the page is the system's, the afternoon
+    await open(page, '/');
     await expect.poll(async () => (await html(page)).light).toBe('afternoon');
     expect((await html(page)).theme).toBe('light');
     await spyPreview(page);
@@ -259,9 +263,23 @@ test.describe('with JavaScript', () => {
     expect(await html(page)).toMatchObject({ light: 'morning', theme: 'light' });
   });
 
+  test('the clock of the day decides nothing: a light system is the afternoon at 23:30, a dark one is the night at 14:00', async ({ page, browser }) => {
+    await still(page);
+    await atTime(page, '23:30');
+    await open(page, '/');
+    expect(await html(page), 'a light system, the clock at night').toMatchObject({ light: 'afternoon', theme: 'light' });
+    const dark = await browser.newContext({ colorScheme: 'dark', reducedMotion: 'reduce' });
+    const other = await dark.newPage();
+    await atTime(other, '14:00');
+    await other.goto('/');
+    await expect(other.locator('home-light .home-light__line')).toBeVisible();
+    expect(await html(other), 'a dark system, the clock in the afternoon').toMatchObject({ light: 'night', theme: 'dark' });
+    await dark.close();
+  });
+
   test('after a mode chosen in the footer, moving the slider gives the hour back the lead: its light and its mode (the last touched wins)', async ({ page }) => {
     await still(page);
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     await chooseMode(page, 'dark');
     await expect.poll(async () => (await html(page)).theme).toBe('dark');
     await expect.poll(async () => (await html(page)).light).toBe('night');
@@ -280,7 +298,7 @@ test.describe('with JavaScript', () => {
 
   test('the slider is a keyboard control named from the catalog, and its value text says the hour', async ({ page }) => {
     await page.setViewportSize(NARROW);
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     await openBar(page);
     const range = page.locator('home-light').getByRole('slider', { name: text('en', 'Scrub the day') });
     await expect(range).toHaveCount(1);
@@ -318,7 +336,7 @@ test.describe('with JavaScript', () => {
     for (const file of ['theme-time.js', 'theme-time.min.js']) {
       await page.route(`**/packages/catalog/dist/${file}`, (route) => route.fulfill({ contentType: 'text/javascript', body: 'export {};' }));
     }
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     expect(await page.evaluate(() => !!customElements.get('luz-theme-time'))).toBe(false);
     const before = await html(page);
     // From here on every write of the two attributes is recorded; the boot scripts ran before
@@ -515,7 +533,7 @@ test.describe('with JavaScript', () => {
   for (const [width, height] of [[1280, 800], [375, 800]]) {
     test(`no layout shift at ${width} px: the hero and the light section are where JavaScript off puts them`, async ({ page, browser }) => {
       await page.setViewportSize({ width, height });
-      await open(page, '/', { time: '14:00' });
+      await open(page, '/');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(800);
       const boxes = (/** @type {import('@playwright/test').Page} */ p) =>
@@ -528,7 +546,7 @@ test.describe('with JavaScript', () => {
         });
       const withScript = await boxes(page);
 
-      const bare = await browser.newContext({ javaScriptEnabled: false, viewport: { width, height }, timezoneId: TIMEZONE });
+      const bare = await browser.newContext({ javaScriptEnabled: false, viewport: { width, height }, });
       const off = await bare.newPage();
       await off.goto('/');
       const withoutScript = await boxes(off);
@@ -555,7 +573,7 @@ test.describe('with JavaScript', () => {
   for (const [light, time, mode] of LIGHTS) {
     test(`axe: / in the ${light} light (${time}, ${mode}), the land drawn`, async ({ page, browserName }) => {
       test.skip(browserName !== 'chromium', 'Chromium only');
-      await open(page, '/', { time });
+      await open(page, '/', { pinned: time });
       await expect.poll(() => page.evaluate(() => document.documentElement.dataset.moment)).toBe(light);
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
       await expect(page.locator('home-globe[land]')).toHaveCount(1, { timeout: 15000 });
@@ -566,7 +584,7 @@ test.describe('with JavaScript', () => {
 
     test(`axe: / with the bar open in the ${light} light (${time})`, async ({ page, browserName }) => {
       test.skip(browserName !== 'chromium', 'Chromium only');
-      await open(page, '/', { time });
+      await open(page, '/', { pinned: time });
       await expect.poll(() => page.evaluate(() => document.documentElement.dataset.moment)).toBe(light);
       await page.waitForLoadState('networkidle');
       await openBar(page);
@@ -578,7 +596,7 @@ test.describe('with JavaScript', () => {
   for (const [route] of ROUTES.slice(1)) {
     test(`axe: ${route} with the bar open`, async ({ page, browserName }) => {
       test.skip(browserName !== 'chromium', 'Chromium only');
-      await open(page, route, { time: '14:00' });
+      await open(page, route);
       await openBar(page);
       await faded(page);
       expect(await violations(page), 'serious/critical axe violations').toEqual([]);
@@ -633,7 +651,7 @@ test.describe('review fixes', () => {
     test(`${route}: the slider's aria-valuetext is the moment's name and the hour, joined by ", " (${lang})`, async ({ page }) => {
       const cat = catalog(lang);
       expect(typeof cat['light.sep'], 'light.sep is a key of the catalog').toBe('string');
-      await open(page, route, { time: '14:00' });
+      await open(page, route);
       await scrub(page, '09:30');
       await expect.poll(async () => (await html(page)).light).toBe('morning');
       // The hour is not shown in the bar any more (the owner's cut, 2026-10-17): the slider still says it
@@ -649,7 +667,7 @@ test.describe('review fixes', () => {
   /* -- 3. No <output>; the one live region is the passing "Saved" notice ------------ */
 
   test('the bar has no <output>, and its one live region is the Saved notice, a status', async ({ page }) => {
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     await openBar(page);
     await expect(output(page)).toHaveCount(0);
     await slider(page).fill('600');
@@ -699,7 +717,7 @@ test.describe('review fixes', () => {
       const cat = catalog(lang);
       const facts = Array.from({ length: 9 }, (_, i) => cat[`light.fact.${i + 1}`]);
       const phases = ['dawn', 'morning', 'afternoon', 'sunset', 'dusk', 'night'].map((phase) => cat[`light.${phase}`]);
-      await open(page, route, { time: '14:00' });
+      await open(page, route);
       const shown = await visibleText(line(page));
       const fact = facts.find((f) => shown.includes(f));
       expect(fact, 'one of the facts of the page\'s language').toBeDefined();
@@ -712,7 +730,7 @@ test.describe('review fixes', () => {
       const cat = catalog(lang);
       for (const [random, n] of [[0, 1], [0.5, 5], [0.999, 9]]) {
         await page.addInitScript((r) => { Math.random = () => r; }, random);
-        await open(page, route, { time: '14:00' });
+        await open(page, route);
         expect(await visibleText(line(page)), `Math.random() = ${random}`).toContain(cat[`light.fact.${n}`]);
       }
     });
@@ -770,7 +788,7 @@ test.describe('review fixes', () => {
 
   test('the bar has no Back to now button, and clicking the line to close it keeps the hour the slider pinned', async ({ page }) => {
     await page.setViewportSize(NARROW);
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     await openBar(page);
     await expect(page.locator('home-light .home-light__live')).toHaveCount(0);
     await scrub(page, '23:30');
@@ -861,7 +879,7 @@ test.describe('review fixes', () => {
   for (const [light, time, mode] of LIGHTS) {
     const dark = ['dawn', 'dusk', 'night'].includes(light);
     test(`${light} (${time}): ${dark ? 'stars on the two layers of the sky' : 'no stars and no clouds: the layers are not drawn'}`, async ({ page }) => {
-      await open(page, '/', { time });
+      await open(page, '/', { pinned: time });
       await expect.poll(async () => (await html(page)).light).toBe(light);
       expect(mode).toBe(dark ? 'dark' : 'light');
       // Two layers behind the page's content (main's ::before and ::after)
@@ -892,7 +910,7 @@ test.describe('review fixes', () => {
   }
 
   test('the sky drifts with the scroll: slower than the page, the far layer slower still', async ({ page }) => {
-    await open(page, '/', { time: '23:30' });
+    await open(page, '/', { pinned: '23:30' });
     test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the layers cannot drift without the timeline)');
     // The block offset of each layer's translate (none is 0)
     const ys = () => page.evaluate(() => ['::before', '::after'].map((p) => parseFloat(getComputedStyle(document.querySelector('main.luz-main'), p).translate.split(' ')[1]) || 0));
@@ -910,7 +928,7 @@ test.describe('review fixes', () => {
   });
 
   test('the glow of the page rises with the scroll: faint at the top, full at the foot', async ({ page }) => {
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     test.skip(!(await page.evaluate(() => window.CSS.supports('animation-timeline: scroll()'))), 'needs scroll-driven animations (Firefox has none yet: the layers cannot drift without the timeline)');
     const glow = () =>
       page.evaluate(() => {
@@ -927,7 +945,7 @@ test.describe('review fixes', () => {
 
   test('under reduced motion the glow does not move: a still, faint glow', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await open(page, '/', { time: '14:00' });
+    await open(page, '/');
     const read = () => page.evaluate(() => { const s = getComputedStyle(document.querySelector('.o-page'), '::before'); return { glow: s.content !== 'none' && /gradient/.test(s.backgroundImage), opacity: parseFloat(s.opacity), animation: s.animationName }; });
     const top = await read();
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
@@ -940,7 +958,7 @@ test.describe('review fixes', () => {
 
   test('under reduced motion the stars do not drift with the scroll', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await open(page, '/', { time: '23:30' });
+    await open(page, '/', { pinned: '23:30' });
     await page.evaluate(() => window.scrollTo(0, 300));
     await page.waitForTimeout(300);
     const t = await page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-main'), p).translate));
@@ -949,7 +967,7 @@ test.describe('review fixes', () => {
 
   test('under reduced motion the stars are still: no twinkle', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await open(page, '/', { time: '23:30' });
+    await open(page, '/', { pinned: '23:30' });
     const names = await page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-main'), p).animationName));
     expect(names).toEqual(['none', 'none']);
   });
@@ -1054,7 +1072,7 @@ test.describe('review fixes', () => {
     for (const [light, time, mode] of LIGHTS) {
       test(`${width} px, ${light} light: the line's text has 4.5:1 over what is behind it, the land drawn`, async ({ page }) => {
         await page.setViewportSize({ width, height: 800 });
-        await open(page, '/', { time });
+        await open(page, '/', { pinned: time });
         await expect(page.locator('home-globe[land]')).toHaveCount(1, { timeout: 15000 });
         await expect.poll(() => page.evaluate(() => document.documentElement.dataset.moment)).toBe(light);
         expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(mode);
@@ -1224,7 +1242,6 @@ test.describe('no Pause motion button', () => {
   }
 
   test('a [still] attribute on <home-light> is ignored: the globe keeps asking for animation frames', async ({ page }) => {
-    await atTime(page, '13:00');
     await countFrames(page);
     await open(page);
     await page.waitForLoadState('networkidle');
@@ -1236,7 +1253,7 @@ test.describe('no Pause motion button', () => {
   });
 
   test('a [still] attribute on <home-light> is ignored: the stars of the page keep twinkling and drifting at night', async ({ page }) => {
-    await open(page, '/', { time: '23:30' });
+    await open(page, '/', { pinned: '23:30' });
     const names = () => page.evaluate(() => ['::before', '::after'].map((p) => getComputedStyle(document.querySelector('main.luz-main'), p).animationName));
     expect((await names()).every((n) => n !== 'none'), 'control: the stars move before the attribute').toBe(true);
     await page.locator('home-light').evaluate((el) => el.setAttribute('still', ''));
