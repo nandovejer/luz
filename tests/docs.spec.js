@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 import { gotoId, routeOf, routes, routesOf, routesWith, site } from './helpers/docs-site.js';
 import { indexEntries, readingOrder } from '../scripts/docs-site/site.js';
 import { PATTERN_AREAS, areaOfPackage } from './helpers/package-areas.js';
-import { KEY as MODE_KEY, seedMode } from './helpers/site-lights.js';
+import { KEY as MODE_KEY, channels, colorOf, seedMode, vejer } from './helpers/site-lights.js';
 import { faded } from './helpers/settle.js';
 import { over, parseColor, ratio } from '../packages/tokens/lib/contrast.js';
 import { resolveColor } from './helpers/design-tokens.js';
@@ -812,7 +812,9 @@ test.describe('Documentation site', () => {
         await page.setViewportSize({ width, height: 800 });
         for (const route of ALL) {
           await page.goto(route);
-          await expect(page.locator('html'), route).toHaveAttribute('data-theme', 'light');
+          // The markup names no mode: the page is Vejer light because the system is light
+          expect(await page.evaluate(() => document.documentElement.hasAttribute('data-theme')), route).toBe(false);
+          expect(channels(await colorOf(page.locator('html'), '--luz-surface-page')), route).toEqual(vejer('light', '--luz-surface-page'));
           // Nothing is hidden but what only works with JavaScript: the search
           // buttons, and the cookie banner of the Cookie consent example with
           // the button that shows it again, and the Try it form and the width
