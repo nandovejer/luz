@@ -1,0 +1,178 @@
+<!-- luz:page
+title: Anillo
+description: Muestra un valor frente a una meta, o las partes de un total, como medio anillo sobre la cifra que lo dice.
+fits: un panel que muestra el avance hacia una meta o cómo se reparte un total
+source: d043fe429b7a
+reviewed: false
+-->
+    <div class="docs-component" id="p-ring">
+          <h2 id="example">Ejemplo</h2>
+          <p>Un valor frente a una meta: las visitas de este mes frente a una meta de 2000. Las cifras son datos de ejemplo, para que pongas las tuyas.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-ring" style="--v1: 1260; --max: 2000">
+              <figcaption>Visitors this month</figcaption>
+              <p class="luz-ring__value">
+                <span class="luz-ring__figure">1,260</span>
+                <span class="luz-ring__label">of 2,000 visitors</span>
+              </p>
+            </figure>
+          </div>
+          </div>
+          <h3 id="example-stacked">Apilado</h3>
+          <p>Dos series que suman un total, con una leyenda: las visitas de este mes por dispositivo. Sin <code>--max</code>, las series llenan el medio anillo.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-ring" style="--v1: 1260; --v2: 570">
+              <figcaption>Visitors by device, this month</figcaption>
+              <p class="luz-ring__value">
+                <span class="luz-ring__figure">1,830</span>
+                <span class="luz-ring__label">visitors</span>
+              </p>
+              <ul class="luz-ring__legend">
+                <li class="luz-ring__item"><span class="luz-ring__name">Desktop</span> <span class="luz-ring__figure">1,260</span></li>
+                <li class="luz-ring__item"><span class="luz-ring__name">Mobile</span> <span class="luz-ring__figure">570</span></li>
+              </ul>
+            </figure>
+          </div>
+          </div>
+          <h2 id="known-issues">Problemas conocidos</h2>
+          <p>No se conocen problemas.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del anillo">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Código</h2>
+            <h3 id="markup">Copiar el marcado</h3>
+            <p>Una hoja de estilos de <code>@luz-ds/catalog</code>: enlaza <code>components/ring.css</code> después de <code>luz.css</code>. Un valor frente a una meta:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-ring" aria-label="Copy the ring markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Ring markup"><code id="code-ring">&lt;figure class=&quot;luz-ring&quot; style=&quot;--v1: 1260; --max: 2000&quot;&gt;
+  &lt;figcaption&gt;Visitors this month&lt;/figcaption&gt;
+  &lt;p class=&quot;luz-ring__value&quot;&gt;
+    &lt;span class=&quot;luz-ring__figure&quot;&gt;1,260&lt;/span&gt;
+    &lt;span class=&quot;luz-ring__label&quot;&gt;of 2,000 visitors&lt;/span&gt;
+  &lt;/p&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
+            <p>Dos o más series que suman un total, con una leyenda:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-ring-stacked" aria-label="Copy the stacked ring markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Stacked ring markup"><code id="code-ring-stacked">&lt;figure class=&quot;luz-ring&quot; style=&quot;--v1: 1260; --v2: 570&quot;&gt;
+  &lt;figcaption&gt;Visitors by device, this month&lt;/figcaption&gt;
+  &lt;p class=&quot;luz-ring__value&quot;&gt;
+    &lt;span class=&quot;luz-ring__figure&quot;&gt;1,830&lt;/span&gt;
+    &lt;span class=&quot;luz-ring__label&quot;&gt;visitors&lt;/span&gt;
+  &lt;/p&gt;
+  &lt;ul class=&quot;luz-ring__legend&quot;&gt;
+    &lt;li class=&quot;luz-ring__item&quot;&gt;&lt;span class=&quot;luz-ring__name&quot;&gt;Desktop&lt;/span&gt; &lt;span class=&quot;luz-ring__figure&quot;&gt;1,260&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-ring__item&quot;&gt;&lt;span class=&quot;luz-ring__name&quot;&gt;Mobile&lt;/span&gt; &lt;span class=&quot;luz-ring__figure&quot;&gt;570&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variantes y opciones</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Opciones del anillo" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Opción</th><th scope="col">Efecto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Opción"><div><code>--v1</code></div></td><td data-label="Efecto"><div>En la figura, el valor de la primera serie, como un número simple: 1260, no 1.260. <code>--v2</code> a <code>--v4</code> son las series siguientes, hasta cuatro, en el orden de la leyenda</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--max</code></div></td><td data-label="Efecto"><div>La meta de la que los valores son una parte. Sin ella, o cuando las series suman más, las series llenan el anillo</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-ring-size</code></div></td><td data-label="Efecto"><div>El ancho máximo del medio anillo, 18rem por defecto; se reduce al ancho de su caja</div></td></tr>
+                  <tr><td data-label="Opción"><div><code>--luz-ring-color</code></div></td><td data-label="Efecto"><div>Otro color para la primera serie, como <code>var(--luz-chart-5)</code>; las demás conservan de <code>--luz-chart-2</code> a <code>--luz-chart-4</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">Cómo funciona</h3>
+            <p>Una figura con su título, la cifra y su etiqueta en un párrafo y, para las series, una leyenda. El texto son los datos. El anillo es un dibujo de ellos, hecho por los dos pseudoelementos del párrafo, medio anillo sobre la cifra: uno pinta la pista y el otro las series, cada uno recortado en una banda por una máscara, de modo que la tecnología de apoyo nunca lo encuentra.</p>
+            <p>Cada serie toma su parte del recorrido: su <code>--v</code> sobre <code>--max</code>, o sobre la suma de los valores cuando no hay <code>--max</code>. Las series toman de <code>--luz-chart-1</code> a <code>--luz-chart-4</code> en orden, los colores de las muestras de la leyenda. El anillo es medio anillo, con una banda del grosor aproximado de la barra de una lista de barras y los extremos cortados en recto. Corre desde la izquierda, en el sentido de las agujas del reloj, en todos los idiomas, como un reloj. El <code>style</code> en línea solo da números; con un <code>style-src</code> estricto, ponlos en una regla propia.</p>
+            <p>La figura es un contenedor de tamaño: cuando es más estrecha que 14em, en una columna estrecha o con un tamaño de texto grande, el texto pasa debajo del arco en lugar de ir dentro. En papel el anillo se omite y se imprime el texto.</p>
+            <h3 id="no-js">Sin JavaScript</h3>
+            <p>No lo necesita. Sin la hoja de estilos la figura se lee como su título, la cifra con su etiqueta y la leyenda, una lista de nombres y cifras; no hay anillo.</p>
+            <h3 id="keyboard">Teclado y ARIA</h3>
+            <p>Nada recibe el foco y no hay ARIA: el anillo lo dibujan pseudoelementos sin texto, así que un lector de pantalla lee el título, la cifra, su etiqueta y la leyenda, en ese orden. Escribe la meta en la etiqueta («de 2000 visitas»), porque el anillo solo no la dice.</p>
+            <p>En colores forzados la pista es el fondo, así que los huecos entre las series también lo son; las series y las muestras de la leyenda toman los mismos colores del sistema, y cada muestra enseña el número de su serie, en el orden del anillo desde la izquierda.</p>
+            <p class="docs-view__xref">El <a href="#contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Diseño</h2>
+            <h3 id="when">Cuándo usarlo</h3>
+            <p>Úsalo en un panel para mostrar cuánto falta a un valor para su meta (una cuota, un presupuesto, un límite de almacenamiento), o cómo se reparte un total en dos o tres partes, cuando la cifra es lo importante y el anillo una ojeada a ella.</p>
+            <h3 id="when-not">Cuándo no usarlo</h3>
+            <p>No lo uses para comparar valores entre sí (usa una <a href="/docs/catalog/bar-list/">lista de barras</a> o un <a href="/docs/catalog/column-chart/">gráfico de columnas</a>: una longitud se lee mejor que un ángulo), para más de cuatro series (usa una <a href="/docs/catalog/stacked-bar/">barra apilada</a>) ni para un valor en un texto corrido o en un formulario (usa un <a href="/docs/components/meter/">medidor</a>).</p>
+            <h3 id="do-dont">Qué hacer y qué no</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Di la meta en la etiqueta, para que la cifra se lea completa sin el anillo.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-ring" style="--v1: 1260; --max: 2000">
+                    <figcaption>Visitors this month</figcaption>
+                    <p class="luz-ring__value">
+                      <span class="luz-ring__figure">1,260</span>
+                      <span class="luz-ring__label">of 2,000 visitors</span>
+                    </p>
+                  </figure>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">No lo hagas</strong> Dejar la meta al anillo: «1260» solo no dice de cuántas.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-ring" style="--v1: 1260; --max: 2000">
+                    <figcaption>Visitors this month</figcaption>
+                    <p class="luz-ring__value">
+                      <span class="luz-ring__figure">1,260</span>
+                      <span class="luz-ring__label">visitors</span>
+                    </p>
+                  </figure>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Cómo escribir el contenido</h3>
+            <p>Indica qué se cuenta y el periodo en el título («Visitas este mes»), escribe la cifra como se lee, con sus separadores, y di la meta o la unidad en la etiqueta. Mantén los nombres de la leyenda en una o dos palabras. Los datos y las etiquetas son tuyos: el componente solo los dibuja.</p>
+            <h3 id="contrast">Contraste y foco</h3>
+            <p>Cada serie es un color de gráfico sobre la superficie y sobre la pista; la pista es decorativa, porque la cifra dice el valor.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Contraste del anillo en cada modo" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Requisitos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Parte"><div>Serie 1 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>7.7:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 2 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-2</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5.3:1</div></td><td data-label="Oscuro"><div>8.9:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 1 sobre una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>7.2:1</div></td><td data-label="Alto contraste"><div>14.1:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 2 sobre una tarjeta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-2</code> on <code>--luz-surface</code></div></td><td data-label="Claro"><div>5.6:1</div></td><td data-label="Oscuro"><div>8.2:1</div></td><td data-label="Alto contraste"><div>9.3:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 1 sobre la pista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-1</code> on <code>--luz-chart-track</code></div></td><td data-label="Claro"><div>3.4:1</div></td><td data-label="Oscuro"><div>3.8:1</div></td><td data-label="Alto contraste"><div>6.8:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 2 sobre la pista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-2</code> on <code>--luz-chart-track</code></div></td><td data-label="Claro"><div>3.2:1</div></td><td data-label="Oscuro"><div>4.4:1</div></td><td data-label="Alto contraste"><div>4.4:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 3 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-3</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>9.6:1</div></td><td data-label="Oscuro"><div>10.6:1</div></td><td data-label="Alto contraste"><div>10.9:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 3 sobre la pista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-3</code> on <code>--luz-chart-track</code></div></td><td data-label="Claro"><div>5.9:1</div></td><td data-label="Oscuro"><div>5.3:1</div></td><td data-label="Alto contraste"><div>5.2:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 4 sobre la página</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-4</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>9.8:1</div></td><td data-label="Oscuro"><div>6.1:1</div></td><td data-label="Alto contraste"><div>6.6:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Serie 4 sobre la pista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-chart-4</code> on <code>--luz-chart-track</code></div></td><td data-label="Claro"><div>6.0:1</div></td><td data-label="Oscuro"><div>3.0:1</div></td><td data-label="Alto contraste"><div>3.2:1</div></td><td data-label="Requisitos"><div>3:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Cifra</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15.8:1</div></td><td data-label="Oscuro"><div>15.1:1</div></td><td data-label="Alto contraste"><div>21.0:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Parte"><div>Etiqueta y nombre</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6.2:1</div></td><td data-label="Oscuro"><div>7.5:1</div></td><td data-label="Alto contraste"><div>19.3:1</div></td><td data-label="Requisitos"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo, redondeado hacia abajo. Los requisitos son los mínimos de WCAG 2.2 AA: 4,5:1 para el texto y 3:1 para los anillos de foco, los bordes y los iconos.</p>
+            <ul>
+              <li><strong>Foco:</strong> nada lo recibe.</li>
+              <li><strong>No solo color:</strong> cada valor está en texto, un hueco de la pista separa dos series y la leyenda sigue el orden del anillo.</li>
+            </ul>
+            <h3 id="tokens">Tokens que usa</h3>
+            <p>Los 18 tokens que lee <code>components/ring.css</code>, agrupados por familia. Cada familia enlaza a su página, con los valores de cada modo. En Figma son variables con los mismos nombres: consulta <a href="/docs/tokens/figma/">Tokens en Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-2"><code>--luz-chart-2</code></a>, <a href="/docs/tokens/color/#luz-chart-3"><code>--luz-chart-3</code></a>, <a href="/docs/tokens/color/#luz-chart-4"><code>--luz-chart-4</code></a>, <a href="/docs/tokens/color/#luz-chart-track"><code>--luz-chart-track</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-4xl</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-2xl</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref">El <a href="#keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+          </div>
+    </div>

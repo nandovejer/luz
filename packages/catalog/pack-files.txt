@@ -61,6 +61,8 @@ dist/components/pager.css
 dist/components/pager.min.css
 dist/components/post-list.css
 dist/components/post-list.min.css
+dist/components/ring.css
+dist/components/ring.min.css
 dist/components/search.css
 dist/components/search.min.css
 dist/components/section.css

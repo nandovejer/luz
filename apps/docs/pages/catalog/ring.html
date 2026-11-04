@@ -1,0 +1,182 @@
+<!-- luz:page
+title: Ring
+description: Shows one value over a goal, or the shares of a total, as half a ring over the figure that says it.
+area: catalog
+order: 40
+group: charts
+fits-kinds: app
+fits: a panel that shows progress to a goal or how one total is split
+files: components/ring.css
+toc: h2,h3
+-->
+    <div class="docs-component" id="p-ring">
+          <h2 id="example">Example</h2>
+          <p>One value over a goal: visitors this month against a goal of 2,000. The figures are sample data, yours to replace.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-ring" style="--v1: 1260; --max: 2000">
+              <figcaption>Visitors this month</figcaption>
+              <p class="luz-ring__value">
+                <span class="luz-ring__figure">1,260</span>
+                <span class="luz-ring__label">of 2,000 visitors</span>
+              </p>
+            </figure>
+          </div>
+          </div>
+          <h3 id="example-stacked">Stacked</h3>
+          <p>Two series that add up to a total, with a legend: visitors this month by device. With no <code>--max</code>, the series fill the half ring.</p>
+          <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <figure class="luz-ring" style="--v1: 1260; --v2: 570">
+              <figcaption>Visitors by device, this month</figcaption>
+              <p class="luz-ring__value">
+                <span class="luz-ring__figure">1,830</span>
+                <span class="luz-ring__label">visitors</span>
+              </p>
+              <ul class="luz-ring__legend">
+                <li class="luz-ring__item"><span class="luz-ring__name">Desktop</span> <span class="luz-ring__figure">1,260</span></li>
+                <li class="luz-ring__item"><span class="luz-ring__name">Mobile</span> <span class="luz-ring__figure">570</span></li>
+              </ul>
+            </figure>
+          </div>
+          </div>
+          <h2 id="known-issues">Known issues</h2>
+          <p>None known.</p>
+          <nav class="luz-tabs docs-view-tabs" aria-label="Ring documentation">
+            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
+            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
+          </nav>
+          <div class="luz-tabpanel docs-view" id="code-panel">
+            <h2 class="docs-view__title" id="code">Code</h2>
+            <h3 id="markup">Copy the markup</h3>
+            <p>A stylesheet of <code>@luz-ds/catalog</code>: link <code>components/ring.css</code> after <code>luz.css</code>. One value over a goal:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-ring" aria-label="Copy the ring markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Ring markup"><code id="code-ring">&lt;figure class=&quot;luz-ring&quot; style=&quot;--v1: 1260; --max: 2000&quot;&gt;
+  &lt;figcaption&gt;Visitors this month&lt;/figcaption&gt;
+  &lt;p class=&quot;luz-ring__value&quot;&gt;
+    &lt;span class=&quot;luz-ring__figure&quot;&gt;1,260&lt;/span&gt;
+    &lt;span class=&quot;luz-ring__label&quot;&gt;of 2,000 visitors&lt;/span&gt;
+  &lt;/p&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
+            <p>Two or more series that add up to a total, with a legend:</p>
+            <div class="docs-snippet">
+              <div class="docs-snippet__bar">
+                <span class="docs-snippet__lang">HTML</span>
+                <button class="luz-copy-btn" type="button" data-copy-from="code-ring-stacked" aria-label="Copy the stacked ring markup">Copy</button>
+              </div>
+              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Stacked ring markup"><code id="code-ring-stacked">&lt;figure class=&quot;luz-ring&quot; style=&quot;--v1: 1260; --v2: 570&quot;&gt;
+  &lt;figcaption&gt;Visitors by device, this month&lt;/figcaption&gt;
+  &lt;p class=&quot;luz-ring__value&quot;&gt;
+    &lt;span class=&quot;luz-ring__figure&quot;&gt;1,830&lt;/span&gt;
+    &lt;span class=&quot;luz-ring__label&quot;&gt;visitors&lt;/span&gt;
+  &lt;/p&gt;
+  &lt;ul class=&quot;luz-ring__legend&quot;&gt;
+    &lt;li class=&quot;luz-ring__item&quot;&gt;&lt;span class=&quot;luz-ring__name&quot;&gt;Desktop&lt;/span&gt; &lt;span class=&quot;luz-ring__figure&quot;&gt;1,260&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;luz-ring__item&quot;&gt;&lt;span class=&quot;luz-ring__name&quot;&gt;Mobile&lt;/span&gt; &lt;span class=&quot;luz-ring__figure&quot;&gt;570&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/figure&gt;</code></pre>
+            </div>
+            <h3 id="variants">Variants and options</h3>
+            <div class="luz-table-wrap" role="region" aria-label="Ring options" tabindex="0">
+              <table class="luz-table">
+                <thead>
+                  <tr><th scope="col">Option</th><th scope="col">Effect</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Option"><div><code>--v1</code></div></td><td data-label="Effect"><div>On the figure, the value of the first series, as a plain number: 1260, not 1,260. <code>--v2</code> to <code>--v4</code> are the next series, up to four, in the order of the legend</div></td></tr>
+                  <tr><td data-label="Option"><div><code>--max</code></div></td><td data-label="Effect"><div>The goal the values are a part of. Without it, or when the series add up to more, the series fill the ring</div></td></tr>
+                  <tr><td data-label="Option"><div><code>--luz-ring-size</code></div></td><td data-label="Effect"><div>The largest width of the half ring, 18rem by default; it shrinks to the width of its box</div></td></tr>
+                  <tr><td data-label="Option"><div><code>--luz-ring-color</code></div></td><td data-label="Effect"><div>Another colour for the first series, such as <code>var(--luz-chart-5)</code>; the others keep <code>--luz-chart-2</code> to <code>--luz-chart-4</code></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 id="how">How it works</h3>
+            <p>A figure with its caption, the figure and its label in a paragraph, and, for series, a legend. The text is the data. The ring is a picture of it, drawn by the paragraph's two pseudo-elements, half a ring over the figure: one paints the track, the other the series, each cut to a band by a mask, so assistive technology never meets it.</p>
+            <p>Each series takes its share of the sweep: its <code>--v</code> over <code>--max</code>, or over the sum of the values when there is no <code>--max</code>. The series take <code>--luz-chart-1</code> to <code>--luz-chart-4</code> in order, the colours of the legend's swatches. The ring is half a ring, its band about the weight of a bar list's bar, its ends cut square. It runs from the left, clockwise, in every language, as a clock does. The inline <code>style</code> sets only numbers; with a strict <code>style-src</code>, set them in a rule of your own.</p>
+            <p>The figure is a size container: when it is narrower than 14em, in a narrow column or at a large text size, the text goes under the arc instead of inside it. On paper the ring is left out and the text prints.</p>
+            <h3 id="no-js">Without JavaScript</h3>
+            <p>It needs none. Without the stylesheet the figure reads as its caption, the figure and its label, and the legend, a list of names and figures; there is no ring.</p>
+            <h3 id="keyboard">Keyboard and ARIA</h3>
+            <p>Nothing takes focus and there is no ARIA: the ring is drawn by pseudo-elements with no text, so a screen reader reads the caption, the figure, its label and the legend, in that order. Write the goal into the label (“of 2,000 visitors”), since the ring alone does not say it.</p>
+            <p>In forced colors the track is the background, so the gaps between the series are too; the series and the swatches of the legend take the same system colours, and each swatch shows the number of its series, in the order of the ring from the left.</p>
+            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
+          </div>
+          <div class="luz-tabpanel docs-view" id="design-panel">
+            <h2 class="docs-view__title" id="design">Design</h2>
+            <h3 id="when">When to use</h3>
+            <p>Use it in a panel to show how far one value is to its goal (a quota, a budget, a storage limit), or how one total is split into two or three parts, when the figure is the point and the ring a glance at it.</p>
+            <h3 id="when-not">When not to use</h3>
+            <p>Do not use it to compare values with each other (use a <a href="/docs/catalog/bar-list/">bar list</a> or a <a href="/docs/catalog/column-chart/">column chart</a>: a length is read better than an angle), for more than four series (use a <a href="/docs/catalog/stacked-bar/">stacked bar</a>), or for a value in running text or a form (use a <a href="/docs/components/meter/">meter</a>).</p>
+            <h3 id="do-dont">Do and don't</h3>
+            <div class="luz-do-dont">
+              <figure class="luz-do-dont__item luz-do-dont__item--do">
+                <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say the goal in the label, so the figure reads whole without the ring.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-ring" style="--v1: 1260; --max: 2000">
+                    <figcaption>Visitors this month</figcaption>
+                    <p class="luz-ring__value">
+                      <span class="luz-ring__figure">1,260</span>
+                      <span class="luz-ring__label">of 2,000 visitors</span>
+                    </p>
+                  </figure>
+                </div>
+              </figure>
+              <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Leave the goal to the ring: “1,260” alone does not say of how many.</figcaption>
+                <div class="luz-do-dont__stage" inert aria-hidden="true">
+                  <figure class="luz-ring" style="--v1: 1260; --max: 2000">
+                    <figcaption>Visitors this month</figcaption>
+                    <p class="luz-ring__value">
+                      <span class="luz-ring__figure">1,260</span>
+                      <span class="luz-ring__label">visitors</span>
+                    </p>
+                  </figure>
+                </div>
+              </figure>
+            </div>
+            <h3 id="content">Writing the content</h3>
+            <p>Name what is counted and the period in the caption (“Visitors this month”), write the figure as it is read, with its separators, and say the goal or the unit in the label. Keep the names of the legend to a word or two. The data and the labels are yours: the component only draws them.</p>
+            <h3 id="contrast">Contrast and focus</h3>
+            <p>Each series is a chart colour on the surface and on the track; the track is decorative, because the figure says the value.</p>
+            <div class="luz-table-wrap" role="region" aria-label="Ring contrast in each mode" tabindex="0">
+              <table class="luz-table docs-contrast">
+                <thead>
+                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Part"><div>Series 1 on the page</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 2 on the page</div></td><td data-label="Colour on background"><div><code>--luz-chart-2</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.3:1</div></td><td data-label="Dark"><div>8.9:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 1 on a card</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>7.2:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 2 on a card</div></td><td data-label="Colour on background"><div><code>--luz-chart-2</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>8.2:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 1 on the track</div></td><td data-label="Colour on background"><div><code>--luz-chart-1</code> on <code>--luz-chart-track</code></div></td><td data-label="Light"><div>3.4:1</div></td><td data-label="Dark"><div>3.8:1</div></td><td data-label="High contrast"><div>6.8:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 2 on the track</div></td><td data-label="Colour on background"><div><code>--luz-chart-2</code> on <code>--luz-chart-track</code></div></td><td data-label="Light"><div>3.2:1</div></td><td data-label="Dark"><div>4.4:1</div></td><td data-label="High contrast"><div>4.4:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 3 on the page</div></td><td data-label="Colour on background"><div><code>--luz-chart-3</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>9.6:1</div></td><td data-label="Dark"><div>10.6:1</div></td><td data-label="High contrast"><div>10.9:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 3 on the track</div></td><td data-label="Colour on background"><div><code>--luz-chart-3</code> on <code>--luz-chart-track</code></div></td><td data-label="Light"><div>5.9:1</div></td><td data-label="Dark"><div>5.3:1</div></td><td data-label="High contrast"><div>5.2:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 4 on the page</div></td><td data-label="Colour on background"><div><code>--luz-chart-4</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>9.8:1</div></td><td data-label="Dark"><div>6.1:1</div></td><td data-label="High contrast"><div>6.6:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Series 4 on the track</div></td><td data-label="Colour on background"><div><code>--luz-chart-4</code> on <code>--luz-chart-track</code></div></td><td data-label="Light"><div>6.0:1</div></td><td data-label="Dark"><div>3.0:1</div></td><td data-label="High contrast"><div>3.2:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Figure</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                  <tr><td data-label="Part"><div>Label and name</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+            <ul>
+              <li><strong>Focus:</strong> nothing takes it.</li>
+              <li><strong>Not colour alone:</strong> every value is in text, a gap of the track separates two series, and the legend is in the order of the ring.</li>
+            </ul>
+            <h3 id="tokens">Tokens it uses</h3>
+            <p>The 18 tokens that <code>components/ring.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
+            <dl class="docs-uses">
+              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-chart-1"><code>--luz-chart-1</code></a>, <a href="/docs/tokens/color/#luz-chart-2"><code>--luz-chart-2</code></a>, <a href="/docs/tokens/color/#luz-chart-3"><code>--luz-chart-3</code></a>, <a href="/docs/tokens/color/#luz-chart-4"><code>--luz-chart-4</code></a>, <a href="/docs/tokens/color/#luz-chart-track"><code>--luz-chart-track</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-4xl</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-heading</code>, <code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-2xl</code>, <code>--luz-text-sm</code>, <code>--luz-text-xs</code></dd></div>
+              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+            </dl>
+            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+          </div>
+    </div>
