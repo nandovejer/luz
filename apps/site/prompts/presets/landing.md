@@ -7,7 +7,7 @@ A landing page presents one thing (a product, an event, a person) and leads the 
 3. The header: the name only, or the name with links and the colour mode switcher.
 4. Any form, and where its data goes. LUZ styles the form; it does not send it.
 
-Start from this skeleton.
+Start from this skeleton. `luz-nav-toggle` needs `{{nav-toggle-css}}`.
 
 ```html
 <body class="o-page luz-glow">

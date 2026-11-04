@@ -2,12 +2,12 @@
 
 An app is a web application: a dashboard, a back office, a tool the person signs in to. Ask:
 
-1. The navigation: a sidebar (recommended for more than five views), a header only, or both.
+1. The navigation: a sidebar (recommended above five views), a header only, or both.
 2. The first views, by name: dashboard, list with a table, detail, form, settings.
-3. What the data comes from (an API, a store) and who renders it (server or client). LUZ is the markup either way.
+3. What the data comes from (an API, a store) and who renders it (server or client).
 4. The empty, loading and error states of each view: what each says.
 
-Start from this skeleton. A menu is a `luz-dropdown` with a `popover`, like the account menu; `luz-btn` goes on a `button` or an `a`, never a `summary`. Numbers are cards; tables, forms, dialogs, tabs and alerts are core's. Data views (bar list, column chart, stacked bar, heat map, line chart) each draw a native table or list that stays in the page; the author supplies the data.
+Start from this skeleton. `luz-nav-toggle` needs `{{nav-toggle-css}}`. A menu is a `luz-dropdown` with a `popover`; `luz-btn` is never a `summary`. Numbers are cards; tables, forms, dialogs, tabs and alerts are core's. Data views (bar list, column chart, stacked bar, heat map, line chart) each draw a native table or list that stays in the page; the author supplies the data. A line chart is `<luz-chart>`. A stacked bar part is sized by `style="--v: 62"`, a column or heat map cell by `--v: 0.8` (0 to 1): the one `style` allowed.
 
 ```html
 <body>
@@ -30,7 +30,6 @@ Start from this skeleton. A menu is a `luz-dropdown` with a `popover`, like the 
        <button class="luz-btn luz-btn--ghost luz-app-bar__account" type="button" popovertarget="account-menu"><span class="luz-avatar luz-avatar--sm">AR</span> <span class="luz-app-bar__account-name">Ana Ruiz</span></button>
        <div class="luz-dropdown__menu" id="account-menu" popover>
         <ul class="luz-dropdown__list">
-         <li><a class="luz-dropdown__item" href="account/">Account settings</a></li>
          <li><a class="luz-dropdown__item" href="logout/">Sign out</a></li>
         </ul>
        </div>
@@ -41,7 +40,6 @@ Start from this skeleton. A menu is a `luz-dropdown` with a `popover`, like the 
    <main class="luz-dashboard" id="main-content" tabindex="-1">
     <div class="luz-dashboard__head">
      <h1 class="luz-dashboard__title">Overview</h1>
-     <div class="o-actions"><a class="luz-btn luz-btn--primary" href="reports/new/">New report</a></div>
     </div>
     <ul class="o-grid o-grid--auto">
      <li class="luz-card luz-dashboard__panel"><h2 class="luz-card__title">Orders</h2><p class="luz-card__body">1,204</p></li>
