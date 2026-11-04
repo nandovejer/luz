@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{lang}}" dir="{{dir}}" data-theme="light">
+<html lang="{{lang}}" dir="{{dir}}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -538,9 +538,9 @@ a {
       </div>
 
       <!-- The catalog's time of day, under core's three modes. The bar is a
-           <luz-theme-time variant="bar"> with no moments of its own: it follows the hour
-           of the footer's element, which owns the page, and the footer's moments are the
-           ones it shows. Without JavaScript the bar is not built: the text stays -->
+           <luz-theme-time variant="bar"> with no moments of its own: it uses the moments
+           of the footer's element, which owns the page, and dragging it is the reader's
+           choice of an hour (Auto stays the system's). Without JavaScript the bar is not built: the text stays -->
       <div class="landing-day" role="group" aria-labelledby="modes-day-title">
         <p class="landing-modes__tag landing-day__tag"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18M7 18a5 5 0 0 1 10 0M12 6v3M5.6 10.6l1.8 1.8M18.4 10.6l-1.8 1.8"/></svg><span class="landing-badge__text">{{t:modes.day.tag}}</span></p>
         <div class="landing-day__head">
@@ -728,7 +728,7 @@ a {
         <luz-theme-mode>
           <fieldset class="luz-theme-mode__group site-modes">
             <legend class="luz-theme-mode__legend">{{t:footer.mode}}</legend>
-            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 7.5a4.5 4.5 0 0 0 0 9ZM12 7.5a4.5 4.5 0 0 1 0 9M12 2.5v2M12 19.5v2M2.5 12h2M5.3 5.3l1.4 1.4M5.3 18.7l1.4-1.4"/><path d="M12 7.5a4.5 4.5 0 0 0 0 9Z" fill="currentColor"/></svg>{{t:footer.auto}}</label>
+            <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto"><svg class="luz-theme-mode__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 7.5a4.5 4.5 0 0 0 0 9ZM12 7.5a4.5 4.5 0 0 1 0 9M12 2.5v2M12 19.5v2M2.5 12h2M5.3 5.3l1.4 1.4M5.3 18.7l1.4-1.4"/><path d="M12 7.5a4.5 4.5 0 0 0 0 9Z" fill="currentColor"/></svg>{{t:footer.auto}}</label>
             <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light"><svg class="luz-theme-mode__icon" aria-hidden="true"><use href="#i10"/></svg>{{t:footer.light}}</label>
             <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark"><svg class="luz-theme-mode__icon" aria-hidden="true"><use href="#i11"/></svg>{{t:footer.dark}}</label>
             <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast"><svg class="luz-theme-mode__icon" aria-hidden="true"><use href="#i12"/></svg>{{t:footer.contrast}}</label>

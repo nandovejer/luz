@@ -2,7 +2,7 @@
 title: Modo de color
 description: Permite elegir Automático, claro, oscuro o alto contraste: con botones de opción que funcionan sin JavaScript o con un botón redondo que los recorre.
 keywords: modo oscuro, selector de modo, claro y oscuro
-source: 90bcfae21a5c
+source: ceebd6f1da55
 reviewed: false
 -->
     <div class="docs-component" id="c-theme-mode">
@@ -27,7 +27,7 @@ reviewed: false
           <p>Qué puedes esperar:</p>
           <ul>
             <li>Sin <a href="#boot">el script de la cabecera</a>, una persona con modo oscuro ve primero la página clara durante un instante: el elemento se ejecuta después del primer pintado.</li>
-            <li>Automático sigue solo los ajustes del sistema. Para que siga también la hora del día, añade <a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, del catálogo.</li>
+            <li>Automático sigue solo los ajustes del sistema. Para que quien lee pueda elegir también la hora del día, añade <a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, del catálogo.</li>
             <li>El texto es tuyo: LUZ no escribe ninguna etiqueta, así que traduce la leyenda y los modos con la página.</li>
             <li>No se ha probado con un lector de pantalla.</li>
           </ul>
@@ -128,7 +128,7 @@ reviewed: false
               <li><strong>Tu propio origen:</strong> con una Content-Security-Policy (CSP) sin <code>'unsafe-inline'</code>, sirve el archivo desde tu propio origen. Un script bloqueante de otro servidor retrasa el primer pintado y necesita ese servidor en <code>script-src</code>.</li>
             </ul>
             <h3 id="extend">Amplíalo con el catálogo: momentos del día y la barra</h3>
-            <p><a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, de <code>@luz-ds/catalog</code>, envuelve a este elemento. Le da a Automático la hora del día, en los momentos que declares (amanecer, mañana, atardecer), y puede añadir un deslizador de las 24 horas. Este elemento no lo necesita: si el catálogo no carga, el botón funciona como aquí.</p>
+            <p><a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, de <code>@luz-ds/catalog</code>, envuelve a este elemento. Añade la hora del día como una elección, en los momentos que declares (amanecer, mañana, atardecer), y puede añadir un deslizador de las 24 horas. Automático sigue siendo el del sistema. Este elemento no lo necesita: si el catálogo no carga, el botón funciona como aquí.</p>
             <p class="docs-view__xref"><a href="#contrast">El contraste y el foco</a> están en la pestaña Diseño.</p>
           </div>
           <div class="luz-tabpanel docs-view" id="design-panel">

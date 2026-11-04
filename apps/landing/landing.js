@@ -47,12 +47,12 @@ function initCopy() {
 /* ---- Modes: each box uses its mode on a click ------------------------- */
 
 /**
- * The buttons of "Modes" check the footer's radio of their mode, as a click
- * would: <luz-theme-mode> applies it, remembers it and moves its button, and
+ * The buttons of "Modes" choose their mode in the footer's <luz-theme-mode>, as a
+ * click on its button would: it applies it, remembers it and moves its button, and
  * tells the page with luz-theme-mode:change, which presses the box of the mode
- * in use (none in Auto). While the page takes the mode, its colours change at
- * the pace of a click (data-mode-preview, landing.css) and the box's icon
- * moves (is-loading). Without <luz-theme-mode> (no site module) the buttons
+ * in use (the system's too; none while an hour is chosen). While the page
+ * takes the mode, its colours change at the pace of a click (data-mode-preview,
+ * landing.css) and the box's icon moves (is-loading). Without <luz-theme-mode> (no site module) the buttons
  * stay hidden.
  */
 function initModes() {
@@ -61,7 +61,9 @@ function initModes() {
   if (!modes || !buttons.length) return;
   const root = document.documentElement;
   let settle = 0;
-  const press = (theme) => {
+  // The box of the mode in use is pressed, the system's included; none while Auto is checked (an hour or a moment is chosen)
+  const press = () => {
+    const theme = modes.querySelector('input[value="auto"]')?.checked ? null : modes.mode;
     for (const button of buttons) button.setAttribute("aria-pressed", String(button.dataset.applyMode === theme));
   };
   for (const button of buttons) {
@@ -72,13 +74,16 @@ function initModes() {
       // A reflow, so the icon moves again on a second click
       void button.offsetWidth;
       button.classList.add("is-loading");
-      modes.querySelector(`input[name="luz-theme-mode"][value="${button.dataset.applyMode}"]`)?.click();
+      // Not a click on the radio: the one of the mode in use is already checked, and a click on it changes nothing
+      modes.choice = button.dataset.applyMode;
       settle = setTimeout(() => delete root.dataset.modePreview, 500);
     });
     button.addEventListener("animationend", () => button.classList.remove("is-loading"));
   }
-  document.addEventListener("luz-theme-mode:change", (event) => press(event.detail?.auto ? null : event.detail?.mode));
-  press(modes.choice && modes.choice !== "auto" ? modes.choice : null);
+  // <luz-theme-time> checks the radio of the mode in use after core's event: its own event comes last
+  document.addEventListener("luz-theme-mode:change", press);
+  document.addEventListener("luz-theme-time:change", press);
+  press();
   // What needs this script and <luz-theme-mode>: shown only now
   for (const el of document.querySelectorAll("[data-needs-js]")) el.hidden = false;
 }
@@ -99,8 +104,8 @@ function initNativePrototype() {
 
 /**
  * The bar of the band under the three boxes (<luz-theme-time variant="bar">)
- * has no moments of its own: it follows the hour of the footer's element,
- * which owns the page. It only needs the city of the visitor's time zone, as
+ * has no moments of its own: it uses those of the footer's element, which
+ * owns the page. It only needs the city of the visitor's time zone, as
  * the globe's bar has.
  */
 function initDayBand() {

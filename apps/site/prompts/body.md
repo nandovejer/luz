@@ -43,7 +43,7 @@ Then ask what the kind of site needs, in a second round.
 
 ## Colour mode switcher
 
-`<luz-theme-mode>` wraps a fieldset, Auto first; `luz-theme-mode__group` and `luz-theme-mode__option` are core's. `<luz-theme-time>` (catalog) wraps it to follow the clock (moments with `data-from`, `variant="bar"`, `show`).
+`<luz-theme-mode>` wraps a fieldset, Auto first; `luz-theme-mode__group` and `luz-theme-mode__option` are core's. `<luz-theme-time>` (catalog) wraps it to add moments the reader picks (`data-from`, `variant="bar"`, `show`).
 
 ```html
 <luz-theme-mode>

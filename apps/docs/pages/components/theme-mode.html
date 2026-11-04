@@ -30,7 +30,7 @@ keywords: dark mode, mode switcher, light and dark
           <p>What to expect:</p>
           <ul>
             <li>Without <a href="#boot">the script for the head</a>, a dark visitor sees the page light for a moment first: the element runs after the first paint.</li>
-            <li>Auto follows the system setting only. To follow the time of day too, add <a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a> from the catalog.</li>
+            <li>Auto follows the system setting only. To let a reader pick the time of day too, add <a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a> from the catalog.</li>
             <li>The text is yours: LUZ writes no label, so translate the legend and the modes with the page.</li>
             <li>It has not been tested with a screen reader.</li>
           </ul>
@@ -131,7 +131,7 @@ keywords: dark mode, mode switcher, light and dark
               <li><strong>Your own origin:</strong> under a Content-Security-Policy (CSP) without <code>'unsafe-inline'</code>, serve the file from your own origin. A blocking script from another host delays the first paint and needs that host in <code>script-src</code>.</li>
             </ul>
             <h3 id="extend">Extend it with the catalog: day moments and the bar</h3>
-            <p><a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, in <code>@luz-ds/catalog</code>, wraps this element. It gives Auto the time of day, in moments you declare (dawn, morning, sunset), and can add a slider of the 24 hours. This element does not need it: if the catalog does not load, the button works as it does here.</p>
+            <p><a href="/docs/catalog/theme-time/"><code>&lt;luz-theme-time&gt;</code></a>, in <code>@luz-ds/catalog</code>, wraps this element. It adds the time of day as a choice, in moments you declare (dawn, morning, sunset), and can add a slider of the 24 hours. Auto stays the system’s. This element does not need it: if the catalog does not load, the button works as it does here.</p>
             <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
           </div>
           <div class="luz-tabpanel docs-view" id="design-panel">
