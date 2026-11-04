@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUZ catalog: the interactive charts, &lt;luz-chart interactive&gt;</title>
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+  <!-- Sheets of catalog: they are not in luz.css, a page links them after it -->
+  <link rel="stylesheet" href="/packages/catalog/dist/components/column-chart.css">
+  <link rel="stylesheet" href="/packages/catalog/dist/components/chart.css">
+  <script type="module" src="/packages/catalog/dist/catalog.min.js"></script>
+</head>
+<body>
+  <!-- tests/chart-interactive.spec.js (with the script) and tests/chart.spec.js (without it). ?only=<case> keeps one section.
+       The tables have a row per day, its name in a th scope="row", and a cell per series; the column chart's table has no class,
+       and the script gives it one. Apr 4 of Desktop says "380 (peak)" in its text and 380 in its value. -->
+  <main id="main">
+    <h1>Interactive charts</h1>
+
+    <section data-case="column">
+      <h2>Column</h2>
+      <luz-chart id="column" type="column" interactive>
+          <div class="luz-table-wrap" role="region" aria-label="Visitors per day, April 1 to 7" tabindex="0">
+            <table>
+              <caption>Visitors per day, April 1 to 7</caption>
+              <thead>
+                <tr><th scope="col">Day</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr>
+              </thead>
+              <tbody>
+              <tr><th scope="row">Apr 1</th><td style="--v: 0.5"><data value="252">252</data></td><td style="--v: 0.3"><data value="148">148</data></td></tr>
+              <tr><th scope="row">Apr 2</th><td style="--v: 0.54"><data value="271">271</data></td><td style="--v: 0.55"><data value="276">276</data></td></tr>
+              <tr><th scope="row">Apr 3</th><td style="--v: 0.36"><data value="182">182</data></td><td style="--v: 0.26"><data value="128">128</data></td></tr>
+              <tr><th scope="row">Apr 4</th><td style="--v: 0.76"><data value="380">380 (peak)</data></td><td style="--v: 0.49"><data value="247">247</data></td></tr>
+              <tr><th scope="row">Apr 5</th><td style="--v: 0.39"><data value="194">194</data></td><td style="--v: 0.41"><data value="203">203</data></td></tr>
+              <tr><th scope="row">Apr 6</th><td style="--v: 0.38"><data value="191">191</data></td><td style="--v: 0.15"><data value="74">74</data></td></tr>
+              <tr><th scope="row">Apr 7</th><td style="--v: 0.36"><data value="179">179</data></td><td style="--v: 0.2"><data value="98">98</data></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </luz-chart>
+    </section>
+
+    <section data-case="line">
+      <h2>Line</h2>
+      <luz-chart id="line" type="line" interactive data-luz-label-table="Show table" data-luz-label-chart="Show chart">
+          <table class="luz-table">
+            <caption>Visitors per day, April 1 to 7</caption>
+            <thead>
+              <tr><th scope="col">Day</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr>
+            </thead>
+            <tbody>
+            <tr><th scope="row">Apr 1</th><td><data value="252">252</data></td><td><data value="148">148</data></td></tr>
+            <tr><th scope="row">Apr 2</th><td><data value="271">271</data></td><td><data value="276">276</data></td></tr>
+            <tr><th scope="row">Apr 3</th><td><data value="182">182</data></td><td><data value="128">128</data></td></tr>
+            <tr><th scope="row">Apr 4</th><td><data value="380">380 (peak)</data></td><td><data value="247">247</data></td></tr>
+            <tr><th scope="row">Apr 5</th><td><data value="194">194</data></td><td><data value="203">203</data></td></tr>
+            <tr><th scope="row">Apr 6</th><td><data value="191">191</data></td><td><data value="74">74</data></td></tr>
+            <tr><th scope="row">Apr 7</th><td><data value="179">179</data></td><td><data value="98">98</data></td></tr>
+            </tbody>
+          </table>
+        </luz-chart>
+    </section>
+
+    <!-- Twenty-eight days, to share a narrow width -->
+    <section data-case="column28">
+      <h2>Twenty-eight days</h2>
+      <luz-chart id="column28" type="column" interactive>
+          <div class="luz-table-wrap" role="region" aria-label="Visitors per day, April 1 to 28" tabindex="0">
+            <table>
+              <caption>Visitors per day, April 1 to 28</caption>
+              <thead>
+                <tr><th scope="col">Day</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr>
+              </thead>
+              <tbody>
+              <tr><th scope="row">Apr 1</th><td style="--v: 0.5"><data value="252">252</data></td><td style="--v: 0.3"><data value="148">148</data></td></tr>
+              <tr><th scope="row">Apr 2</th><td style="--v: 0.54"><data value="271">271</data></td><td style="--v: 0.55"><data value="276">276</data></td></tr>
+              <tr><th scope="row">Apr 3</th><td style="--v: 0.36"><data value="182">182</data></td><td style="--v: 0.26"><data value="128">128</data></td></tr>
+              <tr><th scope="row">Apr 4</th><td style="--v: 0.76"><data value="380">380</data></td><td style="--v: 0.49"><data value="247">247</data></td></tr>
+              <tr><th scope="row">Apr 5</th><td style="--v: 0.39"><data value="194">194</data></td><td style="--v: 0.41"><data value="203">203</data></td></tr>
+              <tr><th scope="row">Apr 6</th><td style="--v: 0.38"><data value="191">191</data></td><td style="--v: 0.15"><data value="74">74</data></td></tr>
+              <tr><th scope="row">Apr 7</th><td style="--v: 0.36"><data value="179">179</data></td><td style="--v: 0.2"><data value="98">98</data></td></tr>
+              <tr><th scope="row">Apr 8</th><td style="--v: 0.36"><data value="179">179</data></td><td style="--v: 0.26"><data value="132">132</data></td></tr>
+              <tr><th scope="row">Apr 9</th><td style="--v: 0.56"><data value="281">281</data></td><td style="--v: 0.43"><data value="217">217</data></td></tr>
+              <tr><th scope="row">Apr 10</th><td style="--v: 0.37"><data value="187">187</data></td><td style="--v: 0.34"><data value="171">171</data></td></tr>
+              <tr><th scope="row">Apr 11</th><td style="--v: 0.39"><data value="193">193</data></td><td style="--v: 0.5"><data value="251">251</data></td></tr>
+              <tr><th scope="row">Apr 12</th><td style="--v: 0.56"><data value="278">278</data></td><td style="--v: 0.25"><data value="125">125</data></td></tr>
+              <tr><th scope="row">Apr 13</th><td style="--v: 0.46"><data value="228">228</data></td><td style="--v: 0.3"><data value="152">152</data></td></tr>
+              <tr><th scope="row">Apr 14</th><td style="--v: 0.24"><data value="120">120</data></td><td style="--v: 0.2"><data value="100">100</data></td></tr>
+              <tr><th scope="row">Apr 15</th><td style="--v: 0.66"><data value="331">331</data></td><td style="--v: 0.54"><data value="270">270</data></td></tr>
+              <tr><th scope="row">Apr 16</th><td style="--v: 0.64"><data value="319">319</data></td><td style="--v: 0.25"><data value="125">125</data></td></tr>
+              <tr><th scope="row">Apr 17</th><td style="--v: 0.63"><data value="317">317</data></td><td style="--v: 0.52"><data value="259">259</data></td></tr>
+              <tr><th scope="row">Apr 18</th><td style="--v: 0.54"><data value="271">271</data></td><td style="--v: 0.24"><data value="122">122</data></td></tr>
+              <tr><th scope="row">Apr 19</th><td style="--v: 0.45"><data value="226">226</data></td><td style="--v: 0.24"><data value="121">121</data></td></tr>
+              <tr><th scope="row">Apr 20</th><td style="--v: 0.37"><data value="187">187</data></td><td style="--v: 0.17"><data value="86">86</data></td></tr>
+              <tr><th scope="row">Apr 21</th><td style="--v: 0.29"><data value="146">146</data></td><td style="--v: 0.26"><data value="130">130</data></td></tr>
+              <tr><th scope="row">Apr 22</th><td style="--v: 0.41"><data value="206">206</data></td><td style="--v: 0.5"><data value="248">248</data></td></tr>
+              <tr><th scope="row">Apr 23</th><td style="--v: 0.4"><data value="200">200</data></td><td style="--v: 0.51"><data value="256">256</data></td></tr>
+              <tr><th scope="row">Apr 24</th><td style="--v: 0.5"><data value="248">248</data></td><td style="--v: 0.51"><data value="253">253</data></td></tr>
+              <tr><th scope="row">Apr 25</th><td style="--v: 0.76"><data value="378">378</data></td><td style="--v: 0.57"><data value="284">284</data></td></tr>
+              <tr><th scope="row">Apr 26</th><td style="--v: 0.43"><data value="216">216</data></td><td style="--v: 0.27"><data value="136">136</data></td></tr>
+              <tr><th scope="row">Apr 27</th><td style="--v: 0.38"><data value="190">190</data></td><td style="--v: 0.31"><data value="153">153</data></td></tr>
+              <tr><th scope="row">Apr 28</th><td style="--v: 0.4"><data value="199">199</data></td><td style="--v: 0.19"><data value="94">94</data></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </luz-chart>
+    </section>
+
+    <!-- The page's language writes the totals -->
+    <section data-case="spanish">
+      <h2>Spanish</h2>
+      <div lang="es">
+        <luz-chart id="column-es" type="column" interactive>
+          <div class="luz-table-wrap" role="region" aria-label="Visitantes por día, del 1 al 7 de abril" tabindex="0">
+            <table>
+              <caption>Visitantes por día, del 1 al 7 de abril</caption>
+              <thead>
+                <tr><th scope="col">Day</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr>
+              </thead>
+              <tbody>
+              <tr><th scope="row">Apr 1</th><td style="--v: 0.5"><data value="252">252</data></td><td style="--v: 0.3"><data value="148">148</data></td></tr>
+              <tr><th scope="row">Apr 2</th><td style="--v: 0.54"><data value="271">271</data></td><td style="--v: 0.55"><data value="276">276</data></td></tr>
+              <tr><th scope="row">Apr 3</th><td style="--v: 0.36"><data value="182">182</data></td><td style="--v: 0.26"><data value="128">128</data></td></tr>
+              <tr><th scope="row">Apr 4</th><td style="--v: 0.76"><data value="380">380 (peak)</data></td><td style="--v: 0.49"><data value="247">247</data></td></tr>
+              <tr><th scope="row">Apr 5</th><td style="--v: 0.39"><data value="194">194</data></td><td style="--v: 0.41"><data value="203">203</data></td></tr>
+              <tr><th scope="row">Apr 6</th><td style="--v: 0.38"><data value="191">191</data></td><td style="--v: 0.15"><data value="74">74</data></td></tr>
+              <tr><th scope="row">Apr 7</th><td style="--v: 0.36"><data value="179">179</data></td><td style="--v: 0.2"><data value="98">98</data></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </luz-chart>
+      </div>
+    </section>
+
+    <!-- A right-to-left page: the columns follow it, the plot of a line does not -->
+    <section data-case="rtl">
+      <h2>Right to left</h2>
+      <div dir="rtl">
+        <luz-chart id="column-rtl" type="column" interactive>
+          <div class="luz-table-wrap" role="region" aria-label="Visitors per day, April 1 to 7" tabindex="0">
+            <table>
+              <caption>Visitors per day, April 1 to 7</caption>
+              <thead>
+                <tr><th scope="col">Day</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr>
+              </thead>
+              <tbody>
+              <tr><th scope="row">Apr 1</th><td style="--v: 0.5"><data value="252">252</data></td><td style="--v: 0.3"><data value="148">148</data></td></tr>
+              <tr><th scope="row">Apr 2</th><td style="--v: 0.54"><data value="271">271</data></td><td style="--v: 0.55"><data value="276">276</data></td></tr>
+              <tr><th scope="row">Apr 3</th><td style="--v: 0.36"><data value="182">182</data></td><td style="--v: 0.26"><data value="128">128</data></td></tr>
+              <tr><th scope="row">Apr 4</th><td style="--v: 0.76"><data value="380">380 (peak)</data></td><td style="--v: 0.49"><data value="247">247</data></td></tr>
+              <tr><th scope="row">Apr 5</th><td style="--v: 0.39"><data value="194">194</data></td><td style="--v: 0.41"><data value="203">203</data></td></tr>
+              <tr><th scope="row">Apr 6</th><td style="--v: 0.38"><data value="191">191</data></td><td style="--v: 0.15"><data value="74">74</data></td></tr>
+              <tr><th scope="row">Apr 7</th><td style="--v: 0.36"><data value="179">179</data></td><td style="--v: 0.2"><data value="98">98</data></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </luz-chart>
+        <luz-chart id="line-rtl" type="line" interactive data-luz-label-table="Show table" data-luz-label-chart="Show chart">
+          <table class="luz-table">
+            <caption>Visitors per day, April 1 to 7, in a right-to-left page</caption>
+            <thead>
+              <tr><th scope="col">Day</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr>
+            </thead>
+            <tbody>
+            <tr><th scope="row">Apr 1</th><td><data value="252">252</data></td><td><data value="148">148</data></td></tr>
+            <tr><th scope="row">Apr 2</th><td><data value="271">271</data></td><td><data value="276">276</data></td></tr>
+            <tr><th scope="row">Apr 3</th><td><data value="182">182</data></td><td><data value="128">128</data></td></tr>
+            <tr><th scope="row">Apr 4</th><td><data value="380">380 (peak)</data></td><td><data value="247">247</data></td></tr>
+            <tr><th scope="row">Apr 5</th><td><data value="194">194</data></td><td><data value="203">203</data></td></tr>
+            <tr><th scope="row">Apr 6</th><td><data value="191">191</data></td><td><data value="74">74</data></td></tr>
+            <tr><th scope="row">Apr 7</th><td><data value="179">179</data></td><td><data value="98">98</data></td></tr>
+            </tbody>
+          </table>
+        </luz-chart>
+      </div>
+    </section>
+
+    <p><a id="after" href="#main">After the charts</a></p>
+  </main>
+  <script>
+    const only = new URLSearchParams(location.search).get('only');
+    if (only) document.querySelectorAll('[data-case]').forEach((section) => section.dataset.case === only || section.remove());
+  </script>
+</body>
+</html>

@@ -86,7 +86,7 @@ describe("chart.js is a lazy chunk that imports nothing and defines its element 
 
   it("describes the element in its header, for custom-elements.json", () => {
     expect(chunk()).toMatch(/@element luz-chart\b/);
-    for (const attr of ["type", "variant", "data-luz-label-table", "data-luz-label-chart"]) expect(chunk(), attr).toMatch(new RegExp(`@attr \\{[^}]+\\} \\[?${attr}\\b`));
+    for (const attr of ["type", "variant", "interactive", "data-luz-label-table", "data-luz-label-chart"]) expect(chunk(), attr).toMatch(new RegExp(`@attr \\{[^}]+\\} \\[?${attr}\\b`));
   });
 });
 
@@ -123,11 +123,34 @@ describe("chart.js draws with DOM calls and writes no HTML (SEC-IDX-2)", () => {
     expect(code(chunk())).not.toMatch(/\.animate\(|requestAnimationFrame|setInterval|setTimeout|transition|animation/i);
   });
 
-  it("swaps the views with a native button: no keydown handler, no Escape (RL-3), no role or tabindex to make a control of a div", () => {
+  it("swaps the views with a native button: no role or tabindex to make a control of a div, and no key handler for the button", () => {
     const source = code(chunk());
     expect(source).toMatch(/createElement\(\s*tag\s*\)|["']button["']/);
-    expect(source).not.toMatch(/Escape|keyCode|["']keydown["']|["']keyup["']|["']keypress["']/);
     expect(source).not.toMatch(/role["'],\s*["']button/);
+    // Enter and Space press a native button: nothing listens to the keys of a button, and no other key event is used
+    expect(source).not.toMatch(/keyCode|["']keyup["']|["']keypress["']/);
+    expect(source).not.toMatch(/\.\s*(?:onkeydown|onkeyup|onkeypress)\b/);
+  });
+
+  it("listens to the keydown only for the roving focus of the rows and for the Escape of the readout, each named an RL-3 case (no native element has arrow keys between table rows, or an Escape for a readout that is no dialog or popover)", () => {
+    const raw = chunk();
+    const source = code(raw);
+    expect(source, "the keys of an interactive chart").toMatch(/["']keydown["']/);
+    // Where the keydown is heard: the table (the arrows, Home and End on a row) and the document (the Escape of the readout, while it shows)
+    const listened = [...source.matchAll(/(\w+(?:\.\w+)*|\w+\[[^\]]*\])\s*\(\s*["']keydown["']/g)].map((m) => m[1]);
+    expect(listened.length, "a keydown on the table and on the document, no more").toBeGreaterThanOrEqual(1);
+    expect(source).not.toMatch(/["']keydown["']\s*,[^)]*\bbutton\b/);
+    // The only keys it reads are the arrows, Home and End (the roving focus) and Escape (the readout); every Escape and every preventDefault cites RL-3 on the line before
+    const keys = new Set([...source.matchAll(/["'](Arrow\w+|Home|End|Escape|Enter|Space|Tab|PageUp|PageDown| )["']/g)].map((m) => m[1]));
+    expect([...keys].filter((key) => !/^(?:Arrow(?:Left|Right|Up|Down)|Home|End|Escape)$/.test(key))).toEqual([]);
+    const lines = raw.split("\n");
+    for (const [i, line] of lines.entries()) {
+      if (!/Escape|preventDefault/.test(line.replace(/\/\/.*$/, "")) || /^\s*(?:\/\/|\*|\/\*)/.test(line)) continue;
+      expect(lines.slice(Math.max(0, i - 2), i).join("\n"), `RL-3 is cited above: ${line.trim()}`).toMatch(/RL-3/);
+    }
+    // The Escape does not cancel the key: the readout is put away and an Escape that closes a dialog around the chart still does. Only the arrows are prevented
+    const prevented = lines.filter((line) => /preventDefault/.test(line.replace(/\/\/.*$/, "")));
+    expect(prevented, "preventDefault once: the arrows of the roving focus").toHaveLength(1);
   });
 });
 
@@ -245,7 +268,7 @@ describe("the package exports, declares and ships it", () => {
   });
 });
 
-describe("the manifests: the tag, its four attributes and its classes, in plain words", () => {
+describe("the manifests: the tag, its five attributes and its classes, in plain words", () => {
   const dist = (name) => JSON.parse(read(`packages/catalog/dist/${name}`));
   const declaration = () => {
     const found = dist("custom-elements.json").modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName === "luz-chart");
@@ -262,9 +285,9 @@ describe("the manifests: the tag, its four attributes and its classes, in plain 
     expect(declaration().demos).toStrictEqual([{ url: "/docs/catalog/chart/" }]);
   });
 
-  it("its attributes are type, variant and the two labels, each with a text", () => {
+  it("its attributes are type, variant, interactive and the two labels, each with a text", () => {
     const attributes = declaration().attributes;
-    expect(attributes.map((a) => a.name)).toEqual(["type", "variant", "data-luz-label-table", "data-luz-label-chart"]);
+    expect(attributes.map((a) => a.name).sort()).toEqual(["data-luz-label-chart", "data-luz-label-table", "interactive", "type", "variant"]);
     for (const a of attributes) expect(a.description?.length, a.name).toBeGreaterThan(10);
   });
 
@@ -280,9 +303,10 @@ describe("the manifests: the tag, its four attributes and its classes, in plain 
     }
   });
 
-  it("classes.json has the sixteen parts of the page, each a defined class of luz.catalog declared in components/chart.css", () => {
+  it("classes.json has the parts of the page (the sixteen of the lines and the spark, and five of the interactive header, the readout and the band), each a defined class of luz.catalog declared in components/chart.css", () => {
     const classes = dist("classes.json").classes.filter((c) => /^luz-chart(?:__|$)/.test(c.name));
-    const parts = ["area", "bar", "figure", "grid", "key", "legend", "line", "marker", "plot", "series", "spark", "swatch", "tick", "title", "toggle", "values"];
+    // The dot of a series (the ::before of a button and of a key of the readout) and the content of the readout (a p, a ul, spans) are no classes: basic, few classes
+    const parts = ["area", "bar", "figure", "grid", "key", "legend", "line", "marker", "plot", "series", "spark", "swatch", "tick", "title", "toggle", "values", "band", "pick", "picker", "readout", "total"];
     expect(classes.map((c) => c.name).sort()).toEqual(parts.map((p) => `luz-chart__${p}`).sort());
     for (const c of classes) {
       expect(c, c.name).toMatchObject({ layer: "luz.catalog", defined: true });
@@ -294,17 +318,18 @@ describe("the manifests: the tag, its four attributes and its classes, in plain 
     const files = front(read(PAGE)).files.split(",").map((f) => f.trim());
     expect(files).toContain("<luz-chart>");
     const listed = files.filter((f) => f.startsWith(".")).map((f) => f.slice(1)).sort();
-    const defined = [...new Set([...sheet().matchAll(/\.(luz-chart__[a-z]+)\b/g)].map((m) => m[1]))].sort();
+    const defined = [...new Set([...css(sheet()).matchAll(/\.(luz-chart__[a-z]+(?:-[a-z]+)*)/g)].map((m) => m[1]))].sort();
     expect(listed).toEqual(defined);
   });
 
-  it("the data luz-check ships has the tag, with its four attribute names and no text", () => {
+  it("the data luz-check ships has the tag, with its five attribute names and no text", () => {
     const file = "packages/check/dist/data/catalog/custom-elements.json";
     expect(existsSync(join(repo, file)), `${file} (pnpm build)`).toBe(true);
     const snapshot = JSON.parse(read(file));
     const found = snapshot.modules.flatMap((m) => m.declarations ?? []).find((d) => d.tagName === "luz-chart");
     expect(found, "luz-chart in the snapshot").toBeTruthy();
-    expect(found?.attributes).toEqual([{ name: "type" }, { name: "variant" }, { name: "data-luz-label-table" }, { name: "data-luz-label-chart" }]);
+    expect(found?.attributes?.map((a) => a.name).sort()).toEqual(["data-luz-label-chart", "data-luz-label-table", "interactive", "type", "variant"]);
+    for (const a of found?.attributes ?? []) expect(Object.keys(a), "the name and no text").toEqual(["name"]);
     expect(found?.stylesheet).toBe("components/chart.css");
   });
 });
@@ -349,12 +374,27 @@ describe("the stylesheet reads tokens and nothing else", () => {
     expect(opacities).toEqual([".luz-chart__area { fill-opacity: 0.16 }"]);
   });
 
-  it("takes space from the tokens: no literal margin, padding or gap but zero", () => {
+  it("takes space from the tokens: no literal margin, padding or gap but zero, and one exception of DR-8, written in DESIGN.md: the space around a day of an interactive column chart is a share of the width", () => {
+    // DR-8's exception: `min(var(--luz-space-3xs), 0.4%)` around a day and half of it around a column
+    const design = read("DESIGN.md");
+    const dr8 = design.slice(design.indexOf("### DR-8"), design.indexOf("### DR-9"));
+    expect(dr8, "the exception is written in DR-8 before it is used").toContain("min(var(--luz-space-3xs), 0.4%)");
+    expect(dr8).toContain("<luz-chart type=\"column\" interactive>");
+    const shrinking = /^min\(var\(--luz-space-3xs\)(?: \/ 2)?, 0\.[24]%\)$/;
+    const used = [];
     for (const { selector, body } of rulesOf(sheet())) {
       for (const [, property, value] of body.matchAll(/(?:^|[;\s])(margin(?:-[a-z]+)*|padding(?:-[a-z]+)*|gap|row-gap|column-gap)\s*:\s*([^;]+)/g)) {
-        expect(value.trim(), `${selector} { ${property} }`).toMatch(/^(?:0|auto|var\(--luz-space-[\w-]+\)(?:\s+var\(--luz-space-[\w-]+\))*)$/);
+        if (shrinking.test(value.trim())) {
+          used.push(`${selector} { ${property} }`);
+          expect(selector, "only inside an interactive column chart, once the script has drawn it").toMatch(/^luz-chart\[type="column"\]\[data-luz-ready\] \.luz-column-chart tbody (?:tr|td)$/);
+          expect(property).toBe("padding-inline");
+          continue;
+        }
+        // zero, auto or a step of the scale, alone or side by side ("0 var(--luz-space-xs)": no row gap, a step between columns)
+        expect(value.trim(), `${selector} { ${property} }`).toMatch(/^(?:0|auto|var\(--luz-space-[\w-]+\))(?:\s+(?:0|var\(--luz-space-[\w-]+\)))*$/);
       }
     }
+    expect(used, "a day and a column: the two places of the exception").toHaveLength(2);
   });
 
   it("uses logical properties for its boxes: no width, height, left, right, margin-left or text-align: left", () => {
