@@ -147,9 +147,9 @@ describe("the pages of the four", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("has the Components area with the 29 components, and the Catalog gallery with 40 pages", () => {
+  it("has the Components area with the 29 components, and the Catalog gallery with 41 pages", () => {
     expect(site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers")).toHaveLength(29);
-    expect(site.pages.filter((p) => p.meta.area === "catalog")).toHaveLength(40);
+    expect(site.pages.filter((p) => p.meta.area === "catalog")).toHaveLength(41);
   });
 });
 
@@ -259,7 +259,7 @@ describe("the rule between core and catalog", () => {
 
   it("PRINCIPLES.md and catalog's README say the same, in their words", () => {
     expect(read("PRINCIPLES.md")).toMatch(/\*\*Core or catalog\.\*\*[^\n]*the pieces that draw data \(the chart, the bar list, the column chart, the stacked bar, the heat map\)/);
-    expect(read("packages/catalog/README.md")).toMatch(/bar list, column chart, stacked bar and heat map/);
+    expect(read("packages/catalog/README.md")).toMatch(/bar list, column chart, stacked bar, ring and heat map/);
     expect(read("packages/core/README.md")).not.toMatch(/bar list|column chart|stacked bar|heat map/i);
   });
 });

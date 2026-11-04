@@ -17,8 +17,8 @@
  *   KEPT          what does not change, and a test must not take for old
  */
 
-/** The 26 patterns, in the order of the cascade (CASCADE of scripts/docs-site/kinds.js, without the four of F7); the four charts after the dashboard came from core on 2026-11-03 (`fits-kinds: app`). */
-export const PATTERNS = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-header", "article-header", "article", "post-list", "app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
+/** The 27 patterns, in the order of the cascade (CASCADE of scripts/docs-site/kinds.js, without the four of F7); the four charts after the dashboard came from core on 2026-11-03 (`fits-kinds: app`). */
+export const PATTERNS = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-header", "article-header", "article", "post-list", "app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "ring", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
 
 /** The patterns that fit any kind of site (`fits-kinds: any`): every kind links their file, and the home weighs them. The pager joined the social links with the minor tweaks. */
 export const ANY_SITE = ["social", "pager"];

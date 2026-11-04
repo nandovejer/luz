@@ -130,7 +130,7 @@ describe("@luz-ds/catalog's README says what site is now", () => {
   it("sorts its pieces by the new rule, not by the data they need", () => {
     expect(readme).toMatch(/catalog is what a page links on its own when it uses it/i);
     expect(readme).toMatch(/what every page needs and fits in `luz\.css` is in `@luz-ds\/core`/i);
-    expect(readme, "the charts are catalog's").toMatch(/bar list, column chart, stacked bar and heat map/i);
+    expect(readme, "the charts are catalog's").toMatch(/bar list, column chart, stacked bar, ring and heat map/i);
     expect(readme).not.toMatch(/any section/i);
     expect(readme).not.toMatch(/needs data of the site/i);
   });

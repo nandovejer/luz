@@ -1,0 +1,249 @@
+/* --------------------------------------------------------------------------
+   LUZ Catalog: ring
+   Ring — one value over a goal, or the shares of a total, drawn as half a
+   ring over the figure that says it: <figure class="luz-ring" style="--v1:
+   1260; --max: 2000"> with a <p class="luz-ring__value"> that holds the
+   <span class="luz-ring__figure"> and its <span class="luz-ring__label">.
+   For shares, one --v per series (--v1 to --v4, in the order of the legend)
+   and a <ul class="luz-ring__legend"> with one <li class="luz-ring__item">
+   (<span class="luz-ring__name">, <span class="luz-ring__figure">) per series.
+   The text is the data; the ring is a picture of it, drawn by the value's
+   ::before (the track) and ::after (the series), so assistive technology never
+   meets it. Without this file the figure reads as its caption, the figure and
+   its label, and the legend.
+   A series takes --v of --max, or of the sum of the --v when there is no
+   --max (or a smaller one): the ring is then full. The series take
+   --luz-chart-1 to -4 in order, on --luz-chart-track; --luz-ring-color sets
+   another colour for the first. --luz-ring-size sets the largest width (the
+   ring shrinks to its box). The band is a seventh of the radius, about the
+   weight of a bar list's bar, so it keeps its weight at every size and every
+   angle below is a plain number. The ends are cut square, as a bar's are.
+   The ring runs from the left,
+   clockwise, in every language, as a clock does. In a figure narrower than
+   14em (a narrow column, a large text size) the text goes under the arc.
+   Contrast: every series is 3:1 on the surfaces and on the track in every
+   mode; the track is a quiet 1.6:1, decorative, because the figure carries
+   the value. In forced colors the track is the background (Canvas), so the
+   gaps between series are too; the series take system colours, and the
+   swatches of the legend the same colours and their number. On paper the
+   ring is left out and the text prints.
+   Layer: catalog · Prefix: .luz-
+   Requires: @luz-ds/tokens and @luz-ds/core (luz.css), loaded first.
+   -------------------------------------------------------------------------- */
+
+/* A figure that is a layout box, not the surface the bare element is, and
+   the container its width is measured from */
+.luz-ring {
+  container-type: inline-size;
+  display: grid;
+  justify-items: center;
+  gap: var(--luz-space-sm);
+  margin: 0;
+  padding: 0;
+  background: none;
+  text-align: center;
+}
+
+.luz-ring :where(figcaption) {
+  font-size: var(--luz-text-sm);
+}
+
+/* The box the half ring is drawn in, twice as wide as tall, its centre at the
+   middle of the bottom edge, and the hole the text sits in. k is the band as a
+   share of the radius; a1 to a4 are where each series ends, f the share the
+   series fill together */
+.luz-ring__value {
+  --luz-ring-k: 0.14;
+  --luz-ring-w: min(100cqi, var(--luz-ring-size, calc(var(--luz-space-4xl) * 3)));
+  --luz-ring-total: max(var(--max, 0), var(--v1, 0) + var(--v2, 0) + var(--v3, 0) + var(--v4, 0));
+  --luz-ring-f: calc((var(--v1, 0) + var(--v2, 0) + var(--v3, 0) + var(--v4, 0)) / var(--luz-ring-total));
+  --luz-ring-a1: calc(0.5turn * var(--v1, 0) / var(--luz-ring-total));
+  --luz-ring-a2: calc(0.5turn * (var(--v1, 0) + var(--v2, 0)) / var(--luz-ring-total));
+  --luz-ring-a3: calc(0.5turn * (var(--v1, 0) + var(--v2, 0) + var(--v3, 0)) / var(--luz-ring-total));
+  --luz-ring-a4: calc(0.5turn * var(--luz-ring-f));
+
+  /* The gap between two series, a sixth of the band, as an angle at the
+     middle of the band; the band itself, as a mask */
+  --luz-ring-mid: calc(1 - var(--luz-ring-k) / 2);
+  --luz-ring-gap: atan2(var(--luz-ring-k) / 6, var(--luz-ring-mid));
+  --luz-ring-band: radial-gradient(circle farthest-side at 50% 100%, transparent calc((1 - var(--luz-ring-k)) * 100% - 1px), CanvasText calc((1 - var(--luz-ring-k)) * 100%), CanvasText calc(100% - 1px), transparent);
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: end;
+  justify-items: center;
+  inline-size: var(--luz-ring-w);
+  min-inline-size: 0;
+  aspect-ratio: 2;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The text keeps inside the hole */
+.luz-ring__value > * {
+  max-inline-size: calc((1 - var(--luz-ring-k)) * 100% - var(--luz-space-md));
+}
+
+/* A narrow figure, or a large text size: the text goes under the arc */
+@container (inline-size < 14em) {
+  .luz-ring__value {
+    aspect-ratio: auto;
+    padding-block-start: calc(var(--luz-ring-w) / 2 + var(--luz-space-xs));
+  }
+
+  .luz-ring__value > * {
+    max-inline-size: none;
+  }
+}
+
+/* The arc, the top of the box at 2:1: the track is the whole band, the
+   series run to --luz-ring-stop */
+.luz-ring__value::before,
+.luz-ring__value::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  aspect-ratio: 2;
+  mask-image: var(--luz-ring-band);
+}
+
+.luz-ring__value::before {
+  background: var(--luz-chart-track);
+}
+
+/* The colours of the series, for the arc and the swatches of the legend */
+.luz-ring__value::after,
+.luz-ring__item::before {
+  --luz-ring-c1: var(--luz-ring-color, var(--luz-chart-1));
+  --luz-ring-c2: var(--luz-chart-2);
+  --luz-ring-c3: var(--luz-chart-3);
+  --luz-ring-c4: var(--luz-chart-4);
+}
+
+/* The series, one after the other, the track showing through a thin gap at
+   the start of each */
+.luz-ring__value::after {
+  mask-image: conic-gradient(from -90deg at 50% 100%, CanvasText var(--luz-ring-a4), transparent 0), var(--luz-ring-band);
+  mask-composite: intersect;
+  background: conic-gradient(
+    from -90deg at 50% 100%,
+    var(--luz-ring-c1) 0 var(--luz-ring-a1),
+    transparent 0 calc(var(--luz-ring-a1) + var(--luz-ring-gap)),
+    var(--luz-ring-c2) 0 var(--luz-ring-a2),
+    transparent 0 calc(var(--luz-ring-a2) + var(--luz-ring-gap)),
+    var(--luz-ring-c3) 0 var(--luz-ring-a3),
+    transparent 0 calc(var(--luz-ring-a3) + var(--luz-ring-gap)),
+    var(--luz-ring-c4) 0 var(--luz-ring-a4),
+    transparent 0
+  );
+}
+
+/* The figure in the hole: the heading face, light, a step above a title */
+.luz-ring__value > .luz-ring__figure {
+  font-family: var(--luz-font-heading);
+  font-size: var(--luz-text-2xl);
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.luz-ring__label {
+  font-size: var(--luz-text-sm);
+  color: var(--luz-text-secondary);
+}
+
+.luz-ring__figure {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The legend: one item per series, in the order of the --v */
+.luz-ring__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--luz-space-xs) var(--luz-space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.luz-ring__item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--luz-space-2xs);
+}
+
+.luz-ring__item::before {
+  content: "";
+  flex: none;
+  inline-size: var(--luz-space-xs);
+  block-size: var(--luz-space-xs);
+  border-radius: var(--luz-radius-sm);
+  background: var(--luz-ring-c1);
+}
+
+.luz-ring__item:nth-child(2)::before { background: var(--luz-ring-c2); }
+.luz-ring__item:nth-child(3)::before { background: var(--luz-ring-c3); }
+.luz-ring__item:nth-child(4)::before { background: var(--luz-ring-c4); }
+
+.luz-ring__name {
+  font-family: var(--luz-font-mono);
+  font-size: var(--luz-text-xs);
+  letter-spacing: 0.04em;
+  color: var(--luz-text-secondary);
+}
+
+/* A joined script takes no letter spacing, and the sans */
+.luz-ring__name:is(:lang(ar), :lang(fa), :lang(ur)) {
+  font-family: var(--luz-font-sans);
+  letter-spacing: 0;
+}
+
+.luz-ring__item .luz-ring__figure {
+  font-size: var(--luz-text-sm);
+}
+
+/* Forced colors: the track takes the background (Canvas, as every
+   background does), the series and the swatches keep system colours, and
+   each swatch shows the number of its series */
+@media (forced-colors: active) {
+  .luz-ring__value::after,
+  .luz-ring__item::before {
+    --luz-ring-c1: Highlight;
+    --luz-ring-c2: CanvasText;
+    --luz-ring-c3: LinkText;
+    --luz-ring-c4: ActiveText;
+
+    forced-color-adjust: none;
+  }
+
+  .luz-ring__legend {
+    counter-reset: luz-series;
+  }
+
+  .luz-ring__item::before {
+    content: counter(luz-series);
+    counter-increment: luz-series;
+    display: grid;
+    place-items: center;
+    min-inline-size: var(--luz-space-md);
+    inline-size: auto;
+    block-size: auto;
+    color: Canvas;
+    font-size: var(--luz-text-xs);
+  }
+}
+
+/* On paper a background may not print: the ring is left out, the text stays */
+@media print {
+  .luz-ring__value {
+    aspect-ratio: auto;
+    padding-block-start: 0;
+  }
+
+  .luz-ring__value::before,
+  .luz-ring__value::after {
+    content: none;
+  }
+}

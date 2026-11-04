@@ -3,7 +3,7 @@ title: Gráfico
 description: Dibuja una línea, un área o una línea de tendencia pequeña a partir de una tabla o de una lista de números que ya escribiste, y que sigue en la página a su lado.
 fits: una página que muestra una tendencia: un informe, un panel, una entrada con algunas cifras
 keywords: gráfico de líneas, gráfico de área, sparkline, svg, visualización de datos, tendencia
-source: f8f788661faf
+source: 42bc939255f2
 reviewed: false
 -->
     <div class="docs-component" id="p-chart">
@@ -123,7 +123,7 @@ reviewed: false
           <div class="luz-tabpanel docs-view" id="code-panel">
             <h2 class="docs-view__title" id="code">Código</h2>
             <h3 id="markup">Copia el marcado</h3>
-            <p>Escribe primero la tabla, como la página en la que quieres que aterrice un lector: es la página sin JavaScript. La primera columna es el eje X, un <code>th</code> de su fila; cada una de las demás es una serie, con el nombre de su <code>th</code>. Pon cada número en un <code>&lt;data value&gt;</code> y escríbelo como quieres que se lea en la celda. Envuelve la tabla en un <code>.luz-table-wrap</code> solo cuando pueda ser más ancha que la pantalla, como en el ejemplo de tres series, y da a cada <code>td</code> un <code>data-label</code>, como cualquier tabla de core, para que en una pantalla estrecha sus filas se apilen y sigan nombrando sus celdas. Una tabla que siempre cabe no necesita contenedor: con uno, el grupo, la región y la tabla leerían el mismo nombre tres veces. El gráfico oculta el contenedor junto con la tabla y, mientras lo hace, el contenedor no recibe parada de Tab. LUZ no dibuja datos propios ni inventa ninguno.</p>
+            <p>Escribe primero la tabla, como la página en la que aterriza un lector sin JavaScript. La primera columna es el eje X, un <code>th</code> de su fila; cada una de las demás es una serie, con el nombre de su <code>th</code>. Pon cada número en un <code>&lt;data value&gt;</code> y escríbelo como quieres que se lea. Envuelve la tabla en un <code>.luz-table-wrap</code> solo cuando pueda ser más ancha que la pantalla, como en el ejemplo de tres series, y da a cada <code>td</code> un <code>data-label</code> para que en una pantalla estrecha sus filas se apilen y sigan nombrando sus celdas. Una tabla que siempre cabe no necesita contenedor: con uno, el grupo, la región y la tabla leerían el mismo nombre tres veces. El gráfico oculta el contenedor junto con la tabla y este no recibe parada de Tab mientras tanto.</p>
             <p><code>catalog.min.js</code> carga el archivo propio del elemento, <code>chart.min.js</code>, cuando analiza la página; una página sin <code>catalog.min.js</code> carga ese archivo por su cuenta. Enlaza <code>components/chart.css</code>, después del de core.</p>
             <div class="docs-snippet">
               <div class="docs-snippet__bar">
@@ -134,7 +134,7 @@ reviewed: false
 
 &lt;luz-chart type=&quot;line&quot; data-luz-label-table=&quot;Show table&quot; data-luz-label-chart=&quot;Show chart&quot;&gt;
   &lt;table class=&quot;luz-table&quot;&gt;
-    &lt;caption&gt;Parcels per route, January to June&lt;/caption&gt;
+    &lt;caption&gt;Parcels per route, January to March&lt;/caption&gt;
     &lt;thead&gt;
       &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Month&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Sevilla&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Cádiz&lt;/th&gt;&lt;/tr&gt;
     &lt;/thead&gt;
@@ -142,9 +142,6 @@ reviewed: false
       &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Jan&lt;/th&gt;&lt;td data-label=&quot;Sevilla&quot;&gt;&lt;data value=&quot;1204&quot;&gt;1,204&lt;/data&gt;&lt;/td&gt;&lt;td data-label=&quot;Cádiz&quot;&gt;&lt;data value=&quot;312&quot;&gt;312&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
       &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Feb&lt;/th&gt;&lt;td data-label=&quot;Sevilla&quot;&gt;&lt;data value=&quot;1310&quot;&gt;1,310&lt;/data&gt;&lt;/td&gt;&lt;td data-label=&quot;Cádiz&quot;&gt;&lt;data value=&quot;340&quot;&gt;340&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
       &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Mar&lt;/th&gt;&lt;td data-label=&quot;Sevilla&quot;&gt;&lt;data value=&quot;1180&quot;&gt;1,180&lt;/data&gt;&lt;/td&gt;&lt;td data-label=&quot;Cádiz&quot;&gt;&lt;data value=&quot;365&quot;&gt;365&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr&lt;/th&gt;&lt;td data-label=&quot;Sevilla&quot;&gt;&lt;data value=&quot;1420&quot;&gt;1,420&lt;/data&gt;&lt;/td&gt;&lt;td data-label=&quot;Cádiz&quot;&gt;&lt;data value=&quot;410&quot;&gt;410&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;May&lt;/th&gt;&lt;td data-label=&quot;Sevilla&quot;&gt;&lt;data value=&quot;1390&quot;&gt;1,390&lt;/data&gt;&lt;/td&gt;&lt;td data-label=&quot;Cádiz&quot;&gt;&lt;data value=&quot;398&quot;&gt;398&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Jun&lt;/th&gt;&lt;td data-label=&quot;Sevilla&quot;&gt;&lt;data value=&quot;1480&quot;&gt;1,480&lt;/data&gt;&lt;/td&gt;&lt;td data-label=&quot;Cádiz&quot;&gt;&lt;data value=&quot;452&quot;&gt;452&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
   &lt;/table&gt;
 &lt;/luz-chart&gt;</code></pre>
@@ -157,7 +154,7 @@ reviewed: false
               </div>
               <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Marcado del gráfico interactivo"><code id="code-chart-interactive">&lt;luz-chart type=&quot;line&quot; interactive data-luz-label-table=&quot;Show table&quot; data-luz-label-chart=&quot;Show chart&quot;&gt;
   &lt;table class=&quot;luz-table&quot;&gt;
-    &lt;caption&gt;Visitors per day, April 1 to 7&lt;/caption&gt;
+    &lt;caption&gt;Visitors per day, April 1 to 3&lt;/caption&gt;
     &lt;thead&gt;
       &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Day&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Desktop&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mobile&lt;/th&gt;&lt;/tr&gt;
     &lt;/thead&gt;
@@ -165,10 +162,6 @@ reviewed: false
       &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 1&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;252&quot;&gt;252&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;148&quot;&gt;148&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
       &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 2&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;271&quot;&gt;271&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;276&quot;&gt;276&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
       &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 3&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;182&quot;&gt;182&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;128&quot;&gt;128&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 4&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;380&quot;&gt;380&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;247&quot;&gt;247&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 5&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;194&quot;&gt;194&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;203&quot;&gt;203&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 6&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;191&quot;&gt;191&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;74&quot;&gt;74&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
-      &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Apr 7&lt;/th&gt;&lt;td&gt;&lt;data value=&quot;179&quot;&gt;179&lt;/data&gt;&lt;/td&gt;&lt;td&gt;&lt;data value=&quot;98&quot;&gt;98&lt;/data&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
   &lt;/table&gt;
 &lt;/luz-chart&gt;</code></pre>
@@ -180,15 +173,12 @@ reviewed: false
                 <button class="luz-copy-btn" type="button" data-copy-from="code-chart-spark" aria-label="Copiar el marcado del spark">Copiar</button>
               </div>
               <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Marcado del spark"><code id="code-chart-spark">&lt;luz-chart type=&quot;spark&quot;&gt;
-  &lt;span&gt;Parcels a day, last 7 days&lt;/span&gt;
+  &lt;span&gt;Parcels a day, last 4 days&lt;/span&gt;
   &lt;ul class=&quot;luz-chart__values&quot; role=&quot;list&quot;&gt;
     &lt;li&gt;&lt;data value=&quot;41&quot;&gt;41&lt;/data&gt;&lt;/li&gt;
     &lt;li&gt;&lt;data value=&quot;38&quot;&gt;38&lt;/data&gt;&lt;/li&gt;
     &lt;li&gt;&lt;data value=&quot;44&quot;&gt;44&lt;/data&gt;&lt;/li&gt;
     &lt;li&gt;&lt;data value=&quot;52&quot;&gt;52&lt;/data&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;data value=&quot;47&quot;&gt;47&lt;/data&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;data value=&quot;58&quot;&gt;58&lt;/data&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;data value=&quot;63&quot;&gt;63&lt;/data&gt;&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/luz-chart&gt;</code></pre>
             </div>
@@ -204,22 +194,21 @@ reviewed: false
 const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;));</code></pre>
             </div>
             <h3 id="variants">Variantes y opciones</h3>
-            <p>Los dos tipos son un atributo, y también lo son el relleno y la cabecera interactiva. La proporción es una propiedad.</p>
             <div class="luz-table-wrap" role="region" aria-label="Clases y atributos del gráfico" tabindex="0">
               <table class="luz-table">
                 <thead>
                   <tr><th scope="col">Clase o atributo</th><th scope="col">Efecto</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-label="Clase o atributo"><div><code>&lt;luz-chart&gt;</code></div></td><td data-label="Efecto"><div>El elemento personalizado que define el módulo: un bloque alrededor de la tabla o de la lista. Se conecta solo al incorporarse</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>&lt;luz-chart&gt;</code></div></td><td data-label="Efecto"><div>El elemento personalizado que define el módulo, alrededor de la tabla o de la lista. Se conecta solo al incorporarse</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>type</code></div></td><td data-label="Efecto"><div><code>line</code> (por defecto) dibuja las columnas de la tabla; <code>spark</code> dibuja una línea pequeña con los elementos <code>&lt;data&gt;</code> que contiene. Con cualquier otro valor queda la tabla</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>variant="area"</code></div></td><td data-label="Efecto"><div>Rellena el área bajo cada línea con un tono suave del color de la serie</div></td></tr>
-                  <tr><td data-label="Clase o atributo"><div><code>interactive</code></div></td><td data-label="Efecto"><div>Con <code>type="line"</code> (o <code>type="column"</code> en un <a href="/docs/catalog/column-chart/">gráfico de columnas</a>): una cabecera con un botón por serie, su nombre y su total, que apaga y enciende su línea, y una lectura del día bajo el puntero o el foco, con una banda sobre él. Ocupa el lugar de la leyenda</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>interactive</code></div></td><td data-label="Efecto"><div>Con <code>type="line"</code> (o <code>type="column"</code> en un <a href="/docs/catalog/column-chart/">gráfico de columnas</a>): una cabecera con un botón por serie, su nombre y su total, que apaga y enciende su línea, y una lectura del día bajo el puntero o el foco. Sustituye a la leyenda</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>data-luz-label-table</code>, <code>data-luz-label-chart</code></div></td><td data-label="Efecto"><div>Las dos palabras del botón: «Ver tabla» y «Ver gráfico», en el idioma de la página, en el elemento o en un ancestro (una vez en <code>&lt;body&gt;</code> sirve a todos los gráficos). LUZ no tiene texto en inglés por defecto: si falta alguna no hay botón y la tabla se muestra bajo el gráfico</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>--luz-chart-ratio</code></div></td><td data-label="Efecto"><div>La forma del dibujo, <code>2 / 1</code> por defecto. Se define en el elemento: <code>style="--luz-chart-ratio: 3 / 1"</code></div></td></tr>
-                  <tr><td data-label="Clase o atributo"><div><code>caption</code></div></td><td data-label="Efecto"><div>El título: el pie de la tabla da nombre al grupo para un lector de pantalla y se copia sobre el dibujo</div></td></tr>
-                  <tr><td data-label="Clase o atributo"><div><code>th scope="col"</code></div></td><td data-label="Efecto"><div>El nombre de una serie, en la leyenda. La primera columna es el eje X y cada una de las demás es una serie, hasta seis; las que sobran quedan solo en la tabla</div></td></tr>
-                  <tr><td data-label="Clase o atributo"><div><code>td</code> con <code>&lt;data value&gt;</code></div></td><td data-label="Efecto"><div>Un número: el <code>value</code> de un <code>&lt;data&gt;</code> o el texto simple de la celda (<code>12</code>, <code>12.5</code>). Cualquier otra cosa es un hueco en la línea</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>caption</code></div></td><td data-label="Efecto"><div>El título: el pie de la tabla da nombre al grupo y se copia sobre el dibujo</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>th scope="col"</code></div></td><td data-label="Efecto"><div>El nombre de una serie, en la leyenda. La primera columna es el eje X; cada una de las demás es una serie, hasta seis, y las que sobran quedan solo en la tabla</div></td></tr>
+                  <tr><td data-label="Clase o atributo"><div><code>td</code> con <code>&lt;data value&gt;</code></div></td><td data-label="Efecto"><div>Un número: el <code>value</code> de un <code>&lt;data&gt;</code> o el texto simple de la celda. Cualquier otra cosa es un hueco en la línea</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>.luz-chart__values</code></div></td><td data-label="Efecto"><div>La lista de un <code>type="spark"</code>: los elementos <code>&lt;data&gt;</code> son los puntos y el último se muestra como texto</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>data-luz-view</code>, <code>data-luz-ready</code>, <code>data-luz-end</code></div></td><td data-label="Efecto"><div>Los escribe el script: <code>chart</code>, <code>table</code> o <code>both</code> según lo que se muestra; el elemento está listo; la última cifra de un spark. Dales estilo, nunca los pongas tú</div></td></tr>
                   <tr><td data-label="Clase o atributo"><div><code>readChart(el)</code></div></td><td data-label="Efecto"><div>Lo exporta <code>@luz-ds/catalog/chart</code>: los nombres de las filas y las series que contiene la tabla, o <code>null</code></div></td></tr>
@@ -227,24 +216,23 @@ const { rows, series } = readChart(document.querySelector(&quot;luz-chart&quot;)
               </table>
             </div>
             <h3 id="how">Cómo funciona</h3>
-            <p>CSS de <code>@luz-ds/catalog</code> y un archivo propio, <code>@luz-ds/catalog/chart</code> (<code>dist/chart.min.js</code>, menos de 5 kB comprimido), que define <code>&lt;luz-chart&gt;</code>. No usa ninguna biblioteca y dibuja solo con llamadas al DOM, así que una página que prohíbe scripts y estilos en línea lo ejecuta tal cual. Valores comparados por longitud no lo necesitan: usa la <a href="/docs/catalog/bar-list/">lista de barras</a>, el <a href="/docs/catalog/column-chart/">gráfico de columnas</a>, la <a href="/docs/catalog/stacked-bar/">barra apilada</a> o el <a href="/docs/catalog/heat-map/">mapa de calor</a>, que son CSS sobre una tabla o una lista.</p>
+            <p>CSS de <code>@luz-ds/catalog</code> y un archivo propio, <code>@luz-ds/catalog/chart</code> (<code>dist/chart.min.js</code>, menos de 5 kB comprimido), que define <code>&lt;luz-chart&gt;</code>. No usa ninguna biblioteca y dibuja solo con llamadas al DOM, así que una página que prohíbe scripts y estilos en línea lo ejecuta tal cual. Para comparar valores por longitud sin script, usa la <a href="/docs/catalog/bar-list/">lista de barras</a>, el <a href="/docs/catalog/column-chart/">gráfico de columnas</a>, la <a href="/docs/catalog/stacked-bar/">barra apilada</a> o el <a href="/docs/catalog/heat-map/">mapa de calor</a>.</p>
             <ul>
               <li><strong>La tabla:</strong> sigue en la página. Mientras se muestra el gráfico, la tabla se saca de la pantalla, no se oculta, así que un lector de pantalla la lee como siempre; cuando el botón muestra la tabla, el dibujo desaparece. En papel se imprime la tabla y no el dibujo.</li>
-              <li><strong>El dibujo:</strong> un SVG marcado con <code>aria-hidden</code>, dibujado a su propio tamaño en píxeles y de nuevo cuando la caja cambia de tamaño o la tabla cambia. No tiene animación, así que no hay nada que detener con movimiento reducido. Las series son <code>--luz-chart-1</code> a <code>--luz-chart-6</code>, de modo que un cambio de modo no repinta nada.</li>
-              <li><strong>Distinguir las series:</strong> cada línea termina en una marca de forma propia (un círculo, un cuadrado, un triángulo, un rombo, un más y una cruz) y la leyenda la repite. En colores forzados todas las líneas tienen el color del texto y cada una tiene sus propios guiones.</li>
-              <li><strong>Los números:</strong> la escala empieza en cero, o más abajo si una cifra es negativa, y sus pasos son redondos (1, 2 o 5 veces una potencia de diez). Las cifras de los ejes se escriben con <code>Intl.NumberFormat</code> en el idioma de la página, como 1.2K.</li>
-              <li><strong>Interactivo:</strong> la cabecera sobre el dibujo tiene un botón de alternancia por serie, con su nombre y la suma de sus cifras escrita con el idioma de la página. El total es una suma: sirve para recuentos e importes, como visitantes o euros, y no para tasas, proporciones ni medias, cuyo total no dice nada. Una línea apagada ya no se dibuja, en la misma escala, y la última línea que se muestra no se puede apagar: un gráfico sin ninguna no dice nada. El día bajo el puntero, o la fila de la tabla que tiene el foco, recibe una banda clara en el trazado y una lectura a su lado con su nombre y la cifra de cada línea mostrada, copiada de las celdas.</li>
-              <li><strong>Las palabras:</strong> el script no escribe ninguna propia. Las dos palabras del botón son tuyas, en <code>data-luz-label-*</code>; el título y la leyenda son copias de tu pie de tabla y de las cabeceras de tus columnas.</li>
+              <li><strong>El dibujo:</strong> un SVG marcado con <code>aria-hidden</code>, dibujado de nuevo cuando cambia la caja o la tabla. No tiene animación. Las series son <code>--luz-chart-1</code> a <code>--luz-chart-6</code>, de modo que un cambio de modo no repinta nada.</li>
+              <li><strong>Distinguir las series:</strong> cada línea termina en una marca de forma propia (un círculo, un cuadrado, un triángulo, un rombo, un más y una cruz), repetida en la leyenda. En colores forzados todas las líneas tienen el color del texto, cada una con sus propios guiones.</li>
+              <li><strong>Los números:</strong> la escala empieza en cero, o más abajo si una cifra es negativa, en pasos redondos (1, 2 o 5 veces una potencia de diez). Los ejes se escriben con <code>Intl.NumberFormat</code> en el idioma de la página, como 1.2K.</li>
+              <li><strong>Interactivo:</strong> la cabecera tiene un botón de alternancia por serie, con su nombre y la suma de sus cifras. El total es una suma: sirve para recuentos e importes, como visitantes o euros, y no para tasas, proporciones ni medias, cuyo total no dice nada. Una línea apagada ya no se dibuja, en la misma escala, y la última línea mostrada no se puede apagar. El día bajo el puntero, o la fila con el foco, recibe una banda clara y una lectura con su nombre y la cifra de cada línea mostrada, copiada de las celdas.</li>
+              <li><strong>Las palabras:</strong> el script no escribe ninguna propia. Las dos palabras del botón son tuyas, en <code>data-luz-label-*</code>; el título y la leyenda copian tu pie de tabla y las cabeceras de tus columnas.</li>
             </ul>
             <h3 id="no-js">Sin JavaScript</h3>
-            <p>La tabla, o la lista, es todo lo que hay, y está completa: el pie, todas las cifras, todos los nombres. El elemento es un bloque, el botón no existe y nada se oculta. Con <code>interactive</code> tampoco hay cabecera ni lectura: todas las cifras están en la tabla. Hace lo mismo cuando la página no tiene la tabla y cuando <code>type</code> no es uno de los dos.</p>
+            <p>La tabla, o la lista, es todo lo que hay, y está completa: el pie, todas las cifras, todos los nombres. El elemento es un bloque y el botón no existe. Con <code>interactive</code> tampoco hay cabecera ni lectura: todas las cifras están en la tabla. Es igual cuando la página no tiene la tabla o <code>type</code> no es uno de los dos.</p>
             <h3 id="keyboard">Teclado y ARIA</h3>
             <ul>
-              <li><strong>Teclas:</strong> Tab llega al botón «Ver tabla»; Enter o Espacio lo pulsan, como en cualquier botón. Sin <code>interactive</code>, la imagen no es un control: nada en ella recibe el foco.</li>
-              <li><strong>Interactivo:</strong> los botones de la cabecera son botones de alternancia (<code>aria-pressed</code>): Enter o Espacio apagan y encienden una línea, y la última línea mostrada sigue encendida. Después, la imagen recibe el foco, en una sola parada de Tab, y el anillo se dibuja alrededor de ella. Es un grupo nombrado por el título de la tabla, y contiene un estado, una región activa de cortesía oculta a la vista: en cada tecla dice la etiqueta del día, el mismo texto que la fila de la tabla, que el gráfico oculta pero un lector de pantalla sigue leyendo. Cada fila se nombra con sus propias celdas, a partir de tu texto, «Apr 1, Desktop 252, Mobile 148», todas las series, mostradas o no. Con el foco en la imagen, las flechas pasan al día siguiente o al anterior (la flecha derecha es siempre el siguiente, porque el trazado va de izquierda a derecha), e Inicio y Fin al primero y al último; las teclas del modo de exploración de un lector de pantalla, que tiene las suyas para una tabla, son suyas. Entrar en la imagen dice su nombre y nada más, una tecla al final de la fila no vuelve a decir nada, y salir de ella vacía el estado. El día recibe su banda y su lectura.</li>
-              <li><strong>La lectura:</strong> su título es el nombre del día, así que la banda nunca es la única señal de dónde estás. Se muestra mientras el puntero está sobre un día o una fila tiene el foco, y Escape la guarda sin mover el puntero ni el foco; vuelve en otro día. Está oculta para la tecnología de asistencia, que lee la fila. Una línea apagada no se dibuja, pero sus celdas siguen en la tabla, leídas como antes. El script escribe los roles de la tabla (<code>table</code>, <code>rowgroup</code>, <code>row</code>, <code>columnheader</code>, <code>rowheader</code> y <code>cell</code>) para que las filas los conserven en todos los navegadores.</li>
+              <li><strong>Teclas:</strong> Tab llega al botón «Ver tabla»; Enter o Espacio lo pulsan. Sin <code>interactive</code>, nada en la imagen recibe el foco.</li>
+              <li><strong>Interactivo:</strong> los botones de la cabecera son botones de alternancia (<code>aria-pressed</code>): Enter o Espacio apagan y encienden una línea, y la última línea mostrada sigue encendida. Después, la imagen recibe el foco, en una sola parada de Tab. Es un grupo nombrado por el título de la tabla y contiene un estado de cortesía que, en cada tecla, dice la etiqueta del día, el mismo texto que la fila de la tabla. Cada fila se nombra con sus propias celdas, a partir de tu texto, «Apr 1, Desktop 252, Mobile 148», todas las series, mostradas o no. Con el foco en la imagen, las flechas pasan al día siguiente o al anterior (la flecha derecha es siempre el siguiente, porque el trazado va de izquierda a derecha), e Inicio y Fin al primero y al último; las teclas del modo de exploración de un lector de pantalla son suyas. Entrar dice su nombre y nada más, y salir vacía el estado.</li>
+              <li><strong>La lectura:</strong> su título es el nombre del día, así que la banda nunca es la única señal de dónde estás. Escape la guarda sin mover el puntero ni el foco; vuelve en otro día. Está oculta para la tecnología de asistencia, que lee la fila. Una línea apagada no se dibuja, pero sus celdas siguen en la tabla, leídas como antes. El script escribe los roles de la tabla (<code>table</code>, <code>rowgroup</code>, <code>row</code>, <code>columnheader</code>, <code>rowheader</code> y <code>cell</code>) para que las filas los conserven en todos los navegadores.</li>
               <li><strong>Nombre:</strong> el elemento es un grupo con el nombre del pie de la tabla, y el botón se describe con él, así que «Ver tabla» se oye junto con lo que muestra. El dibujo, su título y su leyenda son <code>aria-hidden</code>: la tabla lo dice todo.</li>
-              <li><strong>Idioma:</strong> las palabras del botón, el pie y los nombres son tuyos. Los números de los ejes siguen el idioma de la página.</li>
             </ul>
             <p class="docs-view__xref"><a href="#contrast">Contraste y foco</a> están en la pestaña Diseño.</p>
           </div>

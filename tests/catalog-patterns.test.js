@@ -51,8 +51,8 @@ const exists = (path) => existsSync(`${root}${path}`);
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
 const json = (path) => JSON.parse(read(path));
 
-/** The 26 stylesheets of the patterns of a kind of site, named for their block, in the order of the cascade (CASCADE of kinds.js without the four of F7); the last four of the application are the charts that came from core (2026-11-03). */
-const ALL = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-header", "article-header", "article", "post-list", "app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
+/** The 27 stylesheets of the patterns of a kind of site, named for their block, in the order of the cascade (CASCADE of kinds.js without the four of F7); the last five of the application are the charts: four came from core (2026-11-03) and the ring is new. */
+const ALL = ["site-header", "masthead", "hero", "main", "section", "stat", "site-footer", "glow", "social", "page-header", "article-header", "article", "post-list", "app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "ring", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer"];
 /** The 21 files of F5b, `<kind>-<name>.css`, and the two chunks and the three element files that F8 renamed: none of them exists any more. */
 const OLD_ALL = [
   "landing-header", "landing-hero", "landing-main", "landing-section", "landing-stat", "landing-footer", "landing-glow",
@@ -67,9 +67,9 @@ const repoSite = scanSite(join(root, "apps/docs"), root);
 
 /* ---- The 22 files --------------------------------------------------------------------------- */
 
-describe("the 26 patterns are stylesheets of catalog, named for their block", () => {
-  it("are 26 files named <block>.css (the two headers and the two footers are one each, and the masthead is its own)", () => {
-    expect(ALL).toHaveLength(26);
+describe("the 27 patterns are stylesheets of catalog, named for their block", () => {
+  it("are 27 files named <block>.css (the two headers and the two footers are one each, and the masthead is its own)", () => {
+    expect(ALL).toHaveLength(27);
     // `app-bar` and `docs-layout` are the names of their blocks (`.luz-app-bar`, `.luz-docs-layout`), not a kind's prefix on a name
     const sources = readdirSync(`${root}packages/catalog/src/components`).filter((f) => f.endsWith(".css") && !f.startsWith("_")).map((f) => f.replace(/\.css$/, ""));
     expect(sources.filter((f) => !["search", "navbar", "sidebar", "terminal", "timeline", "lang-switch", "submenu", "announcement", "faq", "cookie-consent", "theme-time", "embed", "chart", "page-transition"].includes(f)).sort()).toEqual([...ALL].sort());
@@ -206,7 +206,7 @@ describe("the classes of the patterns, in classes.json of catalog", () => {
     }
   });
 
-  it("every one of the 26 files declares a class, and classes.json says so", () => {
+  it("every one of the 27 files declares a class, and classes.json says so", () => {
     const declared = new Set(manifest.classes.filter((c) => c.defined).flatMap((c) => c.files));
     expect(ALL.filter((name) => !declared.has(`components/${name}.css`))).toEqual([]);
   });
@@ -296,7 +296,7 @@ describe("landing, cms, app and docs are not packages any more", () => {
     expect(exists("apps/docs/catalog-patterns.css"), "apps/docs/catalog-patterns.css").toBe(true);
     const imports = [...read("apps/docs/catalog-patterns.css").matchAll(/@import url\("([^"]+)"\)/g)].map((m) => m[1]);
     const names = imports.map((href) => /components\/([\w-]+)\.css$/.exec(href)?.[1]).filter(Boolean);
-    expect(names.sort(), "the file imports the 26 patterns, by their new names").toEqual([...ALL].sort());
+    expect(names.sort(), "the file imports the 27 patterns, by their new names").toEqual([...ALL].sort());
   });
 });
 
@@ -314,7 +314,7 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
   it("the files of a kind are those of the catalog pages that name it (or `any`), in the order of the cascade", () => {
     expect(kindPatterns("landing", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "hero", "main", "section", "stat", "site-footer", "glow", "social", "pager", "page-transition"].map((n) => `components/${n}.css`));
     expect(kindPatterns("blog", root, null).files).toEqual(["navbar", "sidebar", "timeline", "site-header", "masthead", "site-footer", "social", "page-header", "article-header", "article", "post-list", "pager", "page-transition"].map((n) => `components/${n}.css`));
-    expect(kindPatterns("app", root, null).files).toEqual(["navbar", "sidebar", "social", "app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "pager", "page-transition"].map((n) => `components/${n}.css`));
+    expect(kindPatterns("app", root, null).files).toEqual(["navbar", "sidebar", "social", "app-bar", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "ring", "pager", "page-transition"].map((n) => `components/${n}.css`));
     expect(kindPatterns("docs", root, null).files).toEqual(["navbar", "sidebar", "terminal", "social", "docs-layout", "doc-header", "page-rail", "example", "do-dont", "pager", "page-footer", "page-transition"].map((n) => `components/${n}.css`));
   });
 
@@ -331,7 +331,7 @@ describe("scripts/docs-site/kinds.js reads the files and the pages of each kind 
     const pages = (kind) => [...kindPatterns(kind, root, null).pages].sort();
     expect(pages("landing")).toEqual(["hero", "section", "site-footer", "site-header", "stat", "timeline"]);
     expect(pages("blog")).toEqual(["article-header", "masthead", "page-header", "post-list", "site-footer", "site-header", "timeline", "toc"]);
-    expect(pages("app")).toEqual(["app-bar", "bar-list", "column-chart", "dashboard", "heat-map", "sidebar", "stacked-bar"]);
+    expect(pages("app")).toEqual(["app-bar", "bar-list", "column-chart", "dashboard", "heat-map", "ring", "sidebar", "stacked-bar"]);
     expect(pages("docs")).toEqual(["do-dont", "doc-header", "docs-layout", "example", "page-footer", "page-rail", "sidebar", "terminal"]);
   });
 
@@ -421,6 +421,8 @@ const PAGES = [
   ["column-chart", ["column-chart"], "p-column-chart", "app"],
   ["stacked-bar", ["stacked-bar"], "p-stacked-bar", "app"],
   ["heat-map", ["heat-map"], "p-heat-map", "app"],
+  // the ring: one value over a goal, or the shares of a total, as half a ring (new, 2026-11-04)
+  ["ring", ["ring"], "p-ring", "app"],
   ["docs-layout", ["docs-layout"], "p-docs-layout", "docs"],
   ["doc-header", ["doc-header"], "p-doc-header", "docs"],
   ["page-rail", ["page-rail"], "p-page-rail", "docs"],
@@ -438,9 +440,9 @@ const SITE_WIDE_SHEET_PAGES = ["page-transition"];
 const LAYOUT_PAGES = ["navbar", "sidebar", "terminal", "timeline"];
 const catalogPages = () => repoSite.pages.filter((p) => p.meta.area === "catalog");
 
-describe("the pages of the 24 patterns, at /docs/catalog/<block>/", () => {
-  it("are 24 pages beside the nine elements, the four that came from core (F7), the class reference and the gallery: 40 in the area, with the page transition", () => {
-    expect(PAGES).toHaveLength(24);
+describe("the pages of the 25 patterns, at /docs/catalog/<block>/", () => {
+  it("are 25 pages beside the nine elements, the four that came from core (F7), the class reference and the gallery: 41 in the area, with the page transition", () => {
+    expect(PAGES).toHaveLength(25);
     const routes = catalogPages().map((p) => p.route).sort();
     expect(routes).toEqual(["/docs/catalog/", "/docs/catalog/classes/", ...[...ELEMENT_PAGES, ...LAYOUT_PAGES, ...SITE_WIDE_SHEET_PAGES, ...PAGES.map(([slug]) => slug)].map((slug) => `/docs/catalog/${slug}/`)].sort());
   });
@@ -460,7 +462,7 @@ describe("the pages of the 24 patterns, at /docs/catalog/<block>/", () => {
     expect(page.body, "the id the page had in its area (the specs find the page by it)").toContain(`<div class="docs-component" id="${id}">`);
   });
 
-  it("every one of the 26 files is named by the `files:` of exactly one page (the social links fit any site, so they are not a kind's file)", () => {
+  it("every one of the 27 files is named by the `files:` of exactly one page (the social links fit any site, so they are not a kind's file)", () => {
     const wanted = new Set(ALL.map((name) => `components/${name}.css`));
     const named = catalogPages().flatMap((p) => p.meta.files.split(/[,;]/).map((f) => f.trim()).filter((f) => wanted.has(f)));
     expect(named.sort()).toEqual(ALL.map((name) => `components/${name}.css`).sort());
@@ -633,7 +635,7 @@ describe("the Catalog area groups its pages by what they do", () => {
     navigation: ["app-bar", "masthead", "site-header", "lang-switch", "submenu", "navbar", "sidebar"],
     "page-structure": ["article-header", "site-footer", "page-header", "hero", "section"],
     content: ["embed", "faq", "post-list", "social", "stat", "toc", "terminal", "timeline"],
-    charts: ["chart", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map"],
+    charts: ["chart", "dashboard", "bar-list", "column-chart", "stacked-bar", "heat-map", "ring"],
     "site-wide": ["theme-time", "announcement", "cookie-consent", "search", "page-transition"],
     documentation: ["do-dont", "example", "page-footer", "doc-header", "pager", "page-rail", "docs-layout"],
     reference: ["classes"],
@@ -657,12 +659,12 @@ describe("the Catalog area groups its pages by what they do", () => {
     for (const g of area.groups) expect(pages.some((p) => p.meta.group === g.id), `group ${g.id}`).toBe(true);
   });
 
-  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 39 at most, no ties", () => {
+  it("gives every page of the area its own order number: 0 for the gallery, then 1 to 40 at most, no ties", () => {
     const orders = catalogPages().map((p) => Number(p.meta.order));
-    expect(catalogPages()).toHaveLength(40);
+    expect(catalogPages()).toHaveLength(41);
     expect(new Set(orders).size, `orders: ${orders.sort((a, b) => a - b).join(" ")}`).toBe(orders.length);
     expect(Math.min(...orders)).toBe(0);
-    expect(Math.max(...orders)).toBeLessThanOrEqual(39);
+    expect(Math.max(...orders)).toBeLessThanOrEqual(40);
     expect(repoSite.byRoute.get("/docs/catalog/").meta.order).toBe("0");
   });
 
@@ -738,7 +740,7 @@ describe("Fits best: the real pages", () => {
   const patterns = () => catalogPages().filter((p) => p.meta.group && p.meta.group !== "reference");
 
   it("every pattern page of catalog has both, and no other page has either", () => {
-    expect(patterns()).toHaveLength(38);
+    expect(patterns()).toHaveLength(39);
     for (const page of patterns()) {
       expect(page.meta["fits-kinds"], page.file).toBeTruthy();
       expect(page.meta.fits.length, page.file).toBeGreaterThan(10);
@@ -819,7 +821,7 @@ describe("Fits best: what a page, a card and the Spanish page say", () => {
   it("the card of the gallery says it too, in plain words (the card is one link): no link inside the line", () => {
     for (const [route, lang] of [["/docs/catalog/", "en"], ["/es/docs/catalog/", "es"]]) {
       const cards = findAll(parse(rendered.get(route)), (n) => n.name === "li" && hasClass(n, "docs-card"));
-      expect(cards, route).toHaveLength(38);
+      expect(cards, route).toHaveLength(39);
       for (const card of cards) {
         const href = query(card, "h3.docs-card__title").children.find((n) => n.name === "a").attrs.get("href");
         const slug = href.split("/").filter(Boolean).at(-1);

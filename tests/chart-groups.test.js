@@ -62,8 +62,8 @@ describe("the group Charts of Catalog", () => {
     expect(groups().find((g) => g.id === "charts")).toMatchObject({ label: "Charts", sidebar: true });
   });
 
-  it("holds chart, dashboard and the four that came from core, and Content no longer holds the first two", () => {
-    expect(membersOf("catalog", "charts")).toEqual(["bar-list", "chart", "column-chart", "dashboard", "heat-map", "stacked-bar"]);
+  it("holds chart, dashboard, the four that came from core and the ring, and Content no longer holds the first two", () => {
+    expect(membersOf("catalog", "charts")).toEqual(["bar-list", "chart", "column-chart", "dashboard", "heat-map", "ring", "stacked-bar"]);
     expect(membersOf("catalog", "content")).toEqual(["embed", "faq", "post-list", "social", "stat", "terminal", "timeline", "toc"]);
   });
 
@@ -74,7 +74,7 @@ describe("the group Charts of Catalog", () => {
   it.each([
     ["/docs/catalog/", "Charts", ""],
     ["/es/docs/catalog/", "Gráficos", "/es"],
-  ])("%s has a section %s, after Content and before Site-wide, with a card to each of the six", (route, heading, prefix) => {
+  ])("%s has a section %s, after Content and before Site-wide, with a card to each of the seven", (route, heading, prefix) => {
     const html = buildReal().rendered.get(route);
     const sections = [...html.matchAll(/<section class="docs-gallery" aria-labelledby="group-([a-z-]+)">/g)].map((m) => m[1]);
     expect(sections).toEqual(["navigation", "page-structure", "content", "charts", "site-wide", "documentation", "reference"]);
@@ -82,17 +82,17 @@ describe("the group Charts of Catalog", () => {
     const section = html.slice(start, html.indexOf("</section>", start));
     expect(section).toContain(`<h2 id="group-charts">${heading}</h2>`);
     const cards = [...section.matchAll(/<h3 class="luz-card__title docs-card__title"><a href="([^"]+)">/g)].map((m) => m[1]);
-    expect(cards.sort()).toEqual(["bar-list", "chart", "column-chart", "dashboard", "heat-map", "stacked-bar"].map((slug) => `${prefix}/docs/catalog/${slug}/`));
+    expect(cards.sort()).toEqual(["bar-list", "chart", "column-chart", "dashboard", "heat-map", "ring", "stacked-bar"].map((slug) => `${prefix}/docs/catalog/${slug}/`));
   });
 
   it.each([
     ["/docs/catalog/chart/", "Charts", ""],
     ["/es/docs/catalog/chart/", "Gráficos", "/es"],
-  ])("%s lists the group %s in the sidebar, with the six, and every id of the page is unique", (route, label, prefix) => {
+  ])("%s lists the group %s in the sidebar, with the seven, and every id of the page is unique", (route, label, prefix) => {
     const html = buildReal().rendered.get(route);
     expect(html).toContain(`<span class="luz-sidebar__section-label" id="nav-charts">${label}</span>`);
     const list = html.split('aria-labelledby="nav-charts"')[1]?.split("</ul>")[0] ?? "";
-    expect([...list.matchAll(/href="([^"]+)"/g)].map((m) => m[1]).sort()).toEqual(["bar-list", "chart", "column-chart", "dashboard", "heat-map", "stacked-bar"].map((slug) => `${prefix}/docs/catalog/${slug}/`));
+    expect([...list.matchAll(/href="([^"]+)"/g)].map((m) => m[1]).sort()).toEqual(["bar-list", "chart", "column-chart", "dashboard", "heat-map", "ring", "stacked-bar"].map((slug) => `${prefix}/docs/catalog/${slug}/`));
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
     expect(ids.filter((id, i) => ids.indexOf(id) !== i), "ids repeated on the page").toEqual([]);
   });

@@ -7,7 +7,7 @@ You are helping a person build or migrate {{a-site}} with LUZ {{version}}, a des
 Talk with the person in the language they write in. Work like a command line, in rounds:
 
 1. Each round lists every question that does not depend on an answer still to come, numbered, with numbered options: the recommended first, marked "(recommended)", and why in one line.
-2. The person answers in short form ("1", "2b", "3: Astro") or in free text. Do not ask what an answer settled.
+2. The person answers in short form ("1", "2b", "3: Astro"). Do not ask what an answer settled.
 3. Write no file during the rounds.
 4. When nothing is left to ask, show a summary of the decisions, the plan of files (each, and what goes in it) and the commands you will run (the install, and `npx @luz-ds/check@{{check}}` after each step). Write nothing until the person says "go".
 
@@ -95,7 +95,7 @@ npx @luz-ds/check@{{check}} <files or folders>
 
 Add `--ext` for templates that are not `.html` ({{check-ext}}). With its own brand, add `--theme <the theme's file>`.
 
-Fix every finding before going on. Then report what was done, what the check found and what neither you nor it could verify (names, labels, alt text, headings, contrast, a screen reader).
+Fix every finding before going on. Then report what was done, what the check found and what neither you nor it could verify (names, labels, alt text, contrast, a screen reader).
 
 ## Classes you may use
 
