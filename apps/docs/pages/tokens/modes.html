@@ -68,7 +68,7 @@ keywords: dark mode, prefers-color-scheme
       <h2 class="docs-chapter__title" id="themes-title">Modes and themes</h2>
       <p class="docs-lead">A color mode changes how light or dark the page is; a theme changes its whole identity. LUZ ships one look, in three modes. A theme of your own sits on top of it.</p>
       <ul>
-        <li>The three modes ship with the tokens: <code class="luz-code-inline">data-theme="light"</code>, <code class="luz-code-inline">"dark"</code> and <code class="luz-code-inline">"high-contrast"</code>. Light is the default, whatever the device's setting: <a href="#switching">let readers choose, or follow the system</a>.</li>
+        <li>The three modes ship with the tokens: <code class="luz-code-inline">data-theme="light"</code>, <code class="luz-code-inline">"dark"</code> and <code class="luz-code-inline">"high-contrast"</code>. With no mode named, the page follows the device: dark when the system is dark, high contrast when it asks for more contrast, light otherwise. <a href="#switching">Let readers choose</a>, or name a mode and it wins. To keep a page light, put <code class="luz-code-inline">data-theme="light"</code> on <code class="luz-code-inline">&lt;html&gt;</code>.</li>
         <li>The default look is Vejer, inspired by Vejer de la Frontera. It is the value the tokens have, not a file you load: ET Book for running text and headings, whitewash and sandstone surfaces, iron-black text, sky-blue links and actions, and every link underlined.</li>
         <li>LUZ ships no theme file. <a href="/docs/tokens/themes/">Make your own</a>: copy the template, change what you need, and check it.</li>
       </ul>
@@ -80,7 +80,7 @@ keywords: dark mode, prefers-color-scheme
 
     <section class="docs-block docs-chapter" aria-labelledby="switching">
       <h2 class="docs-chapter__title" id="switching">Letting readers choose</h2>
-      <p class="docs-lead">A page is light until it says otherwise: LUZ reads nothing of the visitor's device by itself. Two elements let a reader choose, and follow the system or the clock for them.</p>
+      <p class="docs-lead">A page follows the system until it says otherwise: with no <code class="luz-code-inline">data-theme</code> or <code class="luz-code-inline">data-mode</code> on <code class="luz-code-inline">&lt;html&gt;</code>, the page follows the device's dark and high contrast settings, with no script. Two elements let a reader choose, or follow the clock.</p>
       <ul>
         <li><a href="/docs/components/theme-mode/">Color mode</a>, in core: a button that steps through Auto, light, dark and high contrast, and an optional script for the head that applies the stored or system mode before the first paint.</li>
         <li><a href="/docs/catalog/theme-time/">Color mode by time of day</a>, in the catalog: gives Auto the time of day, in moments you declare, with an optional slider of the 24 hours.</li>

@@ -45,7 +45,41 @@ const semanticPath = resolve(__dirname, "../packages/tokens/src/semantic.css");
 
 const tokens = JSON.parse(readFileSync(tokensPath, "utf-8"));
 const semanticCss = readFileSync(semanticPath, "utf-8");
-const semanticLayer = `\n\n${semanticCss}`;
+
+// The system's own mode, with no script: the dark and high-contrast blocks of
+// semantic.css again, under the media queries, for a page that names no mode.
+// Written here from those two blocks, so nothing is copied by hand and the
+// values cannot drift. The selector is the page that has no data-mode, no
+// data-theme (a brand or an explicit mode keeps its own blocks) and no
+// checked light, dark or high-contrast radio of <luz-theme-mode> (Auto, or
+// no radio, leaves the choice to the system). High contrast comes last, so it
+// wins over dark when the system asks for both, as theme-boot.js does.
+function blockBody(css, mode) {
+  const start = css.indexOf(`[data-theme="${mode}"],`);
+  const open = css.indexOf("{", start);
+  const close = css.indexOf("\n}", open);
+  if (start < 0 || close < 0) throw new Error(`semantic.css: no [data-theme="${mode}"] block`);
+  return css.slice(open + 1, close);
+}
+const systemRoot = ':is(:root:not([data-mode], [data-theme], :has(input[name="luz-theme-mode"]:checked:is([value="light"], [value="dark"], [value="high-contrast"]))))';
+const systemModes = `/* -------------------------------------------------------------------------
+   COLOR MODE: THE SYSTEM'S — generated from the dark and high-contrast blocks
+   above, so with no data-mode, no data-theme and no radio checked but Auto,
+   the page is dark when the system is dark (prefers-color-scheme) and high
+   contrast when the system asks for more contrast (prefers-contrast).
+   -------------------------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  ${systemRoot} {${blockBody(semanticCss, "dark").replace(/\n/g, "\n  ")}
+  }
+}
+
+@media (prefers-contrast: more) {
+  ${systemRoot} {${blockBody(semanticCss, "high-contrast").replace(/\n/g, "\n  ")}
+  }
+}
+`;
+const semanticLayer = `\n\n${semanticCss}\n${systemModes}`;
 
 // ---- Generate primitives ----
 function generatePrimitives(tokens) {

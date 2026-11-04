@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color mode: the system's, with no script</title>
+  <!-- A page that names no mode: no data-theme and no data-mode on <html>, and no script at all.
+       The mode is the system's (prefers-color-scheme, prefers-contrast) unless a radio or an attribute says otherwise. -->
+  <link rel="stylesheet" href="/packages/tokens/dist/luz-tokens.css">
+  <link rel="stylesheet" href="/packages/core/dist/luz.css">
+</head>
+<body>
+  <main>
+    <h1>Color mode</h1>
+    <p>Text on the page.</p>
+    <div id="mode">
+      <fieldset class="luz-theme-mode__group">
+        <legend class="luz-theme-mode__legend">Color mode</legend>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="auto" checked>Auto</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="light">Light</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="dark">Dark</label>
+        <label class="luz-theme-mode__option"><input class="luz-theme-mode__input" type="radio" name="luz-theme-mode" value="high-contrast">High contrast</label>
+      </fieldset>
+    </div>
+    <form id="controls" action="#">
+      <p><label>Country <select id="sel"><option>Spain</option><option>Chile</option></select></label></p>
+      <p><label>Country <select id="sel-luz" class="luz-select"><option>Spain</option><option>Chile</option></select></label></p>
+      <p><label>Day <input id="date" type="date"></label></p>
+      <p><label>Hour <input id="time" class="luz-input" type="time"></label></p>
+    </form>
+  </main>
+</body>
+</html>

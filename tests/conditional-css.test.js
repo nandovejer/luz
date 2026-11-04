@@ -123,6 +123,12 @@ function items(selector) {
   return list;
 }
 
+/** A colour-mode context standing alone: the mode of the page, with no element of the zone behind it. */
+const isContext = (item) => /^(?:\[data-theme|\[data-mode|:root)/.test(item);
+
+/** Every "prelude { body }" of a stylesheet that has no block inside (comments gone). */
+const flatRules = (css) => [...css.replace(/\/\*[\s\S]*?\*\//g, "").matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, prelude, body]) => ({ prelude: prelude.trim(), body: body.trim() }));
+
 const conditional = read(`${core}dist/luz.conditional.css`);
 const minified = read(`${core}dist/luz.conditional.min.css`);
 const full = read(`${core}dist/luz.css`);
@@ -163,10 +169,26 @@ describe("dist/luz.conditional.css: what the build writes", () => {
       for (const selector of all) {
         for (const item of items(selector)) {
           // A class item is a component that shares the rule of its element, and works outside the zone (:where(select, .luz-select))
-          expect(item.startsWith(".") || item.includes("[data-luz]"), `${layer}: "${item}" in "${selector.slice(0, 100)}"`).toBe(true);
+          // A colour-mode context on its own ([data-theme], [data-mode], :root…) sets --luz-scheme on <html>, on the zone or inside it
+          expect(item.startsWith(".") || isContext(item) || item.includes("[data-luz]"), `${layer}: "${item}" in "${selector.slice(0, 100)}"`).toBe(true);
         }
       }
     }
+  });
+
+  it("leaves a colour-mode context unscoped only where the rule does nothing but set a custom property", () => {
+    let contexts = 0;
+    for (const layer of ZONED) {
+      for (const { prelude, body } of flatRules(conditionalLayers[layer] ?? "")) {
+        if (prelude.startsWith("@") || !items(prelude).some(isContext)) continue;
+        contexts++;
+        // Outside the zone a declaration of a property that paints would restyle the page: a custom property restyles nothing
+        const names = [...body.matchAll(/(?:^|;)\s*([\w-]+)\s*:/g)].map((m) => m[1]);
+        expect(names.length, `declarations of "${prelude.slice(0, 80)}"`).toBeGreaterThan(0);
+        for (const name of names) expect(name.startsWith("--"), `${name} in "${prelude.slice(0, 80)}"`).toBe(true);
+      }
+    }
+    expect(contexts, "the rules of --luz-scheme").toBeGreaterThanOrEqual(2);
   });
 
   it("keeps the specificity at zero: a rule written with :where() is still a :where()", () => {
@@ -236,14 +258,26 @@ describe("dist/luz.conditional.css: what the build writes", () => {
     expect(conditionalLayers["luz.elements"] ?? "", "a class is never put behind the zone").not.toMatch(/\[data-luz\]\s+\.luz-/);
   });
 
-  it("states the colour-mode context of a select in front of the zone and on it, so [data-theme] works on <html> and on the zone", () => {
-    const shared = selectors(conditionalLayers["luz.elements"] ?? "").filter((s) => s.includes("data-theme") && s.includes("select"));
-    expect(shared.length).toBeGreaterThan(0);
-    for (const selector of shared) {
-      const alternatives = items(selector).filter((i) => i.includes("data-theme"));
-      expect(alternatives.some((i) => /^:is\(\[data-theme[^)]*\)[^[]*\[data-luz\]/.test(i)), `the theme outside the zone in ${selector.slice(0, 80)}`).toBe(true);
-      expect(alternatives.some((i) => i.startsWith("[data-luz]:is(")), `the theme on the zone in ${selector.slice(0, 80)}`).toBe(true);
-    }
+  it("reads the colour mode of a select and of the pickers from --luz-scheme, and sets it outside the zone, on it and inside it", () => {
+    const elements = conditionalLayers["luz.elements"] ?? "";
+    const rules = flatRules(elements);
+    // The hook: the dark modes, unscoped, so [data-theme] or [data-mode] on <html>, on the zone or inside it reaches the controls
+    const dark = rules.find(({ prelude, body }) => body.includes("--luz-scheme: dark") && !prelude.startsWith("@") && items(prelude).includes('[data-theme="dark"]'));
+    expect(dark, "a rule that sets --luz-scheme: dark from [data-theme=dark]").toBeDefined();
+    const darkItems = items(dark?.prelude ?? "");
+    expect(darkItems).toContain('[data-mode="dark"]');
+    expect(darkItems.some((i) => i.startsWith(":root:has(") && i.includes('[value="dark"]'))).toBe(true);
+    expect(dark?.prelude, "not behind the zone").not.toContain("[data-luz]");
+    // The system's dark, with no mode named, in the same unscoped way
+    const system = elements.match(/@media\s*\(prefers-color-scheme:\s*dark\)\s*and\s*\(not\s*\(prefers-contrast:\s*more\)\)\s*\{[^{}]*\{[^{}]*--luz-scheme:\s*dark/);
+    expect(system, "@media (prefers-color-scheme: dark) and (not (prefers-contrast: more)) sets --luz-scheme: dark").not.toBeNull();
+    expect(system?.[0]).not.toContain("[data-luz]");
+    // What reads it stays in the zone (the select) or is a component (the class)
+    const readers = rules.filter(({ body }) => body.includes("color-scheme: var(--luz-scheme, light)"));
+    expect(readers.length, "the select and the pickers read it").toBeGreaterThanOrEqual(2);
+    for (const { prelude } of readers) expect(items(prelude).some((i) => i.includes("[data-luz]") && /select|input/.test(i)), prelude.slice(0, 80)).toBe(true);
+    // And no rule of the elements names a dark scheme of its own any more
+    for (const { prelude, body } of rules) expect(body.includes("color-scheme: dark"), `"${prelude.slice(0, 80)}"`).toBe(false);
   });
 
   it("is minified with the same zone", () => {
@@ -303,6 +337,22 @@ describe("scripts/css-scope.js: scopeCss() on the shapes the sources use", () =>
     expect(out).toContain(':is([data-theme="dark"],[data-mode="dark"]) [data-luz] select:not([class*="luz-"])');
     expect(out).toContain('[data-luz]:is([data-theme="dark"],[data-mode="dark"]) select:not([class*="luz-"])');
     expect(out.startsWith(":where(")).toBe(true);
+  });
+
+  it("leaves a colour-mode context on its own where it is: [data-theme], [data-mode] and :root, outside the zone, on it and inside it", () => {
+    const hook = ':where([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) { --luz-scheme: dark; }';
+    same(hook, hook);
+    same(":where(:root:not([data-mode], [data-theme])) { --luz-scheme: dark; }", ":where(:root:not([data-mode], [data-theme])) { --luz-scheme: dark; }");
+    same("@media (prefers-color-scheme: dark) and (not (prefers-contrast: more)) { :where(:root:not([data-mode])) { --luz-scheme: dark; } }", "@media (prefers-color-scheme: dark) and (not (prefers-contrast: more)) { :where(:root:not([data-mode])) { --luz-scheme: dark; } }");
+  });
+
+  it("scopes the other items of the same list, and still drops html", () => {
+    same(':where([data-theme="dark"], select) { a: b; }', ':where([data-theme="dark"], [data-luz] select) { a: b; }');
+    same(':where([data-mode="dark"], html, p) { a: b; }', ':where([data-mode="dark"], [data-luz] p) { a: b; }');
+  });
+
+  it("does not take an element that merely contains a context for one: a context behind a type still gets the zone", () => {
+    same(":where(div:root) { a: b; }", ":where([data-luz] div:root) { a: b; }");
   });
 
   it("scopes a rule that is not in a :where() with the zone and a space", () => {

@@ -130,15 +130,26 @@
   border-bottom-style: dashed;
 }
 
-/* The date and time pickers follow the colour mode, and centre their value */
-:where(input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]):not([class*="luz-"]), .luz-input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"])) {
-  color-scheme: light;
-  display: flex;
-  align-items: center;
+/* The colour scheme of the date and time pickers and of the open list of a
+   select follows the colour mode, through one hook, --luz-scheme, read by the
+   controls below: dark in a dark mode, and in the system's dark when the page
+   names no mode (the case of the tokens' own @media blocks: no data-mode, no
+   data-theme, no radio checked but Auto). High contrast is light. */
+:where([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) {
+  --luz-scheme: dark;
 }
 
-:where(:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]):not([class*="luz-"])) {
-  color-scheme: dark;
+@media (prefers-color-scheme: dark) and (not (prefers-contrast: more)) {
+  :where(:root:not([data-mode], [data-theme], :has(input[name="luz-theme-mode"][value="dark"]:checked, input[name="luz-theme-mode"][value="light"]:checked, input[name="luz-theme-mode"][value="high-contrast"]:checked))) {
+    --luz-scheme: dark;
+  }
+}
+
+/* The date and time pickers centre their value */
+:where(input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"]):not([class*="luz-"]), .luz-input:is([type="date"], [type="time"], [type="datetime-local"], [type="month"], [type="week"])) {
+  color-scheme: var(--luz-scheme, light);
+  display: flex;
+  align-items: center;
 }
 
 /* ---- Select: the closed box of .luz-select. The open list is the
@@ -162,14 +173,10 @@
   background-size: 0.45em 0.45em;
   background-repeat: no-repeat;
   color: var(--luz-text-primary);
-  color-scheme: light;
+  color-scheme: var(--luz-scheme, light);
   font-family: var(--luz-font-sans);
   font-size: var(--luz-text-control);
   cursor: pointer;
-}
-
-:where(:is([data-theme="dark"], [data-mode="dark"], :root:has(input[name="luz-theme-mode"][value="dark"]:checked)) select:not([class*="luz-"])) {
-  color-scheme: dark;
 }
 
 :where(select:not([class*="luz-"]):dir(rtl), .luz-select:dir(rtl)) {

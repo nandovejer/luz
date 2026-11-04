@@ -152,6 +152,8 @@ The page shell of a whole page is catalog; the layout objects of an app with a s
 <html data-theme="dark"></html>
 ```
 
+With no `data-theme` and no `data-mode`, the page follows the system with no script: dark, high contrast or light. Add `data-theme="light"` to `<html>` to keep a page light whatever the device says.
+
 **Themes.** LUZ ships one look, Vejer, in the three modes above. A theme of your own is a set of semantic tokens under its own `data-theme`, with `data-mode` for its light, dark and high-contrast variants. Start from `@luz-ds/core/themes/_template.css` and list the name in `<html data-luz-themes="my-brand">` so the mode switcher remembers it.
 
 Components use semantic tokens, never the primitive scales:

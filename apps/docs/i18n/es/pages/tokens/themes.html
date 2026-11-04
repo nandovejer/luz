@@ -1,14 +1,14 @@
 <!-- luz:page
 title: Crea tu propio tema
 description: LUZ incluye un aspecto en tres modos de color. Tu propio tema es un archivo de tokens semánticos: parte de la plantilla, compruébalo y cárgalo.
-source: 8a2b45e5f94f
+source: 6d9e121a2816
 reviewed: false
 -->
     <div class="docs-block" id="t-themes">
       <h2 id="what">Qué es un tema</h2>
       <p>Un <strong>modo de color</strong> indica si la página es clara u oscura: <code>light</code>, <code>dark</code> o <code>high-contrast</code>. Un <strong>tema</strong> define una identidad completa: colores y, opcionalmente, fuentes, radios y sombras. Cada tema tiene los tres modos.</p>
       <ul>
-        <li>LUZ incluye <strong>un aspecto</strong>, Vejer, en los tres modos. Es el predeterminado: si no hay ningún atributo, se usa su modo claro.</li>
+        <li>LUZ incluye <strong>un aspecto</strong>, Vejer, en los tres modos. Es el predeterminado: si no hay ningún atributo, la página sigue al sistema, oscuro, de alto contraste o claro.</li>
         <li>Tu tema solo sobrescribe <strong>tokens semánticos</strong>. Nunca cambia un token primitivo ni afecta al CSS de un componente.</li>
         <li>Asígnale un nombre con <code>data-theme</code> y elige su modo con <code>data-mode</code>.</li>
         <li>Sobrescribir tokens y crear un tema es lo mismo: un tema es un conjunto de sobrescrituras con nombre y un modo para cada aspecto.</li>
@@ -106,7 +106,7 @@ reviewed: false
         <li><strong>Una zona.</strong> <code>data-theme</code> funciona en cualquier elemento: el tema se aplica a ese elemento y a su contenido. Un selector de fecha u hora y un selector toman el esquema de color de un antecesor con <code>data-theme</code>, así que en esos casos pon el atributo en <code>&lt;html&gt;</code>.</li>
         <li><strong>Colores forzados.</strong> Quien fuerza los colores ve los del sistema, no tu tema. No tienes que hacer nada: los componentes se encargan.</li>
         <li><strong>Impresión.</strong> La capa <code>luz.print</code> establece los colores del papel, sea cual sea el tema.</li>
-        <li><strong>Preferencia del sistema operativo.</strong> Si no hay una elección guardada ni un atributo, la página es clara. Para seguir <code>prefers-color-scheme</code>, usa <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> y, para evitar un parpadeo, su <a href="/docs/components/theme-mode/#boot">script para la cabecera</a>.</li>
+        <li><strong>Preferencia del sistema operativo.</strong> Si no hay una elección guardada ni un atributo, la página sigue al sistema, pero solo con el aspecto propio de LUZ: un tema tuyo se queda en su primer bloque (claro) salvo que repitas su bloque oscuro bajo <code>@media (prefers-color-scheme: dark)</code>. Para seguir al sistema sin copiar el bloque, usa <a href="/docs/components/theme-mode/"><code>&lt;luz-theme-mode&gt;</code></a> y, para evitar un parpadeo, su <a href="/docs/components/theme-mode/#boot">script para la cabecera</a>.</li>
       </ul>
 
       <h2 id="limits">Límites</h2>

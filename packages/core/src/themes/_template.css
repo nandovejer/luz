@@ -16,6 +16,12 @@
    the checked radio of <luz-theme-mode> picks the mode while <html> has no
    data-mode. Keep it: it is why the radios work with no script.
 
+   With no script a theme stays in its first (light) block, while LUZ's own
+   look follows the system (semantic.css). With the script, data-mode follows
+   the system for a theme too: <luz-theme-mode> or theme-boot.js write it. To
+   follow the system with no script as well, repeat the dark block under
+   @media (prefers-color-scheme: dark), on :root[data-theme="my-brand"]:not([data-mode]).
+
    Check it before you ship it:
      npx @luz-ds/tokens check-contrast my-brand.css
    Minimums: 4.5:1 for text, 3:1 for disabled text, borders, field borders

@@ -79,6 +79,8 @@ Base color modes are activated via `data-theme` on `<html>`:
 <html data-theme="high-contrast">
 ```
 
+With no `data-theme` and no `data-mode`, the page follows the system, with no script: dark under `prefers-color-scheme: dark`, high contrast under `prefers-contrast: more` (which wins), light otherwise. Add `data-theme="light"` to `<html>` to keep a page light whatever the device says.
+
 The default look is Vejer. A theme of your own sets `data-theme="<theme-name>"` and uses `data-mode` for its luminosity variants (start from `@luz-ds/core/themes/_template.css`):
 
 ```html

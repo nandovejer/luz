@@ -2,7 +2,7 @@
 title: Modos de color y temas
 description: Cambia entre claro, oscuro y alto contraste con un solo atributo, o crea tu propio aspecto.
 keywords: modo oscuro, prefers-color-scheme
-source: 1d3398bf5dbe
+source: 48323f255c30
 reviewed: false
 -->
     <div class="docs-block" id="t-modes">
@@ -67,7 +67,7 @@ reviewed: false
       <h2 class="docs-chapter__title" id="themes-title">Modos y temas</h2>
       <p class="docs-lead">Un modo de color cambia la claridad u oscuridad de la página; un tema cambia toda su identidad. LUZ incluye un aspecto en tres modos. Tu propio tema se aplica sobre él.</p>
       <ul>
-        <li>Los tokens incluyen los tres modos: <code class="luz-code-inline">data-theme="light"</code>, <code class="luz-code-inline">"dark"</code> y <code class="luz-code-inline">"high-contrast"</code>. Claro es el modo predeterminado, sea cual sea la configuración del dispositivo: <a href="#switching">deja que cada persona elija o sigue el sistema</a>.</li>
+        <li>Los tokens incluyen los tres modos: <code class="luz-code-inline">data-theme="light"</code>, <code class="luz-code-inline">"dark"</code> y <code class="luz-code-inline">"high-contrast"</code>. Si la página no nombra un modo, sigue al dispositivo: oscuro si el sistema es oscuro, alto contraste si pide más contraste y claro en los demás casos. <a href="#switching">Deja que cada persona elija</a>, o nombra un modo y ese manda. Para que una página siga clara, pon <code class="luz-code-inline">data-theme="light"</code> en <code class="luz-code-inline">&lt;html&gt;</code>.</li>
         <li>El aspecto predeterminado es Vejer, inspirado en Vejer de la Frontera. Es el valor de los tokens, no un archivo que se carga: ET Book para el texto corrido y los encabezados, superficies blancas y de arenisca, texto negro hierro, enlaces y acciones azul cielo, y todos los enlaces subrayados.</li>
         <li>LUZ no incluye ningún archivo de tema. <a href="/docs/tokens/themes/">Crea el tuyo</a>: copia la plantilla, cambia lo que necesites y compruébalo.</li>
       </ul>
@@ -79,7 +79,7 @@ reviewed: false
 
     <section class="docs-block docs-chapter" aria-labelledby="switching">
       <h2 class="docs-chapter__title" id="switching">Dejar que cada persona elija</h2>
-      <p class="docs-lead">Una página es clara hasta que se diga otra cosa: LUZ no lee nada del dispositivo de quien la visita por sí sola. Dos elementos permiten elegir y siguen por esa persona el sistema o el reloj.</p>
+      <p class="docs-lead">Una página sigue al sistema hasta que se diga otra cosa: sin <code class="luz-code-inline">data-theme</code> ni <code class="luz-code-inline">data-mode</code> en <code class="luz-code-inline">&lt;html&gt;</code>, la página sigue los ajustes de oscuro y de alto contraste del dispositivo, sin script. Dos elementos permiten elegir o seguir el reloj.</p>
       <ul>
         <li><a href="/docs/components/theme-mode/">Modo de color</a>, en core: un botón que recorre Automático, claro, oscuro y alto contraste, y un script opcional para la cabecera que aplica el modo guardado o del sistema antes del primer pintado.</li>
         <li><a href="/docs/catalog/theme-time/">Modo de color según la hora del día</a>, en el catálogo: da a Automático la hora del día, en los momentos que declares, con un deslizador opcional de las 24 horas.</li>

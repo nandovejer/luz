@@ -16,6 +16,10 @@
  * - * (the reset) becomes :where([data-luz], [data-luz] *).
  * - A colour-mode context in front of an element (:is([data-theme="dark"], …)
  *   select) may be outside the zone, on it or inside it: all three are matched.
+ * - A colour-mode context on its own ([data-theme="dark"], [data-mode="dark"],
+ *   :root:has(…)) is left as it is: it only sets a custom property that a
+ *   control reads (--luz-scheme), so it must match on <html>, on the zone and
+ *   inside it, and a declaration of a custom property restyles nothing.
  * - An item that starts with a class (:where(select, .luz-select)) is left as
  *   it is: a component shares the rule of its element, and works outside the zone.
  * - Everything else is prefixed with the zone and a space.
@@ -71,6 +75,7 @@ function splitTop(text) {
 function scopeItem(item) {
   // A class is not about the zone: the component it names works anywhere
   if (item.startsWith(".")) return item;
+  if (item.startsWith("[data-theme") || item.startsWith("[data-mode") || item.startsWith(":root")) return item;
   if (item === "html") return null;
   if (item === "body") return ZONE;
   if (item.startsWith(":is([data-theme")) {
