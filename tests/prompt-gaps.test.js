@@ -153,6 +153,23 @@ describe("app: the charts", () => {
     expect(text).toContain("the one `style` allowed");
   });
 
+  it("tells a column chart or heat map cell a share from 0 to 1, not the stacked bar's --v: 62", () => {
+    const header = (name) => read(`packages/catalog/src/components/${name}.css`).split("*/")[0];
+    // The stylesheets say it: a cell's --v is the share, 0 to 1.
+    for (const name of ["column-chart", "heat-map"]) expect(header(name), name).toMatch(/--v is the share[^]*\(0 to 1/);
+    expect(header("stacked-bar")).toContain('style="--v: 62"');
+
+    const text = prose(prompts.app);
+    const example = header("column-chart").match(/style="(--v: 0\.\d+)"/)?.[1];
+    expect(example, "an example in column-chart.css").toBeDefined();
+    expect(text).toContain(`\`${example}\``);
+    expect(text).toContain("0 to 1");
+    // No sentence hands the stacked bar's weight to a column chart or a heat map.
+    const sentences = text.split(/(?<=[.:;])\s+/);
+    const wrong = sentences.filter((s) => /column|heat map/i.test(s) && s.includes("--v: 62") && !/stacked bar part/i.test(s));
+    expect(wrong).toEqual([]);
+  });
+
   it("links components/chart.min.css", () => {
     expect(catalogLinks(prompts.app)).toContain("components/chart.min.css");
   });
