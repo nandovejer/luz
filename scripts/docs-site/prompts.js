@@ -160,6 +160,13 @@ function elementEntries(root, pkg) {
   return lines;
 }
 
+/** The catalog file that defines `.luz-nav-toggle` (the presets name it), from classes.json: a class with no file fails the build. */
+function navToggleFile(root) {
+  const file = readJson(root, "packages/catalog/dist/classes.json").classes.find((c) => c.name === "luz-nav-toggle")?.files?.[0];
+  if (!file) throw new Error(`${MODULE}: no classes.json lists a file for luz-nav-toggle, which the presets name`);
+  return file;
+}
+
 const lineOf = (text, index) => text.slice(0, index).split("\n").length;
 
 /** The text of one prompt, by its id. Throws with file:line on a placeholder it cannot resolve. */
@@ -191,6 +198,8 @@ export function assemblePrompt(id, { root }) {
     "a-site": kind.title,
     version,
     check: versionOf(root, "check"),
+    // The stylesheet that defines the menu button, which the presets tell to link: read, never typed
+    "nav-toggle-css": navToggleFile(root),
     site: PROMPT_SITE,
     url: `${PROMPT_SITE}${promptRoute(id).slice(1)}`,
     "stack-list": stacks.map((s, i) => `${i + 1} ${s.name}`).join(", "),
