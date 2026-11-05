@@ -98,6 +98,8 @@ const urlOf = (route, siteUrl) => (siteUrl ? `${siteUrl}${route.slice(1)}` : rou
  */
 const MARKUP_HEADING = /<h3\b[^>]*\bid="markup"/;
 const CONTROL_MARKUP_HEADING = /<h5\b[^>]*\bid="[a-z0-9-]+-markup"/g;
+/** The id the example document links to: `markup`, or on a page of controls the first control's `<control>-markup`. */
+const markupIdOf = (page) => (MARKUP_HEADING.test(page.body) ? "markup" : /<h5\b[^>]*\bid="([a-z0-9-]+-markup)"/.exec(page.body)?.[1] ?? "markup");
 const hasMarkup = (page) => MARKUP_HEADING.test(page.body) || (page.meta.parts === "controls" && new RegExp(CONTROL_MARKUP_HEADING.source).test(page.body));
 
 /** `/docs/<area>/<slug>/` is `/examples/<area>/<slug>.html` (D2-A). */
@@ -606,10 +608,26 @@ function aiBodyOf(body, headings) {
 
 // A page of controls (`parts: controls`, the Form fields page): h2 families, h3 controls, h5 sections of each control's
 // Code and Design panels, their ids prefixed by the control's (`text-markup`). The file keeps what an agent needs to
-// write the markup of a control: its summary, its markup and its keys, and when to use it; the variants, how it works,
-// without JavaScript and when not to use it of each control stay on the page, and the page-level "How form fields
-// work" says what they have in common.
-const CONTROL_SECTIONS = ["markup", "keyboard", "when"];
+// write the markup of a control: its summary and its markup (the code samples); its keys only when
+// they are one short sentence; the variants, how it works, without JavaScript and when not to use it of each control
+// stay on the page, and the page-level "How form fields work" says what they have in common.
+/** A section that is one short paragraph (no list, 100 characters at most), else nothing. */
+const shortSentence = (html) => {
+  const text = html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  return !/<(?:ul|ol|table|pre)\b/.test(html) && /^\s*<p\b[\s\S]*<\/p>\s*$/.test(html) && text.length <= 100 ? html : "";
+};
+/**
+ * The code of a control's markup sample for llms-full: the field wrapper of the page (`.luz-field` with its label, hint and
+ * error, shown once in the family that opens the page) is left out, so a control keeps its own element.
+ */
+function controlMarkup(code) {
+  const lines = code.split("\n");
+  // A label that holds more than text (the range's output) is the control's own markup: it stays
+  if (lines[0] !== '<div class="luz-field">' || lines.at(-1) !== "</div>" || lines.some((l) => /<label\b.*<output\b/.test(l))) return code;
+  const inner = lines.slice(1, -1).filter((l) => !/^\s*<(?:label class="luz-field__label|div class="luz-field__(?:helper|error)")/.test(l));
+  return inner.map((l) => l.replace(/^ {2}/, "")).join("\n");
+}
+const CONTROL_SECTIONS = ["markup", "keyboard"];
 // The h2 of a page of controls that are page-level text: kept whole
 const PAGE_LEVEL = new Set(["known-issues", "how-it-works"]);
 
@@ -617,6 +635,7 @@ const PAGE_LEVEL = new Set(["known-issues", "how-it-works"]);
 function controlsBody(page, headings, { file, siteUrl, base }) {
   const out = [];
   let family = true;
+  let familyId = null;
   let control = null;
   for (const [i, h] of headings.entries()) {
     const keep = (marks, shape = (html) => html) => {
@@ -625,6 +644,7 @@ function controlsBody(page, headings, { file, siteUrl, base }) {
     };
     if (h.level === 2) {
       control = null;
+      familyId = h.id;
       if (h.id === "known-issues") family = false;
       if (family || PAGE_LEVEL.has(h.id)) keep("###");
     } else if (h.level === 3 && family && isFamilyNote(h.id)) {
@@ -637,8 +657,18 @@ function controlsBody(page, headings, { file, siteUrl, base }) {
       // Not moved to its control yet: a section of the old single pair
       keep("###");
     } else if (h.level === 5 && control && CONTROL_SECTIONS.some((kind) => h.id === `${control}-${kind}`)) {
-      // "When to use" is its lead sentence here: its list is on the page
-      keep("#####", h.id === `${control}-when` ? firstParagraph : (html) => html);
+      // The keys stay only as one short sentence; "When to use" is on the page
+      if (h.id === `${control}-markup`) {
+        // Its code samples only, with no heading and no label: the page says the rest
+        const fragment = page.body.slice(h.end, headings[i + 1]?.start ?? page.body.length);
+        for (const [, , code] of fragment.matchAll(PRE_HTML)) {
+          const text = decodeEntities(code).trim();
+          // The family of the field's own parts documents the wrapper: it keeps it
+          out.push(`\`\`\`html\n${familyId === "field" ? text : controlMarkup(text)}\n\`\`\``);
+        }
+      } else {
+        keep("#####", shortSentence);
+      }
     }
   }
   return out.join("\n\n");
@@ -865,7 +895,7 @@ function exampleDocument(page, { csp, versions, packages, catalog = [] }) {
   const title = page.meta.title;
   const route = exampleRouteOf(page);
   // `../dist/` and `../../docs/`: the document is at /examples/<area>/<slug>.html
-  const docsUrl = `../..${page.route}#markup`;
+  const docsUrl = `../..${page.route}#${markupIdOf(page)}`;
   const snippetUrl = "../../docs/get-started/snippet/";
   const css = (pkg) => (pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? inCascadeOrder(catalog).map(minified) : [FILES[pkg].css]);
   const links = packages.flatMap((pkg) => css(pkg).map((file) => `  <link rel="stylesheet" href="../dist/${pkg}/${file}">`));
