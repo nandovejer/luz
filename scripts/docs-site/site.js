@@ -84,8 +84,8 @@ const FRONT_MATTER = {
   // them as "Fits best: …" under the lead and on the card of the gallery. `fits` is translatable
   "fits-kinds": { default: "" },
   fits: { default: "" },
-  // "controls": a component page whose h2 are families and whose h3 are controls, each with its own example and its
-  // own Code and Design tabs (the Form fields page). Empty: the one pair of tabs every other page has
+  // "controls": a component page whose h2 are controls, each with its own example and its own Code and Design tabs
+  // (the pages of Form fields). Empty: the one pair of tabs every other page has
   parts: { default: "" },
   // Shown next to the h1: the CSS files and the JS module of a component
   files: { default: "" },
@@ -563,32 +563,15 @@ function headingsOf(page) {
   const english = contentOf(englishOf(page)).headings;
   if (!page.english || page.fallback) return english;
   const own = new Map(contentOf(page).headings.filter((h) => h.id).map((h) => [h.id, h.text]));
-  // A heading the translation lacks (a page not moved to a new structure yet) is not listed: its link would point at nothing
-  return english.filter((h) => !h.id || own.has(h.id)).map((h) => ({ ...h, english: h.text, text: own.get(h.id) ?? h.text }));
+  return english.map((h) => ({ ...h, english: h.text, text: own.get(h.id) ?? h.text }));
 }
 
 /* ---- Generated blocks --------------------------------------------------- */
 
 const link = (href, text, attrs = "") => `<a${attrs} href="${escapeHtml(href)}">${escapeHtml(text)}</a>`;
 
-/** The id of a heading that closes a family of controls, not a control: `text-inputs-contrast`, `choice-tokens`. */
+/** The id of a heading that is a family's notes, not a control: `inputs-contrast`, `choice-tokens`. */
 export const isFamilyNote = (id) => /-(?:contrast|tokens)$/.test(id ?? "");
-
-/**
- * The families of a page of controls (`parts: controls`): its h2 before "Known issues", with an id, outside the demos,
- * read from the page as it is rendered (a translation that has not been moved to the structure has none, and its
- * page keeps one link). [] for any other page.
- */
-function familiesOf(page) {
-  if (page.meta.parts !== "controls") return [];
-  const found = [];
-  for (const h of contentOf(page).headings) {
-    if (h.level !== 2 || h.specimen) continue;
-    if (h.id === "known-issues") break;
-    if (h.id) found.push(h);
-  }
-  return found;
-}
 
 /**
  * The sidebar: every area of site.json with every page of it, so a page of
@@ -596,9 +579,7 @@ function familiesOf(page) {
  * (all of one name, so opening one closes the others), open for the area of the
  * current page and closed for the rest; its link to the area index stays
  * outside the fold. A group
- * marked `sidebar: true` is a labelled sub-list; one that holds a page of
- * controls (`parts: controls`) lists that page's families as links to their
- * anchors and makes its label the link to the page. aria-current="page" on the
+ * marked `sidebar: true` is a labelled sub-list. aria-current="page" on the
  * current page (the area link on an area index), "true" on its area link.
  * No .is-active: that is the scroll spy's mark. One line per link, without
  * indentation: the list is on every page, under the ceiling of a page (RL-17).
@@ -607,15 +588,8 @@ export function renderNav(site, page) {
   const current = areaOf(site, page);
   const root = docsRootOf(site);
   // In a language the title of a page that is not translated is English: one lang="en" on a list of such pages, else on each link
-  const link1 = (p, listIsEnglish) =>
+  const item = (p, listIsEnglish) =>
     `<li>${link(p.route, p.meta.title, ` class="luz-sidebar__link"${p.fallback && !listIsEnglish ? enLang(site) : ""}${p.route === page.route ? ' aria-current="page"' : ""}`)}</li>`;
-  // A page of controls (`parts: controls`) in a labelled group has no link of its own in the list: its families are, one
-  // line each, to their anchors, and the group's label is the link to the page (it holds aria-current="page")
-  const item = (p, listIsEnglish, inGroup = false) => {
-    const families = inGroup ? familiesOf(p) : [];
-    if (families.length < 2) return link1(p, listIsEnglish);
-    return families.map((h) => `<li>${link(`${p.route}#${h.id}`, h.text, ` class="luz-sidebar__link"${p.fallback && !listIsEnglish ? enLang(site) : ""}`)}</li>`).join("\n");
-  };
   const mark = (area) => {
     const route = areaRoute(area, root);
     return current?.id !== area.id ? "" : page.route === route ? ' aria-current="page"' : ' aria-current="true"';
@@ -634,14 +608,10 @@ export function renderNav(site, page) {
     sections.flatMap(({ group, pages }) => {
       if (!group) return pages.map((p) => item(p, allEnglish));
       const groupEnglish = pages.every((p) => p.fallback);
-      const controls = pages.find((p) => familiesOf(p).length >= 2);
-      const label = controls
-        ? link(controls.route, group.label, ` class="luz-sidebar__section-label" id="nav-${group.id}"${controls.route === page.route ? ' aria-current="page"' : ""}`)
-        : `<span class="luz-sidebar__section-label" id="nav-${group.id}">${escapeHtml(group.label)}</span>`;
       return [
-        `<li class="docs-nav__group">${label}`,
+        `<li class="docs-nav__group"><span class="luz-sidebar__section-label" id="nav-${group.id}">${escapeHtml(group.label)}</span>`,
         `<ul class="docs-nav__pages"${groupEnglish ? enLang(site) : ""} aria-labelledby="nav-${group.id}">`,
-        ...pages.map((p) => item(p, groupEnglish, true)),
+        ...pages.map((p) => item(p, groupEnglish)),
         "</ul></li>",
       ];
     });
@@ -805,23 +775,10 @@ export function renderPageHead(site, page) {
 export function renderToc(page, html, t = englishT(), site = {}) {
   if (page.meta.toc === "false") return "";
   const levels = page.meta.toc === "h2,h3" ? [2, 3] : [2];
-  let headings = readHtml(html, page.file).headings.filter((h) => levels.includes(h.level) && !h.specimen);
-  // A page of controls lists its families, their controls and "Known issues", and nothing else: not a family's notes (its
-  // contrast table and tokens) nor the page-level sections after "Known issues". A page not yet moved to that structure
-  // (a translation) has under two families and keeps the whole list
-  const known = headings.findIndex((h) => h.id === "known-issues");
-  const controls = page.meta.parts === "controls" && known > -1 && headings.slice(0, known).filter((h) => h.level === 2).length >= 2;
-  if (controls) {
-    let family = true;
-    headings = headings.filter((h) => {
-      if (h.level === 2) {
-        if (h.id === "known-issues") return !(family = false);
-        return family;
-      }
-      return family && !isFamilyNote(h.id);
-    });
-  }
-  if (headings.filter((h) => h.level === 2).length < 3 && !controls) return "";
+  // A page of controls (`parts: controls`) lists its controls, the h2, and "Known issues": not a family's notes (its contrast table and tokens)
+  const controls = page.meta.parts === "controls";
+  const headings = readHtml(html, page.file).headings.filter((h) => levels.includes(h.level) && !h.specimen && !(controls && isFamilyNote(h.id)));
+  if (headings.filter((h) => h.level === 2).length < 3) return "";
   const missing = headings.find((h) => !h.id);
   if (missing) throw new Error(`${page.file}: the heading "${missing.text}" belongs in "On this page" and needs an id`);
   if (headings[0].level !== 2) throw new Error(`${page.file}: the h3 "${headings[0].text}" comes before any h2`);
@@ -837,7 +794,7 @@ export function renderToc(page, html, t = englishT(), site = {}) {
     if (next?.level !== 3) lines.push("          </ul>\n        </li>");
   });
   // The headings are the content's: English on a page that is not translated yet
-  return `  <nav class="luz-page-rail__onpage${controls ? " docs-rail-controls" : ""}" aria-labelledby="docs-rail-title">\n    <details class="luz-page-rail__fold" open>\n      <summary class="luz-page-rail__title" id="docs-rail-title">${say(t, "rail.on-page")}</summary>\n      <ul class="luz-page-rail__list"${enAttr(site, page)}>\n${lines.join("\n")}\n      </ul>\n    </details>\n  </nav>`;
+  return `  <nav class="luz-page-rail__onpage" aria-labelledby="docs-rail-title">\n    <details class="luz-page-rail__fold" open>\n      <summary class="luz-page-rail__title" id="docs-rail-title">${say(t, "rail.on-page")}</summary>\n      <ul class="luz-page-rail__list"${enAttr(site, page)}>\n${lines.join("\n")}\n      </ul>\n    </details>\n  </nav>`;
 }
 
 /**
@@ -1109,10 +1066,7 @@ export function indexData(site) {
     }
   }
   for (const entry of data) {
-    // A name is read from the English page; where the translation has no such id yet (a page not moved to a new structure), it points at the page
-    const own = entry.page.english ? contentOf(entry.page).ids : null;
-    const there = (id) => !own || own.has(id);
-    entry.names = entry.candidates.filter((c) => owner.get(c.text).entry === entry).map(({ text, id, tab }) => (there(id) ? { text, id, tab } : { text, id: null, tab: null }));
+    entry.names = entry.candidates.filter((c) => owner.get(c.text).entry === entry).map(({ text, id, tab }) => ({ text, id, tab }));
     delete entry.candidates;
     delete entry.family;
   }
@@ -1222,14 +1176,6 @@ export function renderAZ(site, page) {
   const base = baseOf(site);
   const inEnglish = site.locale ? enLang(site) : "";
   const toLocal = (route) => localRouteOf(site, route);
-  // An entry's link in a language: the page's, and its section when the translation has it (a page not moved to a new
-  // structure yet has not: the link goes to the page)
-  const localHref = (href) => {
-    const local = href.replace(DOCS_ROUTE, root);
-    const [route, hash] = local.split("#");
-    const target = hash ? site.byRoute.get(route) : null;
-    return target && !contentOf(target).ids.has(hash) ? route : local;
-  };
   const groups = new Map();
   for (const entry of indexEntries(base)) {
     const letter = azLetterOf(entry.name);
@@ -1257,7 +1203,7 @@ export function renderAZ(site, page) {
       const heading = l === "#" ? say(t, "az.rest") : l;
       const items = groups
         .get(l)
-        .map((e) => `      <li>${link(site.locale ? localHref(e.href) : e.href, e.name)} <span class="docs-az__kind">${escapeHtml(e.kind)}</span></li>`)
+        .map((e) => `      <li>${link(site.locale ? e.href.replace(DOCS_ROUTE, root) : e.href, e.name)} <span class="docs-az__kind">${escapeHtml(e.kind)}</span></li>`)
         .join("\n");
       return `  <section class="docs-az__letter" aria-labelledby="${id}">\n    <h2 id="${id}"${l === "#" ? ownAttrs(site, page) : inEnglish}>${heading}</h2>\n    <ul class="docs-az__list"${inEnglish}>\n${items}\n    </ul>\n  </section>`;
     });

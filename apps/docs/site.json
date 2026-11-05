@@ -45,7 +45,7 @@
     ] },
     { "id": "html", "label": "HTML elements", "slug": "html", "package": "@luz-ds/core", "essentials": [
       { "href": "/docs/a-z/" },
-      { "href": "/docs/components/form/" },
+      { "href": "/docs/components/form-inputs/" },
       { "href": "/docs/components/" }
     ] },
     { "id": "accessibility", "label": "Accessibility", "slug": "accessibility", "essentials": [

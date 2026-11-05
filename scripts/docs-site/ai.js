@@ -94,12 +94,12 @@ const urlOf = (route, siteUrl) => (siteUrl ? `${siteUrl}${route.slice(1)}` : rou
 
 /**
  * A page with a "Copy the markup" section has an example document: its h3 has the id `markup`, or, on a page of
- * controls (`parts: controls`), each control's h5 has the id `<control>-markup`.
+ * controls (`parts: controls`), each control's h4 has the id `<control>-markup`.
  */
 const MARKUP_HEADING = /<h3\b[^>]*\bid="markup"/;
-const CONTROL_MARKUP_HEADING = /<h5\b[^>]*\bid="[a-z0-9-]+-markup"/g;
+const CONTROL_MARKUP_HEADING = /<h4\b[^>]*\bid="[a-z0-9-]+-markup"/g;
 /** The id the example document links to: `markup`, or on a page of controls the first control's `<control>-markup`. */
-const markupIdOf = (page) => (MARKUP_HEADING.test(page.body) ? "markup" : /<h5\b[^>]*\bid="([a-z0-9-]+-markup)"/.exec(page.body)?.[1] ?? "markup");
+const markupIdOf = (page) => (MARKUP_HEADING.test(page.body) ? "markup" : /<h4\b[^>]*\bid="([a-z0-9-]+-markup)"/.exec(page.body)?.[1] ?? "markup");
 const hasMarkup = (page) => MARKUP_HEADING.test(page.body) || (page.meta.parts === "controls" && new RegExp(CONTROL_MARKUP_HEADING.source).test(page.body));
 
 /** `/docs/<area>/<slug>/` is `/examples/<area>/<slug>.html` (D2-A). */
@@ -606,19 +606,21 @@ function aiBodyOf(body, headings) {
   return parts.join("\n");
 }
 
-// A page of controls (`parts: controls`, the Form fields page): h2 families, h3 controls, h5 sections of each control's
-// Code and Design panels, their ids prefixed by the control's (`text-markup`). The file keeps what an agent needs to
-// write the markup of a control: its summary and its markup (the code samples); its keys only when
-// they are one short sentence; the variants, how it works, without JavaScript and when not to use it of each control
-// stay on the page, and the page-level "How form fields work" says what they have in common.
+// A page of controls (`parts: controls`, the pages of Form fields): h2 controls, h3 panel titles, h4 sections of each
+// control's Code and Design panels, their ids prefixed by the control's (`text-markup`). The file keeps what an agent needs
+// to write the markup of a control: the page's lead, then for each control its summary and its markup (the code samples),
+// and its keys only when they are one short sentence. The rest of each control (variants, how it works, without
+// JavaScript, when to use it and not) stays on the page; so do the notes of the family (contrast, tokens).
 /** A section that is one short paragraph (no list, 100 characters at most), else nothing. */
 const shortSentence = (html) => {
   const text = html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
   return !/<(?:ul|ol|table|pre)\b/.test(html) && /^\s*<p\b[\s\S]*<\/p>\s*$/.test(html) && text.length <= 100 ? html : "";
 };
+// The page that documents the field's own parts keeps the wrapper in its samples; everywhere else the lead of Inputs says it once
+const FIELD_PARTS_ROUTE = "/docs/components/form-field-parts/";
 /**
- * The code of a control's markup sample for llms-full: the field wrapper of the page (`.luz-field` with its label, hint and
- * error, shown once in the family that opens the page) is left out, so a control keeps its own element.
+ * The code of a control's markup sample for llms-full: the field wrapper (`.luz-field` with its label, hint and error,
+ * shown once in the lead of Inputs) is left out, so a control keeps its own element.
  */
 function controlMarkup(code) {
   const lines = code.split("\n");
@@ -627,48 +629,31 @@ function controlMarkup(code) {
   const inner = lines.slice(1, -1).filter((l) => !/^\s*<(?:label class="luz-field__label|div class="luz-field__(?:helper|error)")/.test(l));
   return inner.map((l) => l.replace(/^ {2}/, "")).join("\n");
 }
-const CONTROL_SECTIONS = ["markup", "keyboard"];
-// The h2 of a page of controls that are page-level text: kept whole
-const PAGE_LEVEL = new Set(["known-issues", "how-it-works"]);
 
-/** The text of a page of controls: families and controls before "Known issues", then its page-level sections. */
-function controlsBody(page, headings, { file, siteUrl, base }) {
+/** The text of a page of controls: its lead, then each control, then "Known issues". */
+function controlsBody(page, headings, { file, siteUrl, base, canonical }) {
   const out = [];
-  let family = true;
-  let familyId = null;
+  const lead = convert(page.body.slice(0, headings[0]?.start ?? page.body.length), { file, line: page.bodyLine, siteUrl, base }).text;
+  if (lead) out.push(lead);
   let control = null;
   for (const [i, h] of headings.entries()) {
+    const fragment = () => page.body.slice(h.end, headings[i + 1]?.start ?? page.body.length);
     const keep = (marks, shape = (html) => html) => {
-      const text = convert(shape(page.body.slice(h.end, headings[i + 1]?.start ?? page.body.length)), { file, line: h.endLine, siteUrl, base }).text;
+      const text = convert(shape(fragment()), { file, line: h.endLine, siteUrl, base }).text;
       if (text) out.push(`${marks} ${h.text}\n${text}`);
     };
     if (h.level === 2) {
-      control = null;
-      familyId = h.id;
-      if (h.id === "known-issues") family = false;
-      if (family || PAGE_LEVEL.has(h.id)) keep("###");
-    } else if (h.level === 3 && family && isFamilyNote(h.id)) {
-      // The closing notes of a family (its contrast table and tokens): computed, on the page
-      control = null;
-    } else if (h.level === 3 && family) {
-      control = h.id;
-      keep("####");
-    } else if (h.level === 3 && GUIDED.has(h.id)) {
-      // Not moved to its control yet: a section of the old single pair
-      keep("###");
-    } else if (h.level === 5 && control && CONTROL_SECTIONS.some((kind) => h.id === `${control}-${kind}`)) {
-      // The keys stay only as one short sentence; "When to use" is on the page
-      if (h.id === `${control}-markup`) {
-        // Its code samples only, with no heading and no label: the page says the rest
-        const fragment = page.body.slice(h.end, headings[i + 1]?.start ?? page.body.length);
-        for (const [, , code] of fragment.matchAll(PRE_HTML)) {
-          const text = decodeEntities(code).trim();
-          // The family of the field's own parts documents the wrapper: it keeps it
-          out.push(`\`\`\`html\n${familyId === "field" ? text : controlMarkup(text)}\n\`\`\``);
-        }
-      } else {
-        keep("#####", shortSentence);
+      // A family's notes (its contrast table and tokens) are computed: they stay on the page
+      control = isFamilyNote(h.id) || h.id === "known-issues" ? null : h.id;
+      if (!isFamilyNote(h.id)) keep("###");
+    } else if (h.level === 4 && control && h.id === `${control}-markup`) {
+      // Its code samples only, with no heading and no label
+      for (const [, , code] of fragment().matchAll(PRE_HTML)) {
+        const text = decodeEntities(code).trim();
+        out.push(`\`\`\`html\n${canonical === FIELD_PARTS_ROUTE ? text : controlMarkup(text)}\n\`\`\``);
       }
+    } else if (h.level === 4 && control && h.id === `${control}-keyboard`) {
+      keep("####", shortSentence);
     }
   }
   return out.join("\n\n");
@@ -706,7 +691,7 @@ function bodyOf(page, options) {
     return [items.join("\n"), OUTLINE_POINTERS.get(canonical)].filter(Boolean).join("\n\n");
   }
 
-  if (page.meta.parts === "controls") return controlsBody(page, headings, { file, siteUrl, base });
+  if (page.meta.parts === "controls") return controlsBody(page, headings, { file, siteUrl, base, canonical });
 
   if (headings.some((h) => h.id === "markup")) {
     const boundaries = headings.filter((h) => h.level <= 3);
@@ -845,7 +830,7 @@ const PRE_HTML = /<pre\b([^>]*\bdata-lang="html"[^>]*)>\s*<code[^>]*>([\s\S]*?)<
  * no inline script and its policy says `script-src 'self'`.
  */
 function markupBlocks(page) {
-  // The h3 `markup` section (to the next h2 or h3), then each control's h5 `<control>-markup` (to the next h2 to h5)
+  // The h3 `markup` section (to the next h2 or h3), then each control's h4 `<control>-markup` (to the next h2 to h4)
   const sections = [];
   const start = page.body.search(MARKUP_HEADING);
   if (start !== -1) {
@@ -856,7 +841,7 @@ function markupBlocks(page) {
   if (page.meta.parts === "controls") {
     for (const m of page.body.matchAll(CONTROL_MARKUP_HEADING)) {
       const rest = page.body.slice(m.index + 1);
-      const end = rest.search(/<h[2-5]\b/);
+      const end = rest.search(/<h[2-4]\b/);
       sections.push(rest.slice(0, end === -1 ? undefined : end));
     }
   }

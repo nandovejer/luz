@@ -30,7 +30,7 @@
 import { createHash } from "node:crypto";
 import { lstatSync, readdirSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
-import { decodeEntities, readHtml, tags } from "./html.js";
+import { decodeEntities, tags } from "./html.js";
 import { assertInlineHtml, checkCatalog, lineOfKey } from "./i18n.js";
 import { PLURAL_CATEGORIES, PLACEHOLDER, makeT } from "./strings.js";
 import { depthOf, readInside, routeOfPage } from "./site.js";
@@ -383,16 +383,6 @@ export function localize(site, language) {
     };
   });
   const byRoute = new Map(pages.map((p) => [p.route, p]));
-  // A link to a section of a translated page that does not have that id yet (an English page that gained a section, the
-  // translation not moved to it) goes to the page: the link never points at nothing
-  const idsOf = new Map();
-  const ids = (page) => idsOf.get(page) ?? idsOf.set(page, readHtml(page.body, page.file).ids).get(page);
-  for (const page of pages) {
-    page.body = page.body.replace(/(<a\b[^>]*\shref=")(\/[^"#]*)#([^"]*)(")/g, (whole, before, route, id, after) => {
-      const target = byRoute.get(route);
-      return target && !target.fallback && !ids(target).has(id) ? `${before}${route}${after}` : whole;
-    });
-  }
   const areas = site.areas.map((area) => ({
     ...area,
     label: t(`area.${area.id}`),

@@ -430,13 +430,12 @@ h3.docs-subhead {
   color: var(--luz-text-secondary);
 }
 
-/* A page of controls (parts: controls, the Form fields page): h2 is a family,
-   h3 a control (and, in a family's closing .docs-family-notes, its shared
-   contrast table and tokens), and each control is a block of its own: its summary, its
-   example, then its own Code and Design tabs. The panel title is an h4 and
-   its sections h5, one level under the page's. Sticky is bound by its
-   parent, so each tab row stays under the header only to the end of its own
-   control, and two rows never pile up. */
+/* A page of controls (parts: controls, the pages of Form fields): each control
+   is an h2 and a block of its own: its summary, its example, then its own Code
+   and Design tabs. The panel title is an h3 and its sections h4. The closing
+   .docs-family-notes hold the contrast table and the tokens the controls of the
+   page share. Sticky is bound by its parent, so each tab row stays under the
+   header only to the end of its own control, and two rows never pile up. */
 .docs-control,
 .docs-family-notes {
   display: grid;
@@ -451,9 +450,12 @@ h3.docs-subhead {
   border-block-start: 1px solid var(--luz-divider);
 }
 
-.docs-control > h3,
-.docs-family-notes > h3 {
+.docs-control > h2,
+.docs-family-notes > h2 {
   margin-block: 0;
+}
+
+.docs-family-notes > h2 {
   font-size: var(--luz-text-xl);
 }
 
@@ -467,37 +469,23 @@ h3.docs-subhead {
 
 /* The control's own title is above its tab row, which is not stuck yet: the
    page's scroll padding is all the room it needs */
-.docs-control > h3[id],
-.docs-family-notes > h3[id] {
+.docs-control > h2[id],
+.docs-family-notes > h2[id] {
   scroll-margin-top: 0;
 }
 
 .docs-control .docs-view__title {
+  margin-block-start: var(--luz-space-lg);
   font-size: var(--luz-text-xl);
 }
 
-.docs-view h5 {
+.docs-control .docs-view > h4 {
   margin-block-start: var(--luz-space-md);
   font-size: var(--luz-text-lg);
 }
 
-.docs-view > .docs-view__title + h5 {
+.docs-control .docs-view > .docs-view__title + h4 {
   margin-block-start: 0;
-}
-
-/* The rail of a page of controls (parts: controls): the controls of a family
-   show under the family the scroll spy marks (aria-current="true", written by
-   the script, on the family or on one of its controls), and fold under the
-   others, from 80rem where the rail is a column that follows the page. Before
-   the spy has marked anything (the top of the page) the first family is open.
-   Without JavaScript nothing is marked and nothing is folded (the root has no
-   data-luz-js), and a link with the focus keeps its list open. No animation:
-   the list only appears and goes. */
-@media (min-width: 80rem) {
-  :root[data-luz-js] .docs-rail-controls:has([aria-current="true"]) .luz-page-rail__list > li:not(:has([aria-current="true"]), :focus-within) > .luz-page-rail__sub,
-  :root[data-luz-js] .docs-rail-controls:not(:has([aria-current="true"])) .luz-page-rail__list > li:not(:first-child, :focus-within) > .luz-page-rail__sub {
-    display: none;
-  }
 }
 
 /* Do and don't (Design tab): the pattern is catalog's .luz-do-dont.

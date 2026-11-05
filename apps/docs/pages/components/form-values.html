@@ -1,0 +1,220 @@
+<!-- luz:page
+title: Values
+description: Show or compute a value instead of collecting text: meter and output.
+area: components
+group: forms
+order: 3
+files: components/form.css; components/meter.css
+parts: controls
+toc: h2
+keywords: meter, output, gauge
+-->
+    <div class="docs-component" id="c-form-values">
+      <div class="docs-control">
+        <h2 id="meter">Meter</h2>
+        <p>A bar for a value in a known range, such as storage used, drawn next to its figure.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="me-storage">Storage used, 6 of 10 GB</label>
+              <meter class="luz-meter" id="me-storage" min="0" max="10" value="6">6 of 10 GB</meter>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Meter documentation">
+          <a class="luz-tab" href="#meter-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#meter-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="meter-code-panel">
+          <h3 class="docs-view__title" id="meter-code">Code</h3>
+          <h4 id="meter-markup">Copy the markup</h4>
+          <p>A native <code>&lt;meter&gt;</code> with its range. The text inside is for browsers that do not draw it:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-meter" aria-label="Copy the meter markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meter markup"><code id="code-meter">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;storage&quot;&gt;Storage used, 6 of 10 GB&lt;/label&gt;
+  &lt;meter class=&quot;luz-meter&quot; id=&quot;storage&quot; min=&quot;0&quot; max=&quot;10&quot; value=&quot;6&quot;&gt;6 of 10 GB&lt;/meter&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h4 id="meter-variants">Variants and options</h4>
+          <ul>
+            <li><code>min</code>, <code>max</code>, <code>value</code>: the range and the figure.</li>
+            <li>Do not set <code>low</code>, <code>high</code> or <code>optimum</code>: the bar is always the brand colour, never a green or a red.</li>
+          </ul>
+          <h4 id="meter-how">How it works</h4>
+          <p>A native <code>&lt;meter&gt;</code> drawn by <code>components/meter.css</code> as an 8 px bar: a brand fill on a muted track with the field's border colour. The bar is a picture of a number that is already text. See the <a href="/docs/components/meter/">Meter</a> page for tables and lists.</p>
+          <h4 id="meter-no-js">Without JavaScript</h4>
+          <p>The bar is drawn and the figure is in the label. Nothing changes without your script, which sets <code>value</code>.</p>
+          <h4 id="meter-keyboard">Keyboard and ARIA</h4>
+          <ul>
+            <li>A meter takes no focus and has no keys.</li>
+            <li>Give the figure and the unit in the label, or hide the bar with <code>aria-hidden="true"</code> when the figure is next to it.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#meter-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="meter-design-panel">
+          <h3 class="docs-view__title" id="meter-design">Design</h3>
+          <h4 id="meter-when">When to use</h4>
+          <p>Use a meter for a value inside a known range: a share, a count against a maximum.</p>
+          <ul>
+            <li>Storage used, seats taken, a score out of ten.</li>
+            <li>Write the figure next to the bar: the bar alone is not a number.</li>
+          </ul>
+          <h4 id="meter-when-not">When not to use</h4>
+          <p>A meter is a gauge, not a task in progress.</p>
+          <ul>
+            <li>How far a task has got: <a href="/docs/components/progress/">progress</a>.</li>
+            <li>A value the reader sets: a <a href="/docs/components/form-inputs/#range">range</a>.</li>
+          </ul>
+          <h4 id="meter-do-dont">Do and don't</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A bar with its figure in the label.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-me-do">Storage used, 6 of 10 GB</label><meter class="luz-meter" id="dd-me-do" min="0" max="10" value="6">6 of 10 GB</meter></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A bar with no figure: the reader can only guess the number from its length.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-me-dont">Storage</label><meter class="luz-meter" id="dd-me-dont" min="0" max="10" value="6"></meter></div>
+              </div>
+            </figure>
+          </div>
+          <h4 id="meter-content">Writing the content</h4>
+          <ul>
+            <li>Label it with the figure and its unit: "Storage used, 6 of 10 GB".</li>
+            <li>Say what is measured, not what the bar looks like.</li>
+            <li>Never rely on the colour of the bar: it is the brand colour in every state.</li>
+          </ul>
+          <h4 id="meter-contrast">Contrast and focus</h4>
+          <p>Shared with the other value controls: <a href="#values-contrast">contrast and focus of values</a>.</p>
+          <h4 id="meter-tokens">Tokens it uses</h4>
+          <p>Shared with the other value controls: <a href="#values-tokens">tokens of values</a>.</p>
+          <p class="docs-view__xref"><a href="#meter-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h2 id="output">Output</h2>
+        <p>The result of a calculation or of a control, such as the number beside a slider.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="ou-seats">Seats <output class="luz-output" id="ou-seats">12</output></label>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Output documentation">
+          <a class="luz-tab" href="#output-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#output-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="output-code-panel">
+          <h3 class="docs-view__title" id="output-code">Code</h3>
+          <h4 id="output-markup">Copy the markup</h4>
+          <p>A native <code>&lt;output&gt;</code>; <code>for</code> lists the ids of the controls it comes from:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-output" aria-label="Copy the output markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Output markup"><code id="code-output">&lt;p&gt;Total: &lt;output class=&quot;luz-output&quot; id=&quot;total&quot; for=&quot;qty price&quot;&gt;12&lt;/output&gt; seats&lt;/p&gt;</code></pre>
+          </div>
+          <h4 id="output-variants">Variants and options</h4>
+          <ul>
+            <li><code>.luz-output</code>: the face of the interface, the brand colour, figures of equal width, at least 2.5 em wide and aligned to the end.</li>
+            <li>A bare <code>&lt;output&gt;</code> with no class: a small chip in the mono face.</li>
+          </ul>
+          <h4 id="output-how">How it works</h4>
+          <p>A native <code>&lt;output&gt;</code>. Your script writes its <code>value</code>; LUZ does not calculate. An output is not sent with the form, and its implicit ARIA role is <code>status</code>.</p>
+          <h4 id="output-no-js">Without JavaScript</h4>
+          <p>The output shows the value written in the HTML. Nothing recalculates without your script.</p>
+          <h4 id="output-keyboard">Keyboard and ARIA</h4>
+          <ul>
+            <li>An output takes no focus and has no keys.</li>
+            <li>Tie it to its sources with <code>for</code>, and put the unit in the text around it.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#output-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="output-design-panel">
+          <h3 class="docs-view__title" id="output-design">Design</h3>
+          <h4 id="output-when">When to use</h4>
+          <p>Use an output for a value that your page calculates or that a control sets, shown as text.</p>
+          <ul>
+            <li>The number beside a range, a total, a result.</li>
+            <li>Write the unit next to it: "12 seats".</li>
+          </ul>
+          <h4 id="output-when-not">When not to use</h4>
+          <p>An output shows a value; it does not collect one.</p>
+          <ul>
+            <li>A value the reader types: an <a href="/docs/components/form-inputs/#number">number</a> or a <a href="/docs/components/form-inputs/#text">text</a> field.</li>
+            <li>Text that never changes: a paragraph or a span.</li>
+          </ul>
+          <h4 id="output-do-dont">Do and don't</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> The unit beside the figure: "12 seats".</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <p>Total: <output class="luz-output">12</output> seats</p>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A bare figure with no label or unit: the reader does not know what 12 counts.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <p><output class="luz-output">12</output></p>
+              </div>
+            </figure>
+          </div>
+          <h4 id="output-content">Writing the content</h4>
+          <ul>
+            <li>Put the figure in the output and the unit in the text around it.</li>
+            <li>Label what is counted: "Seats", "Total".</li>
+            <li>Keep the text short: an output is for a value, not a sentence.</li>
+          </ul>
+          <h4 id="output-contrast">Contrast and focus</h4>
+          <p>Shared with the other value controls: <a href="#values-contrast">contrast and focus of values</a>.</p>
+          <h4 id="output-tokens">Tokens it uses</h4>
+          <p>Shared with the other value controls: <a href="#values-tokens">tokens of values</a>.</p>
+          <p class="docs-view__xref"><a href="#output-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-family-notes">
+        <h2 id="values-contrast">Contrast and focus of values</h2>
+        <p>The label is secondary text on the page; the bar and the figure have to be seen against it.</p>
+        <div class="luz-table-wrap" role="region" aria-label="Value controls contrast in each mode" tabindex="0">
+          <table class="luz-table docs-contrast">
+            <thead>
+              <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Part"><div>Label</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Meter fill</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>13.5:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Meter edge</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>3.7:1</div></td><td data-label="Dark"><div>4.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Output figure</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Output with no class</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+        <ul>
+          <li><strong>Focus:</strong> a meter and an output take no focus, so they have no ring.</li>
+          <li><strong>Not colour alone:</strong> the bar is the brand colour in every state; its figure is text.</li>
+          <li><strong>Target:</strong> neither is a control the reader presses.</li>
+        </ul>
+        <h2 id="values-tokens">Tokens of values</h2>
+        <p>The 11 tokens that these controls' rules read, by token family. Each family links to its page, with the values in every mode.</p>
+        <dl class="docs-uses">
+          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a></dd></div>
+          <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+        </dl>
+      </div>
+
+      <h2 id="known-issues">Known issues</h2>
+      <p>None known.</p>
+    </div>
