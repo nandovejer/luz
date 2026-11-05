@@ -1643,8 +1643,18 @@ home-light:defined ~ .landing-light__nojs {
   padding-inline: 0;
 }
 
+/* A flex row would make each run of its text an item that shrinks to a letter
+   ("doc / s" at 320 px): the link is a block, its words wrap at the spaces and
+   the arrow follows the last one */
 .landing-day__link {
+  display: block;
   justify-self: start;
+}
+
+.landing-day__link svg {
+  display: inline-block;
+  vertical-align: -0.125em;
+  margin-inline-start: var(--luz-space-xs);
 }
 
 /* The element's name in the link: the link's colour, no box */
