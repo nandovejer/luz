@@ -16,7 +16,19 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
            computed, never typed: tests/helpers/design-tokens.js); a control's own Contrast and Tokens sections are a sentence and a link to them.
            Template: Inputs > Text. -->
       <h2 id="inputs">Inputs</h2>
-      <p>One control for each type of input: the type tells the browser the keyboard, the picker and the validation.</p>
+      <p>One control for each type of input: the type tells the browser the keyboard, the picker and the validation. Each control below shows its own element; a field wraps it in <code>.luz-field</code> like this:</p>
+      <div class="docs-snippet">
+        <div class="docs-snippet__bar">
+          <span class="docs-snippet__lang">HTML</span>
+          <button class="luz-copy-btn" type="button" data-copy-from="code-field-wrapper" aria-label="Copy the field wrapper markup">Copy</button>
+        </div>
+        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Field wrapper markup"><code id="code-field-wrapper">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;name&quot;&gt;Project name&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;name&quot; type=&quot;text&quot; aria-describedby=&quot;name-hint name-error&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;name-hint&quot;&gt;Shown on the dashboard.&lt;/div&gt;
+  &lt;div class=&quot;luz-field__error&quot; id=&quot;name-error&quot;&gt;&lt;span class=&quot;u-sr-only&quot;&gt;Error: &lt;/span&gt;Use letters, numbers and dashes only.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
 
       <div class="docs-control">
         <h3 id="text">Text</h3>
@@ -55,158 +67,158 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
   &lt;input class=&quot;luz-input&quot; id=&quot;name&quot; type=&quot;text&quot; aria-describedby=&quot;name-hint&quot;&gt;
   &lt;div class=&quot;luz-field__helper&quot; id=&quot;name-hint&quot;&gt;Shown on the dashboard.&lt;/div&gt;
 &lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="text-variants">Variants and options</h5>
+          <ul>
+            <li><code>required</code>, with <code>.luz-field__label--required</code> for the red asterisk.</li>
+            <li>Error: <code>.luz-input--error</code>, <code>aria-invalid="true"</code> and a <code>.luz-field__error</code> after the field.</li>
+            <li><code>disabled</code>: faded, skipped by Tab, not sent.</li>
+            <li><code>readonly</code>: dashed underline, reachable, sent.</li>
+            <li><code>list</code> with a <code>&lt;datalist&gt;</code>: suggestions the reader may ignore.</li>
+          </ul>
+          <h5 id="text-how">How it works</h5>
+          <p>A native <code>&lt;input&gt;</code> styled by <code>components/form.css</code>. LUZ does not mark a field invalid for you: add the error class, <code>aria-invalid</code> and the message when your validation fails.</p>
+          <h5 id="text-no-js">Without JavaScript</h5>
+          <p>The field works and submits with its form.</p>
+          <h5 id="text-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus into the field, Shift+Tab out of it.</li>
+            <li>The label is the name; the hint and the error are read after it. A placeholder is not a name.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#text-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="text-design-panel">
+          <h4 class="docs-view__title" id="text-design">Design</h4>
+          <h5 id="text-when">When to use</h5>
+          <p>Use a text field for a short answer you cannot list in advance.</p>
+          <ul>
+            <li>A name, a title, a code, a reference.</li>
+            <li>An address, a number or a date: use the field of that <code>type</code>, such as <a href="#email">email</a>, <a href="#number">number</a> or <a href="#date">date</a>.</li>
+          </ul>
+          <h5 id="text-when-not">When not to use</h5>
+          <p>Do not make the reader type what they could pick.</p>
+          <ul>
+            <li>A choice from a list: a <a href="/docs/components/form/#select">select</a> or radio buttons.</li>
+            <li>A <a href="#password">password</a>: its field hides what is typed. Several lines: a <a href="#textarea">textarea</a>.</li>
+          </ul>
+          <h5 id="text-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A visible label: it stays on screen while the reader types.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-text-do">Project name</label><input class="luz-input" id="dd-text-do" type="text" value="My project"></div>
               </div>
-              <h5 id="text-variants">Variants and options</h5>
-              <ul>
-                <li><code>required</code>, with <code>.luz-field__label--required</code> for the red asterisk.</li>
-                <li>Error: <code>.luz-input--error</code>, <code>aria-invalid="true"</code> and a <code>.luz-field__error</code> after the field.</li>
-                <li><code>disabled</code>: faded, skipped by Tab, not sent.</li>
-                <li><code>readonly</code>: dashed underline, reachable, sent.</li>
-                <li><code>list</code> with a <code>&lt;datalist&gt;</code>: suggestions the reader may ignore.</li>
-              </ul>
-              <h5 id="text-how">How it works</h5>
-              <p>A native <code>&lt;input&gt;</code> styled by <code>components/form.css</code>. LUZ does not mark a field invalid for you: add the error class, <code>aria-invalid</code> and the message when your validation fails.</p>
-              <h5 id="text-no-js">Without JavaScript</h5>
-              <p>The field works and submits with its form.</p>
-              <h5 id="text-keyboard">Keyboard and ARIA</h5>
-              <ul>
-                <li>Tab moves focus into the field, Shift+Tab out of it.</li>
-                <li>The label is the name; the hint and the error are read after it. A placeholder is not a name.</li>
-              </ul>
-              <p class="docs-view__xref"><a href="#text-contrast">Contrast and focus</a> are in the Design tab.</p>
-            </div>
-            <div class="luz-tabpanel docs-view" id="text-design-panel">
-              <h4 class="docs-view__title" id="text-design">Design</h4>
-              <h5 id="text-when">When to use</h5>
-              <p>Use a text field for a short answer you cannot list in advance.</p>
-              <ul>
-                <li>A name, a title, a code, a reference.</li>
-                <li>An address, a number or a date: use the field of that <code>type</code>, such as <a href="#email">email</a>, <a href="#number">number</a> or <a href="#date">date</a>.</li>
-              </ul>
-              <h5 id="text-when-not">When not to use</h5>
-              <p>Do not make the reader type what they could pick.</p>
-              <ul>
-                <li>A choice from a list: a <a href="/docs/components/form/#select">select</a> or radio buttons.</li>
-                <li>A <a href="#password">password</a>: its field hides what is typed. Several lines: a <a href="#textarea">textarea</a>.</li>
-              </ul>
-              <h5 id="text-do-dont">Do and don't</h5>
-              <div class="luz-do-dont">
-                <figure class="luz-do-dont__item luz-do-dont__item--do">
-                  <figcaption><strong class="luz-do-dont__verdict">Do</strong> A visible label: it stays on screen while the reader types.</figcaption>
-                  <div class="luz-do-dont__stage" inert aria-hidden="true">
-                    <div class="luz-field"><label class="luz-field__label" for="dd-text-do">Project name</label><input class="luz-input" id="dd-text-do" type="text" value="My project"></div>
-                  </div>
-                </figure>
-                <figure class="luz-do-dont__item luz-do-dont__item--dont">
-                  <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A placeholder as the label: it disappears when the reader types.</figcaption>
-                  <div class="luz-do-dont__stage" inert aria-hidden="true">
-                    <pre class="luz-code-block" data-lang="html"><code>&lt;input type="text" placeholder="Project name"&gt;</code></pre>
-                  </div>
-                </figure>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A placeholder as the label: it disappears when the reader types.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="text" placeholder="Project name"&gt;</code></pre>
               </div>
-              <h5 id="text-content">Writing the content</h5>
-              <ul>
-                <li>The label is a short noun in sentence case: "Project name".</li>
-                <li>The hint says the format or why you ask.</li>
-                <li>The error says what is wrong and how to fix it.</li>
-              </ul>
-              <h5 id="text-contrast">Contrast and focus</h5>
-              <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
-              <h5 id="text-tokens">Tokens it uses</h5>
-              <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
-              <p class="docs-view__xref"><a href="#text-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+            </figure>
+          </div>
+          <h5 id="text-content">Writing the content</h5>
+          <ul>
+            <li>The label is a short noun in sentence case: "Project name".</li>
+            <li>The hint says the format or why you ask.</li>
+            <li>The error says what is wrong and how to fix it.</li>
+          </ul>
+          <h5 id="text-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="text-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#text-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="email">Email</h3>
+        <p>A field for an email address: the browser checks its shape and phones show the keyboard with the at sign.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label luz-field__label--required" for="em-address">Email</label>
+              <input class="luz-input" id="em-address" type="email" placeholder="jane@example.com" required autocomplete="email" aria-describedby="em-address-help">
+              <div class="luz-field__helper" id="em-address-help">We send your receipt here.</div>
             </div>
           </div>
-
-          <div class="docs-control">
-            <h3 id="email">Email</h3>
-            <p>A field for an email address: the browser checks its shape and phones show the keyboard with the at sign.</p>
-            <div class="docs-example" data-docs-specimen>
-              <div class="docs-demo__stage">
-                <div class="luz-field">
-                  <label class="luz-field__label luz-field__label--required" for="em-address">Email</label>
-                  <input class="luz-input" id="em-address" type="email" placeholder="jane@example.com" required autocomplete="email" aria-describedby="em-address-help">
-                  <div class="luz-field__helper" id="em-address-help">We send your receipt here.</div>
-                </div>
-              </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Email documentation">
+          <a class="luz-tab" href="#email-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#email-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="email-code-panel">
+          <h4 class="docs-view__title" id="email-code">Code</h4>
+          <h5 id="email-markup">Copy the markup</h5>
+          <p>A text field with <code>type="email"</code>; <code>autocomplete="email"</code> lets the browser fill it in.</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-email" aria-label="Copy the email field markup">Copy</button>
             </div>
-            <nav class="luz-tabs docs-view-tabs" aria-label="Email documentation">
-              <a class="luz-tab" href="#email-code-panel" data-docs-view="code">Code</a>
-              <a class="luz-tab" href="#email-design-panel" data-docs-view="design">Design</a>
-            </nav>
-            <div class="luz-tabpanel docs-view" id="email-code-panel">
-              <h4 class="docs-view__title" id="email-code">Code</h4>
-              <h5 id="email-markup">Copy the markup</h5>
-              <p>A text field with <code>type="email"</code>; <code>autocomplete="email"</code> lets the browser fill it in.</p>
-              <div class="docs-snippet">
-                <div class="docs-snippet__bar">
-                  <span class="docs-snippet__lang">HTML</span>
-                  <button class="luz-copy-btn" type="button" data-copy-from="code-email" aria-label="Copy the email field markup">Copy</button>
-                </div>
-                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Email field markup"><code id="code-email">&lt;div class=&quot;luz-field&quot;&gt;
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Email field markup"><code id="code-email">&lt;div class=&quot;luz-field&quot;&gt;
   &lt;label class=&quot;luz-field__label&quot; for=&quot;email&quot;&gt;Email&lt;/label&gt;
   &lt;input class=&quot;luz-input&quot; id=&quot;email&quot; type=&quot;email&quot; autocomplete=&quot;email&quot; required aria-describedby=&quot;email-hint&quot;&gt;
   &lt;div class=&quot;luz-field__helper&quot; id=&quot;email-hint&quot;&gt;We send your receipt here.&lt;/div&gt;
 &lt;/div&gt;</code></pre>
-                  </div>
-                  <h5 id="email-variants">Variants and options</h5>
-                  <ul>
-                    <li><code>multiple</code>: several addresses, separated by commas.</li>
-                    <li>The classes and states are the Text field's: error, required, disabled and read-only.</li>
-                  </ul>
-                  <h5 id="email-how">How it works</h5>
-                  <p>A native <code>&lt;input type="email"&gt;</code>. The browser checks the shape when the form is sent, not that the address exists.</p>
-                  <h5 id="email-no-js">Without JavaScript</h5>
-                  <p>The browser checks the address when the form is sent, with no script.</p>
-                  <h5 id="email-keyboard">Keyboard and ARIA</h5>
-                  <ul>
-                    <li>Tab moves focus in, Shift+Tab out. On a phone the keyboard shows the at sign.</li>
-                    <li>The label is the name; the hint and the error are read after it.</li>
-                  </ul>
-                  <p class="docs-view__xref"><a href="#email-contrast">Contrast and focus</a> are in the Design tab.</p>
-                </div>
-                <div class="luz-tabpanel docs-view" id="email-design-panel">
-                  <h4 class="docs-view__title" id="email-design">Design</h4>
-                  <h5 id="email-when">When to use</h5>
-                  <p>Use an email field whenever the answer is an email address.</p>
-                  <ul>
-                    <li>Signing up, signing in, contact forms and receipts.</li>
-                    <li>Say in the hint what the address is for.</li>
-                  </ul>
-                  <h5 id="email-when-not">When not to use</h5>
-                  <p>An email field checks the shape of an address, not that it works.</p>
-                  <ul>
-                    <li>Do not use a text field for an address: the reader loses the check and the keyboard.</li>
-                    <li>Do not rely on it to prove the address is real: send a message and ask for confirmation.</li>
-                  </ul>
-                  <h5 id="email-do-dont">Do and don't</h5>
-                  <div class="luz-do-dont">
-                    <figure class="luz-do-dont__item luz-do-dont__item--do">
-                      <figcaption><strong class="luz-do-dont__verdict">Do</strong> An error that says how to fix the address.</figcaption>
-                      <div class="luz-do-dont__stage" inert aria-hidden="true">
-                        <div class="luz-field__error">Enter an email address with an @ and a domain.</div>
-                      </div>
-                    </figure>
-                    <figure class="luz-do-dont__item luz-do-dont__item--dont">
-                      <figcaption><strong class="luz-do-dont__verdict">Don't</strong> An error that only says something is wrong.</figcaption>
-                      <div class="luz-do-dont__stage" inert aria-hidden="true">
-                        <div class="luz-field__error">Invalid.</div>
-                      </div>
-                    </figure>
-                  </div>
-                  <h5 id="email-content">Writing the content</h5>
-                  <ul>
-                    <li>Label it "Email", not "Enter your email address here".</li>
-                    <li>The hint says what the address is used for.</li>
-                    <li>The error says what to change: an address has an @ and a domain.</li>
-                  </ul>
-                  <h5 id="email-contrast">Contrast and focus</h5>
-                  <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
-                  <h5 id="email-tokens">Tokens it uses</h5>
-                  <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
-                  <p class="docs-view__xref"><a href="#email-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
-                </div>
+          </div>
+          <h5 id="email-variants">Variants and options</h5>
+          <ul>
+            <li><code>multiple</code>: several addresses, separated by commas.</li>
+            <li>The classes and states are the Text field's: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="email-how">How it works</h5>
+          <p>A native <code>&lt;input type="email"&gt;</code>. The browser checks the shape when the form is sent, not that the address exists.</p>
+          <h5 id="email-no-js">Without JavaScript</h5>
+          <p>The browser checks the address when the form is sent, with no script.</p>
+          <h5 id="email-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus in, Shift+Tab out. On a phone the keyboard shows the at sign.</li>
+            <li>The label is the name; the hint and the error are read after it.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#email-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="email-design-panel">
+          <h4 class="docs-view__title" id="email-design">Design</h4>
+          <h5 id="email-when">When to use</h5>
+          <p>Use an email field whenever the answer is an email address.</p>
+          <ul>
+            <li>Signing up, signing in, contact forms and receipts.</li>
+            <li>Say in the hint what the address is for.</li>
+          </ul>
+          <h5 id="email-when-not">When not to use</h5>
+          <p>An email field checks the shape of an address, not that it works.</p>
+          <ul>
+            <li>Do not use a text field for an address: the reader loses the check and the keyboard.</li>
+            <li>Do not rely on it to prove the address is real: send a message and ask for confirmation.</li>
+          </ul>
+          <h5 id="email-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> An error that says how to fix the address.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field__error">Enter an email address with an @ and a domain.</div>
               </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> An error that only says something is wrong.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field__error">Invalid.</div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="email-content">Writing the content</h5>
+          <ul>
+            <li>Label it "Email", not "Enter your email address here".</li>
+            <li>The hint says what the address is used for.</li>
+            <li>The error says what to change: an address has an @ and a domain.</li>
+          </ul>
+          <h5 id="email-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="email-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#email-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
 
       <div class="docs-control">
         <h3 id="password">Password</h3>
@@ -227,7 +239,7 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
         <div class="luz-tabpanel docs-view" id="password-code-panel">
           <h4 class="docs-view__title" id="password-code">Code</h4>
           <h5 id="password-markup">Copy the markup</h5>
-          <p>A text field with <code>type="password"</code>. Set <code>autocomplete</code> so a password manager knows what to do:</p>
+          <p>A text field with <code>type="password"</code>. Set <code>autocomplete</code> to say what the field is:</p>
           <div class="docs-snippet">
             <div class="docs-snippet__bar">
               <span class="docs-snippet__lang">HTML</span>
@@ -248,11 +260,11 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
           <h5 id="password-how">How it works</h5>
           <p>A native <code>&lt;input type="password"&gt;</code> styled like any text field. The browser draws dots instead of the characters. LUZ adds no show-password button: one you add is your own script.</p>
           <h5 id="password-no-js">Without JavaScript</h5>
-          <p>The field works and submits with its form, and the browser's password manager can fill it.</p>
+          <p>The field works and submits with its form.</p>
           <h5 id="password-keyboard">Keyboard and ARIA</h5>
           <ul>
             <li>Tab moves focus in, Shift+Tab out.</li>
-            <li>The label is the name; the hint says the rules before the reader types. Do not block paste: it lets password managers work.</li>
+            <li>The label is the name; the hint says the rules before the reader types. Do not block paste: readers paste long passwords.</li>
           </ul>
           <p class="docs-view__xref"><a href="#password-contrast">Contrast and focus</a> are in the Design tab.</p>
         </div>
@@ -262,7 +274,7 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
           <p>Use a password field for any secret the reader types and that must not show on screen.</p>
           <ul>
             <li>Signing in, signing up and changing a password.</li>
-            <li>Set <code>autocomplete</code> so the browser can fill or suggest the password.</li>
+            <li>Set <code>autocomplete</code> to <code>current-password</code> or <code>new-password</code>.</li>
           </ul>
           <h5 id="password-when-not">When not to use</h5>
           <p>A password field is for secrets, not for every code.</p>
@@ -273,15 +285,15 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
           <h5 id="password-do-dont">Do and don't</h5>
           <div class="luz-do-dont">
             <figure class="luz-do-dont__item luz-do-dont__item--do">
-              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Name what the browser should do with the field: <code>current-password</code> to sign in.</figcaption>
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say what the field is: <code>current-password</code> to sign in, <code>new-password</code> to sign up.</figcaption>
               <div class="luz-do-dont__stage" inert aria-hidden="true">
                 <pre class="luz-code-block" data-lang="html"><code>&lt;input type="password" autocomplete="current-password"&gt;</code></pre>
               </div>
             </figure>
             <figure class="luz-do-dont__item luz-do-dont__item--dont">
-              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Switch autocomplete off: it does not help the reader and it works against password managers.</figcaption>
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A text field for a secret: it shows what is typed to anyone looking at the screen.</figcaption>
               <div class="luz-do-dont__stage" inert aria-hidden="true">
-                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="password" autocomplete="off"&gt;</code></pre>
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="text" name="password"&gt;</code></pre>
               </div>
             </figure>
           </div>
@@ -345,7 +357,7 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
           <p>Enter submits the form, as a request to your search address. No script is needed.</p>
           <h5 id="search-keyboard">Keyboard and ARIA</h5>
           <ul>
-            <li>Tab moves focus in. Enter sends the search. In some browsers Escape clears the field.</li>
+            <li>Tab moves focus in. Enter sends the search.</li>
             <li>The label is the name; the hint and the error are read after it. A placeholder is not a name.</li>
           </ul>
           <p class="docs-view__xref"><a href="#search-contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -706,10 +718,10 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
           <h5 id="date-how">How it works</h5>
           <p>A native <code>&lt;input type="date"&gt;</code>. It shows the date in the reader's language and order, and always sends <code>yyyy-mm-dd</code>. The picker is the browser's; its light or dark scheme follows the page's color mode.</p>
           <h5 id="date-no-js">Without JavaScript</h5>
-          <p>The field works and submits with its form. A browser with no date picker shows a text field, so say the format in the hint.</p>
+          <p>The field works and submits with its form. If a browser you support has no date picker, it shows a text field: say the format in the hint.</p>
           <h5 id="date-keyboard">Keyboard and ARIA</h5>
           <ul>
-            <li>Tab moves between the day, the month and the year. Up and Down change the part with focus.</li>
+            <li>The keys of the browser's own picker apply.</li>
             <li>The label is the name; the hint says the limits.</li>
           </ul>
           <p class="docs-view__xref"><a href="#date-contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -797,10 +809,10 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
           <h5 id="time-how">How it works</h5>
           <p>A native <code>&lt;input type="time"&gt;</code>. It shows the time on the reader's clock, 12 or 24 hours, and always sends <code>hh:mm</code>. The value has no time zone.</p>
           <h5 id="time-no-js">Without JavaScript</h5>
-          <p>The field works and submits with its form. A browser with no time picker shows a text field, so say the format in the hint.</p>
+          <p>The field works and submits with its form. If a browser you support has no time picker, it shows a text field: say the format in the hint.</p>
           <h5 id="time-keyboard">Keyboard and ARIA</h5>
           <ul>
-            <li>Tab moves between the hours, the minutes and, on a 12 hour clock, AM or PM. Up and Down change the part with focus.</li>
+            <li>The keys of the browser's own picker apply.</li>
             <li>The label is the name; the hint says the time zone.</li>
           </ul>
           <p class="docs-view__xref"><a href="#time-contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -888,10 +900,10 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
           <h5 id="datetime-local-how">How it works</h5>
           <p>A native <code>&lt;input type="datetime-local"&gt;</code>. "Local" means the reader's own clock: it sends <code>yyyy-mm-ddThh:mm</code> with no time zone. Say the zone in the hint, or store the zone with the value on the server.</p>
           <h5 id="datetime-local-no-js">Without JavaScript</h5>
-          <p>The field works and submits with its form. A browser with no picker shows a text field, so say the format in the hint.</p>
+          <p>The field works and submits with its form. If a browser you support has no picker for it, it shows a text field: say the format in the hint.</p>
           <h5 id="datetime-local-keyboard">Keyboard and ARIA</h5>
           <ul>
-            <li>Tab moves between the day, the month, the year, the hours and the minutes. Up and Down change the part with focus.</li>
+            <li>The keys of the browser's own picker apply.</li>
             <li>The label is the name; the hint says the time zone.</li>
           </ul>
           <p class="docs-view__xref"><a href="#datetime-local-contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -958,7 +970,7 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
         <div class="luz-tabpanel docs-view" id="month-code-panel">
           <h4 class="docs-view__title" id="month-code">Code</h4>
           <h5 id="month-markup">Copy the markup</h5>
-          <p>A text field with <code>type="month"</code>. The placeholder and the pattern are for browsers that show a text field instead:</p>
+          <p>A text field with <code>type="month"</code>. The placeholder and the pattern are for a browser that shows a text field instead:</p>
           <div class="docs-snippet">
             <div class="docs-snippet__bar">
               <span class="docs-snippet__lang">HTML</span>
@@ -977,12 +989,12 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
             <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
           </ul>
           <h5 id="month-how">How it works</h5>
-          <p>A native <code>&lt;input type="month"&gt;</code> that sends <code>yyyy-mm</code>. Not every browser draws a month picker: one that does not shows a text field. A browser with a picker ignores <code>placeholder</code> and <code>pattern</code>, and one without uses them.</p>
+          <p>A native <code>&lt;input type="month"&gt;</code> that sends <code>yyyy-mm</code>. Check the browsers you support: one with no month picker shows a text field. A browser with a picker ignores <code>placeholder</code> and <code>pattern</code>, and one without uses them.</p>
           <h5 id="month-no-js">Without JavaScript</h5>
           <p>The field works and submits with its form, as a picker or as a text field.</p>
           <h5 id="month-keyboard">Keyboard and ARIA</h5>
           <ul>
-            <li>Tab moves between the month and the year. Up and Down change the part with focus. In a text field, type <code>yyyy-mm</code>.</li>
+            <li>The keys of the browser's own picker apply; in a text field, type <code>yyyy-mm</code>.</li>
             <li>The label is the name; the hint says the format, for the browsers with a text field.</li>
           </ul>
           <p class="docs-view__xref"><a href="#month-contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -1049,7 +1061,7 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
         <div class="luz-tabpanel docs-view" id="week-code-panel">
           <h4 class="docs-view__title" id="week-code">Code</h4>
           <h5 id="week-markup">Copy the markup</h5>
-          <p>A text field with <code>type="week"</code>. The placeholder and the pattern are for browsers that show a text field instead:</p>
+          <p>A text field with <code>type="week"</code>. The placeholder and the pattern are for a browser that shows a text field instead:</p>
           <div class="docs-snippet">
             <div class="docs-snippet__bar">
               <span class="docs-snippet__lang">HTML</span>
@@ -1068,12 +1080,12 @@ keywords: input, textarea, checkbox, select, password, email, date, range, numbe
             <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
           </ul>
           <h5 id="week-how">How it works</h5>
-          <p>A native <code>&lt;input type="week"&gt;</code> that sends <code>yyyy-Www</code>, with the weeks counted as ISO 8601 does: they start on Monday. Not every browser draws a week picker: one that does not shows a text field, and uses <code>placeholder</code> and <code>pattern</code>.</p>
+          <p>A native <code>&lt;input type="week"&gt;</code> that sends <code>yyyy-Www</code>, with the weeks counted as ISO 8601 does: they start on Monday. Check the browsers you support: one with no week picker shows a text field, and uses <code>placeholder</code> and <code>pattern</code>.</p>
           <h5 id="week-no-js">Without JavaScript</h5>
           <p>The field works and submits with its form, as a picker or as a text field.</p>
           <h5 id="week-keyboard">Keyboard and ARIA</h5>
           <ul>
-            <li>Tab moves between the week and the year. Up and Down change the part with focus. In a text field, type <code>yyyy-Www</code>.</li>
+            <li>The keys of the browser's own picker apply; in a text field, type <code>yyyy-Www</code>.</li>
             <li>The label is the name; the hint says how weeks are counted.</li>
           </ul>
           <p class="docs-view__xref"><a href="#week-contrast">Contrast and focus</a> are in the Design tab.</p>
@@ -1537,144 +1549,337 @@ range.addEventListener(&quot;input&quot;, () =&gt; {
       </div>
 
       <h2 id="choice">Choice</h2>
-              <p>Controls for picking from options the reader can see. Each option has its own visible label.</p>
+      <p>Controls for picking from options the reader can see. Each option has its own visible label.</p>
 
-              <div class="docs-control">
-                <h3 id="checkbox">Checkbox</h3>
-                <p>A box the reader ticks for a yes or no, or for any of several options. Each option is independent.</p>
-                <div class="docs-example" data-docs-specimen>
-                  <div class="docs-demo__stage">
-                    <div class="luz-field">
-                      <div class="luz-field__label" id="cb-notify-label">Notifications</div>
-                      <div class="luz-check-group" role="group" aria-labelledby="cb-notify-label">
-                        <div class="luz-check-item"><input type="checkbox" id="cb-email" checked><label for="cb-email">Email</label></div>
-                        <div class="luz-check-item"><input type="checkbox" id="cb-push"><label for="cb-push">Push</label></div>
-                        <div class="luz-check-item"><input type="checkbox" id="cb-sms" disabled><label for="cb-sms">SMS (disabled)</label></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <nav class="luz-tabs docs-view-tabs" aria-label="Checkbox documentation">
-                  <a class="luz-tab" href="#checkbox-code-panel" data-docs-view="code">Code</a>
-                  <a class="luz-tab" href="#checkbox-design-panel" data-docs-view="design">Design</a>
-                </nav>
-                <div class="luz-tabpanel docs-view" id="checkbox-code-panel">
-                  <h4 class="docs-view__title" id="checkbox-code">Code</h4>
-                  <h5 id="checkbox-markup">Copy the markup</h5>
-                  <p>A native checkbox inside <code>.luz-check-item</code>, with its label beside it; <code>.luz-check-group</code> stacks several:</p>
-                  <div class="docs-snippet">
-                    <div class="docs-snippet__bar">
-                      <span class="docs-snippet__lang">HTML</span>
-                      <button class="luz-copy-btn" type="button" data-copy-from="code-checkbox" aria-label="Copy the checkbox markup">Copy</button>
-                    </div>
-                    <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Checkbox markup"><code id="code-checkbox">&lt;div class=&quot;luz-check-group&quot; role=&quot;group&quot; aria-labelledby=&quot;notify-label&quot;&gt;
+      <div class="docs-control">
+        <h3 id="checkbox">Checkbox</h3>
+        <p>A box the reader ticks for a yes or no, or for any of several options. Each option is independent.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <div class="luz-field__label" id="cb-notify-label">Notifications</div>
+              <div class="luz-check-group" role="group" aria-labelledby="cb-notify-label">
+                <div class="luz-check-item"><input type="checkbox" id="cb-email" checked><label for="cb-email">Email</label></div>
+                <div class="luz-check-item"><input type="checkbox" id="cb-push"><label for="cb-push">Push</label></div>
+                <div class="luz-check-item"><input type="checkbox" id="cb-sms" disabled><label for="cb-sms">SMS (disabled)</label></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Checkbox documentation">
+          <a class="luz-tab" href="#checkbox-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#checkbox-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="checkbox-code-panel">
+          <h4 class="docs-view__title" id="checkbox-code">Code</h4>
+          <h5 id="checkbox-markup">Copy the markup</h5>
+          <p>A native checkbox inside <code>.luz-check-item</code>, with its label beside it; <code>.luz-check-group</code> stacks several:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-checkbox" aria-label="Copy the checkbox markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Checkbox markup"><code id="code-checkbox">&lt;div class=&quot;luz-check-group&quot; role=&quot;group&quot; aria-labelledby=&quot;notify-label&quot;&gt;
   &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;notify-email&quot; checked&gt;&lt;label for=&quot;notify-email&quot;&gt;Email&lt;/label&gt;&lt;/div&gt;
   &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;notify-push&quot;&gt;&lt;label for=&quot;notify-push&quot;&gt;Push&lt;/label&gt;&lt;/div&gt;
 &lt;/div&gt;</code></pre>
-                      </div>
-                      <h5 id="checkbox-variants">Variants and options</h5>
-                      <ul>
-                        <li><code>checked</code>: a filled box with a check mark.</li>
-                        <li><code>disabled</code>: faded, skipped by Tab, not sent.</li>
-                        <li><code>required</code>: the browser stops the form until it is ticked.</li>
-                      </ul>
-                      <h5 id="checkbox-how">How it works</h5>
-                      <p>A native <code>&lt;input&gt;</code> with <code>appearance: none</code>, redrawn by <code>components/form.css</code>. The label is tied to it with <code>for</code> and <code>id</code>, so a click on the text ticks the box.</p>
-                      <h5 id="checkbox-no-js">Without JavaScript</h5>
-                      <p>Every box ticks, unticks and submits with its form.</p>
-                      <h5 id="checkbox-keyboard">Keyboard and ARIA</h5>
-                      <ul>
-                        <li>Tab moves between the boxes; Space ticks or unticks the one with focus.</li>
-                        <li>Give a group of boxes a name that a screen reader reads before the first one, as the label does in the markup above.</li>
-                      </ul>
-                      <p class="docs-view__xref"><a href="#checkbox-contrast">Contrast and focus</a> are in the Design tab.</p>
-                    </div>
-                    <div class="luz-tabpanel docs-view" id="checkbox-design-panel">
-                      <h4 class="docs-view__title" id="checkbox-design">Design</h4>
-                      <h5 id="checkbox-when">When to use</h5>
-                      <p>Use a checkbox when the reader may choose none, one or several options.</p>
-                      <ul>
-                        <li>A yes or no that is saved with a button: "Email me about new releases".</li>
-                        <li>A list where any number of options may apply.</li>
-                      </ul>
-                      <h5 id="checkbox-when-not">When not to use</h5>
-                      <p>Do not use a checkbox for one choice out of several, or for a setting that applies at once.</p>
-                      <ul>
-                        <li>One choice out of several: radio buttons.</li>
-                        <li>A setting that takes effect the moment it changes: a switch.</li>
-                      </ul>
-                      <h5 id="checkbox-do-dont">Do and don't</h5>
-                      <div class="luz-do-dont">
-                        <figure class="luz-do-dont__item luz-do-dont__item--do">
-                          <figcaption><strong class="luz-do-dont__verdict">Do</strong> Independent options as checkboxes.</figcaption>
-                          <div class="luz-do-dont__stage" inert aria-hidden="true">
-                            <div class="luz-check-item"><input type="checkbox" id="dd-cb-do" checked><label for="dd-cb-do">Email me about new releases</label></div>
-                          </div>
-                        </figure>
-                        <figure class="luz-do-dont__item luz-do-dont__item--dont">
-                          <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Checkboxes for a choice of one: both plans can be ticked.</figcaption>
-                          <div class="luz-do-dont__stage" inert aria-hidden="true">
-                            <div class="luz-check-group">
-                              <div class="luz-check-item"><input type="checkbox" id="dd-cb-dont-1" checked><label for="dd-cb-dont-1">Free plan</label></div>
-                              <div class="luz-check-item"><input type="checkbox" id="dd-cb-dont-2" checked><label for="dd-cb-dont-2">Team plan</label></div>
-                            </div>
-                          </div>
-                        </figure>
-                      </div>
-                      <h5 id="checkbox-content">Writing the content</h5>
-                      <ul>
-                        <li>Write the label so that ticked means yes: "Email me about new releases".</li>
-                        <li>One line, in sentence case, with no full stop.</li>
-                        <li>No negatives: "Do not email me" makes the reader untick to say yes.</li>
-                      </ul>
-                      <h5 id="checkbox-contrast">Contrast and focus</h5>
-                      <p>Shared with the other choice controls: <a href="#choice-contrast">contrast and focus of choice</a>.</p>
-                      <h5 id="checkbox-tokens">Tokens it uses</h5>
-                      <p>Shared with the other choice controls: <a href="#choice-tokens">tokens of choice</a>.</p>
-                      <p class="docs-view__xref"><a href="#checkbox-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
-                    </div>
-                  </div>
+          </div>
+          <h5 id="checkbox-variants">Variants and options</h5>
+          <ul>
+            <li><code>checked</code>: a filled box with a check mark.</li>
+            <li><code>disabled</code>: faded, skipped by Tab, not sent.</li>
+            <li><code>required</code>: the browser stops the form until it is ticked.</li>
+          </ul>
+          <h5 id="checkbox-how">How it works</h5>
+          <p>A native <code>&lt;input&gt;</code> with <code>appearance: none</code>, redrawn by <code>components/form.css</code>. The label is tied to it with <code>for</code> and <code>id</code>, so a click on the text ticks the box.</p>
+          <h5 id="checkbox-no-js">Without JavaScript</h5>
+          <p>Every box ticks, unticks and submits with its form.</p>
+          <h5 id="checkbox-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves between the boxes; Space ticks or unticks the one with focus.</li>
+            <li>Give a group of boxes a name that a screen reader reads before the first one, as the label does in the markup above.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#checkbox-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="checkbox-design-panel">
+          <h4 class="docs-view__title" id="checkbox-design">Design</h4>
+          <h5 id="checkbox-when">When to use</h5>
+          <p>Use a checkbox when the reader may choose none, one or several options.</p>
+          <ul>
+            <li>A yes or no that is saved with a button: "Email me about new releases".</li>
+            <li>A list where any number of options may apply.</li>
+          </ul>
+          <h5 id="checkbox-when-not">When not to use</h5>
+          <p>Do not use a checkbox for one choice out of several, or for a setting that applies at once.</p>
+          <ul>
+            <li>One choice out of several: radio buttons.</li>
+            <li>A setting that takes effect the moment it changes: a switch.</li>
+          </ul>
+          <h5 id="checkbox-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Independent options as checkboxes.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-check-item"><input type="checkbox" id="dd-cb-do" checked><label for="dd-cb-do">Email me about new releases</label></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Checkboxes for a choice of one: both plans can be ticked.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-check-group">
+                  <div class="luz-check-item"><input type="checkbox" id="dd-cb-dont-1" checked><label for="dd-cb-dont-1">Free plan</label></div>
+                  <div class="luz-check-item"><input type="checkbox" id="dd-cb-dont-2" checked><label for="dd-cb-dont-2">Team plan</label></div>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="checkbox-content">Writing the content</h5>
+          <ul>
+            <li>Write the label so that ticked means yes: "Email me about new releases".</li>
+            <li>One line, in sentence case, with no full stop.</li>
+            <li>No negatives: "Do not email me" makes the reader untick to say yes.</li>
+          </ul>
+          <h5 id="checkbox-contrast">Contrast and focus</h5>
+          <p>Shared with the other choice controls: <a href="#choice-contrast">contrast and focus of choice</a>.</p>
+          <h5 id="checkbox-tokens">Tokens it uses</h5>
+          <p>Shared with the other choice controls: <a href="#choice-tokens">tokens of choice</a>.</p>
+          <p class="docs-view__xref"><a href="#checkbox-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
 
-                  <div class="docs-control">
-                    <h3 id="select">Select</h3>
-                    <p>A native drop-down list for choosing one option from a long list, with the closed box styled by tokens.</p>
-                    <div class="docs-example" data-docs-specimen>
-                      <div class="docs-demo__stage">
-                        <div class="o-grid docs-cols-2">
-                          <div class="luz-field">
-                            <label class="luz-field__label" for="sl-country">Country</label>
-                            <select class="luz-select" id="sl-country" name="country">
-                              <option value="">Select a country</option>
-                              <option value="de">Germany</option>
-                              <option value="es">Spain</option>
-                              <option value="fr">France</option>
-                            </select>
-                          </div>
-                          <div class="luz-field">
-                            <label class="luz-field__label" for="sl-error">Country of birth</label>
-                            <select class="luz-select" id="sl-error" name="birth" aria-invalid="true" aria-describedby="sl-error-text">
-                              <option value="" selected>Select a country</option>
-                              <option value="es">Spain</option>
-                            </select>
-                            <div class="luz-field__error" id="sl-error-text"><span class="u-sr-only">Error: </span>Select a country of birth.</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <nav class="luz-tabs docs-view-tabs" aria-label="Select documentation">
-                      <a class="luz-tab" href="#select-code-panel" data-docs-view="code">Code</a>
-                      <a class="luz-tab" href="#select-design-panel" data-docs-view="design">Design</a>
-                    </nav>
-                    <div class="luz-tabpanel docs-view" id="select-code-panel">
-                      <h4 class="docs-view__title" id="select-code">Code</h4>
-                      <h5 id="select-markup">Copy the markup</h5>
-                      <p>A bare <code>select</code> needs no class. <code>.luz-select</code> adds the styled open list, where the browser can draw one:</p>
-                      <div class="docs-snippet">
-                        <div class="docs-snippet__bar">
-                          <span class="docs-snippet__lang">HTML</span>
-                          <button class="luz-copy-btn" type="button" data-copy-from="code-select" aria-label="Copy the select markup">Copy</button>
-                        </div>
-                        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Select markup"><code id="code-select">&lt;div class=&quot;luz-field&quot;&gt;
+      <div class="docs-control">
+        <h3 id="radio">Radio</h3>
+        <p>Round buttons for choosing one option out of a few, with every option in view.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <fieldset class="luz-fieldset">
+              <legend>Plan</legend>
+              <div class="luz-check-group">
+                <div class="luz-check-item"><input type="radio" name="rd-plan" id="rd-free" checked><label for="rd-free">Free</label></div>
+                <div class="luz-check-item"><input type="radio" name="rd-plan" id="rd-team"><label for="rd-team">Team</label></div>
+                <div class="luz-check-item"><input type="radio" name="rd-plan" id="rd-ent"><label for="rd-ent">Enterprise</label></div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Radio documentation">
+          <a class="luz-tab" href="#radio-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#radio-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="radio-code-panel">
+          <h4 class="docs-view__title" id="radio-code">Code</h4>
+          <h5 id="radio-markup">Copy the markup</h5>
+          <p>Radios with the same <code>name</code> are one choice. A <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code> asks the question:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-radio" aria-label="Copy the radio group markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Radio group markup"><code id="code-radio">&lt;fieldset class=&quot;luz-fieldset&quot;&gt;
+  &lt;legend&gt;Plan&lt;/legend&gt;
+  &lt;div class=&quot;luz-check-group&quot;&gt;
+    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; id=&quot;plan-free&quot; checked&gt;&lt;label for=&quot;plan-free&quot;&gt;Free&lt;/label&gt;&lt;/div&gt;
+    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; id=&quot;plan-team&quot;&gt;&lt;label for=&quot;plan-team&quot;&gt;Team&lt;/label&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre>
+          </div>
+          <h5 id="radio-variants">Variants and options</h5>
+          <ul>
+            <li><code>checked</code>: the option chosen at the start. Only one option of a group can be.</li>
+            <li><code>required</code> on one radio: the browser stops the form until the group has an answer.</li>
+            <li><code>disabled</code>: skipped by Tab, not sent.</li>
+          </ul>
+          <h5 id="radio-how">How it works</h5>
+          <p>A native <code>&lt;input type="radio"&gt;</code> with <code>appearance: none</code>, redrawn by <code>components/form.css</code>: a ring that fills with a dot in the brand colour. The browser makes the group of the radios that share a <code>name</code>.</p>
+          <h5 id="radio-no-js">Without JavaScript</h5>
+          <p>Every group works and submits its chosen value with the form.</p>
+          <h5 id="radio-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves into the group, to the chosen option or the first, and out of it. Arrow keys move the choice within the group. Space chooses the focused option.</li>
+            <li>The legend names the group, and each label names its option.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#radio-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="radio-design-panel">
+          <h4 class="docs-view__title" id="radio-design">Design</h4>
+          <h5 id="radio-when">When to use</h5>
+          <p>Use radio buttons when the reader chooses exactly one of a few options and should see them all.</p>
+          <ul>
+            <li>Six options or fewer: a plan, a size, a delivery method.</li>
+            <li>Choose the option most readers want to start, or none when the choice must be conscious.</li>
+          </ul>
+          <h5 id="radio-when-not">When not to use</h5>
+          <p>Do not use radio buttons for a long list, or for answers that are not exclusive.</p>
+          <ul>
+            <li>More than six options: a <a href="#select">select</a>.</li>
+            <li>Any number of options: <a href="#checkbox">checkboxes</a>. A single yes or no: a checkbox or a <a href="#switch">switch</a>.</li>
+          </ul>
+          <h5 id="radio-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> One name for the group and a legend that asks the question.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <fieldset class="luz-fieldset"><legend>Plan</legend><div class="luz-check-group"><div class="luz-check-item"><input type="radio" name="dd-rd-do" id="dd-rd-do-1" checked><label for="dd-rd-do-1">Free</label></div><div class="luz-check-item"><input type="radio" name="dd-rd-do" id="dd-rd-do-2"><label for="dd-rd-do-2">Team</label></div></div></fieldset>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Radio buttons with no legend: the options have no question to answer.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-check-group"><div class="luz-check-item"><input type="radio" name="dd-rd-dont" id="dd-rd-dont-1" checked><label for="dd-rd-dont-1">Free</label></div><div class="luz-check-item"><input type="radio" name="dd-rd-dont" id="dd-rd-dont-2"><label for="dd-rd-dont-2">Team</label></div></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="radio-content">Writing the content</h5>
+          <ul>
+            <li>The legend is the question or a noun: "Plan", "Delivery method".</li>
+            <li>Options are short and parallel, in sentence case, in an order the reader can predict.</li>
+            <li>Say what each option means in its label, not in a hint beside it.</li>
+          </ul>
+          <h5 id="radio-contrast">Contrast and focus</h5>
+          <p>Shared with the other choice controls: <a href="#choice-contrast">contrast and focus of choice</a>.</p>
+          <h5 id="radio-tokens">Tokens it uses</h5>
+          <p>Shared with the other choice controls: <a href="#choice-tokens">tokens of choice</a>.</p>
+          <p class="docs-view__xref"><a href="#radio-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="switch">Switch</h3>
+        <p>A switch for a setting that is on or off and takes effect the moment it changes.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-stack">
+              <label class="luz-toggle">
+                <input class="luz-toggle__input" type="checkbox" role="switch" checked>
+                <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
+                <span class="luz-toggle__label">Public profile</span>
+              </label>
+              <label class="luz-toggle">
+                <input class="luz-toggle__input" type="checkbox" role="switch">
+                <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
+                <span class="luz-toggle__label">Weekly digest</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Switch documentation">
+          <a class="luz-tab" href="#switch-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#switch-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="switch-code-panel">
+          <h4 class="docs-view__title" id="switch-code">Code</h4>
+          <h5 id="switch-markup">Copy the markup</h5>
+          <p>A checkbox with <code>role="switch"</code> inside a <code>&lt;label&gt;</code>; the track and the thumb are drawn after it:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-switch" aria-label="Copy the switch markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Switch markup"><code id="code-switch">&lt;label class=&quot;luz-toggle&quot;&gt;
+  &lt;input class=&quot;luz-toggle__input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot;&gt;
+  &lt;span class=&quot;luz-toggle__track&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;luz-toggle__thumb&quot;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;luz-toggle__label&quot;&gt;Weekly digest&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+          </div>
+          <h5 id="switch-variants">Variants and options</h5>
+          <ul>
+            <li><code>checked</code>: on. The track fills with the brand colour and the thumb moves to the end.</li>
+            <li><code>disabled</code>: a faded track, skipped by Tab, not sent.</li>
+          </ul>
+          <h5 id="switch-how">How it works</h5>
+          <p>A native checkbox, hidden but still focusable, with <code>role="switch"</code>. <code>.luz-toggle</code> draws the track and the thumb; the thumb moves the other way in right-to-left text, and forced colors redraw both with system colors. LUZ ships no script: a change takes effect when your own script acts on it.</p>
+          <h5 id="switch-no-js">Without JavaScript</h5>
+          <p>The switch turns on and off and submits with its form. Applying the change at once is your script's job.</p>
+          <h5 id="switch-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus to the switch; Space turns it on or off.</li>
+            <li>The label is the name; <code>role="switch"</code> tells the browser it is on or off, not ticked.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#switch-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="switch-design-panel">
+          <h4 class="docs-view__title" id="switch-design">Design</h4>
+          <h5 id="switch-when">When to use</h5>
+          <p>Use a switch for a setting that applies the moment it changes, with no button to confirm.</p>
+          <ul>
+            <li>A preference, a mode or a feature that is on or off.</li>
+            <li>Name the setting in the label, so that on means it is active.</li>
+          </ul>
+          <h5 id="switch-when-not">When not to use</h5>
+          <p>Do not use a switch for a choice that waits for a button.</p>
+          <ul>
+            <li>In a form that is sent with a button: a <a href="#checkbox">checkbox</a>.</li>
+            <li>One choice out of several: <a href="#radio">radio buttons</a>.</li>
+          </ul>
+          <h5 id="switch-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A switch names the setting, and the change is instant: no button.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <label class="luz-toggle"><input class="luz-toggle__input" type="checkbox" role="switch" checked><span class="luz-toggle__track"><span class="luz-toggle__thumb"></span></span><span class="luz-toggle__label">Public profile</span></label>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A switch in a form with a save button: it promises an instant change, so the reader does not know the button is still needed.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <label class="luz-toggle"><input class="luz-toggle__input" type="checkbox" role="switch" checked><span class="luz-toggle__track"><span class="luz-toggle__thumb"></span></span><span class="luz-toggle__label">Email me about new releases</span></label><div class="o-row"><button class="luz-btn luz-btn--primary luz-btn--sm" type="button">Save preferences</button></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="switch-content">Writing the content</h5>
+          <ul>
+            <li>Name the setting: "Public profile", "Weekly digest".</li>
+            <li>Do not write On or Off in the label: the switch shows it.</li>
+            <li>No negatives: "Hide my profile" makes on mean off.</li>
+          </ul>
+          <h5 id="switch-contrast">Contrast and focus</h5>
+          <p>Shared with the other choice controls: <a href="#choice-contrast">contrast and focus of choice</a>.</p>
+          <h5 id="switch-tokens">Tokens it uses</h5>
+          <p>Shared with the other choice controls: <a href="#choice-tokens">tokens of choice</a>.</p>
+          <p class="docs-view__xref"><a href="#switch-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="select">Select</h3>
+        <p>A native drop-down list for choosing one option from a long list, with the closed box styled by tokens.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-grid docs-cols-2">
+              <div class="luz-field">
+                <label class="luz-field__label" for="sl-country">Country</label>
+                <select class="luz-select" id="sl-country" name="country">
+                  <option value="">Select a country</option>
+                  <option value="de">Germany</option>
+                  <option value="es">Spain</option>
+                  <option value="fr">France</option>
+                </select>
+              </div>
+              <div class="luz-field">
+                <label class="luz-field__label" for="sl-error">Country of birth</label>
+                <select class="luz-select" id="sl-error" name="birth" aria-invalid="true" aria-describedby="sl-error-text">
+                  <option value="" selected>Select a country</option>
+                  <option value="es">Spain</option>
+                </select>
+                <div class="luz-field__error" id="sl-error-text"><span class="u-sr-only">Error: </span>Select a country of birth.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Select documentation">
+          <a class="luz-tab" href="#select-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#select-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="select-code-panel">
+          <h4 class="docs-view__title" id="select-code">Code</h4>
+          <h5 id="select-markup">Copy the markup</h5>
+          <p>A bare <code>select</code> needs no class. <code>.luz-select</code> adds the styled open list, where the browser can draw one:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-select" aria-label="Copy the select markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Select markup"><code id="code-select">&lt;div class=&quot;luz-field&quot;&gt;
   &lt;label class=&quot;luz-field__label&quot; for=&quot;country&quot;&gt;Country&lt;/label&gt;
   &lt;select class=&quot;luz-select&quot; id=&quot;country&quot; name=&quot;country&quot;&gt;
     &lt;option value=&quot;&quot;&gt;Select a country&lt;/option&gt;
@@ -1682,107 +1887,549 @@ range.addEventListener(&quot;input&quot;, () =&gt; {
     &lt;option value=&quot;es&quot;&gt;Spain&lt;/option&gt;
   &lt;/select&gt;
 &lt;/div&gt;</code></pre>
-                          </div>
-                          <h5 id="select-variants">Variants and options</h5>
-                          <ul>
-                            <li><code>aria-invalid="true"</code>: a thicker danger border; pair it with the error text.</li>
-                            <li><code>disabled</code>: disabled text and a dashed border.</li>
-                            <li><code>multiple</code>, <code>size</code>: a list that stays open, with a full border and no arrow.</li>
-                            <li><code>&lt;optgroup label&gt;</code>: a labelled set of options.</li>
-                          </ul>
-                          <h5 id="select-how">How it works</h5>
-                          <p>A native <code>&lt;select&gt;</code> styled by <code>components/select.css</code> in two layers: the closed box in every browser, and the open list inside <code>@supports (appearance: base-select)</code>. The arrow follows the text colour and moves to the left in right-to-left text.</p>
-                          <h5 id="select-no-js">Without JavaScript</h5>
-                          <p>Nothing changes: the select is a native element and LUZ adds no script to it.</p>
-                          <h5 id="select-keyboard">Keyboard and ARIA</h5>
-                          <ul>
-                            <li>Tab moves to the select. Enter or Space opens the list, Escape closes it, Up and Down move through the options.</li>
-                            <li>Give it a visible <code>&lt;label for&gt;</code> and no role. For an error, set <code>aria-invalid="true"</code> and point <code>aria-describedby</code> at the text.</li>
-                          </ul>
-                          <p class="docs-view__xref"><a href="#select-contrast">Contrast and focus</a> are in the Design tab.</p>
-                        </div>
-                        <div class="luz-tabpanel docs-view" id="select-design-panel">
-                          <h4 class="docs-view__title" id="select-design">Design</h4>
-                          <h5 id="select-when">When to use</h5>
-                          <p>Use a select when the reader must choose one option from a long list they already know the answer to.</p>
-                          <ul>
-                            <li>A country, a year, a time zone: more than six options, one answer.</li>
-                            <li>The options are short and the reader can scan them in order.</li>
-                          </ul>
-                          <h5 id="select-when-not">When not to use</h5>
-                          <p>A select hides the options until the reader opens it, and some people find that hard. The six-option rule is LUZ's own.</p>
-                          <ul>
-                            <li>Six options or fewer: radio buttons, so every option stays in view.</li>
-                            <li>Several answers: checkboxes. Never build your own listbox from <code>&lt;div&gt;</code> elements.</li>
-                          </ul>
-                          <h5 id="select-do-dont">Do and don't</h5>
-                          <div class="luz-do-dont">
-                            <figure class="luz-do-dont__item luz-do-dont__item--do">
-                              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A select for a long list that the reader knows.</figcaption>
-                              <div class="luz-do-dont__stage" inert aria-hidden="true">
-                                <select class="luz-select"><option>Select a country</option><option>Germany</option><option>Spain</option></select>
-                              </div>
-                            </figure>
-                            <figure class="luz-do-dont__item luz-do-dont__item--dont">
-                              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Three options in a select: radio buttons show them all at once.</figcaption>
-                              <div class="luz-do-dont__stage" inert aria-hidden="true">
-                                <select class="luz-select"><option>Standard</option><option>Express</option><option>Collect</option></select>
-                              </div>
-                            </figure>
-                          </div>
-                          <h5 id="select-content">Writing the content</h5>
-                          <ul>
-                            <li>The label says what to choose, as a noun: "Country", not "Please select".</li>
-                            <li>The first option is a prompt with an empty value, so a required field is not answered by default.</li>
-                            <li>Sentence case, in an order the reader can predict, such as alphabetical.</li>
-                          </ul>
-                          <h5 id="select-contrast">Contrast and focus</h5>
-                          <p>Shared with the other choice controls: <a href="#choice-contrast">contrast and focus of choice</a>.</p>
-                          <h5 id="select-tokens">Tokens it uses</h5>
-                          <p>Shared with the other choice controls: <a href="#choice-tokens">tokens of choice</a>.</p>
-                          <p class="docs-view__xref"><a href="#select-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
-                        </div>
-                      </div>
+          </div>
+          <h5 id="select-variants">Variants and options</h5>
+          <ul>
+            <li><code>aria-invalid="true"</code>: a thicker danger border; pair it with the error text.</li>
+            <li><code>disabled</code>: disabled text and a dashed border.</li>
+            <li><code>multiple</code>, <code>size</code>: a list that stays open, with a full border and no arrow.</li>
+            <li><code>&lt;optgroup label&gt;</code>: a labelled set of options.</li>
+          </ul>
+          <h5 id="select-how">How it works</h5>
+          <p>A native <code>&lt;select&gt;</code> styled by <code>components/select.css</code> in two layers: the closed box in every browser, and the open list inside <code>@supports (appearance: base-select)</code>. The arrow follows the text colour and moves to the left in right-to-left text.</p>
+          <h5 id="select-no-js">Without JavaScript</h5>
+          <p>Nothing changes: the select is a native element and LUZ adds no script to it.</p>
+          <h5 id="select-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves to the select. Enter or Space opens the list, Escape closes it, Up and Down move through the options.</li>
+            <li>Give it a visible <code>&lt;label for&gt;</code> and no role. For an error, set <code>aria-invalid="true"</code> and point <code>aria-describedby</code> at the text.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#select-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="select-design-panel">
+          <h4 class="docs-view__title" id="select-design">Design</h4>
+          <h5 id="select-when">When to use</h5>
+          <p>Use a select when the reader must choose one option from a long list they already know the answer to.</p>
+          <ul>
+            <li>A country, a year, a time zone: more than six options, one answer.</li>
+            <li>The options are short and the reader can scan them in order.</li>
+          </ul>
+          <h5 id="select-when-not">When not to use</h5>
+          <p>A select hides the options until the reader opens it, and some people find that hard. The six-option rule is LUZ's own.</p>
+          <ul>
+            <li>Six options or fewer: radio buttons, so every option stays in view.</li>
+            <li>Several answers: checkboxes. Never build your own listbox from <code>&lt;div&gt;</code> elements.</li>
+          </ul>
+          <h5 id="select-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A select for a long list that the reader knows.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <select class="luz-select"><option>Select a country</option><option>Germany</option><option>Spain</option></select>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Three options in a select: radio buttons show them all at once.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <select class="luz-select"><option>Standard</option><option>Express</option><option>Collect</option></select>
+              </div>
+            </figure>
+          </div>
+          <h5 id="select-content">Writing the content</h5>
+          <ul>
+            <li>The label says what to choose, as a noun: "Country", not "Please select".</li>
+            <li>The first option is a prompt with an empty value, so a required field is not answered by default.</li>
+            <li>Sentence case, in an order the reader can predict, such as alphabetical.</li>
+          </ul>
+          <h5 id="select-contrast">Contrast and focus</h5>
+          <p>Shared with the other choice controls: <a href="#choice-contrast">contrast and focus of choice</a>.</p>
+          <h5 id="select-tokens">Tokens it uses</h5>
+          <p>Shared with the other choice controls: <a href="#choice-tokens">tokens of choice</a>.</p>
+          <p class="docs-view__xref"><a href="#select-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
 
-                      <div class="docs-family-notes">
-                        <h3 id="choice-contrast">Contrast and focus of choice</h3>
-                        <p>The label is primary text on the page; the box has to be seen against it.</p>
-                        <div class="luz-table-wrap" role="region" aria-label="Choice controls contrast in each mode" tabindex="0">
-                          <table class="luz-table docs-contrast">
-                            <thead>
-                              <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
-                            </thead>
-                            <tbody>
-                              <tr><td data-label="Part"><div>Label</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Box border</div></td><td data-label="Colour on background"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>4.3:1</div></td><td data-label="Dark"><div>3.6:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Checked box</div></td><td data-label="Colour on background"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>3.5:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Check mark</div></td><td data-label="Colour on background"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Light"><div>6.0:1</div></td><td data-label="Dark"><div>4.9:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Select text and arrow</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Select border</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>3.7:1</div></td><td data-label="Dark"><div>4.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Select error border</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>5.5:1</div></td><td data-label="Dark"><div>10.8:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Open list text</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Option under the pointer</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
-                              <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
-                        <ul>
-                          <li><strong>Focus:</strong> a 2 px <code>--luz-focus-ring</code> outline, 2 px outside the box.</li>
-                          <li><strong>Not colour alone:</strong> a ticked box is filled and has a check mark.</li>
-                          <li><strong>Target:</strong> the whole row, box and label, takes the click.</li>
-                        </ul>
-                        <h3 id="choice-tokens">Tokens of choice</h3>
-                        <p>The 25 tokens that these controls' rules read, by token family. Each family links to its page, with the values in every mode.</p>
-                        <dl class="docs-uses">
-                          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
-                          <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
-                          <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-control</code>, <code>--luz-text-md</code></dd></div>
-                          <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
-                          <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
-                          <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
-                        </dl>
-                      </div>
+      <div class="docs-family-notes">
+        <h3 id="choice-contrast">Contrast and focus of choice</h3>
+        <p>The label is primary text on the page; the box has to be seen against it.</p>
+        <div class="luz-table-wrap" role="region" aria-label="Choice controls contrast in each mode" tabindex="0">
+          <table class="luz-table docs-contrast">
+            <thead>
+              <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Part"><div>Label</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Box border and switch track, off</div></td><td data-label="Colour on background"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>4.3:1</div></td><td data-label="Dark"><div>3.6:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Checked box and switch track, on</div></td><td data-label="Colour on background"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>3.5:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Check mark and switch thumb, on</div></td><td data-label="Colour on background"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Light"><div>6.0:1</div></td><td data-label="Dark"><div>4.9:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Switch thumb, off</div></td><td data-label="Colour on background"><div><code>--luz-text-on-fill</code> on <code>--luz-outline</code></div></td><td data-label="Light"><div>4.6:1</div></td><td data-label="Dark"><div>4.8:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Chosen radio, ring and dot</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Select text and arrow</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Select border</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>3.7:1</div></td><td data-label="Dark"><div>4.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Select error border</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>5.5:1</div></td><td data-label="Dark"><div>10.8:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Open list text</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Option under the pointer</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+        <ul>
+          <li><strong>Focus:</strong> a 2 px <code>--luz-focus-ring</code> outline, 2 px outside the box, the switch track or the select.</li>
+          <li><strong>Not colour alone:</strong> a ticked box is filled and has a check mark, a chosen radio has a dot and the switch thumb moves.</li>
+          <li><strong>Target:</strong> the whole row, box and label, takes the click.</li>
+        </ul>
+        <h3 id="choice-tokens">Tokens of choice</h3>
+        <p>The 27 tokens that these controls' rules read, by token family. Each family links to its page, with the values in every mode.</p>
+        <dl class="docs-uses">
+          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+          <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-control</code>, <code>--luz-text-md</code></dd></div>
+          <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+          <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+          <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+        </dl>
+      </div>
+
+      <h2 id="values">Values</h2>
+      <p>Controls that show or compute a value rather than collect text.</p>
+
+      <div class="docs-control">
+        <h3 id="meter">Meter</h3>
+        <p>A bar for a value in a known range, such as storage used, drawn next to its figure.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="me-storage">Storage used, 6 of 10 GB</label>
+              <meter class="luz-meter" id="me-storage" min="0" max="10" value="6">6 of 10 GB</meter>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Meter documentation">
+          <a class="luz-tab" href="#meter-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#meter-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="meter-code-panel">
+          <h4 class="docs-view__title" id="meter-code">Code</h4>
+          <h5 id="meter-markup">Copy the markup</h5>
+          <p>A native <code>&lt;meter&gt;</code> with its range. The text inside is for browsers that do not draw it:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-meter" aria-label="Copy the meter markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meter markup"><code id="code-meter">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;storage&quot;&gt;Storage used, 6 of 10 GB&lt;/label&gt;
+  &lt;meter class=&quot;luz-meter&quot; id=&quot;storage&quot; min=&quot;0&quot; max=&quot;10&quot; value=&quot;6&quot;&gt;6 of 10 GB&lt;/meter&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="meter-variants">Variants and options</h5>
+          <ul>
+            <li><code>min</code>, <code>max</code>, <code>value</code>: the range and the figure.</li>
+            <li>Do not set <code>low</code>, <code>high</code> or <code>optimum</code>: the bar is always the brand colour, never a green or a red.</li>
+          </ul>
+          <h5 id="meter-how">How it works</h5>
+          <p>A native <code>&lt;meter&gt;</code> drawn by <code>components/meter.css</code> as an 8 px bar: a brand fill on a muted track with the field's border colour. The bar is a picture of a number that is already text. See the <a href="/docs/components/meter/">Meter</a> page for tables and lists.</p>
+          <h5 id="meter-no-js">Without JavaScript</h5>
+          <p>The bar is drawn and the figure is in the label. Nothing changes without your script, which sets <code>value</code>.</p>
+          <h5 id="meter-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>A meter takes no focus and has no keys.</li>
+            <li>Give the figure and the unit in the label, or hide the bar with <code>aria-hidden="true"</code> when the figure is next to it.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#meter-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="meter-design-panel">
+          <h4 class="docs-view__title" id="meter-design">Design</h4>
+          <h5 id="meter-when">When to use</h5>
+          <p>Use a meter for a value inside a known range: a share, a count against a maximum.</p>
+          <ul>
+            <li>Storage used, seats taken, a score out of ten.</li>
+            <li>Write the figure next to the bar: the bar alone is not a number.</li>
+          </ul>
+          <h5 id="meter-when-not">When not to use</h5>
+          <p>A meter is a gauge, not a task in progress.</p>
+          <ul>
+            <li>How far a task has got: <a href="/docs/components/progress/">progress</a>.</li>
+            <li>A value the reader sets: a <a href="#range">range</a>.</li>
+          </ul>
+          <h5 id="meter-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A bar with its figure in the label.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-me-do">Storage used, 6 of 10 GB</label><meter class="luz-meter" id="dd-me-do" min="0" max="10" value="6">6 of 10 GB</meter></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A bar with no figure: the reader can only guess the number from its length.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-me-dont">Storage</label><meter class="luz-meter" id="dd-me-dont" min="0" max="10" value="6"></meter></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="meter-content">Writing the content</h5>
+          <ul>
+            <li>Label it with the figure and its unit: "Storage used, 6 of 10 GB".</li>
+            <li>Say what is measured, not what the bar looks like.</li>
+            <li>Never rely on the colour of the bar: it is the brand colour in every state.</li>
+          </ul>
+          <h5 id="meter-contrast">Contrast and focus</h5>
+          <p>Shared with the other value controls: <a href="#values-contrast">contrast and focus of values</a>.</p>
+          <h5 id="meter-tokens">Tokens it uses</h5>
+          <p>Shared with the other value controls: <a href="#values-tokens">tokens of values</a>.</p>
+          <p class="docs-view__xref"><a href="#meter-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="output">Output</h3>
+        <p>The result of a calculation or of a control, such as the number beside a slider.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="ou-seats">Seats <output class="luz-output" id="ou-seats">12</output></label>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Output documentation">
+          <a class="luz-tab" href="#output-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#output-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="output-code-panel">
+          <h4 class="docs-view__title" id="output-code">Code</h4>
+          <h5 id="output-markup">Copy the markup</h5>
+          <p>A native <code>&lt;output&gt;</code>; <code>for</code> lists the ids of the controls it comes from:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-output" aria-label="Copy the output markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Output markup"><code id="code-output">&lt;p&gt;Total: &lt;output class=&quot;luz-output&quot; id=&quot;total&quot; for=&quot;qty price&quot;&gt;12&lt;/output&gt; seats&lt;/p&gt;</code></pre>
+          </div>
+          <h5 id="output-variants">Variants and options</h5>
+          <ul>
+            <li><code>.luz-output</code>: the face of the interface, the brand colour, figures of equal width, at least 2.5 em wide and aligned to the end.</li>
+            <li>A bare <code>&lt;output&gt;</code> with no class: a small chip in the mono face.</li>
+          </ul>
+          <h5 id="output-how">How it works</h5>
+          <p>A native <code>&lt;output&gt;</code>. Your script writes its <code>value</code>; LUZ does not calculate. An output is not sent with the form, and its implicit ARIA role is <code>status</code>.</p>
+          <h5 id="output-no-js">Without JavaScript</h5>
+          <p>The output shows the value written in the HTML. Nothing recalculates without your script.</p>
+          <h5 id="output-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>An output takes no focus and has no keys.</li>
+            <li>Tie it to its sources with <code>for</code>, and put the unit in the text around it.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#output-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="output-design-panel">
+          <h4 class="docs-view__title" id="output-design">Design</h4>
+          <h5 id="output-when">When to use</h5>
+          <p>Use an output for a value that your page calculates or that a control sets, shown as text.</p>
+          <ul>
+            <li>The number beside a range, a total, a result.</li>
+            <li>Write the unit next to it: "12 seats".</li>
+          </ul>
+          <h5 id="output-when-not">When not to use</h5>
+          <p>An output shows a value; it does not collect one.</p>
+          <ul>
+            <li>A value the reader types: an <a href="#number">number</a> or a <a href="#text">text</a> field.</li>
+            <li>Text that never changes: a paragraph or a span.</li>
+          </ul>
+          <h5 id="output-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> The unit beside the figure: "12 seats".</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <p>Total: <output class="luz-output">12</output> seats</p>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A bare figure with no label or unit: the reader does not know what 12 counts.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <p><output class="luz-output">12</output></p>
+              </div>
+            </figure>
+          </div>
+          <h5 id="output-content">Writing the content</h5>
+          <ul>
+            <li>Put the figure in the output and the unit in the text around it.</li>
+            <li>Label what is counted: "Seats", "Total".</li>
+            <li>Keep the text short: an output is for a value, not a sentence.</li>
+          </ul>
+          <h5 id="output-contrast">Contrast and focus</h5>
+          <p>Shared with the other value controls: <a href="#values-contrast">contrast and focus of values</a>.</p>
+          <h5 id="output-tokens">Tokens it uses</h5>
+          <p>Shared with the other value controls: <a href="#values-tokens">tokens of values</a>.</p>
+          <p class="docs-view__xref"><a href="#output-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-family-notes">
+        <h3 id="values-contrast">Contrast and focus of values</h3>
+        <p>The label is secondary text on the page; the bar and the figure have to be seen against it.</p>
+        <div class="luz-table-wrap" role="region" aria-label="Value controls contrast in each mode" tabindex="0">
+          <table class="luz-table docs-contrast">
+            <thead>
+              <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Part"><div>Label</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Meter fill</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>13.5:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Meter edge</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>3.7:1</div></td><td data-label="Dark"><div>4.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Output figure</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Output with no class</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+        <ul>
+          <li><strong>Focus:</strong> a meter and an output take no focus, so they have no ring.</li>
+          <li><strong>Not colour alone:</strong> the bar is the brand colour in every state; its figure is text.</li>
+          <li><strong>Target:</strong> neither is a control the reader presses.</li>
+        </ul>
+        <h3 id="values-tokens">Tokens of values</h3>
+        <p>The 11 tokens that these controls' rules read, by token family. Each family links to its page, with the values in every mode.</p>
+        <dl class="docs-uses">
+          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a></dd></div>
+          <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+        </dl>
+      </div>
+
+      <h2 id="field">Field parts</h2>
+      <p>What wraps a control: the label, the hint, the error and the group.</p>
+
+      <div class="docs-control">
+        <h3 id="label">Label, hint and error</h3>
+        <p>The text that names a control, says what it needs and tells the reader what went wrong.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label luz-field__label--required" for="lb-slug">Slug</label>
+              <input class="luz-input luz-input--error" id="lb-slug" type="text" value="my project" required aria-invalid="true" aria-describedby="lb-slug-hint lb-slug-error">
+              <div class="luz-field__helper" id="lb-slug-hint">Letters, numbers and dashes.</div>
+              <div class="luz-field__error" id="lb-slug-error"><span class="u-sr-only">Error: </span>Use letters, numbers and dashes only.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Label, hint and error documentation">
+          <a class="luz-tab" href="#label-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#label-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="label-code-panel">
+          <h4 class="docs-view__title" id="label-code">Code</h4>
+          <h5 id="label-markup">Copy the markup</h5>
+          <p><code>.luz-field</code> wraps the label, the control, the hint and the error. <code>aria-describedby</code> ties the hint and the error to the control:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-label" aria-label="Copy the field with hint and error markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Field with hint and error markup"><code id="code-label">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label luz-field__label--required&quot; for=&quot;slug&quot;&gt;Slug&lt;/label&gt;
+  &lt;input class=&quot;luz-input luz-input--error&quot; id=&quot;slug&quot; type=&quot;text&quot; required aria-invalid=&quot;true&quot; aria-describedby=&quot;slug-hint slug-error&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;slug-hint&quot;&gt;Letters, numbers and dashes.&lt;/div&gt;
+  &lt;div class=&quot;luz-field__error&quot; id=&quot;slug-error&quot;&gt;&lt;span class=&quot;u-sr-only&quot;&gt;Error: &lt;/span&gt;Use letters, numbers and dashes only.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="label-variants">Variants and options</h5>
+          <ul>
+            <li><code>.luz-field__label</code>: the visible label. <code>--required</code> adds a red " *" after it.</li>
+            <li><code>.luz-field__helper</code>: the hint, under the control. <code>.luz-field__error</code>: the error, in the danger colour.</li>
+            <li><code>.luz-input--error</code> with <code>aria-invalid="true"</code>: a 2 px danger underline on the control.</li>
+          </ul>
+          <h5 id="label-how">How it works</h5>
+          <p>The label names the control through <code>for</code> and <code>id</code>, and a click on it focuses the control. LUZ does not mark a field invalid for you: add the error class, <code>aria-invalid</code> and the message when your validation fails.</p>
+          <h5 id="label-no-js">Without JavaScript</h5>
+          <p>The label, the hint and the error are text in your HTML, so they show with no script. The browser still checks <code>required</code> and the type when the form is sent.</p>
+          <h5 id="label-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>A label and a message take no focus and have no keys of their own.</li>
+            <li>Write "Error: " before the error text, hidden with <code>.u-sr-only</code> if you like, and list the hint and the error in <code>aria-describedby</code>.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#label-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="label-design-panel">
+          <h4 class="docs-view__title" id="label-design">Design</h4>
+          <h5 id="label-when">When to use</h5>
+          <p>Use a label on every control, a hint when the reader needs the format or the reason, and an error after a check fails.</p>
+          <ul>
+            <li>The label always shows: it stays on screen while the reader types.</li>
+            <li>The error goes beside the field it is about, in words.</li>
+          </ul>
+          <h5 id="label-when-not">When not to use</h5>
+          <p>Do not swap one of these for another, and do not hide any of them.</p>
+          <ul>
+            <li>A placeholder is not a label: it disappears when the reader types.</li>
+            <li>A colour or a border alone is not an error: say what is wrong. Do not show the error only in a toast: it goes away.</li>
+          </ul>
+          <h5 id="label-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> An error beside the field that says how to fix it.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-lb-do">Slug</label><input class="luz-input luz-input--error" id="dd-lb-do" type="text" value="my project" aria-invalid="true"><div class="luz-field__error">Use letters, numbers and dashes only.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A red border and no words: the reader cannot tell what to change.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-lb-dont">Slug</label><input class="luz-input luz-input--error" id="dd-lb-dont" type="text" value="my project" aria-invalid="true"></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="label-content">Writing the content</h5>
+          <ul>
+            <li>The label is a short noun in sentence case: "Project name".</li>
+            <li>The hint says the format or why you ask.</li>
+            <li>The error says what is wrong and how to fix it. If you mark required fields with "*", say once, above the form, what it means.</li>
+          </ul>
+          <h5 id="label-contrast">Contrast and focus</h5>
+          <p>Shared with the other field parts: <a href="#field-contrast">contrast and focus of field parts</a>.</p>
+          <h5 id="label-tokens">Tokens it uses</h5>
+          <p>Shared with the other field parts: <a href="#field-tokens">tokens of field parts</a>.</p>
+          <p class="docs-view__xref"><a href="#label-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="fieldset">Fieldset</h3>
+        <p>A bordered group of related controls, named by its legend.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <fieldset class="luz-fieldset">
+              <legend>Shipping address</legend>
+              <div class="luz-field">
+                <label class="luz-field__label" for="fs-street">Street</label>
+                <input class="luz-input" id="fs-street" type="text" autocomplete="street-address">
+              </div>
+              <div class="luz-field">
+                <label class="luz-field__label" for="fs-city">City</label>
+                <input class="luz-input" id="fs-city" type="text" autocomplete="address-level2">
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Fieldset documentation">
+          <a class="luz-tab" href="#fieldset-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#fieldset-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="fieldset-code-panel">
+          <h4 class="docs-view__title" id="fieldset-code">Code</h4>
+          <h5 id="fieldset-markup">Copy the markup</h5>
+          <p>A native <code>&lt;fieldset&gt;</code> whose first child is a <code>&lt;legend&gt;</code>:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-fieldset" aria-label="Copy the fieldset markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Fieldset markup"><code id="code-fieldset">&lt;fieldset class=&quot;luz-fieldset&quot;&gt;
+  &lt;legend&gt;Shipping address&lt;/legend&gt;
+  &lt;div class=&quot;luz-field&quot;&gt;
+    &lt;label class=&quot;luz-field__label&quot; for=&quot;street&quot;&gt;Street&lt;/label&gt;
+    &lt;input class=&quot;luz-input&quot; id=&quot;street&quot; type=&quot;text&quot;&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-field&quot;&gt;
+    &lt;label class=&quot;luz-field__label&quot; for=&quot;city&quot;&gt;City&lt;/label&gt;
+    &lt;input class=&quot;luz-input&quot; id=&quot;city&quot; type=&quot;text&quot;&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre>
+          </div>
+          <h5 id="fieldset-variants">Variants and options</h5>
+          <ul>
+            <li><code>disabled</code> on the fieldset disables every control inside it.</li>
+            <li><code>role="group"</code> with <code>aria-labelledby</code> on a <code>&lt;div&gt;</code> names a group with no border, as the <a href="#checkbox">checkbox</a> example does.</li>
+          </ul>
+          <h5 id="fieldset-how">How it works</h5>
+          <p>A native <code>&lt;fieldset&gt;</code> styled by <code>components/form.css</code>: a 1 px border, soft corners and the field background. The <code>&lt;legend&gt;</code> is small upper-case text.</p>
+          <h5 id="fieldset-no-js">Without JavaScript</h5>
+          <p>Nothing changes: the fieldset and its legend are native and need no script.</p>
+          <h5 id="fieldset-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>A fieldset takes no focus; Tab moves through the controls inside it.</li>
+            <li>The legend names the group: the browser exposes a fieldset as a group named by its legend.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#fieldset-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="fieldset-design-panel">
+          <h4 class="docs-view__title" id="fieldset-design">Design</h4>
+          <h5 id="fieldset-when">When to use</h5>
+          <p>Use a fieldset for controls that answer one question together.</p>
+          <ul>
+            <li>A set of radio buttons or checkboxes, or an address.</li>
+            <li>Put the legend first and keep it short.</li>
+          </ul>
+          <h5 id="fieldset-when-not">When not to use</h5>
+          <p>A fieldset is a group with a name, not a box for layout.</p>
+          <ul>
+            <li>A single control: its label is enough.</li>
+            <li>Spacing or columns: the layout objects, <code>o-stack</code> or <code>o-grid</code>. Do not wrap every section of a form.</li>
+          </ul>
+          <h5 id="fieldset-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A legend that names the group the controls answer together.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <fieldset class="luz-fieldset"><legend>Shipping address</legend><div class="luz-field"><label class="luz-field__label" for="dd-fs-do">Street</label><input class="luz-input" id="dd-fs-do" type="text"></div></fieldset>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A fieldset around one field: its legend repeats the label.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <fieldset class="luz-fieldset"><legend>Street</legend><div class="luz-field"><label class="luz-field__label" for="dd-fs-dont">Street</label><input class="luz-input" id="dd-fs-dont" type="text"></div></fieldset>
+              </div>
+            </figure>
+          </div>
+          <h5 id="fieldset-content">Writing the content</h5>
+          <ul>
+            <li>The legend is a noun or a question: "Shipping address", "Plan".</li>
+            <li>No colon at the end: the style adds the space.</li>
+            <li>Do not repeat the legend in each label.</li>
+          </ul>
+          <h5 id="fieldset-contrast">Contrast and focus</h5>
+          <p>Shared with the other field parts: <a href="#field-contrast">contrast and focus of field parts</a>.</p>
+          <h5 id="fieldset-tokens">Tokens it uses</h5>
+          <p>Shared with the other field parts: <a href="#field-tokens">tokens of field parts</a>.</p>
+          <p class="docs-view__xref"><a href="#fieldset-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-family-notes">
+        <h3 id="field-contrast">Contrast and focus of field parts</h3>
+        <p>The label and the hint are secondary text on the page; the error is danger text.</p>
+        <div class="luz-table-wrap" role="region" aria-label="Field parts contrast in each mode" tabindex="0">
+          <table class="luz-table docs-contrast">
+            <thead>
+              <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Part"><div>Label</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Hint</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Error message</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.3:1</div></td><td data-label="Dark"><div>11.7:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Required asterisk</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.3:1</div></td><td data-label="Dark"><div>11.7:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Error border</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>5.5:1</div></td><td data-label="Dark"><div>10.8:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Legend</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>6.4:1</div></td><td data-label="Dark"><div>6.9:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+        <ul>
+          <li><strong>Focus:</strong> a label, a message and a legend take none; a click on a label moves focus to its control.</li>
+          <li><strong>Not colour alone:</strong> an invalid field has a 2 px bottom border and an error message in words.</li>
+          <li><strong>Target:</strong> a click on a label reaches its control.</li>
+        </ul>
+        <h3 id="field-tokens">Tokens of field parts</h3>
+        <p>The 12 tokens that these controls' rules read, by token family. Each family links to its page, with the values in every mode.</p>
+        <dl class="docs-uses">
+          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+          <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+          <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+        </dl>
+      </div>
 
       <h2 id="known-issues">Known issues</h2>
       <p>The open list of a select looks different in each browser and system. This is intended.</p>
@@ -1795,273 +2442,8 @@ range.addEventListener(&quot;input&quot;, () =&gt; {
       <h2 id="how-it-works">How form fields work</h2>
       <p>Every control is a native element, styled by <code>components/form.css</code>. The browser owns the state, the keyboard, the validation and the submission.</p>
       <ul>
-        <li>Each control gets its name from its <code>&lt;label&gt;</code>; the hint and the error are tied to it with <code>aria-describedby</code>.</li>
         <li>LUZ does not mark a field as invalid for you: add <code>.luz-input--error</code>, <code>aria-invalid="true"</code> and the error text when your validation fails.</li>
         <li>Field text is 16 px at 768 px and below and on touch screens, so iOS Safari does not zoom in.</li>
       </ul>
-      <p>Without JavaScript every control works and submits with its form. Only what your own script adds is missing, such as live validation.</p>
-
-          <h2 id="to-migrate">To migrate</h2>
-          <p><strong>Temporary.</strong> What follows is the old page, with one pair of tabs for every control. The inputs, the select and the checkbox are already blocks of their own above. Move the rest (the radio buttons, the fieldset, the switch, the meter, the output and the field label, hint and error) to blocks of their own, an example and then Code and Design tabs, then delete this section.</p>
-          <h2 id="example">Example</h2>
-          <p>Choices and values for a project: a select, checkboxes, radio buttons, switches and a meter.</p>
-          <div class="docs-example" data-docs-specimen>
-          <fieldset class="docs-width" hidden>
-            <legend>Width</legend>
-            <label class="luz-check-item"><input type="radio" name="docs-width" value="phone"> Phone</label>
-            <label class="luz-check-item"><input type="radio" name="docs-width" value="tablet"> Tablet</label>
-            <label class="luz-check-item"><input type="radio" name="docs-width" value="full" checked> Full</label>
-          </fieldset>
-          <div class="luz-example__frame">
-          <div class="docs-demo__stage">
-            <div class="o-grid docs-cols-2">
-              <div>
-                <h3 class="docs-subhead">Choice</h3>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-role">Role</label>
-                  <select class="luz-select" id="f-role">
-                    <option value="">Select a role</option>
-                    <option value="dev">Developer</option>
-                    <option value="design">Designer</option>
-                    <option value="pm">Product manager</option>
-                  </select>
-                </div>
-                <div class="luz-field">
-                  <div class="luz-field__label" id="f-notify-label">Notifications</div>
-                  <div class="luz-check-group" role="group" aria-labelledby="f-notify-label">
-                    <div class="luz-check-item"><input type="checkbox" id="f-check-1" checked><label for="f-check-1">Email</label></div>
-                    <div class="luz-check-item"><input type="checkbox" id="f-check-2"><label for="f-check-2">Push</label></div>
-                    <div class="luz-check-item"><input type="checkbox" id="f-check-3" disabled><label for="f-check-3">SMS (disabled)</label></div>
-                  </div>
-                </div>
-                <div class="luz-field">
-                  <fieldset class="luz-fieldset">
-                    <legend>Plan</legend>
-                    <div class="luz-check-group">
-                      <div class="luz-check-item"><input type="radio" name="f-plan" id="f-radio-1" checked><label for="f-radio-1">Free</label></div>
-                      <div class="luz-check-item"><input type="radio" name="f-plan" id="f-radio-2"><label for="f-radio-2">Team</label></div>
-                      <div class="luz-check-item"><input type="radio" name="f-plan" id="f-radio-3"><label for="f-radio-3">Enterprise</label></div>
-                    </div>
-                  </fieldset>
-                </div>
-                <div class="o-stack">
-                  <label class="luz-toggle">
-                    <input class="luz-toggle__input" type="checkbox" role="switch" checked>
-                    <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
-                    <span class="luz-toggle__label">Public profile</span>
-                  </label>
-                  <label class="luz-toggle">
-                    <input class="luz-toggle__input" type="checkbox" role="switch">
-                    <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
-                    <span class="luz-toggle__label">Weekly digest</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="docs-subhead">Values</h3>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-meter">Storage used, 6 of 10 GB</label>
-                  <meter class="luz-meter" id="f-meter" min="0" max="10" value="6">6 of 10 GB</meter>
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>
-          </div>
-          <nav class="luz-tabs docs-view-tabs" aria-label="Form fields documentation">
-            <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
-            <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
-          </nav>
-          <div class="luz-tabpanel docs-view" id="code-panel">
-            <h2 class="docs-view__title" id="code">Code</h2>
-            <h3 id="markup">Copy the markup</h3>
-            <p>A form needs no class: the elements carry the look and the space between them.</p>
-            <div class="docs-snippet">
-              <div class="docs-snippet__bar">
-                <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-form-bare" aria-label="Copy the bare form markup">Copy</button>
-              </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Bare form markup"><code id="code-form-bare">&lt;form&gt;
-  &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
-  &lt;input id=&quot;email&quot; type=&quot;email&quot; required&gt;
-  &lt;label for=&quot;notes&quot;&gt;Notes&lt;/label&gt;
-  &lt;textarea id=&quot;notes&quot; rows=&quot;3&quot;&gt;&lt;/textarea&gt;
-  &lt;fieldset&gt;
-    &lt;legend&gt;Plan&lt;/legend&gt;
-    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; checked&gt; Free&lt;/label&gt;
-    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot;&gt; Team&lt;/label&gt;
-  &lt;/fieldset&gt;
-  &lt;button&gt;Subscribe&lt;/button&gt;
-&lt;/form&gt;</code></pre>
-            </div>
-            <p>The classes add what needs markup: <code>.luz-field</code> for a hint and an error, <code>.luz-input--error</code>, the switch, and <code>.luz-check-group</code> with <code>.luz-check-item</code> for check boxes and radio buttons that LUZ draws. With the classes:</p>
-            <div class="docs-snippet">
-              <div class="docs-snippet__bar">
-                <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-field" aria-label="Copy the text field with a hint markup">Copy</button>
-              </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Text field with a hint markup"><code id="code-field">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;project-name&quot;&gt;Project name&lt;/label&gt;
-  &lt;input class=&quot;luz-input&quot; id=&quot;project-name&quot; type=&quot;text&quot; aria-describedby=&quot;project-name-hint&quot;&gt;
-  &lt;div class=&quot;luz-field__helper&quot; id=&quot;project-name-hint&quot;&gt;Shown on the dashboard.&lt;/div&gt;
-&lt;/div&gt;</code></pre>
-            </div>
-            <div class="docs-snippet">
-              <div class="docs-snippet__bar">
-                <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-field-error" aria-label="Copy the field with an error markup">Copy</button>
-              </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Field with an error markup"><code id="code-field-error">&lt;div class=&quot;luz-field&quot;&gt;
-  &lt;label class=&quot;luz-field__label&quot; for=&quot;slug&quot;&gt;Slug&lt;/label&gt;
-  &lt;input class=&quot;luz-input luz-input--error&quot; id=&quot;slug&quot; type=&quot;text&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;slug-error&quot;&gt;
-  &lt;div class=&quot;luz-field__error&quot; id=&quot;slug-error&quot;&gt;&lt;span class=&quot;u-sr-only&quot;&gt;Error: &lt;/span&gt;Use letters, numbers and dashes only.&lt;/div&gt;
-&lt;/div&gt;</code></pre>
-            </div>
-            <div class="docs-snippet">
-              <div class="docs-snippet__bar">
-                <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-radios" aria-label="Copy the radio group markup">Copy</button>
-              </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Radio group markup"><code id="code-radios">&lt;fieldset class=&quot;luz-fieldset&quot;&gt;
-  &lt;legend&gt;Plan&lt;/legend&gt;
-  &lt;div class=&quot;luz-check-group&quot;&gt;
-    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; id=&quot;plan-free&quot; checked&gt;&lt;label for=&quot;plan-free&quot;&gt;Free&lt;/label&gt;&lt;/div&gt;
-    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; id=&quot;plan-team&quot;&gt;&lt;label for=&quot;plan-team&quot;&gt;Team&lt;/label&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/fieldset&gt;</code></pre>
-            </div>
-            <div class="docs-snippet">
-              <div class="docs-snippet__bar">
-                <span class="docs-snippet__lang">HTML</span>
-                <button class="luz-copy-btn" type="button" data-copy-from="code-switch" aria-label="Copy the switch markup">Copy</button>
-              </div>
-              <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Switch markup"><code id="code-switch">&lt;label class=&quot;luz-toggle&quot;&gt;
-  &lt;input class=&quot;luz-toggle__input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot;&gt;
-  &lt;span class=&quot;luz-toggle__track&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;luz-toggle__thumb&quot;&gt;&lt;/span&gt;&lt;/span&gt;
-  &lt;span class=&quot;luz-toggle__label&quot;&gt;Weekly digest&lt;/span&gt;
-&lt;/label&gt;</code></pre>
-            </div>
-            <h3 id="variants">Variants and options</h3>
-            <p>Every control is a native element with a LUZ class. The state comes from native attributes.</p>
-            <div class="luz-table-wrap" role="region" aria-label="Form classes and states" tabindex="0">
-              <table class="luz-table">
-                <thead>
-                  <tr><th scope="col">Class or attribute</th><th scope="col">Effect</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-field</code></div></td><td data-label="Effect"><div>Wraps one label, its control, its hint and its error</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-field__label</code></div></td><td data-label="Effect"><div>The visible label</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-field__label--required</code></div></td><td data-label="Effect"><div>Adds a red " *" after the label</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-field__helper</code></div></td><td data-label="Effect"><div>A hint under the control</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-field__error</code></div></td><td data-label="Effect"><div>An error under the control, in the danger colour</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-input--error</code></div></td><td data-label="Effect"><div>A 2 px danger underline; pair it with <code>aria-invalid="true"</code></div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-select</code></div></td><td data-label="Effect"><div>A <code>&lt;select&gt;</code>, see <a href="#select">Select</a></div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-check-group</code>, <code>.luz-check-item</code></div></td><td data-label="Effect"><div>A list of checkboxes or radios, each with its label</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-fieldset</code></div></td><td data-label="Effect"><div>A bordered group with an upper-case <code>&lt;legend&gt;</code></div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-toggle</code></div></td><td data-label="Effect"><div>A switch: a checkbox with <code>role="switch"</code> drawn as a track and a thumb</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-meter</code></div></td><td data-label="Effect"><div>A <code>&lt;meter&gt;</code> bar, in the brand colour in every state: see <a href="/docs/components/meter/">Meter</a></div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-output</code></div></td><td data-label="Effect"><div>A computed value</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>disabled</code>, <code>readonly</code></div></td><td data-label="Effect"><div>Faded; read-only also gets a dashed underline</div></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <h3 id="how">How it works</h3>
-            <p>Native form controls, styled by <code>components/form.css</code>. No JavaScript: the browser owns the state, the keyboard, validation and submission.</p>
-            <ul>
-              <li>Each control gets its name from its <code>&lt;label&gt;</code>; the hint and the error are tied to it with <code>aria-describedby</code>.</li>
-              <li>LUZ does not mark a field as invalid for you: add <code>.luz-input--error</code>, <code>aria-invalid="true"</code> and the error text when your validation fails.</li>
-              <li>Field text is 16 px at 768 px and below and on touch screens, so iOS Safari does not zoom in.</li>
-            </ul>
-            <h3 id="no-js">Without JavaScript</h3>
-            <p>Every control works and submits with its form, including the switch. Only what your own script adds is missing, such as live validation or a value echoed in an <code>&lt;output&gt;</code>.</p>
-            <h3 id="keyboard">Keyboard and ARIA</h3>
-            <p>The native keys apply. Tab moves between controls.</p>
-            <ul>
-              <li>Space checks a checkbox or a switch.</li>
-              <li>Arrow keys choose within a radio group, and move a range slider.</li>
-              <li>Group related controls in a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>, or a <code>role="group"</code> named with <code>aria-labelledby</code>.</li>
-              <li>Write "Error: " before the error text, hidden visually with <code>.u-sr-only</code> if you like.</li>
-            </ul>
-            <p class="docs-view__xref"><a href="#contrast">Contrast and focus</a> are in the Design tab.</p>
-          </div>
-          <div class="luz-tabpanel docs-view" id="design-panel">
-            <h2 class="docs-view__title" id="design">Design</h2>
-            <h3 id="when">When to use</h3>
-            <p>Use these fields to collect input, with the native control that fits the data.</p>
-            <ul>
-              <li>Text, email, number, date, time: an input of that <code>type</code>.</li>
-              <li>One choice from a few (six or fewer): radios. From many: a <a href="/docs/components/form/#select">select</a>.</li>
-              <li>Several choices: checkboxes. A setting that applies at once: a switch.</li>
-            </ul>
-            <h3 id="when-not">When not to use</h3>
-            <p>Do not rebuild a native control from <code>&lt;div&gt;</code> elements.</p>
-            <ul>
-              <li>Do not use a placeholder as the label: it disappears when the reader types.</li>
-              <li>Do not use a switch inside a form that is sent with a button: use a checkbox.</li>
-              <li>To show how far a task has got, use <a href="/docs/components/progress/">progress</a>, not a <a href="/docs/components/meter/">meter</a>.</li>
-            </ul>
-            <h3 id="do-dont">Do and don't</h3>
-            <div class="luz-do-dont">
-              <figure class="luz-do-dont__item luz-do-dont__item--do">
-                <figcaption><strong class="luz-do-dont__verdict">Do</strong> A checkbox in a form that is sent with a button: nothing changes until “Save preferences”.</figcaption>
-                <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-check-item"><input type="checkbox" id="dd-form-do" checked><label for="dd-form-do">Email me about new releases</label></div>
-                  <div class="o-row"><button class="luz-btn luz-btn--primary luz-btn--sm" type="button">Save preferences</button></div>
-                </div>
-              </figure>
-              <figure class="luz-do-dont__item luz-do-dont__item--dont">
-                <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A switch in the same form: a switch promises an instant change, so the reader does not know the button is still needed.</figcaption>
-                <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <label class="luz-toggle"><input class="luz-toggle__input" type="checkbox" role="switch" checked><span class="luz-toggle__track"><span class="luz-toggle__thumb"></span></span><span class="luz-toggle__label">Email me about new releases</span></label>
-                  <div class="o-row"><button class="luz-btn luz-btn--primary luz-btn--sm" type="button">Save preferences</button></div>
-                </div>
-              </figure>
-            </div>
-            <h3 id="content">Writing the content</h3>
-            <p>Every control has a visible label that names what to enter.</p>
-            <ul>
-              <li>Labels are short nouns, in sentence case: "Project name".</li>
-              <li>A hint, under the control, says the format or why you ask.</li>
-              <li>An error says what is wrong and how to fix it: "Use letters, numbers and dashes only."</li>
-              <li>If you mark required fields with "*", say once, above the form, what it means.</li>
-            </ul>
-            <h3 id="contrast">Contrast and focus</h3>
-            <p>Labels and hints are secondary text on the page; what the reader types is primary text on the field.</p>
-            <div class="luz-table-wrap" role="region" aria-label="Form fields contrast in each mode" tabindex="0">
-              <table class="luz-table docs-contrast">
-                <thead>
-                  <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td data-label="Part"><div>Label and hint</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Typed text</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Placeholder</div></td><td data-label="Colour on background"><div><code>--luz-text-muted</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>5.1:1</div></td><td data-label="Dark"><div>5.2:1</div></td><td data-label="High contrast"><div>9.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Error message</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.3:1</div></td><td data-label="Dark"><div>11.7:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Field bottom border</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>3.9:1</div></td><td data-label="Dark"><div>3.9:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Checkbox and radio border</div></td><td data-label="Colour on background"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>4.3:1</div></td><td data-label="Dark"><div>3.6:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Checked box and switch on</div></td><td data-label="Colour on background"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>3.5:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Switch track, off</div></td><td data-label="Colour on background"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>4.3:1</div></td><td data-label="Dark"><div>3.6:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Switch thumb, on</div></td><td data-label="Colour on background"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Light"><div>6.0:1</div></td><td data-label="Dark"><div>4.9:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                  <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
-            <ul>
-              <li><strong>Focus:</strong> a 2 px <code>--luz-focus-ring</code> outline, 2 px outside the field; the bottom border of a text field also turns to the ring colour, 2 px thick. Checkboxes, radios and the switch track get the same outline.</li>
-              <li><strong>Not colour alone:</strong> an invalid field has a 2 px bottom border and an error message in words; a read-only field has a dashed bottom border; the switch thumb moves.</li>
-              <li><strong>Target:</strong> text fields are 44 px high.</li>
-            </ul>
-            <h3 id="tokens">Tokens it uses</h3>
-            <p>The 32 tokens that <code>components/form.css</code> reads, by family. Each family links to its page, with the values in every mode. In Figma they are variables with the same names: see <a href="/docs/tokens/figma/">Tokens in Figma</a>.</p>
-            <dl class="docs-uses">
-              <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-muted"><code>--luz-text-muted</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
-              <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
-              <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-control</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
-              <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
-              <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code></dd></div>
-            </dl>
-            <p class="docs-view__xref"><a href="#keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
-          </div>
+      <p>Without JavaScript every control works and submits with its form; only your own script's live validation is missing.</p>
     </div>
