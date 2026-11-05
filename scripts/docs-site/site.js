@@ -1538,7 +1538,7 @@ function renderNotice(site, page) {
     : [t("notice.pending"), ...(canonical === `${DOCS_ROUTE}accessibility/` ? [t("notice.pending-statement")] : [])];
   return [
     '<div class="luz-alert luz-alert--info docs-notice">',
-    '    <div class="luz-alert__icon" aria-hidden="true">\u2139</div>',
+    '    <div class="luz-alert__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.5v.01"/></svg></div>',
     "    <div>",
     `      <div class="luz-alert__body">${escapeHtml(text.join(" "))} <a href="${escapeHtml(canonical)}" hreflang="en">${say(t, "notice.english")}</a></div>`,
     "    </div>",
