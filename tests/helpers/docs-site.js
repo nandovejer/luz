@@ -32,11 +32,10 @@ export function routeOf(id) {
   return route;
 }
 
-/** The routes whose source contains `text` (a class, an attribute…). */
 /** A page of controls (`parts: controls`, the pages of Form fields): one pair of Code and Design tabs for each control, not for the page. */
 export const isControls = (route) => site.byRoute.get(route)?.meta.parts === 'controls';
 
-/** The pages that contain `text` in their source. */
+/** The routes whose source contains `text` (a class, an attribute…). */
 export const routesWith = (text) => site.pages.filter((p) => p.body.includes(text)).map((p) => p.route);
 
 /** Open the page that holds `id` (without a fragment) and wait for it to settle. */
