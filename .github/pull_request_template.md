@@ -28,6 +28,7 @@ Tick every line. An unticked line needs an `EXCEPTIONS.md` row or blocks the mer
 - [ ] Only semantic tokens; logical properties; no `!important`
 - [ ] Generated strings come from the i18n dictionary, in English and Spanish
 - [ ] Strings: sentence case, verb-first buttons, meaningful links, visible labels
+- [ ] I say which AI tool I used, if any, and I checked that it reproduces no licensed code
 - [ ] Docs page: summary · example · Known issues · Code · Design (when to use, when not to use, …)
 - [ ] Tests added (axe + keyboard) and Playwright green (`--project=chromium --project=chromium-nojs`)
 - [ ] `pnpm check:size` and `pnpm check:exceptions` green

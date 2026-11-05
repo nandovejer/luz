@@ -2058,6 +2058,22 @@ home-light:defined ~ .landing-light__nojs {
   }
 }
 
+/* The line is for a translation: in the language of the original it is not shown */
+.landing-translation {
+  margin-block-start: var(--luz-space-sm);
+  font-size: var(--luz-text-sm);
+}
+
+.landing-translation:lang(en) {
+  display: none;
+}
+
+@media (scripting: enabled) {
+  .landing-translation {
+    padding-inline-end: calc(var(--luz-control-lg) + var(--luz-space-md) * 2);
+  }
+}
+
 .landing-foot {
   gap: var(--luz-space-md);
   margin-block-start: var(--luz-space-xl);

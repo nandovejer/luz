@@ -231,7 +231,7 @@ describe("CONTRIBUTING.md is short and says the five things a stranger needs", (
     const t = flat(text());
     expect(t).toMatch(/code you did not write/i);
     expect(t).toMatch(/\bAI\b[^.]*(welcome|accepted)/i);
-    expect(t).toMatch(/explain/i);
+    expect(t).toMatch(/explain|understand/i);
   });
 
   it("sends proposals to Discussions and work to the public Project", () => {

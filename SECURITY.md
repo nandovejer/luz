@@ -16,9 +16,11 @@ If you discover a security vulnerability in LUZ Design System, please report it 
 - Your suggested fix (if available)
 
 **Response Timeline:**
-- Initial response: Within 48 hours
-- Patch release: Within 2 weeks (for critical issues)
+- Initial response: we aim to answer within 48 hours
+- Patch release: we aim to fix critical issues within 2 weeks
 - Public disclosure: Only after patch is released
+
+These are goals of one maintainer, not a commitment or a service level. LUZ is provided "as is", under the MIT licence.
 
 Thank you for helping keep LUZ secure!
 

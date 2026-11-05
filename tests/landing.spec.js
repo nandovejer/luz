@@ -1017,7 +1017,7 @@ test.describe('Landing page', () => {
         await expect(legal).toHaveText(plain(catalog(lang)['footer.legal']));
         await expect(legal.locator('a[href="https://github.com/nandovejer/luz/blob/main/LICENSE"]')).toHaveCount(1);
         // The author is named, as a link to his GitHub
-        await expect(legal.locator('a[href="https://github.com/nandovejer"]')).toHaveText('Nando Muñoz');
+        await expect(legal.locator('a[href="https://github.com/nandovejer"]')).toHaveText('Fernando Muñoz');
       });
     }
 
