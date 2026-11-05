@@ -3,13 +3,1808 @@ title: Form fields
 description: Collect input with native fields, choices and pickers, each with a visible label, a hint and an error.
 area: components
 group: forms
-files: components/form.css
+files: components/form.css; components/select.css
+parts: controls
 toc: h2,h3
-keywords: input, textarea, checkbox
+keywords: input, textarea, checkbox, select, password, email, date, range, number
 -->
     <div class="docs-component" id="c-form">
+      <!-- A page of controls (parts: controls). h2 = a family, with one line; h3 = a control, with its summary and its own example, then
+           its own Code and Design tabs, all eleven sections, each short. The sidebar lists the h2 before "Known issues" as links to their
+           anchors. Every id of a control starts with its id (text-markup); every id on the page is unique. At the end of a family, one
+           div.docs-family-notes holds the family's Contrast and focus table and its Tokens (h3 <family>-contrast and <family>-tokens,
+           computed, never typed: tests/helpers/design-tokens.js); a control's own Contrast and Tokens sections are a sentence and a link to them.
+           Template: Inputs > Text. -->
+      <h2 id="inputs">Inputs</h2>
+      <p>One control for each type of input: the type tells the browser the keyboard, the picker and the validation.</p>
+
+      <div class="docs-control">
+        <h3 id="text">Text</h3>
+        <p>A single-line field for a short answer you cannot list in advance, such as a name or a title.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-grid docs-cols-2">
+              <div class="luz-field">
+                <label class="luz-field__label luz-field__label--required" for="tx-name">Project name</label>
+                <input class="luz-input" id="tx-name" type="text" required aria-describedby="tx-name-help">
+                <div class="luz-field__helper" id="tx-name-help">Shown on the dashboard.</div>
+              </div>
+              <div class="luz-field">
+                <label class="luz-field__label" for="tx-slug">Slug</label>
+                <input class="luz-input luz-input--error" id="tx-slug" type="text" value="my project" aria-invalid="true" aria-describedby="tx-slug-error">
+                <div class="luz-field__error" id="tx-slug-error"><span class="u-sr-only">Error: </span>Use letters, numbers and dashes only.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Text documentation">
+          <a class="luz-tab" href="#text-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#text-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="text-code-panel">
+          <h4 class="docs-view__title" id="text-code">Code</h4>
+          <h5 id="text-markup">Copy the markup</h5>
+          <p>A label and an input need no class. <code>.luz-field</code> adds a hint and an error:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-text" aria-label="Copy the text field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Text field markup"><code id="code-text">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;name&quot;&gt;Project name&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;name&quot; type=&quot;text&quot; aria-describedby=&quot;name-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;name-hint&quot;&gt;Shown on the dashboard.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+              <h5 id="text-variants">Variants and options</h5>
+              <ul>
+                <li><code>required</code>, with <code>.luz-field__label--required</code> for the red asterisk.</li>
+                <li>Error: <code>.luz-input--error</code>, <code>aria-invalid="true"</code> and a <code>.luz-field__error</code> after the field.</li>
+                <li><code>disabled</code>: faded, skipped by Tab, not sent.</li>
+                <li><code>readonly</code>: dashed underline, reachable, sent.</li>
+                <li><code>list</code> with a <code>&lt;datalist&gt;</code>: suggestions the reader may ignore.</li>
+              </ul>
+              <h5 id="text-how">How it works</h5>
+              <p>A native <code>&lt;input&gt;</code> styled by <code>components/form.css</code>. LUZ does not mark a field invalid for you: add the error class, <code>aria-invalid</code> and the message when your validation fails.</p>
+              <h5 id="text-no-js">Without JavaScript</h5>
+              <p>The field works and submits with its form.</p>
+              <h5 id="text-keyboard">Keyboard and ARIA</h5>
+              <ul>
+                <li>Tab moves focus into the field, Shift+Tab out of it.</li>
+                <li>The label is the name; the hint and the error are read after it. A placeholder is not a name.</li>
+              </ul>
+              <p class="docs-view__xref"><a href="#text-contrast">Contrast and focus</a> are in the Design tab.</p>
+            </div>
+            <div class="luz-tabpanel docs-view" id="text-design-panel">
+              <h4 class="docs-view__title" id="text-design">Design</h4>
+              <h5 id="text-when">When to use</h5>
+              <p>Use a text field for a short answer you cannot list in advance.</p>
+              <ul>
+                <li>A name, a title, a code, a reference.</li>
+                <li>An address, a number or a date: use the field of that <code>type</code>, such as <a href="#email">email</a>, <a href="#number">number</a> or <a href="#date">date</a>.</li>
+              </ul>
+              <h5 id="text-when-not">When not to use</h5>
+              <p>Do not make the reader type what they could pick.</p>
+              <ul>
+                <li>A choice from a list: a <a href="/docs/components/form/#select">select</a> or radio buttons.</li>
+                <li>A <a href="#password">password</a>: its field hides what is typed. Several lines: a <a href="#textarea">textarea</a>.</li>
+              </ul>
+              <h5 id="text-do-dont">Do and don't</h5>
+              <div class="luz-do-dont">
+                <figure class="luz-do-dont__item luz-do-dont__item--do">
+                  <figcaption><strong class="luz-do-dont__verdict">Do</strong> A visible label: it stays on screen while the reader types.</figcaption>
+                  <div class="luz-do-dont__stage" inert aria-hidden="true">
+                    <div class="luz-field"><label class="luz-field__label" for="dd-text-do">Project name</label><input class="luz-input" id="dd-text-do" type="text" value="My project"></div>
+                  </div>
+                </figure>
+                <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                  <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A placeholder as the label: it disappears when the reader types.</figcaption>
+                  <div class="luz-do-dont__stage" inert aria-hidden="true">
+                    <pre class="luz-code-block" data-lang="html"><code>&lt;input type="text" placeholder="Project name"&gt;</code></pre>
+                  </div>
+                </figure>
+              </div>
+              <h5 id="text-content">Writing the content</h5>
+              <ul>
+                <li>The label is a short noun in sentence case: "Project name".</li>
+                <li>The hint says the format or why you ask.</li>
+                <li>The error says what is wrong and how to fix it.</li>
+              </ul>
+              <h5 id="text-contrast">Contrast and focus</h5>
+              <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+              <h5 id="text-tokens">Tokens it uses</h5>
+              <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+              <p class="docs-view__xref"><a href="#text-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+            </div>
+          </div>
+
+          <div class="docs-control">
+            <h3 id="email">Email</h3>
+            <p>A field for an email address: the browser checks its shape and phones show the keyboard with the at sign.</p>
+            <div class="docs-example" data-docs-specimen>
+              <div class="docs-demo__stage">
+                <div class="luz-field">
+                  <label class="luz-field__label luz-field__label--required" for="em-address">Email</label>
+                  <input class="luz-input" id="em-address" type="email" placeholder="jane@example.com" required autocomplete="email" aria-describedby="em-address-help">
+                  <div class="luz-field__helper" id="em-address-help">We send your receipt here.</div>
+                </div>
+              </div>
+            </div>
+            <nav class="luz-tabs docs-view-tabs" aria-label="Email documentation">
+              <a class="luz-tab" href="#email-code-panel" data-docs-view="code">Code</a>
+              <a class="luz-tab" href="#email-design-panel" data-docs-view="design">Design</a>
+            </nav>
+            <div class="luz-tabpanel docs-view" id="email-code-panel">
+              <h4 class="docs-view__title" id="email-code">Code</h4>
+              <h5 id="email-markup">Copy the markup</h5>
+              <p>A text field with <code>type="email"</code>; <code>autocomplete="email"</code> lets the browser fill it in.</p>
+              <div class="docs-snippet">
+                <div class="docs-snippet__bar">
+                  <span class="docs-snippet__lang">HTML</span>
+                  <button class="luz-copy-btn" type="button" data-copy-from="code-email" aria-label="Copy the email field markup">Copy</button>
+                </div>
+                <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Email field markup"><code id="code-email">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;email&quot;&gt;Email&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;email&quot; type=&quot;email&quot; autocomplete=&quot;email&quot; required aria-describedby=&quot;email-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;email-hint&quot;&gt;We send your receipt here.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                  <h5 id="email-variants">Variants and options</h5>
+                  <ul>
+                    <li><code>multiple</code>: several addresses, separated by commas.</li>
+                    <li>The classes and states are the Text field's: error, required, disabled and read-only.</li>
+                  </ul>
+                  <h5 id="email-how">How it works</h5>
+                  <p>A native <code>&lt;input type="email"&gt;</code>. The browser checks the shape when the form is sent, not that the address exists.</p>
+                  <h5 id="email-no-js">Without JavaScript</h5>
+                  <p>The browser checks the address when the form is sent, with no script.</p>
+                  <h5 id="email-keyboard">Keyboard and ARIA</h5>
+                  <ul>
+                    <li>Tab moves focus in, Shift+Tab out. On a phone the keyboard shows the at sign.</li>
+                    <li>The label is the name; the hint and the error are read after it.</li>
+                  </ul>
+                  <p class="docs-view__xref"><a href="#email-contrast">Contrast and focus</a> are in the Design tab.</p>
+                </div>
+                <div class="luz-tabpanel docs-view" id="email-design-panel">
+                  <h4 class="docs-view__title" id="email-design">Design</h4>
+                  <h5 id="email-when">When to use</h5>
+                  <p>Use an email field whenever the answer is an email address.</p>
+                  <ul>
+                    <li>Signing up, signing in, contact forms and receipts.</li>
+                    <li>Say in the hint what the address is for.</li>
+                  </ul>
+                  <h5 id="email-when-not">When not to use</h5>
+                  <p>An email field checks the shape of an address, not that it works.</p>
+                  <ul>
+                    <li>Do not use a text field for an address: the reader loses the check and the keyboard.</li>
+                    <li>Do not rely on it to prove the address is real: send a message and ask for confirmation.</li>
+                  </ul>
+                  <h5 id="email-do-dont">Do and don't</h5>
+                  <div class="luz-do-dont">
+                    <figure class="luz-do-dont__item luz-do-dont__item--do">
+                      <figcaption><strong class="luz-do-dont__verdict">Do</strong> An error that says how to fix the address.</figcaption>
+                      <div class="luz-do-dont__stage" inert aria-hidden="true">
+                        <div class="luz-field__error">Enter an email address with an @ and a domain.</div>
+                      </div>
+                    </figure>
+                    <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                      <figcaption><strong class="luz-do-dont__verdict">Don't</strong> An error that only says something is wrong.</figcaption>
+                      <div class="luz-do-dont__stage" inert aria-hidden="true">
+                        <div class="luz-field__error">Invalid.</div>
+                      </div>
+                    </figure>
+                  </div>
+                  <h5 id="email-content">Writing the content</h5>
+                  <ul>
+                    <li>Label it "Email", not "Enter your email address here".</li>
+                    <li>The hint says what the address is used for.</li>
+                    <li>The error says what to change: an address has an @ and a domain.</li>
+                  </ul>
+                  <h5 id="email-contrast">Contrast and focus</h5>
+                  <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+                  <h5 id="email-tokens">Tokens it uses</h5>
+                  <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+                  <p class="docs-view__xref"><a href="#email-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+                </div>
+              </div>
+
+      <div class="docs-control">
+        <h3 id="password">Password</h3>
+        <p>A field that hides what is typed, for a password or another secret the reader enters.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label luz-field__label--required" for="pw-password">Password</label>
+              <input class="luz-input" id="pw-password" type="password" autocomplete="current-password" minlength="8" required aria-describedby="pw-password-hint">
+              <div class="luz-field__helper" id="pw-password-hint">At least 8 characters.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Password documentation">
+          <a class="luz-tab" href="#password-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#password-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="password-code-panel">
+          <h4 class="docs-view__title" id="password-code">Code</h4>
+          <h5 id="password-markup">Copy the markup</h5>
+          <p>A text field with <code>type="password"</code>. Set <code>autocomplete</code> so a password manager knows what to do:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-password" aria-label="Copy the password field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Password field markup"><code id="code-password">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label luz-field__label--required&quot; for=&quot;password&quot;&gt;Password&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;password&quot; type=&quot;password&quot; autocomplete=&quot;current-password&quot; minlength=&quot;8&quot; required aria-describedby=&quot;password-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;password-hint&quot;&gt;At least 8 characters.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="password-variants">Variants and options</h5>
+          <ul>
+            <li><code>autocomplete="current-password"</code> to sign in; <code>"new-password"</code> to sign up or change it.</li>
+            <li><code>minlength</code>, <code>maxlength</code>, <code>pattern</code>: the browser checks them when the form is sent.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="password-how">How it works</h5>
+          <p>A native <code>&lt;input type="password"&gt;</code> styled like any text field. The browser draws dots instead of the characters. LUZ adds no show-password button: one you add is your own script.</p>
+          <h5 id="password-no-js">Without JavaScript</h5>
+          <p>The field works and submits with its form, and the browser's password manager can fill it.</p>
+          <h5 id="password-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus in, Shift+Tab out.</li>
+            <li>The label is the name; the hint says the rules before the reader types. Do not block paste: it lets password managers work.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#password-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="password-design-panel">
+          <h4 class="docs-view__title" id="password-design">Design</h4>
+          <h5 id="password-when">When to use</h5>
+          <p>Use a password field for any secret the reader types and that must not show on screen.</p>
+          <ul>
+            <li>Signing in, signing up and changing a password.</li>
+            <li>Set <code>autocomplete</code> so the browser can fill or suggest the password.</li>
+          </ul>
+          <h5 id="password-when-not">When not to use</h5>
+          <p>A password field is for secrets, not for every code.</p>
+          <ul>
+            <li>A code sent by text message or email: a <a href="#text">text field</a> with <code>inputmode="numeric"</code> and <code>autocomplete="one-time-code"</code>.</li>
+            <li>Something the reader must see to check it, such as an address: a text field.</li>
+          </ul>
+          <h5 id="password-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Name what the browser should do with the field: <code>current-password</code> to sign in.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="password" autocomplete="current-password"&gt;</code></pre>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Switch autocomplete off: it does not help the reader and it works against password managers.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="password" autocomplete="off"&gt;</code></pre>
+              </div>
+            </figure>
+          </div>
+          <h5 id="password-content">Writing the content</h5>
+          <ul>
+            <li>Label it "Password", not "Enter your password".</li>
+            <li>The hint states the rules before the reader types: "At least 8 characters."</li>
+            <li>The error says what is missing: "Use at least 8 characters."</li>
+          </ul>
+          <h5 id="password-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="password-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#password-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="search">Search</h3>
+        <p>A text field for words to look for, with a search key on phone keyboards and, in some browsers, a button that clears it.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="se-search">Search the docs</label>
+              <input class="luz-input" id="se-search" type="search" name="q" enterkeyhint="search" aria-describedby="se-search-hint">
+              <div class="luz-field__helper" id="se-search-hint">Search by name or topic.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Search documentation">
+          <a class="luz-tab" href="#search-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#search-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="search-code-panel">
+          <h4 class="docs-view__title" id="search-code">Code</h4>
+          <h5 id="search-markup">Copy the markup</h5>
+          <p>A text field with <code>type="search"</code> inside a form with <code>role="search"</code>, so the page has a search landmark:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-search" aria-label="Copy the search field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Search field markup"><code id="code-search">&lt;form role=&quot;search&quot;&gt;
+  &lt;div class=&quot;luz-field&quot;&gt;
+    &lt;label class=&quot;luz-field__label&quot; for=&quot;search&quot;&gt;Search the docs&lt;/label&gt;
+    &lt;input class=&quot;luz-input&quot; id=&quot;search&quot; type=&quot;search&quot; name=&quot;q&quot; enterkeyhint=&quot;search&quot; aria-describedby=&quot;search-hint&quot;&gt;
+    &lt;div class=&quot;luz-field__helper&quot; id=&quot;search-hint&quot;&gt;Search by name or topic.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button type=&quot;submit&quot;&gt;Search&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+          </div>
+          <h5 id="search-variants">Variants and options</h5>
+          <ul>
+            <li><code>enterkeyhint="search"</code>: the Enter key of a phone keyboard says Search.</li>
+            <li><code>list</code> with a <code>&lt;datalist&gt;</code>: suggestions the reader may ignore.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="search-how">How it works</h5>
+          <p>A native <code>&lt;input type="search"&gt;</code> styled like any text field. Some browsers add a button inside it that clears it; that button is the browser's and LUZ does not draw it.</p>
+          <h5 id="search-no-js">Without JavaScript</h5>
+          <p>Enter submits the form, as a request to your search address. No script is needed.</p>
+          <h5 id="search-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus in. Enter sends the search. In some browsers Escape clears the field.</li>
+            <li>The label is the name; the hint and the error are read after it. A placeholder is not a name.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#search-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="search-design-panel">
+          <h4 class="docs-view__title" id="search-design">Design</h4>
+          <h5 id="search-when">When to use</h5>
+          <p>Use a search field to find something by words, in a list, a page or a site.</p>
+          <ul>
+            <li>A filter above a table or a list.</li>
+            <li>For the whole site, use <a href="/docs/catalog/search/">search</a>, which has a dialog and an index.</li>
+          </ul>
+          <h5 id="search-when-not">When not to use</h5>
+          <p>Do not use a search field for an answer that is a name or a title.</p>
+          <ul>
+            <li>A name, a title or a reference: a <a href="#text">text field</a>.</li>
+            <li>A choice the reader can list: a <a href="/docs/components/form/#select">select</a> or radio buttons.</li>
+          </ul>
+          <h5 id="search-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A visible label that says what is searched.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-se-do">Search the docs</label><input class="luz-input" id="dd-se-do" type="search"></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A placeholder as the only name: it disappears when the reader types.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="search" placeholder="Search"&gt;</code></pre>
+              </div>
+            </figure>
+          </div>
+          <h5 id="search-content">Writing the content</h5>
+          <ul>
+            <li>The label says what is searched: "Search the docs".</li>
+            <li>The button is a verb: "Search".</li>
+            <li>With no results, say so and offer a way out: "No results for “forms”. Try fewer words."</li>
+          </ul>
+          <h5 id="search-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="search-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#search-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="tel">Telephone</h3>
+        <p>A field for a phone number: phones show a number keypad, and the browser checks no format.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="te-tel">Phone</label>
+              <input class="luz-input" id="te-tel" type="tel" autocomplete="tel" aria-describedby="te-tel-hint">
+              <div class="luz-field__helper" id="te-tel-hint">With the country code, such as +34 600 000 000.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Telephone documentation">
+          <a class="luz-tab" href="#tel-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#tel-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="tel-code-panel">
+          <h4 class="docs-view__title" id="tel-code">Code</h4>
+          <h5 id="tel-markup">Copy the markup</h5>
+          <p>A text field with <code>type="tel"</code>; <code>autocomplete="tel"</code> lets the browser fill it in:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-tel" aria-label="Copy the telephone field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Telephone field markup"><code id="code-tel">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;tel&quot;&gt;Phone&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;tel&quot; type=&quot;tel&quot; autocomplete=&quot;tel&quot; aria-describedby=&quot;tel-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;tel-hint&quot;&gt;With the country code, such as +34 600 000 000.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="tel-variants">Variants and options</h5>
+          <ul>
+            <li><code>autocomplete="tel"</code>: the browser fills in the reader's number.</li>
+            <li><code>pattern</code>: only when you know the format, with an error that says it; the browser checks nothing else.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="tel-how">How it works</h5>
+          <p>A native <code>&lt;input type="tel"&gt;</code>. Phone numbers differ by country, so the browser only chooses the keypad and checks no format. Check the number on the server.</p>
+          <h5 id="tel-no-js">Without JavaScript</h5>
+          <p>The field works and submits its text with the form.</p>
+          <h5 id="tel-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus in, Shift+Tab out. On a phone the keyboard is a number keypad.</li>
+            <li>The label is the name; the hint says the format you accept, and the error says what to change.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#tel-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="tel-design-panel">
+          <h4 class="docs-view__title" id="tel-design">Design</h4>
+          <h5 id="tel-when">When to use</h5>
+          <p>Use a telephone field whenever the answer is a phone number.</p>
+          <ul>
+            <li>Contact, delivery and booking forms.</li>
+            <li>Say in the hint whether the country code is needed, or accept any format and tidy it on the server.</li>
+          </ul>
+          <h5 id="tel-when-not">When not to use</h5>
+          <p>A telephone field checks nothing, and it is not for every number.</p>
+          <ul>
+            <li>A quantity the reader adds up: a <a href="#number">number</a> field.</li>
+            <li>A code or reference made of digits: a <a href="#text">text field</a> with <code>inputmode="numeric"</code>.</li>
+          </ul>
+          <h5 id="tel-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A hint that shows the format you accept.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-te-do">Phone</label><input class="luz-input" id="dd-te-do" type="tel" aria-describedby="dd-te-do-hint"><div class="luz-field__helper" id="dd-te-do-hint">With the country code, such as +34 600 000 000.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A pattern of ten digits: a number written with a plus or spaces is refused.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="tel" pattern="[0-9]{10}"&gt;</code></pre>
+              </div>
+            </figure>
+          </div>
+          <h5 id="tel-content">Writing the content</h5>
+          <ul>
+            <li>Label it "Phone", not "Phone number (digits only)".</li>
+            <li>The hint gives one example of the format.</li>
+            <li>The error says what to change: "Enter a phone number with the country code."</li>
+          </ul>
+          <h5 id="tel-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="tel-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#tel-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="url">URL</h3>
+        <p>A field for a web address: the browser checks that it has a scheme such as https:// and phones show a keyboard with the slash.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="ur-url">Website</label>
+              <input class="luz-input" id="ur-url" type="url" autocomplete="url" placeholder="https://example.com" aria-describedby="ur-url-hint">
+              <div class="luz-field__helper" id="ur-url-hint">Start with https://.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="URL documentation">
+          <a class="luz-tab" href="#url-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#url-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="url-code-panel">
+          <h4 class="docs-view__title" id="url-code">Code</h4>
+          <h5 id="url-markup">Copy the markup</h5>
+          <p>A text field with <code>type="url"</code>; <code>autocomplete="url"</code> lets the browser fill it in:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-url" aria-label="Copy the URL field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="URL field markup"><code id="code-url">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;url&quot;&gt;Website&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;url&quot; type=&quot;url&quot; autocomplete=&quot;url&quot; placeholder=&quot;https://example.com&quot; aria-describedby=&quot;url-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;url-hint&quot;&gt;Start with https://.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="url-variants">Variants and options</h5>
+          <ul>
+            <li><code>pattern="https://.*"</code>: only secure addresses.</li>
+            <li><code>list</code> with a <code>&lt;datalist&gt;</code>: suggestions the reader may ignore.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="url-how">How it works</h5>
+          <p>A native <code>&lt;input type="url"&gt;</code>. When the form is sent the browser checks that the value is a full address with a scheme: <code>https://example.com</code> passes, <code>example.com</code> does not. It accepts any scheme, so before you turn the value into a link, check on the server that it is http or https.</p>
+          <h5 id="url-no-js">Without JavaScript</h5>
+          <p>The browser checks the address when the form is sent, with no script.</p>
+          <h5 id="url-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus in, Shift+Tab out. On a phone the keyboard shows the slash and the dot.</li>
+            <li>The label is the name; the hint says the address starts with https://.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#url-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="url-design-panel">
+          <h4 class="docs-view__title" id="url-design">Design</h4>
+          <h5 id="url-when">When to use</h5>
+          <p>Use a URL field when the answer is the address of a page or a site.</p>
+          <ul>
+            <li>A website, a profile or a portfolio.</li>
+            <li>Say in the hint that the address starts with https://: the browser refuses one without a scheme.</li>
+          </ul>
+          <h5 id="url-when-not">When not to use</h5>
+          <p>A URL field takes only a full address, and it proves nothing about the site.</p>
+          <ul>
+            <li>A path such as /docs/start: a <a href="#text">text field</a>.</li>
+            <li>Do not trust the value: the browser does not check that the site exists or is safe.</li>
+          </ul>
+          <h5 id="url-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say in the hint that the address starts with https://.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-ur-do">Website</label><input class="luz-input" id="dd-ur-do" type="url" aria-describedby="dd-ur-do-hint"><div class="luz-field__helper" id="dd-ur-do-hint">Start with https://.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A URL field for a path: the browser refuses it.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="url" value="/docs/start"&gt;</code></pre>
+              </div>
+            </figure>
+          </div>
+          <h5 id="url-content">Writing the content</h5>
+          <ul>
+            <li>Label it "Website", not "Enter the URL of your website".</li>
+            <li>The hint says how it starts: "Start with https://."</li>
+            <li>The error says what to change: "Enter a full address, starting with https://."</li>
+          </ul>
+          <h5 id="url-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="url-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#url-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="number">Number</h3>
+        <p>A field for a quantity the reader counts or adjusts in steps, with spin buttons and a check of its range.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="nu-number">Quantity</label>
+              <input class="luz-input" id="nu-number" type="number" min="1" max="10" step="1" value="1" aria-describedby="nu-number-hint">
+              <div class="luz-field__helper" id="nu-number-hint">From 1 to 10.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Number documentation">
+          <a class="luz-tab" href="#number-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#number-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="number-code-panel">
+          <h4 class="docs-view__title" id="number-code">Code</h4>
+          <h5 id="number-markup">Copy the markup</h5>
+          <p>A text field with <code>type="number"</code>; <code>min</code>, <code>max</code> and <code>step</code> set what is valid:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-number" aria-label="Copy the number field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Number field markup"><code id="code-number">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;number&quot;&gt;Quantity&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;number&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;10&quot; step=&quot;1&quot; value=&quot;1&quot; aria-describedby=&quot;number-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;number-hint&quot;&gt;From 1 to 10.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="number-variants">Variants and options</h5>
+          <ul>
+            <li><code>min</code>, <code>max</code>: checked when the form is sent, and the limits of the spin buttons.</li>
+            <li><code>step</code>: the size of a step; <code>step="any"</code> allows decimals.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="number-how">How it works</h5>
+          <p>A native <code>&lt;input type="number"&gt;</code>. The browser adds spin buttons, sends the value written with a dot, and checks <code>min</code>, <code>max</code> and <code>step</code> when the form is sent. The spin buttons are the browser's: LUZ does not style them.</p>
+          <h5 id="number-no-js">Without JavaScript</h5>
+          <p>The browser checks the number when the form is sent, with no script.</p>
+          <h5 id="number-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus in. Up and Down arrows add or take away one step.</li>
+            <li>The label is the name; say the range in the hint.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#number-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="number-design-panel">
+          <h4 class="docs-view__title" id="number-design">Design</h4>
+          <h5 id="number-when">When to use</h5>
+          <p>Use a number field for a quantity: something the reader counts, adds or takes away.</p>
+          <ul>
+            <li>Items in a basket, guests, seats.</li>
+            <li>Set <code>min</code>, <code>max</code> and <code>step</code> so the check and the spin buttons agree.</li>
+          </ul>
+          <h5 id="number-when-not">When not to use</h5>
+          <p>A number field is for amounts, not for any value made of digits.</p>
+          <ul>
+            <li>A postal code, a card or a one-time code: a <a href="#text">text field</a> with <code>inputmode="numeric"</code>.</li>
+            <li>An approximate value on a scale: a <a href="#range">range</a>.</li>
+          </ul>
+          <h5 id="number-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A number field for a quantity, with its limits in the hint.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-nu-do">Quantity</label><input class="luz-input" id="dd-nu-do" type="number" min="1" max="10" value="1" aria-describedby="dd-nu-do-hint"><div class="luz-field__helper" id="dd-nu-do-hint">From 1 to 10.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A number field for a postal code: it is not a quantity, and its spin buttons would add one to it.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="number" name="postcode"&gt;</code></pre>
+              </div>
+            </figure>
+          </div>
+          <h5 id="number-content">Writing the content</h5>
+          <ul>
+            <li>Label it for what is counted: "Quantity", "Guests".</li>
+            <li>Put the unit in the label or the hint: "Weight, in kg".</li>
+            <li>The error says the limits: "Enter a number from 1 to 10."</li>
+          </ul>
+          <h5 id="number-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="number-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#number-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="date">Date</h3>
+        <p>A field for a calendar date, with the browser's own picker. The value is always year-month-day.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="da-date">Start date</label>
+              <input class="luz-input" id="da-date" type="date" min="2026-01-01" max="2026-12-31" aria-describedby="da-date-hint">
+              <div class="luz-field__helper" id="da-date-hint">Pick a day in 2026.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Date documentation">
+          <a class="luz-tab" href="#date-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#date-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="date-code-panel">
+          <h4 class="docs-view__title" id="date-code">Code</h4>
+          <h5 id="date-markup">Copy the markup</h5>
+          <p>A text field with <code>type="date"</code>; <code>min</code> and <code>max</code> limit the days:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-date" aria-label="Copy the date field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Date field markup"><code id="code-date">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;date&quot;&gt;Start date&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;date&quot; type=&quot;date&quot; min=&quot;2026-01-01&quot; max=&quot;2026-12-31&quot; aria-describedby=&quot;date-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;date-hint&quot;&gt;Pick a day in 2026.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="date-variants">Variants and options</h5>
+          <ul>
+            <li><code>min</code>, <code>max</code>: days outside them are refused and greyed out in the picker.</li>
+            <li><code>step</code>: the step in days.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="date-how">How it works</h5>
+          <p>A native <code>&lt;input type="date"&gt;</code>. It shows the date in the reader's language and order, and always sends <code>yyyy-mm-dd</code>. The picker is the browser's; its light or dark scheme follows the page's color mode.</p>
+          <h5 id="date-no-js">Without JavaScript</h5>
+          <p>The field works and submits with its form. A browser with no date picker shows a text field, so say the format in the hint.</p>
+          <h5 id="date-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves between the day, the month and the year. Up and Down change the part with focus.</li>
+            <li>The label is the name; the hint says the limits.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#date-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="date-design-panel">
+          <h4 class="docs-view__title" id="date-design">Design</h4>
+          <h5 id="date-when">When to use</h5>
+          <p>Use a date field for a day the reader can pick from a calendar, near today.</p>
+          <ul>
+            <li>A booking, a deadline or a delivery day.</li>
+            <li>Set <code>min</code> and <code>max</code> so the picker only offers valid days.</li>
+          </ul>
+          <h5 id="date-when-not">When not to use</h5>
+          <p>Scrolling a calendar is slow for a date far from today.</p>
+          <ul>
+            <li>A birth date, or any date decades back: three fields, a number for the day, a <a href="/docs/components/form/#select">select</a> for the month and a number for the year.</li>
+            <li>A month and a year alone: a <a href="#month">month</a> field.</li>
+          </ul>
+          <h5 id="date-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A date field with its limits in the hint.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-da-do">Start date</label><input class="luz-input" id="dd-da-do" type="date" min="2026-01-01" max="2026-12-31" aria-describedby="dd-da-do-hint"><div class="luz-field__helper" id="dd-da-do-hint">Pick a day in 2026.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A text field for a date: each reader guesses the order of day and month.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="text" placeholder="dd/mm/yyyy"&gt;</code></pre>
+              </div>
+            </figure>
+          </div>
+          <h5 id="date-content">Writing the content</h5>
+          <ul>
+            <li>Label it for what the date is: "Start date", "Delivery date".</li>
+            <li>The hint says the limits, not the format: the picker has one.</li>
+            <li>The error says what to change: "Pick a day in 2026."</li>
+          </ul>
+          <h5 id="date-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="date-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#date-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="time">Time</h3>
+        <p>A field for a time of day, in the reader's 12 or 24 hour clock. The value is always hours and minutes.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="ti-time">Reminder</label>
+              <input class="luz-input" id="ti-time" type="time" value="09:00" aria-describedby="ti-time-hint">
+              <div class="luz-field__helper" id="ti-time-hint">Your local time.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Time documentation">
+          <a class="luz-tab" href="#time-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#time-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="time-code-panel">
+          <h4 class="docs-view__title" id="time-code">Code</h4>
+          <h5 id="time-markup">Copy the markup</h5>
+          <p>A text field with <code>type="time"</code>:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-time" aria-label="Copy the time field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Time field markup"><code id="code-time">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;time&quot;&gt;Reminder&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;time&quot; type=&quot;time&quot; value=&quot;09:00&quot; aria-describedby=&quot;time-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;time-hint&quot;&gt;Your local time.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="time-variants">Variants and options</h5>
+          <ul>
+            <li><code>min</code>, <code>max</code>: the earliest and the latest time.</li>
+            <li><code>step</code>: in seconds; <code>step="1"</code> adds seconds, <code>step="900"</code> steps by a quarter of an hour.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="time-how">How it works</h5>
+          <p>A native <code>&lt;input type="time"&gt;</code>. It shows the time on the reader's clock, 12 or 24 hours, and always sends <code>hh:mm</code>. The value has no time zone.</p>
+          <h5 id="time-no-js">Without JavaScript</h5>
+          <p>The field works and submits with its form. A browser with no time picker shows a text field, so say the format in the hint.</p>
+          <h5 id="time-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves between the hours, the minutes and, on a 12 hour clock, AM or PM. Up and Down change the part with focus.</li>
+            <li>The label is the name; the hint says the time zone.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#time-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="time-design-panel">
+          <h4 class="docs-view__title" id="time-design">Design</h4>
+          <h5 id="time-when">When to use</h5>
+          <p>Use a time field for a time of day: opening hours, an alarm, an appointment.</p>
+          <ul>
+            <li>Say the time zone in the hint: the field has none.</li>
+            <li>Use two fields, a <a href="#date">date</a> and a time, when the reader may choose them apart.</li>
+          </ul>
+          <h5 id="time-when-not">When not to use</h5>
+          <p>A time field is a time of day, not a length of time.</p>
+          <ul>
+            <li>A duration such as 90 minutes: a <a href="#number">number</a> field with its unit in the label.</li>
+            <li>A day and a time together: <a href="#datetime-local">date and time</a>.</li>
+          </ul>
+          <h5 id="time-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say which time zone the time is in.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-ti-do">Opening time</label><input class="luz-input" id="dd-ti-do" type="time" value="09:00" aria-describedby="dd-ti-do-hint"><div class="luz-field__helper" id="dd-ti-do-hint">Madrid time.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A text field for a time: 9, 9am and 09:00 mean the same to the reader and not to your code.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <pre class="luz-code-block" data-lang="html"><code>&lt;input type="text" placeholder="hh:mm"&gt;</code></pre>
+              </div>
+            </figure>
+          </div>
+          <h5 id="time-content">Writing the content</h5>
+          <ul>
+            <li>Label it for what the time is: "Opening time", "Reminder".</li>
+            <li>The hint says the time zone: "Madrid time."</li>
+            <li>The error says the limits: "Choose a time between 09:00 and 18:00."</li>
+          </ul>
+          <h5 id="time-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="time-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#time-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="datetime-local">Date and time</h3>
+        <p>A field for a day and a time together, with the browser's own picker. The value has no time zone.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="dt-starts">Meeting starts</label>
+              <input class="luz-input" id="dt-starts" type="datetime-local" min="2026-01-01T08:00" aria-describedby="dt-starts-hint">
+              <div class="luz-field__helper" id="dt-starts-hint">Madrid time.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Date and time documentation">
+          <a class="luz-tab" href="#datetime-local-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#datetime-local-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="datetime-local-code-panel">
+          <h4 class="docs-view__title" id="datetime-local-code">Code</h4>
+          <h5 id="datetime-local-markup">Copy the markup</h5>
+          <p>A text field with <code>type="datetime-local"</code>; say the time zone in the hint:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-datetime-local" aria-label="Copy the date and time field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Date and time field markup"><code id="code-datetime-local">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;datetime-local&quot;&gt;Meeting starts&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;datetime-local&quot; type=&quot;datetime-local&quot; min=&quot;2026-01-01T08:00&quot; aria-describedby=&quot;datetime-local-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;datetime-local-hint&quot;&gt;Madrid time.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="datetime-local-variants">Variants and options</h5>
+          <ul>
+            <li><code>min</code>, <code>max</code>: the earliest and the latest moment, as <code>yyyy-mm-ddThh:mm</code>.</li>
+            <li><code>step</code>: in seconds, as in the <a href="#time">time</a> field.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="datetime-local-how">How it works</h5>
+          <p>A native <code>&lt;input type="datetime-local"&gt;</code>. "Local" means the reader's own clock: it sends <code>yyyy-mm-ddThh:mm</code> with no time zone. Say the zone in the hint, or store the zone with the value on the server.</p>
+          <h5 id="datetime-local-no-js">Without JavaScript</h5>
+          <p>The field works and submits with its form. A browser with no picker shows a text field, so say the format in the hint.</p>
+          <h5 id="datetime-local-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves between the day, the month, the year, the hours and the minutes. Up and Down change the part with focus.</li>
+            <li>The label is the name; the hint says the time zone.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#datetime-local-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="datetime-local-design-panel">
+          <h4 class="docs-view__title" id="datetime-local-design">Design</h4>
+          <h5 id="datetime-local-when">When to use</h5>
+          <p>Use a date and time field for one moment the reader picks, in one place.</p>
+          <ul>
+            <li>The start of an event, a booking or a reminder.</li>
+            <li>Say the time zone in the hint: the value has none.</li>
+          </ul>
+          <h5 id="datetime-local-when-not">When not to use</h5>
+          <p>The value has no time zone, so it cannot say what moment an event is for readers in other zones.</p>
+          <ul>
+            <li>A day alone: a <a href="#date">date</a> field. A time alone: a <a href="#time">time</a> field.</li>
+            <li>A short list of slots: radio buttons with the times.</li>
+          </ul>
+          <h5 id="datetime-local-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say which time zone the moment is in.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-dt-do">Meeting starts</label><input class="luz-input" id="dd-dt-do" type="datetime-local" aria-describedby="dd-dt-do-hint"><div class="luz-field__helper" id="dd-dt-do-hint">Madrid time.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A hint that leaves the time zone out: a reader in another zone reads a different moment.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-dt-dont">Meeting starts</label><input class="luz-input" id="dd-dt-dont" type="datetime-local" aria-describedby="dd-dt-dont-hint"><div class="luz-field__helper" id="dd-dt-dont-hint">Pick a day and a time.</div></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="datetime-local-content">Writing the content</h5>
+          <ul>
+            <li>Label it for the moment: "Meeting starts", "Delivery by".</li>
+            <li>The hint names the time zone: "Madrid time."</li>
+            <li>The error says what to change: "Pick a moment after 8:00."</li>
+          </ul>
+          <h5 id="datetime-local-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="datetime-local-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#datetime-local-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="month">Month</h3>
+        <p>A field for a month and a year, such as a card's expiry or a billing month. The value is year-month.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="mo-month">Billing month</label>
+              <input class="luz-input" id="mo-month" type="month" min="2026-01" max="2026-12" placeholder="YYYY-MM" pattern="[0-9]{4}-[0-9]{2}" aria-describedby="mo-month-hint">
+              <div class="luz-field__helper" id="mo-month-hint">Month and year, such as 2026-06.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Month documentation">
+          <a class="luz-tab" href="#month-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#month-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="month-code-panel">
+          <h4 class="docs-view__title" id="month-code">Code</h4>
+          <h5 id="month-markup">Copy the markup</h5>
+          <p>A text field with <code>type="month"</code>. The placeholder and the pattern are for browsers that show a text field instead:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-month" aria-label="Copy the month field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Month field markup"><code id="code-month">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;month&quot;&gt;Billing month&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;month&quot; type=&quot;month&quot; min=&quot;2026-01&quot; max=&quot;2026-12&quot; placeholder=&quot;YYYY-MM&quot; pattern=&quot;[0-9]{4}-[0-9]{2}&quot; aria-describedby=&quot;month-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;month-hint&quot;&gt;Month and year, such as 2026-06.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="month-variants">Variants and options</h5>
+          <ul>
+            <li><code>min</code>, <code>max</code>: the first and the last month, as <code>yyyy-mm</code>.</li>
+            <li><code>step</code>: in months.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="month-how">How it works</h5>
+          <p>A native <code>&lt;input type="month"&gt;</code> that sends <code>yyyy-mm</code>. Not every browser draws a month picker: one that does not shows a text field. A browser with a picker ignores <code>placeholder</code> and <code>pattern</code>, and one without uses them.</p>
+          <h5 id="month-no-js">Without JavaScript</h5>
+          <p>The field works and submits with its form, as a picker or as a text field.</p>
+          <h5 id="month-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves between the month and the year. Up and Down change the part with focus. In a text field, type <code>yyyy-mm</code>.</li>
+            <li>The label is the name; the hint says the format, for the browsers with a text field.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#month-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="month-design-panel">
+          <h4 class="docs-view__title" id="month-design">Design</h4>
+          <h5 id="month-when">When to use</h5>
+          <p>Use a month field when only the month and the year matter.</p>
+          <ul>
+            <li>A card's expiry, a billing month or a report period.</li>
+            <li>Say the format in the hint, for the browsers that show a text field.</li>
+          </ul>
+          <h5 id="month-when-not">When not to use</h5>
+          <p>A month field has no day, so it cannot hold a date.</p>
+          <ul>
+            <li>A day: a <a href="#date">date</a> field.</li>
+            <li>A short list of months, for a reader whose browser has no picker: a <a href="/docs/components/form/#select">select</a> for the month and a number for the year.</li>
+          </ul>
+          <h5 id="month-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Ask for a month and a year when no day is needed.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-mo-do">Billing month</label><input class="luz-input" id="dd-mo-do" type="month" aria-describedby="dd-mo-do-hint"><div class="luz-field__helper" id="dd-mo-do-hint">Month and year, such as 2026-06.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A date field when only the month matters: it asks for a day the reader may not have.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-mo-dont">Billing month</label><input class="luz-input" id="dd-mo-dont" type="date"></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="month-content">Writing the content</h5>
+          <ul>
+            <li>Label it for what the month is: "Billing month", "Expiry".</li>
+            <li>The hint gives the format: "Month and year, such as 2026-06."</li>
+            <li>The error says what to change: "Enter a month and a year, such as 2026-06."</li>
+          </ul>
+          <h5 id="month-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="month-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#month-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="week">Week</h3>
+        <p>A field for a week of a year, such as 2026-W24. It suits planning by week, not everyday forms.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="we-week">Sprint week</label>
+              <input class="luz-input" id="we-week" type="week" min="2026-W01" max="2026-W52" placeholder="YYYY-Www" pattern="[0-9]{4}-W[0-9]{2}" aria-describedby="we-week-hint">
+              <div class="luz-field__helper" id="we-week-hint">Week of the year, such as 2026-W24. Weeks start on Monday.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Week documentation">
+          <a class="luz-tab" href="#week-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#week-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="week-code-panel">
+          <h4 class="docs-view__title" id="week-code">Code</h4>
+          <h5 id="week-markup">Copy the markup</h5>
+          <p>A text field with <code>type="week"</code>. The placeholder and the pattern are for browsers that show a text field instead:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-week" aria-label="Copy the week field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Week field markup"><code id="code-week">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;week&quot;&gt;Sprint week&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;week&quot; type=&quot;week&quot; min=&quot;2026-W01&quot; max=&quot;2026-W52&quot; placeholder=&quot;YYYY-Www&quot; pattern=&quot;[0-9]{4}-W[0-9]{2}&quot; aria-describedby=&quot;week-hint&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;week-hint&quot;&gt;Week of the year, such as 2026-W24. Weeks start on Monday.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="week-variants">Variants and options</h5>
+          <ul>
+            <li><code>min</code>, <code>max</code>: the first and the last week, as <code>yyyy-Www</code>.</li>
+            <li><code>step</code>: in weeks.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="week-how">How it works</h5>
+          <p>A native <code>&lt;input type="week"&gt;</code> that sends <code>yyyy-Www</code>, with the weeks counted as ISO 8601 does: they start on Monday. Not every browser draws a week picker: one that does not shows a text field, and uses <code>placeholder</code> and <code>pattern</code>.</p>
+          <h5 id="week-no-js">Without JavaScript</h5>
+          <p>The field works and submits with its form, as a picker or as a text field.</p>
+          <h5 id="week-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves between the week and the year. Up and Down change the part with focus. In a text field, type <code>yyyy-Www</code>.</li>
+            <li>The label is the name; the hint says how weeks are counted.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#week-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="week-design-panel">
+          <h4 class="docs-view__title" id="week-design">Design</h4>
+          <h5 id="week-when">When to use</h5>
+          <p>Use a week field when the reader plans or reports by the week of the year.</p>
+          <ul>
+            <li>A timesheet, a sprint or a delivery schedule.</li>
+            <li>Say in the hint that weeks start on Monday.</li>
+          </ul>
+          <h5 id="week-when-not">When not to use</h5>
+          <p>Most readers do not know which week of the year it is.</p>
+          <ul>
+            <li>A day: a <a href="#date">date</a> field, and work out the week on the server.</li>
+            <li>A span of days: two <a href="#date">date</a> fields, a start and an end.</li>
+          </ul>
+          <h5 id="week-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say how weeks are counted: they start on Monday.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-we-do">Sprint week</label><input class="luz-input" id="dd-we-do" type="week" aria-describedby="dd-we-do-hint"><div class="luz-field__helper" id="dd-we-do-hint">Week of the year. Weeks start on Monday.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Ask a general audience for a week number: few readers know it.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-we-dont">Week</label><input class="luz-input" id="dd-we-dont" type="week"></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="week-content">Writing the content</h5>
+          <ul>
+            <li>Label it for what the week is: "Sprint week", "Delivery week".</li>
+            <li>The hint gives the format and the first day of the week.</li>
+            <li>The error says what to change: "Enter a week, such as 2026-W24."</li>
+          </ul>
+          <h5 id="week-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="week-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#week-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="color">Color</h3>
+        <p>A swatch that opens the system's color picker. The value is always a hex color, #rrggbb.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="co-color">Accent colour</label>
+              <input class="luz-input" id="co-color" type="color" value="#0066cf">
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Color documentation">
+          <a class="luz-tab" href="#color-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#color-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="color-code-panel">
+          <h4 class="docs-view__title" id="color-code">Code</h4>
+          <h5 id="color-markup">Copy the markup</h5>
+          <p>The class <code>.luz-input</code> is what draws the swatch: a bare color input keeps the browser's own look.</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-color" aria-label="Copy the color field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Color field markup"><code id="code-color">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;color&quot;&gt;Accent colour&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;color&quot; type=&quot;color&quot; value=&quot;#0066cf&quot;&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="color-variants">Variants and options</h5>
+          <ul>
+            <li><code>value</code>: the starting color. With none, the swatch is black (<code>#000000</code>).</li>
+            <li><code>disabled</code>: faded, skipped by Tab, not sent.</li>
+            <li>The classes and the error are the <a href="#text">Text field</a>'s.</li>
+          </ul>
+          <h5 id="color-how">How it works</h5>
+          <p>A native <code>&lt;input type="color"&gt;</code> with <code>.luz-input[type="color"]</code>: a 64 px swatch with the field's bottom border. The value is always lowercase hex, <code>#rrggbb</code>, with no transparency and no name. The picker is the system's.</p>
+          <h5 id="color-no-js">Without JavaScript</h5>
+          <p>The field works and submits its hex value with the form.</p>
+          <h5 id="color-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus to the swatch. Enter or Space opens the picker, whose keys are the system's.</li>
+            <li>The label is the name. A swatch is a color alone: write the value as text where the reader needs it.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#color-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="color-design-panel">
+          <h4 class="docs-view__title" id="color-design">Design</h4>
+          <h5 id="color-when">When to use</h5>
+          <p>Use a color field when the reader may choose any color: a label, a tag or a chart.</p>
+          <ul>
+            <li>Start with <code>value</code>, so the swatch is not black.</li>
+            <li>Check the contrast of the color on your side: the picker allows any.</li>
+          </ul>
+          <h5 id="color-when-not">When not to use</h5>
+          <p>A color field is for a free choice, not for a short list.</p>
+          <ul>
+            <li>A few named colors: radio buttons with the names.</li>
+            <li>A color your design fixes: do not ask the reader.</li>
+          </ul>
+          <h5 id="color-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A color field for a free choice, with a label that says what it colors.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-co-do">Accent colour</label><input class="luz-input" id="dd-co-do" type="color" value="#0066cf"></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A color field to choose among three colors: radio buttons with their names say which is which.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-co-dont">Pick red, green or blue</label><input class="luz-input" id="dd-co-dont" type="color" value="#cc0000"></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="color-content">Writing the content</h5>
+          <ul>
+            <li>Label it for what it colors: "Accent color", "Label color".</li>
+            <li>Name the color where it matters: a swatch alone says nothing to some readers.</li>
+            <li>The error says what to change: "Choose a darker color."</li>
+          </ul>
+          <h5 id="color-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="color-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#color-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="file">File</h3>
+        <p>A button that opens the system's file chooser, and the name of the file the reader chose.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="fi-file">Attachment</label>
+              <input class="luz-input" id="fi-file" type="file" accept=".pdf,.png" aria-describedby="fi-file-hint">
+              <div class="luz-field__helper" id="fi-file-hint">PDF or PNG, up to 5 MB.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="File documentation">
+          <a class="luz-tab" href="#file-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#file-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="file-code-panel">
+          <h4 class="docs-view__title" id="file-code">Code</h4>
+          <h5 id="file-markup">Copy the markup</h5>
+          <p>The class <code>.luz-input</code> styles the button and the name. The form needs <code>enctype="multipart/form-data"</code> to send the file:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-file" aria-label="Copy the file field markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="File field markup"><code id="code-file">&lt;form method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+  &lt;div class=&quot;luz-field&quot;&gt;
+    &lt;label class=&quot;luz-field__label&quot; for=&quot;file&quot;&gt;Attachment&lt;/label&gt;
+    &lt;input class=&quot;luz-input&quot; id=&quot;file&quot; type=&quot;file&quot; accept=&quot;.pdf,.png&quot; aria-describedby=&quot;file-hint&quot;&gt;
+    &lt;div class=&quot;luz-field__helper&quot; id=&quot;file-hint&quot;&gt;PDF or PNG, up to 5 MB.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button type=&quot;submit&quot;&gt;Upload&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+          </div>
+          <h5 id="file-variants">Variants and options</h5>
+          <ul>
+            <li><code>accept</code>: the types the chooser offers, such as <code>.pdf</code> or <code>image/*</code>.</li>
+            <li><code>multiple</code>: several files; <code>required</code>: the browser stops the form until one is chosen.</li>
+            <li>The error and disabled states are the <a href="#text">Text field</a>'s.</li>
+          </ul>
+          <h5 id="file-how">How it works</h5>
+          <p>A native <code>&lt;input type="file"&gt;</code>. <code>.luz-input[type="file"]</code> styles the button with tokens (<code>::file-selector-button</code>). Its words, "Choose file" and "No file chosen", are the browser's, in the reader's language. <code>accept</code> only filters the chooser: check the type and the size on the server.</p>
+          <h5 id="file-no-js">Without JavaScript</h5>
+          <p>The field works and sends its file with the form, with <code>method="post"</code> and <code>enctype="multipart/form-data"</code>.</p>
+          <h5 id="file-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus to the button. Enter or Space opens the chooser.</li>
+            <li>The label is the name; the hint says the types and the size.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#file-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="file-design-panel">
+          <h4 class="docs-view__title" id="file-design">Design</h4>
+          <h5 id="file-when">When to use</h5>
+          <p>Use a file field when the reader sends a file from their own device.</p>
+          <ul>
+            <li>A résumé, a photo or an attachment.</li>
+            <li>Say the accepted types and the size in the hint, before the reader chooses.</li>
+          </ul>
+          <h5 id="file-when-not">When not to use</h5>
+          <p>A file field cannot check what it receives.</p>
+          <ul>
+            <li>Do not rely on <code>accept</code> for safety: it filters the chooser, and a reader can pick anything. Check on the server.</li>
+            <li>The address of a file that is already online: a <a href="#url">URL</a> field.</li>
+          </ul>
+          <h5 id="file-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say the types and the size in the hint, before the reader chooses.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-fi-do">Attachment</label><input class="luz-input" id="dd-fi-do" type="file" accept=".pdf,.png" aria-describedby="dd-fi-do-hint"><div class="luz-field__helper" id="dd-fi-do-hint">PDF or PNG, up to 5 MB.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A file field with no hint: the reader finds out about the limits when the upload fails.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-fi-dont">Attachment</label><input class="luz-input" id="dd-fi-dont" type="file"></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="file-content">Writing the content</h5>
+          <ul>
+            <li>Label it with a noun: "Attachment", "Photo".</li>
+            <li>The hint gives the types and the size: "PDF or PNG, up to 5 MB."</li>
+            <li>The error says what to change: "The file is larger than 5 MB. Choose a smaller one."</li>
+          </ul>
+          <h5 id="file-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="file-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#file-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="range">Range</h3>
+        <p>A slider for a value on a scale, the place of the thumb matters more than the exact number.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="ra-volume">Volume <output class="luz-output" id="ra-volume-out" for="ra-volume">50</output></label>
+              <input class="luz-input" id="ra-volume" type="range" min="0" max="100" value="50" data-output="ra-volume-out">
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Range documentation">
+          <a class="luz-tab" href="#range-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#range-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="range-code-panel">
+          <h4 class="docs-view__title" id="range-code">Code</h4>
+          <h5 id="range-markup">Copy the markup</h5>
+          <p>A slider with <code>min</code>, <code>max</code> and <code>step</code>, and an <code>&lt;output&gt;</code> that shows its value. The slider shows no number of its own, so the output is updated by a few lines of your own script:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-range" aria-label="Copy the range slider markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Range slider markup"><code id="code-range">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;volume&quot;&gt;Volume &lt;output class=&quot;luz-output&quot; id=&quot;volume-out&quot; for=&quot;volume&quot;&gt;50&lt;/output&gt;&lt;/label&gt;
+  &lt;input class=&quot;luz-input&quot; id=&quot;volume&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;50&quot;&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">JS</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-range-js" aria-label="Copy the range slider script">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="js" tabindex="0" role="region" aria-label="Range slider script"><code id="code-range-js">const range = document.getElementById(&quot;volume&quot;);
+const output = document.getElementById(&quot;volume-out&quot;);
+range.addEventListener(&quot;input&quot;, () =&gt; {
+  output.value = range.value;
+});</code></pre>
+          </div>
+          <h5 id="range-variants">Variants and options</h5>
+          <ul>
+            <li><code>min</code>, <code>max</code>, <code>step</code>: the scale and the size of a step.</li>
+            <li><code>disabled</code>: faded, skipped by Tab, not sent. A range has no read-only state.</li>
+            <li>With no <code>&lt;output&gt;</code> the reader cannot see the number: always add one.</li>
+          </ul>
+          <h5 id="range-how">How it works</h5>
+          <p>A native <code>&lt;input type="range"&gt;</code>. <code>.luz-input[type="range"]</code> sets <code>accent-color</code> to <code>--luz-brand-primary</code>, so the thumb and the filled track follow the brand. LUZ has no script for the output: yours listens to the <code>input</code> event.</p>
+          <h5 id="range-no-js">Without JavaScript</h5>
+          <p>The slider works and submits its value. Without your script the output keeps showing the starting value.</p>
+          <h5 id="range-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus to the slider. Left and Down take away one step, Right and Up add one. Home and End go to the ends.</li>
+            <li>The label is the name; tie the output to the slider with <code>for</code>.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#range-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="range-design-panel">
+          <h4 class="docs-view__title" id="range-design">Design</h4>
+          <h5 id="range-when">When to use</h5>
+          <p>Use a range when the reader sets a value by feel and a near answer is enough.</p>
+          <ul>
+            <li>Volume, brightness or a rough budget.</li>
+            <li>Show the value next to the slider, and set <code>min</code>, <code>max</code> and <code>step</code> to what you need.</li>
+          </ul>
+          <h5 id="range-when-not">When not to use</h5>
+          <p>Do not use a range when the exact number matters or the scale is long.</p>
+          <ul>
+            <li>An exact amount: a <a href="#number">number</a> field.</li>
+            <li>A few named levels: radio buttons with the names.</li>
+          </ul>
+          <h5 id="range-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> Show the value as text next to the slider.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-ra-do">Volume <output class="luz-output">50</output></label><input class="luz-input" id="dd-ra-do" type="range" min="0" max="100" value="50"></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A slider with no value: the reader cannot tell what they set.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-ra-dont">Volume</label><input class="luz-input" id="dd-ra-dont" type="range" min="0" max="100" value="50"></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="range-content">Writing the content</h5>
+          <ul>
+            <li>Label it for what it sets: "Volume", "Brightness".</li>
+            <li>The output holds the number only; put the unit in the label: "Volume, %".</li>
+            <li>Say the ends of the scale in the hint if they are not obvious.</li>
+          </ul>
+          <h5 id="range-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="range-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#range-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h3 id="textarea">Textarea</h3>
+        <p>A field for text of more than one line, such as a message or a description.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="ta-textarea">Message</label>
+              <textarea class="luz-input luz-input--textarea" id="ta-textarea" rows="4" maxlength="500" aria-describedby="ta-textarea-hint"></textarea>
+              <div class="luz-field__helper" id="ta-textarea-hint">Up to 500 characters.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Textarea documentation">
+          <a class="luz-tab" href="#textarea-code-panel" data-docs-view="code">Code</a>
+          <a class="luz-tab" href="#textarea-design-panel" data-docs-view="design">Design</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="textarea-code-panel">
+          <h4 class="docs-view__title" id="textarea-code">Code</h4>
+          <h5 id="textarea-markup">Copy the markup</h5>
+          <p>A native <code>&lt;textarea&gt;</code>. <code>.luz-input--textarea</code> gives it its height, and <code>maxlength</code> its limit:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-textarea" aria-label="Copy the textarea markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Textarea markup"><code id="code-textarea">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;textarea&quot;&gt;Message&lt;/label&gt;
+  &lt;textarea class=&quot;luz-input luz-input--textarea&quot; id=&quot;textarea&quot; rows=&quot;4&quot; maxlength=&quot;500&quot; aria-describedby=&quot;textarea-hint&quot;&gt;&lt;/textarea&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;textarea-hint&quot;&gt;Up to 500 characters.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h5 id="textarea-variants">Variants and options</h5>
+          <ul>
+            <li><code>rows</code>: the starting height; the reader drags it taller, never wider.</li>
+            <li><code>maxlength</code>, <code>minlength</code>: the browser checks them; say the limit in the hint.</li>
+            <li>The states are the <a href="#text">Text field</a>'s: error, required, disabled and read-only.</li>
+          </ul>
+          <h5 id="textarea-how">How it works</h5>
+          <p>A native <code>&lt;textarea&gt;</code> styled like a text field, at least 80 px high. A textarea with no class looks the same. LUZ has no character counter.</p>
+          <h5 id="textarea-no-js">Without JavaScript</h5>
+          <p>The field works and submits with its form.</p>
+          <h5 id="textarea-keyboard">Keyboard and ARIA</h5>
+          <ul>
+            <li>Tab moves focus in and out. Enter adds a new line: it does not send the form.</li>
+            <li>The label is the name; the hint says the limit.</li>
+          </ul>
+          <p class="docs-view__xref"><a href="#textarea-contrast">Contrast and focus</a> are in the Design tab.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="textarea-design-panel">
+          <h4 class="docs-view__title" id="textarea-design">Design</h4>
+          <h5 id="textarea-when">When to use</h5>
+          <p>Use a textarea for free text of more than one line.</p>
+          <ul>
+            <li>A message, a comment, a description or a bio.</li>
+            <li>Say the limit in the hint, if there is one.</li>
+          </ul>
+          <h5 id="textarea-when-not">When not to use</h5>
+          <p>Do not use a textarea for a short answer, nor for formatted writing.</p>
+          <ul>
+            <li>A name, a title or a reference: a <a href="#text">text field</a>.</li>
+            <li>Text with headings and links: your own editor. Never build a textarea from a <code>&lt;div contenteditable&gt;</code>.</li>
+          </ul>
+          <h5 id="textarea-do-dont">Do and don't</h5>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A textarea for a message, with its limit in the hint.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-ta-do">Message</label><textarea class="luz-input luz-input--textarea" id="dd-ta-do" rows="4" maxlength="500" aria-describedby="dd-ta-do-hint"></textarea><div class="luz-field__helper" id="dd-ta-do-hint">Up to 500 characters.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> A textarea for a name: it invites an essay and takes the room of a paragraph.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-ta-dont">Name</label><textarea class="luz-input luz-input--textarea" id="dd-ta-dont" rows="4" maxlength="500"></textarea></div>
+              </div>
+            </figure>
+          </div>
+          <h5 id="textarea-content">Writing the content</h5>
+          <ul>
+            <li>Label it for what to write: "Message", "Description".</li>
+            <li>The hint gives the limit: "Up to 500 characters."</li>
+            <li>The error says what to change: "Write at least 20 characters."</li>
+          </ul>
+          <h5 id="textarea-contrast">Contrast and focus</h5>
+          <p>Shared with the other inputs: <a href="#inputs-contrast">contrast and focus of inputs</a>.</p>
+          <h5 id="textarea-tokens">Tokens it uses</h5>
+          <p>Shared with the other inputs: <a href="#inputs-tokens">tokens of inputs</a>.</p>
+          <p class="docs-view__xref"><a href="#textarea-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+        </div>
+      </div>
+
+      <div class="docs-family-notes">
+        <h3 id="inputs-contrast">Contrast and focus of inputs</h3>
+        <p>The label and the hint are secondary text on the page; what the reader types is primary text on the field. The range slider and the file button have their own pairs.</p>
+        <div class="luz-table-wrap" role="region" aria-label="Inputs contrast in each mode" tabindex="0">
+          <table class="luz-table docs-contrast">
+            <thead>
+              <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Part"><div>Label</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>6.2:1</div></td><td data-label="Dark"><div>7.5:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Typed text</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Placeholder</div></td><td data-label="Colour on background"><div><code>--luz-text-muted</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>5.1:1</div></td><td data-label="Dark"><div>5.2:1</div></td><td data-label="High contrast"><div>9.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Error message</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.3:1</div></td><td data-label="Dark"><div>11.7:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Field bottom border and color swatch edge</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>3.9:1</div></td><td data-label="Dark"><div>3.9:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Error border</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>5.5:1</div></td><td data-label="Dark"><div>10.8:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Disabled text</div></td><td data-label="Colour on background"><div><code>--luz-text-disabled</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>3.7:1</div></td><td data-label="Dark"><div>3.9:1</div></td><td data-label="High contrast"><div>5.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>Range thumb and filled track</div></td><td data-label="Colour on background"><div><code>--luz-brand-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+              <tr><td data-label="Part"><div>File name</div></td><td data-label="Colour on background"><div><code>--luz-text-secondary</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>6.4:1</div></td><td data-label="Dark"><div>6.9:1</div></td><td data-label="High contrast"><div>19.3:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>File button text</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-strong</code></div></td><td data-label="Light"><div>13.5:1</div></td><td data-label="Dark"><div>10.9:1</div></td><td data-label="High contrast"><div>18.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>File button text, hovered</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-hover</code></div></td><td data-label="Light"><div>14.4:1</div></td><td data-label="Dark"><div>12.6:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+              <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+        <ul>
+          <li><strong>Focus:</strong> a 2 px <code>--luz-focus-ring</code> outline, 2 px outside the field (4 px outside a range slider); the bottom border of a field also turns to the ring colour.</li>
+          <li><strong>Not colour alone:</strong> an invalid field has a 2 px bottom border and a message in words; a read-only or disabled field has a dashed one. Write the value of a color field as text.</li>
+          <li><strong>Target:</strong> a field is 44 px high.</li>
+        </ul>
+        <h3 id="inputs-tokens">Tokens of inputs</h3>
+        <p>The 25 tokens that these controls' rules read, by token family. Each family links to its page, with the values in every mode.</p>
+        <dl class="docs-uses">
+          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-surface-hover"><code>--luz-surface-hover</code></a>, <a href="/docs/tokens/color/#luz-surface-strong"><code>--luz-surface-strong</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-muted"><code>--luz-text-muted</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+          <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-md</code>, <code>--luz-space-sm</code>, <code>--luz-space-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-control</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+          <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code></dd></div>
+          <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-base</code>, <code>--luz-duration-fast</code></dd></div>
+        </dl>
+      </div>
+
+      <h2 id="choice">Choice</h2>
+              <p>Controls for picking from options the reader can see. Each option has its own visible label.</p>
+
+              <div class="docs-control">
+                <h3 id="checkbox">Checkbox</h3>
+                <p>A box the reader ticks for a yes or no, or for any of several options. Each option is independent.</p>
+                <div class="docs-example" data-docs-specimen>
+                  <div class="docs-demo__stage">
+                    <div class="luz-field">
+                      <div class="luz-field__label" id="cb-notify-label">Notifications</div>
+                      <div class="luz-check-group" role="group" aria-labelledby="cb-notify-label">
+                        <div class="luz-check-item"><input type="checkbox" id="cb-email" checked><label for="cb-email">Email</label></div>
+                        <div class="luz-check-item"><input type="checkbox" id="cb-push"><label for="cb-push">Push</label></div>
+                        <div class="luz-check-item"><input type="checkbox" id="cb-sms" disabled><label for="cb-sms">SMS (disabled)</label></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <nav class="luz-tabs docs-view-tabs" aria-label="Checkbox documentation">
+                  <a class="luz-tab" href="#checkbox-code-panel" data-docs-view="code">Code</a>
+                  <a class="luz-tab" href="#checkbox-design-panel" data-docs-view="design">Design</a>
+                </nav>
+                <div class="luz-tabpanel docs-view" id="checkbox-code-panel">
+                  <h4 class="docs-view__title" id="checkbox-code">Code</h4>
+                  <h5 id="checkbox-markup">Copy the markup</h5>
+                  <p>A native checkbox inside <code>.luz-check-item</code>, with its label beside it; <code>.luz-check-group</code> stacks several:</p>
+                  <div class="docs-snippet">
+                    <div class="docs-snippet__bar">
+                      <span class="docs-snippet__lang">HTML</span>
+                      <button class="luz-copy-btn" type="button" data-copy-from="code-checkbox" aria-label="Copy the checkbox markup">Copy</button>
+                    </div>
+                    <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Checkbox markup"><code id="code-checkbox">&lt;div class=&quot;luz-check-group&quot; role=&quot;group&quot; aria-labelledby=&quot;notify-label&quot;&gt;
+  &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;notify-email&quot; checked&gt;&lt;label for=&quot;notify-email&quot;&gt;Email&lt;/label&gt;&lt;/div&gt;
+  &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;notify-push&quot;&gt;&lt;label for=&quot;notify-push&quot;&gt;Push&lt;/label&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                      </div>
+                      <h5 id="checkbox-variants">Variants and options</h5>
+                      <ul>
+                        <li><code>checked</code>: a filled box with a check mark.</li>
+                        <li><code>disabled</code>: faded, skipped by Tab, not sent.</li>
+                        <li><code>required</code>: the browser stops the form until it is ticked.</li>
+                      </ul>
+                      <h5 id="checkbox-how">How it works</h5>
+                      <p>A native <code>&lt;input&gt;</code> with <code>appearance: none</code>, redrawn by <code>components/form.css</code>. The label is tied to it with <code>for</code> and <code>id</code>, so a click on the text ticks the box.</p>
+                      <h5 id="checkbox-no-js">Without JavaScript</h5>
+                      <p>Every box ticks, unticks and submits with its form.</p>
+                      <h5 id="checkbox-keyboard">Keyboard and ARIA</h5>
+                      <ul>
+                        <li>Tab moves between the boxes; Space ticks or unticks the one with focus.</li>
+                        <li>Give a group of boxes a name that a screen reader reads before the first one, as the label does in the markup above.</li>
+                      </ul>
+                      <p class="docs-view__xref"><a href="#checkbox-contrast">Contrast and focus</a> are in the Design tab.</p>
+                    </div>
+                    <div class="luz-tabpanel docs-view" id="checkbox-design-panel">
+                      <h4 class="docs-view__title" id="checkbox-design">Design</h4>
+                      <h5 id="checkbox-when">When to use</h5>
+                      <p>Use a checkbox when the reader may choose none, one or several options.</p>
+                      <ul>
+                        <li>A yes or no that is saved with a button: "Email me about new releases".</li>
+                        <li>A list where any number of options may apply.</li>
+                      </ul>
+                      <h5 id="checkbox-when-not">When not to use</h5>
+                      <p>Do not use a checkbox for one choice out of several, or for a setting that applies at once.</p>
+                      <ul>
+                        <li>One choice out of several: radio buttons.</li>
+                        <li>A setting that takes effect the moment it changes: a switch.</li>
+                      </ul>
+                      <h5 id="checkbox-do-dont">Do and don't</h5>
+                      <div class="luz-do-dont">
+                        <figure class="luz-do-dont__item luz-do-dont__item--do">
+                          <figcaption><strong class="luz-do-dont__verdict">Do</strong> Independent options as checkboxes.</figcaption>
+                          <div class="luz-do-dont__stage" inert aria-hidden="true">
+                            <div class="luz-check-item"><input type="checkbox" id="dd-cb-do" checked><label for="dd-cb-do">Email me about new releases</label></div>
+                          </div>
+                        </figure>
+                        <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                          <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Checkboxes for a choice of one: both plans can be ticked.</figcaption>
+                          <div class="luz-do-dont__stage" inert aria-hidden="true">
+                            <div class="luz-check-group">
+                              <div class="luz-check-item"><input type="checkbox" id="dd-cb-dont-1" checked><label for="dd-cb-dont-1">Free plan</label></div>
+                              <div class="luz-check-item"><input type="checkbox" id="dd-cb-dont-2" checked><label for="dd-cb-dont-2">Team plan</label></div>
+                            </div>
+                          </div>
+                        </figure>
+                      </div>
+                      <h5 id="checkbox-content">Writing the content</h5>
+                      <ul>
+                        <li>Write the label so that ticked means yes: "Email me about new releases".</li>
+                        <li>One line, in sentence case, with no full stop.</li>
+                        <li>No negatives: "Do not email me" makes the reader untick to say yes.</li>
+                      </ul>
+                      <h5 id="checkbox-contrast">Contrast and focus</h5>
+                      <p>Shared with the other choice controls: <a href="#choice-contrast">contrast and focus of choice</a>.</p>
+                      <h5 id="checkbox-tokens">Tokens it uses</h5>
+                      <p>Shared with the other choice controls: <a href="#choice-tokens">tokens of choice</a>.</p>
+                      <p class="docs-view__xref"><a href="#checkbox-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+                    </div>
+                  </div>
+
+                  <div class="docs-control">
+                    <h3 id="select">Select</h3>
+                    <p>A native drop-down list for choosing one option from a long list, with the closed box styled by tokens.</p>
+                    <div class="docs-example" data-docs-specimen>
+                      <div class="docs-demo__stage">
+                        <div class="o-grid docs-cols-2">
+                          <div class="luz-field">
+                            <label class="luz-field__label" for="sl-country">Country</label>
+                            <select class="luz-select" id="sl-country" name="country">
+                              <option value="">Select a country</option>
+                              <option value="de">Germany</option>
+                              <option value="es">Spain</option>
+                              <option value="fr">France</option>
+                            </select>
+                          </div>
+                          <div class="luz-field">
+                            <label class="luz-field__label" for="sl-error">Country of birth</label>
+                            <select class="luz-select" id="sl-error" name="birth" aria-invalid="true" aria-describedby="sl-error-text">
+                              <option value="" selected>Select a country</option>
+                              <option value="es">Spain</option>
+                            </select>
+                            <div class="luz-field__error" id="sl-error-text"><span class="u-sr-only">Error: </span>Select a country of birth.</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <nav class="luz-tabs docs-view-tabs" aria-label="Select documentation">
+                      <a class="luz-tab" href="#select-code-panel" data-docs-view="code">Code</a>
+                      <a class="luz-tab" href="#select-design-panel" data-docs-view="design">Design</a>
+                    </nav>
+                    <div class="luz-tabpanel docs-view" id="select-code-panel">
+                      <h4 class="docs-view__title" id="select-code">Code</h4>
+                      <h5 id="select-markup">Copy the markup</h5>
+                      <p>A bare <code>select</code> needs no class. <code>.luz-select</code> adds the styled open list, where the browser can draw one:</p>
+                      <div class="docs-snippet">
+                        <div class="docs-snippet__bar">
+                          <span class="docs-snippet__lang">HTML</span>
+                          <button class="luz-copy-btn" type="button" data-copy-from="code-select" aria-label="Copy the select markup">Copy</button>
+                        </div>
+                        <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Select markup"><code id="code-select">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;country&quot;&gt;Country&lt;/label&gt;
+  &lt;select class=&quot;luz-select&quot; id=&quot;country&quot; name=&quot;country&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;Select a country&lt;/option&gt;
+    &lt;option value=&quot;de&quot;&gt;Germany&lt;/option&gt;
+    &lt;option value=&quot;es&quot;&gt;Spain&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;</code></pre>
+                          </div>
+                          <h5 id="select-variants">Variants and options</h5>
+                          <ul>
+                            <li><code>aria-invalid="true"</code>: a thicker danger border; pair it with the error text.</li>
+                            <li><code>disabled</code>: disabled text and a dashed border.</li>
+                            <li><code>multiple</code>, <code>size</code>: a list that stays open, with a full border and no arrow.</li>
+                            <li><code>&lt;optgroup label&gt;</code>: a labelled set of options.</li>
+                          </ul>
+                          <h5 id="select-how">How it works</h5>
+                          <p>A native <code>&lt;select&gt;</code> styled by <code>components/select.css</code> in two layers: the closed box in every browser, and the open list inside <code>@supports (appearance: base-select)</code>. The arrow follows the text colour and moves to the left in right-to-left text.</p>
+                          <h5 id="select-no-js">Without JavaScript</h5>
+                          <p>Nothing changes: the select is a native element and LUZ adds no script to it.</p>
+                          <h5 id="select-keyboard">Keyboard and ARIA</h5>
+                          <ul>
+                            <li>Tab moves to the select. Enter or Space opens the list, Escape closes it, Up and Down move through the options.</li>
+                            <li>Give it a visible <code>&lt;label for&gt;</code> and no role. For an error, set <code>aria-invalid="true"</code> and point <code>aria-describedby</code> at the text.</li>
+                          </ul>
+                          <p class="docs-view__xref"><a href="#select-contrast">Contrast and focus</a> are in the Design tab.</p>
+                        </div>
+                        <div class="luz-tabpanel docs-view" id="select-design-panel">
+                          <h4 class="docs-view__title" id="select-design">Design</h4>
+                          <h5 id="select-when">When to use</h5>
+                          <p>Use a select when the reader must choose one option from a long list they already know the answer to.</p>
+                          <ul>
+                            <li>A country, a year, a time zone: more than six options, one answer.</li>
+                            <li>The options are short and the reader can scan them in order.</li>
+                          </ul>
+                          <h5 id="select-when-not">When not to use</h5>
+                          <p>A select hides the options until the reader opens it, and some people find that hard. The six-option rule is LUZ's own.</p>
+                          <ul>
+                            <li>Six options or fewer: radio buttons, so every option stays in view.</li>
+                            <li>Several answers: checkboxes. Never build your own listbox from <code>&lt;div&gt;</code> elements.</li>
+                          </ul>
+                          <h5 id="select-do-dont">Do and don't</h5>
+                          <div class="luz-do-dont">
+                            <figure class="luz-do-dont__item luz-do-dont__item--do">
+                              <figcaption><strong class="luz-do-dont__verdict">Do</strong> A select for a long list that the reader knows.</figcaption>
+                              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                                <select class="luz-select"><option>Select a country</option><option>Germany</option><option>Spain</option></select>
+                              </div>
+                            </figure>
+                            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+                              <figcaption><strong class="luz-do-dont__verdict">Don't</strong> Three options in a select: radio buttons show them all at once.</figcaption>
+                              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                                <select class="luz-select"><option>Standard</option><option>Express</option><option>Collect</option></select>
+                              </div>
+                            </figure>
+                          </div>
+                          <h5 id="select-content">Writing the content</h5>
+                          <ul>
+                            <li>The label says what to choose, as a noun: "Country", not "Please select".</li>
+                            <li>The first option is a prompt with an empty value, so a required field is not answered by default.</li>
+                            <li>Sentence case, in an order the reader can predict, such as alphabetical.</li>
+                          </ul>
+                          <h5 id="select-contrast">Contrast and focus</h5>
+                          <p>Shared with the other choice controls: <a href="#choice-contrast">contrast and focus of choice</a>.</p>
+                          <h5 id="select-tokens">Tokens it uses</h5>
+                          <p>Shared with the other choice controls: <a href="#choice-tokens">tokens of choice</a>.</p>
+                          <p class="docs-view__xref"><a href="#select-keyboard">Keyboard and ARIA</a> are in the Code tab.</p>
+                        </div>
+                      </div>
+
+                      <div class="docs-family-notes">
+                        <h3 id="choice-contrast">Contrast and focus of choice</h3>
+                        <p>The label is primary text on the page; the box has to be seen against it.</p>
+                        <div class="luz-table-wrap" role="region" aria-label="Choice controls contrast in each mode" tabindex="0">
+                          <table class="luz-table docs-contrast">
+                            <thead>
+                              <tr><th scope="col">Part</th><th scope="col">Colour on background</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">High contrast</th><th scope="col">Needs</th></tr>
+                            </thead>
+                            <tbody>
+                              <tr><td data-label="Part"><div>Label</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Box border</div></td><td data-label="Colour on background"><div><code>--luz-outline</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>4.3:1</div></td><td data-label="Dark"><div>3.6:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Checked box</div></td><td data-label="Colour on background"><div><code>--luz-brand-fill</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>3.5:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Check mark</div></td><td data-label="Colour on background"><div><code>--luz-text-on-fill</code> on <code>--luz-brand-fill</code></div></td><td data-label="Light"><div>6.0:1</div></td><td data-label="Dark"><div>4.9:1</div></td><td data-label="High contrast"><div>14.1:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Select text and arrow</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Select border</div></td><td data-label="Colour on background"><div><code>--luz-input-border</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>3.7:1</div></td><td data-label="Dark"><div>4.2:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Select error border</div></td><td data-label="Colour on background"><div><code>--luz-color-danger</code> on <code>--luz-input-bg</code></div></td><td data-label="Light"><div>5.5:1</div></td><td data-label="Dark"><div>10.8:1</div></td><td data-label="High contrast"><div>9.3:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Open list text</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface</code></div></td><td data-label="Light"><div>16.5:1</div></td><td data-label="Dark"><div>14.0:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Option under the pointer</div></td><td data-label="Colour on background"><div><code>--luz-text-primary</code> on <code>--luz-surface-muted</code></div></td><td data-label="Light"><div>15.8:1</div></td><td data-label="Dark"><div>15.1:1</div></td><td data-label="High contrast"><div>20.1:1</div></td><td data-label="Needs"><div>4.5:1</div></td></tr>
+                              <tr><td data-label="Part"><div>Focus ring</div></td><td data-label="Colour on background"><div><code>--luz-focus-ring</code> on <code>--luz-surface-page</code></div></td><td data-label="Light"><div>5.6:1</div></td><td data-label="Dark"><div>7.7:1</div></td><td data-label="High contrast"><div>21.0:1</div></td><td data-label="Needs"><div>3:1</div></td></tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <p class="docs-demo__note">Measured from the token values of each mode, rounded down. Needs is the WCAG 2.2 AA minimum: 4.5:1 for text, 3:1 for focus rings, borders and icons.</p>
+                        <ul>
+                          <li><strong>Focus:</strong> a 2 px <code>--luz-focus-ring</code> outline, 2 px outside the box.</li>
+                          <li><strong>Not colour alone:</strong> a ticked box is filled and has a check mark.</li>
+                          <li><strong>Target:</strong> the whole row, box and label, takes the click.</li>
+                        </ul>
+                        <h3 id="choice-tokens">Tokens of choice</h3>
+                        <p>The 25 tokens that these controls' rules read, by token family. Each family links to its page, with the values in every mode.</p>
+                        <dl class="docs-uses">
+                          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+                          <div><dt><a href="/docs/tokens/spacing/">Spacing and sizing</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+                          <div><dt><a href="/docs/tokens/typography/">Typography</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-control</code>, <code>--luz-text-md</code></dd></div>
+                          <div><dt><a href="/docs/tokens/radius/">Radius</a></dt><dd><code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+                          <div><dt><a href="/docs/tokens/shadows/">Shadows</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+                          <div><dt><a href="/docs/tokens/motion/">Motion</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+                        </dl>
+                      </div>
+
+      <h2 id="known-issues">Known issues</h2>
+      <p>The open list of a select looks different in each browser and system. This is intended.</p>
+      <ul>
+        <li>The closed box is the same everywhere. The list that opens from it is drawn by the browser or the operating system, and it is the one the reader already knows.</li>
+        <li>Browsers that support <code>appearance: base-select</code> (Chrome and Edge 135 and later, Safari 27 and later) also get the list in LUZ's colors, shape and spacing. Firefox shows its own list.</li>
+        <li>On phones, the system's own picker opens, and LUZ cannot style it.</li>
+      </ul>
+
+      <h2 id="how-it-works">How form fields work</h2>
+      <p>Every control is a native element, styled by <code>components/form.css</code>. The browser owns the state, the keyboard, the validation and the submission.</p>
+      <ul>
+        <li>Each control gets its name from its <code>&lt;label&gt;</code>; the hint and the error are tied to it with <code>aria-describedby</code>.</li>
+        <li>LUZ does not mark a field as invalid for you: add <code>.luz-input--error</code>, <code>aria-invalid="true"</code> and the error text when your validation fails.</li>
+        <li>Field text is 16 px at 768 px and below and on touch screens, so iOS Safari does not zoom in.</li>
+      </ul>
+      <p>Without JavaScript every control works and submits with its form. Only what your own script adds is missing, such as live validation.</p>
+
+          <h2 id="to-migrate">To migrate</h2>
+          <p><strong>Temporary.</strong> What follows is the old page, with one pair of tabs for every control. The inputs, the select and the checkbox are already blocks of their own above. Move the rest (the radio buttons, the fieldset, the switch, the meter, the output and the field label, hint and error) to blocks of their own, an example and then Code and Design tabs, then delete this section.</p>
           <h2 id="example">Example</h2>
-          <p>Fields for a project: text fields, a select, checkboxes and radio buttons, with a hint, an error and the disabled and read-only states.</p>
+          <p>Choices and values for a project: a select, checkboxes, radio buttons, switches and a meter.</p>
           <div class="docs-example" data-docs-specimen>
           <fieldset class="docs-width" hidden>
             <legend>Width</legend>
@@ -19,37 +1814,7 @@ keywords: input, textarea, checkbox
           </fieldset>
           <div class="luz-example__frame">
           <div class="docs-demo__stage">
-            <div class="o-grid docs-cols-3">
-              <div>
-                <h3 class="docs-subhead">Text</h3>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-name">Project name</label>
-                  <input class="luz-input" id="f-name" type="text" placeholder="My project" aria-describedby="f-name-help">
-                  <div class="luz-field__helper" id="f-name-help">Shown on the dashboard.</div>
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label luz-field__label--required" for="f-email">Email</label>
-                  <input class="luz-input" id="f-email" type="email" placeholder="jane@example.com" required autocomplete="off">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-slug">Slug</label>
-                  <input class="luz-input luz-input--error" id="f-slug" type="text" value="my project" aria-invalid="true" aria-describedby="f-slug-error">
-                  <div class="luz-field__error" id="f-slug-error"><span class="u-sr-only">Error: </span>Use letters, numbers and dashes only.</div>
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-disabled">Disabled</label>
-                  <input class="luz-input" id="f-disabled" type="text" value="Not editable" disabled>
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-readonly">Read-only</label>
-                  <input class="luz-input" id="f-readonly" type="text" value="luz-7f3a" readonly>
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-notes">Notes</label>
-                  <textarea class="luz-input luz-input--textarea" id="f-notes" rows="3" placeholder="Anything else?"></textarea>
-                </div>
-              </div>
-
+            <div class="o-grid docs-cols-2">
               <div>
                 <h3 class="docs-subhead">Choice</h3>
                 <div class="luz-field">
@@ -94,86 +1859,16 @@ keywords: input, textarea, checkbox
               </div>
 
               <div>
-                <h3 class="docs-subhead">Pickers and values</h3>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-date">Date</label>
-                  <input class="luz-input" id="f-date" type="date">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-time">Time</label>
-                  <input class="luz-input" id="f-time" type="time">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-color">Color</label>
-                  <input class="luz-input" id="f-color" type="color" value="#0066cf">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-file">File</label>
-                  <input class="luz-input" id="f-file" type="file">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-range">Volume <output class="luz-output" id="f-range-out" for="f-range">50</output></label>
-                  <input class="luz-input" id="f-range" type="range" min="0" max="100" value="50" data-output="f-range-out">
-                </div>
+                <h3 class="docs-subhead">Values</h3>
                 <div class="luz-field">
                   <label class="luz-field__label" for="f-meter">Storage used, 6 of 10 GB</label>
                   <meter class="luz-meter" id="f-meter" min="0" max="10" value="6">6 of 10 GB</meter>
                 </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-list">Browser</label>
-                  <input class="luz-input" id="f-list" list="f-browsers" placeholder="Start typing">
-                  <datalist id="f-browsers">
-                    <option value="Chrome"></option>
-                    <option value="Edge"></option>
-                    <option value="Firefox"></option>
-                    <option value="Safari"></option>
-                  </datalist>
-                </div>
               </div>
             </div>
-
-            <details>
-              <summary>More input types (8)</summary>
-              <div class="o-grid docs-cols-4">
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-number">number</label>
-                  <input class="luz-input" id="f-number" type="number" value="3" min="0" max="10">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-password">password</label>
-                  <input class="luz-input" id="f-password" type="password" value="secret" autocomplete="off">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-tel">tel</label>
-                  <input class="luz-input" id="f-tel" type="tel" placeholder="+34 600 000 000" autocomplete="off">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-url">url</label>
-                  <input class="luz-input" id="f-url" type="url" placeholder="https://example.com" autocomplete="off">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-search">search</label>
-                  <input class="luz-input" id="f-search" type="search" placeholder="Search">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-datetime">datetime-local</label>
-                  <input class="luz-input" id="f-datetime" type="datetime-local">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-month">month</label>
-                  <input class="luz-input" id="f-month" type="month" placeholder="YYYY-MM">
-                </div>
-                <div class="luz-field">
-                  <label class="luz-field__label" for="f-week">week</label>
-                  <input class="luz-input" id="f-week" type="week" placeholder="YYYY-Www">
-                </div>
-              </div>
-            </details>
           </div>
           </div>
           </div>
-          <h2 id="known-issues">Known issues</h2>
-          <p>None known.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Form fields documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
@@ -260,10 +1955,8 @@ keywords: input, textarea, checkbox
                   <tr><td data-label="Class or attribute"><div><code>.luz-field__label--required</code></div></td><td data-label="Effect"><div>Adds a red " *" after the label</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-field__helper</code></div></td><td data-label="Effect"><div>A hint under the control</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-field__error</code></div></td><td data-label="Effect"><div>An error under the control, in the danger colour</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-input</code></div></td><td data-label="Effect"><div>Text, email, number, date, time, colour, file and range inputs and <code>&lt;textarea&gt;</code>; 44 px high</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-input--error</code></div></td><td data-label="Effect"><div>A 2 px danger underline; pair it with <code>aria-invalid="true"</code></div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-input--textarea</code></div></td><td data-label="Effect"><div>Auto height, at least 80 px, resizes vertically</div></td></tr>
-                  <tr><td data-label="Class or attribute"><div><code>.luz-select</code></div></td><td data-label="Effect"><div>A <code>&lt;select&gt;</code>, on its own page: <a href="/docs/components/select/">Select</a></div></td></tr>
+                  <tr><td data-label="Class or attribute"><div><code>.luz-select</code></div></td><td data-label="Effect"><div>A <code>&lt;select&gt;</code>, see <a href="#select">Select</a></div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-check-group</code>, <code>.luz-check-item</code></div></td><td data-label="Effect"><div>A list of checkboxes or radios, each with its label</div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-fieldset</code></div></td><td data-label="Effect"><div>A bordered group with an upper-case <code>&lt;legend&gt;</code></div></td></tr>
                   <tr><td data-label="Class or attribute"><div><code>.luz-toggle</code></div></td><td data-label="Effect"><div>A switch: a checkbox with <code>role="switch"</code> drawn as a track and a thumb</div></td></tr>
@@ -298,7 +1991,7 @@ keywords: input, textarea, checkbox
             <p>Use these fields to collect input, with the native control that fits the data.</p>
             <ul>
               <li>Text, email, number, date, time: an input of that <code>type</code>.</li>
-              <li>One choice from a few (six or fewer): radios. From many: a <a href="/docs/components/select/">select</a>.</li>
+              <li>One choice from a few (six or fewer): radios. From many: a <a href="/docs/components/form/#select">select</a>.</li>
               <li>Several choices: checkboxes. A setting that applies at once: a switch.</li>
             </ul>
             <h3 id="when-not">When not to use</h3>
