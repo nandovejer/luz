@@ -5,14 +5,14 @@
  * The layering (nothing of layer 1 depends on `appearance: base-select`) is
  * checked on the CSS in tests/select.test.js. Run with: pnpm test:ui
  *
- * The select is a control of the Form fields page (since 2026-11-05, /docs/components/form/#select): its example has the
+ * The select is a control of the Choice page of Form fields (since 2026-11-05, /docs/components/form-choice/#select): its example has the
  * closed select and the error. The disabled select and the list box are the same class with an attribute, so the test
  * adds them to the page instead of asking the demo to show every state.
  */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const ROUTE = '/docs/components/form/';
+const ROUTE = '/docs/components/form-choice/';
 const THEMES = ['light', 'dark', 'high-contrast'];
 
 const style = (locator, props) =>
@@ -61,7 +61,12 @@ test.describe('Select', () => {
         el.id = id;
         el.setAttribute('aria-label', id);
         for (const [name, value] of Object.entries(attrs)) el.setAttribute(name, value);
-        for (const text of ['One', 'Two', 'Three', 'Four']) el.append(new Option(text, text.toLowerCase()));
+        for (const text of ['One', 'Two', 'Three', 'Four']) {
+          const option = document.createElement('option');
+          option.value = text.toLowerCase();
+          option.textContent = text;
+          el.append(option);
+        }
         document.querySelector('#sl-country').closest('.luz-field').append(el);
       };
       make('s-disabled', { disabled: '' });
@@ -74,7 +79,7 @@ test.describe('Select', () => {
       await page.evaluate((t) => (document.documentElement.dataset.theme = t), theme);
       await page.waitForTimeout(300);
       const { violations } = await new AxeBuilder({ page })
-        .include('#c-form .docs-example:has(#sl-country)')
+        .include('#c-form-choice .docs-example:has(#sl-country)')
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         .analyze();
       expect(violations.map((v) => v.id)).toEqual([]);

@@ -26,7 +26,6 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { readHtml } from '../scripts/docs-site/html.js';
 import { readingOrder } from '../scripts/docs-site/site.js';
 import { site } from './helpers/docs-site.js';
 import { idle } from './helpers/settle.js';
@@ -39,18 +38,6 @@ const areaOfRoute = (/** @type {string} */ route) => site.byRoute.get(route)?.me
 const indexOf = (/** @type {{ slug: string }} */ area) => `/docs/${area.slug}/`;
 /** The pages an area lists under its link: its pages but its index, in reading order. */
 const listedOf = (/** @type {{ id: string, slug: string }} */ area) => order.filter((r) => areaOfRoute(r) === area.id && r !== indexOf(area));
-/**
- * The anchors a group lists under its label for a page of controls (Form fields: one link to each family of the page). The
- * label is the link to the page, so the page is still listed once; the anchors are the group's own lines. In a language the
- * page has them once its translation has the families (the Spanish page has not yet). Tests: tests/docs-controls.test.js
- */
-const anchorsOf = (/** @type {string} */ route, /** @type {string} */ prefix) => {
-  const page = site.byRoute.get(route);
-  if (prefix || page?.meta.parts !== 'controls') return [];
-  const headings = readHtml(page.body, page.file).headings.filter((h) => h.level === 2 && !h.specimen && h.id);
-  const end = headings.findIndex((h) => h.id === 'known-issues');
-  return headings.slice(0, end).map((h) => `${route}#${h.id}`);
-};
 const folded = site.areas.filter((a) => listedOf(a).length > 0);
 
 const LANGUAGES = [
@@ -131,8 +118,7 @@ test.describe('which fold is open', () => {
         }
         for (const area of folded) {
           const pages = listedOf(area);
-          // (the anchors to the families of a page of controls are not pages)
-          const links = nav(page).locator(`details:has(> summary[aria-labelledby="a-${area.id}"]) a:not([href*="#"])`);
+          const links = nav(page).locator(`details:has(> summary[aria-labelledby="a-${area.id}"]) a`);
           await expect(links, area.id).toHaveCount(pages.length);
           if (area.id === open) {
             await expect(links.first(), `${area.id}: the first page of the open fold`).toBeVisible();
@@ -221,12 +207,7 @@ test.describe('the button of a fold', () => {
       for (const area of site.areas) {
         expected.push(`${prefix}${indexOf(area)}`);
         if (folded.includes(area)) expected.push(`summary:a-${area.id}`);
-        if (area.id === 'components') {
-          for (const route of listedOf(area)) {
-            expected.push(`${prefix}${route}`);
-            for (const anchor of anchorsOf(route, prefix)) expected.push(`${prefix}${anchor}`);
-          }
-        }
+        if (area.id === 'components') for (const route of listedOf(area)) expected.push(`${prefix}${route}`);
       }
       expect(await focused(page)).toBe(expected[0]);
       /** @type {string[]} */

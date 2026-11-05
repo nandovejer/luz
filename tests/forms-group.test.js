@@ -1,11 +1,11 @@
 /**
- * The group "Form fields" (Spanish "Campos de formulario") of Core, in the docs: the form page, whose controls (the select among
- * them, since 2026-11-05) are on one page, left "Actions and input" for a group of its own, right after it. Button, copy-button
- * and dropdown stay in Actions.
+ * The group "Form fields" (Spanish "Campos de formulario") of Core, in the docs: four pages of controls, Inputs, Choice, Values and
+ * Field parts (the select is a control of Choice since 2026-11-05), left "Actions and input" for a group of their own, right after
+ * it. Button, copy-button and dropdown stay in Actions.
  *
- * What these tests pin: site.json (id, label, order, the sidebar flag), the front matter of the pages (the one member), the
- * Spanish label, the gallery of Core in English and in Spanish, and the eyebrow of the member page. The sidebar entries of the
- * group are tests/docs-controls.test.js.
+ * What these tests pin: site.json (id, label, order, the sidebar flag), the front matter of the pages (the four members and their
+ * order), the Spanish label, the gallery of Core in English and in Spanish, and the eyebrow of a member page. The sidebar entries
+ * of the group are tests/docs-controls.test.js.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -18,7 +18,8 @@ const json = (path) => JSON.parse(readFileSync(join(root, path), "utf-8"));
 const area = (id) => json("apps/docs/site.json").areas.find((a) => a.id === id);
 const slugOf = (route) => route.split("/").filter(Boolean).at(-1);
 const membersOf = (areaId, groupId) =>
-  [...site.byRoute.values()].filter((p) => p.meta.area === areaId && p.meta.group === groupId).map((p) => slugOf(p.route)).sort();
+  [...site.byRoute.values()].filter((p) => p.meta.area === areaId && p.meta.group === groupId).sort((a, b) => Number(a.meta.order) - Number(b.meta.order) || slugOf(a.route).localeCompare(slugOf(b.route))).map((p) => slugOf(p.route));
+const FORMS = ["form-inputs", "form-choice", "form-values", "form-field-parts"];
 const GROUPS = ["actions", "forms", "content", "feedback", "navigation", "media", "helpers"];
 
 beforeAll(() => {
@@ -34,11 +35,11 @@ describe("the group Form fields of Core", () => {
     expect(forms.sidebar).toBe(true);
   });
 
-  it("holds exactly the form page (the select is one of its controls), and Actions keeps button, copy-button and dropdown", () => {
-    expect(membersOf("components", "forms")).toEqual(["form"]);
+  it("holds exactly the four pages Inputs, Choice, Values and Field parts, in that order, and Actions keeps button, copy-button and dropdown", () => {
+    expect(membersOf("components", "forms")).toEqual(FORMS);
     const actions = membersOf("components", "actions");
     for (const slug of ["button", "copy-button", "dropdown"]) expect(actions, slug).toContain(slug);
-    for (const slug of ["form", "select"]) expect(actions, slug).not.toContain(slug);
+    for (const slug of [...FORMS, "form", "select"]) expect(actions, slug).not.toContain(slug);
     expect([...site.byRoute.keys()], "no page of the select").not.toContain("/docs/components/select/");
   });
 
@@ -49,7 +50,7 @@ describe("the group Form fields of Core", () => {
   it.each([
     ["/docs/components/", "Form fields", ""],
     ["/es/docs/components/", "Campos de formulario", "/es"],
-  ])("%s has a section %s after Actions, with a card to the form page and to nothing else", (route, heading, prefix) => {
+  ])("%s has a section %s after Actions, with a card to each of the four pages, in their order, and to nothing else", (route, heading, prefix) => {
     const html = buildReal().rendered.get(route);
     const sections = [...html.matchAll(/<section class="docs-gallery" aria-labelledby="group-([a-z-]+)">/g)].map((m) => m[1]);
     expect(sections).toEqual(GROUPS);
@@ -57,12 +58,14 @@ describe("the group Form fields of Core", () => {
     const section = html.slice(start, html.indexOf("</section>", start));
     expect(section).toContain(`<h2 id="group-forms">${heading}</h2>`);
     const cards = [...section.matchAll(/<h3 class="luz-card__title docs-card__title"><a href="([^"]+)">/g)].map((m) => m[1]);
-    expect(cards).toEqual([`${prefix}/docs/components/form/`]);
+    expect(cards).toEqual(FORMS.map((slug) => `${prefix}/docs/components/${slug}/`));
   });
 
   it.each([
-    ["/docs/components/form/", "Core", "Form fields"],
-    ["/es/docs/components/form/", "Core", "Campos de formulario"],
+    ["/docs/components/form-inputs/", "Core", "Form fields"],
+    ["/docs/components/form-field-parts/", "Core", "Form fields"],
+    ["/es/docs/components/form-choice/", "Core", "Campos de formulario"],
+    ["/es/docs/components/form-values/", "Core", "Campos de formulario"],
   ])("%s has the eyebrow of its group, ending in %s", (route, areaLabel, group) => {
     const html = buildReal().rendered.get(route);
     const eyebrow = html.match(/<p class="luz-doc-header__eyebrow">([^<]*)<\/p>/)?.[1];

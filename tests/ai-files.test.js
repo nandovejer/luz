@@ -1065,7 +1065,7 @@ const cssOf = (pkg) => EXAMPLE_ENTRY[pkg] ?? FILES[pkg].css;
 /* ---- the oracle: what a page's "Copy the markup" holds ---------------------- */
 
 function markupSection(page) {
-  // The h3 `markup`, to the next h2 or h3; on a page of controls (`parts: controls`), also each control's h5
+  // The h3 `markup`, to the next h2 or h3; on a page of controls (`parts: controls`), each control's h4
   // `<control>-markup`, to the next heading of any level: the sections of the page, joined
   const sections = [];
   const start = page.body.search(/<h3\b[^>]*\bid="markup"/);
@@ -1075,7 +1075,7 @@ function markupSection(page) {
     sections.push(rest.slice(0, end === -1 ? undefined : end));
   }
   if (page.meta.parts === "controls") {
-    for (const m of page.body.matchAll(/<h5\b[^>]*\bid="[a-z0-9-]+-markup"/g)) {
+    for (const m of page.body.matchAll(/<h4\b[^>]*\bid="[a-z0-9-]+-markup"/g)) {
       const rest = page.body.slice(m.index + 1);
       const end = rest.search(/<h[2-5]\b/);
       sections.push(rest.slice(0, end === -1 ? undefined : end));

@@ -478,11 +478,9 @@ describe("parity: a translation keeps the structure, the code and the figures of
 
 describe("every translation of the real docs", () => {
   const real = scanSite(join(REPO, "apps/docs"), REPO);
-  // The English Form fields page was rebuilt (2026-11-05: families, controls, a pair of tabs each: `parts: controls`), and its
-  // Spanish page is translated afterwards, as a page of its own ("Translating a docs page"). Until then its structure is the old
-  // one: parity is not asked of a translation whose `source` is stale, for these pages only. Once the translation carries the
-  // new `source`, the exception no longer applies and the parity is checked again: delete the line when it does.
-  const UNTRANSLATED_AFTER_REBUILD = new Set(["es /docs/components/form/"]);
+  // The four pages of Form fields (Inputs, Choice, Values, Field parts) have no Spanish page until they are translated: the
+  // generator shows the English page in the Spanish chrome (the fallback), so a page that is not there has no parity to check.
+  // A Spanish file that exists is held to the parity like any other.
 
   it("is read by the loader from apps/docs/i18n", () => {
     expect(real.docsI18n, "scanSite(...).docsI18n").toBeTruthy();
@@ -490,13 +488,12 @@ describe("every translation of the real docs", () => {
 
   it("keeps the parity, the front matter and the reviewer rule of each translation file", async () => {
     expect(real.docsI18n, "scanSite(...).docsI18n").toBeTruthy();
-    const { parityProblems, sourceHash } = await docsI18nModule();
+    const { parityProblems } = await docsI18nModule();
     const problems = [];
     for (const language of real.docsI18n.languages) {
       for (const [route, tr] of language.pages) {
         const english = real.byRoute.get(route);
-        const awaiting = UNTRANSLATED_AFTER_REBUILD.has(`${language.code} ${route}`) && tr.meta.source !== sourceHash(english.body);
-        if (!awaiting) problems.push(...parityProblems(english, tr));
+        problems.push(...parityProblems(english, tr));
         if (!/^[0-9a-f]{12}$/.test(tr.meta.source)) problems.push(`${tr.file}: source is not 12 hex characters`);
         if (tr.meta.reviewed !== (tr.meta.reviewer !== undefined && tr.meta.reviewer !== "")) problems.push(`${tr.file}: reviewed and reviewer disagree`);
       }

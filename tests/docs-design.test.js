@@ -16,7 +16,7 @@ import { readControls, sectionOf } from "./helpers/docs-controls.js";
 const viewPages = site.pages.filter(
   (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group && p.meta.group !== "reference"),
 );
-// A page of controls (`parts: controls`, Form fields) has one Design tab per control and notes per family: read below
+// A page of controls (`parts: controls`, the four pages of Form fields) has one Design tab per control and the notes of its controls at the end: read below
 const tabbedPages = viewPages.filter((p) => p.meta.parts !== "controls");
 /** The HTML of a Design section: from its h3 to the next h3 or the panel's last line. */
 const section = (page, id) => page.body.split(`<h3 id="${id}">`)[1].split(/<h3 |<p class="docs-view__xref">/)[0];
@@ -72,9 +72,9 @@ function checkTokenList(html, used, where) {
 }
 
 describe("Design tab of every component and pattern page", () => {
-  it("covers the 67 pages, the Form fields page (one Design tab per control) among them", () => {
-    expect(viewPages).toHaveLength(67);
-    expect(viewPages.filter((p) => p.meta.parts === "controls").map((p) => p.route)).toEqual(["/docs/components/form/"]);
+  it("covers the 70 pages, the four pages of Form fields (one Design tab per control) among them", () => {
+    expect(viewPages).toHaveLength(70);
+    expect(viewPages.filter((p) => p.meta.parts === "controls").map((p) => p.route).sort()).toEqual(["choice", "field-parts", "inputs", "values"].map((slug) => `/docs/components/form-${slug}/`).sort());
   });
 
   it("Do and don't: a Do then a Don't, labelled with a word, never a live barrier (a11y.md TAB-20)", () => {
@@ -93,13 +93,12 @@ describe("Design tab of every component and pattern page", () => {
 });
 
 /*
- * A page of controls: each control's Design tab says what it says on any page (Do and don't), and its Contrast and
- * Tokens sections are the family's notes, which are recomputed here. Which rules of the page's CSS a family's notes
- * document is the one map below: the control's selectors in components/form.css, and the rule of the bare element it
- * shares with elements/forms.css (the text field), read from the stylesheets and never typed as values. The other
- * controls of the form file (pickers, switch, fieldset, meter, output, range, file, colour) are not in any family yet.
+ * The pages of controls: each control's Design tab says what it says on any page (Do and don't), and its Contrast and Tokens
+ * sections are the notes of its page, which are recomputed here. Which rules of the CSS the notes of a page document is the
+ * one map below, keyed by the family its notes name (`inputs-contrast`): the control's selectors in components/form.css, and
+ * the rules of the bare elements they share with elements/forms.css, read from the stylesheets and never typed as values.
  */
-const CONTROLS_PAGE = viewPages.find((p) => p.meta.parts === "controls");
+const CONTROLS_PAGES = viewPages.filter((p) => p.meta.parts === "controls");
 const FAMILY_RULES = {
   // Every input rule of the form file and of the bare elements: text, number, dates, colour, file, range, textarea
   inputs: { files: "components/form.css", only: /\.luz-(?:field|input)(?![a-z])/ },
@@ -111,42 +110,37 @@ const FAMILY_RULES = {
   field: { files: "components/form.css", only: /\.luz-(?:field|fieldset|legend)(?![a-z])|\.luz-input--error(?![\w-])/ },
 };
 
-describe("Design notes of a page of controls", () => {
+describe("Design notes of the pages of controls", () => {
   // A clear failure, not a TypeError, while no page has `parts: controls`
-  const controlsRead = () => {
-    expect(CONTROLS_PAGE, "a page with the front matter `parts: controls`").toBeTruthy();
-    return readControls(CONTROLS_PAGE);
+  const reads = () => {
+    expect(CONTROLS_PAGES.length, "pages with the front matter `parts: controls`").toBeGreaterThan(0);
+    return CONTROLS_PAGES.map((page) => ({ page, read: readControls(page) }));
   };
 
-  it("maps every family of the page to its rules (a new family needs a line of the map above)", () => {
-    const read = controlsRead();
-    expect(read.families.map((f) => f.id).sort()).toEqual(Object.keys(FAMILY_RULES).sort());
+  it("maps the notes of every page to the rules they document (a new page needs a line of the map above)", () => {
+    expect(reads().map(({ read }) => read.family).sort()).toEqual(Object.keys(FAMILY_RULES).sort());
   });
 
   it("Do and don't of each control: a Do then a Don't, labelled with a word, never a live barrier (a11y.md TAB-20)", () => {
-    const read = controlsRead();
-    for (const family of read.families) for (const control of family.controls) checkDoDont(sectionOf(read, `${control.id}-do-dont`), `${CONTROLS_PAGE.file} #${control.id}`);
+    for (const { page, read } of reads()) for (const control of read.controls) checkDoDont(sectionOf(read, `${control.id}-do-dont`), `${page.file} #${control.id}`);
   });
 
-  it("Contrast and focus of each family: every ratio is the one the tokens give, and a pair below its minimum says so", () => {
-    const read = controlsRead();
+  it("Contrast and focus of each page: every ratio is the one the tokens give, and a pair below its minimum says so", () => {
     let rows = 0;
-    for (const family of read.families) {
-      const html = sectionOf(read, `${family.id}-contrast`);
-      const found = checkContrastRows(html, `${CONTROLS_PAGE.file} #${family.id}-contrast`);
-      expect(found, `${family.id} has rows`).toBeGreaterThanOrEqual(3);
+    for (const { page, read } of reads()) {
+      const found = checkContrastRows(sectionOf(read, `${read.family}-contrast`), `${page.file} #${read.family}-contrast`);
+      expect(found, `${page.file} has rows`).toBeGreaterThanOrEqual(2);
       rows += found;
     }
     expect(rows).toBeGreaterThan(8);
   });
 
-  it("Tokens of each family: exactly the tokens the rules of its controls read, each under the page of its family", () => {
-    const read = controlsRead();
-    for (const family of read.families) {
-      const { files, only } = FAMILY_RULES[family.id];
+  it("Tokens of each page: exactly the tokens the rules of its controls read, each under the page of its family", () => {
+    for (const { page, read } of reads()) {
+      const { files, only } = FAMILY_RULES[read.family];
       const used = tokensUsedBy({ meta: { area: "components", files } }, { only });
-      expect(used.length, `${family.id} reads tokens`).toBeGreaterThan(8);
-      checkTokenList(sectionOf(read, `${family.id}-tokens`), used, `${CONTROLS_PAGE.file} #${family.id}-tokens`);
+      expect(used.length, `${read.family} reads tokens`).toBeGreaterThan(8);
+      checkTokenList(sectionOf(read, `${read.family}-tokens`), used, `${page.file} #${read.family}-tokens`);
     }
   });
 });

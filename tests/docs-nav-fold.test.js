@@ -65,10 +65,6 @@ const listIn = (tree) => query(tree, "ul.docs-nav");
 const itemsOf = (tree) => listIn(tree).children.filter((n) => n.name === "li");
 const itemOf = (tree, href) => itemsOf(tree).find((li) => query(li, "a.docs-nav__area").attrs.get("href") === href);
 const foldsOf = (tree) => queryAll(listIn(tree), "details");
-/** The anchors a group lists for a page of controls (Form fields: its families, #inputs) are not pages: tests/docs-controls.test.js */
-const isAnchor = (href) => href.includes("#");
-/** The label of a group that is the link to its page of controls, Form fields: it is chrome, in the language of the site. */
-const isGroupLabel = (a) => hasClass(a, "luz-sidebar__section-label");
 const openFolds = (tree) => foldsOf(tree).filter((d) => d.attrs.has("open"));
 
 describe("the real areas this test relies on", () => {
@@ -249,7 +245,7 @@ describe("the marks and the pages across the folds", () => {
     const expected = orderRoutes.filter((r) => !indexes.has(r) && areaOfRoute(r) !== "hub" && site.areas.some((a) => a.id === areaOfRoute(r)));
     for (const p of site.pages) {
       const tree = treeOf(p.route);
-      const hrefs = foldsOf(tree).flatMap((d) => queryAll(d, "a").map((a) => a.attrs.get("href"))).filter((h) => !isAnchor(h));
+      const hrefs = foldsOf(tree).flatMap((d) => queryAll(d, "a").map((a) => a.attrs.get("href")));
       expect(hrefs, `${p.route}: every page, once, in the order of the folds`).toEqual(expected);
       expect(new Set(hrefs).size, `${p.route}: no page twice`).toBe(hrefs.length);
       const areas = queryAll(listIn(tree), "a.docs-nav__area").map((a) => a.attrs.get("href"));
@@ -263,7 +259,7 @@ describe("the marks and the pages across the folds", () => {
     expect(groups.length).toBeGreaterThan(0);
     for (const g of groups) {
       expect(foldsOf(tree).some((d) => isInside(g, d)), "a group list is inside a fold").toBe(true);
-      const label = query(g, ".luz-sidebar__section-label");
+      const label = query(g, "span.luz-sidebar__section-label");
       const list = query(g, "ul.docs-nav__pages");
       expect(list.attrs.get("aria-labelledby")).toBe(label.attrs.get("id"));
     }
@@ -332,7 +328,7 @@ describe("the same folds in Spanish (real) and Arabic (a stand-in copy of the do
         const indexes = new Set(site.areas.map((a) => indexRoute(a)));
         const expected = orderRoutes.filter((r) => !indexes.has(r) && areaOfRoute(r) !== "hub" && site.areas.some((a) => a.id === areaOfRoute(r)));
         const t = tree("/docs/html/forms/");
-        const hrefs = foldsOf(t).flatMap((d) => queryAll(d, "a").map((a) => a.attrs.get("href"))).filter((h) => !isAnchor(h));
+        const hrefs = foldsOf(t).flatMap((d) => queryAll(d, "a").map((a) => a.attrs.get("href")));
         expect(hrefs).toEqual(expected.map((r) => `${root}${r}`));
         const links = findAll(listIn(t), (n) => n.name === "a");
         const at = (value) => links.filter((a) => a.attrs.get("aria-current") === value).map((a) => a.attrs.get("href"));
@@ -346,14 +342,13 @@ describe("the same folds in Spanish (real) and Arabic (a stand-in copy of the do
           expect(foldsOf(t), `${code} ${route}: the folds are there`).toHaveLength(areasWithPages.length);
           for (const fold of foldsOf(t)) {
             for (const a of queryAll(fold, "a")) {
-              const done = translates(code, a.attrs.get("href").split("#")[0].slice(root.length));
-              // The label of Form fields is the group's name, in the language of the chrome, though the page it links to is English
-              expect(languageOf(a), `${code} ${route} ${a.attrs.get("href")}`).toBe(done || isGroupLabel(a) ? code : "en");
+              const done = translates(code, a.attrs.get("href").slice(root.length));
+              expect(languageOf(a), `${code} ${route} ${a.attrs.get("href")}`).toBe(done ? code : "en");
             }
             // An area whose pages are all English, with no group, carries the lang once, on its list
             const list = fold.children[1];
             const hasGroups = queryAll(list, "li.docs-nav__group").length > 0;
-            const pages = queryAll(list, "a").filter((a) => !isGroupLabel(a));
+            const pages = queryAll(list, "a");
             const allEnglish = pages.every((a) => !translates(code, a.attrs.get("href").slice(root.length)));
             if (!hasGroups && allEnglish) {
               expect(list.attrs.get("lang"), `${code} ${route}: the all-English list carries lang="en"`).toBe("en");
@@ -383,7 +378,7 @@ describe("the same folds in Spanish (real) and Arabic (a stand-in copy of the do
       expect(languageOf(query(fold.parent, "a.docs-nav__area")), "the area link").toBe("ar");
       const list = fold.children[1];
       const lists = [list, ...queryAll(list, "ul.docs-nav__pages")];
-      const covered = queryAll(list, "a").filter((a) => !isGroupLabel(a)).every((a) => languageOf(a) === "en");
+      const covered = queryAll(list, "a").every((a) => languageOf(a) === "en");
       expect(covered, "every page link is English").toBe(true);
       expect(lists.some((l) => l.attrs.get("lang") === "en"), "the lang=en sits on a list, not only on the links").toBe(true);
     }

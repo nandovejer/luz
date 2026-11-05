@@ -9,7 +9,7 @@
 import { test, expect } from '@playwright/test';
 import { faded } from './helpers/settle.js';
 
-const ROUTE = '/docs/components/form/';
+const ROUTE = '/docs/components/form-choice/';
 
 const style = (page, selector, pseudo, property) =>
   page.locator(selector).first().evaluate((el, [p, prop]) => getComputedStyle(el, p || null).getPropertyValue(prop), [pseudo, property]);
