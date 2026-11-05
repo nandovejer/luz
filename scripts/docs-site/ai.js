@@ -56,7 +56,7 @@ import { HtmlError, VOID, decodeEntities, tags } from "./html.js";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { ruleRows } from "./ai-rules.js";
 import { PROMPT_KINDS, promptRoute } from "./prompts.js";
-import { readingOrder } from "./site.js";
+import { isFamilyNote, readingOrder } from "./site.js";
 import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 import { englishT } from "./strings.js";
 
@@ -92,9 +92,13 @@ const listed = (page) => page.meta.search !== "false";
 
 const urlOf = (route, siteUrl) => (siteUrl ? `${siteUrl}${route.slice(1)}` : route);
 
-/** A page with a "Copy the markup" section has an example document (its h3 has the id `markup`). */
+/**
+ * A page with a "Copy the markup" section has an example document: its h3 has the id `markup`, or, on a page of
+ * controls (`parts: controls`), each control's h5 has the id `<control>-markup`.
+ */
 const MARKUP_HEADING = /<h3\b[^>]*\bid="markup"/;
-const hasMarkup = (page) => MARKUP_HEADING.test(page.body);
+const CONTROL_MARKUP_HEADING = /<h5\b[^>]*\bid="[a-z0-9-]+-markup"/g;
+const hasMarkup = (page) => MARKUP_HEADING.test(page.body) || (page.meta.parts === "controls" && new RegExp(CONTROL_MARKUP_HEADING.source).test(page.body));
 
 /** `/docs/<area>/<slug>/` is `/examples/<area>/<slug>.html` (D2-A). */
 const exampleRouteOf = (page) => page.route.replace(/^\/docs\//, "/examples/").replace(/\/$/, ".html");
@@ -600,6 +604,46 @@ function aiBodyOf(body, headings) {
   return parts.join("\n");
 }
 
+// A page of controls (`parts: controls`, the Form fields page): h2 families, h3 controls, h5 sections of each control's
+// Code and Design panels, their ids prefixed by the control's (`text-markup`). The file keeps what an agent needs to
+// write the markup of a control: its summary, its markup and its keys, and when to use it; the variants, how it works,
+// without JavaScript and when not to use it of each control stay on the page, and the page-level "How form fields
+// work" says what they have in common.
+const CONTROL_SECTIONS = ["markup", "keyboard", "when"];
+// The h2 of a page of controls that are page-level text: kept whole
+const PAGE_LEVEL = new Set(["known-issues", "how-it-works"]);
+
+/** The text of a page of controls: families and controls before "Known issues", then its page-level sections. */
+function controlsBody(page, headings, { file, siteUrl, base }) {
+  const out = [];
+  let family = true;
+  let control = null;
+  for (const [i, h] of headings.entries()) {
+    const keep = (marks, shape = (html) => html) => {
+      const text = convert(shape(page.body.slice(h.end, headings[i + 1]?.start ?? page.body.length)), { file, line: h.endLine, siteUrl, base }).text;
+      if (text) out.push(`${marks} ${h.text}\n${text}`);
+    };
+    if (h.level === 2) {
+      control = null;
+      if (h.id === "known-issues") family = false;
+      if (family || PAGE_LEVEL.has(h.id)) keep("###");
+    } else if (h.level === 3 && family && isFamilyNote(h.id)) {
+      // The closing notes of a family (its contrast table and tokens): computed, on the page
+      control = null;
+    } else if (h.level === 3 && family) {
+      control = h.id;
+      keep("####");
+    } else if (h.level === 3 && GUIDED.has(h.id)) {
+      // Not moved to its control yet: a section of the old single pair
+      keep("###");
+    } else if (h.level === 5 && control && CONTROL_SECTIONS.some((kind) => h.id === `${control}-${kind}`)) {
+      // "When to use" is its lead sentence here: its list is on the page
+      keep("#####", h.id === `${control}-when` ? firstParagraph : (html) => html);
+    }
+  }
+  return out.join("\n\n");
+}
+
 const TOKENS_POINTER = "Values: `tokens.json`, `classes.json`.";
 
 /** The text of a page's body, by the kind of page. */
@@ -631,6 +675,8 @@ function bodyOf(page, options) {
     const items = headings.filter((h) => h.level === 2 && h.text).map((h) => `- ${/[<>]/.test(h.text) ? codeSpan(h.text) : h.text}`);
     return [items.join("\n"), OUTLINE_POINTERS.get(canonical)].filter(Boolean).join("\n\n");
   }
+
+  if (page.meta.parts === "controls") return controlsBody(page, headings, { file, siteUrl, base });
 
   if (headings.some((h) => h.id === "markup")) {
     const boundaries = headings.filter((h) => h.level <= 3);
@@ -769,16 +815,29 @@ const PRE_HTML = /<pre\b([^>]*\bdata-lang="html"[^>]*)>\s*<code[^>]*>([\s\S]*?)<
  * no inline script and its policy says `script-src 'self'`.
  */
 function markupBlocks(page) {
+  // The h3 `markup` section (to the next h2 or h3), then each control's h5 `<control>-markup` (to the next h2 to h5)
+  const sections = [];
   const start = page.body.search(MARKUP_HEADING);
-  const rest = page.body.slice(start + 1);
-  const end = rest.search(/<h[23]\b/);
-  const section = rest.slice(0, end === -1 ? undefined : end);
+  if (start !== -1) {
+    const rest = page.body.slice(start + 1);
+    const end = rest.search(/<h[23]\b/);
+    sections.push(rest.slice(0, end === -1 ? undefined : end));
+  }
+  if (page.meta.parts === "controls") {
+    for (const m of page.body.matchAll(CONTROL_MARKUP_HEADING)) {
+      const rest = page.body.slice(m.index + 1);
+      const end = rest.search(/<h[2-5]\b/);
+      sections.push(rest.slice(0, end === -1 ? undefined : end));
+    }
+  }
   const kept = [];
   const skipped = [];
-  for (const [, attrs, code] of section.matchAll(PRE_HTML)) {
-    const label = collapse(decodeEntities(/\baria-label="([^"]*)"/.exec(attrs)?.[1] ?? ""));
-    const block = { label, code: decodeEntities(code).trim() };
-    (/<script\b/i.test(block.code) || /\son[a-z]+\s*=/i.test(block.code) ? skipped : kept).push(block);
+  for (const section of sections) {
+    for (const [, attrs, code] of section.matchAll(PRE_HTML)) {
+      const label = collapse(decodeEntities(/\baria-label="([^"]*)"/.exec(attrs)?.[1] ?? ""));
+      const block = { label, code: decodeEntities(code).trim() };
+      (/<script\b/i.test(block.code) || /\son[a-z]+\s*=/i.test(block.code) ? skipped : kept).push(block);
+    }
   }
   return { kept, skipped };
 }

@@ -30,7 +30,7 @@
 import { createHash } from "node:crypto";
 import { lstatSync, readdirSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
-import { decodeEntities, tags } from "./html.js";
+import { decodeEntities, readHtml, tags } from "./html.js";
 import { assertInlineHtml, checkCatalog, lineOfKey } from "./i18n.js";
 import { PLURAL_CATEGORIES, PLACEHOLDER, makeT } from "./strings.js";
 import { depthOf, readInside, routeOfPage } from "./site.js";
@@ -48,7 +48,7 @@ export function sourceHash(body) {
 
 const TRANSLATED_KEYS = ["title", "description", "fits", "keywords", "source", "reviewed", "reviewer"];
 /** What a translation never says: it comes from the English page, so the structure cannot drift. */
-const INHERITED_KEYS = ["area", "order", "group", "fits-kinds", "files", "module", "toc", "lead", "generate", "search", "nav", "layout"];
+const INHERITED_KEYS = ["area", "order", "group", "fits-kinds", "files", "module", "parts", "toc", "lead", "generate", "search", "nav", "layout"];
 const HANDLE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/;
 
 /** Read a translation file: { meta, body, bodyLine }. Throws "file:line: …". */
@@ -383,6 +383,16 @@ export function localize(site, language) {
     };
   });
   const byRoute = new Map(pages.map((p) => [p.route, p]));
+  // A link to a section of a translated page that does not have that id yet (an English page that gained a section, the
+  // translation not moved to it) goes to the page: the link never points at nothing
+  const idsOf = new Map();
+  const ids = (page) => idsOf.get(page) ?? idsOf.set(page, readHtml(page.body, page.file).ids).get(page);
+  for (const page of pages) {
+    page.body = page.body.replace(/(<a\b[^>]*\shref=")(\/[^"#]*)#([^"]*)(")/g, (whole, before, route, id, after) => {
+      const target = byRoute.get(route);
+      return target && !target.fallback && !ids(target).has(id) ? `${before}${route}${after}` : whole;
+    });
+  }
   const areas = site.areas.map((area) => ({
     ...area,
     label: t(`area.${area.id}`),
