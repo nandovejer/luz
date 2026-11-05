@@ -792,7 +792,7 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
       const root = treeOf(p.route);
       const { main, aside } = partsOf(root);
       // A list is written when the page has three or more h2 with an id outside the demos
-      const h2s = readHtml(rendered.get(p.route).slice(main.open.index, main.close.end), p.route).headings.filter((h) => h.level === 2 && !h.specimen && h.id && h.id !== "docs-end-title");
+      const h2s = readHtml(rendered.get(p.route).slice(main.open.index, main.close.end), p.route).headings.filter((h) => h.level === 2 && !h.specimen && h.id && h.id !== "docs-end-title" && !(p.meta.parts === "controls" && /-(?:contrast|tokens)$/.test(h.id)));
       if (p.meta.toc !== "false" && h2s.length >= 3) expected += 1;
       expect(queryAllLive(main, "nav.luz-page-rail__onpage"), `${p.route}: nothing of the list stays in main`).toEqual([]);
       const onpage = queryAll(aside, "nav.luz-page-rail__onpage");
@@ -814,7 +814,10 @@ describe("the rail: \"On this page\" outside main, then Copy page, Copy link, Ed
       const { main, aside } = partsOf(root);
       const levels = p.meta.toc === "h2,h3" ? [2, 3] : [2];
       const html = rendered.get(p.route).slice(main.open.index, main.close.end);
-      const headings = readHtml(html, p.route).headings.filter((h) => levels.includes(h.level) && !h.specimen && h.id && h.id !== "docs-end-title");
+      let headings = readHtml(html, p.route).headings.filter((h) => levels.includes(h.level) && !h.specimen && h.id && h.id !== "docs-end-title");
+      // A page of controls (parts: controls) lists its controls (h2) and Known issues, not the notes its controls share (the h2
+      // `<family>-contrast` and `<family>-tokens`): tests/docs-rail-controls.test.js holds that contract
+      if (p.meta.parts === "controls") headings = headings.filter((h) => !/-(?:contrast|tokens)$/.test(h.id));
       const onpage = query(aside, "nav.luz-page-rail__onpage");
       if (headings.filter((h) => h.level === 2).length < 3) continue;
       expect(onpage, `${p.route} has the list`).toBeTruthy();

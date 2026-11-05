@@ -10,7 +10,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
-import { routesWith } from './helpers/docs-site.js';
+import { isControls, routesWith } from './helpers/docs-site.js';
 
 // The pages with a Design tab: the Do and don't section is a direct child of its panel
 const DESIGN = routesWith('luz-do-dont__stage').filter((r) => routesWith('docs-view-tabs').includes(r));
@@ -19,15 +19,37 @@ const DESIGN = routesWith('luz-do-dont__stage').filter((r) => routesWith('docs-v
 const DEMOS = routesWith('luz-do-dont__stage').filter((r) => !DESIGN.includes(r));
 const THEMES = ['light', 'dark', 'high-contrast'];
 
-for (const route of DESIGN) {
-  test(`${route}: the Do and don't examples are captioned pictures`, async ({ page }) => {
+/**
+ * Open the Design tab and say where each Do and don't section is: a page's (`#do-dont`, then `#content`), or on a page of controls
+ * (the pages of Form fields: one Design tab for each control, and one click moves them all) each control's
+ * (`#<control>-do-dont`, then `#<control>-content`).
+ */
+async function openDesign(page, route) {
+  if (!isControls(route)) {
     await page.goto(`${route}#design`);
     await expect(page.locator('#design-panel')).toBeVisible();
-    // One pair for each lesson of the page: a Do, then its Don't
-    const figures = page.locator('#do-dont ~ .luz-do-dont > figure');
-    const count = await figures.count();
-    expect(count, route).toBeGreaterThanOrEqual(2);
-    expect(count % 2, route).toBe(0);
+    return [{ id: 'do-dont', next: 'content' }];
+  }
+  await page.goto(route);
+  await page.getByRole('tab', { name: 'Design' }).first().click();
+  const ids = await page.locator('[id$="-do-dont"]').evaluateAll((list) => list.map((el) => el.id.slice(0, -'-do-dont'.length)));
+  expect(ids.length, route).toBeGreaterThanOrEqual(2);
+  for (const id of ids) await expect(page.locator(`#${id}-design-panel`), id).toBeVisible();
+  return ids.map((id) => ({ id: `${id}-do-dont`, next: `${id}-content` }));
+}
+
+for (const route of DESIGN) {
+  test(`${route}: the Do and don't examples are captioned pictures`, async ({ page }) => {
+    const sections = await openDesign(page, route);
+    // One pair for each lesson of the page (of each control): a Do, then its Don't
+    const figuresOf = ({ id }) => page.locator(`#${id} ~ .luz-do-dont > figure`);
+    let count = 0;
+    for (const section of sections) {
+      const n = await figuresOf(section).count();
+      expect(n, `${route} #${section.id}`).toBeGreaterThanOrEqual(2);
+      expect(n % 2, `${route} #${section.id}`).toBe(0);
+      count += n;
+    }
 
     // Every stage is inert and hidden; an id in it (a label's for) is used
     // inside that stage only, so nothing outside points into a picture
@@ -45,13 +67,17 @@ for (const route of DESIGN) {
 
     // In the accessibility tree the figure holds its caption and nothing else:
     // the verdict first, as a word (the ✓ / ✕ is CSS with empty alt text)
-    for (const [i, verdict] of Array.from({ length: count }, (_, i) => [i, i % 2 ? "Don't" : 'Do'])) {
-      const figure = figures.nth(i);
-      const [head, ...inside] = (await figure.ariaSnapshot()).split('\n');
-      expect(head, route).toMatch(/^- '?figure\b/);
-      const caption = await figure.locator(':scope > figcaption').ariaSnapshot();
-      expect(inside.map((l) => l.replace(/^ {2}/, '')).join('\n'), route).toBe(caption);
-      expect(caption.split('\n')[0], route).toBe(`- strong: ${verdict}`);
+    expect(count, route).toBeGreaterThanOrEqual(2);
+    for (const section of sections) {
+      const figures = figuresOf(section);
+      for (const [i, verdict] of Array.from({ length: await figures.count() }, (_, i) => [i, i % 2 ? "Don't" : 'Do'])) {
+        const figure = figures.nth(i);
+        const [head, ...inside] = (await figure.ariaSnapshot()).split('\n');
+        expect(head, route).toMatch(/^- '?figure\b/);
+        const caption = await figure.locator(':scope > figcaption').ariaSnapshot();
+        expect(inside.map((l) => l.replace(/^ {2}/, '')).join('\n'), route).toBe(caption);
+        expect(caption.split('\n')[0], route).toBe(`- strong: ${verdict}`);
+      }
     }
 
     // Nothing in a stage takes focus, by script or by Tab
@@ -67,28 +93,29 @@ for (const route of DESIGN) {
     expect(reached).toEqual([]);
     // Tab from the section heading (a click sets the starting point) until focus
     // passes the next heading: it never stops in a stage
-    await page.locator('#do-dont').click();
-    let passed = false;
-    for (let i = 0; i < 40 && !passed; i++) {
-      await page.keyboard.press('Tab');
-      const where = await page.evaluate(() => {
-        const a = document.activeElement;
-        const next = document.getElementById('content');
-        return {
-          inStage: !!a?.closest('.luz-do-dont__stage'),
-          passed: !!(next.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_FOLLOWING),
-        };
-      });
-      expect(where.inStage, route).toBe(false);
-      passed = where.passed;
+    for (const section of sections) {
+      await page.locator(`#${section.id}`).click();
+      let passed = false;
+      for (let i = 0; i < 40 && !passed; i++) {
+        await page.keyboard.press('Tab');
+        const where = await page.evaluate((nextId) => {
+          const a = document.activeElement;
+          const next = document.getElementById(nextId);
+          return {
+            inStage: !!a?.closest('.luz-do-dont__stage'),
+            passed: !!(next.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_FOLLOWING),
+          };
+        }, section.next);
+        expect(where.inStage, route).toBe(false);
+        passed = where.passed;
+      }
+      expect(passed, `${route} #${section.id}: Tab left the section`).toBe(true);
     }
-    expect(passed, `${route}: Tab left the section`).toBe(true);
   });
 
   for (const theme of THEMES) {
     test(`${route}: the Do and don't examples keep the page's contrast in ${theme}`, async ({ page }) => {
-      await page.goto(`${route}#design`);
-      await expect(page.locator('#design-panel')).toBeVisible();
+      await openDesign(page, route);
       await page.evaluate((t) => {
         document.documentElement.dataset.theme = t;
         // axe skips hidden content: expose the stages to measure what is seen

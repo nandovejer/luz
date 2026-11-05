@@ -115,8 +115,8 @@ test.describe('meter', () => {
   });
 
   test('an exposed meter is named by its label: min, max and value are exposed (M2)', async ({ page }) => {
-    await page.goto('/docs/components/form/');
-    const meter = page.locator('#f-meter');
+    await page.goto('/docs/components/form-values/');
+    const meter = page.locator('#me-storage');
     await expect(meter).toHaveAccessibleName('Storage used, 6 of 10 GB');
     await expect(meter).toHaveRole('meter');
   });

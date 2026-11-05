@@ -7,7 +7,8 @@
  *     high-contrast, from packages/tokens (semantic.css over tokens.json);
  *   - contrast(mode, fg, bg): the WCAG 2.x ratio, translucent layers
  *     composited over the page as in check-contrast.js;
- *   - tokensUsedBy(page): the --luz-* tokens the component's own CSS reads;
+ *   - tokensUsedBy(page, { only }): the --luz-* tokens the component's own CSS reads (`only`: a RegExp, or any object with test(selector), just the rules
+ *     whose selector matches it: the controls of one family of a page of controls);
  *   - familyOf(token): the token page that documents it.
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -150,8 +151,11 @@ function sourceOf(page) {
   return { css: files.join("\n"), classes, tags };
 }
 
-/** The --luz-* tokens the component's CSS reads with var(), minus the ones it declares itself. */
-export function tokensUsedBy(page) {
+/**
+ * The --luz-* tokens the component's CSS reads with var(), minus the ones it declares itself. `only` narrows it to the
+ * rules whose selector matches (the family notes of a page of controls).
+ */
+export function tokensUsedBy(page, { only } = {}) {
   const { css, whole = "", classes, tags = [], componentNames = [] } = sourceOf(page);
   const byClass = classes?.length ? `\\.(?:${classes.join("|")})(?:(?:--|__)[\\w-]+)?(?![\\w-])` : null;
   // The tag as a type selector: not after a dot, a dash or a word character (.luz-announcement__x, [data-luz-announcement])
@@ -172,6 +176,8 @@ export function tokensUsedBy(page) {
   const wholeRules = new Set(rules(whole));
   for (const rule of [...wholeRules, ...rules(css)]) {
     const { selector, body } = rule;
+    // Only the rules of some selectors (the controls of a family on a page of controls, `parts: controls`)
+    if (only && !only.test(selector)) continue;
     if (!wholeRules.has(rule) && own && !own.test(selector)) continue;
     for (const [, name] of body.matchAll(/(--luz-[\w-]+)\s*:/g)) local.add(name);
     for (const [, name, after] of body.matchAll(/var\(\s*(--luz-[\w-]+)\s*([,)])/g)) {

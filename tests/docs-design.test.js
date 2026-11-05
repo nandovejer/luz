@@ -11,72 +11,136 @@ import { describe, expect, it } from "vitest";
 import { site } from "./helpers/docs-site.js";
 import { PATTERN_AREAS } from "./helpers/package-areas.js";
 import { MODES, colorTokens, contrast, familyOf, formatRatio, resolveColor, tokensUsedBy } from "./helpers/design-tokens.js";
+import { readControls, sectionOf } from "./helpers/docs-controls.js";
 
 const viewPages = site.pages.filter(
   (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group && p.meta.group !== "reference"),
 );
+// A page of controls (`parts: controls`, the four pages of Form fields) has one Design tab per control and the notes of its controls at the end: read below
+const tabbedPages = viewPages.filter((p) => p.meta.parts !== "controls");
 /** The HTML of a Design section: from its h3 to the next h3 or the panel's last line. */
 const section = (page, id) => page.body.split(`<h3 id="${id}">`)[1].split(/<h3 |<p class="docs-view__xref">/)[0];
 const text = (html) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 
+/** One "Do and don't" section: pairs of a Do then its Don't, each said in words, each stage a picture or code. */
+function checkDoDont(html, where) {
+  const items = [...html.matchAll(/<figure class="luz-do-dont__item luz-do-dont__item--(do|dont)">\s*<figcaption><strong class="luz-do-dont__verdict">([^<]+)<\/strong>([^<]|<(?!\/figcaption>))+<\/figcaption>\s*(<div class="luz-do-dont__stage"[^>]*>|<pre class="luz-code-block")/g)];
+  // One pair for each lesson of the page: a Do, then its Don't
+  const verdicts = items.map((m) => [m[1], m[2]]);
+  expect(verdicts.length, where).toBeGreaterThanOrEqual(2);
+  expect(verdicts, where).toEqual(Array.from({ length: verdicts.length / 2 }, () => [["do", "Do"], ["dont", "Don't"]]).flat());
+  for (const m of items) {
+    // The caption says why, in words a screen reader gets
+    expect(text(m[0]).length, `${where} ${m[1]}`).toBeGreaterThan(30);
+    // A live example is a picture: inert, hidden from assistive technology
+    // (the caption describes it); a harmful one is code, never live
+    if (m[4].startsWith("<div")) expect(m[4], `${where} ${m[1]}`).toBe('<div class="luz-do-dont__stage" inert aria-hidden="true">');
+  }
+}
+
+/** The rows of a contrast table, recomputed from the tokens: every ratio, and a pair below its minimum says so. Returns the row count. */
+function checkContrastRows(html, where) {
+  expect(html, where).toMatch(/<strong>Focus:<\/strong>/);
+  let rows = 0;
+  for (const [row] of html.matchAll(/<tr><td data-label="Part">[\s\S]*?<\/tr>/g)) {
+    const cells = [...row.matchAll(/<td data-label="[^"]+"><div>([\s\S]*?)<\/div><\/td>/g)].map((m) => m[1]);
+    const [part, pair, ...rest] = cells;
+    const tokens = [...pair.matchAll(/<code>--luz-([\w-]+)<\/code>/g)].map((m) => m[1]);
+    const [fg, ...bg] = tokens;
+    const min = Number(rest.at(-1).replace(":1", ""));
+    MODES.forEach((mode, i) => {
+      const ratio = contrast(mode, fg, bg.join(" > "));
+      const expected = ratio + 1e-9 >= min ? formatRatio(ratio) : `<strong>${formatRatio(ratio)}, fails</strong>`;
+      expect(rest[i], `${where} "${text(part)}" in ${mode}`).toBe(expected);
+    });
+    rows++;
+  }
+  return rows;
+}
+
+/** A "Tokens it uses" section: exactly `used`, each under the page of its family, and the count in the sentence. */
+function checkTokenList(html, used, where) {
+  const listed = [];
+  for (const [, route, dd] of html.matchAll(/<dt><a href="([^"]+)">[^<]+<\/a><\/dt><dd>([\s\S]*?)<\/dd>/g)) {
+    for (const [, token] of dd.matchAll(/<code>(--luz-[\w-]+)<\/code>/g)) {
+      expect(familyOf(token)[1], `${where} ${token}`).toBe(route);
+      listed.push(token);
+    }
+  }
+  expect([...listed].sort(), where).toEqual(used);
+  expect(html, where).toContain(`The ${used.length} tokens`);
+}
+
 describe("Design tab of every component and pattern page", () => {
-  it("covers the 68 pages", () => {
-    expect(viewPages).toHaveLength(68);
+  it("covers the 70 pages, the four pages of Form fields (one Design tab per control) among them", () => {
+    expect(viewPages).toHaveLength(70);
+    expect(viewPages.filter((p) => p.meta.parts === "controls").map((p) => p.route).sort()).toEqual(["choice", "field-parts", "inputs", "values"].map((slug) => `/docs/components/form-${slug}/`).sort());
   });
 
   it("Do and don't: a Do then a Don't, labelled with a word, never a live barrier (a11y.md TAB-20)", () => {
-    for (const page of viewPages) {
-      const html = section(page, "do-dont");
-      const items = [...html.matchAll(/<figure class="luz-do-dont__item luz-do-dont__item--(do|dont)">\s*<figcaption><strong class="luz-do-dont__verdict">([^<]+)<\/strong>([^<]|<(?!\/figcaption>))+<\/figcaption>\s*(<div class="luz-do-dont__stage"[^>]*>|<pre class="luz-code-block")/g)];
-      // One pair for each lesson of the page: a Do, then its Don't
-      const verdicts = items.map((m) => [m[1], m[2]]);
-      expect(verdicts.length, page.file).toBeGreaterThanOrEqual(2);
-      expect(verdicts, page.file).toEqual(Array.from({ length: verdicts.length / 2 }, () => [["do", "Do"], ["dont", "Don't"]]).flat());
-      for (const m of items) {
-        // The caption says why, in words a screen reader gets
-        expect(text(m[0]).length, `${page.file} ${m[1]}`).toBeGreaterThan(30);
-        // A live example is a picture: inert, hidden from assistive technology
-        // (the caption describes it); a harmful one is code, never live
-        if (m[4].startsWith("<div")) expect(m[4], `${page.file} ${m[1]}`).toBe('<div class="luz-do-dont__stage" inert aria-hidden="true">');
-      }
-    }
+    for (const page of tabbedPages) checkDoDont(section(page, "do-dont"), page.file);
   });
 
   it("Contrast and focus: every ratio is the one the tokens give, and a pair below its minimum says so", () => {
     let rows = 0;
-    for (const page of viewPages) {
-      const html = section(page, "contrast");
-      expect(html, page.file).toMatch(/<strong>Focus:<\/strong>/);
-      for (const [row] of html.matchAll(/<tr><td data-label="Part">[\s\S]*?<\/tr>/g)) {
-        const cells = [...row.matchAll(/<td data-label="[^"]+"><div>([\s\S]*?)<\/div><\/td>/g)].map((m) => m[1]);
-        const [part, pair, ...rest] = cells;
-        const tokens = [...pair.matchAll(/<code>--luz-([\w-]+)<\/code>/g)].map((m) => m[1]);
-        const [fg, ...bg] = tokens;
-        const min = Number(rest.at(-1).replace(":1", ""));
-        MODES.forEach((mode, i) => {
-          const ratio = contrast(mode, fg, bg.join(" > "));
-          const expected = ratio + 1e-9 >= min ? formatRatio(ratio) : `<strong>${formatRatio(ratio)}, fails</strong>`;
-          expect(rest[i], `${page.file} "${text(part)}" in ${mode}`).toBe(expected);
-        });
-        rows++;
-      }
-    }
+    for (const page of tabbedPages) rows += checkContrastRows(section(page, "contrast"), page.file);
     expect(rows).toBeGreaterThan(100);
   });
 
   it("Tokens it uses: exactly the tokens the component's CSS reads, each under the page of its family", () => {
-    for (const page of viewPages) {
-      const html = section(page, "tokens");
-      const listed = [];
-      for (const [, route, dd] of html.matchAll(/<dt><a href="([^"]+)">[^<]+<\/a><\/dt><dd>([\s\S]*?)<\/dd>/g)) {
-        for (const [, token] of dd.matchAll(/<code>(--luz-[\w-]+)<\/code>/g)) {
-          expect(familyOf(token)[1], `${page.file} ${token}`).toBe(route);
-          listed.push(token);
-        }
-      }
-      const used = tokensUsedBy(page);
-      expect([...listed].sort(), page.file).toEqual(used);
-      expect(html, page.file).toContain(`The ${used.length} tokens`);
+    for (const page of tabbedPages) checkTokenList(section(page, "tokens"), tokensUsedBy(page), page.file);
+  });
+});
+
+/*
+ * The pages of controls: each control's Design tab says what it says on any page (Do and don't), and its Contrast and Tokens
+ * sections are the notes of its page, which are recomputed here. Which rules of the CSS the notes of a page document is the
+ * one map below, keyed by the family its notes name (`inputs-contrast`): the control's selectors in components/form.css, and
+ * the rules of the bare elements they share with elements/forms.css, read from the stylesheets and never typed as values.
+ */
+const CONTROLS_PAGES = viewPages.filter((p) => p.meta.parts === "controls");
+const FAMILY_RULES = {
+  // Every input rule of the form file and of the bare elements: text, number, dates, colour, file, range, textarea
+  inputs: { files: "components/form.css", only: /\.luz-(?:field|input)(?![a-z])/ },
+  // The checkbox, the radio buttons and the switch of the form file, and the select
+  choice: { files: "components/form.css; components/select.css", only: /^\.luz-(?:check-(?:item|group)(?![\w-])|toggle)|\.luz-select(?![\w-])/ },
+  // The output and the meter, with the bare elements' rules for them
+  values: { files: "components/form.css; components/meter.css; elements/forms.css", only: /\.luz-(?:output|meter)(?![\w-])|^:where\(output\)|^:where\(meter\)/ },
+  // The parts a field is made of: its label, hint and error, the fieldset and the legend
+  field: { files: "components/form.css", only: /\.luz-(?:field|fieldset|legend)(?![a-z])|\.luz-input--error(?![\w-])/ },
+};
+
+describe("Design notes of the pages of controls", () => {
+  // A clear failure, not a TypeError, while no page has `parts: controls`
+  const reads = () => {
+    expect(CONTROLS_PAGES.length, "pages with the front matter `parts: controls`").toBeGreaterThan(0);
+    return CONTROLS_PAGES.map((page) => ({ page, read: readControls(page) }));
+  };
+
+  it("maps the notes of every page to the rules they document (a new page needs a line of the map above)", () => {
+    expect(reads().map(({ read }) => read.family).sort()).toEqual(Object.keys(FAMILY_RULES).sort());
+  });
+
+  it("Do and don't of each control: a Do then a Don't, labelled with a word, never a live barrier (a11y.md TAB-20)", () => {
+    for (const { page, read } of reads()) for (const control of read.controls) checkDoDont(sectionOf(read, `${control.id}-do-dont`), `${page.file} #${control.id}`);
+  });
+
+  it("Contrast and focus of each page: every ratio is the one the tokens give, and a pair below its minimum says so", () => {
+    let rows = 0;
+    for (const { page, read } of reads()) {
+      const found = checkContrastRows(sectionOf(read, `${read.family}-contrast`), `${page.file} #${read.family}-contrast`);
+      expect(found, `${page.file} has rows`).toBeGreaterThanOrEqual(2);
+      rows += found;
+    }
+    expect(rows).toBeGreaterThan(8);
+  });
+
+  it("Tokens of each page: exactly the tokens the rules of its controls read, each under the page of its family", () => {
+    for (const { page, read } of reads()) {
+      const { files, only } = FAMILY_RULES[read.family];
+      const used = tokensUsedBy({ meta: { area: "components", files } }, { only });
+      expect(used.length, `${read.family} reads tokens`).toBeGreaterThan(8);
+      checkTokenList(sectionOf(read, `${read.family}-tokens`), used, `${page.file} #${read.family}-tokens`);
     }
   });
 });

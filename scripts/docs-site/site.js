@@ -84,6 +84,9 @@ const FRONT_MATTER = {
   // them as "Fits best: …" under the lead and on the card of the gallery. `fits` is translatable
   "fits-kinds": { default: "" },
   fits: { default: "" },
+  // "controls": a component page whose h2 are controls, each with its own example and its own Code and Design tabs
+  // (the pages of Form fields). Empty: the one pair of tabs every other page has
+  parts: { default: "" },
   // Shown next to the h1: the CSS files and the JS module of a component
   files: { default: "" },
   module: { default: "" },
@@ -280,6 +283,7 @@ export function parseFrontMatter(source, file, areas = null) {
     if (!["true", "false"].includes(meta[key])) throw new Error(`${file}: ${key} is "true" or "false"`);
   }
   if (!["h2", "h2,h3", "false"].includes(meta.toc)) throw new Error(`${file}: toc is "h2", "h2,h3" or "false"`);
+  if (!["", "controls"].includes(meta.parts)) throw new Error(`${file}: parts is "controls" or empty`);
   if (!["", "gallery", "a-z", "snippets", "ai", "notfound"].includes(meta.generate)) throw new Error(`${file}: generate is "gallery", "a-z", "snippets", "ai" or "notfound"`);
   if (meta.group && !NAME.test(meta.group)) throw new Error(`${file}: group "${meta.group}" is not a valid name`);
   // "Fits best" (decision 71): both keys on a pattern page of catalog, on no other page
@@ -566,6 +570,9 @@ function headingsOf(page) {
 
 const link = (href, text, attrs = "") => `<a${attrs} href="${escapeHtml(href)}">${escapeHtml(text)}</a>`;
 
+/** The id of a heading that is a family's notes, not a control: `inputs-contrast`, `choice-tokens`. */
+export const isFamilyNote = (id) => /-(?:contrast|tokens)$/.test(id ?? "");
+
 /**
  * The sidebar: every area of site.json with every page of it, so a page of
  * another area is one click away. Each area with pages is a native <details>
@@ -768,7 +775,9 @@ export function renderPageHead(site, page) {
 export function renderToc(page, html, t = englishT(), site = {}) {
   if (page.meta.toc === "false") return "";
   const levels = page.meta.toc === "h2,h3" ? [2, 3] : [2];
-  const headings = readHtml(html, page.file).headings.filter((h) => levels.includes(h.level) && !h.specimen);
+  // A page of controls (`parts: controls`) lists its controls, the h2, and "Known issues": not a family's notes (its contrast table and tokens)
+  const controls = page.meta.parts === "controls";
+  const headings = readHtml(html, page.file).headings.filter((h) => levels.includes(h.level) && !h.specimen && !(controls && isFamilyNote(h.id)));
   if (headings.filter((h) => h.level === 2).length < 3) return "";
   const missing = headings.find((h) => !h.id);
   if (missing) throw new Error(`${page.file}: the heading "${missing.text}" belongs in "On this page" and needs an id`);
@@ -1538,7 +1547,7 @@ function renderNotice(site, page) {
     : [t("notice.pending"), ...(canonical === `${DOCS_ROUTE}accessibility/` ? [t("notice.pending-statement")] : [])];
   return [
     '<div class="luz-alert luz-alert--info docs-notice">',
-    '    <div class="luz-alert__icon" aria-hidden="true">\u2139</div>',
+    '    <div class="luz-alert__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.5v.01"/></svg></div>',
     "    <div>",
     `      <div class="luz-alert__body">${escapeHtml(text.join(" "))} <a href="${escapeHtml(canonical)}" hreflang="en">${say(t, "notice.english")}</a></div>`,
     "    </div>",

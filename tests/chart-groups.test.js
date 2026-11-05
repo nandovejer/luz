@@ -31,8 +31,8 @@ beforeAll(() => {
 describe("Core has no group of charts any more", () => {
   const groups = () => area("components").groups.map((g) => g.id);
 
-  it("has the groups of before the charts and none called charts or data", () => {
-    expect(groups()).toEqual(["actions", "content", "feedback", "navigation", "media", "helpers"]);
+  it("has the groups in order (Forms after Actions) and none called charts or data", () => {
+    expect(groups()).toEqual(["actions", "forms", "content", "feedback", "navigation", "media", "helpers"]);
   });
 
   it("has no page in a group charts or data: the four pages are catalog's", () => {
@@ -49,7 +49,7 @@ describe("Core has no group of charts any more", () => {
   it.each(["/docs/components/", "/es/docs/components/"])("%s has no section of charts, and no card to bar-list, column-chart, heat-map or stacked-bar", (route) => {
     const html = buildReal().rendered.get(route);
     const sections = [...html.matchAll(/<section class="docs-gallery" aria-labelledby="group-([a-z-]+)">/g)].map((m) => m[1]);
-    expect(sections).toEqual(["actions", "content", "feedback", "navigation", "media", "helpers"]);
+    expect(sections).toEqual(["actions", "forms", "content", "feedback", "navigation", "media", "helpers"]);
     for (const name of ["bar-list", "column-chart", "heat-map", "stacked-bar"]) expect(html, name).not.toContain(`/docs/components/${name}/`);
   });
 });

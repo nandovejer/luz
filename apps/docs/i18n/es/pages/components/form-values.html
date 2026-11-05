@@ -1,0 +1,216 @@
+<!-- luz:page
+title: Valores
+description: Mostrar o calcular un valor en lugar de recoger texto: medidor y resultado.
+keywords: medidor, resultado, indicador
+source: 88ba248be185
+reviewed: false
+-->
+    <div class="docs-component" id="c-form-values">
+      <div class="docs-control">
+        <h2 id="meter">Medidor</h2>
+        <p>Una barra para un valor dentro de un rango conocido, como el almacenamiento usado, dibujada junto a su cifra.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="me-storage">Storage used, 6 of 10 GB</label>
+              <meter class="luz-meter" id="me-storage" min="0" max="10" value="6">6 of 10 GB</meter>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de medidor">
+          <a class="luz-tab" href="#meter-code-panel" data-docs-view="code">Código</a>
+          <a class="luz-tab" href="#meter-design-panel" data-docs-view="design">Diseño</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="meter-code-panel">
+          <h3 class="docs-view__title" id="meter-code">Código</h3>
+          <h4 id="meter-markup">Copiar el marcado</h4>
+          <p>Un <code>&lt;meter&gt;</code> nativo con su rango. El texto interior es para los navegadores que no lo dibujan:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-meter" aria-label="Copy the meter markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Meter markup"><code id="code-meter">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;storage&quot;&gt;Storage used, 6 of 10 GB&lt;/label&gt;
+  &lt;meter class=&quot;luz-meter&quot; id=&quot;storage&quot; min=&quot;0&quot; max=&quot;10&quot; value=&quot;6&quot;&gt;6 of 10 GB&lt;/meter&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h4 id="meter-variants">Variantes y opciones</h4>
+          <ul>
+            <li><code>min</code>, <code>max</code>, <code>value</code>: el rango y la cifra.</li>
+            <li>No uses <code>low</code>, <code>high</code> ni <code>optimum</code>: la barra es siempre del color de marca, nunca verde ni roja.</li>
+          </ul>
+          <h4 id="meter-how">Cómo funciona</h4>
+          <p>Un <code>&lt;meter&gt;</code> nativo dibujado por <code>components/meter.css</code> como una barra de 8 px: un relleno del color de marca sobre un riel atenuado con el color de borde del campo. La barra es una imagen de un número que ya es texto. Consulta la página de <a href="/docs/components/meter/">Medidor</a> para tablas y listas.</p>
+          <h4 id="meter-no-js">Sin JavaScript</h4>
+          <p>La barra se dibuja y la cifra está en la etiqueta. No cambia nada sin tu script, que es quien fija <code>value</code>.</p>
+          <h4 id="meter-keyboard">Teclado y ARIA</h4>
+          <ul>
+            <li>Un medidor no recibe el foco y no tiene teclas.</li>
+            <li>Pon la cifra y la unidad en la etiqueta, u oculta la barra con <code>aria-hidden="true"</code> cuando la cifra esté a su lado.</li>
+          </ul>
+          <p class="docs-view__xref">El <a href="#meter-contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="meter-design-panel">
+          <h3 class="docs-view__title" id="meter-design">Diseño</h3>
+          <h4 id="meter-when">Cuándo usarlo</h4>
+          <p>Usa un medidor para un valor dentro de un rango conocido: una proporción, un recuento frente a un máximo.</p>
+          <ul>
+            <li>Almacenamiento usado, plazas ocupadas, una nota sobre diez.</li>
+            <li>Escribe la cifra junto a la barra: la barra sola no es un número.</li>
+          </ul>
+          <h4 id="meter-when-not">Cuándo no usarlo</h4>
+          <p>Un medidor es un indicador de nivel, no una tarea en curso.</p>
+          <ul>
+            <li>Cuánto ha avanzado una tarea: <a href="/docs/components/progress/">progreso</a>.</li>
+            <li>Un valor que fija el lector: un <a href="/docs/components/form-inputs/#range">control deslizante</a>.</li>
+          </ul>
+          <h4 id="meter-do-dont">Qué hacer y qué no</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Una barra con su cifra en la etiqueta.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-me-do">Storage used, 6 of 10 GB</label><meter class="luz-meter" id="dd-me-do" min="0" max="10" value="6">6 of 10 GB</meter></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Una barra sin cifra: el lector solo puede adivinar el número por su longitud.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-me-dont">Storage</label><meter class="luz-meter" id="dd-me-dont" min="0" max="10" value="6"></meter></div>
+              </div>
+            </figure>
+          </div>
+          <h4 id="meter-content">Cómo escribir el contenido</h4>
+          <ul>
+            <li>Etiquétalo con la cifra y su unidad: «Almacenamiento usado, 6 de 10 GB».</li>
+            <li>Di qué se mide, no qué aspecto tiene la barra.</li>
+            <li>No te apoyes nunca en el color de la barra: es el color de marca en todos los estados.</li>
+          </ul>
+          <h4 id="meter-contrast">Contraste y foco</h4>
+          <p>Compartido con los demás controles de valores: <a href="#values-contrast">contraste y foco de los valores</a>.</p>
+          <h4 id="meter-tokens">Tokens que usa</h4>
+          <p>Compartido con los demás controles de valores: <a href="#values-tokens">tokens de los valores</a>.</p>
+          <p class="docs-view__xref">El <a href="#meter-keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h2 id="output">Resultado</h2>
+        <p>El resultado de un cálculo o de un control, como el número junto a un control deslizante.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label" for="ou-seats">Seats <output class="luz-output" id="ou-seats">12</output></label>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de resultado">
+          <a class="luz-tab" href="#output-code-panel" data-docs-view="code">Código</a>
+          <a class="luz-tab" href="#output-design-panel" data-docs-view="design">Diseño</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="output-code-panel">
+          <h3 class="docs-view__title" id="output-code">Código</h3>
+          <h4 id="output-markup">Copiar el marcado</h4>
+          <p>Un <code>&lt;output&gt;</code> nativo; <code>for</code> enumera los ids de los controles de los que procede:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-output" aria-label="Copy the output markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Output markup"><code id="code-output">&lt;p&gt;Total: &lt;output class=&quot;luz-output&quot; id=&quot;total&quot; for=&quot;qty price&quot;&gt;12&lt;/output&gt; seats&lt;/p&gt;</code></pre>
+          </div>
+          <h4 id="output-variants">Variantes y opciones</h4>
+          <ul>
+            <li><code>.luz-output</code>: la tipografía de la interfaz, el color de marca, cifras de igual ancho, de al menos 2,5 em de ancho y alineadas al final.</li>
+            <li>Un <code>&lt;output&gt;</code> sin clase: una pequeña ficha en la tipografía monoespaciada.</li>
+          </ul>
+          <h4 id="output-how">Cómo funciona</h4>
+          <p>Un <code>&lt;output&gt;</code> nativo. Tu script escribe su <code>value</code>; LUZ no calcula. Un resultado no se envía con el formulario y su rol ARIA implícito es <code>status</code>.</p>
+          <h4 id="output-no-js">Sin JavaScript</h4>
+          <p>El resultado muestra el valor escrito en el HTML. Nada se recalcula sin tu script.</p>
+          <h4 id="output-keyboard">Teclado y ARIA</h4>
+          <ul>
+            <li>Un resultado no recibe el foco y no tiene teclas.</li>
+            <li>Únelo a sus orígenes con <code>for</code> y pon la unidad en el texto que lo rodea.</li>
+          </ul>
+          <p class="docs-view__xref">El <a href="#output-contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="output-design-panel">
+          <h3 class="docs-view__title" id="output-design">Diseño</h3>
+          <h4 id="output-when">Cuándo usarlo</h4>
+          <p>Usa un resultado para un valor que calcula tu página o que fija un control, mostrado como texto.</p>
+          <ul>
+            <li>El número junto a un control deslizante, un total, un resultado.</li>
+            <li>Escribe la unidad a su lado: «12 plazas».</li>
+          </ul>
+          <h4 id="output-when-not">Cuándo no usarlo</h4>
+          <p>Un resultado muestra un valor; no lo recoge.</p>
+          <ul>
+            <li>Un valor que escribe el lector: un campo <a href="/docs/components/form-inputs/#number">numérico</a> o de <a href="/docs/components/form-inputs/#text">texto</a>.</li>
+            <li>Texto que nunca cambia: un párrafo o un «span».</li>
+          </ul>
+          <h4 id="output-do-dont">Qué hacer y qué no</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> La unidad junto a la cifra: «12 plazas».</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <p>Total: <output class="luz-output">12</output> seats</p>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Una cifra suelta, sin etiqueta ni unidad: el lector no sabe qué cuenta el 12.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <p><output class="luz-output">12</output></p>
+              </div>
+            </figure>
+          </div>
+          <h4 id="output-content">Cómo escribir el contenido</h4>
+          <ul>
+            <li>Pon la cifra en el resultado y la unidad en el texto que lo rodea.</li>
+            <li>Etiqueta lo que se cuenta: «Plazas», «Total».</li>
+            <li>Mantén el texto corto: un resultado es para un valor, no para una frase.</li>
+          </ul>
+          <h4 id="output-contrast">Contraste y foco</h4>
+          <p>Compartido con los demás controles de valores: <a href="#values-contrast">contraste y foco de los valores</a>.</p>
+          <h4 id="output-tokens">Tokens que usa</h4>
+          <p>Compartido con los demás controles de valores: <a href="#values-tokens">tokens de los valores</a>.</p>
+          <p class="docs-view__xref">El <a href="#output-keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+        </div>
+      </div>
+
+      <div class="docs-family-notes">
+        <h2 id="values-contrast">Contraste y foco de los valores</h2>
+        <p>La etiqueta es texto secundario de la página; la barra y la cifra deben distinguirse sobre ella.</p>
+        <div class="luz-table-wrap" role="region" aria-label="Contraste de los controles de valores en cada modo" tabindex="0">
+          <table class="luz-table docs-contrast">
+            <thead>
+              <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Parte"><div>Etiqueta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6,2:1</div></td><td data-label="Oscuro"><div>7,5:1</div></td><td data-label="Alto contraste"><div>19,3:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Relleno del medidor</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> sobre <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>5,6:1</div></td><td data-label="Oscuro"><div>7,7:1</div></td><td data-label="Alto contraste"><div>13,5:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Borde del medidor</div></td><td data-label="Color sobre el fondo"><div><code>--luz-input-border</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3,7:1</div></td><td data-label="Oscuro"><div>4,2:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Cifra del resultado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5,6:1</div></td><td data-label="Oscuro"><div>7,7:1</div></td><td data-label="Alto contraste"><div>14,1:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Resultado sin clase</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> sobre <code>--luz-surface</code></div></td><td data-label="Claro"><div>16,5:1</div></td><td data-label="Oscuro"><div>14,0:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+        <ul>
+          <li><strong>Foco:</strong> un medidor y un resultado no reciben el foco, así que no tienen anillo.</li>
+          <li><strong>No depende solo del color:</strong> la barra es del color de marca en todos los estados; su cifra es texto.</li>
+          <li><strong>Objetivo táctil:</strong> ninguno de los dos es un control que el lector pulse.</li>
+        </ul>
+        <h2 id="values-tokens">Tokens de los valores</h2>
+        <p>Los 11 tokens que leen las reglas de estos controles, por familia de tokens. Cada familia enlaza a su página, con los valores de todos los modos.</p>
+        <dl class="docs-uses">
+          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a></dd></div>
+          <div><dt><a href="/docs/tokens/spacing/">Espaciado y tamaños</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/typography/">Tipografía</a></dt><dd><code>--luz-font-mono</code>, <code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/radius/">Radio</a></dt><dd><code>--luz-radius-sm</code></dd></div>
+        </dl>
+      </div>
+
+      <h2 id="known-issues">Problemas conocidos</h2>
+      <p>Ninguno conocido.</p>
+    </div>

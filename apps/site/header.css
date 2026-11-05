@@ -229,7 +229,15 @@
   filter: none;
 }
 
+/* Firefox forces the colour of the text and then loses the foot of the L (the
+   word reads "IUZ"): the word is a drawing, so it keeps its own palette and
+   takes the system's text colour */
 @media (forced-colors: active) {
+  .site-word {
+    forced-color-adjust: none;
+    color: CanvasText;
+  }
+
   .site-header__brand .site-word {
     filter: none;
   }

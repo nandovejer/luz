@@ -32,6 +32,9 @@ export function routeOf(id) {
   return route;
 }
 
+/** A page of controls (`parts: controls`, the pages of Form fields): one pair of Code and Design tabs for each control, not for the page. */
+export const isControls = (route) => site.byRoute.get(route)?.meta.parts === 'controls';
+
 /** The routes whose source contains `text` (a class, an attribute…). */
 export const routesWith = (text) => site.pages.filter((p) => p.body.includes(text)).map((p) => p.route);
 

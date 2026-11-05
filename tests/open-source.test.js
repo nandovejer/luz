@@ -411,14 +411,17 @@ describe("proposals, support and the browser reviews are public", () => {
     expect(read("README.md")).toMatch(/\]\(\.\/VERSIONING\.md(#[^)]*)?\)/);
   });
 
-  it("dev/BROWSER-REVIEWS.md has an Open section: Scope, Files, What to look at, Browser", () => {
+  it("dev/BROWSER-REVIEWS.md has an Open section: Scope, Files, What to look at, Browser (a table while a row waits, \"No row is open.\" when none does), and a Closed one with the date and the result", () => {
     const text = read("dev/BROWSER-REVIEWS.md");
     const at = text.search(/^##\s+Open\s*$/m);
     expect(at, "a `## Open` heading").toBeGreaterThanOrEqual(0);
     const section = text.slice(at).split(/\n## /)[0];
-    const header = section.split("\n").find((l) => l.startsWith("|"));
-    expect(header?.split("|").map((c) => c.trim()).filter(Boolean)).toEqual(["Scope", "Files", "What to look at", "Browser"]);
     expect(section).toMatch(/needs-browser-review/);
+    const header = section.split("\n").find((l) => l.startsWith("|"));
+    if (header) expect(header.split("|").map((c) => c.trim()).filter(Boolean)).toEqual(["Scope", "Files", "What to look at", "Browser"]);
+    else expect(section, "no table: no row is open").toMatch(/No row is open\./);
+    const closed = text.slice(text.search(/^##\s+Closed\s*$/m)).split(/\n## /)[0];
+    expect(closed.split("\n").find((l) => l.startsWith("|"))?.split("|").map((c) => c.trim()).filter(Boolean)).toEqual(["Closed", "Scope", "Result"]);
   });
 
   it("the security-auditor agent reads the Open section, the issues and the private list", () => {

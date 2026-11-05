@@ -341,7 +341,8 @@ test.describe('Try it, without JavaScript', () => {
 
 /* ---- The width selector ------------------------------------------------- */
 
-const PAGES = [['c-button', 'Button'], ['c-card', 'Card'], ['c-form', 'Form fields'], ['c-table', 'Table']];
+// (the pages of Form fields are pages of controls: each control has its own example, with no width selector of the page's one Example)
+const PAGES = [['c-button', 'Button'], ['c-card', 'Card'], ['c-table', 'Table']];
 const PHONE = 375;
 const TABLET = 768;
 const TOLERANCE = 8;

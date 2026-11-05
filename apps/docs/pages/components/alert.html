@@ -13,28 +13,28 @@ keywords: callout, message box
           <div class="docs-example" data-docs-specimen>
           <div class="docs-demo__stage docs-demo__stage--flush">
             <div class="luz-alert luz-alert--info">
-              <div class="luz-alert__icon" aria-hidden="true">i</div>
+              <div class="luz-alert__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.5v.01"/></svg></div>
               <div>
                 <div class="luz-alert__title">Information</div>
                 <div class="luz-alert__body">A new version is available.</div>
               </div>
             </div>
             <div class="luz-alert luz-alert--success">
-              <div class="luz-alert__icon" aria-hidden="true">✓</div>
+              <div class="luz-alert__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></div>
               <div>
                 <div class="luz-alert__title">Success</div>
                 <div class="luz-alert__body">Deployment completed.</div>
               </div>
             </div>
             <div class="luz-alert luz-alert--warning">
-              <div class="luz-alert__icon" aria-hidden="true">!</div>
+              <div class="luz-alert__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 4l9 16H3z"/><path d="M12 10v4.5M12 17.5v.01"/></svg></div>
               <div>
                 <div class="luz-alert__title">Warning</div>
                 <div class="luz-alert__body">Storage is almost full.</div>
               </div>
             </div>
             <div class="luz-alert luz-alert--error">
-              <div class="luz-alert__icon" aria-hidden="true">×</div>
+              <div class="luz-alert__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
               <div>
                 <div class="luz-alert__title">Error</div>
                 <div class="luz-alert__body">The build failed.</div>
@@ -57,10 +57,10 @@ keywords: callout, message box
                 <button class="luz-copy-btn" type="button" data-copy-from="code-alert" aria-label="Copy the warning alert markup">Copy</button>
               </div>
               <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Warning alert markup"><code id="code-alert">&lt;div class=&quot;luz-alert luz-alert--warning&quot;&gt;
-  &lt;div class=&quot;luz-alert__icon&quot; aria-hidden=&quot;true&quot;&gt;!&lt;/div&gt;
+  &lt;div class=&quot;luz-alert__icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot; width=&quot;20&quot; height=&quot;20&quot;&gt;…&lt;/svg&gt;&lt;/div&gt;
   &lt;div&gt;
     &lt;div class=&quot;luz-alert__title&quot;&gt;Warning&lt;/div&gt;
-    &lt;div class=&quot;luz-alert__body&quot;&gt;Storage is almost full. Delete old builds to free space.&lt;/div&gt;
+    &lt;div class=&quot;luz-alert__body&quot;&gt;Storage is almost full.&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
             </div>
@@ -82,7 +82,7 @@ keywords: callout, message box
             <h3 id="how">How it works</h3>
             <p>A block with an icon, a title and a body, styled by <code>components/alert.css</code>. No JavaScript.</p>
             <ul>
-              <li>The icon is decorative (<code>aria-hidden="true"</code>): the title already names the status.</li>
+              <li>The icon is an SVG of the Icons page, decorative (<code>aria-hidden="true"</code>): the title already names the status.</li>
               <li>The start border and the title take the status colour; the body stays in the secondary text colour.</li>
             </ul>
             <h3 id="no-js">Without JavaScript</h3>
@@ -108,7 +108,7 @@ keywords: callout, message box
             <ul>
               <li>A decision the reader must make before going on: use a <a href="/docs/components/modal/">modal</a>.</li>
               <li>A short confirmation that needs no action: use a <a href="/docs/components/toast/">toast</a>.</li>
-              <li>An error on one field: put it next to the field (<a href="/docs/components/form/">form fields</a>).</li>
+              <li>An error on one field: put it next to the field (<a href="/docs/components/form-field-parts/">form fields</a>).</li>
               <li>More than two alerts at once: merge them, or the reader stops reading them.</li>
             </ul>
             <h3 id="do-dont">Do and don't</h3>
@@ -116,13 +116,13 @@ keywords: callout, message box
               <figure class="luz-do-dont__item luz-do-dont__item--do">
                 <figcaption><strong class="luz-do-dont__verdict">Do</strong> Say what happened and what to do next: “Storage is almost full. Delete old builds or change your plan.”</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-alert luz-alert--warning"><div class="luz-alert__icon">!</div><div><div class="luz-alert__title">Storage almost full</div><div class="luz-alert__body">Delete old builds or change your plan.</div></div></div>
+                  <div class="luz-alert luz-alert--warning"><div class="luz-alert__icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 4l9 16H3z"/><path d="M12 10v4.5M12 17.5v.01"/></svg></div><div><div class="luz-alert__title">Storage almost full</div><div class="luz-alert__body">Delete old builds or change your plan.</div></div></div>
                 </div>
               </figure>
               <figure class="luz-do-dont__item luz-do-dont__item--dont">
                 <figcaption><strong class="luz-do-dont__verdict">Don't</strong> “Something went wrong.” names neither what failed nor what the reader can do about it.</figcaption>
                 <div class="luz-do-dont__stage" inert aria-hidden="true">
-                  <div class="luz-alert luz-alert--error"><div class="luz-alert__icon">×</div><div><div class="luz-alert__title">Error</div><div class="luz-alert__body">Something went wrong.</div></div></div>
+                  <div class="luz-alert luz-alert--error"><div class="luz-alert__icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div><div><div class="luz-alert__title">Error</div><div class="luz-alert__body">Something went wrong.</div></div></div>
                 </div>
               </figure>
             </div>

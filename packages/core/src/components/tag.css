@@ -64,8 +64,9 @@
   justify-content: center;
   min-width: 20px;
   min-height: 20px;
-  padding: 0 var(--luz-space-2xs);
+  padding: 1px var(--luz-space-2xs) 0; /* the mono face leaves descender room: the digits sit about 1 px high without it */
   font-size: var(--luz-text-xs);
+  line-height: 1;
   font-weight: 500;
   border-radius: var(--luz-radius-full); /* a pill: a count, round by nature */
   font-family: var(--luz-font-mono);

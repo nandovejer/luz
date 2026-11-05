@@ -645,12 +645,11 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
     let blocks = 0;
     let pages = 0;
     for (const page of site.pages.filter((p) => markupAreas.includes(p.meta.area))) {
-      const start = page.body.search(/<h3\b[^>]*\bid="markup"/);
-      if (start === -1) continue;
+      // A page of controls gives llms-full each control's code without the field wrapper: tests/docs-controls.test.js
+      if (page.meta.parts === "controls") continue;
+      const section = markupSection(page);
+      if (section === null) continue;
       pages += 1;
-      const rest = page.body.slice(start + 1);
-      const end = rest.search(/<h[23]\b/);
-      const section = rest.slice(0, end === -1 ? undefined : end);
       const e = entry(page.route);
       expect(e, `an entry for ${page.route}`).toBeTruthy();
       for (const [, code] of section.matchAll(/<pre\b[^>]*\bdata-lang="html"[^>]*>\s*<code[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/g)) {
@@ -1066,11 +1065,23 @@ const cssOf = (pkg) => EXAMPLE_ENTRY[pkg] ?? FILES[pkg].css;
 /* ---- the oracle: what a page's "Copy the markup" holds ---------------------- */
 
 function markupSection(page) {
+  // The h3 `markup`, to the next h2 or h3; on a page of controls (`parts: controls`), each control's h4
+  // `<control>-markup`, to the next heading of any level: the sections of the page, joined
+  const sections = [];
   const start = page.body.search(/<h3\b[^>]*\bid="markup"/);
-  if (start === -1) return null;
-  const rest = page.body.slice(start + 1);
-  const end = rest.search(/<h[23]\b/);
-  return rest.slice(0, end === -1 ? undefined : end);
+  if (start !== -1) {
+    const rest = page.body.slice(start + 1);
+    const end = rest.search(/<h[23]\b/);
+    sections.push(rest.slice(0, end === -1 ? undefined : end));
+  }
+  if (page.meta.parts === "controls") {
+    for (const m of page.body.matchAll(/<h4\b[^>]*\bid="[a-z0-9-]+-markup"/g)) {
+      const rest = page.body.slice(m.index + 1);
+      const end = rest.search(/<h[2-5]\b/);
+      sections.push(rest.slice(0, end === -1 ? undefined : end));
+    }
+  }
+  return sections.length ? sections.join("\n") : null;
 }
 
 /** { kept: [{ label, code }], skipped: [{ label, code }] } of the `html` blocks of #markup. */
@@ -1288,7 +1299,13 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
       const first = inspect(e.html, e.route).anchors[0];
       expect(first, `${e.route} has a link`).toBeTruthy();
       expect(SCHEME_OR_HOST.test(first) || first.startsWith("/"), `${e.route}: ${first} is relative`).toBe(false);
-      expect(resolved(e.route, first), e.route).toEqual({ path: e.page.route, hash: "#markup" });
+      const link = resolved(e.route, first);
+      expect(link.path, e.route).toBe(e.page.route);
+      if (e.page.meta.parts === "controls") {
+        // A page of controls has no one #markup: the link goes to a section of markup that is on the page
+        expect(link.hash, e.route).toMatch(/^#(?:[a-z0-9-]+-)?markup$/);
+        expect(e.page.body, `${e.route}: ${link.hash} is an id of the page`).toContain(`id="${link.hash.slice(1)}"`);
+      } else expect(link.hash, e.route).toBe("#markup");
     }
   });
 
@@ -1337,7 +1354,7 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
       expect(head, e.route).toMatch(/\bMIT\b/);
       expect(head, e.route).toContain(VERSIONS.core);
       expect(head, e.route).toContain("scripts/docs-site/ai.js");
-      expect(head, e.route).toContain("#markup");
+      expect(head, e.route).toMatch(/#(?:[a-z0-9-]+-)?markup/);
     }
   });
 

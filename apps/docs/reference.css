@@ -430,6 +430,64 @@ h3.docs-subhead {
   color: var(--luz-text-secondary);
 }
 
+/* A page of controls (parts: controls, the pages of Form fields): each control
+   is an h2 and a block of its own: its summary, its example, then its own Code
+   and Design tabs. The panel title is an h3 and its sections h4. The closing
+   .docs-family-notes hold the contrast table and the tokens the controls of the
+   page share. Sticky is bound by its parent, so each tab row stays under the
+   header only to the end of its own control, and two rows never pile up. */
+.docs-control,
+.docs-family-notes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--luz-space-md);
+  align-content: start;
+}
+
+.docs-control + :is(.docs-control, .docs-family-notes) {
+  margin-block-start: var(--luz-space-lg);
+  padding-block-start: var(--luz-space-xl);
+  border-block-start: 1px solid var(--luz-divider);
+}
+
+.docs-control > h2,
+.docs-family-notes > h2 {
+  margin-block: 0;
+}
+
+.docs-family-notes > h2 {
+  font-size: var(--luz-text-xl);
+}
+
+.docs-control .docs-view-tabs {
+  margin-block-start: 0;
+}
+
+.docs-control [id] {
+  scroll-margin-top: calc(var(--luz-space-lg) + 3rem);
+}
+
+/* The control's own title is above its tab row, which is not stuck yet: the
+   page's scroll padding is all the room it needs */
+.docs-control > h2[id],
+.docs-family-notes > h2[id] {
+  scroll-margin-top: 0;
+}
+
+.docs-control .docs-view__title {
+  margin-block-start: var(--luz-space-lg);
+  font-size: var(--luz-text-xl);
+}
+
+.docs-control .docs-view > h4 {
+  margin-block-start: var(--luz-space-md);
+  font-size: var(--luz-text-lg);
+}
+
+.docs-control .docs-view > .docs-view__title + h4 {
+  margin-block-start: 0;
+}
+
 /* Do and don't (Design tab): the pattern is catalog's .luz-do-dont.
    What follows holds a component still for a picture in its stage: the
    component's own classes, drawn in place (what the docs teach, not the
@@ -1266,6 +1324,23 @@ h3.docs-subhead {
   display: block;
   margin: var(--luz-space-sm) 0 0;
   padding-inline-start: var(--luz-space-xl);
+}
+
+/* A group whose label is the link to a page of controls (Form fields): quiet like
+   the label, found by its underline when hovered, and heavier with a mark when
+   it is the page you are on (DR-12) */
+.docs-nav__group > a.luz-sidebar__section-label {
+  text-decoration: none;
+}
+
+.docs-nav__group > a.luz-sidebar__section-label:hover,
+.docs-nav__group > a.luz-sidebar__section-label[aria-current="page"] {
+  color: var(--luz-sidebar-text-hover);
+  text-decoration: underline;
+}
+
+.docs-nav__group > a.luz-sidebar__section-label[aria-current="page"] {
+  font-weight: 600;
 }
 
 /* The area of the current page: a thinner cue than the page itself */

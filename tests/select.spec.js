@@ -4,11 +4,15 @@
  * right-to-left text, the list boxes without an arrow, and the keyboard focus.
  * The layering (nothing of layer 1 depends on `appearance: base-select`) is
  * checked on the CSS in tests/select.test.js. Run with: pnpm test:ui
+ *
+ * The select is a control of the Choice page of Form fields (since 2026-11-05, /docs/components/form-choice/#select): its example has the
+ * closed select and the error. The disabled select and the list box are the same class with an attribute, so the test
+ * adds them to the page instead of asking the demo to show every state.
  */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const ROUTE = '/docs/components/select/';
+const ROUTE = '/docs/components/form-choice/';
 const THEMES = ['light', 'dark', 'high-contrast'];
 
 const style = (locator, props) =>
@@ -49,6 +53,25 @@ test.describe('Select', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(ROUTE);
     await page.waitForLoadState('networkidle');
+    // The states the demo does not show: a disabled select and a list box, in the same field as the first select
+    await page.evaluate(() => {
+      const make = (id, attrs) => {
+        const el = document.createElement('select');
+        el.className = 'luz-select';
+        el.id = id;
+        el.setAttribute('aria-label', id);
+        for (const [name, value] of Object.entries(attrs)) el.setAttribute(name, value);
+        for (const text of ['One', 'Two', 'Three', 'Four']) {
+          const option = document.createElement('option');
+          option.value = text.toLowerCase();
+          option.textContent = text;
+          el.append(option);
+        }
+        document.querySelector('#sl-country').closest('.luz-field').append(el);
+      };
+      make('s-disabled', { disabled: '' });
+      make('s-multiple', { multiple: '', size: '4' });
+    });
   });
 
   for (const theme of THEMES) {
@@ -56,7 +79,7 @@ test.describe('Select', () => {
       await page.evaluate((t) => (document.documentElement.dataset.theme = t), theme);
       await page.waitForTimeout(300);
       const { violations } = await new AxeBuilder({ page })
-        .include('#c-select [data-docs-specimen]')
+        .include('#c-form-choice .docs-example:has(#sl-country)')
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         .analyze();
       expect(violations.map((v) => v.id)).toEqual([]);
@@ -64,20 +87,20 @@ test.describe('Select', () => {
 
     test(`sets color-scheme from the theme, so the native list matches (${theme})`, async ({ page }) => {
       await page.evaluate((t) => (document.documentElement.dataset.theme = t), theme);
-      const { 'color-scheme': scheme } = await style(page.locator('#s-country'), ['color-scheme']);
+      const { 'color-scheme': scheme } = await style(page.locator('#sl-country'), ['color-scheme']);
       expect(scheme).toBe(theme === 'dark' ? 'dark' : 'light');
     });
   }
 
   test('is at least 24 CSS px high, with a visible label', async ({ page }) => {
-    const box = await page.locator('#s-country').boundingBox();
+    const box = await page.locator('#sl-country').boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(24);
     await expect(page.getByLabel('Country', { exact: true })).toHaveCount(1);
   });
 
   test('draws a text-colored arrow, with no content for a screen reader', async ({ page }) => {
     await withoutBaseSelect(page);
-    const select = page.locator('#s-country');
+    const select = page.locator('#sl-country');
     const { 'background-image': image, color } = await style(select, ['background-image', 'color']);
     // The arrow is gradients in currentcolor, so it resolves to the text color
     expect(image).toContain('linear-gradient');
@@ -86,7 +109,7 @@ test.describe('Select', () => {
   });
 
   test('shows a keyboard focus ring and a thicker border', async ({ page }) => {
-    const select = page.locator('#s-country');
+    const select = page.locator('#sl-country');
     await page.keyboard.press('Tab');
     await select.focus();
     await page.keyboard.press('Shift+Tab');
@@ -101,7 +124,7 @@ test.describe('Select', () => {
   test('keeps the arrow and the border in forced colors', async ({ page }) => {
     await withoutBaseSelect(page);
     await page.emulateMedia({ forcedColors: 'active' });
-    const select = page.locator('#s-country');
+    const select = page.locator('#sl-country');
     const s = await style(select, ['background-image', 'border-bottom-style', 'border-bottom-width', 'border-bottom-color', 'color', 'background-color']);
     expect(s['border-bottom-style']).toBe('solid');
     expect(Number.parseFloat(s['border-bottom-width'])).toBeGreaterThanOrEqual(1);
@@ -113,7 +136,7 @@ test.describe('Select', () => {
 
   test('moves the arrow to the inline end in right-to-left text', async ({ page }) => {
     await withoutBaseSelect(page);
-    const select = page.locator('#s-country');
+    const select = page.locator('#sl-country');
     const ltr = await style(select, ['background-position']);
     await page.evaluate(() => (document.documentElement.dir = 'rtl'));
     const rtl = await style(select, ['background-position']);
@@ -131,7 +154,7 @@ test.describe('Select', () => {
   });
 
   test('marks an error with a thicker border, and a disabled select with a dashed one', async ({ page }) => {
-    const error = await style(page.locator('#s-error'), ['border-bottom-width']);
+    const error = await style(page.locator('#sl-error'), ['border-bottom-width']);
     expect(error['border-bottom-width']).toBe('2px');
     const disabled = await style(page.locator('#s-disabled'), ['border-bottom-style', 'cursor']);
     expect(disabled['border-bottom-style']).toBe('dashed');
@@ -139,7 +162,7 @@ test.describe('Select', () => {
   });
 
   test('picks an option from the keyboard, with no script', async ({ page }) => {
-    const select = page.locator('#s-country');
+    const select = page.locator('#sl-country');
     await select.selectOption('es');
     await expect(select).toHaveValue('es');
     await select.focus();
@@ -149,12 +172,12 @@ test.describe('Select', () => {
 
   test('in a browser without base-select, the closed box is the whole component', async ({ page }) => {
     const supported = await page.evaluate(() => window.CSS.supports('appearance', 'base-select'));
-    const { 'background-image': image } = await style(page.locator('#s-country'), ['background-image']);
+    const { 'background-image': image } = await style(page.locator('#sl-country'), ['background-image']);
     // Where the list is styled, the browser's own icon replaces the gradient
     // arrow; where it is not, the gradient arrow must be there
     expect(image).toBe(supported ? 'none' : image);
     expect(await withoutBaseSelect(page)).toBeGreaterThan(0);
-    const bare = await style(page.locator('#s-country'), ['background-image', 'appearance']);
+    const bare = await style(page.locator('#sl-country'), ['background-image', 'appearance']);
     expect(bare['background-image']).toContain('linear-gradient');
     expect(bare.appearance).toBe('none');
   });

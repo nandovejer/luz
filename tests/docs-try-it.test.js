@@ -150,7 +150,8 @@ describe("Try it, on the Button page", () => {
 });
 
 describe("the width selector", () => {
-  for (const id of ["c-button", "c-card", "c-form", "c-table"]) {
+  // (the pages of Form fields are pages of controls: each control has its own example, with no width selector of the page's one Example)
+  for (const id of ["c-button", "c-card", "c-table"]) {
     describe(`on ${id}`, () => {
       const page = root(id);
       const component = query(page, "div.docs-component");

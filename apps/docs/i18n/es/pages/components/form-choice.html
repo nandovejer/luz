@@ -1,0 +1,458 @@
+<!-- luz:page
+title: Elección
+description: Elegir entre opciones que el lector ve: casilla de verificación, botón de opción, interruptor y selector.
+keywords: casilla de verificación, botón de opción, interruptor, selector, lista desplegable
+source: 9ff718dfb48f
+reviewed: false
+-->
+    <div class="docs-component" id="c-form-choice">
+      <p>Un selector va dentro de <code>.luz-field</code>, igual que en <a href="/docs/components/form-inputs/">Campos de entrada</a>.</p>
+
+      <div class="docs-control">
+        <h2 id="checkbox">Casilla de verificación</h2>
+        <p>Una casilla que el lector marca para responder sí o no, o para elegir cualquiera de varias opciones independientes.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <div class="luz-field__label" id="cb-notify-label">Notifications</div>
+              <div class="luz-check-group" role="group" aria-labelledby="cb-notify-label">
+                <div class="luz-check-item"><input type="checkbox" id="cb-email" checked><label for="cb-email">Email</label></div>
+                <div class="luz-check-item"><input type="checkbox" id="cb-push"><label for="cb-push">Push</label></div>
+                <div class="luz-check-item"><input type="checkbox" id="cb-sms" disabled><label for="cb-sms">SMS (disabled)</label></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de casilla de verificación">
+          <a class="luz-tab" href="#checkbox-code-panel" data-docs-view="code">Código</a>
+          <a class="luz-tab" href="#checkbox-design-panel" data-docs-view="design">Diseño</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="checkbox-code-panel">
+          <h3 class="docs-view__title" id="checkbox-code">Código</h3>
+          <h4 id="checkbox-markup">Copiar el marcado</h4>
+          <p>Una casilla nativa dentro de <code>.luz-check-item</code>, con su etiqueta al lado; <code>.luz-check-group</code> apila varias:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-checkbox" aria-label="Copy the checkbox markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Checkbox markup"><code id="code-checkbox">&lt;div class=&quot;luz-check-group&quot; role=&quot;group&quot; aria-labelledby=&quot;notify-label&quot;&gt;
+  &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;notify-email&quot; checked&gt;&lt;label for=&quot;notify-email&quot;&gt;Email&lt;/label&gt;&lt;/div&gt;
+  &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;notify-push&quot;&gt;&lt;label for=&quot;notify-push&quot;&gt;Push&lt;/label&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h4 id="checkbox-variants">Variantes y opciones</h4>
+          <ul>
+            <li><code>checked</code>: una casilla rellena con una marca de verificación.</li>
+            <li><code>disabled</code>: atenuada, Tab la salta y no se envía.</li>
+            <li><code>required</code>: el navegador detiene el formulario hasta que se marque.</li>
+          </ul>
+          <h4 id="checkbox-how">Cómo funciona</h4>
+          <p>Un <code>&lt;input&gt;</code> nativo con <code>appearance: none</code>, redibujado por <code>components/form.css</code>. La etiqueta se une a él con <code>for</code> e <code>id</code>, así que un clic en el texto marca la casilla.</p>
+          <h4 id="checkbox-no-js">Sin JavaScript</h4>
+          <p>Cada casilla se marca, se desmarca y se envía con su formulario.</p>
+          <h4 id="checkbox-keyboard">Teclado y ARIA</h4>
+          <ul>
+            <li>Tab pasa de una casilla a otra; Espacio marca o desmarca la que tiene el foco.</li>
+            <li>Da a un grupo de casillas un nombre que un lector de pantalla lea antes de la primera, como hace la etiqueta en el marcado anterior.</li>
+          </ul>
+          <p class="docs-view__xref">El <a href="#checkbox-contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="checkbox-design-panel">
+          <h3 class="docs-view__title" id="checkbox-design">Diseño</h3>
+          <h4 id="checkbox-when">Cuándo usarlo</h4>
+          <p>Usa una casilla cuando el lector pueda elegir ninguna, una o varias opciones.</p>
+          <ul>
+            <li>Un sí o un no que se guarda con un botón: «Envíame un correo sobre las novedades».</li>
+            <li>Una lista en la que pueden valer tantas opciones como se quiera.</li>
+          </ul>
+          <h4 id="checkbox-when-not">Cuándo no usarlo</h4>
+          <p>No uses una casilla para elegir una opción entre varias ni para un ajuste que se aplica al instante.</p>
+          <ul>
+            <li>Una opción entre varias: botones de opción.</li>
+            <li>Un ajuste que surte efecto en cuanto cambia: un interruptor.</li>
+          </ul>
+          <h4 id="checkbox-do-dont">Qué hacer y qué no</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Opciones independientes como casillas.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-check-item"><input type="checkbox" id="dd-cb-do" checked><label for="dd-cb-do">Email me about new releases</label></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Casillas para elegir una sola opción: se pueden marcar los dos planes.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-check-group">
+                  <div class="luz-check-item"><input type="checkbox" id="dd-cb-dont-1" checked><label for="dd-cb-dont-1">Free plan</label></div>
+                  <div class="luz-check-item"><input type="checkbox" id="dd-cb-dont-2" checked><label for="dd-cb-dont-2">Team plan</label></div>
+                </div>
+              </div>
+            </figure>
+          </div>
+          <h4 id="checkbox-content">Cómo escribir el contenido</h4>
+          <ul>
+            <li>Escribe la etiqueta de modo que marcada signifique sí: «Envíame un correo sobre las novedades».</li>
+            <li>Una línea, con mayúscula solo al inicio y sin punto final.</li>
+            <li>Sin negaciones: «No me envíes correos» obliga al lector a desmarcar para decir que sí.</li>
+          </ul>
+          <h4 id="checkbox-contrast">Contraste y foco</h4>
+          <p>Compartido con los demás controles de elección: <a href="#choice-contrast">contraste y foco de la elección</a>.</p>
+          <h4 id="checkbox-tokens">Tokens que usa</h4>
+          <p>Compartido con los demás controles de elección: <a href="#choice-tokens">tokens de la elección</a>.</p>
+          <p class="docs-view__xref">El <a href="#checkbox-keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h2 id="radio">Botón de opción</h2>
+        <p>Botones redondos para elegir una opción entre unas pocas, con todas las opciones a la vista.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <fieldset class="luz-fieldset">
+              <legend>Plan</legend>
+              <div class="luz-check-group">
+                <div class="luz-check-item"><input type="radio" name="rd-plan" id="rd-free" checked><label for="rd-free">Free</label></div>
+                <div class="luz-check-item"><input type="radio" name="rd-plan" id="rd-team"><label for="rd-team">Team</label></div>
+                <div class="luz-check-item"><input type="radio" name="rd-plan" id="rd-ent"><label for="rd-ent">Enterprise</label></div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de botón de opción">
+          <a class="luz-tab" href="#radio-code-panel" data-docs-view="code">Código</a>
+          <a class="luz-tab" href="#radio-design-panel" data-docs-view="design">Diseño</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="radio-code-panel">
+          <h3 class="docs-view__title" id="radio-code">Código</h3>
+          <h4 id="radio-markup">Copiar el marcado</h4>
+          <p>Los botones de opción con el mismo <code>name</code> forman una sola elección. Un <code>&lt;fieldset&gt;</code> con un <code>&lt;legend&gt;</code> plantea la pregunta:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-radio" aria-label="Copy the radio group markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Radio group markup"><code id="code-radio">&lt;fieldset class=&quot;luz-fieldset&quot;&gt;
+  &lt;legend&gt;Plan&lt;/legend&gt;
+  &lt;div class=&quot;luz-check-group&quot;&gt;
+    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; id=&quot;plan-free&quot; checked&gt;&lt;label for=&quot;plan-free&quot;&gt;Free&lt;/label&gt;&lt;/div&gt;
+    &lt;div class=&quot;luz-check-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;plan&quot; id=&quot;plan-team&quot;&gt;&lt;label for=&quot;plan-team&quot;&gt;Team&lt;/label&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre>
+          </div>
+          <h4 id="radio-variants">Variantes y opciones</h4>
+          <ul>
+            <li><code>checked</code>: la opción elegida al principio. Solo una opción de un grupo puede estarlo.</li>
+            <li><code>required</code> en un botón de opción: el navegador detiene el formulario hasta que el grupo tenga respuesta.</li>
+            <li><code>disabled</code>: Tab lo salta y no se envía.</li>
+          </ul>
+          <h4 id="radio-how">Cómo funciona</h4>
+          <p>Un <code>&lt;input type="radio"&gt;</code> nativo con <code>appearance: none</code>, redibujado por <code>components/form.css</code>: un anillo que se rellena con un punto del color de marca. El navegador forma el grupo con los botones de opción que comparten un <code>name</code>.</p>
+          <h4 id="radio-no-js">Sin JavaScript</h4>
+          <p>Cada grupo funciona y envía su valor elegido con el formulario.</p>
+          <h4 id="radio-keyboard">Teclado y ARIA</h4>
+          <ul>
+            <li>Tab entra en el grupo, hasta la opción elegida o la primera, y sale de él. Las teclas de flecha cambian la elección dentro del grupo. Espacio elige la opción que tiene el foco.</li>
+            <li>La leyenda da nombre al grupo y cada etiqueta da nombre a su opción.</li>
+          </ul>
+          <p class="docs-view__xref">El <a href="#radio-contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="radio-design-panel">
+          <h3 class="docs-view__title" id="radio-design">Diseño</h3>
+          <h4 id="radio-when">Cuándo usarlo</h4>
+          <p>Usa botones de opción cuando el lector elige exactamente una entre unas pocas opciones y conviene que las vea todas.</p>
+          <ul>
+            <li>Seis opciones o menos: un plan, una talla, un método de entrega.</li>
+            <li>Marca desde el principio la opción que quiere la mayoría, o ninguna cuando la elección deba ser consciente.</li>
+          </ul>
+          <h4 id="radio-when-not">Cuándo no usarlo</h4>
+          <p>No uses botones de opción para una lista larga ni para respuestas que no son excluyentes.</p>
+          <ul>
+            <li>Más de seis opciones: un <a href="#select">selector</a>.</li>
+            <li>Cualquier número de opciones: <a href="#checkbox">casillas</a>. Un único sí o no: una casilla o un <a href="#switch">interruptor</a>.</li>
+          </ul>
+          <h4 id="radio-do-dont">Qué hacer y qué no</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Un solo nombre para el grupo y una leyenda que plantea la pregunta.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <fieldset class="luz-fieldset"><legend>Plan</legend><div class="luz-check-group"><div class="luz-check-item"><input type="radio" name="dd-rd-do" id="dd-rd-do-1" checked><label for="dd-rd-do-1">Free</label></div><div class="luz-check-item"><input type="radio" name="dd-rd-do" id="dd-rd-do-2"><label for="dd-rd-do-2">Team</label></div></div></fieldset>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Botones de opción sin leyenda: las opciones no tienen una pregunta a la que responder.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-check-group"><div class="luz-check-item"><input type="radio" name="dd-rd-dont" id="dd-rd-dont-1" checked><label for="dd-rd-dont-1">Free</label></div><div class="luz-check-item"><input type="radio" name="dd-rd-dont" id="dd-rd-dont-2"><label for="dd-rd-dont-2">Team</label></div></div>
+              </div>
+            </figure>
+          </div>
+          <h4 id="radio-content">Cómo escribir el contenido</h4>
+          <ul>
+            <li>La leyenda es la pregunta o un sustantivo: «Plan», «Método de entrega».</li>
+            <li>Las opciones son cortas y paralelas, con mayúscula solo al inicio y en un orden que el lector pueda prever.</li>
+            <li>Di qué significa cada opción en su etiqueta, no en una pista al lado.</li>
+          </ul>
+          <h4 id="radio-contrast">Contraste y foco</h4>
+          <p>Compartido con los demás controles de elección: <a href="#choice-contrast">contraste y foco de la elección</a>.</p>
+          <h4 id="radio-tokens">Tokens que usa</h4>
+          <p>Compartido con los demás controles de elección: <a href="#choice-tokens">tokens de la elección</a>.</p>
+          <p class="docs-view__xref">El <a href="#radio-keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h2 id="switch">Interruptor</h2>
+        <p>Un interruptor para un ajuste que está activado o desactivado y surte efecto al instante.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-stack">
+              <label class="luz-toggle">
+                <input class="luz-toggle__input" type="checkbox" role="switch" checked>
+                <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
+                <span class="luz-toggle__label">Public profile</span>
+              </label>
+              <label class="luz-toggle">
+                <input class="luz-toggle__input" type="checkbox" role="switch">
+                <span class="luz-toggle__track" aria-hidden="true"><span class="luz-toggle__thumb"></span></span>
+                <span class="luz-toggle__label">Weekly digest</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de interruptor">
+          <a class="luz-tab" href="#switch-code-panel" data-docs-view="code">Código</a>
+          <a class="luz-tab" href="#switch-design-panel" data-docs-view="design">Diseño</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="switch-code-panel">
+          <h3 class="docs-view__title" id="switch-code">Código</h3>
+          <h4 id="switch-markup">Copiar el marcado</h4>
+          <p>Una casilla con <code>role="switch"</code> dentro de un <code>&lt;label&gt;</code>; el riel y el pulgar se dibujan después:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-switch" aria-label="Copy the switch markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Switch markup"><code id="code-switch">&lt;label class=&quot;luz-toggle&quot;&gt;
+  &lt;input class=&quot;luz-toggle__input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot;&gt;
+  &lt;span class=&quot;luz-toggle__track&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;luz-toggle__thumb&quot;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;luz-toggle__label&quot;&gt;Weekly digest&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+          </div>
+          <h4 id="switch-variants">Variantes y opciones</h4>
+          <ul>
+            <li><code>checked</code>: activado. El riel se rellena con el color de marca y el pulgar se desplaza al final.</li>
+            <li><code>disabled</code>: un riel atenuado; Tab lo salta y no se envía.</li>
+          </ul>
+          <h4 id="switch-how">Cómo funciona</h4>
+          <p>Una casilla nativa, oculta pero con foco, con <code>role="switch"</code>. <code>.luz-toggle</code> dibuja el riel y el pulgar; el pulgar se mueve en sentido contrario en texto de derecha a izquierda, y los colores forzados redibujan ambos con los colores del sistema. LUZ no incluye ningún script: un cambio surte efecto cuando tu propio script actúa sobre él.</p>
+          <h4 id="switch-no-js">Sin JavaScript</h4>
+          <p>El interruptor se activa y se desactiva, y se envía con su formulario. Aplicar el cambio al instante es tarea de tu script.</p>
+          <h4 id="switch-keyboard">Teclado y ARIA</h4>
+          <ul>
+            <li>Tab lleva el foco al interruptor; Espacio lo activa o lo desactiva.</li>
+            <li>La etiqueta es el nombre; <code>role="switch"</code> indica al navegador que está activado o desactivado, no marcado.</li>
+          </ul>
+          <p class="docs-view__xref">El <a href="#switch-contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="switch-design-panel">
+          <h3 class="docs-view__title" id="switch-design">Diseño</h3>
+          <h4 id="switch-when">Cuándo usarlo</h4>
+          <p>Usa un interruptor para un ajuste que se aplica en cuanto cambia, sin botón de confirmación.</p>
+          <ul>
+            <li>Una preferencia, un modo o una función que está activada o desactivada.</li>
+            <li>Nombra el ajuste en la etiqueta, de modo que activado signifique que está en marcha.</li>
+          </ul>
+          <h4 id="switch-when-not">Cuándo no usarlo</h4>
+          <p>No uses un interruptor para una elección que espera a un botón.</p>
+          <ul>
+            <li>En un formulario que se envía con un botón: una <a href="#checkbox">casilla</a>.</li>
+            <li>Una opción entre varias: <a href="#radio">botones de opción</a>.</li>
+          </ul>
+          <h4 id="switch-do-dont">Qué hacer y qué no</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> El interruptor nombra el ajuste y el cambio es instantáneo: sin botón.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <label class="luz-toggle"><input class="luz-toggle__input" type="checkbox" role="switch" checked><span class="luz-toggle__track"><span class="luz-toggle__thumb"></span></span><span class="luz-toggle__label">Public profile</span></label>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Un interruptor en un formulario con botón de guardar: promete un cambio instantáneo, así que el lector no sabe que aún hace falta el botón.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <label class="luz-toggle"><input class="luz-toggle__input" type="checkbox" role="switch" checked><span class="luz-toggle__track"><span class="luz-toggle__thumb"></span></span><span class="luz-toggle__label">Email me about new releases</span></label><div class="o-row"><button class="luz-btn luz-btn--primary luz-btn--sm" type="button">Save preferences</button></div>
+              </div>
+            </figure>
+          </div>
+          <h4 id="switch-content">Cómo escribir el contenido</h4>
+          <ul>
+            <li>Nombra el ajuste: «Perfil público», «Resumen semanal».</li>
+            <li>No escribas «Activado» ni «Desactivado» en la etiqueta: el interruptor ya lo muestra.</li>
+            <li>Sin negaciones: «Ocultar mi perfil» hace que activado signifique desactivado.</li>
+          </ul>
+          <h4 id="switch-contrast">Contraste y foco</h4>
+          <p>Compartido con los demás controles de elección: <a href="#choice-contrast">contraste y foco de la elección</a>.</p>
+          <h4 id="switch-tokens">Tokens que usa</h4>
+          <p>Compartido con los demás controles de elección: <a href="#choice-tokens">tokens de la elección</a>.</p>
+          <p class="docs-view__xref">El <a href="#switch-keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h2 id="select">Selector</h2>
+        <p>Una lista desplegable nativa para elegir una opción entre muchas, con la caja cerrada estilizada mediante tokens.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="o-grid docs-cols-2">
+              <div class="luz-field">
+                <label class="luz-field__label" for="sl-country">Country</label>
+                <select class="luz-select" id="sl-country" name="country">
+                  <option value="">Select a country</option>
+                  <option value="de">Germany</option>
+                  <option value="es">Spain</option>
+                  <option value="fr">France</option>
+                </select>
+              </div>
+              <div class="luz-field">
+                <label class="luz-field__label" for="sl-error">Country of birth</label>
+                <select class="luz-select" id="sl-error" name="birth" aria-invalid="true" aria-describedby="sl-error-text">
+                  <option value="" selected>Select a country</option>
+                  <option value="es">Spain</option>
+                </select>
+                <div class="luz-field__error" id="sl-error-text"><span class="u-sr-only">Error: </span>Select a country of birth.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de selector">
+          <a class="luz-tab" href="#select-code-panel" data-docs-view="code">Código</a>
+          <a class="luz-tab" href="#select-design-panel" data-docs-view="design">Diseño</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="select-code-panel">
+          <h3 class="docs-view__title" id="select-code">Código</h3>
+          <h4 id="select-markup">Copiar el marcado</h4>
+          <p>Un <code>select</code> sin clase no necesita ninguna. <code>.luz-select</code> añade la lista abierta estilizada, donde el navegador puede dibujarla:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-select" aria-label="Copy the select markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Select markup"><code id="code-select">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label&quot; for=&quot;country&quot;&gt;Country&lt;/label&gt;
+  &lt;select class=&quot;luz-select&quot; id=&quot;country&quot; name=&quot;country&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;Select a country&lt;/option&gt;
+    &lt;option value=&quot;de&quot;&gt;Germany&lt;/option&gt;
+    &lt;option value=&quot;es&quot;&gt;Spain&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h4 id="select-variants">Variantes y opciones</h4>
+          <ul>
+            <li><code>aria-invalid="true"</code>: un borde de peligro más grueso; acompáñalo del texto del error.</li>
+            <li><code>disabled</code>: texto desactivado y un borde discontinuo.</li>
+            <li><code>multiple</code>, <code>size</code>: una lista que permanece abierta, con borde completo y sin flecha.</li>
+            <li><code>&lt;optgroup label&gt;</code>: un conjunto de opciones con nombre.</li>
+          </ul>
+          <h4 id="select-how">Cómo funciona</h4>
+          <p>Un <code>&lt;select&gt;</code> nativo estilizado por <code>components/select.css</code> en dos capas: la caja cerrada en todos los navegadores y la lista abierta dentro de <code>@supports (appearance: base-select)</code>. La flecha sigue el color del texto y pasa a la izquierda en texto de derecha a izquierda.</p>
+          <h4 id="select-no-js">Sin JavaScript</h4>
+          <p>No cambia nada: el selector es un elemento nativo y LUZ no le añade ningún script.</p>
+          <h4 id="select-keyboard">Teclado y ARIA</h4>
+          <ul>
+            <li>Tab lleva al selector. Enter o Espacio abre la lista, Escape la cierra y las flechas arriba y abajo recorren las opciones.</li>
+            <li>Dale un <code>&lt;label for&gt;</code> visible y ningún rol. Para un error, pon <code>aria-invalid="true"</code> y haz que <code>aria-describedby</code> apunte al texto.</li>
+          </ul>
+          <p class="docs-view__xref">El <a href="#select-contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="select-design-panel">
+          <h3 class="docs-view__title" id="select-design">Diseño</h3>
+          <h4 id="select-when">Cuándo usarlo</h4>
+          <p>Usa un selector cuando el lector deba elegir una opción de una lista larga cuya respuesta ya conoce.</p>
+          <ul>
+            <li>Un país, un año, una zona horaria: más de seis opciones y una sola respuesta.</li>
+            <li>Las opciones son cortas y el lector puede recorrerlas en orden.</li>
+          </ul>
+          <h4 id="select-when-not">Cuándo no usarlo</h4>
+          <p>Un selector oculta las opciones hasta que el lector lo abre, y a algunas personas les resulta difícil. La regla de las seis opciones es propia de LUZ.</p>
+          <ul>
+            <li>Seis opciones o menos: botones de opción, para que todas queden a la vista.</li>
+            <li>Varias respuestas: casillas. No construyas nunca tu propio cuadro de lista con elementos <code>&lt;div&gt;</code>.</li>
+          </ul>
+          <h4 id="select-do-dont">Qué hacer y qué no</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Un selector para una lista larga que el lector conoce.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <select class="luz-select"><option>Select a country</option><option>Germany</option><option>Spain</option></select>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Tres opciones en un selector: los botones de opción las muestran todas a la vez.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <select class="luz-select"><option>Standard</option><option>Express</option><option>Collect</option></select>
+              </div>
+            </figure>
+          </div>
+          <h4 id="select-content">Cómo escribir el contenido</h4>
+          <ul>
+            <li>La etiqueta dice qué elegir, con un sustantivo: «País», no «Seleccione por favor».</li>
+            <li>La primera opción es una indicación con valor vacío, para que un campo obligatorio no quede respondido por defecto.</li>
+            <li>Con mayúscula solo al inicio y en un orden que el lector pueda prever, como el alfabético.</li>
+          </ul>
+          <h4 id="select-contrast">Contraste y foco</h4>
+          <p>Compartido con los demás controles de elección: <a href="#choice-contrast">contraste y foco de la elección</a>.</p>
+          <h4 id="select-tokens">Tokens que usa</h4>
+          <p>Compartido con los demás controles de elección: <a href="#choice-tokens">tokens de la elección</a>.</p>
+          <p class="docs-view__xref">El <a href="#select-keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+        </div>
+      </div>
+
+      <div class="docs-family-notes">
+        <h2 id="choice-contrast">Contraste y foco de la elección</h2>
+        <p>La etiqueta es texto principal de la página; la casilla debe distinguirse sobre ella.</p>
+        <div class="luz-table-wrap" role="region" aria-label="Contraste de los controles de elección en cada modo" tabindex="0">
+          <table class="luz-table docs-contrast">
+            <thead>
+              <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Parte"><div>Etiqueta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>15,8:1</div></td><td data-label="Oscuro"><div>15,1:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Borde de la casilla y riel del interruptor, desactivado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-outline</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>4,3:1</div></td><td data-label="Oscuro"><div>3,6:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Casilla marcada y riel del interruptor, activado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-fill</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5,6:1</div></td><td data-label="Oscuro"><div>3,5:1</div></td><td data-label="Alto contraste"><div>14,1:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Marca de verificación y pulgar del interruptor, activado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> sobre <code>--luz-brand-fill</code></div></td><td data-label="Claro"><div>6,0:1</div></td><td data-label="Oscuro"><div>4,9:1</div></td><td data-label="Alto contraste"><div>14,1:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Pulgar del interruptor, desactivado</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-on-fill</code> sobre <code>--luz-outline</code></div></td><td data-label="Claro"><div>4,6:1</div></td><td data-label="Oscuro"><div>4,8:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Botón de opción elegido, anillo y punto</div></td><td data-label="Color sobre el fondo"><div><code>--luz-brand-primary</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5,6:1</div></td><td data-label="Oscuro"><div>7,7:1</div></td><td data-label="Alto contraste"><div>14,1:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Texto y flecha del selector</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> sobre <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>16,5:1</div></td><td data-label="Oscuro"><div>14,0:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Borde del selector</div></td><td data-label="Color sobre el fondo"><div><code>--luz-input-border</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>3,7:1</div></td><td data-label="Oscuro"><div>4,2:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Borde de error del selector</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> sobre <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>5,5:1</div></td><td data-label="Oscuro"><div>10,8:1</div></td><td data-label="Alto contraste"><div>9,3:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Texto de la lista abierta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> sobre <code>--luz-surface</code></div></td><td data-label="Claro"><div>16,5:1</div></td><td data-label="Oscuro"><div>14,0:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Opción bajo el puntero</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-primary</code> sobre <code>--luz-surface-muted</code></div></td><td data-label="Claro"><div>15,8:1</div></td><td data-label="Oscuro"><div>15,1:1</div></td><td data-label="Alto contraste"><div>20,1:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Anillo de foco</div></td><td data-label="Color sobre el fondo"><div><code>--luz-focus-ring</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5,6:1</div></td><td data-label="Oscuro"><div>7,7:1</div></td><td data-label="Alto contraste"><div>21,0:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+        <ul>
+          <li><strong>Foco:</strong> un contorno de 2 px <code>--luz-focus-ring</code>, a 2 px de la casilla, del riel del interruptor o del selector.</li>
+          <li><strong>No depende solo del color:</strong> una casilla marcada está rellena y tiene una marca de verificación, un botón de opción elegido tiene un punto y el pulgar del interruptor se desplaza.</li>
+          <li><strong>Objetivo táctil:</strong> toda la fila, casilla y etiqueta, recibe el clic.</li>
+        </ul>
+        <h2 id="choice-tokens">Tokens de la elección</h2>
+        <p>Los 27 tokens que leen las reglas de estos controles, por familia de tokens. Cada familia enlaza a su página, con los valores de todos los modos.</p>
+        <dl class="docs-uses">
+          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-brand-fill"><code>--luz-brand-fill</code></a>, <a href="/docs/tokens/color/#luz-brand-primary"><code>--luz-brand-primary</code></a>, <a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-focus-ring"><code>--luz-focus-ring</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-input-border"><code>--luz-input-border</code></a>, <a href="/docs/tokens/color/#luz-outline"><code>--luz-outline</code></a>, <a href="/docs/tokens/color/#luz-surface"><code>--luz-surface</code></a>, <a href="/docs/tokens/color/#luz-surface-muted"><code>--luz-surface-muted</code></a>, <a href="/docs/tokens/color/#luz-text-disabled"><code>--luz-text-disabled</code></a>, <a href="/docs/tokens/color/#luz-text-on-fill"><code>--luz-text-on-fill</code></a>, <a href="/docs/tokens/color/#luz-text-primary"><code>--luz-text-primary</code></a></dd></div>
+          <div><dt><a href="/docs/tokens/spacing/">Espaciado y tamaños</a></dt><dd><code>--luz-control-lg</code>, <code>--luz-control-md</code>, <code>--luz-space-2xs</code>, <code>--luz-space-3xs</code>, <code>--luz-space-sm</code>, <code>--luz-space-xl</code>, <code>--luz-space-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/typography/">Tipografía</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-control</code>, <code>--luz-text-md</code></dd></div>
+          <div><dt><a href="/docs/tokens/radius/">Radio</a></dt><dd><code>--luz-radius-full</code>, <code>--luz-radius-md</code>, <code>--luz-radius-sm</code></dd></div>
+          <div><dt><a href="/docs/tokens/shadows/">Sombras</a></dt><dd><code>--luz-shadow-md</code></dd></div>
+          <div><dt><a href="/docs/tokens/motion/">Movimiento</a></dt><dd><code>--luz-duration-fast</code></dd></div>
+        </dl>
+      </div>
+
+      <h2 id="known-issues">Problemas conocidos</h2>
+      <p>La lista abierta de un selector se ve distinta en cada navegador y sistema. Es lo previsto.</p>
+      <ul>
+        <li>La caja cerrada es igual en todas partes; la lista que se abre desde ella la dibuja el navegador o el sistema operativo.</li>
+        <li>Donde se admite <code>appearance: base-select</code> (Chrome y Edge 135 y posteriores, Safari 27 y posteriores), la lista toma los colores, la forma y el espaciado de LUZ. Firefox muestra los suyos.</li>
+        <li>En los teléfonos se abre el selector del propio sistema, y LUZ no puede darle estilo.</li>
+      </ul>
+    </div>

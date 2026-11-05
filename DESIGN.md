@@ -102,7 +102,7 @@ The look of the published system (`@luz-ds/tokens`, `@luz-ds/core`, `@luz-ds/cat
 
 **Look at:** is the inline padding at least the block padding? Do two like boxes (two controls, two cards) have the same pair?
 
-**Exceptions:** a dense control (a text field, a select, the terminal) and the bars and cells of a layout (the navbar, the sidebar, a table) may take an inline step two above the block one, for the gutter their text needs (decided 2026-10-24).
+**Exceptions:** a dense control (a text field, a select, the terminal) and the bars and cells of a layout (the navbar, the sidebar, a table) may take an inline step two above the block one, for the gutter their text needs (decided 2026-10-24). The count badge (`.luz-badge`) takes 1 px above and none below: its mono face keeps room for descenders under the digits, so a box centred by its line box shows them 0.6 to 2 px high, and no step of the scale is small enough to correct it (owner chose variant B, 2026-11-05).
 
 ### DR-8 The gap inside a thing is one step small
 

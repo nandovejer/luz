@@ -48,7 +48,7 @@ export function sourceHash(body) {
 
 const TRANSLATED_KEYS = ["title", "description", "fits", "keywords", "source", "reviewed", "reviewer"];
 /** What a translation never says: it comes from the English page, so the structure cannot drift. */
-const INHERITED_KEYS = ["area", "order", "group", "fits-kinds", "files", "module", "toc", "lead", "generate", "search", "nav", "layout"];
+const INHERITED_KEYS = ["area", "order", "group", "fits-kinds", "files", "module", "parts", "toc", "lead", "generate", "search", "nav", "layout"];
 const HANDLE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/;
 
 /** Read a translation file: { meta, body, bodyLine }. Throws "file:line: …". */

@@ -478,6 +478,9 @@ describe("parity: a translation keeps the structure, the code and the figures of
 
 describe("every translation of the real docs", () => {
   const real = scanSite(join(REPO, "apps/docs"), REPO);
+  // The four pages of Form fields (Inputs, Choice, Values, Field parts) have no Spanish page until they are translated: the
+  // generator shows the English page in the Spanish chrome (the fallback), so a page that is not there has no parity to check.
+  // A Spanish file that exists is held to the parity like any other.
 
   it("is read by the loader from apps/docs/i18n", () => {
     expect(real.docsI18n, "scanSite(...).docsI18n").toBeTruthy();

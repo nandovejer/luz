@@ -3,12 +3,16 @@
  *
  * Component and pattern pages have two tabs, Code (the default) and Design:
  * core's tabs.js upgrades them (`.luz-tabs` with `data-docs-view` on each
- * tab). This docs-only glue remembers the reader's choice across pages:
+ * tab). A page of controls (`parts: controls`, the Form fields page) has one
+ * row per control: they all follow the one choice. This docs-only glue
+ * remembers the reader's choice across pages:
  *
  * - Which tab opens: the URL fragment's (tabs.js), else the stored one, else
  *   Code (a11y.md TAB-11). Call initDocsView() before initTabs(): it only
  *   marks the stored tab aria-selected="true", which initTabs() honours.
  * - Restoring is silent: no focus move, no URL or history change (TAB-13).
+ * - A choice in one row moves the other rows to it, silently too, and the
+ *   page keeps the clicked tab where it was on the screen.
  * - Only an explicit choice is stored, a click or a key press on a tab; a tab
  *   opened by a fragment, a link or find in page is not (TAB-14).
  * - One key, "luz-docs-view", and only "code" or "design" is read back:
@@ -44,24 +48,83 @@ export function saveView(value, storage) {
 /** Keys with which core's tabs.js changes the selected tab. */
 const SELECTING_KEYS = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End", " ", "Enter"]);
 
+/** Events that only a reader makes: a scroll that comes after one is not the page's own. */
+const READER_EVENTS = ["wheel", "touchstart", "pointerdown", "keydown"];
+
+/**
+ * A page opened at a fragment keeps its target where tabs.js put it when the web font arrives late. The browser scrolled
+ * to the target in the fallback face; when ET Book replaces it the lines get shorter and the page shrinks, which Firefox
+ * (no scroll anchoring) does not make up for: the target ends under the header and the stuck tab row. Once the fonts are
+ * ready, and only once, the target goes back, with no animation, unless the reader has scrolled meanwhile.
+ */
+function keepDeepLink() {
+  if (location.hash.length < 2 || !document.fonts?.ready) return;
+  let moved = false;
+  const stop = () => {
+    moved = true;
+  };
+  for (const type of READER_EVENTS) document.addEventListener(type, stop, { passive: true });
+  document.fonts.ready.then(async () => {
+    // The face that arrived is applied in the frame after; the page has its new height by the second
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    for (const type of READER_EVENTS) document.removeEventListener(type, stop);
+    let target = null;
+    try {
+      target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    } catch {
+      // A malformed escape in the fragment: no target
+    }
+    if (!moved && target) target.scrollIntoView({ behavior: "instant" });
+  });
+}
+
 /** Mark the stored tab selected (before initTabs) and store the reader's choices (after it). */
 export function initDocsView() {
   const tabs = [...document.querySelectorAll(".luz-tab[data-docs-view]")];
   if (!tabs.length) return;
+  keepDeepLink();
 
+  // Every row of tabs (one on most pages, one per control on a page of controls) opens on the stored tab
   const stored = readView();
-  const tab = stored && tabs.find((t) => t.dataset.docsView === stored);
-  if (tab) tab.setAttribute("aria-selected", "true");
+  if (stored) {
+    for (const row of new Set(tabs.map((t) => t.closest(".luz-tabs")))) {
+      row?.querySelector(`.luz-tab[data-docs-view="${stored}"]`)?.setAttribute("aria-selected", "true");
+    }
+  }
 
+  let syncing = false;
   // Registered before tabs.js binds its own listeners, so it reads the
   // selection once they have run: wait for the end of the event
   const remember = (e) => {
-    if (!e.target.closest?.(".luz-tab[data-docs-view]")) return;
+    const tab = e.target.closest?.(".luz-tab[data-docs-view]");
+    if (!tab || syncing) return;
     if (e.type === "keydown" && !SELECTING_KEYS.has(e.key)) return;
     setTimeout(() => {
-      const selected = tabs.find((t) => t.getAttribute("aria-selected") === "true");
-      if (selected) saveView(selected.dataset.docsView);
+      // The one the reader acted on: the row's selected tab, not the first selected of the page
+      const selected = tab.closest(".luz-tabs")?.querySelector('.luz-tab[aria-selected="true"]');
+      if (!selected) return;
+      saveView(selected.dataset.docsView);
+      follow(selected);
     });
+  };
+
+  // The other rows move to the chosen view through tabs.js's own click (no focus move, no history); the rows above the
+  // clicked tab change height, so the page is scrolled back by what the clicked control's block moved
+  const follow = (selected) => {
+    const others = tabs.filter((t) => t.dataset.docsView === selected.dataset.docsView && t.getAttribute("aria-selected") === "false" && t.closest(".luz-tabs") !== selected.closest(".luz-tabs"));
+    if (!others.length) return;
+    // The tab row sticks under the header, so it does not tell where the page moved: its container does
+    const anchor = selected.closest(".luz-tabs").parentElement;
+    const top = anchor.getBoundingClientRect().top;
+    // Where the browser anchors its scroll it would also move the page: the one correction is ours
+    const root = document.documentElement;
+    root.style.overflowAnchor = "none";
+    syncing = true;
+    for (const t of others) t.click();
+    syncing = false;
+    const moved = anchor.getBoundingClientRect().top - top;
+    if (moved) window.scrollBy({ top: moved, behavior: "instant" });
+    requestAnimationFrame(() => root.style.removeProperty("overflow-anchor"));
   };
   document.addEventListener("click", remember);
   document.addEventListener("keydown", remember);

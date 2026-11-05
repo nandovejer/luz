@@ -56,7 +56,7 @@ import { HtmlError, VOID, decodeEntities, tags } from "./html.js";
 import { SITE_URL } from "../../packages/check/src/messages.js";
 import { ruleRows } from "./ai-rules.js";
 import { PROMPT_KINDS, promptRoute } from "./prompts.js";
-import { readingOrder } from "./site.js";
+import { isFamilyNote, readingOrder } from "./site.js";
 import { FILES, catalogComponents, catalogFilesIn, minified } from "./snippets.js";
 import { englishT } from "./strings.js";
 
@@ -92,9 +92,15 @@ const listed = (page) => page.meta.search !== "false";
 
 const urlOf = (route, siteUrl) => (siteUrl ? `${siteUrl}${route.slice(1)}` : route);
 
-/** A page with a "Copy the markup" section has an example document (its h3 has the id `markup`). */
+/**
+ * A page with a "Copy the markup" section has an example document: its h3 has the id `markup`, or, on a page of
+ * controls (`parts: controls`), each control's h4 has the id `<control>-markup`.
+ */
 const MARKUP_HEADING = /<h3\b[^>]*\bid="markup"/;
-const hasMarkup = (page) => MARKUP_HEADING.test(page.body);
+const CONTROL_MARKUP_HEADING = /<h4\b[^>]*\bid="[a-z0-9-]+-markup"/g;
+/** The id the example document links to: `markup`, or on a page of controls the first control's `<control>-markup`. */
+const markupIdOf = (page) => (MARKUP_HEADING.test(page.body) ? "markup" : /<h4\b[^>]*\bid="([a-z0-9-]+-markup)"/.exec(page.body)?.[1] ?? "markup");
+const hasMarkup = (page) => MARKUP_HEADING.test(page.body) || (page.meta.parts === "controls" && new RegExp(CONTROL_MARKUP_HEADING.source).test(page.body));
 
 /** `/docs/<area>/<slug>/` is `/examples/<area>/<slug>.html` (D2-A). */
 const exampleRouteOf = (page) => page.route.replace(/^\/docs\//, "/examples/").replace(/\/$/, ".html");
@@ -600,6 +606,59 @@ function aiBodyOf(body, headings) {
   return parts.join("\n");
 }
 
+// A page of controls (`parts: controls`, the pages of Form fields): h2 controls, h3 panel titles, h4 sections of each
+// control's Code and Design panels, their ids prefixed by the control's (`text-markup`). The file keeps what an agent needs
+// to write the markup of a control: the page's lead, then for each control its summary and its markup (the code samples),
+// and its keys only when they are one short sentence. The rest of each control (variants, how it works, without
+// JavaScript, when to use it and not) stays on the page; so do the notes of the family (contrast, tokens).
+/** A section that is one short paragraph (no list, 100 characters at most), else nothing. */
+const shortSentence = (html) => {
+  const text = html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  return !/<(?:ul|ol|table|pre)\b/.test(html) && /^\s*<p\b[\s\S]*<\/p>\s*$/.test(html) && text.length <= 100 ? html : "";
+};
+// The page that documents the field's own parts keeps the wrapper in its samples; everywhere else the lead of Inputs says it once
+const FIELD_PARTS_ROUTE = "/docs/components/form-field-parts/";
+/**
+ * The code of a control's markup sample for llms-full: the field wrapper (`.luz-field` with its label, hint and error,
+ * shown once in the lead of Inputs) is left out, so a control keeps its own element.
+ */
+function controlMarkup(code) {
+  const lines = code.split("\n");
+  // A label that holds more than text (the range's output) is the control's own markup: it stays
+  if (lines[0] !== '<div class="luz-field">' || lines.at(-1) !== "</div>" || lines.some((l) => /<label\b.*<output\b/.test(l))) return code;
+  const inner = lines.slice(1, -1).filter((l) => !/^\s*<(?:label class="luz-field__label|div class="luz-field__(?:helper|error)")/.test(l));
+  return inner.map((l) => l.replace(/^ {2}/, "")).join("\n");
+}
+
+/** The text of a page of controls: its lead, then each control, then "Known issues". */
+function controlsBody(page, headings, { file, siteUrl, base, canonical }) {
+  const out = [];
+  const lead = convert(page.body.slice(0, headings[0]?.start ?? page.body.length), { file, line: page.bodyLine, siteUrl, base }).text;
+  if (lead) out.push(lead);
+  let control = null;
+  for (const [i, h] of headings.entries()) {
+    const fragment = () => page.body.slice(h.end, headings[i + 1]?.start ?? page.body.length);
+    const keep = (marks, shape = (html) => html) => {
+      const text = convert(shape(fragment()), { file, line: h.endLine, siteUrl, base }).text;
+      if (text) out.push(`${marks} ${h.text}\n${text}`);
+    };
+    if (h.level === 2) {
+      // A family's notes (its contrast table and tokens) are computed: they stay on the page
+      control = isFamilyNote(h.id) || h.id === "known-issues" ? null : h.id;
+      if (!isFamilyNote(h.id)) keep("###");
+    } else if (h.level === 4 && control && h.id === `${control}-markup`) {
+      // Its code samples only, with no heading and no label
+      for (const [, , code] of fragment().matchAll(PRE_HTML)) {
+        const text = decodeEntities(code).trim();
+        out.push(`\`\`\`html\n${canonical === FIELD_PARTS_ROUTE ? text : controlMarkup(text)}\n\`\`\``);
+      }
+    } else if (h.level === 4 && control && h.id === `${control}-keyboard`) {
+      keep("####", shortSentence);
+    }
+  }
+  return out.join("\n\n");
+}
+
 const TOKENS_POINTER = "Values: `tokens.json`, `classes.json`.";
 
 /** The text of a page's body, by the kind of page. */
@@ -631,6 +690,8 @@ function bodyOf(page, options) {
     const items = headings.filter((h) => h.level === 2 && h.text).map((h) => `- ${/[<>]/.test(h.text) ? codeSpan(h.text) : h.text}`);
     return [items.join("\n"), OUTLINE_POINTERS.get(canonical)].filter(Boolean).join("\n\n");
   }
+
+  if (page.meta.parts === "controls") return controlsBody(page, headings, { file, siteUrl, base, canonical });
 
   if (headings.some((h) => h.id === "markup")) {
     const boundaries = headings.filter((h) => h.level <= 3);
@@ -769,16 +830,29 @@ const PRE_HTML = /<pre\b([^>]*\bdata-lang="html"[^>]*)>\s*<code[^>]*>([\s\S]*?)<
  * no inline script and its policy says `script-src 'self'`.
  */
 function markupBlocks(page) {
+  // The h3 `markup` section (to the next h2 or h3), then each control's h4 `<control>-markup` (to the next h2 to h4)
+  const sections = [];
   const start = page.body.search(MARKUP_HEADING);
-  const rest = page.body.slice(start + 1);
-  const end = rest.search(/<h[23]\b/);
-  const section = rest.slice(0, end === -1 ? undefined : end);
+  if (start !== -1) {
+    const rest = page.body.slice(start + 1);
+    const end = rest.search(/<h[23]\b/);
+    sections.push(rest.slice(0, end === -1 ? undefined : end));
+  }
+  if (page.meta.parts === "controls") {
+    for (const m of page.body.matchAll(CONTROL_MARKUP_HEADING)) {
+      const rest = page.body.slice(m.index + 1);
+      const end = rest.search(/<h[2-4]\b/);
+      sections.push(rest.slice(0, end === -1 ? undefined : end));
+    }
+  }
   const kept = [];
   const skipped = [];
-  for (const [, attrs, code] of section.matchAll(PRE_HTML)) {
-    const label = collapse(decodeEntities(/\baria-label="([^"]*)"/.exec(attrs)?.[1] ?? ""));
-    const block = { label, code: decodeEntities(code).trim() };
-    (/<script\b/i.test(block.code) || /\son[a-z]+\s*=/i.test(block.code) ? skipped : kept).push(block);
+  for (const section of sections) {
+    for (const [, attrs, code] of section.matchAll(PRE_HTML)) {
+      const label = collapse(decodeEntities(/\baria-label="([^"]*)"/.exec(attrs)?.[1] ?? ""));
+      const block = { label, code: decodeEntities(code).trim() };
+      (/<script\b/i.test(block.code) || /\son[a-z]+\s*=/i.test(block.code) ? skipped : kept).push(block);
+    }
   }
   return { kept, skipped };
 }
@@ -806,7 +880,7 @@ function exampleDocument(page, { csp, versions, packages, catalog = [] }) {
   const title = page.meta.title;
   const route = exampleRouteOf(page);
   // `../dist/` and `../../docs/`: the document is at /examples/<area>/<slug>.html
-  const docsUrl = `../..${page.route}#markup`;
+  const docsUrl = `../..${page.route}#${markupIdOf(page)}`;
   const snippetUrl = "../../docs/get-started/snippet/";
   const css = (pkg) => (pkg === "tokens" ? ["tokens.min.css"] : pkg === "catalog" ? inCascadeOrder(catalog).map(minified) : [FILES[pkg].css]);
   const links = packages.flatMap((pkg) => css(pkg).map((file) => `  <link rel="stylesheet" href="../dist/${pkg}/${file}">`));

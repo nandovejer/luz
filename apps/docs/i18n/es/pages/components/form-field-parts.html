@@ -1,0 +1,240 @@
+<!-- luz:page
+title: Partes del campo
+description: Lo que envuelve a un control: la etiqueta, la pista, el error y el grupo.
+keywords: etiqueta, pista, ayuda, error, fieldset, legend, grupo de campos, leyenda
+source: 1c33e48f9016
+reviewed: false
+-->
+    <div class="docs-component" id="c-form-field-parts">
+      <div class="docs-control">
+        <h2 id="label">Etiqueta, pista y error</h2>
+        <p>El texto que da nombre a un control, dice lo que necesita e indica qué ha fallado.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <div class="luz-field">
+              <label class="luz-field__label luz-field__label--required" for="lb-slug">Slug</label>
+              <input class="luz-input luz-input--error" id="lb-slug" type="text" value="my project" required aria-invalid="true" aria-describedby="lb-slug-hint lb-slug-error">
+              <div class="luz-field__helper" id="lb-slug-hint">Letters, numbers and dashes.</div>
+              <div class="luz-field__error" id="lb-slug-error"><span class="u-sr-only">Error: </span>Use letters, numbers and dashes only.</div>
+            </div>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de etiqueta, pista y error">
+          <a class="luz-tab" href="#label-code-panel" data-docs-view="code">Código</a>
+          <a class="luz-tab" href="#label-design-panel" data-docs-view="design">Diseño</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="label-code-panel">
+          <h3 class="docs-view__title" id="label-code">Código</h3>
+          <h4 id="label-markup">Copiar el marcado</h4>
+          <p><code>.luz-field</code> envuelve la etiqueta, el control, la pista y el error. <code>aria-describedby</code> une la pista y el error al control:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-label" aria-label="Copy the field with hint and error markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Field with hint and error markup"><code id="code-label">&lt;div class=&quot;luz-field&quot;&gt;
+  &lt;label class=&quot;luz-field__label luz-field__label--required&quot; for=&quot;slug&quot;&gt;Slug&lt;/label&gt;
+  &lt;input class=&quot;luz-input luz-input--error&quot; id=&quot;slug&quot; type=&quot;text&quot; required aria-invalid=&quot;true&quot; aria-describedby=&quot;slug-hint slug-error&quot;&gt;
+  &lt;div class=&quot;luz-field__helper&quot; id=&quot;slug-hint&quot;&gt;Letters, numbers and dashes.&lt;/div&gt;
+  &lt;div class=&quot;luz-field__error&quot; id=&quot;slug-error&quot;&gt;&lt;span class=&quot;u-sr-only&quot;&gt;Error: &lt;/span&gt;Use letters, numbers and dashes only.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <h4 id="label-variants">Variantes y opciones</h4>
+          <ul>
+            <li><code>.luz-field__label</code>: la etiqueta visible. <code>--required</code> añade detrás un « *» rojo.</li>
+            <li><code>.luz-field__helper</code>: la pista, bajo el control. <code>.luz-field__error</code>: el error, en el color de peligro.</li>
+            <li><code>.luz-input--error</code> con <code>aria-invalid="true"</code>: un subrayado de peligro de 2 px en el control.</li>
+          </ul>
+          <h4 id="label-how">Cómo funciona</h4>
+          <p>La etiqueta da nombre al control mediante <code>for</code> e <code>id</code>, y un clic en ella lleva el foco al control. LUZ no marca un campo como no válido por ti: añade la clase de error, <code>aria-invalid</code> y el mensaje cuando falle tu validación.</p>
+          <h4 id="label-no-js">Sin JavaScript</h4>
+          <p>La etiqueta, la pista y el error son texto de tu HTML, así que se muestran sin script. El navegador sigue comprobando <code>required</code> y el tipo al enviar el formulario.</p>
+          <h4 id="label-keyboard">Teclado y ARIA</h4>
+          <ul>
+            <li>Una etiqueta y un mensaje no reciben el foco y no tienen teclas propias.</li>
+            <li>Escribe «Error: » antes del texto del error, oculto con <code>.u-sr-only</code> si quieres, y enumera la pista y el error en <code>aria-describedby</code>.</li>
+          </ul>
+          <p class="docs-view__xref">El <a href="#label-contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="label-design-panel">
+          <h3 class="docs-view__title" id="label-design">Diseño</h3>
+          <h4 id="label-when">Cuándo usarlo</h4>
+          <p>Usa una etiqueta en cada control, una pista cuando el lector necesite el formato o el motivo, y un error cuando falle una comprobación.</p>
+          <ul>
+            <li>La etiqueta siempre se ve: permanece en pantalla mientras el lector escribe.</li>
+            <li>El error va junto al campo al que se refiere, con palabras.</li>
+          </ul>
+          <h4 id="label-when-not">Cuándo no usarlo</h4>
+          <p>No sustituyas una de estas partes por otra ni ocultes ninguna.</p>
+          <ul>
+            <li>Un texto de ejemplo (placeholder) no es una etiqueta: desaparece cuando el lector escribe.</li>
+            <li>Un color o un borde solos no son un error: di qué está mal. No muestres el error solo en un aviso emergente: desaparece.</li>
+          </ul>
+          <h4 id="label-do-dont">Qué hacer y qué no</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Un error junto al campo que dice cómo corregirlo.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-lb-do">Slug</label><input class="luz-input luz-input--error" id="dd-lb-do" type="text" value="my project" aria-invalid="true"><div class="luz-field__error">Use letters, numbers and dashes only.</div></div>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Un borde rojo sin palabras: el lector no sabe qué cambiar.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <div class="luz-field"><label class="luz-field__label" for="dd-lb-dont">Slug</label><input class="luz-input luz-input--error" id="dd-lb-dont" type="text" value="my project" aria-invalid="true"></div>
+              </div>
+            </figure>
+          </div>
+          <h4 id="label-content">Cómo escribir el contenido</h4>
+          <ul>
+            <li>La etiqueta es un sustantivo corto, con mayúscula solo al inicio: «Nombre del proyecto».</li>
+            <li>La pista indica el formato o por qué lo pides.</li>
+            <li>El error dice qué está mal y cómo corregirlo. Si marcas los campos obligatorios con «*», explica una vez, sobre el formulario, qué significa.</li>
+          </ul>
+          <h4 id="label-contrast">Contraste y foco</h4>
+          <p>Compartido con las demás partes del campo: <a href="#field-contrast">contraste y foco de las partes del campo</a>.</p>
+          <h4 id="label-tokens">Tokens que usa</h4>
+          <p>Compartido con las demás partes del campo: <a href="#field-tokens">tokens de las partes del campo</a>.</p>
+          <p class="docs-view__xref">El <a href="#label-keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+        </div>
+      </div>
+
+      <div class="docs-control">
+        <h2 id="fieldset">Grupo de campos</h2>
+        <p>Un grupo con borde de controles relacionados, con el nombre de su leyenda.</p>
+        <div class="docs-example" data-docs-specimen>
+          <div class="docs-demo__stage">
+            <fieldset class="luz-fieldset">
+              <legend>Shipping address</legend>
+              <div class="luz-field">
+                <label class="luz-field__label" for="fs-street">Street</label>
+                <input class="luz-input" id="fs-street" type="text" autocomplete="street-address">
+              </div>
+              <div class="luz-field">
+                <label class="luz-field__label" for="fs-city">City</label>
+                <input class="luz-input" id="fs-city" type="text" autocomplete="address-level2">
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <nav class="luz-tabs docs-view-tabs" aria-label="Documentación de grupo de campos">
+          <a class="luz-tab" href="#fieldset-code-panel" data-docs-view="code">Código</a>
+          <a class="luz-tab" href="#fieldset-design-panel" data-docs-view="design">Diseño</a>
+        </nav>
+        <div class="luz-tabpanel docs-view" id="fieldset-code-panel">
+          <h3 class="docs-view__title" id="fieldset-code">Código</h3>
+          <h4 id="fieldset-markup">Copiar el marcado</h4>
+          <p>Un <code>&lt;fieldset&gt;</code> nativo cuyo primer hijo es un <code>&lt;legend&gt;</code>:</p>
+          <div class="docs-snippet">
+            <div class="docs-snippet__bar">
+              <span class="docs-snippet__lang">HTML</span>
+              <button class="luz-copy-btn" type="button" data-copy-from="code-fieldset" aria-label="Copy the fieldset markup">Copy</button>
+            </div>
+            <pre class="luz-code-block" data-lang="html" tabindex="0" role="region" aria-label="Fieldset markup"><code id="code-fieldset">&lt;fieldset class=&quot;luz-fieldset&quot;&gt;
+  &lt;legend&gt;Shipping address&lt;/legend&gt;
+  &lt;div class=&quot;luz-field&quot;&gt;
+    &lt;label class=&quot;luz-field__label&quot; for=&quot;street&quot;&gt;Street&lt;/label&gt;
+    &lt;input class=&quot;luz-input&quot; id=&quot;street&quot; type=&quot;text&quot;&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;luz-field&quot;&gt;
+    &lt;label class=&quot;luz-field__label&quot; for=&quot;city&quot;&gt;City&lt;/label&gt;
+    &lt;input class=&quot;luz-input&quot; id=&quot;city&quot; type=&quot;text&quot;&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre>
+          </div>
+          <h4 id="fieldset-variants">Variantes y opciones</h4>
+          <ul>
+            <li><code>disabled</code> en el grupo desactiva todos los controles que contiene.</li>
+            <li><code>role="group"</code> con <code>aria-labelledby</code> en un <code>&lt;div&gt;</code> da nombre a un grupo sin borde, como hace el ejemplo de la <a href="/docs/components/form-choice/#checkbox">casilla de verificación</a>.</li>
+          </ul>
+          <h4 id="fieldset-how">Cómo funciona</h4>
+          <p>Un <code>&lt;fieldset&gt;</code> nativo estilizado por <code>components/form.css</code>: un borde de 1 px, esquinas suaves y el fondo del campo. El <code>&lt;legend&gt;</code> es un texto pequeño en mayúsculas.</p>
+          <h4 id="fieldset-no-js">Sin JavaScript</h4>
+          <p>No cambia nada: el grupo y su leyenda son nativos y no necesitan script.</p>
+          <h4 id="fieldset-keyboard">Teclado y ARIA</h4>
+          <ul>
+            <li>Un grupo no recibe el foco; Tab recorre los controles que contiene.</li>
+            <li>La leyenda da nombre al grupo: el navegador expone un fieldset como un grupo con el nombre de su leyenda.</li>
+          </ul>
+          <p class="docs-view__xref">El <a href="#fieldset-contrast">contraste y el foco</a> están en la pestaña Diseño.</p>
+        </div>
+        <div class="luz-tabpanel docs-view" id="fieldset-design-panel">
+          <h3 class="docs-view__title" id="fieldset-design">Diseño</h3>
+          <h4 id="fieldset-when">Cuándo usarlo</h4>
+          <p>Usa un grupo de campos para controles que responden juntos a una sola pregunta.</p>
+          <ul>
+            <li>Un conjunto de botones de opción o de casillas, o una dirección.</li>
+            <li>Pon la leyenda primero y mantenla corta.</li>
+          </ul>
+          <h4 id="fieldset-when-not">Cuándo no usarlo</h4>
+          <p>Un grupo de campos es un grupo con nombre, no una caja para maquetar.</p>
+          <ul>
+            <li>Un solo control: su etiqueta basta.</li>
+            <li>Espaciado o columnas: los objetos de maquetación, <code>o-stack</code> u <code>o-grid</code>. No envuelvas cada sección de un formulario.</li>
+          </ul>
+          <h4 id="fieldset-do-dont">Qué hacer y qué no</h4>
+          <div class="luz-do-dont">
+            <figure class="luz-do-dont__item luz-do-dont__item--do">
+              <figcaption><strong class="luz-do-dont__verdict">Hazlo</strong> Una leyenda que nombra el grupo al que responden juntos los controles.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <fieldset class="luz-fieldset"><legend>Shipping address</legend><div class="luz-field"><label class="luz-field__label" for="dd-fs-do">Street</label><input class="luz-input" id="dd-fs-do" type="text"></div></fieldset>
+              </div>
+            </figure>
+            <figure class="luz-do-dont__item luz-do-dont__item--dont">
+              <figcaption><strong class="luz-do-dont__verdict">Evítalo</strong> Un grupo alrededor de un solo campo: su leyenda repite la etiqueta.</figcaption>
+              <div class="luz-do-dont__stage" inert aria-hidden="true">
+                <fieldset class="luz-fieldset"><legend>Street</legend><div class="luz-field"><label class="luz-field__label" for="dd-fs-dont">Street</label><input class="luz-input" id="dd-fs-dont" type="text"></div></fieldset>
+              </div>
+            </figure>
+          </div>
+          <h4 id="fieldset-content">Cómo escribir el contenido</h4>
+          <ul>
+            <li>La leyenda es un sustantivo o una pregunta: «Dirección de envío», «Plan».</li>
+            <li>Sin dos puntos al final: el estilo añade el espacio.</li>
+            <li>No repitas la leyenda en cada etiqueta.</li>
+          </ul>
+          <h4 id="fieldset-contrast">Contraste y foco</h4>
+          <p>Compartido con las demás partes del campo: <a href="#field-contrast">contraste y foco de las partes del campo</a>.</p>
+          <h4 id="fieldset-tokens">Tokens que usa</h4>
+          <p>Compartido con las demás partes del campo: <a href="#field-tokens">tokens de las partes del campo</a>.</p>
+          <p class="docs-view__xref">El <a href="#fieldset-keyboard">teclado y ARIA</a> están en la pestaña Código.</p>
+        </div>
+      </div>
+
+      <div class="docs-family-notes">
+        <h2 id="field-contrast">Contraste y foco de las partes del campo</h2>
+        <p>La etiqueta y la pista son texto secundario de la página; el error es texto de peligro.</p>
+        <div class="luz-table-wrap" role="region" aria-label="Contraste de las partes del campo en cada modo" tabindex="0">
+          <table class="luz-table docs-contrast">
+            <thead>
+              <tr><th scope="col">Parte</th><th scope="col">Color sobre el fondo</th><th scope="col">Claro</th><th scope="col">Oscuro</th><th scope="col">Alto contraste</th><th scope="col">Mínimo</th></tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Parte"><div>Etiqueta</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6,2:1</div></td><td data-label="Oscuro"><div>7,5:1</div></td><td data-label="Alto contraste"><div>19,3:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Pista</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>6,2:1</div></td><td data-label="Oscuro"><div>7,5:1</div></td><td data-label="Alto contraste"><div>19,3:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Mensaje de error</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5,3:1</div></td><td data-label="Oscuro"><div>11,7:1</div></td><td data-label="Alto contraste"><div>9,3:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Asterisco de obligatorio</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> sobre <code>--luz-surface-page</code></div></td><td data-label="Claro"><div>5,3:1</div></td><td data-label="Oscuro"><div>11,7:1</div></td><td data-label="Alto contraste"><div>9,3:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Borde de error</div></td><td data-label="Color sobre el fondo"><div><code>--luz-color-danger</code> sobre <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>5,5:1</div></td><td data-label="Oscuro"><div>10,8:1</div></td><td data-label="Alto contraste"><div>9,3:1</div></td><td data-label="Mínimo"><div>3:1</div></td></tr>
+              <tr><td data-label="Parte"><div>Leyenda</div></td><td data-label="Color sobre el fondo"><div><code>--luz-text-secondary</code> sobre <code>--luz-input-bg</code></div></td><td data-label="Claro"><div>6,4:1</div></td><td data-label="Oscuro"><div>6,9:1</div></td><td data-label="Alto contraste"><div>19,3:1</div></td><td data-label="Mínimo"><div>4,5:1</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-demo__note">Medido a partir de los valores de los tokens de cada modo y redondeado hacia abajo. El mínimo requerido es el de WCAG 2.2 AA: 4,5:1 para texto y 3:1 para anillos de foco, bordes e iconos.</p>
+        <ul>
+          <li><strong>Foco:</strong> una etiqueta, un mensaje y una leyenda no lo reciben; un clic en una etiqueta lleva el foco a su control.</li>
+          <li><strong>No depende solo del color:</strong> un campo no válido tiene un borde inferior de 2 px y un mensaje de error con palabras.</li>
+          <li><strong>Objetivo táctil:</strong> un clic en una etiqueta llega a su control.</li>
+        </ul>
+        <h2 id="field-tokens">Tokens de las partes del campo</h2>
+        <p>Los 12 tokens que leen las reglas de estos controles, por familia de tokens. Cada familia enlaza a su página, con los valores de todos los modos.</p>
+        <dl class="docs-uses">
+          <div><dt><a href="/docs/tokens/color/">Color</a></dt><dd><a href="/docs/tokens/color/#luz-color-danger"><code>--luz-color-danger</code></a>, <a href="/docs/tokens/color/#luz-divider"><code>--luz-divider</code></a>, <a href="/docs/tokens/color/#luz-input-bg"><code>--luz-input-bg</code></a>, <a href="/docs/tokens/color/#luz-text-secondary"><code>--luz-text-secondary</code></a></dd></div>
+          <div><dt><a href="/docs/tokens/spacing/">Espaciado y tamaños</a></dt><dd><code>--luz-space-2xs</code>, <code>--luz-space-lg</code>, <code>--luz-space-md</code>, <code>--luz-space-xs</code></dd></div>
+          <div><dt><a href="/docs/tokens/typography/">Tipografía</a></dt><dd><code>--luz-font-sans</code>, <code>--luz-text-md</code>, <code>--luz-text-sm</code></dd></div>
+          <div><dt><a href="/docs/tokens/radius/">Radio</a></dt><dd><code>--luz-radius-md</code></dd></div>
+        </dl>
+      </div>
+
+      <h2 id="known-issues">Problemas conocidos</h2>
+      <p>Ninguno conocido.</p>
+    </div>

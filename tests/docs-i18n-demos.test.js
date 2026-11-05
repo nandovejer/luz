@@ -182,7 +182,7 @@ describe("the demos of the real translated pages", () => {
     const localized = mod.localize(real, es);
     let seen = 0;
     const wrong = [];
-    for (const route of ["/es/docs/components/button/", "/es/docs/components/card/", "/es/docs/components/form/"]) {
+    for (const route of ["/es/docs/components/button/", "/es/docs/components/card/", "/es/docs/components/form-choice/"]) {
       const page = localized.byRoute.get(route);
       expect(page.fallback, `${route} is translated`).toBe(false);
       const root = parse(renderPage(page, localized, { dev: true }), route);
