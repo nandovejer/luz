@@ -6,7 +6,7 @@
  *   a "beta v<version>" badge, named "LUZ beta v<version>". The version is no longer a link to the changelog.
  * - A site map: a nav of four groups (Documentation, Reference, Resources, Community), each an h2 over a list, with
  *   exactly twenty-one links, in order. No link to the browser reviews, no column of kinds of site, no link twice.
- * - The licence line names Nando Muñoz, as a link to his GitHub, in every language.
+ * - The licence line names Fernando Muñoz, as a link to his GitHub, in every language.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -119,12 +119,12 @@ for (const route of Object.keys(CODES)) {
       expect(findAll(footer, (n) => hasClass(n, "landing-foot-label")), "the labels of the old columns are gone").toEqual([]);
     });
 
-    it("names Nando Muñoz in the licence line as a link to his GitHub, and not Fernando", () => {
+    it("names Fernando Muñoz in the licence line as a link to his GitHub", () => {
       const legal = query(footer, "p.landing-legal");
       const author = findAll(legal, (n) => n.name === "a").find((a) => a.attrs.get("href") === "https://github.com/nandovejer");
       expect(author, "a link to https://github.com/nandovejer").toBeTruthy();
-      expect(textOf(author)).toBe("Nando Muñoz");
-      expect(textOf(legal)).not.toContain("Fernando");
+      expect(textOf(author)).toBe("Fernando Muñoz");
+      expect(textOf(legal)).not.toContain("Nando Muñoz");
       expect(findAll(legal, (n) => n.name === "a").some((a) => a.attrs.get("href") === `${GITHUB}/blob/main/LICENSE`), "the licence stays a link").toBe(true);
     });
   });
