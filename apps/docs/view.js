@@ -48,10 +48,41 @@ export function saveView(value, storage) {
 /** Keys with which core's tabs.js changes the selected tab. */
 const SELECTING_KEYS = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End", " ", "Enter"]);
 
+/** Events that only a reader makes: a scroll that comes after one is not the page's own. */
+const READER_EVENTS = ["wheel", "touchstart", "pointerdown", "keydown"];
+
+/**
+ * A page opened at a fragment keeps its target where tabs.js put it when the web font arrives late. The browser scrolled
+ * to the target in the fallback face; when ET Book replaces it the lines get shorter and the page shrinks, which Firefox
+ * (no scroll anchoring) does not make up for: the target ends under the header and the stuck tab row. Once the fonts are
+ * ready, and only once, the target goes back, with no animation, unless the reader has scrolled meanwhile.
+ */
+function keepDeepLink() {
+  if (location.hash.length < 2 || !document.fonts?.ready) return;
+  let moved = false;
+  const stop = () => {
+    moved = true;
+  };
+  for (const type of READER_EVENTS) document.addEventListener(type, stop, { passive: true });
+  document.fonts.ready.then(async () => {
+    // The face that arrived is applied in the frame after; the page has its new height by the second
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    for (const type of READER_EVENTS) document.removeEventListener(type, stop);
+    let target = null;
+    try {
+      target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    } catch {
+      // A malformed escape in the fragment: no target
+    }
+    if (!moved && target) target.scrollIntoView({ behavior: "instant" });
+  });
+}
+
 /** Mark the stored tab selected (before initTabs) and store the reader's choices (after it). */
 export function initDocsView() {
   const tabs = [...document.querySelectorAll(".luz-tab[data-docs-view]")];
   if (!tabs.length) return;
+  keepDeepLink();
 
   // Every row of tabs (one on most pages, one per control on a page of controls) opens on the stored tab
   const stored = readView();
