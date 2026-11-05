@@ -54,13 +54,12 @@ toc: h2,h3
           </div>
           </div>
           <h2 id="known-issues">Known issues</h2>
-          <p>Without JavaScript the banner is not shown at all: there is nothing to answer, because none of the site’s own scripts run either. A server that sets optional cookies itself, without a script, must ask some other way.</p>
+          <p>Without JavaScript the banner is not shown: none of the site’s own scripts run either, so there is nothing to answer. A server that sets optional cookies without a script must ask another way.</p>
           <ul>
-            <li>The answer is kept in the browser’s local storage, so a server cannot read it, and clearing site data asks again.</li>
-            <li>In a window less than 30 rem (480 px) tall the banner is not fixed: it is in the flow at the top of the page, where its markup is, so the page moves down when it appears.</li>
-            <li>The saved state hides when focus leaves it for the page, but not when you click an empty part of the page. Use its Close button.</li>
+            <li>The answer is a record in the visitor’s browser: a server cannot read it, clearing site data asks again, and it is no proof of consent (GDPR art. 7(1)); keep your own, e.g. from a <code class="luz-code-inline">luz:consent</code> listener.</li>
+            <li>In a window under 30 rem (480 px) tall the banner is in the page flow, not fixed, so the page moves down when it appears.</li>
+            <li>The saved state hides when focus leaves it, but not when you click an empty part of the page: use its Close button.</li>
             <li>It has not been tested with a screen reader.</li>
-            <li>The answer is a record in the visitor’s browser. If your site must be able to show that a person consented (GDPR art. 7(1)), keep your own record, for example by sending the answer to your server from a <code class="luz-code-inline">luz:consent</code> listener, and tell the visitor in your policy.</li>
           </ul>
           <nav class="luz-tabs docs-view-tabs" aria-label="Cookie consent documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
