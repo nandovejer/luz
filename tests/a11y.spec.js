@@ -6,7 +6,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { faded } from './helpers/settle.js';
-import { notFoundRoute, routeOf, routes, routesWith } from './helpers/docs-site.js';
+import { isControls, notFoundRoute, routeOf, routes, routesWith } from './helpers/docs-site.js';
 
 // Every page in Chromium; a sample of layouts in Firefox and WebKit (a11y.md TEST-1)
 // The home page in each of its languages (apps/landing/i18n)
@@ -18,7 +18,18 @@ const BLOCKING = ['serious', 'critical'];
 
 // axe skips hidden content: component pages are scanned again with the
 // Design tab open (a11y.md TEST-2)
+// (a page of controls has one Design tab for each control: its #design is the first row's tab, and every row follows it)
 const DESIGN = routesWith('docs-view-tabs').map((route) => `${route}#design`);
+
+/** Open the Design tab: a page's #design panel, or on a page of controls every control's (one click moves all the rows). */
+async function openDesign(page, route) {
+  if (isControls(route)) {
+    await page.getByRole('tab', { name: 'Design' }).first().click();
+    const panels = page.locator('[id$="-design-panel"]');
+    expect(await panels.count(), route).toBeGreaterThanOrEqual(2);
+    for (const panel of await panels.all()) await expect(panel).toBeVisible();
+  } else await expect(page.locator('#design-panel')).toBeVisible();
+}
 
 for (const app of [...APPS, ...DESIGN]) {
   for (const theme of THEMES) {
@@ -28,8 +39,10 @@ for (const app of [...APPS, ...DESIGN]) {
       // measure a colour at a random point of the fade. Reduced motion keeps the
       // first scene at its last frame, the same on every machine.
       if (HOMES.includes(app)) await page.emulateMedia({ reducedMotion: 'reduce' });
-      await page.goto(app);
-      if (app.endsWith('#design')) await expect(page.locator('#design-panel')).toBeVisible();
+      // A page of controls has no #design: the page, with every Design tab open
+      const route = app.replace(/#design$/, '');
+      await page.goto(isControls(route) ? route : app);
+      if (app.endsWith('#design')) await openDesign(page, route);
       await page.evaluate((t) => {
         document.documentElement.dataset.theme = t;
       }, theme);

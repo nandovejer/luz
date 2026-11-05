@@ -6,7 +6,7 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { notFoundRoute, routes, routesWith } from './helpers/docs-site.js';
+import { isControls, notFoundRoute, routes, routesWith } from './helpers/docs-site.js';
 import { px } from './helpers/site-loader.js';
 import { channels, colorOf, vejer } from './helpers/site-lights.js';
 
@@ -69,6 +69,8 @@ for (const app of APPS) {
 
 // a11y.md TAB-1/TAB-3: the Code and Design tabs of a component or pattern page
 for (const route of routesWith('docs-view-tabs')) {
+  // A page of controls (the pages of Form fields) has the pair for each control, under its h3 and h4: the test below
+  if (isControls(route)) continue;
   test(`${route}: Code and Design are stacked sections, each under its visible h2`, async ({ page }) => {
     await page.goto(route);
     const row = page.getByRole('navigation', { name: /documentation$/ });
@@ -85,6 +87,35 @@ for (const route of routesWith('docs-view-tabs')) {
     // Code comes first, in the DOM and on screen
     const top = (id) => page.locator(`#${id}`).evaluate((el) => el.getBoundingClientRect().top);
     expect(await top('code')).toBeLessThan(await top('design'));
+  });
+}
+
+// The same on a page of controls, for each control: its Code and Design are stacked under their visible titles (h3), its
+// sections (h4) are all there, and the page has one Known issues
+for (const route of routesWith('docs-view-tabs').filter(isControls)) {
+  test(`${route}: for each control, Code and Design are stacked sections, each under its visible h3`, async ({ page }) => {
+    await page.goto(route);
+    await expect(page.getByRole('tab')).toHaveCount(0);
+    const controls = page.locator('.docs-control');
+    expect(await controls.count(), route).toBeGreaterThanOrEqual(2);
+    const top = (selector) => page.locator(selector).evaluate((el) => el.getBoundingClientRect().top);
+    for (const control of await controls.all()) {
+      const id = await control.locator('> h2').getAttribute('id');
+      const name = (await control.locator('> h2').textContent()).trim();
+      const row = control.getByRole('navigation', { name: `${name} documentation` });
+      await expect(row.getByRole('link'), id).toHaveText(['Code', 'Design']);
+      for (const [panel, heading, text] of [[`${id}-code-panel`, `${id}-code`, 'Code'], [`${id}-design-panel`, `${id}-design`, 'Design']]) {
+        await expect(page.locator(`#${panel}`), panel).toBeVisible();
+        await expect(page.locator(`#${heading}`), heading).toBeVisible();
+        await expect(page.locator(`#${heading}`), heading).toHaveText(text);
+        expect(await page.locator(`#${heading}`).evaluate((h) => h.tagName), heading).toBe('H3');
+      }
+      // When to use / When not to use (red line 18), and the code sections
+      for (const section of ['when', 'when-not', 'how', 'keyboard']) await expect(page.locator(`#${id}-${section}`), `${id}-${section}`).toBeVisible();
+      // Code comes first, in the DOM and on screen
+      expect(await top(`#${id}-code`), id).toBeLessThan(await top(`#${id}-design`));
+    }
+    await expect(page.locator('#known-issues')).toBeVisible();
   });
 }
 
