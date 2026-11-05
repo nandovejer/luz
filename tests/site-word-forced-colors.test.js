@@ -18,11 +18,14 @@ const css = readFileSync(join(repo, "apps/site/header.css"), "utf-8");
 function forcedBlocks(source) {
   const blocks = [];
   const open = /@media \(forced-colors: active\)\s*\{/g;
-  let match;
-  while ((match = open.exec(source))) {
+  for (let match = open.exec(source); match; match = open.exec(source)) {
     let depth = 1;
     let i = open.lastIndex;
-    while (depth && i < source.length) depth += source[i] === "{" ? 1 : source[i] === "}" ? -1 : 0, i++;
+    while (depth && i < source.length) {
+      if (source[i] === "{") depth += 1;
+      else if (source[i] === "}") depth -= 1;
+      i += 1;
+    }
     blocks.push(source.slice(open.lastIndex, i - 1));
   }
   return blocks;
