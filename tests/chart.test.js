@@ -10,6 +10,7 @@
  *   - EX-014 is a row of EXCEPTIONS.md and the code carries it;
  *   - its page, in English and in Spanish, the accessibility statement and the changeset.
  */
+import { expectReviewRow, reviewRow } from "./helpers/browser-reviews.js";
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -584,15 +585,9 @@ describe("the changeset and the review record", () => {
     expect(text).toContain("EX-014");
   });
 
-  it("dev/BROWSER-REVIEWS.md has an Open row for the chart: its files, what to look at, and both browsers", () => {
-    const open = read("dev/BROWSER-REVIEWS.md").split(/^## Closed/m)[0];
-    const row = open.split("\n").find((line) => line.startsWith("|") && line.includes("<luz-chart>") && line.includes("packages/catalog/src/chart.js"));
-    expect(row, "a row of <luz-chart> in the Open section").toBeTruthy();
-    const cells = row.split("|").map((c) => c.trim());
-    expect(cells[2]).toContain("chart.js");
-    expect(cells[2]).toContain("chart.css");
-    expect(cells[2]).toContain("chart.html");
-    expect(cells[3]).toMatch(/forced colors/);
-    expect(cells[4]).toBe("Safari, Firefox");
+  it("dev/BROWSER-REVIEWS.md has a row for the chart, Open or Closed: its files, what to look at, and both browsers", () => {
+    // Open: the files, forced colors to look at, Safari and Firefox missing. Closed: dated, its scope names chart.js and chart.css, Safari and Firefox in the result
+    const row = reviewRow((line) => line.includes("<luz-chart>") && /chart\.js/.test(line) && !line.includes("Column chart") && !line.includes("column"));
+    expectReviewRow(row, { files: ["chart.js", "chart.css", "chart.html"], closedFiles: ["chart.js", "chart.css"], look: [/forced colors/], browser: "Safari, Firefox" });
   });
 });

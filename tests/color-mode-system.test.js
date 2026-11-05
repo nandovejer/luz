@@ -17,6 +17,7 @@
  *   - the weights stay under the ceilings of budgets.json (never raised), and
  *     the changeset and the docs say that the default look changes.
  */
+import { expectReviewRow, reviewRow } from "./helpers/browser-reviews.js";
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
@@ -283,13 +284,10 @@ describe("the words: the changeset and the docs say that the default follows the
     expect(read("apps/docs/pages/components/theme-mode.html")).toMatch(/Auto follows the system/);
   });
 
-  it("has a row in the browser reviews: Open, for Safari and Firefox, with the files", () => {
-    const text = read("dev/BROWSER-REVIEWS.md");
-    const open = text.slice(text.indexOf("## Open"), text.indexOf("## Closed"));
-    const row = open.split("\n").find((line) => line.includes("follows the system") && line.includes("prefers-color-scheme: dark"));
+  it("has a row in the browser reviews, Open or Closed, for Safari and Firefox, with the files", () => {
+    // Open: the files in full and Safari, Firefox missing. Closed: dated, the scope names build-tokens.js and forms.css, Safari and Firefox in the result
+    const row = reviewRow((line) => /follows the system/.test(line) && (line.includes("prefers-color-scheme: dark") || line.includes("build-tokens.js")) && !/Auto is the system/.test(line));
     expect(row, "a row about the system's default color mode").toBeDefined();
-    expect(row).toContain("scripts/build-tokens.js");
-    expect(row).toContain("packages/core/src/elements/forms.css");
-    expect(row).toMatch(/\| Safari, Firefox \|$/);
+    expectReviewRow(row, { files: ["scripts/build-tokens.js", "packages/core/src/elements/forms.css"], closedFiles: ["build-tokens.js", "forms.css"], browser: "Safari, Firefox" });
   });
 });

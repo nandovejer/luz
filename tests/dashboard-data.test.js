@@ -13,6 +13,7 @@
  *   - the prompt for an app says that a data view draws a native table or list, and the other four prompts do not;
  *   - dev/DOCS-SITE.md no longer documents the key and dev/BROWSER-REVIEWS.md has the row of the panels.
  */
+import { expectReviewRow, reviewRow } from "./helpers/browser-reviews.js";
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -332,16 +333,17 @@ describe("dev/DOCS-SITE.md and dev/BROWSER-REVIEWS.md", () => {
     expect(text).not.toContain("{{loose}}");
   });
 
-  it("BROWSER-REVIEWS.md has an Open row for the data panels of the Dashboard: its files, what to look at and both browsers", () => {
-    const open = read("dev/BROWSER-REVIEWS.md").split(/^## Closed/m)[0];
-    const row = open.split("\n").find((line) => line.startsWith("|") && line.includes("apps/docs/pages/catalog/dashboard.html"));
-    expect(row, "a row of the Dashboard page in the Open section").toBeTruthy();
-    const cells = row.split("|").map((c) => c.trim());
-    expect(cells[1], "the scope").toMatch(/Dashboard/);
-    expect(cells[2], "the file that links the sheets now").toContain("apps/docs/catalog-patterns.css");
-    expect(cells[2], "the key is gone").not.toContain("loose");
-    expect(cells[3], "what to look at").toMatch(/luz-chart/);
-    expect(cells[4]).toMatch(/Safari/);
-    expect(cells[4]).toMatch(/Firefox/);
+  it("BROWSER-REVIEWS.md has a row, Open or Closed, for the data panels of the Dashboard: its files, what to look at and both browsers", () => {
+    // Open: the full path of the page. Closed: dated, `dashboard.html` and `catalog-patterns.css` in the scope, Safari and Firefox in the result
+    const row = reviewRow((line) => line.includes("dashboard.html"));
+    expect(row, "a row of the Dashboard page").toBeTruthy();
+    expect(row.scope, "the scope").toMatch(/Dashboard/);
+    expectReviewRow(row, { files: ["apps/docs/catalog-patterns.css"], closedFiles: ["dashboard.html", "catalog-patterns.css"], look: [/luz-chart/] });
+    if (row.section === "Open") {
+      expect(row.files, "the page").toContain("apps/docs/pages/catalog/dashboard.html");
+      expect(row.files, "the key is gone").not.toContain("loose");
+      expect(row.browser).toMatch(/Safari/);
+      expect(row.browser).toMatch(/Firefox/);
+    }
   });
 });

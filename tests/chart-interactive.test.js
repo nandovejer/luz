@@ -11,6 +11,7 @@
  *     the total of a series is a sum, said so;
  *   - the review record has a row for the column chart.
  */
+import { expectReviewRow, reviewRow } from "./helpers/browser-reviews.js";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -223,22 +224,21 @@ describe("the pages", () => {
 });
 
 describe("the review record", () => {
-  const open = () => read("dev/BROWSER-REVIEWS.md").split(/^## Closed/m)[0];
-
-  it("has an Open row for the column chart, for both browsers: its sheets, its script and its page, and what to look at", () => {
+  it("has a row for the column chart, Open or Closed, for both browsers: its sheets, its script and its page, and what to look at", () => {
     expect(existsSync(join(repo, "dev/BROWSER-REVIEWS.md"))).toBe(true);
-    const row = open().split("\n").find((line) => line.startsWith("|") && line.includes("Column chart") && line.includes("column-chart.css"));
-    expect(row, "a row of the column chart in the Open section").toBeTruthy();
-    const cells = row.split("|").map((c) => c.trim());
-    for (const file of ["column-chart.css", "chart.css", "chart.js", "column-chart.html"]) expect(cells[2], file).toContain(file);
-    expect(cells[3], "what to look at").toMatch(/table-footer-group/);
-    expect(cells[3]).toMatch(/forced colors/);
-    expect(cells[4]).toBe("Safari, Firefox");
+    // Closed: dated, the scope names column-chart.css, chart.css and chart.js, and the result says Safari and Firefox
+    const row = reviewRow((line) => line.includes("Column chart") && line.includes("column-chart.css"));
+    expectReviewRow(row, {
+      files: ["column-chart.css", "chart.css", "chart.js", "column-chart.html"],
+      closedFiles: ["column-chart.css", "chart.css", "chart.js"],
+      look: [/table-footer-group/, /forced colors/],
+      browser: "Safari, Firefox",
+    });
   });
 
   it("the row of <luz-chart> says it now has `interactive` on a line", () => {
-    const row = open().split("\n").find((line) => line.startsWith("|") && line.includes("<luz-chart>") && line.includes("packages/catalog/src/chart.js") && !line.includes("Column chart"));
-    expect(row).toBeTruthy();
-    expect(row).toMatch(/interactive/);
+    const row = reviewRow((line) => line.includes("<luz-chart>") && /chart\.js/.test(line) && !line.includes("Column chart") && !/column-chart/.test(line.split("|")[1] ?? ""));
+    expect(row, "a row of <luz-chart>").toBeTruthy();
+    expect(row.section === "Open" ? row.scope + row.look : row.scope).toMatch(/interactive/);
   });
 });

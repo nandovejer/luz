@@ -14,6 +14,7 @@
  * Every example is also a standalone document at /examples/<area>/<slug>.html (scripts/docs-site/ai.js): the markup to copy is in
  * it, as valid markup (tests/examples.spec.js runs axe on all of them). Plus the Open rows of dev/BROWSER-REVIEWS.md.
  */
+import { expectReviewRow, reviewRow } from "./helpers/browser-reviews.js";
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -372,9 +373,8 @@ describe("the examples made from the four pages (/examples/<area>/<slug>.html)",
 
 /* ---- dev/BROWSER-REVIEWS.md ------------------------------------------------------------------------- */
 
-describe("dev/BROWSER-REVIEWS.md has an Open row for each of the three new things the browsers have not seen", () => {
-  const open = () => read("dev/BROWSER-REVIEWS.md").split(/^## Closed/m)[0];
-  const rowWith = (needle) => open().split("\n").find((line) => line.startsWith("|") && line.includes(needle));
+describe("dev/BROWSER-REVIEWS.md has a row, Open or Closed, for each of the three new things the browsers had not seen", () => {
+  const rowWith = (needle) => reviewRow((line) => line.includes(needle));
 
   it.each([
     [".luz-meta--facts", "packages/core/src/components/meta.css", "apps/docs/pages/components/meta.html"],
@@ -382,12 +382,13 @@ describe("dev/BROWSER-REVIEWS.md has an Open row for each of the three new thing
     ["<search>", "apps/docs/pages/catalog/post-list.html", "apps/docs/pages/catalog/post-list.html"],
   ])("%s: its files, what to look at, and both browsers", (needle, file, page) => {
     const row = rowWith(needle);
-    expect(row, `a row naming ${needle} in the Open section`).toBeTruthy();
-    const cells = row.split("|").map((c) => c.trim());
-    expect(cells[2], "the files").toContain(file);
-    expect(cells[2], "the page").toContain(page);
-    expect(cells[3].length, "what to look at").toBeGreaterThan(40);
-    expect(cells[4]).toMatch(/Safari/);
-    expect(cells[4]).toMatch(/Firefox/);
+    expect(row, `a row naming ${needle}`).toBeTruthy();
+    // Open: the full paths of the files and the page. Closed: dated, the scope names the stylesheet or the template, and the result says Safari and Firefox
+    const name = (path) => path.split("/").at(-1);
+    expectReviewRow(row, { files: [file, page], closedFiles: [name(file)] });
+    if (row.section === "Open") {
+      expect(row.browser).toMatch(/Safari/);
+      expect(row.browser).toMatch(/Firefox/);
+    }
   });
 });
