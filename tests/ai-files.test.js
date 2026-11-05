@@ -645,6 +645,8 @@ describe("llms-full.txt: the curated text of the pages, from the real site", () 
     let blocks = 0;
     let pages = 0;
     for (const page of site.pages.filter((p) => markupAreas.includes(p.meta.area))) {
+      // A page of controls gives llms-full each control's code without the field wrapper: tests/docs-controls.test.js
+      if (page.meta.parts === "controls") continue;
       const section = markupSection(page);
       if (section === null) continue;
       pages += 1;
@@ -1352,7 +1354,7 @@ describe("exampleDocuments: one standalone page per component or pattern page, f
       expect(head, e.route).toMatch(/\bMIT\b/);
       expect(head, e.route).toContain(VERSIONS.core);
       expect(head, e.route).toContain("scripts/docs-site/ai.js");
-      expect(head, e.route).toContain("#markup");
+      expect(head, e.route).toMatch(/#(?:[a-z0-9-]+-)?markup/);
     }
   });
 

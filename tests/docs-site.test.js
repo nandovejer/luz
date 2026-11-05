@@ -742,7 +742,8 @@ describe("the LUZ docs site", () => {
     }
     // A name a page only mentions goes to the page that documents it, never to an area index
     // (the select is a control of the Form fields page since 2026-11-05: its class is listed at that page, not at a page of its own)
-    expect(index.sections).toContainEqual([".luz-select", expect.stringMatching(/^components\/form\/#[a-z0-9-]+$/), "Form fields › Code"]);
+    // (on a page of controls the section is the control's own, where the class first appears: its markup; the tab is not named)
+    expect(index.sections).toContainEqual([".luz-select", "components/form/#select-markup", "Form fields"]);
     expect(index.sections.filter(([text, url]) => /^(\.|--luz-)/.test(text) && url.startsWith("tokens/#"))).toEqual([]);
     const names = indexData(site).flatMap((e) => e.names.map((n) => n.text));
     expect(new Set(names).size).toBe(names.length);

@@ -101,14 +101,14 @@ describe("Design tab of every component and pattern page", () => {
  */
 const CONTROLS_PAGE = viewPages.find((p) => p.meta.parts === "controls");
 const FAMILY_RULES = {
-  // Every field and every input rule of the form file and of the bare elements: text, number, dates, colour, file, range, textarea
+  // Every input rule of the form file and of the bare elements: text, number, dates, colour, file, range, textarea
   inputs: { files: "components/form.css", only: /\.luz-(?:field|input)(?![a-z])/ },
-  // The radio buttons are a control of Choice that is not moved here yet: a rule for radios alone is left out, a rule the
-  // checkbox shares with them stays. Add the radios to the page and drop the exclusion
-  choice: {
-    files: "components/form.css; components/select.css",
-    only: { test: (selector) => (/^\.luz-check-(?:item|group)(?![\w-])/.test(selector) && !(/\[type="radio"\]/.test(selector) && !/\[type="checkbox"\]/.test(selector))) || /\.luz-select(?![\w-])/.test(selector) },
-  },
+  // The checkbox, the radio buttons and the switch of the form file, and the select
+  choice: { files: "components/form.css; components/select.css", only: /^\.luz-(?:check-(?:item|group)(?![\w-])|toggle)|\.luz-select(?![\w-])/ },
+  // The output and the meter, with the bare elements' rules for them
+  values: { files: "components/form.css; components/meter.css; elements/forms.css", only: /\.luz-(?:output|meter)(?![\w-])|^:where\(output\)|^:where\(meter\)/ },
+  // The parts a field is made of: its label, hint and error, the fieldset and the legend
+  field: { files: "components/form.css", only: /\.luz-(?:field|fieldset|legend)(?![a-z])|\.luz-input--error(?![\w-])/ },
 };
 
 describe("Design notes of a page of controls", () => {

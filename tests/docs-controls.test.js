@@ -12,7 +12,7 @@
  *   sidebar       the group "Form fields" has its families as anchor links, and its label is the link to the page
  *   rail          "On this page" lists the families and the controls
  *   Select        is a control of Choice, not a page
- * AI files     llms-full.txt keeps, for each control, its summary, its markup, its keys and when to use it, and none of the
+ * AI files     llms-full.txt keeps, for each control, its summary, its markup and the lead of when to use it (not its variants, how it works, keys list or when not), and none of the
  *               family notes; the example document of the page (/examples/components/form.html) has every control's markup
  * What a browser does with the rows (they follow one choice) is tests/docs-controls.spec.js.
  */
@@ -281,7 +281,19 @@ describe("the AI files of a page of controls", () => {
       code: decodeEntities(m[2]).trim(),
     }));
 
-  it("has in llms-full.txt, for each control, its summary, its markup, its keys and the text of When to use, under its family", () => {
+  /** The text of an entry from the heading of a control to the next control, family or page-level heading. */
+  const chunkOf = (text, title) => {
+    const start = text.indexOf(`#### ${title}\n`);
+    expect(start, `#### ${title}`).toBeGreaterThanOrEqual(0);
+    const rest = text.slice(start + 5);
+    const end = rest.search(/\n###+ /);
+    return rest.slice(0, end === -1 ? undefined : end);
+  };
+  /** The field wrapper is dropped from a control's markup when its sample is only that wrapper around the control. */
+  const isWrapped = (code, family) =>
+    family.id !== "field" && code.split("\n")[0] === '<div class="luz-field">' && code.split("\n").at(-1) === "</div>" && !/<label\b.*<output\b/.test(code);
+
+  it("has in llms-full.txt, for each control, its summary and its code only, under its family, with the field wrapper shown once in the family that opens the page", () => {
     const text = entry();
     const plain = norm(text);
     let at = -1;
@@ -293,23 +305,48 @@ describe("the AI files of a page of controls", () => {
         const own = text.indexOf(`#### ${control.title}\n`);
         expect(own, `control ${control.id}`).toBeGreaterThan(at);
         at = own;
+        const chunk = chunkOf(text, control.title);
         const summary = textOf(control.node.parent.children[control.node.parent.children.indexOf(control.node) + 1]);
         expect(plain, `${control.id} summary`).toContain(norm(summary));
         const blocks = htmlBlocks(control);
         expect(blocks.length, `${control.id} has markup`).toBeGreaterThanOrEqual(1);
         for (const block of blocks) {
-          expect(text, `${control.id}: ${block.label}`).toContain(block.code);
-          expect(text, `${control.id}: ${block.label}`).toContain(block.label);
+          if (isWrapped(block.code, family)) {
+            // The control's own lines, without the label, hint and error of the wrapper
+            const own = block.code
+              .split("\n")
+              .slice(1, -1)
+              .map((l) => l.trim())
+              .filter((l) => !/^<(?:label class="luz-field__label|div class="luz-field__(?:helper|error)")/.test(l));
+            expect(own.length, `${control.id} has a control line`).toBeGreaterThanOrEqual(1);
+            for (const line of own) expect(chunk, `${control.id}: ${line}`).toContain(line);
+            expect(chunk, `${control.id} leaves the wrapper to the family`).not.toContain("luz-field__label");
+            expect(chunk, `${control.id}`).not.toContain('class="luz-field"');
+          } else {
+            expect(chunk, `${control.id} keeps its markup whole`).toContain(block.code);
+          }
+          // No label line and no heading of its own: the code follows the summary
+          expect(chunk, `${control.id}: ${block.label}`).not.toContain(block.label);
         }
-        // Its keys: each item of its Keyboard and ARIA
-        const keys = [...sectionOf(read, `${control.id}-keyboard`).matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => inline(m[1]));
-        expect(keys.length, `${control.id} keys`).toBeGreaterThanOrEqual(1);
-        for (const key of keys) expect(plain, `${control.id} key`).toContain(key);
-        // When to use: its text
+        expect(chunk, control.id).not.toContain("##### Copy the markup");
+        // When to use stays on the page
+        expect(chunk, `${control.id} has no When to use`).not.toContain("##### When to use");
         const when = /<p>([\s\S]*?)<\/p>/.exec(sectionOf(read, `${control.id}-when`))[1];
-        expect(plain, `${control.id} when`).toContain(inline(when));
+        expect(norm(chunk), `${control.id} when`).not.toContain(inline(when));
+        // The keys, only when they are one short sentence (100 characters, no list)
+        const keys = sectionOf(read, `${control.id}-keyboard`);
+        const sentence = inline(keys);
+        if (!/<(?:ul|ol|table|pre)\b/.test(keys) && /^\s*<p\b[\s\S]*<\/p>\s*$/.test(keys) && sentence.length <= 100) {
+          expect(norm(chunk), `${control.id} short keys`).toContain(sentence);
+        } else {
+          expect(chunk, `${control.id} long keys stay on the page`).not.toContain("##### Keyboard and ARIA");
+        }
       }
     }
+    // The wrapper, once, in the intro of the family that opens the page
+    const first = read.families[0];
+    const intro = text.slice(text.indexOf(`### ${first.title}\n`), text.indexOf(`#### ${first.controls[0].title}\n`));
+    expect(intro, "the wrapper in the first family's intro").toMatch(/```html\n<div class="luz-field">\n\s*<label class="luz-field__label"/);
   });
 
   it("leaves out of llms-full.txt the notes of a family, and, for each control, what is on the page only (variants, how, no JavaScript, when not, do and don't, content, contrast, tokens)", () => {
@@ -335,8 +372,9 @@ describe("the AI files of a page of controls", () => {
         expect(doc.html, `${control.id}: ${block.label}`).toContain(`>${block.label.replace(/&/g, "&amp;")}</h2>`);
       }
     }
-    // The page's own address is in it, and it points at a section that exists
+    // The page's own address is in it, and it points at the markup of a control: an id of the page that ends in markup
     const link = /<a href="([^"]*)">[^<]*in the LUZ documentation<\/a>/.exec(doc.html)?.[1];
+    expect(link?.split("#")[1], "the link goes to a section of markup").toMatch(/^(?:[a-z0-9-]+-)?markup$/);
     expect(link, "link to the docs page").toBeTruthy();
     const hash = link.split("#")[1];
     if (hash) expect(page.body).toContain(`id="${hash}"`);
