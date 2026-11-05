@@ -78,7 +78,8 @@ const PATTERN_PACKAGES = PATTERN_AREAS;
 const MODES = ['light', 'dark', 'high-contrast'];
 
 // One guide per core component file, each on its own page
-const GUIDE_ID = { 'copy-btn': 'c-copy', 'icon-grid': 'c-icons' };
+// (the select is a control of the Form fields page since 2026-11-05: select.css is documented on the page of form.css)
+const GUIDE_ID = { 'copy-btn': 'c-copy', 'icon-grid': 'c-icons', select: 'c-form' };
 const guideIds = [...new Set(components.map((file) => GUIDE_ID[file.replace('.css', '')] ?? `c-${file.replace('.css', '')}`))];
 
 const ALL = routes();
@@ -452,10 +453,10 @@ test.describe('Documentation site', () => {
   });
 
   test.describe('galleries and the A–Z index', () => {
-    test('a gallery card is one link, named like its heading (HUB-1; 29 since the navbar, sidebar, terminal and timeline went to Catalog, and the bar list, the column chart, the stacked bar and the heat map after them)', async ({ page }) => {
+    test('a gallery card is one link, named like its heading (HUB-1; 28 since the navbar, sidebar, terminal and timeline went to Catalog, the bar list, the column chart, the stacked bar and the heat map after them, and the select became a control of Form fields)', async ({ page }) => {
       await open(page, '/docs/components/');
       const cards = page.locator('.docs-card');
-      await expect(cards).toHaveCount(29);
+      await expect(cards).toHaveCount(28);
       for (const card of await cards.all()) {
         await expect(card.getByRole('link')).toHaveCount(1);
       }
@@ -612,11 +613,44 @@ test.describe('Documentation site', () => {
       for (const id of guideIds) {
         const route = await gotoId(page, id);
         expect(route, id).toMatch(/^\/docs\/components\/[a-z-]+\/$/);
-        await expect(page.locator('h2#example'), `${id} example`).toBeVisible();
         // Known issues: visible, outside the panels, never empty
         await expect(page.locator('h2#known-issues'), `${id} known issues`).toBeVisible();
         await expect(page.locator('[role="tabpanel"] #known-issues, .luz-tabpanel #known-issues')).toHaveCount(0);
         await expect(page.locator('#known-issues + p'), id).not.toBeEmpty();
+        // A page of controls (`parts: controls`, Form fields) has an example and the two tabs for each control, not for the page:
+        // the structure is tests/docs-controls.test.js and the rows of tabs tests/docs-controls.spec.js
+        if (site.byRoute.get(route).meta.parts === 'controls') {
+          const controls = page.locator('.docs-control');
+          expect(await controls.count(), `${id} has controls`).toBeGreaterThanOrEqual(4);
+          for (const control of await controls.all()) {
+            const name = (await control.locator('> h3').textContent()).trim();
+            const controlId = await control.locator('> h3').getAttribute('id');
+            await expect(control.locator('.docs-example'), `${id} ${name} example`).toBeVisible();
+            const tablist = control.getByRole('tablist', { name: `${name} documentation` });
+            await expect(tablist.getByRole('tab'), `${id} ${name}`).toHaveText(['Code', 'Design']);
+            await expect(tablist.getByRole('tab', { name: 'Code' }), `${id} ${name}`).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator(`#${controlId}-code-panel`), `${id} ${name}`).toBeVisible();
+            await expect(page.locator(`#${controlId}-design-panel`), `${id} ${name}`).toBeHidden();
+            // RL-18: When to use and When not to use are on the page for each control
+            for (const section of ['when', 'when-not', 'how', 'content', 'keyboard']) {
+              await expect(page.locator(`#${controlId}-${section}`), `${id} ${name} ${section}`).toHaveCount(1);
+            }
+          }
+          // One click moves every control to Design: each says when to use it and when not to
+          await page.getByRole('tab', { name: 'Design' }).first().click();
+          for (const control of await controls.all()) {
+            const controlId = await control.locator('> h3').getAttribute('id');
+            for (const section of ['when', 'when-not']) {
+              await expect(page.locator(`#${controlId}-${section}`), `${id} ${controlId} ${section}`).toBeVisible();
+              const text = await page.locator(`#${controlId}-${section} + p`).textContent();
+              expect(text.trim().length, `${id} ${controlId} ${section} has content`).toBeGreaterThan(20);
+            }
+          }
+          await expect.poll(() => page.evaluate(() => localStorage.getItem('luz-docs-view')), id).toBe('design');
+          await page.evaluate(() => localStorage.clear());
+          continue;
+        }
+        await expect(page.locator('h2#example'), `${id} example`).toBeVisible();
         // The same two tabs on every page, Code first and selected by default (TAB-16)
         const tablist = page.getByRole('tablist', { name: /documentation$/ });
         await expect(tablist.getByRole('tab'), id).toHaveText(['Code', 'Design']);

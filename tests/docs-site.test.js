@@ -610,9 +610,9 @@ describe("the LUZ docs site", () => {
     // links are in the closed drawer on a phone, "On this page" is closed).
     // A page in a language (/es/, /es/docs/…) must reach the component's page
     // in that language (/es/docs/components/…): the English one is not its target.
-    // F7: the navbar, the sidebar, the terminal and the timeline are pages of the Catalog area now; so are the bar list and the three charts since 2026-11-03: 29 pages of components
+    // F7: the navbar, the sidebar, the terminal and the timeline are pages of the Catalog area now; so are the bar list and the three charts since 2026-11-03, and the select is a control of the Form fields page since 2026-11-05: 28 pages of components
     const components = site.pages.filter((p) => p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers");
-    expect(components).toHaveLength(29);
+    expect(components).toHaveLength(28);
     const withLanguages = buildSite(site, { extra: landing, languages: true, unchecked: homes });
     // Every language of the home page is a start page; only Spanish has docs, so a link from the Arabic home goes to the English docs
     const homeCodes = homes.filter((h) => h !== "/").map((h) => h.replaceAll("/", ""));
@@ -649,10 +649,12 @@ describe("the LUZ docs site", () => {
     const viewPages = site.pages.filter(
       (p) => (p.meta.area === "components" && p.meta.group && p.meta.group !== "helpers") || (PATTERN_AREAS.includes(p.meta.area) && p.meta.group && p.meta.group !== "reference"),
     );
-    expect(viewPages).toHaveLength(68);
+    expect(viewPages).toHaveLength(67);
     const CODE = ["markup", "variants", "how", "no-js", "keyboard"];
     const DESIGN = ["when", "when-not", "do-dont", "content", "contrast", "tokens"];
-    for (const page of viewPages) {
+    // A page of controls (`parts: controls`, the Form fields page) has this structure for each control, not for the page:
+    // tests/docs-controls.test.js
+    for (const page of viewPages.filter((p) => p.meta.parts !== "controls")) {
       const where = page.file;
       expect(page.meta.toc, where).toBe("h2,h3");
       const { headings } = readHtml(page.body, page.file);
@@ -739,7 +741,8 @@ describe("the LUZ docs site", () => {
       }
     }
     // A name a page only mentions goes to the page that documents it, never to an area index
-    expect(index.sections).toContainEqual([".luz-select", "components/select/#variants", "Select › Code"]);
+    // (the select is a control of the Form fields page since 2026-11-05: its class is listed at that page, not at a page of its own)
+    expect(index.sections).toContainEqual([".luz-select", expect.stringMatching(/^components\/form\/#[a-z0-9-]+$/), "Form fields › Code"]);
     expect(index.sections.filter(([text, url]) => /^(\.|--luz-)/.test(text) && url.startsWith("tokens/#"))).toEqual([]);
     const names = indexData(site).flatMap((e) => e.names.map((n) => n.text));
     expect(new Set(names).size).toBe(names.length);
