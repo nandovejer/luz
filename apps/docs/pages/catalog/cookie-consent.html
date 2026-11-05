@@ -60,6 +60,7 @@ toc: h2,h3
             <li>In a window less than 30 rem (480 px) tall the banner is not fixed: it is in the flow at the top of the page, where its markup is, so the page moves down when it appears.</li>
             <li>The saved state hides when focus leaves it for the page, but not when you click an empty part of the page. Use its Close button.</li>
             <li>It has not been tested with a screen reader.</li>
+            <li>The answer is a record in the visitor’s browser. If your site must be able to show that a person consented (GDPR art. 7(1)), keep your own record, for example by sending the answer to your server from a <code class="luz-code-inline">luz:consent</code> listener, and tell the visitor in your policy.</li>
           </ul>
           <nav class="luz-tabs docs-view-tabs" aria-label="Cookie consent documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>

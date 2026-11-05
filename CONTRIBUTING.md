@@ -17,7 +17,9 @@ LUZ is open source and welcomes contributions of every size. Be kind: the [Code 
 
 ## Licence
 
-By opening a pull request you license your work under the MIT licence, the same as the project: inbound = outbound. If it includes code you did not write, say where it comes from and under which licence. Only MIT work is accepted: no dual licences, no other licence. AI-written code is welcome if you can explain every line of it and it passes the same checks.
+By opening a pull request you license your work under the MIT licence, the same as the project: inbound = outbound. If it includes code you did not write, say where it comes from and under which licence. Only MIT work is accepted: no dual licences, no other licence. Sign off every commit (`git commit -s`) to state the [Developer Certificate of Origin](https://developercertificate.org/): that you wrote the work or have the right to submit it under the MIT licence.
+
+AI-written code and text are welcome if you read and understand every line, check that it does not reproduce licensed code and say in the pull request which tool you used. A work generated entirely by an AI may not be protected by copyright, in the EU and in the United States; the MIT licence covers what is protected. It must pass the same checks.
 
 If you fork LUZ, keep the LICENSE and say where it came from.
 

@@ -83,3 +83,5 @@ For answers to common questions about this code of conduct, see the FAQ at [http
 [Mozilla CoC]: https://github.com/mozilla/diversity
 [FAQ]: https://www.contributor-covenant.org/faq
 [translations]: https://www.contributor-covenant.org/translations
+
+This text is adapted from the Contributor Covenant, version 2.1, by Coraline Ada Ehmke, under the Creative Commons Attribution 4.0 licence (https://creativecommons.org/licenses/by/4.0/); it is not covered by this repository's MIT licence.

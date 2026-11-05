@@ -3,7 +3,7 @@ title: Consentimiento para cookies
 description: Pregunta una vez al visitante si el sitio puede usar cookies opcionales, muestra Aceptar y Rechazar uno junto al otro y recuerda la respuesta.
 fits: cuando el sitio usa cookies opcionales
 keywords: aviso de cookies, RGPD, ePrivacy, privacidad, consentimiento de seguimiento
-source: 3f2518b1dc75
+source: 48f840571d7f
 reviewed: false
 -->
     <div class="docs-component" id="p-cookie-consent">
@@ -55,6 +55,7 @@ reviewed: false
             <li>En una ventana de menos de 30 rem (480 px) de alto, el aviso no queda fijo: se muestra en el flujo, al principio de la página, donde está su marcado, así que la página baja cuando aparece.</li>
             <li>El estado guardado se oculta cuando el foco sale del aviso hacia la página, pero no al hacer clic en una zona vacía. Usa el botón Cerrar.</li>
             <li>No se ha probado con un lector de pantalla.</li>
+            <li>La respuesta es un registro en el navegador del visitante. Si tu sitio debe poder demostrar que una persona dio su consentimiento (art. 7(1) del RGPD), conserva tu propio registro, por ejemplo enviando la respuesta a tu servidor desde un listener de <code class="luz-code-inline">luz:consent</code>, e infórmalo en tu política.</li>
           </ul>
           <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del consentimiento para cookies">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
