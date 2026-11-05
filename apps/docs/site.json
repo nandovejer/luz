@@ -19,6 +19,7 @@
     ] },
     { "id": "components", "label": "Core", "slug": "components", "package": "@luz-ds/core", "groups": [
       { "id": "actions", "label": "Actions and input" },
+      { "id": "forms", "label": "Forms" },
       { "id": "content", "label": "Show content" },
       { "id": "feedback", "label": "Feedback and status" },
       { "id": "navigation", "label": "Navigation" },
