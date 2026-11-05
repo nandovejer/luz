@@ -11,7 +11,8 @@
  * Firefox is emulated in Chromium, which re-scrolls to the fragment by itself when the page has loaded (so a real ET Book that
  * arrives before the load event is no test). Four things are made to happen as they do in Firefox: scroll anchoring is off
  * (`overflow-anchor: none`); the page is set in a wide face (monospace) while a font is pending; that font (a late `FontFace`,
- * answered after a second) arrives after the target was scrolled to; and then the page is set in a narrower face (serif), so it
+ * answered when the test lets it go, never after a fixed time, which a loaded runner would make a race) arrives after the
+ * target was scrolled to; and then the page is set in a narrower face (serif), so it
  * shrinks by more than a thousand pixels, as it does when ET Book replaces the fallback. `document.fonts.ready` resolves at
  * that moment. It needs JavaScript, so it runs in the chromium project only.
  */
@@ -20,11 +21,18 @@ import { test, expect } from '@playwright/test';
 
 const ROUTE = '/docs/components/form-inputs/#month-keyboard';
 const TARGET = 'month-keyboard';
-const HELD_BACK = 1000;
 const FONT = readFileSync(new URL('../packages/tokens/fonts/serif/ETBook-Roman.woff2', import.meta.url));
+
+/** The font's answer waits here until the test says so: what happens before it is checked with no clock involved. */
+const gates = new WeakMap();
 
 /** Firefox's lack of scroll anchoring, a wide face first, and a font that arrives late and brings the narrow one. */
 async function emulateFirefoxAndLateFont(page) {
+  let release = () => {};
+  const gate = new Promise((resolve) => {
+    release = resolve;
+  });
+  gates.set(page, release);
   await page.addInitScript(() => {
     const sheet = new window.CSSStyleSheet();
     sheet.replaceSync(
@@ -38,7 +46,7 @@ async function emulateFirefoxAndLateFont(page) {
     face.load().then(() => document.documentElement.classList.add('late-font'));
   });
   await page.route('**/luz-late-font.woff2', async (route) => {
-    await new Promise((resolve) => setTimeout(resolve, HELD_BACK));
+    await gate;
     await route.fulfill({ body: FONT, contentType: 'font/woff2' });
   });
 }
@@ -65,6 +73,7 @@ async function open(page) {
 
 /** The late font has arrived, the page has shrunk and the fonts are ready. */
 async function fontArrived(page) {
+  gates.get(page)();
   await expect.poll(async () => (await measure(page)).late, { timeout: 10_000 }).toBe(true);
   await page.evaluate(() => document.fonts.ready);
 }
@@ -87,6 +96,8 @@ test.describe('a deep link on a page of controls, with the font arriving late', 
   test('a reader who scrolled before the fonts arrived is not taken back to the target', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await open(page);
+    // The docs script listens for the reader from DOMContentLoaded on (module scripts have run): a wheel before that is nobody it could hear
+    await page.waitForLoadState('domcontentloaded');
     // The reader scrolls away with the wheel, while the font is on its way
     await page.mouse.move(700, 500);
     await page.mouse.wheel(0, 1200);
