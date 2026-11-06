@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Reproductor multimedia
 description: Reproduce un vídeo, un sonido o un archivo MIDI en la página, con los mismos controles para los tres.
-source: 3dc89a0c91c0
+source: 43c5d7583712
 reviewed: false
 -->
     <div class="docs-component" id="c-player">
@@ -91,9 +91,9 @@ reviewed: false
           </div>
           </div>
           <h2 id="known-issues">Problemas conocidos</h2>
-          <p>Los subtítulos, las transcripciones y la audiodescripción dependen del contenido multimedia que proporciones. Los colores de los subtítulos son una sugerencia: prevalecen los ajustes propios de quien lee, y puede que el navegador los dibuje a su manera, por ejemplo en su propio reproductor a pantalla completa.</p>
+          <p>Los subtítulos, las transcripciones y la audiodescripción dependen del contenido multimedia que proporciones. Los colores de los subtítulos son una sugerencia: prevalecen los ajustes propios de quien lee, y puede que el navegador los dibuje a su manera.</p>
           <p>Un archivo MIDI no tiene reproductor sin JavaScript: ofrece un enlace de descarga en el texto alternativo.</p>
-          <p>Una dirección MIDI que redirige falla (<code>error</code>): da la dirección final. El texto del error cambia según el navegador.</p>
+          <p>Una dirección MIDI que redirige falla: da la dirección final. El texto del error cambia según el navegador.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del reproductor">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
@@ -174,7 +174,7 @@ initPlayers();</code></pre>
             <h3 id="how">Cómo funciona</h3>
             <p>El elemento multimedia nativo reproduce el archivo; <code>player.js</code> controla los controles de LUZ, con estilos de <code>components/player.css</code>.</p>
             <ul>
-              <li><code>initPlayers()</code> monta todos los elementos <code>.luz-player</code> de la página o del elemento que le pases. <code>luz.js</code> lo ejecuta. Si un reproductor ya está montado, lo deja como está, así que se puede volver a ejecutar sin riesgo.</li>
+              <li><code>initPlayers()</code> monta todos los elementos <code>.luz-player</code> de la página o del elemento que le pases. <code>luz.js</code> lo ejecuta. Ejecutarlo dos veces no tiene riesgo.</li>
               <li>Al montarlo, el script quita <code>controls</code> nativo y conecta los controles de LUZ: reproducir y pausar, tiempo, búsqueda y volumen. Se inicializan según el estado del propio contenido: un vídeo <code>muted</code> aparece silenciado y la duración conocida por el navegador se muestra de inmediato.</li>
               <li>La búsqueda y el volumen usan controles deslizantes nativos <code>&lt;input type="range"&gt;</code>. Cuando se conoce la duración, el de búsqueda tiene un paso por segundo, independientemente del valor de <code>max</code> en el marcado.</li>
               <li>Los botones de pantalla completa e imagen en imagen se ocultan cuando el navegador no ofrece esas funciones.</li>
