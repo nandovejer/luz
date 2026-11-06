@@ -17,12 +17,13 @@
  *     Components, the docs' catalog sheets (catalog-patterns.css) holding the sheet;
  *   - the changesets, and DESIGN.md writing the deviations of DR-2 and DR-8, dated, with no luz-exception.
  */
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 import { beforeAll, describe, expect, it } from "vitest";
 import { sourceHash } from "../scripts/docs-site/docs-i18n.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 import { buildReal, site } from "./helpers/debug-page.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -213,21 +214,24 @@ describe("the gallery of the catalog: the group Charts has the four that came fr
 /* ---- The changeset ---------------------------------------------------------------------------------------------------- */
 
 describe("the changeset that added the three charts", () => {
-  const files = () => readdirSync(join(root, ".changeset")).filter((f) => f.endsWith(".md") && f !== "README.md");
+  // pending in .changeset/ before the Version PR, in the CHANGELOGs after it (where Prettier pads the tables)
+  const notes = () => releaseNotes(root).map((n) => ({ ...n, text: n.text.replace(/[ \t]{2,}/g, " ") }));
+  const isMove = (n) => /the four chart sheets move from core to catalog/.test(n.text);
+  const packages = (n) => n.bumps.map((b) => b.name).sort();
 
   it("is one that names each chart's class and sheet, and bumps @luz-ds/core and @luz-ds/check as the bar list's does", () => {
     // the changeset that added the three (the one of the move to catalog, charts-to-catalog.md, has its own test in tests/charts-to-catalog.test.js)
-    const own = files().filter((f) => f !== "charts-to-catalog.md" && CHARTS.every(({ block }) => read(`.changeset/${f}`).includes(block)));
+    const own = notes().filter((n) => !isMove(n) && CHARTS.every(({ block }) => n.text.includes(block)));
     expect(own, "one changeset names the three charts").toHaveLength(1);
-    const text = read(`.changeset/${own[0]}`);
+    const text = own[0].text;
     const frontMatter = text.split("---")[1];
     expect(frontMatter).toMatch(/"@luz-ds\/core":\s*(?:patch|minor)/);
     expect(frontMatter).toMatch(/"@luz-ds\/check":\s*(?:patch|minor)/);
     for (const { name } of CHARTS) expect(text, name).toContain(`${name}.css`);
     expect(text, "it says the sheets are loose").toMatch(/loose/);
     // the bar list's changeset is the model: the same two packages
-    const model = files().find((f) => read(`.changeset/${f}`).includes("luz-bar-list"));
-    if (model) expect(text.split("---")[1].match(/"@luz-ds\/[a-z]+"/g)).toEqual(read(`.changeset/${model}`).split("---")[1].match(/"@luz-ds\/[a-z]+"/g));
+    const model = notes().find((n) => n !== own[0] && !isMove(n) && n.text.includes("luz-bar-list"));
+    if (model) expect(packages(own[0])).toEqual(packages(model));
   });
 });
 
