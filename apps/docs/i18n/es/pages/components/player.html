@@ -1,7 +1,7 @@
 <!-- luz:page
 title: Reproductor multimedia
 description: Reproduce un vídeo, un sonido o un archivo MIDI en la página, con los mismos controles para los tres.
-source: 9392e13a2b1a
+source: 3dc89a0c91c0
 reviewed: false
 -->
     <div class="docs-component" id="c-player">
@@ -93,6 +93,7 @@ reviewed: false
           <h2 id="known-issues">Problemas conocidos</h2>
           <p>Los subtítulos, las transcripciones y la audiodescripción dependen del contenido multimedia que proporciones. Los colores de los subtítulos son una sugerencia: prevalecen los ajustes propios de quien lee, y puede que el navegador los dibuje a su manera, por ejemplo en su propio reproductor a pantalla completa.</p>
           <p>Un archivo MIDI no tiene reproductor sin JavaScript: ofrece un enlace de descarga en el texto alternativo.</p>
+          <p>Una dirección MIDI que redirige falla (<code>error</code>): da la dirección final. El texto del error cambia según el navegador.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Documentación del reproductor">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Código</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Diseño</a>
