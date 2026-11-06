@@ -19,6 +19,7 @@ import * as contrast from "../packages/tokens/lib/contrast.js";
 import { colorTokens, resolveColor } from "./helpers/design-tokens.js";
 import { NAMES, PAIR_COUNT, TOKENS, blocksOf, pairsOf, primitives, semanticModes, valuesFor } from "./helpers/chart-palette.js";
 import { site } from "./helpers/docs-site.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 
 const { PAIRS, createResolver, expandPairs, measure, pairsFor, parseColor } = contrast;
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -318,8 +319,10 @@ describe("the Spanish pages of the palette follow the English ones", () => {
 /* ---- DESIGN.md and the changeset ------------------------------------------------------ */
 
 describe("the changeset of the palette", () => {
-  it("is .changeset/chart-palette.md and names the tokens and the check packages", () => {
-    const text = read(".changeset/chart-palette.md");
+  it("is a changeset (.changeset/chart-palette.md, or its note in the CHANGELOGs once the Version PR has consumed it) that names the tokens and the check packages", () => {
+    const note = releaseNotes(repo).find((n) => n.file === "chart-palette.md" || /Adds the data palette to the semantic tokens/.test(n.text));
+    expect(note, "a changeset for the data palette").toBeTruthy();
+    const text = note.text;
     const front = text.match(/^---\n([\s\S]*?)\n---/)[1];
     expect(front).toMatch(/^"@luz-ds\/tokens": (?:patch|minor|major)$/m);
     expect(front).toMatch(/^"@luz-ds\/check": (?:patch|minor|major)$/m);

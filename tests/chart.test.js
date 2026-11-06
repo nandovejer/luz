@@ -11,6 +11,7 @@
  *   - its page, in English and in Spanish, the accessibility statement and the changeset.
  */
 import { expectReviewRow, reviewRow } from "./helpers/browser-reviews.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -574,9 +575,10 @@ describe("the accessibility statement says what was tested and what was not", ()
 
 describe("the changeset and the review record", () => {
   it("a changeset adds <luz-chart> to catalog and to what luz-check knows: both packages, a patch or a minor, and the exception named", () => {
-    const file = ".changeset/catalog-chart.md";
-    expect(existsSync(join(repo, file)), file).toBe(true);
-    const text = read(file);
+    // .changeset/catalog-chart.md, or its note in the CHANGELOGs once the Version PR has consumed it
+    const note = releaseNotes(repo).find((n) => n.file === "catalog-chart.md" || n.text.includes("Adds `<luz-chart>` to catalog"));
+    expect(note, "a changeset that adds <luz-chart>").toBeTruthy();
+    const text = note.text;
     const header = /^---\n([\s\S]*?)\n---\n/.exec(text)?.[1] ?? "";
     expect(header).toMatch(/"@luz-ds\/catalog":\s*(?:patch|minor)/);
     expect(header).toMatch(/"@luz-ds\/check":\s*(?:patch|minor)/);

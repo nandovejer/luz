@@ -10,11 +10,12 @@
  * with the sentence in the prompts and stay red until the sentinel reads the
  * diff and the new `source` is written there.
  */
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { PUBLISHED } from "../scripts/luz-packages.js";
 import { assemblePrompt } from "../scripts/docs-site/prompts.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => readFileSync(`${root}${path}`, "utf-8");
@@ -144,12 +145,14 @@ describe("the prompts for AI say the site is a starting point", () => {
 /* ---- The changeset ------------------------------------------------------- */
 
 describe("the changeset of the principle", () => {
+  // .changeset/foundation-not-finished-site.md, or its note in the CHANGELOG of check once the Version PR has consumed it
   const file = ".changeset/foundation-not-finished-site.md";
-  const text = existsSync(`${root}${file}`) ? read(file) : "";
+  const note = releaseNotes(root).find((n) => n.file === "foundation-not-finished-site.md" || /PRINCIPLES\.md, the README, Get started \(English and Spanish\) and the five prompts for AI now say that LUZ is a foundation/.test(n.text));
+  const text = note?.text ?? "";
   const frontMatter = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
 
   it("exists, names a published package (every changeset must) and says what it records", () => {
-    expect(existsSync(`${root}${file}`), `${file} exists`).toBe(true);
+    expect(note, `${file} exists, or its note is in a CHANGELOG`).toBeTruthy();
     expect(frontMatter, "has a front matter").not.toBeNull();
     const names = [...frontMatter[1].matchAll(/^"?(@luz-ds\/[a-z-]+)"?:\s*(patch|minor|major)\s*$/gm)].map((m) => m[1]);
     expect(names.length).toBeGreaterThan(0);

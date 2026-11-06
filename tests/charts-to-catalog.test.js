@@ -26,9 +26,12 @@ import { assemblePrompt } from "../scripts/docs-site/prompts.js";
 import * as snippets from "../scripts/docs-site/snippets.js";
 import { PAGES_CSP } from "../vite.config.js";
 import { site } from "./helpers/debug-page.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(join(root, path), "utf-8");
+// The README of core without its "Breaking changes" section: the Version PR writes that one from the changesets, and it says where the four chart sheets went
+const coreReadme = () => read("packages/core/README.md").replace(/^### Breaking changes\n[\s\S]*?(?=^#{1,3} |(?![\s\S]))/m, "");
 const json = (path) => JSON.parse(read(path));
 const lines = (path) => read(path).split("\n").map((l) => l.trim());
 
@@ -85,7 +88,7 @@ describe("core has nothing of the four", () => {
   });
 
   it("does not know the four in its README", () => {
-    expect(read("packages/core/README.md")).not.toMatch(/components\/(?:bar-list|column-chart|stacked-bar|heat-map)\.css/);
+    expect(coreReadme()).not.toMatch(/components\/(?:bar-list|column-chart|stacked-bar|heat-map)\.css/);
   });
 });
 
@@ -260,14 +263,16 @@ describe("the rule between core and catalog", () => {
   it("PRINCIPLES.md and catalog's README say the same, in their words", () => {
     expect(read("PRINCIPLES.md")).toMatch(/\*\*Core or catalog\.\*\*[^\n]*the pieces that draw data \(the chart, the bar list, the column chart, the stacked bar, the heat map\)/);
     expect(read("packages/catalog/README.md")).toMatch(/bar list, column chart, stacked bar, ring and heat map/);
-    expect(read("packages/core/README.md")).not.toMatch(/bar list|column chart|stacked bar|heat map/i);
+    expect(coreReadme()).not.toMatch(/bar list|column chart|stacked bar|heat map/i);
   });
 });
 
 describe("the changeset of the move", () => {
+  // .changeset/charts-to-catalog.md, or its note in the CHANGELOGs once the Version PR has consumed it (where Prettier pads the tables)
   const text = () => {
-    expect(existsSync(join(root, ".changeset/charts-to-catalog.md")), "a changeset .changeset/charts-to-catalog.md").toBe(true);
-    return read(".changeset/charts-to-catalog.md");
+    const note = releaseNotes(root).find((n) => n.file === "charts-to-catalog.md" || /the four chart sheets move from core to catalog/.test(n.text));
+    expect(note, "a changeset for the move of the four chart sheets").toBeTruthy();
+    return note.text.replace(/[ \t]{2,}/g, " ");
   };
 
   it("is a minor of core and catalog and a patch of check, and the text says Breaking", () => {

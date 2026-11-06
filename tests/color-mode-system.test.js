@@ -26,6 +26,7 @@ import { analyze } from "../packages/tokens/lib/check.js";
 import { run } from "../packages/tokens/lib/cli.js";
 import { parseRules, valuesFor } from "../packages/tokens/lib/theme.js";
 import { builtData } from "./helpers/check-fixtures.js";
+import { releaseNotes } from "./helpers/release-notes.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const read = (path) => (existsSync(`${root}${path}`) ? readFileSync(`${root}${path}`, "utf-8") : "");
@@ -240,7 +241,8 @@ describe("weights: the ceilings of budgets.json are never raised", () => {
 });
 
 describe("the words: the changeset and the docs say that the default follows the system", () => {
-  const changeset = read(".changeset/color-mode-follows-system.md");
+  // .changeset/color-mode-follows-system.md, or its note in the CHANGELOGs once the Version PR has consumed it
+  const changeset = releaseNotes(root).find((n) => n.file === "color-mode-follows-system.md" || /The default color mode now follows the system, with no script/.test(n.text))?.text ?? "";
 
   it("has a changeset: minor for tokens, core and catalog, patch for check, and it says the default look changes for dark and high-contrast systems", () => {
     expect(changeset.length, ".changeset/color-mode-follows-system.md").toBeGreaterThan(200);
