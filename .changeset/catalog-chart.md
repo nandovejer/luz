@@ -1,6 +1,0 @@
----
-"@luz-ds/catalog": patch
-"@luz-ds/check": patch
----
-
-Adds `<luz-chart>` to catalog (and to the elements `luz-check` knows): a line chart (`type="line"`, and `variant="area"`) or a small line (`type="spark"`) drawn from the table, or the list of `<data>` elements, the author already wrote, in a lazy chunk of its own, `chart.js` (`@luz-ds/catalog/chart`, `components/chart.css`). The first column of the table is the X axis and each other column a series, up to six (`--luz-chart-1` to `--luz-chart-6`); each line ends in a mark of its own shape, and in forced colors it has its own dashes. The SVG is built with DOM calls only, is `aria-hidden`, follows the mode with no repaint and is drawn again when the box or the table changes; the table stays in the page for a screen reader, a button swaps one for the other (its two words are `data-luz-label-table` and `data-luz-label-chart`, with no English fallback), and on paper the table prints. There is no readout on hover: the figures are in the table. `catalog.js` loads the chunk when the page has a `<luz-chart>`. It draws no data of its own and writes no word of its own. A new exception, EX-014 (the two button texts, as EX-005 and EX-013), and no budget row: catalog has no weight limit.

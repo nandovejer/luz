@@ -2,7 +2,7 @@
 title: Migra un proyecto a LUZ
 description: Pasa a LUZ un proyecto que tiene su propio CSS, una página cada vez y en cinco pasos. Una IA hace el trabajo mecánico; tú decides y compruebas.
 keywords: migrar, refactor, proyecto existente, css antiguo, bootstrap
-source: e0453072730e
+source: d30cb5af0ab8
 reviewed: false
 -->
     <section class="docs-block" id="overview" aria-labelledby="overview-title">
@@ -63,7 +63,7 @@ reviewed: false
       <p>Elige el orden, de las páginas simples a las complejas, con las páginas que comparten plantilla juntas. Migra las partes compartidas (cabecera, pie de página, menú) una sola vez, después de las páginas simples y antes de las complejas, para no tener dos cabeceras durante meses. Con cada página, repite el mismo bucle:</p>
       <ol>
         <li>La IA, con <a href="/docs/get-started/ai/">el prompt de LUZ</a>, mete la página en la región, quita las clases del framework antiguo, deja el HTML semántico y añade una clase de LUZ solo donde el HTML no basta. Quitar es más seguro que añadir.</li>
-        <li>Ejecuta <code>npx @luz-ds/check@0.3.0</code> y una comprobación de accesibilidad, y te enseña qué ha cambiado y qué queda, nunca el archivo entero reescrito.</li>
+        <li>Ejecuta <code>npx @luz-ds/check@0.3.1</code> y una comprobación de accesibilidad, y te enseña qué ha cambiado y qué queda, nunca el archivo entero reescrito.</li>
         <li>Tú lees el diff y las capturas, y pasas las pruebas de humo.</li>
         <li>Un commit por página, para poder revertir una página y no un mes.</li>
       </ol>

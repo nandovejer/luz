@@ -86,12 +86,12 @@ import "@luz-ds/catalog";     // level 3, only if you use the search
 Drop the lines for the levels you do not use:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.0/dist/luz-tokens.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.4.0/dist/luz-tokens.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/luz.min.css">
 <!-- Level 3: one link per catalog component the page uses, here the search -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/search.min.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.min.js"></script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/catalog.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/components/search.min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/luz.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/catalog.min.js"></script>
 ```
 
 Loading LUZ from a CDN sends your visitors' IP addresses to the CDN. If you do not want that, install from npm and serve the files from your own server.
@@ -112,7 +112,7 @@ There are no packages for one kind of site. The patterns of a landing page, a bl
 | Documentation site | `docs-layout`, `doc-header`, `page-rail`, `example`, `do-dont`, `pager`, `page-footer` |
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.3.0/dist/components/hero.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/components/hero.min.css">
 ```
 
 ### Other files you can load
@@ -182,7 +182,7 @@ Every component has a page in the documentation with a live example, the markup 
 
 ## For AI agents
 
-LUZ is plain HTML and CSS, so an AI coding agent can write it when it knows which names exist. Give it this: read [`llms.txt`](https://nandovejer.github.io/luz/llms.txt) first, use only the classes in the `classes.json` of each package, and run `npx @luz-ds/check@0.3.0` on every HTML and CSS file it writes.
+LUZ is plain HTML and CSS, so an AI coding agent can write it when it knows which names exist. Give it this: read [`llms.txt`](https://nandovejer.github.io/luz/llms.txt) first, use only the classes in the `classes.json` of each package, and run `npx @luz-ds/check@0.3.1` on every HTML and CSS file it writes.
 
 What an agent can read, what the check reports and what it does not do are on [Working with AI](https://nandovejer.github.io/luz/docs/get-started/ai/). The same page has a prompt you can paste.
 

@@ -33,11 +33,11 @@ import '@luz-ds/core'   // optional: the JavaScript, starts every behavior
 
 ```html
 <!-- Tokens first -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.0/dist/luz-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.4.0/dist/luz-tokens.css">
 
 <!-- Then core -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/luz.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/luz.js"></script>
 
 <!-- A theme of your own (optional): start from themes/_template.css -->
 <link rel="stylesheet" href="/my-brand.css">
@@ -55,8 +55,8 @@ The HTML comes out styled with no class: text, links, lists, buttons, fields, `s
 Load `luz.conditional.css` instead of `luz.css`: the same file, with the reset and the bare elements only inside `[data-luz]`. The element with `data-luz` takes the font, color and background of the page; objects, components and utilities apply wherever you put their class. [Migrate a project to LUZ](https://nandovejer.github.io/luz/docs/get-started/migrate/) has the steps.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.0/dist/luz-tokens.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.conditional.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.4.0/dist/luz-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/luz.conditional.css">
 
 <main data-luz>…</main>
 ```
@@ -66,10 +66,10 @@ Load `luz.conditional.css` instead of `luz.css`: the same file, with the reset a
 Every component also ships as its own file in `dist/components/` — load only what you need. Tokens come first, then `base.css` (core settings such as z-index and layout widths, reset, bare elements):
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.3.0/dist/luz-tokens.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/base.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/components/button.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/components/card.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.4.0/dist/luz-tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/base.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/components/button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/components/card.css">
 ```
 
 Available: `accordion`, `alert`, `avatar`, `breadcrumb`, `button`, `card`, `code`, `copy-btn`, `dropdown`, `figure`, `form`, `icon-grid`, `modal`, `pagination`, `player`, `progress`, `select`, `table`, `tabs`, `tag`, `theme-mode`, `toast`, `tooltip` (+ `_animations` for the shared keyframes). Each has a `.min.css` twin.
@@ -119,11 +119,11 @@ To check the language file, put an import map with an `integrity` section before
 <script type="importmap">
 {
   "integrity": {
-    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/i18n-es.min.js": "sha384-…"
+    "https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/i18n-es.min.js": "sha384-…"
   }
 }
 </script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.3.0/dist/luz.min.js" integrity="sha384-…" crossorigin></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/luz.min.js" integrity="sha384-…" crossorigin></script>
 ```
 
 A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari and Firefox do not block a file with a wrong hash. Use it as a performance hint only.
@@ -170,7 +170,7 @@ Every stylesheet puts its rules in a layer of one container layer, `luz`: `luz.t
 
 LUZ ships one look, Vejer, in three color modes (`light`, `dark`, `high-contrast`): ET Book for running text, whitewash and sandstone surfaces, iron-black text, sky-blue links and actions, every link underlined.
 
-A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, with `data-mode` for its light, dark and high-contrast variants. Copy `@luz-ds/core/themes/_template.css`, and check it with `npx @luz-ds/tokens@0.3.0 check-contrast my-brand.css`. `<luz-theme-mode>` writes `data-mode` and leaves `data-theme` to your theme; list the name in `<html data-luz-themes="my-brand">` only for `applyTheme()` and the buttons of custom themes.
+A theme of your own overrides semantic tokens under `[data-theme="my-brand"]`, with `data-mode` for its light, dark and high-contrast variants. Copy `@luz-ds/core/themes/_template.css`, and check it with `npx @luz-ds/tokens@0.4.0 check-contrast my-brand.css`. `<luz-theme-mode>` writes `data-mode` and leaves `data-theme` to your theme; list the name in `<html data-luz-themes="my-brand">` only for `applyTheme()` and the buttons of custom themes.
 
 ## Vanilla JS behaviors
 
@@ -184,17 +184,13 @@ The core JS (`luz.js`) provides no-dependency implementations of:
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/core` 0.3.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/core` 0.4.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-#### The patterns of a landing page, a blog, a web application and a documentation site are components of `@luz-ds/catalog` now, one stylesheet each. `@luz-ds/landing`, `@luz-ds/cms`, `@luz-ds/app` and `@luz-ds/docs` are not published any more, and the layers `luz.landing`, `luz.cms`, `luz.app` and `luz.docs` are gone. **Breaking:** if you use one of the four packages, follow the steps below.
+#### **Breaking:** the four chart sheets move from core to catalog. `.luz-bar-list`, `.luz-column-chart`, `.luz-stacked-bar` and `.luz-heat-map` leave `@luz-ds/core/components/*` and are now `@luz-ds/catalog/components/bar-list.css`, `column-chart.css`, `stacked-bar.css` and `heat-map.css` (and their `.min.css`), each an independent stylesheet in the `luz.catalog` layer, linked after `luz.css` and only where a page uses it. Change the `href` (or the `@import`) of the ones you link: `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/bar-list.min.css">`. The CSS and the markup are the same; the sheets still read only tokens, and a page that links them must also link `@luz-ds/catalog`'s peers (tokens and core). The rule is now that core is what every page needs and fits in `luz.css`, and what a page links on its own when it uses it is catalog; the docs pages of the four are at `/docs/catalog/<name>/`. `luz-check` takes the classes of the four from catalog.
 
-The patterns are in `luz.catalog`, with the other catalog components. The order of the layers is now `luz.tokens`, `luz.themes`, `luz.settings`, `luz.generic`, `luz.elements`, `luz.objects`, `luz.components`, `luz.utilities`, `luz.catalog`, `luz.print`, and core and tokens repeat that statement in every file. **Breaking:** if your own `@layer` statement names `luz.landing`, `luz.cms`, `luz.app` or `luz.docs`, remove the name.
-
-#### The HTML comes out complete with no class. **Breaking:** `classless.css` (`@luz-ds/core/classless.css`) and the `[data-luz-classless]` attribute are gone, with no alias: what they did is now in `luz.css`, for the whole page.
-
-#### The color mode is now two elements: `<luz-theme-mode>` in core (a round fixed button that cycles Auto, light, dark and high contrast) and `<luz-theme-time>` in catalog (the same button plus the time of day). **Breaking:** the 0.2.1 names below are gone, with no aliases. `luz-check` names the new one when it finds an old one.
+#### **Breaking:** the Auto of `<luz-theme-time>` no longer follows the hour of the day: it follows the system, as core's `<luz-theme-mode>` does. The time of day is now a choice the reader makes: the slider of `variant="bar"`, a moment option (`show="moments"`) or `pin(hour)` set a moment, whose base goes to `data-mode` and `data-theme` and whose name goes to `data-moment`, and the page keeps it (an hour pinned is stored under `luz-light`) until a mode or Auto is chosen. With no hour chosen, `data-moment` is the `data-default` moment of the mode in use (the system's in Auto), so a page's rules for its dark moment still apply when the system is dark, and no moment option is checked.
 
 Older versions: https://github.com/nandovejer/luz/blob/main/packages/core/CHANGELOG.md
 
@@ -211,7 +207,7 @@ This package needs `@luz-ds/tokens` loaded first.
 
 ### Check what you write
 
-Run `npx @luz-ds/check@0.3.0 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.0 agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.3.1 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.1 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 
