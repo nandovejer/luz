@@ -94,8 +94,9 @@ toc: h2,h3
           </div>
           </div>
           <h2 id="known-issues">Known issues</h2>
-          <p>Captions, transcripts and audio description depend on the media you provide. The colours of the captions are a request: the reader's own caption settings win, and a browser may draw them its own way, in its own full-screen player for example.</p>
+          <p>Captions, transcripts and audio description depend on the media you provide. The colours of the captions are a request: the reader's own caption settings win, and a browser may draw them its own way.</p>
           <p>A MIDI file has no player without JavaScript: offer a download link in the fallback text.</p>
+          <p>A MIDI address that redirects fails: give the final address. The error text differs by browser.</p>
           <nav class="luz-tabs docs-view-tabs" aria-label="Player documentation">
             <a class="luz-tab" href="#code-panel" data-docs-view="code">Code</a>
             <a class="luz-tab" href="#design-panel" data-docs-view="design">Design</a>
@@ -176,7 +177,7 @@ initPlayers();</code></pre>
             <h3 id="how">How it works</h3>
             <p>The native media element plays the file; <code>player.js</code> drives the LUZ controls, styled by <code>components/player.css</code>.</p>
             <ul>
-              <li><code>initPlayers()</code> mounts every <code>.luz-player</code> on the page, or inside the element you pass it. <code>luz.js</code> runs it. A player already mounted is left as it is, so running it again is safe.</li>
+              <li><code>initPlayers()</code> mounts every <code>.luz-player</code> on the page, or inside the element you pass it. <code>luz.js</code> runs it. Running it twice is safe.</li>
               <li>On mount, the script removes the native <code>controls</code> and binds the LUZ ones: play and pause, time, seek and volume. They start from the media's own state: a <code>muted</code> video shows as muted, and a length the browser already knows shows at once.</li>
               <li>Seek and volume are native <code>&lt;input type="range"&gt;</code> sliders. Once the length is known, the seek slider has one step per second, whatever its <code>max</code> in the markup.</li>
               <li>A full-screen or picture-in-picture button is hidden where the browser cannot do it.</li>
