@@ -1,5 +1,45 @@
 # @luz-ds/core
 
+## 0.4.0
+
+### Minor Changes
+
+- 6e5ed98: **Breaking:** the four chart sheets move from core to catalog. `.luz-bar-list`, `.luz-column-chart`, `.luz-stacked-bar` and `.luz-heat-map` leave `@luz-ds/core/components/*` and are now `@luz-ds/catalog/components/bar-list.css`, `column-chart.css`, `stacked-bar.css` and `heat-map.css` (and their `.min.css`), each an independent stylesheet in the `luz.catalog` layer, linked after `luz.css` and only where a page uses it. Change the `href` (or the `@import`) of the ones you link: `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/bar-list.min.css">`. The CSS and the markup are the same; the sheets still read only tokens, and a page that links them must also link `@luz-ds/catalog`'s peers (tokens and core). The rule is now that core is what every page needs and fits in `luz.css`, and what a page links on its own when it uses it is catalog; the docs pages of the four are at `/docs/catalog/<name>/`. `luz-check` takes the classes of the four from catalog.
+- b2e5b22: The default color mode now follows the system, with no script. A page that names no mode is dark when the system is dark, high contrast when the system asks for more contrast (`prefers-contrast: more` wins over dark), and light otherwise. Before, only the script looked at the system, so with no JavaScript, or before it ran, the page was always light.
+
+  **Who sees a difference:** people whose system is dark or high contrast, on a page that names no mode.
+
+  **To keep a page light:** `<html data-theme="light">`.
+
+  **What still wins over the system:** `data-mode` or `data-theme` (set by your page, or by `<luz-theme-mode>` and `theme-boot.js` from the stored choice), and a checked light, dark or high contrast radio of `<luz-theme-mode>`. The Auto radio follows the system. A page that names a brand theme behaves as before.
+
+  Date and time pickers and the open list of a select are dark in the same cases.
+
+  `luz-check`: no change; version bump only.
+
+- 4293d9a: **Breaking:** the Auto of `<luz-theme-time>` no longer follows the hour of the day: it follows the system, as core's `<luz-theme-mode>` does. The time of day is now a choice the reader makes: the slider of `variant="bar"`, a moment option (`show="moments"`) or `pin(hour)` set a moment, whose base goes to `data-mode` and `data-theme` and whose name goes to `data-moment`, and the page keeps it (an hour pinned is stored under `luz-light`) until a mode or Auto is chosen. With no hour chosen, `data-moment` is the `data-default` moment of the mode in use (the system's in Auto), so a page's rules for its dark moment still apply when the system is dark, and no moment option is checked.
+
+  With no hour chosen, the radio checked in core's `<luz-theme-mode>` is the mode in use (Light or Dark, the system's), and the round button shows its icon and name; `<luz-theme-time>` does that and nothing is stored (core's choice is still Auto). Auto is checked, and the button says so, only while an hour or a moment is chosen. When the system is light, the button's first press goes to Dark, not to the Light already shown. The LUZ site's footer no longer has Auto checked in its markup, so without JavaScript no radio is checked and the page follows the system.
+
+  **Who sees a difference:** a page that relied on Auto changing with the clock (dark from 20:30, say). **To keep that:** pin the moment at the visitor's hour yourself, with `pin(hour)`.
+
+  `theme-time-boot.js` (the optional script for the head) follows the same rule: it applies an hour only when one is pinned under `luz-light`; otherwise it writes the default moment of the mode core's `theme-boot.js` wrote, and no longer reads the clock. The element no longer checks the clock every minute.
+
+  New: `el.dayMoment`, the name of the moment at the hour the slider shows, whether the page shows it or not (the bar's label and sun or moon read it). `el.moment` is the moment the page shows. The `luz-theme-time:change` event is unchanged.
+
+  The LUZ site follows this rule: its pages no longer name `data-theme="light"`, so Auto is the system's on the home and in the docs, with or without JavaScript.
+
+  `luz-check`: no change; version bump only.
+
+### Patch Changes
+
+- 3ce50b7: `.luz-badge`: the digits sit in the middle of the box. A mono face keeps room for descenders under the digits, so a count looked 0.6 to 2 px high; the badge now has `line-height: 1` and 1 px of padding above, which leaves it within 1 px of the centre in the common system mono faces. The box is still 20 px high.
+- c2b966e: `.luz-bar-list`: a list of rows, each a name, its figure and a bar under them (a native `meter`, `.luz-bar-list__meter`), in the chart colours (`--luz-chart-1` on `--luz-chart-track`). `--luz-bar-list-color` sets another series for a list or a row, `--luz-bar-list-row-h` gives lists side by side one row height, `.luz-bar-list--cells` cuts the bar into cells and `.luz-bar-list__row--zero` puts the figure of an empty row in the brand colour. It is a loose sheet, `@luz-ds/core/components/bar-list.css`, linked after `luz.css`: core's CSS has no room left in `luz.css`. The home page's weight charts use it.
+- 39bd0da: `.luz-card--media`: a card with an image on top (`.luz-card__media`, full width, cropped to `--luz-card-ratio`, 16 / 9 by default, rounded on top only), a body and `.luz-card__actions` at the foot, so the buttons of cards side by side line up. One destination: link the title and the whole card is the link. Several: leave the title without a link and put them in the actions.
+- d45a803: Three charts drawn from a native element, each a loose sheet linked after `luz.css` (core's CSS has no room left in `luz.css`): `.luz-column-chart` (`@luz-ds/core/components/column-chart.css`), a table whose cells are columns, `--v` from 0 to 1 on each cell; `.luz-stacked-bar` (`components/stacked-bar.css`), the shares of a whole in one bar with a legend of names and figures in text, the series in `--luz-chart-1` to `-6`; and `.luz-heat-map` (`components/heat-map.css`), a table whose cells show a swatch mixed from `--luz-chart-1` into `--luz-chart-track` and the figure under it. The figures are always text; in forced colors the columns, parts and swatches take system colours and an edge, and the parts of a stacked bar are numbered. `--luz-column-chart-color`, `--luz-stacked-bar-color` and `--luz-heat-map-color` set another series.
+- 6c92889: `MidiPlayer.load(url)` no longer follows redirects: it calls `fetch(url, { redirect: "error" })`, so a MIDI address that redirects fails through the player's error path instead of loading a file from wherever it points. Host the file at the address you give: a redirect now needs its final address.
+- fb95fe5: Core's meta line has `.luz-meta--facts` for labelled facts in a hero (`dl.luz-meta.luz-meta--facts`, one `div` with a `dt` and a `dd` for each fact: the label in the secondary text colour above its value, no dots). Catalog's section has `.luz-section__more`, a link such as "See all talks" at the end of the section head, in a row with the title. The pager now fits any kind of site (`fits-kinds: any`) and its page says the labels and titles are the author's text; the post list's page has a template for search results, a `<search>` with a form over `.luz-post-list--compact`. `luz-check` knows the two new classes.
+
 ## 0.3.0
 
 ### Minor Changes

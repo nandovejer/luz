@@ -1,5 +1,39 @@
 # @luz-ds/tokens
 
+## 0.4.0
+
+### Minor Changes
+
+- b2e5b22: The default color mode now follows the system, with no script. A page that names no mode is dark when the system is dark, high contrast when the system asks for more contrast (`prefers-contrast: more` wins over dark), and light otherwise. Before, only the script looked at the system, so with no JavaScript, or before it ran, the page was always light.
+
+  **Who sees a difference:** people whose system is dark or high contrast, on a page that names no mode.
+
+  **To keep a page light:** `<html data-theme="light">`.
+
+  **What still wins over the system:** `data-mode` or `data-theme` (set by your page, or by `<luz-theme-mode>` and `theme-boot.js` from the stored choice), and a checked light, dark or high contrast radio of `<luz-theme-mode>`. The Auto radio follows the system. A page that names a brand theme behaves as before.
+
+  Date and time pickers and the open list of a select are dark in the same cases.
+
+  `luz-check`: no change; version bump only.
+
+- 4293d9a: **Breaking:** the Auto of `<luz-theme-time>` no longer follows the hour of the day: it follows the system, as core's `<luz-theme-mode>` does. The time of day is now a choice the reader makes: the slider of `variant="bar"`, a moment option (`show="moments"`) or `pin(hour)` set a moment, whose base goes to `data-mode` and `data-theme` and whose name goes to `data-moment`, and the page keeps it (an hour pinned is stored under `luz-light`) until a mode or Auto is chosen. With no hour chosen, `data-moment` is the `data-default` moment of the mode in use (the system's in Auto), so a page's rules for its dark moment still apply when the system is dark, and no moment option is checked.
+
+  With no hour chosen, the radio checked in core's `<luz-theme-mode>` is the mode in use (Light or Dark, the system's), and the round button shows its icon and name; `<luz-theme-time>` does that and nothing is stored (core's choice is still Auto). Auto is checked, and the button says so, only while an hour or a moment is chosen. When the system is light, the button's first press goes to Dark, not to the Light already shown. The LUZ site's footer no longer has Auto checked in its markup, so without JavaScript no radio is checked and the page follows the system.
+
+  **Who sees a difference:** a page that relied on Auto changing with the clock (dark from 20:30, say). **To keep that:** pin the moment at the visitor's hour yourself, with `pin(hour)`.
+
+  `theme-time-boot.js` (the optional script for the head) follows the same rule: it applies an hour only when one is pinned under `luz-light`; otherwise it writes the default moment of the mode core's `theme-boot.js` wrote, and no longer reads the clock. The element no longer checks the clock every minute.
+
+  New: `el.dayMoment`, the name of the moment at the hour the slider shows, whether the page shows it or not (the bar's label and sun or moon read it). `el.moment` is the moment the page shows. The `luz-theme-time:change` event is unchanged.
+
+  The LUZ site follows this rule: its pages no longer name `data-theme="light"`, so Auto is the system's on the home and in the docs, with or without JavaScript.
+
+  `luz-check`: no change; version bump only.
+
+### Patch Changes
+
+- 2fd84f0: Adds the data palette to the semantic tokens, in light, dark and high contrast: `--luz-chart-1` to `--luz-chart-6` (blue, teal, purple, berry, periwinkle, stone), `--luz-chart-track` (the empty part of a bar) and `--luz-chart-grid` (the grid). The series are 3:1 or more on every surface (4.5:1 in high contrast), 0.08 or more apart in OKLab, and 0.05 or more apart with protanopia or deuteranopia; none is red, green or yellow, so the status colours keep their meaning. `luz-tokens check-contrast` measures these pairs too, so a theme that sets its own surfaces now needs chart colours that suit them; the theme template (`themes/_template.css`) names the eight tokens.
+
 ## 0.3.0
 
 ### Minor Changes
