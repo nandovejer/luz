@@ -170,6 +170,9 @@ function fixture(value) {
   return site.repoRoot;
 }
 
+// A fixture builds the whole home and its docs: about 2.5 s on its own, and past the default 5 s when the runner is busy (it failed in CI under load)
+const BUILD_TIMEOUT = 30_000;
+
 const buildFixture = (root) => {
   const site = scanSite(join(root, "apps/docs"), root);
   const html = readFileSync(join(root, "apps/landing/index.html"), "utf-8");
@@ -186,13 +189,13 @@ describe("an unknown {n:name} fails the build with file:line", () => {
     }
     expect(message).toMatch(/(apps\/landing\/i18n\/en\.json|apps\/landing\/index\.html):\d+/);
     expect(message).toContain("bogus");
-  });
+  }, BUILD_TIMEOUT);
 
   it("does not touch the scripts' own placeholders", () => {
     const { rendered, problems } = buildFixture(fixture("{n} results"));
     expect(problems).toEqual([]);
     expect(rendered.get("/")).toContain("{n} results");
-  });
+  }, BUILD_TIMEOUT);
 });
 
 describe("the numbers in the pages of the LUZ home, in every language", () => {
