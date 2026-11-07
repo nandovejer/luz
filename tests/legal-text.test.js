@@ -9,6 +9,7 @@
  * - L-06  The home in Spanish and Arabic says, in its own language, that an AI wrote the translation and nobody has
  *         reviewed it; the English home is not shown the note (`:lang(en)`).
  * - L-07  The cookie consent page lists, among its known issues, that the answer is a record in the visitor's browser.
+ * - L-05  (also) The copyright line of LICENSE, in the root and in each package, names LUZ contributors.
  * - L-08  The Code of Conduct names its Creative Commons licence; the footer names Fernando Muñoz.
  * - L-09  SECURITY.md states goals, not commitments.
  */
@@ -180,6 +181,26 @@ describe("L-08: the Code of Conduct names its licence and the footer the owner's
       const legal = catalog(code)["footer.legal"];
       expect(legal).toContain(">Fernando Muñoz</a>");
       expect(legal).not.toContain("Nando Muñoz");
+    });
+  }
+});
+
+/* ---- L-05 · The licence line names the contributors (owner decision, 2026-11-07) ------------ */
+
+describe("L-05: the copyright line of LICENSE names the contributors", () => {
+  const LINE = "Copyright (c) 2024–2026 Fernando Muñoz and LUZ contributors";
+  const PACKAGES = ["tokens", "core", "catalog", "check"];
+
+  it("LICENSE at the root has the line, once, and is still the MIT text", () => {
+    const text = read("LICENSE");
+    expect(text.split("\n")[0]).toBe("MIT License");
+    expect(text.split("\n").filter((l) => l.startsWith("Copyright (c)"))).toEqual([LINE]);
+    expect(text).toContain("Permission is hereby granted, free of charge");
+  });
+
+  for (const name of PACKAGES) {
+    it(`the LICENSE a package ships is the root one (${name})`, () => {
+      expect(read(`packages/${name}/LICENSE`)).toBe(read("LICENSE"));
     });
   }
 });
