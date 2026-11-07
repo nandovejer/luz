@@ -246,7 +246,33 @@ export const DATA = [
     file: "apps/landing/light/globe-data.js",
     origin: "Natural Earth",
   },
+  // Media of NASA, a work of the United States government (owner decision L-01, 2026-11-07): served only by the docs site,
+  // never in a package, no NASA logotype or insignia, and credited next to each file on the player's page.
+  {
+    name: 'NASA, "Earth Views from the ISS - No Music" (NHQ_2020_1221_Earth Views, 15 s)',
+    licence: "public domain in the United States, a work of NASA (nasa.gov media usage guidelines, read 2026-11-05)",
+    where: "the video of the player's second example and its two caption files, `apps/docs/assets/nasa-earth.mp4`, `nasa-earth.vtt` and `nasa-earth-es.vtt`, served only by the docs site and never in a package",
+    file: "apps/docs/pages/components/player.html",
+    origin: "Earth Views from the ISS",
+  },
+  {
+    name: "NASA, Apollo 11 launch countdown and lift-off, 16 July 1969 (nasa.gov/historical-sounds, 25 s)",
+    licence: "public domain in the United States, a work of NASA (nasa.gov media usage guidelines, read 2026-11-05)",
+    where: "the recording of the player's audio example, `apps/docs/assets/nasa-apollo11-countdown.mp3`, served only by the docs site and never in a package",
+    file: "apps/docs/pages/components/player.html",
+    origin: "Apollo 11 launch countdown",
+  },
 ];
+
+/** Every file of the docs assets named `nasa-*` is named by a DATA entry, so NASA media never arrives without its notice in dev/LICENSES.md. */
+export function checkMedia(root) {
+  const dir = join(root, "apps/docs/assets");
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((name) => name.startsWith("nasa-"))
+    .filter((name) => !DATA.some((d) => d.where.includes(`\`${name}\``) || d.where.includes(`apps/docs/assets/${name}`)))
+    .map((name) => `apps/docs/assets/${name}: NASA media with no DATA entry in scripts/check-license.js, so no origin and no licence in dev/LICENSES.md (red line 13).`);
+}
 
 /** Each DATA entry's file, when it is there, carries its origin note: the origin and "public domain". */
 export function checkData(root) {
@@ -301,7 +327,7 @@ function main(argv) {
   const at = argv.indexOf("--root");
   const root = at >= 0 && argv[at + 1] ? resolve(argv[at + 1]) : resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
-  const problems = [...checkPackages(root), ...checkPagesSite(root), ...checkData(root)];
+  const problems = [...checkPackages(root), ...checkPagesSite(root), ...checkData(root), ...checkMedia(root)];
   const entries = collectDependencies(root);
   for (const e of entries) {
     if (!acceptedDependency(e)) problems.push(`${e.name}@${e.version} (${e.usedBy.join(", ")}): licence ${e.licence} is not on the allowlist (${ALLOWED.join(", ")}).`);
