@@ -56,7 +56,7 @@
  *       disallowed licence remains (an update never legitimises one).
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -664,5 +664,165 @@ describe("the files of the DATA entries", () => {
     expect(line).toContain("apps/landing/light/globe-data.js");
     expect(line).not.toMatch(/1:50m|land polygons|globe\.js(?!-)/);
     expect(line).toMatch(/public domain/);
+  });
+});
+
+/* ---- NASA media: owner decision L-01, 2026-11-07 ----------------------------------------- */
+
+describe("the NASA media the docs site serves", () => {
+  const PLAYER = "apps/docs/pages/components/player.html";
+  const WORKS = [
+    { title: "Earth Views from the ISS", files: ["nasa-earth.mp4", "nasa-earth.vtt", "nasa-earth-es.vtt"] },
+    { title: "Apollo 11 launch countdown", files: ["nasa-apollo11-countdown.mp3"] },
+  ];
+  const entryOf = (DATA, work) => DATA.find((d) => d.origin === work.title);
+  const NOTE = (work) => `<p>${work.title}, NASA, in the public domain.</p>`;
+  const bothNotes = WORKS.map(NOTE).join("\n");
+
+  it.each(WORKS.map((w) => [w.title, w]))("DATA has an entry for %s: public domain, a work of NASA, its files, docs site only, credited on the player page", async (_title, work) => {
+    const { DATA } = await load();
+    const entry = entryOf(DATA, work);
+    expect(entry, `a DATA entry whose origin is "${work.title}"`).toBeDefined();
+    expect(entry.licence).toMatch(/public domain/i);
+    expect(`${entry.name} ${entry.licence}`).toMatch(/NASA/);
+    for (const file of work.files) expect(entry.where, `names ${file}`).toContain(file);
+    expect(entry.where).toMatch(/docs site/i);
+    expect(entry.where).toMatch(/never in a package/i);
+    expect(entry.file).toBe(PLAYER);
+  });
+
+  it("checkData fails, naming the player page and the work, when the page lacks the origin note of a work", async () => {
+    const { checkData } = await load();
+    for (const work of WORKS) {
+      const root = fixture();
+      put(root, PLAYER, WORKS.filter((w) => w !== work).map(NOTE).join("\n"));
+      const problems = checkData(root).filter((p) => p.includes(PLAYER));
+      expect(problems.length, `the page lacks "${work.title}"`).toBe(1);
+      expect(problems[0]).toContain(work.title);
+    }
+  });
+
+  it("checkData passes when the player page credits both works as public domain", async () => {
+    const { checkData } = await load();
+    const root = fixture();
+    put(root, PLAYER, bothNotes);
+    expect(checkData(root)).toEqual([]);
+  });
+
+  it("checkData passes on this repository", async () => {
+    const { checkData } = await load();
+    expect(checkData(repo)).toEqual([]);
+  });
+
+  it("the player page of this repository credits each work next to the media", () => {
+    const page = readFileSync(join(repo, PLAYER), "utf-8");
+    for (const work of WORKS) expect(page).toContain(work.title);
+    expect(page).toMatch(/public domain/i);
+  });
+
+  it("check:license fails when the player page lacks the origin note of a work, and names the page", () => {
+    const root = fixture();
+    put(root, PLAYER, NOTE(WORKS[0]));
+    const failing = cli(root, "--update");
+    expect(failing.code, failing.out).toBe(1);
+    expect(failing.out).toContain(PLAYER);
+    expect(failing.out).toContain(WORKS[1].title);
+  });
+});
+
+describe("checkMedia: every nasa-* file of the docs assets is named by a DATA entry", () => {
+  const ASSETS = "apps/docs/assets";
+
+  it("passes on this repository", async () => {
+    const { checkMedia } = await load();
+    expect(checkMedia(repo)).toEqual([]);
+  });
+
+  it("passes the four registered files", async () => {
+    const { checkMedia } = await load();
+    const root = fixture();
+    for (const name of ["nasa-earth.mp4", "nasa-earth.vtt", "nasa-earth-es.vtt", "nasa-apollo11-countdown.mp3"]) put(root, `${ASSETS}/${name}`, "x");
+    expect(checkMedia(root)).toEqual([]);
+  });
+
+  it("names a nasa-* file no DATA entry covers", async () => {
+    const { checkMedia } = await load();
+    const root = fixture();
+    put(root, `${ASSETS}/nasa-earth.mp4`, "x");
+    put(root, `${ASSETS}/nasa-launch.mp4`, "x");
+    const problems = checkMedia(root);
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toContain("nasa-launch.mp4");
+  });
+
+  it("ignores files that are not named nasa-*", async () => {
+    const { checkMedia } = await load();
+    const root = fixture();
+    put(root, `${ASSETS}/clip.mp4`, "x");
+    expect(checkMedia(root)).toEqual([]);
+  });
+
+  it("passes a root with no apps/docs/assets", async () => {
+    const { checkMedia } = await load();
+    expect(checkMedia(fixture())).toEqual([]);
+  });
+
+  it("check:license fails on a new nasa-*.mp4 with no entry and names the file", () => {
+    const root = fixture();
+    put(root, `${ASSETS}/nasa-new-clip.mp4`, "x");
+    const failing = cli(root, "--update");
+    expect(failing.code, failing.out).toBe(1);
+    expect(failing.out).toContain("nasa-new-clip.mp4");
+  });
+
+  it("check:license passes a root whose nasa-* files are all registered", () => {
+    const root = fixture();
+    put(root, `${ASSETS}/nasa-earth.mp4`, "x");
+    const ok = cli(root, "--update");
+    expect(ok.code, ok.out).toBe(0);
+  });
+});
+
+describe("the NASA media in dev/LICENSES.md, PRINCIPLES.md and the packages", () => {
+  const licences = readFileSync(join(repo, "dev/LICENSES.md"), "utf-8");
+  const dataList = licences.slice(licences.indexOf("Data, not a dependency"));
+
+  it.each([
+    ["Earth Views from the ISS", "nasa-earth.mp4"],
+    ["Apollo 11 launch countdown", "nasa-apollo11-countdown.mp3"],
+  ])("dev/LICENSES.md lists %s under the data list, as public domain and NASA", (title, file) => {
+    expect(licences, "the data list").toContain("Data, not a dependency");
+    const line = dataList.split("\n").find((l) => l.includes(title));
+    expect(line, `a line for ${title}`).toBeDefined();
+    expect(line).toMatch(/public domain/);
+    expect(line).toMatch(/NASA/);
+    expect(line).toContain(file);
+  });
+
+  it("red line 13 admits the public-domain media of a government work such as NASA's, under its conditions", () => {
+    const rl13 = readFileSync(join(repo, "PRINCIPLES.md"), "utf-8")
+      .split("\n")
+      .find((l) => l.startsWith("13. **Nothing published or served under a licence other than"));
+    expect(rl13, "red line 13").toBeDefined();
+    expect(rl13).toMatch(/NASA/);
+    expect(rl13).toMatch(/government/i);
+    expect(rl13).toMatch(/docs site/i);
+    expect(rl13).toMatch(/no package/i);
+    expect(rl13).toMatch(/logotype|insignia/i);
+    expect(rl13).toContain("dev/LICENSES.md");
+    // it is still MIT only for everything else
+    expect(rl13).toContain("MIT only");
+    expect(rl13).toMatch(/OFL/);
+  });
+
+  it("no file named nasa-* is in the pack list of any package", () => {
+    const packs = readdirSync(join(repo, "packages"))
+      .map((dir) => join(repo, "packages", dir, "pack-files.txt"))
+      .filter((p) => existsSync(p));
+    expect(packs.length).toBeGreaterThan(0);
+    for (const pack of packs) {
+      const listed = readFileSync(pack, "utf-8").split("\n").filter((l) => /(^|\/)nasa-/i.test(l));
+      expect(listed, `${pack} lists NASA media`).toEqual([]);
+    }
   });
 });
