@@ -150,6 +150,58 @@ describe("RL-12: no third-party URL in a place that loads it", () => {
   });
 });
 
+/* ---- RL-12: the one frame an app may open (owner decision L-03) ------------ */
+
+describe("RL-12: the clause about the one frame an app may open", () => {
+  const principles = read("PRINCIPLES.md");
+  const clause = principles.split("\n").find((line) => /^12\. \*\*No third-party network request\*\*/.test(line)) ?? "";
+  // what the other tests guard: only the Embed pages have a frame-src beyond 'self'
+  // (tests/pages-csp.test.js), no package source names the address (tests/embed-docs.test.js)
+
+  it("keeps the rule: no third-party request for fonts, scripts, images or analytics from a package or an app", () => {
+    expect(clause).not.toBe("");
+    for (const word of ["fonts", "scripts", "images", "analytics", "package", "app"]) expect(clause, word).toContain(word);
+  });
+
+  it("allows one frame only, the one a visitor asks for with a button and an answer", () => {
+    expect(clause).toMatch(/one frame/i);
+    expect(clause).toMatch(/\bbutton\b/i);
+    expect(clause).toMatch(/\banswer|agrees?\b/i);
+  });
+
+  it("names the Embed page of the docs site, and that page exists", () => {
+    const route = clause.match(/`(\/docs\/[^`\s]+\/)`/)?.[1];
+    expect(route, "the route of the Embed page, in backticks, root-absolute with a trailing slash").toBe("/docs/catalog/embed/");
+    expect(existsSync(resolve(root, "apps/docs/pages", route.replace(/^\/docs\//, "").replace(/\/$/, "") + ".html"))).toBe(true);
+  });
+
+  it("says that page's frame-src names that one service and no other page's does", () => {
+    expect(clause).toContain("frame-src");
+    expect(clause).toMatch(/no other page/i);
+  });
+
+  it("says the privacy page tells what the service receives, and the page does", () => {
+    expect(clause).toMatch(/privacy page/i);
+    expect(clause).toMatch(/receives/i);
+    const privacy = read("apps/docs/pages/privacy.html").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+    expect(privacy).toMatch(/receives your IP address and details of your browser/);
+  });
+
+  it("says a package never names the address", () => {
+    expect(clause).toMatch(/package never names/i);
+  });
+
+  it("records the owner decision L-03 with its date", () => {
+    expect(clause).toMatch(/owner decision L-03, 2026-11-07/);
+  });
+
+  it("is not contradicted by the privacy principle: it says it is apart from the one frame of red line 12", () => {
+    const bullet = principles.split("\n").find((line) => /^- \*\*No tracking, no analytics, no third-party domains/.test(line)) ?? "";
+    expect(bullet).not.toBe("");
+    expect(bullet).toMatch(/apart from the one frame of red line 12/);
+  });
+});
+
 /* ---- RL-13: bundled fonts are MIT only ------------------------------------ */
 
 describe("RL-13: every bundled font has an MIT-only licence next to it", () => {
