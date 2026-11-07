@@ -3,7 +3,7 @@
  *
  * - L-02  The home does not say LUZ is "built to" WCAG: it aims at it, and the statement lists what fails. The
  *         accessibility statement says LUZ has not been audited, names EN 301 549 3.2.1 and 4.1.1, and was last
- *         reviewed on 5 November 2026 (English and Spanish).
+ *         reviewed on 7 November 2026 (English and Spanish).
  * - L-05  CONTRIBUTING.md asks for the Developer Certificate of Origin and the AI tool used, and says a work made
  *         entirely by an AI may not be protected; the pull request template has the box.
  * - L-06  The home in Spanish and Arabic says, in its own language, that an AI wrote the translation and nobody has
@@ -89,10 +89,10 @@ describe("L-02: the accessibility statement says it has not been audited", () =>
     expect(target).toContain("4.1.1");
   });
 
-  it("was last reviewed on 5 November 2026, in the description and in the lead, in English and in Spanish", () => {
-    expect((en.match(/Last reviewed on 5 November 2026\./g) ?? []).length).toBe(2);
+  it("was last reviewed on 7 November 2026, in the description and in the lead, in English and in Spanish", () => {
+    expect((en.match(/Last reviewed on 7 November 2026\./g) ?? []).length).toBe(2);
     expect(en).not.toContain("17 October 2026");
-    expect((es.match(/Última revisión: 5 de noviembre de 2026\./g) ?? []).length).toBe(2);
+    expect((es.match(/Última revisión: 7 de noviembre de 2026\./g) ?? []).length).toBe(2);
     expect(es).not.toContain("17 de octubre de 2026");
   });
 });

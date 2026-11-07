@@ -559,6 +559,7 @@ const SUMMARY_POINTERS = new Map([
 // The known issues of each component are in its own entry.
 const OUTLINE_POINTERS = new Map([
   ["/docs/accessibility/", "LUZ's accessibility statement: open its URL for what is checked, what has not been tested and the known issues. Each component's known issues are in its entry."],
+  ["/docs/accessibility-map/", "LUZ's mapping of every WCAG 2.2 level A and AA criterion to EN 301 549 and to the tests that exercise it: open its URL for the table, the status of each criterion and what is not covered."],
 ]);
 
 // The page "Working with AI" (generate: ai): most of it is data. The files are in llms.txt and its
