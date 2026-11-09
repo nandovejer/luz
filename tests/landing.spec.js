@@ -129,6 +129,9 @@ test.describe('Landing page', () => {
     test('the footer switcher is a radio group that becomes one round button: Auto (the system\'s), Light, Dark and High contrast', async ({ page }) => {
       // Auto is the system's mode, shown checked, and the hour counts only when it is pinned: this file starts from no
       // choice (NO_CHOICE), and the system is light (Chromium's default), so Auto reads as Light
+      // This test is about the group and the announcement, not about the transitions: with reduced motion the durations
+      // are zero, so a click does not wait for the page to repaint about 200 colour transitions
+      await page.emulateMedia({ reducedMotion: 'reduce' });
       await seedMode(page, 'light');
       await open(page);
 
@@ -144,11 +147,19 @@ test.describe('Landing page', () => {
       await expect(button).toHaveAccessibleName('Color mode: Light');
       await expect(switcher.locator('.luz-theme-mode__option').first()).toBeHidden();
 
+      // The announcement is cleared 3 s after the change (on purpose), and click() can take longer than that on a loaded
+      // runner (the page repaints about 200 colour transitions while Playwright waits), so a read after the click may find
+      // it empty. A recorder in the page keeps every text the status region takes, and the test asks it afterwards.
+      await page.evaluate(() => {
+        window.__announced = [];
+        const status = document.querySelector('footer [role="status"]');
+        new MutationObserver(() => status.textContent && window.__announced.push(status.textContent)).observe(status, { childList: true, characterData: true, subtree: true });
+      });
+
       // Dark, High contrast, Auto (the system's, light) and then Dark again: Light is the mode Auto already shows
       for (const [mode, label, shown] of [['dark', 'Dark', 'dark'], ['high-contrast', 'High contrast', 'high-contrast'], ['light', 'Light', 'light'], ['dark', 'Dark', 'dark']]) {
         await button.click();
-        // First of all: the announcement is cleared 3 s after the change (on purpose), and a slow runner may spend them on the rest
-        await expect(page.locator('footer [role="status"]').first()).toHaveText(`Color mode: ${label}`);
+        await expect.poll(() => page.evaluate(() => window.__announced.at(-1))).toBe(`Color mode: ${label}`);
         expect(await theme(page)).toBe(shown);
         await expect(page.locator('input[name="luz-theme-mode"]:checked')).toHaveValue(mode);
         await expect(button).toHaveAccessibleName(`Color mode: ${label}`);
