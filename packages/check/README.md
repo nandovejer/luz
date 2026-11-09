@@ -7,12 +7,12 @@ A command line that reads the HTML and CSS of a project that uses LUZ and says w
 ## Usage
 
 ```bash
-npx @luz-ds/check@0.3.1 --help
-npx @luz-ds/check@0.3.1 index.html css/site.css
-npx @luz-ds/check@0.3.1 src --json
+npx @luz-ds/check@0.3.2 --help
+npx @luz-ds/check@0.3.2 index.html css/site.css
+npx @luz-ds/check@0.3.2 src --json
 ```
 
-Say `npx @luz-ds/check@0.3.1`, with the scope. The bare name `luz-check` is the command the package installs, not the name to run with `npx`.
+Say `npx @luz-ds/check@0.3.2`, with the scope. The bare name `luz-check` is the command the package installs, not the name to run with `npx`.
 
 A path is a file, a folder (read recursively: `.html`, `.htm` and `.css`) or a quoted glob such as `"src/**/*.html"`; with no path it reads the current folder. `--ext .astro,.vue` reads those extensions as HTML, `--json` prints the report as JSON, `--strict` fails on a warning too, and `--config <file>` reads a configuration other than `luz-check.json`.
 
@@ -31,7 +31,7 @@ It reads source files only. It does not check names, labels, alt text, headings 
 `agent` prints an agent definition for a project that uses an AI coding assistant: a read-only accessibility reviewer (it can read, search and list files, and write nothing) for WCAG 2.2 level AA and EN 301 549. It reads source files, so it gives advice from reading code, not test results. Copy it into your project:
 
 ```bash
-npx @luz-ds/check@0.3.1 agent > .claude/agents/luz-accessibility-reviewer.md
+npx @luz-ds/check@0.3.2 agent > .claude/agents/luz-accessibility-reviewer.md
 ```
 
 The `>` overwrites a file that is already there: use another path, or check the file in first, if you edited your copy. The copy is yours to read before you use it, and anyone who can write to your project can change it.
@@ -45,20 +45,18 @@ It needs Node 20 or later and nothing else: no dependency, no network, no enviro
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/check` 0.3.1 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/check` 0.3.2 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-#### **Breaking:** the four chart sheets move from core to catalog. `.luz-bar-list`, `.luz-column-chart`, `.luz-stacked-bar` and `.luz-heat-map` leave `@luz-ds/core/components/*` and are now `@luz-ds/catalog/components/bar-list.css`, `column-chart.css`, `stacked-bar.css` and `heat-map.css` (and their `.min.css`), each an independent stylesheet in the `luz.catalog` layer, linked after `luz.css` and only where a page uses it. Change the `href` (or the `@import`) of the ones you link: `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/bar-list.min.css">`. The CSS and the markup are the same; the sheets still read only tokens, and a page that links them must also link `@luz-ds/catalog`'s peers (tokens and core). The rule is now that core is what every page needs and fits in `luz.css`, and what a page links on its own when it uses it is catalog; the docs pages of the four are at `/docs/catalog/<name>/`. `luz-check` takes the classes of the four from catalog.
-
-#### **Breaking:** the Auto of `<luz-theme-time>` no longer follows the hour of the day: it follows the system, as core's `<luz-theme-mode>` does. The time of day is now a choice the reader makes: the slider of `variant="bar"`, a moment option (`show="moments"`) or `pin(hour)` set a moment, whose base goes to `data-mode` and `data-theme` and whose name goes to `data-moment`, and the page keeps it (an hour pinned is stored under `luz-light`) until a mode or Auto is chosen. With no hour chosen, `data-moment` is the `data-default` moment of the mode in use (the system's in Auto), so a page's rules for its dark moment still apply when the system is dark, and no moment option is checked.
+No breaking changes in 0.3.2.
 
 Older versions: https://github.com/nandovejer/luz/blob/main/packages/check/CHANGELOG.md
 
 ### Read first
 
 1. `README.md` in this package: what the command does and its exit codes.
-2. `npx @luz-ds/check@0.3.1 --help`: the command's options, from the version you run.
+2. `npx @luz-ds/check@0.3.2 --help`: the command's options, from the version you run.
 3. https://nandovejer.github.io/luz/llms.txt: the index of the documentation, short enough for a small context.
 4. https://nandovejer.github.io/luz/llms-full.txt: the same pages in full.
 5. https://nandovejer.github.io/luz/examples/: one standalone page of markup for each component and pattern.
@@ -69,7 +67,7 @@ Older versions: https://github.com/nandovejer/luz/blob/main/packages/check/CHANG
 
 ### Check what you write
 
-Run `npx @luz-ds/check@0.3.1 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.1 agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.3.2 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.2 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 
