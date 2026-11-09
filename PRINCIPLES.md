@@ -29,7 +29,7 @@ There are three levels, the third of them in [DESIGN.md](./DESIGN.md).
 
 Accessibility is the baseline, not a feature, a phase or a ticket.
 
-- **Target: WCAG 2.2 level AA**, with **EN 301 549** as its reference (clause 9, web, is the one that applies to LUZ; the accessibility mapping at `/docs/accessibility-map/` lists every criterion with the tests that check it and what they do not cover), for every style, component, pattern and app. AAA where it costs nothing (focus appearance, target size 44 px on touch controls, reduced motion).
+- **Target: WCAG 2.2 level AA**, with **EN 301 549** as its reference (clause 9, web, is the one the mapping covers; the accessibility mapping at `/docs/accessibility-map/` lists every criterion with the tests that check it and what they do not cover), for every style, component, pattern and app. AAA where it costs nothing (focus appearance, target size 44 px on touch controls, reduced motion).
 - Every interactive component must work with **keyboard only**, with a **screen reader**, at **400 % zoom** (reflow to 320 px), in **forced-colors mode** and with **prefers-reduced-motion**.
 - **Focus is always visible.** Never `outline: none` without an equivalent `:focus-visible` style with 3:1 contrast against adjacent colours.
 - **Colour is never the only signal.** Error, success, selected, disabled and current states need a second cue: text, icon, border, underline or weight.

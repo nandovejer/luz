@@ -1,13 +1,13 @@
 <!-- luz:page
 title: Declaración de accesibilidad
 description: LUZ aspira a cumplir WCAG 2.2 nivel AA. Aquí se explica qué se comprueba en cada cambio, qué no se ha probado y cuáles son los problemas conocidos. Última revisión: 7 de noviembre de 2026.
-source: 89d360220a57
+source: ffec3d569dfd
 reviewed: false
 -->
     <div class="docs-block docs-prose-chapter" id="accessibility">
       <p class="docs-lead">LUZ aspira a cumplir WCAG 2.2 nivel AA. Aquí se explica qué se comprueba en cada cambio, qué no se ha probado y cuáles son los problemas conocidos. Última revisión: 7 de noviembre de 2026.</p>
       <h2 id="h-a11y-target">Objetivo</h2>
-      <p>LUZ aspira a cumplir el <a href="https://www.w3.org/TR/WCAG22/">nivel AA de WCAG 2.2</a>. La versión de EN 301 549 que cita hoy la Ley Europea de Accesibilidad (3.2.1) exige WCAG 2.1 nivel AA; la versión 4.1.1, publicada en septiembre de 2026, exige la 2.2. LUZ no ha sido auditada con respecto a ninguna de las dos normas.</p>
+      <p>LUZ aspira a cumplir el <a href="https://www.w3.org/TR/WCAG22/">nivel AA de WCAG 2.2</a>. La versión 3.2.1 de EN 301 549 exige WCAG 2.1 nivel AA; la versión 4.1.1, publicada en septiembre de 2026, exige WCAG 2.2 nivel AA. LUZ no ha sido auditada con respecto a ninguna de las dos.</p>
       <p>La correspondencia de cada criterio con EN 301 549 y con las pruebas está en su propia página, <a href="/docs/accessibility-map/">Correspondencia con EN 301 549</a>. Esa página está en inglés.</p>
       <p>Un sistema de diseño no puede hacer que un servicio sea accesible por sí solo: el resultado depende de cómo uses los componentes. En la página de cada componente se explica qué debes hacer, en las secciones <em>Teclado y ARIA</em> y <em>Cómo escribir el contenido</em>.</p>
 
@@ -27,7 +27,7 @@ reviewed: false
         <li>La página de inicio en árabe, de derecha a izquierda: no debe desbordarse a 320 píxeles de ancho, ni con JavaScript ni sin él.</li>
         <li>Texto de derecha a izquierda: el ejemplo de cada componente, excepto el reproductor, se dispone con <code class="luz-code-inline">dir="rtl"</code> junto a su versión de izquierda a derecha. Cada elemento con texto y cada control deben ocupar la posición que les corresponde al reflejar el diseño, y nada debe desbordarse. Se comprueba con y sin JavaScript.</li>
         <li>Contraste del texto escrito para las páginas de documentación, en los tres modos, con una prueba; la página de inicio tiene su propia prueba, también en los tres modos.</li>
-        <li>Antes de esta versión, las mismas pruebas automatizadas se ejecutaron una vez en Firefox 155 y en WebKit 26.6 y 27.2 (el motor de Safari), en Linux, y se corrigieron los hallazgos. No se ejecutan en cada cambio y tampoco se prueba en macOS ni iOS.</li>
+        <li>Para los cambios que recoge <code class="luz-code-inline">dev/BROWSER-REVIEWS.md</code>, las pruebas que nombra se ejecutaron en Firefox 155 y WebKit 26.6 de Playwright, en Linux (WebKit 27.2 para la lista abierta de Select), y se corrigieron los hallazgos. No se ejecutan en cada cambio y nada se prueba en macOS ni iOS.</li>
         <li><code class="luz-code-inline">llms.txt</code> y <code class="luz-code-inline">classes.json</code> se regeneran en cada cambio; si alguno está desactualizado, la compilación falla.</li>
         <li>Un script comprueba el contraste de cada par de tokens que representa un componente, en los tres modos base. El mismo script mide cualquier <a href="/docs/tokens/themes/">tema propio</a>, como se explica en la página de temas.</li>
       </ul>
