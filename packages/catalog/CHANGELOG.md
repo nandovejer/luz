@@ -1,5 +1,11 @@
 # @luz-ds/catalog
 
+## 0.4.1
+
+### Patch Changes
+
+- 698bac8: The copyright line of the LICENSE each package ships now reads "Fernando Muñoz and LUZ contributors". The licence is still MIT and nothing else changes.
+
 ## 0.4.0
 
 ### Minor Changes

@@ -38,19 +38,19 @@ import '@luz-ds/catalog'    // the loader: the chunks of the search, the cookie 
 ### Via CDN
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.4.0/dist/luz-tokens.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/luz.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/tokens@0.4.1/dist/luz-tokens.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.1/dist/luz.min.css">
 <!-- One link per component the page uses: here the search and the time of day -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/components/search.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/components/theme-time.min.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.0/dist/luz.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/components/search.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/components/theme-time.min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/core@0.4.1/dist/luz.min.js"></script>
 <!-- The loader: it loads search.min.js on a page with a <luz-search>,
      cookie-consent.min.js on a page with a <luz-cookie-consent>, theme-time.min.js on a
      page with a <luz-theme-time> (and theme-time-bar.min.js after it for a
      variant="bar"), timeline.min.js on a page with a <luz-timeline>,
      embed.min.js on a page with a <luz-embed>, chart.min.js on a page with a <luz-chart> and
      sidebar.min.js on a page with a .luz-sidebar, and nothing else -->
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/catalog.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/catalog.min.js"></script>
 ```
 
 Loading LUZ from a CDN sends your visitors' IP addresses to the CDN. If you do not want that, install from npm and serve the files from your own server.
@@ -61,18 +61,18 @@ With Subresource Integrity, an `integrity` on the `<script>` covers `catalog.min
 <script type="importmap">
 {
   "integrity": {
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/search.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/cookie-consent.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/theme-time.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/theme-time-bar.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/timeline.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/embed.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/chart.min.js": "sha384-…",
-    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/sidebar.min.js": "sha384-…"
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/search.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/cookie-consent.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/theme-time.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/theme-time-bar.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/timeline.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/embed.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/chart.min.js": "sha384-…",
+    "https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/sidebar.min.js": "sha384-…"
   }
 }
 </script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/catalog.min.js" integrity="sha384-…" crossorigin></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/catalog.min.js" integrity="sha384-…" crossorigin></script>
 ```
 
 A `<link rel="modulepreload" integrity>` is not a guard outside Chromium: Safari and Firefox do not block a chunk with a wrong hash. Add `modulepreload` only as a performance hint.
@@ -170,7 +170,7 @@ import '@luz-ds/catalog/components/hero.css'
 ```
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.0/dist/components/hero.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@0.4.1/dist/components/hero.min.css">
 ```
 
 | Fits best | File in `components/` | Block | Docs page |
@@ -214,13 +214,11 @@ This package also holds four components that were core's: the navbar, the sideba
 <!-- luz:ai-agents:start -->
 ## For AI agents
 
-`@luz-ds/catalog` 0.4.0 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
+`@luz-ds/catalog` 0.4.1 is in beta: any release may break anything. Read the breaking changes below before you update, and use only what the files under "Read first" list.
 
 ### Breaking changes
 
-#### **Breaking:** the four chart sheets move from core to catalog. `.luz-bar-list`, `.luz-column-chart`, `.luz-stacked-bar` and `.luz-heat-map` leave `@luz-ds/core/components/*` and are now `@luz-ds/catalog/components/bar-list.css`, `column-chart.css`, `stacked-bar.css` and `heat-map.css` (and their `.min.css`), each an independent stylesheet in the `luz.catalog` layer, linked after `luz.css` and only where a page uses it. Change the `href` (or the `@import`) of the ones you link: `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@luz-ds/catalog@<version>/dist/components/bar-list.min.css">`. The CSS and the markup are the same; the sheets still read only tokens, and a page that links them must also link `@luz-ds/catalog`'s peers (tokens and core). The rule is now that core is what every page needs and fits in `luz.css`, and what a page links on its own when it uses it is catalog; the docs pages of the four are at `/docs/catalog/<name>/`. `luz-check` takes the classes of the four from catalog.
-
-#### **Breaking:** the Auto of `<luz-theme-time>` no longer follows the hour of the day: it follows the system, as core's `<luz-theme-mode>` does. The time of day is now a choice the reader makes: the slider of `variant="bar"`, a moment option (`show="moments"`) or `pin(hour)` set a moment, whose base goes to `data-mode` and `data-theme` and whose name goes to `data-moment`, and the page keeps it (an hour pinned is stored under `luz-light`) until a mode or Auto is chosen. With no hour chosen, `data-moment` is the `data-default` moment of the mode in use (the system's in Auto), so a page's rules for its dark moment still apply when the system is dark, and no moment option is checked.
+No breaking changes in 0.4.1.
 
 Older versions: https://github.com/nandovejer/luz/blob/main/packages/catalog/CHANGELOG.md
 
@@ -238,7 +236,7 @@ This package needs `@luz-ds/tokens` and `@luz-ds/core` loaded first.
 
 ### Check what you write
 
-Run `npx @luz-ds/check@0.3.1 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.1 agent > .claude/agents/luz-accessibility-reviewer.md`.
+Run `npx @luz-ds/check@0.3.2 <files>` on every HTML and CSS file you write, and fix what it reports. To copy the accessibility reviewer into your project: `npx @luz-ds/check@0.3.2 agent > .claude/agents/luz-accessibility-reviewer.md`.
 
 <!-- luz:ai-agents:end -->
 
