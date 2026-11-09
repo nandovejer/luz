@@ -252,3 +252,32 @@ describe("L-09: SECURITY.md states goals, not a service level", () => {
     expect(text).toContain('"as is"');
   });
 });
+
+/* ---- N-08: red line 13 does not say a government's work is free everywhere (legal audit of 2026-11-09) ---- */
+
+describe("N-08: red line 13 and the work of a government", () => {
+  const rl13 = () => {
+    const line = read("PRINCIPLES.md")
+      .split("\n")
+      .find((l) => /^13\. \*\*Nothing published or served under a licence other than/.test(l));
+    expect(line, "the line of red line 13").toBeDefined();
+    return flat(line);
+  };
+
+  it("accepts the work of a government only when it is not subject to copyright in that government's own country", () => {
+    expect(rl13()).toContain("not subject to copyright in that government's own country");
+  });
+
+  it("no longer says a government's work has \"no copyright\" without saying where", () => {
+    expect(rl13()).not.toMatch(/government with no copyright/i);
+  });
+
+  it("keeps the conditions of owner decision L-01: the docs site only, no package, no logotype or insignia, credited", () => {
+    const text = rl13();
+    expect(text).toContain("owner decision L-01, 2026-11-07");
+    expect(text).toMatch(/only the docs site serves it/);
+    expect(text).toMatch(/no package ships it/);
+    expect(text).toMatch(/no logotype or insignia/);
+    expect(text).toMatch(/credited next to it and in `dev\/LICENSES\.md`/);
+  });
+});
