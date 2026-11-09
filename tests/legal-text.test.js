@@ -10,7 +10,7 @@
  *         reviewed it; the English home is not shown the note (`:lang(en)`).
  * - L-07  The cookie consent page lists, among its known issues, that the answer is a record in the visitor's browser.
  * - L-05  (also) The copyright line of LICENSE, in the root and in each package, names LUZ contributors.
- * - L-08  The Code of Conduct names its Creative Commons licence; the footer names Fernando Muñoz.
+ * - L-08  The Code of Conduct names its Creative Commons licence; the footer names Fernando Muñoz and LUZ contributors.
  * - L-09  SECURITY.md states goals, not commitments.
  */
 import { readFileSync } from "node:fs";
@@ -81,12 +81,36 @@ describe("L-02: the accessibility statement says it has not been audited", () =>
     expect(target).toContain("4.1.1");
   });
 
+  it("no longer says the European Accessibility Act cites version 3.2.1 today, and still says 3.2.1 asks for WCAG 2.1 AA and 4.1.1 for 2.2 AA", () => {
+    const target = sectionOf(en, "h-a11y-target");
+    expect(target).not.toMatch(/cites today/);
+    expect(target).toMatch(/3\.2\.1 asks for WCAG 2\.1 level AA/);
+    expect(target).toMatch(/4\.1\.1[^.]*asks for WCAG 2\.2 level AA/);
+    expect(target).toMatch(/has not been audited against either/);
+  });
+
   it("says the same in Spanish", () => {
     const target = sectionOf(es, "h-a11y-target");
     expect(target).toMatch(/no ha sido auditada/);
     expect(target).toContain("EN 301 549");
     expect(target).toContain("3.2.1");
     expect(target).toContain("4.1.1");
+  });
+
+  it("says the same without the Act in Spanish: 3.2.1 exige WCAG 2.1 AA, 4.1.1 exige 2.2 AA", () => {
+    const target = sectionOf(es, "h-a11y-target");
+    expect(target).not.toMatch(/cita hoy/);
+    expect(target).toMatch(/3\.2\.1 de EN 301 549 exige WCAG 2\.1 nivel AA/);
+    expect(target).toMatch(/4\.1\.1[^.]*exige WCAG 2\.2 nivel AA/);
+    expect(target).toMatch(/no ha sido auditada con respecto a ninguna de las dos/);
+  });
+
+  it("no longer says the same suites ran once in Firefox and WebKit before this release: it names dev/BROWSER-REVIEWS.md", () => {
+    for (const [code, html, once] of [["en", en, /ran once|Before this release/], ["es", es, /se ejecutaron una vez|Antes de esta versi/]]) {
+      const text = flat(html.replace(/<[^>]+>/g, " "));
+      expect(text, code).not.toMatch(once);
+      expect(text, code).toContain("dev/BROWSER-REVIEWS.md");
+    }
   });
 
   it("was last reviewed on 7 November 2026, in the description and in the lead, in English and in Spanish", () => {
@@ -176,11 +200,16 @@ describe("L-08: the Code of Conduct names its licence and the footer the owner's
     expect(text).toContain("https://creativecommons.org/licenses/by/4.0/");
   });
 
+  const CONTRIBUTORS = { en: "and LUZ contributors", es: "y colaboradores de LUZ", ar: "وجميع المساهمين في LUZ" };
   for (const code of CODES) {
     it(`names Fernando Muñoz in the licence line of the footer (${code})`, () => {
       const legal = catalog(code)["footer.legal"];
       expect(legal).toContain(">Fernando Muñoz</a>");
       expect(legal).not.toContain("Nando Muñoz");
+    });
+
+    it(`follows the name with the LUZ contributors in the licence line of the footer (${code})`, () => {
+      expect(catalog(code)["footer.legal"]).toContain(`>Fernando Muñoz</a> ${CONTRIBUTORS[code]}.`.replace(/\.$/, ""));
     });
   }
 });

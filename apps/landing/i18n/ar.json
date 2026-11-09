@@ -284,7 +284,7 @@
   "footer.bug": "أبلغ عن خطأ",
   "footer.conduct": "مدونة السلوك",
   "footer.security": "سياسة الأمان",
-  "footer.legal": "© 2024–2026 <a href=\"https://github.com/nandovejer\">Fernando Muñoz</a>. يُنشر LUZ بموجب <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">رخصة MIT</a>: استخدمه وعدّله وشاركه، حتى في الأعمال التجارية، ما دام الإشعار يرافقه. ويُقدَّر ذكر المشروع الأصلي. كل ملف ينشره، بما في ذلك الخطوط والأيقونات، مرخّص بـ MIT.",
+  "footer.legal": "© 2024–2026 <a href=\"https://github.com/nandovejer\">Fernando Muñoz</a> وجميع المساهمين في LUZ. يُنشر LUZ بموجب <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">رخصة MIT</a>: استخدمه وعدّله وشاركه، حتى في الأعمال التجارية، ما دام الإشعار يرافقه. ويُقدَّر ذكر المشروع الأصلي. كل ملف ينشره، بما في ذلك الخطوط والأيقونات، مرخّص بـ MIT.",
   "footer.translation": "كتب هذه الترجمة ذكاء اصطناعي ولم يراجعها أي شخص بعد. تسود النسخة الإنجليزية.",
   "footer.mode": "وضع الألوان",
   "footer.auto": "تلقائي",

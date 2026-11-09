@@ -299,7 +299,7 @@
   "footer.bug": "Report a bug",
   "footer.conduct": "Code of conduct",
   "footer.security": "Security policy",
-  "footer.legal": "© 2024–2026 <a href=\"https://github.com/nandovejer\">Fernando Muñoz</a>. LUZ is released under the <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">MIT License</a>: use it, change it and share it, in commercial work too, as long as the notice goes with it. Credit to the original project is appreciated. Every file it ships, fonts and icons included, is MIT.",
+  "footer.legal": "© 2024–2026 <a href=\"https://github.com/nandovejer\">Fernando Muñoz</a> and LUZ contributors. LUZ is released under the <a href=\"https://github.com/nandovejer/luz/blob/main/LICENSE\">MIT License</a>: use it, change it and share it, in commercial work too, as long as the notice goes with it. Credit to the original project is appreciated. Every file it ships, fonts and icons included, is MIT.",
   "footer.translation": "This page is the original English text.",
   "footer.mode": "Color mode",
   "footer.auto": "Auto",
