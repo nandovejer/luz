@@ -11,7 +11,8 @@
  * - Status and coverage come from a closed list, an Automated row cites a test file, and every test file the page
  *   cites exists.
  * - The page claims nothing: no "meets", "complies", "certified"; it says nobody has audited LUZ and no screen
- *   reader has been used; clause 9 applies, clauses 10 and 11 do not.
+ *   reader has been used; clause 9 applies, clause 10 is not mapped here (llms.txt and the Markdown copies may
+ *   fall under it), clause 11 does not apply, clause 12 applies and is not mapped here (legal audit 2026-11-09).
  * - The page's index.md (made by the function that writes the entries of llms-full.txt) has its h2 outline and a
  *   pointer, not the table; llms-full.txt stays under its ceiling.
  * - The map is last reviewed on 7 November 2026, and PRINCIPLES.md no longer promises "met" clauses.
@@ -75,6 +76,7 @@ function rows() {
         status: cells[3]?.text,
         coverage: cells[4]?.text,
         checked: cells[5] ?? { codes: [] },
+        notCovered: cells[6]?.text ?? "",
         cells: cells.length,
       });
     }
@@ -198,13 +200,81 @@ describe("what the page says about itself", () => {
     expect(text()).toMatch(/no screen reader has been used/);
   });
 
-  it("says clause 9, Web, applies and that clauses 10 and 11 do not", () => {
-    const clauses = sectionsOf(page().body).get("clauses");
-    expect(clauses, "an h2 with the id clauses").toBeTruthy();
-    const t = textOf(clauses.html);
-    expect(t).toMatch(/Clause 9, Web, applies/);
-    expect(t).toMatch(/Clause 10, Non-web documents, does not apply/);
-    expect(t).toMatch(/Clause 11, Software, does not apply/);
+  /** The text of the item of the "Which clauses apply" list that starts with `lead` in bold. */
+  const clauseItem = (lead) => {
+    const section = sectionsOf(page().body).get("clauses");
+    expect(section, "an h2 with the id clauses").toBeTruthy();
+    const li = [...section.html.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => m[1]).find((h) => h.trimStart().startsWith(`<strong>${lead}`));
+    expect(li, `a list item that starts with ${lead}`).toBeTruthy();
+    return flat(textOf(li));
+  };
+
+  it("says clause 9, Web, applies", () => {
+    expect(clauseItem("Clause 9, Web, applies")).toMatch(/^Clause 9, Web, applies\./);
+  });
+
+  it("says clause 9 also has 9.6, and 9.7 in version 4.1.1 only, and that neither is a row", () => {
+    const t = clauseItem("Clause 9, Web, applies");
+    expect(t).toMatch(/9\.6/);
+    expect(t).toMatch(/9\.7/);
+    expect(t).toMatch(/(in )?version 4\.1\.1 only[^.]*9\.7|9\.7[^.]*(in )?version 4\.1\.1 only/);
+    expect(t).toMatch(/Neither is a row/);
+    expect(rows().filter((r) => /^9\./.test(r.number))).toEqual([]);
+  });
+
+  it("says clause 10 is not mapped here, that llms.txt and the Markdown copies can fall under it, and that no test looks at them", () => {
+    const t = clauseItem("Clause 10, Non-web documents");
+    expect(t).toMatch(/^Clause 10, Non-web documents, is not mapped here\./);
+    expect(t).toContain("llms.txt");
+    expect(t).toMatch(/Markdown cop(y|ies)/);
+    expect(t).toMatch(/documents provided with web pages/);
+    expect(t).toMatch(/clause 10 can apply to them/);
+    expect(t).toMatch(/No test looks at them/);
+    expect(t).not.toMatch(/does not apply/);
+  });
+
+  it("says clause 11 does not apply, names Non-web software in version 4.1.1 and leaves command-line tools such as luz-check out of the standard's scope", () => {
+    const t = clauseItem("Clause 11");
+    expect(t).toMatch(/^Clause 11, Software.*?, does not apply\./);
+    expect(t).toContain("Non-web software in version 4.1.1");
+    expect(t).toMatch(/command-line tools such as luz-check[^.]*out of (its|the standard.s) scope/);
+  });
+
+  it("says clause 12 applies and is not mapped here, names its V4.1.1 title and that the support route is GitHub's issue tracker", () => {
+    const t = clauseItem("Clause 12");
+    expect(t).toMatch(/^Clause 12, Documentation and support services.*?, applies and is not mapped here\./);
+    expect(t).toContain("Information about products and services in version 4.1.1");
+    expect(t).toMatch(/support route is GitHub.s issue tracker/);
+    expect(t).not.toMatch(/does not apply/);
+  });
+
+  it("says in Annex A that the presumption of conformity under Directive 2019/882 comes only when the Official Journal cites the standard, and names Annex C", () => {
+    const t = clauseItem("Annex A");
+    expect(t).toContain("2019/882");
+    expect(t).toMatch(/presumption of conformity/);
+    expect(t).toMatch(/only once the Official Journal cites the standard/);
+    expect(t).toContain("Annex C");
+  });
+
+  it("says in the 1.2.1 row that the criterion is not met on the two audio examples", () => {
+    expect(rows().find((r) => r.number === "1.2.1").notCovered).toMatch(/1\.2\.1 is not met on (those|the) two audio examples/);
+  });
+
+  it("says in the 1.4.2 row that the Embed frame is asked to autoplay only after the button and the visitor's consent", () => {
+    expect(rows().find((r) => r.number === "1.4.2").notCovered).toMatch(/Embed frame is asked to autoplay only after[^.]*button[^.]*(agrees|consent)/);
+  });
+
+  it("keeps exactly the four statuses in the list that explains the Status column", () => {
+    const section = sectionsOf(page().body).get("read");
+    expect(section, "an h2 with the id read").toBeTruthy();
+    const defined = [...section.html.matchAll(/<li><strong>([^<]+?)\.?<\/strong>/g)].map((m) => m[1].trim());
+    expect(defined).toEqual(STATUSES);
+  });
+
+  it("does not say the Firefox and WebKit suites ran once before the release: it points at the browser reviews", () => {
+    const t = flat(textOf(page().body));
+    expect(t).not.toMatch(/ran once/);
+    expect(t).toMatch(/browser reviews/);
   });
 
   it("is last reviewed on 7 November 2026, in the description and in the lead", () => {
@@ -246,6 +316,13 @@ describe("PRINCIPLES.md", () => {
     expect(line).toContain("/docs/accessibility-map/");
     expect(line).not.toContain("mapped to **EN 301 549**");
     expect(line).not.toContain("clauses 9 web, 10 non-web documents, 11 software where they apply");
+  });
+
+  it("says clause 9, web, is the one the mapping covers, not the one that applies to LUZ", () => {
+    const line = bullet("- **Target: WCAG 2.2 level AA**");
+    expect(line, "the Target bullet").toBeTruthy();
+    expect(line).toContain("clause 9, web, is the one the mapping covers");
+    expect(line).not.toContain("the one that applies to LUZ");
   });
 
   it("says the accessibility statement publishes what is checked, what is not tested, the known issues and the mapping", () => {
