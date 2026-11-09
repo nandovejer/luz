@@ -59,7 +59,9 @@ describe("the motion of the logo is a written deviation", () => {
   it("PRINCIPLES.md writes a second deviation on the same line: the home's tabs that turn by themselves, WCAG 2.2.2, held by hover and focus, and not started under reduced motion", () => {
     const line = text("PRINCIPLES.md").split("\n").find((l) => /no infinite loops/i.test(l));
     expect(line, "the 'no infinite loops' line").toBeTruthy();
-    expect(line, "it counts two deviations").toMatch(/\bTwo written deviations\b/);
+    // N-10 (legal audit, 2026-11-09): the line does not count the deviations, because the statement lists four failures of 2.2.2 and the owner has chosen two
+    expect(line, "it does not count the deviations").not.toMatch(/\b(Two|Three|Four) written deviations\b/i);
+    expect(line, "it says which are the owner's written choice").toMatch(/two of (those|these)[^.]*owner's written choice/i);
     const second = line.slice(line.search(/\bSecond\b/));
     expect(second, "the second deviation starts after the first").not.toBe(line);
     expect(second).toMatch(/home/i);
@@ -70,6 +72,18 @@ describe("the motion of the logo is a written deviation", () => {
     expect(second).toMatch(/focus/i);
     expect(second).toMatch(/reduced[- ]motion/i);
     expect(second).toMatch(/2026-10-31/);
+  });
+
+  it("PRINCIPLES.md names the globe and the stars of the home page and the 404 page as known failures of 2.2.2 with no decision of the owner yet, and points to the statement", () => {
+    const line = text("PRINCIPLES.md").split("\n").find((l) => /no infinite loops/i.test(l));
+    expect(line, "the 'no infinite loops' line").toBeTruthy();
+    const rest = line.slice(line.search(/2026-10-31/));
+    expect(rest).toMatch(/globe/i);
+    expect(rest).toMatch(/stars/i);
+    expect(rest).toMatch(/\b404\b/);
+    expect(rest).toMatch(/\b2\.2\.2\b/);
+    expect(rest).toMatch(/no decision of the owner/i);
+    expect(rest).toMatch(/accessibility statement/i);
   });
 
   for (const [file, title] of [
