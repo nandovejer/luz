@@ -62,7 +62,6 @@
   border-radius: var(--luz-radius-md);
   box-shadow: var(--luz-shadow-lg);
   max-inline-size: min(90vw, 600px);
-  max-block-size: 90vh;
   max-block-size: 90dvh;
   overflow-y: auto;
 }

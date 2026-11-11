@@ -12,7 +12,6 @@
 .luz-table-wrap {
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
   container-type: inline-size;
 }
 
@@ -189,7 +188,7 @@
   .luz-table tr {
     border: 1px solid var(--luz-divider);
     border-radius: var(--luz-radius-md);
-    margin-bottom: var(--luz-space-sm);
+    margin-block-end: var(--luz-space-sm);
     overflow: hidden;
   }
 
@@ -200,11 +199,11 @@
     align-items: baseline;
     gap: var(--luz-space-md);
     padding: var(--luz-space-xs) var(--luz-space-sm);
-    border-bottom: 1px solid var(--luz-divider);
+    border-block-end: 1px solid var(--luz-divider);
   }
 
   .luz-table tr:last-child td:last-child {
-    border-bottom: none;
+    border-block-end: none;
   }
 
   /* Inject the column label before the value */
@@ -238,6 +237,6 @@
   }
 
   .luz-table td {
-    padding: var(--luz-space-xs) var(--luz-space-xs);
+    padding: var(--luz-space-xs);
   }
 }

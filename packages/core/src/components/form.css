@@ -11,7 +11,7 @@
 
 .luz-field {
   font-family: var(--luz-font-sans); /* UI text: never the body serif */
-  margin-bottom: var(--luz-space-md);
+  margin-block-end: var(--luz-space-md);
 }
 
 .luz-field__label {
@@ -19,7 +19,7 @@
   font-size: var(--luz-text-md);
   font-weight: 400;
   color: var(--luz-text-secondary);
-  margin-bottom: var(--luz-space-2xs);
+  margin-block-end: var(--luz-space-2xs);
 }
 
 .luz-field__label--required::after {
@@ -30,17 +30,17 @@
 .luz-field__helper {
   font-size: var(--luz-text-sm);
   color: var(--luz-text-secondary);
-  margin-top: var(--luz-space-2xs);
+  margin-block-start: var(--luz-space-2xs);
 }
 
 .luz-field__error {
   font-size: var(--luz-text-sm);
   color: var(--luz-color-danger);
-  margin-top: var(--luz-space-2xs);
+  margin-block-start: var(--luz-space-2xs);
 }
 
 .luz-input--error {
-  border-bottom: 2px solid var(--luz-color-danger);
+  border-block-end: 2px solid var(--luz-color-danger);
 }
 
 .luz-input--textarea {
@@ -57,14 +57,14 @@
 .luz-input[type="range"] {
   height: auto;
   padding: var(--luz-space-2xs) 0;
-  border-bottom: none;
+  border-block-end: none;
   background: transparent;
   accent-color: var(--luz-brand-primary);
   cursor: pointer;
 }
 
 .luz-input[type="range"]:focus {
-  border-bottom: none;
+  border-block-end: none;
   outline: 2px solid var(--luz-focus-ring);
   outline-offset: 4px;
 }
@@ -78,7 +78,7 @@
   padding: var(--luz-space-3xs) var(--luz-space-2xs);
   cursor: pointer;
   width: 64px;
-  border-bottom: 1px solid var(--luz-input-border);
+  border-block-end: 1px solid var(--luz-input-border);
   background: var(--luz-input-bg);
 }
 

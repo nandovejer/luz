@@ -49,7 +49,7 @@
 
 :where(td, .luz-table td) {
   padding: var(--luz-space-sm) var(--luz-space-md);
-  border-bottom: 1px solid var(--luz-divider);
+  border-block-end: 1px solid var(--luz-divider);
   color: var(--luz-text-primary);
   transition: background var(--luz-duration-fast);
 }
@@ -59,7 +59,7 @@
 }
 
 :where(tr:last-child td, .luz-table tr:last-child td) {
-  border-bottom: none;
+  border-block-end: none;
 }
 
 /* Forced colors drops the header's background: a line under it keeps the

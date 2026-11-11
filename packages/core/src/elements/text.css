@@ -6,7 +6,7 @@
 
 :where(hr) {
   border: none;
-  border-top: 1px solid var(--luz-divider);
+  border-block-start: 1px solid var(--luz-divider);
   margin-block: var(--luz-space-xl);
 }
 
@@ -58,7 +58,7 @@
 :where(figcaption) {
   font-size: max(0.875em, var(--luz-text-sm));
   color: var(--luz-text-secondary);
-  margin-top: var(--luz-space-xs);
+  margin-block-start: var(--luz-space-xs);
   font-style: italic;
 }
 
