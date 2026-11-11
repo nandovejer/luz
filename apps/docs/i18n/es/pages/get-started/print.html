@@ -1,12 +1,31 @@
 <!-- luz:page
 title: Estilos de impresión
 description: Qué cambia LUZ al imprimir y cómo conservarlo o modificarlo, con una sola capa y sin archivos adicionales si cargas luz.css.
-source: e7039f46eb4c
+source: f3c8c7a3dd1e
 reviewed: false
 -->
     <section class="docs-block" id="what" aria-labelledby="what-title">
       <h2 class="docs-chapter__title" id="what-title">Qué cambia al imprimir</h2>
       <p class="docs-lead">Una página impresa con LUZ tiene texto negro sobre fondo blanco, sin las partes que solo funcionan en pantalla. Es un bloque CSS en su propia capa, <code>luz.print</code>, que se carga con <code>luz.css</code>.</p>
+      <p>Pulsa <kbd>Ctrl</kbd>+<kbd>P</kbd> (<kbd>Cmd</kbd>+<kbd>P</kbd> en un Mac) para ver cómo se imprime tu propia página.</p>
+      <template data-docs-print-preview>
+        <p class="docs-print__open"><button class="luz-btn luz-btn--secondary" type="button" aria-haspopup="dialog" data-docs-print-open>Ver la vista previa de impresión</button></p>
+        <dialog class="luz-modal docs-print" id="print-preview" aria-labelledby="print-preview-title">
+          <div class="luz-modal__header">
+            <button class="luz-modal__close" type="button" commandfor="print-preview" command="close" aria-label="Cerrar la vista previa de impresión">&times;</button>
+            <h2 class="luz-modal__title" id="print-preview-title">Vista previa de impresión</h2>
+          </div>
+          <div class="luz-modal__body">
+            <p class="docs-print__limits">Es una aproximación, no la vista previa del propio navegador: no hay márgenes de página (<code>@page</code>), ni saltos de página reales, ni la fila de encabezado repetida en cada página. Para ver el resultado real, pulsa <kbd>Ctrl</kbd>+<kbd>P</kbd> o usa Imprimir esta página.</p>
+            <p class="docs-print__status u-sr-only" role="status" data-luz-label-loading="Cargando la vista previa…" data-luz-label-ready="La vista previa está lista." data-luz-label-failed="No se pudo cargar la vista previa. Usa Imprimir esta página."></p>
+            <div class="docs-print__stage" data-docs-print-stage data-luz-label-sheet="Una página de ejemplo tal como se imprime: negro sobre blanco, sin la navegación. Solo una imagen; los cambios están listados en esta página." data-luz-label-title="Una página de ejemplo, tal como se imprime"></div>
+          </div>
+          <div class="luz-modal__footer">
+            <button class="luz-btn luz-btn--primary" type="button" data-docs-print-now>Imprimir esta página</button>
+            <button class="luz-btn luz-btn--secondary" type="button" commandfor="print-preview" command="close">Cerrar</button>
+          </div>
+        </dialog>
+      </template>
       <ul>
         <li><strong>Colores.</strong> Las superficies son blancas y el texto negro, sea cual sea el modo de color de la página. Los tokens vuelven a definirse para impresión y todos los componentes se adaptan, sin reglas propias. Los colores de estado y del código pasan a ser negros: cada uno tiene además un icono, un título o un grosor que lo distingue.</li>
         <li><strong>Ocultos.</strong> La navegación (<code>nav</code>), la fila de pestañas, los botones de copia, el selector del modo de color, el reproductor, los avisos emergentes, los tooltips y el enlace para saltar al contenido. El catálogo también oculta su barra lateral, los controles de su línea de tiempo y su búsqueda.</li>
@@ -14,7 +33,7 @@ reviewed: false
         <li><strong>Saltos.</strong> No hay saltos de página dentro de una figura, un bloque de código, una tabla, una fila de tabla, una cita, una imagen, una tarjeta o una alerta. Los encabezados permanecen junto al texto que viene después.</li>
         <li><strong>Tablas.</strong> La fila de encabezado se repite en cada página de una tabla que ocupa varias páginas. Una tabla ancha no queda recortada.</li>
         <li><strong>Código.</strong> Las líneas largas se parten porque el papel no permite desplazarse.</li>
-        <li><strong>Pestañas.</strong> Se imprimen todos los paneles, uno tras otro, no solo el que está abierto.</li>
+        <li><strong>Pestañas.</strong> Se imprimen todos los paneles, no solo el que está abierto.</li>
         <li><strong>Movimiento.</strong> Sin transiciones, animaciones ni sombras.</li>
       </ul>
     </section>
@@ -22,7 +41,7 @@ reviewed: false
     <section class="docs-block" id="load" aria-labelledby="load-title">
       <h2 class="docs-chapter__title" id="load-title">Cómo cargarlo</h2>
       <ul>
-        <li><code>luz.css</code> ya lo incluye. No tienes que añadir ni quitar nada: el bloque está dentro del archivo.</li>
+        <li><code>luz.css</code> ya lo incluye. No hay nada que añadir.</li>
         <li>Si cargas <code>base.css</code> y cada componente por separado, no se incluyen los estilos de impresión. Añade <code>@luz-ds/core/print.css</code> (<code>dist/print.css</code>) si los quieres. Declara el orden de capas, como hacen todos los archivos.</li>
         <li>Cada componente del catálogo tiene sus reglas de impresión en su propio archivo, en <code>luz.print</code>.</li>
         <li>En pantalla no cambia nada: todo el bloque está dentro de <code>@media print</code>.</li>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Print preview sample</title>
+  <!--
+    The sample of the print preview on /docs/get-started/print/ (apps/docs/print-preview.js).
+    It links no stylesheet: the preview adds the ones of the page that opened it, so the
+    sample is drawn with the same CSS as the docs, and no CSS is copied here.
+    Scripts do not run in it (the frame is sandboxed), so the tabs are written as the
+    tabs script leaves them: one panel open, the others hidden="until-found".
+  -->
+</head>
+<body>
+  <nav aria-label="Sample site">
+    <a href="#report">Report</a>
+    <a href="#services">Services</a>
+    <a href="#build">Build</a>
+  </nav>
+
+  <main>
+    <h1>Quarterly report</h1>
+    <p>Everything below is one page: a heading, a card, a table, a code block, an alert, a link to another site and tabs. The links to the <a href="https://example.com/report">full data</a> and to a <a href="#services">section of this page</a> differ on paper, and the button-like link does not show its address: <a class="luz-btn luz-btn--primary" href="https://example.com/download">Download the report</a></p>
+
+    <h2 id="report">Summary</h2>
+    <div class="luz-card">
+      <h3 class="luz-card__title">API gateway</h3>
+      <p class="luz-card__body">1,204 requests per minute, 99.98 % of them answered in under 200 ms.</p>
+    </div>
+
+    <div class="luz-alert luz-alert--warning">
+      <div class="luz-alert__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 4l9 16H3z"/><path d="M12 10v4.5M12 17.5v.01"/></svg></div>
+      <div>
+        <div class="luz-alert__title">Warning</div>
+        <div class="luz-alert__body">Storage is almost full. The alert keeps its icon and its title, and loses its color.</div>
+      </div>
+    </div>
+
+    <h2 id="services">Services</h2>
+    <div class="luz-table-wrap" role="region" aria-label="Service status" tabindex="0">
+      <table class="luz-table">
+        <caption>Service status</caption>
+        <thead>
+          <tr><th scope="col">Service</th><th scope="col">Status</th><th scope="col">CPU</th><th scope="col">Region</th></tr>
+        </thead>
+        <tbody>
+          <tr><td data-label="Service">api-gateway</td><td data-label="Status"><span class="luz-tag luz-tag--green luz-tag--dot">Running</span></td><td data-label="CPU">12%</td><td data-label="Region">eu-west-1</td></tr>
+          <tr><td data-label="Service">data-pipeline</td><td data-label="Status"><span class="luz-tag luz-tag--yellow luz-tag--dot">Degraded</span></td><td data-label="CPU">78%</td><td data-label="Region">us-east-1</td></tr>
+          <tr><td data-label="Service">mailer</td><td data-label="Status"><span class="luz-tag luz-tag--red luz-tag--dot">Stopped</span></td><td data-label="CPU">0%</td><td data-label="Region">eu-west-1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="build">Build</h2>
+    <pre class="luz-code-block" data-lang="sh" tabindex="0" role="region" aria-label="Build command"><code>pnpm build --mode production --out-dir ./dist/releases/2026-q4 --report ./reports/2026-q4/summary.json --no-cache</code></pre>
+
+    <h2>Details</h2>
+    <nav class="luz-tabs" aria-label="Service details">
+      <a class="luz-tab is-active" id="tab-summary" href="#panel-summary">Summary</a>
+      <a class="luz-tab" id="tab-settings" href="#panel-settings">Settings</a>
+      <a class="luz-tab" id="tab-logs" href="#panel-logs">Logs</a>
+    </nav>
+    <div class="luz-tabpanel" id="panel-summary"><p>Three services are running.</p></div>
+    <div class="luz-tabpanel" id="panel-settings" hidden="until-found"><p>Deploys run on every push.</p></div>
+    <div class="luz-tabpanel" id="panel-logs" hidden="until-found"><p>No errors in the last hour.</p></div>
+  </main>
+</body>
+</html>
